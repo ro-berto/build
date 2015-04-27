@@ -7,6 +7,69 @@ import re
 from slave import recipe_api
 
 
+# TODO(machenbach): Chromium specific data should move out of the archive
+# module, into e.g. the chromium test configs.
+EXCLUDED_FILES_ALL_PLATFORMS = [
+  '.landmines',
+  '.ninja_deps',
+  '.ninja_log',
+  'gen',
+  'obj',
+]
+
+# Excluded files on specific platforms.
+EXCLUDED_FILES = {
+  'win': set(EXCLUDED_FILES_ALL_PLATFORMS + [
+    'cfinstaller_archive',
+    'installer_archive',
+    'lib',
+  ]),
+  'mac': set(EXCLUDED_FILES_ALL_PLATFORMS + [
+    '.deps',
+    'App Shim Socket',
+    # We copy the framework into the app bundle, we don't need the second
+    # copy outside the app.
+    # TODO(mark): Since r28431, the copy in the build directory is actually
+    # used by tests.  Putting two copies in the .zip isn't great, so maybe
+    # we can find another workaround.
+    # 'Chromium Framework.framework',
+    # 'Google Chrome Framework.framework',
+    # We copy the Helper into the app bundle, we don't need the second
+    # copy outside the app.
+    'Chromium Helper.app',
+    'Google Chrome Helper.app',
+    # We don't need the arm bits v8 builds.
+    'd8_arm',
+    'v8_shell_arm',
+    'lib',
+    'obj.host',
+    'obj.target',
+    # pdfsqueeze is a build helper, no need to copy it to testers.
+    'pdfsqueeze',
+  ]),
+  'linux': set(EXCLUDED_FILES_ALL_PLATFORMS + [
+    '.deps',
+    # Scons build cruft.
+    '.sconsign.dblite',
+    # Intermediate build directories (full of .o, .d, etc.).
+    'appcache',
+    'glue',
+    'lib.host',
+    # Build helper, not needed on testers.
+    'mksnapshot',
+    'obj.host',
+    'obj.target',
+    'src',
+  ]),
+}
+
+# Pattern for excluded files on specific platforms.
+EXCLUDED_FILES_PATTERN = {
+  'win': re.compile(r'^.+\.(obj|lib|pch|exp)$'),
+  'mac': re.compile(r'^.+\.(a)$'),
+  'linux': re.compile(r'^.+\.(o|a|d)$'),
+}
+
 # Regular expression to identify a Git hash.
 GIT_COMMIT_HASH_RE = re.compile(r'[a-zA-Z0-9]{40}')
 # The Google Storage metadata key for the full commit position.
@@ -55,66 +118,13 @@ class ArchiveApi(recipe_api.RecipeApi):
       **kwargs
     )
 
-  def _file_exclusions(self):
-    # TODO(machenbach): Extract to static constant toplevel sets.
-    """Returns a platform-dependent list of excluded files for archiving."""
-    all_platforms = ['.landmines', 'obj', 'gen', '.ninja_deps', '.ninja_log']
-    # Skip files that the testers don't care about. Mostly directories.
-    if self.m.platform.is_win:
-      # Remove obj or lib dir entries
-      return all_platforms + [
-        'cfinstaller_archive', 'lib', 'installer_archive']
-    if self.m.platform.is_mac:
-      return all_platforms + [
-        # We don't need the arm bits v8 builds.
-        'd8_arm', 'v8_shell_arm',
-        # pdfsqueeze is a build helper, no need to copy it to testers.
-        'pdfsqueeze',
-        # We copy the framework into the app bundle, we don't need the second
-        # copy outside the app.
-        # TODO(mark): Since r28431, the copy in the build directory is actually
-        # used by tests.  Putting two copies in the .zip isn't great, so maybe
-        # we can find another workaround.
-        # 'Chromium Framework.framework',
-        # 'Google Chrome Framework.framework',
-        # We copy the Helper into the app bundle, we don't need the second
-        # copy outside the app.
-        'Chromium Helper.app',
-        'Google Chrome Helper.app',
-        'App Shim Socket',
-        '.deps', 'obj.host', 'obj.target', 'lib'
-      ]
-    if self.m.platform.is_linux:
-      return all_platforms + [
-        # Intermediate build directories (full of .o, .d, etc.).
-        'appcache', 'glue', 'lib.host', 'obj.host',
-        'obj.target', 'src', '.deps',
-        # Scons build cruft
-        '.sconsign.dblite',
-        # Build helper, not needed on testers
-        'mksnapshot',
-      ]
-
-    raise NotImplementedError('Platform is not supported.')  # pragma: no cover
-
   def _cf_should_package_file(self, filename):
     """Returns true if the file should be a part of the resulting archive."""
-    if self.m.platform.is_mac:
-      file_filter = r'^.+\.(a)$'
-    elif self.m.platform.is_linux:
-      file_filter = r'^.+\.(o|a|d)$'
-    elif self.m.platform.is_win:
-      file_filter = r'^.+\.(obj|lib|pch|exp)$'
-    else:  # pragma: no cover
-      raise NotImplementedError('Platform is not supported.')
-    if re.match(file_filter, filename):
+    if EXCLUDED_FILES_PATTERN[self.m.platform.name].match(filename):
       return False
 
     # Skip files that we don't care about. Mostly directories.
-    # TODO(machenbach): This should refer to a static set.
-    things_to_skip = self._file_exclusions()
-
-    if filename in things_to_skip:
+    if filename in EXCLUDED_FILES[self.m.platform.name]:
       return False
 
     return True
