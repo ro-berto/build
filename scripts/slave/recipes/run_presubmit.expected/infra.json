@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "infra_tester",
+      "chromium_presubmit",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -25,8 +25,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "infra@HEAD",
-      "--force"
+      "infra@HEAD"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -49,33 +48,60 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gclient.py",
-      "runhooks"
-    ],
-    "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
       "git",
-      "diff",
-      "--name-only",
-      "HEAD",
-      "HEAD~"
+      "-c",
+      "user.email=commit-bot@chromium.org",
+      "-c",
+      "user.name=The Commit Bot",
+      "commit",
+      "-a",
+      "-m",
+      "Committed patch"
     ],
     "cwd": "[SLAVE_BUILD]/infra",
-    "name": "get change list",
-    "stdout": "/path/to/tmp/"
+    "name": "commit git patch"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "test.py",
-      "test"
+      "[DEPOT_TOOLS]/presubmit_support.py",
+      "--root",
+      "[SLAVE_BUILD]/infra",
+      "--commit",
+      "--verbose",
+      "--verbose",
+      "--issue",
+      "12853011",
+      "--patchset",
+      "1",
+      "--skip_canned",
+      "CheckRietveldTryJobExecution",
+      "--skip_canned",
+      "CheckTreeIsOpen",
+      "--skip_canned",
+      "CheckBuildbotPendingBuilds",
+      "--rietveld_url",
+      "https://codereview.chromium.org",
+      "--rietveld_fetch",
+      "--upstream",
+      "5e03a58dc0850e5137a8ebbce29610670c756aed",
+      "--trybot-json",
+      "/path/to/tmp/json",
+      "--rietveld_email",
+      ""
     ],
-    "cwd": "[SLAVE_BUILD]/infra",
-    "name": "test.py"
+    "name": "presubmit",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chromium_presubmit\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"compile\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   }
 ]

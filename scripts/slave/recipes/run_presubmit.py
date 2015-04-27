@@ -15,6 +15,8 @@ DEPS = [
 
 def _GenStepsInternal(api):
   root = api.rietveld.calculate_issue_root(extra_patch_project_roots={'v8': []})
+  project = api.properties['patch_project'] or api.properties['project']
+  requires_auth = 'internal' in project
 
   # TODO(iannucci): Pass the build repo info directly via properties
   repo_name = api.properties['repo_name']
@@ -23,7 +25,8 @@ def _GenStepsInternal(api):
   api.gclient.set_config(repo_name)
 
   bot_update_step = api.bot_update.ensure_checkout(
-      force=force_checkout, patch_project_roots={'v8': []})
+      force=force_checkout, patch_project_roots={'v8': []},
+      patch_oauth2=requires_auth)
   relative_root = '%s/%s' % (api.gclient.c.solutions[0].name, root)
   relative_root = relative_root.strip('/')
   got_revision_property = api.gclient.c.got_revision_mapping[relative_root]
@@ -38,7 +41,8 @@ def _GenStepsInternal(api):
 
   api.presubmit.commit_patch_locally(root)
   api.presubmit(root=root, upstream=upstream,
-                trybot_json_output=api.json.output())
+                trybot_json_output=api.json.output(),
+                use_rietveld_credentials=requires_auth)
 
 
 def GenSteps(api):
@@ -50,7 +54,8 @@ def GenTests(api):
   # TODO(machenbach): This uses the same tryserver for all repos, which doesn't
   # reflect reality (cosmetical problem only). It also misses some repos that
   # use the recipe like tools_build.
-  for repo_name in ['blink', 'chromium', 'v8', 'nacl', 'naclports', 'gyp']:
+  for repo_name in ['blink', 'chromium', 'v8', 'nacl', 'naclports', 'gyp',
+                    'infra', 'infra_internal']:
     yield (
       api.test(repo_name) +
       api.properties.tryserver(

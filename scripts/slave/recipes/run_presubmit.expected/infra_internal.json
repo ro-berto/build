@@ -5,9 +5,9 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "internal.infra",
+      "tryserver.chromium.linux",
       "--builder",
-      "infra-internal-tester",
+      "chromium_presubmit",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -29,8 +29,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "infra_internal@HEAD",
-      "--force"
+      "infra_internal@HEAD"
     ],
     "name": "bot_update",
     "~followup_annotations": [
@@ -53,43 +52,62 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gclient.py",
-      "runhooks"
-    ],
-    "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
       "git",
-      "diff",
-      "--name-only",
-      "HEAD",
-      "HEAD~"
+      "-c",
+      "user.email=commit-bot@chromium.org",
+      "-c",
+      "user.name=The Commit Bot",
+      "commit",
+      "-a",
+      "-m",
+      "Committed patch"
     ],
     "cwd": "[SLAVE_BUILD]/infra_internal",
-    "name": "get change list",
-    "stdout": "/path/to/tmp/"
+    "name": "commit git patch"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "test.py",
-      "test"
+      "[DEPOT_TOOLS]/presubmit_support.py",
+      "--root",
+      "[SLAVE_BUILD]/infra_internal",
+      "--commit",
+      "--verbose",
+      "--verbose",
+      "--issue",
+      "12853011",
+      "--patchset",
+      "1",
+      "--skip_canned",
+      "CheckRietveldTryJobExecution",
+      "--skip_canned",
+      "CheckTreeIsOpen",
+      "--skip_canned",
+      "CheckBuildbotPendingBuilds",
+      "--rietveld_url",
+      "https://codereview.chromium.org",
+      "--rietveld_fetch",
+      "--upstream",
+      "0a18b32e3a93913e1090d1ee6b8965c6dc3116d6",
+      "--trybot-json",
+      "/path/to/tmp/json",
+      "--rietveld_email_file",
+      "[BUILD]/site_config/.rietveld_client_email",
+      "--rietveld_private_key_file",
+      "[BUILD]/site_config/.rietveld_secret_key"
     ],
-    "cwd": "[SLAVE_BUILD]/infra_internal",
-    "name": "test.py"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/infra_internal/go/env.py",
-      "python",
-      "[SLAVE_BUILD]/infra_internal/go/test.py"
-    ],
-    "name": "go test.py"
+    "name": "presubmit",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chromium_presubmit\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"compile\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   }
 ]
