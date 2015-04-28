@@ -431,7 +431,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/third_party/android_platform/development/scripts/stack",
       "--arch",
-      "arm",
+      "arm64",
       "--more-info",
       "[SLAVE_BUILD]/src/out/Release/full_log"
     ],

@@ -82,6 +82,7 @@ BUILDERS = freeze({
       'num_device_shards': 1,
     },
     'Android Nexus9 Perf': {
+      'recipe_config': 'tests_arm64',
       'perf_id': 'android-nexus9',
       'bucket': 'chrome-perf',
       'path': lambda api: ('android_perf_fyi_rel_arm64/full-build-linux_'
@@ -111,12 +112,10 @@ def GenSteps(api):
   mastername = api.properties['mastername']
   buildername = api.properties['buildername']
   builder = thaw(BUILDERS[mastername][buildername])
-  api.chromium_android.configure_from_properties('base_config',
-                                                 REPO_NAME='src',
-                                                 REPO_URL=REPO_URL,
-                                                 INTERNAL=False,
-                                                 BUILD_CONFIG='Release',
-                                                 TARGET_PLATFORM='android')
+  api.chromium_android.set_config(
+      builder.get('recipe_config', 'base_config'), REPO_NAME='src',
+      REPO_URL=REPO_URL, INTERNAL=False, BUILD_CONFIG='Release',
+      TARGET_PLATFORM='android')
   api.gclient.set_config('perf')
   api.gclient.apply_config('android')
   for c in builder.get('gclient_apply_config', []):
