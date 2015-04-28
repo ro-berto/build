@@ -1,0 +1,201 @@
+{% extends "layout.html" %}
+
+{% block header -%}
+{{ super() }}
+<hr/>
+<script>
+  function autoLink(className) {
+    var comments = document.querySelectorAll(className);
+    for(var i = 0; i < comments.length; i++) {
+      comments[i].innerHTML = comments[i].innerHTML.replace(/http:\/\/[^ \t\n<]*/g, '<a href="$&">$&</a>');
+    }
+  }
+
+  window.onload = function() {
+    autoLink('.DevComment');
+  }
+
+  /**
+   * A simple HTML table string.
+   * @param {String} attributes A set of HTML attributes for the table.
+   * @param {String} contents The contents.
+   * @returns {!String}
+   */
+  function table(attributes, contents) {
+      return '<table ' + attributes + '>' + contents + '</table>\n';
+  };
+
+  /**
+   * A simple HTML table row string.
+   * @param {String} attributes A set of HTML attributes for the table row.
+   * @param {String} contents The contents.
+   * @returns {!String}
+   */
+  function tr(contents) {
+    return '<tr>' + contents + '</tr>\n';
+  };
+
+  /**
+   * A simple HTML table cell string.
+   * @param {String} attributes A set of HTML attributes for the table cell.
+   * @param {String} contents The contents.
+   * @returns {!String}
+   */
+  function td(attributes, contents) {
+    return '<td ' + attributes + '>' + contents + '</td>';
+  };
+
+  /**
+   * A simple HTML anchor string.
+   * @param {String} url The value for the href.
+   * @param {String} attributes A set of HTML attributes for the table.
+   * @param {String} contents The contents.
+   * @returns {!String}
+   */
+  function a(url, contents, attributes) {
+    return '<a href="' + url + '" ' + attributes + '>' + contents + '</a>';
+  };
+
+  /**
+   * A simple HTML iframe string.
+   * @param {String} attributes A set of HTML attributes for the table.
+   * @param {String} url The source of the iframe.
+   * @returns {!String} the iframe or an empty string if noframe is specified.
+   */
+  function iFrame(attributes, url) {
+      if (window.location.href.search('noframe') == -1) {
+          return '<iframe ' + attributes + ' src="' + url + '"></iframe>';
+      }
+      return ''
+  };
+
+</script>
+
+<div class="Announcement">
+<iframe width="100%" height="44" frameborder="0" scrolling="no" src="https://infra-status.appspot.com/current"></iframe>
+
+<center style="padding-left: 7px; padding-right: 7px">
+  <table width="100%" valign="top" bgcolor="#efefef" style="-webkit-border-bottom-left-radius: 24px; -webkit-border-bottom-right-radius: 24px; -moz-border-bottom-right-radius: 24px; -moz-border-bottom-right-radius: 24px;   box-shadow: 2px 2px 6px rgba(0,0,0,0.6); -moz-box-shadow: 2px 2px 6px rgba(0,0,0,0.6); -webkit-box-shadow: 2px 2px 6px rgba(0,0,0,0.6);">
+    <tr>
+      <td width="2%"> </td>
+      <td width="35%">
+      <table> <tr> <td>
+        <table valign="top" width="100%">
+          <tr>
+            <td style="text-align: right;">
+              <b>Masters:</b>
+            </td>
+            <td>
+              <nobr><a href="http://build.chromium.org/p/chromium.infra/">infra</a></nobr>
+              |
+              <nobr><a href="http://build.chromium.org/p/chromium.infra/">infra.cron</a></nobr>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+              <b>Controls:</b>
+            </td>
+            <td>
+              <a href="https://infra-status.appspot.com/">tree status</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+              <b>Development:</b>
+            </td>
+            <td>
+              <a href="https://chromium.googlesource.com/infra/all">source</a> |
+              <a href="https://code.google.com/p/chromium/issues/list?q=label:Infra">bugs</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+              <b>Gardeners:</b>
+            </td>
+            <td>
+                TBD
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+              <b>Trooper:</b>
+            </td>
+            <td>
+              <script src='https://chromium-build.appspot.com/p/chromium/trooper.js'></script>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+              <b>Navigate:</b>
+            </td>
+            <td>
+              <a href="http://dev.chromium.org/developers/testing/chromium-build-infrastructure/tour-of-the-chromium-buildbot">about</a> |
+              <a href="./waterfall/help">customize</a> |
+              <a href="./waterfall?show_events=true&failures_only=true">failures</a> |
+              <a href="./waterfall">waterfall</a> |
+              <a href="./console">console</a>
+            </td>
+          </tr>
+        </table>
+  </td></tr></table>
+      </td>
+      <td width="2%"> </td>
+      <td width="1" bgcolor="#CCCCCC">
+      </td>
+      <td width="2%"> </td>
+      <td width="57%"> <div>
+        <table width="100%" id="dashboard">
+          <script language="javascript">
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function() {
+              if (request.readyState != 4) return;
+              if (request.status != 200) return;
+              var data = eval('(' + request.responseText + ')');
+
+              // Add dashboard.
+              var flavors = {};
+              for (var i in data.builders) {
+                var category = data.builders[i].category.split('|')[0];
+                if (!(category in flavors)) flavors[category] = [];
+                flavors[category].push('builder=' + i);
+              }
+              for (var category in flavors) {
+                flavors[category].push('titles=on');
+              }
+              var bar = "./horizontal_one_box_per_builder"
+              var waterfall = "./waterfall"
+              function GetUrl(type, content) {
+                return type + "?" + content + "&reload=30";
+              }
+              function DisplayBar(content, name) {
+                var dash = document.getElementById('dashboard');
+                dash.innerHTML += ("<tr><td><a href='" + GetUrl(waterfall, content) + "'>" + name + "</a></td><td width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar, content) + "'></iframe></td></tr>\n");
+              }
+              var order = [];
+              for (var i in flavors) {
+                order.push(i);
+              }
+              order.sort();
+              for (var i = 0; i < order.length; i++) {
+                DisplayBar(flavors[order[i]].join('&'),
+                           order[i].replace(/^[0-9]+/, ''));
+              }
+            };
+            request.open('GET', './json', true);
+            request.send(null);
+          </script>
+        </table>
+      </div> </td>
+      <td width="2%"> </td>
+    </tr>
+  </table>
+</center>
+
+</div>
+{% endblock header %}
+
+{% block footer %}
+
+{{ super() }}
+{# <p>Debug info: {{ debuginfo }}</p> #}
+{% endblock %}
