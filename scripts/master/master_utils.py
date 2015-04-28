@@ -416,12 +416,27 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
           os.path.expanduser("~/.ssh/authorized_keys"))
 
   if active_master.buildbucket_bucket and active_master.service_account_path:
-    buildbucket.setup(
-        c,
-        active_master,
-        buckets=[active_master.buildbucket_bucket],
-        max_lease_count=buildbucket.NO_LEASE_LIMIT,
-    )
+    SetupBuildbucket(c, active_master)
+
+
+def SetupBuildbucket(c, active_master):
+  def properties_hook(properties, build):
+    properties.pop('requester', None)  # Ignore externally set requester.
+    if build['created_by']:
+      identity_type, name = build['created_by'].split(':', 1)
+      if identity_type == 'user':
+        # There other types of identity, such as service, anonymous. We are
+        # interested in users only. For users, name is email address.
+        properties['requester'] = name
+
+  buildbucket.setup(
+      c,
+      active_master,
+      buckets=[active_master.buildbucket_bucket],
+      build_properties_hook=properties_hook,
+      max_lease_count=buildbucket.NO_LEASE_LIMIT,
+  )
+
 
 def DumpSetup(c, important=None, filename='config.current.txt'):
   """Writes a flattened version of the setup to a text file.

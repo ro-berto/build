@@ -51,7 +51,9 @@ class BuildBucketIntegrator(object):
   # _lease is None on creation, but it gets loaded from the database in
   # _ensure_leases_loaded().
 
-  def __init__(self, buckets, max_lease_count=None, heartbeat_interval=None):
+  def __init__(
+      self, buckets, build_properties_hook=None, max_lease_count=None,
+      heartbeat_interval=None):
     """Creates a BuildBucketIntegrator.
 
     Args:
@@ -66,6 +68,7 @@ class BuildBucketIntegrator(object):
     if max_lease_count is not None:
       assert max_lease_count >= 1
     self.buckets = buckets[:]
+    self.build_properties_hook = build_properties_hook
     self.buildbot = None
     self.buildbucket_service = None
     self._find_change_cache = None
@@ -280,6 +283,8 @@ class BuildBucketIntegrator(object):
     """Schedules a build and returns (bsid, brid) tuple as Deferred."""
     assert self._leases is not None
     properties = (properties or {}).copy()
+    if self.build_properties_hook:
+      self.build_properties_hook(properties, build.copy())
     properties[common.INFO_PROPERTY] = {
         common.BUILD_PROPERTY: self._strip_build_def(build),
     }
