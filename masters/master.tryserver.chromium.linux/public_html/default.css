@@ -63,8 +63,8 @@ table td {
 }
 
 .LastBuild, .Activity, .Builder, .BuildStep {
-  width: 155px;
-  max-width: 155px;
+  width: 260px;
+  max-width: 260px;
 }
 
 /* Chromium Specific styles */
