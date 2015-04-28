@@ -20,9 +20,10 @@ from slave.chromium import package_index
 
 
 TEST_CC_FILE_CONTENT = '#include "test.h"\nint main() {\nreturn 0;\n}\n'
-TEST_H_FILE_CONTENT = '#ifndef TEST_H\n#define TEST_H\n#include <set>\n#endif\n'
+TEST_H_FILE_CONTENT = ('#ifndef TEST_H\n#define TEST_H\n#include <stdio.h>\n'
+    '#endif\n')
 COMPILE_ARGUMENTS = 'clang++ -fsyntax-only -std=c++11 -c test.cc -o test.o'
-INCLUDE_PATH = '/usr/include/c++/4.8.2'
+INCLUDE_PATH = '/usr/include'
 
 
 class PackageIndexTest(unittest.TestCase):
@@ -50,7 +51,7 @@ class PackageIndexTest(unittest.TestCase):
     with open(self.test_cc_file.name + '.filepaths', 'wb') as filepaths_file:
       filepaths_file.write('\n'.join([self.test_cc_file.name,
                                       self.test_h_file.name,
-                                      '%s//set' % INCLUDE_PATH]))
+                                      '%s//stdio.h' % INCLUDE_PATH]))
 
     self.index_pack = package_index.IndexPack(
         os.path.realpath(self.compdb_file.name))
@@ -92,16 +93,16 @@ class PackageIndexTest(unittest.TestCase):
     # Setup some dictionaries which are usually filled by _GenerateDataFiles()
     test_cc_file_fullpath = os.path.join('.', self.test_cc_file.name)
     test_h_file_fullpath = os.path.join('.', self.test_h_file.name)
-    set_fullpath = '%s/set' % INCLUDE_PATH
+    stdio_fullpath = '%s/stdio.h' % INCLUDE_PATH
     self.index_pack.filehashes = {
         test_cc_file_fullpath: hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest(),
         test_h_file_fullpath: hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest(),
-        set_fullpath: hashlib.sha256('').hexdigest()
+        stdio_fullpath: hashlib.sha256('').hexdigest()
     }
     self.index_pack.filesizes = {
         test_cc_file_fullpath: len(TEST_CC_FILE_CONTENT),
         test_h_file_fullpath: len(TEST_H_FILE_CONTENT),
-        set_fullpath: 0
+        stdio_fullpath: 0
     }
     # Now _GenerateUnitFiles() can be called.
     self.index_pack._GenerateUnitFiles()
