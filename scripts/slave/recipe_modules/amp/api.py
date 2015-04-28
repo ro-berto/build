@@ -176,6 +176,28 @@ class AmpApi(recipe_api.RecipeApi):
     return gtest_args
 
   @recipe_api.non_step
+  def instrumentation_test_arguments(
+      self, apk_under_test, test_apk, isolate_file_path=None):
+    """Generate command-line arguments for running instrumentation tests.
+
+    Args:
+      apk_under_test: The path to the APK under test.
+      test_apk: The path to the test APK.
+      isolate_file_path: The path to the .isolate file containing data
+        dependency information for the test suite.
+
+    Returns:
+      A list of command-line arguments as strings.
+    """
+    instrumentation_test_args = [
+        '--apk-under-test', apk_under_test,
+        '--test-apk', test_apk,
+    ]
+    if isolate_file_path:
+      instrumentation_test_args += ['--isolate-file-path', isolate_file_path]
+    return instrumentation_test_args
+
+  @recipe_api.non_step
   def uirobot_arguments(self, app_under_test=None, minutes=5):
     """Generate command-line arguments for running uirobot tests.
 

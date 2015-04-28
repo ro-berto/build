@@ -20,6 +20,15 @@ DEPS = [
   'tryserver',
 ]
 
+CHROMIUM_AMP_INSTRUMENTATION_TESTS = freeze([
+  {
+    'gyp_target': 'content_shell_test_apk',
+    'apk_under_test': 'ContentShell.apk',
+    'test_apk': 'ContentShellTest.apk',
+    'isolate_file_path': ['content', 'content_shell_test_apk.isolate'],
+  },
+])
+
 CHROMIUM_AMP_UNITTESTS = freeze([
   ['android_webview_unittests', None],
   ['base_unittests', ['base', 'base_unittests.isolate']],
@@ -72,7 +81,7 @@ BUILDERS = freeze({
       'device_minimum_os': '4.0',
       'device_timeout': 60,
       'unittests': CHROMIUM_AMP_UNITTESTS,
-      'instrumentation_tests': [],
+      'instrumentation_tests': CHROMIUM_AMP_INSTRUMENTATION_TESTS,
     },
   },
   'chromium.linux': {
@@ -121,9 +130,7 @@ def GenSteps(api):
   api.chromium_android.run_tree_truth()
 
   native_unittests = builder.get('unittests', [])
-  instrumentation_tests = [
-      api.chromium_android.get_instrumentation_suite(s)
-      for s in builder.get('instrumentation_tests', [])]
+  instrumentation_tests = builder.get('instrumentation_tests', [])
   java_unittests = builder.get('java_unittests', [])
   python_unittests = builder.get('python_unittests', [])
 
@@ -178,25 +185,43 @@ def GenSteps(api):
              ['mv', '-T', api.path['checkout'].join('full-build-linux'),
                           extract_location])
 
+  output_dir = api.chromium.output_dir
+
   with api.step.defer_results():
     trigger_successful = {}
+
+    amp_arguments = api.amp.amp_arguments(
+        api_address=AMP_INSTANCE_ADDRESS,
+        api_port=AMP_INSTANCE_PORT,
+        api_protocol=AMP_INSTANCE_PROTOCOL,
+        device_minimum_os=builder.get('device_minimum_os'),
+        device_name=builder.get('device_name'),
+        device_os=builder.get('device_os'),
+        device_timeout=builder.get('device_timeout'))
+
+    for i in instrumentation_tests:
+      suite = i.get('gyp_target')
+      isolate_file = i.get('isolate_file_path')
+
+      isolate_file_path = (
+          api.path['checkout'].join(*isolate_file) if isolate_file else None)
+      deferred_trigger_result = api.amp.trigger_test_suite(
+          suite, 'instrumentation',
+          api.amp.instrumentation_test_arguments(
+              apk_under_test=output_dir.join('apks', i['apk_under_test']),
+              test_apk=output_dir.join('apks', i['test_apk']),
+              isolate_file_path=isolate_file_path),
+          amp_arguments)
+      trigger_successful[suite] = deferred_trigger_result.is_ok
+
     for suite, isolate_file in native_unittests:
       isolate_file_path = (
           api.path['checkout'].join(*isolate_file) if isolate_file else None)
       deferred_trigger_result = api.amp.trigger_test_suite(
           suite, 'gtest',
           api.amp.gtest_arguments(suite, isolate_file_path=isolate_file_path),
-          api.amp.amp_arguments(
-              api_address=AMP_INSTANCE_ADDRESS,
-              api_port=AMP_INSTANCE_PORT,
-              api_protocol=AMP_INSTANCE_PROTOCOL,
-              device_minimum_os=builder.get('device_minimum_os'),
-              device_name=builder.get('device_name'),
-              device_os=builder.get('device_os'),
-              device_timeout=builder.get('device_timeout')))
+          amp_arguments)
       trigger_successful[suite] = deferred_trigger_result.is_ok
-
-    # TODO(jbudorick): Add support for instrumentation tests.
 
     for suite in java_unittests:
       api.chromium_android.run_java_unit_test_suite(suite)
@@ -211,14 +236,26 @@ def GenSteps(api):
       deferred_step_result = api.amp.collect_test_suite(
           suite, 'gtest',
           api.amp.gtest_arguments(suite),
-          api.amp.amp_arguments(
-              api_address=AMP_INSTANCE_ADDRESS,
-              api_port=AMP_INSTANCE_PORT,
-              api_protocol=AMP_INSTANCE_PROTOCOL,
-              device_minimum_os=builder.get('device_minimum_os'),
-              device_name=builder.get('device_name'),
-              device_os=builder.get('device_os'),
-              device_timeout=builder.get('device_timeout')))
+          amp_arguments)
+      if not deferred_step_result.is_ok:
+        # We only want to upload the logcat if there was a test failure.
+        step_failure = deferred_step_result.get_error()
+        if step_failure.result.presentation.status == api.step.FAILURE:
+          api.amp.upload_logcat_to_gs(AMP_RESULTS_BUCKET, suite)
+
+    for i in instrumentation_tests:
+      suite = i.get('gyp_target')
+
+      # Skip collection if test was not triggered successfully.
+      if not trigger_successful[suite]:
+        continue
+
+      deferred_step_result = api.amp.collect_test_suite(
+          suite, 'instrumentation',
+          api.amp.instrumentation_test_arguments(
+              apk_under_test=output_dir.join('apks', i['apk_under_test']),
+              test_apk=output_dir.join('apks', i['test_apk'])),
+          amp_arguments)
       if not deferred_step_result.is_ok:
         # We only want to upload the logcat if there was a test failure.
         step_failure = deferred_step_result.get_error()
@@ -273,6 +310,36 @@ def GenTests(api):
         # Test runner warning
         api.step_data('[collect] cc_unittests', retcode=88)
       )
+
+  yield (
+    api.test('instrumentation_test_trigger_failure') +
+    api.properties.generic(
+        revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
+        mastername='chromium.fyi',
+        buildername='Android Tests (amp)(dbg)',
+        slavename='slavename') +
+    api.override_step_data(
+        'analyze',
+        api.json.output({
+            'status': 'Found dependency',
+            'targets': ['content_shell_test_apk'],
+            'build_targets': ['content_shell_test_apk']})) +
+    api.step_data('[trigger] content_shell_test_apk', retcode=1))
+
+  yield (
+    api.test('instrumentation_test_collect_failure') +
+    api.properties.generic(
+        revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
+        mastername='chromium.fyi',
+        buildername='Android Tests (amp)(dbg)',
+        slavename='slavename') +
+    api.override_step_data(
+        'analyze',
+        api.json.output({
+            'status': 'Found dependency',
+            'targets': ['content_shell_test_apk'],
+            'build_targets': ['content_shell_test_apk']})) +
+    api.step_data('[collect] content_shell_test_apk', retcode=1))
 
   yield (
       api.test('analyze_no_compilation') +

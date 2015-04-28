@@ -1671,7 +1671,55 @@
     ],
     "name": "[collect] content_shell_test_apk",
     "~followup_annotations": [
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/content_shell_test_apk.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "[upload logcat] load content_shell_test_apk data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"12345abcde\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[zip]/resources/unzip.py"
+    ],
+    "name": "[upload logcat] unzip results for content_shell_test_apk",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/content_shell_test_apk/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/content_shell_test_apk/results.zip\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "[TMP_BASE]/amp_results_tmp_2/content_shell_test_apk/unzipped_results/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_content_shell_test_apk_12345abcde.txt"
+    ],
+    "name": "gsutil [upload logcat] content_shell_test_apk",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_content_shell_test_apk_12345abcde.txt@@@"
     ]
   },
   {
@@ -1692,5 +1740,10 @@
       "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
+  },
+  {
+    "name": "$final_result",
+    "reason": "1 out of 28 aggregated steps failed. Failures: Step('[collect] content_shell_test_apk') failed with return_code 1",
+    "status_code": 1
   }
 ]
