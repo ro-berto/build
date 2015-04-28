@@ -386,6 +386,8 @@
       "[BUILD]/scripts/slave/runtest.py",
       "--target",
       "Release",
+      "--test-platform",
+      "android",
       "--xvfb",
       "--factory-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Tests (L Nexus7.2)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"parent_buildername\": \"Android32 Builder Release\", \"parent_got_revision\": \"12345\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",

@@ -347,6 +347,8 @@
       "[BUILD]/scripts/slave/runtest.py",
       "--target",
       "Release",
+      "--test-platform",
+      "android",
       "--no-xvfb",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Android (Nexus4)\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
