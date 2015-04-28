@@ -18,6 +18,7 @@
             "https://build.chromium.org/p/chromium.chrome",
             "https://build.chromium.org/p/chromium.chromiumos",
             "https://build.chromium.org/p/chromium.gpu",
+            "https://build.chromium.org/p/chromium.infra.cron",
             "https://build.chromium.org/p/chromium.linux",
             "https://build.chromium.org/p/chromium.mac",
             "https://build.chromium.org/p/chromium.memory",
@@ -31,9 +32,13 @@
         "track-revisions": true
     },
     "infra": {
+        "build-db": "infra_db.json",
         "masters": [
             "https://build.chromium.org/p/chromium.infra"
-        ]
+        ],
+        "status-url": "https://infra-status.appspot.com",
+        "set-status": true,
+        "password-file": "/creds/gatekeeper/infra_status_password"
     },
     "nacl": {
         "build-db": "nacl_build_db.json",

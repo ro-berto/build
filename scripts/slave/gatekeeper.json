@@ -104,6 +104,17 @@
         ]
       }
     ],
+    "https://build.chromium.org/p/chromium.infra.cron": [
+      {
+        "builders": {
+          "gnumbd": {
+            "categories": [
+              "chromium_gnumbd_not_yet_closer"
+            ]
+          }
+        }
+      }
+    ],
     "https://build.chromium.org/p/chromium.infra": [
       {
         "builders": {
@@ -125,11 +136,6 @@
           "infra-continuous-precise-32": {
             "categories": [
               "infra_tree_closer"
-            ]
-          },
-          "gnumbd": {
-            "categories": [
-              "infra_cron_closer"
             ]
           }
         }
@@ -693,7 +699,7 @@
         "chrome-troopers+infra-continuous@google.com"
       ]
     },
-    "infra_cron_closer": {
+    "chromium_gnumbd_not_yet_closer": {
       "closing_optional": [
         "gnumbd"
       ],
