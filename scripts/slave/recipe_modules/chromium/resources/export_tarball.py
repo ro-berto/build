@@ -75,11 +75,6 @@ TESTDIRS = (
 )
 
 
-def GetSourceDirectory():
-  return os.path.realpath(
-    os.path.join(os.path.dirname(__file__), '..', '..', '..', 'src'))
-
-
 # Workaround lack of the exclude parameter in add method in python-2.4.
 # TODO(phajdan.jr): remove the workaround when it's not needed on the bot.
 class MyTarFile(tarfile.TarFile):
@@ -88,6 +83,9 @@ class MyTarFile(tarfile.TarFile):
 
   def set_verbose(self, verbose):
     self.__verbose = verbose
+
+  def set_src_dir(self, src_dir):
+    self.__src_dir = src_dir
 
   def __report_skipped(self, name):
     if self.__verbose:
@@ -113,7 +111,7 @@ class MyTarFile(tarfile.TarFile):
       # Remove contents of non-essential directories, but preserve gyp files,
       # so that build/gyp_chromium can work.
       for nonessential_dir in (NONESSENTIAL_DIRS + TESTDIRS):
-        dir_path = os.path.join(GetSourceDirectory(), nonessential_dir)
+        dir_path = os.path.join(self.__src_dir, nonessential_dir)
         if (name.startswith(dir_path) and
             os.path.isfile(name) and
             'gyp' not in name):
@@ -135,6 +133,7 @@ def main(argv):
   parser.add_option("--xz", action="store_true")
   parser.add_option("--verbose", action="store_true", default=False)
   parser.add_option("--progress", action="store_true", default=False)
+  parser.add_option("--src-dir")
 
   options, args = parser.parse_args(argv)
 
@@ -143,19 +142,19 @@ def main(argv):
     print '(without .tar.xz extension).'
     return 1
 
-  if not os.path.exists(GetSourceDirectory()):
-    print 'Cannot find the src directory ' + GetSourceDirectory()
+  if not os.path.exists(options.src_dir):
+    print 'Cannot find the src directory ' + options.src_dir
     return 1
 
   # These two commands are from src/DEPS; please keep them in sync.
   if subprocess.call(['python', 'build/util/lastchange.py', '-o',
-                      'build/util/LASTCHANGE'], cwd=GetSourceDirectory()) != 0:
+                      'build/util/LASTCHANGE'], cwd=options.src_dir) != 0:
     print 'Could not run build/util/lastchange.py to update LASTCHANGE.'
     return 1
   if subprocess.call(['python', 'build/util/lastchange.py', '-s',
                       'third_party/WebKit', '-o',
                       'build/util/LASTCHANGE.blink'],
-                     cwd=GetSourceDirectory()) != 0:
+                     cwd=options.src_dir) != 0:
     print 'Could not run build/util/lastchange.py to update LASTCHANGE.blink.'
     return 1
 
@@ -165,13 +164,14 @@ def main(argv):
   archive = MyTarFile.open(output_fullname, 'w')
   archive.set_remove_nonessential_files(options.remove_nonessential_files)
   archive.set_verbose(options.verbose)
+  archive.set_src_dir(options.src_dir)
   try:
     if options.test_data:
       for directory in TESTDIRS:
-        archive.add(os.path.join(GetSourceDirectory(), directory),
+        archive.add(os.path.join(options.src_dir, directory),
                     arcname=os.path.join(output_basename, directory))
     else:
-      archive.add(GetSourceDirectory(), arcname=output_basename)
+      archive.add(options.src_dir, arcname=output_basename)
   finally:
     archive.close()
 
