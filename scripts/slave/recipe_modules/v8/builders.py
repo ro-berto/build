@@ -1664,5 +1664,8 @@ BUILDERS['client.dart.fyi'] = {'builders': {
   } for platform in ('win', 'linux', 'mac')
 }}
 
+dart_mac_release = BUILDERS['client.dart.fyi']['builders']['v8-mac-release']
+dart_mac_release['chromium_apply_config'].extend(['v8_ninja', 'clang', 'goma'])
+
 BUILDERS = freeze(BUILDERS)
 BRANCH_BUILDERS = freeze(BRANCH_BUILDERS)
