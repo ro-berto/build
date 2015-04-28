@@ -87,7 +87,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' msan=1 msan_track_origins=2 target_arch=x64 test_isolation_mode=prepare use_goma=1 use_prebuilt_instrumented_libraries=1"
+      "GYP_DEFINES": "chromeos=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' msan=1 msan_track_origins=2 target_arch=x64 test_isolation_mode=prepare use_goma=1 use_prebuilt_instrumented_libraries=1"
     },
     "name": "gclient runhooks (with patch)"
   },
@@ -177,7 +177,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' msan=1 msan_track_origins=2 target_arch=x64 test_isolation_mode=prepare use_goma=1 use_prebuilt_instrumented_libraries=1"
+      "GYP_DEFINES": "chromeos=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' msan=1 msan_track_origins=2 target_arch=x64 test_isolation_mode=prepare use_goma=1 use_prebuilt_instrumented_libraries=1"
     },
     "name": "analyze",
     "~followup_annotations": [
