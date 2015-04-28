@@ -10,37 +10,64 @@ def _GetTargetName(platform, target_bits):
             else 'Release')
 
 def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
-  return {
-    'disable_tests': True,
-    'bot_type': 'tester',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': target_bits,
-    },
-    'parent_buildername': parent_builder,
-    'chromium_config': 'chromium_official',
-    'gclient_config': 'perf',
-    'testing': {
-      'platform': platform,
-    },
-    'tests': [
-      steps.DynamicPerfTests(
-          _GetTargetName(platform, target_bits).lower(),
-          perf_id, index, num_shards),
-    ],
-  }
+  if platform == 'android':
+    return {
+      'disable_tests': True,
+      'bot_type': 'tester',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': target_bits,
+        'TARGET_PLATFORM': 'android',
+      },
+      'gclient_config': 'perf',
+      'gclient_apply_config': ['android'],
+      'parent_buildername': parent_builder,
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'perf',
+      'android_config': 'perf',
+      'testing': {
+        'platform': 'linux',
+      },
+      'perf-id': perf_id,
+      'results-url': 'https://chromeperf.appspot.com',
+      'tests': [],
+    }
+  else:
+    return {
+      'disable_tests': True,
+      'bot_type': 'tester',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': target_bits,
+      },
+      'parent_buildername': parent_builder,
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'perf',
+      'testing': {
+        'platform': platform,
+      },
+      'perf-id': perf_id,
+      'results-url': 'https://chromeperf.appspot.com',
+      'tests': [
+        steps.DynamicPerfTests(
+            _GetTargetName(platform, target_bits).lower(),
+            perf_id, index, num_shards),
+      ],
+    }
 
 
 def _AddBotSpec(name, platform, parent_builder, perf_id, target_bits,
-  num_shards):
+  num_shards, extra_tests=[]):
   if num_shards > 1:
     for i in range(0, num_shards):
       builder_name = "%s (%d)" % (name, i + 1)
       SPEC['builders'][builder_name] = _Spec(platform, parent_builder, perf_id,
         i, num_shards, target_bits)
+      SPEC['builders'][builder_name]['tests'].extend(extra_tests)
   else:
     SPEC['builders'][name] = _Spec(platform, parent_builder, perf_id,
         0, 1, target_bits)
+    SPEC['builders'][name]['tests'].extend(extra_tests)
 
 
 SPEC = {
@@ -48,26 +75,21 @@ SPEC = {
     'build_gs_bucket': 'chrome-perf',
   },
   'builders': {
-    'android_nexus5_oilpan_perf': {
+    'Android Builder 64': {
       'disable_tests': True,
-      'bot_type': 'tester',
+      'chromium_config': 'chromium_official',
+      'chromium_apply_config': ['chromium_perf', 'android'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android', 'perf'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
+        'TARGET_BITS': 64,
+        'TARGET_ARCH': 'arm',
       },
-      'gclient_config': 'perf',
-      'gclient_apply_config': ['android'],
-      'parent_buildername': 'android_oilpan_builder',
-      'chromium_config': 'chromium_official',
-      'gclient_config': 'perf',
-      'android_config': 'perf',
+      'bot_type': 'builder',
       'testing': {
         'platform': 'linux',
       },
-      'tests': [
-        steps.AndroidPerfTests('android-nexus5-oilpan', 1),
-      ],
     },
     'android_oilpan_builder': {
       'disable_tests': True,
@@ -184,3 +206,21 @@ _AddBotSpec(
     perf_id='chromium-win-clang',
     target_bits=32,
     num_shards=1)
+
+_AddBotSpec(
+    name='Android Nexus9 Perf',
+    platform='android',
+    parent_builder='Android Builder 64',
+    perf_id='android-nexus9',
+    target_bits=64,
+    num_shards=1)
+
+_AddBotSpec(
+    name='android_nexus5_oilpan_perf',
+    platform='android',
+    parent_builder='android_oilpan_builder',
+    perf_id='android-nexus5-oilpan',
+    target_bits=32,
+    num_shards=1,
+    extra_tests=[steps.AndroidPerfTests('android-nexus5-oilpan', 1)])
+

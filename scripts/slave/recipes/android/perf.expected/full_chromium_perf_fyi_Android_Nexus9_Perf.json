@@ -88,7 +88,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Android Nexus9 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"slavename\": \"slavename\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Android Nexus9 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"perf-id\": \"android-nexus9\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"slavename\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
