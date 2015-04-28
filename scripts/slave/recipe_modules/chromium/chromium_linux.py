@@ -10,7 +10,8 @@ SPEC = {
   },
   'builders': {
     'Linux Builder': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -26,7 +27,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'Linux Tests': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -43,7 +45,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'Linux Builder (dbg)(32)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -64,7 +67,8 @@ SPEC = {
       },
     },
     'Linux Tests (dbg)(1)(32)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -82,7 +86,8 @@ SPEC = {
     },
 
     'Linux Builder (dbg)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -95,7 +100,8 @@ SPEC = {
       'use_isolate': True,
     },
     'Linux Tests (dbg)(1)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -113,7 +119,9 @@ SPEC = {
     },
 
     'Android Arm64 Builder (dbg)': {
-      'recipe_config': 'chromium_android',
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -125,7 +133,9 @@ SPEC = {
       },
     },
     'Android Builder (dbg)': {
-      'recipe_config': 'chromium_android',
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -138,7 +148,9 @@ SPEC = {
       },
     },
     'Android Tests (dbg)': {
-      'recipe_config': 'chromium_android',
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -208,7 +220,9 @@ SPEC = {
     },
 
     'Android Builder': {
-      'recipe_config': 'chromium_android',
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -221,7 +235,9 @@ SPEC = {
       },
     },
     'Android Tests': {
-      'recipe_config': 'chromium_android',
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -290,7 +306,9 @@ SPEC = {
     },
 
     'Android Clang Builder (dbg)': {
-      'recipe_config': 'chromium_android_clang',
+      'chromium_config': 'android_clang',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -304,7 +322,9 @@ SPEC = {
     },
 
     'Android x86 Builder (dbg)': {
-      'recipe_config': 'chromium_android',
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -318,7 +338,8 @@ SPEC = {
     },
 
     'Cast Linux': {
-      'recipe_config': 'cast_linux',
+      'chromium_config': 'cast_linux',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -332,7 +353,9 @@ SPEC = {
       },
     },
     'Cast Android (dbg)': {
-      'recipe_config': 'chromium_android',
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,

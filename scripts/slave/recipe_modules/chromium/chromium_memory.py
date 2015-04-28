@@ -10,7 +10,8 @@ SPEC = {
   },
   'builders': {
     'Linux ASan LSan Builder': {
-      'recipe_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_linux_asan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -24,7 +25,8 @@ SPEC = {
       'use_isolate': True,
     },
     'Linux ASan LSan Tests (1)': {
-      'recipe_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_linux_asan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -42,7 +44,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'Linux ASan Tests (sandboxed)': {
-      'recipe_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_linux_asan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -59,7 +62,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'Mac ASan 64 Builder': {
-      'recipe_config': 'chromium_mac_asan',
+      'chromium_config': 'chromium_mac_asan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -70,7 +74,8 @@ SPEC = {
       'use_isolate': True,
     },
     'Mac ASan 64 Tests (1)': {
-      'recipe_config': 'chromium_mac_asan',
+      'chromium_config': 'chromium_mac_asan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -85,7 +90,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'Linux Chromium OS ASan LSan Builder': {
-      'recipe_config': 'chromium_chromiumos_asan',
+      'chromium_config': 'chromium_chromiumos_asan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -97,7 +103,8 @@ SPEC = {
       'use_isolate': True,
     },
     'Linux Chromium OS ASan LSan Tests (1)': {
-      'recipe_config': 'chromium_chromiumos_asan',
+      'chromium_config': 'chromium_chromiumos_asan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

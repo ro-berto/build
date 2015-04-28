@@ -10,7 +10,9 @@ SPEC = {
   },
   'builders': {
     'Linux ChromiumOS Full': {
-      'recipe_config': 'chromium_chromeos',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['chromeos'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -63,7 +65,9 @@ SPEC = {
     },
 
     'Linux ChromiumOS Builder': {
-      'recipe_config': 'chromium_chromeos',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['chromeos'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -79,7 +83,9 @@ SPEC = {
       'use_isolate': True,
     },
     'Linux ChromiumOS Tests (1)': {
-      'recipe_config': 'chromium_chromeos',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['chromeos'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -97,7 +103,9 @@ SPEC = {
     },
 
     'Linux ChromiumOS (Clang dbg)': {
-      'recipe_config': 'chromium_chromeos_clang',
+      'chromium_config': 'chromium_clang',
+      'chromium_apply_config': ['chromeos'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -143,7 +151,9 @@ SPEC = {
     },
 
     'Linux ChromiumOS Ozone Builder': {
-      'recipe_config': 'chromium_chromeos_ozone',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['chromeos', 'ozone'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -159,7 +169,9 @@ SPEC = {
       'use_isolate': True,
     },
     'Linux ChromiumOS Ozone Tests (1)': {
-      'recipe_config': 'chromium_chromeos_ozone',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['chromeos', 'ozone'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -177,7 +189,9 @@ SPEC = {
       'use_isolate': True,
     },
     'Linux ChromiumOS Ozone Builder (dbg)': {
-      'recipe_config': 'chromium_chromeos_ozone',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['chromeos', 'ozone'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -193,7 +207,9 @@ SPEC = {
       'use_isolate': True,
     },
     'Linux ChromiumOS Builder (dbg)': {
-      'recipe_config': 'chromium_chromeos',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['chromeos'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -209,7 +225,9 @@ SPEC = {
       'use_isolate': True,
     },
     'Linux ChromiumOS Tests (dbg)(1)': {
-      'recipe_config': 'chromium_chromeos',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['chromeos'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -228,7 +246,9 @@ SPEC = {
 
     # Simple Chrome test builder for coverage
     'Coverage ChromiumOS Simple Chrome x86-generic': {
-      'recipe_config': 'chromium_chromeos',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['chromeos'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

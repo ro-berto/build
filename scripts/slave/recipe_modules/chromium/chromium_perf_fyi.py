@@ -18,7 +18,8 @@ def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
       'TARGET_BITS': target_bits,
     },
     'parent_buildername': parent_builder,
-    'recipe_config': 'perf',
+    'chromium_config': 'chromium_official',
+    'gclient_config': 'perf',
     'testing': {
       'platform': platform,
     },
@@ -58,7 +59,8 @@ SPEC = {
       'gclient_config': 'perf',
       'gclient_apply_config': ['android'],
       'parent_buildername': 'android_oilpan_builder',
-      'recipe_config': 'perf',
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'perf',
       'android_config': 'perf',
       'testing': {
         'platform': 'linux',
@@ -69,7 +71,10 @@ SPEC = {
     },
     'android_oilpan_builder': {
       'disable_tests': True,
-      'recipe_config': 'chromium_oilpan',
+      'chromium_config': 'chromium_official',
+      'chromium_apply_config': ['oilpan', 'chromium_perf', 'android'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'android', 'perf'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -79,12 +84,13 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'chromium_apply_config': ['chromium_perf', 'android'],
-      'gclient_apply_config': ['android', 'perf'],
     },
     'Linux Oilpan Builder': {
       'disable_tests': True,
-      'recipe_config': 'chromium_oilpan',
+      'chromium_config': 'chromium_official',
+      'chromium_apply_config': ['oilpan', 'chromium_perf'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -96,11 +102,12 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'chromium_apply_config': ['chromium_perf']
     },
     'Win x64 FYI Builder': {
       'disable_tests': True,
-      'recipe_config': 'official',
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -116,7 +123,9 @@ SPEC = {
     },
     'Win Clang Builder': {
       'disable_tests': True,
-      'recipe_config': 'chromium_win_clang_official',
+      'chromium_config': 'chromium_win_clang_official',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,

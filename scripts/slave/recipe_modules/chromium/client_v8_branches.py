@@ -10,7 +10,8 @@ SPEC = {
   },
   'builders': {
     'Chromium ASAN (symbolized)': {
-      'recipe_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_linux_asan',
+      'gclient_config': 'chromium',
       'chromium_apply_config': [
         'asan_symbolized',
         'chromium_asan_default_targets',

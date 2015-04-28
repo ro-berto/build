@@ -20,7 +20,9 @@ SPEC = {
     'mac_perf_bisect_builder':
         chromium_perf.SPEC['builders']['Mac Builder'],
     'linux_perf_tester':{
-      'recipe_config': 'official',
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'parent_buildername': 'Linux Builder',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -37,7 +39,9 @@ SPEC = {
       'chromium_apply_config': ['chromium_perf']
     },
     'linux_perf_bisector':{
-      'recipe_config': 'official',
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'parent_buildername': 'Linux Builder',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',

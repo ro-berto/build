@@ -5,7 +5,10 @@
 SPEC = {
   'builders': {
     'Google Chrome ChromeOS': {
-      'recipe_config': 'chromeos_official',
+      'chromium_config': 'chromium_official',
+      'chromium_apply_config': ['chromeos'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -21,7 +24,9 @@ SPEC = {
       },
     },
     'Google Chrome Linux': {
-      'recipe_config': 'official',
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -31,7 +36,9 @@ SPEC = {
       },
     },
     'Google Chrome Linux x64': {
-      'recipe_config': 'official',
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -41,7 +48,9 @@ SPEC = {
       },
     },
     'Google Chrome Mac': {
-      'recipe_config': 'official',
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -51,7 +60,9 @@ SPEC = {
       },
     },
     'Google Chrome Win': {
-      'recipe_config': 'official',
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,

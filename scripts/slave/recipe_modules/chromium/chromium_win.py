@@ -10,7 +10,8 @@ SPEC = {
   },
   'builders': {
     'Win Builder': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -26,7 +27,8 @@ SPEC = {
       'use_isolate': True,
     },
     'XP Tests (1)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -47,7 +49,8 @@ SPEC = {
       },
     },
     'Vista Tests (1)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -67,7 +70,8 @@ SPEC = {
       },
     },
     'Win7 Tests (1)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -87,7 +91,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'Win x64 Builder': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -103,7 +108,8 @@ SPEC = {
       'use_isolate': True,
     },
     'Win 7 Tests x64 (1)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -124,7 +130,8 @@ SPEC = {
     },
 
     'Win x64 Builder (dbg)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -141,7 +148,8 @@ SPEC = {
     },
 
     'Win Builder (dbg)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -157,7 +165,8 @@ SPEC = {
       'use_isolate': True,
     },
     'Win7 Tests (dbg)(1)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -174,7 +183,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'Win8 Aura': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,

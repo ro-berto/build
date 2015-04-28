@@ -4,6 +4,12 @@
 
 SPEC = {
   'builders': {
+    'Chromeos Builder': {
+      'recipe_config': 'chrome_chromeos',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Release Buildspec Builder': {
       'recipe_config': 'chrome_chromeos_buildspec',
       'buildspec_version': '1.2.3.4',

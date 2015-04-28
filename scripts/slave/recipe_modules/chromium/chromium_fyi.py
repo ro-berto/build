@@ -10,7 +10,8 @@ SPEC = {
   },
   'builders': {
      'Chromium iOS Device': {
-      'recipe_config': 'chromium_ios_device',
+      'chromium_config': 'chromium_ios_device',
+      'gclient_config': 'ios',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_PLATFORM': 'ios',
@@ -24,7 +25,8 @@ SPEC = {
       }
     },
     'Chromium iOS Simulator (dbg)': {
-      'recipe_config': 'chromium_ios_simulator',
+      'chromium_config': 'chromium_ios_simulator',
+      'gclient_config': 'ios',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_PLATFORM': 'ios',
@@ -39,7 +41,8 @@ SPEC = {
       }
     },
     'Chromium iOS Device (ninja)': {
-      'recipe_config': 'chromium_ios_ninja',
+      'chromium_config': 'chromium_ios_ninja',
+      'gclient_config': 'ios',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_PLATFORM': 'ios',
@@ -53,7 +56,8 @@ SPEC = {
       }
     },
     'Chromium Mac 10.10': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -68,7 +72,8 @@ SPEC = {
     },
     'Linux ARM Cross-Compile': {
       # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
-      'recipe_config': 'chromium_no_goma',
+      'chromium_config': 'chromium_no_goma',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_ARCH': 'arm',
@@ -79,7 +84,6 @@ SPEC = {
         'arm_float_abi': 'hard',
         'test_isolation_mode': 'archive',
       },
-      'chromium_config': 'chromium',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -94,7 +98,8 @@ SPEC = {
       'use_isolate': True,
     },
     'Linux ARM': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_ARCH': 'arm',
@@ -110,7 +115,8 @@ SPEC = {
       },
     },
     'Linux Trusty': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -128,7 +134,8 @@ SPEC = {
       },
     },
     'Linux Trusty (32)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -146,7 +153,8 @@ SPEC = {
       },
     },
     'Linux Trusty (dbg)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -164,7 +172,8 @@ SPEC = {
       },
     },
     'Linux Trusty (dbg)(32)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -182,7 +191,8 @@ SPEC = {
       },
     },
     'Print Preview Linux': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'GYP_DEFINES': {
         'component': 'shared_library',
       },
@@ -200,7 +210,8 @@ SPEC = {
       },
     },
     'Print Preview Mac': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'GYP_DEFINES': {
         'component': 'shared_library',
       },
@@ -218,7 +229,8 @@ SPEC = {
       },
     },
     'Print Preview Win': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'GYP_DEFINES': {
         'component': 'shared_library',
       },
@@ -236,7 +248,8 @@ SPEC = {
       },
     },
     'CFI Linux': {
-      'recipe_config': 'chromium_cfi',
+      'chromium_config': 'chromium_cfi',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -251,7 +264,8 @@ SPEC = {
       },
     },
     'Mac OpenSSL': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -268,7 +282,8 @@ SPEC = {
       },
     },
     'Site Isolation Linux': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -290,7 +305,8 @@ SPEC = {
       },
     },
     'Site Isolation Win': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_PLATFORM': 'win',
@@ -314,7 +330,8 @@ SPEC = {
       },
     },
     'Browser Side Navigation Linux': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -333,7 +350,8 @@ SPEC = {
       },
     },
     'ChromiumPractice': {
-      'recipe_config': 'chromium_blink_merged',
+      'chromium_config': 'chromium',
+      'gclient_config': 'blink_merged',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -344,7 +362,8 @@ SPEC = {
       },
     },
     'ChromiumPracticeTester': {
-      'recipe_config': 'chromium_blink_merged',
+      'chromium_config': 'chromium',
+      'gclient_config': 'blink_merged',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -359,7 +378,8 @@ SPEC = {
       },
     },
     'ChromiumPracticeFullTester': {
-      'recipe_config': 'chromium_blink_merged',
+      'chromium_config': 'chromium',
+      'gclient_config': 'blink_merged',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -381,7 +401,9 @@ SPEC = {
       },
     },
     'CrWinClang': {
-      'recipe_config': 'chromium_win_clang_official',
+      'chromium_config': 'chromium_win_clang_official',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -397,7 +419,8 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'CrWinClang tester': {
-      'recipe_config': 'chromium_no_goma',
+      'chromium_config': 'chromium_no_goma',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -413,7 +436,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'CrWinClang(dbg)': {
-      'recipe_config': 'chromium_win_clang',
+      'chromium_config': 'chromium_win_clang',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -430,7 +454,8 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'CrWinClang(dbg) tester': {
-      'recipe_config': 'chromium_no_goma',
+      'chromium_config': 'chromium_no_goma',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -446,7 +471,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'CrWinClang(shared)': {
-      'recipe_config': 'chromium_win_clang',
+      'chromium_config': 'chromium_win_clang',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -463,7 +489,8 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'CrWinClang(shared) tester': {
-      'recipe_config': 'chromium_no_goma',
+      'chromium_config': 'chromium_no_goma',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -479,7 +506,9 @@ SPEC = {
       'enable_swarming': True,
     },
     'CrWinClang64': {
-      'recipe_config': 'chromium_win_clang_official',
+      'chromium_config': 'chromium_win_clang_official',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -495,7 +524,8 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'CrWinClang64 tester': {
-      'recipe_config': 'chromium_no_goma',
+      'chromium_config': 'chromium_no_goma',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -511,7 +541,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'CrWinClang64(dbg)': {
-      'recipe_config': 'chromium_win_clang',
+      'chromium_config': 'chromium_win_clang',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -528,7 +559,8 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'CrWinClang64(dbg) tester': {
-      'recipe_config': 'chromium_no_goma',
+      'chromium_config': 'chromium_no_goma',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -544,7 +576,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'CrWinClang64(dll)': {
-      'recipe_config': 'chromium_win_clang',
+      'chromium_config': 'chromium_win_clang',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -561,7 +594,8 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'CrWinClang64(dll) tester': {
-      'recipe_config': 'chromium_no_goma',
+      'chromium_config': 'chromium_no_goma',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -577,7 +611,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'CrWinClangLLD': {
-      'recipe_config': 'chromium_win_clang',
+      'chromium_config': 'chromium_win_clang',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -594,7 +629,8 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'CrWinClangLLD tester': {
-      'recipe_config': 'chromium_no_goma',
+      'chromium_config': 'chromium_no_goma',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -610,7 +646,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'CrWinAsan': {
-      'recipe_config': 'chromium_win_clang_asan',
+      'chromium_config': 'chromium_win_clang_asan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -627,7 +664,8 @@ SPEC = {
       # build everything.
     },
     'CrWinAsan tester': {
-      'recipe_config': 'chromium_win_asan',
+      'chromium_config': 'chromium_win_asan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -643,7 +681,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'CrWinAsan(dll)': {
-      'recipe_config': 'chromium_win_clang_asan',
+      'chromium_config': 'chromium_win_clang_asan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -661,7 +700,8 @@ SPEC = {
       # build everything.
     },
     'CrWinAsan(dll) tester': {
-      'recipe_config': 'chromium_win_asan',
+      'chromium_config': 'chromium_win_asan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -677,7 +717,9 @@ SPEC = {
       'enable_swarming': True,
     },
     'CrWinGoma': {
-      'recipe_config': 'chromium_win_goma_canary',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['goma_canary'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -690,7 +732,9 @@ SPEC = {
       }
     },
     'CrWinGoma(dll)': {
-      'recipe_config': 'chromium_win_goma_canary_dll',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['goma_canary', 'shared_library'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -703,7 +747,9 @@ SPEC = {
       }
     },
     'CrWin7Goma': {
-      'recipe_config': 'chromium_win_goma_canary',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['goma_canary'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -716,7 +762,9 @@ SPEC = {
       }
     },
     'CrWin7Goma(dll)': {
-      'recipe_config': 'chromium_win_goma_canary_dll',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['goma_canary', 'shared_library'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -729,7 +777,9 @@ SPEC = {
       }
     },
     'CrWin7Goma(dbg)': {
-      'recipe_config': 'chromium_win_goma_canary',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['goma_canary'],
+      'gclient_config': 'chromium',
       'GYP_DEFINES': {
         'win_z7': '1'
       },
@@ -745,7 +795,9 @@ SPEC = {
       }
     },
     'CrWin7Goma(clbr)': {
-      'recipe_config': 'chromium_win_goma_canary_clobber',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['goma_canary', 'clobber', 'shared_library'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -758,7 +810,9 @@ SPEC = {
       }
     },
     'CrWinClangGoma': {
-      'recipe_config': 'chromium_win_goma_canary_clang',
+      'chromium_config': 'chromium_win_clang_goma',
+      'chromium_apply_config': ['goma_canary', 'clobber'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -771,7 +825,9 @@ SPEC = {
       }
     },
     'Chromium Linux Goma Canary': {
-      'recipe_config': 'chromium_linux_goma_canary',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['goma_canary'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -784,7 +840,9 @@ SPEC = {
       }
     },
     'Chromium Linux Goma Canary (clobber)': {
-      'recipe_config': 'chromium_linux_goma_canary_clobber',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['goma_canary', 'clobber'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -797,7 +855,9 @@ SPEC = {
       }
     },
     'Chromium Linux32 Goma Canary (clobber)': {
-      'recipe_config': 'chromium_linux_goma_canary_clobber',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['goma_canary', 'clobber'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -810,7 +870,9 @@ SPEC = {
       }
     },
     'Chromium Linux Precise Goma LinkTest': {
-      'recipe_config': 'chromium_linux_goma_canary_linktest',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['goma_canary', 'goma_linktest'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -823,7 +885,9 @@ SPEC = {
       }
     },
     'Chromium Mac 10.6 Goma Canary': {
-      'recipe_config': 'chromium_mac_goma_canary',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['goma_canary'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -836,7 +900,9 @@ SPEC = {
       }
     },
     'Chromium Mac 10.7 Goma Canary': {
-      'recipe_config': 'chromium_mac_goma_canary',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['goma_canary'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -849,7 +915,9 @@ SPEC = {
       }
     },
     'Chromium Mac 10.6 Goma Canary (clobber)': {
-      'recipe_config': 'chromium_mac_goma_canary_clobber',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['goma_canary', 'clobber'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -862,7 +930,9 @@ SPEC = {
       }
     },
     'Chromium Mac 10.7 Goma Canary (clobber)': {
-      'recipe_config': 'chromium_mac_goma_canary_clobber',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['goma_canary', 'clobber'],
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -875,7 +945,8 @@ SPEC = {
       }
     },
     'ClangToTLinux': {
-      'recipe_config': 'clang_tot_linux',
+      'chromium_config': 'clang_tot_linux',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -903,7 +974,8 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'ClangToTLinux tester': {
-      'recipe_config': 'chromium_no_goma',
+      'chromium_config': 'chromium_no_goma',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -920,7 +992,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'ClangToTLinux (dbg)': {
-      'recipe_config': 'clang_tot_linux',
+      'chromium_config': 'clang_tot_linux',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -941,7 +1014,8 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'ClangToTLinuxASan': {
-      'recipe_config': 'clang_tot_linux_asan',
+      'chromium_config': 'clang_tot_linux_asan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -962,7 +1036,8 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'ClangToTLinuxASan tester': {
-      'recipe_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_linux_asan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -978,7 +1053,9 @@ SPEC = {
       'enable_swarming': True,
     },
     'ClangToTAndroidASan': {
-      'recipe_config': 'clang_tot_android_asan',
+      'chromium_config': 'clang_tot_android_asan',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_ARCH': 'arm',
@@ -998,7 +1075,8 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'ClangToTMac': {
-      'recipe_config': 'clang_tot_mac',
+      'chromium_config': 'clang_tot_mac',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -1019,7 +1097,8 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'ClangToTMac tester': {
-      'recipe_config': 'chromium_no_goma',
+      'chromium_config': 'chromium_no_goma',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -1036,7 +1115,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'ClangToTMac (dbg)': {
-      'recipe_config': 'clang_tot_mac',
+      'chromium_config': 'clang_tot_mac',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -1056,7 +1136,8 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'ClangToTMacASan': {
-      'recipe_config': 'clang_tot_mac_asan',
+      'chromium_config': 'clang_tot_mac_asan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -1076,7 +1157,8 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'ClangToTMacASan tester': {
-      'recipe_config': 'chromium_mac_asan',
+      'chromium_config': 'chromium_mac_asan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -1091,7 +1173,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'Linux Builder (clobber)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_apply_config': ['clobber'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1108,7 +1191,9 @@ SPEC = {
       },
     },
     'Android Remoting Tests': {
-      'recipe_config': 'chromium_android',
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,

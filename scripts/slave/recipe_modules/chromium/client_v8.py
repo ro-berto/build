@@ -10,7 +10,13 @@ SPEC = {
   },
   'builders': {
     'Linux Debug Builder': {
-      'recipe_config': 'chromium_v8',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': [
+        'v8_bleeding_edge_git',
+        'chromium_lkcr',
+        'show_v8_revision',
+      ],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -25,7 +31,13 @@ SPEC = {
     # Bot names should be in sync with chromium.linux's names to retrieve the
     # same test configuration files.
     'Linux Tests (dbg)(1)': {
-      'recipe_config': 'chromium_v8',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': [
+        'v8_bleeding_edge_git',
+        'chromium_lkcr',
+        'show_v8_revision',
+      ],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -43,7 +55,8 @@ SPEC = {
       },
     },
     'Linux ASAN Builder': {
-      'recipe_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_linux_asan',
+      'gclient_config': 'chromium',
       'gclient_apply_config': [
         'v8_bleeding_edge_git',
         'chromium_lkcr',
@@ -61,7 +74,8 @@ SPEC = {
       },
     },
     'Linux ASan LSan Tests (1)': {
-      'recipe_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_linux_asan',
+      'gclient_config': 'chromium',
       'gclient_apply_config': [
         'v8_bleeding_edge_git',
         'chromium_lkcr',
@@ -85,8 +99,10 @@ SPEC = {
     },
     'Chrome Linux Perf': {
       'disable_tests': True,
-      'recipe_config': 'official',
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'chromium',
       'gclient_apply_config': [
+        'chrome_internal',
         'perf',
         'v8_bleeding_edge_git',
         'chromium_lkcr',
@@ -109,8 +125,10 @@ SPEC = {
     },
     'Chrome Win7 Perf': {
       'disable_tests': True,
-      'recipe_config': 'official',
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'chromium',
       'gclient_apply_config': [
+        'chrome_internal',
         'perf',
         'v8_bleeding_edge_git',
         'chromium_lkcr',
@@ -137,7 +155,8 @@ SPEC = {
     },
     'Chrome Mac10.9 Perf': {
       'disable_tests': True,
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'gclient_apply_config': [
         'perf',
         'v8_bleeding_edge_git',

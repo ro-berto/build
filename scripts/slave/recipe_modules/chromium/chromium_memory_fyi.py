@@ -10,7 +10,8 @@ SPEC = {
   },
   'builders': {
     'Chromium Linux MSan Builder': {
-      'recipe_config': 'chromium_msan',
+      'chromium_config': 'chromium_msan',
+      'gclient_config': 'chromium',
       'chromium_apply_config': ['prebuilt_instrumented_libraries'],
       'GYP_DEFINES': {
         'msan_track_origins': 2,
@@ -25,7 +26,8 @@ SPEC = {
       'use_isolate': True,
     },
     'Linux MSan Tests': {
-      'recipe_config': 'chromium_msan',
+      'chromium_config': 'chromium_msan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -40,7 +42,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'Chromium Linux ChromeOS MSan Builder': {
-      'recipe_config': 'chromium_msan',
+      'chromium_config': 'chromium_msan',
+      'gclient_config': 'chromium',
       'chromium_apply_config': ['prebuilt_instrumented_libraries'],
       'GYP_DEFINES': {
         'msan_track_origins': 2,
@@ -56,7 +59,8 @@ SPEC = {
       'use_isolate': True,
     },
     'Linux ChromeOS MSan Tests': {
-      'recipe_config': 'chromium_msan',
+      'chromium_config': 'chromium_msan',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -71,7 +75,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'Chromium Linux TSan Builder': {
-      'recipe_config': 'chromium_tsan2',
+      'chromium_config': 'chromium_tsan2',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -84,7 +89,8 @@ SPEC = {
       'use_isolate': True,
     },
     'Linux TSan Tests': {
-      'recipe_config': 'chromium_tsan2',
+      'chromium_config': 'chromium_tsan2',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

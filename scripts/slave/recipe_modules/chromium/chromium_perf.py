@@ -18,7 +18,8 @@ def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
       'TARGET_BITS': target_bits,
     },
     'parent_buildername': parent_builder,
-    'recipe_config': 'perf',
+    'chromium_config': 'chromium_official',
+    'gclient_config': 'perf',
     'testing': {
       'platform': platform,
     },
@@ -55,7 +56,9 @@ SPEC = {
   'builders': {
     'Linux Builder': {
       'disable_tests': True,
-      'recipe_config': 'official',
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -71,7 +74,9 @@ SPEC = {
     },
     'Win Builder': {
       'disable_tests': True,
-      'recipe_config': 'official',
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -87,7 +92,9 @@ SPEC = {
     },
     'Win x64 Builder': {
       'disable_tests': True,
-      'recipe_config': 'official',
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -103,7 +110,9 @@ SPEC = {
     },
     'Mac Builder': {
       'disable_tests': True,
-      'recipe_config': 'official',
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -119,7 +128,8 @@ SPEC = {
     },
     'Android Builder': {
       'disable_tests': True,
-      'recipe_config': 'official',
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -253,7 +263,8 @@ for k, v in _AndroidSpecs.iteritems():
     'gclient_config': 'perf',
     'gclient_apply_config': ['android'],
     'parent_buildername': 'Android Builder',
-    'recipe_config': 'perf',
+    'chromium_config': 'chromium_official',
+    'gclient_config': 'perf',
     'android_config': 'perf',
     'testing': {
       'platform': 'linux',

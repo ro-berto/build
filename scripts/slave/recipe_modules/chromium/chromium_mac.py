@@ -10,7 +10,8 @@ SPEC = {
   },
   'builders': {
     'Mac Builder': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -26,7 +27,8 @@ SPEC = {
       'use_isolate': True,
     },
     'Mac10.6 Tests': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -46,7 +48,8 @@ SPEC = {
       },
     },
     'Mac10.8 Tests': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -66,7 +69,8 @@ SPEC = {
       },
     },
     'Mac10.9 Tests': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -86,7 +90,8 @@ SPEC = {
       },
     },
     'Mac Builder (dbg)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -102,7 +107,8 @@ SPEC = {
       'use_isolate': True,
     },
     'Mac10.9 Tests (dbg)': {
-      'recipe_config': 'chromium',
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,

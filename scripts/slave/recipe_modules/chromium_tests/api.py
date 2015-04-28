@@ -13,49 +13,9 @@ from slave import recipe_util
 
 # Different types of builds this recipe module can do.
 RECIPE_CONFIGS = freeze({
-  'chromeos_official': {
-    'chromium_config': 'chromium_official',
-    'chromium_apply_config': ['chromeos'],
-    'gclient_config': 'chromium',
-    'gclient_apply_config': ['chrome_internal'],
-  },
+  # TODO(phajdan.jr): Remove remaining indirect recipe configs.
   'chromium': {
     'chromium_config': 'chromium',
-    'gclient_config': 'chromium',
-  },
-  'chromium_blink_merged': {
-    'chromium_config': 'chromium',
-    'gclient_config': 'blink_merged',
-  },
-  'chromium_android': {
-    'chromium_config': 'android',
-    'gclient_config': 'chromium',
-    'gclient_apply_config': ['android'],
-  },
-  'chromium_android_clang': {
-    'chromium_config': 'android_clang',
-    'gclient_config': 'chromium',
-    'gclient_apply_config': ['android'],
-  },
-  'chromium_clang': {
-    'chromium_config': 'chromium_clang',
-    'gclient_config': 'chromium',
-  },
-  'chromium_linux_asan': {
-    'chromium_config': 'chromium_linux_asan',
-    'gclient_config': 'chromium',
-  },
-  'chromium_mac_asan': {
-    'chromium_config': 'chromium_mac_asan',
-    'gclient_config': 'chromium',
-  },
-  'chromium_chromiumos_asan': {
-    'chromium_config': 'chromium_chromiumos_asan',
-    'gclient_config': 'chromium',
-  },
-  'chromium_chromeos': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['chromeos'],
     'gclient_config': 'chromium',
   },
   'chrome_chromeos': {
@@ -68,159 +28,6 @@ RECIPE_CONFIGS = freeze({
     'chromium_config': 'chromium',
     'chromium_apply_config': ['chromeos', 'chrome_internal'],
     'gclient_config': 'chrome_from_release_buildspec',
-  },
-  'chromium_chromeos_ozone': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['chromeos', 'ozone'],
-    'gclient_config': 'chromium',
-  },
-  'chromium_chromeos_clang': {
-    'chromium_config': 'chromium_clang',
-    'chromium_apply_config': ['chromeos'],
-    'gclient_config': 'chromium',
-  },
-  'chromium_ios_device': {
-    'chromium_config': 'chromium_ios_device',
-    'gclient_config': 'ios',
-  },
-  'chromium_ios_ninja': {
-    'chromium_config': 'chromium_ios_ninja',
-    'gclient_config': 'ios',
-  },
-  'chromium_ios_simulator': {
-    'chromium_config': 'chromium_ios_simulator',
-    'gclient_config': 'ios',
-  },
-  'chromium_tsan2': {
-    'chromium_config': 'chromium_tsan2',
-    'gclient_config': 'chromium',
-  },
-  'chromium_msan': {
-    'chromium_config': 'chromium_msan',
-    'gclient_config': 'chromium',
-  },
-  'chromium_no_goma': {
-    'chromium_config': 'chromium_no_goma',
-    'gclient_config': 'chromium',
-  },
-  'chromium_oilpan': {
-    'chromium_config': 'chromium_official',
-    'chromium_apply_config': ['oilpan'],
-    'gclient_config': 'chromium',
-    'gclient_apply_config': ['chrome_internal'],
-  },
-  'chromium_v8': {
-    'chromium_config': 'chromium',
-    'gclient_config': 'chromium',
-    'gclient_apply_config': [
-      'v8_bleeding_edge_git',
-      'chromium_lkcr',
-      'show_v8_revision',
-    ],
-  },
-  'chromium_skia': {
-    'chromium_config': 'chromium',
-    'gclient_config': 'chromium_skia',
-  },
-  'chromium_win_clang': {
-    'chromium_config': 'chromium_win_clang',
-    'gclient_config': 'chromium',
-  },
-  'chromium_win_clang_asan': {
-    'chromium_config': 'chromium_win_clang_asan',
-    'gclient_config': 'chromium',
-  },
-  'chromium_win_clang_official': {
-    'chromium_config': 'chromium_win_clang_official',
-    'gclient_config': 'chromium',
-    'gclient_apply_config': ['chrome_internal'],
-  },
-  'chromium_win_asan': {
-    'chromium_config': 'chromium_win_asan',
-    'gclient_config': 'chromium',
-  },
-  'chromium_win_goma_canary': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['goma_canary'],
-    'gclient_config': 'chromium',
-  },
-  'chromium_win_goma_canary_dll': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['goma_canary', 'shared_library'],
-    'gclient_config': 'chromium',
-  },
-  'chromium_win_goma_canary_clobber': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['goma_canary', 'clobber', 'shared_library'],
-    'gclient_config': 'chromium',
-  },
-  'chromium_win_goma_canary_clang': {
-    'chromium_config': 'chromium_win_clang_goma',
-    'chromium_apply_config': ['goma_canary', 'clobber'],
-    'gclient_config': 'chromium',
-  },
-  'chromium_linux_goma_canary': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['goma_canary'],
-    'gclient_config': 'chromium',
-  },
-  'chromium_linux_goma_canary_clobber': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['goma_canary', 'clobber'],
-    'gclient_config': 'chromium',
-  },
-  'chromium_linux_goma_canary_linktest': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['goma_canary', 'goma_linktest'],
-    'gclient_config': 'chromium',
-  },
-  'chromium_mac_goma_canary': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['goma_canary'],
-    'gclient_config': 'chromium',
-  },
-  'chromium_mac_goma_canary_clobber': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['goma_canary', 'clobber'],
-    'gclient_config': 'chromium',
-  },
-  'official': {
-    'chromium_config': 'chromium_official',
-    'gclient_config': 'chromium',
-    'gclient_apply_config': ['chrome_internal'],
-  },
-  'perf': {
-    'chromium_config': 'chromium_official',
-    'gclient_config': 'perf',
-  },
-  'clang_tot_linux': {
-    'chromium_config': 'clang_tot_linux',
-    'gclient_config': 'chromium',
-  },
-  'clang_tot_linux_asan': {
-    'chromium_config': 'clang_tot_linux_asan',
-    'gclient_config': 'chromium',
-  },
-  'clang_tot_android_asan': {
-    'chromium_config': 'clang_tot_android_asan',
-    'gclient_config': 'chromium',
-    'gclient_apply_config': ['android'],
-  },
-  'clang_tot_mac': {
-    'chromium_config': 'clang_tot_mac',
-    'gclient_config': 'chromium',
-  },
-  'clang_tot_mac_asan': {
-    'chromium_config': 'clang_tot_mac_asan',
-    'gclient_config': 'chromium',
-  },
-  'cast_linux': {
-    'chromium_config': 'cast_linux',
-    'gclient_config': 'chromium',
-  },
-  'chromium_cfi': {
-    'chromium_config': 'chromium_cfi',
-    'gclient_config': 'chromium',
   },
 })
 
@@ -235,11 +42,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     bot_config = master_dict.get('builders', {}).get(buildername)
     master_config = master_dict.get('settings', {})
-    recipe_config_name = bot_config['recipe_config']
-    assert recipe_config_name, (
-        'Unrecognized builder name %r for master %r.' % (
-            buildername, mastername))
-    recipe_config = RECIPE_CONFIGS[recipe_config_name]
+
+    # TODO(phajdan.jr): Remove indirect recipe configs completely.
+    recipe_config = RECIPE_CONFIGS.get(bot_config.get('recipe_config'), {})
 
     # Get the buildspec version. It can be supplied as a build property or as
     # a recipe config value.
@@ -247,7 +52,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                          bot_config.get('buildspec_version'))
 
     self.m.chromium.set_config(
-        recipe_config['chromium_config'],
+        bot_config.get('chromium_config') or recipe_config['chromium_config'],
         **bot_config.get('chromium_config_kwargs', {}))
     # Set GYP_DEFINES explicitly because chromium config constructor does
     # not support that.
@@ -263,7 +68,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       for c in chromium_apply_config:
         self.m.chromium.apply_config(c)
     self.m.gclient.set_config(
-        recipe_config['gclient_config'],
+        bot_config.get('gclient_config') or recipe_config['gclient_config'],
         PATCH_PROJECT=self.m.properties.get('patch_project'),
         BUILDSPEC_VERSION=buildspec_version,
         **bot_config.get('gclient_config_kwargs', {}))

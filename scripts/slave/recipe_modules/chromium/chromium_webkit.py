@@ -15,7 +15,8 @@ SPEC['settings']['build_gs_bucket'] = 'chromium-webkit-archive'
 
 SPEC['builders'].update({
   'WebKit Win Builder': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -34,7 +35,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit XP': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -56,7 +58,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Win7': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -78,7 +81,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Win x64 Builder': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'chromium_apply_config': ['shared_library'],
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
@@ -101,7 +105,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Win Builder (dbg)': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -120,7 +125,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Win7 (dbg)': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -142,7 +148,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Win x64 Builder (dbg)': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -164,7 +171,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Mac Builder': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -178,7 +186,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Mac10.6': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -200,7 +209,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Mac10.7': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -222,7 +232,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Mac10.8': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -244,7 +255,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Mac10.8 (retina)': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -267,7 +279,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Mac10.9': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -289,7 +302,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Mac Builder (dbg)': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -303,7 +317,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Mac10.6 (dbg)': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -325,7 +340,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Mac10.7 (dbg)': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -347,7 +363,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Linux': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -370,7 +387,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Linux 32': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -390,7 +408,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Linux ASAN': {
-    'recipe_config': 'chromium_clang',
+    'chromium_config': 'chromium_clang',
+    'gclient_config': 'chromium',
     'chromium_apply_config': ['asan'],
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
@@ -417,7 +436,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Linux MSAN': {
-    'recipe_config': 'chromium_clang',
+    'chromium_config': 'chromium_clang',
+    'gclient_config': 'chromium',
     'chromium_apply_config': [
       'prebuilt_instrumented_libraries',
       'msan',
@@ -449,7 +469,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Linux (dbg)': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -469,8 +490,9 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'Android Builder': {
-    'recipe_config': 'chromium_android',
-    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_config': 'android',
+    'gclient_config': 'chromium',
+    'gclient_apply_config': ['android', 'blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 32,
@@ -483,8 +505,9 @@ SPEC['builders'].update({
     },
   },
   'WebKit Android (Nexus4)': {
-    'recipe_config': 'chromium_android',
-    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_config': 'android',
+    'gclient_config': 'chromium',
+    'gclient_apply_config': ['android', 'blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 32,
@@ -508,7 +531,8 @@ SPEC['builders'].update({
     },
   },
   'WebKit Win Oilpan': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_apply_config': ['oilpan'],
     'chromium_config_kwargs': {
@@ -537,7 +561,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Win Oilpan (dbg)': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_apply_config': ['oilpan'],
     'chromium_config_kwargs': {
@@ -566,7 +591,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Mac Oilpan': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_apply_config': ['oilpan'],
     'chromium_config_kwargs': {
@@ -590,7 +616,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Mac Oilpan (dbg)': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_apply_config': ['oilpan'],
     'chromium_config_kwargs': {
@@ -614,7 +641,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Linux Oilpan': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_apply_config': ['oilpan'],
     'chromium_config_kwargs': {
@@ -641,7 +669,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Linux Oilpan ASAN': {
-    'recipe_config': 'chromium_clang',
+    'chromium_config': 'chromium_clang',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_apply_config': ['oilpan', 'asan'],
     'chromium_config_kwargs': {
@@ -671,7 +700,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Linux Leak': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -698,7 +728,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Linux Oilpan Leak': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_apply_config': ['oilpan'],
     'chromium_config_kwargs': {
@@ -730,7 +761,8 @@ SPEC['builders'].update({
     'use_isolate': True,
   },
   'WebKit Linux Oilpan (dbg)': {
-    'recipe_config': 'chromium',
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_apply_config': ['oilpan'],
     'chromium_config_kwargs': {
