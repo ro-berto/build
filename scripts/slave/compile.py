@@ -230,8 +230,9 @@ def UploadGomaCompilerProxyInfo():
   # Since a filename of compiler_proxy.INFO is fairly unique,
   # we might be able to upload it as-is.
   log_path = UploadToGomaLogGS(latest_info, os.path.basename(latest_info))
-  viewer_url = 'http://chromium-build-stats.appspot.com/compiler_proxy_log/' + log_path
-  print "Visualization at %s" % viewer_url
+  viewer_url = ('http://chromium-build-stats.appspot.com/compiler_proxy_log/'
+                + log_path)
+  print 'Visualization at %s' % viewer_url
 
 
 def goma_teardown(options, env):
@@ -294,7 +295,7 @@ def UploadNinjaLog(options, command, exit_status):
   log_path = UploadToGomaLogGS(
     ninja_log_path, ninja_log_filename, additional_text)
   viewer_url = 'http://chromium-build-stats.appspot.com/ninja_log/' + log_path
-  print "Visualization at %s" % viewer_url
+  print 'Visualization at %s' % viewer_url
 
 
 def common_xcode_settings(command, options, env, compiler=None):
@@ -845,10 +846,63 @@ def NeedEnvFileUpdateOnWin(env):
       'GOMA_HERMETIC',
       'GOMA_RPC_EXTRA_PARAMS'
   )
-  for key in env.keys():
+  for key in env.overrides:
     if key not in ignore_envs:
       return True
   return False
+
+
+def UpdateWindowsEnvironment(envfile_dir, env):
+  """Update windows environment in environment.{x86,x64}.
+
+  Args:
+    envfile_dir: a directory name environment.{x86,x64} are stored.
+    env: an instance of EchoDict that represents environment.
+  """
+  # envvars_to_save come from _ExtractImportantEnvironment in
+  # https://chromium.googlesource.com/external/gyp/+/\
+  # master/pylib/gyp/msvs_emuation.py
+  # You must update this when the original code is updated.
+  envvars_to_save = (
+      'goma_.*', # TODO(scottmg): This is ugly, but needed for goma.
+      'include',
+      'lib',
+      'libpath',
+      'path',
+      'pathext',
+      'systemroot',
+      'temp',
+      'tmp',
+  )
+  env_to_store = {}
+  for envvar in envvars_to_save:
+    compiled = re.compile(envvar, re.IGNORECASE)
+    for key in env.overrides:
+      if compiled.match(key):
+        if envvar == 'path':
+          env_to_store[key] = (os.path.dirname(sys.executable) +
+                               os.pathsep + env[key])
+        else:
+          env_to_store[key] = env[key]
+
+  if not env_to_store:
+    return
+
+  nul = '\0'
+  for arch in ['x86', 'x64']:
+    path = os.path.join(envfile_dir, 'environment.%s' % arch)
+    print '%s will be updated with %s.' % (path, env_to_store)
+    env_in_file = {}
+    with open(path) as f:
+      for entry in f.read().split(nul):
+        if not entry:
+          continue
+        key, value = entry.split('=', 1)
+        env_in_file[key] = value
+    env_in_file.update(env_to_store)
+    with open(path, 'wb') as f:
+      f.write(nul.join(['%s=%s' % (k, v) for k, v in env_in_file.iteritems()]))
+      f.write(nul * 2)
 
 
 def main_ninja(options, args):
@@ -871,12 +925,14 @@ def main_ninja(options, args):
 
     command = ['ninja', '-C', options.target_output_dir]
 
+    # HACK(yyanagisawa): update environment files on |env| update.
+    # For compiling on Windows, environment in environment files are used.
+    # It means even if enviroment such as GOMA_DISABLED is updated in
+    # compile.py, the update will be ignored.
+    # We need to update environment files to reflect the update.
     if chromium_utils.IsWindows() and NeedEnvFileUpdateOnWin(env):
-      # On Windows, we need to update environment.{x86,x64} before running
-      # ninja to reflect overridden environment.
-      print 'Calling runhooks again because of environment override'
-      chromium_utils.RunCommand(
-          [chromium_utils.GetGClientCommand(), 'runhooks'], env=env)
+      print 'Updating environment.{x86,x64} files.'
+      UpdateWindowsEnvironment(options.target_output_dir, env)
 
     if options.clobber:
       print 'Removing %s' % options.target_output_dir
