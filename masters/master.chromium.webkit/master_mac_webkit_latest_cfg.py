@@ -72,9 +72,9 @@ B('WebKit Mac10.8', 'f_webkit_rel_tests_108',
   scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_108', m_annotator.BaseFactory('chromium'))
 
-B('WebKit Mac10.8 (retina)', 'f_webkit_rel_tests_108_retina',
+B('WebKit Mac10.9 (retina)', 'f_webkit_rel_tests_109_retina',
   scheduler='s5_webkit_rel_trigger')
-F('f_webkit_rel_tests_108_retina', m_annotator.BaseFactory('chromium'))
+F('f_webkit_rel_tests_109_retina', m_annotator.BaseFactory('chromium'))
 
 B('WebKit Mac10.9', 'f_webkit_rel_tests_109',
   scheduler='s5_webkit_rel_trigger')
