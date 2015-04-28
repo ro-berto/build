@@ -17,11 +17,6 @@ DEPS = [
 ]
 
 
-def _BuildBaseUrl(api):
-  """The OS-specific cloud storage location for perf builds of Chrome."""
-  return 'gs://chrome-perf/' + api.properties['buildername']
-
-
 def _PlatformSpecificExecutable(api):
   """The OS-specific path to the executable."""
   if api.platform.is_mac:
@@ -39,7 +34,7 @@ def _CloudStoragePath(api):
 
 def _DownloadAndExtractBinary(api):
   """Downloads the binary from the revision passed to the recipe."""
-  build_url = _BuildBaseUrl(api)
+  build_url = api.properties['parent_build_archive_url']
 
   build_revision = api.properties['parent_got_revision']
   api.archive.download_and_unzip_build(
@@ -97,12 +92,12 @@ def GenSteps(api):
 
 def GenTests(api):
   for platform in ('linux', 'win', 'mac'):
-    buildername = platform.title() + ' Builder'
+    archive_url = 'gs://chrome-perf/%s Builder/testbuildurl' % platform.title()
     yield (
         api.test(platform) +
         api.properties.generic(
             mastername='master.chromium.perf.fyi',
-            buildername=buildername,
+            parent_build_archive_url=archive_url,
             parent_got_revision='5d6dd8eaee742daf7f298f533fb0827dc4a693fd') +
         api.platform.name(platform)
     )
