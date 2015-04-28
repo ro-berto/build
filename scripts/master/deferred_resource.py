@@ -10,7 +10,7 @@ import time
 import threading
 import traceback
 
-from twisted.internet import defer, reactor
+from twisted.internet import defer, reactor, threads
 from twisted.python import log as twistedLog
 from twisted.python.threadpool import ThreadPool
 import apiclient
@@ -25,6 +25,10 @@ DEFAULT_RETRY_WAIT_SECONDS = 1
 
 if httplib.FORBIDDEN not in oauth2client.client.REFRESH_STATUS_CODES:
   oauth2client.client.REFRESH_STATUS_CODES.append(httplib.FORBIDDEN)
+
+
+class NotStartedError(Exception):
+  pass
 
 
 class DeferredResource(object):
@@ -112,6 +116,7 @@ class DeferredResource(object):
     self.log_prefix = log_prefix
     self.api = self.Api(self)
     self._th_local = threading.local()
+    self.started = False
 
   @classmethod
   def _create_thread_pool(cls):
@@ -198,8 +203,10 @@ class DeferredResource(object):
 
   def start(self):
     self._pool.start()
+    self.started = True
 
   def stop(self):
+    self.started = False
     self._pool.stop()
 
   def __enter__(self):
@@ -209,42 +216,40 @@ class DeferredResource(object):
   def __exit__(self, *args, **kwrags):
     self.stop()
 
+  @defer.inlineCallbacks
   def _retry(self, method_name, call):
     """Retries |call| on transient errors and access token expiration.
 
     Args:
       method_name (str): name of the remote method, for logging.
-      call (func(httplib2.Http) -> any): a function that accepts
-        httplib2.Http and returns an RPC result.
+      call (func() -> any): a function that makes an RPC call and returns
+        result.
     """
-    if not hasattr(self._th_local, 'http') or self._th_local.http is None:
-      self._th_local.http = httplib2.Http()
-      if self.credentials:
-        self._th_local.credentials = self.credentials.from_json(
-            self.credentials.to_json())
-        self._th_local.http = self._th_local.credentials.authorize(
-            self._th_local.http)
-    elif getattr(self._th_local.credentials, 'access_token_expired', False):
-      self._th_local.credentials.refresh(self._th_local.http)
-
     attempts = self.retry_attempt_count
     wait = self.retry_wait_seconds
     while attempts > 0:
       attempts -= 1
       try:
-        return call(self._th_local.http)
-      except apiclient.errors.HttpError as ex:
-        status = ex.resp.status if ex.resp else None
-        if status >= 500:
-          self.log('Transient error while calling %s. '
-                   'Will retry in %d seconds.' % (method_name, wait))
-          # TODO(nodir), optimize: stop waiting if the resource is stopped.
-          time.sleep(wait)
-          wait *= 2
-        else:
-          self.log('RPC "%s" failed: %s'
-                   % (method_name, traceback.format_exc()))
-          raise
+        if not self.started:
+          raise NotStartedError('DeferredResource is not started')
+        res = yield threads.deferToThreadPool(reactor, self._pool, call)
+        defer.returnValue(res)
+      except Exception as ex:
+        if not self.started:
+          raise ex
+        if isinstance(ex, apiclient.errors.HttpError):
+          status = ex.resp.status if ex.resp else None
+          if status >= 500 and attempts > 0:
+            self.log('Transient error while calling %s. '
+                     'Will retry in %d seconds.' % (method_name, wait))
+            # TODO(nodir), optimize: stop waiting if the resource is stopped.
+            yield sleep(wait)
+            if not self.started:
+              raise ex
+            wait = min(wait * 2, 30)
+            continue
+        self.log('RPC "%s" failed: %s'% (method_name, traceback.format_exc()))
+        raise ex
 
   def _log_request(self, method_name, args, kwargs):
     arg_str_list = map(repr, args)
@@ -259,25 +264,29 @@ class DeferredResource(object):
 
     @functools.wraps(method)
     def twistified(*args, **kwargs):
-      result = defer.Deferred()
+      def single_call():
+        if getattr(self._th_local, 'http', None) is None:
+          self._th_local.credentials = None
+          self._th_local.http = httplib2.Http()
+          if self.credentials:
+            self._th_local.credentials = self.credentials.from_json(
+                self.credentials.to_json())
+            self._th_local.http = self._th_local.credentials.authorize(
+                self._th_local.http)
+        elif getattr(self._th_local.credentials, 'access_token_expired', False):
+          self._th_local.credentials.refresh(self._th_local.http)
 
-      def single_call(http):
-        """Makes one RPC. Used as |call| parameters in _retry func."""
         if self.verbose:
           self._log_request(method_name, args, kwargs)
-        response = method(*args, **kwargs).execute(http)
+        response = method(*args, **kwargs).execute(self._th_local.http)
         if self.verbose:
           self.log('Reponse: %s' % response)
         return response
-
-      def execute():
-        try:
-          response = self._retry(method_name, single_call)
-          reactor.callFromThread(result.callback, response)
-        except Exception as ex:
-          reactor.callFromThread(result.errback, ex)
-
-      self._pool.callInThread(execute)
-      return result
-
+      return self._retry(method_name, single_call)
     return twistified
+
+
+def sleep(secs):
+  d = defer.Deferred()
+  reactor.callLater(secs, d.callback, None)
+  return d
