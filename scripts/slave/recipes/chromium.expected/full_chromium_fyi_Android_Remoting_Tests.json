@@ -171,7 +171,8 @@
       "[BUILD]/goma",
       "--",
       "remoting_apk",
-      "remoting_test_apk"
+      "remoting_test_apk",
+      "remoting_unittests"
     ],
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -275,7 +276,7 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "ChromotingTest",
+      "ChromotingInstrumentationTests",
       "--flakiness-dashboard-server",
       "http://test-results.appspot.com",
       "--verbose",
@@ -283,7 +284,41 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "name": "Instrumentation test ChromotingTest",
+    "name": "Instrumentation test ChromotingInstrumentationTests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "--apk",
+      "Chromoting.apk",
+      "--apk_package",
+      "org.chromium.chromoting",
+      "--release"
+    ],
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install Chromoting.apk (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "ChromotingUnitTests",
+      "--flakiness-dashboard-server",
+      "http://test-results.appspot.com",
+      "--verbose",
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "name": "Instrumentation test ChromotingUnitTests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]

@@ -54,8 +54,18 @@ INSTRUMENTATION_TESTS = freeze([
     },
   },
   {
-    'test': 'ChromotingTest',
+    'test': 'ChromotingInstrumentationTests',
     'gyp_target': 'remoting_test_apk',
+    'kwargs': {
+      'install_apk': {
+        'package': 'org.chromium.chromoting',
+        'apk': 'Chromoting.apk',
+      },
+    },
+  },
+  {
+    'test': 'ChromotingUnitTests',
+    'gyp_target': 'remoting_unittests',
     'kwargs': {
       'install_apk': {
         'package': 'org.chromium.chromoting',
