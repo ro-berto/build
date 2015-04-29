@@ -44,6 +44,7 @@ def create_buildbucket_service(
       'buildbucket',
       'v1',
       credentials=auth.create_credentials_for_master(master),
+      max_concurrent_requests=10,
       discoveryServiceUrl=buildbucket_api_discovery_url(hostname),
       verbose=verbose or False,
       log_prefix=common.LOG_PREFIX,

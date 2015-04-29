@@ -83,9 +83,10 @@ class DeferredResource(object):
         self._methods[name] = method
       return method
 
-  def __init__(self, resource, credentials=None, retry_wait_seconds=None,
-               retry_attempt_count=None, verbose=False, log_prefix='',
-               _pool=None):
+  def __init__(
+      self, resource, credentials=None, max_concurrent_requests=1,
+      retry_wait_seconds=None, retry_attempt_count=None, verbose=False,
+      log_prefix='', _pool=None):
     """Creates a DeferredResource.
 
     Args:
@@ -93,6 +94,8 @@ class DeferredResource(object):
         apiclient.discovery.build.
       credentials (oauth2client.client.Credentials): credentials to use
         to make API requests.
+      max_concurrent_requests (int): maximum number of concurrent requests.
+        Defaults to 1.
       retry_wait_seconds (int, float): initial wait interval for request
         retrial. In seconds, defaults to 1.
       retry_attempt_count (int): number of attempts before giving up.
@@ -100,6 +103,7 @@ class DeferredResource(object):
       verbose (bool): if True, log each request/response.
       log_prefix (str): prefix for log messages.
     """
+    max_concurrent_requests = max_concurrent_requests or 1
     assert resource, 'resource not specified'
     if retry_wait_seconds is None:
       retry_wait_seconds = DEFAULT_RETRY_WAIT_SECONDS
@@ -108,7 +112,7 @@ class DeferredResource(object):
       retry_attempt_count = DEFAULT_RETRY_ATTEMPT_COUNT
     assert isinstance(retry_attempt_count, int)
 
-    self._pool = _pool or self._create_thread_pool()
+    self._pool = _pool or self._create_thread_pool(max_concurrent_requests)
     self._resource = resource
     self.credentials = credentials
     self.retry_wait_seconds = retry_wait_seconds
@@ -120,12 +124,13 @@ class DeferredResource(object):
     self.started = False
 
   @classmethod
-  def _create_thread_pool(cls):
-    return ThreadPool(minthreads=1, maxthreads=1)
+  def _create_thread_pool(cls, max_concurrent_requests):
+    return ThreadPool(minthreads=1, maxthreads=max_concurrent_requests)
 
   @classmethod
-  def _create_async(cls, resource_factory, _pool=None, **kwargs):
-    _pool = _pool or cls._create_thread_pool()
+  def _create_async(
+      cls, resource_factory, max_concurrent_requests=1, _pool=None, **kwargs):
+    _pool = _pool or cls._create_thread_pool(max_concurrent_requests)
     result = defer.Deferred()
 
     def create_sync():
@@ -145,12 +150,13 @@ class DeferredResource(object):
 
   # Yes, I've copied all these parameters because being explicit is good.
   @classmethod
-  def build(cls, service_name, version, credentials=None,
-            discoveryServiceUrl=apiclient.discovery.DISCOVERY_URI,
-            developerKey=None, model=None,
-            requestBuilder=apiclient.http.HttpRequest,
-            retry_wait_seconds=None, retry_attempt_count=None, verbose=False,
-            log_prefix=''):
+  def build(
+      cls, service_name, version, credentials=None, max_concurrent_requests=1,
+      discoveryServiceUrl=apiclient.discovery.DISCOVERY_URI,
+      developerKey=None, model=None,
+      requestBuilder=apiclient.http.HttpRequest,
+      retry_wait_seconds=None, retry_attempt_count=None, verbose=False,
+      log_prefix=''):
     """Asynchronously builds a DeferredResource for a discoverable API.
 
     Asynchronously builds a resource by calling apiclient.discovery.build and
@@ -161,6 +167,8 @@ class DeferredResource(object):
       version: string, the version of the service.
       credentials (oauth2client.client.Credentials): credentials to use
         to make API requests.
+      max_concurrent_requests (int): maximum number of concurrent requests.
+        Defaults to 1.
       discoveryServiceUrl: string, a URI Template that points to the location of
         the discovery service. It should have two parameters {api} and
         {apiVersion} that when filled in produce an absolute URI to the
@@ -191,12 +199,14 @@ class DeferredResource(object):
           requestBuilder=requestBuilder,
       )
 
-    return cls._create_async(resource_factory,
-                             credentials=credentials,
-                             retry_wait_seconds=retry_wait_seconds,
-                             retry_attempt_count=retry_attempt_count,
-                             verbose=verbose,
-                             log_prefix=log_prefix,
+    return cls._create_async(
+        resource_factory,
+        credentials=credentials,
+        max_concurrent_requests=max_concurrent_requests,
+        retry_wait_seconds=retry_wait_seconds,
+        retry_attempt_count=retry_attempt_count,
+        verbose=verbose,
+        log_prefix=log_prefix,
     )
 
   def log(self, message):

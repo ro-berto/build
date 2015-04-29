@@ -140,7 +140,7 @@ class DeferredResourceTest(unittest.TestCase):
       def_res.stop()
 
   def test_async_create_with_bad_request_factory(self):
-    pool = DeferredResource._create_thread_pool()
+    pool = DeferredResource._create_thread_pool(1)
     try:
       with self.assertRaises(self.BadFactoryError):
         run_deferred(
