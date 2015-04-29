@@ -154,27 +154,30 @@ def layout_test(options, args):
     if options.json_test_results:
       results_dir = options.results_directory
       results_json = os.path.join(results_dir, "failing_results.json")
-      with open(results_json, 'rb') as f:
-        data = f.read()
 
-      # data is in the form of:
-      #   ADD_RESULTS(<json object>);
-      # but use a regex match to also support a raw json object.
-      m = re.match(r'[^({]*' # From the beginning, take any except '(' or '{'
-                  r'(?:'
-                    r'\((.*)\);'  # Expect '(<json>);'
-                    r'|'          # or
-                    r'({.*})'     # '<json object>'
-                  r')$',
-        data)
-      assert m is not None
-      data = m.group(1) or m.group(2)
+      # If the json results file was not produced, then we produce no output
+      # file too and rely on a recipe to handle this as invalid result.
+      if os.path.isfile(results_json):
+        with open(results_json, 'rb') as f:
+          data = f.read()
 
-      json_data = json.loads(data)
-      assert isinstance(json_data, dict)
+        # data is in the form of:
+        #   ADD_RESULTS(<json object>);
+        # but use a regex match to also support a raw json object.
+        m = re.match(r'[^({]*' # From the beginning, take any except '(' or '{'
+                     r'(?:'
+                       r'\((.*)\);'  # Expect '(<json>);'
+                       r'|'          # or
+                       r'({.*})'     # '<json object>'
+                     r')$', data)
+        assert m is not None
+        data = m.group(1) or m.group(2)
 
-      with open(options.json_test_results, 'wb') as f:
-        f.write(data)
+        json_data = json.loads(data)
+        assert isinstance(json_data, dict)
+
+        with open(options.json_test_results, 'wb') as f:
+          f.write(data)
 
 
 def main():
