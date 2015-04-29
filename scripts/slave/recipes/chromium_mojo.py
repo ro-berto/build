@@ -62,14 +62,11 @@ def GenSteps(api):
 
   with api.step.defer_results():
     api.chromium.runtest('html_viewer_unittests')
-    api.chromium.runtest('mojo_application_manager_unittests')
     api.chromium.runtest('mojo_common_unittests')
     api.chromium.runtest('mojo_runner_unittests')
     api.chromium.runtest('mojo_shell_unittests')
     api.chromium.runtest('mojo_surfaces_lib_unittests')
     api.chromium.runtest('view_manager_service_unittests')
-    # TODO(msw|sky): Fix window_manager_unittests; see http://crbug.com/479031
-    # api.chromium.runtest('window_manager_unittests')
     if not is_android:
       _RunApptests(api)
 
