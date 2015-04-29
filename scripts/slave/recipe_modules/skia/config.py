@@ -157,6 +157,11 @@ def gyp_defs_from_builder_dict(builder_dict):
   if 'Valgrind' in builder_dict.get('extra_config', ''):
     gyp_defs['skia_release_optimization_level'] = '1'
 
+  # Link-time code generation just wastes time on compile-only bots.
+  if (builder_dict.get('role') == builder_name_schema.BUILDER_ROLE_BUILD and
+      builder_dict.get('compiler') == 'MSVC'):
+    gyp_defs['skia_win_ltcg'] = '0'  # pragma: no cover
+
   return gyp_defs
 
 
