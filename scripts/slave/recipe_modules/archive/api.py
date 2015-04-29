@@ -222,6 +222,33 @@ class ArchiveApi(recipe_api.RecipeApi):
     zip_file_list = [f for f in self.m.file.listdir('build_dir', build_dir)
                      if self._cf_should_package_file(f)]
 
+    # Make paths absolute.
+    zip_file_list = [build_dir.join(f) for f in zip_file_list]
+
+    # Check whether entries are files or directories.
+    # TODO(machenbach): Extract this to zip module.
+    zip_file_types = self.m.python.inline('retrieve entry types',
+        """
+        import json, os, sys
+        types = []
+        with open(sys.argv[1], 'r') as f:
+          paths = json.load(f)
+        for path in paths:
+          if os.path.isfile(path):
+            types.append('file')
+          elif os.path.isdir(path):
+            types.append('dir')
+        with open(sys.argv[2], 'w') as f:
+          json.dump(types, f)
+        """,
+        args=[self.m.json.input(zip_file_list), self.m.json.output()],
+        step_test_data=lambda: self.m.json.test_api.output(
+            ['file' for f in zip_file_list]),
+    ).json.output
+
+    assert len(zip_file_list) == len(zip_file_types)
+    zip_file_list_with_types = zip(zip_file_list, zip_file_types)
+
     pieces = [self.m.platform.name, target.lower()]
     if archive_subdir_suffix:
       pieces.append(archive_subdir_suffix)
@@ -242,8 +269,11 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     zip_file = staging_dir.join(zip_file_name)
     package = self.m.zip.make_package(build_dir, zip_file)
-    for f in zip_file_list:
-      package.add_file(package.root.join(f))
+    for f, tp in zip_file_list_with_types:
+      if tp == 'file':
+        package.add_file(f)
+      elif tp == 'dir':
+        package.add_directory(f)
     package.zip('zipping')
 
     # TODO(machenbach): This feature has not migrated yet.

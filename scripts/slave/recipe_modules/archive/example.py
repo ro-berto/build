@@ -92,7 +92,9 @@ def GenTests(api):
         primary_project='x10',
     ) +
     api.override_step_data(
-        'listdir build_dir', api.json.output(['chrome']))
+        'listdir build_dir', api.json.output(['chrome', 'resources'])) +
+    api.override_step_data(
+        'retrieve entry types', api.json.output(['file', 'dir']))
   )
 
   # A component on svn with a separate git property.
