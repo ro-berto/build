@@ -21,7 +21,7 @@ SPEC = {
       ],
       'gclient_apply_config': [
         'v8_bleeding_edge_git',
-        'chromium_lkgr',
+        'chromium_lkcr',
         'show_v8_revision',
       ],
       'chromium_config_kwargs': {
@@ -32,7 +32,6 @@ SPEC = {
       'disable_tests': True,
       'cf_archive_build': True,
       'cf_gs_bucket': 'gs://v8-asan',
-      'cf_gs_acl': 'public-read',
       'cf_archive_name': 'asan-symbolized',
       'cf_revision_dir': 'v8',
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
