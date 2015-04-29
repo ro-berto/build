@@ -18,9 +18,8 @@ from twisted.internet.defer import inlineCallbacks, returnValue
 
 # buildbucket API-related constants.
 # time enough to schedule and start a build.
-LEASE_DURATION = datetime.timedelta(minutes=5)
-MAX_LEASE_DURATION = datetime.timedelta(minutes=10)
-DEFAULT_HEARTBEAT_INTERVAL = datetime.timedelta(minutes=1)
+LEASE_DURATION = datetime.timedelta(hours=1)
+DEFAULT_HEARTBEAT_INTERVAL = datetime.timedelta(minutes=5)
 # Maximum integer that max_builds buildbucket parameter can take.
 MAX_MAX_BUILDS = (1 << 31) - 1
 
@@ -419,18 +418,6 @@ class BuildBucketIntegrator(object):
       return None
     return info.get(common.BUILD_PROPERTY)
 
-  @staticmethod
-  def adjust_lease_duration(duration):
-    """Increases lease duration, but not exceed buildbucket's limit.
-
-    Increases lease duration 3 times or by 5 minutes, which ever is greater,
-    to give buildbot an opportunity to hang a bit.
-    """
-    duration = max(
-        duration * 3,
-        duration + datetime.timedelta(minutes=5))
-    return min(duration, MAX_LEASE_DURATION)
-
   @inlineCallbacks
   def send_heartbeats(self):
     if not self._leases:
@@ -439,7 +426,8 @@ class BuildBucketIntegrator(object):
     self.log(
         'Sending heartbeats for %d leases' % len(leases),
         level=logging.DEBUG)
-    lease_expiration_ts = self.get_lease_expiration_ts(self.heartbeat_interval)
+    lease_expiration_ts = common.datetime_to_timestamp(
+        datetime.datetime.utcnow() + LEASE_DURATION)
 
     heartbeats = [{
         'build_id': build_id,
@@ -507,11 +495,6 @@ class BuildBucketIntegrator(object):
         if self.started:
           reactor.callLater(interval.total_seconds(), loop_iteration)
     loop_iteration()
-
-  @classmethod
-  def get_lease_expiration_ts(cls, lease_duration):
-    return common.datetime_to_timestamp(
-        datetime.datetime.utcnow() + cls.adjust_lease_duration(lease_duration))
 
   def _stop_build(self, build, error_dict):
     if build.isFinished():
