@@ -530,6 +530,8 @@ def open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
   status = get_tree_status(status_url_root, username, password)
   # Don't change the status unless the tree is currently closed.
   if status['general_state'] != 'closed':
+    logging.debug('Not opening tree because it is not closed (%s)'
+                  % status['general_state'])
     return
 
   # Don't override human closures.
@@ -542,10 +544,15 @@ def open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
     status_limit = 499
     if (last_gatekeeper_closure['message'][:status_limit]
         != status['message'][:status_limit]):
+      logging.debug(
+          'Not opening tree because we didn\'t set the last message: %s vs %s'
+          % (last_gatekeeper_closure['message'], status['message']))
       return
   else:
     # Backwards compatability hack.
     if not re.search(r"automatic", status['message'], re.IGNORECASE):
+      logging.debug('Not opening tree because \'automatic\' was not found in %s'
+                    % status['message'])
       return
 
   logging.info('All builders are green, opening the tree...')
