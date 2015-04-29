@@ -144,7 +144,8 @@ class DeferredResourceTest(unittest.TestCase):
     try:
       with self.assertRaises(self.BadFactoryError):
         run_deferred(
-            DeferredResource._create_async(self.bad_factory, _pool=pool),
+            DeferredResource._create_async(
+                self.bad_factory, _pool=pool),
             print_traceback=False
         )
       self.assertFalse(pool.threads)

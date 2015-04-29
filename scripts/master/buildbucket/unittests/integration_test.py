@@ -69,7 +69,7 @@ def fake_buildbucket():
         }
     }
   service.api.lease.side_effect = lease
-  service.api.heartbeat_batch.return_value = {}  # Not a Mock.
+  service.api.heartbeat_batch.side_effect = lambda *_, **__: defer.succeed({})
 
   return service
 
@@ -388,22 +388,36 @@ class IntegratorTest(unittest.TestCase):
 
   def test_heartbeats(self):
     def test():
+      NUM_BUILDS = 200  # More than batch size.
+
+      self.integrator._leases = {
+        str(i): {
+          'key': LEASE_KEY,
+          'build_request': Mock(),
+        } for i in xrange(NUM_BUILDS)
+      }
+
       test_finished = defer.Deferred()
-      self.integrator.poll_builds()
+
       def assert_heartbeat_sent():
         try:
-          self.assertTrue(self.buildbucket.api.heartbeat_batch.called)
+          updated_builds = set()
+          for _, kwargs in self.buildbucket.api.heartbeat_batch.call_args_list:
+            for hb in kwargs['body']['heartbeats']:
+              updated_builds.add(int(hb['build_id']))
+          self.assertEqual(updated_builds, set(xrange(NUM_BUILDS)))
         finally:
           test_finished.callback(None)  # Finish test.
+
       reactor.callLater(0.001, assert_heartbeat_sent)
       return test_finished
 
-    with self.create_integrator(), self.mock_build_peek():
+    with self.create_integrator():
       run_deferred(test())
 
   @contextlib.contextmanager
   def mock_heartbeat_lease_expired(self, build_id):
-    self.buildbucket.api.heartbeat_batch.return_value = {
+    response = {
       'results': [{
           'build_id': build_id,
           'error': {
@@ -411,6 +425,8 @@ class IntegratorTest(unittest.TestCase):
           },
       }],
     }
+    self.buildbucket.api.heartbeat_batch.side_effect = (
+        lambda *_, **__: defer.succeed(response))
     yield
     self.assertTrue(self.buildbucket.api.heartbeat_batch.called)
 

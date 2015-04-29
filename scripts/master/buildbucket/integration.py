@@ -5,6 +5,7 @@
 """BuildBucketIntegrator integrates Buildbot and Buildbucket."""
 
 import datetime
+import itertools
 import json
 import logging
 import traceback
@@ -422,44 +423,45 @@ class BuildBucketIntegrator(object):
   def send_heartbeats(self):
     if not self._leases:
       return
-    leases = self._leases.copy()
+    leases = self._leases.items()
     self.log(
         'Sending heartbeats for %d leases' % len(leases),
         level=logging.DEBUG)
     lease_expiration_ts = common.datetime_to_timestamp(
         datetime.datetime.utcnow() + LEASE_DURATION)
 
-    heartbeats = [{
-        'build_id': build_id,
-        'lease_key': lease['key'],
-        'lease_expiration_ts': lease_expiration_ts,
-    } for build_id, lease in leases.iteritems()]
-    resp = yield self.buildbucket_service.api.heartbeat_batch(
-        body={'heartbeats': heartbeats},
-    )
+    @inlineCallbacks
+    def send(leases):
+      heartbeats = [{
+          'build_id': build_id,
+          'lease_key': lease['key'],
+          'lease_expiration_ts': lease_expiration_ts,
+      } for build_id, lease in leases]
+      resp = yield self.buildbucket_service.api.heartbeat_batch(
+          body={'heartbeats': heartbeats},
+      )
+      results = resp.get('results') or []
 
-    results = resp.get('results') or []
-    returned_build_ids = set(r['build_id'] for r in results)
-    if returned_build_ids != set(leases):
-      self.log(
-          ('Unexpected build ids during heartbeat.\nExpected: %r.\nActual: %r'
-            % (sorted(leases), sorted(returned_build_ids))),
-          level=logging.WARNING)
-
-    for result in results:
-      build_id = result.get('build_id')
-      lease = leases.get(build_id)
-      if not lease:
-        continue
-      if self._check_error(result):
-        self.log('Canceling build request for build "%s"' % build_id)
-        if build_id in self._leases:
+      for result in results:
+        build_id = result.get('build_id')
+        lease = self._leases.get(build_id)
+        if not lease:
+          continue
+        if self._check_error(result):
+          self.log('Canceling build request for build "%s"' % build_id)
           del self._leases[build_id]
-        build = lease.get('build')
-        if build:
-          yield self._stop_build(build, result['error'])
-        else:
-          yield lease['build_request'].cancel()
+          build = lease.get('build')
+          if build:
+            yield self._stop_build(build, result['error'])
+          else:
+            yield lease['build_request'].cancel()
+
+    batches = []
+    BATCH_SIZE = 50
+    while leases:
+      batches.append(send(leases[:BATCH_SIZE]))
+      leases = leases[BATCH_SIZE:]
+    yield defer.gatherResults(batches)
 
   @inlineCallbacks
   def clean_completed_build_requests(self):
