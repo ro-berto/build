@@ -4,6 +4,7 @@
 
 """deferred_resource converts blocking apiclient resource to deferred."""
 
+import datetime
 import functools
 import httplib
 import time
@@ -273,8 +274,14 @@ class DeferredResource(object):
                 self.credentials.to_json())
             self._th_local.http = self._th_local.credentials.authorize(
                 self._th_local.http)
-        elif getattr(self._th_local.credentials, 'access_token_expired', False):
-          self._th_local.credentials.refresh(self._th_local.http)
+        elif getattr(self._th_local.credentials, 'token_expiry', None):
+          # Check token_expiry more aggressively:
+          # refresh if it expires in <= 5 min.
+          expiry = (
+              self._th_local.credentials.token_expiry -
+              datetime.timedelta(minutes=5))
+          if expiry <= datetime.datetime.utcnow():
+            self._th_local.credentials.refresh(self._th_local.http)
 
         if self.verbose:
           self._log_request(method_name, args, kwargs)
