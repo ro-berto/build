@@ -6,6 +6,7 @@
       "\nimport os, sys\n\nbuild_path = sys.argv[1]\nif os.path.exists(build_path):\n  for (path, dir, files) in os.walk(build_path):\n    for cur_file in files:\n      if cur_file.endswith('index.lock'):\n        path_to_file = os.path.join(path, cur_file)\n        print 'deleting %s' % path_to_file\n        os.remove(path_to_file)\n",
       "[SLAVE_BUILD]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup index.lock",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -44,6 +45,7 @@
       "--revision",
       "src@4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -62,6 +64,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src'}]\ntarget_os = ['android']"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -79,6 +82,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -122,6 +126,7 @@
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -146,6 +151,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "OS=android component=static_library disable_file_support=1 disable_ftp_support=1 enable_websockets=0 fastbuild=1 gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1 use_icu_alternatives_on_android=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -173,6 +179,7 @@
       "cronet_sample_test_apk",
       "cronet_test_instrumentation_apk"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -192,6 +199,7 @@
       "[SLAVE_BUILD]/src/out/Debug/cronet/VERSION",
       "gs://chromium-cronet/android/cronet-Debug-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00/VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload_cronet_version",
     "~followup_annotations": [
       "@@@STEP_LINK@Cronet version@https://storage.cloud.google.com/chromium-cronet/android/cronet-Debug-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00/VERSION@@@"
@@ -212,6 +220,7 @@
       "[SLAVE_BUILD]/src/out/Debug/cronet",
       "gs://chromium-cronet/android/cronet-Debug-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload_cronet_package",
     "~followup_annotations": [
       "@@@STEP_LINK@Cronet package@https://storage.cloud.google.com/chromium-cronet/android/cronet-Debug-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00@@@"

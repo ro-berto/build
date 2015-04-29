@@ -27,6 +27,7 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -73,6 +74,7 @@
       "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [

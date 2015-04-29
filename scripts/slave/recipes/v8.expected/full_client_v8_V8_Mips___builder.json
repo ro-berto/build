@@ -23,6 +23,7 @@
       "--no_shallow",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -62,6 +63,7 @@
       "gs://chromium-v8/mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2",
       "[SLAVE_BUILD]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil bootstrapping mips toolchain"
   },
   {
@@ -80,6 +82,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "AR": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ar",
       "CC": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-gcc",
@@ -97,6 +100,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -112,6 +116,7 @@
       "make",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -131,10 +136,12 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"V8 Mips - builder\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "package build"
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "trigger",
     "trigger_specs": [
       {

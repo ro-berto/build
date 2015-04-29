@@ -5,6 +5,7 @@
       "--json-file",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "host and tools info",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br />OS X 1.2.3, Xcode 6.7.8 (5D342509a)@@@",
@@ -46,6 +47,7 @@
       "src@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -93,6 +95,7 @@
       "[SLAVE_BUILD]/src/ios/build/bots/chromium.fake/ios.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read build config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -126,6 +129,7 @@
       "-e",
       "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\"\n  }, \n  \"compiler\": \"xcodebuild\", \n  \"configuration\": \"Debug\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests 1\", \n      \"device type\": \"fake device\", \n      \"os\": \"8.0\"\n    }, \n    {\n      \"app\": \"fake tests 2\", \n      \"device type\": \"fake device\", \n      \"os\": \"7.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "finalize build config"
   },
   {
@@ -136,6 +140,7 @@
       "--version",
       "fake xcode version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "find xcode",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -149,6 +154,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "fake gyp define 1=fake value 1 fake gyp define 2=fake value 2 component=static_library OS=ios",
       "GYP_GENERATORS": "xcode",
@@ -187,6 +193,7 @@
       "--version",
       "8.0"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "fake tests 1 (fake device iOS 8.0)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -223,6 +230,7 @@
       "--version",
       "7.1"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "fake tests 2 (fake device iOS 7.1)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

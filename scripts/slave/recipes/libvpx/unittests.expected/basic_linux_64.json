@@ -15,6 +15,7 @@
       "vpx_scale",
       "third_party"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean_build",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -40,6 +41,7 @@
       "--url",
       "https://chromium.googlesource.com/webm/libvpx"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "git setup"
   },
   {
@@ -99,6 +101,7 @@
     "cmd": [
       "./libvpx/configure"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "configure"
   },
   {
@@ -107,6 +110,7 @@
       "test",
       "-j8"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "run tests"
   }
 ]

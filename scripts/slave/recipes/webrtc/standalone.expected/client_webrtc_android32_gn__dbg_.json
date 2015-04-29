@@ -21,6 +21,7 @@
       "--revision",
       "src@12345"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -47,6 +48,7 @@
       "RECIPE_MODULE[webrtc]/resources/cleanup_files.py",
       "[SLAVE_BUILD]/src/out"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean test output files"
   },
   {
@@ -59,6 +61,7 @@
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -83,6 +86,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -99,6 +103,7 @@
       "//out/Debug",
       "--args=is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[BUILD]/goma\" build_with_chromium=false"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gn"
   },
   {
@@ -119,6 +124,7 @@
       "--",
       "all"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },

@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -29,6 +30,7 @@
       "--revision",
       "src@c321321"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -83,6 +85,7 @@
       "RECIPE_MODULE[webrtc]\\resources\\cleanup_files.py",
       "[SLAVE_BUILD]\\src\\out"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean test output files"
   },
   {
@@ -91,6 +94,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -100,6 +104,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "blink_logging_always_on=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
     },
@@ -112,6 +117,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]\\src\\out\\Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -139,6 +145,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win8 Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": \"Win Builder\", \"parent_got_revision\": \"c321321\", \"recipe\": \"webrtc/chromium\", \"revision\": \"c321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "extract build"
   },
   {
@@ -149,6 +156,7 @@
       "--target",
       "Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "start_crash_service"
   },
   {
@@ -178,6 +186,7 @@
       "--test-launcher-print-test-stdio=always",
       "--test-launcher-bot-mode"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "content_browsertests"
   },
   {
@@ -209,6 +218,7 @@
       "--test-launcher-bot-mode",
       "--test-launcher-print-test-stdio=always"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "browser_tests"
   },
   {
@@ -241,6 +251,7 @@
       "--fake-variations-channel=canary",
       "--force-fieldtrials=WebRTC-NewVideoAPI/Disabled/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "content_browsertests_old_vie"
   },
   {
@@ -275,6 +286,7 @@
       "--fake-variations-channel=canary",
       "--force-fieldtrials=WebRTC-NewVideoAPI/Disabled/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "browser_tests_old_vie"
   },
   {
@@ -299,6 +311,7 @@
       "--build-number=571",
       "content_unittests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "content_unittests"
   },
   {
@@ -309,6 +322,7 @@
       "--target",
       "Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "process_dumps"
   }
 ]

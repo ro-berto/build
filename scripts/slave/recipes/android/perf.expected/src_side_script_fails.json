@@ -21,6 +21,7 @@
       "--revision",
       "src@deadbeef"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -68,6 +69,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.perf.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.perf.json@@@",
@@ -99,6 +101,7 @@
       "--properties",
       "{\"buildername\": \"Android Nexus5 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-nexus5\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"slavename\", \"target_platform\": \"android\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -115,6 +118,7 @@
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -146,6 +150,7 @@
       "gs://chrome-perf/android_perf_rel/full-build-linux_deadbeef.zip",
       "[SLAVE_BUILD]/src/out/build_product.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil download_build_product"
   },
   {
@@ -164,6 +169,7 @@
       "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
       "[SLAVE_BUILD]/src/out/logcat"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -177,6 +183,7 @@
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -188,6 +195,7 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -232,6 +240,7 @@
       "--disable-network",
       "--disable-java-debug"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -246,6 +255,7 @@
       "org.chromium.chrome.shell",
       "--release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -266,6 +276,7 @@
       "--device",
       "07a00ca4"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "List Perf Tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -310,6 +321,7 @@
       "--output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "host_info",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -348,6 +360,7 @@
       "--output-json-list",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -398,6 +411,7 @@
       "page_cycler.foo",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -440,6 +454,7 @@
       "perf_test.foo",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -460,6 +475,7 @@
       "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
       "[SLAVE_BUILD]/src/out/logcat"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "logcat_dump"
   },
   {
@@ -470,6 +486,7 @@
       "--more-info",
       "[SLAVE_BUILD]/src/out/Release/full_log"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -482,6 +499,7 @@
       "-s",
       "-w"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -494,6 +512,7 @@
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[SLAVE_BUILD]/src/out/Release/test_logs/*.log"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "test_report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

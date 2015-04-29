@@ -27,6 +27,7 @@
       "--revision",
       "src@12345"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -53,6 +54,7 @@
       "RECIPE_MODULE[webrtc]\\resources\\cleanup_files.py",
       "[SLAVE_BUILD]\\src\\out"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean test output files"
   },
   {
@@ -61,6 +63,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -70,6 +73,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' syzyasan=1 target_arch=ia32 use_goma=1 win_z7=1",
       "GYP_USE_SEPARATE_MSPDBSRV": "1"
@@ -94,6 +98,7 @@
       "--",
       "All"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -104,6 +109,7 @@
       "--target",
       "Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "apply_syzyasan"
   },
   {
@@ -125,6 +131,7 @@
       "--use-syzyasan-logger",
       "audio_decoder_unittests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "audio_decoder_unittests"
   },
   {
@@ -146,6 +153,7 @@
       "--use-syzyasan-logger",
       "common_audio_unittests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "common_audio_unittests"
   },
   {
@@ -167,6 +175,7 @@
       "--use-syzyasan-logger",
       "common_video_unittests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "common_video_unittests"
   },
   {
@@ -188,6 +197,7 @@
       "--use-syzyasan-logger",
       "libjingle_media_unittest.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "libjingle_media_unittest"
   },
   {
@@ -209,6 +219,7 @@
       "--use-syzyasan-logger",
       "libjingle_p2p_unittest.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "libjingle_p2p_unittest"
   },
   {
@@ -230,6 +241,7 @@
       "--use-syzyasan-logger",
       "libjingle_peerconnection_unittest.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "libjingle_peerconnection_unittest"
   },
   {
@@ -251,6 +263,7 @@
       "--use-syzyasan-logger",
       "modules_tests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "modules_tests"
   },
   {
@@ -272,6 +285,7 @@
       "--use-syzyasan-logger",
       "modules_unittests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "modules_unittests"
   },
   {
@@ -293,6 +307,7 @@
       "--use-syzyasan-logger",
       "rtc_unittests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_unittests"
   },
   {
@@ -314,6 +329,7 @@
       "--use-syzyasan-logger",
       "system_wrappers_unittests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "system_wrappers_unittests"
   },
   {
@@ -335,6 +351,7 @@
       "--use-syzyasan-logger",
       "test_support_unittests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "test_support_unittests"
   },
   {
@@ -356,6 +373,7 @@
       "--use-syzyasan-logger",
       "tools_unittests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "tools_unittests"
   },
   {
@@ -377,6 +395,7 @@
       "--use-syzyasan-logger",
       "video_engine_core_unittests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "video_engine_core_unittests"
   },
   {
@@ -398,6 +417,7 @@
       "--use-syzyasan-logger",
       "video_engine_tests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "video_engine_tests"
   },
   {
@@ -419,6 +439,7 @@
       "--use-syzyasan-logger",
       "voice_engine_unittests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "voice_engine_unittests"
   }
 ]

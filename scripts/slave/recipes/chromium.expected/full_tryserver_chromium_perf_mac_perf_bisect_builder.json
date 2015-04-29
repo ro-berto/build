@@ -21,6 +21,7 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -67,6 +68,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
@@ -78,6 +80,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -102,6 +105,7 @@
       "--",
       "chromium_builder_perf"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -119,6 +123,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"mac_perf_bisect_builder\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "package build"
   }
 ]

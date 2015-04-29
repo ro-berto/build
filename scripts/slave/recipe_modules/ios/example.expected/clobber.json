@@ -22,6 +22,7 @@
       "src@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -69,6 +70,7 @@
       "[SLAVE_BUILD]/src/ios/build/bots/chromium.fake/ios.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read build config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -88,6 +90,7 @@
       "-e",
       "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\"\n  }, \n  \"compiler\": \"xcodebuild\", \n  \"configuration\": \"Debug\", \n  \"sdk\": \"iphonesimulator8.1\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"xcode version\": \"6.1.1\"\n}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "finalize build config"
   },
   {
@@ -98,6 +101,7 @@
       "--version",
       "6.1.1"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "find xcode",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -111,6 +115,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "component=static_library OS=ios",
       "GYP_GENERATORS": "xcode",

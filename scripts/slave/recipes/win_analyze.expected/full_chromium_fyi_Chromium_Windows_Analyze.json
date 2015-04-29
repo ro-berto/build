@@ -22,6 +22,7 @@
       "src@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -68,6 +69,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "chromium_win_pch=0 component=shared_library fastbuild=2 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=0 win_analyze=1"
     },
@@ -88,6 +90,7 @@
       "--",
       "chrome"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   }
 ]

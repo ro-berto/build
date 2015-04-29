@@ -28,6 +28,7 @@
       "src@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -74,6 +75,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "clang=1 component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
@@ -90,6 +92,7 @@
       "//out/Release",
       "--args=symbol_level=0 is_debug=false target_cpu=\"x64\""
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gn"
   },
   {
@@ -112,6 +115,7 @@
       "gn",
       "gn_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -119,6 +123,7 @@
       "[SLAVE_BUILD]/src/out/Release/gn",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gn version"
   },
   {
@@ -137,6 +142,7 @@
       "--build-number=571",
       "gn_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gn_unittests"
   },
   {
@@ -144,6 +150,7 @@
       "strip",
       "[SLAVE_BUILD]/src/out/Release/gn"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gn strip"
   },
   {
@@ -155,6 +162,7 @@
       "chromium-gn",
       "[SLAVE_BUILD]/src/out/Release/gn"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "upload"
   },
   {
@@ -165,6 +173,7 @@
       "[SLAVE_BUILD]/src/out/Release/gn.sha1",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gn sha1",
     "~followup_annotations": [
       "@@@STEP_TEXT@0123456789abcdeffedcba987654321012345678@@@"

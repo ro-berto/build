@@ -23,6 +23,7 @@
       "--force",
       "--no_shallow"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -50,6 +51,7 @@
       "[BUILD]/scripts/tools/pycurl.py",
       "https://v8-status.appspot.com/lkgr"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get new lkgr",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -110,6 +112,7 @@
       "[SLAVE_BUILD]/refs_heads_lkgr.log",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Read refs_heads_lkgr.log"
   },
   {
@@ -120,6 +123,7 @@
       "\nc1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6 396004",
       "[SLAVE_BUILD]/refs_heads_lkgr.log"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Write refs_heads_lkgr.log"
   },
   {
@@ -136,6 +140,7 @@
       "[SLAVE_BUILD]/refs_heads_lkgr.log",
       "gs://chromium-v8-auto-roll/v8_release_process/refs_heads_lkgr.log"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8-auto-roll/v8_release_process/refs_heads_lkgr.log@@@"
@@ -199,6 +204,7 @@
       "[SLAVE_BUILD]/timestamp.txt",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "check timestamp",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -213,6 +219,7 @@
       "396006",
       "[SLAVE_BUILD]/timestamp.txt"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "init timestamp"
   },
   {
@@ -225,6 +232,7 @@
       "--results-file",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "check clusterfuzz",
     "stderr": "/path/to/tmp/err",
     "stdout": "/path/to/tmp/out"
@@ -234,6 +242,7 @@
       "echo",
       "Current candidate is 0h old (limit: 8h)."
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "log"
   },
   {

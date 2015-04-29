@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -32,6 +33,7 @@
       "--output_manifest",
       "--with_branch_heads"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -64,6 +66,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "target_arch=ia32 v8_enable_disassembler=1 v8_target_arch=ia32"
     },
@@ -75,6 +78,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -90,6 +94,7 @@
       "vs",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -109,6 +114,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"4.2\", \"buildername\": \"v8-win-release\", \"buildnumber\": 571, \"mastername\": \"client.dart.fyi\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "package build"
   }
 ]

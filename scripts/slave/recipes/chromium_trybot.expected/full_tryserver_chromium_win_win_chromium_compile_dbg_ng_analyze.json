@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -35,6 +36,7 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -81,6 +83,7 @@
       "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -94,6 +97,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
@@ -107,6 +111,7 @@
       "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json@@@",
@@ -129,6 +134,7 @@
       "--properties",
       "{\"buildername\": \"win_chromium_compile_dbg_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -158,6 +164,7 @@
       "[SLAVE_BUILD]\\src\\testing\\buildbot\\trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read filter exclusion spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: 'testing\\\\buildbot\\\\trybot_analyze_config.json'@@@",
@@ -184,6 +191,7 @@
       "{\"files\": [\"foo.cc\"], \"targets\": []}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },

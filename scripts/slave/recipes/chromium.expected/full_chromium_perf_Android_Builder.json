@@ -21,6 +21,7 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -67,6 +68,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
@@ -80,6 +82,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -103,6 +106,7 @@
       "fallback",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -125,6 +129,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "package build"
   }
 ]

@@ -21,6 +21,7 @@
       "--revision",
       "src@204787"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -39,6 +40,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -56,6 +58,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -96,6 +99,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1"
     },
@@ -109,6 +113,7 @@
       "-s",
       "[SLAVE_BUILD]/src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Chromium LASTCHANGE"
   },
   {
@@ -119,6 +124,7 @@
       "-s",
       "[SLAVE_BUILD]/src/third_party/WebKit"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Blink LASTCHANGE"
   },
   {
@@ -129,6 +135,7 @@
       "[SLAVE_BUILD]/android-src",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs android source root",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -178,6 +185,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "calculate blacklist",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -202,6 +210,7 @@
       "[SLAVE_BUILD]/src/",
       "[SLAVE_BUILD]/android-src/external/chromium_org"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rsync chromium_org"
   },
   {
@@ -222,6 +231,7 @@
       "[SLAVE_BUILD]/android-src/external/chromium_org/android_webview/tools/webview_licenses.py",
       "all_incompatible_directories"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "incompatible directories"
   },
   {
@@ -247,6 +257,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read filter exclusion spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
@@ -269,6 +280,7 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@excluded_files@android_webview/buildbot/aosp_manifest.xml (regex = 'android_webview/.*')@@@",

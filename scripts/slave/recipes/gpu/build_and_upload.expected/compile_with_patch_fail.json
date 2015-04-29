@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup temp"
   },
   {
@@ -36,6 +37,7 @@
       "src@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -82,6 +84,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "archive_gpu_tests=1 blink_logging_always_on=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
@@ -96,6 +99,7 @@
       "[SLAVE_BUILD]\\src\\out\\Release",
       "--clean-isolated-files"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean isolated files"
   },
   {
@@ -121,6 +125,7 @@
       "[SLAVE_BUILD]\\src\\testing\\buildbot\\trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read filter exclusion spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: 'testing\\\\buildbot\\\\trybot_analyze_config.json'@@@",
@@ -147,6 +152,7 @@
       "{\"files\": [\"foo.cc\"], \"targets\": [\"angle_unittests_run\", \"content_gl_tests_run\", \"content_unittests_run\", \"gl_tests_run\", \"gles2_conform_test_run\", \"gpu_unittests_run\", \"media_unittests_run\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "archive_gpu_tests=1 blink_logging_always_on=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
@@ -211,6 +217,7 @@
       "tab_capture_end2end_tests_run",
       "telemetry_gpu_test_run"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -223,6 +230,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -250,6 +258,7 @@
       "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -284,6 +293,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "archive_gpu_tests=1 blink_logging_always_on=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
@@ -315,6 +325,7 @@
       "tab_capture_end2end_tests_run",
       "telemetry_gpu_test_run"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile (without patch)"
   },
   {

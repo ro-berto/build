@@ -28,6 +28,7 @@
       "src@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -74,6 +75,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
@@ -90,6 +92,7 @@
       "//out/Release",
       "--args=is_official_build=true symbol_level=2 is_debug=false target_cpu=\"x86\" host_cpu=\"x86\""
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gn"
   },
   {
@@ -112,6 +115,7 @@
       "gn",
       "gn_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -119,6 +123,7 @@
       "[SLAVE_BUILD]\\src\\out\\Release\\gn.exe",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gn version"
   },
   {
@@ -137,6 +142,7 @@
       "--build-number=571",
       "gn_unittests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gn_unittests"
   },
   {
@@ -148,6 +154,7 @@
       "chromium-gn",
       "[SLAVE_BUILD]\\src\\out\\Release\\gn.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "upload"
   },
   {
@@ -158,6 +165,7 @@
       "[SLAVE_BUILD]\\src\\out\\Release\\gn.exe.sha1",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gn sha1",
     "~followup_annotations": [
       "@@@STEP_TEXT@0123456789abcdeffedcba987654321012345678@@@"

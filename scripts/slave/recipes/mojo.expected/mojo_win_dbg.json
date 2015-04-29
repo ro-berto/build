@@ -22,6 +22,7 @@
       "src@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -43,6 +44,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient runhooks"
   },
   {
@@ -64,6 +66,7 @@
       "build",
       "--debug"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "mojob build"
   },
   {
@@ -74,6 +77,7 @@
       "{\"build_number\": 571, \"builder_name\": \"Mojo Win (dbg)\", \"dcheck_always_on\": false, \"is_debug\": true, \"master_name\": \"chromium.testing.master\", \"target_os\": \"windows\", \"test_results_server\": \"test-results.appspot.com\", \"test_types\": [\"default\"]}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get_test_list",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",

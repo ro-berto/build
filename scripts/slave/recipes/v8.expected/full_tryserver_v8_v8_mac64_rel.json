@@ -25,6 +25,7 @@
       "--no_shallow",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -57,6 +58,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "clang=1 dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1 v8_target_arch=x64",
       "GYP_GENERATORS": "ninja"
@@ -69,6 +71,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -88,6 +91,7 @@
       "[BUILD]/goma",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {

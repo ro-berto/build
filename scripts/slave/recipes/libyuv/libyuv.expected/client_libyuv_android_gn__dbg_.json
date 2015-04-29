@@ -22,6 +22,7 @@
       "src@12345",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -43,6 +44,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -59,6 +61,7 @@
       "//out/Debug",
       "--args=is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[BUILD]/goma\""
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gn"
   },
   {
@@ -79,6 +82,7 @@
       "--",
       "all"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },

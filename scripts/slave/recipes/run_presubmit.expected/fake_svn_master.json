@@ -28,6 +28,7 @@
       "src@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -124,6 +125,7 @@
       "--rietveld_email",
       ""
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "presubmit",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",

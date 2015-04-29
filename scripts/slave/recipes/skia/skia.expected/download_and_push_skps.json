@@ -36,6 +36,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['android']"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -53,6 +54,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -71,6 +73,7 @@
       "which",
       "ccache"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "has ccache?",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -101,6 +104,7 @@
       "015d210a13480604",
       "wait-for-device"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "wait for device (1)"
   },
   {
@@ -112,6 +116,7 @@
       "echo",
       "$EXTERNAL_STORAGE"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get EXTERNAL_STORAGE dir",
     "stdout": "/path/to/tmp/"
   },
@@ -122,6 +127,7 @@
       "015d210a13480604",
       "root"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "adb root"
   },
   {
@@ -129,6 +135,7 @@
       "sleep",
       "10"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "wait"
   },
   {
@@ -138,6 +145,7 @@
       "015d210a13480604",
       "wait-for-device"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "wait for device (2)"
   },
   {
@@ -146,6 +154,7 @@
       "-s",
       "015d210a13480604"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
@@ -160,6 +169,7 @@
       "shell",
       "stop"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "stop shell"
   },
   {
@@ -170,6 +180,7 @@
       "[SLAVE_BUILD]/skia/resources",
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
@@ -184,6 +195,7 @@
       "[SLAVE_BUILD]/tmp",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -206,6 +218,7 @@
       "[SLAVE_BUILD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SKP_VERSION"
   },
   {
@@ -216,6 +229,7 @@
       "[SLAVE_BUILD]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -225,6 +239,7 @@
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
       "[SLAVE_BUILD]/tmp/SKP_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "remove actual SKP_VERSION",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -241,6 +256,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/playback/skps"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -260,6 +276,7 @@
       "[SLAVE_BUILD]/playback/skps",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -289,6 +306,7 @@
       "gs://chromium-skia-gm/playback_42/skps/*",
       "[SLAVE_BUILD]/playback/skps"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil download skps"
   },
   {
@@ -299,6 +317,7 @@
       "42",
       "[SLAVE_BUILD]/tmp/SKP_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "write SKP_VERSION"
   },
   {
@@ -310,6 +329,7 @@
       "cat",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/SKP_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read SKP_VERSION",
     "stdout": "/path/to/tmp/"
   },
@@ -323,6 +343,7 @@
       "-f",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/SKP_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rm SKP_VERSION"
   },
   {
@@ -335,6 +356,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmdir skps"
   },
   {
@@ -353,6 +375,7 @@
       "FILE_EXISTS;",
       "fi"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "exists skps",
     "stdout": "/path/to/tmp/"
   },
@@ -366,6 +389,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "mkdir skps"
   },
   {
@@ -376,6 +400,7 @@
       "[SLAVE_BUILD]/playback/skps",
       "/storage/emulated/legacy/skiabot/skia_skp/skps"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
@@ -391,6 +416,7 @@
       "[SLAVE_BUILD]/tmp/SKP_VERSION",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/SKP_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "push SKP_VERSION"
   },
   {
@@ -406,6 +432,7 @@
       "cat",
       "gs://chromium-skia-gm/skimage/input/TIMESTAMP_LAST_UPLOAD_COMPLETED"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED",
     "stdout": "/path/to/tmp/"
   },
@@ -417,6 +444,7 @@
       "[SLAVE_BUILD]/tmp/SKIMAGE_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKIMAGE_VERSION"
   },
   {
@@ -428,6 +456,7 @@
       "cat",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/SKIMAGE_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read SKIMAGE_VERSION",
     "stdout": "/path/to/tmp/"
   },
@@ -438,6 +467,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/dm"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -457,6 +487,7 @@
       "[SLAVE_BUILD]/dm",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -481,6 +512,7 @@
       "-r",
       "/storage/emulated/legacy/skiabot/skia_dm"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmdir skia_dm"
   },
   {
@@ -499,6 +531,7 @@
       "FILE_EXISTS;",
       "fi"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "exists skia_dm",
     "stdout": "/path/to/tmp/"
   },
@@ -512,6 +545,7 @@
       "-p",
       "/storage/emulated/legacy/skiabot/skia_dm"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "mkdir skia_dm"
   },
   {
@@ -564,6 +598,7 @@
       "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/uninteresting_hashes.txt"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "push uninteresting_hashes.txt"
   },
   {
@@ -628,6 +663,7 @@
       "--nocpu",
       "--dummy-flags"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
@@ -642,6 +678,7 @@
       "/storage/emulated/legacy/skiabot/skia_dm",
       "[SLAVE_BUILD]/dm"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"
@@ -670,6 +707,7 @@
       "015d210a13480604",
       "reboot"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "reboot"
   },
   {
@@ -677,6 +715,7 @@
       "sleep",
       "10"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "wait for reboot"
   },
   {
@@ -686,6 +725,7 @@
       "015d210a13480604",
       "wait-for-device"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "wait for device (3)"
   }
 ]

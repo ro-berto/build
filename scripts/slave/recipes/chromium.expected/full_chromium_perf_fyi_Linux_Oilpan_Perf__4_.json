@@ -21,6 +21,7 @@
       "--revision",
       "src@1111111"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -67,6 +68,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
@@ -78,6 +80,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -87,6 +90,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/src/out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -112,6 +116,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Oilpan Perf (4)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Oilpan Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "extract build"
   },
   {
@@ -127,6 +132,7 @@
       "--num-shards",
       "4"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "List Perf Tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

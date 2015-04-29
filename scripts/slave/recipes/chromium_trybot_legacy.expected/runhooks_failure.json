@@ -28,6 +28,7 @@
       "src@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -75,6 +76,7 @@
       "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium_win8_trybot.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: testing\\buildbot\\chromium_win8_trybot.json@@@",
@@ -126,6 +128,7 @@
       "--properties",
       "{\"buildername\": \"win8_chromium_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -139,6 +142,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
     },
@@ -154,6 +158,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -181,6 +186,7 @@
       "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -215,6 +221,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
     },

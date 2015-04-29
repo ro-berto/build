@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup temp"
   },
   {
@@ -17,6 +18,7 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
@@ -77,6 +79,7 @@
       "-u",
       "exit()"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "copy parent_got_revision to got_revision",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@exit()@@@",
@@ -90,6 +93,7 @@
       "-9",
       "gnome-keyring-daemon"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "killall gnome-keyring-daemon"
   },
   {
@@ -126,6 +130,7 @@
       "--",
       "--use-gpu-in-tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "content_gl_tests",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -166,6 +171,7 @@
       "--",
       "--use-gpu-in-tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gl_tests"
   },
   {
@@ -202,6 +208,7 @@
       "--",
       "--use-gpu-in-tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "angle_unittests"
   },
   {
@@ -250,6 +257,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -311,6 +319,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -361,6 +370,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -411,6 +421,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -461,6 +472,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -511,6 +523,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -561,6 +574,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -611,6 +625,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -661,6 +676,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -715,6 +731,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -756,6 +773,7 @@
       "https://isolateserver.appspot.com",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "tab_capture_end2end_tests"
   },
   {

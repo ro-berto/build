@@ -3,24 +3,28 @@
     "cmd": [
       "true"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "prelude"
   },
   {
     "cmd": [
       "true"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "aggregated start"
   },
   {
     "cmd": [
       "true"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "aggregated finish"
   },
   {
     "cmd": [
       "true"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "normal start",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -31,24 +35,28 @@
     "cmd": [
       "true"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "normal finish"
   },
   {
     "cmd": [
       "true"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "composite start"
   },
   {
     "cmd": [
       "true"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "composite finish"
   },
   {
     "cmd": [
       "true"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean up"
   },
   {

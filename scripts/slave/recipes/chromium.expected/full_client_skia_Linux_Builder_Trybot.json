@@ -23,6 +23,7 @@
       "--revision",
       "src/third_party/skia@origin/master"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -73,6 +74,7 @@
       "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -86,6 +88,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
@@ -99,6 +102,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json@@@",
@@ -121,6 +125,7 @@
       "--properties",
       "{\"buildername\": \"Linux Builder-Trybot\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -133,6 +138,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -153,6 +159,7 @@
       "--",
       "chromium_swarm_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -172,6 +179,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Builder-Trybot\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "package build"
   }
 ]

@@ -27,6 +27,7 @@
       "--revision",
       "src@12345"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -53,6 +54,7 @@
       "RECIPE_MODULE[webrtc]/resources/cleanup_files.py",
       "[SLAVE_BUILD]/src/out"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean test output files"
   },
   {
@@ -61,6 +63,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -70,6 +73,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
@@ -93,6 +97,7 @@
       "--",
       "All"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -121,6 +126,7 @@
       "-pb",
       "[SLAVE_BUILD]/src/resources/audioproc.aecdump"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "audioproc"
   },
   {
@@ -145,6 +151,7 @@
       "[SLAVE_BUILD]/src/resources/speech_and_misc_wb.pcm",
       "isac_speech_and_misc_wb.pcm"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "iSACFixtest"
   },
   {
@@ -153,6 +160,7 @@
       "-u",
       "RECIPE_MODULE[webrtc]/resources/ensure_webcam_is_running.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webcam_check"
   },
   {
@@ -174,6 +182,7 @@
       "--slave-name=slavename",
       "libjingle_peerconnection_java_unittest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "LD_PRELOAD": "/usr/lib/x86_64-linux-gnu/libpulse.so.0"
     },
@@ -185,6 +194,7 @@
       "-u",
       "RECIPE_MODULE[webrtc]/resources/ensure_webcam_is_running.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webcam_check (2)"
   },
   {
@@ -208,6 +218,7 @@
       "--automated",
       "--capture_test_ensure_resolution_alignment_in_capture_device=false"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "vie_auto_test"
   },
   {
@@ -230,6 +241,7 @@
       "voe_auto_test",
       "--automated"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "voe_auto_test"
   },
   {
@@ -238,6 +250,7 @@
       "-u",
       "RECIPE_MODULE[webrtc]/resources/ensure_webcam_is_running.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webcam_check (3)"
   },
   {
@@ -259,6 +272,7 @@
       "--slave-name=slavename",
       "video_capture_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "video_capture_tests"
   },
   {
@@ -280,6 +294,7 @@
       "--slave-name=slavename",
       "webrtc_perf_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webrtc_perf_tests"
   }
 ]

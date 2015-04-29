@@ -4,6 +4,7 @@
       "touch",
       "[TMP_BASE]\\zip-example_tmp_1\\a"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "touch a"
   },
   {
@@ -11,6 +12,7 @@
       "touch",
       "[TMP_BASE]\\zip-example_tmp_1\\b"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "touch b"
   },
   {
@@ -21,6 +23,7 @@
       "[TMP_BASE]\\zip-example_tmp_1\\sub\\dir",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs mkdirs",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -40,6 +43,7 @@
       "touch",
       "[TMP_BASE]\\zip-example_tmp_1\\sub\\dir\\c"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "touch c"
   },
   {
@@ -48,6 +52,7 @@
       "-u",
       "RECIPE_MODULE[zip]\\resources\\zip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "zipping",
     "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output.zip\", \"root\": \"[TMP_BASE]\\\\zip-example_tmp_1\", \"use_python_zip\": true}"
   },
@@ -57,6 +62,7 @@
       "-u",
       "RECIPE_MODULE[zip]\\resources\\zip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "zipping more",
     "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\a\", \"type\": \"file\"}, {\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\b\", \"type\": \"file\"}, {\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\sub\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\more.zip\", \"root\": \"[TMP_BASE]\\\\zip-example_tmp_1\", \"use_python_zip\": true}"
   },
@@ -65,6 +71,7 @@
       "echo",
       "[TMP_BASE]\\zip-example_tmp_1\\more.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "report"
   },
   {
@@ -73,6 +80,7 @@
       "-u",
       "RECIPE_MODULE[zip]\\resources\\unzip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "unzipping",
     "stdin": "{\"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output\", \"use_python_zip\": true, \"zip_file\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output.zip\"}"
   },
@@ -90,6 +98,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[TMP_BASE]\\zip-example_tmp_1"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree cleanup",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

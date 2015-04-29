@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -31,6 +32,7 @@
       "--revision",
       "src/v8@22135"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -73,6 +75,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "branding=Chrome buildtype=Official chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
     },
@@ -84,6 +87,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -107,6 +111,7 @@
       "chromium_builder_perf",
       "crash_service"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -117,6 +122,7 @@
       "--target",
       "Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "start_crash_service"
   },
   {
@@ -132,6 +138,7 @@
       "--num-shards",
       "1"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "List Perf Tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -189,6 +196,7 @@
       "-v",
       "--b=2"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "blink_perf.all.exact",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",
@@ -223,6 +231,7 @@
       "-v",
       "--b=2"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "blink_perf.all.release",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",
@@ -237,6 +246,7 @@
       "--target",
       "Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "process_dumps"
   }
 ]

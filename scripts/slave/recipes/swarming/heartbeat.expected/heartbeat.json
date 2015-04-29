@@ -9,6 +9,7 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
@@ -70,6 +71,7 @@
       "[SLAVE_BUILD]/swarming.client/swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -82,6 +84,7 @@
       "-u",
       "RECIPE_MODULE[swarming_heartbeat]/resources/job_runs_fine.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "job_runs_fine.py"
   }
 ]

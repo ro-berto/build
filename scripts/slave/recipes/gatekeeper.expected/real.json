@@ -7,6 +7,7 @@
       "[BUILD]/scripts/slave/gatekeeper_trees.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "reading gatekeeper_trees.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -167,6 +168,7 @@
       "/creds/gatekeeper/nacl_ports_status_password",
       "https://build.chromium.org/p/client.nacl.ports"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: nacl-ports"
   },
   {
@@ -183,6 +185,7 @@
       "https://build.chromium.org/p/client.boringssl",
       "https://build.chromium.org/p/client.libvpx"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: non-closers"
   },
   {
@@ -206,6 +209,7 @@
       "/creds/gatekeeper/pdfium_status_password",
       "https://build.chromium.org/p/client.pdfium"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: pdfium"
   },
   {
@@ -221,6 +225,7 @@
       "got_revision_cp",
       "https://build.chromium.org/p/client.nacl.sdk"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: nacl-sdk"
   },
   {
@@ -244,6 +249,7 @@
       "/creds/gatekeeper/nacl_status_password",
       "https://build.chromium.org/p/client.nacl"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: nacl"
   },
   {
@@ -263,6 +269,7 @@
       "/creds/gatekeeper/infra_status_password",
       "https://build.chromium.org/p/chromium.infra"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: infra"
   },
   {
@@ -286,6 +293,7 @@
       "/creds/gatekeeper/v8_status_password",
       "https://build.chromium.org/p/client.v8"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: v8"
   },
   {
@@ -298,6 +306,7 @@
       "[BUILD]/scripts/slave/gatekeeper.json",
       "https://build.chromium.org/p/chromium.perf"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: chromium.perf"
   },
   {
@@ -320,6 +329,7 @@
       "https://build.chromium.org/p/client.skia",
       "https://build.chromium.org/p/client.skia.compile"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: skia"
   },
   {
@@ -343,6 +353,7 @@
       "/creds/gatekeeper/blink_status_password",
       "https://build.chromium.org/p/chromium.webkit"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: blink"
   },
   {
@@ -374,6 +385,7 @@
       "https://build.chromium.org/p/chromium.memory",
       "https://build.chromium.org/p/chromium.win"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: chromium"
   },
   {
@@ -397,6 +409,7 @@
       "/creds/gatekeeper/webrtc_status_password",
       "https://build.chromium.org/p/client.webrtc"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: webrtc"
   }
 ]

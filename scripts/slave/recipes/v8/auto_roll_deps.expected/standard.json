@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -33,6 +34,7 @@
       "--force",
       "--no_shallow"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -80,6 +82,7 @@
       "[BUILD]/scripts/tools/pycurl.py",
       "https://v8-roll.appspot.com/status"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "check roll status",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [

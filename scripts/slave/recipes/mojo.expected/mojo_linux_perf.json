@@ -22,6 +22,7 @@
       "src@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -43,6 +44,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient runhooks"
   },
   {
@@ -67,6 +69,7 @@
       "build",
       "--release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GOMA_DIR": "[BUILD]/goma"
     },
@@ -80,6 +83,7 @@
       "{\"build_number\": 571, \"builder_name\": \"Mojo Linux Perf\", \"dcheck_always_on\": false, \"is_debug\": false, \"master_name\": \"chromium.testing.master\", \"target_os\": \"linux\", \"test_results_server\": \"test-results.appspot.com\", \"test_types\": [\"perf\"]}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get_test_list",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",

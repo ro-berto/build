@@ -6,6 +6,7 @@
       "\nimport os, sys\n\nbuild_path = sys.argv[1]\nif os.path.exists(build_path):\n  for (path, dir, files) in os.walk(build_path):\n    for cur_file in files:\n      if cur_file.endswith('index.lock'):\n        path_to_file = os.path.join(path, cur_file)\n        print 'deleting %s' % path_to_file\n        os.remove(path_to_file)\n",
       "[SLAVE_BUILD]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup index.lock",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -48,6 +49,7 @@
       "--refs",
       "refs/changes/50/176150/1"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -66,6 +68,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src/repo', 'url': 'svn://svn.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -76,6 +79,7 @@
       ".",
       "[DEPOT_TOOLS]/gclient"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient revert"
   },
   {
@@ -93,6 +97,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -139,6 +144,7 @@
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -163,6 +169,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 target_arch=arm",
@@ -179,6 +186,7 @@
       "foo",
       "src/repo"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "tree truth steps"
   },
   {
@@ -186,6 +194,7 @@
       "cat",
       "[SLAVE_BUILD]/src/chrome/VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get version",
     "stdout": "/path/to/tmp/version"
   },
@@ -202,6 +211,7 @@
       "ninja",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -219,6 +229,7 @@
       "--filters",
       "*.apk"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "zip_build_proudct"
   },
   {
@@ -237,6 +248,7 @@
       "['[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "List adb devices",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -253,6 +265,7 @@
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "014E1F310401C009"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Root devices",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -272,6 +285,7 @@
       "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
       "[SLAVE_BUILD]/src/out/logcat"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -285,6 +299,7 @@
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -296,6 +311,7 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -336,6 +352,7 @@
       "-t",
       "Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -347,6 +364,7 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -388,6 +406,7 @@
       "Release",
       "--skip-wipe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -403,6 +422,7 @@
       "--package=chrome",
       "--event-count=50000"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release"
     },
@@ -430,6 +450,7 @@
       "[SLAVE_BUILD]/src/chrome/test",
       "--official-build"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test SmallTest"
   },
   {
@@ -446,6 +467,7 @@
       "--gtest_filter=WebRtc*",
       "--tool=asan"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -457,6 +479,7 @@
       "-w",
       "[SLAVE_BUILD]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "prepare bisect perf regression"
   },
   {
@@ -469,6 +492,7 @@
       "--path_to_config",
       "test.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "run bisect perf regression"
   },
   {
@@ -481,6 +505,7 @@
       "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
       "[SLAVE_BUILD]/src/out/logcat"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "logcat_dump"
   },
   {
@@ -491,6 +516,7 @@
       "--more-info",
       "[SLAVE_BUILD]/src/out/Release/full_log"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -503,6 +529,7 @@
       "-s",
       "-w"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -514,6 +541,7 @@
       "-l",
       "[SLAVE_BUILD]/src/out/Release/full_log"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },

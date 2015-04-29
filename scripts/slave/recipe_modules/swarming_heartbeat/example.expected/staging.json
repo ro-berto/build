@@ -6,6 +6,7 @@
       "RECIPE_MODULE[swarming_heartbeat]/resources/job_runs_fine.py",
       "--canary"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "job_runs_fine.py"
   }
 ]

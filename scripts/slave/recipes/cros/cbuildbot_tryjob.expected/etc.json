@@ -11,6 +11,7 @@
       "--attempts",
       "10"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Fetch tryjob commit",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -55,6 +56,7 @@
       "--attempts",
       "10"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Fetch tryjob descriptor (user/user.12345)",
     "~followup_annotations": [
       "@@@STEP_TEXT@extra_args: [u'--timeout', u'14400', u'--remote-trybot', u'--remote-version=4']<br/>name: 12345<br/>email: testauthor@fake.chromium.org@@@"
@@ -83,6 +85,7 @@
       "chromite@master:",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",

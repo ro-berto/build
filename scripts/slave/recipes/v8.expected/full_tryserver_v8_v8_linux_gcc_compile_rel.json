@@ -25,6 +25,7 @@
       "--no_shallow",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -57,6 +58,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "clang=0 dcheck_always_on=0 fastbuild=1 target_arch=ia32 v8_target_arch=ia32"
     },
@@ -68,6 +70,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -83,6 +86,7 @@
       "make",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   }
 ]

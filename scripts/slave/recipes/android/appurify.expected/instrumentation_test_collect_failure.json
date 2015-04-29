@@ -21,6 +21,7 @@
       "--revision",
       "src@4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -70,6 +71,7 @@
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -94,6 +96,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
@@ -108,6 +111,7 @@
       "[SLAVE_BUILD]/src",
       "src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "tree truth steps"
   },
   {
@@ -124,6 +128,7 @@
       "gs://chromium-android/android_fyi_dbg/full-build-linux_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip",
       "[SLAVE_BUILD]/src/out/build_product.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil download_build_product"
   },
   {
@@ -141,6 +146,7 @@
       "-rf",
       "[SLAVE_BUILD]/src/out/Debug"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "remove extract location"
   },
   {
@@ -150,6 +156,7 @@
       "[SLAVE_BUILD]/src/full-build-linux",
       "[SLAVE_BUILD]/src/out/Debug"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "move extracted build"
   },
   {
@@ -187,6 +194,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] content_shell_test_apk",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -210,6 +218,7 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
       "[TMP_BASE]/amp_trigger_tmp_1/content_shell_test_apk.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save content_shell_test_apk data"
   },
   {
@@ -243,6 +252,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] android_webview_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -266,6 +276,7 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
       "[TMP_BASE]/amp_trigger_tmp_1/android_webview_unittests.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save android_webview_unittests data"
   },
   {
@@ -301,6 +312,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] base_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -324,6 +336,7 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
       "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save base_unittests data"
   },
   {
@@ -357,6 +370,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] cc_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -380,6 +394,7 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
       "[TMP_BASE]/amp_trigger_tmp_1/cc_unittests.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save cc_unittests data"
   },
   {
@@ -415,6 +430,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] components_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -438,6 +454,7 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
       "[TMP_BASE]/amp_trigger_tmp_1/components_unittests.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save components_unittests data"
   },
   {
@@ -471,6 +488,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] events_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -494,6 +512,7 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
       "[TMP_BASE]/amp_trigger_tmp_1/events_unittests.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save events_unittests data"
   },
   {
@@ -527,6 +546,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] gl_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -550,6 +570,7 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
       "[TMP_BASE]/amp_trigger_tmp_1/gl_tests.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save gl_tests data"
   },
   {
@@ -583,6 +604,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] ipc_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -606,6 +628,7 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
       "[TMP_BASE]/amp_trigger_tmp_1/ipc_tests.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save ipc_tests data"
   },
   {
@@ -639,6 +662,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] skia_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -662,6 +686,7 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
       "[TMP_BASE]/amp_trigger_tmp_1/skia_unittests.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save skia_unittests data"
   },
   {
@@ -697,6 +722,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] sql_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -720,6 +746,7 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
       "[TMP_BASE]/amp_trigger_tmp_1/sql_unittests.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save sql_unittests data"
   },
   {
@@ -755,6 +782,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] sync_unit_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -778,6 +806,7 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
       "[TMP_BASE]/amp_trigger_tmp_1/sync_unit_tests.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save sync_unit_tests data"
   },
   {
@@ -811,6 +840,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] ui_android_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -834,6 +864,7 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
       "[TMP_BASE]/amp_trigger_tmp_1/ui_android_unittests.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save ui_android_unittests data"
   },
   {
@@ -867,6 +898,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] ui_touch_selection_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -890,6 +922,7 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
       "[TMP_BASE]/amp_trigger_tmp_1/ui_touch_selection_unittests.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save ui_touch_selection_unittests data"
   },
   {
@@ -900,6 +933,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/android_webview_unittests.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load android_webview_unittests data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -947,6 +981,7 @@
       "[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] android_webview_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -960,6 +995,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load base_unittests data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1007,6 +1043,7 @@
       "[TMP_BASE]/amp_results_tmp_2/base_unittests/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] base_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -1020,6 +1057,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/cc_unittests.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load cc_unittests data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1067,6 +1105,7 @@
       "[TMP_BASE]/amp_results_tmp_2/cc_unittests/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] cc_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -1080,6 +1119,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/components_unittests.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load components_unittests data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1127,6 +1167,7 @@
       "[TMP_BASE]/amp_results_tmp_2/components_unittests/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] components_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -1140,6 +1181,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/events_unittests.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load events_unittests data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1187,6 +1229,7 @@
       "[TMP_BASE]/amp_results_tmp_2/events_unittests/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] events_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -1200,6 +1243,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/gl_tests.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load gl_tests data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1247,6 +1291,7 @@
       "[TMP_BASE]/amp_results_tmp_2/gl_tests/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] gl_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -1260,6 +1305,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/ipc_tests.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load ipc_tests data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1307,6 +1353,7 @@
       "[TMP_BASE]/amp_results_tmp_2/ipc_tests/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] ipc_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -1320,6 +1367,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/skia_unittests.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load skia_unittests data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1367,6 +1415,7 @@
       "[TMP_BASE]/amp_results_tmp_2/skia_unittests/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] skia_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -1380,6 +1429,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/sql_unittests.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load sql_unittests data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1427,6 +1477,7 @@
       "[TMP_BASE]/amp_results_tmp_2/sql_unittests/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] sql_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -1440,6 +1491,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/sync_unit_tests.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load sync_unit_tests data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1487,6 +1539,7 @@
       "[TMP_BASE]/amp_results_tmp_2/sync_unit_tests/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] sync_unit_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -1500,6 +1553,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/ui_android_unittests.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load ui_android_unittests data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1547,6 +1601,7 @@
       "[TMP_BASE]/amp_results_tmp_2/ui_android_unittests/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] ui_android_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -1560,6 +1615,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/ui_touch_selection_unittests.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load ui_touch_selection_unittests data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1607,6 +1663,7 @@
       "[TMP_BASE]/amp_results_tmp_2/ui_touch_selection_unittests/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] ui_touch_selection_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -1620,6 +1677,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/content_shell_test_apk.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load content_shell_test_apk data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1669,6 +1727,7 @@
       "[TMP_BASE]/amp_results_tmp_2/content_shell_test_apk/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] content_shell_test_apk",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -1684,6 +1743,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/content_shell_test_apk.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] load content_shell_test_apk data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1700,6 +1760,7 @@
       "-u",
       "RECIPE_MODULE[zip]/resources/unzip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for content_shell_test_apk",
     "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/content_shell_test_apk/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/content_shell_test_apk/results.zip\"}"
   },
@@ -1717,6 +1778,7 @@
       "[TMP_BASE]/amp_results_tmp_2/content_shell_test_apk/unzipped_results/appurify_results/logcat.txt",
       "gs://chrome-amp-results/logcats/logcat_content_shell_test_apk_12345abcde.txt"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil [upload logcat] content_shell_test_apk",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_content_shell_test_apk_12345abcde.txt@@@"
@@ -1729,6 +1791,7 @@
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[SLAVE_BUILD]/src/out/Debug/test_logs/*.log"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "test_report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

@@ -27,6 +27,7 @@
       "--revision",
       "src/v8@267739"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -72,6 +73,7 @@
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -96,6 +98,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
@@ -120,6 +123,7 @@
       "[BUILD]/goma",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -152,6 +156,7 @@
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "gs://v8-android/v8_android_perf_rel/full-build-linux_267739.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload_build_product",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/v8-android/v8_android_perf_rel/full-build-linux_267739.zip@@@"

@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup temp"
   },
   {
@@ -17,6 +18,7 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
@@ -77,6 +79,7 @@
       "-u",
       "exit()"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "copy parent_got_revision to got_revision",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@exit()@@@",
@@ -117,6 +120,7 @@
       "--",
       "--use-gpu-in-tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "content_gl_tests"
   },
   {
@@ -152,6 +156,7 @@
       "--",
       "--use-gpu-in-tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gl_tests"
   },
   {
@@ -187,6 +192,7 @@
       "--",
       "--use-gpu-in-tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "angle_unittests"
   },
   {
@@ -234,6 +240,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "maps_pixel_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -289,6 +296,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "pixel_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -335,6 +343,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webgl_conformance_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -381,6 +390,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "context_lost_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -427,6 +437,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "memory_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -473,6 +484,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "trace_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -519,6 +531,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "screenshot_sync_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -565,6 +578,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "hardware_accelerated_feature_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -611,6 +625,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gpu_process_launch_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -661,6 +676,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gpu_rasterization_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"

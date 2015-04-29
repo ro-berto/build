@@ -8,6 +8,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -23,6 +24,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -46,6 +48,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CPPFLAGS": "-DSK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS=1 -DSK_PICTURE_FORCE_FONT_EMBEDDING"
     },

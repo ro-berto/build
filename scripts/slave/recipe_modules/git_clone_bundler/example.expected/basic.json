@@ -6,6 +6,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/git_clone_bundler/bundles"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree old bundles",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -25,6 +26,7 @@
       "[SLAVE_BUILD]/git_clone_bundler/bundles",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs bundles",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -64,6 +66,7 @@
       "[SLAVE_BUILD]/git_clone_bundler/bundles/4c11f7d238ab3a5109562560694c3722.bundle",
       "gs://clone-dot-bundle-bucket/checkout/repository/clone.bundle"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload bundle",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil bundle@https://storage.cloud.google.com/clone-dot-bundle-bucket/checkout/repository/clone.bundle@@@"

@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -29,6 +30,7 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -75,6 +77,7 @@
       "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -88,6 +91,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
@@ -101,6 +105,7 @@
       "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json@@@",
@@ -154,6 +159,7 @@
       "--properties",
       "{\"buildername\": \"Win Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -166,6 +172,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -177,6 +184,7 @@
       "[SLAVE_BUILD]\\src\\out\\Release",
       "--clean-isolated-files"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean isolated files"
   },
   {
@@ -201,6 +209,7 @@
       "crash_service",
       "mini_installer"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -229,6 +238,7 @@
       "--verbose",
       "[SLAVE_BUILD]\\src\\out\\Release\\browser_tests.isolated.gen.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -254,6 +264,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "package build"
   }
 ]

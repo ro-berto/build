@@ -9,6 +9,7 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
@@ -67,6 +68,7 @@
     "cmd": [
       "cat"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -87,6 +89,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "find isolated tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -113,6 +116,7 @@
       "[BUILD]/test1.isolated.gen.json",
       "[BUILD]/test2.isolated.gen.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

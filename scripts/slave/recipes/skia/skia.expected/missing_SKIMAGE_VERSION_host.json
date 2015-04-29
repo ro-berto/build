@@ -36,6 +36,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -53,6 +54,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -73,6 +75,7 @@
       "\nimport os\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write(os.path.join(os.path.expanduser('~'), 'src'))\n",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get CHROME_PATH",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -104,6 +107,7 @@
       "[SLAVE_BUILD]/tmp",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -126,6 +130,7 @@
       "[SLAVE_BUILD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SKP_VERSION"
   },
   {
@@ -136,6 +141,7 @@
       "[SLAVE_BUILD]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -151,6 +157,7 @@
       "cat",
       "gs://chromium-skia-gm/skimage/input/TIMESTAMP_LAST_UPLOAD_COMPLETED"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED",
     "stdout": "/path/to/tmp/"
   },
@@ -162,6 +169,7 @@
       "[SLAVE_BUILD]/tmp/SKIMAGE_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKIMAGE_VERSION",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -175,6 +183,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/images"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree images",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -194,6 +203,7 @@
       "[SLAVE_BUILD]/images",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs images",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -223,6 +233,7 @@
       "gs://chromium-skia-gm/skimage/input/*",
       "[SLAVE_BUILD]/images"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil download images"
   },
   {
@@ -233,6 +244,7 @@
       "42",
       "[SLAVE_BUILD]/tmp/SKIMAGE_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "write SKIMAGE_VERSION"
   },
   {
@@ -242,6 +254,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/dm"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -261,6 +274,7 @@
       "[SLAVE_BUILD]/dm",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -373,6 +387,7 @@
       "--nogpu",
       "--dummy-flags"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dm"
   },
   {

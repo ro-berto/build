@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup temp"
   },
   {
@@ -32,6 +33,7 @@
       "src/third_party/WebKit@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -78,6 +80,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "archive_gpu_tests=1 blink_logging_always_on=1 component=static_library dcheck_always_on=1 disable_glibcxx_debug=1 ffmpeg_branding=Chrome gomadir='[BUILD]/goma' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
@@ -92,6 +95,7 @@
       "[SLAVE_BUILD]/src/out/Release",
       "--clean-isolated-files"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean isolated files"
   },
   {
@@ -120,6 +124,7 @@
       "tab_capture_end2end_tests_run",
       "telemetry_gpu_test_run"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -142,6 +147,7 @@
       "[SLAVE_BUILD]/src/out/Release/tab_capture_end2end_tests.isolated.gen.json",
       "[SLAVE_BUILD]/src/out/Release/telemetry_gpu_test.isolated.gen.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -165,6 +171,7 @@
       "-9",
       "gnome-keyring-daemon"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "killall gnome-keyring-daemon"
   },
   {
@@ -200,6 +207,7 @@
       "--",
       "--use-gpu-in-tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "content_gl_tests"
   },
   {
@@ -235,6 +243,7 @@
       "--",
       "--use-gpu-in-tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gl_tests"
   },
   {
@@ -270,6 +279,7 @@
       "--",
       "--use-gpu-in-tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "angle_unittests"
   },
   {
@@ -317,6 +327,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -375,6 +386,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -424,6 +436,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -473,6 +486,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -522,6 +536,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -571,6 +586,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -620,6 +636,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -669,6 +686,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -718,6 +736,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -771,6 +790,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
@@ -811,6 +831,7 @@
       "https://isolateserver.appspot.com",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "tab_capture_end2end_tests"
   }
 ]

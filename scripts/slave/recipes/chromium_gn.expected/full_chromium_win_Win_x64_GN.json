@@ -22,6 +22,7 @@
       "src@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -68,6 +69,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1"
     },
@@ -90,6 +92,7 @@
       "[BUILD]\\goma",
       "//out/Release_x64"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Generate build files"
   },
   {
@@ -100,6 +103,7 @@
       "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json@@@",
@@ -132,6 +136,7 @@
       "base_unittests",
       "all"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -143,6 +148,7 @@
       "check",
       "//out/Release_x64"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gn check"
   }
 ]

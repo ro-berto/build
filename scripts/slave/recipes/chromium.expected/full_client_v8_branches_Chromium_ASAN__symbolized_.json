@@ -23,6 +23,7 @@
       "--revision",
       "src/v8@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -65,6 +66,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "asan=1 clang=1 component=static_library gomadir='[BUILD]/goma' lsan=1 release_extra_cflags='-fno-inline-functions -fno-inline' sanitizer_coverage=3 target_arch=x64 use_goma=1 v8_enable_verify_heap=1"
     },
@@ -76,6 +78,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -97,6 +100,7 @@
       "--",
       "chromium_builder_asan"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -107,6 +111,7 @@
       "[SLAVE_BUILD]/src/out/Release",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "listdir build_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -128,6 +133,7 @@
       "-u",
       "RECIPE_MODULE[zip]/resources/zip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "zipping",
     "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/Release/file 1\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/Release/file 2\", \"type\": \"file\"}], \"output\": \"[SLAVE_BUILD]/chrome_staging/asan-symbolized-linux-release-v8-component-43426.zip\", \"root\": \"[SLAVE_BUILD]/src/out/Release\", \"use_python_zip\": false}"
   },
@@ -151,6 +157,7 @@
       "[SLAVE_BUILD]/chrome_staging/asan-symbolized-linux-release-v8-component-43426.zip",
       "gs://gs://v8-asan/linux-release/asan-symbolized-linux-release-v8-component-43426.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/gs://v8-asan/linux-release/asan-symbolized-linux-release-v8-component-43426.zip@@@"
@@ -163,6 +170,7 @@
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
       "[SLAVE_BUILD]/chrome_staging/asan-symbolized-linux-release-v8-component-43426.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "asan-symbolized-linux-release-v8-component-43426.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

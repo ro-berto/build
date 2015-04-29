@@ -7,6 +7,7 @@
       "[BUILD]/scripts/slave/gatekeeper_trees.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "reading gatekeeper_trees.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -40,6 +41,7 @@
       "--json",
       "[BUILD]/scripts/slave/gatekeeper.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: chromium"
   },
   {
@@ -71,6 +73,7 @@
       "gatekeeper@google.com",
       "https://build.chromium.org/p/chromium.webkit"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: blink"
   }
 ]

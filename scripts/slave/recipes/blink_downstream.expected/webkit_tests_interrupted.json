@@ -26,6 +26,7 @@
       "src/v8@20123",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -72,6 +73,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
@@ -95,6 +97,7 @@
       "--",
       "blink_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -114,6 +117,7 @@
       "--build-number=571",
       "webkit_unit_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_unit_tests"
   },
   {
@@ -149,6 +153,7 @@
       "V8-Blink Linux 64",
       "--no-pixel-tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 130",
@@ -176,6 +181,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 64\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
       "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/V8-Blink_Linux_64/571/layout-test-results/results.html@@@",
@@ -188,6 +194,7 @@
       "-u",
       "import sys; sys.exit(1)"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",

@@ -27,6 +27,7 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -73,6 +74,7 @@
       "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -86,6 +88,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "archive_gpu_tests=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
@@ -99,6 +102,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json@@@",
@@ -121,6 +125,7 @@
       "--properties",
       "{\"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -133,6 +138,7 @@
       "-9",
       "gnome-keyring-daemon"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "killall gnome-keyring-daemon"
   },
   {
@@ -158,6 +164,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read filter exclusion spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
@@ -184,6 +191,7 @@
       "{\"files\": [\"third_party/WebKit/foo.cc\"], \"targets\": [\"angle_unittests_run\", \"blink_tests\", \"chrome\", \"content_gl_tests_run\", \"gl_tests_run\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "archive_gpu_tests=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },

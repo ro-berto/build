@@ -21,6 +21,7 @@
       "--revision",
       "src@12345"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -47,6 +48,7 @@
       "RECIPE_MODULE[webrtc]\\resources\\cleanup_files.py",
       "[SLAVE_BUILD]\\src\\out"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean test output files"
   },
   {
@@ -55,6 +57,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -64,6 +67,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "build_for_tool=drmemory chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
     },
@@ -87,6 +91,7 @@
       "--",
       "All"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -115,6 +120,7 @@
       "--tool",
       "drmemory_light"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "audio_decoder_unittests"
   },
   {
@@ -143,6 +149,7 @@
       "--tool",
       "drmemory_light"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "common_audio_unittests"
   },
   {
@@ -171,6 +178,7 @@
       "--tool",
       "drmemory_light"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "common_video_unittests"
   },
   {
@@ -199,6 +207,7 @@
       "--tool",
       "drmemory_light"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "libjingle_media_unittest"
   },
   {
@@ -227,6 +236,7 @@
       "--tool",
       "drmemory_light"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "libjingle_p2p_unittest"
   },
   {
@@ -255,6 +265,7 @@
       "--tool",
       "drmemory_light"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "libjingle_peerconnection_unittest"
   },
   {
@@ -283,6 +294,7 @@
       "--tool",
       "drmemory_light"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "modules_tests"
   },
   {
@@ -311,6 +323,7 @@
       "--tool",
       "drmemory_light"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "modules_unittests"
   },
   {
@@ -339,6 +352,7 @@
       "--tool",
       "drmemory_light"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_unittests"
   },
   {
@@ -367,6 +381,7 @@
       "--tool",
       "drmemory_light"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "system_wrappers_unittests"
   },
   {
@@ -395,6 +410,7 @@
       "--tool",
       "drmemory_light"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "test_support_unittests"
   },
   {
@@ -423,6 +439,7 @@
       "--tool",
       "drmemory_light"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "tools_unittests"
   },
   {
@@ -451,6 +468,7 @@
       "--tool",
       "drmemory_light"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "video_engine_core_unittests"
   },
   {
@@ -479,6 +497,7 @@
       "--tool",
       "drmemory_light"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "video_engine_tests"
   },
   {
@@ -507,6 +526,7 @@
       "--tool",
       "drmemory_light"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "voice_engine_unittests"
   }
 ]

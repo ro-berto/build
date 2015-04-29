@@ -21,6 +21,7 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -67,6 +68,7 @@
       "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -80,6 +82,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "clang=1 component=static_library disable_nacl=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare tsan=1 use_goma=1"
     },
@@ -93,6 +96,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.memory.fyi.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.memory.fyi.json@@@",
@@ -124,6 +128,7 @@
       "--properties",
       "{\"buildername\": \"Linux TSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -136,6 +141,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -145,6 +151,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/src/out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -172,6 +179,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux TSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.memory.fyi\", \"parent_buildername\": \"Chromium Linux TSan Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "extract build"
   },
   {
@@ -201,6 +209,7 @@
       "base_unittests",
       "--test-launcher-print-test-stdio=always"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "base_unittests"
   }
 ]

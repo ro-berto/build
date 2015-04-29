@@ -22,6 +22,7 @@
       "boringssl@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -43,6 +44,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient runhooks"
   },
   {
@@ -53,6 +55,7 @@
       "[SLAVE_BUILD]/boringssl/build",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs mkdir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -92,6 +95,7 @@
       "-C",
       "[SLAVE_BUILD]/boringssl/build"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ninja"
   },
   {

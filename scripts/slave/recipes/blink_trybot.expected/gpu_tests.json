@@ -30,6 +30,7 @@
       "src/third_party/WebKit@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -76,6 +77,7 @@
       "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -89,6 +91,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "archive_gpu_tests=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
@@ -103,6 +106,7 @@
       "[SLAVE_BUILD]/src/out/Release",
       "--clean-isolated-files"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean isolated files"
   },
   {
@@ -129,6 +133,7 @@
       "tab_capture_end2end_tests_run",
       "telemetry_gpu_test_run"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -139,6 +144,7 @@
       "/path/to/tmp/",
       "[SLAVE_BUILD]/src/out/Release/*.isolated.gen.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "find isolated targets"
   },
   {
@@ -154,6 +160,7 @@
       "[SLAVE_BUILD]/src/out/Release/dummy_target_1.isolated.gen.json",
       "[SLAVE_BUILD]/src/out/Release/dummy_target_2.isolated.gen.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -174,6 +181,7 @@
       "--target",
       "Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_lint"
   },
   {
@@ -186,6 +194,7 @@
       "--target",
       "Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_python_tests"
   },
   {
@@ -204,6 +213,7 @@
       "--build-number=571",
       "webkit_unit_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_unit_tests"
   },
   {
@@ -222,6 +232,7 @@
       "--build-number=571",
       "blink_platform_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "blink_platform_unittests"
   },
   {
@@ -240,6 +251,7 @@
       "--build-number=571",
       "blink_heap_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "blink_heap_unittests"
   },
   {
@@ -258,6 +270,7 @@
       "--build-number=571",
       "wtf_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "wtf_unittests"
   },
   {
@@ -331,6 +344,7 @@
       "--use-gpu-in-tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] content_gl_tests on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -418,6 +432,7 @@
       "--use-gpu-in-tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] gl_tests on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -505,6 +520,7 @@
       "--use-gpu-in-tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] angle_unittests on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -603,6 +619,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] maps_pixel_test on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -706,6 +723,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] pixel_test on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -800,6 +818,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] webgl_conformance on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -894,6 +913,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] context_lost on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -988,6 +1008,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] memory_test on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1082,6 +1103,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] trace_test on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1176,6 +1198,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] screenshot_sync on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1270,6 +1293,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] hardware_accelerated_feature on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1364,6 +1388,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] gpu_process_launch on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1462,6 +1487,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] gpu_rasterization on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1548,6 +1574,7 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] tab_capture_end2end_tests on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1635,6 +1662,7 @@
       "--use-gpu-in-tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] content_gl_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1722,6 +1750,7 @@
       "--use-gpu-in-tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] gl_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1809,6 +1838,7 @@
       "--use-gpu-in-tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] angle_unittests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1907,6 +1937,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] maps_pixel_test on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2010,6 +2041,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] pixel_test on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2104,6 +2136,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] webgl_conformance on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2198,6 +2231,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] context_lost on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2292,6 +2326,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] memory_test on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2386,6 +2421,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] trace_test on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2480,6 +2516,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] screenshot_sync on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2574,6 +2611,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] hardware_accelerated_feature on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2668,6 +2706,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] gpu_process_launch on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2766,6 +2805,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] gpu_rasterization on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2852,6 +2892,7 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] tab_capture_end2end_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2899,6 +2940,7 @@
       "--builder-name",
       "mac_blink_rel"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total executed: 9001<br/>@@@"
@@ -2924,6 +2966,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"mac_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patch_project\": \"blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
       "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/mac_blink_rel/571/layout-test-results/results.html@@@",
@@ -2952,6 +2995,7 @@
       "1",
       "content_gl_tests on Intel GPU on Mac (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "content_gl_tests on Intel GPU on Mac (with patch)"
   },
   {
@@ -2976,6 +3020,7 @@
       "1",
       "gl_tests on Intel GPU on Mac (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gl_tests on Intel GPU on Mac (with patch)"
   },
   {
@@ -3000,6 +3045,7 @@
       "1",
       "angle_unittests on Intel GPU on Mac (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "angle_unittests on Intel GPU on Mac (with patch)"
   },
   {
@@ -3018,6 +3064,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "maps_pixel_test on Intel GPU on Mac (with patch)"
   },
   {
@@ -3036,6 +3083,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "pixel_test on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -3057,6 +3105,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webgl_conformance on Intel GPU on Mac (with patch)"
   },
   {
@@ -3075,6 +3124,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "context_lost on Intel GPU on Mac (with patch)"
   },
   {
@@ -3093,6 +3143,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "memory_test on Intel GPU on Mac (with patch)"
   },
   {
@@ -3111,6 +3162,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "trace_test on Intel GPU on Mac (with patch)"
   },
   {
@@ -3129,6 +3181,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "screenshot_sync on Intel GPU on Mac (with patch)"
   },
   {
@@ -3147,6 +3200,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "hardware_accelerated_feature on Intel GPU on Mac (with patch)"
   },
   {
@@ -3165,6 +3219,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gpu_process_launch on Intel GPU on Mac (with patch)"
   },
   {
@@ -3183,6 +3238,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gpu_rasterization on Intel GPU on Mac (with patch)"
   },
   {
@@ -3207,6 +3263,7 @@
       "1",
       "tab_capture_end2end_tests on Intel GPU on Mac (with patch)/Mac-10.8/[dummy has/mac_blink_rel/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "tab_capture_end2end_tests on Intel GPU on Mac (with patch)"
   },
   {
@@ -3231,6 +3288,7 @@
       "1",
       "content_gl_tests on NVIDIA GPU on Mac Retina (with patch)/Mac-10.9/[dummy has/mac_blink_rel/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "content_gl_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
   },
   {
@@ -3255,6 +3313,7 @@
       "1",
       "gl_tests on NVIDIA GPU on Mac Retina (with patch)/Mac-10.9/[dummy has/mac_blink_rel/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gl_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
   },
   {
@@ -3279,6 +3338,7 @@
       "1",
       "angle_unittests on NVIDIA GPU on Mac Retina (with patch)/Mac-10.9/[dummy has/mac_blink_rel/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "angle_unittests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
   },
   {
@@ -3297,6 +3357,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "maps_pixel_test on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
   },
   {
@@ -3315,6 +3376,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "pixel_test on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
   },
   {
@@ -3333,6 +3395,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webgl_conformance on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
   },
   {
@@ -3351,6 +3414,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "context_lost on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
   },
   {
@@ -3369,6 +3433,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "memory_test on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
   },
   {
@@ -3387,6 +3452,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "trace_test on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
   },
   {
@@ -3405,6 +3471,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "screenshot_sync on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
   },
   {
@@ -3423,6 +3490,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "hardware_accelerated_feature on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
   },
   {
@@ -3441,6 +3509,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gpu_process_launch on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
   },
   {
@@ -3459,6 +3528,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gpu_rasterization on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
   },
   {
@@ -3483,6 +3553,7 @@
       "1",
       "tab_capture_end2end_tests on NVIDIA GPU on Mac Retina (with patch)/Mac-10.9/[dummy has/mac_blink_rel/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "tab_capture_end2end_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
   },
   {
@@ -3512,6 +3583,7 @@
       "src/third_party/WebKit@5e2293dffc3cd07d37fbedea3b500f0eb650614d",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -3558,6 +3630,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "archive_gpu_tests=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
@@ -3572,6 +3645,7 @@
       "[SLAVE_BUILD]/src/out/Release",
       "--clean-isolated-files"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean isolated files (2)"
   },
   {
@@ -3598,6 +3672,7 @@
       "tab_capture_end2end_tests_run",
       "telemetry_gpu_test_run"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile (2)"
   },
   {
@@ -3608,6 +3683,7 @@
       "/path/to/tmp/",
       "[SLAVE_BUILD]/src/out/Release/*.isolated.gen.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "find isolated targets (2)"
   },
   {
@@ -3623,6 +3699,7 @@
       "[SLAVE_BUILD]/src/out/Release/dummy_target_1.isolated.gen.json",
       "[SLAVE_BUILD]/src/out/Release/dummy_target_2.isolated.gen.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3721,6 +3798,7 @@
       "--output-dir",
       "${ISOLATED_OUTDIR}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] pixel_test on Intel GPU on Mac (without patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3753,6 +3831,7 @@
       "--task-output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "pixel_test on Intel GPU on Mac (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -3765,6 +3844,7 @@
       "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for f in failures['new']:\n    print f\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for f in failures['ignored']:\n    print f\n\nsys.exit(0 if success else 1)\n",
       "{\"ignored\": [\"Test.Test1\"], \"new\": []}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "pixel_test on Intel GPU on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>Test.Test1<br/>@@@",

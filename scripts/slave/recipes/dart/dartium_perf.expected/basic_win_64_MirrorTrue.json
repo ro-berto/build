@@ -8,6 +8,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'dartium_base': 'svn://svn-mirror.golo.chromium.org', 'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'dartium.deps', 'url': 'svn://svn-mirror.golo.chromium.org/dart/branches/bleeding_edge/deps/dartium.deps'}]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -25,6 +26,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -68,6 +70,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' linux_strip_binary=1 target_arch=x64 use_goma=1",
       "GYP_GENERATORS": "ninja"
@@ -80,6 +83,7 @@
       "-u",
       "[SLAVE_BUILD]\\src\\dart\\tools\\bots\\fetch_reference_build.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "fetch_reference_build"
   },
   {
@@ -90,6 +94,7 @@
       "12345",
       "[SLAVE_BUILD]\\src\\out\\Release_x64"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "download_archived_build"
   },
   {
@@ -116,6 +121,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"blink_perf.animation\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"blink_perf.animation\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "blink_perf.animation"
   },
   {
@@ -142,6 +148,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcoreattr\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcoreattr\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dromaeo.domcoreattr"
   },
   {
@@ -168,6 +175,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcoremodify\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcoremodify\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dromaeo.domcoremodify"
   },
   {
@@ -194,6 +202,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcorequery\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcorequery\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dromaeo.domcorequery"
   },
   {
@@ -220,6 +229,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcoretraverse\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcoretraverse\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dromaeo.domcoretraverse"
   },
   {
@@ -246,6 +256,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibattrjquery\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibattrjquery\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dromaeo.jslibattrjquery"
   },
   {
@@ -272,6 +283,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibattrprototype\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibattrprototype\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dromaeo.jslibattrprototype"
   },
   {
@@ -298,6 +310,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibeventjquery\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibeventjquery\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dromaeo.jslibeventjquery"
   },
   {
@@ -324,6 +337,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibeventprototype\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibeventprototype\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dromaeo.jslibeventprototype"
   },
   {
@@ -350,6 +364,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibmodifyjquery\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibmodifyjquery\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dromaeo.jslibmodifyjquery"
   },
   {
@@ -376,6 +391,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibmodifyprototype\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibmodifyprototype\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dromaeo.jslibmodifyprototype"
   },
   {
@@ -402,6 +418,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibstylejquery\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibstylejquery\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dromaeo.jslibstylejquery"
   },
   {
@@ -428,6 +445,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibstyleprototype\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibstyleprototype\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dromaeo.jslibstyleprototype"
   },
   {
@@ -454,6 +472,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibtraversejquery\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibtraversejquery\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dromaeo.jslibtraversejquery"
   },
   {
@@ -480,6 +499,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibtraverseprototype\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibtraverseprototype\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dromaeo.jslibtraverseprototype"
   },
   {
@@ -506,6 +526,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"image_decoding.image_decoding_measurement\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"image_decoding.image_decoding_measurement\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "image_decoding.image_decoding_measurement"
   },
   {
@@ -532,6 +553,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"kraken\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"kraken\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "kraken"
   },
   {
@@ -558,6 +580,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"octane\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"octane\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "octane"
   },
   {
@@ -584,6 +607,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"spaceport\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"spaceport\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "spaceport"
   },
   {
@@ -610,6 +634,7 @@
       "[BUILD]\\scripts\\slave\\telemetry.py",
       "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release_x64\\\\chrome.exe\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"sunspider\", \"tools_dir\": \"[SLAVE_BUILD]\\\\src\\\\tools\", \"target_platform\": \"win32\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"sunspider\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "sunspider"
   }
 ]

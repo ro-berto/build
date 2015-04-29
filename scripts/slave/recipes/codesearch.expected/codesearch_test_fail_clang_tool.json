@@ -8,6 +8,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}]\ntarget_os = ['android']"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -25,6 +26,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -65,6 +67,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android clang=1 component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
@@ -85,6 +88,7 @@
       "objc",
       "objcxx"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "generate compilation database",
     "stdout": "/path/to/tmp/"
   },
@@ -106,6 +110,7 @@
       "--",
       "all"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -117,6 +122,7 @@
       "some compilation data",
       "[SLAVE_BUILD]/src/out/Debug/compile_commands.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "copy compilation database"
   },
   {
@@ -139,6 +145,7 @@
       "[SLAVE_BUILD]/src/out/Debug",
       "--all"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "run translation_unit clang tool",
     "~followup_annotations": [
       "step returned non-zero exit code: 2",
@@ -156,6 +163,7 @@
       "--path-to-archive-output",
       "[SLAVE_BUILD]/src/out/Debug/index_pack.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "create index pack"
   },
   {
@@ -165,6 +173,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/src/third_party/llvm-build"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree llvm-build",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -190,6 +199,7 @@
       "[SLAVE_BUILD]/src/out/Debug/index_pack.zip",
       "gs://chrome-codesearch/index_pack_571.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload index pack",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/index_pack_571.zip@@@"
@@ -205,6 +215,7 @@
       "-f",
       "src.tar.bz2"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "archive source"
   },
   {
@@ -221,6 +232,7 @@
       "[SLAVE_BUILD]/src.tar.bz2",
       "gs://chrome-codesearch/src_571.tar.bz2"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload source tarball",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/src_571.tar.bz2@@@"

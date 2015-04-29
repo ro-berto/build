@@ -21,6 +21,7 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -67,6 +68,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=ios chromium_ios_signing=0 component=static_library",
@@ -82,6 +84,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json@@@",
@@ -104,6 +107,7 @@
       "--properties",
       "{\"buildername\": \"Chromium iOS Simulator (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"ios\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -116,6 +120,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -135,6 +140,7 @@
       "-sdk",
       "iphonesimulator7.1"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -160,6 +166,7 @@
       "--build-number=571",
       "ios_chrome_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ios_chrome_unittests"
   },
   {
@@ -185,6 +192,7 @@
       "--build-number=571",
       "base_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "base_unittests"
   },
   {
@@ -210,6 +218,7 @@
       "--build-number=571",
       "components_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "components_unittests"
   },
   {
@@ -235,6 +244,7 @@
       "--build-number=571",
       "crypto_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "crypto_unittests"
   },
   {
@@ -260,6 +270,7 @@
       "--build-number=571",
       "gfx_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gfx_unittests"
   },
   {
@@ -285,6 +296,7 @@
       "--build-number=571",
       "url_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "url_unittests"
   },
   {
@@ -310,6 +322,7 @@
       "--build-number=571",
       "content_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "content_unittests"
   },
   {
@@ -335,6 +348,7 @@
       "--build-number=571",
       "net_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "net_unittests"
   },
   {
@@ -360,6 +374,7 @@
       "--build-number=571",
       "ui_base_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ui_base_unittests"
   },
   {
@@ -385,6 +400,7 @@
       "--build-number=571",
       "ui_ios_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ui_ios_unittests"
   },
   {
@@ -410,6 +426,7 @@
       "--build-number=571",
       "sync_unit_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "sync_unit_tests"
   },
   {
@@ -435,6 +452,7 @@
       "--build-number=571",
       "sql_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "sql_unittests"
   }
 ]

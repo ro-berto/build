@@ -23,6 +23,7 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -51,6 +52,7 @@
       "-u",
       "import sys; sys.exit(1)"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Patch failure",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",

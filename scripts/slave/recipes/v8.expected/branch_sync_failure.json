@@ -29,6 +29,7 @@
       "--no_shallow",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",

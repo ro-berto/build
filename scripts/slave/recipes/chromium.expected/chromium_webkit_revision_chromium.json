@@ -23,6 +23,7 @@
       "--revision",
       "src/third_party/WebKit@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -69,6 +70,7 @@
       "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -82,6 +84,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
@@ -95,6 +98,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.webkit.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.webkit.json@@@",
@@ -117,6 +121,7 @@
       "--properties",
       "{\"buildername\": \"WebKit Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -129,6 +134,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -149,6 +155,7 @@
       "--",
       "blink_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -183,6 +190,7 @@
       "--builder-name",
       "WebKit Linux"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total executed: 9001<br/>@@@"
@@ -208,6 +216,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"project\": \"chromium\", \"recipe\": \"chromium\", \"revision\": \"3edb4989f8f69c968c0df14cb1c26d21dd19bf1f\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
       "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux/571/layout-test-results/results.html@@@",

@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -31,6 +32,7 @@
       "--no_shallow",
       "--output_manifest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -63,6 +65,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "target_arch=x64 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=x64",
       "GYP_MSVS_VERSION": "2013"
@@ -75,6 +78,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -92,6 +96,7 @@
       "x64",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {

@@ -21,6 +21,7 @@
       "--revision",
       "src@1111111"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -67,6 +68,7 @@
       "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -80,6 +82,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "asan=1 clang=1 component=static_library fastbuild=0 gomadir='[BUILD]/goma' host_arch=x64 target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
@@ -93,6 +96,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.memory.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.memory.json@@@",
@@ -126,6 +130,7 @@
       "--properties",
       "{\"buildername\": \"Mac ASan 64 Tests (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -138,6 +143,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -147,6 +153,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/src/out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -172,6 +179,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac ASan 64 Tests (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Mac ASan 64 Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "extract build"
   },
   {
@@ -184,6 +192,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "find isolated tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -256,6 +265,7 @@
       "--test-launcher-print-test-stdio=always",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] browser_tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -294,6 +304,7 @@
       "1",
       "browser_tests/Mac-10.8/ffffffffff/Mac ASan 64 Tests (1)/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "browser_tests"
   }
 ]

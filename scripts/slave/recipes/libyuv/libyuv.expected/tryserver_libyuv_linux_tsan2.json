@@ -24,6 +24,7 @@
       "src@12345",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -45,6 +46,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 disable_nacl=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 tsan=1 use_goma=1"
     },
@@ -68,6 +70,7 @@
       "--",
       "All"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -87,6 +90,7 @@
       "--enable-tsan",
       "libyuv_unittest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "libyuv_unittest"
   }
 ]

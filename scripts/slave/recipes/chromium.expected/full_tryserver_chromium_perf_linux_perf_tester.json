@@ -5,6 +5,7 @@
       "-u",
       "RECIPE_MODULE[bisect_tester]/resources/put_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "saving url to temp file",
     "stdin": "http://build.chromium.org/p/tryserver.chromium.perf/json/builders/linux_perf_tester/builds/571",
     "stdout": "/path/to/tmp/"
@@ -23,6 +24,7 @@
       "/tmp/dummy1",
       "gs://chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil bisect-results/f7a7b4135624439cbd27fdd5133d74ec",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec@@@"
@@ -50,6 +52,7 @@
       "--revision",
       "src@1111111"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -96,6 +99,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
@@ -109,6 +113,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/tryserver.chromium.perf.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/tryserver.chromium.perf.json@@@",
@@ -131,6 +136,7 @@
       "--properties",
       "{\"buildername\": \"linux_perf_tester\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -143,6 +149,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -152,6 +159,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/src/out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -177,6 +185,7 @@
       "--build-properties",
       "{\"bisect_config\": {\"bad_revision\": \"300148\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \"good_revision\": \"300138\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"linux_perf_tester\", \"buildnumber\": 571, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "extract build"
   },
   {
@@ -186,6 +195,7 @@
       "--browser=release",
       "page_cycler.intl_ar_fa_he"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Performance Test 1/2",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/"
@@ -197,6 +207,7 @@
       "--browser=release",
       "page_cycler.intl_ar_fa_he"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Performance Test 2/2",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/"
@@ -207,6 +218,7 @@
       "-u",
       "RECIPE_MODULE[bisect_tester]/resources/put_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "saving json to temp file",
     "stdin": "{\"output\": \"Test output omitted for now\", \"results\": {\"std_err\": 0.0, \"values\": [0, 0], \"mean\": 0.0}}",
     "stdout": "/path/to/tmp/"
@@ -225,6 +237,7 @@
       "/tmp/dummy2",
       "gs://chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec.results"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec.results@@@"

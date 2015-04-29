@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -16,6 +17,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS.syzygy', 'managed': False, 'name': 'src', 'url': 'https://github.com/google/syzygy.git'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src-internal', 'url': 'svn://svn.chromium.org/chrome-internal/trunk/syzygy/internal.DEPS'}]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -33,6 +35,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -57,6 +60,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "target_arch=ia32",
       "GYP_GENERATORS": "msvs",
@@ -80,6 +84,7 @@
       "--project",
       "build_all"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -92,6 +97,7 @@
       "--build-dir",
       "[SLAVE_BUILD]\\src\\build\\Coverage"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "capture_unittest_coverage"
   },
   {
@@ -102,6 +108,7 @@
       "[SLAVE_BUILD]\\src\\build\\Coverage\\cov",
       "gs://syzygy-archive/builds/coverage/170242"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "archive_coverage",
     "~followup_annotations": [
       "@@@STEP_LINK@coverage_report@https://syzygy-archive.commondatastorage.googleapis.com/builds/coverage/170242/index.html@@@"

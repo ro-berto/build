@@ -21,6 +21,7 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -70,6 +71,7 @@
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -94,6 +96,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
@@ -108,6 +111,7 @@
       "[SLAVE_BUILD]/src",
       "src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "tree truth steps"
   },
   {
@@ -133,6 +137,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read filter exclusion spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
@@ -159,6 +164,7 @@
       "{\"files\": [\"foo.cc\"], \"targets\": [\"android_webview_unittests\", \"base_unittests\", \"cc_unittests\", \"components_unittests\", \"events_unittests\", \"gl_tests\", \"ipc_tests\", \"skia_unittests\", \"sql_unittests\", \"sync_unit_tests\", \"ui_android_unittests\", \"ui_touch_selection_unittests\", \"junit_unit_tests\"]}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1"
@@ -182,6 +188,7 @@
       "[SLAVE_BUILD]/src",
       "src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "tree truth steps (2)"
   },
   {
@@ -202,6 +209,7 @@
       "--",
       "base_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },

@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -30,6 +31,7 @@
       "src@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -76,6 +78,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "buildtype=Official chrome_pgo_phase=1 component=static_library fastbuild=0 optimize=max target_arch=ia32 use_goma=0",
       "PATH": "[SLAVE_BUILD]\\src\\out\\Release;%(PATH)s"
@@ -90,6 +93,7 @@
       "*.pg[cd]",
       "[SLAVE_BUILD]\\src\\out\\Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmwildcard *.pg[cd] in [SLAVE_BUILD]\\src\\out\\Release",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -114,6 +118,7 @@
       "--",
       "chrome"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]\\src\\out\\Release;%(PATH)s"
     },
@@ -128,6 +133,7 @@
       "--browser=release",
       "smoothness.tough_animation_cases"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -142,6 +148,7 @@
       "--browser=release",
       "blink_perf.svg"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -156,6 +163,7 @@
       "--browser=release",
       "dromaeo.jslibtraverseprototype"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -170,6 +178,7 @@
       "--browser=release",
       "dromaeo.domcorequery"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -184,6 +193,7 @@
       "--browser=release",
       "tab_switching.top_10"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -198,6 +208,7 @@
       "--browser=release",
       "dromaeo.jslibeventjquery"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -212,6 +223,7 @@
       "--browser=release",
       "dromaeo.jslibtraversejquery"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -226,6 +238,7 @@
       "--browser=release",
       "dromaeo.jslibmodifyprototype"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -240,6 +253,7 @@
       "--browser=release",
       "media.mse_cases"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -254,6 +268,7 @@
       "--browser=release",
       "indexeddb_perf"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -268,6 +283,7 @@
       "--browser=release",
       "dromaeo.jslibattrprototype"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -282,6 +298,7 @@
       "--browser=release",
       "dromaeo.jslibeventprototype"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -296,6 +313,7 @@
       "--browser=release",
       "dromaeo.domcoreattr"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -310,6 +328,7 @@
       "--browser=release",
       "dromaeo.jslibstyleprototype"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -324,6 +343,7 @@
       "--browser=release",
       "dromaeo.jslibstylejquery"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -338,6 +358,7 @@
       "--browser=release",
       "dromaeo.jslibmodifyjquery"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -352,6 +373,7 @@
       "--browser=release",
       "dromaeo.domcoremodify"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -366,6 +388,7 @@
       "--browser=release",
       "sunspider"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -380,6 +403,7 @@
       "--browser=release",
       "blink_perf.css"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -394,6 +418,7 @@
       "--browser=release",
       "dromaeo.domcoretraverse"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -408,6 +433,7 @@
       "--browser=release",
       "dromaeo.jslibattrjquery"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s"
     },
@@ -420,6 +446,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "buildtype=Official chrome_pgo_phase=2 component=static_library fastbuild=0 optimize=max target_arch=ia32 use_goma=0"
     },
@@ -449,6 +476,7 @@
       "--",
       "chrome"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Compile: Optimization phase."
   },
   {
@@ -466,6 +494,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"win_pgo\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"recipe\": \"chromium_pgo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "package build"
   }
 ]

@@ -6,6 +6,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/git_clone_bundler/bundles"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree old bundles",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -25,6 +26,7 @@
       "[SLAVE_BUILD]/git_clone_bundler/bundles",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs bundles",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -47,6 +49,7 @@
       "[SLAVE_BUILD]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs repo",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -117,6 +120,7 @@
       "[SLAVE_BUILD]/git_clone_bundler/bundles/b30c7a01edcf711e48356dd038d8c03e.bundle",
       "gs://clone-dot-bundle-bucket/checkout/repository/src/foo/clone.bundle"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload bundle (src/foo)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil bundle@https://storage.cloud.google.com/clone-dot-bundle-bucket/checkout/repository/src/foo/clone.bundle@@@"
@@ -161,6 +165,7 @@
       "[SLAVE_BUILD]/git_clone_bundler/bundles/4e9dd63391c5eb1884b9b449679dfa16.bundle",
       "gs://clone-dot-bundle-bucket/checkout/repository/src/bar/clone.bundle"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload bundle (src/bar)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil bundle@https://storage.cloud.google.com/clone-dot-bundle-bucket/checkout/repository/src/bar/clone.bundle@@@"

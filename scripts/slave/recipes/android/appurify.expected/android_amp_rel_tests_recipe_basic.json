@@ -21,6 +21,7 @@
       "--revision",
       "src@4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -70,6 +71,7 @@
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -94,6 +96,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
@@ -108,6 +111,7 @@
       "[SLAVE_BUILD]/src",
       "src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "tree truth steps"
   },
   {
@@ -133,6 +137,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read filter exclusion spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
@@ -159,6 +164,7 @@
       "{\"files\": [\"foo.cc\"], \"targets\": [\"android_webview_unittests\", \"base_unittests\", \"cc_unittests\", \"components_unittests\", \"events_unittests\", \"gl_tests\", \"ipc_tests\", \"skia_unittests\", \"sql_unittests\", \"sync_unit_tests\", \"ui_android_unittests\", \"ui_touch_selection_unittests\", \"junit_unit_tests\"]}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1"
@@ -186,6 +192,7 @@
       "[SLAVE_BUILD]/src",
       "src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "tree truth steps (2)"
   },
   {
@@ -207,6 +214,7 @@
       "base_unittests_apk",
       "junit_unit_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -248,6 +256,7 @@
       "--verbose",
       "--release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] base_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -271,6 +280,7 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
       "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save base_unittests data"
   },
   {
@@ -284,6 +294,7 @@
       "--verbose",
       "--release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -299,6 +310,7 @@
       "gyp_py_unittests",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -314,6 +326,7 @@
       "pylib_py_unittests",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -327,6 +340,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load base_unittests data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -377,6 +391,7 @@
       "--verbose",
       "--release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] base_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -389,6 +404,7 @@
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[SLAVE_BUILD]/src/out/Release/test_logs/*.log"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "test_report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

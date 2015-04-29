@@ -22,6 +22,7 @@
       "src@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -68,6 +69,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1"
     },
@@ -83,6 +85,7 @@
       "//out/Release",
       "--args=is_debug=false target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[BUILD]/goma\""
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gn"
   },
   {
@@ -105,6 +108,7 @@
       "mojo/services:apptests",
       "mojo/services:tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -126,6 +130,7 @@
       "--build-number=571",
       "html_viewer_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "html_viewer_unittests"
   },
   {
@@ -147,6 +152,7 @@
       "--build-number=571",
       "mojo_application_manager_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "mojo_application_manager_unittests"
   },
   {
@@ -168,6 +174,7 @@
       "--build-number=571",
       "mojo_common_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "mojo_common_unittests"
   },
   {
@@ -189,6 +196,7 @@
       "--build-number=571",
       "mojo_runner_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "mojo_runner_unittests"
   },
   {
@@ -210,6 +218,7 @@
       "--build-number=571",
       "mojo_shell_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "mojo_shell_unittests"
   },
   {
@@ -231,6 +240,7 @@
       "--build-number=571",
       "mojo_surfaces_lib_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "mojo_surfaces_lib_unittests"
   },
   {
@@ -252,6 +262,7 @@
       "--build-number=571",
       "view_manager_service_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "view_manager_service_unittests"
   }
 ]

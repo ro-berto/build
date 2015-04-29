@@ -4,6 +4,7 @@
       "echo",
       "testa"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "climate": "rainy",
       "mood": "excellent"
@@ -15,6 +16,7 @@
       "echo",
       "testb"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "climate": "sunny",
       "mood": "excellent"

@@ -21,6 +21,7 @@
       "--revision",
       "src@204787"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -39,6 +40,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -56,6 +58,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -96,6 +99,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "component=shared_library embedded=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
@@ -119,6 +123,7 @@
       "--",
       "content_shell"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile content_shell"
   },
   {
@@ -171,6 +176,7 @@
       "ui_touch_selection_unittests",
       "url_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile tests"
   },
   {
@@ -191,6 +197,7 @@
       "--no-spawn-dbus",
       "aura_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "aura_unittests"
   },
   {
@@ -211,6 +218,7 @@
       "--no-spawn-dbus",
       "base_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "base_unittests"
   },
   {
@@ -231,6 +239,7 @@
       "--no-spawn-dbus",
       "cacheinvalidation_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cacheinvalidation_unittests"
   },
   {
@@ -251,6 +260,7 @@
       "--no-spawn-dbus",
       "cc_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cc_unittests"
   },
   {
@@ -271,6 +281,7 @@
       "--no-spawn-dbus",
       "components_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "components_unittests"
   },
   {
@@ -291,6 +302,7 @@
       "--no-spawn-dbus",
       "compositor_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compositor_unittests"
   },
   {
@@ -311,6 +323,7 @@
       "--no-spawn-dbus",
       "content_browsertests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "content_browsertests"
   },
   {
@@ -331,6 +344,7 @@
       "--no-spawn-dbus",
       "content_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "content_unittests"
   },
   {
@@ -351,6 +365,7 @@
       "--no-spawn-dbus",
       "crypto_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "crypto_unittests"
   },
   {
@@ -371,6 +386,7 @@
       "--no-spawn-dbus",
       "device_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "device_unittests"
   },
   {
@@ -391,6 +407,7 @@
       "--no-spawn-dbus",
       "events_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "events_unittests"
   },
   {
@@ -411,6 +428,7 @@
       "--no-spawn-dbus",
       "gfx_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gfx_unittests"
   },
   {
@@ -431,6 +449,7 @@
       "--no-spawn-dbus",
       "gpu_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gpu_unittests"
   },
   {
@@ -451,6 +470,7 @@
       "--no-spawn-dbus",
       "ipc_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ipc_tests"
   },
   {
@@ -471,6 +491,7 @@
       "--no-spawn-dbus",
       "media_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "media_unittests"
   },
   {
@@ -491,6 +512,7 @@
       "--no-spawn-dbus",
       "net_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "net_unittests"
   },
   {
@@ -511,6 +533,7 @@
       "--no-spawn-dbus",
       "ozone_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ozone_unittests"
   },
   {
@@ -531,6 +554,7 @@
       "--no-spawn-dbus",
       "ppapi_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ppapi_unittests"
   },
   {
@@ -551,6 +575,7 @@
       "--no-spawn-dbus",
       "sandbox_linux_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "sandbox_linux_unittests"
   },
   {
@@ -571,6 +596,7 @@
       "--no-spawn-dbus",
       "sql_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "sql_unittests"
   },
   {
@@ -591,6 +617,7 @@
       "--no-spawn-dbus",
       "sync_unit_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "sync_unit_tests"
   },
   {
@@ -611,6 +638,7 @@
       "--no-spawn-dbus",
       "ui_base_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ui_base_unittests"
   },
   {
@@ -631,6 +659,7 @@
       "--no-spawn-dbus",
       "ui_touch_selection_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "ui_touch_selection_unittests"
   },
   {
@@ -651,6 +680,7 @@
       "--no-spawn-dbus",
       "url_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "url_unittests"
   }
 ]

@@ -9,6 +9,7 @@
       "--url",
       "https://chromium.googlesource.com/chromium/src/+refs?format=json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "refs",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -33,6 +34,7 @@
       "--url",
       "https://chromium.googlesource.com/chromium/src/+log/HEAD?format=json&n=all"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "log: HEAD",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br />3 new commits@@@",
@@ -75,6 +77,7 @@
       "--url",
       "https://chromium.googlesource.com/chromium/src/+log/refs/heads/A?format=json&n=all"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "log: refs/heads/A",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br />3 new commits@@@",
@@ -117,6 +120,7 @@
       "--url",
       "https://chromium.googlesource.com/chromium/src/+log/refs/tags/B?format=json&n=all"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "log: refs/tags/B",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br />3 new commits@@@",
@@ -159,6 +163,7 @@
       "--url",
       "https://chromium.googlesource.com/chromium/src/+/4015b57a143aec5156fd1444a017a32137a3fd0f?format=json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "commit log: 4015b57a143aec5156fd1444a017a32137a3fd0f",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -192,6 +197,7 @@
       "--outfile",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Gitiles fetch OWNERS"
   }
 ]

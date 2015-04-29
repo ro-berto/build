@@ -22,6 +22,7 @@
       "src@12345",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -43,6 +44,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1",
       "GYP_MSVS_VERSION": "2013"
@@ -67,6 +69,7 @@
       "--",
       "All"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -84,6 +87,7 @@
       "--slave-name=slavename",
       "libyuv_unittest.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "libyuv_unittest"
   }
 ]

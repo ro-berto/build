@@ -21,6 +21,7 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -67,6 +68,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
@@ -77,6 +79,7 @@
       "echo",
       "{\n  \"bad_revision\": \"src@a6298e4afedbf2cd461755ea6f45b0ad64222222\", \n  \"bug_id\": \"425582\", \n  \"builder_host\": \"master4.golo.chromium.org\", \n  \"builder_port\": \"8341\", \n  \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \n  \"dummy_builds\": true, \n  \"dummy_regression_confidence\": \"95\", \n  \"good_revision\": \"306475\", \n  \"gs_bucket\": \"chrome-perf\", \n  \"max_time_minutes\": \"5\", \n  \"metric\": \"warm_times/page_load_time\", \n  \"poll_sleep\": 0, \n  \"repeat_count\": \"2\", \n  \"test_type\": \"perf\", \n  \"truncate_percent\": \"25\"\n}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "config"
   },
   {

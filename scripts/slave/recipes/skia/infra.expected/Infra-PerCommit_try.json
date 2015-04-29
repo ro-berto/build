@@ -7,6 +7,7 @@
       "[SLAVE_BUILD]/go/src",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs makedirs go/src",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -28,6 +29,7 @@
       "https://skia.googlesource.com/buildbot",
       "[SLAVE_BUILD]/go/src/go.skia.org/infra"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "git clone"
   },
   {
@@ -87,6 +89,7 @@
       "https://codereview.chromium.org",
       "--no-auth"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "apply_issue",
     "~followup_annotations": [
       "@@@STEP_LINK@Applied issue 1234@https://codereview.chromium.org/1234@@@"

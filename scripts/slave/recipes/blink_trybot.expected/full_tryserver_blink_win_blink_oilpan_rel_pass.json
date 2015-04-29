@@ -30,6 +30,7 @@
       "src/third_party/WebKit@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -76,6 +77,7 @@
       "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -89,6 +91,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 enable_oilpan=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
@@ -103,6 +106,7 @@
       "[SLAVE_BUILD]\\src\\out\\Release",
       "--clean-isolated-files"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean isolated files"
   },
   {
@@ -123,6 +127,7 @@
       "--",
       "blink_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -133,6 +138,7 @@
       "/path/to/tmp/",
       "[SLAVE_BUILD]\\src\\out\\Release\\*.isolated.gen.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "find isolated targets"
   },
   {
@@ -148,6 +154,7 @@
       "[SLAVE_BUILD]\\src\\out\\Release\\dummy_target_1.isolated.gen.json",
       "[SLAVE_BUILD]\\src\\out\\Release\\dummy_target_2.isolated.gen.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -168,6 +175,7 @@
       "--target",
       "Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_lint"
   },
   {
@@ -180,6 +188,7 @@
       "--target",
       "Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_python_tests"
   },
   {
@@ -198,6 +207,7 @@
       "--build-number=571",
       "webkit_unit_tests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_unit_tests"
   },
   {
@@ -216,6 +226,7 @@
       "--build-number=571",
       "blink_platform_unittests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "blink_platform_unittests"
   },
   {
@@ -234,6 +245,7 @@
       "--build-number=571",
       "blink_heap_unittests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "blink_heap_unittests"
   },
   {
@@ -252,6 +264,7 @@
       "--build-number=571",
       "wtf_unittests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "wtf_unittests"
   },
   {
@@ -287,6 +300,7 @@
       "--additional-expectations",
       "[SLAVE_BUILD]\\src\\third_party\\WebKit\\LayoutTests\\OilpanExpectations"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total executed: 9001<br/>@@@"
@@ -312,6 +326,7 @@
       "--build-properties",
       "{\"blamelist\": [\"someone@chromium.org\"], \"branch\": \"\", \"buildername\": \"win_blink_oilpan_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.blink\", \"patch_project\": \"blink\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"media_unittests\": \"[dummy hash for media_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
       "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/win_blink_oilpan_rel/571/layout-test-results/results.html@@@",

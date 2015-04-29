@@ -7,6 +7,7 @@
       "/fake/dir",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "listdir fake dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -27,6 +28,7 @@
       "some",
       "command"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "manipulate file 1"
   },
   {
@@ -34,6 +36,7 @@
       "some",
       "command"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "manipulate file 2"
   },
   {
@@ -41,6 +44,7 @@
       "echo",
       "[TMP_BASE]/prefix_a_tmp_1"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "print prefix_a"
   },
   {
@@ -48,6 +52,7 @@
       "echo",
       "[TMP_BASE]/prefix_b_tmp_2"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "print prefix_b"
   },
   {
@@ -58,6 +63,7 @@
       "*.o",
       "[SLAVE_BUILD]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmwildcard *.o in [SLAVE_BUILD]",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -76,6 +82,7 @@
       "abcde",
       "tmp_file.txt"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "write_simple"
   },
   {
@@ -86,6 +93,7 @@
       "tmp_file.txt",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read_simple"
   },
   {
@@ -96,6 +104,7 @@
       "! ~&&",
       "tmp_file.txt"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "write_symbols"
   },
   {
@@ -106,6 +115,7 @@
       "tmp_file.txt",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read_symbols"
   },
   {
@@ -116,6 +126,7 @@
       "abcde fgh",
       "tmp_file.txt"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "write_spaces"
   },
   {
@@ -126,6 +137,7 @@
       "tmp_file.txt",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read_spaces"
   },
   {
@@ -136,6 +148,7 @@
       "ab\ncd\nefg\n",
       "tmp_file.txt"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "write_multiline"
   },
   {
@@ -146,6 +159,7 @@
       "tmp_file.txt",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read_multiline"
   },
   {
@@ -156,6 +170,7 @@
       "[SLAVE_BUILD]/copytree_example_tmp",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs makedirs",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -178,6 +193,7 @@
       "some file content",
       "[SLAVE_BUILD]/copytree_example_tmp/dummy_file"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "write [SLAVE_BUILD]/copytree_example_tmp/dummy_file"
   },
   {
@@ -188,6 +204,7 @@
       "[SLAVE_BUILD]/copytree_example_tmp",
       "[SLAVE_BUILD]/copytree_example_tmp2"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "copytree"
   },
   {
@@ -198,6 +215,7 @@
       "[SLAVE_BUILD]/copytree_example_tmp2/dummy_file",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read [SLAVE_BUILD]/copytree_example_tmp2/dummy_file"
   },
   {
@@ -208,6 +226,7 @@
       "/path/to/tmp/",
       "[SLAVE_BUILD]/copytree_example_tmp/*"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "glob"
   },
   {
@@ -217,6 +236,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/copytree_example_tmp"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree cleanup",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -235,6 +255,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/copytree_example_tmp2"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree cleanup2",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

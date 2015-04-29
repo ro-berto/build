@@ -22,6 +22,7 @@
       "src@5d6dd8eaee742daf7f298f533fb0827dc4a693fd",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -77,6 +78,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"master.chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://chrome-perf/Win Builder/testbuildurl\", \"parent_got_revision\": \"5d6dd8eaee742daf7f298f533fb0827dc4a693fd\", \"recipe\": \"perf/telemetry_generate_large_profile\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Download and Extract Binary"
   },
   {
@@ -89,6 +91,7 @@
       "--profile-type-to-generate=large_profile",
       "--output-dir=[TMP_BASE]\\large-profile_tmp_1"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Generate Large Profile"
   },
   {
@@ -97,6 +100,7 @@
       "-u",
       "RECIPE_MODULE[zip]\\resources\\zip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Zip Large Profile",
     "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]\\\\large-profile_tmp_1\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\zipped-profile_tmp_2\\\\large_profile.zip\", \"root\": \"[TMP_BASE]\\\\large-profile_tmp_1\", \"use_python_zip\": true}"
   },
@@ -114,6 +118,7 @@
       "[TMP_BASE]\\zipped-profile_tmp_2\\large_profile.zip",
       "gs://chrome-partner-telemetry/large_profile/win"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-partner-telemetry/large_profile/win@@@"
@@ -126,6 +131,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[TMP_BASE]\\large-profile_tmp_1"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree Remove profile directory.",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -144,6 +150,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[TMP_BASE]\\zipped-profile_tmp_2"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree Remove zipped profile directory.",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

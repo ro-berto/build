@@ -8,6 +8,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'dartium_base': 'svn://svn-mirror.golo.chromium.org', 'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'dartium.deps', 'url': 'svn://svn-mirror.golo.chromium.org/dart/branches/bleeding_edge/deps/dartium.deps'}]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -25,6 +26,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -68,6 +70,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "clang=1 component=static_library gomadir='[BUILD]/goma' linux_strip_binary=1 target_arch=x64 use_goma=1",
       "GYP_GENERATORS": "ninja"
@@ -93,6 +96,7 @@
       "All",
       "chromium_builder_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -102,6 +106,7 @@
       "[SLAVE_BUILD]/src/dart/tools/dartium/multivm_archive.py",
       "12345"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "archive_build"
   }
 ]

@@ -29,6 +29,7 @@
       "--revision",
       "src/third_party/WebKit@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -47,6 +48,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -57,6 +59,7 @@
       ".",
       "[DEPOT_TOOLS]/gclient"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient revert"
   },
   {
@@ -76,6 +79,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -124,6 +128,7 @@
       "https://codereview.chromium.org",
       "--no-auth"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "apply_issue",
     "~followup_annotations": [
       "@@@STEP_LINK@Applied issue 12853011@https://codereview.chromium.org/12853011@@@"
@@ -136,6 +141,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -159,6 +165,7 @@
       "[BUILD]/goma",
       "//out/Debug"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Generate build files"
   },
   {
@@ -179,6 +186,7 @@
       "--",
       "blink_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },

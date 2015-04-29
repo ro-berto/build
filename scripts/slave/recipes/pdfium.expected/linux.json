@@ -8,6 +8,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'pdfium', 'url': 'https://pdfium.googlesource.com/pdfium.git'}]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -23,6 +24,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -41,6 +43,7 @@
       "-u",
       "[SLAVE_BUILD]/pdfium/build/gyp_pdfium.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_GENERATORS": "ninja"
     },
@@ -52,12 +55,14 @@
       "-C",
       "[SLAVE_BUILD]/pdfium/out/Debug"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile with ninja"
   },
   {
     "cmd": [
       "[SLAVE_BUILD]/pdfium/out/Debug/pdfium_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "unittests"
   },
   {

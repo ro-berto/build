@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -16,6 +17,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS.syzygy', 'managed': False, 'name': 'src', 'url': 'https://github.com/google/syzygy.git'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src-internal', 'url': 'svn://svn.chromium.org/chrome-internal/trunk/syzygy/internal.DEPS'}]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -33,6 +35,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -57,6 +60,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "official_build=1 target_arch=ia32",
       "GYP_GENERATORS": "msvs",
@@ -81,6 +85,7 @@
       "--project",
       "official_build"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -91,6 +96,7 @@
       "metrics.csv",
       "[SLAVE_BUILD]\\src\\build\\Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmwildcard metrics.csv in [SLAVE_BUILD]\\src\\build\\Release",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -109,6 +115,7 @@
       "[SLAVE_BUILD]\\src\\syzygy\\unittests.gypi",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read_unittests_gypi"
   },
   {
@@ -135,6 +142,7 @@
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bar_unittests"
   },
   {
@@ -161,6 +169,7 @@
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "baz_unittests"
   },
   {
@@ -187,6 +196,7 @@
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "foo_unittests"
   },
   {
@@ -199,6 +209,7 @@
       "[SLAVE_BUILD]\\src\\build\\Release\\metrics.csv",
       "gs://syzygy-archive/builds/metrics/170242/official.csv"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "archive_metrics",
     "~followup_annotations": [
       "@@@STEP_LINK@archive@https://syzygy-archive.commondatastorage.googleapis.com/index.html?path=builds/metrics/170242/official.csv/@@@"
@@ -215,6 +226,7 @@
       "Release",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "randomly_reorder_chrome"
   },
   {
@@ -228,6 +240,7 @@
       "Release",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "benchmark_chrome"
   },
   {
@@ -238,6 +251,7 @@
       "[SLAVE_BUILD]\\src\\syzygy\\SYZYGY_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read_version"
   },
   {
@@ -248,6 +262,7 @@
       "[SLAVE_BUILD]\\src\\build\\Release\\archive",
       "gs://syzygy-archive/builds/official/170242"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "archive_binaries",
     "~followup_annotations": [
       "@@@STEP_LINK@0.0.0.1 archive@https://syzygy-archive.commondatastorage.googleapis.com/index.html?path=builds/official/170242/@@@"
@@ -263,10 +278,12 @@
       "[SLAVE_BUILD]\\src\\build\\Release\\*asan_rtl.dll",
       "[SLAVE_BUILD]\\src\\build\\Release\\*client.dll"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "upload_symbols"
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "trigger",
     "trigger_specs": [
       {

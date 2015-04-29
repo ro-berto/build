@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup temp"
   },
   {
@@ -30,6 +31,7 @@
       "src@204787",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -76,6 +78,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "archive_gpu_tests=1 blink_logging_always_on=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
@@ -90,6 +93,7 @@
       "[SLAVE_BUILD]\\src\\out\\Release",
       "--clean-isolated-files"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean isolated files"
   },
   {
@@ -119,6 +123,7 @@
       "telemetry_gpu_test_run",
       "angle_end2end_tests_run"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -142,6 +147,7 @@
       "[SLAVE_BUILD]\\src\\out\\Release\\telemetry_gpu_test.isolated.gen.json",
       "[SLAVE_BUILD]\\src\\out\\Release\\angle_end2end_tests.isolated.gen.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -192,6 +198,7 @@
       "--",
       "--use-gpu-in-tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "content_gl_tests"
   },
   {
@@ -226,6 +233,7 @@
       "--",
       "--use-gpu-in-tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gl_tests"
   },
   {
@@ -260,6 +268,7 @@
       "--",
       "--use-gpu-in-tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "angle_unittests"
   },
   {
@@ -294,6 +303,7 @@
       "--",
       "--use-gpu-in-tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gles2_conform_test"
   },
   {
@@ -328,6 +338,7 @@
       "--",
       "--use-gpu-in-tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "angle_end2end_tests"
   },
   {
@@ -363,6 +374,7 @@
       "--use-gpu-in-tests",
       "--disable-d3d11"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gles2_conform_d3d9_test"
   },
   {
@@ -409,6 +421,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "maps_pixel_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -463,6 +476,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "pixel_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -508,6 +522,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webgl_conformance_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -553,6 +568,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "webgl_conformance_d3d9_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -598,6 +614,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "context_lost_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -643,6 +660,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "memory_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -688,6 +706,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "trace_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -733,6 +752,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "screenshot_sync_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -778,6 +798,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "hardware_accelerated_feature_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -823,6 +844,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gpu_process_launch_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -872,6 +894,7 @@
       "--output-dir",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gpu_rasterization_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
@@ -908,6 +931,7 @@
       "https://isolateserver.appspot.com",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "tab_capture_end2end_tests"
   },
   {
@@ -941,6 +965,7 @@
       "https://isolateserver.appspot.com",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gpu_unittests"
   },
   {
@@ -974,6 +999,7 @@
       "https://isolateserver.appspot.com",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "content_unittests"
   },
   {
@@ -1007,6 +1033,7 @@
       "https://isolateserver.appspot.com",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "media_unittests"
   }
 ]

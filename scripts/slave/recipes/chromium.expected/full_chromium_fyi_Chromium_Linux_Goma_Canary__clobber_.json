@@ -35,6 +35,7 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -81,6 +82,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
@@ -94,6 +96,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json@@@",
@@ -116,6 +119,7 @@
       "--properties",
       "{\"buildername\": \"Chromium Linux Goma Canary (clobber)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -128,6 +132,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -153,6 +158,7 @@
       "chromium_builder_tests",
       "content_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -161,6 +167,7 @@
       "-u",
       "[BUILD]/goma/diagnose_goma_log.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "diagnose_goma"
   },
   {
@@ -185,6 +192,7 @@
       "--build-number=571",
       "base_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "base_unittests"
   },
   {
@@ -209,6 +217,7 @@
       "--build-number=571",
       "content_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "content_unittests"
   }
 ]

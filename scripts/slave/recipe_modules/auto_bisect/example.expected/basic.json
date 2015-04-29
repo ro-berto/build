@@ -4,6 +4,7 @@
       "echo",
       "{\n  \"bad_revision\": \"314017\", \n  \"bug_id\": \"\", \n  \"builder_host\": \"master4.golo.chromium.org\", \n  \"builder_port\": \"8341\", \n  \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \n  \"dummy_builds\": \"True\", \n  \"good_revision\": \"314015\", \n  \"gs_bucket\": \"chrome-perf\", \n  \"max_time_minutes\": \"5\", \n  \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \n  \"repeat_count\": \"2\", \n  \"skip_gclient_ops\": \"True\", \n  \"test_type\": \"perf\", \n  \"truncate_percent\": \"0\"\n}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "config"
   },
   {
@@ -94,6 +95,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls"
   },
   {
@@ -127,6 +129,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (2)"
   },
   {
@@ -156,6 +159,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision 314015 and 1 other revision(s)."
   },
   {
@@ -171,6 +175,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (3)"
   },
   {
@@ -186,10 +191,12 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (4)"
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Triggering test job for 314015",
     "trigger_specs": [
       {
@@ -223,6 +230,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (5)"
   },
   {
@@ -238,10 +246,12 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (6)"
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Triggering test job for 314017",
     "trigger_specs": [
       {
@@ -271,6 +281,7 @@
       "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test",
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision 314015 and 1 other revision(s). (2)"
   },
   {
@@ -286,6 +297,7 @@
       "cat",
       "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil Get test status url for build a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/"
   },
@@ -296,6 +308,7 @@
       "RECIPE_MODULE[auto_bisect]/resources/check_job_status.py",
       "dummy/url"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get test status for build a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/"
   },
@@ -312,6 +325,7 @@
       "cat",
       "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil Get test results for build a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/"
   },
@@ -328,6 +342,7 @@
       "cat",
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil Get test status url for build 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/"
   },
@@ -338,6 +353,7 @@
       "RECIPE_MODULE[auto_bisect]/resources/check_job_status.py",
       "dummy/url"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get test status for build 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/"
   },
@@ -354,6 +370,7 @@
       "cat",
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil Get test results for build 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/"
   },
@@ -370,6 +387,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (7)"
   },
   {
@@ -398,6 +416,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision 314016"
   },
   {
@@ -413,6 +432,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (8)"
   },
   {
@@ -428,10 +448,12 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (9)"
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Triggering test job for 314016",
     "trigger_specs": [
       {
@@ -460,6 +482,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/bisect-results/dcdcdc0ff1122212323134879ddceeb1240b0988-test"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision 314016 (2)"
   },
   {
@@ -475,6 +498,7 @@
       "cat",
       "gs://chrome-perf/bisect-results/dcdcdc0ff1122212323134879ddceeb1240b0988-test"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil Get test status url for build dcdcdc0ff1122212323134879ddceeb1240b0988",
     "stdout": "/path/to/tmp/"
   },
@@ -485,6 +509,7 @@
       "RECIPE_MODULE[auto_bisect]/resources/check_job_status.py",
       "dummy/url"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get test status for build dcdcdc0ff1122212323134879ddceeb1240b0988",
     "stdout": "/path/to/tmp/"
   },
@@ -501,6 +526,7 @@
       "cat",
       "gs://chrome-perf/bisect-results/dcdcdc0ff1122212323134879ddceeb1240b0988-test.results"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil Get test results for build dcdcdc0ff1122212323134879ddceeb1240b0988",
     "stdout": "/path/to/tmp/"
   },
@@ -638,6 +664,7 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_40d3da8b7d11006dcf015af3710534d7af12c2db.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (10)"
   },
   {
@@ -648,6 +675,7 @@
       "Dummy .diff contents 001 - 002\ndiff --git DEPS.sha DEPS.sha\nnew file mode 100644\n--- /dev/null\n+++ DEPS.sha\n@@ -0,0 +1 @@\n+40d3da8b7d11006dcf015af3710534d7af12c2db\n",
       "/tmp/a6298e4afedbf2cd461755ea6f45b0ad64222222-build.diff"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Saving diff patch for 314015,v8@002"
   },
   {
@@ -673,6 +701,7 @@
       "rm",
       "/tmp/a6298e4afedbf2cd461755ea6f45b0ad64222222-build.diff"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleaning up patch"
   },
   {

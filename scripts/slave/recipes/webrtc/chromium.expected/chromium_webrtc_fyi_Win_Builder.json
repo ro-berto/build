@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -33,6 +34,7 @@
       "--revision",
       "src/third_party/webrtc@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -87,6 +89,7 @@
       "RECIPE_MODULE[webrtc]\\resources\\cleanup_files.py",
       "[SLAVE_BUILD]\\src\\out"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean test output files"
   },
   {
@@ -95,6 +98,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -104,6 +108,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "blink_logging_always_on=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
     },
@@ -127,6 +132,7 @@
       "--",
       "chromium_builder_webrtc"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -159,6 +165,7 @@
       "--platform",
       "win"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "sizes"
   },
   {
@@ -178,10 +185,12 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"got_libjingle_revision\": \"1161aa63\", \"got_revision\": \"c321321\", \"got_webrtc_revision\": \"deadbeef\", \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "package build"
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "trigger",
     "trigger_specs": [
       {

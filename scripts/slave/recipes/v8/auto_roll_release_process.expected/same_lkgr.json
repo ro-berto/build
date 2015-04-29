@@ -23,6 +23,7 @@
       "--force",
       "--no_shallow"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -50,6 +51,7 @@
       "[BUILD]/scripts/tools/pycurl.py",
       "https://v8-status.appspot.com/lkgr"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get new lkgr",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -87,6 +89,7 @@
       "echo",
       "There is no new lkgr."
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "log"
   },
   {
@@ -147,6 +150,7 @@
       "[SLAVE_BUILD]/timestamp.txt",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "check timestamp"
   },
   {
@@ -159,6 +163,7 @@
       "--results-file",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "check clusterfuzz",
     "stderr": "/path/to/tmp/err",
     "stdout": "/path/to/tmp/out"
@@ -168,6 +173,7 @@
       "echo",
       "Current candidate is 10h old (limit: 8h)."
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "log (2)"
   },
   {
@@ -175,6 +181,7 @@
       "echo",
       "There is no new candidate."
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "log (3)"
   }
 ]

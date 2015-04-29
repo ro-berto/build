@@ -28,6 +28,7 @@
       "src@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -75,6 +76,7 @@
       "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium_trybot.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: testing\\buildbot\\chromium_trybot.json@@@",
@@ -126,6 +128,7 @@
       "--properties",
       "{\"buildername\": \"win_chromium_compile_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -139,6 +142,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=2 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
     },
@@ -164,6 +168,7 @@
       "browser_tests",
       "mini_installer"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile (with patch)"
   }
 ]

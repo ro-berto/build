@@ -9,6 +9,7 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
@@ -70,6 +71,7 @@
       "[SLAVE_BUILD]/swarming.client/swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -83,6 +85,7 @@
       "[SLAVE_BUILD]/swarming.client/isolate.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "isolate.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -95,6 +98,7 @@
       "-u",
       "import sys; sys.exit(1)"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py is too old",
     "~followup_annotations": [
       "@@@STEP_TEXT@Expecting at least v20.0.0, got v0.4.4@@@",

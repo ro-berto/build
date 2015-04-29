@@ -21,6 +21,7 @@
       "--revision",
       "src@12345"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -47,6 +48,7 @@
       "RECIPE_MODULE[webrtc]/resources/cleanup_files.py",
       "[SLAVE_BUILD]/src/out"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean test output files"
   },
   {
@@ -55,6 +57,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -64,6 +67,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 gomadir='[BUILD]/goma' lsan=1 target_arch=x64 use_goma=1"
     },
@@ -87,6 +91,7 @@
       "--",
       "All"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -114,6 +119,7 @@
       "--enable-lsan",
       "audio_decoder_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "audio_decoder_unittests"
   },
   {
@@ -141,6 +147,7 @@
       "--enable-lsan",
       "common_audio_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "common_audio_unittests"
   },
   {
@@ -168,6 +175,7 @@
       "--enable-lsan",
       "common_video_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "common_video_unittests"
   },
   {
@@ -195,6 +203,7 @@
       "--enable-lsan",
       "libjingle_media_unittest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "libjingle_media_unittest"
   },
   {
@@ -222,6 +231,7 @@
       "--enable-lsan",
       "libjingle_p2p_unittest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "libjingle_p2p_unittest"
   },
   {
@@ -249,6 +259,7 @@
       "--enable-lsan",
       "libjingle_peerconnection_unittest"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "libjingle_peerconnection_unittest"
   },
   {
@@ -276,6 +287,7 @@
       "--enable-lsan",
       "modules_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "modules_tests"
   },
   {
@@ -303,6 +315,7 @@
       "--enable-lsan",
       "modules_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "modules_unittests"
   },
   {
@@ -330,6 +343,7 @@
       "--enable-lsan",
       "rtc_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rtc_unittests"
   },
   {
@@ -357,6 +371,7 @@
       "--enable-lsan",
       "system_wrappers_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "system_wrappers_unittests"
   },
   {
@@ -384,6 +399,7 @@
       "--enable-lsan",
       "test_support_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "test_support_unittests"
   },
   {
@@ -411,6 +427,7 @@
       "--enable-lsan",
       "tools_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "tools_unittests"
   },
   {
@@ -438,6 +455,7 @@
       "--enable-lsan",
       "video_engine_core_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "video_engine_core_unittests"
   },
   {
@@ -465,6 +483,7 @@
       "--enable-lsan",
       "video_engine_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "video_engine_tests"
   },
   {
@@ -492,6 +511,7 @@
       "--enable-lsan",
       "voice_engine_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "voice_engine_unittests"
   }
 ]

@@ -36,6 +36,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['chromeos']"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -53,6 +54,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -90,6 +92,7 @@
       "-rf",
       "/usr/local/skiabot/bin"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmdir bin"
   },
   {
@@ -102,6 +105,7 @@
       "-p",
       "/usr/local/skiabot/bin"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "mkdir bin"
   },
   {
@@ -110,6 +114,7 @@
       "[SLAVE_BUILD]/skia/resources",
       "root@192.168.1.123:/usr/local/skiabot/skia_resources"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "scp resources"
   },
   {
@@ -120,6 +125,7 @@
       "[SLAVE_BUILD]/tmp",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -142,6 +148,7 @@
       "[SLAVE_BUILD]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SKP_VERSION"
   },
   {
@@ -152,6 +159,7 @@
       "[SLAVE_BUILD]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -163,6 +171,7 @@
       "cat",
       "/usr/local/skiabot/skia_tmp_dir/SKP_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read SKP_VERSION",
     "stdout": "/path/to/tmp/"
   },
@@ -176,6 +185,7 @@
       "-f",
       "/usr/local/skiabot/skia_tmp_dir/SKP_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rm SKP_VERSION"
   },
   {
@@ -188,6 +198,7 @@
       "-rf",
       "/usr/local/skiabot/skia_skp/skps"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmdir skps"
   },
   {
@@ -200,6 +211,7 @@
       "-p",
       "/usr/local/skiabot/skia_skp/skps"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "mkdir skps"
   },
   {
@@ -208,6 +220,7 @@
       "[SLAVE_BUILD]/playback/skps",
       "root@192.168.1.123:/usr/local/skiabot/skia_skp/skps"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "scp skps"
   },
   {
@@ -218,6 +231,7 @@
       "[SLAVE_BUILD]/tmp/SKP_VERSION",
       "root@192.168.1.123:/usr/local/skiabot/skia_tmp_dir/SKP_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "scp SKP_VERSION"
   },
   {
@@ -233,6 +247,7 @@
       "cat",
       "gs://chromium-skia-gm/skimage/input/TIMESTAMP_LAST_UPLOAD_COMPLETED"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED",
     "stdout": "/path/to/tmp/"
   },
@@ -244,6 +259,7 @@
       "[SLAVE_BUILD]/tmp/SKIMAGE_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKIMAGE_VERSION"
   },
   {
@@ -255,6 +271,7 @@
       "cat",
       "/usr/local/skiabot/skia_tmp_dir/SKIMAGE_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read SKIMAGE_VERSION",
     "stdout": "/path/to/tmp/"
   },
@@ -268,6 +285,7 @@
       "-f",
       "/usr/local/skiabot/skia_tmp_dir/SKIMAGE_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rm SKIMAGE_VERSION"
   },
   {
@@ -280,6 +298,7 @@
       "-rf",
       "/usr/local/skiabot/skia_images"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmdir skia_images"
   },
   {
@@ -292,6 +311,7 @@
       "-p",
       "/usr/local/skiabot/skia_images"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "mkdir skia_images"
   },
   {
@@ -300,6 +320,7 @@
       "[SLAVE_BUILD]/images",
       "root@192.168.1.123:/usr/local/skiabot/skia_images"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "scp images"
   },
   {
@@ -310,6 +331,7 @@
       "[SLAVE_BUILD]/tmp/SKIMAGE_VERSION",
       "root@192.168.1.123:/usr/local/skiabot/skia_tmp_dir/SKIMAGE_VERSION"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "scp SKIMAGE_VERSION"
   },
   {
@@ -319,6 +341,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/dm"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -338,6 +361,7 @@
       "[SLAVE_BUILD]/dm",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -362,6 +386,7 @@
       "-rf",
       "/usr/local/skiabot/skia_dm_out"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmdir skia_dm_out"
   },
   {
@@ -374,6 +399,7 @@
       "-p",
       "/usr/local/skiabot/skia_dm_out"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "mkdir skia_dm_out"
   },
   {
@@ -425,6 +451,7 @@
       "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt",
       "root@192.168.1.123:/usr/local/skiabot/skia_tmp_dir/uninteresting_hashes.txt"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "scp uninteresting_hashes.txt"
   },
   {
@@ -452,6 +479,7 @@
       "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/dm",
       "root@192.168.1.123:/usr/local/skiabot/bin/dm"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "scp dm"
   },
   {
@@ -497,6 +525,7 @@
       "--nogpu",
       "--dummy-flags"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dm"
   },
   {
@@ -505,6 +534,7 @@
       "root@192.168.1.123:/usr/local/skiabot/skia_dm_out",
       "[SLAVE_BUILD]/dm"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "scp skia_dm_out"
   },
   {

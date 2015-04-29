@@ -34,6 +34,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] example_gtest_suite",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -57,6 +58,7 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
       "[TMP_BASE]/amp_trigger_tmp_1/example_gtest_suite.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save example_gtest_suite data"
   },
   {
@@ -96,6 +98,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] example_uirobot_suite",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -119,6 +122,7 @@
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
       "[TMP_BASE]/amp_trigger_tmp_1/example_uirobot_suite.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save example_uirobot_suite data"
   },
   {
@@ -129,6 +133,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/example_gtest_suite.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load example_gtest_suite data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -172,6 +177,7 @@
       "[TMP_BASE]/amp_results_tmp_2/example_gtest_suite/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] example_gtest_suite",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -185,6 +191,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/example_gtest_suite.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] load example_gtest_suite data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -201,6 +208,7 @@
       "-u",
       "RECIPE_MODULE[zip]/resources/unzip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for example_gtest_suite",
     "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/example_gtest_suite/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/example_gtest_suite/results.zip\"}"
   },
@@ -218,6 +226,7 @@
       "[TMP_BASE]/amp_results_tmp_2/example_gtest_suite/unzipped_results/appurify_results/logcat.txt",
       "gs://chrome-amp-results/logcats/logcat_example_gtest_suite_12345abcde.txt"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil [upload logcat] example_gtest_suite",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_gtest_suite_12345abcde.txt@@@"
@@ -231,6 +240,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/example_uirobot_suite.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load example_uirobot_suite data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -274,6 +284,7 @@
       "[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/results.zip",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[collect] example_uirobot_suite",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -287,6 +298,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/example_uirobot_suite.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] load example_uirobot_suite data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -303,6 +315,7 @@
       "-u",
       "RECIPE_MODULE[zip]/resources/unzip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for example_uirobot_suite",
     "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/results.zip\"}"
   },
@@ -320,6 +333,7 @@
       "[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/unzipped_results/appurify_results/logcat.txt",
       "gs://chrome-amp-results/logcats/logcat_example_uirobot_suite_12345abcde.txt"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil [upload logcat] example_uirobot_suite",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_uirobot_suite_12345abcde.txt@@@"

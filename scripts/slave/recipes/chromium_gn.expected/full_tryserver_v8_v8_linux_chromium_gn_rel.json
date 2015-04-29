@@ -30,6 +30,7 @@
       "src/v8@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -72,6 +73,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1"
     },
@@ -94,6 +96,7 @@
       "[BUILD]/goma",
       "//out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Generate build files"
   },
   {
@@ -104,6 +107,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/tryserver.v8.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/tryserver.v8.json@@@",
@@ -140,6 +144,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read filter exclusion spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
@@ -172,6 +177,7 @@
       "{\"files\": [\"foo.cc\"], \"targets\": [\"base_unittests\", \"all\"]}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -223,6 +229,7 @@
       "--",
       "base_unittests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -234,6 +241,7 @@
       "check",
       "//out/Release"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gn check"
   }
 ]

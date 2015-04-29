@@ -23,6 +23,7 @@
       "--force",
       "--no_shallow"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -84,6 +85,7 @@
       "-u",
       "RECIPE_MODULE[perf_dashboard]/resources/post_json.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "perf dashboard post",
     "stdin": "{\"data\": [{\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"8.16496580928\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": \"12345\", \"supplemental_columns\": {\"a_default_rev\": \"r_v8_git\", \"r_v8_git\": \"deadbeef\"}, \"test\": \"v8/v8/Richards\", \"units\": \"score\", \"value\": \"20.0\"}, {\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"0.0\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": \"12345\", \"supplemental_columns\": {\"a_default_rev\": \"r_v8_git\", \"r_v8_git\": \"deadbeef\"}, \"test\": \"v8/v8/DeltaBlue\", \"units\": \"ms\", \"value\": \"1.2\"}, {\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"8.16496580928\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": \"12345\", \"supplemental_columns\": {\"a_default_rev\": \"r_v8_git\", \"r_v8_git\": \"deadbeef\"}, \"test\": \"v8/v8/Richards\", \"units\": \"score\", \"value\": \"20.0\"}, {\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"0.0\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": \"12345\", \"supplemental_columns\": {\"a_default_rev\": \"r_v8_git\", \"r_v8_git\": \"deadbeef\"}, \"test\": \"v8/v8/DeltaBlue\", \"units\": \"ms\", \"value\": \"1.2\"}], \"url\": \"https://chrome-perf.googleplex.com/add_point\"}"
   },
@@ -95,6 +97,7 @@
       "[SLAVE_BUILD]/test_output1.json",
       "[SLAVE_BUILD]/test_output2.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "merge perf results",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -109,6 +112,7 @@
       "echo",
       "the result"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "do something with the results"
   }
 ]

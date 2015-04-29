@@ -9,6 +9,7 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
@@ -88,6 +89,7 @@
       "--",
       "--gtest_filter=*NaCl*.*"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "browser_tests"
   }
 ]

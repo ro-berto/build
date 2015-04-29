@@ -3,6 +3,7 @@
     "cmd": [
       "dummy_command.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Fake failing test.",
     "~followup_annotations": [
       "step returned non-zero exit code: 4",
@@ -15,6 +16,7 @@
       "-u",
       "RECIPE_MODULE[bisect_tester]/resources/put_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "saving json to temp file",
     "stdin": "{\"output\": \"\", \"results\": \"Test failed with error code: 4\"}",
     "stdout": "/path/to/tmp/"
@@ -33,6 +35,7 @@
       "dummy_location.json",
       "gs://chrome-perf/bisect-results/dummy.results"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/bisect-results/dummy.results@@@"

@@ -27,6 +27,7 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -73,6 +74,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
@@ -88,6 +90,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json@@@",
@@ -110,6 +113,7 @@
       "--properties",
       "{\"buildername\": \"android_compile_dbg\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -139,6 +143,7 @@
       "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read filter exclusion spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
@@ -165,6 +170,7 @@
       "{\"files\": [\"foo.cc\"], \"targets\": [\"android_webview_test_apk\", \"android_webview_unittests_apk\", \"base_unittests_apk\", \"breakpad_unittests_deps\", \"cc_unittests_apk\", \"chrome_junit_tests\", \"chrome_shell_test_apk\", \"chrome_sync_shell_test_apk\", \"components_unittests_apk\", \"content_browsertests_apk\", \"content_junit_tests\", \"content_shell_test_apk\", \"content_unittests_apk\", \"device_unittests_apk\", \"events_unittests_apk\", \"gl_tests_apk\", \"gpu_unittests_apk\", \"ipc_tests_apk\", \"junit_unit_tests\", \"media_unittests_apk\", \"net_unittests_apk\", \"sandbox_linux_unittests_deps\", \"sql_unittests_apk\", \"sync_unit_tests_apk\", \"ui_android_unittests_apk\", \"ui_base_unittests_apk\", \"ui_touch_selection_unittests_apk\", \"unit_tests_apk\"]}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1"

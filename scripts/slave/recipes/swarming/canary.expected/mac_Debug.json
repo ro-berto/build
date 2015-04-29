@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
@@ -31,6 +32,7 @@
       "--revision",
       "src/tools/swarming_client@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -49,6 +51,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'swarming_revision': '', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -68,6 +71,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -108,6 +112,7 @@
       "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -121,6 +126,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "clang=1 component=shared_library gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
@@ -135,6 +141,7 @@
       "[SLAVE_BUILD]/src/out/Debug",
       "--clean-isolated-files"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean isolated files"
   },
   {
@@ -155,6 +162,7 @@
       "--",
       "chromium_swarm_tests"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -178,6 +186,7 @@
       "/path/to/tmp/",
       "[SLAVE_BUILD]/src/out/Debug/*.isolated.gen.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "find isolated targets"
   },
   {
@@ -194,6 +203,7 @@
       "[SLAVE_BUILD]/src/out/Debug/dummy_target_1.isolated.gen.json",
       "[SLAVE_BUILD]/src/out/Debug/dummy_target_2.isolated.gen.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "SWARMING_PROFILE": "1"
     },
@@ -265,6 +275,7 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] dummy_target_1 on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -345,6 +356,7 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] dummy_target_2 on Mac",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -390,6 +402,7 @@
       "2",
       "dummy_target_1/Mac/[dummy has/TestBuilder/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dummy_target_1 on Mac"
   },
   {
@@ -415,6 +428,7 @@
       "2",
       "dummy_target_2/Mac/[dummy has/TestBuilder/571"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "dummy_target_2 on Mac"
   }
 ]

@@ -11,6 +11,7 @@
       "--git_cmd_path",
       "[DEPOT_TOOLS]\\git.bat"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "git setup"
   },
   {

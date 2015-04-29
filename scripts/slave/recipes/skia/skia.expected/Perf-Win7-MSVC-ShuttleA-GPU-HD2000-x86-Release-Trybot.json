@@ -36,6 +36,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -46,6 +47,7 @@
       ".",
       "[DEPOT_TOOLS]\\gclient.bat"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient revert"
   },
   {
@@ -63,6 +65,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -91,6 +94,7 @@
       "https://codereview.chromium.org",
       "--no-auth"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "apply_issue",
     "~followup_annotations": [
       "@@@STEP_LINK@Applied issue 500@https://codereview.chromium.org/500@@@"
@@ -103,6 +107,7 @@
       "\nimport os\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write(os.path.join(os.path.expanduser('~'), 'src'))\n",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get CHROME_PATH",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -135,6 +140,7 @@
       "[SLAVE_BUILD]\\tmp",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -157,6 +163,7 @@
       "[SLAVE_BUILD]\\skia\\SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get expected SKP_VERSION"
   },
   {
@@ -167,6 +174,7 @@
       "[SLAVE_BUILD]\\tmp\\SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -176,6 +184,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]\\perfdata\\Perf-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Release-Trybot\\data"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -195,6 +204,7 @@
       "[SLAVE_BUILD]\\perfdata\\Perf-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Release-Trybot\\data",
       "511"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "makedirs data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -269,6 +279,7 @@
       "os",
       "Win7"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "nanobench"
   },
   {

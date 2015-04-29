@@ -21,6 +21,7 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -67,6 +68,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "chromeos=1 clang=1 component=shared_library fastbuild=1 ffmpeg_branding=ChromeOS gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1 use_ozone=1"
@@ -86,6 +88,7 @@
       "objc",
       "objcxx"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "generate compilation database for chromeos",
     "stdout": "/path/to/tmp/"
   },
@@ -107,6 +110,7 @@
       "--",
       "all"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },
   {
@@ -115,6 +119,7 @@
       "some compilation data",
       "[SLAVE_BUILD]/src/out/Debug/compile_commands.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "copy compilation database"
   },
   {
@@ -124,6 +129,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
@@ -142,6 +148,7 @@
       "objc",
       "objcxx"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "generate compilation database for linux",
     "stdout": "/path/to/tmp/"
   },
@@ -157,6 +164,7 @@
       "--compdb-output",
       "[SLAVE_BUILD]/src/out/Debug/compile_commands.json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Filter out duplicate compilation units"
   },
   {
@@ -179,6 +187,7 @@
       "[SLAVE_BUILD]/src/out/Debug",
       "--all"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "run translation_unit clang tool"
   },
   {
@@ -191,6 +200,7 @@
       "--path-to-archive-output",
       "[SLAVE_BUILD]/src/out/Debug/index_pack_chromeos.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "create index pack"
   },
   {
@@ -200,6 +210,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/src/third_party/llvm-build"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree llvm-build",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -225,6 +236,7 @@
       "[SLAVE_BUILD]/src/out/Debug/index_pack_chromeos.zip",
       "gs://chrome-codesearch/prod/index_pack_chromeos_170242.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload index pack",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/index_pack_chromeos_170242.zip@@@"
@@ -243,6 +255,7 @@
       "-f",
       "chromium_src_chromeos.tar.bz2"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "archive source"
   },
   {
@@ -259,6 +272,7 @@
       "[SLAVE_BUILD]/chromium_src_chromeos.tar.bz2",
       "gs://chrome-codesearch/prod/chromium_src_chromeos_170242.tar.bz2"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload source tarball",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_src_chromeos_170242.tar.bz2@@@"

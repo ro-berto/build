@@ -25,6 +25,7 @@
       "--revision",
       "src/third_party/webrtc@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -79,6 +80,7 @@
       "RECIPE_MODULE[webrtc]/resources/cleanup_files.py",
       "[SLAVE_BUILD]/src/out"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean test output files"
   },
   {
@@ -91,6 +93,7 @@
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -115,6 +118,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm64 use_goma=1",
@@ -140,6 +144,7 @@
       "--",
       "android_builder_chromium_webrtc"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -162,10 +167,12 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Builder ARM64 (dbg)\", \"buildnumber\": 571, \"got_libjingle_revision\": \"1161aa63\", \"got_revision\": \"c321321\", \"got_webrtc_revision\": \"deadbeef\", \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "package build"
   },
   {
     "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "trigger",
     "trigger_specs": [
       {

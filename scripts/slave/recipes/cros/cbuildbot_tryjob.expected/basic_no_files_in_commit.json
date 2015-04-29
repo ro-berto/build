@@ -11,6 +11,7 @@
       "--attempts",
       "10"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Fetch tryjob commit",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

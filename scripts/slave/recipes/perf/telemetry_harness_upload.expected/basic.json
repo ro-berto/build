@@ -21,6 +21,7 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -65,6 +66,7 @@
       "[SLAVE_BUILD]/src/tools/telemetry/build/generate_telemetry_harness.sh",
       "[TMP_BASE]/telemetry-harness_tmp_1/telemetry-f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "create harness archive"
   },
   {
@@ -81,6 +83,7 @@
       "[TMP_BASE]/telemetry-harness_tmp_1/telemetry-f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip",
       "gs://chromium-telemetry/snapshots/telemetry-f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@Telemetry rf27fede2220bcd326aee3e86ddfd4ebd0fe58cb9@https://storage.cloud.google.com/chromium-telemetry/snapshots/telemetry-f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip@@@"
@@ -100,6 +103,7 @@
       "gs://chromium-telemetry/snapshots/telemetry-f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip",
       "gs://chromium-telemetry/snapshots/telemetry.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil copy",
     "~followup_annotations": [
       "@@@STEP_LINK@Telemetry latest@https://storage.cloud.google.com/chromium-telemetry/snapshots/telemetry.zip@@@"
@@ -112,6 +116,7 @@
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[TMP_BASE]/telemetry-harness_tmp_1"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "rmtree remove harness temp directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

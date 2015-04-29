@@ -7,6 +7,7 @@
       "[SLAVE_BUILD]/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read filter exclusion spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
@@ -33,6 +34,7 @@
       "{\"files\": [\"foo.cc\"], \"targets\": []}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
@@ -51,6 +53,7 @@
       "echo",
       "Why hello, there."
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "hello"
   }
 ]

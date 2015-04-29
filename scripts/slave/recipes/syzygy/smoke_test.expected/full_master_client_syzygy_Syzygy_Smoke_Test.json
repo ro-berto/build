@@ -5,6 +5,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\kill_processes.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
   },
   {
@@ -16,6 +17,7 @@
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS.syzygy', 'managed': False, 'name': 'src', 'url': 'https://github.com/google/syzygy.git'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src-internal', 'url': 'svn://svn.chromium.org/chrome-internal/trunk/syzygy/internal.DEPS'}]"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
   },
   {
@@ -33,6 +35,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -57,6 +60,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "target_arch=ia32",
       "GYP_GENERATORS": "msvs",
@@ -76,6 +80,7 @@
       "--overwrite",
       "--verbose"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "download_binaries"
   },
   {
@@ -87,6 +92,7 @@
       "--build-dir",
       "[SLAVE_BUILD]\\src\\build"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "smoke_test"
   }
 ]

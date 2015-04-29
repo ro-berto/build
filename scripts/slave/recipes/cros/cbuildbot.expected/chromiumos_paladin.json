@@ -11,6 +11,7 @@
       "--attempts",
       "10"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Fetch manifest config",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Build ID: 1337<br/>Chromite branch: master@@@",
@@ -59,6 +60,7 @@
       "chromite@master:",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",

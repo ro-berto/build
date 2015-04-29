@@ -7,6 +7,7 @@
       "[SLAVE_BUILD]/src/out/Release",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "listdir build_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -27,6 +28,7 @@
       "-u",
       "RECIPE_MODULE[zip]/resources/zip.py"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "zipping",
     "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"type\": \"file\"}], \"output\": \"[SLAVE_BUILD]/chrome_staging/chrome-asan-linux-release-x10-component-234.zip\", \"root\": \"[SLAVE_BUILD]/src/out/Release\", \"use_python_zip\": false}"
   },
@@ -50,6 +52,7 @@
       "[SLAVE_BUILD]/chrome_staging/chrome-asan-linux-release-x10-component-234.zip",
       "gs://chromium/linux-release/chrome-asan-linux-release-x10-component-234.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium/linux-release/chrome-asan-linux-release-x10-component-234.zip@@@"
@@ -62,6 +65,7 @@
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
       "[SLAVE_BUILD]/chrome_staging/chrome-asan-linux-release-x10-component-234.zip"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "chrome-asan-linux-release-x10-component-234.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

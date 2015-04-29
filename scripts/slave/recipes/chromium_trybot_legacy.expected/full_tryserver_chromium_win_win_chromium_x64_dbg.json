@@ -28,6 +28,7 @@
       "src@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -75,6 +76,7 @@
       "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium_trybot.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: testing\\buildbot\\chromium_trybot.json@@@",
@@ -126,6 +128,7 @@
       "--properties",
       "{\"buildername\": \"win_chromium_x64_dbg\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -139,6 +142,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 use_goma=1"
     },
@@ -164,6 +168,7 @@
       "browser_tests",
       "mini_installer"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile (with patch)"
   },
   {
@@ -181,6 +186,7 @@
       "--output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "telemetry_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -205,6 +211,7 @@
       "--output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "telemetry_perf_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -235,6 +242,7 @@
       "--build-number=571",
       "base_unittests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "base_unittests (with patch)"
   },
   {
@@ -258,6 +266,7 @@
       "--build-number=571",
       "browser_tests.exe"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "browser_tests (with patch)"
   },
   {
@@ -275,6 +284,7 @@
       "--output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "nacl_integration (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -299,6 +309,7 @@
       "--write-full-results-to",
       "/path/to/tmp/json"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "test_installer (with patch)"
   }
 ]

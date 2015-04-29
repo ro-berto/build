@@ -22,6 +22,7 @@
       "src@HEAD",
       "--force"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -66,6 +67,7 @@
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "[SLAVE_BUILD]/src/third_party/closure_compiler/compiled_resources.gyp"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "generate_gyp_files"
   },
   {
@@ -81,6 +83,7 @@
       "ninja",
       "--"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   }
 ]
