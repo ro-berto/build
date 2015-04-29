@@ -50,13 +50,16 @@ class BuildRequestGateway(object):
     yield self.build_request.cancelBuildRequest()
 
   @inlineCallbacks
-  def is_complete(self):
-    """Returns True if build request is marked complete in the database.
+  def is_failed(self):
+    """Returns True if build request is marked failed in the database.
 
     Performs a database query, does not a cached value.
     """
     brdict = yield self.master.db.buildrequests.getBuildRequest(self.brid)
-    returnValue(brdict.get('complete', False))
+    returnValue(
+        brdict.get('complete', False) and
+        brdict.get('results') == build_results.FAILURE
+    )
 
 
 class BuildbotGateway(object):

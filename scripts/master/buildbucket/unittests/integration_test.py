@@ -357,7 +357,7 @@ class IntegratorTest(unittest.TestCase):
       self.assertFalse(self.buildbucket.api.peek.called)
       self.assertFalse(self.buildbot.add_build_request.called)
 
-  def mock_existing_build(self):
+  def mock_existing_build(self, put_build_to_lease=True):
     build = Mock()
     build.id = '123321'
     build.getNumber.return_value = 42
@@ -381,7 +381,7 @@ class IntegratorTest(unittest.TestCase):
     self.integrator._leases[build.id] = {
         'key': LEASE_KEY,
         'build_request': Mock(),
-        'build': build,
+        'build': build if put_build_to_lease else None,
     }
 
     return build
@@ -456,7 +456,7 @@ class IntegratorTest(unittest.TestCase):
     with self.create_integrator():
       def make_build_request(complete):
         result = Mock()
-        result.is_complete.return_value = complete
+        result.is_failed.return_value = complete
         return result
       self.integrator._leases = {
           '1': {
@@ -467,6 +467,11 @@ class IntegratorTest(unittest.TestCase):
               'lease_key': LEASE_KEY,
               'build_request': make_build_request(False),
           },
+          '3': {
+              'lease_key': LEASE_KEY,
+              'build_request': make_build_request(True),
+              'build': Mock(),
+          },
       }
 
       run_deferred(self.integrator.clean_completed_build_requests())
@@ -476,7 +481,7 @@ class IntegratorTest(unittest.TestCase):
 
   def test_build_started(self):
     with self.create_integrator():
-      build = self.mock_existing_build()
+      build = self.mock_existing_build(put_build_to_lease=False)
       self.buildbucket.api.start.return_value = {}
       self.integrator.on_build_started(build)
 
@@ -489,7 +494,7 @@ class IntegratorTest(unittest.TestCase):
 
   def test_build_started_error_response(self):
     with self.create_integrator():
-      build = self.mock_existing_build()
+      build = self.mock_existing_build(put_build_to_lease=False)
       self.buildbucket.api.start.return_value = {
           'error': {
               'reason': 'BAD',

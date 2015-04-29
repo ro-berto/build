@@ -452,7 +452,12 @@ class BuildBucketIntegrator(object):
           del self._leases[build_id]
           build = lease.get('build')
           if build:
-            yield self._stop_build(build, result['error'])
+            stop_reason = (
+                'Heartbeat failed with error "%s" (reason "%s")'
+                % (
+                    result['error'].get('message'),
+                    result['error'].get('reason')))
+            yield self._stop_build(build, stop_reason)
           else:
             yield lease['build_request'].cancel()
 
@@ -465,7 +470,7 @@ class BuildBucketIntegrator(object):
 
   @inlineCallbacks
   def clean_completed_build_requests(self):
-    """Deletes leases that point to completed build requests.
+    """Deletes leases that point to cancelled build requests.
 
     Since Buildbot's requestCancelled notifcation does not work,
     we have to periodically check for canceled build requests.
@@ -473,19 +478,23 @@ class BuildBucketIntegrator(object):
     if not self._leases:
       return
     for build_id, lease in self._leases.items():
+      request = lease['build_request']
+      # Buildbot does not distinguish failed and cancelled build requests,
+      # but a cancelled build request doesn't have a started build.
+      is_cancelled = (yield request.is_failed()) and not lease.get('build')
+      if not is_cancelled:
+        continue
+
       # Check that build_id is still in self._leases because this loop iteration
       # is async and self._leases may be modified in the meantime.
       if build_id not in self._leases:
         continue
 
-      request = lease['build_request']
-      is_complete = yield request.is_complete()
-      if is_complete and build_id in self._leases:
-        self.log(('Build request %r is complete. Deleting lease for build %s' %
-                  (request, build_id)),
-                 level=logging.DEBUG)
-        del self._leases[build_id]
-        yield self.buildbucket_service.api.cancel(id=build_id)
+      self.log(('Build request %r is complete. Deleting lease for build %s' %
+                (request, build_id)),
+               level=logging.DEBUG)
+      del self._leases[build_id]
+      yield self.buildbucket_service.api.cancel(id=build_id)
 
   def _do_until_stopped(self, interval, fn):
     def loop_iteration():
@@ -498,17 +507,13 @@ class BuildBucketIntegrator(object):
           reactor.callLater(interval.total_seconds(), loop_iteration)
     loop_iteration()
 
-  def _stop_build(self, build, error_dict):
+  def _stop_build(self, build, reason):
     if build.isFinished():
       return
-    error_msg = (
-        'Build %d (%s) has started, but an attempt to notify buildbucket about '
-        'it has failed with error "%s" (reason: %s).' % (
-            build.getNumber(), build.getBuilder().getName(),
-            error_dict.get('message'),
-            error_dict.get('reason')))
-    self.log('%s Stopping the build.' % error_msg, level=logging.ERROR)
-    self.buildbot.stop_build(build, reason=error_msg)
+    self.log(
+        'Stopping the build %s/%s. Reason: %s' % (
+            build.getBuilder().getName(), build.getNumber(), reason))
+    self.buildbot.stop_build(build, reason=reason)
 
   @inlineCallbacks
   def _leased_build_call(self, method_name, build, body):
@@ -520,8 +525,7 @@ class BuildBucketIntegrator(object):
     body = body.copy()
     body['lease_key'] = build_def['lease_key']
     resp = yield method(id=build_def['id'], body=body)
-    if 'error' in resp:
-      self._stop_build(build, resp['error'])
+    returnValue(resp)
 
   @inlineCallbacks
   def on_build_started(self, build):
@@ -530,15 +534,29 @@ class BuildBucketIntegrator(object):
     if not build_def:
       return
     build_id = build_def['id']
-
+    builder = build.getBuilder()
+    self.log(
+        ('Build %s started as %s/%d' %
+         (build_id, builder.getName(), build.getNumber())))
     yield self._ensure_leases_loaded()
-    assert build_id in self._leases
-    assert self._leases[build_id]['key'] == build_def['lease_key']
-    self._leases[build_id]['build'] = build
+    if build_id not in self._leases:
+      self._stop_build(build, 'Build started, but it is not among leases.')
+    if self._leases[build_id]['key'] != build_def['lease_key']:
+      self._stop_build(
+          build, 'Build started, but it is lease key is not current.')
 
-    yield self._leased_build_call('start', build, {
+    assert not self._leases[build_id].get('build')
+    self._leases[build_id]['build'] = build
+    resp = yield self._leased_build_call('start', build, {
         'url': self.buildbot.get_build_url(build),
     })
+    if 'error' in resp:
+      stop_reason = (
+          'Build has started, but an attempt to notify buildbucket about it '
+          'has failed with error "%s" (reason: %s).' % (
+              resp['error'].get('message'),
+              resp['error'].get('reason')))
+      self._stop_build(build, stop_reason)
 
   @inlineCallbacks
   def on_build_finished(self, build, status):
