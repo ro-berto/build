@@ -254,7 +254,7 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
-  'WebKit Mac10.8 (retina)': {
+  'WebKit Mac10.9 (retina)': {
     'chromium_config': 'chromium',
     'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
