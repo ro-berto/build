@@ -1207,11 +1207,7 @@ SPEC = {
       'root_devices': True,
       'tests': [
         steps.AndroidInstrumentationTest(
-            'ChromotingInstrumentationTests', 'remoting_test_apk',
-            adb_install_apk=(
-              'Chromoting.apk', 'org.chromium.chromoting')),
-        steps.AndroidInstrumentationTest(
-            'ChromotingUnitTests', 'remoting_unittests',
+            'ChromotingTest', 'remoting_test_apk',
             adb_install_apk=(
               'Chromoting.apk', 'org.chromium.chromoting')),
       ],
