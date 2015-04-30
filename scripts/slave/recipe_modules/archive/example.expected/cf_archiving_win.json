@@ -64,7 +64,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "zipping",
-    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release\\\\chrome\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release\\\\icu.dat\", \"type\": \"file\"}], \"output\": \"[SLAVE_BUILD]\\\\chrome_staging\\\\chrome-asan-win-release-refs_heads_B1-123456.zip\", \"root\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release\", \"use_python_zip\": true}"
+    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release\\\\chrome\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release\\\\icu.dat\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]\\\\chrome_staging_tmp_1\\\\chrome-asan-win-release-refs_heads_B1-123456.zip\", \"root\": \"[SLAVE_BUILD]\\\\src\\\\out\\\\Release\", \"use_python_zip\": true}"
   },
   {
     "cmd": [
@@ -85,7 +85,7 @@
       "x-goog-meta-Cr-Commit-Position-Number:123456",
       "-h",
       "x-goog-meta-Cr-Git-Commit:5e3250aadda2b170692f8e762d43b7e8deadbeef",
-      "[SLAVE_BUILD]\\chrome_staging\\chrome-asan-win-release-refs_heads_B1-123456.zip",
+      "[TMP_BASE]\\chrome_staging_tmp_1\\chrome-asan-win-release-refs_heads_B1-123456.zip",
       "gs://chromium/win-release-subdir/chrome-asan-win-release-refs_heads_B1-123456.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -99,7 +99,7 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[SLAVE_BUILD]\\chrome_staging\\chrome-asan-win-release-refs_heads_B1-123456.zip"
+      "[TMP_BASE]\\chrome_staging_tmp_1\\chrome-asan-win-release-refs_heads_B1-123456.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "chrome-asan-win-release-refs_heads_B1-123456.zip",

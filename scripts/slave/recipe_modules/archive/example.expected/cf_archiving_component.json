@@ -62,7 +62,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "zipping",
-    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/Release/resources\", \"type\": \"dir\"}], \"output\": \"[SLAVE_BUILD]/chrome_staging/chrome-asan-linux-release-x10-component-234.zip\", \"root\": \"[SLAVE_BUILD]/src/out/Release\", \"use_python_zip\": false}"
+    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/Release/resources\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/chrome_staging_tmp_1/chrome-asan-linux-release-x10-component-234.zip\", \"root\": \"[SLAVE_BUILD]/src/out/Release\", \"use_python_zip\": false}"
   },
   {
     "cmd": [
@@ -81,7 +81,7 @@
       "x-goog-meta-Cr-Commit-Position-Number:234",
       "-h",
       "x-goog-meta-Cr-Git-Commit:deadbeefdda2b170692f8e762d43b7e8e7a96686",
-      "[SLAVE_BUILD]/chrome_staging/chrome-asan-linux-release-x10-component-234.zip",
+      "[TMP_BASE]/chrome_staging_tmp_1/chrome-asan-linux-release-x10-component-234.zip",
       "gs://chromium/linux-release/chrome-asan-linux-release-x10-component-234.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -95,7 +95,7 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[SLAVE_BUILD]/chrome_staging/chrome-asan-linux-release-x10-component-234.zip"
+      "[TMP_BASE]/chrome_staging_tmp_1/chrome-asan-linux-release-x10-component-234.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "chrome-asan-linux-release-x10-component-234.zip",

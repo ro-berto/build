@@ -216,7 +216,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     cp_branch, cp_number = self.m.commit_position.parse(commit_position)
     build_git_commit = self._get_git_commit(update_properties, primary_project)
 
-    staging_dir = self.m.path['slave_build'].join('chrome_staging')
+    staging_dir = self.m.path.mkdtemp('chrome_staging')
 
     # Build the list of files to archive.
     zip_file_list = [f for f in self.m.file.listdir('build_dir', build_dir)
