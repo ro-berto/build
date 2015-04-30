@@ -65,8 +65,8 @@ F('win_x64_full', win_out().ChromiumFactory(
     }))
 
 # ASan/Win supports neither the component build nor NaCL at the moment.
-asan_win_gyp = ('clang=1 asan=1 component=static_library disable_nacl=1 '
-                'enable_ipc_fuzzer=1 v8_enable_verify_heap=1')
+asan_win_gyp = ('asan=1 component=static_library enable_ipc_fuzzer=1 '
+                'v8_enable_verify_heap=1')
 
 # Clang is not stable enough on Windows to use a gatekeeper yet.
 B('Win ASan Release', 'win_asan_rel', scheduler='chromium_lkgr')
@@ -80,6 +80,20 @@ F('win_asan_rel', win_out().ChromiumASANFactory(
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_win_gyp}}))
+
+# ASan/Win coverage bot.
+B('Win ASan Release Coverage', 'win_asan_rel_cov', scheduler='chromium_lkgr')
+F('win_asan_rel_cov', win_out().ChromiumASANFactory(
+    compile_timeout=8*3600,  # We currently use a VM, which is extremely slow.
+    clobber=True,
+    options=['--build-tool=ninja', '--', 'chromium_builder_asan'],
+    factory_properties={
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_name': 'asan-coverage',
+       'gs_bucket': 'gs://chromium-browser-asan',
+       'gs_acl': 'public-read',
+       'gclient_env': {'GYP_DEFINES': asan_win_gyp + ' sanitizer_coverage=3'}}))
+
 
 # ASan/Win supports neither the component build nor NaCL at the moment.
 proprietary_codecs_gyp = (' proprietary_codecs=1 ffmpeg_branding=Chrome')
