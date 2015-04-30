@@ -46,6 +46,7 @@ def GenTests(api):
   builders = [
     'Build-Ubuntu-GCC-Arm7-Debug-CrOS_Daisy',
     'Build-Ubuntu-GCC-x86_64-Debug',
+    'Build-Ubuntu-GCC-x86_64-Release-Mesa',
     'Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release',
     'Perf-Android-GCC-Nexus9-CPU-Denver-Arm64-Release',
     'Test-ChromeOS-GCC-Daisy-CPU-NEON-Arm7-Release',

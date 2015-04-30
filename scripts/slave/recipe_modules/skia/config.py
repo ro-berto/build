@@ -37,6 +37,7 @@ def BaseConfig(BUILDER_NAME, MASTER_NAME, SLAVE_NAME, **_kwargs):
 
 VAR_TEST_MAP = {
   'BUILDER_NAME': (u'Build-Ubuntu-GCC-x86_64-Debug',
+                   u'Build-Ubuntu-GCC-x86_64-Release-Mesa',
                    u'Build-Win-MSVC-x86-Release',
                    u'Build-Win-MSVC-x86-Debug-Exceptions',
                    u'Housekeeper-PerCommit',
@@ -161,6 +162,11 @@ def gyp_defs_from_builder_dict(builder_dict):
   if (builder_dict.get('role') == builder_name_schema.BUILDER_ROLE_BUILD and
       builder_dict.get('compiler') == 'MSVC'):
     gyp_defs['skia_win_ltcg'] = '0'  # pragma: no cover
+
+  # Mesa.
+  if (builder_dict.get('extra_config') == 'Mesa' or
+      builder_dict.get('cpu_or_gpu_value') == 'Mesa'):
+    gyp_defs['skia_mesa'] = '1'
 
   return gyp_defs
 
