@@ -19,6 +19,7 @@ import threading
 import time
 
 BUILD_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MAX_CONCURRENT_THREADS = 8
 sys.path.insert(0, os.path.join(BUILD_DIR, 'scripts'))
 import common.env
 common.env.Install()
@@ -102,6 +103,19 @@ class MasterTestThread(threading.Thread):
           self.master, self.master_path, self.name, self.ports)
 
 
+def join_threads(started_threads, failed):
+  success = 0
+  for cur_thread in started_threads:
+    cur_thread.join(30)
+    if cur_thread.result:
+      print '\n=== Error running %s === ' % cur_thread.master
+      print cur_thread.result
+      failed.add(cur_thread.master)
+    else:
+      success += 1
+  return success
+
+
 def real_main(all_expected):
   start = time.time()
   master_classes = do_master_imports()
@@ -132,8 +146,8 @@ def real_main(all_expected):
 
 
   with master_cfg_utils.TemporaryMasterPasswords():
-    master_threads = []
     for base, masters in all_masters.iteritems():
+      started_threads = []
       for master in masters[:]:
         if not master in all_expected[base]:
           continue
@@ -147,15 +161,15 @@ def real_main(all_expected):
             master_class=getattr(master_classes, classname),
             master_path=os.path.join(base, 'masters', master))
         cur_thread.start()
-        master_threads.append(cur_thread)
-      for cur_thread in master_threads:
-        cur_thread.join(20)
-        if cur_thread.result:
-          print '\n=== Error running %s === ' % cur_thread.master
-          print cur_thread.result
-          failed.add(cur_thread.master)
-        else:
-          success += 1
+        started_threads.append(cur_thread)
+        # Avoid having too many concurrent threads; join if we have reached the
+        # limit.
+        if len(started_threads) == MAX_CONCURRENT_THREADS:
+          success += join_threads(started_threads, failed)
+          started_threads = []
+      # Join to the remaining started threads.
+      if len(started_threads):
+        success += join_threads(started_threads, failed)
 
   if failed:
     print >> sys.stderr, (

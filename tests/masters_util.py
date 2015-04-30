@@ -232,9 +232,9 @@ def json_probe(sensitive, allports):
 
 
 def wait_for_start(master, name, path, ports):
-  """Waits for ~20s for the masters to open its web server."""
+  """Waits for ~30s for the masters to open its web server."""
   logging.info("Waiting for master %s on ports %s" % (name, ports))
-  for i in range(200):
+  for i in range(300):
     result = json_probe(False, ports)
     if result is None:
       exception = search_for_exceptions(path)
