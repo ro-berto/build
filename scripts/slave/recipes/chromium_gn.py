@@ -359,6 +359,22 @@ BUILDERS = freeze({
   },
 })
 
+def tests_in_compile_targets(api, compile_targets, tests):
+  """Returns the tests in |tests| that have at least one of their compile
+  targets in |compile_targets|."""
+  result = []
+  for test in tests:
+    test_compile_targets = test.compile_targets(api)
+
+    # Always return tests that don't require compile. Otherwise we'd never
+    # run them.
+    if ((set(compile_targets).intersection(set(test_compile_targets))) or
+        not test_compile_targets):
+      result.append(test)
+
+  return result
+
+
 def all_compile_targets(api, tests):
   """Returns the compile_targets for all the Tests in |tests|."""
   return sorted(set(x
@@ -408,7 +424,7 @@ def _GenStepsInternal(api):
             build_output_dir='//out/%s' % api.chromium.c.build_config_fs)
     if requires_compile:
       api.chromium.compile(compile_targets)
-
+    tests = tests_in_compile_targets(api, compile_targets, tests)
   else:
     api.chromium.compile(all_compile_targets(api, tests) +
                           additional_compile_targets)
@@ -482,4 +498,25 @@ def GenTests(api):
         mastername='tryserver.chromium.linux',
         patch_project='v8') +
     overrides['tryserver.chromium.linux']['linux_chromium_gn_rel']
+  )
+
+  yield (
+    api.test('no_tests_run') +
+    api.platform.name('linux') +
+    api.properties.tryserver(
+        buildername='linux_chromium_gn_rel',
+        mastername='tryserver.chromium.linux') +
+    api.override_step_data(
+        'read test spec',
+        api.json.output({'linux_chromium_gn_rel': {
+           'additional_compile_targets': ['net_unittests'],
+           'gtest_tests': ['base_unittests'],
+        }})) +
+    api.override_step_data(
+        'analyze',
+        api.json.output({
+          'status': 'Found dependency',
+          'targets': ['net_unittests'],
+          'build_targets': ['net_unittests'],
+        }))
   )
