@@ -59,6 +59,11 @@ class GpuApi(recipe_api.RecipeApi):
     # Blink Release builds.
     self.m.chromium.apply_config('blink_logging_on')
 
+    # The FYI waterfall is being used to test linking Chrome Mac against the
+    # OSX 10.10 SDK.
+    if self.is_fyi_waterfall and self.m.platform.is_mac:
+      self.m.chromium.apply_config('chromium_mac_sdk_10_10')
+
     # Use the default Ash and Aura settings on all bots (specifically Blink
     # bots).
     self.m.chromium.c.gyp_env.GYP_DEFINES.pop('use_ash', None)
