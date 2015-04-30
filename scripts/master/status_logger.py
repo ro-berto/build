@@ -182,10 +182,10 @@ class StatusEventLogger(StatusReceiverMultiService):
         self.monitoring_script,
         '--event-mon-run-type=%s' % self.monitoring_type,
         '--event-mon-timestamp-kind=%s' % timestamp_kind,
+        '--event-mon-service-name=buildbot/master/%s' % self.master_dir,
         '--build-event-type=%s' % build_event_type,
-        '--build-event-master-name=%s' % self.master_dir,
         '--build-event-hostname=%s' % bot_name,
-        '--build-event-builder-name=%s' % builder_name,
+        '--build-event-build-name=%s' % builder_name,
         '--build-event-build-number=%d' % build_number,
         '--build-event-build-scheduling-time=%d' % build_scheduled_ts,
     ]
