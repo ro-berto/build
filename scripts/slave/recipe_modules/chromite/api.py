@@ -302,6 +302,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     # Checkout Chromite.
     self.m.bot_update.ensure_checkout(
         gclient_config=self.gclient_config(),
+        update_presentation=False,
         force=True)
 
     # Run cbuildbot.
