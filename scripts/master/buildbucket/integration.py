@@ -560,7 +560,6 @@ class BuildBucketIntegrator(object):
 
   @inlineCallbacks
   def on_build_finished(self, build, status):
-    assert self.started
     assert status in ('SUCCESS', 'FAILURE', 'EXCEPTION', 'RETRY', 'SKIPPED')
     build_def = self._get_build_def(build)
     if not build_def:
@@ -589,6 +588,12 @@ class BuildBucketIntegrator(object):
       # Build lease will expire on its own.
       # TODO(nodir): implement unlease API http://crbug.com/448984 and call it
       # here.
+      return
+
+    if not self.started:
+      self.log(
+          'BuildBucketIntegrator.on_build_finished: cannot proceed because '
+          'the integrator is stopped', level=logging.WARNING)
       return
 
     properties_to_send = build.getProperties().asDict()

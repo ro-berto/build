@@ -540,6 +540,9 @@ class IntegratorTest(unittest.TestCase):
   def test_build_retried(self):
     with self.create_integrator():
       build = self.mock_existing_build()
+
+      # A build is marked during master stop.
+      self.integrator.stop()
       run_deferred(self.integrator.on_build_finished(build, 'RETRY'))
       # Do not delete lease for RETRY builds.
       self.assertTrue(build.id in self.integrator._leases)
