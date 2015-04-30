@@ -72,11 +72,11 @@
       "--force-version",
       "3.25",
       "--",
-      "cp",
       "-h",
       "x-goog-meta-Cr-Commit-Position:refs/heads/B1@{#123456}",
       "-h",
       "x-goog-meta-Cr-Commit-Position-Number:123456",
+      "cp",
       "[TMP_BASE]/chrome_staging_tmp_1/chrome-asan-linux-release-refs_heads_B1-123456.zip",
       "gs://chromium/linux-release/chrome-asan-linux-release-refs_heads_B1-123456.zip"
     ],

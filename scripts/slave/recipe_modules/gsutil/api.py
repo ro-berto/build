@@ -51,9 +51,10 @@ class GSUtilApi(recipe_api.RecipeApi):
   def upload(self, source, bucket, dest, args=None, link_name='gsutil.upload',
              metadata=None, unauthenticated_url=False, **kwargs):
     args = [] if args is None else args[:]
-    args += self._generate_metadata_args(metadata)
+    # Note that metadata arguments have to be passed before the command cp.
+    metadata_args = self._generate_metadata_args(metadata)
     full_dest = 'gs://%s/%s' % (bucket, dest)
-    cmd = ['cp'] + args + [source, full_dest]
+    cmd = metadata_args + ['cp'] + args + [source, full_dest]
     name = kwargs.pop('name', 'upload')
 
     result = self(cmd, name, **kwargs)

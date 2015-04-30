@@ -9,7 +9,6 @@
       "--force-version",
       "3.25",
       "--",
-      "cp",
       "-h",
       "Cache-Control:no-cache",
       "-h",
@@ -18,6 +17,7 @@
       "x-goog-meta-Test-Field:value",
       "-h",
       "x-custom-field:custom-value",
+      "cp",
       "[SLAVE_BUILD]/boom",
       "gs://chromium-recipe-test/some/random/path/to/boom"
     ],
