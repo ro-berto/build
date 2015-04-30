@@ -36,6 +36,7 @@
         "masters": [
             "https://build.chromium.org/p/chromium.infra"
         ],
+        "open-tree": true,
         "status-url": "https://infra-status.appspot.com",
         "set-status": true,
         "password-file": "/creds/gatekeeper/infra_status_password"
