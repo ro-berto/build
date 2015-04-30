@@ -31,7 +31,7 @@ SPEC = {
       'bot_type': 'builder',
       'disable_tests': True,
       'cf_archive_build': True,
-      'cf_gs_bucket': 'gs://v8-asan',
+      'cf_gs_bucket': 'v8-asan',
       'cf_gs_acl': 'public-read',
       'cf_archive_name': 'asan-symbolized',
       'cf_revision_dir': 'v8',
