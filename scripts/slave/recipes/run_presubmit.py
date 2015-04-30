@@ -5,25 +5,28 @@
 DEPS = [
   'bot_update',
   'gclient',
+  'git',
   'json',
-  'presubmit',
+  'path',
   'properties',
-  'rietveld',
+  'python',
   'tryserver',
+  'rietveld',
 ]
 
 
 def _GenStepsInternal(api):
   root = api.rietveld.calculate_issue_root(extra_patch_project_roots={'v8': []})
 
-  # TODO(iannucci): Pass the build repo info directly via properties
   repo_name = api.properties['repo_name']
+  codereview_auth = api.properties.get('codereview_auth', False)
   force_checkout = api.properties.get('force_checkout', False)
 
   api.gclient.set_config(repo_name)
 
   bot_update_step = api.bot_update.ensure_checkout(
-      force=force_checkout, patch_project_roots={'v8': []})
+      force=force_checkout, patch_project_roots={'v8': []},
+      patch_oauth2=codereview_auth)
   relative_root = '%s/%s' % (api.gclient.c.solutions[0].name, root)
   relative_root = relative_root.strip('/')
   got_revision_property = api.gclient.c.got_revision_mapping[relative_root]
@@ -36,9 +39,39 @@ def _GenStepsInternal(api):
     upstream = bot_update_step.json.output['properties'].get(
         '%s_git' % got_revision_property) or ''
 
-  api.presubmit.commit_patch_locally(root)
-  api.presubmit(root=root, upstream=upstream,
-                trybot_json_output=api.json.output())
+  # TODO(hinoka): Extract email/name from issue?
+  api.git('-c', 'user.email=commit-bot@chromium.org',
+          '-c', 'user.name=The Commit Bot',
+          'commit', '-a', '-m', 'Committed patch',
+          name='commit git patch', cwd=api.path['checkout'].join(root))
+
+  presubmit_args = [
+    '--root', api.path['checkout'].join(root),
+    '--commit',
+    '--verbose', '--verbose',
+    '--issue', api.properties['issue'],
+    '--patchset', api.properties['patchset'],
+    '--skip_canned', 'CheckRietveldTryJobExecution',
+    '--skip_canned', 'CheckTreeIsOpen',
+    '--skip_canned', 'CheckBuildbotPendingBuilds',
+    '--rietveld_url', api.properties['rietveld'],
+    '--rietveld_fetch',
+    '--upstream', upstream,  # '' if not in bot_update mode.
+    '--trybot-json', api.json.output(),
+  ]
+
+  if codereview_auth:
+    presubmit_args.extend([
+        '--rietveld_email_file',
+        api.path['build'].join('site_config', '.rietveld_client_email')])
+    presubmit_args.extend([
+        '--rietveld_private_key_file',
+        api.path['build'].join('site_config', '.rietveld_secret_key')])
+  else:
+    presubmit_args.extend(['--rietveld_email', ''])  # activate anonymous mode
+
+  api.python('presubmit', api.path['depot_tools'].join('presubmit_support.py'),
+             presubmit_args)
 
 
 def GenSteps(api):
@@ -69,6 +102,18 @@ def GenTests(api):
         buildername='chromium_presubmit',
         repo_name='chromium',
         force_checkout=True) +
+    api.step_data('presubmit', api.json.output([['chromium_presubmit',
+                                                 ['compile']]]))
+  )
+
+  yield (
+    api.test('chromium_with_auth') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
+        repo_name='chromium',
+        codereview_auth=True,
+        patch_project='chromium') +
     api.step_data('presubmit', api.json.output([['chromium_presubmit',
                                                  ['compile']]]))
   )
