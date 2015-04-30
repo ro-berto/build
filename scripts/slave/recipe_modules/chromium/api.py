@@ -546,7 +546,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     # This runs with no env being passed along, so we get a clean environment
     # without any GYP_DEFINES being present to cause confusion.
-    self.m.python(name='Generate build files',
+    self.m.python(name='generate_build_files',
                   script=self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
                   args=args)
 

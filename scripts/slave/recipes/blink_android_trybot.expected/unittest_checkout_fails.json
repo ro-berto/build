@@ -255,7 +255,7 @@
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Generate build files"
+    "name": "generate_build_files"
   },
   {
     "cmd": [
