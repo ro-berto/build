@@ -12,5 +12,4 @@ DEPS = [
   'properties',
   'python',
   'step',
-  'zip',
 ]
