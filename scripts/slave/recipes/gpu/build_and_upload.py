@@ -52,6 +52,17 @@ def GenTests(api):
     api.platform.name('win')
   )
 
+  # Test that Mac builds on fyi bots link against the OSX 10.10 SDK.
+  yield (
+    api.test('mac_fyi_link_against_10_10') +
+    api.properties.scheduled(
+      build_config='Release',
+      mastername='chromium.gpu.fyi',
+      buildername='mac release builder',
+      buildnumber=572) +
+    api.platform.name('mac')
+  )
+
   yield (
     api.test('compile_with_patch_fail') +
     api.properties.tryserver(
