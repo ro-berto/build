@@ -37,24 +37,6 @@ BUILDERS = freeze({
   },
   'chromium.webkit': {
     'builders': {
-      'Android GN': {
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-        },
-        'gclient_apply_config': ['android', 'blink'],
-      },
-      'Android GN (dbg)': {
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-        },
-        'gclient_apply_config': ['android', 'blink'],
-      },
       'Linux GN': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',

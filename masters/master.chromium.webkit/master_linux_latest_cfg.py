@@ -77,12 +77,6 @@ F('f_linux_gn', m_annotator.BaseFactory('chromium_gn'))
 B('Linux GN (dbg)', 'f_linux_gn', scheduler='global_scheduler')
 F('f_linux_gn_dbg', m_annotator.BaseFactory('chromium_gn'))
 
-B('Android GN', 'f_android_gn', scheduler='global_scheduler')
-F('f_android_gn', m_annotator.BaseFactory('chromium_gn'))
-
-B('Android GN (dbg)', 'f_android_gn', scheduler='global_scheduler')
-F('f_android_gn_dbg', m_annotator.BaseFactory('chromium_gn'))
-
 
 def Update(_config, _active_master, c):
   return helper.Update(c)
