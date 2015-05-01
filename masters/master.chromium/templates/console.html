@@ -289,6 +289,7 @@ document.addEventListener("DOMContentLoaded", SetupView, false);
 <div align="center">
   <table width="95%" class="Grid" border="0" cellspacing="0">
     <tr>
+      <td><div class="bbp_placeholder " id="{{ mastername }}"></div></td>
       <td width="33%" align="left" class="left_align">
 {% if repository %}
         <br><b>Repository:</b> {{ repository|e }}
@@ -372,6 +373,8 @@ document.addEventListener("DOMContentLoaded", SetupView, false);
           <td class='DevSlaveBox'>
             <a href='{{ s.url }}' title='{{ s.pageTitle }}' class='DevSlaveBox {{ s.color }}' target="_blank">
             </a>
+            <div id="{{ mastername }}:{{ s.builderName }}"
+                 class="bbp_placeholder"></div>
           </td>
     {% endfor %}            
         </tr>
@@ -402,6 +405,8 @@ document.addEventListener("DOMContentLoaded", SetupView, false);
             <a href='#' onclick='showBuildBox("{{ b.url }}", event); return false;'
                title='{{ b.pageTitle|e }}' class='DevStatusBox {{ b.color }} {{ b.tag }}'
                target="_blank"></a>
+            <div id="{{ mastername }}:{{ b.builderName }}:{{ b.buildNumber }}"
+                 class="bbp_placeholder"></div>
           </td>
     {% endfor %}    
         </tr>
