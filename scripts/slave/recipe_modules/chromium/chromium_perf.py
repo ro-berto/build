@@ -178,10 +178,10 @@ _AddBotSpec(
 _AddBotSpec(
     name='Win 7 ATI GPU Perf',
     platform='win',
-    parent_builder='Win Builder',
+    parent_builder='Win x64 Builder',
     perf_id='chromium-rel-win7-gpu-ati',
-    target_bits=32,
-    num_shards=1)
+    target_bits=64,
+    num_shards=5)
 _AddBotSpec(
     name='Win 7 Intel GPU Perf',
     platform='win',
@@ -192,10 +192,10 @@ _AddBotSpec(
 _AddBotSpec(
     name='Win 7 Nvidia GPU Perf',
     platform='win',
-    parent_builder='Win Builder',
+    parent_builder='Win x64 Builder',
     perf_id='chromium-rel-win7-gpu-nvidia',
-    target_bits=32,
-    num_shards=1)
+    target_bits=64,
+    num_shards=5)
 _AddBotSpec(
     name='Win 7 Low-End Perf',
     platform='win',
