@@ -59,15 +59,6 @@ BUILDERS = freeze({
   },
   'tryserver.blink': {
     'builders': {
-      'android_chromium_gn_compile_rel': {
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-        },
-        'gclient_apply_config': ['android', 'blink'],
-      },
       'linux_chromium_gn_rel': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
