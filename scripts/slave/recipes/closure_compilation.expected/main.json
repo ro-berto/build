@@ -64,6 +64,15 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/third_party/closure_compiler/compiler_customization_test.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "compiler_customization_test"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "[SLAVE_BUILD]/src/third_party/closure_compiler/compiled_resources.gyp"
     ],

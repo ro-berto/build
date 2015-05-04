@@ -8,6 +8,7 @@ DEPS = [
   'gclient',
   'path',
   'properties',
+  'python',
   'step',
 ]
 
@@ -17,6 +18,12 @@ def GenSteps(api):
   api.chromium.set_config('ninja')
 
   api.bot_update.ensure_checkout(force=True)
+
+  api.python(
+      'compiler_customization_test',
+      api.path['checkout'].join('third_party', 'closure_compiler',
+                                'compiler_customization_test.py')
+  )
 
   api.step(
       'generate_gyp_files',
