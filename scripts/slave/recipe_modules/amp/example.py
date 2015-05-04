@@ -96,6 +96,14 @@ BUILDERS = {
     'api_port': '80',
     'api_protocol': 'http',
   },
+  'network_config_set': {
+    'device_name': ['SampleDevice'],
+    'device_os': ['SampleDeviceOS'],
+    'api_address': '127.0.0.1',
+    'api_port': '80',
+    'api_protocol': 'http',
+    'network_config': 8, # Sprint 4G 1 Bar
+  },
 }
 
 AMP_RESULTS_BUCKET = 'chrome-amp-results'
@@ -117,7 +125,8 @@ def GenSteps(api):
           device_timeout=builder.get('device_timeout', None),
           api_address=builder.get('api_address', None),
           api_port=builder.get('api_port', None),
-          api_protocol=builder.get('api_protocol', None)))
+          api_protocol=builder.get('api_protocol', None),
+          network_config=builder.get('network_config', None)))
 
   api.amp.trigger_test_suite(
       'example_uirobot_suite', 'uirobot',
@@ -130,7 +139,8 @@ def GenSteps(api):
           device_timeout=builder.get('device_timeout', None),
           api_address=builder.get('api_address', None),
           api_port=builder.get('api_port', None),
-          api_protocol=builder.get('api_protocol', None)))
+          api_protocol=builder.get('api_protocol', None),
+          network_config=builder.get('network_config', None)))
 
   api.amp.collect_test_suite(
       'example_gtest_suite', 'gtest',

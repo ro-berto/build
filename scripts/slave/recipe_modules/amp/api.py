@@ -218,7 +218,7 @@ class AmpApi(recipe_api.RecipeApi):
   def amp_arguments(
       self, device_type='Android', device_minimum_os=None, device_name=None,
       device_oem=None, device_os=None, device_timeout=None, api_address=None,
-      api_port=None, api_protocol=None):
+      api_port=None, api_protocol=None, network_config=None):
     """Generate command-line arguments for running tests on AMP.
 
     Args:
@@ -236,6 +236,10 @@ class AmpApi(recipe_api.RecipeApi):
       api_address: The IP address of the AMP API endpoint.
       api_port: The port of the AMP API endpoint.
       api_protocol: The protocol to use to connect to the AMP API endpoint.
+      network_config: Use to have AMP run tests in a simulated network
+        environment. See the availible network environment options at
+        https://appurify.atlassian.net/wiki/display/APD/
+          Run+Configurations+-+Test+and+Network
 
     Returns:
       A list of command-line arguments as strings.
@@ -276,6 +280,9 @@ class AmpApi(recipe_api.RecipeApi):
 
     if device_timeout:
       amp_args += ['--remote-device-timeout', device_timeout]
+
+    if network_config:
+      amp_args += ['--network-config', network_config]
 
     return amp_args
 
