@@ -92,8 +92,12 @@ class ArchiveBuildStep(Test):
 
 
 class SizesStep(Test):
+  def __init__(self, results_url, perf_id):
+    self.results_url = results_url
+    self.perf_id = perf_id
+
   def run(self, api, suffix):
-    return api.chromium.run_sizes()
+    return api.chromium.sizes(self.results_url, self.perf_id)
 
   @staticmethod
   def compile_targets(_):

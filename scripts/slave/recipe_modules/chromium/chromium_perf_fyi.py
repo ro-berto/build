@@ -4,6 +4,7 @@
 
 from . import steps
 
+RESULTS_URL = 'https://chromeperf.appspot.com'
 
 def _GetTargetName(platform, target_bits):
   return ('Release_x64' if platform is 'win' and target_bits is 64
@@ -29,7 +30,7 @@ def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
         'platform': 'linux',
       },
       'perf-id': perf_id,
-      'results-url': 'https://chromeperf.appspot.com',
+        'results-url': RESULTS_URL,
       'tests': [],
     }
   else:
@@ -47,7 +48,7 @@ def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
         'platform': platform,
       },
       'perf-id': perf_id,
-      'results-url': 'https://chromeperf.appspot.com',
+      'results-url': RESULTS_URL,
       'tests': [
         steps.DynamicPerfTests(
             _GetTargetName(platform, target_bits).lower(),
@@ -160,9 +161,9 @@ SPEC = {
         'platform': 'win',
       },
       'tests': {
-        steps.SizesStep()
+        steps.SizesStep(RESULTS_URL, 'win-clang-builder')
       },
-      'chromium_apply_config': ['chromium_perf_fyi']
+      'chromium_apply_config': ['chromium_perf_fyi'],
     },
   },
 }
@@ -207,4 +208,3 @@ _AddBotSpec(
     target_bits=32,
     num_shards=1,
     extra_tests=[steps.AndroidPerfTests('android-nexus5-oilpan', 1)])
-

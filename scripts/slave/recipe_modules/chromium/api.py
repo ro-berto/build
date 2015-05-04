@@ -243,17 +243,6 @@ class ChromiumApi(recipe_api.RecipeApi):
   def test_launcher_filter(self, tests):
     return TestLauncherFilterFileInputPlaceholder(self, tests)
 
-  def run_sizes(self, **kwargs):
-    """Return a sizes.py invocation."""
-    full_args = ['--target', self.c.BUILD_CONFIG,
-                 '--platform', self.c.TARGET_PLATFORM]
-
-    return self.m.python(
-      'sizes',
-      self.m.path['build'].join('scripts', 'slave', 'chromium', 'sizes.py'),
-      full_args,
-      **kwargs)
-
   def runtest(self, test, args=None, xvfb=False, name=None, annotate=None,
               results_url=None, perf_dashboard_id=None, test_type=None,
               generate_json_file=False, results_directory=None,
@@ -372,6 +361,19 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args,
       **kwargs
     )
+
+  def sizes(self, results_url, perf_id, **kwargs):
+    sizes_script = self.m.path['build'].join('scripts', 'slave', 'chromium',
+                                             'sizes.py')
+    args = ['--target', self.c.BUILD_CONFIG,
+            '--platform', self.c.TARGET_PLATFORM]
+
+    revision = self.m.properties.get('got_revision')
+
+    return self.runtest(test=sizes_script, args=args, name='sizes',
+                        results_url=results_url, annotate='graphing',
+                        perf_dashboard_id='sizes', test_type='sizes',
+                        revision=revision, perf_id=perf_id, **kwargs)
 
   @property
   def is_release_build(self):
