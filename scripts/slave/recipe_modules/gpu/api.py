@@ -434,13 +434,12 @@ class GpuApi(recipe_api.RecipeApi):
     # Run the content and media unittests on the FYI bots
     # TODO(jmadill): Run them on all GPU bots once stable
     if self.is_fyi_waterfall:
-      audio_args = [ '--require-audio-hardware-for-testing' ]
       tests.append(self._create_gtest(
           'content_unittests', chrome_revision, webkit_revision,
-          enable_swarming, swarming_dimensions, audio_args))
+          enable_swarming, swarming_dimensions))
       tests.append(self._create_gtest(
           'media_unittests', chrome_revision, webkit_revision, enable_swarming,
-          swarming_dimensions, audio_args))
+          swarming_dimensions))
 
     # Remove empty entries as some tests may be skipped.
     tests = [test for test in tests if test]
