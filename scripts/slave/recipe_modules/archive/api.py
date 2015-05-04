@@ -273,6 +273,7 @@ class ArchiveApi(recipe_api.RecipeApi):
         "/".join([subdir, zip_file_name]),
         args=gs_args,
         metadata=gs_metadata,
+        use_retry_wrapper=False,
     )
     self.m.file.remove(zip_file_name, zip_file)
 
