@@ -3,7 +3,6 @@ setlocal
 title Build slave
 if not exist %~dp0..\..\depot_tools\. (
   echo You must put a copy of depot_tools in %~dp0..\depot_tools
-  echo Did you read the instructions carefully??
   goto :EOF
 )
 set PATH=%~dp0..\..\depot_tools;%PATH%
