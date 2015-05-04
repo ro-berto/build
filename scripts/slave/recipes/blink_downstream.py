@@ -54,6 +54,9 @@ def V8Builder(config, bits, platform):
       'TARGET_BITS': bits,
     },
     'test_args': ['--no-pixel-tests'],
+    'additional_expectations': [
+      'v8', 'tools', 'blink_tests', 'TestExpectations',
+    ],
     'component': {'path': 'src/v8', 'revision': '%s'},
     'testing': {'platform': platform},
   }
@@ -120,8 +123,15 @@ def GenSteps(api):
     api.chromium.runhooks()
     api.chromium.compile()
 
+  extra_args = list(bot_config.get('test_args', []))
+  if bot_config.get('additional_expectations'):
+    extra_args.extend([
+      '--additional-expectations',
+      api.path['checkout'].join(*bot_config['additional_expectations']),
+    ])
+
   tests = [
-    api.chromium.steps.BlinkTest(extra_args=bot_config.get('test_args')),
+    api.chromium.steps.BlinkTest(extra_args=extra_args),
   ]
   api.test_utils.determine_new_failures(api, tests, component_pinned_fn)
 

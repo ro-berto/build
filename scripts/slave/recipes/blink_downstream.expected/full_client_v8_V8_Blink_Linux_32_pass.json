@@ -151,7 +151,9 @@
       "571",
       "--builder-name",
       "V8-Blink Linux 32",
-      "--no-pixel-tests"
+      "--no-pixel-tests",
+      "--additional-expectations",
+      "[SLAVE_BUILD]/src/v8/tools/blink_tests/TestExpectations"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests (with patch)",
