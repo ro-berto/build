@@ -997,7 +997,8 @@
       "[dummy hash for content_unittests]",
       "-I",
       "https://isolateserver.appspot.com",
-      "--"
+      "--",
+      "--require-audio-hardware-for-testing"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "content_unittests"
@@ -1031,7 +1032,8 @@
       "[dummy hash for media_unittests]",
       "-I",
       "https://isolateserver.appspot.com",
-      "--"
+      "--",
+      "--require-audio-hardware-for-testing"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "media_unittests"
