@@ -96,6 +96,17 @@ def _GetTargetEnv(buildername, bot_utils):
   return env
 
 
+def _LogFailingTests(api, deferred):
+  if not deferred.is_ok:
+    error = deferred.get_error()
+    if hasattr(error.result, 'test_utils'):
+      r = error.result.test_utils.test_results
+      p = error.result.presentation
+      p.step_text += api.test_utils.format_step_text([
+        ['unexpected_failures:', r.unexpected_failures.keys()],
+      ])
+
+
 def GenSteps(api):
   # Sync and pull in everything.
   api.gclient.set_config('boringssl')
@@ -127,22 +138,30 @@ def GenSteps(api):
              cwd=build_dir)
   api.python('ninja', go_env, msvc_prefix + ['ninja', '-C', build_dir])
 
-  env = _GetTargetEnv(api.properties['buildername'], bot_utils)
-
-  # Run the unit tests.
-  api.python('unit tests', go_env,
-             msvc_prefix + ['go', 'run', api.path.join('util', 'all_tests.go'),
-              '-json-output', api.test_utils.test_results()],
-             cwd=api.path['checkout'], env=env)
-
-  # Run the SSL tests.
+  # Build the runner.
   runner_dir = api.path['checkout'].join('ssl', 'test', 'runner')
   runner = build_dir.join('runner' + _GetHostExeSuffix(api.platform))
   api.python('build runner.go', go_env, ['go', 'build', '-o', runner],
              cwd=runner_dir)
-  api.step('ssl tests', msvc_prefix + [runner, '-pipe', '-json-output',
+
+  with api.step.defer_results():
+    env = _GetTargetEnv(api.properties['buildername'], bot_utils)
+
+    # Run the unit tests.
+    deferred = api.python('unit tests', go_env,
+                          msvc_prefix + ['go', 'run',
+                                         api.path.join('util', 'all_tests.go'),
+                                         '-json-output',
+                                         api.test_utils.test_results()],
+                          cwd=api.path['checkout'], env=env)
+    _LogFailingTests(api, deferred)
+
+    # Run the SSL tests.
+    deferred = api.step('ssl tests',
+                        msvc_prefix + [runner, '-pipe', '-json-output',
                                        api.test_utils.test_results()],
-           cwd=runner_dir, env=env)
+                        cwd=runner_dir, env=env)
+    _LogFailingTests(api, deferred)
 
 
 def GenTests(api):
@@ -166,3 +185,25 @@ def GenTests(api):
       api.override_step_data('ssl tests',
                              api.test_utils.canned_test_output(True))
     )
+
+  yield (
+    api.test('failed_unit_tests') +
+    api.platform('linux', 64) +
+    api.properties.generic(mastername='client.boringssl', buildername='linux',
+                           slavename='slavename') +
+    api.override_step_data('unit tests',
+                           api.test_utils.canned_test_output(False)) +
+    api.override_step_data('ssl tests',
+                           api.test_utils.canned_test_output(True))
+  )
+
+  yield (
+    api.test('failed_ssl_tests') +
+    api.platform('linux', 64) +
+    api.properties.generic(mastername='client.boringssl', buildername='linux',
+                           slavename='slavename') +
+    api.override_step_data('unit tests',
+                           api.test_utils.canned_test_output(True)) +
+    api.override_step_data('ssl tests',
+                           api.test_utils.canned_test_output(False))
+  )

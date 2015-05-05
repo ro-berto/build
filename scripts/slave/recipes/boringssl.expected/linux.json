@@ -100,6 +100,19 @@
       "-u",
       "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
       "go",
+      "build",
+      "-o",
+      "[SLAVE_BUILD]/boringssl/build/runner"
+    ],
+    "cwd": "[SLAVE_BUILD]/boringssl/ssl/test/runner",
+    "name": "build runner.go"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
+      "go",
       "run",
       "util/all_tests.go",
       "-json-output",
@@ -149,19 +162,6 @@
       "@@@STEP_LOG_LINE@test_utils.test_results@}@@@",
       "@@@STEP_LOG_END@test_utils.test_results@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/boringssl/util/bot/go/env.py",
-      "go",
-      "build",
-      "-o",
-      "[SLAVE_BUILD]/boringssl/build/runner"
-    ],
-    "cwd": "[SLAVE_BUILD]/boringssl/ssl/test/runner",
-    "name": "build runner.go"
   },
   {
     "cmd": [
