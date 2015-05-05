@@ -591,6 +591,7 @@
       "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/nanobench",
       "root@192.168.1.123:/usr/local/skiabot/bin/nanobench"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "scp nanobench"
   },
   {
@@ -608,6 +609,7 @@
       "--nogpu",
       "--dummy-flags"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "nanobench"
   }
 ]

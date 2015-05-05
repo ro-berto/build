@@ -372,6 +372,7 @@
       "--nogpu",
       "--dummy-flags"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "nanobench"
   }
 ]

@@ -537,6 +537,7 @@
       "--nocpu",
       "--dummy-flags"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "SKIA_ANDROID_VERBOSE_SETUP": "1"

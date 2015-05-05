@@ -380,6 +380,7 @@
       "--nocpu",
       "--dummy-flags"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "env": {
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++"
