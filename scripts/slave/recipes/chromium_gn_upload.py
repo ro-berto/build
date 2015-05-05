@@ -20,21 +20,11 @@ DEPS = [
 BUILDERS = freeze({
   'tryserver.chromium.linux': {
     'builders': {
-      'linux_chromium_gn_upload_x64': {
+      'linux_chromium_gn_upload': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
-        },
-
-        # We need this to pull the Linux sysroots.
-        'gclient_apply_config': ['chrome_internal'],
-      },
-      'linux_chromium_gn_upload_x86': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 32,
         },
 
         # We need this to pull the Linux sysroots.
