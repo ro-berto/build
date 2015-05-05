@@ -37,10 +37,12 @@ def Update(c):
     {'name': 'Android Tests (dbg) (L Nexus9)'},
     {
       'name': 'Android GN',
+      'recipe': 'chromium_gn',
       'slavebuilddir': 'android_gn',
     },
     {
       'name': 'Android GN (dbg)',
+      'recipe': 'chromium_gn',
       'slavebuilddir': 'android_gn',
     },
   ]
@@ -48,7 +50,8 @@ def Update(c):
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory('webrtc/chromium'),
+        'factory': m_annotator.BaseFactory(spec.get('recipe',
+                                                    'webrtc/chromium')),
         'category': 'android',
         'notify_on_missing': True,
         'slavebuilddir': spec.get('slavebuilddir', 'android'),

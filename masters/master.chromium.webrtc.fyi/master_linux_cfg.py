@@ -28,10 +28,12 @@ def Update(c):
     {'name': 'Linux'},
     {
        'name': 'Linux GN',
+       'recipe': 'chromium_gn',
        'slavebuilddir': 'linux_gn',
     },
     {
       'name': 'Linux GN (dbg)',
+      'recipe': 'chromium_gn',
       'slavebuilddir': 'linux_gn',
     },
   ]
@@ -39,7 +41,8 @@ def Update(c):
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory('webrtc/chromium'),
+        'factory': m_annotator.BaseFactory(spec.get('recipe',
+                                                    'webrtc/chromium')),
         'category': 'linux',
         'notify_on_missing': True,
         'slavebuilddir': spec.get('slavebuilddir', 'linux'),

@@ -71,12 +71,6 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'chromium_webrtc_tot',
     'compile_targets': ['gtest'],
   },
-  'chromium_webrtc_tot_gn': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['gn'],
-    'gclient_config': 'chromium_webrtc_tot',
-    'compile_targets': ['all'],
-  },
   'chromium_webrtc_android': {
     'chromium_config': 'android',
     'chromium_android_config': 'base_config',
@@ -92,13 +86,6 @@ RECIPE_CONFIGS = freeze({
     'gclient_apply_config': ['android'],
     'compile_targets': ['android_builder_chromium_webrtc'],
     'test_suite': 'chromium',
-  },
-  'chromium_webrtc_tot_android_gn': {
-    'chromium_config': 'android',
-    'chromium_apply_config': ['gn', 'gn_minimal_symbols'],
-    'gclient_config': 'chromium_webrtc_tot',
-    'gclient_apply_config': ['android'],
-    'compile_targets': ['chrome_shell_apk'],
   },
 })
 
@@ -277,26 +264,6 @@ BUILDERS = freeze({
         'parent_buildername': 'Win Builder',
         'testing': {'platform': 'win'},
       },
-      'Win GN': {
-        'recipe_config': 'chromium_webrtc_tot_gn',
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'win'},
-      },
-      'Win GN (dbg)': {
-        'recipe_config': 'chromium_webrtc_tot_gn',
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'win'},
-      },
       'Mac Builder': {
         'recipe_config': 'chromium_webrtc_tot',
         'chromium_config_kwargs': {
@@ -325,24 +292,6 @@ BUILDERS = freeze({
         'parent_buildername': 'Mac Builder',
         'testing': {'platform': 'mac'},
       },
-      'Mac GN': {
-        'recipe_config': 'chromium_webrtc_tot_gn',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
-      'Mac GN (dbg)': {
-        'recipe_config': 'chromium_webrtc_tot_gn',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
       'Linux': {
         'recipe_config': 'chromium_webrtc_tot',
         'chromium_config_kwargs': {
@@ -353,25 +302,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-trunk-tot-rel-linux',
         },
         'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
-      'Linux GN': {
-        'recipe_config': 'chromium_webrtc_tot_gn',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Linux GN (dbg)': {
-        'recipe_config': 'chromium_webrtc_tot_gn',
-        'chromium_apply_config': ['gn_component_build'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
       'Android Builder (dbg)': {
@@ -456,29 +386,6 @@ BUILDERS = freeze({
         'parent_buildername': 'Android Builder ARM64 (dbg)',
         'testing': {'platform': 'linux'},
       },
-      'Android GN': {
-        'recipe_config': 'chromium_webrtc_tot_android_gn',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Android GN (dbg)': {
-        'recipe_config': 'chromium_webrtc_tot_android_gn',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-
     },
   },
   'client.webrtc': {

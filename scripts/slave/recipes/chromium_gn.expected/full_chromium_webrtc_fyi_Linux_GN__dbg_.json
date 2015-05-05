@@ -7,7 +7,7 @@
       "--master",
       "chromium.webrtc.fyi",
       "--builder",
-      "Mac GN",
+      "Linux GN (dbg)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -23,7 +23,8 @@
       "--revision",
       "src/third_party/libjingle/source/talk@HEAD",
       "--revision",
-      "src/third_party/webrtc@HEAD"
+      "src/third_party/webrtc@HEAD",
+      "--force"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
@@ -77,25 +78,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[webrtc]/resources/cleanup_files.py",
-      "[SLAVE_BUILD]/src/out"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clean test output files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/cleanup_temp.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "cleanup_temp"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
@@ -109,14 +91,43 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
       "gen",
-      "//out/Release",
-      "--args=is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[BUILD]/goma\""
+      "-v",
+      "-m",
+      "chromium.webrtc.fyi",
+      "-b",
+      "Linux GN (dbg)",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gn"
+    "name": "generate_build_files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.webrtc.fyi.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "read test spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.webrtc.fyi.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Linux GN (dbg)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -124,19 +135,32 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-dir",
       "[BUILD]/goma",
       "--",
+      "base_unittests",
       "all"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gn.py",
+      "--root=[SLAVE_BUILD]/src",
+      "check",
+      "//out/Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gn check"
   }
 ]

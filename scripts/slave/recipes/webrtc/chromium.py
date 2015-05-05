@@ -51,13 +51,8 @@ def GenSteps(api):
     api.chromium.runhooks()
 
   if webrtc.should_build:
-    run_gn = api.chromium.c.project_generator.tool == 'gn'
-    if run_gn:
-      api.chromium.run_gn(use_goma=True)
-
     webrtc.compile()
     if (api.properties.get('mastername') == 'chromium.webrtc.fyi' and
-        not run_gn and
         api.chromium.c.TARGET_PLATFORM != 'android'):
       webrtc.sizes()
 

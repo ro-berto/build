@@ -30,10 +30,12 @@ def Update(c):
     {'name': 'Win7 Tester'},
     {
       'name': 'Win GN',
+      'recipe': 'chromium_gn',
       'slavebuilddir': 'win_gn',
     },
     {
       'name': 'Win GN (dbg)',
+      'recipe': 'chromium_gn',
       'slavebuilddir': 'win_gn',
     },
   ]
@@ -42,7 +44,7 @@ def Update(c):
       {
         'name': spec['name'],
         'factory': m_annotator.BaseFactory(
-            'webrtc/chromium',
+            spec.get('recipe', 'webrtc/chromium'),
             triggers=spec.get('triggers')),
         'category': 'win',
         'notify_on_missing': True,
