@@ -234,5 +234,36 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ClangToTLinux\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ClangToTLinux\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=sizes",
+      "--perf-id=ClangToTLinux",
+      "--test-type=sizes",
+      "--builder-name=ClangToTLinux",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "--run-python-script",
+      "[BUILD]/scripts/slave/chromium/sizes.py",
+      "--target",
+      "Release",
+      "--platform",
+      "linux"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "sizes"
   }
 ]

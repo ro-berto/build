@@ -4,6 +4,8 @@
 
 from . import steps
 
+RESULTS_URL = 'https://chromeperf.appspot.com'
+
 SPEC = {
   'settings': {
     'build_gs_bucket': 'chromium-fyi-archive',
@@ -967,6 +969,9 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'tests': {
+        steps.SizesStep(RESULTS_URL, 'ClangToTLinux')
+      },
       'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
@@ -1007,6 +1012,9 @@ SPEC = {
       },
       'bot_type': 'builder',
       'testing': { 'platform': 'linux', },
+      'tests': {
+        steps.SizesStep(RESULTS_URL, 'ClangToTLinux (dbg)')
+      },
       'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
@@ -1029,6 +1037,9 @@ SPEC = {
       },
       'bot_type': 'builder',
       'testing': { 'platform': 'linux', },
+      'tests': {
+        steps.SizesStep(RESULTS_URL, 'ClangToTLinuxASan')
+      },
       'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
@@ -1070,6 +1081,9 @@ SPEC = {
       },
       'bot_type': 'builder',
       'testing': { 'platform': 'linux', },
+      'tests': {
+        steps.SizesStep(RESULTS_URL, 'ClangToTAndroidASan')
+      },
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -1090,6 +1104,9 @@ SPEC = {
       },
       'bot_type': 'builder',
       'testing': { 'platform': 'mac', },
+      'tests': {
+        steps.SizesStep(RESULTS_URL, 'ClangToTMac')
+      },
       'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
@@ -1129,6 +1146,9 @@ SPEC = {
       },
       'bot_type': 'builder',
       'testing': { 'platform': 'mac', },
+      'tests': {
+        steps.SizesStep(RESULTS_URL, 'ClangToTMac (dbg)')
+      },
       'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
@@ -1150,6 +1170,9 @@ SPEC = {
       },
       'bot_type': 'builder',
       'testing': { 'platform': 'mac', },
+      'tests': {
+        steps.SizesStep(RESULTS_URL, 'ClangToTMacASan')
+      },
       'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
