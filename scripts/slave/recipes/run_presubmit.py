@@ -70,8 +70,15 @@ def _GenStepsInternal(api):
   else:
     presubmit_args.extend(['--rietveld_email', ''])  # activate anonymous mode
 
+  env = {}
+  if repo_name == 'tools_build':
+    # This should overwrite the existing pythonpath which includes references to
+    # the local build checkout (but the presubmit scripts should only pick up
+    # the scripts from presubmit_tools_build checkout).
+    env['PYTHONPATH'] = ''
+
   api.python('presubmit', api.path['depot_tools'].join('presubmit_support.py'),
-             presubmit_args)
+             presubmit_args, env=env)
 
 
 def GenSteps(api):
@@ -81,16 +88,16 @@ def GenSteps(api):
 
 def GenTests(api):
   # TODO(machenbach): This uses the same tryserver for all repos, which doesn't
-  # reflect reality (cosmetical problem only). It also misses some repos that
-  # use the recipe like tools_build.
-  for repo_name in ['blink', 'chromium', 'v8', 'nacl', 'naclports', 'gyp']:
+  # reflect reality (cosmetical problem only).
+  for repo_name in ['blink', 'chromium', 'v8', 'nacl', 'naclports', 'gyp',
+                    'tools_build']:
     yield (
       api.test(repo_name) +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='chromium_presubmit',
           repo_name=repo_name,
-          patch_project=repo_name) +
+          patch_project=repo_name if repo_name != 'tools_build' else 'tools') +
       api.step_data('presubmit', api.json.output([['chromium_presubmit',
                                                    ['compile']]]))
     )
