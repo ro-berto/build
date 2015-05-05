@@ -935,3 +935,13 @@ def GenTests(api):
                      buildername='android_clang_dbg_recipe',
                      steps=['compile (with patch)', 'compile (without patch)'],
                      tryserver=True)
+
+  yield (
+    api.test('swarming_paths') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.linux',
+      buildername='linux_chromium_rel_ng',
+      path_config='swarming',
+    ) +
+    api.platform.name('linux')
+  )
