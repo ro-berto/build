@@ -325,42 +325,44 @@ class SkiaApi(recipe_api.RecipeApi):
     hashes_file = self.flavor.device_path_join(
         self.device_dirs.tmp_dir, hash_filename)
     use_hash_file = False
-    try:
-      self.m.python.inline(
-          'get uninteresting hashes',
-          """
-          import contextlib
-          import math
-          import socket
-          import sys
-          import time
-          import urllib2
+    self.run(
+        self.m.python.inline,
+        'get uninteresting hashes',
+        program="""
+        import contextlib
+        import math
+        import socket
+        import sys
+        import time
+        import urllib2
 
-          HASHES_URL = 'https://gold.skia.org/2/_/hashes'
-          RETRIES = 5
-          TIMEOUT = 60
-          WAIT_BASE = 15
+        HASHES_URL = 'https://gold.skia.org/2/_/hashes'
+        RETRIES = 5
+        TIMEOUT = 60
+        WAIT_BASE = 15
 
-          socket.setdefaulttimeout(TIMEOUT)
-          for retry in range(RETRIES):
-            try:
+        socket.setdefaulttimeout(TIMEOUT)
+        for retry in range(RETRIES):
+          try:
+            with contextlib.closing(
+                urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:
+              hashes = w.read()
               with open(sys.argv[1], 'w') as f:
-                with contextlib.closing(
-                    urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:
-                  f.write(w.read())
-                  break
-            except:
-              print 'Failed to get uninteresting hashes from %s' % HASHES_URL
-              if retry == RETRIES:
-                raise
-              waittime = WAIT_BASE * math.pow(2, retry)
-              print 'Retry in %d seconds.' % waittime
-              time.sleep(waittime)
-          """,
-          args=[host_hashes_file],
-          cwd=self.skia_dir)
-    except self.m.step.StepFailure:
-      pass
+                f.write(hashes)
+                break
+          except:
+            print 'Failed to get uninteresting hashes from %s' % HASHES_URL
+            if retry == RETRIES:
+              raise
+            waittime = WAIT_BASE * math.pow(2, retry)
+            print 'Retry in %d seconds.' % waittime
+            time.sleep(waittime)
+        """,
+        args=[host_hashes_file],
+        cwd=self.skia_dir,
+        abort_on_failure=False,
+        fail_build_on_failure=False)
+
     if self.m.path.exists(host_hashes_file):
       self.flavor.copy_file_to_device(host_hashes_file, hashes_file)
       use_hash_file = True
