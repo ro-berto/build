@@ -264,6 +264,8 @@ class V8Api(recipe_api.RecipeApi):
     self.revision_number = str(self.m.commit_position.parse_revision(
         self.revision_cp))
 
+    return update_step
+
   def runhooks(self, **kwargs):
     env = {}
     if self.c.gyp_env.AR:
@@ -877,14 +879,16 @@ class V8Api(recipe_api.RecipeApi):
       **kwargs
     ).stdout
 
-  def maybe_trigger(self):
+  def maybe_trigger(self, **additional_properties):
     triggers = self.bot_config.get('triggers')
     if triggers:
+      properties = {
+        'revision': self.revision,
+        'parent_got_revision': self.revision,
+        'parent_got_revision_cp': self.revision_cp,
+      }
+      properties.update(**additional_properties)
       self.m.trigger(*[{
         'builder_name': builder_name,
-        'properties': {
-          'revision': self.revision,
-          'parent_got_revision': self.revision,
-          'parent_got_revision_cp': self.revision_cp,
-        },
+        'properties': properties,
       } for builder_name in triggers])
