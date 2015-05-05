@@ -363,22 +363,24 @@ class V8Api(recipe_api.RecipeApi):
   def run_dynamorio(self):
     return self.m.gclient.c.solutions[-1].name == 'dynamorio'
 
-  def upload_build(self):
+  def upload_build(self, name_suffix='', archive=None):
+    archive = archive or self.GS_ARCHIVES[self.bot_config['build_gs_archive']]
     self.m.archive.zip_and_upload_build(
-          'package build',
+          'package build' + name_suffix,
           self.m.chromium.c.build_config_fs,
-          self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
+          archive,
           src_dir='v8')
 
-  def download_build(self):
+  def download_build(self, name_suffix='', archive=None):
     self.m.file.rmtree(
-          'build directory',
+          'build directory' + name_suffix,
           self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 
+    archive = archive or self.GS_ARCHIVES[self.bot_config['build_gs_archive']]
     self.m.archive.download_and_unzip_build(
-          'extract build',
+          'extract build' + name_suffix,
           self.m.chromium.c.build_config_fs,
-          self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
+          archive,
           src_dir='v8')
 
 
