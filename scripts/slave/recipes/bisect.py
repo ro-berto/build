@@ -222,7 +222,8 @@ def _get_step_data_for_revision(api, revision_data, broken_cp=None,
 def _ensure_checkout(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
-  api.chromium_tests.sync_and_configure_build(mastername, buildername)
+  api.chromium_tests.configure_build(mastername, buildername)
+  api.chromium_tests.prepare_checkout(mastername, buildername)
 
 
 def _gather_reference_range(bisector):

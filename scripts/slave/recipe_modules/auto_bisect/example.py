@@ -28,8 +28,6 @@ DEPS = [
 #
 # More information is available in scripts/slave/README.recipes.md
 def GenSteps(api):
-  # Setting `api.path['checkout']` would ordinarily be done by
-  # `api.chromium_tests.sync_and_configure_build`
   fake_checkout_path = api.path.mkdtemp('fake_checkout')
   api.path['checkout'] = fake_checkout_path
   bisector = api.auto_bisect.create_bisector(api.properties['bisect_config'])

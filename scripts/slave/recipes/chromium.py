@@ -29,8 +29,9 @@ def GenSteps(api):
       mastername]['builders'][buildername]['bot_type'] == 'tester':
     api.bisect_tester.upload_job_url()
 
+  api.chromium_tests.configure_build(mastername, buildername)
   update_step, master_dict, test_spec = \
-      api.chromium_tests.sync_and_configure_build(mastername, buildername)
+      api.chromium_tests.prepare_checkout(mastername, buildername)
   api.chromium_tests.compile(mastername, buildername, update_step, master_dict,
                              test_spec)
   tests = api.chromium_tests.tests_for_builder(

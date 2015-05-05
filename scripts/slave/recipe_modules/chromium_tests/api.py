@@ -33,15 +33,10 @@ RECIPE_CONFIGS = freeze({
 
 
 class ChromiumTestsApi(recipe_api.RecipeApi):
-  def sync_and_configure_build(self, mastername, buildername,
-                               override_bot_type=None,
-                               chromium_apply_config=None):
-    # Make an independent copy so that we don't overwrite global state
-    # with updates made dynamically based on the test specs.
-    master_dict = thaw(self.m.chromium.builders.get(mastername, {}))
-
+  def configure_build(self, mastername, buildername, override_bot_type=None,
+                      chromium_apply_config=None):
+    master_dict = self.m.chromium.builders.get(mastername, {})
     bot_config = master_dict.get('builders', {}).get(buildername)
-    master_config = master_dict.get('settings', {})
 
     # TODO(phajdan.jr): Remove indirect recipe configs completely.
     recipe_config = RECIPE_CONFIGS.get(bot_config.get('recipe_config'), {})
@@ -109,6 +104,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       dep = bot_config.get('set_component_rev')
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
+  def prepare_checkout(self, mastername, buildername):
+    # Make an independent copy so that we don't overwrite global state
+    # with updates made dynamically based on the test specs.
+    master_dict = thaw(self.m.chromium.builders.get(mastername, {}))
+    bot_config = master_dict.get('builders', {}).get(buildername)
+
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
 
@@ -163,6 +164,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium.download_lto_plugin()
 
     return update_step, freeze(master_dict), test_spec
+
+  # TODO(phajdan.jr): Update internal callers and remove this.
+  def sync_and_configure_build(self, mastername, buildername,
+                               override_bot_type=None,
+                               chromium_apply_config=None):  # pragma: no cover
+    self.configure_build(
+        mastername, buildername, override_bot_type=override_bot_type,
+        chromium_apply_config=chromium_apply_config)
+    return self.prepare_checkout(mastername, buildername)
 
   def generate_tests_from_test_spec(self, api, test_spec, builder_dict,
       buildername, mastername, enable_swarming, scripts_compile_targets,

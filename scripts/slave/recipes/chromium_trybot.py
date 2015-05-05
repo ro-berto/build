@@ -334,12 +334,15 @@ def _GenStepsInternal(api):
   if enable_gpu_tests:
     extra_chromium_configs.append('archive_gpu_tests')
 
+  api.chromium_tests.configure_build(
+      bot_config['mastername'],
+      bot_config['buildername'],
+      override_bot_type='builder_tester',
+      chromium_apply_config=extra_chromium_configs)
   bot_update_step, master_dict, test_spec = \
-      api.chromium_tests.sync_and_configure_build(
+      api.chromium_tests.prepare_checkout(
           bot_config['mastername'],
-          bot_config['buildername'],
-          override_bot_type='builder_tester',
-          chromium_apply_config=extra_chromium_configs)
+          bot_config['buildername'])
 
   tests = list(api.chromium_tests.tests_for_builder(
       bot_config['mastername'],
