@@ -171,16 +171,14 @@ def gyp_defs_from_builder_dict(builder_dict):
   return gyp_defs
 
 
-def build_targets(do_test_steps, do_perf_steps):
+def build_targets_from_builder_dict(builder_dict):
   """Return a list of targets to build, depending on the builder type."""
-  targets = []
-  if do_test_steps:
-    targets.append('dm')
-  if do_perf_steps:
-    targets.append('nanobench')
-  if not targets:
-    targets.append('most')
-  return targets
+  if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_TEST:
+    return ['dm', 'nanobench']
+  elif builder_dict['role'] == builder_name_schema.BUILDER_ROLE_PERF:
+    return ['nanobench']
+  else:
+    return ['most']
 
 
 config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, '%(BUILDER_NAME)s')
@@ -190,6 +188,7 @@ config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, '%(BUILDER_NAME)s')
 def skia(c):
   """Base config for Skia."""
   c.builder_cfg = builder_name_schema.DictForBuilderName(c.BUILDER_NAME)
+  c.build_targets = build_targets_from_builder_dict(c.builder_cfg)
   c.role = c.builder_cfg['role']
   if c.role == builder_name_schema.BUILDER_ROLE_HOUSEKEEPER:
     c.configuration = CONFIG_RELEASE
@@ -197,8 +196,9 @@ def skia(c):
     c.configuration = c.builder_cfg.get('configuration', CONFIG_DEBUG)
   c.do_test_steps = c.role == builder_name_schema.BUILDER_ROLE_TEST
   c.do_perf_steps = (c.role == builder_name_schema.BUILDER_ROLE_PERF or
+                     (c.role == builder_name_schema.BUILDER_ROLE_TEST and
+                      c.configuration == CONFIG_DEBUG) or
                      'Valgrind' in c.BUILDER_NAME)
-  c.build_targets = build_targets(c.do_test_steps, c.do_perf_steps)
   c.gyp_env.GYP_DEFINES.update(gyp_defs_from_builder_dict(c.builder_cfg))
   c.slave_cfg = slaves_cfg.get(c.MASTER_NAME)[c.SLAVE_NAME]
   c.is_trybot = builder_name_schema.IsTrybot(c.BUILDER_NAME)

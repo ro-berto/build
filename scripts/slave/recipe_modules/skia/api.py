@@ -437,6 +437,9 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def perf_steps(self):
     """Run Skia benchmarks."""
+    if 'ZeroGPUCache' in self.c.BUILDER_NAME:
+      return
+
     self._run_once(self.install)
     self._run_once(self.download_and_copy_skps)
     is_perf = self.c.role == builder_name_schema.BUILDER_ROLE_PERF

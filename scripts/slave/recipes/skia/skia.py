@@ -48,7 +48,6 @@ def GenTests(api):
     'Build-Ubuntu-GCC-x86_64-Debug',
     'Build-Ubuntu-GCC-x86_64-Release-Mesa',
     'Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release',
-    'Perf-Android-GCC-Nexus9-CPU-Denver-Arm64-Release',
     'Test-ChromeOS-GCC-Daisy-CPU-NEON-Arm7-Release',
     'Perf-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Release-Trybot',
     'Test-Android-GCC-GalaxyS4-GPU-SGX544-Arm7-Debug',

@@ -101,6 +101,19 @@
   },
   {
     "cmd": [
+      "make",
+      "nanobench",
+      "BUILDTYPE=Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "env": {
+      "CHROME_PATH": "/home/chrome-bot/src",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0"
+    },
+    "name": "build nanobench"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
@@ -329,5 +342,36 @@
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "Upload DM Results"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
+      "/path/to/tmp/json",
+      "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "exec nanobench_flags.py",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "catchsegv",
+      "[SLAVE_BUILD]/skia/out/Debug/nanobench",
+      "--undefok",
+      "-i",
+      "[SLAVE_BUILD]/skia/resources",
+      "--skps",
+      "[SLAVE_BUILD]/playback/skps",
+      "--nogpu",
+      "--dummy-flags"
+    ],
+    "name": "nanobench"
   }
 ]
