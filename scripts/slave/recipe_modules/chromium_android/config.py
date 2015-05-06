@@ -35,6 +35,9 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     upload_dest_prefix = Single(basestring, empty_val=''),
     gclient_custom_vars = Dict(value_type=(basestring, types.NoneType)),
     coverage = Single(bool, required=False, empty_val=False),
+    env = ConfigGroup(
+      LLVM_FORCE_HEAD_REVISION = Single(basestring, required=False),
+    ),
   )
 
 
@@ -72,6 +75,10 @@ def clang_asan_release_builder(c):  # pragma: no cover
   c.asan_symbolize = True
   c.storage_bucket = 'chrome-test-builds/android'
   c.upload_dest_prefix = 'asan-android-release-'
+
+@config_ctx(includes=['clang_asan_release_builder'])
+def clang_asan_tot_release_builder(c):  # pragma: no cover
+  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
 
 @config_ctx(config_vars={'BUILD_CONFIG': 'Release'})
 def clang_asan_release_builder_l(c):  # pragma: no cover

@@ -1069,6 +1069,7 @@ SPEC = {
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'android',
         'TARGET_ARCH': 'arm',
         'TARGET_BITS': 32,
       },
@@ -1080,6 +1081,7 @@ SPEC = {
         'clang_use_chrome_plugins': '0',
       },
       'bot_type': 'builder',
+      'android_config': 'clang_asan_tot_release_builder',
       'testing': { 'platform': 'linux', },
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ClangToTAndroidASan')
