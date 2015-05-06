@@ -28,26 +28,6 @@ TIMEOUT_INTERVAL = 60 * 60
 gsutil_path = ''
 
 
-def _is_job_url(url):
-  """Returns True if the URL looks like a Job and not like an image file.
-
-  A file containing the Buildbot URL is expected to be named as a UUID with no
-  extension, unlike an image (a build) which is expected to have an extension.
-  """
-  filename = url.split('/')[-1]
-  if '.' not in filename and len(filename) == 32:
-    try:
-      _ = int(filename, 16)
-      return True
-    except ValueError:
-      pass
-  return False
-
-
-def _is_gs_url(url):
-  return url.lower().startswith('gs://')
-
-
 def _run_gsutil(cmd):
   # Sleep for a short time between gsutil calls
   time.sleep(SHORT_INTERVAL)
@@ -57,20 +37,6 @@ def _run_gsutil(cmd):
     return 0, out
   except subprocess.CalledProcessError as cpe:
     return cpe.returncode, cpe.output
-
-
-def _check_buildbot_job(url):
-  print "Checking buildbot url:", url
-  time.sleep(SHORT_INTERVAL)
-  try:
-    doc = urllib2.urlopen(url).read()
-    build_status_dict = json.loads(doc)
-    if build_status_dict['currentStep'] is None:
-      print url, " finished."
-      return True
-  except Exception:
-    print "Could not retrieve or parse the buildbot url: ", url
-  return False
 
 
 def _gs_file_exists(url):
@@ -92,23 +58,9 @@ def main(argv):
   urls = argv[2:]
   while urls:
     for url in urls:
-      if _is_gs_url(url):
-        if _gs_file_exists(url):
-          if _is_job_url(url):
-            new_url = _run_gsutil(['cat', url])[1]
-            print "Buildbot URL found.", new_url
-            urls.append(new_url)
-            urls.remove(url)
-            continue
-          else:
-            print 'Build finished: ', url
-            return 0
-      else:
-        # Assuming url is buildbot JSON API
-        finished = _check_buildbot_job(url)
-        if finished:
+      if _gs_file_exists(url):
+          print 'Build finished: ', url
           return 0
-
     if time.time() - start_time > TIMEOUT_INTERVAL:
       print "Timed out waiting for: ", urls
       return 1

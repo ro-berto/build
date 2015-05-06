@@ -433,9 +433,7 @@ class Bisector(object):
   def wait_for_all(self, revision_list):
     """Waits for all revisions in list to finish."""
     while any([r.in_progress for r in revision_list]):
-      self.wait_for_any(revision_list)
-      for revision in revision_list:
-        revision.update_status()
+      revision_list.remove(self.wait_for_any(revision_list))
 
   def sleep_until_next_revision_ready(self, revision_list):
     """Produces a single step that sleeps until any revision makes progress.
@@ -449,9 +447,19 @@ class Bisector(object):
       name += ' and %d other revision(s).' % (len(revision_list) - 1)
     script = self.api.resource('wait_for_any.py')
     args_list = [gsutil_path]
-    url_list = [r.get_next_url() for r in revision_list]
+    url_mapping = {r.get_next_url(): r for r in revision_list}
+    url_list = url_mapping.keys()
     args_list += [url for url in url_list if url and url is not None]
-    self.api.m.python(str(name), script, args_list)
+    step_result = self.api.m.python(
+        str(name),
+        script,
+        args_list,
+        stdout=self.api.m.raw_io.output())
+    step_output = step_result.stdout or 'Build finished: Unknown'
+    for line in step_output.splitlines():
+      if line.startswith('Build finished: '):
+        finished_url = line[len('Build finished: '):].strip()
+        return url_mapping.get(finished_url)
 
   def wait_for_any(self, revision_list):
     """Waits for any of the revisions in the list to finish its job(s)."""
@@ -459,10 +467,20 @@ class Bisector(object):
       if not revision_list or not any(
           r.in_progress or r.tested for r in revision_list):  # pragma: no cover
         break
-      self.sleep_until_next_revision_ready(revision_list)
+
+      finished_revision = self.sleep_until_next_revision_ready(revision_list)
+
+      if finished_revision:
+        finished_revision.update_status()
+        if not finished_revision.in_progress:
+          return finished_revision
+        continue  # pragma: no cover
+
+      # If the waiting step didn't specify which revision finished, we check all
+      # of them.
       for revision in revision_list:
         revision.update_status()
-        if revision.tested:
+        if not revision.in_progress:
           return revision
 
   def abort_unnecessary_jobs(self):
@@ -474,12 +492,12 @@ class Bisector(object):
     for r in self.revisions:
       if r == self.lkgr:
         break
-      if not r.tested:
+      if not r.tested or r.failed:
         r.good = True  # pragma: no cover
       if r.in_progress:
         r.abort()  # pragma: no cover
     for r in self.revisions[self.fkbr.list_index + 1:]:
-      if not r.tested:
+      if not r.tested or r.failed:
         r.bad = True  # pragma: no cover
       if r.in_progress:
         r.abort()  # pragma: no cover

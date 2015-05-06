@@ -298,7 +298,8 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision 306475 and 1 other revision(s)."
+    "name": "Waiting for revision 306475 and 1 other revision(s).",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
@@ -315,22 +316,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (3)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "--",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil ls (4)"
   },
   {
     "cmd": [],
@@ -369,23 +354,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil ls (5)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "--",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil ls (6)"
+    "name": "gsutil ls (4)"
   },
   {
     "cmd": [],
@@ -416,11 +385,12 @@
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/bisect-results/e28dc0d49c331def2a3bbf3ddd0096eb51551155-test",
-      "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test"
+      "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results",
+      "gs://chrome-perf/bisect-results/e28dc0d49c331def2a3bbf3ddd0096eb51551155-test.results"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision 306475 and 1 other revision(s). (2)"
+    "name": "Waiting for revision 306475 and 1 other revision(s). (2)",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
@@ -432,23 +402,11 @@
       "--force-version",
       "3.25",
       "--",
-      "cat",
-      "gs://chrome-perf/bisect-results/e28dc0d49c331def2a3bbf3ddd0096eb51551155-test"
+      "ls",
+      "gs://chrome-perf/bisect-results/e28dc0d49c331def2a3bbf3ddd0096eb51551155-test.results"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil Get test status url for build e28dc0d49c331def2a3bbf3ddd0096eb51551155",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[auto_bisect]/resources/check_job_status.py",
-      "dummy/url"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Get test status for build e28dc0d49c331def2a3bbf3ddd0096eb51551155",
-    "stdout": "/path/to/tmp/"
+    "name": "gsutil ls (5)"
   },
   {
     "cmd": [
@@ -471,29 +429,29 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
+      "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "--",
-      "cat",
-      "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test"
+      "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil Get test status url for build a6298e4afedbf2cd461755ea6f45b0ad64222222",
+    "name": "Waiting for revision src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[auto_bisect]/resources/check_job_status.py",
-      "dummy/url"
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "ls",
+      "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Get test status for build a6298e4afedbf2cd461755ea6f45b0ad64222222",
-    "stdout": "/path/to/tmp/"
+    "name": "gsutil ls (6)"
   },
   {
     "cmd": [
@@ -574,7 +532,8 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision 306477"
+    "name": "Waiting for revision 306477",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
@@ -591,22 +550,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (8)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "--",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil ls (9)"
   },
   {
     "cmd": [],
@@ -637,10 +580,11 @@
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test"
+      "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision 306477 (2)"
+    "name": "Waiting for revision 306477 (2)",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
@@ -652,23 +596,11 @@
       "--force-version",
       "3.25",
       "--",
-      "cat",
-      "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test"
+      "ls",
+      "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil Get test status url for build 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[auto_bisect]/resources/check_job_status.py",
-      "dummy/url"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Get test status for build 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
-    "stdout": "/path/to/tmp/"
+    "name": "gsutil ls (9)"
   },
   {
     "cmd": [
@@ -749,7 +681,8 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_fc6dfc7ff5b1073408499478969261b826441144.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision 306476"
+    "name": "Waiting for revision 306476",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
@@ -766,22 +699,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (11)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "--",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_fc6dfc7ff5b1073408499478969261b826441144.zip"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil ls (12)"
   },
   {
     "cmd": [],
@@ -812,10 +729,11 @@
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/bisect-results/fc6dfc7ff5b1073408499478969261b826441144-test"
+      "gs://chrome-perf/bisect-results/fc6dfc7ff5b1073408499478969261b826441144-test.results"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision 306476 (2)"
+    "name": "Waiting for revision 306476 (2)",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
@@ -827,23 +745,11 @@
       "--force-version",
       "3.25",
       "--",
-      "cat",
-      "gs://chrome-perf/bisect-results/fc6dfc7ff5b1073408499478969261b826441144-test"
+      "ls",
+      "gs://chrome-perf/bisect-results/fc6dfc7ff5b1073408499478969261b826441144-test.results"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil Get test status url for build fc6dfc7ff5b1073408499478969261b826441144",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[auto_bisect]/resources/check_job_status.py",
-      "dummy/url"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Get test status for build fc6dfc7ff5b1073408499478969261b826441144",
-    "stdout": "/path/to/tmp/"
+    "name": "gsutil ls (12)"
   },
   {
     "cmd": [

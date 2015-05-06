@@ -1,6 +1,4 @@
-# Copyright 2015 The Chromium Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be
-# found in the LICENSE file.
+# Copyright 2015 The Chromium Authors. All rights reserved.  # Use of this source code is governed by a BSD-style license that can be # found in the LICENSE file.
 
 """An interface for holding state and result of revisions in a bisect job.
 
@@ -19,6 +17,19 @@ from . import depot_config
 
 class RevisionState(object):
   """Abstracts the state of a single revision on a bisect job."""
+
+  # Possible statuses for the revision state to be in:
+  (NEW,  # A revision_state object that has just been initialized.
+   BUILDING,  # Requested a build for this revision, waiting for it.
+   TESTING,  # A test job for this revision was triggered, waiting for it.
+   TESTED,  # The test job completed with non-failing results.
+   FAILED,  # Either the build or the test jobs failed or timed out.
+   ABORTED,  # The build or test job was aborted. (For use in multi-secting).
+   SKIPPED,  # A revision that was not built or tested for a special reason,
+              # such as those ranges that we know are broken, or when nudging
+              # revisions.
+  ) = xrange(7)
+
 
   def __init__(self, revision_string, bisector, depot='chromium',
                dependency_depot_name=None,base_revision=None,
@@ -51,19 +62,17 @@ class RevisionState(object):
     super(RevisionState, self).__init__()
     self.bisector = bisector
     self._good = None
-    self._tested = False
     self.deps = None
     self.build_status_url = None
-    self.in_progress = False
-    self.aborted = False
+    self.test_results_url = None
+    self.build_archived = False
+    self.status = RevisionState.NEW
     self.next_revision = None
     self.previous_revision = None
     self.revision_string = revision_string
     self.build_job_name = None
     self.test_job_name = None
-    self.built = False
     self.patch_file = None
-    self.failed_test = False
     self.deps_revision = None
     if not self.revision_string:
       assert base_revision
@@ -92,16 +101,28 @@ class RevisionState(object):
     self.build_url = self.bisector.get_platform_gs_prefix() + self._gs_suffix()
 
   @property
+  def tested(self):
+    return self.status in  [RevisionState.TESTED]
+
+  @property
+  def in_progress(self):
+    return self.status in (RevisionState.BUILDING, RevisionState.TESTING)
+
+  @property
+  def failed(self):
+    return self.status == RevisionState.FAILED
+
+  @property
+  def aborted(self):
+    return self.status == RevisionState.ABORTED
+
+  @property
   def good(self):
     return self._good == True
 
   @property
   def bad(self):
     return self._good == False
-
-  @property
-  def tested(self):
-    return self._tested
 
   @good.setter
   def good(self, value):
@@ -111,19 +132,17 @@ class RevisionState(object):
   def bad(self, value):
     self._good = not value
 
-  @tested.setter
-  def tested(self, value):
-    self._tested = value
-
   def start_job(self):
     """Starts a build, or a test job if the build is available."""
-    if self._is_build_archived():
-      self.built = True
-      self.in_progress = True
-      self._do_test()
-    elif not self.in_progress:
+    if self.status == RevisionState.NEW and not self._is_build_archived():
       self._request_build()
-      self.in_progress = True
+      self.status = RevisionState.BUILDING
+      return
+
+    if self._is_build_archived() and self.status in [RevisionState.NEW,
+                                                     RevisionState.BUILDING]:
+      self._do_test()
+      self.status = RevisionState.TESTING
 
   def abort(self):  # pragma: no cover
     """Aborts the job.
@@ -133,9 +152,8 @@ class RevisionState(object):
     parallel.
     """
     assert self.in_progress
-    self.in_progress = False
-    self.aborted = True
     # TODO: actually kill buildbot job if it's the test step.
+    self.status = RevisionState.ABORTED
 
   def deps_change(self):
     """Uses `git show` to see if a given commit contains a DEPS change."""
@@ -213,25 +231,30 @@ class RevisionState(object):
     To wait for the test we try to get the buildbot job url from GS, and if
     available, we query the status of such job.
     """
-    if not self.in_progress:
-      return
-    if not self.built:
-      if self._is_build_archived():
-        self.start_job()
-      else:
-        pass  # TODO: Check if build has not timed out.
-      return
-    if not self.build_status_url:
-      self.build_status_url = self._get_build_status_url()
-    if self.build_status_url:
-      if 'Complete' in self._get_build_status():
-        self._read_test_results()
-        self.in_progress = False
+    if self.status == RevisionState.BUILDING and self._is_build_archived():
+      self.start_job()
+    elif self.status == RevisionState.TESTING and self._results_available():
+      self._read_test_results()
+      # We assume _read_test_results may have changed the status to a broken
+      # state such as FAILED or ABORTED.
+      if self.status == RevisionState.TESTING:
+        self.status = RevisionState.TESTED
 
   def _is_build_archived(self):
     """Checks if the revision is already built and archived."""
+    if not self.build_archived:
+      api = self.bisector.api
+      self.build_archived = api.gsutil_file_exists(self.build_url)
+
+    if self.bisector.dummy_builds:
+      self.build_archived = self.in_progress
+
+    return self.build_archived
+
+  def _results_available(self):
+    """Checks if the results for the test job have been uploaded."""
     api = self.bisector.api
-    result = api.gsutil_file_exists(self.build_url)
+    result = api.gsutil_file_exists(self.test_results_url)
     if self.bisector.dummy_builds:
       return self.in_progress
     return result  # pragma: no cover

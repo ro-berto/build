@@ -207,12 +207,6 @@ def _get_step_data_for_revision(api, revision_data, broken_cp=None,
   yield api.step_data(step_name, stdout=api.raw_io.output(json.dumps(
       test_results)))
 
-  step_name = 'Get test status for build ' + commit_hash
-  yield api.step_data(step_name, stdout=api.raw_io.output('Complete'))
-
-  step_name = 'gsutil Get test status url for build ' + commit_hash
-  yield api.step_data(step_name, stdout=api.raw_io.output('dummy/url'))
-
   if 'cl_info' in revision_data:
     step_name = 'Reading culprit cl information.'
     stdout = api.raw_io.output(revision_data['cl_info'])
@@ -230,9 +224,9 @@ def _gather_reference_range(bisector):
   bisector.good_rev.start_job()
   bisector.bad_rev.start_job()
   bisector.wait_for_all([bisector.good_rev, bisector.bad_rev])
-  if bisector.good_rev.failed_test:
+  if bisector.good_rev.failed:
     raise bisector.api.m.step.StepFailure('Testing the "good" revision failed')
-  elif bisector.bad_rev.failed_test:
+  elif bisector.bad_rev.failed:
     raise bisector.api.m.step.StepFailure('Testing the "bad" revision failed')
   else:
     bisector.compute_relative_change()

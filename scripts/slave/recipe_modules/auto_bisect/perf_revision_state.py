@@ -31,9 +31,8 @@ class PerfRevisionState(revision_state.RevisionState):
     # 'mean', 'values', 'std_err' unless the test failed, in which case
     # 'results' will be a string.
     results = results['results']
-    self.tested = True
     if isinstance(results, basestring):
-      self.failed_test = True
+      self.status = PerfRevisionState.FAILED
       return
     self.mean_value = results['mean']
     self.values = results['values']
@@ -128,66 +127,24 @@ class PerfRevisionState(revision_state.RevisionState):
         self.test_job_name):  # pragma: no cover
       return
     step_name = 'Triggering test job for ' + str(self.revision_string)
+    self.test_results_url = (self.bisector.api.GS_RESULTS_URL +
+                             self.test_job_name + '.results')
     api.m.trigger(perf_test_properties, name=step_name)
 
-  def _get_build_status(self):
-    """Queries buildbot through the json API to check if the job is done."""
-    api = self.bisector.api
-    try:
-      stdout = api.m.raw_io.output()
-      name = 'Get test status for build ' + self.commit_hash
-      step_result = api.m.python(name, api.resource('check_job_status.py'),
-                                 args=[self.build_status_url], stdout=stdout)
-    except api.m.step.StepFailure:  # pragma: no cover
-      return None
-    else:
-      return step_result.stdout
-
-  def _get_build_status_url(self):
-    """Fetches the job URL from cloud storage.
-
-    Note that when we post the request for a build or a test to buildbot, the
-    job is not scheduled yet so there's no way to query its status. That's why
-    we have made build and test jobs using the 'chromium' recipe upload a file
-    with their status' URL as soon as possible.
-
-    Returns:
-      The URL (the verbatim content of the file in GS) or None if it could not
-      be read.
-    """
-    api = self.bisector.api
-    url_file_url = api.GS_RESULTS_URL + self.test_job_name
-    try:
-      stdout = api.m.raw_io.output()
-      name = 'Get test status url for build ' + self.commit_hash
-      step_result = api.m.gsutil.cat(url_file_url, stdout=stdout, name=name)
-    except api.m.step.StepFailure:  # pragma: no cover
-      return None
-    else:
-      url = step_result.stdout
-      if 'CACHE_TEST_RESULTS' in os.environ:  # pragma: no cover
-        test_results_cache.save_results(self.test_job_name, url)
-      return url
-
   def get_next_url(self):
-    if not self.in_progress:  # pragma: no cover
-      return None
-    if not self.built:
+    if self.status == PerfRevisionState.BUILDING:
       return self.build_url
-    if not self.build_status_url:
-      # The file that will eventually contain the buildbot job url
-      return self.bisector.api.GS_RESULTS_URL + self.test_job_name
-    return self.build_status_url  # pragma: no cover
+    if self.status == PerfRevisionState.TESTING:
+      return self.test_results_url
 
   def _get_test_results(self):
     """Tries to get the results of a test job from cloud storage."""
     api = self.bisector.api
     job_name = self.test_job_name
-    results_file_url = api.GS_RESULTS_URL + job_name + '.results'
     try:
       stdout = api.m.raw_io.output()
       name = 'Get test results for build ' + self.commit_hash
-      step_result = api.m.gsutil.cat(results_file_url, stdout=stdout,
+      step_result = api.m.gsutil.cat(self.test_results_url, stdout=stdout,
                                      name=name)
     except api.m.step.StepFailure:  # pragma: no cover
       return None

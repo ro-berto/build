@@ -58,11 +58,23 @@ def GenSteps(api):
 
 
 def GenTests(api):
+  wait_for_any_output = (
+      'Build finished: gs://chrome-perf/bisect-results/'
+      'a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results')
   basic_data = _get_basic_test_data()
-  yield _make_test(api, basic_data, 'basic')
+  basic_test = _make_test(api, basic_data, 'basic')
+  basic_test += api.step_data(
+      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      stdout=api.raw_io.output(wait_for_any_output))
+  yield basic_test
 
   failed_data = _get_basic_test_data()
+  failed_data[0].pop('DEPS')
   failed_data[1]['test_results']['results'] = 'Failed test'
+  failed_data[1].pop('DEPS_change')
+  failed_data[1].pop('DEPS')
+  failed_data[1].pop('DEPS_interval')
+  failed_data[0].pop('git_diff')
   yield _make_test(api, failed_data, 'failed_test')
 
   reversed_basic_data = _get_reversed_basic_test_data()
@@ -113,7 +125,7 @@ def _get_basic_test_data():
           'cl_info': 'S3P4R4T0R'.join(['DummyAuthor', 'dummy@nowhere.com',
                                       'Some random CL', '01/01/2015',
                                       'A long description for a CL.\n'
-                                      'Containing multiple lines'])
+                                      'Containing multiple lines']),
       },
       {
           'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
@@ -248,12 +260,6 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
     step_name = 'gsutil Get test results for build ' + commit_hash
     yield api.step_data(step_name, stdout=api.raw_io.output(json.dumps(
         test_results)))
-
-    step_name = 'Get test status for build ' + commit_hash
-    yield api.step_data(step_name, stdout=api.raw_io.output('Complete'))
-
-    step_name = 'gsutil Get test status url for build ' + commit_hash
-    yield api.step_data(step_name, stdout=api.raw_io.output('dummy/url'))
 
     if revision_data.get('DEPS', False):
       step_name = 'git cat-file %s:DEPS' % commit_hash
