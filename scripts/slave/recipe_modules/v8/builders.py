@@ -1622,8 +1622,11 @@ BUILDERS = {
 ####### Waterfall: client.v8.branches
 BRANCH_BUILDERS = {}
 
-def AddBranchBuilder(build_config, arch, bits, presubmit=False):
-  tests = ['unittests', 'v8testing', 'webkit', 'test262', 'mozilla']
+def AddBranchBuilder(build_config, arch, bits, presubmit=False,
+                     unittests_only=False):
+  tests = ['unittests']
+  if not unittests_only:
+    tests += ['v8testing', 'webkit', 'test262', 'mozilla']
   if presubmit:
     tests = ['presubmit'] + tests
   return {
@@ -1647,7 +1650,28 @@ for build_config, name_suffix in (('Release', ''), ('Debug', ' - debug')):
     BRANCH_BUILDERS[name] = AddBranchBuilder(build_config, 'intel', 64)
     name = 'V8 arm - sim - %s%s' % (branch_name, name_suffix)
     BRANCH_BUILDERS[name] = AddBranchBuilder(build_config, 'intel', 32)
-    BRANCH_BUILDERS[name]['chromium_apply_config'] = ['simulate_arm']
+    BRANCH_BUILDERS[name]['chromium_apply_config'].append('simulate_arm')
+
+for branch_name in ('stable branch', 'beta branch'):
+  name = 'V8 mipsel - sim - %s' % branch_name
+  BRANCH_BUILDERS[name] = AddBranchBuilder(
+      'Release', 'intel', 32, unittests_only=True)
+  BRANCH_BUILDERS[name]['chromium_apply_config'].append('simulate_mipsel')
+
+  name = 'V8 mips64el - sim - %s' % branch_name
+  BRANCH_BUILDERS[name] = AddBranchBuilder(
+      'Release', 'intel', 64, unittests_only=True)
+  BRANCH_BUILDERS[name]['chromium_apply_config'].append('simulate_mipsel')
+
+  name = 'V8 ppc - sim - %s' % branch_name
+  BRANCH_BUILDERS[name] = AddBranchBuilder(
+      'Release', 'intel', 32, unittests_only=True)
+  BRANCH_BUILDERS[name]['chromium_apply_config'].append('simulate_ppc')
+
+  name = 'V8 ppc64 - sim - %s' % branch_name
+  BRANCH_BUILDERS[name] = AddBranchBuilder(
+      'Release', 'intel', 64, unittests_only=True)
+  BRANCH_BUILDERS[name]['chromium_apply_config'].append('simulate_ppc')
 
 BUILDERS['client.v8.branches'] = {'builders': BRANCH_BUILDERS}
 
