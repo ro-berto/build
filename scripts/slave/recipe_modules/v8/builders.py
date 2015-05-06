@@ -1627,6 +1627,7 @@ def AddBranchBuilder(build_config, arch, bits, presubmit=False):
   if presubmit:
     tests = ['presubmit'] + tests
   return {
+    'chromium_apply_config': ['v8_goma'],
     'v8_config_kwargs': {
       'BUILD_CONFIG': build_config,
       'TARGET_ARCH': arch,
@@ -1663,6 +1664,10 @@ BUILDERS['client.dart.fyi'] = {'builders': {
     'testing': {'platform': platform},
   } for platform in ('win', 'linux', 'mac')
 }}
+
+dart_linux_release = (
+  BUILDERS['client.dart.fyi']['builders']['v8-linux-release'])
+dart_linux_release['chromium_apply_config'].extend(['v8_goma'])
 
 dart_mac_release = BUILDERS['client.dart.fyi']['builders']['v8-mac-release']
 dart_mac_release['chromium_apply_config'].extend(['v8_ninja', 'clang', 'goma'])
