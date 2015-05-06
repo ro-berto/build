@@ -79,6 +79,7 @@ def Update(_config_arg, _active_master, c):
 
   specs = [
     {'name': 'Android GN', 'recipe': 'chromium_gn'},
+    {'name': 'Android GN (dbg)', 'recipe': 'chromium_gn'},
     {'name': 'Cast Android (dbg)'},
   ]
 
@@ -86,7 +87,7 @@ def Update(_config_arg, _active_master, c):
       SingleBranchScheduler(name='android_gn',
                             branch='master',
                             treeStableTimer=60,
-                            builderNames=['Android GN']),
+                            builderNames=['Android GN', 'Android GN (dbg)']),
   ])
   c['builders'].extend([
       {

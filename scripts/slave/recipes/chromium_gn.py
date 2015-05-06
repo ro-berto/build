@@ -114,6 +114,14 @@ BUILDERS = freeze({
         'should_run_gn_gyp_compare': True,
         'should_run_tests': True,
       },
+      'Linux GN Clobber': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
+        },
+        'force_clobber': True,
+      },
       'Linux GN (dbg)': {
         'chromium_apply_config': ['gn_component_build'],
         'chromium_config_kwargs': {
@@ -435,6 +443,7 @@ def _GenStepsInternal(api):
   buildername = api.properties.get('buildername')
   bot_config = BUILDERS[mastername]['builders'][buildername]
   is_android = ('Android' in buildername or 'android' in buildername)
+  force_clobber = bot_config.get('force_clobber', False)
 
   api.chromium.configure_bot(BUILDERS, ['gn'])
   bot_update_step = api.bot_update.ensure_checkout(
@@ -471,11 +480,13 @@ def _GenStepsInternal(api):
             use_mb=True,
             build_output_dir='//out/%s' % api.chromium.c.build_config_fs)
     if requires_compile:
-      api.chromium.compile(compile_targets)
+      api.chromium.compile(compile_targets,
+                           force_clobber=force_clobber)
     tests = tests_in_compile_targets(api, compile_targets, tests)
   else:
     api.chromium.compile(all_compile_targets(api, tests) +
-                          additional_compile_targets)
+                         additional_compile_targets,
+                         force_clobber=force_clobber)
 
   # TODO(dpranke): Ensure that every bot runs w/ --check, then make
   # it be on by default.

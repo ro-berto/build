@@ -19,6 +19,7 @@ def Update(_config, active_master, c):
           'Linux Builder (dbg)(32)',
           'Linux Builder (dbg)',
           'Linux GN',
+          'Linux GN Clobber',
           'Linux GN (dbg)',
       ]),
       Triggerable(name='linux_rel_trigger', builderNames=[
@@ -42,6 +43,7 @@ def Update(_config, active_master, c):
     {'name': 'Linux Builder (dbg)', 'triggers': ['linux_dbg_trigger']},
     {'name': 'Linux Tests (dbg)(1)'},
     {'name': 'Linux GN', 'recipe': 'chromium_gn'},
+    {'name': 'Linux GN Clobber', 'recipe': 'chromium_gn'},
     {'name': 'Linux GN (dbg)', 'recipe': 'chromium_gn'},
     {'name': 'Cast Linux'},
   ]

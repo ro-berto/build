@@ -79,7 +79,9 @@ SUPPRESSIONS = {
     ],
     'master.chromium.linux': [
         'Android GN',
+        'Android GN (dbg)',
         'Linux GN',
+        'Linux GN Clobber',
         'Linux GN (dbg)',
     ],
     'master.chromium.mac': [
