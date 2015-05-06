@@ -157,6 +157,11 @@ BUILDERS = freeze({
         'buildername': 'Chromium Linux MSan Builder',
         'tester': 'Linux MSan Tests',
       },
+      'linux_chromium_tsan_rel_ng': {
+        'mastername': 'chromium.memory.fyi',
+        'buildername': 'Chromium Linux TSan Builder',
+        'tester': 'Linux TSan Tests',
+      },
       'linux_site_isolation': {
         'mastername': 'chromium.fyi',
         'buildername': 'Site Isolation Linux',
