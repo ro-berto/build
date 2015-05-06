@@ -165,15 +165,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return update_step, freeze(master_dict), test_spec
 
-  # TODO(phajdan.jr): Update internal callers and remove this.
-  def sync_and_configure_build(self, mastername, buildername,
-                               override_bot_type=None,
-                               chromium_apply_config=None):  # pragma: no cover
-    self.configure_build(
-        mastername, buildername, override_bot_type=override_bot_type,
-        chromium_apply_config=chromium_apply_config)
-    return self.prepare_checkout(mastername, buildername)
-
   def generate_tests_from_test_spec(self, api, test_spec, builder_dict,
       buildername, mastername, enable_swarming, scripts_compile_targets,
       generators):
