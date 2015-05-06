@@ -60,6 +60,68 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--apk-under-test",
+      "ApkUnderTest.apk",
+      "--test-apk",
+      "TestApk.apk",
+      "--isolate-file-path",
+      "isolate_file.isolate",
+      "--annotation",
+      "SmallTest",
+      "--enable-platform-mode",
+      "-e",
+      "remote_device",
+      "--api-key-file",
+      "[BUILD]/site_config/.amp_api_key",
+      "--api-secret-file",
+      "[BUILD]/site_config/.amp_api_secret",
+      "--api-address",
+      "127.0.0.1",
+      "--api-port",
+      "80",
+      "--api-protocol",
+      "http",
+      "--device-type",
+      "Android",
+      "--remote-device-os",
+      "SampleDeviceOS",
+      "--trigger",
+      "/path/to/tmp/json",
+      "--verbose"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "[trigger] example_instrumentation_suite",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/example_instrumentation_suite.json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "[trigger] save example_instrumentation_suite data"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "uirobot",
       "--minutes",
       "5",
@@ -218,6 +280,115 @@
     "name": "gsutil [upload logcat] example_gtest_suite",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_gtest_suite_12345abcde.txt@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/example_instrumentation_suite.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "[collect] load example_instrumentation_suite data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--apk-under-test",
+      "ApkUnderTest.apk",
+      "--test-apk",
+      "TestApk.apk",
+      "--enable-platform-mode",
+      "-e",
+      "remote_device",
+      "--api-key-file",
+      "[BUILD]/site_config/.amp_api_key",
+      "--api-secret-file",
+      "[BUILD]/site_config/.amp_api_secret",
+      "--api-address",
+      "127.0.0.1",
+      "--api-port",
+      "80",
+      "--api-protocol",
+      "http",
+      "--device-type",
+      "Android",
+      "--collect",
+      "[TMP_BASE]/amp_trigger_tmp_1/example_instrumentation_suite.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/example_instrumentation_suite/results.zip",
+      "--verbose"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "[collect] example_instrumentation_suite",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/example_instrumentation_suite.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "[upload logcat] load example_instrumentation_suite data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"12345abcde\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[zip]/resources/unzip.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "[upload logcat] unzip results for example_instrumentation_suite",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/example_instrumentation_suite/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/example_instrumentation_suite/results.zip\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "--",
+      "cp",
+      "[TMP_BASE]/amp_results_tmp_2/example_instrumentation_suite/unzipped_results/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_example_instrumentation_suite_12345abcde.txt"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil [upload logcat] example_instrumentation_suite",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_instrumentation_suite_12345abcde.txt@@@"
     ]
   },
   {

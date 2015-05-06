@@ -177,7 +177,8 @@ class AmpApi(recipe_api.RecipeApi):
 
   @recipe_api.non_step
   def instrumentation_test_arguments(
-      self, apk_under_test, test_apk, isolate_file_path=None):
+      self, apk_under_test, test_apk, isolate_file_path=None,
+      annotation=None):
     """Generate command-line arguments for running instrumentation tests.
 
     Args:
@@ -185,6 +186,8 @@ class AmpApi(recipe_api.RecipeApi):
       test_apk: The path to the test APK.
       isolate_file_path: The path to the .isolate file containing data
         dependency information for the test suite.
+      annotation: Comma-separated list of annotations. Will only run
+        tests with any of the given annotations.
 
     Returns:
       A list of command-line arguments as strings.
@@ -195,6 +198,8 @@ class AmpApi(recipe_api.RecipeApi):
     ]
     if isolate_file_path:
       instrumentation_test_args += ['--isolate-file-path', isolate_file_path]
+    if annotation:
+      instrumentation_test_args += ['--annotation', annotation]
     return instrumentation_test_args
 
   @recipe_api.non_step
