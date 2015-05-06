@@ -7,7 +7,9 @@ from slave import recipe_util
 
 from .util import GTestResults, TestResults
 
-from RECIPE_MODULES.json.api import JsonOutputPlaceholder
+# TODO(luqui): Destroy this DEPS hack.
+import DEPS
+JsonOutputPlaceholder = DEPS['json'].api.JsonOutputPlaceholder
 
 class TestResultsOutputPlaceholder(JsonOutputPlaceholder):
   def result(self, presentation, test):

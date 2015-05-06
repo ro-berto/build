@@ -9,7 +9,7 @@ import re
 
 from infra.libs.infra_types import freeze
 from slave import recipe_api
-from slave.recipe_modules.v8 import builders
+from . import builders
 
 
 # Regular expressions for v8 branch names.

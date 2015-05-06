@@ -4,7 +4,8 @@
 
 from slave.recipe_config import BadConf
 
-from RECIPE_MODULES.chromium import CONFIG_CTX
+import DEPS
+CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
 from slave.recipe_config_types import Path
 
 

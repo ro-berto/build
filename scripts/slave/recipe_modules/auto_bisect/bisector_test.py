@@ -7,17 +7,15 @@ import sys
 import unittest
 
 # TODO(robertocn): Use abspath for these, to prevent relative path errors.
-_RECIPE_MODULES_DIR = os.path.join(os.path.dirname(__file__), os.path.pardir)
 # For the importing of mock.
 _ROOT_DIR = os.path.join(os.path.dirname(__file__), os.path.pardir,
                          os.path.pardir, os.path.pardir, os.path.pardir)
 
-sys.path.append(_RECIPE_MODULES_DIR)
 sys.path.append(os.path.join(_ROOT_DIR, 'third_party', 'mock-1.0.1'))
 
 import mock
 
-from auto_bisect.bisector import Bisector
+from .bisector import Bisector
 
 
 class MockRevisionClass(object):  # pragma: no cover

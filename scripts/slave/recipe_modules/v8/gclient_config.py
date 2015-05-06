@@ -2,7 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from RECIPE_MODULES.gclient import CONFIG_CTX
+import DEPS
+CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
 from slave.recipe_config import BadConf
 
 

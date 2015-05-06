@@ -5,7 +5,6 @@
 
 """Recipe module to ensure a checkout is consistant on a bot."""
 
-
 from slave import recipe_api
 from slave import recipe_util
 

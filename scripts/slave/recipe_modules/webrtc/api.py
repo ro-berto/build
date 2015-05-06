@@ -4,7 +4,7 @@
 
 from infra.libs.infra_types import freeze
 from slave import recipe_api
-from slave.recipe_modules.webrtc import builders
+from . import builders
 
 
 class WebRTCApi(recipe_api.RecipeApi):

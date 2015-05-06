@@ -15,6 +15,7 @@ DEPS = [
   'step',
   'test_utils',
   'tryserver',
+  'webrtc',
 ]
 
 

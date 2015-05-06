@@ -8,7 +8,8 @@ from common import cros_chromite
 from slave.recipe_config import config_item_context, ConfigGroup
 from slave.recipe_config import Dict, Single, Set
 
-from RECIPE_MODULES.path import api as path_api
+import DEPS
+path_api = DEPS['path'].api
 
 
 def BaseConfig(**_kwargs):

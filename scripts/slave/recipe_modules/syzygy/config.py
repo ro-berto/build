@@ -6,7 +6,7 @@ import types
 
 from slave.recipe_config import config_item_context, ConfigGroup, Single
 from slave.recipe_config_types import Path
-from RECIPE_MODULES.syzygy import api as syzygy_api
+from . import api as syzygy_api
 
 
 def BaseConfig(**dummy_kwargs):

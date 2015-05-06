@@ -7,7 +7,7 @@ import types
 from slave.recipe_config import config_item_context, ConfigGroup, BadConf
 from slave.recipe_config import ConfigList, Dict, Single, Static, Set, List
 
-from RECIPE_MODULES.gclient import api as gclient_api
+from . import api as gclient_api
 
 
 def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None,
