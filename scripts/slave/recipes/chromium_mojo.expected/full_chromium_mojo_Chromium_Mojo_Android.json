@@ -104,9 +104,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "mojo",
-      "mojo/services:apptests",
-      "mojo/services:tests"
+      "mandoline:all"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
@@ -238,9 +236,31 @@
       "--builder-name=Chromium Mojo Android",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "view_manager_service_unittests"
+      "resource_provider_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "view_manager_service_unittests"
+    "name": "resource_provider_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--test-platform",
+      "android",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Mojo Android\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"recipe\": \"chromium_mojo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Mojo Android\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"recipe\": \"chromium_mojo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--builder-name=Chromium Mojo Android",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "view_manager_unittests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "view_manager_unittests"
   }
 ]
