@@ -197,7 +197,7 @@ class StatusEventLogger(StatusReceiverMultiService):
   def _subprocess_spawn(self, cmd, args):
     """Spawns a subprocess and registers a logging error handler."""
     cmd = chromium_utils.AbsoluteCanonicalPath(cmd)
-    full_cmd = [cmd] + args
+    full_cmd = map(str, [cmd] + args)
 
     if self.log_pipeline_calls:
       twisted_log.msg('Calling %s.' % full_cmd)
