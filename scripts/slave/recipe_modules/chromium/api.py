@@ -362,18 +362,36 @@ class ChromiumApi(recipe_api.RecipeApi):
       **kwargs
     )
 
-  def sizes(self, results_url, perf_id, **kwargs):
+  def sizes(self, results_url=None, perf_id=None, **kwargs):
+    """Return a sizes.py invocation.
+    This uses runtests.py to upload the results to the perf dashboard."""
     sizes_script = self.m.path['build'].join('scripts', 'slave', 'chromium',
                                              'sizes.py')
-    args = ['--target', self.c.BUILD_CONFIG,
-            '--platform', self.c.TARGET_PLATFORM]
+    sizes_args = ['--target', self.c.BUILD_CONFIG,
+                  '--platform', self.c.TARGET_PLATFORM]
 
-    revision = self.m.properties.get('got_revision')
+    run_tests_args = ['--target', self.c.build_config_fs,
+                      '--no-xvfb']
+    run_tests_args.extend(self.m.json.property_args())
+    run_tests_args.extend(['--annotate=graphing',
+                           '--test-type=sizes',
+                           '--builder-name=%s' % self.m.properties['buildername'],
+                           '--slave-name=%s' % self.m.properties['slavename'],
+                           '--build-number=%s' % self.m.properties['buildnumber'],
+                           '--run-python-script'])
 
-    return self.runtest(test=sizes_script, args=args, name='sizes',
-                        results_url=results_url, annotate='graphing',
-                        perf_dashboard_id='sizes', test_type='sizes',
-                        revision=revision, perf_id=perf_id, **kwargs)
+    if perf_id:
+      assert results_url is not None
+      run_tests_args.extend(['--results-url=%s' % results_url,
+                             '--perf-dashboard-id=sizes',
+                             '--perf-id=%s' % perf_id])
+
+
+    full_args = run_tests_args + [sizes_script] + sizes_args
+
+    return self.m.python(
+        'sizes', self.m.path['build'].join('scripts', 'slave', 'runtest.py'),
+        full_args, allow_subannotations=True, **kwargs)
 
   @property
   def is_release_build(self):
