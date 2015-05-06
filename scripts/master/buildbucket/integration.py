@@ -462,7 +462,7 @@ class BuildBucketIntegrator(object):
             yield lease['build_request'].cancel()
 
     batches = []
-    BATCH_SIZE = 50
+    BATCH_SIZE = 25
     while leases:
       batches.append(send(leases[:BATCH_SIZE]))
       leases = leases[BATCH_SIZE:]
