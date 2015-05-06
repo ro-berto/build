@@ -387,11 +387,14 @@ def _GenStepsInternal(api):
     raise exception
 
   def deapply_patch_fn(_failing_steps):
-    bot_update_json = bot_update_step.json.output
+    properties = bot_update_step.json.output['properties']
+    # Use the got_cr_revision property if available. In component-driven
+    # builds it will hold the chromium revision (while got_revision will
+    # hold the revision of the component, e.g. v8).
     api.gclient.c.revisions['src'] = str(
-        bot_update_json['properties']['got_revision'])
+        properties.get('got_cr_revision', properties['got_revision']))
     api.gclient.c.revisions['src/third_party/WebKit'] = str(
-        bot_update_json['properties']['got_webkit_revision'])
+        properties['got_webkit_revision'])
 
     api.bot_update.ensure_checkout(patch=False, force=True)
     api.chromium.runhooks()

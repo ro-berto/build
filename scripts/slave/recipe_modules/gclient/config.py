@@ -268,7 +268,7 @@ def ios(c):
 @config_ctx(includes=['chromium'])
 def show_v8_revision(c):
   # Have the V8 revision appear in the web UI instead of Chromium's.
-  del c.got_revision_mapping['src']
+  c.got_revision_mapping['src'] = 'got_cr_revision'
   c.got_revision_mapping['src/v8'] = 'got_revision'
   # Needed to get the testers to properly sync the right revision.
   c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
