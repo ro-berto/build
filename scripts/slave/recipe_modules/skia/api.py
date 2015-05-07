@@ -10,6 +10,7 @@ from common.skia import global_constants
 from . import android_flavor
 from . import chromeos_flavor
 from . import default_flavor
+from . import ios_flavor
 from . import valgrind_flavor
 from . import xsan_flavor
 
@@ -35,6 +36,11 @@ def is_chromeos(builder_cfg):
           builder_cfg.get('os') == 'ChromeOS')
 
 
+def is_ios(builder_cfg):
+  return ('iOS' in builder_cfg.get('extra_config', '') or
+          builder_cfg.get('os') == 'iOS')
+
+
 def is_valgrind(builder_cfg):
   return 'Valgrind' in builder_cfg.get('extra_config', '')
 
@@ -53,6 +59,8 @@ class SkiaApi(recipe_api.RecipeApi):
       self.flavor = android_flavor.AndroidFlavorUtils(self)
     elif is_chromeos(self.c.builder_cfg):
       self.flavor = chromeos_flavor.ChromeOSFlavorUtils(self)
+    elif is_ios(self.c.builder_cfg):
+      self.flavor = ios_flavor.iOSFlavorUtils(self)
     elif is_valgrind(self.c.builder_cfg):
       self.flavor = valgrind_flavor.ValgrindFlavorUtils(self)
     elif is_xsan(self.c.builder_cfg):

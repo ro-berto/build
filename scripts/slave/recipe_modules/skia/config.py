@@ -41,6 +41,7 @@ VAR_TEST_MAP = {
                    u'Build-Win-MSVC-x86-Release',
                    u'Build-Win-MSVC-x86-Debug-Exceptions',
                    u'Housekeeper-PerCommit',
+                   u'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug',
                    u'Test-Mac10.8-Clang-MacMini4.1-GPU-GeForce320M-x86_64-Release',
                    u'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache',
                    u'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
@@ -173,7 +174,9 @@ def gyp_defs_from_builder_dict(builder_dict):
 
 def build_targets_from_builder_dict(builder_dict):
   """Return a list of targets to build, depending on the builder type."""
-  if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_TEST:
+  if builder_dict['role'] in ('Test', 'Perf') and builder_dict['os'] == 'iOS':
+    return ['iOSShell']
+  elif builder_dict['role'] == builder_name_schema.BUILDER_ROLE_TEST:
     return ['dm', 'nanobench']
   elif builder_dict['role'] == builder_name_schema.BUILDER_ROLE_PERF:
     return ['nanobench']

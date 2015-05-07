@@ -64,6 +64,7 @@ def GenTests(api):
     'Test-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Release',
     'Test-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Release-ANGLE',
     'Test-Win8-MSVC-ShuttleA-CPU-AVX-x86_64-Debug',
+    'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug',
   ]
 
   def AndroidTestData(builder, slave_cfg):
