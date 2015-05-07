@@ -108,6 +108,9 @@
       "[SLAVE_BUILD]\\src"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "LLVM_FORCE_HEAD_REVISION": "YES"
+    },
     "name": "clang_revision"
   },
   {

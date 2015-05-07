@@ -400,8 +400,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       'clang_revision',
       self.m.path['build'].join('scripts', 'slave', 'clang_revision.py'),
       ['--src-dir', self.m.path['checkout']],
-      allow_subannotations = True,
-      **kwargs)
+      allow_subannotations = True, env = self.get_env(), **kwargs)
 
   @property
   def is_release_build(self):

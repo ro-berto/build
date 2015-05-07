@@ -87,6 +87,10 @@
       "[SLAVE_BUILD]/src"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "LLVM_FORCE_HEAD_REVISION": "YES",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "clang_revision"
   },
   {
