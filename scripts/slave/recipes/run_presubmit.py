@@ -12,6 +12,7 @@ DEPS = [
   'python',
   'tryserver',
   'rietveld',
+  'v8',
 ]
 
 
