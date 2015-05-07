@@ -186,7 +186,7 @@ class BisectResults(object):
     self.warnings = bisector.warnings
     self.command = config['command']
     self.metric = config['metric']
-    self.bug_id = config['bug_id']
+    self.bug_id = config.get('bug_id')
     self.good_revision = bisector.good_rev.commit_hash
     self.bad_revision = bisector.bad_rev.commit_hash
     self.results_confidence = bisector.results_confidence
