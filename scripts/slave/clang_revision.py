@@ -19,7 +19,7 @@ def main(argv):
   update_script = os.path.join(os.path.abspath(options.src_dir),
       'tools', 'clang', 'scripts', 'update.py')
   revision = subprocess.check_output(
-      ['python', update_script, '--print-revision'], shell=True)
+      ['python', update_script, '--print-revision'])
   print '@@@SET_BUILD_PROPERTY@clang_revision@"%s"@@@' % revision.rstrip()
 
   return 0
