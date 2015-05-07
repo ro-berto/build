@@ -26,6 +26,12 @@ BUILD_DIR = os.path.abspath(os.path.join(
 ))
 
 
+# We use PlistBuddy, but it is not in $PATH. launchctl on OS X 10.10
+# does not respect $PATH changes, so we can't even force it to be
+# in $PATH. See https://crbug.com/450827.
+PLIST_BUDDY = '/usr/libexec/PlistBuddy'
+
+
 class CallResult(object):
   """A result of call."""
   @property

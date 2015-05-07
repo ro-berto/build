@@ -32,7 +32,7 @@ def check_for_tools():
 
   # A list of tools that should be present in PATH.
   tools = [
-    'PlistBuddy',
+    utils.PLIST_BUDDY,
   ]
 
   def try_call(binary):

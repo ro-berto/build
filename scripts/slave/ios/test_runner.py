@@ -396,7 +396,7 @@ class SimulatorTestRunner(TestRunner):
       raise SimulatorNotFoundError(iossim_path)
 
     self.cfbundleid = utils.call(
-      'PlistBuddy',
+      utils.PLIST_BUDDY,
       '-c', 'Print:CFBundleIdentifier',
       os.path.join(self.app_path, 'Info.plist'),
     ).stdout[0]
@@ -473,7 +473,7 @@ class SimulatorTestRunner(TestRunner):
         if os.path.exists(app_bundle):
           return docs_dir
         elif os.path.exists(metadata_plist) and utils.call(
-          'PlistBuddy',
+          utils.PLIST_BUDDY,
           '-c', 'Print:MCMMetadataIdentifier',
           metadata_plist,
         ).stdout[0] == self.cfbundleid:
