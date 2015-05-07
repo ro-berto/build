@@ -70,8 +70,7 @@ def _GetTargetCMakeArgs(buildername, bot_utils):
     _AppendFlags(args, 'CMAKE_C_FLAGS', '-m32 -msse2')
     _AppendFlags(args, 'CMAKE_ASM_FLAGS', '-m32 -msse2')
   if _HasToken(buildername, 'noasm'):
-    _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-DOPENSSL_NO_ASM')
-    _AppendFlags(args, 'CMAKE_C_FLAGS', '-DOPENSSL_NO_ASM')
+    args['OPENSSL_NO_ASM'] = '1'
   if _HasToken(buildername, 'asan'):
     args['CMAKE_C_COMPILER'] = bot_utils.join('llvm-build', 'bin', 'clang')
     args['CMAKE_CXX_COMPILER'] = bot_utils.join('llvm-build', 'bin', 'clang++')
@@ -170,6 +169,7 @@ def GenTests(api):
     ('linux_shared', api.platform('linux', 64)),
     ('linux32', api.platform('linux', 64)),
     ('linux_noasm_asan', api.platform('linux', 64)),
+    ('linux32_noasm_asan', api.platform('linux', 64)),
     ('mac', api.platform('mac', 64)),
     ('win32', api.platform('win', 64)),
     ('win64', api.platform('win', 64)),
