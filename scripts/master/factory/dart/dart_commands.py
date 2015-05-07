@@ -81,30 +81,12 @@ class DartCommands(commands.FactoryCommands):
     cmd = 'python ' + self._tools_dir + '/build.py --mode=%s' % \
         (options['mode'])
     workdir = self._dart_build_dir
-    is_dartc = (options.get('name') != None and
-                options.get('name').startswith('dartc'))
-    is_dart2dart = (options.get('name') != None and
-                    options.get('name').startswith('dart2dart'))
-    is_new_analyzer = (options.get('name') != None and
-                       options.get('name').startswith('new_analyzer'))
-    is_analyzer_experimental = (options.get('name') != None and
-                                options.get('name')
-                                .startswith('analyzer_experimental'))
-    is_vm = not (is_dartc or is_dart2dart or is_new_analyzer or
-                 is_analyzer_experimental)
-
-    if is_vm:
+    name = options.get('name') or ''
+    is_analyzer = 'analyzer' in name
+    # On the vm bots we only build the runtime target
+    if not is_analyzer:
       cmd += ' --arch=%s' % (options['arch'])
       cmd += ' runtime'
-    elif is_dart2dart:
-      cmd += ' dart2dart_bot'
-    elif is_dartc and options['mode'] == 'debug':
-      # For dartc we always do a full build, except for debug mode
-      # where we will time out doing api docs.
-      cmd += ' dartc_bot'
-    else:
-      # We don't specify a specific target (i.e. we build the all target)
-      pass
 
     self._factory.addStep(shell.ShellCommand,
                           name='build',
@@ -163,37 +145,6 @@ class DartCommands(commands.FactoryCommands):
                             logfiles=self.logfiles,
                             lazylogfiles=True)
 
-  def AddDart2dartTests(self, options, name, timeout):
-    shards = options.get('shards') or 1
-    shard = options.get('shard') or 1
-    cmd = ('python ' + self._tools_dir + '/test.py '
-           ' --progress=buildbot --report --time --mode=%s --arch=%s '
-           ' --compiler=dart2dart --host-checked --dart2js-batch '
-           '--shards=%s --shard=%s %s'
-           ) % (options['mode'], options['arch'], shards, shard,
-                self.standard_flags)
-    self._factory.addStep(shell.ShellCommand,
-                          name='tests',
-                          description='tests',
-                          timeout=timeout,
-                          env=self._custom_env,
-                          haltOnFailure=False,
-                          workdir=self._dart_build_dir,
-                          command=cmd,
-                          logfiles=self.logfiles,
-                          lazylogfiles=True)
-    cmd += ' --minified'
-    self._factory.addStep(shell.ShellCommand,
-                          name='minified tests',
-                          description='minified tests',
-                          timeout=timeout,
-                          env=self._custom_env,
-                          haltOnFailure=False,
-                          workdir=self._dart_build_dir,
-                          command=cmd,
-                          logfiles=self.logfiles,
-                          lazylogfiles=True)
-
   def AddVMTests(self, options, timeout, channel):
     cmd = ('python ' + self._tools_dir + '/test.py '
            ' --progress=line --report --time --mode=%s --arch=%s '
@@ -243,14 +194,10 @@ class DartCommands(commands.FactoryCommands):
   def AddTests(self, options=None, timeout=1200, channel=None):
     options = options or {}
     name = options.get('name') or ''
-    is_dart2dart = name.startswith('dart2dart')
-    is_analyzer = (name.startswith('new_analyzer') or
-                   name.startswith('analyzer_experimental'))
+    is_analyzer = 'analyzer' in name
 
     if is_analyzer:
       self.AddAnalyzerTests(options, name, timeout)
-    elif is_dart2dart:
-      self.AddDart2dartTests(options, name, timeout)
     else:
       self.AddVMTests(options, timeout, channel)
 

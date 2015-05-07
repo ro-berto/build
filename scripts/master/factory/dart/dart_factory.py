@@ -650,8 +650,6 @@ class DartUtils(object):
         base = self.factory_base[platform]
         name = v['name']
         no_annotated = ((name.startswith('vm') or
-                        name.startswith('dart2dart') or
-                        name.startswith('dartc') or
                         name.startswith('new_analyzer') or
                         name.startswith('analyzer_experimental'))
                         and not name.startswith('vm-android')
