@@ -343,6 +343,17 @@
         }
       }
     ],
+    "https://build.chromium.org/p/client.crashpad": [
+      {
+        "builders": {
+          "*": {
+            "closing_optional": [
+              "*"
+            ]
+          }
+        }
+      }
+    ],
     "https://build.chromium.org/p/client.libvpx": [
       {
         "tree_notify": [
