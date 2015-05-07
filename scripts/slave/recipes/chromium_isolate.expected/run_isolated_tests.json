@@ -75,6 +75,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"parent_got_revision\": 123, \"parent_got_swarming_client_revision\": \"ae8085b09e6162b4ec869e430d7d09c16b32b433\", \"parent_got_webkit_revision\": 321, \"recipe\": \"chromium_isolate\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"23f4ed98b3616e695602920b8d6c679091e8d8ce\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"parent_got_revision\": 123, \"parent_got_swarming_client_revision\": \"ae8085b09e6162b4ec869e430d7d09c16b32b433\", \"parent_got_webkit_revision\": 321, \"recipe\": \"chromium_isolate\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"23f4ed98b3616e695602920b8d6c679091e8d8ce\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--step-name=browser_tests",
       "--builder-name=TestBuilder",
       "--slave-name=TestSlavename",
       "--build-number=571",

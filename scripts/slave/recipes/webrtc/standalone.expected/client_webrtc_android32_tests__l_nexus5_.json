@@ -421,6 +421,7 @@
       "--perf-config",
       "{'a_default_rev': 'r_webrtc_rev'}",
       "--test-type=webrtc_perf_tests",
+      "--step-name=webrtc_perf_tests",
       "--builder-name=Android32 Tests (L Nexus5)",
       "--slave-name=slavename",
       "--build-number=1337",

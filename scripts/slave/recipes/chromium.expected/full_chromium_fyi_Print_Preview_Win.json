@@ -175,6 +175,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Print Preview Win\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Print Preview Win\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--step-name=print_preview_tests",
       "--builder-name=Print Preview Win",
       "--slave-name=TestSlavename",
       "--build-number=571",

@@ -312,6 +312,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Win7\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"WebKit Win Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Win7\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"WebKit Win Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"browser_tests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--step-name=webkit_tests",
       "--builder-name=WebKit Win7",
       "--slave-name=TestSlavename",
       "--build-number=571",

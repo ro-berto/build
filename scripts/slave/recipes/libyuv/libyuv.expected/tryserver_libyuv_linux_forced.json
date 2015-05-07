@@ -85,6 +85,7 @@
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"linux\", \"mastername\": \"tryserver.libyuv\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"libyuv/libyuv\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"linux\", \"mastername\": \"tryserver.libyuv\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"libyuv/libyuv\", \"slavename\": \"slavename\"}",
+      "--step-name=libyuv_unittest",
       "--builder-name=linux",
       "--slave-name=slavename",
       "libyuv_unittest"

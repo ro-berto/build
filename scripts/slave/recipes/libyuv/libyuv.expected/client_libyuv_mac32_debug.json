@@ -82,6 +82,7 @@
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Mac32 Debug\", \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Mac32 Debug\", \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--step-name=libyuv_unittest",
       "--builder-name=Mac32 Debug",
       "--slave-name=slavename",
       "libyuv_unittest"

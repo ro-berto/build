@@ -154,6 +154,7 @@
       "--perf-config",
       "{'a_default_rev': 'r_webrtc_rev'}",
       "--test-type=sizes",
+      "--step-name=sizes",
       "--builder-name=Win Builder",
       "--slave-name=TestSlavename",
       "--build-number=571",

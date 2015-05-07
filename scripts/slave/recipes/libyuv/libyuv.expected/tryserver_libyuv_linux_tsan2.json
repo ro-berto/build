@@ -85,6 +85,7 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"linux_tsan2\", \"mastername\": \"tryserver.libyuv\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"linux_tsan2\", \"mastername\": \"tryserver.libyuv\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--step-name=libyuv_unittest",
       "--builder-name=linux_tsan2",
       "--slave-name=slavename",
       "--enable-tsan",

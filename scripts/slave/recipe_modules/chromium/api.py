@@ -285,6 +285,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     # This replaces the step_name that used to be sent via factory_properties.
     if test_type:
       full_args.append('--test-type=%s' % test_type)
+    step_name = name or t_name
+    full_args.append('--step-name=%s' % step_name)
     if generate_json_file:
       full_args.append('--generate-json-file')
     if chartjson_file:
@@ -356,7 +358,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     full_args.extend(args)
 
     return self.m.python(
-      name or t_name,
+      step_name,
       self.m.path['build'].join('scripts', 'slave', 'runtest.py'),
       full_args,
       **kwargs

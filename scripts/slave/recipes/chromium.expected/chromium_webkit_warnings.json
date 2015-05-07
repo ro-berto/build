@@ -170,6 +170,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--step-name=webkit_tests",
       "--builder-name=WebKit Linux",
       "--slave-name=TestSlavename",
       "--build-number=571",

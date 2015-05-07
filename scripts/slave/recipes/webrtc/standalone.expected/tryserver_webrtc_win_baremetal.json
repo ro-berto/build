@@ -114,6 +114,7 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"win_baremetal\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=audio_device_tests",
+      "--step-name=audio_device_tests",
       "--builder-name=win_baremetal",
       "--slave-name=slavename",
       "audio_device_tests.exe"
@@ -144,6 +145,7 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"win_baremetal\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=vie_auto_test",
+      "--step-name=vie_auto_test",
       "--builder-name=win_baremetal",
       "--slave-name=slavename",
       "vie_auto_test.exe",
@@ -167,6 +169,7 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"win_baremetal\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=voe_auto_test",
+      "--step-name=voe_auto_test",
       "--builder-name=win_baremetal",
       "--slave-name=slavename",
       "voe_auto_test.exe",
@@ -198,6 +201,7 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"win_baremetal\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=video_capture_tests",
+      "--step-name=video_capture_tests",
       "--builder-name=win_baremetal",
       "--slave-name=slavename",
       "video_capture_tests.exe"
@@ -219,6 +223,7 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"win_baremetal\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
       "--test-type=webrtc_perf_tests",
+      "--step-name=webrtc_perf_tests",
       "--builder-name=win_baremetal",
       "--slave-name=slavename",
       "webrtc_perf_tests.exe"

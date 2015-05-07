@@ -888,8 +888,15 @@ def _UploadProfilingData(options, args):
   return chromium_utils.RunCommand(cmd)
 
 
-def _UploadGtestJsonSummary(json_path, build_properties, test_exe):
-  """Archives GTest results to Google Storage."""
+def _UploadGtestJsonSummary(json_path, build_properties, test_exe, step_name):
+  """Archives GTest results to Google Storage.
+
+  Args:
+    json_path: path to the json-format output of the gtest.
+    build_properties: the build properties of a build in buildbot.
+    test_exe: the name of the gtest executable.
+    step_name: the name of the buildbot step running the gtest.
+  """
   if not os.path.exists(json_path):
     return
 
@@ -922,12 +929,27 @@ def _UploadGtestJsonSummary(json_path, build_properties, test_exe):
 
   # Use a directory structure that makes it easy to filter by year,
   # month, week and day based just on the file path.
-  raw_json_gs_path = 'gs://chrome-gtest-results/raw/%d/%d/%d/%d/%s.json.gz' % (
+  date_json_gs_path = 'gs://chrome-gtest-results/raw/%d/%d/%d/%d/%s.json.gz' % (
       weekly_timestamp.year,
       weekly_timestamp.month,
       weekly_timestamp.day,
       today.day,
       target_name)
+
+  # Use a directory structure so that the json results could be indexed by
+  # master_name/builder_name/build_number/step_name.
+  master_name = build_properties.get('mastername')
+  builder_name = build_properties.get('buildername')
+  build_number = build_properties.get('buildnumber')
+  buildbot_json_gs_path = ''
+  if master_name and builder_name and build_number is not None and step_name:
+    # build_number could be zero.
+    buildbot_json_gs_path = (
+        'gs://chrome-gtest-results/buildbot/%s/%s/%d/%s.json.gz' % (
+            master_name,
+            builder_name,
+            build_number,
+            step_name))
 
   fd, target_json_path = tempfile.mkstemp()
   try:
@@ -935,7 +957,9 @@ def _UploadGtestJsonSummary(json_path, build_properties, test_exe):
       with gzip.GzipFile(fileobj=f, compresslevel=9) as gzipf:
         gzipf.write(target_json_serialized)
 
-    slave_utils.GSUtilCopy(target_json_path, raw_json_gs_path)
+    slave_utils.GSUtilCopy(target_json_path, date_json_gs_path)
+    if buildbot_json_gs_path:
+      slave_utils.GSUtilCopy(target_json_path, buildbot_json_gs_path)
   finally:
     os.remove(target_json_path)
 
@@ -985,7 +1009,7 @@ def _UploadGtestJsonSummary(json_path, build_properties, test_exe):
                     target_json['build_properties'].get('buildername', ''),
                 'mastername':
                     target_json['build_properties'].get('mastername', ''),
-                'raw_json_gs_path': raw_json_gs_path,
+                'raw_json_gs_path': date_json_gs_path,
                 'timestamp': now.strftime('%Y-%m-%d %H:%M:%S.%f'),
                 'flaky_failures': flaky_failures,
                 'num_successes': num_successes,
@@ -1168,7 +1192,8 @@ def _MainMac(options, args, extra_env):
     if _UsingGtestJson(options):
       _UploadGtestJsonSummary(json_file_name,
                               options.build_properties,
-                              test_exe)
+                              test_exe,
+                              options.step_name)
       log_processor.ProcessJSONFile(options.build_dir)
 
   if options.generate_json_file:
@@ -1432,7 +1457,8 @@ def _MainLinux(options, args, extra_env):
       if json_file_name:
         _UploadGtestJsonSummary(json_file_name,
                                 options.build_properties,
-                                test_exe)
+                                test_exe,
+                                options.step_name)
       log_processor.ProcessJSONFile(options.build_dir)
 
   if options.generate_json_file:
@@ -1548,7 +1574,8 @@ def _MainWin(options, args, extra_env):
     if _UsingGtestJson(options):
       _UploadGtestJsonSummary(json_file_name,
                               options.build_properties,
-                              test_exe)
+                              test_exe,
+                              options.step_name)
       log_processor.ProcessJSONFile(options.build_dir)
 
   if options.enable_pageheap:
@@ -1859,6 +1886,8 @@ def main():
   option_parser.add_option('--build-number', default=None,
                            help=('The build number of the builder running'
                                  'this script.'))
+  option_parser.add_option('--step-name', default=None,
+                           help=('The name of the step running this script.'))
   option_parser.add_option('--test-type', default='',
                            help='The test name that identifies the test, '
                                 'e.g. \'unit-tests\'')
