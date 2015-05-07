@@ -20,7 +20,7 @@ def main(argv):
       'tools', 'clang', 'scripts', 'update.py')
   revision = subprocess.check_output(
       ['python', update_script, '--print-revision'])
-  print '@@@SET_BUILD_PROPERTY@clang_revision@"%s"@@@' % revision.rstrip()
+  print '@@@SET_BUILD_PROPERTY@got_clang_revision@"%s"@@@' % revision.rstrip()
 
   return 0
 
