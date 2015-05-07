@@ -137,16 +137,6 @@ def GenTests(api):
           'analyze',
           retcode=-1))
 
-  # Analyze with python returning bad status on Mac (http://crbug.com/461811).
-  yield (api.test('bad_retcode_is_nonfatal_on_mac') +
-         api.platform.name('mac') +
-         api.properties(
-           matching_exes=[],
-           example_result=1) +
-         api.step_data(
-          'analyze',
-          retcode=-1))
-
   # invalid_targets creates a failure.
   yield (api.test('invalid_targets') +
          api.properties(

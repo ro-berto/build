@@ -170,15 +170,7 @@ class FilterApi(recipe_api.RecipeApi):
               test_output),
             **kwargs)
     except self.m.step.StepFailure as f:
-      # TODO(sky): Make it fatal everywhere, http://crbug.com/461811 .
-      if self.m.platform.is_mac:
-        # Continue on if there is an error executing python. Most likely runhooks
-        # will fail too, but errors there are more well understood than here.
-        self._result = True
-        step_result = f.result
-        step_result.presentation.status = 'WARNING'
-        return
-
+      # TODO(phajdan.jr): De-indent above code and remove trivial try-except.
       raise
 
     if 'error' in step_result.json.output:
