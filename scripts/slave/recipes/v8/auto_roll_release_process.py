@@ -15,6 +15,7 @@ DEPS = [
   'raw_io',
   'step',
   'time',
+  'v8',
 ]
 
 REPO = 'https://chromium.googlesource.com/v8/v8'

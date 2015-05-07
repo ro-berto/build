@@ -15,6 +15,7 @@ DEPS = [
   'python',
   'raw_io',
   'step',
+  'v8',
 ]
 
 BASE_URL = 'https://chromium.googlesource.com'

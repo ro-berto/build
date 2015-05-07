@@ -12,6 +12,7 @@ DEPS = [
   'path',
   'properties',
   'step',
+  'v8',
 ]
 
 def GenSteps(api):
