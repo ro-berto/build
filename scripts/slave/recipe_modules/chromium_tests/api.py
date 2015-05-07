@@ -138,6 +138,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       else:
         self.m.chromium.runhooks()
 
+      if self.m.chromium.c.gyp_env.GYP_DEFINES.get('clang', 0) == 1:
+        # Print the Clang revision after runhooks.
+        self.m.chromium.get_clang_version()
+
     test_spec_file = bot_config.get('testing', {}).get('test_spec_file',
                                                        '%s.json' % mastername)
 

@@ -395,6 +395,14 @@ class ChromiumApi(recipe_api.RecipeApi):
         'sizes', self.m.path['build'].join('scripts', 'slave', 'runtest.py'),
         full_args, allow_subannotations=True, **kwargs)
 
+  def get_clang_version(self, **kwargs):
+    return self.m.python(
+      'clang_revision',
+      self.m.path['build'].join('scripts', 'slave', 'clang_revision.py'),
+      ['--src-dir', self.m.path['checkout']],
+      allow_subannotations = True,
+      **kwargs)
+
   @property
   def is_release_build(self):
     return self.c.BUILD_CONFIG == 'Release'
