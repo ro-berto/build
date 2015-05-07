@@ -3,7 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-""" Prints an annotation with the Clang revision used for the current build."""
+"""Prints an annotation with the Clang revision used for the current build."""
 
 import optparse
 import os
@@ -18,7 +18,8 @@ def main(argv):
 
   update_script = os.path.join(os.path.abspath(options.src_dir),
       'tools', 'clang', 'scripts', 'update.py')
-  revision = subprocess.check_output([update_script, '--print-revision'])
+  revision = subprocess.check_output(
+      ['python', update_script, '--print-revision'], shell=True)
   print '@@@SET_BUILD_PROPERTY@clang_revision@"%s"@@@' % revision.rstrip()
 
   return 0
