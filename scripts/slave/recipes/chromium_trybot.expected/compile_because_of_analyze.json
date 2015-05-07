@@ -227,37 +227,5 @@
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/cleanup_temp.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "cleanup_temp"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--ninja-ensure-up-to-date",
-      "--",
-      "All",
-      "chromium_builder_tests"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "compile (with patch)"
   }
 ]

@@ -832,7 +832,9 @@ def GenTests(api):
     api.test('compile_because_of_analyze_matching_exclusion') +
     props(buildername='linux_chromium_asan_rel') +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({})) +
+    api.override_step_data('read test spec', api.json.output({
+      'gtest_tests': ['base_unittests'],
+    })) +
     suppress_analyze()
   )
 
@@ -846,8 +848,8 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'analyze',
-      api.json.output({'status': 'Found dependency', 'targets': [],
-                       'build_targets': []}))
+      api.json.output({'status': 'Found dependency', 'targets': ['foo'],
+                       'build_targets': ['foo']}))
   )
 
   yield (

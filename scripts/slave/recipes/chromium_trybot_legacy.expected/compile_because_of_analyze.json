@@ -163,17 +163,27 @@
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"foo\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"targets\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"foo\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"foo\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"original_exes\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.matching_exes\": []@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"foo\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.matching_exes\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"foo\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
     ]
@@ -206,7 +216,8 @@
       "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
-      "--"
+      "--",
+      "foo"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile (with patch)"

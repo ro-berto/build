@@ -919,28 +919,6 @@ def GenTests(api):
     api.override_step_data('analyze', api.gpu.analyze_builds_nothing)
   )
 
-  def step_failure(mastername, buildername, steps, tryserver=False):
-    props = api.properties.tryserver if tryserver else api.properties.generic
-    return (
-      api.test('%s_%s_fail_%s' % (
-        _sanitize_nonalpha(mastername),
-        _sanitize_nonalpha(buildername),
-        '_'.join(_sanitize_nonalpha(step) for step in steps))) +
-      props(mastername=mastername, buildername=buildername) +
-      suppress_analyze() +
-      reduce(lambda a, b: a + b,
-             (api.step_data(step, retcode=1) for step in steps))
-    )
-
-  yield step_failure(mastername='tryserver.chromium.linux',
-                     buildername='android_clang_dbg_recipe',
-                     steps=['compile (with patch)'],
-                     tryserver=True)
-  yield step_failure(mastername='tryserver.chromium.linux',
-                     buildername='android_clang_dbg_recipe',
-                     steps=['compile (with patch)', 'compile (without patch)'],
-                     tryserver=True)
-
   yield (
     api.test('swarming_paths') +
     api.properties.tryserver(

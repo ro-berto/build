@@ -592,7 +592,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     step_result = self.m.step.active_result
     step_result.presentation.logs['analyze_details'] = listio.lines
 
-    return True, self.m.filter.matching_exes, compile_targets
+    # Note: due to our custom logic above it's possible we end up with empty
+    # results. In this case we should not compile, because doing so would
+    # use default compile targets (i.e. compile too much).
+    requires_compile = bool(self.m.filter.matching_exes or compile_targets)
+    return requires_compile, self.m.filter.matching_exes, compile_targets
 
   def configure_swarming(self, project_name, precommit, mastername=None):
     """Configures default swarming dimensions and tags.
