@@ -231,6 +231,18 @@
     "name": "clean isolated files"
   },
   {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/clang_revision.py",
+      "--src-dir",
+      "[SLAVE_BUILD]/src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "clang_revision"
+  },
+  {
     "cmd": [
       "python",
       "-u",

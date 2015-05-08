@@ -75,6 +75,18 @@
     "name": "cleanup_temp"
   },
   {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/clang_revision.py",
+      "--src-dir",
+      "[SLAVE_BUILD]/v8"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "clang_revision"
+  },
+  {
     "cmd": [
       "python",
       "-u",

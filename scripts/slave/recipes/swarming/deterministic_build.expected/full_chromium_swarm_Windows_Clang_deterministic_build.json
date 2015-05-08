@@ -85,6 +85,18 @@
     "name": "gclient runhooks"
   },
   {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\clang_revision.py",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "clang_revision"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -189,6 +201,18 @@
       "GYP_DEFINES": "clang=1 component=static_library dont_embed_build_metadata=1 fastbuild=1 target_arch=ia32 test_isolation_mode=prepare"
     },
     "name": "gclient runhooks (2)"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\clang_revision.py",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "clang_revision (2)"
   },
   {
     "cmd": [

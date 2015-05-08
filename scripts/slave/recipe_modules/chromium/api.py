@@ -174,6 +174,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
 
+    if self.c.gyp_env.GYP_DEFINES.get('clang', 0) == 1:
+      # Print the Clang revision before compiling.
+      self.get_clang_version()
+
     args = [
       '--target', self.c.build_config_fs,
       '--src-dir', self.m.path['checkout'],

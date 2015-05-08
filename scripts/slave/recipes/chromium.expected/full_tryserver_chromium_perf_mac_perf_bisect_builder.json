@@ -75,6 +75,15 @@
     "name": "gclient runhooks"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/cleanup_temp.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "cleanup_temp"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -85,15 +94,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "clang_revision"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/cleanup_temp.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "cleanup_temp"
   },
   {
     "cmd": [
