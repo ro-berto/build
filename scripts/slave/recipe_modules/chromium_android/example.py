@@ -63,6 +63,12 @@ BUILDERS = freeze({
         'build': False,
         'skip_wipe': False,
     },
+    'perf_runner_allow_high_battery_temp': {
+        'perf_config': 'sharded_perf_tests.json',
+        'build': False,
+        'skip_wipe': False,
+        'max_battery_temp': 500,
+    },
     'gerrit_try_builder': {
       'build': True,
       'skip_wipe': True,
@@ -116,7 +122,8 @@ def GenSteps(api):
     api.chromium_android.provision_devices(
         skip_wipe=config['skip_wipe'],
         disable_location=config.get('disable_location', False),
-        min_battery_level=config.get('min_battery_level'))
+        min_battery_level=config.get('min_battery_level'),
+        max_battery_temp=config.get('max_battery_temp'))
 
   except api.step.StepFailure as f:
     failure = f

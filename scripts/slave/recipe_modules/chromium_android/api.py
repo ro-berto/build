@@ -294,13 +294,14 @@ class AndroidApi(recipe_api.RecipeApi):
   def detect_and_setup_devices(self, restart_usb=False, skip_wipe=False,
                                disable_location=False, min_battery_level=None,
                                disable_network=False, disable_java_debug=False,
-                               reboot_timeout=None):
+                               reboot_timeout=None, max_battery_temp=None):
     self.authorize_adb_devices()
     self.device_status_check(restart_usb=restart_usb)
     self.provision_devices(
       skip_wipe=skip_wipe, disable_location=disable_location,
       min_battery_level=min_battery_level, disable_network=disable_network,
-      disable_java_debug=disable_java_debug, reboot_timeout=reboot_timeout)
+      disable_java_debug=disable_java_debug, reboot_timeout=reboot_timeout,
+      max_battery_temp=max_battery_temp)
 
   def device_status_check(self, restart_usb=False, **kwargs):
     args = ['--json-output', self.m.json.output()]
@@ -357,7 +358,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def provision_devices(self, skip_wipe=False, disable_location=False,
                         min_battery_level=None, disable_network=False,
                         disable_java_debug=False, reboot_timeout=None,
-                        **kwargs):
+                        max_battery_temp=None, **kwargs):
     args = ['-t', self.m.chromium.c.BUILD_CONFIG]
     if skip_wipe:
       args.append('--skip-wipe')
@@ -376,6 +377,11 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--disable-network')
     if disable_java_debug:
       args.append('--disable-java-debug')
+    if max_battery_temp:
+      assert isinstance(max_battery_temp, int)
+      assert max_battery_temp >= 0
+      assert max_battery_temp <= 500
+      args.extend(['--max-battery-temp', max_battery_temp])
     self.m.python(
       'provision_devices',
       self.m.path['checkout'].join(
