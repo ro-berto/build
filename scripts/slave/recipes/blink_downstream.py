@@ -66,11 +66,15 @@ def V8Builder(config, bits, platform):
 BUILDERS = freeze({
   'client.v8': {
     'builders': {
-      'V8-Blink Win': V8Builder('Release', 32, 'win'),
       'V8-Blink Mac': V8Builder('Release', 64, 'mac'),
       'V8-Blink Linux 32': V8Builder('Release', 32, 'linux'),
       'V8-Blink Linux 64': V8Builder('Release', 64, 'linux'),
       'V8-Blink Linux 64 (dbg)': V8Builder('Debug', 64, 'linux'),
+    },
+  },
+  'client.v8.fyi': {
+    'builders': {
+      'V8-Blink Win': V8Builder('Release', 32, 'win'),
     },
   },
 })
