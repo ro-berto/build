@@ -5,9 +5,9 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "chromium.perf.fyi",
+      "chromium.perf",
       "--builder",
-      "android_arm64_builder",
+      "Android arm64 Builder",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -16,14 +16,10 @@
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/WebKit\": \"got_webkit_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
-      "--issue",
-      "8675309",
-      "--patchset",
-      "1",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@267739"
+      "src@HEAD"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
@@ -69,44 +65,25 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[SLAVE_BUILD]/src/out/Release/debug_info_dumps",
-      "[SLAVE_BUILD]/src/out/Release/test_logs",
-      "[SLAVE_BUILD]/src/out/build_product.zip",
-      "[SLAVE_BUILD]/src"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clean local files",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil, sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1], True)@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[2], True)@@@",
-      "@@@STEP_LOG_LINE@python.inline@try:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.remove(sys.argv[3])@@@",
-      "@@@STEP_LOG_LINE@python.inline@except OSError:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  pass@@@",
-      "@@@STEP_LOG_LINE@python.inline@for base, _dirs, files in os.walk(sys.argv[4]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in files:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    if f.endswith('.pyc'):@@@",
-      "@@@STEP_LOG_LINE@python.inline@      os.remove(os.path.join(base, f))@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm64 use_goma=1",
+      "GYP_DEFINES": "OS=android branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm64 use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/cleanup_temp.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "cleanup_temp"
   },
   {
     "cmd": [
@@ -121,8 +98,12 @@
       "ninja",
       "--compiler",
       "goma",
+      "--mode",
+      "official",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-hermetic",
+      "fallback",
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -132,36 +113,23 @@
     "name": "compile"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/android/archive_build.py",
+      "[BUILD]/scripts/slave/zip_build.py",
       "--target",
       "Release",
-      "--name",
-      "build_product.zip"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "zip_build_product"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "4.7",
-      "--",
-      "cp",
-      "[SLAVE_BUILD]/src/out/build_product.zip",
-      "gs://chrome-perf/android_perf_fyi_rel_arm64/full-build-linux_267739.zip"
+      "--build-url",
+      "gs://chrome-perf/Android arm64 Builder",
+      "--build_revision",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android arm64 Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android arm64 Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil upload_build_product",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/android_perf_fyi_rel_arm64/full-build-linux_267739.zip@@@"
-    ]
+    "name": "package build"
   }
 ]

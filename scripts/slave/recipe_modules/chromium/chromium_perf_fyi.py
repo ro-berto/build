@@ -76,22 +76,6 @@ SPEC = {
     'build_gs_bucket': 'chrome-perf',
   },
   'builders': {
-    'Android Builder 64': {
-      'disable_tests': True,
-      'chromium_config': 'chromium_official',
-      'chromium_apply_config': ['chromium_perf', 'android'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android', 'perf'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_ARCH': 'arm',
-      },
-      'bot_type': 'builder',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'android_oilpan_builder': {
       'disable_tests': True,
       'chromium_config': 'chromium_official',
@@ -193,14 +177,6 @@ _AddBotSpec(
     num_shards=1)
 
 _AddBotSpec(
-    name='Android Nexus9 Perf',
-    platform='android',
-    parent_builder='Android Builder 64',
-    perf_id='android-nexus9',
-    target_bits=64,
-    num_shards=1)
-
-_AddBotSpec(
     name='android_nexus5_oilpan_perf',
     platform='android',
     parent_builder='android_oilpan_builder',
@@ -208,3 +184,4 @@ _AddBotSpec(
     target_bits=32,
     num_shards=1,
     extra_tests=[steps.AndroidPerfTests('android-nexus5-oilpan', 1)])
+

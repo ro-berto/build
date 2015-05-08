@@ -54,11 +54,11 @@ BUILDERS = freeze({
       'num_device_shards': 8,
       'test_spec_file': 'chromium.perf.json',
     },
-    'Android Nexus10 Perf': {
-      'perf_id': 'android-nexus10',
+    'Android Nexus9 Perf': {
+      'perf_id': 'android-nexus9',
       'bucket': 'chrome-perf',
-      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                           api.properties['parent_revision']),
+      'path': lambda api: ('android_perf_rel_arm64/full-build-linux_'
+                           '%s.zip' % api.properties['parent_revision']),
       'num_device_shards': 8,
       'test_spec_file': 'chromium.perf.json',
     },
@@ -69,7 +69,7 @@ BUILDERS = freeze({
                            api.properties['parent_revision']),
       'num_device_shards': 8,
       'test_spec_file': 'chromium.perf.json',
-    },
+    }
   },
   'chromium.perf.fyi': {
     'android_nexus5_oilpan_perf': {
@@ -80,15 +80,6 @@ BUILDERS = freeze({
               api.properties['parent_buildername'],
               api.properties['parent_revision'])),
       'num_device_shards': 1,
-    },
-    'Android Nexus9 Perf': {
-      'recipe_config': 'tests_arm64',
-      'perf_id': 'android-nexus9',
-      'bucket': 'chrome-perf',
-      'path': lambda api: ('android_perf_fyi_rel_arm64/full-build-linux_'
-                           '%s.zip' % api.properties['parent_revision']),
-      'num_device_shards': 8,
-      'test_spec_file': 'chromium.perf.json',
     }
   },
   'client.v8': {

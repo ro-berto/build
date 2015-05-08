@@ -50,19 +50,6 @@ BUILDERS = freeze({
           '%s/build_product_%s.zip' % (api.properties['buildername'],
                                        api.properties['revision'])),
       }
-    },
-    'android_arm64_builder': {
-      'recipe_config': 'arm64_builder',
-      'gclient_apply_config': ['android', 'perf'],
-      'kwargs': {
-        'BUILD_CONFIG': 'Release',
-      },
-      'upload': {
-        'bucket': 'chrome-perf',
-        'path': lambda api: (
-            'android_perf_fyi_rel_arm64/full-build-linux_%s.zip'
-            % api.properties['revision']),
-      }
     }
   },
   'chromium.perf': {
@@ -76,6 +63,19 @@ BUILDERS = freeze({
         'bucket': 'chrome-perf',
         'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
                              % api.properties['revision']),
+      }
+    },
+    'Android arm64 Builder': {
+      'recipe_config': 'arm64_builder',
+      'gclient_apply_config': ['android', 'perf'],
+      'kwargs': {
+        'BUILD_CONFIG': 'Release',
+      },
+      'upload': {
+        'bucket': 'chrome-perf',
+        'path': lambda api: (
+            'android_perf_rel_arm64/full-build-linux_%s.zip'
+            % api.properties['revision']),
       }
     }
   },

@@ -144,6 +144,24 @@ SPEC = {
       ],
       'gclient_apply_config': ['android', 'perf'],
     },
+    'Android arm64 Builder': {
+      'disable_tests': True,
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_ARCH': 'arm',
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'chromium_apply_config': [
+        'chromium_perf', 'android', 'goma_hermetic_fallback',
+      ],
+      'gclient_apply_config': ['android', 'perf'],
+    }
   }
 }
 
@@ -242,9 +260,10 @@ _AndroidSpecs = {
     'perf_id': 'android-nexus7v2',
     'num_device_shards': 8,
   },
-  'Android Nexus10 Perf': {
-    'perf_id': 'android-nexus10',
+  'Android Nexus9 Perf': {
+    'perf_id': 'android-nexus9',
     'num_device_shards': 8,
+    'target_bits': 64
   },
   'Android One Perf': {
     'perf_id': 'android-one',
@@ -252,12 +271,13 @@ _AndroidSpecs = {
   },
 }
 for k, v in _AndroidSpecs.iteritems():
+  bits = v.get('target_bits', 32)
   SPEC['builders'][k] = {
     'disable_tests': True,
     'bot_type': 'tester',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': 32,
+      'TARGET_BITS': bits,
       'TARGET_PLATFORM': 'android',
     },
     'gclient_config': 'perf',
