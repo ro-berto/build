@@ -115,7 +115,7 @@ F('win_asan_rel_prop_codecs', win_out().ChromiumASANFactory(
 ## Mac
 ################################################################################
 
-asan_mac_gyp = 'asan=1 '
+asan_mac_gyp = 'asan=1 v8_enable_verify_heap=1 '
 
 B('Mac', 'mac_full', 'compile|testers', 'chromium_lkgr')
 F('mac_full', mac().ChromiumFactory(
