@@ -4,7 +4,12 @@
 
 from slave import recipe_api
 
+import urllib
+
 class UrlApi(recipe_api.RecipeApi):
+  urlencode = staticmethod(urllib.urlencode)
+
+  @recipe_api.non_step
   def join(self, *parts):
     return '/'.join(str(x).strip('/') for x in parts)
 

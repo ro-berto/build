@@ -12,6 +12,7 @@ DEPS = [
   'python',
   'step',
   'tryserver',
+  'url',
 ]
 
 
@@ -61,6 +62,31 @@ def _BuildSteps(api, buildername, build_type):
              args=['build', build_type] + args,
              env=env)
 
+def _DeviceCheckStep(api):
+  args = ['--json-output', api.json.output(), '--restart-usb']
+  try:
+    result = api.python(
+        'device_status_check',
+        api.path['checkout'].join('build', 'android', 'buildbot',
+                              'bb_device_status_check.py'),
+        args=args,
+        infra_step=True)
+    devices = [d['serial'] for d in result.json.output]
+    result.presentation.step_text = 'Online devices: %s' % len(devices)
+  except api.step.InfraFailure as f:
+    params = {
+      'summary': ('Device Offline on %s %s' %
+                   (api.properties['mastername'], api.properties['slavename'])),
+      'comment': ('Buildbot: %s\n(Please do not change any labels)' %
+                   api.properties['buildername']),
+      'labels': 'Restrict-View-Google,OS-Android,Infra-Client,Infra-Labs',
+    }
+    link = ('https://code.google.com/p/chromium/issues/entry?%s' %
+      api.url.urlencode(params))
+    f.result.presentation.links.update({
+      'report a bug': link
+    })
+    raise
 
 def _GetTestConfig(api):
   buildername = api.properties.get('buildername')
@@ -140,6 +166,10 @@ def GenSteps(api):
   is_asan = 'ASan' in buildername
   is_perf = 'Perf' in buildername
   is_nacl = 'NaCl' in buildername
+
+  if is_android and is_tester:
+    _DeviceCheckStep(api)
+
   upload_binaries = ((is_linux or is_android) and build_type == '--release'
       and not is_try and not is_perf and not is_asan and not is_nacl)
   if not is_tester and not is_linux and not is_win:
@@ -172,7 +202,35 @@ def GenTests(api):
       ['mojo_win_dbg', 'Mojo Win (dbg)'],
       ['mojo_linux_perf', 'Mojo Linux Perf']
   ]
-  for t in tests:
-    yield(api.test(t[0]) + api.properties.generic(buildername=t[1]))
+  for test_name, buildername in tests:
+    test = api.test(test_name) + api.properties.generic(buildername=buildername)
+    if 'Android' in buildername and 'Tests' in buildername:
+      test += api.step_data("device_status_check", api.json.output([{
+              "battery": {
+                  "status": "5",
+                  "scale": "100",
+                  "temperature": "249",
+                  "level": "100",
+                  "AC powered": "false",
+                  "health": "2",
+                  "voltage": "4286",
+                  "Wireless powered": "false",
+                  "USB powered": "true",
+                  "technology": "Li-ion",
+                  "present": "true"
+              },
+              "wifi_ip": "",
+              "imei_slice": "Unknown",
+              "build": "LRX21O",
+              "build_detail":
+                  "google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys",
+              "serial": "07a00ca4",
+              "type": "flo"
+          }]))
+    yield test
   yield(api.test('mojo_linux_try') +
       api.properties.tryserver(buildername="Mojo Linux Try"))
+  yield(api.test('mojo_android_builder_tests_dbg_fail_device_check') +
+      api.properties.tryserver(buildername="Mojo Android Builder Tests (dbg)") +
+      api.step_data("device_status_check", retcode=1))
+
