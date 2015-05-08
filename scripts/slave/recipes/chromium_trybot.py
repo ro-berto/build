@@ -189,6 +189,11 @@ BUILDERS = freeze({
         'buildername': 'Mac Builder',
         'tester': 'Mac10.6 Tests',
       },
+      'mac_chromium_10.10_rel_ng': {
+        'mastername': 'chromium.mac',
+        'buildername': 'Mac Builder',
+        'tester': 'Mac10.10 Tests',
+      },
       'mac_chromium_compile_dbg_ng': {
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder (dbg)',

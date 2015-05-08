@@ -24,6 +24,7 @@ def Update(config, active_master, c):
           'Mac10.6 Tests',
           'Mac10.8 Tests',
           'Mac10.9 Tests',
+          'Mac10.10 Tests',
       ]),
       Triggerable(name='mac_dbg_trigger', builderNames=[
           'Mac10.9 Tests (dbg)',
@@ -37,6 +38,7 @@ def Update(config, active_master, c):
     {'name': 'Mac10.6 Tests'},
     {'name': 'Mac10.8 Tests'},
     {'name': 'Mac10.9 Tests'},
+    {'name': 'Mac10.10 Tests'},
     {
       'name': 'Mac Builder (dbg)',
       'triggers': ['mac_dbg_trigger'],

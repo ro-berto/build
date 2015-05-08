@@ -89,6 +89,23 @@ SPEC = {
         'os': 'Mac-10.9',
       },
     },
+    'Mac10.10 Tests': {
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'Mac Builder',
+      'testing': {
+        'platform': 'mac',
+      },
+    },
     'Mac Builder (dbg)': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
