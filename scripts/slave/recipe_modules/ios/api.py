@@ -264,7 +264,7 @@ class iOSApi(recipe_api.RecipeApi):
         self.m.chromium_tests.analyze(
           affected_files,
           tests,
-          tests,
+          ['all'] + tests,  # https://crbug.com/463676.
           'trybot_analyze_config.json',
           additional_names=['chromium', 'ios'],
         )
