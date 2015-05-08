@@ -46,6 +46,7 @@ def V8Builder(config, bits, platform):
   chromium_configs = []
   if config == 'Debug':
     chromium_configs.append('v8_optimize_medium')
+    chromium_configs.append('v8_slow_dchecks')
   return {
     'gclient_apply_config': ['show_v8_revision'],
     'chromium_apply_config': chromium_configs,
