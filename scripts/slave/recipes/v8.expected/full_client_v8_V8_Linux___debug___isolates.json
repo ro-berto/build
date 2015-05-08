@@ -122,7 +122,6 @@
       "out",
       "--testname",
       "unittests",
-      "--no-variants",
       "--isolates=on",
       "--json-test-results",
       "/path/to/tmp/json"

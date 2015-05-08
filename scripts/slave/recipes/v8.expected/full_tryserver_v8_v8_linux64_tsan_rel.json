@@ -106,7 +106,6 @@
       "out",
       "--testname",
       "unittests",
-      "--no-variants",
       "--flaky-tests=skip",
       "--tsan",
       "--json-test-results",

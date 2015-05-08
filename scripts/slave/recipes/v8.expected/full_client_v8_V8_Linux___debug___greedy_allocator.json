@@ -122,7 +122,6 @@
       "out",
       "--testname",
       "unittests",
-      "--no-variants",
       "--shell_flags=\"--turbo-verify-allocation --turbo-greedy-regalloc\"",
       "--turbo-variant",
       "--json-test-results",

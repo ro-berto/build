@@ -104,7 +104,6 @@
       "out",
       "--testname",
       "unittests",
-      "--no-variants",
       "--no-snap",
       "--shard_count=2",
       "--shard_run=1",

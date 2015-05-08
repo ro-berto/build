@@ -105,7 +105,6 @@
       "out",
       "--testname",
       "unittests",
-      "--no-variants",
       "--no-snap",
       "--msan",
       "--json-test-results",

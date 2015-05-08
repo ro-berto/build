@@ -67,7 +67,6 @@ TEST_CONFIGS = freeze({
   'unittests': {
     'name': 'Unittests',
     'tests': ('unittests'),
-    'test_args': ['--no-variants'],
   },
   'v8testing': {
     'name': 'Check',

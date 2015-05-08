@@ -104,7 +104,6 @@
       "out",
       "--testname",
       "unittests",
-      "--no-variants",
       "--shell_flags=\"--noenable-vfp3\"",
       "--json-test-results",
       "/path/to/tmp/json"

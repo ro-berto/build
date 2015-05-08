@@ -119,7 +119,6 @@
       "out",
       "--testname",
       "unittests",
-      "--no-variants",
       "--no-presubmit",
       "--noi18n",
       "--command_prefix=tools/nacl-run.py",

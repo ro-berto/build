@@ -123,7 +123,6 @@
       "out",
       "--testname",
       "unittests",
-      "--no-variants",
       "--noi18n",
       "--no-snap",
       "--shard_count=2",

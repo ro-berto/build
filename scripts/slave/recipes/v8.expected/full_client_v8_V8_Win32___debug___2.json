@@ -131,7 +131,6 @@
       "build",
       "--testname",
       "unittests",
-      "--no-variants",
       "--shard_count=3",
       "--shard_run=2",
       "--json-test-results",

@@ -106,7 +106,6 @@
       "out",
       "--testname",
       "unittests",
-      "--no-variants",
       "--flaky-tests=skip",
       "--dcheck-always-on",
       "--json-test-results",

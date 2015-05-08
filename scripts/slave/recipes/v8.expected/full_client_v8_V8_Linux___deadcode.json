@@ -122,7 +122,6 @@
       "out",
       "--testname",
       "unittests",
-      "--no-variants",
       "--shell_flags=\"--dead-code-elimination\"",
       "--json-test-results",
       "/path/to/tmp/json"

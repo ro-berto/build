@@ -105,7 +105,6 @@
       "out",
       "--testname",
       "unittests",
-      "--no-variants",
       "--json-test-results",
       "/path/to/tmp/json"
     ],

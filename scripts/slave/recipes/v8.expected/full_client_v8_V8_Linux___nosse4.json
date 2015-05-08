@@ -122,7 +122,6 @@
       "out",
       "--testname",
       "unittests",
-      "--no-variants",
       "--shell_flags=\"--noenable-sse4-1 --noenable-avx\"",
       "--json-test-results",
       "/path/to/tmp/json"

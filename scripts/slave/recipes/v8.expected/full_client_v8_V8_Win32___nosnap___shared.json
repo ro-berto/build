@@ -110,7 +110,6 @@
       "build",
       "--testname",
       "unittests",
-      "--no-variants",
       "--no-snap",
       "--json-test-results",
       "/path/to/tmp/json"
