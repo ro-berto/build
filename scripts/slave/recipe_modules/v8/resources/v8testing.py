@@ -70,6 +70,9 @@ def main():
   option_parser.add_option("--no-variants",
                            default=False, action='store_true',
                            help='Skip testing variants')
+  option_parser.add_option("--turbo-variant",
+                           default=False, action='store_true',
+                           help='Run only turbofan variant')
   option_parser.add_option('--outdir',
                            help='Output directory.')
   option_parser.add_option('--flaky-tests',
@@ -129,6 +132,8 @@ def main():
     cmd.extend(['--no-snap'])
   if options.no_variants:
     cmd.extend(['--no-variants'])
+  if options.turbo_variant:
+    cmd.extend(['--variants=turbofan'])
   if 'benchmarks' in options.testname:
     cmd.extend(['--download-data'])
   if 'test262' in options.testname:

@@ -54,6 +54,7 @@ BUILDERS = {
           'V8 Linux - memcheck',
           'V8 Linux - test262 - debug',
           'V8 Linux - test262-es6 - debug',
+          'V8 Linux - debug - greedy allocator',
         ],
       },
       'V8 Linux - nosnap builder': {
@@ -343,6 +344,18 @@ BUILDERS = {
         'tests': ['mjsunit', 'webkit', 'mozilla', 'test262', 'benchmarks'],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux - debug - greedy allocator': {
+        'v8_apply_config': ['greedy_allocator', 'turbo_variant'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - debug builder',
+        'build_gs_archive': 'linux_dbg_archive',
+        'tests': ['unittests', 'v8testing', 'benchmarks'],
+        'testing': {'platform': 'linux'},
+      },
 ####### Category: Linux64
       'V8 Linux64 - builder': {
         'chromium_apply_config': ['v8_goma'],
@@ -371,6 +384,7 @@ BUILDERS = {
           'V8 Fuzzer',
           'V8 Linux64 - debug',
           'V8 Linux64 - debug - avx2',
+          'V8 Linux64 - debug - greedy allocator',
         ],
       },
       'V8 Linux64 - custom snapshot - debug builder': {
@@ -469,6 +483,18 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux64 - custom snapshot - debug builder',
         'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
         'tests': ['mjsunit'],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux64 - debug - greedy allocator': {
+        'v8_apply_config': ['greedy_allocator', 'turbo_variant'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux64 - debug builder',
+        'build_gs_archive': 'linux64_dbg_archive',
+        'tests': ['unittests', 'v8testing', 'benchmarks'],
         'testing': {'platform': 'linux'},
       },
 ####### Category: Windows

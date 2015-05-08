@@ -100,6 +100,12 @@ def gc_stress(c):
 
 
 @config_ctx()
+def greedy_allocator(c):
+  c.testing.test_args.add(
+      '--shell_flags="--turbo-verify-allocation --turbo-greedy-regalloc"')
+
+
+@config_ctx()
 def isolates(c):
   c.testing.test_args.add('--isolates=on')
 
@@ -171,6 +177,11 @@ def no_harness(c):
 @config_ctx()
 def no_variants(c):
   c.testing.test_args.add('--no-variants')
+
+
+@config_ctx()
+def turbo_variant(c):
+  c.testing.test_args.add('--turbo-variant')
 
 
 @config_ctx()

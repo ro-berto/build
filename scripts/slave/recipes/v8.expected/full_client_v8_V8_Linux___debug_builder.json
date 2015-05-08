@@ -211,10 +211,18 @@
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
         }
+      },
+      {
+        "builder_name": "V8 Linux - debug - greedy allocator",
+        "properties": {
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@V8 GC Stress - 1<br />V8 GC Stress - 2<br />V8 GC Stress - 3<br />V8 Linux - debug<br />V8 Linux - debug - avx2<br />V8 Linux - debug - code serializer<br />V8 Linux - debug - isolates<br />V8 Linux - debug - nosse3<br />V8 Linux - debug - nosse4<br />V8 Linux - memcheck<br />V8 Linux - test262 - debug<br />V8 Linux - test262-es6 - debug@@@"
+      "@@@STEP_TEXT@V8 GC Stress - 1<br />V8 GC Stress - 2<br />V8 GC Stress - 3<br />V8 Linux - debug<br />V8 Linux - debug - avx2<br />V8 Linux - debug - code serializer<br />V8 Linux - debug - greedy allocator<br />V8 Linux - debug - isolates<br />V8 Linux - debug - nosse3<br />V8 Linux - debug - nosse4<br />V8 Linux - memcheck<br />V8 Linux - test262 - debug<br />V8 Linux - test262-es6 - debug@@@"
     ]
   }
 ]
