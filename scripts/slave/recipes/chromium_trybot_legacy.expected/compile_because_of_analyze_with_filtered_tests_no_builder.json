@@ -437,12 +437,12 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
       "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"bd92d7d8b2e1796729890548a7fb5dbf5640a5db\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"212d0eb2385b1eaa828053689225258ece065725\"@@@"
     ]
   },
   {
     "name": "$final_result",
-    "reason": "1 out of 2 aggregated steps failed. Failures: Step('base_unittests') failed with return_code 1",
+    "reason": "1 out of 1 aggregated steps failed. Failures: Step('base_unittests') failed with return_code 1",
     "status_code": 1
   }
 ]

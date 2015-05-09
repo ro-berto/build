@@ -50,11 +50,18 @@
       "true"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "clean up"
+    "name": "bogus"
+  },
+  {
+    "cmd": [
+      "true"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "steps"
   },
   {
     "name": "$final_result",
-    "reason": "1 out of 6 aggregated steps failed. Failures: Step('composite start') failed with return_code 1",
+    "reason": "Step('composite start') failed with return_code 1",
     "status_code": 1
   }
 ]

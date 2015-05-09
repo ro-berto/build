@@ -4,39 +4,36 @@
 
 DEPS = [
   'step',
+  'example',
 ]
 
 from slave import recipe_api
 
-# Just for readability. Don't use global variables in real code.
-API = None
-def step(step_name):
-  API.step(step_name, ['true'])
-
 @recipe_api.composite_step
 def deferrer(api):
   with api.step.defer_results():
-    step('aggregated start')
-    step('aggregated finish')
+    api.example('aggregated start')
+    api.example('aggregated finish')
 
 def normal(api):
-  step('normal start')
-  step('normal finish')
+  api.example('normal start')
+  api.example('normal finish')
 
 @recipe_api.composite_step
 def composite_step(api):
-  step('composite start')
-  step('composite finish')
+  api.example('composite start')
+  api.example('composite finish')
+  return "jane"
 
 def GenSteps(api):
-  global API
-  API = api
   with api.step.defer_results():
-    step('prelude')
+    api.example('prelude')
     deferrer(api)
     normal(api)
-    composite_step(api)
-    step('clean up')
+    rslt = composite_step(api)
+    api.example.explicit_non_composite_step()  # will count as 2 steps
+    api.example(rslt.get_result())
+    api.example('clean up')
 
 
 def GenTests(api):

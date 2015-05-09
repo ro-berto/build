@@ -499,7 +499,6 @@ class AndroidApi(recipe_api.RecipeApi):
     if failures:
       raise self.m.step.StepFailure('sharded perf tests failed %s' % failures)
 
-  @recipe_api.non_step
   def get_instrumentation_suite(self, suite_name):
     for suite in INSTRUMENTATION_TESTS:
       if suite['test'] == suite_name:

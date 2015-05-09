@@ -1487,12 +1487,12 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "process_dumps",
     "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"518a2c58c6dc7a69c0941eb3a3158cd47560631d\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"5591d9786a235947e4df81ccd3d9f3c955b3ca9e\"@@@"
     ]
   },
   {
     "name": "$final_result",
-    "reason": "1 out of 2 aggregated steps failed. Failures: Step('pixel_test on NVIDIA GPU on Windows') failed with return_code 1",
+    "reason": "1 out of 1 aggregated steps failed. Failures: Step('pixel_test on NVIDIA GPU on Windows') failed with return_code 1",
     "status_code": 1
   }
 ]

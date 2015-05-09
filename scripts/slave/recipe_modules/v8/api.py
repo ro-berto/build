@@ -387,7 +387,6 @@ class V8Api(recipe_api.RecipeApi):
 
   # TODO(machenbach): Pass api already in constructor to avoid redundant api
   # parameter passing later.
-  @recipe_api.non_step
   def create_test(self, test):
     """Wrapper that allows to shortcut common tests with their names.
     Returns a runnable test instance.

@@ -3598,12 +3598,12 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
       "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"a770a09e081a720f9c2b673a9b9c157a048e9bb7\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"4cd189d31a78721966a6a6d2208248a1c6db1f3a\"@@@"
     ]
   },
   {
     "name": "$final_result",
-    "reason": "1 out of 2 aggregated steps failed. Failures: Step('pixel_test on Intel GPU on Mac') failed with return_code 1",
+    "reason": "1 out of 1 aggregated steps failed. Failures: Step('pixel_test on Intel GPU on Mac') failed with return_code 1",
     "status_code": 1
   }
 ]

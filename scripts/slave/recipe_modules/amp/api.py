@@ -16,36 +16,29 @@ class AmpApi(recipe_api.RecipeApi):
     """Sets up necessary configs."""
     self.m.chromium_android.set_config('base_config')
 
-  @recipe_api.non_step
   def _get_trigger_dir(self):
     if not self._trigger_file_dir:
       self._trigger_file_dir = self.m.path.mkdtemp('amp_trigger')
     return self._trigger_file_dir
 
-  @recipe_api.non_step
   def _get_trigger_file_for_suite(self, suite):
     return self._get_trigger_dir().join('%s.json' % suite)
 
-  @recipe_api.non_step
   def _get_results_dir(self, suite):
     if not self._base_results_dir:
       self._base_results_dir = self.m.path.mkdtemp('amp_results')
     return self._base_results_dir.join(suite)
 
-  @recipe_api.non_step
   def _get_results_zip_path(self, suite):
     return self._get_results_dir(suite).join('results.zip')
 
-  @recipe_api.non_step
   def _get_results_unzipped_path(self, suite):
     return self._get_results_dir(suite).join('unzipped_results')
 
-  @recipe_api.non_step
   def _get_results_logcat_path(self, suite):
     return self._get_results_unzipped_path(suite).join(
         'appurify_results', 'logcat.txt')
 
-  @recipe_api.composite_step
   def trigger_test_suite(
       self, suite, test_type, test_type_args, amp_args, verbose=True):
     args = ([test_type] + test_type_args + amp_args
@@ -157,7 +150,6 @@ class AmpApi(recipe_api.RecipeApi):
       step_result.presentation.status = self.m.step.EXCEPTION
       step_result.presentation.step_text = 'unable to find test run id'
 
-  @recipe_api.non_step
   def gtest_arguments(
       self, suite, isolate_file_path=None):
     """Generate command-line arguments for running gtests.
@@ -175,7 +167,6 @@ class AmpApi(recipe_api.RecipeApi):
       gtest_args += ['--isolate-file-path', isolate_file_path]
     return gtest_args
 
-  @recipe_api.non_step
   def instrumentation_test_arguments(
       self, apk_under_test, test_apk, isolate_file_path=None,
       annotation=None):
@@ -202,7 +193,6 @@ class AmpApi(recipe_api.RecipeApi):
       instrumentation_test_args += ['--annotation', annotation]
     return instrumentation_test_args
 
-  @recipe_api.non_step
   def uirobot_arguments(self, app_under_test=None, minutes=5):
     """Generate command-line arguments for running uirobot tests.
 
@@ -219,7 +209,6 @@ class AmpApi(recipe_api.RecipeApi):
       uirobot_args += ['--app-under-test', app_under_test]
     return uirobot_args
 
-  @recipe_api.non_step
   def amp_arguments(
       self, device_type='Android', device_minimum_os=None, device_name=None,
       device_oem=None, device_os=None, device_timeout=None, api_address=None,

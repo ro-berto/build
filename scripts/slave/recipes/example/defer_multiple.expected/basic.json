@@ -53,6 +53,27 @@
       "true"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "name": "bogus"
+  },
+  {
+    "cmd": [
+      "true"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "steps"
+  },
+  {
+    "cmd": [
+      "true"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "jane"
+  },
+  {
+    "cmd": [
+      "true"
+    ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "clean up"
   }
 ]
