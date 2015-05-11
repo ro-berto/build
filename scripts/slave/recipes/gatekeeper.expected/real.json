@@ -125,7 +125,8 @@
       "@@@STEP_LOG_LINE@json.output@  \"v8\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"v8_build_db.json\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.v8\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.v8.fyi\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"open-tree\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"password-file\": \"/creds/gatekeeper/v8_status_password\", @@@",
@@ -295,7 +296,8 @@
       "v8_build_db.json",
       "--password-file",
       "/creds/gatekeeper/v8_status_password",
-      "https://build.chromium.org/p/client.v8"
+      "https://build.chromium.org/p/client.v8",
+      "https://build.chromium.org/p/client.v8.fyi"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gatekeeper: v8"

@@ -497,6 +497,16 @@
         }
       }
     ],
+    "https://build.chromium.org/p/client.v8.fyi": [
+      {
+        "categories": [
+          "v8_all"
+        ],
+        "builders": {
+          "*": {}
+        }
+      }
+    ],
     "https://build.chromium.org/p/client.webrtc": [
       {
         "tree_notify": [

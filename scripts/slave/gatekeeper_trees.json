@@ -98,7 +98,8 @@
     "v8": {
         "build-db": "v8_build_db.json",
         "masters": [
-            "https://build.chromium.org/p/client.v8"
+            "https://build.chromium.org/p/client.v8",
+            "https://build.chromium.org/p/client.v8.fyi"
         ],
         "open-tree": true,
         "password-file": "/creds/gatekeeper/v8_status_password",
