@@ -832,12 +832,6 @@ class EnsureUpToDateFilter(chromium_utils.RunCommandFilter):
 
 def NeedEnvFileUpdateOnWin(env):
   """Returns true if environment file need to be updated."""
-  # HACK(yyanagisawa, goma): let me avoid returing true except victim goma
-  # canaries until I am confident on gclient runhook in compile.py works.
-  hostname = GetShortHostname()
-  if hostname not in ['build28-m1', 'vm191-m1']:
-    return False
-
   # Following GOMA_* are applied to compiler_proxy not gomacc,
   # you do not need to update environment files.
   ignore_envs = (
