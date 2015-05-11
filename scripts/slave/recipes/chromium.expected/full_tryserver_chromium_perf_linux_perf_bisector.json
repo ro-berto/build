@@ -190,6 +190,8 @@
   },
   {
     "cmd": [
+      "xvfb-run",
+      "-a",
       "tools/perf/run_benchmark",
       "-v",
       "--browser=release",
@@ -202,6 +204,8 @@
   },
   {
     "cmd": [
+      "xvfb-run",
+      "-a",
       "tools/perf/run_benchmark",
       "-v",
       "--browser=release",

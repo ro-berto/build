@@ -41,6 +41,11 @@ def truncate_and_aggregate(api, values, truncate_percent):
 
 
 def _run_command(api, command, command_name):
+
+  # TODO(robertocn): Reevaluate this approach when adding support for non-perf
+  # tests and non-linux platforms.
+  if api.m.platform.is_linux and 'xvfb' not in command:
+    command = 'xvfb-run -a ' + command
   command_parts = command.split()
   stdout = api.m.raw_io.output()
   stderr = api.m.raw_io.output()
