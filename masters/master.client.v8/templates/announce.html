@@ -47,6 +47,7 @@
   }
 
   branches_url = "https://build.chromium.org/p/client.v8.branches/horizontal_one_box_per_builder"
+  fyi_url = "https://build.chromium.org/p/client.v8.fyi/horizontal_one_box_per_builder"
 </script>
 
 <div class="Announcement">
@@ -56,36 +57,96 @@
 <center style="padding: 0 7px">
   <table width="100%" valign="top" bgcolor="#efefef" style="border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; box-shadow: 2px 2px 6px rgba(0,0,0,0.6);">
     <tr>
-      <td width="50%" style="text-align: right;">
-        <b>Sheriff: </b>
-        <script src='https://chromium-build.appspot.com/p/chromium/sheriff_v8.js'></script>
-        &nbsp;&nbsp;
-        <b>Masters: </b>
-        <a id="master_v8" href="../client.v8">client.v8</a> |
-        <a id="master_v8_branches" href="../client.v8.branches">client.v8.branches</a>
-        &nbsp;&nbsp;
-        <b>Controls: </b>
-        <a id="tree_status_link" href="https://v8-status.appspot.com">tree status</a> |
-        <a id="roll_status_link" href="https://v8-roll.appspot.com">roll status</a>
-        &nbsp;&nbsp;
-        <b>LKGR: </b>
-        <a id="lkgr_link" href="https://v8-status.appspot.com/commits">lkgr</a>
-        <script language="javascript">
-          setTimeout('DisplayLKGR()', 100);
-        </script>
-        &nbsp;&nbsp;
-        <b>Branch builders: </b>
+      <td width="1%" />
+      <td width="40%" style="text-align: left;">
+        <table width="100%" valign="top">
+          <tr>
+            <td width="8%" style="text-align: left;">
+              <b>Sheriffs: </b>
+            </td>
+            <td width="52%" style="text-align: left;">
+              <script src='https://chromium-build.appspot.com/p/chromium/sheriff_v8.js'></script>
+            </td>
+            <td width="8%" style="text-align: left;">
+              <b>Controls: </b>
+            </td>
+            <td width="32%" style="text-align: left;">
+              <a id="tree_status_link" href="https://v8-status.appspot.com">
+                tree status
+              </a> |
+              <a id="roll_status_link" href="https://v8-roll.appspot.com">
+                roll status
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td width="8%" style="text-align: left;">
+              <b>Masters: </b>
+            </td>
+            <td width="52%" style="text-align: left;">
+              <a id="master_v8" href="../client.v8">
+                client.v8
+              </a> |
+              <a id="master_v8_fyi" href="../client.v8.fyi">
+                client.v8.fyi
+              </a> |
+              <a id="master_v8_branches" href="../client.v8.branches">
+                client.v8.branches
+              </a>
+            </td>
+            <td width="8%" style="text-align: left;">
+              <b>LKGR: </b>
+            </td>
+            <td width="32%" style="text-align: left;">
+              <a id="lkgr_link" href="https://v8-status.appspot.com/commits">
+                lkgr
+              </a>
+              <script language="javascript">
+                setTimeout('DisplayLKGR()', 100);
+              </script>
+            </td>
+          </tr>
+        </table>  
       </td>
-      <td width="49%" style="text-align: left;">
-        <script language="javascript">
-          iframe_properties = [
-            'width="100%"',
-            'height="20"',
-            'frameborder="0"',
-            'scrolling="no"',
-          ].join(' ');
-          document.write(iFrame(iframe_properties, branches_url))
-        </script>
+      <td width="58%" style="text-align: left;">
+        <table valign="top" width="100%" style="text-align: left;">
+          <tr>
+            <td width="5%">
+              <a id="master_v8_fyi_label" href="../client.v8.fyi">
+                <b>FYI: </b>
+              </a>
+            </td>
+            <td width="95%">
+              <script language="javascript">
+                iframe_properties = [
+                  'width="100%"',
+                  'height="15"',
+                  'frameborder="0"',
+                  'scrolling="no"',
+                ].join(' ');
+                document.write(iFrame(iframe_properties, fyi_url))
+              </script>
+            </td>
+          </tr>
+          <tr>
+            <td width="5%">
+              <a id="master_v8_branches_label" href="../client.v8.branches">
+                <b>Branches: </b>
+              </a>
+            </td>
+            <td width="95%">
+              <script language="javascript">
+                iframe_properties = [
+                  'width="100%"',
+                  'height="15"',
+                  'frameborder="0"',
+                  'scrolling="no"',
+                ].join(' ');
+                document.write(iFrame(iframe_properties, branches_url))
+              </script>
+            </td>
+          </tr>
+        </table>  
       </td>
       <td width="1%" />
     </tr>
