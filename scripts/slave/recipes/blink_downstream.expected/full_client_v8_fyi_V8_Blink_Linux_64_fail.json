@@ -5,9 +5,9 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "client.v8",
+      "client.v8.fyi",
       "--builder",
-      "V8-Blink Linux 32",
+      "V8-Blink Linux 64",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -75,7 +75,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -109,11 +109,11 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 32\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 64\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 32\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 64\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_unit_tests",
-      "--builder-name=V8-Blink Linux 32",
+      "--builder-name=V8-Blink Linux 64",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "webkit_unit_tests"
@@ -130,11 +130,11 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 32\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 64\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 32\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 64\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests (with patch)",
-      "--builder-name=V8-Blink Linux 32",
+      "--builder-name=V8-Blink Linux 64",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
@@ -152,7 +152,7 @@
       "--build-number",
       "571",
       "--builder-name",
-      "V8-Blink Linux 32",
+      "V8-Blink Linux 64",
       "--no-pixel-tests",
       "--additional-expectations",
       "[SLAVE_BUILD]/src/v8/tools/blink_tests/TestExpectations"
@@ -177,19 +177,19 @@
       "--build-number",
       "571",
       "--builder-name",
-      "V8-Blink Linux 32",
+      "V8-Blink Linux 64",
       "--gs-bucket",
       "gs://chromium-layout-test-archives",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 32\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 64\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 32\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 64\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/V8-Blink_Linux_32/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/V8-Blink_Linux_32/571/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/V8-Blink_Linux_64/571/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/V8-Blink_Linux_64/571/layout-test-results.zip@@@"
     ]
   },
   {
@@ -198,9 +198,9 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "client.v8",
+      "client.v8.fyi",
       "--builder",
-      "V8-Blink Linux 32",
+      "V8-Blink Linux 64",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -254,7 +254,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks (2)"
   },
@@ -288,11 +288,11 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 32\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 64\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 32\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8-Blink Linux 64\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests (without patch)",
-      "--builder-name=V8-Blink Linux 32",
+      "--builder-name=V8-Blink Linux 64",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
@@ -310,7 +310,7 @@
       "--build-number",
       "571",
       "--builder-name",
-      "V8-Blink Linux 32",
+      "V8-Blink Linux 64",
       "--no-pixel-tests",
       "--additional-expectations",
       "[SLAVE_BUILD]/src/v8/tools/blink_tests/TestExpectations",

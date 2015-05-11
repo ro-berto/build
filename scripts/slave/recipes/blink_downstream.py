@@ -64,17 +64,13 @@ def V8Builder(config, bits, platform):
 
 
 BUILDERS = freeze({
-  'client.v8': {
+  'client.v8.fyi': {
     'builders': {
+      'V8-Blink Win': V8Builder('Release', 32, 'win'),
       'V8-Blink Mac': V8Builder('Release', 64, 'mac'),
       'V8-Blink Linux 32': V8Builder('Release', 32, 'linux'),
       'V8-Blink Linux 64': V8Builder('Release', 64, 'linux'),
       'V8-Blink Linux 64 (dbg)': V8Builder('Debug', 64, 'linux'),
-    },
-  },
-  'client.v8.fyi': {
-    'builders': {
-      'V8-Blink Win': V8Builder('Release', 32, 'win'),
     },
   },
 })
@@ -184,7 +180,7 @@ def GenTests(api):
   # that we fail the whole build.
   yield (
     api.test('minimal_pass_continues') +
-    properties('client.v8', 'V8-Blink Linux 64') +
+    properties('client.v8.fyi', 'V8-Blink Linux 64') +
     api.override_step_data(with_patch, canned_test(passing=False)) +
     api.override_step_data(without_patch,
                            canned_test(passing=True, minimal=True))
@@ -198,7 +194,7 @@ def GenTests(api):
   # 255 == test_run_results.UNEXPECTED_ERROR_EXIT_STATUS in run-webkit-tests.
   yield (
     api.test('webkit_tests_unexpected_error') +
-    properties('client.v8', 'V8-Blink Linux 64') +
+    properties('client.v8.fyi', 'V8-Blink Linux 64') +
     api.override_step_data(with_patch, canned_test(passing=False, retcode=255))
   )
 
@@ -209,7 +205,7 @@ def GenTests(api):
   # 130 == test_run_results.INTERRUPTED_EXIT_STATUS in run-webkit-tests.
   yield (
     api.test('webkit_tests_interrupted') +
-    properties('client.v8', 'V8-Blink Linux 64') +
+    properties('client.v8.fyi', 'V8-Blink Linux 64') +
     api.override_step_data(with_patch, canned_test(passing=False, retcode=130))
   )
 
@@ -219,7 +215,7 @@ def GenTests(api):
   # and compare the lists of failing tests).
   yield (
     api.test('too_many_failures_for_retcode') +
-    properties('client.v8', 'V8-Blink Linux 64') +
+    properties('client.v8.fyi', 'V8-Blink Linux 64') +
     api.override_step_data(with_patch,
                            canned_test(passing=False,
                                        num_additional_failures=125)) +
