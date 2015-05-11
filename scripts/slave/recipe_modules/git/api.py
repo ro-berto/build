@@ -110,7 +110,8 @@ class GitApi(recipe_api.RecipeApi):
                keep_paths=None, step_suffix=None,
                curl_trace_file=None, can_fail_build=True,
                set_got_revision=False, remote_name=None,
-               display_fetch_size=None, file_name=None):
+               display_fetch_size=None, file_name=None,
+               submodule_update_recursive=True):
     """Returns an iterable of steps to perform a full git checkout.
     Args:
       url (str): url of remote repo to use as upstream
@@ -132,6 +133,8 @@ class GitApi(recipe_api.RecipeApi):
       display_fetch_size (bool): if True, run `git count-objects` before and
         after fetch and display delta. Adds two more steps. Defaults to False.
       file_name (str): optional path to a single file to checkout.
+      submodule_update_recursive (bool): if True, updates submodules
+          recursively.
     """
     # TODO(robertocn): Break this function and refactor calls to it.
     #     The problem is that there are way too many unrealated use cases for
@@ -265,7 +268,9 @@ class GitApi(recipe_api.RecipeApi):
         name='submodule sync%s' % step_suffix,
         cwd=dir_path,
         can_fail_build=can_fail_build)
-      submodule_update = ['submodule', 'update', '--init', '--recursive']
+      submodule_update = ['submodule', 'update', '--init']
+      if submodule_update_recursive:
+        submodule_update.append('--recursive')
       if submodule_update_force:
         submodule_update.append('--force')
       self(*submodule_update,

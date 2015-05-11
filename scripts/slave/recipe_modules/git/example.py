@@ -22,6 +22,8 @@ def GenSteps(api):
     curl_trace_file = api.path['slave_build'].join('curl_trace.log')
 
   submodule_update_force = api.properties.get('submodule_update_force', False)
+  submodule_update_recursive = api.properties.get('submodule_update_recursive',
+          True)
 
   # You can use api.git.checkout to perform all the steps of a safe checkout.
   api.git.checkout(
@@ -33,7 +35,8 @@ def GenSteps(api):
       curl_trace_file=curl_trace_file,
       remote_name=api.properties.get('remote_name'),
       display_fetch_size=api.properties.get('display_fetch_size'),
-      file_name=api.properties.get('checkout_file_name'))
+      file_name=api.properties.get('checkout_file_name'),
+      submodule_update_recursive=submodule_update_recursive)
 
   # count_objects shows number and size of objects in .git dir.
   api.git.count_objects(
