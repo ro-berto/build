@@ -486,3 +486,10 @@ def chrome_from_release_buildspec(c):
   soln.custom_deps = {}
   c.src_root = 'src'
   c.got_revision_mapping['chrome_from_buildspec'] = 'got_revision'
+
+@config_ctx()
+def catapult(c):
+  soln = c.solutions.add()
+  soln.name = 'catapult'
+  soln.url = ('https://chromium.googlesource.com/external/github.com/'
+              'catapult-project/catapult.git')
