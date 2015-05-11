@@ -65,7 +65,7 @@ def logging_urlopen(url, *args, **kwargs):
     raise
 
 
-def update_status(tree_message, status_url_root, username, password):
+def update_status(tree_message, status_url_root, username, password, simulate):
   """Connects to chromium-status and closes the tree."""
   #TODO(xusydoc): append status if status is already closed.
 
@@ -81,28 +81,35 @@ def update_status(tree_message, status_url_root, username, password):
   })
 
   # Standard urllib doesn't raise an exception on 403, urllib2 does.
-  status_url = status_url_root + "/status"
-  f = logging_urlopen(status_url, params)
-  f.close()
+  if not simulate:
+    status_url = status_url_root + "/status"
+    with closing(logging_urlopen(status_url, params)):
+      pass
+  else:
+    logging.info("Simulate: Setting tree [%s] status: %s",
+                 status_url_root, tree_message)
   logging.info('success')
 
 
 def get_tree_status(status_url_root, username, password):
   status_url = status_url_root + "/current?format=json"
-  data = logging_urlopen(status_url).read()
+  with closing(logging_urlopen(status_url)) as f:
+    data = f.read()
   try:
     return json.loads(data)
   except ValueError:
     # Failed due to authentication error?
     if 'login' not in data:
       raise
+
   # Try using bot password to authenticate.
   params = urllib.urlencode({
       'username': username,
       'password': password
   })
   try:
-    data = logging_urlopen(status_url, params).read()
+    with closing(logging_urlopen(status_url, params)) as f:
+      data = f.read()
   except urllib2.HTTPError, e:
     if e.code == 405:
       logging.warn("update your chromium_status app.")
@@ -478,8 +485,12 @@ def hash_message(message, url, secret):
          }
 
 
-def submit_email(email_app, build_data, secret):
+def submit_email(email_app, build_data, secret, simulate):
   """Submit json to a mailer app which sends out the alert email."""
+  if simulate:
+    logging.info("Simulate: Sending e-mail via [%s]: %s", email_app, build_data)
+    return
+
   url = email_app + '/email'
   data = hash_message(json.dumps(build_data, sort_keys=True), url, secret)
 
@@ -494,7 +505,7 @@ def submit_email(email_app, build_data, secret):
 
 def open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
     current_builds_successful, username, password, status_url_root,
-    set_status, emoji):
+    set_status, emoji, simulate):
   if not current_builds_successful:
     logging.debug('Not opening tree because failing steps were detected.')
     return
@@ -565,7 +576,7 @@ def open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
   logging.info('Opening tree with message: \'%s\'' % tree_status)
   build_db.aux[closed_tree_key] = {}
   if set_status:
-    update_status(tree_status, status_url_root, username, password)
+    update_status(tree_status, status_url_root, username, password, simulate)
   else:
     logging.info('set-status not set, not connecting to chromium-status!')
 
@@ -592,7 +603,8 @@ def get_results_string(result_value):
 
 
 def close_tree_if_necessary(build_db, failed_builds, username, password,
-                            status_url_root, set_status, revision_properties):
+                            status_url_root, set_status, revision_properties,
+                            simulate):
   """Given a list of failed builds, close the tree if necessary."""
 
   closing_builds = [b for b in failed_builds if b['close_tree']]
@@ -633,7 +645,7 @@ def close_tree_if_necessary(build_db, failed_builds, username, password,
 
   logging.info('closing the tree with message: \'%s\'' % tree_status)
   if set_status:
-    update_status(tree_status, status_url_root, username, password)
+    update_status(tree_status, status_url_root, username, password, simulate)
     closed_tree_key = 'closed_tree-%s' % status_url_root
     build_db.aux[closed_tree_key] = {
         'message': tree_status,
@@ -644,7 +656,7 @@ def close_tree_if_necessary(build_db, failed_builds, username, password,
 
 def notify_failures(failed_builds, sheriff_url, default_from_email,
                     email_app_url, secret, domain, filter_domain,
-                    disable_domain_filter):
+                    disable_domain_filter, simulate):
   # Email everyone that should be notified.
   emails_to_send = []
   for failed_build in failed_builds:
@@ -726,7 +738,41 @@ def notify_failures(failed_builds, sheriff_url, default_from_email,
     watchers = list(reduce(operator.or_, [set(e[0]) for e in g], set()))
     build_data = json.loads(k)
     build_data['recipients'] = watchers
-    submit_email(email_app_url, build_data, secret)
+    submit_email(email_app_url, build_data, secret, simulate)
+
+
+def simulate_build_failure(build_db, master, builder, *steps):
+  master_json = {
+      'project': {
+        'buildbotURL': master,
+        'title': 'Simulated Master',
+      },
+      'builders': [builder],
+  }
+  build_json = (
+      {
+        'builderName': builder,
+        'number': 0,
+        'steps': [{
+          'name': s,
+          'isFinished': True,
+          'text': [
+            'Simulated Build Step',
+          ],
+          'logs': [],
+        } for s in steps],
+        'results': FAILURE,
+        'reason': 'simulation',
+        'blame': ['you'],
+      },
+      master,
+      builder,
+      0,
+  )
+  build_db.masters.setdefault(master, {})
+  build_db.masters[master].setdefault(builder, {})
+  build_db.masters[master][builder][0] = build_scan_db.gen_build(finished=True)
+  return {master: master_json}, (build_json,)
 
 
 def get_args(argv):
@@ -799,6 +845,16 @@ def get_args(argv):
   parser.add_argument('master_url', nargs='*',
                       help='The master URLs to poll.')
 
+  group = parser.add_argument_group(title='Testing')
+  group.add_argument('--simulate-master', metavar='MASTER',
+                     help='Simulate a build failure. This is the name of the '
+                          'master on which the failure occurs.')
+  group.add_argument('--simulate-builder', metavar='BUILDER',
+                     help='The builder to simulate the failure on.')
+  group.add_argument('--simulate-step', metavar='NAME', default=[],
+                     action='append',
+                     help='The steps to simulate completion.')
+
   args = parser.parse_args(argv)
 
   args.email_app_secret = None
@@ -817,7 +873,7 @@ def get_args(argv):
   if args.no_email_app:
     args.email_app_url = None
 
-  if args.email_app_url:
+  if args.email_app_url and not args.simulate_master:
     if os.path.exists(args.email_app_secret_file):
       with open(args.email_app_secret_file) as f:
         args.email_app_secret = f.read().strip()
@@ -842,6 +898,8 @@ def main(argv):
   if args.verify:
     return 0
 
+  simulate = bool(args.simulate_master)
+
   if args.flatten_json:
     if not args.no_hashes:
       gatekeeper_config = gatekeeper_ng_config.inject_hashes(gatekeeper_config)
@@ -849,7 +907,7 @@ def main(argv):
     print
     return 0
 
-  if args.set_status:
+  if args.set_status and not simulate:
     args.password = get_pwd(args.password_file)
 
   masters = set(args.master_url)
@@ -874,8 +932,13 @@ def main(argv):
   else:
     build_db = build_scan_db.get_build_db(args.build_db)
 
-  master_jsons, build_jsons = build_scan.get_updated_builds(
-      masters, build_db, args.parallelism)
+  if not simulate:
+    master_jsons, build_jsons = build_scan.get_updated_builds(
+        masters, build_db, args.parallelism)
+  else:
+    master_jsons, build_jsons = simulate_build_failure(
+        build_db, args.simulate_master, args.simulate_builder,
+        *args.simulate_step)
 
   if args.sync_build_db:
     build_scan_db.save_build_db(build_db, gatekeeper_config,
@@ -894,7 +957,7 @@ def main(argv):
   if args.open_tree:
     open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
         current_builds_successful, args.status_user, args.password,
-        args.status_url, args.set_status, emoji)
+        args.status_url, args.set_status, emoji, simulate)
 
   # debounce_failures does 3 things:
   # 1. Groups logging by builder
@@ -917,14 +980,16 @@ def main(argv):
   close_tree_if_necessary(build_db, new_failures,
                           args.status_user, args.password,
                           args.status_url, args.set_status,
-                          args.revision_properties.split(','))
+                          args.revision_properties.split(','),
+                          simulate)
   try:
     notify_failures(new_failures, args.sheriff_url,
                     args.default_from_email, args.email_app_url,
                     args.email_app_secret, args.email_domain,
-                    args.filter_domain, args.disable_domain_filter)
+                    args.filter_domain, args.disable_domain_filter,
+                    simulate)
   finally:
-    if not args.skip_build_db_update:
+    if not args.skip_build_db_update and not simulate:
       build_scan_db.save_build_db(build_db, gatekeeper_config,
                                args.build_db)
 
