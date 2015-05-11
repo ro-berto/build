@@ -151,6 +151,7 @@ def propagate_build_json_to_db(build_db, builds):
 
     build_db.masters[master][builder][buildnum] = build
 
+
 def get_options():
   prog_desc = 'Scans for builds and outputs updated builds.'
   usage = '%prog [options] <one or more master urls>'

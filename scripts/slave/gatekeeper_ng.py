@@ -13,6 +13,7 @@ steps to close and which parties to notify are in a local gatekeeper.json file.
 
 from collections import defaultdict
 from contextlib import closing, contextmanager
+import argparse
 import fnmatch
 import getpass
 import hashlib
@@ -21,7 +22,6 @@ import itertools
 import json
 import logging
 import operator
-import optparse
 import os
 import random
 import re
@@ -480,7 +480,6 @@ def hash_message(message, url, secret):
 
 def submit_email(email_app, build_data, secret):
   """Submit json to a mailer app which sends out the alert email."""
-
   url = email_app + '/email'
   data = hash_message(json.dumps(build_data, sort_keys=True), url, secret)
 
@@ -730,127 +729,130 @@ def notify_failures(failed_builds, sheriff_url, default_from_email,
     submit_email(email_app_url, build_data, secret)
 
 
-def get_options():
-  prog_desc = 'Closes the tree if annotated builds fail.'
-  usage = '%prog [options] <one or more master urls>'
-  parser = optparse.OptionParser(usage=(usage + '\n\n' + prog_desc))
-  parser.add_option('--build-db', default='build_db.json',
-                    help='records the last-seen build for each builder')
-  parser.add_option('--clear-build-db', action='store_true',
-                    help='reset build_db to be empty')
-  parser.add_option('--sync-build-db', action='store_true',
-                    help='don\'t process any builds, but update build_db '
-                         'to the latest build numbers')
-  parser.add_option('--skip-build-db-update', action='store_true',
-                    help='don\' write to the build_db, overridden by sync and'
-                         ' clear db options')
-  parser.add_option('--password-file', default='.status_password',
-                    help='password file to update chromium-status')
-  parser.add_option('-s', '--set-status', action='store_true',
-                    help='close the tree by connecting to chromium-status')
-  parser.add_option('--open-tree', action='store_true',
-                    help='open the tree by connecting to chromium-status')
-  parser.add_option('--status-url',
-                    default='https://chromium-status.appspot.com',
-                    help='URL for root of the status app')
-  parser.add_option('--track-revisions', action='store_true',
-                    help='only close on increasing revisions')
-  parser.add_option('--revision-properties', default='revision',
-                    help='comma-separated list of buildproperties to compare '
-                         'revision on.')
-  parser.add_option('--status-user', default='buildbot@chromium.org',
-                    help='username for the status app')
-  parser.add_option('--disable-domain-filter', action='store_true',
-                    help='allow emailing any domain')
-  parser.add_option('--filter-domain', default='chromium.org,google.com',
-                    help='only email users in these comma separated domains')
-  parser.add_option('--email-domain', default='google.com',
-                    help='default email domain to add to users without one')
-  parser.add_option('--sheriff-url',
-                    default='http://build.chromium.org/p/chromium/%s.js',
-                    help='URL pattern for the current sheriff list')
-  parser.add_option('--parallelism', default=16,
-                    help='up to this many builds can be queried simultaneously')
-  parser.add_option('--default-from-email',
-                    default='buildbot@chromium.org',
-                    help='default email address to send from')
-  parser.add_option('--email-app-url',
-                    default='https://chromium-build.appspot.com/mailer',
-                    help='URL of the application to send email from')
-  parser.add_option('--email-app-secret-file',
-                    default='.mailer_password',
-                    help='file containing secret used in email app auth')
-  parser.add_option('--no-email-app', action='store_true',
-                    help='don\'t send emails')
-  parser.add_option('--json', default=os.path.join(DATA_DIR, 'gatekeeper.json'),
-                    help='location of gatekeeper configuration file')
-  parser.add_option('--emoji',
-                    default=os.path.join(DATA_DIR, 'gatekeeper_emoji.json'),
-                    help='location of gatekeeper configuration file (None to'
-                         'turn off)')
-  parser.add_option('--verify', action='store_true',
-                    help='verify that the gatekeeper config file is correct')
-  parser.add_option('--flatten-json', action='store_true',
-                    help='display flattened gatekeeper.json for debugging')
-  parser.add_option('--no-hashes', action='store_true',
-                    help='don\'t insert gatekeeper section hashes')
-  parser.add_option('-v', '--verbose', action='store_true',
-                    help='turn on extra debugging information')
+def get_args(argv):
+  parser = argparse.ArgumentParser(description='Closes the tree if annotated '
+                                               'builds fail.')
+  parser.add_argument('--build-db', default='build_db.json',
+                      help='records the last-seen build for each builder')
+  parser.add_argument('--clear-build-db', action='store_true',
+                      help='reset build_db to be empty')
+  parser.add_argument('--sync-build-db', action='store_true',
+                      help='don\'t process any builds, but update build_db '
+                           'to the latest build numbers')
+  parser.add_argument('--skip-build-db-update', action='store_true',
+                      help='don\' write to the build_db, overridden by sync and'
+                           ' clear db options')
+  parser.add_argument('--password-file', default='.status_password',
+                      help='password file to update chromium-status')
+  parser.add_argument('-s', '--set-status', action='store_true',
+                      help='close the tree by connecting to chromium-status')
+  parser.add_argument('--open-tree', action='store_true',
+                      help='open the tree by connecting to chromium-status')
+  parser.add_argument('--status-url',
+                      default='https://chromium-status.appspot.com',
+                      help='URL for root of the status app')
+  parser.add_argument('--track-revisions', action='store_true',
+                      help='only close on increasing revisions')
+  parser.add_argument('--revision-properties', default='revision',
+                      help='comma-separated list of buildproperties to compare '
+                           'revision on.')
+  parser.add_argument('--status-user', default='buildbot@chromium.org',
+                      help='username for the status app')
+  parser.add_argument('--disable-domain-filter', action='store_true',
+                      help='allow emailing any domain')
+  parser.add_argument('--filter-domain', default='chromium.org,google.com',
+                      help='only email users in these comma separated domains')
+  parser.add_argument('--email-domain', default='google.com',
+                      help='default email domain to add to users without one')
+  parser.add_argument('--sheriff-url',
+                      default='http://build.chromium.org/p/chromium/%s.js',
+                      help='URL pattern for the current sheriff list')
+  parser.add_argument('--parallelism', default=16,
+                      help='up to this many builds can be queried '
+                           'simultaneously')
+  parser.add_argument('--default-from-email',
+                      default='buildbot@chromium.org',
+                      help='default email address to send from')
+  parser.add_argument('--email-app-url',
+                      default='https://chromium-build.appspot.com/mailer',
+                      help='URL of the application to send email from')
+  parser.add_argument('--email-app-secret-file',
+                      default='.mailer_password',
+                      help='file containing secret used in email app auth')
+  parser.add_argument('--no-email-app', action='store_true',
+                      help='don\'t send emails')
+  parser.add_argument('--json',
+                      default=os.path.join(DATA_DIR, 'gatekeeper.json'),
+                      help='location of gatekeeper configuration file')
+  parser.add_argument('--emoji',
+                      default=os.path.join(DATA_DIR, 'gatekeeper_emoji.json'),
+                      help='location of gatekeeper configuration file (None to'
+                           'turn off)')
+  parser.add_argument('--verify', action='store_true',
+                      help='verify that the gatekeeper config file is correct')
+  parser.add_argument('--flatten-json', action='store_true',
+                      help='display flattened gatekeeper.json for debugging')
+  parser.add_argument('--no-hashes', action='store_true',
+                      help='don\'t insert gatekeeper section hashes')
+  parser.add_argument('-v', '--verbose', action='store_true',
+                      help='turn on extra debugging information')
+  parser.add_argument('master_url', nargs='*',
+                      help='The master URLs to poll.')
 
-  options, args = parser.parse_args()
+  args = parser.parse_args(argv)
 
-  options.email_app_secret = None
-  options.password = None
+  args.email_app_secret = None
+  args.password = None
 
-  if options.no_hashes and not options.flatten_json:
+  if args.no_hashes and not args.flatten_json:
     parser.error('specifying --no-hashes doesn\'t make sense without '
                  '--flatten-json')
 
-  if options.verify or options.flatten_json:
-    return options, args
+  if args.verify or args.flatten_json:
+    return args
 
   if not args:
     parser.error('you need to specify at least one master URL')
 
-  if options.no_email_app:
-    options.email_app_url = None
+  if args.no_email_app:
+    args.email_app_url = None
 
-  if options.email_app_url:
-    if os.path.exists(options.email_app_secret_file):
-      with open(options.email_app_secret_file) as f:
-        options.email_app_secret = f.read().strip()
+  if args.email_app_url:
+    if os.path.exists(args.email_app_secret_file):
+      with open(args.email_app_secret_file) as f:
+        args.email_app_secret = f.read().strip()
     else:
       parser.error('Must provide email app auth with  %s.' % (
-          options.email_app_secret_file))
+          args.email_app_secret_file))
 
-  options.filter_domain = options.filter_domain.split(',')
+  args.filter_domain = args.filter_domain.split(',')
 
-  args = [url.rstrip('/') for url in args]
+  args.master_url = [url.rstrip('/') for url in args.master_url]
 
-  return options, args
+  return args
 
 
-def main():
-  options, args = get_options()
+def main(argv):
+  args = get_args(argv)
 
-  logging.basicConfig(level=logging.DEBUG if options.verbose else logging.INFO)
+  logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO)
 
-  gatekeeper_config = gatekeeper_ng_config.load_gatekeeper_config(options.json)
+  gatekeeper_config = gatekeeper_ng_config.load_gatekeeper_config(args.json)
 
-  if options.verify:
+  if args.verify:
     return 0
 
-  if options.flatten_json:
-    if not options.no_hashes:
+  if args.flatten_json:
+    if not args.no_hashes:
       gatekeeper_config = gatekeeper_ng_config.inject_hashes(gatekeeper_config)
     gatekeeper_ng_config.flatten_to_json(gatekeeper_config, sys.stdout)
     print
     return 0
 
-  if options.set_status:
-    options.password = get_pwd(options.password_file)
+  if args.set_status:
+    args.password = get_pwd(args.password_file)
 
-  masters = set(args)
+  masters = set(args.master_url)
   if not masters <= set(gatekeeper_config):
     print 'The following masters are not present in the gatekeeper config:'
     for m in masters - set(gatekeeper_config):
@@ -858,26 +860,26 @@ def main():
     return 1
 
   emoji = []
-  if options.emoji != 'None':
+  if args.emoji != 'None':
     try:
-      with open(options.emoji) as f:
+      with open(args.emoji) as f:
         emoji = json.load(f)
     except (IOError, ValueError) as e:
-      logging.warning('Could not load emoji file %s: %s', options.emoji, e)
+      logging.warning('Could not load emoji file %s: %s', args.emoji, e)
 
-  if options.clear_build_db:
-    build_db = {}
+  if args.clear_build_db:
+    build_db = build_scan_db.gen_db()
     build_scan_db.save_build_db(build_db, gatekeeper_config,
-                                options.build_db)
+                                args.build_db)
   else:
-    build_db = build_scan_db.get_build_db(options.build_db)
+    build_db = build_scan_db.get_build_db(args.build_db)
 
   master_jsons, build_jsons = build_scan.get_updated_builds(
-      masters, build_db, options.parallelism)
+      masters, build_db, args.parallelism)
 
-  if options.sync_build_db:
+  if args.sync_build_db:
     build_scan_db.save_build_db(build_db, gatekeeper_config,
-                             options.build_db)
+                                args.build_db)
     return 0
 
   (failure_tuples, success_tuples, successful_builder_steps,
@@ -889,10 +891,10 @@ def main():
 
   # opening is an option, mostly to keep the unittests working which
   # assume that any setting of status is negative.
-  if options.open_tree:
+  if args.open_tree:
     open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
-        current_builds_successful, options.status_user, options.password,
-        options.status_url, options.set_status, emoji)
+        current_builds_successful, args.status_user, args.password,
+        args.status_url, args.set_status, emoji)
 
   # debounce_failures does 3 things:
   # 1. Groups logging by builder
@@ -901,9 +903,9 @@ def main():
   new_failures = debounce_failures(failure_tuples,
       current_builds_successful, build_db)
 
-  if options.track_revisions:
+  if args.track_revisions:
     # Only close the tree if it's a newer revision than before.
-    properties = options.revision_properties.split(',')
+    properties = args.revision_properties.split(',')
     triggered_revisions = build_db.aux.get('triggered_revisions', {})
     if not triggered_revisions or (
         sorted(triggered_revisions) != sorted(properties)):
@@ -913,21 +915,21 @@ def main():
     new_failures = reject_old_revisions(new_failures, build_db)
 
   close_tree_if_necessary(build_db, new_failures,
-                          options.status_user, options.password,
-                          options.status_url, options.set_status,
-                          options.revision_properties.split(','))
+                          args.status_user, args.password,
+                          args.status_url, args.set_status,
+                          args.revision_properties.split(','))
   try:
-    notify_failures(new_failures, options.sheriff_url,
-                    options.default_from_email, options.email_app_url,
-                    options.email_app_secret, options.email_domain,
-                    options.filter_domain, options.disable_domain_filter)
+    notify_failures(new_failures, args.sheriff_url,
+                    args.default_from_email, args.email_app_url,
+                    args.email_app_secret, args.email_domain,
+                    args.filter_domain, args.disable_domain_filter)
   finally:
-    if not options.skip_build_db_update:
+    if not args.skip_build_db_update:
       build_scan_db.save_build_db(build_db, gatekeeper_config,
-                               options.build_db)
+                               args.build_db)
 
   return 0
 
 
 if __name__ == '__main__':
-  sys.exit(main())
+  sys.exit(main(sys.argv[1:]))
