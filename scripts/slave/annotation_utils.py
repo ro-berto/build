@@ -60,9 +60,8 @@ def getText(result, observer, name):
     if observer.master_name:
       # Include the link to the flakiness dashboard.
       failure_text.append('<div class="BuildResultInfo">')
-      failure_text.append('<a href="%s#master=%s&testType=%s'
+      failure_text.append('<a href="%s#testType=%s'
                           '&tests=%s">' % (GTEST_DASHBOARD_BASE,
-                                           observer.master_name,
                                            name,
                                            ','.join(observer.FailedTests())))
       failure_text.append('Flakiness dashboard')
@@ -84,8 +83,8 @@ def annotate(test_name, result, log_processor, perf_dashboard_id=None):
   get_text_result = performance_log_processor.SUCCESS
 
   for failure in sorted(log_processor.FailedTests()):
-    test_name = re.sub(r'[^\w\.\-]', '_', failure)
-    slave_utils.WriteLogLines(test_name,
+    clean_test_name = re.sub(r'[^\w\.\-]', '_', failure)
+    slave_utils.WriteLogLines(clean_test_name,
                               log_processor.FailureDescription(failure))
   for report_hash in sorted(log_processor.MemoryToolReportHashes()):
     slave_utils.WriteLogLines(report_hash,
