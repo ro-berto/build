@@ -223,7 +223,7 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
         # don't open the tree.
         still_failing_steps = (
             unsatisfied_steps - successful_builder_steps[master_url][builder])
-        if still_failing_steps and close_tree:
+        if still_failing_steps:
           logging.debug('%s failed on %s, not yet resolved.',
               ','.join(still_failing_steps),
               generate_build_url(failed_builds[-1][0]))
