@@ -80,6 +80,13 @@ def GenTests(api):
                      bot_config.get(
                          'chromium_config_kwargs', {}).get('TARGET_BITS', 64))
       )
+
+      if 'Clang' in buildername:
+        # TODO(hans): This isn't ideal as many bots (e.g. all Mac and Linux
+        # builders) don't have Clang in their name. We should make
+        # clang_revision inject a fake revision when run in tests.
+        test += api.properties(got_clang_revision='123456-7')
+
       if(bot_type == 'tester' and 'linux_perf' in buildername):
         bisect_config = {
             'test_type': 'perf',

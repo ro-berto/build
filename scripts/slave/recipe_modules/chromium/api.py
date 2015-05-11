@@ -392,6 +392,13 @@ class ChromiumApi(recipe_api.RecipeApi):
                              '--perf-dashboard-id=sizes',
                              '--perf-id=%s' % perf_id])
 
+      # If we have a clang revision, add that to the perf data point.
+      # TODO(hans): We want this for all perf data, not just sizes.
+      clang_rev_str = self.m.properties.get('got_clang_revision')
+      if clang_rev_str:
+        clang_rev = re.match(r'(\d+)(-\d+)?', clang_rev_str).group(1)
+        run_tests_args.append(
+            "--perf-config={'r_clang_rev': '%s'}" % clang_rev)
 
     full_args = run_tests_args + [sizes_script] + sizes_args
 
@@ -401,10 +408,10 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def get_clang_version(self, **kwargs):
     return self.m.python(
-      'clang_revision',
-      self.m.path['build'].join('scripts', 'slave', 'clang_revision.py'),
-      ['--src-dir', self.m.path['checkout']],
-      allow_subannotations = True, env = self.get_env(), **kwargs)
+        'clang_revision',
+        self.m.path['build'].join('scripts', 'slave', 'clang_revision.py'),
+        ['--src-dir', self.m.path['checkout']],
+        allow_subannotations=True, env=self.get_env(), **kwargs)
 
   @property
   def is_release_build(self):
