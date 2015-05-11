@@ -40,6 +40,9 @@
       "mipsel-o32-generic-paladin": [
         "build112-m2"
       ], 
+      "oak-full": [
+        "build323-m2"
+      ], 
       "panther_embedded-minimal-paladin": [
         "build203-m2"
       ], 
