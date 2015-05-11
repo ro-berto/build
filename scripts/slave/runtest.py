@@ -547,24 +547,23 @@ def _GetCommitPos(build_properties):
 def _GetMainRevision(options):
   """Return revision to use as the numerical x-value in the perf dashboard.
 
-  In general, for most data, we always want to use the git commit position. In
-  cases where we want to use something else, it should be specified as
-  'got_revision_cp' in build properties, or if that is not specified, the
-  --revision flag to runtest.py.
+  This will be used as the value of "rev" in the data passed to
+  results_dashboard.SendResults.
+
+  In order or priority, this function could return:
+    1. The value of the --revision flag.
+    2. The value of "got_revision_cp" in build properties.
+    3. An SVN number, git commit position, or git commit hash.
   """
+  if options.revision:
+    return options.revision
   commit_pos_num = _GetCommitPos(options.build_properties)
   if commit_pos_num is not None:
-    revision = commit_pos_num
-  elif options.revision:
-    # TODO(sullivan): options.revision should override everything else,
-    # including commit_pos_num.
-    revision = options.revision
-  else:
-    # TODO(sullivan,qyearsley): Don't fall back to _GetRevision if it returns
-    # a git commit, since this should be a numerical revision. Instead, abort
-    # and fail.
-    revision = _GetRevision(os.path.dirname(os.path.abspath(options.build_dir)))
-  return revision
+    return commit_pos_num
+  # TODO(sullivan,qyearsley): Don't fall back to _GetRevision if it returns
+  # a git commit, since this should be a numerical revision. Instead, abort
+  # and fail.
+  return _GetRevision(os.path.dirname(os.path.abspath(options.build_dir)))
 
 
 def _GetBlinkRevision(options):
