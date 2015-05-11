@@ -204,25 +204,12 @@ def MakeListOfPoints(charts, bot, test_name, mastername, buildername,
       result['supplemental_columns'].update(revision_columns)
       result['supplemental_columns'].update(supplemental_columns)
 
-      # Check whether this result is itself a time series (e.g. Endure result).
-      # If so add the key "data", otherwise add "value" and "error".
-      have_multi_value_data = False
-      for value in trace_values:
-        if isinstance(value, list):
-          have_multi_value_data = True
-      if have_multi_value_data:
-        result['data'] = trace_values
-      else:
-        result['value'] = trace_values[0]
-        result['error'] = trace_values[1]
+      result['value'] = trace_values[0]
+      result['error'] = trace_values[1]
 
       # Add other properties to this result dictionary if available.
       if chart_data.get('units'):
         result['units'] = chart_data['units']
-      if chart_data.get('units_x'):
-        result['units_x'] = chart_data['units_x']
-      if chart_data.get('stack'):
-        result['stack'] = chart_data['stack']
       if is_important:
         result['important'] = True
 
