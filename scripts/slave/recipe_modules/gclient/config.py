@@ -370,7 +370,16 @@ def tools_build(c):  # pragma: no cover
   s.url = ChromiumGitURL(c, 'chromium', 'tools', 'build.git')
   m = c.got_revision_mapping
   m['build'] = 'got_revision'
-  
+
+@config_ctx(config_vars={'GIT_MODE': True})
+def chrome_golo(c): # pragma: no cover
+  if not c.GIT_MODE:
+    raise BadConf('chrome_golo only supports git')
+  s = c.solutions.add()
+  s.name = 'chrome_golo'
+  s.url = 'https://chrome-internal.googlesource.com/chrome-golo/chrome-golo.git'
+  c.got_revision_mapping['chrome_golo'] = 'got_revision'
+
 @config_ctx(config_vars={'GIT_MODE': True})
 def build_internal(c):  # pragma: no cover
   if not c.GIT_MODE:
