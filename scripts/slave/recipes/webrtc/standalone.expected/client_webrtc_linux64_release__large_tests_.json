@@ -204,44 +204,6 @@
     "name": "libjingle_peerconnection_java_unittest"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[webrtc]/resources/ensure_webcam_is_running.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "webcam_check (2)"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--xvfb",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
-      "--test-type=vie_auto_test",
-      "--step-name=vie_auto_test",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/vie_auto_test",
-      "--builder-name=Linux64 Release [large tests]",
-      "--slave-name=slavename",
-      "--build-number=1337",
-      "vie_auto_test",
-      "--automated",
-      "--capture_test_ensure_resolution_alignment_in_capture_device=false"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "vie_auto_test"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -276,7 +238,7 @@
       "RECIPE_MODULE[webrtc]/resources/ensure_webcam_is_running.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "webcam_check (3)"
+    "name": "webcam_check (2)"
   },
   {
     "allow_subannotations": true,

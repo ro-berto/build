@@ -216,13 +216,6 @@ class WebRTCApi(recipe_api.RecipeApi):
               'libjingle_peerconnection_java_unittest',
               env={'LD_PRELOAD': '/usr/lib/x86_64-linux-gnu/libpulse.so.0'})
 
-        self.virtual_webcam_check()
-        self.add_test(
-            'vie_auto_test',
-            args=['--automated',
-                  '--capture_test_ensure_resolution_alignment_in_capture_device='
-                  'false'],
-            revision=self.perf_revision)
         self.add_test('voe_auto_test', args=['--automated'])
         self.virtual_webcam_check()
         self.add_test('video_capture_tests')
