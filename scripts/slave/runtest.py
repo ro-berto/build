@@ -1698,15 +1698,12 @@ def _UpdateRunBenchmarkArgs(args, options):
 
 
 def _ConfigureSanitizerTools(options, args, extra_env):
-  # Support factory properties as an alternative to command line flags.
+  # Temporary deprecation warning for sanitizer factory properties.
   for sanitizer_name in ['asan', 'msan', 'tsan', 'lsan']:
-    if options.factory_properties.get(sanitizer_name, False):
-      setattr(options, 'enable_%s' % sanitizer_name, True)
-
-  if options.enable_tsan:
-    # TODO(glider): switch TSan to recipes and move this flag into the recipe
-    # config.
-    args.append('--test-launcher-print-test-stdio=always')
+    if (options.factory_properties.get(sanitizer_name, False) and
+        not getattr(options, 'enable_%s' % sanitizer_name)):
+      raise NotImplementedError(
+          'Factory property "%s" is no longer supported.' % sanitizer_name)
 
   if (options.enable_asan or options.enable_tsan or
       options.enable_msan or options.enable_lsan):
