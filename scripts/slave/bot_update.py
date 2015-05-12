@@ -238,6 +238,7 @@ ENABLED_MASTERS = [
     'client.skia',
     'client.v8',
     'client.v8.branches',
+    'client.v8.fyi',
     'client.webrtc',
     'client.webrtc.fyi',
     'tryserver.blink',

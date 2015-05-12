@@ -5,9 +5,9 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "client.v8",
+      "client.v8.fyi",
       "--builder",
-      "Linux ASan LSan Tests (1)",
+      "Linux ASAN Builder",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -21,7 +21,7 @@
       "--revision",
       "src@origin/lkcr",
       "--revision",
-      "src/v8@1111111"
+      "src/v8@22135"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
@@ -105,7 +105,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Linux ASan LSan Tests (1)\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"Linux ASAN Builder\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -124,39 +124,55 @@
     "name": "cleanup_temp"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[BUILD]/scripts/slave/clang_revision.py",
+      "--src-dir",
+      "[SLAVE_BUILD]/src"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree build directory",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "clang_revision"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/extract_build.py",
+      "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Release",
-      "--build-archive-url",
-      "gs://test-domain/test-archive.zip",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ASan LSan Tests (1)\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux ASAN Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ASan LSan Tests (1)\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux ASAN Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma-clang",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "extract build"
+    "name": "compile"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/zip_build.py",
+      "--target",
+      "Release",
+      "--build-url",
+      "gs://chromium-v8/client.v8.fyi/Linux ASAN Builder",
+      "--build_revision",
+      "801ada225ddc271c132c3a35f03975671d43e399",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ASAN Builder\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ASAN Builder\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "package build"
   }
 ]

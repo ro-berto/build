@@ -307,7 +307,7 @@ BUILDERS = freeze({
       },
     },
   },
-  'client.v8': {
+  'client.v8.fyi': {
     'builders': {
       'V8 Linux GN': {
         'chromium_config_kwargs': {

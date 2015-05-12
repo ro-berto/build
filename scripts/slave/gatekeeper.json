@@ -462,11 +462,7 @@
           "V8 Mac64 ASAN",
           "V8 Mips - big endian - nosnap - 1",
           "V8 Mips - big endian - nosnap - 2",
-          "V8 Random Deopt Fuzzer - debug",
-          "Linux Snapshot Builder",
-          "Chrome Win7 Perf",
-          "Chrome Mac10.9 Perf",
-          "Chrome Linux Perf"
+          "V8 Random Deopt Fuzzer - debug"
         ],
         "builders": {
           "V8 Linux64 ASAN": {
@@ -501,6 +497,12 @@
       {
         "categories": [
           "v8_all"
+        ],
+        "excluded_builders" : [
+          "Linux Snapshot Builder",
+          "Chrome Win7 Perf",
+          "Chrome Mac10.9 Perf",
+          "Chrome Linux Perf"
         ],
         "builders": {
           "*": {}

@@ -17,7 +17,7 @@ from . import chromium_recipe_coverage
 from . import chromium_webkit
 from . import chromium_win
 from . import client_skia
-from . import client_v8
+from . import client_v8_fyi
 from . import client_v8_branches
 from . import tryserver_chromium_linux
 from . import tryserver_chromium_mac
@@ -36,8 +36,8 @@ BUILDERS = freeze({
   'chromium.webkit': chromium_webkit.SPEC,
   'chromium.win': chromium_win.SPEC,
   'client.skia': client_skia.SPEC,
-  'client.v8': client_v8.SPEC,
   'client.v8.branches': client_v8_branches.SPEC,
+  'client.v8.fyi': client_v8_fyi.SPEC,
   'tryserver.chromium.linux': tryserver_chromium_linux.SPEC,
   'tryserver.chromium.mac': tryserver_chromium_mac.SPEC,
   'tryserver.chromium.perf': tryserver_chromium_perf.SPEC,

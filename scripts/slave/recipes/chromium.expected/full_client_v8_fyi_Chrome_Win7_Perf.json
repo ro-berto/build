@@ -3,11 +3,20 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/bot_update.py",
+      "[BUILD]\\scripts\\slave\\kill_processes.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "taskkill"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\bot_update.py",
       "--master",
-      "client.v8",
+      "client.v8.fyi",
       "--builder",
-      "Chrome Mac10.9 Perf",
+      "Chrome Win7 Perf",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -67,12 +76,12 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
+      "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "branding=Chrome buildtype=Official chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -80,40 +89,31 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/cleanup_temp.py"
+      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/src"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clang_revision"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
+      "[BUILD]\\scripts\\slave\\compile.py",
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]\\src",
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
+      "--mode",
+      "official",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[BUILD]\\goma",
       "--",
-      "chromium_builder_perf"
+      "chromium_builder_perf",
+      "crash_service"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
@@ -122,7 +122,18 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
+      "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
+      "--target",
+      "Release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "start_crash_service"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "list",
       "--browser",
       "release",
@@ -166,22 +177,22 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[BUILD]\\scripts\\slave\\runtest.py",
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chrome Mac10.9 Perf\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chrome Win7 Perf\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chrome Mac10.9 Perf\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chrome Win7 Perf\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=blink_perf.all",
-      "--perf-id=chromium-rel-mac9-v8",
+      "--perf-id=chromium-rel-win7-dual-v8",
       "--test-type=blink_perf.all",
       "--step-name=blink_perf.all.exact",
       "--chartjson-file",
       "/path/to/tmp/json",
-      "--builder-name=Chrome Mac10.9 Perf",
+      "--builder-name=Chrome Win7 Perf",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
@@ -202,22 +213,22 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[BUILD]\\scripts\\slave\\runtest.py",
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chrome Mac10.9 Perf\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chrome Win7 Perf\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chrome Mac10.9 Perf\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chrome Win7 Perf\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=blink_perf.all",
-      "--perf-id=chromium-rel-mac9-v8",
+      "--perf-id=chromium-rel-win7-dual-v8",
       "--test-type=blink_perf.all",
       "--step-name=blink_perf.all.release",
       "--chartjson-file",
       "/path/to/tmp/json",
-      "--builder-name=Chrome Mac10.9 Perf",
+      "--builder-name=Chrome Win7 Perf",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
@@ -232,5 +243,16 @@
       "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\process_dumps.py",
+      "--target",
+      "Release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "process_dumps"
   }
 ]

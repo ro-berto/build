@@ -5,13 +5,13 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "client.v8",
+      "client.v8.fyi",
       "--builder",
-      "Linux Tests (dbg)(1)",
+      "V8 Android GN (dbg)",
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'v8_branch': 'branches/bleeding_edge', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'safesync_url': 'https://build.chromium.org/p/chromium/lkcr-status/lkgr', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'v8_branch': 'branches/bleeding_edge', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'safesync_url': 'https://build.chromium.org/p/chromium/lkcr-status/lkgr', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']",
       "--root",
       "src",
       "--revision_mapping_file",
@@ -21,7 +21,8 @@
       "--revision",
       "src@origin/lkcr",
       "--revision",
-      "src/v8@1111111"
+      "src/v8@HEAD",
+      "--force"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
@@ -72,7 +73,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "component=shared_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+      "GYP_CHROMIUM_NO_ACTION": "1"
     },
     "name": "gclient runhooks"
   },
@@ -80,15 +81,41 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-v",
+      "-m",
+      "client.v8.fyi",
+      "-b",
+      "V8 Android GN (dbg)",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/client.v8.fyi.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/client.v8.fyi.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"V8 Android GN (dbg)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -96,67 +123,34 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
-      "--output",
-      "/path/to/tmp/json",
-      "--",
-      "--build-config-fs",
-      "Debug",
-      "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
-      "--properties",
-      "{\"buildername\": \"Linux Tests (dbg)(1)\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "get compile targets for scripts",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/cleanup_temp.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "cleanup_temp"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree build directory",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/extract_build.py",
+      "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Debug",
-      "--build-archive-url",
-      "gs://test-domain/test-archive.zip",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Tests (dbg)(1)\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Debug Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Tests (dbg)(1)\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Debug Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--",
+      "base_unittests_apk",
+      "chrome_shell_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "extract build"
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gn.py",
+      "--root=[SLAVE_BUILD]/src",
+      "check",
+      "//out/Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gn check"
   }
 ]

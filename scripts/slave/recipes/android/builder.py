@@ -93,7 +93,7 @@ BUILDERS = freeze({
       }
     }
   },
-  'client.v8': {
+  'client.v8.fyi': {
     'Android Builder': {
       'recipe_config': 'perf',
       'gclient_apply_config': [

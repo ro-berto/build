@@ -82,7 +82,7 @@ BUILDERS = freeze({
       'num_device_shards': 1,
     }
   },
-  'client.v8': {
+  'client.v8.fyi': {
     'Android Nexus4 Perf': {
       'gclient_apply_config': [
         'v8_bleeding_edge_git',
