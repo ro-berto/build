@@ -34,14 +34,12 @@ def _CloudStoragePath(api):
 
 def _DownloadAndExtractBinary(api):
   """Downloads the binary from the revision passed to the recipe."""
-  build_url = api.properties['parent_build_archive_url']
-
-  build_revision = api.properties['parent_got_revision']
+  build_archive_url = api.properties['parent_build_archive_url']
   api.archive.download_and_unzip_build(
       step_name='Download and Extract Binary',
       target='Release',
-      build_url=build_url,
-      build_revision=build_revision)
+      build_url=None,  # This is a required parameter, but has no effect.
+      build_archive_url=build_archive_url)
 
 
 def _GenerateProfile(api, output_directory):
