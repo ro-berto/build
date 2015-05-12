@@ -124,6 +124,12 @@ def goma_setup(options, env):
                   'vm820-m1', 'vm821-m1', 'vm848-m1']:
     env['NO_NACL_GOMA'] = 'false'
 
+  # If a network error continues 30 minutes, compiler_proxy make the compile
+  # failed.  When people use goma, they expect using goma is faster than
+  # compile locally. If goma cannot guarantee that, let it make compile
+  # as error.
+  env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
+
   # Enable DepsCache. DepsCache caches the list of files to send goma server.
   # This will greatly improve build speed when cache is warmed.
   # The cache file is stored in the target output directory.
