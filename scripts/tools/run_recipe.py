@@ -10,7 +10,7 @@ This is currently useful for testing recipes locally while developing them.
 
 Example:
 
-./run_recipe.py run_presubmit repo_name=tools_build issue=12345 patchset=1 \
+./run_recipe.py run_presubmit repo_name=build issue=12345 patchset=1 \
     description="this is a cool description" blamelist=['dude@chromium.org'] \
     rietveld=https://codereview.chromium.org
 
@@ -19,7 +19,7 @@ Alternatively, the properties can be specified as a Python dict using a
 
 ./run_recipe.py run_presubmit --properties-file - <<EOF
 {
-  'repo_name': 'tools_build',
+  'repo_name': 'build',
   'issue': 12345,
   'patchset': 1,
   'description': 'this is a cool description',
@@ -29,7 +29,7 @@ Alternatively, the properties can be specified as a Python dict using a
 EOF
 
 This would execute the run_presubmit recipe, passing
-{'repo_name':'tools_build', 'issue':'12345' ...} as properties.
+{'repo_name':'build', 'issue':'12345' ...} as properties.
 
 This script can be run from any directory.
 

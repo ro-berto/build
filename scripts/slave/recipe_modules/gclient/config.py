@@ -362,14 +362,24 @@ def gyp(c):
   m['trunk'] = 'got_revision'
 
 @config_ctx(config_vars={'GIT_MODE': True})
-def tools_build(c):  # pragma: no cover
+def build(c):  # pragma: no cover
   if not c.GIT_MODE:
-    raise BadConf('tools_build only supports git')
+    raise BadConf('build only supports git')
   s = c.solutions.add()
   s.name = 'build'
   s.url = ChromiumGitURL(c, 'chromium', 'tools', 'build.git')
   m = c.got_revision_mapping
   m['build'] = 'got_revision'
+
+@config_ctx(config_vars={'GIT_MODE': True})
+def depot_tools(c):  # pragma: no cover
+  if not c.GIT_MODE:
+    raise BadConf('depot_tools only supports git')
+  s = c.solutions.add()
+  s.name = 'depot_tools'
+  s.url = ChromiumGitURL(c, 'chromium', 'tools', 'depot_tools.git')
+  m = c.got_revision_mapping
+  m['depot_tools'] = 'got_revision'
 
 @config_ctx(config_vars={'GIT_MODE': True})
 def chrome_golo(c): # pragma: no cover
@@ -391,7 +401,7 @@ def build_internal(c):  # pragma: no cover
   # We do not use 'includes' here, because we want build_internal to be the
   # first solution in the list as run_presubmit computes upstream revision
   # from the first solution.
-  tools_build(c)
+  build(c)
   c.got_revision_mapping['build'] = 'got_build_revision'
 
 @config_ctx(includes=['chromium', 'chrome_internal'])
