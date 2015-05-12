@@ -1,0 +1,53 @@
+{
+  "builders": {
+    "Catapult Linux": {
+      "recipe": "catapult",
+      "slave_pools": ["linux_slave_pool"],
+      "slavebuilddir": "catapult",
+    },
+    "Catapult Mac": {
+      "recipe": "catapult",
+      "slave_pools": ["mac_slave_pool"],
+      "slavebuilddir": "catapult",
+    },
+    "Catapult Windows": {
+      "recipe": "catapult",
+      "slave_pools": ["win_slave_pool"],
+      "slavebuilddir": "catapult",
+    },
+  },
+  "git_repo_url": "https://chromium.googlesource.com/external/github.com/catapult-project/catapult.git",
+  "master_base_class": "Master3",
+  "master_classname": "Catapult",
+  "master_port": 20303,
+  "master_port_alt": 40303,
+  "master_type": "waterfall",
+  "slave_pools": {
+    "linux_slave_pool": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "precise",
+      },
+      "slaves": ["vm600-m3"],
+    },
+    "mac_slave_pool": {
+      "slave_data": {
+        "bits": 64,
+        "os": "mac",
+        "version": "10.9",
+      },
+      "slaves": ["vm113-m3"],
+    },
+    "win_slave_pool": {
+      "slave_data": {
+        "bits": 64,
+        "os": "win",
+        "version": "win7",
+      },
+      "slaves": ["vm114-m3"],
+    },
+  },
+  "slave_port": 30303,
+  "templates": ["../master.chromium/templates"],
+}
