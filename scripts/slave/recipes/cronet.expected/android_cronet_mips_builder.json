@@ -191,7 +191,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "[SLAVE_BUILD]/src/out/Release/cronet/VERSION",
       "gs://chromium-cronet/android/cronet-Release-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00/VERSION"
@@ -211,7 +211,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "-R",
       "[SLAVE_BUILD]/src/out/Release/cronet",

@@ -191,7 +191,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip"
     ],
@@ -244,7 +244,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
@@ -310,7 +310,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip"
     ],
@@ -349,7 +349,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
@@ -401,7 +401,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "ls",
       "gs://chrome-perf/bisect-results/e28dc0d49c331def2a3bbf3ddd0096eb51551155-test.results"
     ],
@@ -417,7 +417,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cat",
       "gs://chrome-perf/bisect-results/e28dc0d49c331def2a3bbf3ddd0096eb51551155-test.results"
     ],
@@ -446,7 +446,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "ls",
       "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results"
     ],
@@ -462,7 +462,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cat",
       "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results"
     ],

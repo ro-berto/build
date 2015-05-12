@@ -197,7 +197,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "[SLAVE_BUILD]/src/out/Debug/index_pack_linux.zip",
       "gs://chrome-codesearch/staging/index_pack_linux_170242.zip"
@@ -233,7 +233,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "[SLAVE_BUILD]/chromium_src_linux.tar.bz2",
       "gs://chrome-codesearch/staging/chromium_src_linux_170242.tar.bz2"

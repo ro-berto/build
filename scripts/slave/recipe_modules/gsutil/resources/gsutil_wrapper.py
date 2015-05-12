@@ -32,6 +32,12 @@ def main(argv):
                       metavar='N', nargs=1, default=2, type=int,
                       help='number of times to retry, with deleting trackers ')
   args = parser.parse_args()
+
+  # The -- argument for the wrapped gsutil.py is escaped as ---- as python
+  # 2.7.3 removes all occurences of --, not only the first.
+  if '----' in args.command:
+    args.command[args.command.index('----')] = '--'
+
   cmd = [sys.executable, '-u'] + args.command
 
   for hard in range(args.hard_retries):

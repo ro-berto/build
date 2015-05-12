@@ -200,7 +200,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cat",
       "gs://chromium-skia-gm/skimage/input/TIMESTAMP_LAST_UPLOAD_COMPLETED"
     ],

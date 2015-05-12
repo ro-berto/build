@@ -243,7 +243,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "[SLAVE_BUILD]/src/out/Debug/index_pack_chromeos.zip",
       "gs://chrome-codesearch/staging/index_pack_chromeos_170242.zip"
@@ -279,7 +279,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "[SLAVE_BUILD]/chromium_src_chromeos.tar.bz2",
       "gs://chrome-codesearch/staging/chromium_src_chromeos_170242.tar.bz2"

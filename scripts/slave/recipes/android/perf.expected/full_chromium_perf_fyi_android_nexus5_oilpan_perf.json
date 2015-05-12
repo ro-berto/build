@@ -98,7 +98,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "4.7",
-      "--",
+      "----",
       "cp",
       "gs://chromium-android/parent_buildername/build_product_deadbeef.zip",
       "[SLAVE_BUILD]/src/out/build_product.zip"

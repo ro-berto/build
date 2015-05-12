@@ -131,7 +131,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "[SLAVE_BUILD]/git_clone_bundler/bundles/4e9dd63391c5eb1884b9b449679dfa16.bundle",
       "gs://clone-dot-bundle-bucket/checkout/repository/src/bar/clone.bundle"

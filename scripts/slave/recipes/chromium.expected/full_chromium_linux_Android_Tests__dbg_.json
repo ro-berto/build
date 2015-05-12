@@ -941,7 +941,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "4.7",
-      "--",
+      "----",
       "cp",
       "[SLAVE_BUILD]/src/out/Debug/full_log",
       "gs://chromium-android/logcat_dumps/Android Tests (dbg)/571"

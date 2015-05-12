@@ -30,7 +30,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "dummy_location.json",
       "gs://chrome-perf/bisect-results/dummy.results"

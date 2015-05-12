@@ -415,7 +415,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/unzipped_results/appurify_results/logcat.txt",
       "gs://chrome-amp-results/logcats/logcat_android_webview_unittests_12345abcde.txt"

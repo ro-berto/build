@@ -572,7 +572,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "4.7",
-      "--",
+      "----",
       "cp",
       "-R",
       "[SLAVE_BUILD]/src/out/Release/coverage/coverage_html",

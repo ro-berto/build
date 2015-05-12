@@ -8,7 +8,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "-h",
       "Cache-Control:no-cache",
       "-h",
@@ -36,7 +36,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "gs://chromium-recipe-test/some/random/path/**",
       "gs://chromium-recipe-test/staging"
@@ -53,7 +53,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "gs://chromium-recipe-test/some/random/path/**",
       "gs://chromium-recipe-test/staging"
@@ -70,7 +70,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "gs://chromium-recipe-test/some/random/path/to/boom",
       "[SLAVE_BUILD]/boom"
@@ -87,7 +87,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "gs://chromium-recipe-test/staging/to/boom",
       "[SLAVE_BUILD]/erang"
@@ -104,7 +104,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "signurl",
       "path/to/key",
       "gs://chromium-recipe-test/some/random/path/to/boom"
@@ -121,7 +121,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "rm",
       "gs://chromium-recipe-test/staging/to/boom"
     ],

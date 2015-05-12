@@ -136,7 +136,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "4.7",
-      "--",
+      "----",
       "cp",
       "gs://chrome-perf/android_perf_rel/full-build-linux_deadbeef.zip",
       "[SLAVE_BUILD]/src/out/build_product.zip"

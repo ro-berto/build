@@ -97,7 +97,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "[SLAVE_BUILD]/v8-releases-update.json",
       "gs://chromium-v8-auto-roll/v8rel/v8-releases-update.json"

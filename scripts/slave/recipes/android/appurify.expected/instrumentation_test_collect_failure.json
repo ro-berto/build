@@ -123,7 +123,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "4.7",
-      "--",
+      "----",
       "cp",
       "gs://chromium-android/android_fyi_dbg/full-build-linux_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip",
       "[SLAVE_BUILD]/src/out/build_product.zip"
@@ -1773,7 +1773,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "[TMP_BASE]/amp_results_tmp_2/content_shell_test_apk/unzipped_results/appurify_results/logcat.txt",
       "gs://chrome-amp-results/logcats/logcat_content_shell_test_apk_12345abcde.txt"

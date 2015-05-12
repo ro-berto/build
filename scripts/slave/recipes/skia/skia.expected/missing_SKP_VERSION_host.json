@@ -212,7 +212,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "-R",
       "gs://chromium-skia-gm/playback_42/skps/*",
@@ -241,7 +241,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cat",
       "gs://chromium-skia-gm/skimage/input/TIMESTAMP_LAST_UPLOAD_COMPLETED"
     ],

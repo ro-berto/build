@@ -209,7 +209,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "[SLAVE_BUILD]/src/out/Debug/index_pack.zip",
       "gs://chrome-codesearch/index_pack_571.zip"
@@ -242,7 +242,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "[SLAVE_BUILD]/src.tar.bz2",
       "gs://chrome-codesearch/src_571.tar.bz2"

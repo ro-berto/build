@@ -40,7 +40,14 @@ class GSUtilApi(recipe_api.RecipeApi):
 
     cmd_prefix.extend(['--force-version', version])
 
-    cmd_prefix.append('--')
+    if use_retry_wrapper:
+      # The -- argument for the wrapped gsutil.py is escaped as ---- as python
+      # 2.7.3 removes all occurences of --, not only the first. Is is unescaped
+      # in gsutil_wrapper.py and then passed as -- to gsutil.py.
+      # Note, that 2.7.6 doesn't have this problem, but it doesn't hurt.
+      cmd_prefix.append('----')
+    else:
+      cmd_prefix.append('--')
 
     return self.m.python(full_name, gsutil_path, cmd_prefix + cmd,
                          infra_step=True, **kwargs)

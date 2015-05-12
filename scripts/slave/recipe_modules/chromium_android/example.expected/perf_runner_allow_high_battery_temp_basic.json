@@ -205,7 +205,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "4.7",
-      "--",
+      "----",
       "cp",
       "gs://build-bucket/build_product.zip",
       "[SLAVE_BUILD]/src/out/build_product.zip"

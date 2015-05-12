@@ -113,7 +113,7 @@
       "[DEPOT_TOOLS]\\gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "[TMP_BASE]\\zipped-profile_tmp_2\\large_profile.zip",
       "gs://chrome-partner-telemetry/large_profile/win"

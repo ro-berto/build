@@ -19,7 +19,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "/tmp/dummy1",
       "gs://chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec"
@@ -236,7 +236,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "/tmp/dummy2",
       "gs://chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec.results"

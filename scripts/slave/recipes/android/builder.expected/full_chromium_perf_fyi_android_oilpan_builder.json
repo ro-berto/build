@@ -153,7 +153,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "4.7",
-      "--",
+      "----",
       "cp",
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "gs://chromium-android/android_oilpan_builder/build_product_267739.zip"

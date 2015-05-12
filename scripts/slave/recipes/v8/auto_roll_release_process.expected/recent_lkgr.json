@@ -135,7 +135,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "3.25",
-      "--",
+      "----",
       "cp",
       "[SLAVE_BUILD]/refs_heads_lkgr.log",
       "gs://chromium-v8-auto-roll/v8_release_process/refs_heads_lkgr.log"
