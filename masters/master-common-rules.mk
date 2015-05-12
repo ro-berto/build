@@ -17,8 +17,8 @@ ifeq ($(MASTERPATH),)
   $(error MASTERPATH not defined.)
 endif
 
-# Only valid on master machines, trying not to be too clever here.
-INFRA_RUNPY = /home/chrome-bot/infra/infra/run.py
+# Use the puppet-managed infra-python CIPD deployment (which all masters have).
+INFRA_RUNPY = /opt/infra-python/run.py
 
 # Get the current host's short hostname.  We may use this in Makefiles that
 # include this file.
