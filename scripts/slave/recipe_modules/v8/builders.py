@@ -1331,6 +1331,17 @@ BUILDERS = {
         'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'linux'},
       },
+      'v8_linux_greedy_allocator_dbg': {
+        'chromium_apply_config': ['v8_goma'],
+        'v8_apply_config': ['greedy_allocator', 'turbo_variant'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing', 'benchmarks'],
+        'testing': {'platform': 'linux'},
+      },
       'v8_linux_nosnap_rel': {
         'chromium_apply_config': ['no_snapshot', 'v8_goma'],
         'v8_config_kwargs': {
@@ -1402,6 +1413,17 @@ BUILDERS = {
           'v8testing',
           'webkit',
         ],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_greedy_allocator_dbg': {
+        'chromium_apply_config': ['v8_goma'],
+        'v8_apply_config': ['greedy_allocator', 'turbo_variant'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing', 'benchmarks'],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_nacl_rel': {
