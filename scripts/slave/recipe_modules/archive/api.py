@@ -222,7 +222,9 @@ class ArchiveApi(recipe_api.RecipeApi):
     zip_file_list = [f for f in self.m.file.listdir('build_dir', build_dir)
                      if self._cf_should_package_file(f)]
 
-    pieces = [self.m.platform.name, target.lower()]
+    # Use the legacy platform name as Clusterfuzz has some expectations on
+    # this (it only affects Windows, where it replace 'win' by 'win32').
+    pieces = [self._legacy_platform_name(), target.lower()]
     if archive_subdir_suffix:
       pieces.append(archive_subdir_suffix)
     subdir = '-'.join(pieces)

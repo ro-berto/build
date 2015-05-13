@@ -56,12 +56,12 @@
       "-a",
       "public-read",
       "[TMP_BASE]\\chrome_staging_tmp_1\\chrome-asan-win-release-refs_heads_B1-123456.zip",
-      "gs://chromium/win-release-subdir/chrome-asan-win-release-refs_heads_B1-123456.zip"
+      "gs://chromium/win32-release-subdir/chrome-asan-win-release-refs_heads_B1-123456.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium/win-release-subdir/chrome-asan-win-release-refs_heads_B1-123456.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium/win32-release-subdir/chrome-asan-win-release-refs_heads_B1-123456.zip@@@"
     ]
   },
   {

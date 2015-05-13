@@ -111,6 +111,11 @@ F('win_asan_rel_prop_codecs', win_out().ChromiumASANFactory(
        'cf_archive_name': 'asan',
        'gs_bucket': 'gs://chrome-test-builds/media',
        'gclient_env': {'GYP_DEFINES': asan_win_proprietary_codecs_gyp}}))
+
+# Win SyzyASan bot.
+B('Win SyzyASAN LKGR', 'win_syzyasan_lkgr', 'compile', 'chromium_lkgr')
+F('win_syzyasan_lkgr', m_annotator.BaseFactory('chromium'))
+
 ################################################################################
 ## Mac
 ################################################################################

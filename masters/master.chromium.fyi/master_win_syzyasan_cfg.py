@@ -156,23 +156,5 @@ F('win_syzyasan_rel_tests_2', win().ChromiumASANFactory(
     }))
 
 
-U('LKGR', 'https://chromium-status.appspot.com/lkgr', include_revision=True)
-B('Win SyzyASAN LKGR', 'win_syzyasan_lkgr_rel', 'lkgr', 'LKGR',
-  notify_on_missing=True)
-lkgr_factory_properties = {
-  'cf_archive_build': ActiveMaster.is_production_host,
-  'cf_archive_name': 'asan',
-  'gs_acl': 'public-read',
-  'gs_bucket': 'gs://chromium-browser-syzyasan',
-}
-lkgr_factory_properties.update(builder_factory_properties)
-F('win_syzyasan_lkgr_rel', win().ChromiumASANFactory(
-    clobber=True,
-    slave_type='Builder',
-    options=['--build-tool=ninja', '--', 'chromium_builder_asan'],
-    compile_timeout=7200,
-    factory_properties=lkgr_factory_properties))
-
-
 def Update(_update_config, _active_master, c):
   return helper.Update(c)

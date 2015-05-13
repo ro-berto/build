@@ -8,6 +8,7 @@ from . import chromium_chrome
 from . import chromium_chromiumos
 from . import chromium_fyi
 from . import chromium_linux
+from . import chromium_lkgr
 from . import chromium_mac
 from . import chromium_memory
 from . import chromium_memory_fyi
@@ -28,6 +29,7 @@ BUILDERS = freeze({
   'chromium.chromiumos': chromium_chromiumos.SPEC,
   'chromium.fyi': chromium_fyi.SPEC,
   'chromium.linux': chromium_linux.SPEC,
+  'chromium.lkgr': chromium_lkgr.SPEC,
   'chromium.mac': chromium_mac.SPEC,
   'chromium.memory': chromium_memory.SPEC,
   'chromium.memory.fyi': chromium_memory_fyi.SPEC,
