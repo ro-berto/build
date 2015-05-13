@@ -192,6 +192,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"content_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"gl_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_browsertests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"media_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"breakpad_unittests_deps\", @@@",
@@ -219,6 +220,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"device_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"events_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"gl_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"gpu_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"ipc_tests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"junit_unit_tests\", @@@",
@@ -249,6 +251,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"device_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"events_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"gl_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"gpu_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"ipc_tests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"junit_unit_tests\", @@@",
@@ -279,6 +282,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"device_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"events_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"gl_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"gpu_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"ipc_tests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"junit_unit_tests\", @@@",
@@ -309,6 +313,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"device_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"events_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"gl_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"gpu_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"ipc_tests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"junit_unit_tests\", @@@",
@@ -408,6 +413,7 @@
       "content_unittests_apk",
       "chrome_shell_test_apk",
       "gl_tests_apk",
+      "gl_unittests_apk",
       "content_browsertests_apk",
       "media_unittests_apk",
       "breakpad_unittests_deps",
@@ -834,6 +840,26 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "events_unittests (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "gl_unittests",
+      "--verbose",
+      "--release",
+      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "gl_unittests (with patch)"
   },
   {
     "cmd": [

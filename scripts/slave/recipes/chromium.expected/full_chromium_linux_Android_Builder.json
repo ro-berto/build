@@ -193,6 +193,7 @@
       "device_unittests_apk",
       "events_unittests_apk",
       "gl_tests_apk",
+      "gl_unittests_apk",
       "gpu_unittests_apk",
       "ipc_tests_apk",
       "junit_unit_tests",
