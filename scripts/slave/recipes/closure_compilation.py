@@ -20,9 +20,9 @@ def GenSteps(api):
   api.bot_update.ensure_checkout(force=True)
 
   api.python(
-      'compiler_customization_test',
+      'run_tests',
       api.path['checkout'].join('third_party', 'closure_compiler',
-                                'compiler_customization_test.py')
+                                'run_tests.py')
   )
 
   api.step(
