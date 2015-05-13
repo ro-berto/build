@@ -31,7 +31,8 @@ def GenSteps(api):
       'json': 'example2.json',
     }
   }
-  api.v8.runperf(api.v8.perf_tests, perf_config, category='ia32')
+  api.v8.runperf(api.v8.perf_tests, perf_config, category='ia32',
+                 extra_flags=['--flag1', '--flag2'])
   output1 = api.path['slave_build'].join('test_output1.json')
   output2 = api.path['slave_build'].join('test_output2.json')
   results = api.v8.merge_perf_results(output1, output2)

@@ -786,7 +786,7 @@ class V8Api(recipe_api.RecipeApi):
 
 
   def runperf(self, tests, perf_configs, category=None, suffix='',
-              upload=True):
+              upload=True, extra_flags=None):
     """Run v8 performance tests and upload results.
 
     Args:
@@ -798,6 +798,7 @@ class V8Api(recipe_api.RecipeApi):
       suffix: Optional name suffix to differentiate multiple runs of the same
               step.
       upload: If true, uploads results to the performance dashboard.
+      extra_flags: List of flags to be passed to the test executable.
     Returns: A mapping of test config name->results map. Each results map has
              an errors and a traces item.
     """
@@ -815,6 +816,9 @@ class V8Api(recipe_api.RecipeApi):
         '--json-test-results', self.m.json.output(add_json_log=False),
         json_file,
       ]
+
+      if extra_flags:
+        full_args.append('--extra-flags="%s"' % ' '.join(extra_flags))
 
       step_test_data = lambda: self.test_api.perf_json(
           self._test_data.get('perf_failures', False))
