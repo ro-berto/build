@@ -31,11 +31,6 @@ def _BuildSteps(api, buildername, build_type):
   gn_args = []
   if 'Android' in buildername:
     args += ['--android']
-  elif 'ChromeOS' in buildername:
-    args += ['--chromeos']
-
-  if 'NaCl' in buildername:
-    gn_args += ['--nacl']
 
   if 'ASan' in buildername:
     args += ['--asan']
@@ -94,8 +89,6 @@ def _GetTestConfig(api):
   test_config = {}
   if 'Android' in buildername:
     test_config['target_os'] = 'android'
-  elif 'ChromeOS' in buildername:
-    test_config['target_os'] = 'chromeos'  # pragma: no cover
   elif 'Linux' in buildername:
     test_config['target_os'] = 'linux'
   elif 'Win' in buildername:
@@ -107,8 +100,6 @@ def _GetTestConfig(api):
 
   if 'Perf' in buildername:
     test_config['test_types'] = ['perf']
-  elif 'NaCl' in buildername:
-    test_config['test_types'] = ['default', 'nacl']
   else:
     test_config['test_types'] = ['default']
 
@@ -165,13 +156,12 @@ def GenSteps(api):
   is_try = api.tryserver.is_tryserver
   is_asan = 'ASan' in buildername
   is_perf = 'Perf' in buildername
-  is_nacl = 'NaCl' in buildername
 
   if is_android and is_tester:
     _DeviceCheckStep(api)
 
   upload_binaries = ((is_linux or is_android) and build_type == '--release'
-      and not is_try and not is_perf and not is_asan and not is_nacl)
+      and not is_try and not is_perf and not is_asan)
   if not is_tester and not is_linux and not is_win:
     # TODO(blundell): Eliminate this special case
     # once there's an Android release tester bot.
@@ -193,12 +183,9 @@ def GenTests(api):
       ['mojo_linux_dbg', 'Mojo Linux (dbg)'],
       ['mojo_linux_asan', 'Mojo Linux ASan'],
       ['mojo_linux_asan_dbg', 'Mojo Linux ASan (dbg)'],
-      ['mojo_linux_nacl', 'Mojo Linux NaCl'],
-      ['mojo_linux_nacl_dbg', 'Mojo Linux NaCl (dbg)'],
       ['mojo_android_builder', 'Mojo Android Builder'],
       ['mojo_android_dbg', 'Mojo Android (dbg)'],
       ['mojo_android_builder_tests_dbg', 'Mojo Android Builder Tests (dbg)'],
-      ['mojo_chromeos_dbg', 'Mojo ChromeOS (dbg)'],
       ['mojo_win_dbg', 'Mojo Win (dbg)'],
       ['mojo_linux_perf', 'Mojo Linux Perf']
   ]
