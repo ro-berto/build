@@ -194,18 +194,18 @@ class ChromiteApi(recipe_api.RecipeApi):
                   ['./build_packages', '--board', board],
                   args, **kwargs)
 
-  def configure(self, config_map, master, variant=None):
-    """Applies configurations to this recipe.
+  def configure(self, properties, config_map):
+    """Loads configuration from build properties into this recipe config.
 
     Args:
+      properties (Properties): The build properties object.
       config_map (dict): The configuration map to use.
-      master (str): The name of the master configuration.
-      variant (str): If not None, the name of the master variant configs to
-          apply.
     """
-    config_map = config_map.get(master, {})
+    master = properties['mastername']
+    variant = properties.get('cbb_variant')
 
     # Set the master's base configuration.
+    config_map = config_map.get(master, {})
     master_config = config_map.get('master_config')
     assert master_config, (
         "No 'master_config' configuration for '%s'" % (master,))
@@ -215,6 +215,25 @@ class ChromiteApi(recipe_api.RecipeApi):
     if variant:
       for config_name in config_map.get('variants', {}).get(variant, ()):
         self.apply_config(config_name)
+
+    # If a Chromite branch is supplied, use it to override the default Chromite
+    # checkout revision.
+    if properties.get('cbb_branch'):
+      self.c.chromite_branch = properties['cbb_branch']
+
+    # Set the build number if one is defined in the properties.
+    if self.m.properties.get('buildnumber') is not None:
+      # On a developer system, it's been noted that when the build number is
+      # zero, it's passed as an empty string in the properties JSON blob.
+      self.c.cbb.build_number = int(self.m.properties['buildnumber'] or 0)
+
+    # Run a debug build if instructed.
+    if properties.get('cbb_debug'):
+      self.c.cbb.debug = True
+
+    # If a clobber build was requested, set this builder to clobber.
+    if 'clobber' in properties:
+      self.c.cbb.clobber = True
 
   def run_cbuildbot(self, config, tryjob=False):
     """Runs a 'cbuildbot' checkout-and-build workflow.
@@ -278,11 +297,8 @@ class ChromiteApi(recipe_api.RecipeApi):
       cbb_args.append('--buildbot')
     if self.c.chromite_branch:
       cbb_args.extend(['--branch', self.c.chromite_branch])
-    if self.m.properties.get('buildnumber') is not None:
-      # On a developer system, it's been noted that when the build number is
-      # zero, it's passed as an empty string in the properties JSON blob.
-      buildnumber = self.m.properties['buildnumber'] or 0
-      cbb_args.extend(['--buildnumber', buildnumber])
+    if self.c.cbb.build_number is not None:
+      cbb_args.extend(['--buildnumber', self.c.cbb.build_number])
     if self.c.cbb.chrome_rev:
       cbb_args.extend(['--chrome_rev', self.c.cbb.chrome_rev])
     if self.c.cbb.debug:

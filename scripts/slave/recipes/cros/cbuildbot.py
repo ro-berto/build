@@ -33,18 +33,8 @@ _MASTER_CONFIG_MAP = {
 def GenSteps(api):
   # Load the appropriate configuration based on the master.
   api.chromite.configure(
-      _MASTER_CONFIG_MAP,
-      api.properties['mastername'],
-      variant=api.properties.get('cbb_variant'))
-
-  # If a Chromite branch is supplied, use it to override the default Chromite
-  # checkout revision.
-  if api.properties.get('cbb_branch'):
-    api.chromite.c.chromite_branch = api.properties['cbb_branch']
-
-  # Run a debug build if instructed.
-  if api.properties.get('cbb_debug'):
-    api.chromite.c.cbb.debug = True
+      api.properties,
+      _MASTER_CONFIG_MAP)
 
   # Run 'cbuildbot' common recipe.
   api.chromite.run_cbuildbot(
@@ -74,7 +64,7 @@ def GenTests(api):
   # master.chromiumos
   #
 
-  # Test a CrOS build with missing revision/repository properties.
+  # Test a ChromiumOS clobber Paladin build.
   yield (
       api.test('chromiumos_paladin')
       + api.properties(
@@ -86,6 +76,7 @@ def GenTests(api):
                      'manifest-versions',
           branch='master',
           revision=api.gitiles.make_hash('test'),
+          clobber=None,
           cbb_config='x86-generic-paladin',
           cbb_variant='paladin',
       )
@@ -102,7 +93,7 @@ def GenTests(api):
       )
   )
 
-  # Test a CrOS build with missing revision/repository properties.
+  # Test a ChromiumOS Paladin build whose manifest is not parsable.
   yield (
       api.test('chromiumos_paladin_manifest_failure')
       + api.properties(

@@ -51,7 +51,6 @@
       "--chrome_rev",
       "stable",
       "--debug",
-      "--clobber",
       "x86-generic-full"
     ],
     "name": "cbuildbot [x86-generic-full]"

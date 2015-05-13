@@ -86,6 +86,7 @@
       "master",
       "--buildnumber",
       "12345",
+      "--clobber",
       "--master-build-id",
       "1337",
       "x86-generic-paladin"

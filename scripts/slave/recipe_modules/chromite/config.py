@@ -34,6 +34,9 @@ def BaseConfig(**_kwargs):
       # If supplied, forward to cbuildbot as '--master-build-id'.
       build_id = Single(basestring),
 
+      # If supplied, forward to cbuildbot as '--buildnumber'.
+      build_number = Single(int),
+
       # If supplied, forward to cbuildbot as '--chrome-rev'.
       chrome_rev = Single(basestring),
 
@@ -92,4 +95,3 @@ def chromiumos_coverage_test(c):
   c.use_chrome_version = True
   c.read_cros_manifest = True
   c.cbb.chrome_rev = 'stable'
-  c.cbb.clobber = True

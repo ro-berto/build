@@ -44,9 +44,8 @@ def GenSteps(api):
 
   # Apply our generic configuration.
   api.chromite.configure(
-      _MASTER_CONFIG_MAP,
-      api.properties['mastername'],
-      variant=api.properties.get('cbb_variant'))
+      api.properties,
+      _MASTER_CONFIG_MAP)
 
   # Determine our build directory name.
   namebase = cbb_config_name
