@@ -1232,7 +1232,6 @@ SPEC = {
         steps.AndroidJunitTest('base_junit_tests'),
         steps.GTestTest('components_browsertests'),
         steps.GTestTest('gfx_unittests'),
-        steps.GTestTest('gl_unittests'),
       ],
       'testing': {
         'platform': 'linux',
