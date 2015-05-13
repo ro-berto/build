@@ -396,7 +396,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       # TODO(hans): We want this for all perf data, not just sizes.
       clang_rev_str = self.m.properties.get('got_clang_revision')
       if clang_rev_str:
-        clang_rev = re.match(r'(\d+)(-\d+)?', clang_rev_str).group(1)
+        clang_rev = re.search(r'(\d+)(-\d+)?', clang_rev_str).group(1)
         run_tests_args.append(
             "--perf-config={'r_clang_rev': '%s'}" % clang_rev)
 
