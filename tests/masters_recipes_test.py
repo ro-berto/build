@@ -70,7 +70,6 @@ SUPPRESSIONS = {
         'Mac 10.8 Release (ATI)',
         'Mac 10.8 Release (Intel)',
         'Mac Debug (Intel)',
-        'Mac Release (ATI)',
         'Mac Release (Intel)',
         'Mac Retina Debug',
         'Mac Retina Release',
