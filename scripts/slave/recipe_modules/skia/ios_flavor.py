@@ -66,9 +66,9 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
   def copy_directory_contents_to_device(self, host_dir, device_dir):
     """Like shutil.copytree(), but for copying to a connected device."""
     return self._skia_api.m.step(
-        'push %s to %s' % (host_dir, device_dir),
+        name='push %s to %s' % (self._skia_api.m.path.basename(host_dir), self._skia_api.m.path.basename(device_dir)),
         cmd=[self.ios_bin.join('ios_push_if_needed'),
-             host_dir, device_dir]
+             host_dir, device_dir ]
     )
 
   def copy_directory_contents_to_host(self, device_dir, host_dir):

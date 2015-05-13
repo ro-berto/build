@@ -96,7 +96,7 @@
       "skiabot/skia_resources"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "push [SLAVE_BUILD]/skia/resources to skiabot/skia_resources"
+    "name": "push resources to skia_resources"
   },
   {
     "cmd": [
@@ -183,7 +183,7 @@
       "skiabot/skia_skp/skps"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "push [SLAVE_BUILD]/playback/skps to skiabot/skia_skp/skps"
+    "name": "push skps to skps"
   },
   {
     "cmd": [
@@ -262,7 +262,7 @@
       "skiabot/skia_images"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "push [SLAVE_BUILD]/images to skiabot/skia_images"
+    "name": "push images to skia_images"
   },
   {
     "cmd": [
