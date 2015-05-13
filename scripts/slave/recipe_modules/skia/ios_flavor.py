@@ -93,9 +93,11 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def install(self):
     """Run device-specific installation steps."""
+    env = {'BUILDTYPE': self._skia_api.c.configuration}
     self._skia_api.m.step(
         name='install iOSShell',
-        cmd=[self.ios_bin.join('ios_install')]
+        cmd=[self.ios_bin.join('ios_install')],
+        env=env
     )
 
   def cleanup_steps(self):

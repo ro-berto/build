@@ -84,6 +84,9 @@
       "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_install"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug"
+    },
     "name": "install iOSShell"
   },
   {
