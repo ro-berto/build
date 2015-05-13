@@ -53,6 +53,8 @@ SCHEDULERS = [
   INFRA_PERCOMMIT_SCHEDULER_NAME,
 ]
 
+KEYWORD_NO_MERGE_BUILDS = 'NO_MERGE_BUILDS'
+
 
 def CanMergeBuildRequests(req1, req2):
   """Determine whether or not two BuildRequests can be merged.
@@ -93,7 +95,11 @@ def CanMergeBuildRequests(req1, req2):
     return False
   if not req1.source.changes and req2.source.changes:
     return False
-  if not (req1.source.changes and req2.source.changes):
+  if req1.source.changes and req2.source.changes:
+    for ch in (req1.source.changes + req2.source.changes):
+      if KEYWORD_NO_MERGE_BUILDS in ch.comments:
+        return False
+  else:
     if req1.source.revision != req2.source.revision:
       return False
 
