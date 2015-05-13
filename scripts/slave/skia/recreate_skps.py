@@ -24,6 +24,7 @@ COMMIT_MSG = '''Update SKP version
 Automatic commit by the RecreateSKPs bot.
 
 TBR=
+NO_MERGE_BUILDS
 '''
 SKIA_COMMITTER_EMAIL = 'skia.buildbots@gmail.com'
 SKIA_COMMITTER_NAME = 'skia.buildbots'
