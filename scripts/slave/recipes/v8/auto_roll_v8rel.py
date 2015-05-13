@@ -37,5 +37,6 @@ def GenSteps(api):
 
 
 def GenTests(api):
-  yield api.test('standard') + api.properties.generic(mastername='client.v8')
+  yield api.test('standard') + api.properties.generic(
+      mastername='client.v8.fyi')
 

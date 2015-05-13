@@ -189,7 +189,7 @@ def GenTests(api):
   )
   yield (
       api.test('roll') +
-      api.properties.generic(mastername='client.v8',
+      api.properties.generic(mastername='client.v8.fyi',
                              buildername='Auto-roll - v8 deps') +
       api.override_step_data(
           'gclient get v8 deps',
