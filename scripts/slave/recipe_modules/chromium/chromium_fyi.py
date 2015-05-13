@@ -73,8 +73,7 @@ SPEC = {
       },
     },
     'Linux ARM Cross-Compile': {
-      # TODO(phajdan.jr): Re-enable goma, http://crbug.com/349236 .
-      'chromium_config': 'chromium_no_goma',
+      'chromium_config': 'chromium',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
