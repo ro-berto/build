@@ -78,6 +78,7 @@ SUPPRESSIONS = {
         'Win7 Release (NVIDIA)',
         'Win8 Debug (NVIDIA)',
         'Win8 Release (NVIDIA)',
+        'Win7 Release (ATI)',
     ],
     'master.chromium.linux': [
         'Android GN',
