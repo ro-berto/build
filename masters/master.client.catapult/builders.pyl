@@ -29,7 +29,7 @@
         "os": "linux",
         "version": "precise",
       },
-      "slaves": ["vm600-m3"],
+      "slaves": ["vm113-m3"],
     },
     "mac_slave_pool": {
       "slave_data": {
@@ -37,7 +37,7 @@
         "os": "mac",
         "version": "10.9",
       },
-      "slaves": ["vm113-m3"],
+      "slaves": ["vm600-m3"],
     },
     "win_slave_pool": {
       "slave_data": {
