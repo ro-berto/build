@@ -9,7 +9,7 @@ RESULTS_URL = 'https://chromeperf.appspot.com'
 SPEC = {
   'builders': {
     'Win SyzyASAN LKGR': {
-      'chromium_config': 'chromium',
+      'chromium_config': 'chromium_no_goma',
       'chromium_apply_config': ['syzyasan', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
