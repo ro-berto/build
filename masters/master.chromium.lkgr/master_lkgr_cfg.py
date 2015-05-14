@@ -114,7 +114,7 @@ F('win_asan_rel_prop_codecs', win_out().ChromiumASANFactory(
 
 # Win SyzyASan bot.
 B('Win SyzyASAN LKGR', 'win_syzyasan_lkgr', 'compile', 'chromium_lkgr')
-F('win_syzyasan_lkgr', m_annotator.BaseFactory('chromium'))
+F('win_syzyasan_lkgr', m_annotator.BaseFactory(recipe='chromium', timeout=7200))
 
 ################################################################################
 ## Mac
