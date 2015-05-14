@@ -13,11 +13,25 @@ SPEC = {
     # This is intended to build in the same way as the main perf builder.
     'linux_perf_bisect_builder':
         chromium_perf.SPEC['builders']['Linux Builder'],
+    'linux_perf_bisect':
+        chromium_perf.SPEC['builders']['Linux Builder'],
     'win_perf_bisect_builder':
+        chromium_perf.SPEC['builders']['Win Builder'],
+    'win_perf_bisect':
+        chromium_perf.SPEC['builders']['Win Builder'],
+    'win_8_perf_bisect':
+        chromium_perf.SPEC['builders']['Win Builder'],
+    'win_xp_perf_bisect':
         chromium_perf.SPEC['builders']['Win Builder'],
     'win_x64_perf_bisect_builder':
         chromium_perf.SPEC['builders']['Win x64 Builder'],
+    'win_x64_perf_bisect':
+        chromium_perf.SPEC['builders']['Win x64 Builder'],
     'mac_perf_bisect_builder':
+        chromium_perf.SPEC['builders']['Mac Builder'],
+    'mac_perf_bisect':
+        chromium_perf.SPEC['builders']['Mac Builder'],
+    'mac_10_9_perf_bisect':
         chromium_perf.SPEC['builders']['Mac Builder'],
     'linux_perf_tester':{
       'chromium_config': 'chromium_official',

@@ -6,6 +6,7 @@ import json
 
 DEPS = [
     'auto_bisect',
+    'chromium_tests',
     'path',
     'properties',
     'raw_io',
@@ -56,6 +57,15 @@ def GenSteps(api):
   # TODO(robertocn): Add examples for the following operations
   # Abort unnecesary jobs # Print results
 
+  # Test runner for classic bisect script.
+  # Calls bisect script in recipe wrapper with extra_src and path_to_config,
+  # to override default behavior.
+  if api.properties.get('mastername'):
+    mastername = api.properties.get('mastername')
+    buildername = api.properties.get('buildername')
+    api.chromium_tests.configure_build(mastername, buildername)
+    api.chromium_tests.prepare_checkout(mastername, buildername)
+    api.auto_bisect.run_bisect_script('dummy_extra_src', '/dummy/path/')
 
 def GenTests(api):
   wait_for_any_output = (
@@ -66,6 +76,10 @@ def GenTests(api):
   basic_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
       stdout=api.raw_io.output(wait_for_any_output))
+
+  basic_test += api.properties(mastername='tryserver.chromium.perf',
+                               buildername='linux_perf_bisect',
+                               slavename='dummyslave')
   yield basic_test
 
   failed_data = _get_basic_test_data()

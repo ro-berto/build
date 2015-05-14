@@ -99,3 +99,35 @@ class AutoBisectApi(recipe_api.RecipeApi):
                              cwd=git_checkout_dir,
                              stdout=self.m.raw_io.output())
     return dict(zip(targets, step_result.stdout.split(separator)))
+
+  def run_bisect_script(self, extra_src='', path_to_config='', **kwargs):
+    """Executes run-perf-bisect-regression.py to perform bisection.
+
+    Args:
+      extra_src (str): Path to extra source file. If this is supplied,
+        bisect script will use this to override default behavior.
+      path_to_config (str): Path to the config file to use. If this is supplied,
+        the bisect script will use this to override the default config file
+        path.
+    """
+    self.m.step(
+        'Preparing for Bisection',
+        [self.m.path['checkout'].join('tools',
+                                      'prepare-bisect-perf-regression.py'),
+        '-w', self.m.path['slave_build']])
+    args = []
+    if extra_src:
+      args = args + ['--extra_src', extra_src]
+    if path_to_config:
+      args = args + ['--path_to_config', path_to_config]
+
+    args += ['--path_to_goma', self.m.path['build'].join('goma')]
+    args += [
+        '--build-properties',
+        self.m.json.dumps(self.m.chromium.build_properties),
+      ]
+    self.m.chromium.runtest(
+        self.m.path['checkout'].join('tools', 'run-bisect-perf-regression.py'),
+        ['-w', self.m.path['slave_build']] + args,
+        name='Running Bisection',
+        xvfb=True, **kwargs)
