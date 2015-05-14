@@ -471,6 +471,13 @@ def infra_internal(c):  # pragma: no cover
   soln.url = 'https://chrome-internal.googlesource.com/infra/infra_internal.git'
   c.got_revision_mapping['infra_internal'] = 'got_revision'
 
+@config_ctx(includes=['infra'])
+def luci_go(c):
+  # luci-go is checked out as a part of infra.git solution at HEAD.
+  c.revisions['infra'] = 'origin/master'
+  c.revisions['infra/go/src/github.com/luci/luci-go'] = (
+      gclient_api.RevisionFallbackChain('origin/master'))
+
 @config_ctx()
 def chrome_from_buildspec(c):  # pragma: no cover
   soln = c.solutions.add()
