@@ -17,6 +17,7 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
+      'disable_tests': True,
       'cf_archive_build': True,
       'cf_gs_bucket': 'chromium-browser-syzyasan',
       'cf_gs_acl': 'public-read',
