@@ -167,6 +167,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
+      "--verbose",
       "-s",
       "R32CB017X2L"
     ],
@@ -191,6 +192,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
+      "--verbose",
       "-s",
       "R32CB017X2L",
       "[SLAVE_BUILD]/skia/resources",
@@ -464,6 +466,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
+      "--verbose",
       "--logcat",
       "-d",
       "nexus_10",
@@ -517,6 +520,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
+      "--verbose",
       "-s",
       "R32CB017X2L",
       "/storage/emulated/legacy/skiabot/skia_dm",

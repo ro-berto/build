@@ -88,6 +88,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
   def step(self, name, cmd, **kwargs):
     self._adb.maybe_wait_for_device()
     args = [self.android_bin.join('android_run_skia'),
+            '--verbose',
             '--logcat',
             '-d', self.device,
             '-s', self.serial,
@@ -147,7 +148,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     """Like shutil.copytree(), but for copying to a connected device."""
     self._skia_api.m.step(
         name='push %s' % self._skia_api.m.path.basename(host_dir),
-        cmd=[self.android_bin.join('adb_push_if_needed'),
+        cmd=[self.android_bin.join('adb_push_if_needed'), '--verbose',
              '-s', self.serial, host_dir, device_dir],
         env=self._default_env)
 
@@ -155,7 +156,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     """Like shutil.copytree(), but for copying from a connected device."""
     self._skia_api.m.step(
         name='pull %s' % self._skia_api.m.path.basename(device_dir),
-        cmd=[self.android_bin.join('adb_pull_if_needed'),
+        cmd=[self.android_bin.join('adb_pull_if_needed'), '--verbose',
              '-s', self.serial, device_dir, host_dir],
         env=self._default_env)
 
@@ -183,7 +184,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     # TODO(borenet): Set CPU scaling mode to 'performance'.
     self._skia_api.m.step(name='kill skia',
                           cmd=[self.android_bin.join('android_kill_skia'),
-                               '-s', self.serial],
+                               '--verbose', '-s', self.serial],
                           env=self._default_env)
     if self._has_root:
       self._adb(name='stop shell',

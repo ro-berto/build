@@ -167,6 +167,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
+      "--verbose",
       "-s",
       "8AB5139A"
     ],
@@ -191,6 +192,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
+      "--verbose",
       "-s",
       "8AB5139A",
       "[SLAVE_BUILD]/skia/resources",
@@ -464,6 +466,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
+      "--verbose",
       "--logcat",
       "-d",
       "x86",
@@ -516,6 +519,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
+      "--verbose",
       "-s",
       "8AB5139A",
       "/storage/emulated/legacy/skiabot/skia_dm",
@@ -563,6 +567,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_run_skia",
+      "--verbose",
       "--logcat",
       "-d",
       "x86",
