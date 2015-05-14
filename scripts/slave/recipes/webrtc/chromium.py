@@ -69,7 +69,9 @@ def GenSteps(api):
           gtest_filter='WebRtc*')
       api.chromium_android.common_tests_final_steps()
     else:
-      api.chromium_tests.setup_chromium_tests(webrtc.runtests)
+      with api.chromium_tests.wrap_chromium_tests(
+          api.properties.get('mastername')):
+        webrtc.runtests()
 
   webrtc.maybe_trigger()
 
