@@ -844,7 +844,8 @@ def NeedEnvFileUpdateOnWin(env):
       'GOMA_API_KEY_FILE',
       'GOMA_DEPS_CACHE_DIR',
       'GOMA_HERMETIC',
-      'GOMA_RPC_EXTRA_PARAMS'
+      'GOMA_RPC_EXTRA_PARAMS',
+      'GOMA_ALLOWED_NETWORK_ERROR_DURATION'
   )
   for key in env.overrides:
     if key not in ignore_envs:
