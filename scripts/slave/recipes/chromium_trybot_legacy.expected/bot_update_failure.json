@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "linux_chromium_asan_rel",
+      "linux_chromium_trusty_rel",
       "--slave",
       "TestSlavename",
       "--spec",

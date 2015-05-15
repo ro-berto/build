@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "linux_chromium_asan_rel",
+      "linux_chromium_trusty_rel",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -73,13 +73,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium_memory_trybot.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium_trybot.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: testing/buildbot/chromium_memory_trybot.json@@@",
+      "@@@STEP_TEXT@path: testing/buildbot/chromium_trybot.json@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
@@ -105,7 +105,7 @@
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"exclude_builders\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"tryserver.chromium.win:win_chromium_x64_rel\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"tryserver.chromium.linux:linux_chromium_trusty_rel\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"test\": \"browser_tests\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -126,7 +126,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"linux_chromium_asan_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"linux_chromium_trusty_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -144,21 +144,9 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' lsan=1 target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks (with patch)"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/src"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clang_revision"
   },
   {
     "cmd": [
@@ -172,12 +160,12 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-dir",
       "[BUILD]/goma",
       "--",
+      "all",
       "base_unittests",
-      "browser_tests",
       "mojo_common_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -195,7 +183,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "linux_chromium_asan_rel",
+      "linux_chromium_trusty_rel",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -249,21 +237,9 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' lsan=1 target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks (without patch)"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/src"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clang_revision (2)"
   },
   {
     "cmd": [
@@ -277,12 +253,12 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-dir",
       "[BUILD]/goma",
       "--",
+      "all",
       "base_unittests",
-      "browser_tests",
       "mojo_common_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",

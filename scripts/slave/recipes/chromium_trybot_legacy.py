@@ -48,33 +48,6 @@ BUILDERS = freeze({
         },
         'use_isolate': True,
       },
-      'linux_chromium_asan_rel': {
-        'add_telemetry_tests': False,
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'enable_swarming': True,
-        'exclude_compile_all': True,
-        'chromium_config': 'chromium_linux_asan',
-        'compile_only': False,
-        'use_lsan': True,
-        'testing': {
-          'platform': 'linux',
-          'test_spec_file': 'chromium_memory_trybot.json',
-        },
-      },
-      'linux_chromium_compile_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'chromium_config': 'chromium',
-        'compile_only': True,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
       'linux_chromium_trusty_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -123,17 +96,6 @@ BUILDERS = freeze({
   },
   'tryserver.chromium.win': {
     'builders': {
-      'win_chromium_compile_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'chromium_config': 'chromium',
-        'compile_only': True,
-        'testing': {
-          'platform': 'win',
-        },
-      },
       'win_chromium_x64_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -230,26 +192,7 @@ def find_test_named(test_name, tests):
 
 
 def _GenStepsInternal(api):
-  def swarming_shards_from_test_spec(test_spec, test_name):
-    if isinstance(test_spec, dict):
-      gtest_tests_spec = test_spec.get('gtest_tests', [])
-    else:
-      # TODO(phajdan.jr): Convert test step data and remove this.
-      gtest_tests_spec = test_spec
-
-    for test in gtest_tests_spec:
-      if not isinstance(test, dict):
-        continue
-
-      if test['test'] == test_name:
-        swarming_spec = test.get('swarming', {})
-        if not swarming_spec.get('can_use_on_swarming_builders'):
-          continue
-        return (True, swarming_spec.get('shards', 1))
-
-    return (False, -1)
-
-  def parse_test_spec(test_spec, enable_swarming, should_use_test):
+  def parse_test_spec(test_spec, should_use_test):
     """Returns a list of tests to run and additional targets to compile.
 
     Uses 'should_use_test' callback to figure out what tests should be skipped.
@@ -287,26 +230,12 @@ def _GenStepsInternal(api):
       if not test_name or not should_use_test(test_dict):
         continue
 
-      # If test can run on swarming, test_dict has a section that defines when
-      # swarming should be used, in same format as main test dict.
-      use_swarming = False
-      swarming_shards = 1
-      if enable_swarming:
-        use_swarming, swarming_shards = swarming_shards_from_test_spec(
-            test_spec, test_name)
-
       test_args = test_dict.get('args')
       if isinstance(test_args, basestring):
         test_args = [test_args]
 
-      if use_swarming:
-        test = api.chromium.steps.GTestTest(
-            test_name, test_args, enable_swarming=True,
-            swarming_shards=swarming_shards)
-        assert test.uses_swarming
-      else:
-        test = api.chromium.steps.GTestTest(test_name, test_args)
-        assert not test.uses_swarming
+      test = api.chromium.steps.GTestTest(test_name, test_args)
+      assert not test.uses_swarming
 
       gtest_tests.append(test)
 
@@ -342,7 +271,9 @@ def _GenStepsInternal(api):
         },
         {
           'test': 'browser_tests',
-          'exclude_builders': ['tryserver.chromium.win:win_chromium_x64_rel'],
+          'exclude_builders': [
+              'tryserver.chromium.linux:linux_chromium_trusty_rel',
+          ],
         },
       ])
     step_result = api.json.read(
@@ -370,8 +301,6 @@ def _GenStepsInternal(api):
     if bot_config['compile_only']:
       api.chromium.c.gyp_env.GYP_DEFINES['fastbuild'] = 2
     api.chromium.apply_config('trybot_flavor')
-    if bot_config.get('use_lsan', False):
-      api.chromium.apply_config('lsan')
     api.gclient.set_config('chromium')
 
     bot_update_step = api.bot_update.ensure_checkout(force=True)
@@ -394,7 +323,6 @@ def _GenStepsInternal(api):
     # Parse test spec file into list of Test instances.
     compile_targets, gtest_tests = parse_test_spec(
         test_spec,
-        bot_config.get('enable_swarming'),
         should_use_test)
     compile_targets.extend(bot_config.get('compile_targets', []))
     # TODO(phajdan.jr): Also compile 'all' on win, http://crbug.com/368831 .
@@ -452,17 +380,10 @@ def _GenStepsInternal(api):
     if api.platform.is_win:
       tests.append(api.chromium.steps.MiniInstallerTest())
 
-    has_swarming_tests = any(t.uses_swarming for t in tests)
-
     # Swarming uses Isolate to transfer files to swarming bots.
     # set_isolate_environment modifies GYP_DEFINES to enable test isolation.
-    if bot_config.get('use_isolate') or has_swarming_tests:
+    if bot_config.get('use_isolate'):
       api.isolate.set_isolate_environment(api.chromium.c)
-
-    # If going to use swarming_client (pinned in src/DEPS), ensure it is
-    # compatible with what recipes expect.
-    if has_swarming_tests:
-      api.swarming.check_client_version()
 
     try:
       api.chromium.runhooks(name='runhooks (with patch)')
@@ -471,7 +392,7 @@ def _GenStepsInternal(api):
       api.chromium_tests.deapply_patch(bot_update_step)
       raise
 
-    if bot_config.get('use_isolate') or has_swarming_tests:
+    if bot_config.get('use_isolate'):
       api.isolate.clean_isolated_files(api.chromium.output_dir)
 
     compile_targets.extend(api.itertools.chain(
@@ -495,7 +416,7 @@ def _GenStepsInternal(api):
         raise
       raise
 
-    if bot_config.get('use_isolate') or has_swarming_tests:
+    if bot_config.get('use_isolate'):
       # Remove the build metadata from the binaries.
       api.isolate.remove_build_metadata()
       # Isolate all prepared targets, will look for *.isolated.gen.json files.
@@ -515,26 +436,15 @@ def _GenStepsInternal(api):
 
   def deapply_patch_fn(failing_tests):
     api.chromium_tests.deapply_patch(bot_update_step)
-    compile_targets = list(api.itertools.chain(
-        *[t.compile_targets(api) for t in failing_tests]))
+    compile_targets = sorted(list(set(api.itertools.chain(
+        *[t.compile_targets(api) for t in failing_tests]))))
     if compile_targets:
-      # Remove duplicate targets.
-      compile_targets = sorted(set(compile_targets))
-      # Search for *.isolated only if enabled in bot config or if some
-      # swarming test is being recompiled.
-      bot_config = get_bot_config(mastername, buildername)
-      has_failing_swarming_tests = [
-          t for t in failing_tests if t.uses_swarming]
-      if bot_config.get('use_isolate') or has_failing_swarming_tests:
-        api.isolate.clean_isolated_files(api.chromium.output_dir)
       try:
         api.chromium.compile(
             compile_targets, name='compile (without patch)')
       except api.step.StepFailure:
         api.tryserver.set_transient_failure_tryjob_result()
         raise
-      if bot_config.get('use_isolate') or has_failing_swarming_tests:
-        api.isolate.isolate_tests(api.chromium.output_dir, verbose=True)
 
   return api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
 
@@ -552,7 +462,7 @@ def GenTests(api):
   canned_test = api.test_utils.canned_gtest_output
 
   def props(config='Release', mastername='tryserver.chromium.linux',
-            buildername='linux_chromium_asan_rel', extra_swarmed_tests=None,
+            buildername='linux_chromium_trusty_rel', extra_swarmed_tests=None,
             **kwargs):
     kwargs.setdefault('revision', None)
     swarm_hashes = api.gpu.dummy_swarm_hashes
@@ -653,7 +563,7 @@ def GenTests(api):
   for step in ('bot_update', 'gclient runhooks (with patch)'):
     yield (
       api.test(_sanitize_nonalpha(step) + '_failure') +
-      props(buildername='linux_chromium_asan_rel',
+      props(buildername='linux_chromium_trusty_rel',
             mastername='tryserver.chromium.linux') +
       api.platform.name('linux') +
       api.step_data(step, retcode=1)
@@ -670,7 +580,7 @@ def GenTests(api):
 
   yield (
     api.test('compile_failure') +
-    props(buildername='linux_chromium_asan_rel',
+    props(buildername='linux_chromium_trusty_rel',
           mastername='tryserver.chromium.linux') +
     api.platform.name('linux') +
     api.step_data('compile (with patch)', retcode=1)
@@ -678,7 +588,7 @@ def GenTests(api):
 
   yield (
     api.test('compile_failure_without_patch') +
-    props(buildername='linux_chromium_asan_rel',
+    props(buildername='linux_chromium_trusty_rel',
           mastername='tryserver.chromium.linux') +
     api.platform.name('linux') +
     api.step_data('compile (with patch)', retcode=1) +
@@ -703,30 +613,6 @@ def GenTests(api):
         ],
       })
     )
-  )
-
-  yield (
-    api.test('check_swarming_version_failure') +
-    props(mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_asan_rel') +
-    api.platform.name('linux') +
-    api.step_data('swarming.py --version', retcode=1) +
-    api.override_step_data('read test spec', api.json.output({
-        'gtest_tests': [
-          {
-            'test': 'base_unittests',
-            'swarming': {'can_use_on_swarming_builders': True},
-          },
-          {
-            'test': 'browser_tests',
-            'exclude_builders': [
-              'tryserver.chromium.linux:linux_chromium_asan_rel'
-            ],
-          },
-        ],
-      })
-      ) +
-    suppress_analyze()
   )
 
   # Successfully compiling, isolating and running two targets on swarming for a
@@ -761,7 +647,7 @@ def GenTests(api):
   # manual try job.
   yield (
     api.test('swarming_basic_try_job') +
-    props(buildername='linux_chromium_asan_rel', requester='joe@chromium.org',
+    props(buildername='linux_chromium_trusty_rel', requester='joe@chromium.org',
           extra_swarmed_tests=['base_unittests', 'browser_tests']) +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
@@ -809,7 +695,7 @@ def GenTests(api):
 
   yield (
     api.test('no_compile_because_of_analyze') +
-    props(buildername='linux_chromium_asan_rel') +
+    props(buildername='linux_chromium_trusty_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
       })
@@ -819,7 +705,7 @@ def GenTests(api):
   # Verifies analyze doesn't skip projects other than src.
   yield (
     api.test('analyze_for_non_src_project') +
-    props(buildername='linux_chromium_asan_rel') +
+    props(buildername='linux_chromium_trusty_rel') +
     props(patch_project='blink') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
@@ -830,7 +716,7 @@ def GenTests(api):
   # This should result in a compile.
   yield (
     api.test('compile_because_of_analyze_matching_exclusion') +
-    props(buildername='linux_chromium_asan_rel') +
+    props(buildername='linux_chromium_trusty_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
       'gtest_tests': ['base_unittests'],
@@ -841,7 +727,7 @@ def GenTests(api):
   # This should result in a compile.
   yield (
     api.test('compile_because_of_analyze') +
-    props(buildername='linux_chromium_asan_rel') +
+    props(buildername='linux_chromium_trusty_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
       })
@@ -854,7 +740,7 @@ def GenTests(api):
 
   yield (
     api.test('compile_because_of_analyze_with_filtered_tests_no_builder') +
-    props(buildername='linux_chromium_asan_rel') +
+    props(buildername='linux_chromium_trusty_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [
@@ -880,7 +766,7 @@ def GenTests(api):
 
   yield (
     api.test('compile_because_of_analyze_with_filtered_tests') +
-    props(buildername='linux_chromium_asan_rel') +
+    props(buildername='linux_chromium_trusty_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [
@@ -907,7 +793,7 @@ def GenTests(api):
   # Tests compile_target portion of analyze module.
   yield (
     api.test('compile_because_of_analyze_with_filtered_compile_targets') +
-    props(buildername='linux_chromium_asan_rel') +
+    props(buildername='linux_chromium_trusty_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'gtest_tests': [
@@ -937,7 +823,7 @@ def GenTests(api):
   yield (
     api.test(
       'compile_because_of_analyze_with_filtered_compile_targets_exclude_all') +
-    props(buildername='linux_chromium_asan_rel') +
+    props(buildername='linux_chromium_trusty_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'compile_targets': ['base_unittests'],
@@ -964,7 +850,7 @@ def GenTests(api):
   yield (
     api.test(
       'analyze_finds_invalid_target') +
-    props(buildername='linux_chromium_asan_rel') +
+    props(buildername='linux_chromium_trusty_rel') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({
         'compile_targets': ['base_unittests'],

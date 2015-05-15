@@ -511,6 +511,42 @@ def GenTests(api):
   )
 
   yield (
+    api.test('swarming_trigger_failure') +
+    props() +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'Linux Tests': {
+            'gtest_tests': [
+                {
+                  'test': 'base_unittests',
+                  'swarming': {'can_use_on_swarming_builders': True},
+                },
+            ],
+        },
+    })) +
+    suppress_analyze()
+  )
+
+  yield (
+    api.test('swarming_test_failure') +
+    props() +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'Linux Tests': {
+            'gtest_tests': [
+                {
+                  'test': 'media_unittests',
+                  'swarming': {'can_use_on_swarming_builders': True},
+                },
+            ],
+        },
+    })) +
+    suppress_analyze() +
+    api.override_step_data('media_unittests (with patch)',
+                           canned_test(passing=False))
+  )
+
+  yield (
     api.test('compile_failure_without_patch_deapply_fn') +
     props() +
     api.platform.name('linux') +
