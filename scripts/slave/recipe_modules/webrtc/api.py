@@ -226,13 +226,6 @@ class WebRTCApi(recipe_api.RecipeApi):
         # waterfalls (marked as MANUAL_) since they rely on special setup and/or
         # physical audio/video devices.
         self._add_webrtc_browser_tests()
-
-        # Same tests but running with the old Video Engine API.
-        variations_server = 'https://clients4.google.com/chrome-variations/seed'
-        extra_args=['--variations-server-url=%s' % variations_server,
-                    '--fake-variations-channel=canary',
-                    '--force-fieldtrials=WebRTC-NewVideoAPI/Disabled/']
-        self._add_webrtc_browser_tests(extra_args, suffix='_old_vie')
         self.add_test('content_unittests')
       elif self.c.TEST_SUITE == 'android':
         self.m.chromium_android.common_tests_setup_steps()
@@ -250,21 +243,15 @@ class WebRTCApi(recipe_api.RecipeApi):
         #self.m.chromium_android.stack_tool_steps()
         self.m.chromium_android.test_report()
 
-  def _add_webrtc_browser_tests(self, extra_args=None, suffix=None):
-    extra_args = extra_args or []
-    suffix = suffix or ''
+  def _add_webrtc_browser_tests(self):
     self.add_test(test='content_browsertests',
-                  name='content_browsertests%s' % suffix,
-                  perf_dashboard_id='content_browsertests%s' % suffix,
                   args=['--gtest_filter=WebRtc*', '--run-manual',
                         '--test-launcher-print-test-stdio=always',
-                        '--test-launcher-bot-mode'] + extra_args,
+                        '--test-launcher-bot-mode'],
         revision=self.perf_revision,
         perf_test=True)
     self.add_test(
         test='browser_tests',
-        name='browser_tests%s' % suffix,
-        perf_dashboard_id='browser_tests%s' % suffix,
         # These tests needs --test-launcher-jobs=1 since some of them are
         # not able to run in parallel (due to the usage of the
         # peerconnection server).
@@ -274,7 +261,7 @@ class WebRTCApi(recipe_api.RecipeApi):
                 '--run-manual', '--ui-test-action-max-timeout=350000',
                 '--test-launcher-jobs=1',
                 '--test-launcher-bot-mode',
-                '--test-launcher-print-test-stdio=always'] + extra_args,
+                '--test-launcher-print-test-stdio=always'],
         revision=self.perf_revision,
         # The WinXP tester doesn't run the audio quality perf test.
         perf_test='xp' not in self.c.PERF_ID)
