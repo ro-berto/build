@@ -237,7 +237,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     sortkey_path = self._get_comparable_upload_path_for_sort_key(
         cp_branch, cp_number)
     zip_file_base_name = '%s-%s-%s%s-%s' % (archive_prefix,
-                                            self.m.platform.name,
+                                            self._legacy_platform_name(),
                                             target.lower(),
                                             component,
                                             sortkey_path)

@@ -142,7 +142,7 @@
       "-u",
       "RECIPE_MODULE[archive]\\resources\\zip_archive.py",
       "[TMP_BASE]\\chrome_staging_tmp_1",
-      "asan-win-release-170242",
+      "asan-win32-release-170242",
       "[\"file 1\", \"file 2\"]",
       "[SLAVE_BUILD]\\src\\out\\Release"
     ],
@@ -166,13 +166,13 @@
       "cp",
       "-a",
       "public-read",
-      "[TMP_BASE]\\chrome_staging_tmp_1\\asan-win-release-170242.zip",
-      "gs://chromium-browser-syzyasan/win32-release/asan-win-release-170242.zip"
+      "[TMP_BASE]\\chrome_staging_tmp_1\\asan-win32-release-170242.zip",
+      "gs://chromium-browser-syzyasan/win32-release/asan-win32-release-170242.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-syzyasan/win32-release/asan-win-release-170242.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-syzyasan/win32-release/asan-win32-release-170242.zip@@@"
     ]
   },
   {
@@ -180,10 +180,10 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[TMP_BASE]\\chrome_staging_tmp_1\\asan-win-release-170242.zip"
+      "[TMP_BASE]\\chrome_staging_tmp_1\\asan-win32-release-170242.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "asan-win-release-170242.zip",
+    "name": "asan-win32-release-170242.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
