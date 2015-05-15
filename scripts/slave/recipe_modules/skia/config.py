@@ -5,7 +5,6 @@
 from slave.recipe_config import config_item_context, ConfigGroup
 from slave.recipe_config import Dict, Set, Single, Static
 from slave.recipe_config_types import Path
-from slave.skia import slaves_cfg
 from common.skia import builder_name_schema
 
 
@@ -31,7 +30,6 @@ def BaseConfig(BUILDER_NAME, MASTER_NAME, SLAVE_NAME, **_kwargs):
     ),
     is_trybot = Single(bool),
     role = Single(str),
-    slave_cfg = Single(dict)
   )
 
 
@@ -105,9 +103,6 @@ def gyp_defs_from_builder_dict(builder_dict):
       if not ('GDI' in builder_dict.get('extra_config', '') or
               'Exceptions' in builder_dict.get('extra_config', '')):
         werr = True
-    elif 'Mac' in builder_dict.get('os', ''):
-      if 'iOS' in builder_dict.get('extra_config', ''):  # pragma: no cover
-        werr = True
     else:
       werr = True
   gyp_defs['skia_warnings_as_errors'] = str(int(werr))  # True/False -> '1'/'0'
@@ -149,7 +144,7 @@ def gyp_defs_from_builder_dict(builder_dict):
   if (builder_dict.get('os') == 'Mac10.8' and
       builder_dict.get('arch') == 'x86_64' and
       builder_dict.get('configuration') == 'Release'):
-    gyp_defs['skia_run_pdfviewer_in_gm'] = '1'  # pragma: no cover
+    gyp_defs['skia_run_pdfviewer_in_gm'] = '1'
 
   # Clang.
   if builder_dict.get('compiler') == 'Clang':
@@ -203,7 +198,6 @@ def skia(c):
                       c.configuration == CONFIG_DEBUG) or
                      'Valgrind' in c.BUILDER_NAME)
   c.gyp_env.GYP_DEFINES.update(gyp_defs_from_builder_dict(c.builder_cfg))
-  c.slave_cfg = slaves_cfg.get(c.MASTER_NAME)[c.SLAVE_NAME]
   c.is_trybot = builder_name_schema.IsTrybot(c.BUILDER_NAME)
   c.extra_env_vars = get_extra_env_vars(c.builder_cfg)
   arch = (c.builder_cfg.get('arch') or c.builder_cfg.get('target_arch'))

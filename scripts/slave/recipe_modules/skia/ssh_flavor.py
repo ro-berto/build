@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 
+import collections
 import default_flavor
 import posixpath
 
@@ -14,29 +15,38 @@ DEFAULT_PORT = '22'
 DEFAULT_USER = 'chrome-bot'
 
 
+SlaveInfo = collections.namedtuple('SlaveInfo',
+                                   'ssh_user ssh_host ssh_port')
+
+SLAVE_INFO = {
+  'skiabot-shuttle-ubuntu12-003':
+      SlaveInfo('root', '192.168.1.123', DEFAULT_PORT),
+  'skiabot-shuttle-ubuntu12-004':
+      SlaveInfo('root', '192.168.1.134', DEFAULT_PORT),
+  'default':
+      SlaveInfo('nouser', 'noip', 'noport'),
+}
+
+
 class SSHFlavorUtils(default_flavor.DefaultFlavorUtils):
   def __init__(self, *args, **kwargs):
     super(SSHFlavorUtils, self).__init__(*args, **kwargs)
-    self._host = None
-    self._port = None
-    self._user = None
+    slave_info = SLAVE_INFO.get(self._skia_api.c.SLAVE_NAME,
+                                SLAVE_INFO['default'])
+    self._host = slave_info.ssh_host
+    self._port = slave_info.ssh_port
+    self._user = slave_info.ssh_user
 
   @property
   def host(self):
-    if not self._host:
-      self._host = self._skia_api.c.slave_cfg['ssh_host']
     return self._host
 
   @property
   def port(self):
-    if not self._port:
-      self._port = self._skia_api.c.slave_cfg.get('ssh_port', DEFAULT_PORT)
     return self._port
 
   @property
   def user(self):
-    if not self._user:
-      self._user = self._skia_api.c.slave_cfg.get('ssh_user', DEFAULT_USER)
     return self._user
 
   def ssh(self, name, cmd, **kwargs):
