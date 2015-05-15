@@ -56,7 +56,7 @@ VAR_TEST_MAP = {
 
 def get_extra_env_vars(builder_dict):
   env = {}
-  if builder_dict.get('compiler') == 'Clang':  # pragma: no cover
+  if builder_dict.get('compiler') == 'Clang':
     env['CC'] = '/usr/bin/clang'
     env['CXX'] = '/usr/bin/clang++'
   return env
@@ -99,7 +99,7 @@ def gyp_defs_from_builder_dict(builder_dict):
   # skia_warnings_as_errors.
   werr = False
   if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_BUILD:
-    if 'Win' in builder_dict.get('os', ''):  # pragma: no cover
+    if 'Win' in builder_dict.get('os', ''):
       if not ('GDI' in builder_dict.get('extra_config', '') or
               'Exceptions' in builder_dict.get('extra_config', '')):
         werr = True
@@ -113,7 +113,7 @@ def gyp_defs_from_builder_dict(builder_dict):
 
   # Qt SDK (Win).
   if 'Win' in builder_dict.get('os', ''):
-    if builder_dict.get('os') == 'Win8':  # pragma: no cover
+    if builder_dict.get('os') == 'Win8':
       gyp_defs['qt_sdk'] = 'C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/'
     else:
       gyp_defs['qt_sdk'] = 'C:/Qt/4.8.5/'
@@ -124,21 +124,21 @@ def gyp_defs_from_builder_dict(builder_dict):
 
   # GDI.
   if builder_dict.get('extra_config') == 'GDI':
-    gyp_defs['skia_gdi'] = '1'  # pragma: no cover
+    gyp_defs['skia_gdi'] = '1'
 
   # Build with Exceptions on Windows.
   if ('Win' in builder_dict.get('os', '') and
       builder_dict.get('extra_config') == 'Exceptions'):
-    gyp_defs['skia_win_exceptions'] = '1'  # pragma: no cover
+    gyp_defs['skia_win_exceptions'] = '1'
 
   # iOS.
   if (builder_dict.get('os') == 'iOS' or
       builder_dict.get('extra_config') == 'iOS'):
-    gyp_defs['skia_os'] = 'ios'  # pragma: no cover
+    gyp_defs['skia_os'] = 'ios'
 
   # Shared library build.
   if builder_dict.get('extra_config') == 'Shared':
-    gyp_defs['skia_shared_lib'] = '1'  # pragma: no cover
+    gyp_defs['skia_shared_lib'] = '1'
 
   # PDF viewer in GM.
   if (builder_dict.get('os') == 'Mac10.8' and
@@ -148,7 +148,7 @@ def gyp_defs_from_builder_dict(builder_dict):
 
   # Clang.
   if builder_dict.get('compiler') == 'Clang':
-    gyp_defs['skia_clang_build'] = '1'  # pragma: no cover
+    gyp_defs['skia_clang_build'] = '1'
 
   # Valgrind.
   if 'Valgrind' in builder_dict.get('extra_config', ''):
@@ -157,7 +157,7 @@ def gyp_defs_from_builder_dict(builder_dict):
   # Link-time code generation just wastes time on compile-only bots.
   if (builder_dict.get('role') == builder_name_schema.BUILDER_ROLE_BUILD and
       builder_dict.get('compiler') == 'MSVC'):
-    gyp_defs['skia_win_ltcg'] = '0'  # pragma: no cover
+    gyp_defs['skia_win_ltcg'] = '0'
 
   # Mesa.
   if (builder_dict.get('extra_config') == 'Mesa' or

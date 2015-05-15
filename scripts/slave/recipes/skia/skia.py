@@ -30,6 +30,7 @@ def GenTests(api):
         'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug',
       ],
       'skiabot-linux-tester-000': [
+        'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Shared',
         'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-TSAN',
       ],
       'skiabot-macmini-10_8-000': [
@@ -48,6 +49,9 @@ def GenTests(api):
       'skiabot-shuttle-win7-intel-bench': [
         'Perf-Win7-MSVC-ShuttleA-GPU-HD2000-x86_64-Release-Trybot',
       ],
+      'skiabot-shuttle-win8-hd7770-000': [
+        'Test-Win8-MSVC-ShuttleA-CPU-AVX-x86_64-Debug',
+      ],
     },
     'client.skia.android': {
       'skiabot-shuttle-ubuntu12-nexus7-001': [
@@ -57,7 +61,17 @@ def GenTests(api):
     'client.skia.compile': {
       'skiabot-linux-compile-000': [
         'Build-Ubuntu-GCC-Arm7-Debug-CrOS_Daisy',
+        'Build-Ubuntu-GCC-Arm7-Debug-CrOS_Link',
         'Build-Ubuntu-GCC-x86_64-Release-Mesa',
+        'Build-Ubuntu-GCC-Arm7-Debug-Android_NoNeon',
+      ],
+      'skiabot-mac-10_8-compile-001': [
+        'Build-Mac10.8-Clang-Arm7-Debug-Android',
+      ],
+      'skiabot-win-compile-000': [
+        'Build-Win-MSVC-x86-Debug',
+        'Build-Win-MSVC-x86-Debug-GDI',
+        'Build-Win-MSVC-x86-Debug-Exceptions',
       ],
     },
   }
@@ -107,7 +121,7 @@ def GenTests(api):
                                 stdout=api.raw_io.output('42'))
         if 'Android' in builder:
           test += api.step_data('has ccache?', retcode=1)
-        if 'Android' in builder:
+        if 'Android' in builder and ('Test' in builder or 'Perf' in builder):
           test += AndroidTestData(builder)
         if 'ChromeOS' in builder:
           test += api.step_data('read SKP_VERSION',

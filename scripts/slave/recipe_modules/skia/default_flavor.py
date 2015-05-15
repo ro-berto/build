@@ -21,21 +21,6 @@ class SKPDirs(object):
   def root_dir(self):
     return self._root_dir
 
-  @property
-  def actual_images_dir(self):
-    return self._path_sep.join((self.root_dir, 'actualImages',
-                                self._builder_name))
-
-  @property
-  def actual_summaries_dir(self):
-    return self._path_sep.join((self.root_dir, 'actualSummaries',
-                                self._builder_name))
-
-  @property
-  def expected_summaries_dir(self):
-    return self._path_sep.join((self.root_dir, 'expectedSummaries',
-                                self._builder_name))
-
   def skp_dir(self, skp_version=None):
     root_dir = self.root_dir
     if skp_version:
@@ -50,17 +35,12 @@ class DeviceDirs(object):
                resource_dir,
                images_dir,
                skp_dirs,
-               skp_perf_dir,
                tmp_dir):
     self._dm_dir = dm_dir
     self._perf_data_dir = perf_data_dir
-    self._playback_actual_images_dir = skp_dirs.actual_images_dir
-    self._playback_actual_summaries_dir = skp_dirs.actual_summaries_dir
-    self._playback_expected_summaries_dir = skp_dirs.expected_summaries_dir
     self._resource_dir = resource_dir
     self._images_dir = images_dir
     self._skp_dir = skp_dirs.skp_dir()
-    self._skp_perf_dir = skp_perf_dir
     self._tmp_dir = tmp_dir
 
   @property
@@ -71,21 +51,6 @@ class DeviceDirs(object):
   @property
   def perf_data_dir(self):
     return self._perf_data_dir
-
-  @property
-  def playback_actual_images_dir(self):
-    """Holds image files written out by the 'render_pictures' tool."""
-    return self._playback_actual_images_dir  # pragma: no cover
-
-  @property
-  def playback_actual_summaries_dir(self):
-    """Holds actual-result JSON summaries written by 'render_pictures' tool."""
-    return self._playback_actual_summaries_dir  # pragma: no cover
-
-  @property
-  def playback_expected_summaries_dir(self):
-    """Holds expected-result JSON summaries read by 'render_pictures' tool."""
-    return self._playback_expected_summaries_dir  # pragma: no cover
 
   @property
   def resource_dir(self):
@@ -101,12 +66,8 @@ class DeviceDirs(object):
     return self._skp_dir
 
   @property
-  def skp_perf_dir(self):
-    return self._skp_perf_dir  # pragma: no cover
-
-  @property
   def tmp_dir(self):
-    return self._tmp_dir  # pragma: no cover
+    return self._tmp_dir
 
 
 class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
@@ -246,5 +207,4 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
         resource_dir=self._skia_api.resource_dir,
         images_dir=join('images'),
         skp_dirs=self._skia_api.local_skp_dirs,
-        skp_perf_dir=self._skia_api.perf_data_dir,
         tmp_dir=join('tmp'))

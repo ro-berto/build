@@ -59,7 +59,7 @@ def device_from_builder_dict(builder_dict):
   """Given a builder name dictionary, return an Android device name."""
   if 'Android' in builder_dict.get('extra_config', ''):
     if 'NoNeon' in builder_dict['extra_config']:
-      return 'arm_v7'  # pragma: no cover
+      return 'arm_v7'
     return {
       'Arm64': 'arm64',
       'x86': 'x86',
@@ -156,7 +156,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
 
     cmd = [self.android_bin.join('android_ninja'), target, '-d', self.device]
     if 'Clang' in self._skia_api.c.BUILDER_NAME:
-      cmd.append('--clang')  # pragma: no cover
+      cmd.append('--clang')
     self._skia_api.m.step('build %s' % target, cmd, env=env,
                           cwd=self._skia_api.m.path['checkout'])
 
@@ -278,6 +278,5 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         images_dir=prefix + 'images',
         skp_dirs=default_flavor.SKPDirs(
             prefix + 'skp', self._skia_api.c.BUILDER_NAME, '/'),
-        skp_perf_dir=prefix + 'skp_perf',
         tmp_dir=prefix + 'tmp_dir')
 

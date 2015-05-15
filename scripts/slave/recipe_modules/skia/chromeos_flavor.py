@@ -13,7 +13,7 @@ import ssh_flavor
 def board_from_builder_dict(builder_dict):
   if 'CrOS' in builder_dict.get('extra_config', ''):
     if 'Link' in builder_dict['extra_config']:
-      return 'link'  # pragma: no cover
+      return 'link'
     if 'Daisy' in builder_dict['extra_config']:
       return 'daisy'
   elif builder_dict['os'] == 'ChromeOS':
@@ -70,6 +70,5 @@ class ChromeOSFlavorUtils(ssh_flavor.SSHFlavorUtils):
         images_dir=join('images'),
         skp_dirs=default_flavor.SKPDirs(
             join('skp'), self._skia_api.c.BUILDER_NAME, '/'),
-        skp_perf_dir=join('skp_perf'),
         tmp_dir=join('tmp_dir'))
 

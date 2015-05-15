@@ -129,5 +129,4 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
         images_dir=prefix + 'images',
         skp_dirs=default_flavor.SKPDirs(
             prefix + 'skp', self._skia_api.c.BUILDER_NAME, '/'),
-        skp_perf_dir=prefix + 'skp_perf',
         tmp_dir=prefix + 'tmp_dir')
