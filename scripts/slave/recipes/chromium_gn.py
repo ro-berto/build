@@ -461,10 +461,16 @@ def _GenStepsInternal(api):
   # and deapply patches and retry as need be.
   test_spec_file = '%s.json' % mastername
   test_spec = api.chromium_tests.read_test_spec(api, test_spec_file)
-  tests = list(api.chromium.steps.generate_gtest(api, mastername,
-                                                  buildername, test_spec))
-  tests += list(api.chromium.steps.generate_script(api, mastername,
-                                                   buildername, test_spec))
+
+  tests = list(api.chromium.steps.generate_gtest(
+      api, mastername, buildername, test_spec))
+
+  scripts_compile_targets = \
+      api.chromium.get_compile_targets_for_scripts().json.output
+  tests += list(api.chromium.steps.generate_script(
+      api, mastername, buildername, test_spec,
+      scripts_compile_targets=scripts_compile_targets))
+
   additional_compile_targets = test_spec.get(buildername, {}).get(
       'additional_compile_targets',
       ['chrome_shell_apk' if is_android else 'all'])
