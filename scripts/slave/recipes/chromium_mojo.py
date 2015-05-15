@@ -44,13 +44,11 @@ def _RunApptests(api):
   api.python('app_tests', runner, [tests, api.chromium.output_dir,
                                    '--verbose', '--verbose'])
 
-def GenSteps(api):
-  _, bot_config = api.chromium.configure_bot(BUILDERS, ['gn'])
-  is_android = 'Android' in api.properties.get('buildername')
 
-  # TODO(msw): We don't use root_override in our BUILDERS, remove this?
-  api.bot_update.ensure_checkout(force=True,
-                                 patch_root=bot_config.get('root_override'))
+def GenSteps(api):
+  api.chromium.configure_bot(BUILDERS, ['gn'])
+
+  api.bot_update.ensure_checkout(force=True)
 
   api.chromium.runhooks()
 
@@ -66,8 +64,7 @@ def GenSteps(api):
     api.chromium.runtest('mojo_surfaces_lib_unittests')
     api.chromium.runtest('resource_provider_unittests')
     api.chromium.runtest('view_manager_unittests')
-    if not is_android:
-      _RunApptests(api)
+    _RunApptests(api)
 
 
 def GenTests(api):

@@ -269,5 +269,18 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "view_manager_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/mojo/tools/apptest_runner.py",
+      "[SLAVE_BUILD]/src/mojo/tools/data/apptests",
+      "[SLAVE_BUILD]/src/out/Release",
+      "--verbose",
+      "--verbose"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "app_tests"
   }
 ]
