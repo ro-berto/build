@@ -108,12 +108,13 @@ if android_resources_url:
       ('dart/third_party/android_testing_resources', android_resources_url))
 
 def BuildChromiumFactory(channel, target_platform='win32'):
-  def new_solution(deps_url, custom_vars, custom_deps):
+  def new_solution(deps_url, custom_vars, custom_deps, custom_deps_file, name):
     return  gclient_factory.GClientSolution(
         deps_url,
-        'dartium.deps',
+        name=name,
         custom_vars_list=custom_vars,
-        custom_deps_list=custom_deps)
+        custom_deps_list=custom_deps,
+        custom_deps_file=custom_deps_file)
 
   class DartiumFactory(chromium_factory.ChromiumFactory):
     def __init__(self, target_platform=None):
@@ -139,11 +140,21 @@ def BuildChromiumFactory(channel, target_platform='win32'):
   dartium_deps_url = config.Master.dart_url + channel.dartium_deps_path
 
   factory = DartiumFactory(target_platform)
+  custom_deps_file = None
+  name = 'dartium.deps'
+  deps_url = dartium_deps_url
+  if channel.name == 'be':
+    custom_deps_file = 'tools/deps/dartium.deps/DEPS'
+    name = 'src/dart'
+    deps_url = 'https://github.com/dart-lang/sdk.git'
+
   if target_platform == 'win32':
     factory.add_solution(
-        new_solution(dartium_deps_url, custom_vars_list, custom_deps_list_win))
+        new_solution(deps_url, custom_vars_list, custom_deps_list_win,
+                     custom_deps_file, name))
   else:
-    factory.add_solution(new_solution(dartium_deps_url, custom_vars_list, []))
+    factory.add_solution(new_solution(deps_url, custom_vars_list, [],
+                                      custom_deps_file, name))
 
   return factory.ChromiumFactory
 
