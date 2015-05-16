@@ -169,7 +169,7 @@ class DartFactory(gclient_factory.GClientFactory):
   NEEDED_COMPONENTS_INTERNAL = {
   }
 
-  def __init__(self, channel=None, build_dir='dart', target_platform='posix',
+  def __init__(self, channel=None, build_dir='sdk', target_platform='posix',
                target_os=None, custom_deps_list=None,
                nohooks_on_update=False, is_standalone=False):
     solutions = []
@@ -180,21 +180,16 @@ class DartFactory(gclient_factory.GClientFactory):
       channel = CHANNELS_BY_NAME['be']
     self.channel = channel
 
-    # 'channel.all_deps_path' can be for example:
-    #   "/branches/bleeding_edge/deps/all.deps"
-    # config.Master.dart_url will be the base svn url. It will point to the
-    # mirror if we're in golo and otherwise to the googlecode location.
-    if is_standalone:
+    # Until we have stable/trunk building from github, still support svn
+    if channel.name == 'be':
+      deps_url = 'https://github.com/dart-lang/sdk.git'
+    elif is_standalone:
       deps_url = config.Master.dart_url + self.channel.standalone_deps_path
     else:
       deps_url = config.Master.dart_url + self.channel.all_deps_path
 
     if not custom_deps_list:
       custom_deps_list = []
-
-    if config.Master.trunk_internal_url:
-      custom_deps_list.append(CUSTOM_DEPS_JAVA)
-      custom_deps_list.append(CUSTOM_TZ)
 
     main = gclient_factory.GClientSolution(
         deps_url,
@@ -547,7 +542,7 @@ class DartUtils(object):
     branch = branch or 'master'
     workdir = '/tmp/git_workdir_%s_%s' % (project, branch)
     return gitpoller.GitPoller(repourl=repo,
-                               pollinterval=90,
+                               pollinterval=20,
                                project=project,
                                branch=branch,
                                workdir=workdir,
@@ -662,7 +657,7 @@ class DartUtils(object):
       name = variant['name']
       variant['factory_builder'] = self.factory_base_dartium[name]
 
-  def get_web_statuses(self, order_console_by_time=False,
+  def get_web_statuses(self, order_console_by_time=True,
                        extra_templates=None):
     public_html = '../master.chromium/public_html'
     templates = ['../master.client.dart/templates',
