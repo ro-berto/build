@@ -29,11 +29,16 @@ class ChromiteConfigTestCase(unittest.TestCase):
     '_default': {
       'foo': 'bar',
       'key': 'value',
+      'hw_tests': [
+        'default0',
+        'default1',
+      ],
     },
     'test': {
       'foo': 'baz',
     },
     'parent': {
+      'name': 'parent',
       'child_configs': [
         {
           'name': 'alice',
@@ -82,12 +87,12 @@ class ChromiteConfigTestCase(unittest.TestCase):
   def testDefaultFallthrough_UsesDefaultWhenMissing(self):
     self.assertEqual(self.test['key'], 'value')
 
-  def testDefaultFallthrough_UsesFirstChild(self):
-    self.assertEqual(self.parent['vm_tests'], ['test'])
+  def testDefaultFallthrough_ParentUsesDefaults(self):
+    self.assertEqual(self.parent['hw_tests'], ['default0', 'default1'])
 
   def testHasTests(self):
     self.assertFalse(self.test.HasVmTests())
-    self.assertFalse(self.test.HasHwTests())
+    self.assertTrue(self.test.HasHwTests())
     self.assertFalse(self.test.HasUnitTests())
 
     self.assertTrue(self.baremetal.HasVmTests())

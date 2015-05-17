@@ -46,7 +46,7 @@ TOT_BRANCH = 'master'
 # - Update the value here.
 # - Run "gclient runhooks --force".
 PINS = collections.OrderedDict((
-  (TOT_BRANCH, 'd1f42f1a50c2285f951785bf752fbcba1b66f24a'),
+  (TOT_BRANCH, 'aa558c9465e379956cee64c57cc11b071a499800'),
   ('release-R43-6946.B', '504196e05c2d8cb5448646a5f036431ec2ee5da1'),
   ('release-R42-6812.B', '719914944802dede1a0dd1cd93376b76880c63f4'),
   ('release-R41-6680.B', '925ac2312082511f08e7ae121392ecb1b3d61445'),
@@ -118,27 +118,32 @@ class ChromiteTarget(object):
   # Sentinel value to indicate a missing key.
   _MISSING = object()
 
-  def __init__(self, name, config, children=None, default=None):
+  def __init__(self, name, config, default=None):
     self._name = name
     self._config = config
-    self._children = tuple(children)
+    self._children = ()
     self._default = default
     self._base, self._suffix, self._category = self.Categorize(
         name,
         build_type=self.get('build_type'))
 
+  def _setChildren(self, children):
+    self._children = tuple(children)
+
   @classmethod
   def FromConfigDict(cls, name, config, default=None):
     """Returns: (ChromiteTarget) A target instance parsed from a config dict.
     """
+    result = cls(name, config, default=default)
+
     # Wrap and add any child configurations in ChromiteTarget instances.
-    children = tuple(cls.FromConfigDict(None, child, default=default)
-                     for child in config.get('child_configs', ()))
-    if children:
-      # If a configuration has children, use its first child as its default
-      # source.
-      default = children[0]
-    return cls(name, config, children=children, default=default)
+    #
+    # As of 231348146015739254fd2978dd172975555e9bdc, Chromite uses the common
+    # default dictionary for all children.
+    result._setChildren(tuple(cls.FromConfigDict(None, child, default=default)
+                              for child in config.get('child_configs', ())))
+
+    return result
 
   @property
   def name(self):
