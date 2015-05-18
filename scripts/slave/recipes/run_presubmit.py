@@ -91,7 +91,7 @@ def GenTests(api):
   # TODO(machenbach): This uses the same tryserver for all repos, which doesn't
   # reflect reality (cosmetical problem only).
   for repo_name in ['blink', 'chromium', 'v8', 'nacl', 'naclports', 'gyp',
-                    'build', 'depot_tools', 'chrome_golo']:
+                    'build', 'depot_tools', 'skia', 'chrome_golo']:
     yield (
       api.test(repo_name) +
       api.properties.tryserver(

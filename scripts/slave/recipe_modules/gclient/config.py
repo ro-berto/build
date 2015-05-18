@@ -382,6 +382,16 @@ def depot_tools(c):  # pragma: no cover
   m['depot_tools'] = 'got_revision'
 
 @config_ctx(config_vars={'GIT_MODE': True})
+def skia(c):  # pragma: no cover
+  if not c.GIT_MODE:
+    raise BadConf('skia only supports git')
+  s = c.solutions.add()
+  s.name = 'skia'
+  s.url = 'https://skia.googlesource.com/skia.git'
+  m = c.got_revision_mapping
+  m['skia'] = 'got_revision'
+
+@config_ctx(config_vars={'GIT_MODE': True})
 def chrome_golo(c): # pragma: no cover
   if not c.GIT_MODE:
     raise BadConf('chrome_golo only supports git')
