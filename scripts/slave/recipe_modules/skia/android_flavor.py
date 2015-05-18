@@ -13,11 +13,32 @@ import default_flavor
 
 
 DEFAULT_SDK_ROOT = '/home/chrome-bot/android-sdk-linux'
+MAC_SDK_ROOT = '/Users/chrome-bot/adt-bundle-mac-x86_64-20140702/sdk'
 
 SlaveInfo = collections.namedtuple('SlaveInfo',
                                    'serial android_sdk_root has_root')
 
 SLAVE_INFO = {
+  'skiabot-mac-10_8-compile-000':
+      SlaveInfo('noserial', MAC_SDK_ROOT, True),
+  'skiabot-mac-10_8-compile-001':
+      SlaveInfo('noserial', MAC_SDK_ROOT, True),
+  'skiabot-mac-10_8-compile-002':
+      SlaveInfo('noserial', MAC_SDK_ROOT, True),
+  'skiabot-mac-10_8-compile-003':
+      SlaveInfo('noserial', MAC_SDK_ROOT, True),
+  'skiabot-mac-10_8-compile-004':
+      SlaveInfo('noserial', MAC_SDK_ROOT, True),
+  'skiabot-mac-10_8-compile-005':
+      SlaveInfo('noserial', MAC_SDK_ROOT, True),
+  'skiabot-mac-10_8-compile-006':
+      SlaveInfo('noserial', MAC_SDK_ROOT, True),
+  'skiabot-mac-10_8-compile-007':
+      SlaveInfo('noserial', MAC_SDK_ROOT, True),
+  'skiabot-mac-10_8-compile-008':
+      SlaveInfo('noserial', MAC_SDK_ROOT, True),
+  'skiabot-mac-10_8-compile-009':
+      SlaveInfo('noserial', MAC_SDK_ROOT, True),
   'skiabot-shuttle-ubuntu12-galaxys3-001':
       SlaveInfo('4df713b8244a21cf', DEFAULT_SDK_ROOT, False),
   'skiabot-shuttle-ubuntu12-galaxys3-002':
