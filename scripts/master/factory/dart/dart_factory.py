@@ -44,12 +44,16 @@ else:
 # fix these to be absolute if they don't run from there.
 linux_env = {'BUILDBOT_JAVA_HOME': 'third_party/java/linux/j2sdk'}
 linux_clang_env = {'BUILDBOT_JAVA_HOME': 'third_party/java/linux/j2sdk',
-                    'CC': 'third_party/clang/linux/bin/clang',
-                    'CXX': 'third_party/clang/linux/bin/clang++'}
+                   'CC': 'third_party/clang/linux/bin/clang',
+                   'CXX': 'third_party/clang/linux/bin/clang++'}
 clang_asan = 'third_party/clang/linux/bin/clang++ -fsanitize=address -fPIC'
-linux_asan_env = {'CXX': clang_asan,
-                  'ASAN_OPTIONS':
-                      'handle_segv=0:detect_stack_use_after_return=1'}
+linux_asan_env_64 = {'CXX': clang_asan,
+                     'ASAN_OPTIONS':
+                     'handle_segv=0:detect_stack_use_after_return=1'}
+linux_asan_env_32 = {'CXX': clang_asan,
+                     'ASAN_OPTIONS':
+                     'handle_segv=0:detect_stack_use_after_return=0'}
+
 windows_env = {'BUILDBOT_JAVA_HOME': 'third_party\\java\\windows\\j2sdk',
                'LOGONSERVER': '\\\\AD1'}
 
