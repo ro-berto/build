@@ -236,6 +236,7 @@ ENABLED_MASTERS = [
     'client.nacl.sdk',
     'client.nacl.toolchain',
     'client.skia',
+    'client.skia.fyi',
     'client.v8',
     'client.v8.branches',
     'client.v8.fyi',
