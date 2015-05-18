@@ -34,7 +34,8 @@ def BaseConfig(BUILDER_NAME, MASTER_NAME, SLAVE_NAME, **_kwargs):
 
 
 VAR_TEST_MAP = {
-  'BUILDER_NAME': (u'Build-Ubuntu-GCC-x86_64-Debug',
+  'BUILDER_NAME': (u'Build-Mac10.8-Clang-Arm7-Debug-Android',
+                   u'Build-Ubuntu-GCC-x86_64-Debug',
                    u'Build-Ubuntu-GCC-x86_64-Release-Mesa',
                    u'Build-Win-MSVC-x86-Release',
                    u'Build-Win-MSVC-x86-Debug-Exceptions',
@@ -103,6 +104,9 @@ def gyp_defs_from_builder_dict(builder_dict):
       if not ('GDI' in builder_dict.get('extra_config', '') or
               'Exceptions' in builder_dict.get('extra_config', '')):
         werr = True
+    elif ('Mac' in builder_dict.get('os', '') and
+          'Android' in builder_dict.get('extra_config', '')):
+      werr = False
     else:
       werr = True
   gyp_defs['skia_warnings_as_errors'] = str(int(werr))  # True/False -> '1'/'0'
