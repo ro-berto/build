@@ -8,6 +8,7 @@ from slave import recipe_api
 DEPS = [
   'bot_update',
   'chromium',
+  'chromium_android',
   'path',
   'properties',
   'python',
@@ -55,6 +56,9 @@ def GenSteps(api):
   api.chromium.run_gn(use_goma=True)
 
   api.chromium.compile(targets=['mandoline:all'])
+
+  if api.chromium.c.TARGET_PLATFORM == 'android':
+    api.chromium_android.detect_and_setup_devices()
 
   with api.step.defer_results():
     api.chromium.runtest('html_viewer_unittests')
