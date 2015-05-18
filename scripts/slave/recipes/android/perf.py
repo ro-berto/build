@@ -55,6 +55,7 @@ BUILDERS = freeze({
       'test_spec_file': 'chromium.perf.json',
     },
     'Android Nexus9 Perf': {
+      'recipe_config': 'tests_arm64',
       'perf_id': 'android-nexus9',
       'bucket': 'chrome-perf',
       'path': lambda api: ('android_perf_rel_arm64/full-build-linux_'
