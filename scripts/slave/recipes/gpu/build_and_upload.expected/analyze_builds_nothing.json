@@ -149,7 +149,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"angle_unittests_run\", \"content_gl_tests_run\", \"content_unittests_run\", \"gl_tests_run\", \"gles2_conform_test_run\", \"gpu_unittests_run\", \"media_unittests_run\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"angle_unittests_run\", \"content_gl_tests_run\", \"gl_tests_run\", \"gles2_conform_test_run\", \"gpu_unittests_run\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",

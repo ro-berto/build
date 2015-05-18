@@ -535,14 +535,14 @@ def GenTests(api):
         'Linux Tests': {
             'gtest_tests': [
                 {
-                  'test': 'media_unittests',
+                  'test': 'gl_tests',
                   'swarming': {'can_use_on_swarming_builders': True},
                 },
             ],
         },
     })) +
     suppress_analyze() +
-    api.override_step_data('media_unittests (with patch)',
+    api.override_step_data('gl_tests (with patch)',
                            canned_test(passing=False))
   )
 
