@@ -72,7 +72,7 @@ class SSHFlavorUtils(default_flavor.DefaultFlavorUtils):
   def device_path_exists(self, path):  # pragma: no cover
     """Like os.path.exists(), but for paths on a remote device."""
     try:
-      self.ssh('exists %s' % path, ['test', '-e', path])
+      self.ssh('exists %s' % path, ['test', '-e', path], infra_step=True)
       return True
     except self._skia_api.m.step.StepFailure:
       return False
@@ -80,12 +80,14 @@ class SSHFlavorUtils(default_flavor.DefaultFlavorUtils):
   def _remove_device_dir(self, path):
     """Remove the directory on the device."""
     self.ssh(name='rmdir %s' % self._skia_api.m.path.basename(path),
-             cmd=['rm', '-rf', path])
+             cmd=['rm', '-rf', path],
+             infra_step=True)
 
   def _create_device_dir(self, path):
     """Create the directory on the device."""
     self.ssh(name='mkdir %s' % self._skia_api.m.path.basename(path),
-             cmd=['mkdir', '-p', path])
+             cmd=['mkdir', '-p', path],
+             infra_step=True)
 
   def create_clean_device_dir(self, path):
     """Like shutil.rmtree() + os.makedirs(), but on a remote device."""
@@ -121,23 +123,29 @@ class SSHFlavorUtils(default_flavor.DefaultFlavorUtils):
     cmd = [self._skia_api.resource('scp_dir_contents.sh'),
            remote_path, host_dir]
     self._skia_api.m.step(
-        name='scp %s' % self._skia_api.m.path.basename(device_dir), cmd=cmd)
+        name='scp %s' % self._skia_api.m.path.basename(device_dir),
+        cmd=cmd,
+        infra_step=True)
 
   def copy_file_to_device(self, host_path, device_path):
     """Like shutil.copyfile, but for copying to a connected device."""
     cmd, remote_path = self._make_scp_cmd(device_path, recurse=False)
     cmd.extend([host_path, remote_path])
     self._skia_api.m.step(
-        name='scp %s' % self._skia_api.m.path.basename(host_path), cmd=cmd)
+        name='scp %s' % self._skia_api.m.path.basename(host_path),
+        cmd=cmd,
+        infra_step=True)
 
   def read_file_on_device(self, path):
     self.ssh(name='read %s' % self._skia_api.m.path.basename(path),
              cmd=['cat', path],
-             stdout=self._skia_api.m.raw_io.output()).stdout.rstrip()
+             stdout=self._skia_api.m.raw_io.output(),
+             infra_step=True).stdout.rstrip()
 
   def remove_file_on_device(self, path, *args, **kwargs):
     """Delete the given file."""
     return self.ssh(name='rm %s' % self._skia_api.m.path.basename(path),
                     cmd=['rm', '-f', path],
+                    infra_step=True,
                     *args,
                     **kwargs)

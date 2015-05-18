@@ -100,7 +100,8 @@ class _ADBWrapper(object):
     self._wait_count += 1
     self._adb(name='wait for device (%d)' % self._wait_count,
               serial=self._serial,
-              cmd=['wait-for-device'])
+              cmd=['wait-for-device'],
+              infra_step=True)
 
   def maybe_wait_for_device(self):
     """Run 'adb wait-for-device' if it hasn't already been run."""
@@ -172,14 +173,16 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         serial=self.serial,
         cmd=['shell', 'if', '[', '-e', path, '];',
              'then', 'echo', exists_str + ';', 'fi'],
-        stdout=self._skia_api.m.raw_io.output()
+        stdout=self._skia_api.m.raw_io.output(),
+        infra_step=True
     ).stdout
 
   def _remove_device_dir(self, path):
     """Remove the directory on the device."""
     self._adb(name='rmdir %s' % self._skia_api.m.path.basename(path),
               serial=self.serial,
-              cmd=['shell', 'rm', '-r', path])
+              cmd=['shell', 'rm', '-r', path],
+              infra_step=True)
     # Sometimes the removal fails silently. Verify that it worked.
     if self.device_path_exists(path):
       raise Exception('Failed to remove %s!' % path)  # pragma: no cover
@@ -188,7 +191,8 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     """Create the directory on the device."""
     self._adb(name='mkdir %s' % self._skia_api.m.path.basename(path),
               serial=self.serial,
-              cmd=['shell', 'mkdir', '-p', path])
+              cmd=['shell', 'mkdir', '-p', path],
+              infra_step=True)
 
   def copy_directory_contents_to_device(self, host_dir, device_dir):
     """Like shutil.copytree(), but for copying to a connected device."""
@@ -196,7 +200,8 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         name='push %s' % self._skia_api.m.path.basename(host_dir),
         cmd=[self.android_bin.join('adb_push_if_needed'), '--verbose',
              '-s', self.serial, host_dir, device_dir],
-        env=self._default_env)
+        env=self._default_env,
+        infra_step=True)
 
   def copy_directory_contents_to_host(self, device_dir, host_dir):
     """Like shutil.copytree(), but for copying from a connected device."""
@@ -204,13 +209,15 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         name='pull %s' % self._skia_api.m.path.basename(device_dir),
         cmd=[self.android_bin.join('adb_pull_if_needed'), '--verbose',
              '-s', self.serial, device_dir, host_dir],
-        env=self._default_env)
+        env=self._default_env,
+        infra_step=True)
 
   def copy_file_to_device(self, host_path, device_path):
     """Like shutil.copyfile, but for copying to a connected device."""
     self._adb(name='push %s' % self._skia_api.m.path.basename(host_path),
               serial=self.serial,
-              cmd=['push', host_path, device_path])
+              cmd=['push', host_path, device_path],
+              infra_step=True)
 
   def create_clean_device_dir(self, path):
     """Like shutil.rmtree() + os.makedirs(), but on a connected device."""
@@ -220,31 +227,39 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
   def install(self):
     """Run device-specific installation steps."""
     if self._has_root:
-      self._adb(name='adb root', serial=self.serial, cmd=['root'])
+      self._adb(name='adb root',
+                serial=self.serial,
+                cmd=['root'],
+                infra_step=True)
       # Wait for the device to reconnect.
       self._skia_api.m.step(
           name='wait',
-          cmd=['sleep', '10'])
+          cmd=['sleep', '10'],
+          infra_step=True)
       self._adb.wait_for_device()
 
     # TODO(borenet): Set CPU scaling mode to 'performance'.
     self._skia_api.m.step(name='kill skia',
                           cmd=[self.android_bin.join('android_kill_skia'),
                                '--verbose', '-s', self.serial],
-                          env=self._default_env)
+                          env=self._default_env,
+                          infra_step=True)
     if self._has_root:
       self._adb(name='stop shell',
                 serial=self.serial,
-                cmd=['shell', 'stop'])
+                cmd=['shell', 'stop'],
+                infra_step=True)
 
   def cleanup_steps(self):
     """Run any device-specific cleanup steps."""
     self._adb(name='reboot',
               serial=self.serial,
-              cmd=['reboot'])
+              cmd=['reboot'],
+              infra_step=True)
     self._skia_api.m.step(
         name='wait for reboot',
-        cmd=['sleep', '10'])
+        cmd=['sleep', '10'],
+        infra_step=True)
     self._adb.wait_for_device()
 
   def read_file_on_device(self, path, *args, **kwargs):
@@ -252,13 +267,15 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     return self._adb(name='read %s' % self._skia_api.m.path.basename(path),
                      serial=self.serial,
                      cmd=['shell', 'cat', path],
-                     stdout=self._skia_api.m.raw_io.output()).stdout.rstrip()
+                     stdout=self._skia_api.m.raw_io.output(),
+                     infra_step=True).stdout.rstrip()
 
   def remove_file_on_device(self, path, *args, **kwargs):
     """Delete the given file."""
     return self._adb(name='rm %s' % self._skia_api.m.path.basename(path),
                      serial=self.serial,
                      cmd=['shell', 'rm', '-f', path],
+                     infra_step=True,
                      *args,
                      **kwargs)
 
@@ -269,6 +286,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         serial=self.serial,
         cmd=['shell', 'echo', '$EXTERNAL_STORAGE'],
         stdout=self._skia_api.m.raw_io.output(),
+        infra_step=True,
     ).stdout.rstrip()
     prefix = self.device_path_join(device_scratch_dir, 'skiabot', 'skia_')
     return default_flavor.DeviceDirs(

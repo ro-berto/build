@@ -130,14 +130,23 @@ class SkiaApi(recipe_api.RecipeApi):
         git = 'git.bat'
       else:
         git = 'git'
-      self.run(self.m.step, 'git fetch', cmd=[git, 'fetch'], cwd=self.skia_dir)
+      self.run(self.m.step,
+               'git fetch',
+               cmd=[git, 'fetch'],
+               cwd=self.skia_dir,
+               infra_step=True)
       target_rev = self.m.properties.get('revision')
       if target_rev:
-        self.run(self.m.step, 'git reset',
+        self.run(self.m.step,
+                 'git reset',
                  cmd=[git, 'reset', '--hard', target_rev],
-                 cwd=self.skia_dir)
-      self.run(self.m.step, 'git clean', cmd=[git, 'clean', '-d', '-f'],
-               cwd=self.skia_dir)
+                 cwd=self.skia_dir,
+                 infra_step=True)
+      self.run(self.m.step,
+               'git clean',
+               cmd=[git, 'clean', '-d', '-f'],
+               cwd=self.skia_dir,
+               infra_step=True)
 
     # Run 'gclient sync'.
     gclient_cfg = self.m.gclient.make_config()
@@ -164,12 +173,12 @@ class SkiaApi(recipe_api.RecipeApi):
   def _readfile(self, filename, *args, **kwargs):
     """Convenience function for reading files."""
     name = kwargs.pop('name') or 'read %s' % self.m.path.basename(filename)
-    return self.m.file.read(name, filename, *args, **kwargs)
+    return self.m.file.read(name, filename, infra_step=True, *args, **kwargs)
 
   def _writefile(self, filename, contents):
     """Convenience function for writing files."""
     return self.m.file.write('write %s' % self.m.path.basename(filename),
-                             filename, contents)
+                             filename, contents, infra_step=True)
 
   def run(self, steptype, name, abort_on_failure=True,
           fail_build_on_failure=True, **kwargs):
@@ -196,7 +205,8 @@ class SkiaApi(recipe_api.RecipeApi):
     if actual_version != expected_version:
       if actual_version != -1:
         self.m.file.remove('remove actual %s' % version_file,
-                           actual_version_file)
+                           actual_version_file,
+                           infra_step=True)
 
       self.flavor.create_clean_host_dir(host_path)
       self.m.gsutil.download(
@@ -228,7 +238,10 @@ class SkiaApi(recipe_api.RecipeApi):
   def download_and_copy_images(self):
     """Download test images if needed."""
     # Ensure that the tmp_dir exists.
-    self._run_once(self.m.file.makedirs, 'tmp_dir', self.tmp_dir)
+    self._run_once(self.m.file.makedirs,
+                   'tmp_dir',
+                   self.tmp_dir,
+                   infra_step=True)
 
     # Determine which version we have and which version we want.
     timestamp_file = 'TIMESTAMP_LAST_UPLOAD_COMPLETED'
@@ -254,7 +267,10 @@ class SkiaApi(recipe_api.RecipeApi):
   def download_and_copy_skps(self):
     """Download the SKPs if needed."""
     # Ensure that the tmp_dir exists.
-    self._run_once(self.m.file.makedirs, 'tmp_dir', self.tmp_dir)
+    self._run_once(self.m.file.makedirs,
+                   'tmp_dir',
+                   self.tmp_dir,
+                   infra_step=True)
 
     # Determine which version we have and which version we want.
     version_file = 'SKP_VERSION'
@@ -298,8 +314,10 @@ class SkiaApi(recipe_api.RecipeApi):
       if not self.m.platform.is_win:
         try:
           result = self.m.step(
-              'has ccache?', ['which', 'ccache'],
-              stdout=self.m.raw_io.output())
+              'has ccache?',
+              ['which', 'ccache'],
+              stdout=self.m.raw_io.output(),
+              infra_step=True)
           ccache = result.stdout.rstrip()
           if ccache:
             self._ccache = ccache
@@ -314,7 +332,8 @@ class SkiaApi(recipe_api.RecipeApi):
         filename,
         args=[self.m.json.output(), self.c.BUILDER_NAME],
         step_test_data=lambda: self.m.json.test_api.output(['--dummy-flags']),
-        cwd=self.skia_dir).json.output
+        cwd=self.skia_dir,
+        infra_step=True).json.output
 
   def run_dm(self):
     """Run the DM test."""
@@ -369,7 +388,8 @@ class SkiaApi(recipe_api.RecipeApi):
         args=[host_hashes_file],
         cwd=self.skia_dir,
         abort_on_failure=False,
-        fail_build_on_failure=False)
+        fail_build_on_failure=False,
+        infra_step=True)
 
     if self.m.path.exists(host_hashes_file):
       self.flavor.copy_file_to_device(host_hashes_file, hashes_file)
@@ -420,7 +440,8 @@ class SkiaApi(recipe_api.RecipeApi):
                self.m.path['slave_build'].join("skia", "common", "py", "utils"),
              ],
              cwd=self.m.path['checkout'],
-             abort_on_failure=False)
+             abort_on_failure=False,
+             infra_step=True)
 
     # See skia:2789.
     if ('Valgrind' in self.c.BUILDER_NAME and
@@ -475,7 +496,8 @@ class SkiaApi(recipe_api.RecipeApi):
     args.extend(self.flags_from_file(self.skia_dir.join(
         'tools/nanobench_flags.py')))
     if is_perf:
-      git_timestamp = self.m.git.get_timestamp(test_data='1408633190')
+      git_timestamp = self.m.git.get_timestamp(test_data='1408633190',
+                                               infra_step=True)
       json_path = self.flavor.device_path_join(
           self.device_dirs.perf_data_dir,
           'nanobench_%s_%s.json' % (self.got_revision, git_timestamp))
@@ -515,7 +537,8 @@ class SkiaApi(recipe_api.RecipeApi):
                script=self.resource('upload_bench_results.py'),
                args=upload_args,
                cwd=self.m.path['checkout'],
-               abort_on_failure=False)
+               abort_on_failure=False,
+               infra_step=True)
 
   def cleanup_steps(self):
     """Run any cleanup steps."""

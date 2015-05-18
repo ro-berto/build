@@ -115,7 +115,8 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
             f.write(os.path.join(os.path.expanduser('~'), 'src'))
           """,
           args=[self._skia_api.m.raw_io.output()],
-          step_test_data=test_data
+          step_test_data=test_data,
+          infra_step=True,
       ).raw_io.output
     return self._chrome_path
 
@@ -141,7 +142,7 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
 
   def device_path_exists(self, path):
     """Like os.path.exists(), but for paths on a connected device."""
-    return self._skia_api.m.path.exists(path)  # pragma: no cover
+    return self._skia_api.m.path.exists(path, infra_step=True)  # pragma: no cover
 
   def copy_directory_contents_to_device(self, host_dir, device_dir):
     """Like shutil.copytree(), but for copying to a connected device."""
@@ -180,9 +181,9 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
   def create_clean_host_dir(self, path):
     """Convenience function for creating a clean directory."""
     self._skia_api.m.file.rmtree(
-        self._skia_api.m.path.basename(path), path)
+        self._skia_api.m.path.basename(path), path, infra_step=True)
     self._skia_api.m.file.makedirs(
-        self._skia_api.m.path.basename(path), path)
+        self._skia_api.m.path.basename(path), path, infra_step=True)
 
   def install(self):
     """Run device-specific installation steps."""

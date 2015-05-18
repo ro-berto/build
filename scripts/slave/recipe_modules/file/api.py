@@ -11,7 +11,7 @@ class FileApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(FileApi, self).__init__(**kwargs)
 
-  def copy(self, name, source, dest, step_test_data=None):
+  def copy(self, name, source, dest, step_test_data=None, **kwargs):
     """Copy a file."""
     return self.m.python.inline(
         name,
@@ -22,7 +22,8 @@ class FileApi(recipe_api.RecipeApi):
         """,
         args=[source, dest],
         add_python_log=False,
-        step_test_data=step_test_data
+        step_test_data=step_test_data,
+        **kwargs
     )
 
   def copytree(self, name, source, dest, **kwargs):
@@ -39,13 +40,13 @@ class FileApi(recipe_api.RecipeApi):
         **kwargs
     )
 
-  def read(self, name, path, test_data=None):
+  def read(self, name, path, test_data=None, **kwargs):
     """Read a file and return its contents."""
     step_test_data = None
     if test_data is not None:
       step_test_data = lambda: self.m.raw_io.test_api.output(test_data)
     return self.copy(name, path, self.m.raw_io.output(),
-                     step_test_data=step_test_data).raw_io.output
+                     step_test_data=step_test_data, **kwargs).raw_io.output
 
   def write(self, name, path, data, **kwargs):
     """Write the given data to a file."""
@@ -98,7 +99,7 @@ class FileApi(recipe_api.RecipeApi):
         **kwargs
     )
 
-  def listdir(self, name, path, step_test_data=None):
+  def listdir(self, name, path, step_test_data=None, **kwargs):
     """Wrapper for os.listdir."""
     return self.m.python.inline('listdir %s' % name,
       """
@@ -110,9 +111,10 @@ class FileApi(recipe_api.RecipeApi):
       args=[path, self.m.json.output()],
       step_test_data=(step_test_data or
                       self.test_api.listdir(['file 1', 'file 2'])),
+      **kwargs
     ).json.output
 
-  def makedirs(self, name, path, mode=0777):
+  def makedirs(self, name, path, mode=0777, **kwargs):
     """
     Like os.makedirs, except that if the directory exists, then there is no
     error.
@@ -131,10 +133,11 @@ class FileApi(recipe_api.RecipeApi):
         os.makedirs(path, mode)
       """,
       args=[path, str(mode)],
+      **kwargs
     )
     self.m.path.mock_add_paths(path)
 
-  def rmtree(self, name, path):
+  def rmtree(self, name, path, **kwargs):
     """Wrapper for chromium_utils.RemoveDirectory."""
     self.m.path.assert_absolute(path)
     self.m.python.inline(
@@ -147,9 +150,10 @@ class FileApi(recipe_api.RecipeApi):
         chromium_utils.RemoveDirectory(sys.argv[1])
       """,
       args=[path],
+      **kwargs
     )
 
-  def rmcontents(self, name, path):
+  def rmcontents(self, name, path, **kwargs):
     """
     Similar to rmtree, but removes only contents not the directory.
 
@@ -172,6 +176,7 @@ class FileApi(recipe_api.RecipeApi):
           os.unlink(p)
       """,
       args=[path],
+      **kwargs
     )
 
   def rmwildcard(self, pattern, path, **kwargs):

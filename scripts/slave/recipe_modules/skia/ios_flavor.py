@@ -46,29 +46,34 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
     """Like os.path.exists(), but for paths on a connected device."""
     return self._skia_api.m.step(
         'exists %s' % path,
-        cmd=[self.ios_bin.join('ios_path_exists'), path]
+        cmd=[self.ios_bin.join('ios_path_exists'), path],
+        infra_step=True,
     ) # pragma: no cover
 
   def _remove_device_dir(self, path):
     """Remove the directory on the device."""
     return self._skia_api.m.step(
         'rmdir %s' % path,
-        cmd=[self.ios_bin.join('ios_rm'), path]
+        cmd=[self.ios_bin.join('ios_rm'), path],
+        infra_step=True,
     )
 
   def _create_device_dir(self, path):
     """Create the directory on the device."""
     return self._skia_api.m.step(
         'mkdir %s' % path,
-        cmd=[self.ios_bin.join('ios_mkdir'), path]
+        cmd=[self.ios_bin.join('ios_mkdir'), path],
+        infra_step=True,
     )
 
   def copy_directory_contents_to_device(self, host_dir, device_dir):
     """Like shutil.copytree(), but for copying to a connected device."""
     return self._skia_api.m.step(
-        name='push %s to %s' % (self._skia_api.m.path.basename(host_dir), self._skia_api.m.path.basename(device_dir)),
+        name='push %s to %s' % (self._skia_api.m.path.basename(host_dir),
+                                self._skia_api.m.path.basename(device_dir)),
         cmd=[self.ios_bin.join('ios_push_if_needed'),
-             host_dir, device_dir ]
+             host_dir, device_dir ],
+        infra_step=True,
     )
 
   def copy_directory_contents_to_host(self, device_dir, host_dir):
@@ -77,6 +82,7 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
         name='pull %s' % device_dir,
         cmd=[self.ios_bin.join('ios_pull_if_needed'),
              device_dir, host_dir],
+        infra_step=True,
     )
 
   def copy_file_to_device(self, host_path, device_path):
@@ -84,6 +90,7 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
     self._skia_api.m.step(
         name='push %s' % host_path,
         cmd=[self.ios_bin.join('ios_push_file'), host_path, device_path],
+        infra_step=True,
     ) # pragma: no cover
 
   def create_clean_device_dir(self, path):
@@ -97,7 +104,8 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
     self._skia_api.m.step(
         name='install iOSShell',
         cmd=[self.ios_bin.join('ios_install')],
-        env=env
+        env=env,
+        infra_step=True,
     )
 
   def cleanup_steps(self):
@@ -109,14 +117,16 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
     ret = self._skia_api.m.step(
         name='read %s' % self._skia_api.m.path.basename(path),
         cmd=[self.ios_bin.join('ios_cat_file'), path],
-        stdout=self._skia_api.m.raw_io.output())
+        stdout=self._skia_api.m.raw_io.output(),
+        infra_step=True)
     return ret.stdout.rstrip() if ret.stdout else ret.stdout
 
   def remove_file_on_device(self, path):
     """Remove the file on the device."""
     return self._skia_api.m.step(
         'rm %s' % path,
-        cmd=[self.ios_bin.join('ios_rm'), path]
+        cmd=[self.ios_bin.join('ios_rm'), path],
+        infra_step=True,
     )
 
   def get_device_dirs(self):
