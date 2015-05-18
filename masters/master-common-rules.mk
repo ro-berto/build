@@ -23,6 +23,7 @@ INFRA_RUNPY = /opt/infra-python/run.py
 # Get the current host's short hostname.  We may use this in Makefiles that
 # include this file.
 SHORT_HOSTNAME := $(shell hostname -s)
+CURRENT_DIR = $(shell pwd)
 
 printstep:
 ifndef NO_REVISION_AUDIT
@@ -39,10 +40,10 @@ ifndef NO_REVISION_AUDIT
 	    echo "gclient not found.  Add depot_tools to PATH or use DEPS checkout."; \
 	    exit 2; \
 	fi
-	$(GCLIENT) revinfo -a >> actions.log || true
+	$(GCLIENT) revinfo -a | tee revinfo.log >> actions.log || true
 	$(GCLIENT) diff >> actions.log || true
 	@($(INFRA_RUNPY) infra.tools.send_monitoring_event \
-                   --service-event-revinfo-from-gclient \
+                   --service-event-revinfo=$(CURRENT_DIR)/revinfo.log \
                    --service-event-type=START \
                    --event-mon-run-type=prod \
                    --event-mon-service-name \
