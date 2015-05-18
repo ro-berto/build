@@ -1193,6 +1193,28 @@ SPEC = {
       'testing': { 'platform': 'mac', },
       'enable_swarming': True,
     },
+    'ClangToTiOS': {
+      'chromium_config': 'clang_tot_ios',
+      'gclient_config': 'ios',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'ios',
+        'TARGET_BITS': 32,
+      },
+      'gclient_config_kwargs': {
+        'GIT_MODE': True,
+      },
+      'GYP_DEFINES': {
+        'werror': '',
+        # Plugin flags often need to be changed when using a plugin newer than
+        # the latest Clang package, so disable plugins.
+        'clang_use_chrome_plugins': '0',
+      },
+      'testing': {
+        'platform': 'mac',
+      }
+    },
+
     'Linux Builder (clobber)': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
@@ -1211,7 +1233,6 @@ SPEC = {
         'platform': 'linux',
       },
     },
-
     'Android Tests (trial)(dbg)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',

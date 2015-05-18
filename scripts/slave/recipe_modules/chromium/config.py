@@ -677,6 +677,11 @@ def chromium_ios_ninja(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['clang_xcode'] = 0
 
+@config_ctx(includes=['chromium_ios_ninja'])
+def clang_tot_ios(c):
+  # Use ToT Clang.
+  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+
 @config_ctx(includes=['ios'])
 def chromium_ios_simulator(c):
   c.compile_py.build_tool = 'xcode'
