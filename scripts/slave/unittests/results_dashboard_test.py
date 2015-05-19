@@ -234,42 +234,6 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     ]
     self.assertEqual(expected_points, actual_points)
 
-  def test_BlinkUsesTimestamp(self):
-    """Tests that timestamp is used for "revision" for ChromiumWebkit master."""
-    self.mox.StubOutWithMock(datetime, 'datetime')
-    datetime.datetime.utcnow().AndReturn(FakeDateTime())
-    self.mox.StubOutWithMock(slave_utils, 'GetActiveMaster')
-    slave_utils.GetActiveMaster().AndReturn('ChromiumWebkit')
-    self.mox.ReplayAll()
-
-    actual_points = results_dashboard.MakeListOfPoints(
-        {
-            'bar': {
-                'traces': {'baz': ["100.0", "5.0"]},
-                'rev': '123456',
-                'webkit_rev': '23456',
-            }
-        },
-        'my-bot', 'foo_test', 'chromium.webkit', 'Builder', 10, {})
-    expected_points = [
-        {
-            'master': 'ChromiumWebkit',
-            'bot': 'my-bot',
-            'test': 'foo_test/bar/baz',
-            'revision': 1375315200,
-            'value': '100.0',
-            'error': '5.0',
-            'masterid': 'chromium.webkit',
-            'buildername': 'Builder',
-            'buildnumber': 10,
-            'supplemental_columns': {
-                'r_chromium_svn': 123456,
-                'r_webkit_rev': '23456',
-            },
-        }
-    ]
-    self.assertEqual(expected_points, actual_points)
-
 
 class IsEncodedJson(mox.Comparator):
   def __init__(self, expected_json):

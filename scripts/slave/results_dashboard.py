@@ -180,8 +180,7 @@ def MakeListOfPoints(charts, bot, test_name, mastername, buildername,
   master = slave_utils.GetActiveMaster()
 
   for chart_name, chart_data in sorted(charts.items()):
-    revision, default_rev, revision_columns = _RevisionNumberColumns(
-        chart_data, master, 'r_')
+    point_id, revision_columns = _RevisionNumberColumns(chart_data, prefix='r_')
 
     for trace_name, trace_values in sorted(chart_data['traces'].items()):
       is_important = trace_name in chart_data.get('important', [])
@@ -190,14 +189,12 @@ def MakeListOfPoints(charts, bot, test_name, mastername, buildername,
           'master': master,
           'bot': bot,
           'test': test_path,
-          'revision': revision,
+          'revision': point_id,
           'masterid': mastername,
           'buildername': buildername,
           'buildnumber': buildnumber,
           'supplemental_columns': {}
       }
-      if default_rev:
-        supplemental_columns['a_default_rev'] = default_rev
 
       # Add the supplemental_columns values that were passed in after the
       # calculated revision column values so that these can be overwritten.
@@ -243,14 +240,8 @@ def MakeDashboardJsonV1(chart_json, revision_data, bot, mastername,
   # The master name used for the dashboard is the CamelCase name returned by
   # GetActiveMaster(), and not the canonical master name with dots.
   master = slave_utils.GetActiveMaster()
-  point_id, default_rev, versions = _RevisionNumberColumns(
-      revision_data, master, '')
+  point_id, revision_columns = _RevisionNumberColumns(revision_data, prefix='')
   supplemental_columns = {}
-  if default_rev:
-    # Note: default_rev is always prefixed with 'r_', since the dashboard adds
-    # 'r_' to the names of the revision columns, but not to the values of the
-    # supplementary columns.
-    supplemental_columns['default_rev'] = default_rev
   for key in supplemental_dict:
     supplemental_columns[key.replace('a_', '', 1)] = supplemental_dict[key]
   fields = {
@@ -261,7 +252,7 @@ def MakeDashboardJsonV1(chart_json, revision_data, bot, mastername,
       'buildnumber': buildnumber,
       'point_id': point_id,
       'supplemental': supplemental_columns,
-      'versions': versions,
+      'versions': revision_columns,
       'chart_data': chart_json,
       'is_ref': is_ref,
   }
@@ -273,25 +264,24 @@ def _GetTimestamp():
   return int(calendar.timegm(datetime.datetime.utcnow().utctimetuple()))
 
 
-def _RevisionNumberColumns(data, master, prefix):
+def _RevisionNumberColumns(data, prefix):
   """Get the revision number and revision-related columns from the given data.
 
   Args:
     data: A dict of information from one line of the log file.
     master: The name of the buildbot master.
-    prefix: Prefix for keys. 'r_' for non-telemetry json, '' for telemetry json.
+    prefix: Prefix for revision type keys. 'r_' for non-telemetry json, '' for
+        telemetry json.
 
   Returns:
-    A 3-tuple with the revision number (which must be an int), the default rev
-    name, and a dict of version-related supplemental columns.
+    A tuple with the point id (which must be an int), and a dict of
+    revision-related columns.
   """
   revision_supplemental_columns = {}
-  default_rev = None
 
   # The dashboard requires points' x-values to be integers, and points are
-  # ordered by this. If the revision can't be parsed as an int, assume that
-  # it's a git hash and use timestamp as the x-value.
-  git_hash = None
+  # ordered by these x-values. If data['rev'] can't be parsed as an int, assume
+  # that it's a git commit hash and use timestamp as the x-value.
   try:
     revision = int(data['rev'])
     if revision and revision > 300000 and revision < 1000000:
@@ -302,44 +292,18 @@ def _RevisionNumberColumns(data, master, prefix):
     # The dashboard requires ordered integer revision numbers. If the revision
     # is not an integer, assume it's a git hash and send a timestamp.
     revision = _GetTimestamp()
-    git_hash = data['rev']
+    revision_supplemental_columns[prefix + 'chromium'] = data['rev']
 
-  # Add Chromium version if it was specified, and use timestamp as x-value.
-  if 'ver' in data and data['ver'] and data['ver'] != 'undefined':
-    revision_supplemental_columns[prefix + 'chrome_version'] = data['ver']
-    default_rev = 'r_chrome_version'
-    revision = _GetTimestamp()
-
-  # Blink builds can have the same chromium revision for two builds. So
-  # order them by timestamp to get them to show on the dashboard in the
-  # order they were built.
-  if master in ['ChromiumWebkit', 'Oilpan']:
-    if not git_hash:
-      revision_supplemental_columns[prefix + 'chromium_svn'] = revision
-    revision = _GetTimestamp()
-
-  # Regardless of what the master is, if the given "rev" can't be parsed as
-  # an int, we're assuming that it's a git hash.
-  if git_hash:
-    revision_supplemental_columns[prefix + 'chromium'] = git_hash
-
-  # For Oilpan, send the webkit_rev as r_oilpan since we are getting
-  # the oilpan branch revision instead of the Blink trunk revision
-  # and set r_oilpan to be the dashboard default revision.
-  if master == 'Oilpan':
-    revision_supplemental_columns[prefix + 'oilpan'] = data['webkit_rev']
-    default_rev = 'r_oilpan'
-  else:
-    # For other revision data, add it if it's present and not undefined:
-    for key in ['webkit_rev', 'webrtc_rev', 'v8_rev']:
-      if key in data and data[key] != 'undefined':
-        revision_supplemental_columns[prefix + key] = data[key]
+  # For other revision data, add it if it's present and not undefined:
+  for key in ['webkit_rev', 'webrtc_rev', 'v8_rev']:
+    if key in data and data[key] != 'undefined':
+      revision_supplemental_columns[prefix + key] = data[key]
 
   # If possible, also send the git hash.
   if 'git_revision' in data and data['git_revision'] != 'undefined':
     revision_supplemental_columns[prefix + 'chromium'] = data['git_revision']
 
-  return revision, default_rev, revision_supplemental_columns
+  return revision, revision_supplemental_columns
 
 
 def _TestPath(test_name, chart_name, trace_name):
