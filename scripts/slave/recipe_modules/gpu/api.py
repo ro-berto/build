@@ -180,14 +180,10 @@ class GpuApi(recipe_api.RecipeApi):
     # aren't supported on the current configuration (because the component
     # build is used).
     is_tryserver = self.m.tryserver.is_tryserver
-    if self.is_fyi_waterfall:
-      if self.m.platform.is_win:
-        # TODO(kbr): run these tests on the trybots as soon as there is
-        # capacity to do so, and on all platforms as soon as ANGLE does.
-        isolates = (common.GPU_ISOLATES + common.FYI_ONLY_GPU_ISOLATES +
-                    common.WIN_ONLY_GPU_ISOLATES)
-      else:
-        isolates = common.GPU_ISOLATES + common.FYI_ONLY_GPU_ISOLATES
+    if self.is_fyi_waterfall and self.m.platform.is_win:
+      # TODO(kbr): run these tests on the trybots as soon as there is
+      # capacity to do so, and on all platforms as soon as ANGLE does.
+      isolates = common.GPU_ISOLATES + common.WIN_ONLY_GPU_ISOLATES
     else:
       isolates = common.GPU_ISOLATES
     targets = [u'%s_run' % test for test in isolates]
@@ -435,14 +431,14 @@ class GpuApi(recipe_api.RecipeApi):
           'gpu_unittests', chrome_revision, webkit_revision, enable_swarming,
           swarming_dimensions))
 
-    # Run the content and audio unittests on the FYI bots
+    # Run the content and media unittests on the FYI bots
     # TODO(jmadill): Run them on all GPU bots once stable
     if self.is_fyi_waterfall:
       tests.append(self._create_gtest(
           'content_unittests', chrome_revision, webkit_revision,
           enable_swarming, swarming_dimensions))
       tests.append(self._create_gtest(
-          'audio_unittests', chrome_revision, webkit_revision, enable_swarming,
+          'media_unittests', chrome_revision, webkit_revision, enable_swarming,
           swarming_dimensions))
 
     # Remove empty entries as some tests may be skipped.
