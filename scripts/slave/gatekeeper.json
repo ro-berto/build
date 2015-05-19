@@ -723,6 +723,7 @@
         "infra go tests",
         "build cipd packages"
       ],
+      "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)",
       "tree_notify": [
         "chrome-troopers+infra-continuous@google.com"
       ]
