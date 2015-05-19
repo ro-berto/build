@@ -116,15 +116,19 @@ class AutoBisectApi(recipe_api.RecipeApi):
                                       'prepare-bisect-perf-regression.py'),
         '-w', self.m.path['slave_build']])
     args = []
+
+    kwargs['allow_subannotations'] = True
+
     if extra_src:
       args = args + ['--extra_src', extra_src]
     if path_to_config:
       args = args + ['--path_to_config', path_to_config]
 
-    args += ['--path_to_goma', self.m.path['build'].join('goma')]
+    if self.m.chromium.c.TARGET_PLATFORM != 'android':
+      args += ['--path_to_goma', self.m.path['build'].join('goma')]
     args += [
         '--build-properties',
-        self.m.json.dumps(self.m.chromium.build_properties),
+         self.m.json.dumps(dict(self.m.properties.legacy())),
       ]
     self.m.chromium.runtest(
         self.m.path['checkout'].join('tools', 'run-bisect-perf-regression.py'),

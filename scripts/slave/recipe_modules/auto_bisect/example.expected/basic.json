@@ -733,6 +733,7 @@
     "name": "Preparing for Bisection"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -758,7 +759,7 @@
       "--path_to_goma",
       "[BUILD]/goma",
       "--build-properties",
-      "{\"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webkit_revision\": \"5e2293dffc3cd07d37fbedea3b500f0eb650614d\", \"got_webkit_revision_cp\": \"refs/heads/master@{#124383}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\"}"
+      "{\"bisect_config\": {\"bad_revision\": \"314017\", \"bug_id\": \"\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \"dummy_builds\": \"True\", \"good_revision\": \"314015\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"repeat_count\": \"2\", \"skip_gclient_ops\": \"True\", \"test_type\": \"perf\", \"truncate_percent\": \"0\"}, \"buildername\": \"linux_perf_bisect\", \"mastername\": \"tryserver.chromium.perf\", \"recipe\": \"auto_bisect:example\", \"slavename\": \"dummyslave\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Running Bisection"
