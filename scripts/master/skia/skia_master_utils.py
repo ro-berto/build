@@ -32,6 +32,7 @@ import re
 DEFAULT_AUTO_REBOOT = False
 DEFAULT_DO_TRYBOT = True
 DEFAULT_RECIPE = 'skia/skia'
+DEFAULT_TRYBOT_ONLY = False
 PERCOMMIT_SCHEDULER_NAME = 'skia_percommit'
 MASTER_ONLY_SCHEDULER_NAME = 'skia_master_only'
 PERIODIC_15MINS_SCHEDULER_NAME = 'skia_periodic_15mins'
@@ -165,7 +166,13 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
 
   # Create builders and trybots.
   for builder in builders:
-    process_builder(builder)
+    if builder.get('trybot_only', DEFAULT_TRYBOT_ONLY):
+      # trybot_only=True should only be used in combination with do_trybot=True
+      # Also, the buildername then needs to already have the '-Trybot' suffix.
+      assert builder.get('do_trybot', DEFAULT_DO_TRYBOT)
+      assert builder['name'] == builder_name_schema.TrybotName(builder['name'])
+    else:
+      process_builder(builder)
     if builder.get('do_trybot', DEFAULT_DO_TRYBOT):
       process_builder(builder, is_trybot=True)
 
