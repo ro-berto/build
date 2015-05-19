@@ -319,6 +319,9 @@ SPEC = {
       },
       'android_config': 'clang_builder',
       'bot_type': 'builder_tester',
+      'compile_targets': [
+        'all',
+      ],
       'testing': {
         'platform': 'linux',
       },

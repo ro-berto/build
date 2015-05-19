@@ -191,7 +191,8 @@
       "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
-      "--"
+      "--",
+      "all"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
