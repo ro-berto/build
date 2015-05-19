@@ -147,7 +147,7 @@ def BuildChromiumFactory(channel, target_platform='win32'):
   custom_deps_file = None
   name = 'dartium.deps'
   deps_url = dartium_deps_url
-  if channel.name == 'be':
+  if channel.name == 'be' or channel.name == 'dev':
     custom_deps_file = 'tools/deps/dartium.deps/DEPS'
     name = 'src/dart'
     deps_url = 'https://github.com/dart-lang/sdk.git'
@@ -196,7 +196,7 @@ class DartFactory(gclient_factory.GClientFactory):
     self.channel = channel
 
     # Until we have stable/trunk building from github, still support svn
-    if channel.name == 'be':
+    if channel.name == 'be' or channel.name == 'dev':
       deps_url = 'https://github.com/dart-lang/sdk.git'
     elif is_standalone:
       deps_url = config.Master.dart_url + self.channel.standalone_deps_path
@@ -532,9 +532,7 @@ class DartUtils(object):
   def get_svn_poller():
     def dart_tree_file_splitter(path):
       pieces = path.split('/')
-      if pieces[0] == 'trunk':
-        return ('trunk', '/'.join(pieces[1:]))
-      elif pieces[0] == 'branches':
+      if pieces[0] == 'branches':
         return ('/'.join(pieces[0:2]),
                 '/'.join(pieces[2:]))
       elif pieces[0] == 'experimental':

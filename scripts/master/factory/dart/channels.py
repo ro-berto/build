@@ -18,7 +18,7 @@ class Channel(object):
 # dart waterfalls. If you change anything here please also change it there.
 CHANNELS = [
   Channel('be', 'master', 0, '', 4),
-  Channel('dev', 'trunk', 1, '-dev', 2),
+  Channel('dev', 'dev', 1, '-dev', 2),
   Channel('stable', 'branches/1.10', 2, '-stable', 1),
   Channel('integration', 'branches/dartium_integration', 3, '-integration', 3),
 ]
