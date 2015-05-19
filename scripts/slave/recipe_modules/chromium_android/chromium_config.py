@@ -36,6 +36,7 @@ def clang_asan_release_builder(c):  # pragma: no cover
   c.gyp_env.GYP_DEFINES['sanitizer_coverage'] = 3
   c.gyp_env.GYP_DEFINES['fastbuild'] = 0
   c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
+  c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
   c.compile_py.default_targets = ['chrome_apk']
 
 @CONFIG_CTX(includes=['clang_asan_release_builder'])
