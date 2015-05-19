@@ -91,7 +91,19 @@ BUILDERS = freeze({
       'zip_and_upload': {
         'bucket': 'chrome-perf',
       }
-    }
+    },
+    'android_arm64_perf_bisect_builder': {
+      'recipe_config': 'arm64_builder',
+      'gclient_apply_config': ['android', 'perf'],
+      'kwargs': {
+        'BUILD_CONFIG': 'Release',
+      },
+      # Perf bisect builders uses custom file names for binaries with
+      # DEPS changes, and the logic for this is in zip_build.py.
+      'zip_and_upload': {
+        'bucket': 'chrome-perf',
+      }
+    },
   },
   'client.v8.fyi': {
     'Android Builder': {
