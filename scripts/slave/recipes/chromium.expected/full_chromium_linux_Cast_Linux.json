@@ -149,8 +149,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "All",
-      "chromium_builder_tests"
+      "cast_shell"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"

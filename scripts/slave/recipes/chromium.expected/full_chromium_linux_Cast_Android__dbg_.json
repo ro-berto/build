@@ -176,7 +176,8 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
-      "--"
+      "--",
+      "cast_shell_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

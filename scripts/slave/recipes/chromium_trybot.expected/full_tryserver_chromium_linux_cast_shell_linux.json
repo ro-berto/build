@@ -170,13 +170,62 @@
       "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
       "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"cast_shell\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"cast_shell\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"original_exes\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"cast_shell\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.matching_exes\": []@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/cleanup_temp.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "cleanup_temp"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/clang_revision.py",
+      "--src-dir",
+      "[SLAVE_BUILD]/src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "clang_revision"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma-clang",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--ninja-ensure-up-to-date",
+      "--",
+      "cast_shell"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "compile (with patch)"
   }
 ]

@@ -350,6 +350,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'compile_targets': [
+        'cast_shell',
+      ],
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -362,6 +365,9 @@ SPEC = {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
+      'compile_targets': [
+        'cast_shell_apk',
+      ],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
