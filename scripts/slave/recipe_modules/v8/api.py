@@ -46,6 +46,14 @@ TEST_CONFIGS = freeze({
     'add_flaky_step': True,
     'test_args': ['--no-variants', '--shell_flags="--optimize-for-size"'],
   },
+  'simdjs_small': {
+    'name': 'SimdJs - small',
+    'tests': 'simdjs/shell_test_runner',
+  },
+  'simdjs': {
+    'name': 'SimdJs - all',
+    'tests': 'simdjs',
+  },
   'test262': {
     'name': 'Test262 - no variants',
     'tests': 'test262',
