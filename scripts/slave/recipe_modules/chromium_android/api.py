@@ -629,7 +629,8 @@ class AndroidApi(recipe_api.RecipeApi):
       kwargs = {
           'min_battery_level': 95,
           'disable_network': True,
-          'disable_java_debug': True}
+          'disable_java_debug': True,
+          'max_battery_temp': 350}
     else:
       kwargs = {}
     self.provision_devices(**kwargs)

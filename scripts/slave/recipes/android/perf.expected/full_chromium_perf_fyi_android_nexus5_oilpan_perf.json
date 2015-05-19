@@ -191,7 +191,9 @@
       "--min-battery-level",
       "95",
       "--disable-network",
-      "--disable-java-debug"
+      "--disable-java-debug",
+      "--max-battery-temp",
+      "350"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
