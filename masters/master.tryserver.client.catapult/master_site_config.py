@@ -12,11 +12,11 @@
 
 from config_bootstrap import Master
 
-class CatapultTryserver(Master.Master4):
+class CatapultTryserver(Master.Master4a):
   project_name = 'CatapultTryserver'
-  master_port = 20400
-  slave_port = 30400
-  master_port_alt = 40400
+  master_port = 21400
+  slave_port = 31400
+  master_port_alt = 41400
   buildbot_url = 'https://build.chromium.org/p/tryserver.client.catapult/'
   buildbucket_bucket = 'master.tryserver.client.catapult'
   service_account_file = 'service-account-chromium-tryserver'
