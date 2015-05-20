@@ -12,6 +12,7 @@ DEPS = [
   'path',
   'platform',
   'properties',
+  'python',
   'step',
   'test_utils',
   'tryserver',
