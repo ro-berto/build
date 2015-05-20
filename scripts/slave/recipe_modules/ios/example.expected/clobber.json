@@ -88,7 +88,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\"\n  }, \n  \"compiler\": \"xcodebuild\", \n  \"configuration\": \"Debug\", \n  \"sdk\": \"iphonesimulator8.1\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"xcode version\": \"6.1.1\"\n}"
+      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\"\n  }, \n  \"compiler\": \"xcodebuild\", \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"sdk\": \"iphonesimulator8.1\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"xcode version\": \"6.1.1\"\n}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "finalize build config"

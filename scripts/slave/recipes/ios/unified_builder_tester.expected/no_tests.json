@@ -114,7 +114,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\"\n  }, \n  \"compiler\": \"ninja\", \n  \"configuration\": \"Release\", \n  \"sdk\": \"iphoneos8.0\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\"\n  }, \n  \"compiler\": \"ninja\", \n  \"configuration\": \"Release\", \n  \"env\": {}, \n  \"sdk\": \"iphoneos8.0\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "finalize build config"

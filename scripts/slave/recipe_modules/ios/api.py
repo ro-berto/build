@@ -123,13 +123,13 @@ class iOSApi(recipe_api.RecipeApi):
     self.__config['GYP_DEFINES']['component'] = 'static_library'
     self.__config['GYP_DEFINES']['OS'] = 'ios'
 
-    # Because build configs are only required to specify "triggered bots" or
-    # "tests", one of them may not be specified. In order to simplify the code
-    # that uses the values of self.__config, here we default them both to empty
-    # values of their respective types, so in other places we can iterate over
-    # them without having to check if they are in the dict at all.
+    # In order to simplify the code that uses the values of self.__config, here
+    # we default to empty values of their respective types, so in other places
+    # we can iterate over them without having to check if they are in the dict
+    # at all.
     self.__config['triggered bots'] = self.__config.get('triggered bots', {})
     self.__config['tests'] = self.__config.get('tests', [])
+    self.__config['env'] = self.__config.get('env', {})
 
     # Elements of the "tests" list are dicts. There are two types of elements,
     # determined by the presence of one of these mutually exclusive keys:
@@ -223,6 +223,9 @@ class iOSApi(recipe_api.RecipeApi):
       'GYP_DEFINES': ' '.join(gyp_defines),
       'LANDMINES_VERBOSE': '1',
     }
+
+    # Add extra env variables.
+    env.update(self.__config['env'])
 
     if self.compiler == 'xcodebuild':
       env['GYP_GENERATORS'] = 'xcode'

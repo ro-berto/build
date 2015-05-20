@@ -125,7 +125,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\"\n  }, \n  \"compiler\": \"ninja\", \n  \"configuration\": \"Debug\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests 1\", \n      \"device type\": \"fake device\", \n      \"os\": \"8.0\"\n    }, \n    {\n      \"app\": \"fake tests 2\", \n      \"device type\": \"fake device\", \n      \"os\": \"7.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\", \n    \"fake gyp define 1\": \"fake value 1\", \n    \"fake gyp define 2\": \"fake value 2\"\n  }, \n  \"compiler\": \"ninja\", \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests 1\", \n      \"device type\": \"fake device\", \n      \"os\": \"8.0\"\n    }, \n    {\n      \"app\": \"fake tests 2\", \n      \"device type\": \"fake device\", \n      \"os\": \"7.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "finalize build config"
