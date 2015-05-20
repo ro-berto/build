@@ -300,8 +300,18 @@ class RevisionState(object):
 
   def _get_pos_from_hash(self, sha):
     api = self.bisector.api
-    return api.m.commit_position.chromium_commit_position_from_hash(sha)
+    try:
+      result = api.m.commit_position.chromium_commit_position_from_hash(sha)
+    except api.m.step.StepFailure as sf:
+      api.m.halt('Failed to resolve commit position - ' + sf.reason)
+      raise
+    return result
 
   def _get_hash_from_pos(self, pos):
     api = self.bisector.api
-    return api.m.commit_position.chromium_hash_from_commit_position(pos)
+    try:
+      result = api.m.commit_position.chromium_hash_from_commit_position(pos)
+    except api.m.step.StepFailure as sf:
+      api.m.halt('Failed to resolve commit position - ' + sf.reason)
+      raise
+    return result

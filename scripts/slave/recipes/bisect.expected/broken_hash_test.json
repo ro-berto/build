@@ -133,6 +133,19 @@
     "stdout": "/path/to/tmp/"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(1)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Recipe failed. Reason: Failed to resolve commit position - Could not parse commit position from git output: UnCastable",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@import sys; sys.exit(1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
     "name": "$final_result",
     "reason": "Could not parse commit position from git output: UnCastable",
     "status_code": 1

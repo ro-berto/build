@@ -12,6 +12,7 @@ DEPS = [
     'test_utils',
     'chromium_tests',
     'raw_io',
+    'halt',
 ]
 
 AVAILABLE_BOTS = 1  # Change this for n-secting instead of bi-.
@@ -29,7 +30,7 @@ def GenSteps(api):
     bisect_config = api.properties.get('bisect_config')
   assert isinstance(bisect_config, collections.Mapping)
   bisector = api.auto_bisect.create_bisector(bisect_config)
-  _gather_reference_range(bisector)
+  _gather_reference_range(api, bisector)
   if (not bisector.failed and bisector.check_improvement_direction() and
       bisector.check_regression_confidence()):
     if not bisector.check_bisect_finished(bisector.good_rev):
@@ -167,7 +168,9 @@ def GenTests(api):
   doctored_data[0]['test_results']['results'] = 'Failed test.'
   for revision_data in doctored_data:
     revision_data.pop('cl_info', None)
-    for step_data in _get_step_data_for_revision(api, revision_data):
+    skip_results = revision_data in doctored_data[1:-1]
+    for step_data in _get_step_data_for_revision(api, revision_data,
+                                                 skip_results=skip_results):
       broken_bad_rev_test += step_data
   yield broken_bad_rev_test
 
@@ -175,7 +178,9 @@ def GenTests(api):
   doctored_data[-1]['test_results']['results'] = 'Failed test.'
   for revision_data in doctored_data:
     revision_data.pop('cl_info', None)
-    for step_data in _get_step_data_for_revision(api, revision_data):
+    skip_results = revision_data in doctored_data[1:-1]
+    for step_data in _get_step_data_for_revision(api, revision_data,
+                                                 skip_results=skip_results):
       broken_good_rev_test += step_data
   yield broken_good_rev_test
 
@@ -183,7 +188,7 @@ def GenTests(api):
 
 
 def _get_step_data_for_revision(api, revision_data, broken_cp=None,
-                                broken_hash=None):
+                                broken_hash=None, skip_results=False):
   """Generator that produces step patches for fake results."""
   commit_pos = revision_data['commit_pos']
   commit_hash = revision_data['hash']
@@ -203,9 +208,10 @@ def _get_step_data_for_revision(api, revision_data, broken_cp=None,
     commit_pos_str = 'refs/heads/master@{#%s}' % commit_pos
     yield api.step_data(step_name, stdout=api.raw_io.output(commit_pos_str))
 
-  step_name = 'gsutil Get test results for build ' + commit_hash
-  yield api.step_data(step_name, stdout=api.raw_io.output(json.dumps(
-      test_results)))
+  if not skip_results:
+    step_name = 'gsutil Get test results for build ' + commit_hash
+    yield api.step_data(step_name, stdout=api.raw_io.output(json.dumps(
+        test_results)))
 
   if 'cl_info' in revision_data:
     step_name = 'Reading culprit cl information.'
@@ -220,14 +226,16 @@ def _ensure_checkout(api):
   api.chromium_tests.prepare_checkout(mastername, buildername)
 
 
-def _gather_reference_range(bisector):
+def _gather_reference_range(api, bisector):
   bisector.good_rev.start_job()
   bisector.bad_rev.start_job()
   bisector.wait_for_all([bisector.good_rev, bisector.bad_rev])
   if bisector.good_rev.failed:
-    raise bisector.api.m.step.StepFailure('Testing the "good" revision failed')
+    api.halt('Testing the "good" revision failed')
+    bisector.failed = True
   elif bisector.bad_rev.failed:
-    raise bisector.api.m.step.StepFailure('Testing the "bad" revision failed')
+    api.halt('Testing the "bad" revision failed')
+    bisector.failed = True
   else:
     bisector.compute_relative_change()
 

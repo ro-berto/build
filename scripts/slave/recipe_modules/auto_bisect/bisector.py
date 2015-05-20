@@ -150,8 +150,9 @@ class Bisector(object):
     except ValueError:
       pass
 
-    raise self.api.m.step.StepFailure('Git did not output a valid hash for the '
-                                      'interned file.')
+    reason = 'Git did not output a valid hash for the interned file.'
+    self.api.m.halt(reason)
+    raise self.api.m.step.StepFailure(reason)
 
   def _gen_diff_patch(self, git_object_a, git_object_b, src_alias, dst_alias,
                       cwd, deps_rev):
@@ -209,8 +210,10 @@ class Bisector(object):
         r'(?<=["\']%s["\']: ["\'])([a-fA-F0-9]+)(?=["\'])' % deps_var,
         re.MULTILINE)
     if not re.search(deps_item_regexp, original_contents):
-      raise self.api.m.step.StepFailure('DEPS file does not contain entry for '
-                                        + deps_var)
+      reason = 'DEPS file does not contain entry for ' + deps_var
+      self.api.m.halt(reason)
+      raise self.api.m.step.StepFailure(reason)
+
     patched_contents = re.sub(deps_item_regexp, new_commit_hash,
                               original_contents)
 

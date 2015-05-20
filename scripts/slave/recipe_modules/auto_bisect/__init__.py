@@ -6,6 +6,7 @@ DEPS = [
   'git',
   'gsutil',
   'json',
+  'halt',
   'math_utils',
   'path',
   'properties',

@@ -571,6 +571,19 @@
     "stdout": "/path/to/tmp/"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(1)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Recipe failed. Reason: Git did not output a valid hash for the interned file.",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@import sys; sys.exit(1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
     "name": "$final_result",
     "reason": "Git did not output a valid hash for the interned file.",
     "status_code": 1
