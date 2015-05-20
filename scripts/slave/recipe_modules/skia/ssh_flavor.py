@@ -3,36 +3,19 @@
 # found in the LICENSE file.
 
 
-import collections
 import default_flavor
 import posixpath
+import ssh_devices
 
 
 """Utils for running tests remotely over SSH."""
 
 
-DEFAULT_PORT = '22'
-DEFAULT_USER = 'chrome-bot'
-
-
-SlaveInfo = collections.namedtuple('SlaveInfo',
-                                   'ssh_user ssh_host ssh_port')
-
-SLAVE_INFO = {
-  'skiabot-shuttle-ubuntu12-003':
-      SlaveInfo('root', '192.168.1.123', DEFAULT_PORT),
-  'skiabot-shuttle-ubuntu12-004':
-      SlaveInfo('root', '192.168.1.134', DEFAULT_PORT),
-  'default':
-      SlaveInfo('nouser', 'noip', 'noport'),
-}
-
-
 class SSHFlavorUtils(default_flavor.DefaultFlavorUtils):
   def __init__(self, *args, **kwargs):
     super(SSHFlavorUtils, self).__init__(*args, **kwargs)
-    slave_info = SLAVE_INFO.get(self._skia_api.c.SLAVE_NAME,
-                                SLAVE_INFO['default'])
+    slave_info = ssh_devices.SLAVE_INFO.get(self._skia_api.c.SLAVE_NAME,
+                                            ssh_devices.SLAVE_INFO['default'])
     self._host = slave_info.ssh_host
     self._port = slave_info.ssh_port
     self._user = slave_info.ssh_user

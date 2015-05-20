@@ -3,77 +3,13 @@
 # found in the LICENSE file.
 
 
-import collections
+import android_devices
 import config
 import copy
 import default_flavor
 
 
 """Android flavor utils, used for building for and running tests on Android."""
-
-
-DEFAULT_SDK_ROOT = '/home/chrome-bot/android-sdk-linux'
-MAC_SDK_ROOT = '/Users/chrome-bot/adt-bundle-mac-x86_64-20140702/sdk'
-
-SlaveInfo = collections.namedtuple('SlaveInfo',
-                                   'serial android_sdk_root has_root')
-
-SLAVE_INFO = {
-  'skiabot-mac-10_8-compile-000':
-      SlaveInfo('noserial', MAC_SDK_ROOT, True),
-  'skiabot-mac-10_8-compile-001':
-      SlaveInfo('noserial', MAC_SDK_ROOT, True),
-  'skiabot-mac-10_8-compile-002':
-      SlaveInfo('noserial', MAC_SDK_ROOT, True),
-  'skiabot-mac-10_8-compile-003':
-      SlaveInfo('noserial', MAC_SDK_ROOT, True),
-  'skiabot-mac-10_8-compile-004':
-      SlaveInfo('noserial', MAC_SDK_ROOT, True),
-  'skiabot-mac-10_8-compile-005':
-      SlaveInfo('noserial', MAC_SDK_ROOT, True),
-  'skiabot-mac-10_8-compile-006':
-      SlaveInfo('noserial', MAC_SDK_ROOT, True),
-  'skiabot-mac-10_8-compile-007':
-      SlaveInfo('noserial', MAC_SDK_ROOT, True),
-  'skiabot-mac-10_8-compile-008':
-      SlaveInfo('noserial', MAC_SDK_ROOT, True),
-  'skiabot-mac-10_8-compile-009':
-      SlaveInfo('noserial', MAC_SDK_ROOT, True),
-  'skiabot-shuttle-ubuntu12-galaxys3-001':
-      SlaveInfo('4df713b8244a21cf', DEFAULT_SDK_ROOT, False),
-  'skiabot-shuttle-ubuntu12-galaxys3-002':
-      SlaveInfo('32309a56e9b3a09f', DEFAULT_SDK_ROOT, False),
-  'skiabot-shuttle-ubuntu12-galaxys4-001':
-      SlaveInfo('4d0032a5d8cb6125', DEFAULT_SDK_ROOT, False),
-  'skiabot-shuttle-ubuntu12-galaxys4-002':
-      SlaveInfo('4d00353cd8ed61c3', DEFAULT_SDK_ROOT, False),
-  'skiabot-shuttle-ubuntu12-nexus5-001':
-      SlaveInfo('03f61449437cc47b', DEFAULT_SDK_ROOT, True),
-  'skiabot-shuttle-ubuntu12-nexus5-002':
-      SlaveInfo('018dff3520c970f6', DEFAULT_SDK_ROOT, True),
-  'skiabot-shuttle-ubuntu12-nexus7-001':
-      SlaveInfo('015d210a13480604', DEFAULT_SDK_ROOT, True),
-  'skiabot-shuttle-ubuntu12-nexus7-002':
-      SlaveInfo('015d18848c280217', DEFAULT_SDK_ROOT, True),
-  'skiabot-shuttle-ubuntu12-nexus7-003':
-      SlaveInfo('015d16897c401e17', DEFAULT_SDK_ROOT, True),
-  'skiabot-shuttle-ubuntu12-nexus9-001':
-      SlaveInfo('HT43RJT00022', DEFAULT_SDK_ROOT, True),
-  'skiabot-shuttle-ubuntu12-nexus9-002':
-      SlaveInfo('HT4AEJT03112', DEFAULT_SDK_ROOT, True),
-  'skiabot-shuttle-ubuntu12-nexus9-003':
-      SlaveInfo('HT4ADJT03339', DEFAULT_SDK_ROOT, True),
-  'skiabot-shuttle-ubuntu12-nexus10-001':
-      SlaveInfo('R32C801B5LH', DEFAULT_SDK_ROOT, True),
-  'skiabot-shuttle-ubuntu12-nexus10-003':
-      SlaveInfo('R32CB017X2L', DEFAULT_SDK_ROOT, True),
-  'skiabot-shuttle-ubuntu12-nexusplayer-001':
-      SlaveInfo('D76C708B', DEFAULT_SDK_ROOT, True),
-  'skiabot-shuttle-ubuntu12-nexusplayer-002':
-      SlaveInfo('8AB5139A', DEFAULT_SDK_ROOT, True),
-  'default':
-      SlaveInfo('noserial', DEFAULT_SDK_ROOT, False),
-}
 
 
 def device_from_builder_dict(builder_dict):
@@ -138,8 +74,9 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
   def __init__(self, skia_api):
     super(AndroidFlavorUtils, self).__init__(skia_api)
     self.device = device_from_builder_dict(self._skia_api.c.builder_cfg)
-    slave_info = SLAVE_INFO.get(self._skia_api.c.SLAVE_NAME,
-                                SLAVE_INFO['default'])
+    slave_info = android_devices.SLAVE_INFO.get(
+        self._skia_api.c.SLAVE_NAME,
+        android_devices.SLAVE_INFO['default'])
     self.serial = slave_info.serial
     self.android_bin = self._skia_api.m.path['slave_build'].join(
         'skia', 'platform_tools', 'android', 'bin')
