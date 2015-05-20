@@ -107,10 +107,13 @@ def mipsel_builder(c):
   pass
 
 @config_ctx(includes=['main_builder'])
-def dartium_builder(c):
+def dartium_builder(c):  # pragma: no cover
   c.get_app_manifest_vars = False
   c.run_tree_truth = False
-  c.deps_file = 'DEPS'
+  if c.deps_dir != 'src/dart':
+    c.deps_file = 'DEPS'
+  else:
+    c.deps_file = 'tools/deps/dartium.deps/DEPS'
   c.managed = True
 
 @config_ctx()

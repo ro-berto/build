@@ -15,7 +15,7 @@ def GenSteps(api):
   api.chromium_android.configure_from_properties(
       'dartium_builder',
       REPO_URL=api.properties.get('deps_url'),
-      REPO_NAME='dartium.deps',
+      REPO_NAME=api.properties.get('deps_path'),
       BUILD_CONFIG='Release',
       INTERNAL=False)
   revision = api.properties.get('revision', 'HEAD')
@@ -41,4 +41,13 @@ def GenTests(api):
           revision='34567',
           buildername='dartium-builder',
           buildnumber=1337,
-          deps_url='https://dart.googlecode.com/svn/trunk/deps/dartium.deps'))
+          deps_url='https://dart.googlecode.com/svn/trunk/deps/dartium.deps',
+          deps_path='dartium.deps'))
+  yield (
+      api.test('dartium_builder_git') +
+      api.properties.generic(
+          revision='478695f60c28b5b8a951ce1d4fd60f53d80b21fb',
+          buildername='dartium-builder',
+          buildnumber=1337,
+          deps_url='https://github.com/dart-lang/sdk.git',
+          deps_path='src/dart'))
