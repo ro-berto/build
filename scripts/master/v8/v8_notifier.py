@@ -21,7 +21,8 @@ class V8Notifier(chromium_notifier.ChromiumNotifier):
                categories_steps,
                sendToInterestedUsers=False,
                extraRecipients=None):
-    super(V8Notifier, self).__init__(
+    chromium_notifier.ChromiumNotifier.__init__(
+        self,
         fromaddr=active_master.from_address,
         categories_steps=categories_steps,
         relayhost=config.Master.smtp,
