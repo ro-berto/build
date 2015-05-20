@@ -1698,13 +1698,6 @@ def _UpdateRunBenchmarkArgs(args, options):
 
 
 def _ConfigureSanitizerTools(options, args, extra_env):
-  # Temporary deprecation warning for sanitizer factory properties.
-  for sanitizer_name in ['asan', 'msan', 'tsan', 'lsan']:
-    if (options.factory_properties.get(sanitizer_name, False) and
-        not getattr(options, 'enable_%s' % sanitizer_name)):
-      raise NotImplementedError(
-          'Factory property "%s" is no longer supported.' % sanitizer_name)
-
   if (options.enable_asan or options.enable_tsan or
       options.enable_msan or options.enable_lsan):
     # Instruct GTK to use malloc while running ASan, TSan, MSan or LSan tests.
@@ -1929,20 +1922,15 @@ def main():
                            help='See --revision.')
   option_parser.add_option('--enable-asan', action='store_true', default=False,
                            help='Enable fast memory error detection '
-                                '(AddressSanitizer). Can also enabled with the '
-                                'factory property "asan" (deprecated).')
+                                '(AddressSanitizer).')
   option_parser.add_option('--enable-lsan', action='store_true', default=False,
-                           help='Enable memory leak detection (LeakSanitizer). '
-                                'Can also be enabled with the factory '
-                                'property "lsan" (deprecated).')
+                           help='Enable memory leak detection (LeakSanitizer).')
   option_parser.add_option('--enable-msan', action='store_true', default=False,
                            help='Enable uninitialized memory reads detection '
-                                '(MemorySanitizer). Can also enabled with the '
-                                'factory property "msan" (deprecated).')
+                                '(MemorySanitizer).')
   option_parser.add_option('--enable-tsan', action='store_true', default=False,
                            help='Enable data race detection '
-                                '(ThreadSanitizer). Can also enabled with the '
-                                'factory property "tsan" (deprecated).')
+                                '(ThreadSanitizer).')
   option_parser.add_option('--strip-path-prefix',
                            default='build/src/out/Release/../../',
                            help='Source paths in stack traces will be stripped '
