@@ -276,6 +276,7 @@ def main(argv):
       'master.tryserver.chromium.mac': 'TryServerChromiumMac',
       'master.tryserver.chromium.win': 'TryServerChromiumWin',
       'master.tryserver.chromium.perf': 'ChromiumPerfTryServer',
+      'master.tryserver.client.catapult': 'CatapultTryserver',
       'master.tryserver.client.mojo': 'MojoTryServer',
       'master.tryserver.blink': 'BlinkTryServer',
       'master.tryserver.libyuv': 'LibyuvTryServer',

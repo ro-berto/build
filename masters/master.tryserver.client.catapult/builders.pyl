@@ -1,0 +1,55 @@
+{
+  "builders": {
+    "Catapult Linux Tryserver": {
+      "recipe": "catapult",
+      "slave_pools": ["linux_slave_pool"],
+      "slavebuilddir": "catapult",
+    },
+    "Catapult Mac Tryserver": {
+      "recipe": "catapult",
+      "slave_pools": ["mac_slave_pool"],
+      "slavebuilddir": "catapult",
+    },
+    "Catapult Windows Tryserver": {
+      "recipe": "catapult",
+      "slave_pools": ["win_slave_pool"],
+      "slavebuilddir": "catapult",
+    },
+  },
+  "git_repo_url": "https://chromium.googlesource.com/external/github.com/catapult-project/catapult.git",
+  "master_base_class": "Master4",
+  "master_classname": "CatapultTryserver",
+  "master_port": 20400,
+  "master_port_alt": 40400,
+  "master_type": "tryserver",
+  "service_account_file": "service-account-chromium-tryserver",
+  "buildbucket_bucket": "master.tryserver.client.catapult",
+  "slave_pools": {
+    "linux_slave_pool": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "precise",
+      },
+      "slaves": ["slave425-c4"],
+    },
+    "mac_slave_pool": {
+      "slave_data": {
+        "bits": 64,
+        "os": "mac",
+        "version": "10.9",
+      },
+      "slaves": ["vm600-m4"],
+    },
+    "win_slave_pool": {
+      "slave_data": {
+        "bits": 64,
+        "os": "win",
+        "version": "win7",
+      },
+      "slaves": ["vm711-m4"],
+    },
+  },
+  "slave_port": 30400,
+  "templates": ["../master.chromium/templates"],
+}
