@@ -323,6 +323,11 @@
     "name": "Triggering test job for 306475",
     "trigger_specs": [
       {
+        "buildbot_changes": [
+          {
+            "revision": "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
+          }
+        ],
         "builder_name": "linux_perf_tester",
         "properties": {
           "bisect_config": {
@@ -335,7 +340,8 @@
           },
           "job_name": "e28dc0d49c331def2a3bbf3ddd0096eb51551155-test",
           "parent_build_archive_url": "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip",
-          "revision": "306475"
+          "parent_got_revision": "e28dc0d49c331def2a3bbf3ddd0096eb51551155",
+          "revision": "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
         }
       }
     ]
@@ -362,6 +368,11 @@
     "name": "Triggering test job for src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "trigger_specs": [
       {
+        "buildbot_changes": [
+          {
+            "revision": "a6298e4afedbf2cd461755ea6f45b0ad64222222"
+          }
+        ],
         "builder_name": "linux_perf_tester",
         "properties": {
           "bisect_config": {
@@ -374,7 +385,8 @@
           },
           "job_name": "a6298e4afedbf2cd461755ea6f45b0ad64222222-test",
           "parent_build_archive_url": "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
-          "revision": "src@a6298e4afedbf2cd461755ea6f45b0ad64222222"
+          "parent_got_revision": "a6298e4afedbf2cd461755ea6f45b0ad64222222",
+          "revision": "a6298e4afedbf2cd461755ea6f45b0ad64222222"
         }
       }
     ]

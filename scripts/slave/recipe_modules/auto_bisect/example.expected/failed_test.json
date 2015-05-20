@@ -185,6 +185,11 @@
     "name": "Triggering test job for 314015",
     "trigger_specs": [
       {
+        "buildbot_changes": [
+          {
+            "revision": "a6298e4afedbf2cd461755ea6f45b0ad64222222"
+          }
+        ],
         "builder_name": "linux_perf_tester",
         "properties": {
           "bisect_config": {
@@ -197,7 +202,8 @@
           },
           "job_name": "a6298e4afedbf2cd461755ea6f45b0ad64222222-test",
           "parent_build_archive_url": "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
-          "revision": "314015"
+          "parent_got_revision": "a6298e4afedbf2cd461755ea6f45b0ad64222222",
+          "revision": "a6298e4afedbf2cd461755ea6f45b0ad64222222"
         }
       }
     ]
@@ -224,6 +230,11 @@
     "name": "Triggering test job for 314017",
     "trigger_specs": [
       {
+        "buildbot_changes": [
+          {
+            "revision": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
+          }
+        ],
         "builder_name": "linux_perf_tester",
         "properties": {
           "bisect_config": {
@@ -236,7 +247,8 @@
           },
           "job_name": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test",
           "parent_build_archive_url": "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
-          "revision": "314017"
+          "parent_got_revision": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+          "revision": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
         }
       }
     ]
@@ -400,6 +412,11 @@
     "name": "Triggering test job for 314016",
     "trigger_specs": [
       {
+        "buildbot_changes": [
+          {
+            "revision": "dcdcdc0ff1122212323134879ddceeb1240b0988"
+          }
+        ],
         "builder_name": "linux_perf_tester",
         "properties": {
           "bisect_config": {
@@ -412,7 +429,8 @@
           },
           "job_name": "dcdcdc0ff1122212323134879ddceeb1240b0988-test",
           "parent_build_archive_url": "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
-          "revision": "314016"
+          "parent_got_revision": "dcdcdc0ff1122212323134879ddceeb1240b0988",
+          "revision": "dcdcdc0ff1122212323134879ddceeb1240b0988"
         }
       }
     ]

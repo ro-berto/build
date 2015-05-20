@@ -117,11 +117,17 @@ class PerfRevisionState(revision_state.RevisionState):
       self.test_job_name = uuid.uuid4().hex
     api = self.bisector.api
     perf_test_properties = {
-        'buildername': self.bisector.get_perf_tester_name(),
-        'revision': self.revision_string,
-        'parent_build_archive_url': self.build_url,
-        'bisect_config': self._get_bisect_config_for_tester(),
-        'job_name': self.test_job_name,
+        'builder_name': self.bisector.get_perf_tester_name(),
+        'properties': {
+            'revision': self.commit_hash,
+            'parent_got_revision': self.commit_hash,
+            'parent_build_archive_url': self.build_url,
+            'bisect_config': self._get_bisect_config_for_tester(),
+            'job_name': self.test_job_name,
+        },
+        'buildbot_changes': [{
+            'revision': self.commit_hash,
+        }]
     }
     if 'CACHE_TEST_RESULTS' in os.environ and test_results_cache.has_results(
         self.test_job_name):  # pragma: no cover
