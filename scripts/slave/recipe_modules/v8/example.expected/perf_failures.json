@@ -70,6 +70,17 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/v8/tools/run-test.py",
+      "--download-data-only",
+      "foo"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Example2 - download-data"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/v8/tools/run_perf.py",
       "--arch",
       "x64",

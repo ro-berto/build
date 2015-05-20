@@ -812,7 +812,7 @@ class V8Api(recipe_api.RecipeApi):
     """
 
     results_mapping = collections.defaultdict(dict)
-    def run_single_perf_test(test, name, json_file):
+    def run_single_perf_test(test, name, json_file, download_test=None):
       """Call the v8 perf test runner.
 
       Performance results are saved in the json test results file as a dict with
@@ -832,6 +832,14 @@ class V8Api(recipe_api.RecipeApi):
           self._test_data.get('perf_failures', False))
 
       try:
+        if download_test is not None:
+          self.m.python(
+            '%s%s - download-data' % (name, suffix),
+            self.m.path['checkout'].join('tools', 'run-test.py'),
+            ['--download-data-only', download_test],
+            cwd=self.m.path['checkout'],
+            step_test_data=step_test_data,
+          )
         self.m.python(
           '%s%s' % (name, suffix),
           self.m.path['checkout'].join('tools', 'run_perf.py'),
@@ -862,7 +870,8 @@ class V8Api(recipe_api.RecipeApi):
       assert perf_configs[t]['json']
       try:
         run_single_perf_test(
-            t, perf_configs[t]['name'], perf_configs[t]['json'])
+            t, perf_configs[t]['name'], perf_configs[t]['json'],
+            download_test=perf_configs[t].get('download_test'))
       except self.m.step.StepFailure:
         failed = True
 

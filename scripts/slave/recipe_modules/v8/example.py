@@ -29,6 +29,7 @@ def GenSteps(api):
     'example2': {
       'name': 'Example2',
       'json': 'example2.json',
+      'download_test': 'foo',
     }
   }
   api.v8.runperf(api.v8.perf_tests, perf_config, category='ia32',
