@@ -275,12 +275,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return sorted(compile_targets), tests_including_triggered
 
-  def get_build_revision(self, properties, type):
-    if type == 'commit_position':
-      return self.m.commit_position.parse_revision(
-          properties['got_revision_cp'])
-    return properties['got_revision']
-
   def transient_check(self, update_step, command):
     """Runs command, checking for transience if this is a try job.
 
@@ -377,10 +371,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             revision_dir=bot_config.get('cf_revision_dir'),
         )
       else:
-        build_revision = self.get_build_revision(
-            update_step.presentation.properties,
-            bot_config.get('archive_key', 'got_revision'))
-
+        build_revision = update_step.presentation.properties['got_revision']
         self.m.archive.zip_and_upload_build(
             'package build',
             self.m.chromium.c.build_config_fs,

@@ -130,6 +130,18 @@ BUILDERS = freeze({
         'buildername': 'Linux Chromium OS ASan LSan Builder',
         'tester': 'Linux Chromium OS ASan LSan Tests (1)',
       },
+      'chromeos_x86-generic_chromium_compile_only_ng': {
+        'mastername': 'chromium.chromiumos',
+        'buildername': 'ChromiumOS x86-generic Compile',
+      },
+      'chromeos_amd64-generic_chromium_compile_only_ng': {
+        'mastername': 'chromium.chromiumos',
+        'buildername': 'ChromiumOS amd64-generic Compile',
+      },
+      'chromeos_daisy_chromium_compile_only_ng': {
+        'mastername': 'chromium.chromiumos',
+        'buildername': 'ChromiumOS daisy Compile',
+      },
       'linux_chromium_chromeos_compile_rel_ng': {
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS Builder',

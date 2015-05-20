@@ -7,7 +7,7 @@
       "--master",
       "chromium.chromiumos",
       "--builder",
-      "Coverage ChromiumOS Simple Chrome x86-generic",
+      "ChromiumOS x86-generic Compile",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -127,15 +127,15 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chromium-chromiumos-archive/chromium.chromiumos/Coverage ChromiumOS Simple Chrome x86-generic",
+      "gs://chromium-chromiumos-archive/chromium.chromiumos/ChromiumOS x86-generic Compile",
       "--build_revision",
-      "170242",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--cros-board",
       "x86-generic",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Coverage ChromiumOS Simple Chrome x86-generic\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ChromiumOS x86-generic Compile\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Coverage ChromiumOS Simple Chrome x86-generic\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ChromiumOS x86-generic Compile\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"

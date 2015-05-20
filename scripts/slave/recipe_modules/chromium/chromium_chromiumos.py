@@ -243,27 +243,27 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-
-    # Simple Chrome test builder for coverage
-    'Coverage ChromiumOS Simple Chrome x86-generic': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'chromeos',
-        'TARGET_CROS_BOARD': 'x86-generic',
-      },
-      'bot_type': 'builder',
-      'disable_tests': True,
-      'compile_targets': [
-        'chrome',
-      ],
-      'archive_key': 'commit_position',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
   },
 }
+
+# Simple Chrome compile-only builders.
+for board in ('x86-generic', 'amd64-generic', 'daisy'):
+  SPEC['builders']['ChromiumOS %s Compile' % (board,)] = {
+    'chromium_config': 'chromium',
+    'chromium_apply_config': ['chromeos'],
+    'gclient_config': 'chromium',
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 64,
+      'TARGET_PLATFORM': 'chromeos',
+      'TARGET_CROS_BOARD': board,
+    },
+    'bot_type': 'builder',
+    'disable_tests': True,
+    'compile_targets': [
+      'chrome',
+    ],
+    'testing': {
+      'platform': 'linux',
+    },
+  }
