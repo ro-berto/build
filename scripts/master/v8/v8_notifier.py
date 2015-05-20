@@ -21,6 +21,7 @@ class V8Notifier(chromium_notifier.ChromiumNotifier):
                categories_steps,
                sendToInterestedUsers=False,
                extraRecipients=None):
+    extraRecipients = extraRecipients or []
     chromium_notifier.ChromiumNotifier.__init__(
         self,
         fromaddr=active_master.from_address,
