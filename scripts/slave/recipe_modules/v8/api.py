@@ -835,7 +835,7 @@ class V8Api(recipe_api.RecipeApi):
         if download_test is not None:
           self.m.python(
             '%s%s - download-data' % (name, suffix),
-            self.m.path['checkout'].join('tools', 'run-test.py'),
+            self.m.path['checkout'].join('tools', 'run-tests.py'),
             ['--download-data-only', download_test],
             cwd=self.m.path['checkout'],
             step_test_data=step_test_data,
