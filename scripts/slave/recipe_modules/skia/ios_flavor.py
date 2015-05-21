@@ -18,7 +18,8 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
         'skia', 'platform_tools', 'ios', 'bin')
 
   def step(self, name, cmd, **kwargs):
-    env = {'BUILDTYPE': self._skia_api.c.configuration}
+    env = {'BUILDTYPE': self._skia_api.c.configuration,
+           'SKIA_OUT': self._skia_api.out_dir}
     args = [self.ios_bin.join('ios_run_skia')]
 
     # Convert 'dm' and 'nanobench' from positional arguments
@@ -29,9 +30,10 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
     return self._skia_api.m.step(name=name, cmd=args + cmd,
                                  env=env, **kwargs)
 
-  def compile(self, target):
+  def compile(self, target, env=None):
     """Build the given target."""
-    env = self._skia_api.c.gyp_env.as_jsonish()
+    env = env or {}
+    env.update(self._skia_api.c.gyp_env.as_jsonish())
     env['BUILDTYPE'] = self._skia_api.c.configuration
 
     cmd = [self.ios_bin.join('ios_ninja')]

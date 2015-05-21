@@ -93,6 +93,7 @@ class SkiaApi(recipe_api.RecipeApi):
     self.local_skp_dirs = default_flavor.SKPDirs(
         str(slave_dir.join('playback')),
         self.c.BUILDER_NAME, self.m.path.sep)
+    self.out_dir = None
     self.storage_skp_dirs = default_flavor.SKPDirs(
         'playback', self.c.BUILDER_NAME, '/')
     self.tmp_dir = self.m.path['slave_build'].join('tmp')
@@ -164,11 +165,12 @@ class SkiaApi(recipe_api.RecipeApi):
 
     self.got_revision = update_step.presentation.properties['got_revision']
     self.m.tryserver.maybe_apply_issue()
+    self.out_dir = self.m.path['checkout'].join('out', self.c.BUILDER_NAME)
 
   def compile_steps(self, clobber=False):
     """Run the steps to build Skia."""
     for target in self.c.build_targets:
-      self.flavor.compile(target)
+      self.flavor.compile(target, env={'SKIA_OUT': self.out_dir})
 
   def _readfile(self, filename, *args, **kwargs):
     """Convenience function for reading files."""

@@ -128,7 +128,8 @@
     "cwd": "[SLAVE_BUILD]\\skia",
     "env": {
       "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86_64 skia_arch_width=64 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp"
+      "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86_64 skia_arch_width=64 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
+      "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Perf-Win7-MSVC-ShuttleA-GPU-HD2000-x86_64-Release-Trybot"
     },
     "name": "build nanobench"
   },
@@ -250,7 +251,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\skia\\out\\Release_x64\\nanobench",
+      "[SLAVE_BUILD]\\skia\\out\\Perf-Win7-MSVC-ShuttleA-GPU-HD2000-x86_64-Release-Trybot\\Release_x64\\nanobench",
       "--undefok",
       "-i",
       "[SLAVE_BUILD]\\skia\\resources",

@@ -96,7 +96,8 @@
     "cwd": "[SLAVE_BUILD]\\skia",
     "env": {
       "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_angle=1 skia_arch_type=x86 skia_arch_width=32 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp"
+      "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_angle=1 skia_arch_type=x86 skia_arch_width=32 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
+      "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Test-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Release-ANGLE"
     },
     "name": "build dm"
   },
@@ -110,7 +111,8 @@
     "cwd": "[SLAVE_BUILD]\\skia",
     "env": {
       "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_angle=1 skia_arch_type=x86 skia_arch_width=32 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp"
+      "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_angle=1 skia_arch_type=x86 skia_arch_width=32 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
+      "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Test-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Release-ANGLE"
     },
     "name": "build nanobench"
   },
@@ -290,7 +292,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]\\skia\\out\\Release\\dm",
+      "[SLAVE_BUILD]\\skia\\out\\Test-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Release-ANGLE\\Release\\dm",
       "--undefok",
       "--verbose",
       "--resourcePath",

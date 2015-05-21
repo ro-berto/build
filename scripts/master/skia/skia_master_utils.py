@@ -41,6 +41,7 @@ WEEKLY_SCHEDULER_NAME = 'skia_weekly'
 INFRA_PERCOMMIT_SCHEDULER_NAME = 'infra_percommit'
 MASTER_BRANCH = 'master'
 POLLING_BRANCH = re.compile('refs/heads/.+')
+SLAVE_WORKDIR = 'workdir'
 TRY_SCHEDULER_NAME = 'try_job_rietveld_skia'
 TRY_SCHEDULER_PROJECT = 'skia'
 
@@ -149,6 +150,7 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       'recipe': builder.get('recipe', DEFAULT_RECIPE),
       'properties': properties,
       'mergeRequests': builder.get('can_merge_requests', CanMergeBuildRequests),
+      'slavebuilddir': SLAVE_WORKDIR,
     }
     builder_dicts.append(builder_dict)
 

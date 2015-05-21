@@ -75,7 +75,8 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Debug",
-      "GYP_DEFINES": "skia_arch_type=arm skia_arch_width=32 skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0"
+      "GYP_DEFINES": "skia_arch_type=arm skia_arch_width=32 skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "build iOSShell"
   },
@@ -441,7 +442,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "BUILDTYPE": "Debug"
+      "BUILDTYPE": "Debug",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "dm"
   },
@@ -500,7 +502,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "BUILDTYPE": "Debug"
+      "BUILDTYPE": "Debug",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "nanobench"
   }

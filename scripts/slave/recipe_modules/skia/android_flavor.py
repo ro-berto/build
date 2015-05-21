@@ -98,15 +98,18 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
             '-d', self.device,
             '-s', self.serial,
     ]
+    env = {'SKIA_OUT': self._skia_api.out_dir}
+    env.update(self._default_env)
     if self._skia_api.c.configuration == config.CONFIG_RELEASE:
       args.append('--release')
 
     return self._skia_api.m.step(name=name, cmd=args + cmd,
-                                 env=self._default_env, **kwargs)
+                                 env=env, **kwargs)
 
-  def compile(self, target):
+  def compile(self, target, env=None):
     """Build the given target."""
-    env = copy.deepcopy(self._default_env)
+    env = env or {}
+    env.update(self._default_env)
     env.update(self._skia_api.c.gyp_env.as_jsonish())
     env['BUILDTYPE'] = self._skia_api.c.configuration
     ccache = self._skia_api.ccache

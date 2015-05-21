@@ -24,8 +24,8 @@ class XSanFlavorUtils(default_flavor.DefaultFlavorUtils):
                 'vla-bound'),
     }[self._skia_api.c.builder_cfg['extra_config']]
 
-  def compile(self, target):
-    env = {}
+  def compile(self, target, env=None):
+    env = env or {}
     env.update(self._skia_api.c.gyp_env.as_jsonish())
     cmd = [self._skia_api.m.path['checkout'].join('tools', 'xsan_build'),
            self._sanitizer, target,
@@ -45,8 +45,8 @@ class XSanFlavorUtils(default_flavor.DefaultFlavorUtils):
                            lsan_suppressions)
     env['TSAN_OPTIONS'] = 'suppressions=%s' % tsan_suppressions
 
-    path_to_app = self._skia_api.m.path['checkout'].join(
-        'out', self._skia_api.c.configuration, cmd[0])
+    path_to_app = self._skia_api.out_dir.join(
+        self._skia_api.c.configuration, cmd[0])
     new_cmd = [path_to_app]
     new_cmd.extend(cmd[1:])
     return self._skia_api.m.step(name, new_cmd, env=env, **kwargs)

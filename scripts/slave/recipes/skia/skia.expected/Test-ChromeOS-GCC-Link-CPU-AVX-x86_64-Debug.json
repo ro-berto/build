@@ -79,7 +79,8 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0",
-      "PATH": "%(PATH)s:/home/chrome-bot/depot_tools/third_party/gsutil"
+      "PATH": "%(PATH)s:/home/chrome-bot/depot_tools/third_party/gsutil",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "build dm"
   },
@@ -94,7 +95,8 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0",
-      "PATH": "%(PATH)s:/home/chrome-bot/depot_tools/third_party/gsutil"
+      "PATH": "%(PATH)s:/home/chrome-bot/depot_tools/third_party/gsutil",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "build nanobench"
   },
@@ -493,7 +495,7 @@
       "scp",
       "-P",
       "22",
-      "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/dm",
+      "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug/config/chromeos-link/Debug/dm",
       "root@192.168.1.123:/usr/local/skiabot/bin/dm"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -591,7 +593,7 @@
       "scp",
       "-P",
       "22",
-      "[SLAVE_BUILD]/skia/out/config/chromeos-link/Debug/nanobench",
+      "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug/config/chromeos-link/Debug/nanobench",
       "root@192.168.1.123:/usr/local/skiabot/bin/nanobench"
     ],
     "cwd": "[SLAVE_BUILD]",

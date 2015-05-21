@@ -34,8 +34,8 @@ class ChromeOSFlavorUtils(ssh_flavor.SSHFlavorUtils):
 
   def step(self, name, cmd, **kwargs):
     """Wrapper for the Step API; runs a step as appropriate for this flavor."""
-    local_path = self._skia_api.m.path['checkout'].join(
-      'out', 'config', 'chromeos-%s' % self.board,
+    local_path = self._skia_api.out_dir.join(
+      'config', 'chromeos-%s' % self.board,
       self._skia_api.c.configuration, cmd[0])
     remote_path = self.device_path_join(self.device_bin_dir, cmd[0])
     self.copy_file_to_device(local_path, remote_path)
@@ -43,12 +43,11 @@ class ChromeOSFlavorUtils(ssh_flavor.SSHFlavorUtils):
                                           cmd=[remote_path]+cmd[1:],
                                           **kwargs)
 
-  def compile(self, target):
+  def compile(self, target, env=None):
     """Build the given target."""
+    env = env or {}
     # Add depot_tools/third_party/gsutil to PATH.
-    env = {
-      'PATH': '%(PATH)s:/home/chrome-bot/depot_tools/third_party/gsutil',
-    }
+    env['PATH'] = '%(PATH)s:/home/chrome-bot/depot_tools/third_party/gsutil'
     env.update(self._skia_api.c.gyp_env.as_jsonish())
     skia_dir = self._skia_api.m.path['checkout']
     cmd = [skia_dir.join('platform_tools', 'chromeos', 'bin', 'chromeos_make'),

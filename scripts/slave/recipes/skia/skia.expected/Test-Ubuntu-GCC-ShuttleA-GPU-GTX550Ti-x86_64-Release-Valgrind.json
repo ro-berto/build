@@ -95,7 +95,8 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_release_optimization_level=1 skia_warnings_as_errors=0"
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
     },
     "name": "build dm"
   },
@@ -108,7 +109,8 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_release_optimization_level=1 skia_warnings_as_errors=0"
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
     },
     "name": "build nanobench"
   },

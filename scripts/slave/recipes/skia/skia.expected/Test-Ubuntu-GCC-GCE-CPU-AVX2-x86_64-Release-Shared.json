@@ -95,7 +95,8 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_shared_lib=1 skia_warnings_as_errors=0"
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_shared_lib=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Shared"
     },
     "name": "build dm"
   },
@@ -108,7 +109,8 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_shared_lib=1 skia_warnings_as_errors=0"
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_shared_lib=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Shared"
     },
     "name": "build nanobench"
   },
@@ -289,7 +291,7 @@
   {
     "cmd": [
       "catchsegv",
-      "[SLAVE_BUILD]/skia/out/Release/dm",
+      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Shared/Release/dm",
       "--undefok",
       "--verbose",
       "--resourcePath",

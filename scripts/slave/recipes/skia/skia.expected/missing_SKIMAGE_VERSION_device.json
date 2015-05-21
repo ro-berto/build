@@ -93,7 +93,8 @@
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=arm skia_arch_width=32 skia_warnings_as_errors=0",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1"
+      "SKIA_ANDROID_VERBOSE_SETUP": "1",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug"
     },
     "name": "build dm"
   },
@@ -109,7 +110,8 @@
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=arm skia_arch_width=32 skia_warnings_as_errors=0",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1"
+      "SKIA_ANDROID_VERBOSE_SETUP": "1",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug"
     },
     "name": "build nanobench"
   },
@@ -603,7 +605,8 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1"
+      "SKIA_ANDROID_VERBOSE_SETUP": "1",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug"
     },
     "name": "dm"
   },
@@ -676,7 +679,8 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
-      "SKIA_ANDROID_VERBOSE_SETUP": "1"
+      "SKIA_ANDROID_VERBOSE_SETUP": "1",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug"
     },
     "name": "nanobench"
   },

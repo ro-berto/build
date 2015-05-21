@@ -65,7 +65,8 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "skia_shared_lib=1 skia_warnings_as_errors=0"
+      "GYP_DEFINES": "skia_shared_lib=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Housekeeper-PerCommit-Trybot"
     },
     "name": "build most"
   },
@@ -94,7 +95,7 @@
       "python",
       "RECIPE_MODULE[skia]/resources/run_binary_size_analysis.py",
       "--library",
-      "[SLAVE_BUILD]/skia/out/Release/lib/libskia.so",
+      "[SLAVE_BUILD]/skia/out/Housekeeper-PerCommit-Trybot/Release/lib/libskia.so",
       "--githash",
       "164710",
       "--commit_ts",
