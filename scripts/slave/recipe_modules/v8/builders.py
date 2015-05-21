@@ -1492,6 +1492,27 @@ BUILDERS = {
         'tests': ['unittests', 'v8testing'],
         'testing': {'platform': 'linux'},
       },
+      'v8_linux64_msan_rel': {
+        # 'simulate_arm' is actually implied by 'msan'. We still set it
+        # explicitly for the sake of consistency.
+        'chromium_apply_config': [
+          'v8_ninja',
+          'clang',
+          'msan',
+          'no_snapshot',
+          'simulate_arm',
+          'goma',
+          'no_dcheck',
+        ],
+        'v8_apply_config': ['no_snapshot'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'linux'},
+      },
       'v8_linux64_tsan_rel': {
         'chromium_apply_config': [
           'make',
