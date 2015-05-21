@@ -779,6 +779,26 @@ def chromium_pgo_optimize(c):
   c.gyp_env.GYP_DEFINES['chrome_pgo_phase'] = 2
 
 @config_ctx()
+def v8_arch_arm(c):
+  if c.TARGET_BITS == 64:
+    c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'arm64'
+  else:  # pragma: no cover
+    # Not used in a recipe yet. Just set to 'arm' as soon as required.
+    raise BadConf('Recipe config not implemented for arm.')
+
+@config_ctx()
+def v8_arch_mipsel(c):
+  if c.TARGET_BITS == 64:  # pragma: no cover
+    # Not used in a recipe yet. Just set to 'mips64el' as soon as required.
+    raise BadConf('Recipe config not implemented for mips64el.')
+  else:
+    c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'mipsel'
+
+@config_ctx()
+def v8_d8_default_target(c):
+  c.compile_py.default_targets = ['d8']
+
+@config_ctx()
 def v8_optimize_medium(c):
   c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 1
 

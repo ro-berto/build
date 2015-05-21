@@ -7,7 +7,7 @@
       "--master",
       "client.v8.branches",
       "--builder",
-      "Chromium ASAN - debug",
+      "Chromium ASAN arm64 - debug",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -72,7 +72,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 component=shared_library gomadir='[BUILD]/goma' lsan=1 sanitizer_coverage=3 target_arch=x64 use_goma=1 v8_optimized_debug=1"
+      "GYP_DEFINES": "asan=1 clang=1 component=shared_library gomadir='[BUILD]/goma' lsan=1 sanitizer_coverage=3 target_arch=x64 use_goma=1 v8_optimized_debug=1 v8_target_arch=arm64"
     },
     "name": "gclient runhooks"
   },
@@ -105,7 +105,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Chromium ASAN - debug\", \"buildnumber\": 571, \"mastername\": \"client.v8.branches\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"Chromium ASAN arm64 - debug\", \"buildnumber\": 571, \"mastername\": \"client.v8.branches\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -152,7 +152,7 @@
       "[BUILD]/goma",
       "--clobber",
       "--",
-      "chromium_builder_asan"
+      "d8"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
@@ -187,7 +187,7 @@
       "-u",
       "RECIPE_MODULE[archive]/resources/zip_archive.py",
       "[TMP_BASE]/chrome_staging_tmp_1",
-      "asan-linux-debug-v8-component-43426",
+      "arm64-asan-linux-debug-v8-component-43426",
       "[\"file 1\", \"file 2\"]",
       "[SLAVE_BUILD]/src/out/Debug"
     ],
@@ -211,13 +211,13 @@
       "cp",
       "-a",
       "public-read",
-      "[TMP_BASE]/chrome_staging_tmp_1/asan-linux-debug-v8-component-43426.zip",
-      "gs://v8-asan/linux-debug/asan-linux-debug-v8-component-43426.zip"
+      "[TMP_BASE]/chrome_staging_tmp_1/arm64-asan-linux-debug-v8-component-43426.zip",
+      "gs://v8-asan/linux-debug/arm64-asan-linux-debug-v8-component-43426.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/v8-asan/linux-debug/asan-linux-debug-v8-component-43426.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/v8-asan/linux-debug/arm64-asan-linux-debug-v8-component-43426.zip@@@"
     ]
   },
   {
@@ -225,10 +225,10 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[TMP_BASE]/chrome_staging_tmp_1/asan-linux-debug-v8-component-43426.zip"
+      "[TMP_BASE]/chrome_staging_tmp_1/arm64-asan-linux-debug-v8-component-43426.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "asan-linux-debug-v8-component-43426.zip",
+    "name": "arm64-asan-linux-debug-v8-component-43426.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
