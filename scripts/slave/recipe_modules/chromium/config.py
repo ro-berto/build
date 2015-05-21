@@ -517,6 +517,10 @@ def chromium(c):
 def chromium_win_clang(c):
   fastbuild(c, final=False)  # final=False so win_clang_asan can override it.
 
+@config_ctx(includes=['chromium_win_clang'])
+def chromium_win_clang_tot(c):
+  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+
 @config_ctx(includes=['chromium_win_clang', 'official'])
 def chromium_win_clang_official(c):
   pass
