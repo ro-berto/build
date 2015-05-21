@@ -7,6 +7,7 @@ DEPS = [
   'isolate',
   'json',
   'path',
+  'properties',
   'step',
   'swarming_client',
 ]
@@ -65,6 +66,8 @@ def GenTests(api):
   # Found more than expected.
   yield make_test('extra', ['test1', 'test2'], ['test1', 'test2', 'extra_test'])
   # Didn't find something.
-  yield make_test('missing', ['test1', 'test2'], ['test1'])
+  yield (
+      make_test('missing', ['test1', 'test2'], ['test1']) +
+      api.properties.generic(buildername='Windows Swarm Test'))
   # No expectations, and nothing has been found, produces warning.
   yield make_test('none', None, [])
