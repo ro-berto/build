@@ -38,10 +38,16 @@ from common import find_depot_tools
 
 import auth
 import rietveld
-import roll_dep
 import scm
 import subprocess2
 
+
+ROLL_DESCRIPTION_STR = (
+'''Roll %(dep_path)s %(before_rev)s:%(after_rev)s%(svn_range)s
+
+Summary of changes available at:
+%(revlog_url)s
+''')
 
 BLINK_SHERIFF_URL = (
   'http://build.chromium.org/p/chromium.webkit/sheriff_webkit.js')
@@ -135,7 +141,7 @@ class AutoRoller(object):
   STOP_NAG_TIME_LIMIT = datetime.timedelta(hours=12)
   ADMIN_EMAIL = 'eseidel@chromium.org'
 
-  ROLL_DESCRIPTION_REGEXP = roll_dep.ROLL_DESCRIPTION_STR % {
+  ROLL_DESCRIPTION_REGEXP = ROLL_DESCRIPTION_STR % {
     'dep_path': '%(project)s',
     'before_rev': '(?P<from_revision>[0-9a-fA-F]{2,40})',
     'after_rev': '(?P<to_revision>[0-9a-fA-F]{2,40})',

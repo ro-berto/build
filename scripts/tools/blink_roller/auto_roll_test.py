@@ -141,7 +141,7 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
 
   def _make_issue(self, old_rev, new_rev, created_datetime=None,
                   svn_range_str=''):
-    description = auto_roll.roll_dep.ROLL_DESCRIPTION_STR % {
+    description = auto_roll.ROLL_DESCRIPTION_STR % {
         'dep_path': 'src/third_party/test_project',
         'before_rev': self._display_rev(old_rev),
         'after_rev': self._display_rev(new_rev),
