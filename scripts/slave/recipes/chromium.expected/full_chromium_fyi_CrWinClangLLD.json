@@ -93,7 +93,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 target_arch=ia32 test_isolation_mode=prepare use_lld=1"
+      "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 target_arch=ia32 test_isolation_mode=prepare use_lld=1",
+      "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "gclient runhooks"
   },
@@ -177,6 +178,9 @@
       "[SLAVE_BUILD]\\src"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "LLVM_FORCE_HEAD_REVISION": "YES"
+    },
     "name": "clang_revision"
   },
   {
@@ -195,6 +199,9 @@
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "LLVM_FORCE_HEAD_REVISION": "YES"
+    },
     "name": "compile"
   },
   {

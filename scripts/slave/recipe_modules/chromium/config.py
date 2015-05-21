@@ -530,7 +530,8 @@ def chromium_win_clang_asan(c):
   # Clear lsan configuration for win.
   del c.gyp_env.GYP_DEFINES['lsan']
 
-  # clang is pinned to a fixed revision on Win if asan is set. Override that.
+@config_ctx(includes=['chromium_win_clang_asan'])
+def chromium_win_clang_asan_tot(c):
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
 
 @config_ctx(includes=['chromium_win_clang_asan', 'goma'])

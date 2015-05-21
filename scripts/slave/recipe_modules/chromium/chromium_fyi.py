@@ -608,7 +608,7 @@ SPEC = {
       'enable_swarming': True,
     },
     'CrWinClangLLD': {
-      'chromium_config': 'chromium_win_clang',
+      'chromium_config': 'chromium_win_clang_tot',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -643,7 +643,7 @@ SPEC = {
       'enable_swarming': True,
     },
     'CrWinAsan': {
-      'chromium_config': 'chromium_win_clang_asan',
+      'chromium_config': 'chromium_win_clang_asan_tot',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -678,7 +678,7 @@ SPEC = {
       'enable_swarming': True,
     },
     'CrWinAsan(dll)': {
-      'chromium_config': 'chromium_win_clang_asan',
+      'chromium_config': 'chromium_win_clang_asan_tot',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
