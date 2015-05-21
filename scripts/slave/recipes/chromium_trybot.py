@@ -294,7 +294,10 @@ CHROMIUM_GPU_DIMENSION_SETS = freeze({
       {
         'gpu': '10de:104a',  # NVIDIA GeForce GT 610
         'os': 'Windows',
-      }
+      }, {
+        'gpu': '1002:6779',  # AMD Radeon HD 6450
+        'os': 'Windows',
+      },
     ],
   },
 })
