@@ -162,28 +162,6 @@
     "name": "compile"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
-      "check",
-      "//out/Release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gn check"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/tools/gn/bin/gyp_flag_compare.py",
-      "chrome"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gyp_flag_compare"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",

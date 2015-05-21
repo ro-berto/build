@@ -172,15 +172,5 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gn check"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/tools/gn/bin/gyp_flag_compare.py",
-      "chrome"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gyp_flag_compare"
   }
 ]

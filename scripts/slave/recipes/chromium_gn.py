@@ -113,7 +113,7 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
-        'should_run_gn_gyp_compare': True,
+        'should_run_gn_check': False,
         'should_run_tests': True,
       },
       'Linux GN Clobber': {
@@ -131,7 +131,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
-        'should_run_gn_gyp_compare': True,
       },
     },
   },
@@ -181,6 +180,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
+        'should_run_gn_check': False,
       },
       'android_chromium_gn_compile_dbg': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -197,6 +197,7 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
+        'should_run_gn_check': False,
         'should_run_tests': True,
       },
       'linux_chromium_gn_dbg': {
@@ -502,9 +503,6 @@ def _GenStepsInternal(api):
   # it be on by default.
   if bot_config.get('should_run_gn_check', True):
     api.chromium.run_gn_check()
-
-  if bot_config.get('should_run_gn_gyp_compare', False):
-    api.chromium.run_gn_compare()
 
   if tests and bot_config.get('should_run_tests', False):
     if api.tryserver.is_tryserver:

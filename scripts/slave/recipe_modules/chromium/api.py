@@ -604,16 +604,6 @@ class ChromiumApi(recipe_api.RecipeApi):
             build_dir,
         ])
 
-  def run_gn_compare(self):
-    """Run the gyp/GN flag comparison tool to generate a report on flag
-    differences between the builds."""
-    self.m.python(
-        name='gyp_flag_compare',
-        script=self.m.path['checkout'].join('tools/gn/bin/gyp_flag_compare.py'),
-        args=[
-            'chrome',  # TODO(scottmg): all, configurable, etc.
-        ])
-
   def taskkill(self):
     self.m.python(
       'taskkill',

@@ -257,18 +257,6 @@
     "name": "compile"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
-      "check",
-      "//out/Release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gn check"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
