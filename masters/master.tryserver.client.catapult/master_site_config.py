@@ -19,4 +19,4 @@ class CatapultTryserver(Master.Master4a):
   master_port_alt = 41400
   buildbot_url = 'https://build.chromium.org/p/tryserver.client.catapult/'
   buildbucket_bucket = 'master.tryserver.client.catapult'
-  service_account_file = 'service-account-chromium-tryserver'
+  service_account_file = 'service-account-chromium-tryserver.json'
