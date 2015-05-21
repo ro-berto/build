@@ -82,7 +82,6 @@ SPEC = {
       },
       'bot_type': 'builder',
       'GYP_DEFINES': {
-        'arm_float_abi': 'hard',
         'test_isolation_mode': 'archive',
       },
       'test_generators': [
@@ -107,9 +106,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
-      'GYP_DEFINES': {
-        'arm_float_abi': 'hard',
-      },
       'use_isolate': True,
       'testing': {
         'platform': 'linux',
