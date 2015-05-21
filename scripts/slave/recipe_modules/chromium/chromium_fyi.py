@@ -1398,6 +1398,23 @@ SPEC = {
         'platform': 'linux',
       },
     },
+
+    'Android Builder (dbg)': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'main_builder',
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
     'Android Tests (trial)(dbg)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
