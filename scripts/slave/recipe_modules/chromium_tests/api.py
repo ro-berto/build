@@ -11,35 +11,11 @@ from slave import recipe_api
 from slave import recipe_util
 
 
-# Different types of builds this recipe module can do.
-RECIPE_CONFIGS = freeze({
-  # TODO(phajdan.jr): Remove remaining indirect recipe configs.
-  'chromium': {
-    'chromium_config': 'chromium',
-    'gclient_config': 'chromium',
-  },
-  'chrome_chromeos': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['chromeos', 'chrome_internal'],
-    'gclient_config': 'chromium',
-    'gclient_apply_config': ['chrome_internal'],
-  },
-  'chrome_chromeos_buildspec': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['chromeos', 'chrome_internal'],
-    'gclient_config': 'chrome_from_release_buildspec',
-  },
-})
-
-
 class ChromiumTestsApi(recipe_api.RecipeApi):
   def configure_build(self, mastername, buildername, override_bot_type=None,
                       chromium_apply_config=None):
     master_dict = self.m.chromium.builders.get(mastername, {})
     bot_config = master_dict.get('builders', {}).get(buildername)
-
-    # TODO(phajdan.jr): Remove indirect recipe configs completely.
-    recipe_config = RECIPE_CONFIGS.get(bot_config.get('recipe_config'), {})
 
     # Get the buildspec version. It can be supplied as a build property or as
     # a recipe config value.
@@ -47,7 +23,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                          bot_config.get('buildspec_version'))
 
     self.m.chromium.set_config(
-        bot_config.get('chromium_config') or recipe_config['chromium_config'],
+        bot_config.get('chromium_config'),
         **bot_config.get('chromium_config_kwargs', {}))
     # Set GYP_DEFINES explicitly because chromium config constructor does
     # not support that.
@@ -57,7 +33,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
 
     self.m.gclient.set_config(
-        bot_config.get('gclient_config') or recipe_config['gclient_config'],
+        bot_config.get('gclient_config'),
         PATCH_PROJECT=self.m.properties.get('patch_project'),
         BUILDSPEC_VERSION=buildspec_version,
         **bot_config.get('gclient_config_kwargs', {}))
@@ -67,27 +43,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           bot_config['android_config'],
           **bot_config.get('chromium_config_kwargs', {}))
 
-    for c in recipe_config.get('chromium_apply_config', []):
-      self.m.chromium.apply_config(c)
     for c in bot_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
     if chromium_apply_config:
       for c in chromium_apply_config:
         self.m.chromium.apply_config(c)
 
-    for c in recipe_config.get('gclient_apply_config', []):
-      self.m.gclient.apply_config(c)
     for c in bot_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
 
     if bot_config.get('goma_canary'):
       self.m.goma.update_goma_canary()
-
-    # If a source root is specified, use it. Overrides the first-solution
-    # assignment used by 'bot_update'.
-    if self.m.gclient.c.src_root:
-      self.m.path['checkout'] = self.m.path['slave_build'].join(
-          self.m.gclient.c.src_root)
 
     bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
 

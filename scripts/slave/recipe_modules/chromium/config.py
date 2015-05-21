@@ -643,11 +643,6 @@ def chromium_xcode(c):  # pragma: no cover
   c.compile_py.default_targets = ['All']
   c.compile_py.xcode_project = Path('[CHECKOUT]', 'build', 'all.xcodeproj')
 
-@config_ctx()
-def chrome_internal(c):
-  # For internal Chrome builds, add this flag to our 'cros' wrapper.
-  c.cros_sdk_args.append('--internal')
-
 @config_ctx(includes=['static_library'])
 def ios(c):
   gyp_defs = c.gyp_env.GYP_DEFINES

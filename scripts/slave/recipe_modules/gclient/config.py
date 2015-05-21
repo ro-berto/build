@@ -500,21 +500,6 @@ def chrome_from_buildspec(c):  # pragma: no cover
   soln.custom_deps = {}
 
 @config_ctx()
-def chrome_from_release_buildspec(c):
-  assert c.BUILDSPEC_VERSION, "A buildspec version must be supplied."
-  soln = c.solutions.add()
-  soln.name = 'chrome_from_buildspec'
-  soln.revision = 'HEAD'
-  # This URL has to be augmented with the appropriate bucket by the recipe using
-  # it.
-  soln.url = ('svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/tools/'
-      'buildspec/releases/' + c.BUILDSPEC_VERSION)
-  soln.custom_vars['svn_url'] = 'svn://svn-mirror.golo.chromium.org'
-  soln.custom_deps = {}
-  c.src_root = 'src'
-  c.got_revision_mapping['chrome_from_buildspec'] = 'got_revision'
-
-@config_ctx()
 def catapult(c):
   soln = c.solutions.add()
   soln.name = 'catapult'
