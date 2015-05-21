@@ -28,7 +28,7 @@ def using_sys_path(path):
 
 
 # List of slaves that are allowed to be used more than once.
-WHITELIST = ['build1-m6']
+WHITELIST = ['build1-m6', 'build131-m1']
 
 def main():
   # Get public slaves.
