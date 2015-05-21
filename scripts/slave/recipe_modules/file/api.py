@@ -169,11 +169,13 @@ class FileApi(recipe_api.RecipeApi):
       import os, sys
       from common import chromium_utils
 
-      for p in [os.path.join(sys.argv[1], x) for x in os.listdir(sys.argv[1])]:
-        if os.path.isdir(p):
-          chromium_utils.RemoveDirectory(p)
-        else:
-          os.unlink(p)
+      path = sys.argv[1]
+      if os.path.exists(path):
+        for p in (os.path.join(path, x) for x in os.listdir(path)):
+          if os.path.isdir(p):
+            chromium_utils.RemoveDirectory(p)
+          else:
+            os.unlink(p)
       """,
       args=[path],
       **kwargs
