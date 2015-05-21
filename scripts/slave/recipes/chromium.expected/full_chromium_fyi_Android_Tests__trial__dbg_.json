@@ -378,7 +378,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "--apk",
-      "ChromePublicTest.apk",
+      "ChromePublic.apk",
       "--apk_package",
       "org.chromium.chrome"
     ],
@@ -386,7 +386,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "install ChromePublicTest.apk"
+    "name": "install ChromePublic.apk"
   },
   {
     "cmd": [

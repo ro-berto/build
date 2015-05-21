@@ -1253,7 +1253,7 @@ SPEC = {
         steps.AndroidInstrumentationTest(
             'ChromePublicTest', 'chrome_public_test_apk',
             isolate_file_path='chrome/chrome_public_test_apk.isolate',
-            adb_install_apk=('ChromePublicTest.apk', 'org.chromium.chrome')),
+            adb_install_apk=('ChromePublic.apk', 'org.chromium.chrome')),
       ],
       'testing': {
         'platform': 'linux',
