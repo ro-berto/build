@@ -77,7 +77,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android asan=1 clang=1 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' run_findbugs=1 target_arch=arm use_allocator=none use_goma=1",
+      "GYP_DEFINES": "OS=android asan=1 clang=1 component=shared_library fastbuild=1 gomadir='[BUILD]/goma' run_findbugs=1 target_arch=arm use_allocator=none use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks (with patch)"
@@ -264,7 +264,6 @@
       "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
-      "--ninja-ensure-up-to-date",
       "--",
       "all"
     ],
