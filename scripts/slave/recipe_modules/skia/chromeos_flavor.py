@@ -45,7 +45,10 @@ class ChromeOSFlavorUtils(ssh_flavor.SSHFlavorUtils):
 
   def compile(self, target):
     """Build the given target."""
-    env = {}
+    # Add depot_tools/third_party/gsutil to PATH.
+    env = {
+      'PATH': '/home/chrome-bot/depot_tools/third_party/gsutil',
+    }
     env.update(self._skia_api.c.gyp_env.as_jsonish())
     skia_dir = self._skia_api.m.path['checkout']
     cmd = [skia_dir.join('platform_tools', 'chromeos', 'bin', 'chromeos_make'),
