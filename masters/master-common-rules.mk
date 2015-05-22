@@ -27,7 +27,7 @@ CURRENT_DIR = $(shell pwd)
 
 printstep:
 ifndef NO_REVISION_AUDIT
-	@echo "**  `date`	make $(MAKECMDGOALS)" >> actions.log
+	@echo "**  `python -c 'import datetime; print datetime.datetime.utcnow().isoformat() + "Z"'`	make $(MAKECMDGOALS)" >> actions.log
 endif
 
 ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
