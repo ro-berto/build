@@ -542,7 +542,10 @@ class V8Api(recipe_api.RecipeApi):
       'Duration: %s' % V8Api.format_duration(test['duration']),
     ]
 
-  def _update_durations(self, output, presentation):
+  def _update_test_presentation(self, output, presentation):
+    def all_same(items):
+      return all(x == items[0] for x in items)
+
     # Slowest tests duration summary.
     lines = []
     for test in output['slowest_tests']:
@@ -554,12 +557,8 @@ class V8Api(recipe_api.RecipeApi):
       lines.extend(self._duration_results_text(test))
     presentation.logs['durations'] = lines
 
-  def _get_failure_logs(self, output):
-    def all_same(items):
-      return all(x == items[0] for x in items)
-
     if not output['results']:
-      return {}, 0, {}, 0
+      return
 
     unique_results = {}
     for result in output['results']:
@@ -574,11 +573,8 @@ class V8Api(recipe_api.RecipeApi):
 
     failure_count = 0
     flake_count = 0
-    failure_log = {}
-    flake_log = {}
     for label in sorted(unique_results.keys()[:MAX_FAILURE_LOGS]):
-      failure_lines = []
-      flake_lines = []
+      lines = []
 
       # Group results by command. The same command might have run multiple
       # times to detect flakes.
@@ -589,29 +585,21 @@ class V8Api(recipe_api.RecipeApi):
       for command in results_per_command:
         # Determine flakiness. A test is flaky if not all results from a unique
         # command are the same (e.g. all 'FAIL').
-        if all_same(map(lambda x: x['result'], results_per_command[command])):
-          # This is a failure.
-          failure_count += 1
-          failure_lines += self._command_results_text(
-              results_per_command[command], False)
-        else:
-          # This is a flake.
-          flake_count += 1
-          flake_lines += self._command_results_text(
-              results_per_command[command], True)
+        flaky = not all_same(map(lambda x: x['result'],
+                                 results_per_command[command]))
 
-      failure_log[label] = failure_lines
-      flake_log[label] = flake_lines
+        # Count flakes and failures for summary. The v8 test driver reports
+        # failures and reruns of failures.
+        flake_count += int(flaky)
+        failure_count += int(not flaky)
 
-    return failure_log, failure_count, flake_log, flake_count
+        lines += self._command_results_text(results_per_command[command],
+                                            flaky)
+      presentation.logs[label] = lines
 
-  def _update_failure_presentation(self, log, count, presentation):
-    for label in sorted(log):
-      presentation.logs[label] = log[label]
-
-    if count:
-      # Number of failures.
-      presentation.step_text += ('failures: %d<br/>' % count)
+    # Summary about flakes and failures.
+    presentation.step_text += ('failures: %d<br/>flakes: %d<br/>' %
+                               (failure_count, flake_count))
 
   def _runtest(self, name, test, flaky_tests=None, **kwargs):
     env = {}
@@ -692,11 +680,8 @@ class V8Api(recipe_api.RecipeApi):
     def step_test_data():
       return self.test_api.output_json(
           self._test_data.get('test_failures', False),
-          self._test_data.get('wrong_results', False),
-          self._test_data.get('flakes', False))
+          self._test_data.get('wrong_results', False))
 
-    flake_log = None
-    flake_count = 0
     try:
       self.m.python(
         name,
@@ -715,11 +700,7 @@ class V8Api(recipe_api.RecipeApi):
       # each contain a results list. On buildbot, there is only one
       # architecture.
       if (r and isinstance(r, list) and isinstance(r[0], dict)):
-        self._update_durations(r[0], step_result.presentation)
-        failure_log, failure_count, flake_log, flake_count = (
-            self._get_failure_logs(r[0]))
-        self._update_failure_presentation(
-            failure_log, failure_count, step_result.presentation)
+        self._update_test_presentation(r[0], step_result.presentation)
 
       # Check integrity of the last output. The json list is expected to
       # contain only one element for one (architecture, build config type)
@@ -733,14 +714,6 @@ class V8Api(recipe_api.RecipeApi):
             print 'Unexpected results set present.'
             sys.exit(1)
             """)
-
-    if flake_log and flake_count:
-      # Emit a separate step to show flakes from the previous step
-      # to not close the tree.
-      step_result = self.m.python.inline(name + ' (flakes)', '# Empty program')
-      self._update_failure_presentation(
-            flake_log, flake_count, step_result.presentation)
-      step_result.presentation.status = self.m.step.FAILURE
 
   def runtest(self, test, **kwargs):
     # Get the flaky-step configuration default per test.
