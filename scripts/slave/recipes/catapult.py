@@ -21,7 +21,7 @@ def _CheckoutSteps(api, buildername):
 def GenSteps(api):
   buildername = api.properties.get('buildername')
   _CheckoutSteps(api, buildername)
-  api.python('base/util tests',
+  api.python('Util Tests',
              api.path['checkout'].join('base', 'util', 'run_tests.py'))
 
 

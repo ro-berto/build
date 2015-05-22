@@ -54,6 +54,6 @@
       "[SLAVE_BUILD]/catapult/base/util/run_tests.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "base/util tests"
+    "name": "Util Tests"
   }
 ]
