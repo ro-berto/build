@@ -48,6 +48,7 @@ def _Populate(BuildmasterConfig, builders, active_master_cls):
   else:
     assert builders['master_type'] == 'tryserver'
     c['change_source'] = []
+    c['mergeRequests'] = False
     tag_comparator = None
 
   c['builders'] = []
