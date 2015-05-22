@@ -42,8 +42,7 @@ BUILDERS = freeze({
 def _RunApptests(api):
   runner = api.path['checkout'].join('mojo', 'tools', 'apptest_runner.py')
   tests = api.path['checkout'].join('mojo', 'tools', 'data', 'apptests')
-  api.python('app_tests', runner, [tests, api.chromium.output_dir,
-                                   '--verbose', '--verbose'])
+  api.python('app_tests', runner, [tests, api.chromium.output_dir, '--verbose'])
 
 
 def GenSteps(api):
