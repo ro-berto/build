@@ -129,7 +129,7 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@failures: 19<br/>flakes: 0<br/>@@@",
+      "@@@STEP_TEXT@failures: 19<br/>@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
       "@@@STEP_LOG_LINE@durations@@@@",
@@ -602,7 +602,7 @@
     "name": "Check",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@failures: 19<br/>flakes: 0<br/>@@@",
+      "@@@STEP_TEXT@failures: 19<br/>@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
       "@@@STEP_LOG_LINE@durations@@@@",
@@ -1076,7 +1076,7 @@
     "name": "Check - flaky",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@failures: 19<br/>flakes: 0<br/>@@@",
+      "@@@STEP_TEXT@failures: 19<br/>@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
       "@@@STEP_LOG_LINE@durations@@@@",
