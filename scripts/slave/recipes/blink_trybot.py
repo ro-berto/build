@@ -227,21 +227,6 @@ BUILDERS = freeze({
           'platform': 'linux',
         },
       },
-      'v8_linux32_layout_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'compile_only': False,
-        'v8_blink_flavor': True,
-        'root_override': 'src/v8',
-        'set_custom_revs': {
-          'src/v8': '%(revision)s',
-        },
-        'testing': {
-          'platform': 'linux',
-        },
-      },
     },
   },
 })
