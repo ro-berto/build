@@ -352,18 +352,17 @@ def _GenStepsInternal(api):
   builder = api.properties['buildername']
   enable_gpu_tests = builder in CHROMIUM_GPU_DIMENSION_SETS.get(master, {})
 
-  extra_chromium_configs = [
-      'trybot_flavor',
-      'ninja_confirm_noop'
-  ]
-  if enable_gpu_tests:
-    extra_chromium_configs.append('archive_gpu_tests')
-
   api.chromium_tests.configure_build(
       bot_config['mastername'],
       bot_config['buildername'],
-      override_bot_type='builder_tester',
-      chromium_apply_config=extra_chromium_configs)
+      override_bot_type='builder_tester')
+
+  api.chromium.apply_config('trybot_flavor')
+  if enable_gpu_tests:
+    api.chromium.apply_config('archive_gpu_tests')
+  if api.chromium.c.TARGET_PLATFORM != 'android':
+    api.chromium.apply_config('ninja_confirm_noop')
+
   bot_update_step, master_dict, test_spec = \
       api.chromium_tests.prepare_checkout(
           bot_config['mastername'],

@@ -13,7 +13,7 @@ from slave import recipe_util
 
 class ChromiumTestsApi(recipe_api.RecipeApi):
   def configure_build(self, mastername, buildername, override_bot_type=None,
-                      chromium_apply_config=None):
+):
     master_dict = self.m.chromium.builders.get(mastername, {})
     bot_config = master_dict.get('builders', {}).get(buildername)
 
@@ -31,27 +31,26 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot_config.get('GYP_DEFINES', {}))
     if bot_config.get('use_isolate'):
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
-    for c in bot_config.get('chromium_apply_config', []):
-      self.m.chromium.apply_config(c)
-    if chromium_apply_config:
-      for c in chromium_apply_config:
-        self.m.chromium.apply_config(c)
 
     self.m.gclient.set_config(
         bot_config.get('gclient_config'),
         PATCH_PROJECT=self.m.properties.get('patch_project'),
         BUILDSPEC_VERSION=buildspec_version,
         **bot_config.get('gclient_config_kwargs', {}))
-    for c in bot_config.get('gclient_apply_config', []):
-      self.m.gclient.apply_config(c)
-
-    if bot_config.get('goma_canary'):
-      self.m.goma.update_goma_canary()
 
     if 'android_config' in bot_config:
       self.m.chromium_android.set_config(
           bot_config['android_config'],
           **bot_config.get('chromium_config_kwargs', {}))
+
+    for c in bot_config.get('chromium_apply_config', []):
+      self.m.chromium.apply_config(c)
+
+    for c in bot_config.get('gclient_apply_config', []):
+      self.m.gclient.apply_config(c)
+
+    if bot_config.get('goma_canary'):
+      self.m.goma.update_goma_canary()
 
     bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
 
