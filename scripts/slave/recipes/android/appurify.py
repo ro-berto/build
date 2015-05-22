@@ -28,6 +28,18 @@ CHROMIUM_AMP_INSTRUMENTATION_TESTS = freeze([
     'test_apk': 'ContentShellTest.apk',
     'isolate_file_path': ['content', 'content_shell_test_apk.isolate'],
   },
+  {
+    'gyp_target': 'chrome_shell_test_apk',
+    'apk_under_test': 'ChromeShell.apk',
+    'test_apk': 'ChromeShellTest.apk',
+    'isolate_file_path': ['chrome', 'chrome_shell_test_apk.isolate'],
+  },
+  {
+    'gyp_target': 'chrome_public_test_apk',
+    'apk_under_test': 'ChromePublic.apk',
+    'test_apk': 'ChromePublicTest.apk',
+    'isolate_file_path': ['chrome', 'chrome_public_test_apk.isolate'],
+  },
 ])
 
 CHROMIUM_AMP_UNITTESTS = freeze([
