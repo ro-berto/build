@@ -29,7 +29,7 @@ def device_from_builder_dict(builder_dict):
     return {
       'GalaxyS3': 'arm_v7_neon',
       'GalaxyS4': 'arm_v7_neon',
-      'Nexus5': 'nexus_5',
+      'Nexus5': 'arm_v7', # This'd be 'nexus_5', but we simulate no-NEON Clank.
       'Nexus7': 'nexus_7',
       'Nexus9': 'nexus_9',
       'Nexus10': 'nexus_10',
