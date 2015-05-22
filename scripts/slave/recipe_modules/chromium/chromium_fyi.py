@@ -106,6 +106,9 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
+      'compile_targets': [
+        'all',
+      ],
       'use_isolate': True,
       'testing': {
         'platform': 'linux',
