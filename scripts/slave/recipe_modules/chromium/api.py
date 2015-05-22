@@ -175,8 +175,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     assert isinstance(targets, (list, tuple))
 
     if self.c.gyp_env.GYP_DEFINES.get('clang', 0) == 1:
-      # Print the Clang revision before compiling.
-      self.get_clang_version()
+      # Get the Clang revision before compiling.
+      self._clang_version = self.get_clang_version()
 
     args = [
       '--target', self.c.build_config_fs,
@@ -394,9 +394,8 @@ class ChromiumApi(recipe_api.RecipeApi):
 
       # If we have a clang revision, add that to the perf data point.
       # TODO(hans): We want this for all perf data, not just sizes.
-      clang_rev_str = self.m.properties.get('got_clang_revision')
-      if clang_rev_str:
-        clang_rev = re.match(r'(\d+)(-\d+)?', clang_rev_str).group(1)
+      if hasattr(self, '_clang_version'):
+        clang_rev = re.match(r'(\d+)(-\d+)?', self._clang_version).group(1)
         run_tests_args.append(
             "--perf-config={'r_clang_rev': '%s'}" % clang_rev)
 
@@ -407,11 +406,18 @@ class ChromiumApi(recipe_api.RecipeApi):
         full_args, allow_subannotations=True, **kwargs)
 
   def get_clang_version(self, **kwargs):
-    return self.m.python(
+    step_result = self.m.python(
         'clang_revision',
         self.m.path['build'].join('scripts', 'slave', 'clang_revision.py'),
-        ['--src-dir', self.m.path['checkout']],
-        allow_subannotations=True, env=self.get_env(), **kwargs)
+        args=['--src-dir', self.m.path['checkout'],
+              '--output-json', self.m.json.output()],
+        step_test_data=lambda:
+            self.m.json.test_api.output({'clang_revision': '123456-7'}),
+        allow_subannotations=True,
+        env=self.get_env(),
+        **kwargs)
+    return step_result.json.output['clang_revision']
+
 
   @property
   def is_release_build(self):
