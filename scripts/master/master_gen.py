@@ -19,35 +19,19 @@ from master.factory import annotator_factory
 
 
 def PopulateBuildmasterConfig(BuildmasterConfig, builders_path,
-                              master_cls=None):
+                              active_master_cls):
   """Read builders_path and populate a build master config dict."""
-  master_cls = master_cls or Master
   builders = chromium_utils.ReadBuildersFile(builders_path)
-  _Populate(BuildmasterConfig, builders, master_cls)
+  _Populate(BuildmasterConfig, builders, active_master_cls)
 
 
-
-def _Populate(BuildmasterConfig, builders, master_cls):
-  classname = builders['master_classname']
-  base_class = getattr(master_cls, builders['master_base_class'])
-  active_master_cls = type(classname, (base_class,), {
-      'buildbot_url': builders['buildbot_url'],
-      'project_name': builders['master_classname'],
-      'master_port': int(builders['master_port']),
-      'master_port_alt': int(builders['master_port_alt']),
-      'slave_port': int(builders['slave_port']),
-      })
-
-  # TODO: Modify this and the factory call, below, so that we can pass the
-  # path to the builders.pyl file through the annotator to the slave so that
-  # the slave can get the recipe name and the factory properties dynamically
-  # without needing the master to re-read things.
-  m_annotator = annotator_factory.AnnotatorFactory()
+def _Populate(BuildmasterConfig, builders, active_master_cls):
+  m_annotator = annotator_factory.AnnotatorFactory(active_master_cls)
 
   c = BuildmasterConfig
   c['logCompressionLimit'] = False
   c['projectName'] = active_master_cls.project_name
-  c['projectURL'] = master_cls.project_url
+  c['projectURL'] = Master.project_url
   c['buildbotURL'] = active_master_cls.buildbot_url
 
   # This sets c['db_url'] to the database connect string in found in
@@ -88,7 +72,7 @@ def _Populate(BuildmasterConfig, builders, master_cls):
   # slaves registered to a builder. Remove dupes.
   c['slaves'] = master_utils.AutoSetupSlaves(
       c['builders'],
-      master_cls.GetBotPassword(),
+      Master.GetBotPassword(),
       missing_recipients=['buildbot@chromium-build-health.appspotmail.com'])
 
   # This does some sanity checks on the configuration.

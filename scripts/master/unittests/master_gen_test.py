@@ -29,7 +29,7 @@ SAMPLE_BUILDERS_PY = """\
     }
   },
   "git_repo_url": "https://chromium.googlesource.com/test/test.git",
-  "master_base_class": "_FakeMaster",
+  "master_base_class": "_FakeMasterBase",
   "master_port": 20999,
   "master_port_alt": 40999,
   "master_type": "waterfall",
@@ -49,16 +49,21 @@ SAMPLE_BUILDERS_PY = """\
 """
 
 
-class _FakeMaster(object):
+# This class fakes the base class from master_site_config.py.
+class _FakeMasterBase(object):
   in_production = False
   is_production_host = False
-  project_name = 'test'
-  project_url = 'https://example.com/'
-  buildbucket_bucket = None
 
-  @classmethod
-  def GetBotPassword(cls):
-    return ''
+
+# This class fakes the actual master class in master_site_config.py.
+class _FakeMaster(_FakeMasterBase):
+  project_name = 'test'
+  master_port = '20999'
+  slave_port = '30999'
+  master_port_alt = '40999'
+  buildbot_url = 'https://build.chromium.org/p/test'
+  buildbucket_bucket = None
+  service_account_file = None
 
 
 class PopulateBuildmasterConfigTest(unittest.TestCase):
@@ -68,7 +73,6 @@ class PopulateBuildmasterConfigTest(unittest.TestCase):
       fp.write(SAMPLE_BUILDERS_PY)
       fp.close()
 
-      setattr(_FakeMaster, '_FakeMaster', _FakeMaster)
       c = {}
       master_gen.PopulateBuildmasterConfig(c, fp.name, _FakeMaster)
 
@@ -87,7 +91,6 @@ class PopulateBuildmasterConfigTest(unittest.TestCase):
       fp.write(contents)
       fp.close()
 
-      setattr(_FakeMaster, '_FakeMaster', _FakeMaster)
       c = {}
       master_gen.PopulateBuildmasterConfig(c, fp.name, _FakeMaster)
 
