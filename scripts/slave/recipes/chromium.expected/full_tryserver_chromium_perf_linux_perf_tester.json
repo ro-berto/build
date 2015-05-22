@@ -224,7 +224,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "saving json to temp file",
-    "stdin": "{\"output\": \"Test output omitted for now\", \"results\": {\"std_err\": 0.0, \"values\": [0, 0], \"mean\": 0.0}}",
+    "stdin": "{\"output\": \"\", \"results\": {\"std_err\": 0.0, \"values\": [0, 0], \"mean\": 0.0}, \"retcodes\": [0, 0]}",
     "stdout": "/path/to/tmp/"
   },
   {

@@ -185,11 +185,6 @@
     "name": "Triggering test job for 314015",
     "trigger_specs": [
       {
-        "buildbot_changes": [
-          {
-            "revision": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
-          }
-        ],
         "builder_name": "linux_perf_tester",
         "properties": {
           "bisect_config": {
@@ -230,11 +225,6 @@
     "name": "Triggering test job for 314017",
     "trigger_specs": [
       {
-        "buildbot_changes": [
-          {
-            "revision": "dcdcdc0ff1122212323134879ddceeb1240b0988"
-          }
-        ],
         "builder_name": "linux_perf_tester",
         "properties": {
           "bisect_config": {
@@ -412,11 +402,6 @@
     "name": "Triggering test job for 314016",
     "trigger_specs": [
       {
-        "buildbot_changes": [
-          {
-            "revision": "a6298e4afedbf2cd461755ea6f45b0ad64222222"
-          }
-        ],
         "builder_name": "linux_perf_tester",
         "properties": {
           "bisect_config": {

@@ -30,8 +30,9 @@ class PerfRevisionState(revision_state.RevisionState):
     # stdout of the command, and 'results' is itself a dict with the keys:
     # 'mean', 'values', 'std_err' unless the test failed, in which case
     # 'results' will be a string.
+    retcodes = results['retcodes']
     results = results['results']
-    if isinstance(results, basestring):
+    if not len(retcodes) or 0 not in retcodes or 'values' not in results:
       self.status = PerfRevisionState.FAILED
       return
     self.mean_value = results['mean']
@@ -125,9 +126,6 @@ class PerfRevisionState(revision_state.RevisionState):
             'bisect_config': self._get_bisect_config_for_tester(),
             'job_name': self.test_job_name,
         },
-        'buildbot_changes': [{
-            'revision': self.commit_hash,
-        }]
     }
     if 'CACHE_TEST_RESULTS' in os.environ and test_results_cache.has_results(
         self.test_job_name):  # pragma: no cover

@@ -819,20 +819,14 @@ class BisectTest(Test):  # pylint: disable=W0232
         api.properties.get('bisect_config'))
 
   def run(self, api, _):
-    try:
-      self._run_results = api.bisect_tester.run_test(self.test_config)
-      self.failure = False
-    except api.step.StepFailure as f:
-      self.failure = f
+    self._run_results, self.test_output, self.retcodes = (
+        api.bisect_tester.run_test(self.test_config))
 
   def post_run(self, api, _):
-    if not self.failure:
       self.values = api.bisect_tester.digest_run_results(self._run_results,
                                                          self.test_config)
-      api.bisect_tester.upload_results('Test output omitted for now',
-                                       self.values)
-    else:
-      api.bisect_tester.upload_failure(self.failure)
+      api.bisect_tester.upload_results(self.test_output, self.values,
+                                       self.retcodes)
 
   def has_valid_results(self, *_):
     return len(getattr(self, 'values', [])) > 0  # pragma: no cover

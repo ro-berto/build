@@ -53,11 +53,11 @@ class BisectTesterApi(recipe_api.RecipeApi):
       raise NotImplementedError('Test type %s not supported.' %
                                 test_config['test_type'])
 
-  def upload_results(self, output, results):
+  def upload_results(self, output, results, retcodes):
     """Puts the results as a JSON file in a GS bucket."""
     gs_filename = (RESULTS_GS_DIR + '/' +
                    self.m.properties['job_name'] + '.results')
-    contents = {'results': results, 'output': output}
+    contents = {'results': results, 'output': output, 'retcodes': retcodes}
     contents_json = json.dumps(contents)
     local_save_results = self.m.python('saving json to temp file',
                                        self.resource('put_temp.py'),
@@ -68,14 +68,6 @@ class BisectTesterApi(recipe_api.RecipeApi):
     # TODO(robertocn): Look into using self.m.json.input(contents) instead of
     # local_file.
     self.m.gsutil.upload(local_file, BUCKET, gs_filename)
-
-  def upload_failure(self, failure):
-    stdout = failure.result.stdout or ''
-    stderr = failure.result.stderr or ''
-    retcode = failure.result.retcode
-    self.upload_results(stdout + stderr, 'Test failed with error code: '
-                        + str(retcode))
-    raise self.m.step.StepWarning('Test Failed')
 
   def upload_job_url(self):
     """Puts the URL to the job's status on a GS file."""

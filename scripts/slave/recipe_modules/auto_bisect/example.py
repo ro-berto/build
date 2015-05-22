@@ -127,7 +127,8 @@ def _get_basic_test_data():
                   'mean': 20,
                   'std_err': 1,
                   'values': [19, 20, 21],
-              }
+              },
+              'retcodes': [0],
           },
           "DEPS": ("vars={'v8_revision': '001'};"
                    "deps = {'src/v8': 'v8.git@' + Var('v8_revision'),"
@@ -149,7 +150,8 @@ def _get_basic_test_data():
                   'mean': 15,
                   'std_err': 1,
                   'values': [14, 15, 16],
-              }
+              },
+              'retcodes': [0],
           },
           'DEPS_change': 'True',
           "DEPS": ("vars={'v8_revision': '004'};"
@@ -165,7 +167,8 @@ def _get_basic_test_data():
                   'mean': 15,
                   'std_err': 1,
                   'values': [14, 15, 16],
-              }
+              },
+              'retcodes': [0],
           }
       },
   ]
@@ -181,7 +184,8 @@ def _get_reversed_basic_test_data():
                   'mean': 20,
                   'std_err': 1,
                   'values': [19, 20, 21],
-              }
+              },
+              'retcodes': [0],
           },
           'cl_info': 'S3P4R4T0R'.join(['DummyAuthor', 'dummy@nowhere.com',
                                       'Some random CL', '01/01/2015',
@@ -196,7 +200,8 @@ def _get_reversed_basic_test_data():
                   'mean': 20,
                   'std_err': 1,
                   'values': [19, 20, 21],
-              }
+              },
+              'retcodes': [0],
           },
           "DEPS": ("vars={'v8_revision': '001'};"
                    "deps = {'src/v8': 'v8.git@' + Var('v8_revision'),"
@@ -214,7 +219,8 @@ def _get_reversed_basic_test_data():
                   'mean': 15,
                   'std_err': 1,
                   'values': [14, 15, 16],
-              }
+              },
+              'retcodes': [0],
           },
           'DEPS_change': 'True',
           "DEPS": ("vars={'v8_revision': '004'};"

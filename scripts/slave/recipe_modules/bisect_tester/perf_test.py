@@ -13,6 +13,8 @@ def run_perf_test(api, test_config):
   limit = time.time() + test_config['timeout_seconds']
   values = []
   metric = test_config['metric'].split('/')
+  output_for_all_runs = ''
+  retcodes = []
   for i in range(test_config['repeat_count']):
     if time.time() < limit:
       command_name = "Performance Test %d/%d" % (i + 1,
@@ -20,17 +22,20 @@ def run_perf_test(api, test_config):
       if api.m.platform.is_linux:
         os.environ['CHROME_DEVEL_SANDBOX'] = api.m.path.join(
             '/opt', 'chromium', 'chrome_sandbox')
-      out, err = _run_command(api, test_config['command'], command_name)
+      out, err, retcode = _run_command(api, test_config['command'], command_name)
       if out is None and err is None:
         # dummy value when running test TODO: replace with a mock
         values.append(0)
+        retcodes.append(retcode)
       else:  # pragma: no cover
         valid_value, value = parse_metric.parse_metric(out, err, metric)
-        assert valid_value
-        values.extend(value)
+        output_for_all_runs += out
+        retcodes.append(retcode)
+        if valid_value:
+          values.extend(value)
     else:  # pragma: no cover
       break
-  return values
+  return values, output_for_all_runs, retcodes
 
 
 def truncate_and_aggregate(api, values, truncate_percent):
@@ -49,9 +54,12 @@ def _run_command(api, command, command_name):
   command_parts = command.split()
   stdout = api.m.raw_io.output()
   stderr = api.m.raw_io.output()
-  step_result = api.m.step(
-      command_name,
-      command_parts,
-      stdout=stdout,
-      stderr=stderr)
-  return step_result.stdout, step_result.stderr
+  try:
+    step_result = api.m.step(
+        command_name,
+        command_parts,
+        stdout=stdout,
+        stderr=stderr)
+  except api.m.step.StepFailure as sf:
+    return sf.result.stdout, sf.result.stderr, sf.result.retcode
+  return step_result.stdout, step_result.stderr, step_result.retcode

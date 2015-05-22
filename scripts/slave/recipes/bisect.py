@@ -106,12 +106,15 @@ def GenTests(api):
     return [
       {
           'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
-           'commit_pos': '306478',
-           'test_results': {'results':{
-               'mean': 20,
-               'std_err': 1,
-               'values': [19, 20, 21],
-           }},
+          'commit_pos': '306478',
+          'test_results': {
+              'results':{
+                  'mean': 20,
+                  'std_err': 1,
+                  'values': [19, 20, 21],
+               },
+              'retcodes':[0],
+          },
           'cl_info': 'S3P4R4T0R'.join(['DummyAuthor', 'dummy@nowhere.com',
                                        'Some random CL', '01/01/2015',
                                        'A long description for a CL.\n'
@@ -120,29 +123,38 @@ def GenTests(api):
       {
           'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
           'commit_pos': '306477',
-          'test_results': {'results': {
-              'mean': 15,
-              'std_err': 1,
-              'values': [14, 15, 16],
-          }}
+          'test_results': {
+              'results': {
+                  'mean': 15,
+                  'std_err': 1,
+                  'values': [14, 15, 16],
+              },
+              'retcodes':[0],
+          }
       },
       {
           'hash': 'fc6dfc7ff5b1073408499478969261b826441144',
           'commit_pos': '306476',
-          'test_results': {'results': {
-              'mean': 70,
-              'std_err': 2,
-              'values': [68, 70, 72],
-          }}
+          'test_results': {
+              'results': {
+                  'mean': 70,
+                  'std_err': 2,
+                  'values': [68, 70, 72],
+              },
+              'retcodes':[0],
+          }
       },
       {
           'hash': 'e28dc0d49c331def2a3bbf3ddd0096eb51551155',
           'commit_pos': '306475',
-          'test_results': {'results': {
-              'mean': 80,
-              'std_err': 10,
-              'values': [70, 70, 80, 90, 90],
-          }}
+          'test_results': {
+              'results': {
+                  'mean': 80,
+                  'std_err': 10,
+                  'values': [70, 70, 80, 90, 90],
+              },
+              'retcodes':[0],
+          }
       },
     ]
 
@@ -165,7 +177,7 @@ def GenTests(api):
   yield broken_cp_test
 
   doctored_data = test_data()
-  doctored_data[0]['test_results']['results'] = 'Failed test.'
+  doctored_data[0]['test_results']['retcodes'] = [1]
   for revision_data in doctored_data:
     revision_data.pop('cl_info', None)
     skip_results = revision_data in doctored_data[1:-1]
@@ -175,7 +187,7 @@ def GenTests(api):
   yield broken_bad_rev_test
 
   doctored_data = test_data()
-  doctored_data[-1]['test_results']['results'] = 'Failed test.'
+  doctored_data[-1]['test_results']['retcodes'] = []
   for revision_data in doctored_data:
     revision_data.pop('cl_info', None)
     skip_results = revision_data in doctored_data[1:-1]
@@ -236,6 +248,7 @@ def _gather_reference_range(api, bisector):
   elif bisector.bad_rev.failed:
     api.halt('Testing the "bad" revision failed')
     bisector.failed = True
+    bisector.api.m.halt('Testing the "good" revision failed')
   else:
     bisector.compute_relative_change()
 
