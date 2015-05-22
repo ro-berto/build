@@ -6,6 +6,7 @@ from infra.libs.infra_types import freeze
 from slave import recipe_api
 
 DEPS = [
+  'archive',
   'amp',
   'bot_update',
   'chromium',
@@ -73,11 +74,6 @@ BUILDERS = freeze({
       'config': 'main_builder',
       'target': 'Debug',
       'build': False,
-      'download': {
-        'bucket': 'chromium-android',
-        'path': lambda api: ('android_fyi_dbg/full-build-linux_%s.zip' %
-                             api.properties['revision']),
-      },
       'device_minimum_os': '4.0',
       'device_timeout': 60,
       'unittests': CHROMIUM_AMP_UNITTESTS,
@@ -134,7 +130,9 @@ def GenSteps(api):
   java_unittests = builder.get('java_unittests', [])
   python_unittests = builder.get('python_unittests', [])
 
-  if builder.get('build', False):
+  should_build = builder.get('build', False)
+
+  if should_build:
     test_names = []
     test_names.extend(suite for suite, _ in native_unittests)
     test_names.extend(suite['gyp_target'] for suite in instrumentation_tests)
@@ -173,17 +171,12 @@ def GenSteps(api):
   if not instrumentation_tests and not native_unittests and not java_unittests:
     return
 
-  download_config = builder.get('download')
-  if download_config:
-    api.chromium_android.download_build(download_config['bucket'],
-                                        download_config['path'](api))
-    extract_location = api.chromium_android.out_path.join(
-                           api.chromium_android.c.BUILD_CONFIG)
-    api.step('remove extract location',
-             ['rm', '-rf', extract_location])
-    api.step('move extracted build',
-             ['mv', '-T', api.path['checkout'].join('full-build-linux'),
-                          extract_location])
+  if not should_build:
+    api.archive.download_and_unzip_build(
+        step_name='extract build',
+        target=api.chromium.c.BUILD_CONFIG,
+        build_url=None,
+        build_archive_url=api.properties.get('parent_build_archive_url'))
 
   output_dir = api.chromium.output_dir
 
@@ -287,29 +280,39 @@ def GenTests(api):
                 'status': 'Found dependency',
                 'targets': ['base_unittests', 'junit_unit_tests'],
                 'build_targets': ['base_unittests_apk', 'junit_unit_tests']}))
+
+      if not builder.get('build'):
+        test_props += api.properties(
+            parent_build_archive_url='gs://test-domain/test-archive.zip')
+
       yield test_props
 
-      yield (
-        api.test('%s_test_failure' % sanitize(buildername)) +
-        api.properties.generic(
-            revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-            buildername=buildername,
-            slavename='slavename',
-            mastername=mastername) +
-        api.override_step_data(
-            'analyze',
-            api.json.output({
-                'status': 'Found dependency',
-                'targets': ['android_webview_unittests'],
-                'build_targets': ['android_webview_unittests_apk']})) +
-        api.step_data('[trigger] components_unittests', retcode=1) +
-        # Test runner error
-        api.step_data('[collect] android_webview_unittests', retcode=1) +
-        # Test runner infrastructure error
-        api.step_data('[collect] base_unittests', retcode=87) +
-        # Test runner warning
-        api.step_data('[collect] cc_unittests', retcode=88)
-      )
+      test_props = (
+          api.test('%s_test_failure' % sanitize(buildername)) +
+          api.properties.generic(
+              revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
+              buildername=buildername,
+              slavename='slavename',
+              mastername=mastername) +
+          api.override_step_data(
+              'analyze',
+              api.json.output({
+                  'status': 'Found dependency',
+                  'targets': ['android_webview_unittests'],
+                  'build_targets': ['android_webview_unittests_apk']})) +
+          api.step_data('[trigger] components_unittests', retcode=1) +
+          # Test runner error
+          api.step_data('[collect] android_webview_unittests', retcode=1) +
+          # Test runner infrastructure error
+          api.step_data('[collect] base_unittests', retcode=87) +
+          # Test runner warning
+          api.step_data('[collect] cc_unittests', retcode=88))
+
+      if not builder.get('build'):
+        test_props += api.properties(
+            parent_build_archive_url='gs://test-domain/test-archive.zip')
+
+      yield test_props
 
   yield (
     api.test('instrumentation_test_trigger_failure') +
@@ -317,7 +320,8 @@ def GenTests(api):
         revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
         mastername='chromium.fyi',
         buildername='Android Tests (amp)(dbg)',
-        slavename='slavename') +
+        slavename='slavename',
+        parent_build_archive_url='gs://test-domain/test-archive.zip') +
     api.override_step_data(
         'analyze',
         api.json.output({
@@ -332,7 +336,8 @@ def GenTests(api):
         revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
         mastername='chromium.fyi',
         buildername='Android Tests (amp)(dbg)',
-        slavename='slavename') +
+        slavename='slavename',
+        parent_build_archive_url='gs://test-domain/test-archive.zip') +
     api.override_step_data(
         'analyze',
         api.json.output({

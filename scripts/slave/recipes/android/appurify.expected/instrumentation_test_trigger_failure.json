@@ -118,46 +118,18 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "4.7",
-      "----",
-      "cp",
-      "gs://chromium-android/android_fyi_dbg/full-build-linux_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.zip",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
+      "[BUILD]/scripts/slave/extract_build.py",
+      "--target",
+      "Debug",
+      "--build-archive-url",
+      "gs://test-domain/test-archive.zip",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (amp)(dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"recipe\": \"android/appurify\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"slavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (amp)(dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"recipe\": \"android/appurify\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"slavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download_build_product"
-  },
-  {
-    "cmd": [
-      "unzip",
-      "-o",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "unzip_build_product"
-  },
-  {
-    "cmd": [
-      "rm",
-      "-rf",
-      "[SLAVE_BUILD]/src/out/Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "remove extract location"
-  },
-  {
-    "cmd": [
-      "mv",
-      "-T",
-      "[SLAVE_BUILD]/src/full-build-linux",
-      "[SLAVE_BUILD]/src/out/Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "move extracted build"
+    "name": "extract build"
   },
   {
     "cmd": [
