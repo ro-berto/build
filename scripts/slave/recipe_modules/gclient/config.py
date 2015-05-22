@@ -487,6 +487,9 @@ def luci_go(c):
   c.revisions['infra'] = 'origin/master'
   c.revisions['infra/go/src/github.com/luci/luci-go'] = (
       gclient_api.RevisionFallbackChain('origin/master'))
+  m = c.got_revision_mapping
+  del m['infra']
+  m['infra/go/src/github.com/luci/luci-go'] = 'got_revision'
 
 @config_ctx()
 def chrome_from_buildspec(c):  # pragma: no cover
