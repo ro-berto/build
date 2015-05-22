@@ -297,7 +297,14 @@ class GitBranchPoller(PollingChangeSource):
 
     for branch, head in self.branch_heads.iteritems():
       rev_list_args.append('%s..origin/%s' % (head, branch))
-      out, err, ret = yield self._git('rev-list', rev_list_args[-1])
+      excluded_branches = [
+        '^origin/%s' % b for b in self.branch_heads.keys() if b != branch
+      ]
+      out, err, ret = yield self._git(
+        'rev-list',
+        rev_list_args[-1],
+        *excluded_branches
+      )
       if log_error(err, ret):
         return
       revisions = out.splitlines()
@@ -359,6 +366,10 @@ class GitBranchPoller(PollingChangeSource):
       change_data[revision]['files'] = out.splitlines()
 
     for revision in revisions:
+      if revision not in revision_branch_map:
+        self._log('Saw unexpected revision:', revision)
+        continue
+
       try:
         yield self.master.addChange(
           author=change_data[revision]['author'],
