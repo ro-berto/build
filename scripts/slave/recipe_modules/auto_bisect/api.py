@@ -110,11 +110,11 @@ class AutoBisectApi(recipe_api.RecipeApi):
         the bisect script will use this to override the default config file
         path.
     """
-    self.m.step(
+    self.m.python(
         'Preparing for Bisection',
-        [self.m.path['checkout'].join('tools',
-                                      'prepare-bisect-perf-regression.py'),
-        '-w', self.m.path['slave_build']])
+        script=self.m.path['checkout'].join(
+            'tools', 'prepare-bisect-perf-regression.py'),
+        args=['-w', self.m.path['slave_build']])
     args = []
 
     kwargs['allow_subannotations'] = True

@@ -728,6 +728,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[TMP_BASE]/fake_checkout_tmp_1/tools/prepare-bisect-perf-regression.py",
       "-w",
       "[SLAVE_BUILD]"

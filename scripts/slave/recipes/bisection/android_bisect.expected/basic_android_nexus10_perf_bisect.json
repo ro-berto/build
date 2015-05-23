@@ -198,6 +198,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/tools/prepare-bisect-perf-regression.py",
       "-w",
       "[SLAVE_BUILD]"
