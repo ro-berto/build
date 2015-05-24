@@ -16,7 +16,7 @@
       "--master",
       "chromium.fyi",
       "--builder",
-      "ClangToTWin (dll)",
+      "ClangToTWin(dbg)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -111,7 +111,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"ClangToTWin(dll) tester\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"ClangToTWin(dbg) tester\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -134,11 +134,11 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Release",
+      "Debug",
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
-      "{\"buildername\": \"ClangToTWin (dll)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"buildername\": \"ClangToTWin(dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -162,7 +162,7 @@
       "-u",
       "RECIPE_MODULE[isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[SLAVE_BUILD]\\src\\out\\Debug",
       "--clean-isolated-files"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -197,7 +197,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\compile.py",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
       "[SLAVE_BUILD]\\src",
       "--build-tool",
@@ -218,7 +218,7 @@
       "-u",
       "RECIPE_MODULE[isolate]\\resources\\remove_build_metadata.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[SLAVE_BUILD]\\src\\out\\Debug",
       "--src-dir",
       "[SLAVE_BUILD]\\src"
     ],
@@ -236,7 +236,7 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]\\src\\out\\Release\\browser_tests.isolated.gen.json"
+      "[SLAVE_BUILD]\\src\\out\\Debug\\browser_tests.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
@@ -254,15 +254,15 @@
       "-u",
       "[BUILD]\\scripts\\slave\\zip_build.py",
       "--target",
-      "Release",
+      "Debug",
       "--build-url",
-      "gs://chromium-fyi-archive/chromium.fyi/ClangToTWin (dll)",
+      "gs://chromium-fyi-archive/chromium.fyi/ClangToTWin(dbg)",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ClangToTWin (dll)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ClangToTWin(dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ClangToTWin (dll)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ClangToTWin(dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"

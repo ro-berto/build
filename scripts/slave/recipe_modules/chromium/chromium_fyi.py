@@ -1241,7 +1241,7 @@ SPEC = {
       'testing': { 'platform': 'win' },
       'enable_swarming': True,
     },
-    'ClangToTWin (dbg)': {
+    'ClangToTWin(dbg)': {
       'chromium_config': 'chromium_win_clang_tot',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1265,11 +1265,11 @@ SPEC = {
       },
       'test_generators': [steps.generate_gtest],
       'bot_type': 'tester',
-      'parent_buildername': 'ClangToTWin (dbg)',
+      'parent_buildername': 'ClangToTWin(dbg)',
       'testing': { 'platform': 'win' },
       'enable_swarming': True,
     },
-    'ClangToTWin (dll)': {
+    'ClangToTWin(dll)': {
       'chromium_config': 'chromium_win_clang_tot',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1294,7 +1294,7 @@ SPEC = {
       },
       'test_generators': [steps.generate_gtest],
       'bot_type': 'tester',
-      'parent_buildername': 'ClangToTWin (dll)',
+      'parent_buildername': 'ClangToTWin(dll)',
       'testing': { 'platform': 'win' },
       'enable_swarming': True,
     },
@@ -1326,7 +1326,7 @@ SPEC = {
       'testing': { 'platform': 'win' },
       'enable_swarming': True,
     },
-    'ClangToTWin64 (dbg)': {
+    'ClangToTWin64(dbg)': {
       'chromium_config': 'chromium_win_clang_tot',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1350,11 +1350,11 @@ SPEC = {
       },
       'test_generators': [steps.generate_gtest],
       'bot_type': 'tester',
-      'parent_buildername': 'ClangToTWin64 (dbg)',
+      'parent_buildername': 'ClangToTWin64(dbg)',
       'testing': { 'platform': 'win' },
       'enable_swarming': True,
     },
-    'ClangToTWin64 (dll)': {
+    'ClangToTWin64(dll)': {
       'chromium_config': 'chromium_win_clang_tot',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1379,7 +1379,7 @@ SPEC = {
       },
       'test_generators': [steps.generate_gtest],
       'bot_type': 'tester',
-      'parent_buildername': 'ClangToTWin64 (dll)',
+      'parent_buildername': 'ClangToTWin64(dll)',
       'testing': { 'platform': 'win' },
       'enable_swarming': True,
     },
