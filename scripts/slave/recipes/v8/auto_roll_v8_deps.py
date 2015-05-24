@@ -141,7 +141,7 @@ def GenSteps(api):
     if v8_rev != new_rev:
       step_result = api.step(
           'roll dependency %s' % name,
-          ['roll-dep', '--no-verify-revision', 'v8/%s' % name, new_rev],
+          ['roll-dep-svn', '--no-verify-revision', 'v8/%s' % name, new_rev],
           ok_ret='any',
           cwd=api.path['checkout'],
       )
