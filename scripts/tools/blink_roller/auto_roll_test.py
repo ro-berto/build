@@ -197,9 +197,10 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
       message = issue['description']
 
     message += '\nTBR='
-    auto_roll.subprocess2.check_call(
-        ['roll-dep', 'third_party/%s' % self.TEST_PROJECT, str(self.NEW_REV)],
-        cwd='.')
+    cmd = [
+      'roll-dep-svn', 'third_party/%s' % self.TEST_PROJECT, str(self.NEW_REV),
+    ]
+    auto_roll.subprocess2.check_call(cmd, cwd='.')
 
     auto_roll.subprocess2.check_call(['git', 'add', 'DEPS'], cwd='.')
     auto_roll.subprocess2.check_call(['git', 'commit', '--no-edit'], cwd='.')

@@ -266,7 +266,7 @@ class AutoRoller(object):
     subprocess2.check_call(['git', 'checkout', '-b', roll_branch,
                             '-t', 'origin/master', '-f'], **cwd_kwargs)
     try:
-      subprocess2.check_call(['roll-dep', self._path_to_project,
+      subprocess2.check_call(['roll-dep-svn', self._path_to_project,
                               new_roll_revision], **cwd_kwargs)
       subprocess2.check_call(['git', 'add', 'DEPS'], **cwd_kwargs)
       subprocess2.check_call(['git', 'commit', '--no-edit'], **cwd_kwargs)
