@@ -28,6 +28,12 @@ from master import status_logger
 import config
 
 
+# CQ uses this service account to authenticate to other services, including
+# buildbucket.
+CQ_SERVICE_ACCOUNT = (
+  '5071639625-1lppvbtck1morgivc6sq4dul7klu27sd@developer.gserviceaccount.com')
+
+
 def HackMaxTime(maxTime=8*60*60):
   """Set maxTime default value to 8 hours. This function must be called before
   adding steps."""
@@ -427,6 +433,10 @@ def SetupBuildbucket(c, active_master):
       if identity_type == 'user':
         # There other types of identity, such as service, anonymous. We are
         # interested in users only. For users, name is email address.
+        if name == CQ_SERVICE_ACCOUNT:
+          # Most of systems expect CQ's builds to be requested by
+          # 'commit-bot@chromium.org', so replace the service account with it.
+          name = 'commit-bot@chromium.org'
         properties['requester'] = name
 
   buildbucket.setup(
