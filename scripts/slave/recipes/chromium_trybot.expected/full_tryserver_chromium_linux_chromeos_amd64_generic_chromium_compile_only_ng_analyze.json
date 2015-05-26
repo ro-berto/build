@@ -73,6 +73,7 @@
       "chrome-sdk",
       "--board=amd64-generic",
       "--nocolor",
+      "--use-external-config",
       "--clear-sdk-cache",
       "--",
       "python",

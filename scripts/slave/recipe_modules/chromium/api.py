@@ -489,6 +489,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     """Returns: a wrapper command for 'cros chrome-sdk'
 
     Args:
+      external: (bool) If True, force the wrapper to prefer external board
+          configurations over internal ones, even if the latter is available.
       clean: (bool) If True, instruct the wrapper to clean any previous
           state data.
     """
@@ -497,7 +499,9 @@ class ChromiumApi(recipe_api.RecipeApi):
         'cros', 'chrome-sdk',
         '--board=%s' % (self.c.TARGET_CROS_BOARD,),
         '--nocolor',]
-    wrapper += self.c.cros_sdk_args
+    wrapper += self.c.cros_sdk.args
+    if self.c.cros_sdk.external:
+      wrapper += ['--use-external-config']
     if clean:
       wrapper += ['--clear-sdk-cache']
     wrapper += ['--']

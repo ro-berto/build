@@ -69,7 +69,10 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       args = Set(basestring),
     ),
     build_dir = Single(Path),
-    cros_sdk_args = List(basestring),
+    cros_sdk = ConfigGroup(
+      external = Single(bool, empty_val=True, required=False),
+      args = List(basestring),
+    ),
     runtests = ConfigGroup(
       memory_tool = Single(basestring, required=False),
       memory_tests_runner = Single(Path),
@@ -512,6 +515,7 @@ def chromium_no_goma(c):
 @config_ctx(includes=['ninja', 'default_compiler', 'goma'])
 def chromium(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+  c.cros_sdk.external = True
 
 @config_ctx(includes=['ninja', 'clang'])  # Intentionally no goma yet.
 def chromium_win_clang(c):
