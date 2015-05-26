@@ -177,7 +177,6 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "base_junit_tests",
       "chrome_public_test_apk",
       "components_browsertests_apk",
       "gfx_unittests_apk"

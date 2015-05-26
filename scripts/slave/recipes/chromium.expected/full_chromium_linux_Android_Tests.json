@@ -653,26 +653,6 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
-      "gl_unittests",
-      "--verbose",
-      "--release",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "gl_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "gtest",
-      "-s",
       "gl_tests",
       "--verbose",
       "--release",
@@ -685,6 +665,26 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gl_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "gl_unittests",
+      "--verbose",
+      "--release",
+      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "gl_unittests"
   },
   {
     "cmd": [
@@ -913,7 +913,7 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "junit",
       "-s",
-      "junit_unit_tests",
+      "base_junit_tests",
       "--verbose",
       "--release",
       "--json-results-file",
@@ -923,7 +923,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "junit_unit_tests",
+    "name": "base_junit_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
@@ -968,6 +968,28 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "content_junit_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "junit",
+      "-s",
+      "junit_unit_tests",
+      "--verbose",
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "junit_unit_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]

@@ -1432,7 +1432,6 @@ SPEC = {
       'android_config': 'main_builder',
       'root_devices': True,
       'tests': [
-        steps.AndroidJunitTest('base_junit_tests'),
         steps.GTestTest('components_browsertests'),
         steps.GTestTest('gfx_unittests'),
         steps.AndroidInstrumentationTest(
