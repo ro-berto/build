@@ -5,29 +5,62 @@
 DEPS = [
   'bot_update',
   'gclient',
+  'gitiles',
   'path',
   'properties',
   'python',
 ]
 
+SDK_DOWNLOADER_PATH = 'bootstrap/get_appengine.py'
+
 
 def _CheckoutSteps(api, buildername):
-  # Checkout catapult and its dependencies (specified in DEPS) using gclient
+  """Checks out the catapult repo (and any dependencies) using gclient."""
   api.gclient.set_config('catapult')
   api.bot_update.ensure_checkout(force=True)
   api.gclient.runhooks()
 
 
+def _FetchAppEngineSDKSteps(api):
+  """Fetches the App Engine SDK and returns its path.
+
+  This uses a downloader script in the infra repo to download a script
+  which is then used to download and unpack the SDK itself.
+  """
+  script_content = api.gitiles.download_file(
+      'https://chromium.googlesource.com/infra/infra',
+      SDK_DOWNLOADER_PATH,
+      # This is a commit after the latest fix to the script.
+      branch='f849aad85ac3589c931197bff861faf0e2ef0ece')
+  api.python.inline('Run SDK downloader', script_content, args=['--dest=.'])
+  return api.path['slave_build'].join('google_appengine')
+
+
 def GenSteps(api):
   buildername = api.properties.get('buildername')
   _CheckoutSteps(api, buildername)
+
+  # The dashboard unit tests depend on Python modules in the App Engine SDK,
+  # and the unit test runner script assumes that the SDK is in PYTHONPATH.
+  sdk_path = _FetchAppEngineSDKSteps(api)
+  modified_env = {
+    'PYTHONPATH': api.path.pathsep.join(['%(PYTHONPATH)s', str(sdk_path)])
+  }
+
   api.python('Util Tests',
              api.path['checkout'].join('base', 'util', 'run_tests.py'))
+  api.python('Dashboard Tests',
+             api.path['checkout'].join('dashboard', 'run_tests.py'),
+             env=modified_env)
 
 
 def GenTests(api):
-  # Run GenSteps with default input
-  yield (api.test('basic') +
-         api.properties(mastername='master.client.catapult',
-                        buildername='windows',
-                        slavename='windows_slave'))
+  yield (
+    api.test('basic') +
+    api.properties(mastername='master.client.catapult',
+                   buildername='windows',
+                   slavename='windows_slave') +
+    api.step_data('Gitiles fetch ' + SDK_DOWNLOADER_PATH,
+                  api.gitiles.make_encoded_file(
+                      '"<simulated contents of get_appengine.py>"'))
+  )
