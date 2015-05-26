@@ -745,7 +745,7 @@ class DartUtils(object):
                          subject=subject,
                          sendToInterestedUsers=send_to_interested_useres,
                          extraRecipients=extra_recipients,
-                         lookup=master_utils.FilterDomain(),
+                         lookup=master_utils.UsersAreEmails(),
                          builders=notifying_builders))
       else:
         statuses.append(
@@ -753,6 +753,6 @@ class DartUtils(object):
                          mode='problem',
                          sendToInterestedUsers=send_to_interested_useres,
                          extraRecipients=extra_recipients,
-                         lookup=master_utils.FilterDomain(),
+                         lookup=master_utils.UsersAreEmails(),
                          builders=notifying_builders))
     return statuses
