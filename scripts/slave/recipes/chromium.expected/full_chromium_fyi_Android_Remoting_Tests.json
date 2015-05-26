@@ -178,7 +178,8 @@
       "[BUILD]/goma",
       "--",
       "remoting_apk",
-      "remoting_test_apk"
+      "remoting_test_apk",
+      "remoting_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -265,6 +266,26 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "provision_devices"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "remoting_unittests",
+      "--verbose",
+      "--release",
+      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "remoting_unittests"
   },
   {
     "cmd": [

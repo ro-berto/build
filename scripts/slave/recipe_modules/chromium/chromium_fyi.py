@@ -1460,6 +1460,7 @@ SPEC = {
       'android_config': 'main_builder',
       'root_devices': True,
       'tests': [
+        steps.GTestTest('remoting_unittests'),
         steps.AndroidInstrumentationTest(
             'ChromotingTest', 'remoting_test_apk',
             adb_install_apk=(
