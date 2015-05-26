@@ -526,6 +526,7 @@ class SkiaApi(recipe_api.RecipeApi):
 
     # Upload results.
     if is_perf:
+      self.m.file.makedirs('perf_dir', self.perf_data_dir)
       self.flavor.copy_directory_contents_to_host(
           self.device_dirs.perf_data_dir, self.perf_data_dir)
       gsutil_path = self.m.path['depot_tools'].join(
