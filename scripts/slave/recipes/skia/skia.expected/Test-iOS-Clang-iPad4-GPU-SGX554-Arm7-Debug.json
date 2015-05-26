@@ -454,7 +454,7 @@
       "[SLAVE_BUILD]/dm"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "pull skiabot/skia_dm"
+    "name": "pull skia_dm"
   },
   {
     "cmd": [
