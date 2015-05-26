@@ -129,7 +129,7 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@failures: 19<br/>@@@",
+      "@@@STEP_TEXT@failures: 19<br/>flakes: 0<br/>@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
       "@@@STEP_LOG_LINE@durations@@@@",
@@ -576,8 +576,7 @@
       "@@@STEP_LOG_LINE@test-name8@Stderr:@@@",
       "@@@STEP_LOG_LINE@test-name8@Some errput.@@@",
       "@@@STEP_LOG_LINE@test-name8@@@@",
-      "@@@STEP_LOG_END@test-name8@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_END@test-name8@@@"
     ]
   },
   {
@@ -602,7 +601,8 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Check",
     "~followup_annotations": [
-      "@@@STEP_TEXT@failures: 19<br/>@@@",
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@failures: 19<br/>flakes: 0<br/>@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
       "@@@STEP_LOG_LINE@durations@@@@",
@@ -1075,7 +1075,8 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Check - flaky",
     "~followup_annotations": [
-      "@@@STEP_TEXT@failures: 19<br/>@@@",
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@failures: 19<br/>flakes: 0<br/>@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
       "@@@STEP_LOG_LINE@durations@@@@",
@@ -1528,7 +1529,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "2 out of 2 aggregated steps failed. Failures: Falures or flakes in step Unittests., Falures or flakes in step Check - flaky.",
+    "reason": "1 out of 2 aggregated steps failed. Failures: Step('Check - flaky') failed with return_code 1",
     "status_code": 1
   }
 ]
