@@ -542,10 +542,7 @@ class V8Api(recipe_api.RecipeApi):
       'Duration: %s' % V8Api.format_duration(test['duration']),
     ]
 
-  def _update_test_presentation(self, output, presentation):
-    def all_same(items):
-      return all(x == items[0] for x in items)
-
+  def _update_durations(self, output, presentation):
     # Slowest tests duration summary.
     lines = []
     for test in output['slowest_tests']:
@@ -557,8 +554,12 @@ class V8Api(recipe_api.RecipeApi):
       lines.extend(self._duration_results_text(test))
     presentation.logs['durations'] = lines
 
+  def _get_failure_logs(self, output):
+    def all_same(items):
+      return all(x == items[0] for x in items)
+
     if not output['results']:
-      return
+      return {}, 0, {}, 0
 
     unique_results = {}
     for result in output['results']:
@@ -573,8 +574,11 @@ class V8Api(recipe_api.RecipeApi):
 
     failure_count = 0
     flake_count = 0
+    failure_log = {}
+    flake_log = {}
     for label in sorted(unique_results.keys()[:MAX_FAILURE_LOGS]):
-      lines = []
+      failure_lines = []
+      flake_lines = []
 
       # Group results by command. The same command might have run multiple
       # times to detect flakes.
@@ -585,21 +589,31 @@ class V8Api(recipe_api.RecipeApi):
       for command in results_per_command:
         # Determine flakiness. A test is flaky if not all results from a unique
         # command are the same (e.g. all 'FAIL').
-        flaky = not all_same(map(lambda x: x['result'],
-                                 results_per_command[command]))
+        if all_same(map(lambda x: x['result'], results_per_command[command])):
+          # This is a failure.
+          failure_count += 1
+          failure_lines += self._command_results_text(
+              results_per_command[command], False)
+        else:
+          # This is a flake.
+          flake_count += 1
+          flake_lines += self._command_results_text(
+              results_per_command[command], True)
 
-        # Count flakes and failures for summary. The v8 test driver reports
-        # failures and reruns of failures.
-        flake_count += int(flaky)
-        failure_count += int(not flaky)
+      if failure_lines:
+        failure_log[label] = failure_lines
+      if flake_lines:
+        flake_log[label] = flake_lines
 
-        lines += self._command_results_text(results_per_command[command],
-                                            flaky)
-      presentation.logs[label] = lines
+    return failure_log, failure_count, flake_log, flake_count
 
-    # Summary about flakes and failures.
-    presentation.step_text += ('failures: %d<br/>flakes: %d<br/>' %
-                               (failure_count, flake_count))
+  def _update_failure_presentation(self, log, count, presentation):
+    for label in sorted(log):
+      presentation.logs[label] = log[label]
+
+    if count:
+      # Number of failures.
+      presentation.step_text += ('failures: %d<br/>' % count)
 
   def _runtest(self, name, test, flaky_tests=None, **kwargs):
     env = {}
@@ -680,40 +694,59 @@ class V8Api(recipe_api.RecipeApi):
     def step_test_data():
       return self.test_api.output_json(
           self._test_data.get('test_failures', False),
-          self._test_data.get('wrong_results', False))
+          self._test_data.get('wrong_results', False),
+          self._test_data.get('flakes', False))
 
-    try:
-      self.m.python(
-        name,
-        self.resource('v8testing.py'),
-        full_args,
-        cwd=self.m.path['checkout'],
-        env=env,
-        step_test_data=step_test_data,
-        **kwargs
-      )
-    finally:
-      # Show test results independent of the step result.
-      step_result = self.m.step.active_result
-      r = step_result.json.output
+    step_result = self.m.python(
+      name,
+      self.resource('v8testing.py'),
+      full_args,
+      cwd=self.m.path['checkout'],
+      env=env,
+      # The outcome is controlled by the json test result of the step.
+      ok_ret='any',
+      step_test_data=step_test_data,
+      **kwargs
+    )
+
+    json_output = step_result.json.output
+    if json_output:
       # The output is expected to be a list of architecture dicts that
       # each contain a results list. On buildbot, there is only one
       # architecture.
-      if (r and isinstance(r, list) and isinstance(r[0], dict)):
-        self._update_test_presentation(r[0], step_result.presentation)
+      if (isinstance(json_output, list) and len(json_output) == 1
+          and isinstance(json_output[0], dict)):
+        test_results = json_output[0]
+      else:
+        step_result.presentation.status = self.m.step.EXCEPTION
+        raise self.m.step.InfraFailure('Invalid test results json.')
+    else:
+      # FIXME(machenbach): The v8-side test runner doesn't return json in case
+      # there were no tests. This should be fixed on the v8-side and merged
+      # back to old branches. Until then we need this default.
+      test_results = {'results': [], 'slowest_tests': []}
 
-      # Check integrity of the last output. The json list is expected to
-      # contain only one element for one (architecture, build config type)
-      # pair on the buildbot.
-      result = step_result.json.output
-      if result and len(result) > 1:
-        self.m.python.inline(
-            name,
-            r"""
-            import sys
-            print 'Unexpected results set present.'
-            sys.exit(1)
-            """)
+    self._update_durations(test_results, step_result.presentation)
+    failure_log, failure_count, flake_log, flake_count = (
+        self._get_failure_logs(test_results))
+    self._update_failure_presentation(
+        failure_log, failure_count, step_result.presentation)
+
+    if failure_log and failure_count:
+      # Mark the test step as failure only if there were real failures (i.e.
+      # non-flakes) present.
+      step_result.presentation.status = self.m.step.FAILURE
+
+    if flake_log and flake_count:
+      # Emit a separate step to show flakes from the previous step
+      # to not close the tree.
+      step_result = self.m.python.inline(name + ' (flakes)', '# Empty program')
+      self._update_failure_presentation(
+            flake_log, flake_count, step_result.presentation)
+
+    if failure_count or flake_count:
+      # Let the overall build fail for failures and flakes.
+      raise self.m.step.StepFailure('Falures or flakes in step %s.' % name)
 
   def runtest(self, test, **kwargs):
     # Get the flaky-step configuration default per test.

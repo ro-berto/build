@@ -149,6 +149,46 @@
     "cmd": [
       "python",
       "-u",
+      "# Empty program"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Unittests (flakes)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@failures: 1<br/>@@@",
+      "@@@STEP_LOG_LINE@python.inline@# Empty program@@@",
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@STEP_LOG_LINE@test-name@Test: suite-name/dir/test-name (flaky in a repeated run)@@@",
+      "@@@STEP_LOG_LINE@test-name@Flags: @@@",
+      "@@@STEP_LOG_LINE@test-name@Command: d8 test.js@@@",
+      "@@@STEP_LOG_LINE@test-name@@@@",
+      "@@@STEP_LOG_LINE@test-name@Run #1@@@",
+      "@@@STEP_LOG_LINE@test-name@Exit code: 1@@@",
+      "@@@STEP_LOG_LINE@test-name@Result: FAIL@@@",
+      "@@@STEP_LOG_LINE@test-name@Expected outcomes: PASS, SLOW@@@",
+      "@@@STEP_LOG_LINE@test-name@Duration: 00:05:000@@@",
+      "@@@STEP_LOG_LINE@test-name@@@@",
+      "@@@STEP_LOG_LINE@test-name@Stdout:@@@",
+      "@@@STEP_LOG_LINE@test-name@Some output.@@@",
+      "@@@STEP_LOG_LINE@test-name@@@@",
+      "@@@STEP_LOG_LINE@test-name@Stderr:@@@",
+      "@@@STEP_LOG_LINE@test-name@Some errput.@@@",
+      "@@@STEP_LOG_LINE@test-name@@@@",
+      "@@@STEP_LOG_LINE@test-name@Run #2@@@",
+      "@@@STEP_LOG_LINE@test-name@Exit code: 1@@@",
+      "@@@STEP_LOG_LINE@test-name@Result: PASS@@@",
+      "@@@STEP_LOG_LINE@test-name@Expected outcomes: PASS, SLOW@@@",
+      "@@@STEP_LOG_LINE@test-name@Duration: 00:10:000@@@",
+      "@@@STEP_LOG_LINE@test-name@@@@",
+      "@@@STEP_LOG_LINE@test-name@Stdout:@@@",
+      "@@@STEP_LOG_LINE@test-name@Some output.@@@",
+      "@@@STEP_LOG_LINE@test-name@@@@",
+      "@@@STEP_LOG_END@test-name@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[v8]/resources/v8testing.py",
       "--target",
       "Release",
@@ -187,6 +227,46 @@
     "cmd": [
       "python",
       "-u",
+      "# Empty program"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Check (flakes)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@failures: 1<br/>@@@",
+      "@@@STEP_LOG_LINE@python.inline@# Empty program@@@",
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@STEP_LOG_LINE@test-name@Test: suite-name/dir/test-name (flaky in a repeated run)@@@",
+      "@@@STEP_LOG_LINE@test-name@Flags: @@@",
+      "@@@STEP_LOG_LINE@test-name@Command: d8 test.js@@@",
+      "@@@STEP_LOG_LINE@test-name@@@@",
+      "@@@STEP_LOG_LINE@test-name@Run #1@@@",
+      "@@@STEP_LOG_LINE@test-name@Exit code: 1@@@",
+      "@@@STEP_LOG_LINE@test-name@Result: FAIL@@@",
+      "@@@STEP_LOG_LINE@test-name@Expected outcomes: PASS, SLOW@@@",
+      "@@@STEP_LOG_LINE@test-name@Duration: 00:05:000@@@",
+      "@@@STEP_LOG_LINE@test-name@@@@",
+      "@@@STEP_LOG_LINE@test-name@Stdout:@@@",
+      "@@@STEP_LOG_LINE@test-name@Some output.@@@",
+      "@@@STEP_LOG_LINE@test-name@@@@",
+      "@@@STEP_LOG_LINE@test-name@Stderr:@@@",
+      "@@@STEP_LOG_LINE@test-name@Some errput.@@@",
+      "@@@STEP_LOG_LINE@test-name@@@@",
+      "@@@STEP_LOG_LINE@test-name@Run #2@@@",
+      "@@@STEP_LOG_LINE@test-name@Exit code: 1@@@",
+      "@@@STEP_LOG_LINE@test-name@Result: PASS@@@",
+      "@@@STEP_LOG_LINE@test-name@Expected outcomes: PASS, SLOW@@@",
+      "@@@STEP_LOG_LINE@test-name@Duration: 00:10:000@@@",
+      "@@@STEP_LOG_LINE@test-name@@@@",
+      "@@@STEP_LOG_LINE@test-name@Stdout:@@@",
+      "@@@STEP_LOG_LINE@test-name@Some output.@@@",
+      "@@@STEP_LOG_LINE@test-name@@@@",
+      "@@@STEP_LOG_END@test-name@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[v8]/resources/v8testing.py",
       "--target",
       "Release",
@@ -205,7 +285,6 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Check - flaky",
     "~followup_annotations": [
-      "@@@STEP_TEXT@failures: 1<br/>@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
       "@@@STEP_LOG_LINE@durations@@@@",
@@ -219,8 +298,22 @@
       "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
       "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
       "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
-      "@@@STEP_LOG_END@durations@@@",
-      "@@@STEP_LOG_LINE@test-name@Test: suite-name/dir/test-name@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "# Empty program"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Check - flaky (flakes)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@failures: 1<br/>@@@",
+      "@@@STEP_LOG_LINE@python.inline@# Empty program@@@",
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@STEP_LOG_LINE@test-name@Test: suite-name/dir/test-name (flaky in a repeated run)@@@",
       "@@@STEP_LOG_LINE@test-name@Flags: @@@",
       "@@@STEP_LOG_LINE@test-name@Command: d8 test.js@@@",
       "@@@STEP_LOG_LINE@test-name@@@@",
@@ -236,13 +329,21 @@
       "@@@STEP_LOG_LINE@test-name@Stderr:@@@",
       "@@@STEP_LOG_LINE@test-name@Some errput.@@@",
       "@@@STEP_LOG_LINE@test-name@@@@",
-      "@@@STEP_LOG_END@test-name@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_LINE@test-name@Run #2@@@",
+      "@@@STEP_LOG_LINE@test-name@Exit code: 1@@@",
+      "@@@STEP_LOG_LINE@test-name@Result: PASS@@@",
+      "@@@STEP_LOG_LINE@test-name@Expected outcomes: PASS, SLOW@@@",
+      "@@@STEP_LOG_LINE@test-name@Duration: 00:10:000@@@",
+      "@@@STEP_LOG_LINE@test-name@@@@",
+      "@@@STEP_LOG_LINE@test-name@Stdout:@@@",
+      "@@@STEP_LOG_LINE@test-name@Some output.@@@",
+      "@@@STEP_LOG_LINE@test-name@@@@",
+      "@@@STEP_LOG_END@test-name@@@"
     ]
   },
   {
     "name": "$final_result",
-    "reason": "1 out of 2 aggregated steps failed. Failures: Falures or flakes in step Check - flaky.",
+    "reason": "2 out of 2 aggregated steps failed. Failures: Falures or flakes in step Unittests., Falures or flakes in step Check - flaky.",
     "status_code": 1
   }
 ]

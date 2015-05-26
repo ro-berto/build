@@ -24,7 +24,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     },
   ]
 
-  def output_json(self, has_failures=False, wrong_results=False):
+  def output_json(self, has_failures=False, wrong_results=False, flakes=False):
     if not has_failures:
       return self.m.json.output([{
         'arch': 'theArch',
@@ -45,6 +45,39 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         'results': [],
         'slowest_tests': V8TestApi.SLOWEST_TESTS,
       }])
+    if flakes:
+      return self.m.json.output([{
+        'arch': 'theArch1',
+        'mode': 'theMode1',
+        'results': [
+          {
+            'flags': [],
+            'result': 'FAIL',
+            'expected': ['PASS', 'SLOW'],
+            'duration': 5,
+            'run': 1,
+            'stdout': 'Some output.',
+            'stderr': 'Some errput.',
+            'name': 'suite-name/dir/test-name',
+            'command': 'd8 test.js',
+            'exit_code': 1,
+          },
+          {
+            'flags': [],
+            'result': 'PASS',
+            'expected': ['PASS', 'SLOW'],
+            'duration': 10,
+            'run': 2,
+            'stdout': 'Some output.',
+            'stderr': '',
+            'name': 'suite-name/dir/test-name',
+            'command': 'd8 test.js',
+            'exit_code': 1,
+          },
+        ],
+        'slowest_tests': V8TestApi.SLOWEST_TESTS,
+      }])
+
 
     # Add enough failures to exceed the maximum number of shown failures
     # (test-name9 will be cut off).
@@ -93,6 +126,27 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'slowest_tests': V8TestApi.SLOWEST_TESTS,
     }])
 
+  def one_failure(self):
+    return self.m.json.output([{
+      'arch': 'theArch',
+      'mode': 'theMode',
+      'results': [
+        {
+          'flags': [],
+          'result': 'FAIL',
+          'expected': ['PASS', 'SLOW'],
+          'duration': 5,
+          'run': 1,
+          'stdout': 'Some output.',
+          'stderr': 'Some errput.',
+          'name': 'suite-name/dir/test-name',
+          'command': 'd8 test.js',
+          'exit_code': 1,
+        },
+      ],
+      'slowest_tests': V8TestApi.SLOWEST_TESTS,
+    }])
+
   def perf_json(self, has_failures=False):
     result = {
       'errors': [],
@@ -125,6 +179,11 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
 
   @recipe_test_api.mod_test_data
   @staticmethod
+  def flakes(flakes):
+    return flakes
+
+  @recipe_test_api.mod_test_data
+  @staticmethod
   def wrong_results(wrong_results):
     return wrong_results
 
@@ -134,7 +193,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     return has_failures
 
   def __call__(self, test_failures=False, wrong_results=False,
-               perf_failures=False):
+               perf_failures=False, flakes=False):
     return (self.test_failures(test_failures) +
             self.wrong_results(wrong_results) +
+            self.flakes(flakes) +
             self.perf_failures(perf_failures))

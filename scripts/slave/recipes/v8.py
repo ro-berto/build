@@ -120,12 +120,15 @@ def GenTests(api):
   mastername = 'client.v8'
   buildername = 'V8 Linux - isolates'
   bot_config = api.v8.BUILDERS[mastername]['builders'][buildername]
-  def TestFailures(wrong_results):
-    suffix = "_wrong_results" if wrong_results else ""
+  def TestFailures(wrong_results, flakes):
+    results_suffix = "_wrong_results" if wrong_results else ""
+    flakes_suffix = "_flakes" if flakes else ""
     return (
-      api.test('full_%s_%s_test_failures%s' % (_sanitize_nonalpha(mastername),
-                                               _sanitize_nonalpha(buildername),
-                                               suffix)) +
+      api.test('full_%s_%s_test_failures%s%s' %
+          (_sanitize_nonalpha(mastername),
+          _sanitize_nonalpha(buildername),
+          results_suffix,
+          flakes_suffix)) +
       api.properties.generic(mastername=mastername,
                              buildername=buildername,
                              branch='master',
@@ -133,13 +136,12 @@ def GenTests(api):
                                  'parent_buildername')) +
       api.platform(bot_config['testing']['platform'],
                    v8_config_kwargs.get('TARGET_BITS', 64)) +
-      api.v8(test_failures=True, wrong_results=wrong_results) +
-      api.step_data('Check', retcode=1) +
-      api.step_data('Check - flaky', retcode=1)
+      api.v8(test_failures=True, wrong_results=wrong_results, flakes=flakes)
     )
 
-  yield TestFailures(wrong_results=False)
-  yield TestFailures(wrong_results=True)
+  yield TestFailures(wrong_results=False, flakes=False)
+  yield TestFailures(wrong_results=False, flakes=True)
+  yield TestFailures(wrong_results=True, flakes=False)
   yield (
     api.test('full_%s_%s_flaky_test_failures' % (
         _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
@@ -150,6 +152,32 @@ def GenTests(api):
                                'parent_buildername')) +
     api.platform(bot_config['testing']['platform'],
                  v8_config_kwargs.get('TARGET_BITS', 64)) +
-    api.step_data('Check - flaky', retcode=1)
+    api.override_step_data('Check - flaky', api.v8.one_failure())
   )
 
+  yield (
+    api.test('full_%s_%s_empty_json' % (
+        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
+    api.properties.generic(mastername=mastername,
+                           buildername=buildername,
+                           branch='master',
+                           parent_buildername=bot_config.get(
+                               'parent_buildername')) +
+    api.platform(bot_config['testing']['platform'],
+                 v8_config_kwargs.get('TARGET_BITS', 64)) +
+    api.override_step_data('Check - flaky', api.json.output([]))
+  )
+
+  yield (
+    api.test('full_%s_%s_one_failure' %
+        (_sanitize_nonalpha(mastername),
+        _sanitize_nonalpha(buildername))) +
+    api.properties.generic(mastername=mastername,
+                           buildername=buildername,
+                           branch='master',
+                           parent_buildername=bot_config.get(
+                               'parent_buildername')) +
+    api.platform(bot_config['testing']['platform'],
+                 v8_config_kwargs.get('TARGET_BITS', 64)) +
+    api.override_step_data('Check', api.v8.one_failure())
+  )
