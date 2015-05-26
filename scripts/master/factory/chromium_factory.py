@@ -909,40 +909,17 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Ensure that component is set correctly in the gyp defines.
     ForceComponent(target, project, factory_properties['gclient_env'])
 
-    # There's 2 different windows SyzyASan builders:
-    #     - The unittests builder, which build all the unittests, instrument
-    #       them and put them in a zip file for the test bots.
-    #     - The Chromium LKGR builder, which build the All_syzygy target of the
-    #       Chromium project with the 'asan' gyp define set. There's no need to
-    #       call a script to do the instrumentation for this target (it's
-    #       already in the build steps). This builder should archive the builds
-    #       for Clusterfuzz, it need to have the 'cf_archive_build' property.
-    is_win_syzyasan_tests_builder = (slave_type == 'Builder' and
-                                     self._target_platform == 'win32' and
-                                     factory_properties.get('syzyasan') and
-                                 not factory_properties.get('cf_archive_build'))
-
     factory = self.BuildFactory(target, clobber, tests_for_build, mode,
                                 slave_type, options, compile_timeout, build_url,
                                 project, factory_properties,
                                 gclient_deps=gclient_deps,
-                               skip_archive_steps=is_win_syzyasan_tests_builder)
+                                skip_archive_steps=False)
 
     # Get the factory command object to create new steps to the factory.
     chromium_cmd_obj = chromium_commands.ChromiumCommands(factory,
                                                           target,
                                                           self._build_dir,
                                                           self._target_platform)
-
-    # Add ASANification step for windows unittests.
-    # MUST BE FIRST STEP ADDED AFTER BuildFactory CALL in order to add back
-    # the ZipBuild step in it's expected place.
-    if is_win_syzyasan_tests_builder:
-      chromium_cmd_obj.AddWindowsSyzyASanStep()
-      # Need to add the Zip Build step back
-      if build_url:
-        chromium_cmd_obj.AddZipBuild(build_url,
-                                    factory_properties=factory_properties)
 
     # Add this archive build step.
     if factory_properties.get('archive_build'):
