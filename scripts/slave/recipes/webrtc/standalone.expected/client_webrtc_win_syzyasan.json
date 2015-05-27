@@ -127,7 +127,6 @@
       "--builder-name=Win SyzyASan",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--use-syzyasan-logger",
       "audio_decoder_unittests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -154,7 +153,6 @@
       "--builder-name=Win SyzyASan",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--use-syzyasan-logger",
       "common_audio_unittests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -181,7 +179,6 @@
       "--builder-name=Win SyzyASan",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--use-syzyasan-logger",
       "common_video_unittests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -208,7 +205,6 @@
       "--builder-name=Win SyzyASan",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--use-syzyasan-logger",
       "libjingle_media_unittest.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -235,7 +231,6 @@
       "--builder-name=Win SyzyASan",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--use-syzyasan-logger",
       "libjingle_p2p_unittest.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -262,7 +257,6 @@
       "--builder-name=Win SyzyASan",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--use-syzyasan-logger",
       "libjingle_peerconnection_unittest.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -289,7 +283,6 @@
       "--builder-name=Win SyzyASan",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--use-syzyasan-logger",
       "modules_tests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -316,7 +309,6 @@
       "--builder-name=Win SyzyASan",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--use-syzyasan-logger",
       "modules_unittests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -343,7 +335,6 @@
       "--builder-name=Win SyzyASan",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--use-syzyasan-logger",
       "rtc_unittests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -370,7 +361,6 @@
       "--builder-name=Win SyzyASan",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--use-syzyasan-logger",
       "system_wrappers_unittests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -397,7 +387,6 @@
       "--builder-name=Win SyzyASan",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--use-syzyasan-logger",
       "test_support_unittests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -424,7 +413,6 @@
       "--builder-name=Win SyzyASan",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--use-syzyasan-logger",
       "tools_unittests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -451,7 +439,6 @@
       "--builder-name=Win SyzyASan",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--use-syzyasan-logger",
       "video_engine_core_unittests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -478,7 +465,6 @@
       "--builder-name=Win SyzyASan",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--use-syzyasan-logger",
       "video_engine_tests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -505,7 +491,6 @@
       "--builder-name=Win SyzyASan",
       "--slave-name=slavename",
       "--build-number=1337",
-      "--use-syzyasan-logger",
       "voice_engine_unittests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",

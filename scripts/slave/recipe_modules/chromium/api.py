@@ -348,8 +348,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--enable-msan')
     if self.c.gyp_env.GYP_DEFINES.get('tsan', 0) == 1:
       full_args.append('--enable-tsan')
-    if self.c.gyp_env.GYP_DEFINES.get('syzyasan', 0) == 1:
-      full_args.append('--use-syzyasan-logger')
     if self.c.runtests.memory_tool:
       full_args.extend([
         '--pass-build-dir',
