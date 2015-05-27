@@ -398,6 +398,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-disable-local-fallback",
       "--",
       "ui_base_unittests_apk",
       "device_unittests_apk",

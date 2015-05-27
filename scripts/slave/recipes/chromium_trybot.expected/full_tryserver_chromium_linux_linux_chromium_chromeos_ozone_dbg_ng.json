@@ -223,6 +223,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-disable-local-fallback",
       "--ninja-ensure-up-to-date",
       "--",
       "aura_builder"

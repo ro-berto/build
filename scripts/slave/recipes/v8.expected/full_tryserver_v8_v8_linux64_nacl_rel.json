@@ -95,6 +95,7 @@
       "[SLAVE_BUILD]/v8",
       "--build-tool",
       "make",
+      "--goma-disable-local-fallback",
       "--",
       "-C",
       "..",

@@ -84,6 +84,7 @@
       "[SLAVE_BUILD]/v8",
       "--build-tool",
       "make",
+      "--goma-disable-local-fallback",
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",

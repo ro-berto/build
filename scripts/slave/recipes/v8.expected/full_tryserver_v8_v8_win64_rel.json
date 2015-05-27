@@ -94,6 +94,7 @@
       "[SLAVE_BUILD]\\v8",
       "--build-tool",
       "vs",
+      "--goma-disable-local-fallback",
       "--arch",
       "x64",
       "--"

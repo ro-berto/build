@@ -215,6 +215,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-disable-local-fallback",
       "--",
       "all",
       "base_unittests"
@@ -409,6 +410,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-disable-local-fallback",
       "--",
       "base_unittests"
     ],

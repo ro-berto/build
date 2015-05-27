@@ -94,6 +94,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-disable-local-fallback",
       "--",
       "All"
     ],

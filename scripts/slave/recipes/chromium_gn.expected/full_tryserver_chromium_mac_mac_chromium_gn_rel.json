@@ -270,6 +270,7 @@
       "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-disable-local-fallback",
       "--",
       "base_unittests"
     ],

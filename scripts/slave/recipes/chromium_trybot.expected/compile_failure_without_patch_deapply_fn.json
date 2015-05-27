@@ -287,6 +287,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-disable-local-fallback",
       "--ninja-ensure-up-to-date",
       "--",
       "angle_unittests_run",
@@ -2025,6 +2026,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-disable-local-fallback",
       "--ninja-ensure-up-to-date",
       "--",
       "base_unittests"

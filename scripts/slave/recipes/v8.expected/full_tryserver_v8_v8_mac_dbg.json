@@ -109,6 +109,7 @@
       "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-disable-local-fallback",
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",

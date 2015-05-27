@@ -163,6 +163,14 @@ def goma_setup(options, env):
     # goma started sucessfully.
     return True
 
+  # Upload compiler_proxy.INFO to investigate the reason of compiler_proxy
+  # start-up failure.
+  UploadGomaCompilerProxyInfo()
+
+  if options.goma_disable_local_fallback:
+    print 'error: failed to start goma; fallback has been disabled'
+    raise Exception('failed to start goma')
+
   print 'warning: failed to start goma. falling back to non-goma'
   # Drop goma from options.compiler
   options.compiler = options.compiler.replace('goma-', '')
@@ -171,9 +179,6 @@ def goma_setup(options, env):
   # Reset options.goma_dir.
   options.goma_dir = None
   env['GOMA_DISABLED'] = '1'
-  # Upload compiler_proxy.INFO to investigate the reason of compiler_proxy
-  # start-up failure.
-  UploadGomaCompilerProxyInfo()
   return False
 
 
@@ -1284,6 +1289,7 @@ def real_main():
                            help='Enable goma remote link.')
   option_parser.add_option('--goma-store-local-run-output', default=None,
                            help='Store local run output to goma servers.')
+  option_parser.add_option('--goma-disable-local-fallback', action='store_true')
   option_parser.add_option('--verbose', action='store_true')
   option_parser.add_option('--ninja-ensure-up-to-date', action='store_true',
                            help='Checks the output of the ninja builder to '

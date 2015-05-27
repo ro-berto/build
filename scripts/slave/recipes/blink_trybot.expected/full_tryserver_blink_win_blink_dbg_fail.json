@@ -124,6 +124,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]\\goma",
+      "--goma-disable-local-fallback",
       "--",
       "blink_tests"
     ],
@@ -445,6 +446,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]\\goma",
+      "--goma-disable-local-fallback",
       "--",
       "blink_tests"
     ],

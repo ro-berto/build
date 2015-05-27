@@ -144,6 +144,7 @@
       "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-disable-local-fallback",
       "--",
       "angle_unittests_run",
       "blink_tests",
