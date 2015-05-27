@@ -340,6 +340,9 @@ class AndroidApi(recipe_api.RecipeApi):
           **kwargs)
       self._devices = [d['serial'] for d in result.json.output]
       result.presentation.step_text = 'Online devices: %s' % len(self._devices)
+      for d in result.json.output:
+        key = '%s %s %s' % (d['type'], d['build'], d['serial'])
+        result.presentation.logs[key] = self.m.json.dumps(d, indent=2).splitlines()
     except self.m.step.InfraFailure as f:
       params = {
         'summary': ('Device Offline on %s %s' %
