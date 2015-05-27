@@ -120,5 +120,28 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {'platform': 'linux'},
     },
+    'Chromium Win SyzyASAN': {
+      'chromium_config': 'chromium_no_goma',
+      'gclient_config': 'chromium',
+      'chromium_apply_config': ['syzyasan', 'clobber'],
+      'gclient_apply_config': [
+        'v8_bleeding_edge_git',
+        'chromium_lkgr',
+        'show_v8_revision',
+      ],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'builder',
+      'cf_archive_build': True,
+      'cf_gs_bucket': 'v8-asan',
+      'cf_gs_acl': 'public-read',
+      'cf_archive_name': 'syzyasan',
+      'cf_revision_dir': 'v8',
+      'compile_targets': ['chromium_builder_asan'],
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      'testing': {'platform': 'win'},
+    },
   },
 }
