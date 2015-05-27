@@ -167,6 +167,10 @@ SPEC = {
             adb_install_apk=(
                 'AndroidWebView.apk', 'org.chromium.android_webview.shell')),
         steps.AndroidInstrumentationTest(
+            'ChromePublicTest', 'chrome_public_test_apk',
+            isolate_file_path='chrome/chrome_public_test_apk.isolate',
+            adb_install_apk=('ChromePublic.apk', 'org.chromium.chrome')),
+        steps.AndroidInstrumentationTest(
             'ChromeShellTest', 'chrome_shell_test_apk',
             isolate_file_path='chrome/chrome_shell_test_apk.isolate',
             adb_install_apk=(
@@ -255,6 +259,10 @@ SPEC = {
             isolate_file_path='android_webview/android_webview_test_apk.isolate',
             adb_install_apk=(
                 'AndroidWebView.apk', 'org.chromium.android_webview.shell')),
+        steps.AndroidInstrumentationTest(
+            'ChromePublicTest', 'chrome_public_test_apk',
+            isolate_file_path='chrome/chrome_public_test_apk.isolate',
+            adb_install_apk=('ChromePublic.apk', 'org.chromium.chrome')),
         steps.AndroidInstrumentationTest(
             'ChromeShellTest', 'chrome_shell_test_apk',
             isolate_file_path='chrome/chrome_shell_test_apk.isolate',

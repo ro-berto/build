@@ -1435,10 +1435,6 @@ SPEC = {
         steps.AndroidJunitTest('base_junit_tests'),
         steps.GTestTest('components_browsertests'),
         steps.GTestTest('gfx_unittests'),
-        steps.AndroidInstrumentationTest(
-            'ChromePublicTest', 'chrome_public_test_apk',
-            isolate_file_path='chrome/chrome_public_test_apk.isolate',
-            adb_install_apk=('ChromePublic.apk', 'org.chromium.chrome')),
       ],
       'testing': {
         'platform': 'linux',
@@ -1461,10 +1457,6 @@ SPEC = {
       'tests': [
         steps.GTestTest('components_browsertests'),
         steps.GTestTest('gfx_unittests'),
-        steps.AndroidInstrumentationTest(
-            'ChromePublicTest', 'chrome_public_test_apk',
-            isolate_file_path='chrome/chrome_public_test_apk.isolate',
-            adb_install_apk=('ChromePublic.apk', 'org.chromium.chrome')),
       ],
       'testing': {
         'platform': 'linux',

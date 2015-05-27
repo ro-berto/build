@@ -181,6 +181,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"ui_touch_selection_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"cc_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_public_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"unit_tests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"android_webview_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"events_unittests_apk\", @@@",
@@ -212,6 +213,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"breakpad_unittests_deps\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"cc_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_junit_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_public_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_sync_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_unittests_apk\", @@@",
@@ -244,6 +246,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"breakpad_unittests_deps\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"cc_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_junit_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_public_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_sync_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_unittests_apk\", @@@",
@@ -276,6 +279,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"breakpad_unittests_deps\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"cc_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_junit_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_public_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_sync_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_unittests_apk\", @@@",
@@ -308,6 +312,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"breakpad_unittests_deps\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"cc_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_junit_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_public_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_sync_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_unittests_apk\", @@@",
@@ -408,6 +413,7 @@
       "ui_touch_selection_unittests_apk",
       "cc_unittests_apk",
       "content_junit_tests",
+      "chrome_public_test_apk",
       "unit_tests_apk",
       "android_webview_test_apk",
       "events_unittests_apk",
@@ -551,6 +557,44 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test AndroidWebViewTest (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "--apk",
+      "ChromePublic.apk",
+      "--apk_package",
+      "org.chromium.chrome",
+      "--release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install ChromePublic.apk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "ChromePublicTest",
+      "--isolate-file-path",
+      "chrome/chrome_public_test_apk.isolate",
+      "--flakiness-dashboard-server",
+      "http://test-results.appspot.com",
+      "--verbose",
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Instrumentation test ChromePublicTest (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
@@ -1284,6 +1328,7 @@
       "android_webview_test_apk",
       "base_junit_tests",
       "chrome_junit_tests",
+      "chrome_public_test_apk",
       "chrome_shell_test_apk",
       "chrome_sync_shell_test_apk",
       "content_junit_tests",
@@ -1330,6 +1375,44 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test AndroidWebViewTest (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "--apk",
+      "ChromePublic.apk",
+      "--apk_package",
+      "org.chromium.chrome",
+      "--release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install ChromePublic.apk (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "ChromePublicTest",
+      "--isolate-file-path",
+      "chrome/chrome_public_test_apk.isolate",
+      "--flakiness-dashboard-server",
+      "http://test-results.appspot.com",
+      "--verbose",
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Instrumentation test ChromePublicTest (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
@@ -1543,6 +1626,39 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "AndroidWebViewTest",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
+      "@@@STEP_LOG_LINE@python.inline@failures = json.load(open(sys.argv[1], 'rb'))@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@success = True@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if failures['new']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  success = False@@@",
+      "@@@STEP_LOG_LINE@python.inline@  print 'New failures:'@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for f in failures['new']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if failures['ignored']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  print 'Ignored failures:'@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for f in failures['ignored']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for f in failures['new']:\n    print f\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for f in failures['ignored']:\n    print f\n\nsys.exit(0 if success else 1)\n",
+      "{\"ignored\": [\"TestB\"], \"new\": []}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ChromePublicTest",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
