@@ -11,7 +11,6 @@ DEPS = [
   'python',
 ]
 
-SDK_DOWNLOADER_PATH = 'bootstrap/get_appengine.py'
 
 
 def _CheckoutSteps(api, buildername):
@@ -29,7 +28,8 @@ def _FetchAppEngineSDKSteps(api):
   """
   script_content = api.gitiles.download_file(
       'https://chromium.googlesource.com/infra/infra',
-      SDK_DOWNLOADER_PATH,
+      'bootstrap/get_appengine.py',
+      step_name='Fetch SDK downloader',
       # This is a commit after the latest fix to the script.
       branch='f849aad85ac3589c931197bff861faf0e2ef0ece')
   api.python.inline('Run SDK downloader', script_content, args=['--dest=.'])
@@ -60,7 +60,7 @@ def GenTests(api):
     api.properties(mastername='master.client.catapult',
                    buildername='windows',
                    slavename='windows_slave') +
-    api.step_data('Gitiles fetch ' + SDK_DOWNLOADER_PATH,
+    api.step_data('Fetch SDK downloader',
                   api.gitiles.make_encoded_file(
                       '"<simulated contents of get_appengine.py>"'))
   )

@@ -57,7 +57,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Gitiles fetch bootstrap/get_appengine.py"
+    "name": "Fetch SDK downloader"
   },
   {
     "cmd": [
