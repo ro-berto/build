@@ -23,7 +23,15 @@ def Update(config, active_master, c):
     V8Notifier(
         config,
         active_master,
-        categories_steps={'clusterfuzz': ['check clusterfuzz']},
+        categories_steps={
+          'clusterfuzz': [
+            'check clusterfuzz'
+            'runhooks',
+            'gn',
+            'compile',
+            'gsutil upload',
+          ],
+        },
         extraRecipients=[
           'machenbach@chromium.org',
           'v8-clusterfuzz-sheriff@chromium.org',

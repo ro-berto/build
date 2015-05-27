@@ -65,23 +65,5 @@ def Update(config, active_master, c):
           'michael_dawson@ca.ibm.com',
         ],
     ),
-    V8Notifier(
-        config,
-        active_master,
-        categories_steps={
-          'clusterfuzz': [
-            'update',
-            'runhooks',
-            'gn',
-            'compile',
-            'gsutil upload',
-            'ClusterFuzz Archive', # Legacy.
-          ],
-        },
-        extraRecipients=[
-          'machenbach@chromium.org',
-          'v8-clusterfuzz-sheriff@chromium.org',
-        ],
-    ),
   ])
 

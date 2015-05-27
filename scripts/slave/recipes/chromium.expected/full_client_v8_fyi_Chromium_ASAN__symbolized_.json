@@ -5,7 +5,7 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "client.v8.branches",
+      "client.v8.fyi",
       "--builder",
       "Chromium ASAN (symbolized)",
       "--slave",
@@ -21,7 +21,7 @@
       "--revision",
       "src@origin/lkgr",
       "--revision",
-      "src/v8@HEAD"
+      "src/v8@22135"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
@@ -81,13 +81,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/client.v8.branches.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/client.v8.fyi.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/client.v8.branches.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/client.v8.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -105,7 +105,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Chromium ASAN (symbolized)\", \"buildnumber\": 571, \"mastername\": \"client.v8.branches\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"Chromium ASAN (symbolized)\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
