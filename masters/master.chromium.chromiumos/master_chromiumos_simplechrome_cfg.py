@@ -17,9 +17,10 @@ builders = [{
 
 
 def Update(_config, active_master, c):
-  c['schedulers'].extend(SingleBranchScheduler(
-    name='chromium_simplechrome',
-    branch='master',
-    treeStableTimer=60,
-    builderNames=[b['name'] for b in builders]))
+  c['schedulers'].append(SingleBranchScheduler(
+      name='chromium_simplechrome',
+      branch='master',
+      treeStableTimer=60,
+      builderNames=[b['name'] for b in builders]
+  ))
   c['builders'] += builders
