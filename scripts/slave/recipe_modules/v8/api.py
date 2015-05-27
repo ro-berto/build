@@ -741,6 +741,7 @@ class V8Api(recipe_api.RecipeApi):
       # Emit a separate step to show flakes from the previous step
       # to not close the tree.
       step_result = self.m.python.inline(name + ' (flakes)', '# Empty program')
+      step_result.presentation.status = self.m.step.WARNING
       self._update_failure_presentation(
             flake_log, flake_count, step_result.presentation)
 

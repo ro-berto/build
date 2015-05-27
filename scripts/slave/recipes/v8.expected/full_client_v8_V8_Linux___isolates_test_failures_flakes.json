@@ -182,7 +182,8 @@
       "@@@STEP_LOG_LINE@test-name@Stdout:@@@",
       "@@@STEP_LOG_LINE@test-name@Some output.@@@",
       "@@@STEP_LOG_LINE@test-name@@@@",
-      "@@@STEP_LOG_END@test-name@@@"
+      "@@@STEP_LOG_END@test-name@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -260,7 +261,8 @@
       "@@@STEP_LOG_LINE@test-name@Stdout:@@@",
       "@@@STEP_LOG_LINE@test-name@Some output.@@@",
       "@@@STEP_LOG_LINE@test-name@@@@",
-      "@@@STEP_LOG_END@test-name@@@"
+      "@@@STEP_LOG_END@test-name@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -338,7 +340,8 @@
       "@@@STEP_LOG_LINE@test-name@Stdout:@@@",
       "@@@STEP_LOG_LINE@test-name@Some output.@@@",
       "@@@STEP_LOG_LINE@test-name@@@@",
-      "@@@STEP_LOG_END@test-name@@@"
+      "@@@STEP_LOG_END@test-name@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
