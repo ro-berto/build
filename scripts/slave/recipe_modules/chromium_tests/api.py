@@ -335,6 +335,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             gs_acl=bot_config.get('cf_gs_acl'),
             archive_prefix=bot_config.get('cf_archive_name'),
             revision_dir=bot_config.get('cf_revision_dir'),
+            fixed_staging_dir=bot_config.get('fixed_staging_dir', False),
         )
       else:
         build_revision = update_step.presentation.properties['got_revision']

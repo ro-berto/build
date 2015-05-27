@@ -175,7 +175,8 @@ class ArchiveApi(recipe_api.RecipeApi):
   def clusterfuzz_archive(
       self, build_dir, update_properties, gs_bucket,
       archive_prefix, archive_subdir_suffix='', gs_acl=None,
-      revision_dir=None, primary_project=None, **kwargs):
+      revision_dir=None, primary_project=None,
+      fixed_staging_dir=False, **kwargs):
     # TODO(machenbach): Merge revision_dir and primary_project. The
     # revision_dir is only used for building the archive name while the
     # primary_project is authoritative for the commit position.
@@ -209,6 +210,8 @@ class ArchiveApi(recipe_api.RecipeApi):
                     archive is a component revision
       primary_project: Optional project name for specifying the revision of the
                        checkout
+      fixed_staging_dir: Use a fixed directory on the same drive rather than a
+                         temp dir, which can lead to problems on windows.
     """
     target = self.m.path.split(build_dir)[-1]
     commit_position = self._get_commit_position(
@@ -216,7 +219,12 @@ class ArchiveApi(recipe_api.RecipeApi):
     cp_branch, cp_number = self.m.commit_position.parse(commit_position)
     build_git_commit = self._get_git_commit(update_properties, primary_project)
 
-    staging_dir = self.m.path.mkdtemp('chrome_staging')
+    if fixed_staging_dir:
+      staging_dir = self.m.path['slave_build'].join('chrome_staging')
+      self.m.file.rmtree('purge staging dir', staging_dir)
+      self.m.file.makedirs('create staging dir', staging_dir)
+    else:
+      staging_dir = self.m.path.mkdtemp('chrome_staging')
 
     # Build the list of files to archive.
     zip_file_list = [f for f in self.m.file.listdir('build_dir', build_dir)

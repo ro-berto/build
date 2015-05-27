@@ -139,6 +139,7 @@ SPEC = {
       'cf_gs_acl': 'public-read',
       'cf_archive_name': 'syzyasan',
       'cf_revision_dir': 'v8',
+      'fixed_staging_dir': True,
       'compile_targets': ['chromium_builder_asan'],
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {'platform': 'win'},
