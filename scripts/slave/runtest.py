@@ -551,11 +551,11 @@ def _GetMainRevision(options):
   results_dashboard.SendResults.
 
   In order or priority, this function could return:
-    1. The value of the --revision flag.
+    1. The value of the --revision flag (IF it can be parsed as an int).
     2. The value of "got_revision_cp" in build properties.
     3. An SVN number, git commit position, or git commit hash.
   """
-  if options.revision:
+  if options.revision and options.revision.isdigit():
     return options.revision
   commit_pos_num = _GetCommitPos(options.build_properties)
   if commit_pos_num is not None:
