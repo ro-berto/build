@@ -58,7 +58,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' msan=1 target_arch=x64 use_goma=1 v8_target_arch=arm64 v8_use_snapshot=false",
+      "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' msan=1 target_arch=x64 use_goma=1 v8_target_arch=arm64",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
@@ -125,7 +125,6 @@
       "out",
       "--testname",
       "unittests",
-      "--no-snap",
       "--msan",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -165,7 +164,6 @@
       "out",
       "--testname",
       "default",
-      "--no-snap",
       "--flaky-tests",
       "skip",
       "--msan",
@@ -207,7 +205,6 @@
       "out",
       "--testname",
       "default",
-      "--no-snap",
       "--flaky-tests",
       "run",
       "--msan",
