@@ -574,11 +574,18 @@ class SimulatorTestRunner(TestRunner):
       docs_dir = self.FindTestDocumentsDirectory(xcode6_apps_dir)
 
     if docs_dir is not None and os.path.exists(docs_dir):
+      subprocess.check_call([
+        'screencapture',
+        os.path.join(docs_dir, 'desktop.png'),
+      ])
+
       self.summary['links']['test data'] = slave_utils.ZipAndUpload(
         self.gs_bucket,
         '%s.zip' % self.app_name,
         docs_dir,
       )
+
+      shutil.rmtree(docs_dir, ignore_errors=True)
       return True
 
     return False
