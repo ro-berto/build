@@ -233,6 +233,11 @@ BUILDERS = freeze({
         'buildername': 'Win Builder',
         'tester': 'Win7 Tests (1)',
       },
+      'win_chromium_rel_ng_exp': {
+        'mastername': 'chromium.win',
+        'buildername': 'Win Builder',
+        'tester': 'Win7 Tests (1)',
+      },
       'win_chromium_xp_rel_ng': {
         'mastername': 'chromium.win',
         'buildername': 'Win Builder',
@@ -247,11 +252,20 @@ BUILDERS = freeze({
         'mastername': 'chromium.win',
         'buildername': 'Win Builder (dbg)',
       },
+      'win_chromium_compile_dbg_ng_exp': {
+        'mastername': 'chromium.win',
+        'buildername': 'Win Builder (dbg)',
+      },
       'win_chromium_compile_rel_ng': {
         'mastername': 'chromium.win',
         'buildername': 'Win Builder',
       },
       'win_chromium_x64_rel_ng': {
+        'mastername': 'chromium.win',
+        'buildername': 'Win x64 Builder',
+        'tester': 'Win 7 Tests x64 (1)',
+      },
+      'win_chromium_x64_rel_ng_exp': {
         'mastername': 'chromium.win',
         'buildername': 'Win x64 Builder',
         'tester': 'Win 7 Tests x64 (1)',
