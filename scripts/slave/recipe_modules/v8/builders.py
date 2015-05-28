@@ -1478,7 +1478,7 @@ BUILDERS = {
       },
       'v8_linux64_asan_rel': {
         'chromium_apply_config': [
-          'make',
+          'v8_ninja',
           'clang',
           'asan',
           'goma',
@@ -1515,7 +1515,7 @@ BUILDERS = {
       },
       'v8_linux64_tsan_rel': {
         'chromium_apply_config': [
-          'make',
+          'v8_ninja',
           'clang',
           'tsan2',
           'goma',
