@@ -2,11 +2,11 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from slave.recipe_config import BadConf
+from recipe_engine.config import BadConf
 
 import DEPS
 CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
-from slave.recipe_config_types import Path
+from recipe_engine.config_types import Path
 
 
 @CONFIG_CTX(includes=['chromium'])

@@ -4,7 +4,7 @@
 
 import urllib
 
-from slave import recipe_api
+from recipe_engine import recipe_api
 
 class PerfDashboardApi(recipe_api.RecipeApi):
   """Provides steps to take a list of perf points and post them to the

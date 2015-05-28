@@ -5,7 +5,7 @@
 import contextlib
 import hashlib
 
-from slave import recipe_api
+from recipe_engine import recipe_api
 
 
 PATCH_STORAGE_RIETVELD = 'rietveld'

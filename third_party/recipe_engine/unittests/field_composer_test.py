@@ -5,12 +5,14 @@
 
 import os
 import shutil
+import sys
 import tempfile
 import unittest
 
-import test_env  # pylint: disable=W0403,W0611
-import sys
-from slave import field_composer
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(
+    os.path.abspath(__file__)))))
+
+from recipe_engine import field_composer
 
 
 # Functors are compared by reference.

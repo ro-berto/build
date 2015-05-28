@@ -4,9 +4,9 @@
 
 import types
 
-from slave.recipe_config import config_item_context, ConfigGroup
-from slave.recipe_config import ConfigList, Dict, List, Single, Static
-from slave.recipe_config_types import Path
+from recipe_engine.config import config_item_context, ConfigGroup
+from recipe_engine.config import ConfigList, Dict, List, Single, Static
+from recipe_engine.config_types import Path
 
 def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
                BUILD_CONFIG='Debug', REVISION='', **_kwargs):

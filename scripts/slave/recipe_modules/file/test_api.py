@@ -4,7 +4,7 @@
 
 import os
 
-from slave import recipe_test_api
+from recipe_engine import recipe_test_api
 
 
 # We want to be able to really read a file during a recipe test. Of course,

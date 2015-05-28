@@ -4,7 +4,7 @@
 
 import hashlib
 
-from slave import recipe_api
+from recipe_engine import recipe_api
 
 """
 The 'git_clone_bundler' creates and uploads 'clone.bundle' packages to

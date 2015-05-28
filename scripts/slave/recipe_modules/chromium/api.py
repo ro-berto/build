@@ -4,8 +4,8 @@
 
 import re
 
-from slave import recipe_api
-from slave import recipe_util
+from recipe_engine import recipe_api
+from recipe_engine import util as recipe_util
 
 from . import builders
 from . import steps

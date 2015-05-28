@@ -4,7 +4,7 @@
 
 import urlparse
 
-from slave import recipe_api
+from recipe_engine import recipe_api
 
 
 class RietveldApi(recipe_api.RecipeApi):

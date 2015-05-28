@@ -5,8 +5,7 @@
 
 """Recipe module to ensure a checkout is consistant on a bot."""
 
-from slave import recipe_api
-from slave import recipe_util
+from recipe_engine import recipe_api
 
 
 # This is just for testing, to indicate if a master is using a Git scheduler

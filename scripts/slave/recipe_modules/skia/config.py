@@ -2,9 +2,19 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from slave.recipe_config import config_item_context, ConfigGroup
-from slave.recipe_config import Dict, Set, Single, Static
-from slave.recipe_config_types import Path
+import os
+import sys
+
+from recipe_engine.config import config_item_context, ConfigGroup
+from recipe_engine.config import Dict, Set, Single, Static
+from recipe_engine.config_types import Path
+
+# TODO(luqui): Separate this out so we can make the recipes independent of
+# build/.
+sys.path.append(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__))))))
+
 from common.skia import builder_name_schema
 
 

@@ -4,7 +4,7 @@
 
 import copy
 
-from slave import recipe_api
+from recipe_engine import recipe_api
 
 
 class iOSApi(recipe_api.RecipeApi):

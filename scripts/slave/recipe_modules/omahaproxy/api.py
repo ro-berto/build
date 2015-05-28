@@ -5,7 +5,7 @@
 import cStringIO
 import csv
 
-from slave import recipe_api
+from recipe_engine import recipe_api
 
 
 class OmahaproxyApi(recipe_api.RecipeApi):

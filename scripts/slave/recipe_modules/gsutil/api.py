@@ -4,8 +4,7 @@
 
 import re
 
-from slave import recipe_api
-from slave import recipe_util
+from recipe_engine import recipe_api
 
 class GSUtilApi(recipe_api.RecipeApi):
   def __call__(self, cmd, name=None, use_retry_wrapper=True, version='3.25',

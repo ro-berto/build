@@ -1,6 +1,6 @@
 import json
 
-from slave import recipe_test_api
+from recipe_engine import recipe_test_api
 
 from .util import GTestResults, TestResults
 

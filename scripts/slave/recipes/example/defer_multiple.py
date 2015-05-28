@@ -7,7 +7,7 @@ DEPS = [
   'example',
 ]
 
-from slave import recipe_api
+from recipe_engine import recipe_api
 
 @recipe_api.composite_step
 def deferrer(api):

@@ -5,7 +5,7 @@
 import json
 import os
 
-from slave import recipe_api
+from recipe_engine import recipe_api
 from . import perf_test
 
 BUCKET = 'chrome-perf'

@@ -7,8 +7,8 @@ import copy
 import json
 
 from infra.libs.infra_types import freeze, thaw
-from slave import recipe_api
-from slave import recipe_util
+from recipe_engine import recipe_api
+from recipe_engine import util as recipe_util
 
 
 class ChromiumTestsApi(recipe_api.RecipeApi):

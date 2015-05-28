@@ -3,10 +3,18 @@
 # found in the LICENSE file.
 
 import hashlib
+import os
 import struct
+import sys
+
+sys.path.append(
+  os.path.dirname( # scripts
+    os.path.dirname( # slave
+      os.path.dirname( # recipe_modules
+        os.path.dirname(__file__))))) # bot_update
 
 from slave import bot_update
-from slave import recipe_test_api
+from recipe_engine import recipe_test_api
 
 
 class BotUpdateTestApi(recipe_test_api.RecipeTestApi):

@@ -16,7 +16,6 @@ import unittest
 import test_env  # pylint: disable=W0611
 
 from common import annotator
-from common import chromium_utils
 
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -111,7 +110,7 @@ class TestAnnotationStreams(unittest.TestCase):
 
   def testStepAnnotationsDocstring(self):
     self.assertEqual(
-      annotator.AdvancedAnnotationStep.step_link.__doc__,
+      annotator.StructuredAnnotationStep.step_link.__doc__,
       'Emits an annotation for STEP_LINK.'
     )
 
@@ -145,10 +144,11 @@ class TestAnnotationStreams(unittest.TestCase):
       s.write_log_lines('mylog', lines)
       self.assertRaises(ValueError, s.write_log_lines, 'mylog', lines)
 
-  def testAdvanced(self):
-    step = annotator.AdvancedAnnotationStep(stream=self.buf, flush_before=None)
-    stream = annotator.AdvancedAnnotationStream(stream=self.buf,
-                                                flush_before=None)
+  def testStructured(self):
+    stream = annotator.StructuredAnnotationStream(
+        stream=self.buf, flush_before=None)
+    step = annotator.StructuredAnnotationStep(
+        annotation_stream=stream, stream=self.buf, flush_before=None)
     stream.step_cursor('one')
     step.step_started()
     stream.step_cursor('two')
@@ -170,185 +170,6 @@ class TestAnnotationStreams(unittest.TestCase):
     ]
 
     self.assertEquals(result, self._getLines())
-
-
-def _synthesizeCmd(args):
-  basecmd = [sys.executable, '-c']
-  basecmd.extend(args)
-  return basecmd
-
-
-class TestExecution(unittest.TestCase):
-  def setUp(self):
-    self.capture = chromium_utils.FilterCapture()
-    self.tempfd, self.tempfn = tempfile.mkstemp()
-    self.temp = os.fdopen(self.tempfd, 'wb')
-    self.script = os.path.join(SCRIPT_DIR, os.pardir, 'annotator.py')
-
-  def tearDown(self):
-    self.temp.close()
-    if os.path.exists(self.tempfn):
-      os.remove(self.tempfn)
-
-  def _runAnnotator(self, cmdlist, env=None):
-    json.dump(cmdlist, self.temp)
-    self.temp.close()
-    cmd = [sys.executable, self.script, self.tempfn]
-    cmd_env = os.environ.copy()
-    cmd_env['PYTHONPATH'] = os.pathsep.join(sys.path)
-    if env:
-      cmd_env.update(env)
-    return chromium_utils.RunCommand(cmd, filter_obj=self.capture, env=cmd_env,
-                                     print_cmd=False)
-
-  def testSimpleExecution(self):
-    cmdlist = [{'name': 'one', 'cmd': _synthesizeCmd(['print \'hello!\''])},
-               {'name': 'two', 'cmd': _synthesizeCmd(['print \'yo!\''])}]
-
-    ret = self._runAnnotator(cmdlist)
-
-    self.assertEquals(ret, 0)
-
-    step_one_header = [
-        '@@@STEP_CURSOR one@@@',
-        '',
-        '@@@STEP_STARTED@@@',
-        '',
-        sys.executable + " -c print 'hello!'",
-        'in dir %s:' % os.getcwd(),
-        ' allow_subannotations: False',
-        ' cmd: [' + repr(sys.executable) + ', \'-c\', "print \'hello!\'"]',
-        ' name: one',
-        'full environment:',
-    ]
-    step_one_result = [
-        'hello!',
-        '',
-        '@@@STEP_CURSOR one@@@',
-        '',
-        '@@@STEP_CLOSED@@@',
-    ]
-    step_two_header = [
-        '@@@STEP_CURSOR two@@@',
-        '',
-        '@@@STEP_STARTED@@@',
-        '',
-        sys.executable + " -c print 'yo!'",
-        'in dir %s:' % os.getcwd(),
-        ' allow_subannotations: False',
-        ' cmd: [' + repr(sys.executable) + ', \'-c\', "print \'yo!\'"]',
-        ' name: two',
-        'full environment:',
-    ]
-    step_two_result = [
-        'yo!',
-        '',
-        '@@@STEP_CURSOR two@@@',
-        '',
-        '@@@STEP_CLOSED@@@',
-    ]
-
-    def has_sublist(whole, part):
-      n = len(part)
-      return any((part == whole[i:i+n]) for i in xrange(len(whole) - n+1))
-
-    self.assertTrue(has_sublist(self.capture.text, step_one_header))
-    self.assertTrue(has_sublist(self.capture.text, step_one_result))
-    self.assertTrue(has_sublist(self.capture.text, step_two_header))
-    self.assertTrue(has_sublist(self.capture.text, step_two_result))
-
-  def testFailBuild(self):
-    cmdlist = [{'name': 'one', 'cmd': _synthesizeCmd(['print \'hello!\''])},
-               {'name': 'two', 'cmd': _synthesizeCmd(['error'])}]
-
-    ret = self._runAnnotator(cmdlist)
-
-    self.assertTrue('@@@STEP_FAILURE@@@' in self.capture.text)
-    self.assertEquals(ret, 1)
-
-  def testStopBuild(self):
-    cmdlist = [{'name': 'one', 'cmd': _synthesizeCmd(['error'])},
-               {'name': 'two', 'cmd': _synthesizeCmd(['print \'yo!\''])}]
-
-    ret = self._runAnnotator(cmdlist)
-
-    self.assertTrue('@@@STEP_CURSOR two@@@' not in self.capture.text)
-    self.assertEquals(ret, 1)
-
-  def testException(self):
-    cmdlist = [{'name': 'one', 'cmd': ['doesn\'t exist']}]
-
-    ret = self._runAnnotator(cmdlist)
-
-    self.assertTrue('@@@STEP_EXCEPTION@@@' in self.capture.text)
-    self.assertEquals(ret, 1)
-
-  def testCwd(self):
-    tmpdir = os.path.realpath(tempfile.mkdtemp())
-    try:
-      cmdlist = [{'name': 'one',
-                  'cmd': _synthesizeCmd(['import os; print os.getcwd()']),
-                  'cwd': tmpdir
-                 },]
-      ret = self._runAnnotator(cmdlist)
-    finally:
-      os.rmdir(tmpdir)
-    self.assertTrue(tmpdir in self.capture.text)
-    self.assertEquals(ret, 0)
-
-  def testStepEnvKeep(self):
-    cmdlist = [{'name': 'one',
-                'cmd': _synthesizeCmd([
-                  'import os; print os.environ[\'SOME_ENV\']'
-                ]),
-                'env': {'SOME_OTHER_ENV': '123'}
-               },]
-    ret = self._runAnnotator(cmdlist, env={'SOME_ENV': 'blah-blah'})
-    self.assertTrue('blah-blah' in self.capture.text)
-    self.assertEquals(ret, 0)
-
-  def testStepEnvAdd(self):
-    cmdlist = [{'name': 'one',
-                'cmd': _synthesizeCmd([
-                  'import os; print os.environ[\'SOME_ENV\']'
-                ]),
-                'env': {'SOME_ENV': 'blah-blah'}
-               },]
-    ret = self._runAnnotator(cmdlist)
-    self.assertTrue('blah-blah' in self.capture.text)
-    self.assertEquals(ret, 0)
-
-  def testStepEnvReplace(self):
-    cmdlist = [{'name': 'one',
-                'cmd': _synthesizeCmd([
-                  'import os; print os.environ[\'SOME_ENV\']'
-                ]),
-                'env': {'SOME_ENV': 'two'}
-               },]
-    ret = self._runAnnotator(cmdlist, env={'SOME_ENV': 'one'})
-    self.assertTrue('two' in self.capture.text)
-    self.assertEquals(ret, 0)
-
-  def testStepEnvRemove(self):
-    cmdlist = [{'name': 'one',
-                'cmd': _synthesizeCmd([
-                  'import os\n'
-                  'print \'SOME_ENV is set:\', \'SOME_ENV\' in os.environ'
-                ]),
-                'env': {'SOME_ENV': None}
-               },]
-    ret = self._runAnnotator(cmdlist, env={'SOME_ENV': 'one'})
-    self.assertTrue('SOME_ENV is set: False' in self.capture.text)
-    self.assertEquals(ret, 0)
-
-  def testIgnoreAnnotations(self):
-    cmdlist = [{'name': 'one',
-                'cmd': _synthesizeCmd(['print \'@@@SEED_STEP@blah@@@\'']),
-                'ignore_annotations': True
-               },]
-    ret = self._runAnnotator(cmdlist)
-    self.assertFalse('@@@SEED_STEP@blah@@@' in self.capture.text)
-    self.assertEquals(ret, 0)
 
 
 class TestMatchAnnotation(unittest.TestCase):

@@ -4,7 +4,7 @@
 
 import re
 
-from slave import recipe_api
+from recipe_engine import recipe_api
 
 
 # TODO(machenbach): Chromium specific data should move out of the archive

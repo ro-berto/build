@@ -4,8 +4,8 @@
 
 import types
 
-from slave.recipe_config import config_item_context, ConfigGroup, BadConf
-from slave.recipe_config import ConfigList, Dict, Single, Static, Set, List
+from recipe_engine.config import config_item_context, ConfigGroup, BadConf
+from recipe_engine.config import ConfigList, Dict, Single, Static, Set, List
 
 from . import api as gclient_api
 

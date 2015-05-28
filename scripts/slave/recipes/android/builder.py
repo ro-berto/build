@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 from contextlib import contextmanager
-from slave import recipe_api
+from recipe_engine import recipe_api
 from infra.libs.infra_types import freeze
 
 DEPS = [

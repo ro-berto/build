@@ -4,7 +4,7 @@
 
 import DEPS
 CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
-from slave.recipe_config import BadConf
+from recipe_engine.config import BadConf
 
 
 # TODO(machenbach): This is copied from gclient's config.py and should be

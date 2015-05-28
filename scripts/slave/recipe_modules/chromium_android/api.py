@@ -7,7 +7,7 @@ import re
 import urllib
 
 from infra.libs.infra_types import freeze
-from slave import recipe_api
+from recipe_engine import recipe_api
 
 INSTRUMENTATION_TESTS = freeze([
   {

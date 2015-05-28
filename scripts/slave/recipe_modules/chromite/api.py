@@ -5,7 +5,7 @@
 import cgi
 import re
 
-from slave import recipe_api
+from recipe_engine import recipe_api
 
 
 class ChromiteApi(recipe_api.RecipeApi):

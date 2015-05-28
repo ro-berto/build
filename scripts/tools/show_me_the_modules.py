@@ -14,10 +14,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(os.path.dirname(__file__),
                 '..', '..', 'third_party'))
 
-from slave import annotated_run
-from slave import recipe_api
-from slave import recipe_loader
-from slave import recipe_util
+from recipe_engine import main as recipe_main
+from recipe_engine import recipe_api
+from recipe_engine import loader
+
+from slave import recipe_universe
 
 def trim_doc(docstring):
   """From PEP 257"""
@@ -85,14 +86,14 @@ def main():
   for method in sorted(common_methods):
     pmethod(1, method, getattr(recipe_api.RecipeApi, method))
 
-  universe = recipe_loader.RecipeUniverse()
+  universe = recipe_universe.get_universe()
   deps = universe.deps_from_paths(
       { modpath: modpath
-        for modpath in recipe_loader.loop_over_recipe_modules() },
+        for modpath in universe.loop_over_recipe_modules() },
       base_path=None)
 
-  inst = recipe_loader.create_recipe_api(
-      deps, annotated_run.SequentialRecipeEngine(None, {}, None))
+  inst = loader.create_recipe_api(
+      deps, recipe_main.SequentialRecipeEngine(None, {}, None))
 
   for mod_name, mod in deps.iteritems():
     p(0)

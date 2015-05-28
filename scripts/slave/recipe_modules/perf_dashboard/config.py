@@ -4,8 +4,8 @@
 
 import types
 
-from slave.recipe_config import config_item_context, ConfigGroup
-from slave.recipe_config import Single
+from recipe_engine.config import config_item_context, ConfigGroup
+from recipe_engine.config import Single
 
 def BaseConfig(**_kwargs):
   return ConfigGroup(

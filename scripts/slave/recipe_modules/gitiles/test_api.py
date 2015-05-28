@@ -5,7 +5,7 @@
 import base64
 import hashlib
 
-from slave import recipe_test_api
+from recipe_engine import recipe_test_api
 
 class GitilesTestApi(recipe_test_api.RecipeTestApi):
   def _make_gitiles_response_json(self, data):

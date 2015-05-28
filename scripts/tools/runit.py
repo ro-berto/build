@@ -23,10 +23,6 @@ import common.env
 
 USAGE = '%s [options] <command to run>' % os.path.basename(sys.argv[0])
 
-# These third_party libs interfere with other imports in PYTHONPATH and should
-# be put last. Please file bugs to clean up each entry here.
-troublemakers = []
-
 
 def main():
   option_parser = optparse.OptionParser(usage=USAGE)

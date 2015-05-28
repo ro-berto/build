@@ -5,7 +5,7 @@
 import DEPS
 CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
 
-from slave.recipe_config_types import Path
+from recipe_engine.config_types import Path
 
 
 SYZYGY_SLN = Path('[CHECKOUT]', 'syzygy', 'syzygy.sln')

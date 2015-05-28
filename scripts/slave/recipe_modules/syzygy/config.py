@@ -4,8 +4,8 @@
 
 import types
 
-from slave.recipe_config import config_item_context, ConfigGroup, Single
-from slave.recipe_config_types import Path
+from recipe_engine.config import config_item_context, ConfigGroup, Single
+from recipe_engine.config_types import Path
 from . import api as syzygy_api
 
 

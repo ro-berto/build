@@ -7,7 +7,7 @@
 See README.md.
 """
 
-from slave import recipe_api
+from recipe_engine import recipe_api
 
 
 class TriggerApi(recipe_api.RecipeApi):

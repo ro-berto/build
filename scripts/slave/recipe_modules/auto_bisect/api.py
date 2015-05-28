@@ -8,7 +8,7 @@ This API is meant to enable the bisect recipe to bisect any chromium-supported
 platform for any test that can be run via buildbot, perf or otherwise.
 """
 
-from slave import recipe_api
+from recipe_engine import recipe_api
 from . import bisector
 from . import perf_revision_state
 

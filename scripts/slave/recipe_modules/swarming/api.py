@@ -6,7 +6,7 @@ import datetime
 import functools
 
 from infra.libs.infra_types import freeze
-from slave import recipe_api
+from recipe_engine import recipe_api
 
 
 # Minimally supported version of swarming.py script (reported by --version).

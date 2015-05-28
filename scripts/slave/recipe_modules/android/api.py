@@ -4,7 +4,7 @@
 
 """Common steps for recipes that sync/build Android sources."""
 
-from slave import recipe_api
+from recipe_engine import recipe_api
 
 class AOSPApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):

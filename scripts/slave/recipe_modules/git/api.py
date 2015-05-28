@@ -4,7 +4,7 @@
 
 import re
 
-from slave import recipe_api
+from recipe_engine import recipe_api
 
 class GitApi(recipe_api.RecipeApi):
   _GIT_HASH_RE = re.compile('[0-9a-f]{40}', re.IGNORECASE)

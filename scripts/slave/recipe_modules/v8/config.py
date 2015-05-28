@@ -2,8 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from slave.recipe_config import config_item_context, ConfigGroup
-from slave.recipe_config import List, Set, Single, Static
+from recipe_engine.config import config_item_context, ConfigGroup
+from recipe_engine.config import List, Set, Single, Static
 
 
 def BaseConfig(**_kwargs):

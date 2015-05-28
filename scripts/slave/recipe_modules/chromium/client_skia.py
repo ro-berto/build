@@ -2,11 +2,20 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import copy
+import os
+import sys
+
 from . import chromium_linux
 from . import chromium_mac
 from . import chromium_win
+
+# TODO(luqui): Separate the skia common scripts out so we can make this
+# independent of build/.
+sys.path.append(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__))))))
 from common.skia import builder_name_schema
-import copy
 
 # The Skia config just clones some regular Chromium builders, except that they
 # use an up-to-date Skia.

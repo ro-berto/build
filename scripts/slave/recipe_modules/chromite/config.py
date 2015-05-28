@@ -5,8 +5,8 @@
 import types
 
 from common import cros_chromite
-from slave.recipe_config import config_item_context, ConfigGroup
-from slave.recipe_config import Dict, Single, Set
+from recipe_engine.config import config_item_context, ConfigGroup
+from recipe_engine.config import Dict, Single, Set
 
 import DEPS
 path_api = DEPS['path'].api

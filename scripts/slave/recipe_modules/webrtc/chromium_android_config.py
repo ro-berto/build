@@ -4,7 +4,7 @@
 
 import DEPS
 CONFIG_CTX = DEPS['chromium_android'].CONFIG_CTX
-from slave.recipe_config_types import Path
+from recipe_engine.config_types import Path
 
 
 @CONFIG_CTX(includes=['base_config'])

@@ -5,6 +5,17 @@
 
 # Recipe module for Skia builders.
 
+# We do this so recipe_lint doesn't find our use of os and sys.
+def setup_path():
+  import os
+  import sys
+
+  # TODO(luqui): Separate the skia common scripts out so we can make this
+  # independent of build/.
+  sys.path.append(
+      os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
+          os.path.abspath(__file__))))))
+setup_path()
 
 from common.skia import builder_name_schema
 

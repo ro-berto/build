@@ -2,9 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from slave.recipe_config import config_item_context, ConfigGroup, Single, List
-from slave.recipe_config import Static
-from slave.recipe_config_types import Path
+from recipe_engine.config import config_item_context, ConfigGroup, Single, List
+from recipe_engine.config import Static
+from recipe_engine.config_types import Path
 
 def BaseConfig(USE_MIRROR=False):
   chromium_in_android_subpath = ('external', 'chromium_org')

@@ -3,10 +3,11 @@
 # found in the LICENSE file.
 
 
-from slave import recipe_api
-from slave import recipe_config_types
-from common.skia import builder_name_schema
-from common.skia import global_constants
+import re
+import os
+import sys
+
+from recipe_engine import recipe_api
 from . import android_flavor
 from . import chromeos_flavor
 from . import default_flavor
@@ -14,7 +15,13 @@ from . import ios_flavor
 from . import valgrind_flavor
 from . import xsan_flavor
 
-import re
+# TODO(luqui): Make this recipe stop depending on common so we can make it
+# independent of build/.
+sys.path.append(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__))))))
+from common.skia import builder_name_schema
+from common.skia import global_constants
 
 
 # The gsutil recipe API uses a different gsutil version which does not work
