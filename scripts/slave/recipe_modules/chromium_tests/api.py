@@ -502,7 +502,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         additional_names=additional_names,
         config_file_name=config_file_name,
         use_mb=use_mb,
-        build_output_dir=build_output_dir)
+        build_output_dir=build_output_dir,
+        cros_board=self.m.chromium.c.TARGET_CROS_BOARD)
 
     if not self.m.filter.result:
       # Patch does not require compile.

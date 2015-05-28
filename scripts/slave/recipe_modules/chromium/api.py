@@ -235,7 +235,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'compile' through 'cros chrome-sdk'
-      kwargs['wrapper'] = self._get_cros_chrome_sdk_wrapper()
+      kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper()
 
     env = self.get_env()
     env.update(kwargs.pop('env', {}))
@@ -487,7 +487,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         env=env,
     )
 
-  def _get_cros_chrome_sdk_wrapper(self, clean=False):
+  def get_cros_chrome_sdk_wrapper(self, clean=False):
     """Returns: a wrapper command for 'cros chrome-sdk'
 
     Args:
@@ -523,7 +523,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     kwargs['env'] = env
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'runhooks' through 'cros chrome-sdk'
-      kwargs['wrapper'] = self._get_cros_chrome_sdk_wrapper(clean=True)
+      kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
     self.m.gclient.runhooks(**kwargs)
 
   def run_gn(self, use_goma=False):

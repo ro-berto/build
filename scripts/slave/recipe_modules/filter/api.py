@@ -82,6 +82,7 @@ class FilterApi(recipe_api.RecipeApi):
                                  config_file_name='trybot_analyze_config.json',
                                  use_mb=False,
                                  build_output_dir=None,
+                                 cros_board=None,
                                  **kwargs):
     """Return true if the current patch requires a build (and exes to run).
     Return value can be accessed by call to result().
@@ -137,6 +138,9 @@ class FilterApi(recipe_api.RecipeApi):
 
     kwargs.setdefault('env', {})
     kwargs['env'].update(self.m.chromium.c.gyp_env.as_jsonish())
+
+    if cros_board:
+      kwargs['wrapper'] = self.m.chromium.get_cros_chrome_sdk_wrapper()
 
     try:
       if use_mb:

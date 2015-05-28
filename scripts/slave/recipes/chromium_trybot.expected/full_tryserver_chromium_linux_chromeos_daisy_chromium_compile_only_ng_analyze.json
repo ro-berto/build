@@ -133,6 +133,14 @@
   },
   {
     "cmd": [
+      "cros",
+      "chrome-sdk",
+      "--board=daisy",
+      "--nocolor",
+      "--use-external-config",
+      "--gomadir",
+      "[BUILD]/goma",
+      "--",
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
