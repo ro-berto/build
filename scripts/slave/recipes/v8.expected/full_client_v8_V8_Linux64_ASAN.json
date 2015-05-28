@@ -232,5 +232,23 @@
       "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
       "@@@STEP_LOG_END@durations@@@"
     ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "V8 Linux64 ASAN - debug builder",
+        "properties": {
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@V8 Linux64 ASAN - debug builder@@@"
+    ]
   }
 ]

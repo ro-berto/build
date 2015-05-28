@@ -380,6 +380,18 @@ class V8Api(recipe_api.RecipeApi):
           archive,
           src_dir='v8')
 
+  def maybe_create_clusterfuzz_archive(self, update_step):
+    if self.bot_config.get('cf_archive_build', False):
+      self.m.archive.clusterfuzz_archive(
+          revision_dir='v8',
+          build_dir=self.m.chromium.c.build_dir.join(
+              self.m.chromium.c.build_config_fs),
+          update_properties=update_step.presentation.properties,
+          gs_bucket=self.bot_config.get('cf_gs_bucket'),
+          gs_acl=self.bot_config.get('cf_gs_acl'),
+          archive_prefix=self.bot_config.get('cf_archive_name'),
+      )
+
   def download_build(self, name_suffix='', archive=None):
     self.m.file.rmtree(
           'build directory' + name_suffix,

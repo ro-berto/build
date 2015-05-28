@@ -25,7 +25,7 @@ def GenSteps(api):
   if api.platform.is_win:
     api.chromium.taskkill()
 
-  v8.checkout(revert=api.tryserver.is_tryserver)
+  update_step = v8.checkout(revert=api.tryserver.is_tryserver)
 
   if v8.c.mips_cross_compile:
     v8.setup_mips_toolchain()
@@ -43,6 +43,8 @@ def GenSteps(api):
 
   if v8.should_upload_build:
     v8.upload_build()
+
+  v8.maybe_create_clusterfuzz_archive(update_step)
 
   if v8.should_download_build:
     v8.download_build()
