@@ -506,6 +506,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       wrapper += ['--use-external-config']
     if clean:
       wrapper += ['--clear-sdk-cache']
+    if self.c.compile_py.goma_dir:
+      wrapper += ['--gomadir', self.c.compile_py.goma_dir]
     wrapper += ['--']
     return wrapper
 
