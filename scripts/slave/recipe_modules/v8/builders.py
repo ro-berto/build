@@ -1133,7 +1133,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 ASAN': {
-        'chromium_apply_config': ['make', 'clang', 'asan', 'goma'],
+        'chromium_apply_config': ['v8_ninja', 'clang', 'asan', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1143,7 +1143,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 TSAN': {
-        'chromium_apply_config': ['make', 'clang', 'tsan2', 'goma'],
+        'chromium_apply_config': ['v8_ninja', 'clang', 'tsan2', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

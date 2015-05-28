@@ -58,7 +58,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 gomadir='[BUILD]/goma' lsan=1 target_arch=x64 use_goma=1 v8_target_arch=x64"
+      "GYP_DEFINES": "asan=1 clang=1 gomadir='[BUILD]/goma' lsan=1 target_arch=x64 use_goma=1 v8_target_arch=x64",
+      "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
   },
@@ -101,7 +102,7 @@
       "--src-dir",
       "[SLAVE_BUILD]/v8",
       "--build-tool",
-      "make",
+      "ninja",
       "--compiler",
       "goma-clang",
       "--goma-dir",
