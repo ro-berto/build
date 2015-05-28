@@ -227,6 +227,12 @@ class GitBranchPoller(PollingChangeSource):
         yield stop(err)
         return
 
+      out, err, ret = yield self._git(
+        'config', '--unset', 'remote.%s.fetch' % remote.name)
+      if ret:
+        yield stop(err)
+        return
+
       for (remote_ref, local_ref) in remote.ref_map.iteritems():
         out, err, ret = yield self._git(
           'config',
