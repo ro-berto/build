@@ -608,7 +608,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "Dummy .diff contents 001 - 002\ndiff --git DEPS.sha DEPS.sha\nnew file mode 100644\n--- /dev/null\n+++ DEPS.sha\n@@ -0,0 +1 @@\n+40d3da8b7d11006dcf015af3710534d7af12c2db\n",
-      "/tmp/a6298e4afedbf2cd461755ea6f45b0ad64222222-build.diff"
+      "[TMP_BASE]/a6298e4afedbf2cd461755ea6f45b0ad64222222-build.diff"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Saving diff patch for 314016,v8@002"
@@ -626,7 +626,7 @@
       "--svn_repo",
       "svn://svn.chromium.org/chrome-try/try-perf",
       "--diff",
-      "/tmp/a6298e4afedbf2cd461755ea6f45b0ad64222222-build.diff"
+      "[TMP_BASE]/a6298e4afedbf2cd461755ea6f45b0ad64222222-build.diff"
     ],
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "Requesting build for a6298e4afedbf2cd461755ea6f45b0ad64222222 via git try. (2)"
@@ -634,7 +634,7 @@
   {
     "cmd": [
       "rm",
-      "/tmp/a6298e4afedbf2cd461755ea6f45b0ad64222222-build.diff"
+      "[TMP_BASE]/a6298e4afedbf2cd461755ea6f45b0ad64222222-build.diff"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleaning up patch"

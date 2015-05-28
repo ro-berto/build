@@ -47,7 +47,7 @@ class PerfRevisionState(revision_state.RevisionState):
 
   def _write_deps_patch_file(self, build_name):
     api = self.bisector.api
-    file_name = os.path.join(tempfile.gettempdir(), build_name + '.diff')
+    file_name = str(api.m.path['tmp_base'].join(build_name + '.diff'))
     api.m.file.write('Saving diff patch for ' + str(self.revision_string),
                      file_name, self.deps_patch + self.deps_sha_patch)
     return file_name
