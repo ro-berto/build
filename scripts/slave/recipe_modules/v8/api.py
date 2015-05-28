@@ -709,26 +709,14 @@ class V8Api(recipe_api.RecipeApi):
       **kwargs
     )
 
-    json_output = step_result.json.output
-    if json_output:
-      # The output is expected to be a list of architecture dicts that
-      # each contain a results list. On buildbot, there is only one
-      # architecture.
-      if (isinstance(json_output, list) and len(json_output) == 1
-          and isinstance(json_output[0], dict)):
-        test_results = json_output[0]
-      else:
-        step_result.presentation.status = self.m.step.EXCEPTION
-        raise self.m.step.InfraFailure('Invalid test results json.')
-    else:
-      # FIXME(machenbach): The v8-side test runner doesn't return json in case
-      # there were no tests. This should be fixed on the v8-side and merged
-      # back to old branches. Until then we need this default.
-      test_results = {'results': [], 'slowest_tests': []}
-
-    self._update_durations(test_results, step_result.presentation)
+    # The output is expected to be a list of architecture dicts that
+    # each contain a results list. On buildbot, there is only one
+    # architecture.
+    assert len(step_result.json.output) == 1
+    self._update_durations(
+        step_result.json.output[0], step_result.presentation)
     failure_log, failure_count, flake_log, flake_count = (
-        self._get_failure_logs(test_results))
+        self._get_failure_logs(step_result.json.output[0]))
     self._update_failure_presentation(
         failure_log, failure_count, step_result.presentation)
 

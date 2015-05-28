@@ -141,7 +141,10 @@ def GenTests(api):
 
   yield TestFailures(wrong_results=False, flakes=False)
   yield TestFailures(wrong_results=False, flakes=True)
-  yield TestFailures(wrong_results=True, flakes=False)
+  yield (
+      TestFailures(wrong_results=True, flakes=False) +
+      api.expect_exception('AssertionError')
+  )
   yield (
     api.test('full_%s_%s_flaky_test_failures' % (
         _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
@@ -165,7 +168,8 @@ def GenTests(api):
                                'parent_buildername')) +
     api.platform(bot_config['testing']['platform'],
                  v8_config_kwargs.get('TARGET_BITS', 64)) +
-    api.override_step_data('Check - flaky', api.json.output([]))
+    api.override_step_data('Check - flaky', api.json.output([])) +
+    api.expect_exception('AssertionError')
   )
 
   yield (
