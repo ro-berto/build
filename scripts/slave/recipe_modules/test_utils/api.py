@@ -76,16 +76,21 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     failing_tests = []
     #TODO(martiniss) convert loop
+    # TODO(phajdan.jr): Deduplicate this and chromium_tests.create_test_runner.
     def run(prefix, tests):
       for t in tests:
         try:
           t.pre_run(caller_api, prefix)
         # TODO(iannucci): Write a test.
+        except caller_api.step.InfraFailure:  # pragma: no cover
+          raise
         except caller_api.step.StepFailure:  # pragma: no cover
           pass
       for t in tests:
         try:
           t.run(caller_api, prefix)
+        except caller_api.step.InfraFailure:  # pragma: no cover
+          raise
         # TODO(iannucci): How should exceptions be accumulated/handled here?
         except caller_api.step.StepFailure:
           pass
@@ -93,6 +98,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
         try:
           t.post_run(caller_api, prefix)
         # TODO(iannucci): Write a test.
+        except caller_api.step.InfraFailure:  # pragma: no cover
+          raise
         except caller_api.step.StepFailure:  # pragma: no cover
           pass
 
