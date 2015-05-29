@@ -84,25 +84,6 @@ class PopulateBuildmasterConfigTest(unittest.TestCase):
     finally:
       os.remove(fp.name)
 
-  def test_tryserver(self):
-    try:
-      contents = SAMPLE_BUILDERS_PY.replace('waterfall', 'tryserver')
-      fp = tempfile.NamedTemporaryFile(delete=False)
-      fp.write(contents)
-      fp.close()
-
-      c = {}
-      master_gen.PopulateBuildmasterConfig(c, fp.name, _FakeMaster)
-
-      self.assertEqual(len(c['builders']), 1)
-      self.assertEqual(c['builders'][0]['name'], 'Test Linux')
-
-      self.assertEqual(len(c['change_source']), 0)
-      self.assertEqual(len(c['schedulers']), 1)
-    finally:
-      os.remove(fp.name)
-
-
 
 if __name__ == '__main__':
   unittest.TestCase.maxDiff = None

@@ -65,9 +65,8 @@ def run_gen(args, fs):
       builders_path,
       fs.read_text_file(builders_path))
 
-  template_dir = fs.join(TEMPLATE_DIR, values['master_type'])
-  for filename in fs.listfiles(template_dir):
-    template = fs.read_text_file(fs.join(template_dir, filename))
+  for filename in fs.listfiles(TEMPLATE_DIR):
+    template = fs.read_text_file(fs.join(TEMPLATE_DIR, filename))
     contents = _expand(template, values,
                        '%s/%s' % (TEMPLATE_SUBPATH, filename),
                        master_subpath)

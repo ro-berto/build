@@ -14,3 +14,5 @@ class %(master_classname)s(Master.%(master_base_class)s):
   slave_port = %(slave_port)s
   master_port_alt = %(master_port_alt)s
   buildbot_url = '%(buildbot_url)s'
+  buildbucket_bucket = %(buildbucket_bucket_str)s
+  service_account_file = %(service_account_file_str)s

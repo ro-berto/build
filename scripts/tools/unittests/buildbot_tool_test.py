@@ -70,7 +70,7 @@ def _restore_constants(orig_values):
 class GenTest(unittest.TestCase):
   def _run_gen(self, builders_pyl, master_cfg=FAKE_MASTER_CFG_TEMPLATE):
     files = {
-      '/build/templates/waterfall/master.cfg': master_cfg,
+      '/build/templates/master.cfg': master_cfg,
       '/build/masters/master.test/builders.pyl': builders_pyl,
     }
     fs = fake_filesystem.FakeFilesystem(files=files.copy())
@@ -118,7 +118,7 @@ class GenTest(unittest.TestCase):
 
   def test_bad_template(self):
     files = {
-      '/build/templates/waterfall/master.cfg': '%(unknown_key)s',
+      '/build/templates/master.cfg': '%(unknown_key)s',
       '/build/masters/master.test/builders.pyl': FAKE_BUILDERS_PYL,
     }
     fs = fake_filesystem.FakeFilesystem(files=files.copy())

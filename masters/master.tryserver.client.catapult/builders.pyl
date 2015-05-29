@@ -21,7 +21,6 @@
   "master_classname": "CatapultTryserver",
   "master_port": 21400,
   "master_port_alt": 41400,
-  "master_type": "tryserver",
   "service_account_file": "service-account-chromium-tryserver.json",
   "buildbucket_bucket": "master.tryserver.client.catapult",
   "slave_pools": {

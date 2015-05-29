@@ -21,7 +21,6 @@
   "master_classname": "Catapult",
   "master_port": 20303,
   "master_port_alt": 40303,
-  "master_type": "waterfall",
   "slave_pools": {
     "linux_slave_pool": {
       "slave_data": {

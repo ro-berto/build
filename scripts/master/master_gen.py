@@ -41,12 +41,13 @@ def _Populate(BuildmasterConfig, builders, active_master_cls):
       c,
       require_dbconfig=active_master_cls.is_production_host)
 
-  if builders['master_type'] == 'waterfall':
+  # TODO(dpranke): crbug.com/492876. Rework this when we add support for
+  # multiple schedulers.
+  if 'git_repo_url' in builders:
     change_source = gitiles_poller.GitilesPoller(builders['git_repo_url'])
     c['change_source'] = [change_source]
     tag_comparator = change_source.comparator
   else:
-    assert builders['master_type'] == 'tryserver'
     c['change_source'] = []
     c['mergeRequests'] = False
     tag_comparator = None

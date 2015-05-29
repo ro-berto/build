@@ -21,7 +21,6 @@
   "master_classname": "GYP",
   "master_port": 20302,
   "master_port_alt": 40302,
-  "master_type": "waterfall",
   "slave_port": 30302,
   "slave_pools": {
     "linux": {

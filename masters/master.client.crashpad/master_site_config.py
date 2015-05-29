@@ -18,3 +18,5 @@ class ClientCrashpad(Master.Master3):
   slave_port = 30300
   master_port_alt = 40300
   buildbot_url = 'https://build.chromium.org/p/client.crashpad/'
+  buildbucket_bucket = None
+  service_account_file = None

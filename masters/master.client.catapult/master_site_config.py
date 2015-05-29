@@ -18,3 +18,5 @@ class Catapult(Master.Master3):
   slave_port = 30303
   master_port_alt = 40303
   buildbot_url = 'https://build.chromium.org/p/client.catapult/'
+  buildbucket_bucket = None
+  service_account_file = None

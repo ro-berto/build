@@ -1852,6 +1852,15 @@ def ParseBuildersFileContents(path, contents):
   builders.setdefault('buildbot_url',
                       'https://build.chromium.org/p/%s/' % buildbot_path)
 
+  builders.setdefault('buildbucket_bucket', None)
+  builders.setdefault('service_account_file', None)
+
+  # The _str fields are printable representations of Python values:
+  # if builders['foo'] == "hello", then builders['foo_str'] == "'hello'".
+  # This allows them to be read back in by Python scripts properly.
+  builders['buildbucket_bucket_str'] = repr(builders['buildbucket_bucket'])
+  builders['service_account_file_str'] = repr(builders['service_account_file'])
+
   return builders
 
 
