@@ -171,20 +171,20 @@ def GenSteps(api):
   clusterfuzz_has_issues = ClusterfuzzHasIssues(api)
   if clusterfuzz_has_issues:
     fail_on_exit.append('Clusterfuzz had issues.')
-  else:
-    new_date = api.time.time()
-    if not AgeLimitBailout(api, new_date, current_date):
-      if current_candidate != new_lkgr:
-        PushRef(api, repo, CANDIDATE_REF, new_lkgr)
-        WriteTimeStamp(api, 'update timestamp', api.time.time())
-      else:
-        LogStep(api, 'There is no new candidate.')
 
-      # Promote the successful candidate to the roll ref in order to get
-      # rolled. This is independent of a new lkgr. Every candidate that is
-      # more than 8h old is promoted.
-      if current_candidate != current_roll:
-        PushRef(api, repo, ROLL_REF, current_candidate)
+  new_date = api.time.time()
+  if not AgeLimitBailout(api, new_date, current_date):
+    if current_candidate != new_lkgr:
+      PushRef(api, repo, CANDIDATE_REF, new_lkgr)
+      WriteTimeStamp(api, 'update timestamp', api.time.time())
+    else:
+      LogStep(api, 'There is no new candidate.')
+
+    # Promote the successful candidate to the roll ref in order to get
+    # rolled. This is independent of a new lkgr. Every candidate that is
+    # more than 8h old is promoted.
+    if current_candidate != current_roll:
+      PushRef(api, repo, ROLL_REF, current_candidate)
 
   if fail_on_exit:
     raise api.step.StepFailure(' '.join(fail_on_exit))
