@@ -68,7 +68,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "target_arch=ia32 v8_enable_disassembler=1 v8_target_arch=ia32"
+      "GYP_DEFINES": "target_arch=ia32 v8_enable_disassembler=1 v8_target_arch=ia32",
+      "GYP_MSVS_VERSION": "2013"
     },
     "name": "gclient runhooks"
   },

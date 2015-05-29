@@ -1824,5 +1824,8 @@ dart_linux_release['chromium_apply_config'].extend(['v8_goma'])
 dart_mac_release = BUILDERS['client.dart.fyi']['builders']['v8-mac-release']
 dart_mac_release['chromium_apply_config'].extend(['v8_ninja', 'clang', 'goma'])
 
+dart_win_release = BUILDERS['client.dart.fyi']['builders']['v8-win-release']
+dart_win_release['chromium_apply_config'].extend(['msvs2013'])
+
 BUILDERS = freeze(BUILDERS)
 BRANCH_BUILDERS = freeze(BRANCH_BUILDERS)
