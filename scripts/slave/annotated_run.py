@@ -115,8 +115,9 @@ def main(argv):
   properties = get_recipe_properties(
       opts.factory_properties, opts.build_properties)
   stream = annotator.StructuredAnnotationStream()
-  recipe_main.run_steps(properties, stream,
-                        universe=recipe_universe.get_universe())
+  ret = recipe_main.run_steps(properties, stream,
+                              universe=recipe_universe.get_universe())
+  return ret.status_code
 
 
 def shell_main(argv):
