@@ -84,7 +84,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "clang=1 clang_use_chrome_plugins=0 component=shared_library target_arch=x64 test_isolation_mode=prepare werror=''",
+      "GYP_DEFINES": "clang=1 clang_use_chrome_plugins=0 component=shared_library fastbuild=1 target_arch=x64 test_isolation_mode=prepare werror=''",
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "gclient runhooks"

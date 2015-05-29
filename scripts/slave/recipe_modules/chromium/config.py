@@ -551,8 +551,9 @@ def clang_tot_linux(c):
 
 @config_ctx(includes=['ninja', 'clang'])  # No goma.
 def clang_tot_mac(c):
-  # Use ToT Clang.
+  # Use ToT Clang and fastbuild.
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+  c.gyp_env.GYP_DEFINES['fastbuild'] = 1
 
 @config_ctx()
 def asan_test_batch(c):
