@@ -397,7 +397,7 @@ F('telemetry_harness_upload',
 
 # The build process for UBSan vptr is described at
 # http://dev.chromium.org/developers/testing/undefinedbehaviorsanitizer
-ubsan_gyp = ('ubsan=1 sanitizer_coverage=3 ')
+ubsan_gyp = ('ubsan=1 ')
 
 B('UBSan Release', 'linux_ubsan_rel', 'compile', 'chromium_lkgr')
 F('linux_ubsan_rel', linux().ChromiumFactory(
