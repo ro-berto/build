@@ -93,7 +93,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library fastbuild=0 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "clang=1 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -231,7 +231,6 @@
       "--builder-name=CrWinClangGoma",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "--enable-asan",
       "base_unittests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -257,7 +256,6 @@
       "--builder-name=CrWinClangGoma",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "--enable-asan",
       "content_unittests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",

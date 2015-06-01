@@ -533,16 +533,19 @@ def chromium_win_clang_official(c):
 def chromium_win_clang_asan(c):
   # Clear lsan configuration for win.
   del c.gyp_env.GYP_DEFINES['lsan']
+  # These are set on the lkgr bot, and the fyi bots should match the lkgr bot.
+  # TODO(thakis): Once the lkgr bot uses recipes, the lkgr and the fyi bots
+  # should use the same context to ensure they use the same gyp defines.
+  c.gyp_env.GYP_DEFINES['enable_ipc_fuzzer'] = 1
+  c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
 
 @config_ctx(includes=['chromium_win_clang_asan'])
 def chromium_win_clang_asan_tot(c):
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
 
-@config_ctx(includes=['chromium_win_clang_asan', 'goma'])
+@config_ctx(includes=['chromium_win_clang', 'goma'])
 def chromium_win_clang_goma(c):
-  # For goma, clang must be pinned. goma server side might not have
-  # the latest clang.
-  del c.env.LLVM_FORCE_HEAD_REVISION
+  pass
 
 @config_ctx(includes=['ninja', 'clang'])  # No goma.
 def clang_tot_linux(c):

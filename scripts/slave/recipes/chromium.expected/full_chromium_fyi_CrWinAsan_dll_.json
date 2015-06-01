@@ -93,7 +93,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 component=shared_library fastbuild=0 target_arch=ia32 test_isolation_mode=prepare",
+      "GYP_DEFINES": "asan=1 clang=1 component=shared_library enable_ipc_fuzzer=1 fastbuild=0 target_arch=ia32 test_isolation_mode=prepare v8_enable_verify_heap=1",
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "gclient runhooks"
