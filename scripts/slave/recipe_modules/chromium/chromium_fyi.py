@@ -658,8 +658,7 @@ SPEC = {
       },
       'use_isolate': True,
       'enable_swarming': True,
-      # TODO(thakis): Consider using chromium_builder_asan instead?
-      'compile_targets': [ 'chromium_builder_tests' ],
+      'compile_targets': [ 'chromium_builder_asan' ],
       # add_tests_as_compile_targets not needed for the asan bot, it doesn't
       # build everything.
     },
@@ -694,8 +693,7 @@ SPEC = {
       },
       'use_isolate': True,
       'enable_swarming': True,
-      # TODO(thakis): Consider using chromium_builder_asan instead?
-      'compile_targets': [ 'chromium_builder_tests' ],
+      'compile_targets': [ 'chromium_builder_asan' ],
       # add_tests_as_compile_targets not needed for the asan bot, it doesn't
       # build everything.
     },
