@@ -372,7 +372,7 @@ class SkiaApi(recipe_api.RecipeApi):
         import time
         import urllib2
 
-        HASHES_URL = 'https://gold.skia.org/2/_/hashes'
+        HASHES_URL = 'https://gold.skia.org/_/hashes'
         RETRIES = 5
         TIMEOUT = 60
         WAIT_BASE = 15
