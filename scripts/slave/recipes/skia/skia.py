@@ -54,11 +54,11 @@ def GenTests(api):
         'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
         'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache',
       ],
-      'skiabot-shuttle-win7-intel-000': [
-        'Test-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Release-ANGLE',
+      'skiabot-shuttle-win8-i7-4790k-000': [
+        'Test-Win8-MSVC-ShuttleB-GPU-HD4600-x86-Release-ANGLE',
       ],
-      'skiabot-shuttle-win7-intel-bench': [
-        'Perf-Win7-MSVC-ShuttleA-GPU-HD2000-x86_64-Release-Trybot',
+      'skiabot-shuttle-win8-i7-4790k-001': [
+        'Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot',
       ],
       'skiabot-shuttle-win8-hd7770-000': [
         'Test-Win8-MSVC-ShuttleA-CPU-AVX-x86_64-Debug',
