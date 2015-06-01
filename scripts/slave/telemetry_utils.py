@@ -31,6 +31,8 @@ class TelemetryResultsProcessor(object):
     except (IOError, ValueError):
       logging.error('Error reading telemetry results from %s',
                     self._chart_filename)
+      logging.error('This usually means that telemetry did not run, so it could'
+          ' not generate the file. Please check the device running the test.')
     return None
 
   def Cleanup(self):
