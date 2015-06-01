@@ -32,10 +32,7 @@ WHITELIST = freeze({
 
   # http://crbug.com/330263
   'linux': {
-    'browser_tests.isolated',
-    'irt_exception_test_pnacl_newlib_x64.nexe',
-    'irt_manifest_file_pnacl_newlib_x64.nexe',
-    'ppapi_tests_extensions_packaged_app_pnacl_newlib_x64.nexe',
+    # Completed.
   },
 
   # http://crbug.com/330262
