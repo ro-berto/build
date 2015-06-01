@@ -34,6 +34,12 @@ CQ_SERVICE_ACCOUNT = (
   '5071639625-1lppvbtck1morgivc6sq4dul7klu27sd@developer.gserviceaccount.com')
 
 
+# Sanity timeout for CQ builders - they are expected to finish under one hour
+# anyway. The timeout is deliberately larger than that so that we only
+# kill really crazy long builds that also gum up resources.
+CQ_MAX_TIME = 3*60*60
+
+
 def HackMaxTime(maxTime=8*60*60):
   """Set maxTime default value to 8 hours. This function must be called before
   adding steps."""
