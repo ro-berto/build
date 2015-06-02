@@ -117,10 +117,9 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device",
       "-s",
-      "015d210a13480604",
-      "wait-for-device"
+      "015d210a13480604"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "wait for device (1)"
@@ -158,10 +157,9 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device",
       "-s",
-      "015d210a13480604",
-      "wait-for-device"
+      "015d210a13480604"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "wait for device (2)"
@@ -615,10 +613,9 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device",
       "-s",
-      "015d210a13480604",
-      "wait-for-device"
+      "015d210a13480604"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "wait for device (3)"

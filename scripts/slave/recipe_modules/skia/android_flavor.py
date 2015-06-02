@@ -47,19 +47,24 @@ class _ADBWrapper(object):
   out on our bots. This wrapper ensures that we set a custom ADB path before
   attempting to use the module.
   """
-  def __init__(self, adb_api, path_to_adb, serial):
+  def __init__(self, adb_api, path_to_adb, serial, android_flavor):
     self._adb = adb_api
     self._adb.set_adb_path(path_to_adb)
     self._serial = serial
     self._wait_count = 0
+    self._android_flavor = android_flavor
 
   def wait_for_device(self):
     """Run 'adb wait-for-device'."""
     self._wait_count += 1
-    self._adb(name='wait for device (%d)' % self._wait_count,
-              serial=self._serial,
-              cmd=['wait-for-device'],
-              infra_step=True)
+    cmd = [
+        self._android_flavor.android_bin.join('adb_wait_for_device'),
+        '-s', self._serial,
+    ]
+    self._android_flavor._skia_api.m.step(
+        name='wait for device (%d)' % self._wait_count,
+        cmd=cmd,
+        infra_step=True)
 
   def maybe_wait_for_device(self):
     """Run 'adb wait-for-device' if it hasn't already been run."""
@@ -86,7 +91,8 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         self._skia_api.m.adb,
         self._skia_api.m.path.join(self._android_sdk_root,
                                    'platform-tools', 'adb'),
-        self.serial)
+        self.serial,
+        self)
     self._has_root = slave_info.has_root
     self._default_env = {'ANDROID_SDK_ROOT': self._android_sdk_root,
                          'SKIA_ANDROID_VERBOSE_SETUP': 1}
