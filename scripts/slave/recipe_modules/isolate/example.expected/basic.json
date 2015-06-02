@@ -104,8 +104,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/swarming.client",
+      "[SLAVE_BUILD]/swarming.client/isolate.py",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",

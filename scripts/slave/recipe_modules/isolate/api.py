@@ -149,14 +149,19 @@ class IsolateApi(recipe_api.RecipeApi):
     try:
       # TODO(vadimsh): Differentiate between bad *.isolate and upload errors.
       # Raise InfraFailure on upload errors.
+      # TODO(maruel): Remove this condition tomorrow.
+      use_new = ' Swarm ' in self.m.properties.get('buildername', '')
+      old = self.m.swarming_client.path.join('isolate.py')
+      new = self.resource('isolate.py')
       args = [
-        self.m.swarming_client.path,
         'batcharchive',
         '--dump-json', self.m.json.output(),
         '--isolate-server', self._isolate_server,
       ] + (['--verbose'] if verbose else []) + input_files
+      if use_new:
+        args.insert(0, self.m.swarming_client.path)
       return self.m.python(
-          'isolate tests', self.resource('isolate.py'), args,
+          'isolate tests', new if use_new else old, args,
           step_test_data=lambda: (self.test_api.output_json(targets)),
           **kwargs)
     finally:
