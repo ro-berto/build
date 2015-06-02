@@ -27,10 +27,10 @@ def try_go(path, args):
     return None
 
   # Try to use Go implementation.
-  try
+  try:
     version = subprocess.check_output([exe, 'version']).strip()
     version = tuple(map(int, version.split('.')))
-  except OSError, subprocess.CalledProcessError, ValueError:
+  except (subprocess.CalledProcessError, OSError, ValueError):
     return None
 
   # Key behavior based on version if necessary.
