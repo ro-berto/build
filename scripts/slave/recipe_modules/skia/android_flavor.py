@@ -64,6 +64,7 @@ class _ADBWrapper(object):
     self._android_flavor._skia_api.m.step(
         name='wait for device (%d)' % self._wait_count,
         cmd=cmd,
+        env=self._android_flavor._default_env,
         infra_step=True)
 
   def maybe_wait_for_device(self):

@@ -105,6 +105,10 @@
       "015d210a13480604"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
+    },
     "name": "wait for device (1)"
   },
   {
@@ -145,6 +149,10 @@
       "015d210a13480604"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
+    },
     "name": "wait for device (2)"
   },
   {
@@ -446,6 +454,10 @@
       "015d210a13480604"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1"
+    },
     "name": "wait for device (3)"
   }
 ]
