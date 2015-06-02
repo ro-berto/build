@@ -121,7 +121,8 @@
       "--cros-board",
       "amd64-generic",
       "--",
-      "chrome"
+      "chrome",
+      "chrome_initial"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"

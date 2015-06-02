@@ -262,6 +262,7 @@ for board in ('x86-generic', 'amd64-generic', 'daisy'):
     'disable_tests': True,
     'compile_targets': [
       'chrome',
+      'chrome_initial',
     ],
     'testing': {
       'platform': 'linux',

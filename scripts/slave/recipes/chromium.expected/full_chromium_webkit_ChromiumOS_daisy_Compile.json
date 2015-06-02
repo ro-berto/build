@@ -121,7 +121,8 @@
       "--cros-board",
       "daisy",
       "--",
-      "chrome"
+      "chrome",
+      "chrome_initial"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
