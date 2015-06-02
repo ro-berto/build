@@ -47,6 +47,12 @@ SLAVE_INFO = {
       SlaveInfo('03f61449437cc47b', DEFAULT_SDK_ROOT, True),
   'skiabot-shuttle-ubuntu12-nexus5-002':
       SlaveInfo('018dff3520c970f6', DEFAULT_SDK_ROOT, True),
+  'skiabot-shuttle-ubuntu15-nexus6-001':
+      SlaveInfo('ZX1G22JJWS', DEFAULT_SDK_ROOT, True),
+  'skiabot-shuttle-ubuntu15-nexus6-002':
+      SlaveInfo('ZX1G22JN35', DEFAULT_SDK_ROOT, True),
+  'skiabot-shuttle-ubuntu15-nexus6-003':
+      SlaveInfo('ZX1G22JXXM', DEFAULT_SDK_ROOT, True),
   'skiabot-shuttle-ubuntu12-nexus7-001':
       SlaveInfo('015d210a13480604', DEFAULT_SDK_ROOT, True),
   'skiabot-shuttle-ubuntu12-nexus7-002':
