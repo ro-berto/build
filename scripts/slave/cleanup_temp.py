@@ -102,6 +102,22 @@ def remove_build_dead(slave_path):
       cleanup_directory(path)
 
 
+def remove_temp():
+  """Removes all the temp files on Windows."""
+  if socket.getfqdn().split('.')[0] != 'vm836-m1':
+    return
+  with function_logger('removing TEMP'):
+    root = os.environ['TEMP']
+    for path in os.listdir(root):
+      if path.startswith('goma'):
+        # Work around http://crbug.com/449511
+        continue
+      try:
+        chromium_utils.RemovePath(os.path.join(root, path))
+      except OSError:
+        pass
+
+
 def get_free_space(path):
   """Returns the number of free bytes."""
   if sys.platform == 'win32':
@@ -134,8 +150,7 @@ def main_win():
   remove_build_dead(slave_path)
   remove_old_isolate_directories(slave_path)
   remove_old_isolate_execution_directories(slave_path)
-  # TODO(maruel): Temporary, add back.
-  #cleanup_directory(os.environ['TEMP'])
+  remove_temp()
   check_free_space_path('c:\\')
   if os.path.isdir('e:\\'):
     check_free_space_path('e:\\')
