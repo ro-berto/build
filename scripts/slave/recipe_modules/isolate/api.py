@@ -161,6 +161,9 @@ class IsolateApi(recipe_api.RecipeApi):
         'Linux ASan LSan Builder',
         'Linux Chromium OS ASan LSan Builder',
         'Mac ASan 64 Builder',
+        # tryserver.chromium.linux
+        'linux_chromium_asan_rel_ng',
+        'linux_chromium_chromeos_asan_rel_ng',
       }
       use_new = buildername not in blacklist
       old = self.m.swarming_client.path.join('isolate.py')
