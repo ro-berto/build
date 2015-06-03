@@ -34,7 +34,7 @@ def try_go(path, args):
     return None
 
   # Key behavior based on version if necessary.
-  if version < (0, 1):
+  if version < (0, 2):
     return None
 
   return subprocess.call([exe] + args)
