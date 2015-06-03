@@ -104,8 +104,6 @@ def remove_build_dead(slave_path):
 
 def remove_temp():
   """Removes all the temp files on Windows."""
-  if socket.getfqdn().split('.')[0] != 'vm836-m1':
-    return
   with function_logger('removing TEMP'):
     root = os.environ['TEMP']
     for path in os.listdir(root):
