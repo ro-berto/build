@@ -1,47 +1,64 @@
 {
-  "builders": {
-    "crashpad_mac_dbg": {
-      "auto_reboot": False,
-      "properties": {
-        "config": "Debug",
-      },
-      "recipe": "crashpad/continuous",
-      "slave_pools": ["mac10.9"],
-      "slavebuilddir": "chromium_mac_dbg",
-    },
-    "crashpad_mac_rel": {
-      "auto_reboot": False,
-      "properties": {
-        "config": "Release",
-      },
-      "recipe": "crashpad/continuous",
-      "slave_pools": ["mac10.9"],
-      "slavebuilddir": "chromium_mac_rel",
-    },
-    "crashpad_win_dbg": {
-      "auto_reboot": False,
-      "properties": {
-        "config": "Debug",
-      },
-      "recipe": "crashpad/continuous",
-      "slave_pools": ["win7"],
-      "slavebuilddir": "chromium_win_dbg",
-    },
-    "crashpad_win_rel": {
-      "auto_reboot": False,
-      "properties": {
-        "config": "Release",
-      },
-      "recipe": "crashpad/continuous",
-      "slave_pools": ["win7"],
-      "slavebuilddir": "chromium_win_rel",
-    },
-  },
-  "git_repo_url": "https://chromium.googlesource.com/crashpad/crashpad",
   "master_base_class": "Master3",
   "master_port": 20300,
   "master_port_alt": 40300,
   "slave_port": 30300,
+  "templates": ["templates", "../master.chromium/templates"],
+
+  "builders": {
+    "crashpad_mac_dbg": {
+      "recipe": "crashpad/continuous",
+      "scheduler": "crashpad_commits",
+      "slave_pools": ["mac10.9"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Debug",
+      },
+      "slavebuilddir": "chromium_mac_dbg",
+    },
+    "crashpad_mac_rel": {
+      "recipe": "crashpad/continuous",
+      "scheduler": "crashpad_commits",
+      "slave_pools": ["mac10.9"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Release",
+      },
+      "slavebuilddir": "chromium_mac_rel",
+    },
+    "crashpad_win_dbg": {
+      "recipe": "crashpad/continuous",
+      "scheduler": "crashpad_commits",
+      "slave_pools": ["win7"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Debug",
+      },
+      "slavebuilddir": "chromium_win_dbg",
+    },
+    "crashpad_win_rel": {
+      "recipe": "crashpad/continuous",
+      "scheduler": "crashpad_commits",
+      "slave_pools": ["win7"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Release",
+      },
+      "slavebuilddir": "chromium_win_rel",
+    },
+  },
+
+  "schedulers": {
+    "crashpad_commits": {
+      "type": "git_poller",
+      "git_repo_url": "https://chromium.googlesource.com/crashpad/crashpad",
+    },
+  },
+
   "slave_pools": {
     "mac10.9": {
       "slave_data": {
@@ -60,5 +77,4 @@
       "slaves": ["vm254-m3"],
     },
   },
-  "templates": ["templates", "../master.chromium/templates"],
 }

@@ -1,26 +1,42 @@
 {
-  "builders": {
-    "Catapult Linux": {
-      "recipe": "catapult",
-      "slave_pools": ["linux_slave_pool"],
-      "slavebuilddir": "catapult",
-    },
-    "Catapult Mac": {
-      "recipe": "catapult",
-      "slave_pools": ["mac_slave_pool"],
-      "slavebuilddir": "catapult",
-    },
-    "Catapult Windows": {
-      "recipe": "catapult",
-      "slave_pools": ["win_slave_pool"],
-      "slavebuilddir": "catapult",
-    },
-  },
-  "git_repo_url": "https://chromium.googlesource.com/external/github.com/catapult-project/catapult.git",
   "master_base_class": "Master3",
   "master_classname": "Catapult",
   "master_port": 20303,
   "master_port_alt": 40303,
+  "slave_port": 30303,
+  "templates": ["../master.chromium/templates"],
+
+  "builders": {
+    "Catapult Linux": {
+      "recipe": "catapult",
+      "scheduler": "catapult_commits",
+      "slave_pools": ["linux_slave_pool"],
+
+      "slavebuilddir": "catapult",
+    },
+    "Catapult Mac": {
+      "recipe": "catapult",
+      "scheduler": "catapult_commits",
+      "slave_pools": ["mac_slave_pool"],
+
+      "slavebuilddir": "catapult",
+    },
+    "Catapult Windows": {
+      "recipe": "catapult",
+      "scheduler": "catapult_commits",
+      "slave_pools": ["win_slave_pool"],
+
+      "slavebuilddir": "catapult",
+    },
+  },
+
+  "schedulers": {
+    "catapult_commits": {
+      "type": "git_poller",
+      "git_repo_url": "https://chromium.googlesource.com/external/github.com/catapult-project/catapult.git",
+    },
+  },
+
   "slave_pools": {
     "linux_slave_pool": {
       "slave_data": {
@@ -47,6 +63,4 @@
       "slaves": ["vm114-m3"],
     },
   },
-  "slave_port": 30303,
-  "templates": ["../master.chromium/templates"],
 }

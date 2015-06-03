@@ -1,27 +1,43 @@
 {
+  "master_base_class": "Master3",
+  "master_port": 20302,
+  "master_port_alt": 40302,
+  "slave_port": 30302,
+  "templates": ["templates", "../master.chromium/templates"],
+
+  "master_classname": "GYP",
+
   "builders": {
     "gyp_linux": {
       "recipe": "gyp",
+      "scheduler": "gyp_commits",
       "slave_pools": ["linux"],
+
       "slavebuilddir": "gyp",
     },
     "gyp_mac": {
       "recipe": "gyp",
+      "scheduler": "gyp_commits",
       "slave_pools": ["mac10.9"],
+
       "slavebuilddir": "gyp",
     },
     "gyp_win": {
       "recipe": "gyp",
+      "scheduler": "gyp_commits",
       "slave_pools": ["win7"],
+
       "slavebuilddir": "gyp",
     },
   },
-  "git_repo_url": "https://chromium.googlesource.com/external/gyp",
-  "master_base_class": "Master3",
-  "master_classname": "GYP",
-  "master_port": 20302,
-  "master_port_alt": 40302,
-  "slave_port": 30302,
+
+  "schedulers": {
+    "gyp_commits": {
+      "type": "git_poller",
+      "git_repo_url": "https://chromium.googlesource.com/external/gyp",
+    },
+  },
+
   "slave_pools": {
     "linux": {
       "slave_data": {
@@ -48,5 +64,4 @@
       "slaves": ["vm49-m3"],
     },
   },
-  "templates": ["templates", "../master.chromium/templates"],
 }

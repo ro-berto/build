@@ -16,24 +16,47 @@ import test_env
 from master import master_gen
 
 
-SAMPLE_BUILDERS_PY = """\
+SAMPLE_WATERFALL_PYL = """\
 {
+  "master_base_class": "_FakeMasterBase",
+  "master_port": 20999,
+  "master_port_alt": 40999,
+  "slave_port": 30999,
+  "templates": ["templates"],
+
   "builders": {
     "Test Linux": {
       "properties": {
         "config": "Release"
       },
       "recipe": "test_recipe",
+      "scheduler": "test_repo",
+      "slave_pools": ["main"],
+      "slavebuilddir": "test"
+    },
+    "Test Linux Nightly": {
+      "properties": {
+        "config": "Release"
+      },
+      "recipe": "test_nightly_recipe",
+      "scheduler": "nightly",
       "slave_pools": ["main"],
       "slavebuilddir": "test"
     }
   },
-  "git_repo_url": "https://chromium.googlesource.com/test/test.git",
-  "master_base_class": "_FakeMasterBase",
-  "master_port": 20999,
-  "master_port_alt": 40999,
-  "master_type": "waterfall",
-  "slave_port": 30999,
+
+  "schedulers": {
+    "nightly": {
+      "type": "cron",
+      "hour": 4,
+      "minute": 15,
+    },
+    "test_repo": {
+      "type": "git_poller",
+      "git_repo_url": "https://chromium.googlesource.com/test/test.git",
+    },
+  },
+
   "slave_pools": {
     "main": {
       "slave_data": {
@@ -44,10 +67,46 @@ SAMPLE_BUILDERS_PY = """\
       "slaves": ["vm9999-m1"],
     },
   },
-  "templates": ["templates"],
 }
 """
 
+
+SAMPLE_TRYSERVER_PYL = """\
+{
+  "master_base_class": "_FakeMasterBase",
+  "master_port": 20999,
+  "master_port_alt": 40999,
+  "slave_port": 30999,
+  "buildbucket_bucket": "fake_bucket",
+  "service_account_file": "fake_service_account",
+  "templates": ["templates"],
+
+  "builders": {
+    "Test Linux": {
+      "properties": {
+        "config": "Release"
+      },
+      "recipe": "test_recipe",
+      "scheduler": None,
+      "slave_pools": ["main"],
+      "slavebuilddir": "test"
+    }
+  },
+
+  "schedulers": {},
+
+  "slave_pools": {
+    "main": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "linux",
+        "version": "precise"
+      },
+      "slaves": ["vm9999-m1"],
+    },
+  },
+}
+"""
 
 # This class fakes the base class from master_site_config.py.
 class _FakeMasterBase(object):
@@ -70,7 +129,24 @@ class PopulateBuildmasterConfigTest(unittest.TestCase):
   def test_waterfall(self):
     try:
       fp = tempfile.NamedTemporaryFile(delete=False)
-      fp.write(SAMPLE_BUILDERS_PY)
+      fp.write(SAMPLE_WATERFALL_PYL)
+      fp.close()
+
+      c = {}
+      master_gen.PopulateBuildmasterConfig(c, fp.name, _FakeMaster)
+
+      self.assertEqual(len(c['builders']), 2)
+      self.assertEqual(c['builders'][0]['name'], 'Test Linux')
+
+      self.assertEqual(len(c['change_source']), 1)
+      self.assertEqual(len(c['schedulers']), 2)
+    finally:
+      os.remove(fp.name)
+
+  def test_tryservers(self):
+    try:
+      fp = tempfile.NamedTemporaryFile(delete=False)
+      fp.write(SAMPLE_TRYSERVER_PYL)
       fp.close()
 
       c = {}
@@ -79,8 +155,8 @@ class PopulateBuildmasterConfigTest(unittest.TestCase):
       self.assertEqual(len(c['builders']), 1)
       self.assertEqual(c['builders'][0]['name'], 'Test Linux')
 
-      self.assertEqual(len(c['change_source']), 1)
-      self.assertEqual(len(c['schedulers']), 1)
+      self.assertEqual(len(c['change_source']), 0)
+      self.assertEqual(len(c['schedulers']), 0)
     finally:
       os.remove(fp.name)
 

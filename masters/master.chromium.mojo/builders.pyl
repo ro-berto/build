@@ -1,27 +1,40 @@
 {
-  "builders": {
-    "Chromium Mojo Linux": {
-      "properties": {
-        "config": "Release",
-      },
-      "recipe": "chromium_mojo",
-      "slave_pools": ["linux_precise"],
-      "slavebuilddir": "chromium_mojo",
-    },
-    "Chromium Mojo Android": {
-      "properties": {
-        "config": "Release",
-      },
-      "recipe": "chromium_mojo",
-      "slave_pools": ["linux_precise_android"],
-      "slavebuilddir": "chromium_mojo",
-    },
-  },
-  "git_repo_url": "https://chromium.googlesource.com/chromium/src.git",
   "master_base_class": "Master1",
   "master_port": 20100,
   "master_port_alt": 40100,
   "slave_port": 30100,
+  "templates": ["../master.chromium/templates"],
+
+  "builders": {
+    "Chromium Mojo Linux": {
+      "recipe": "chromium_mojo",
+      "scheduler": "chromium_commits",
+      "slave_pools": ["linux_precise"],
+
+      "properties": {
+        "config": "Release",
+      },
+      "slavebuilddir": "chromium_mojo",
+    },
+    "Chromium Mojo Android": {
+      "recipe": "chromium_mojo",
+      "scheduler": "chromium_commits",
+      "slave_pools": ["linux_precise_android"],
+
+      "properties": {
+        "config": "Release",
+      },
+      "slavebuilddir": "chromium_mojo",
+    },
+  },
+
+  "schedulers": {
+    "chromium_commits": {
+      "type": "git_poller",
+      "git_repo_url": "https://chromium.googlesource.com/chromium/src.git",
+    },
+  },
+
   "slave_pools": {
     "linux_precise": {
       "slave_data": {
@@ -40,5 +53,4 @@
       "slaves": ["build136-a1"],
     },
   },
-  "templates": ["../master.chromium/templates"],
 }

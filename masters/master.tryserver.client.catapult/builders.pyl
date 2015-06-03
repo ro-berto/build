@@ -1,28 +1,40 @@
 {
-  "builders": {
-    "Catapult Linux Tryserver": {
-      "recipe": "catapult",
-      "slave_pools": ["linux_slave_pool"],
-      "slavebuilddir": "catapult",
-    },
-    "Catapult Mac Tryserver": {
-      "recipe": "catapult",
-      "slave_pools": ["mac_slave_pool"],
-      "slavebuilddir": "catapult",
-    },
-    "Catapult Windows Tryserver": {
-      "recipe": "catapult",
-      "slave_pools": ["win_slave_pool"],
-      "slavebuilddir": "catapult",
-    },
-  },
-  "git_repo_url": "https://chromium.googlesource.com/external/github.com/catapult-project/catapult.git",
   "master_base_class": "Master4a",
   "master_classname": "CatapultTryserver",
   "master_port": 21400,
   "master_port_alt": 41400,
+  "slave_port": 31400,
+  "templates": ["../master.chromium/templates"],
+
   "service_account_file": "service-account-chromium-tryserver.json",
   "buildbucket_bucket": "master.tryserver.client.catapult",
+
+  "builders": {
+    "Catapult Linux Tryserver": {
+      "recipe": "catapult",
+      "scheduler": None,
+      "slave_pools": ["linux_slave_pool"],
+
+      "slavebuilddir": "catapult",
+    },
+    "Catapult Mac Tryserver": {
+      "recipe": "catapult",
+      "scheduler": None,
+      "slave_pools": ["mac_slave_pool"],
+
+      "slavebuilddir": "catapult",
+    },
+    "Catapult Windows Tryserver": {
+      "recipe": "catapult",
+      "scheduler": None,
+      "slave_pools": ["win_slave_pool"],
+
+      "slavebuilddir": "catapult",
+    },
+  },
+
+  "schedulers": {},
+
   "slave_pools": {
     "linux_slave_pool": {
       "slave_data": {
@@ -49,6 +61,4 @@
       "slaves": ["vm711-m4"],
     },
   },
-  "slave_port": 31400,
-  "templates": ["../master.chromium/templates"],
 }
