@@ -158,7 +158,7 @@ class DartCommands(commands.FactoryCommands):
     if options.get('flags') != None:
       cmd += options.get('flags')
     if channel and (channel.name == 'be' or channel.name == 'dev'):
-      cmd += ' --exclude-suite=pkg,pkg_tested'
+      cmd += ' --exclude-suite=pkg'
 
     name = options.get('name') or ''
     if 'asan' in name:
