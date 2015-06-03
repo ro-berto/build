@@ -10,6 +10,7 @@ import json
 
 DEFAULT_SDK_ROOT = '/home/chrome-bot/android-sdk-linux'
 MAC_SDK_ROOT = '/Users/chrome-bot/adt-bundle-mac-x86_64-20140702/sdk'
+MACMINI_SDK_ROOT = '/Users/chrome-bot/android-sdk-macosx'
 
 SlaveInfo = collections.namedtuple('SlaveInfo',
                                    'serial android_sdk_root has_root')
@@ -56,7 +57,7 @@ SLAVE_INFO = {
   'skiabot-shuttle-ubuntu12-nexus7-001':
       SlaveInfo('015d210a13480604', DEFAULT_SDK_ROOT, True),
   'skiabot-shuttle-ubuntu12-nexus7-002':
-      SlaveInfo('015d18848c280217', DEFAULT_SDK_ROOT, True),
+      SlaveInfo('015d18848c280217', MACMINI_SDK_ROOT, True),
   'skiabot-shuttle-ubuntu12-nexus7-003':
       SlaveInfo('015d16897c401e17', DEFAULT_SDK_ROOT, True),
   'skiabot-shuttle-ubuntu12-nexus9-001':
