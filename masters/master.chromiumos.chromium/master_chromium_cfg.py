@@ -8,7 +8,7 @@ from master.factory import annotator_factory, chromeos_factory
 from buildbot.schedulers.basic import SingleBranchScheduler as Scheduler
 
 def Builder(factory_obj, dname, sname, flavor, board):
-  cbb_name = '%s-tot-chrome-pfq-informational' % (board,)
+  cbb_name = '%s-tot-chromium-pfq-informational' % (board,)
   builder = {
       'name': '%s (%s)' % (dname, flavor),
       'builddir': '%s-tot-chromeos-%s' % (flavor, sname),
