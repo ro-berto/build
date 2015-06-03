@@ -34,8 +34,18 @@ class ChromiteConfigTestCase(unittest.TestCase):
         'default1',
       ],
     },
+    '_templates': {
+      'no-hwtest-pre-cq': {
+        'hw_tests': [
+        ],
+      },
+    },
     'test': {
       'foo': 'baz',
+    },
+    'no-hwtest-pre-cq': {
+      '_template': 'no-hwtest-pre-cq',
+      'name': 'no-hwtest-pre-cq',
     },
     'parent': {
       'name': 'parent',
@@ -51,6 +61,16 @@ class ChromiteConfigTestCase(unittest.TestCase):
           'unittests': True,
         },
         {'name': 'bob'}
+      ],
+    },
+    'parent-template': {
+      'name': 'parent-template',
+      'hw_tests': [],
+      'child_configs': [
+        {
+          '_template': 'no-hwtest-pre-cq',
+          'name': 'joe',
+        }
       ],
     },
     'baremetal-pre-cq': {
@@ -72,7 +92,9 @@ class ChromiteConfigTestCase(unittest.TestCase):
     self.config = cros_chromite.ChromiteConfig.FromConfigDict(
         self.CHROMITE_CONFIG)
     self.test = self.config['test']
+    self.no_hwtest_pre_cq = self.config['no-hwtest-pre-cq']
     self.parent = self.config['parent']
+    self.parent_template = self.config['parent-template']
     self.baremetal = self.config['baremetal-pre-cq']
 
   def testChildren(self):
@@ -93,6 +115,7 @@ class ChromiteConfigTestCase(unittest.TestCase):
   def testHasTests(self):
     self.assertFalse(self.test.HasVmTests())
     self.assertTrue(self.test.HasHwTests())
+    self.assertFalse(self.no_hwtest_pre_cq.HasHwTests())
     self.assertFalse(self.test.HasUnitTests())
 
     self.assertTrue(self.baremetal.HasVmTests())
@@ -102,6 +125,7 @@ class ChromiteConfigTestCase(unittest.TestCase):
   def testHasTests_DetectsInChildren(self):
     self.assertTrue(self.parent.HasVmTests())
     self.assertTrue(self.parent.HasHwTests())
+    self.assertFalse(self.parent_template.HasHwTests())
     self.assertTrue(self.baremetal.HasUnitTests())
 
   def testPreCqDetection(self):

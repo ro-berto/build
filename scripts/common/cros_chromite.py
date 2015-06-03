@@ -46,7 +46,7 @@ TOT_BRANCH = 'master'
 # - Update the value here.
 # - Run "gclient runhooks --force".
 PINS = collections.OrderedDict((
-  (TOT_BRANCH, '48a5e10e2fd4b53740017b6a4bbd202a1662a179'),
+  (TOT_BRANCH, '2d4510113e3774682e547e95ba6195490de359c7'),
   ('release-R44-7077.B', '139892011501a919d306bed80e645506f29e4db8'),
   ('release-R43-6946.B', '504196e05c2d8cb5448646a5f036431ec2ee5da1'),
   ('release-R42-6812.B', '719914944802dede1a0dd1cd93376b76880c63f4'),
@@ -118,10 +118,14 @@ class ChromiteTarget(object):
   # Sentinel value to indicate a missing key.
   _MISSING = object()
 
-  def __init__(self, name, config, default=None):
+  def __init__(self, name, config, default=None, templates=None):
     self._name = name
     self._config = config
     self._children = ()
+    template = config.get('_template')
+    if templates and template and default:
+      default = default.copy()
+      default.update(templates.get(template, {}))
     self._default = default
     self._base, self._suffix, self._category = self.Categorize(
         name,
@@ -131,16 +135,17 @@ class ChromiteTarget(object):
     self._children = tuple(children)
 
   @classmethod
-  def FromConfigDict(cls, name, config, default=None):
+  def FromConfigDict(cls, name, config, default=None, templates=None):
     """Returns: (ChromiteTarget) A target instance parsed from a config dict.
     """
-    result = cls(name, config, default=default)
+    result = cls(name, config, default=default, templates=templates)
 
     # Wrap and add any child configurations in ChromiteTarget instances.
     #
     # As of 231348146015739254fd2978dd172975555e9bdc, Chromite uses the common
     # default dictionary for all children.
-    result._setChildren(tuple(cls.FromConfigDict(None, child, default=default)
+    result._setChildren(tuple(cls.FromConfigDict(None, child, default=default,
+                                                 templates=templates)
                               for child in config.get('child_configs', ())))
 
     return result
@@ -291,9 +296,10 @@ class ChromiteTarget(object):
 class ChromiteConfig(collections.OrderedDict):
   """Wraps a full Chromite configuration dictionary."""
 
-  def __init__(self, default_config=None):
+  def __init__(self, default_config=None, templates=None):
     super(ChromiteConfig, self).__init__(self)
     self._default = default_config or {}
+    self._templates = templates
 
   def AddTarget(self, name, config):
     """Adds a named Chromite target to the config object.
@@ -305,8 +311,8 @@ class ChromiteConfig(collections.OrderedDict):
     Returns: (ChromiteTarget) The generated ChromiteTarget object.
     """
     assert not self.get(name), ('Target [%s] is already registered.' % (name,))
-    self[name] = target = ChromiteTarget.FromConfigDict(name, config,
-                                                        default=self._default)
+    self[name] = target = ChromiteTarget.FromConfigDict(
+        name, config, default=self._default, templates=self._templates)
     return target
 
   @classmethod
@@ -316,11 +322,12 @@ class ChromiteConfig(collections.OrderedDict):
     Raises:
       ValueError: If the JSON string could not be parsed.
     """
-    default = config.get('_default')
-    chromite_config = cls(default)
+    config = config.copy()
+    default = config.pop('_default', None)
+    templates = config.pop('_templates', None)
+    chromite_config = cls(default, templates)
     for k, v in config.iteritems():
-      if k != '_default':
-        chromite_config.AddTarget(k, v)
+      chromite_config.AddTarget(k, v)
     return chromite_config
 
 
