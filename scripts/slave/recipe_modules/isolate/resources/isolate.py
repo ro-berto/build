@@ -33,8 +33,17 @@ def try_go(path, args):
   except (subprocess.CalledProcessError, OSError, ValueError):
     return None
 
+  expected = (0, 2, 1)
+
+  # Enlarge both tuples so (1, 0) == (1, 0, 0).
+  while len(version) < len(expected):
+    version = tuple(list(version) + [0])
+  while len(expected) < len(version):
+    version = tuple(list(expected) + [0])
+
   # Key behavior based on version if necessary.
-  if version < (0, 2):
+  if version < expected:
+    print('Expected %s, found %s' % '.'.join(expected), '.'.join(version))
     return None
 
   return subprocess.call([exe] + args)
