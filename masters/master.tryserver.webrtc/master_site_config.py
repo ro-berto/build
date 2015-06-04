@@ -19,7 +19,7 @@ class WebRTCTryServer(Master.Master4):
   tree_status_url = base_app_url + '/status'
   store_revisions_url = base_app_url + '/revisions'
   last_good_url = None
-  code_review_site = 'https://webrtc-codereview.appspot.com'
+  code_review_site = 'https://codereview.webrtc.org'
   buildbot_url = 'http://build.chromium.org/p/tryserver.webrtc/'
   service_account_file = 'service-account-webrtc.json'
   buildbucket_bucket = 'master.tryserver.webrtc'
