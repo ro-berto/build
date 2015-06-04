@@ -33,7 +33,7 @@ def try_go(path, args):
   except (subprocess.CalledProcessError, OSError, ValueError):
     return None
 
-  expected = (0, 2, 1)
+  expected = (0, 2, 2)
 
   # Enlarge both tuples so (1, 0) == (1, 0, 0).
   while len(version) < len(expected):
