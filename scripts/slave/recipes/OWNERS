@@ -13,6 +13,7 @@ per-file v8.py=machenbach@chromium.org
 per-file blink_downstream.py=machenbach@chromium.org
 per-file chromium_pgo.py=sebmarchand@chromium.org
 per-file bisect.py=robertocn@chromium.org
+per-file bisect.py=prasadv@chromium.org
 per-file chromium.py=set noparent
 per-file chromium.py=akuegel@chromium.org
 per-file chromium.py=phajdan.jr@chromium.org
