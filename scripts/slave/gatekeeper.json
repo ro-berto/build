@@ -229,7 +229,17 @@
             "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"]
           },
           "*": {}
-        }
+        },
+
+        "comment": [
+          "TODO(dpranke): crbug.com/486098, crbug.com/439402",
+          "Until these are in the CQ, they should not close the tree."
+        ],
+        "excluded_builders": [
+          "Mac GN",
+          "Mac GN (dbg)"
+        ]
+
       }
     ],
     "https://build.chromium.org/p/chromium.memory": [
@@ -323,7 +333,18 @@
         ],
         "builders": {
           "*": {}
-        }
+        },
+
+        "comment": [
+          "TODO(dpranke): crbug.com/486098, crbug.com/439402",
+          "Until these are in the CQ, they should not close the tree."
+        ],
+        "excluded_builders": [
+          "Win x64 GN",
+          "Win x64 GN (dbg)",
+          "Win8 GN",
+          "Win8 GN (dbg)"
+        ]
       }
     ],
     "https://build.chromium.org/p/client.boringssl": [
