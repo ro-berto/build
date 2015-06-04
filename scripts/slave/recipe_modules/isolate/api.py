@@ -154,7 +154,6 @@ class IsolateApi(recipe_api.RecipeApi):
       buildername = self.m.properties.get('buildername', '')
       blacklist = {
         # chromium.gpu
-        'GPU Linux Builder (dbg)',
         'GPU Mac Builder (dbg)',
         'GPU Win Builder (dbg)',
         # chromium.memory
