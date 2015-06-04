@@ -153,6 +153,10 @@ class IsolateApi(recipe_api.RecipeApi):
       # http://crbug.com/496268
       buildername = self.m.properties.get('buildername', '')
       blacklist = {
+        # chromium.memory
+        'Linux ASan LSan Builder',
+        'Linux Chromium OS ASan LSan Builder',
+        'Mac ASan 64 Builder',
         # tryserver.chromium.linux
         'linux_chromium_asan_rel_ng',
         'linux_chromium_chromeos_asan_rel_ng',
