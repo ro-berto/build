@@ -149,14 +149,26 @@ class IsolateApi(recipe_api.RecipeApi):
     try:
       # TODO(vadimsh): Differentiate between bad *.isolate and upload errors.
       # Raise InfraFailure on upload errors.
+
+      # http://crbug.com/496268
+      buildername = self.m.properties.get('buildername', '')
+      blacklist = {
+        # tryserver.chromium.linux
+        'linux_chromium_asan_rel_ng',
+        'linux_chromium_chromeos_asan_rel_ng',
+      }
+      use_new = buildername not in blacklist
+      old = self.m.swarming_client.path.join('isolate.py')
+      new = self.resource('isolate.py')
       args = [
-        self.m.swarming_client.path,
         'batcharchive',
         '--dump-json', self.m.json.output(),
         '--isolate-server', self._isolate_server,
       ] + (['--verbose'] if verbose else []) + input_files
+      if use_new:
+        args.insert(0, self.m.swarming_client.path)
       return self.m.python(
-          'isolate tests', self.resource('isolate.py'), args,
+          'isolate tests', new if use_new else old, args,
           step_test_data=lambda: (self.test_api.output_json(targets)),
           **kwargs)
     finally:
