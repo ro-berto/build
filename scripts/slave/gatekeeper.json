@@ -232,7 +232,7 @@
         },
 
         "comment": [
-          "TODO(dpranke): crbug.com/486098, crbug.com/439402",
+          "TODO(dpranke): crbug.com/486089, crbug.com/439402",
           "Until these are in the CQ, they should not close the tree."
         ],
         "excluded_builders": [
@@ -336,7 +336,7 @@
         },
 
         "comment": [
-          "TODO(dpranke): crbug.com/486098, crbug.com/439402",
+          "TODO(dpranke): crbug.com/486089, crbug.com/439402",
           "Until these are in the CQ, they should not close the tree."
         ],
         "excluded_builders": [
