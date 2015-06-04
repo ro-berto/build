@@ -161,7 +161,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"android_webview_unittests\", \"base_unittests\", \"cc_unittests\", \"components_unittests\", \"events_unittests\", \"gl_tests\", \"ipc_tests\", \"skia_unittests\", \"sql_unittests\", \"sync_unit_tests\", \"ui_android_unittests\", \"ui_touch_selection_unittests\", \"junit_unit_tests\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"content_shell_test_apk\", \"chrome_shell_test_apk\", \"chrome_public_test_apk\", \"junit_unit_tests\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -173,10 +173,12 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chrome_public_test_apk\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"android_webview_unittests_apk\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chrome_public_test_apk\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"android_webview_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -209,6 +211,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
+      "chrome_public_test_apk",
       "android_webview_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -222,9 +225,13 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "android_webview_unittests",
+      "instrumentation",
+      "--apk-under-test",
+      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk",
+      "--test-apk",
+      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublicTest.apk",
+      "--isolate-file-path",
+      "[SLAVE_BUILD]/src/chrome/chrome_public_test_apk.isolate",
       "--enable-platform-mode",
       "-e",
       "remote_device",
@@ -252,7 +259,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] android_webview_unittests",
+    "name": "[trigger] chrome_public_test_apk",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -273,10 +280,10 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/android_webview_unittests.json"
+      "[TMP_BASE]/amp_trigger_tmp_1/chrome_public_test_apk.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save android_webview_unittests data"
+    "name": "[trigger] save chrome_public_test_apk data"
   },
   {
     "cmd": [
@@ -315,11 +322,11 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/android_webview_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/chrome_public_test_apk.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load android_webview_unittests data",
+    "name": "[collect] load chrome_public_test_apk data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -338,9 +345,11 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "android_webview_unittests",
+      "instrumentation",
+      "--apk-under-test",
+      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk",
+      "--test-apk",
+      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublicTest.apk",
       "--enable-platform-mode",
       "-e",
       "remote_device",
@@ -363,14 +372,14 @@
       "--remote-device-os",
       "4.4.3",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/android_webview_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/chrome_public_test_apk.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/chrome_public_test_apk/results.zip",
       "--verbose",
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] android_webview_unittests",
+    "name": "[collect] chrome_public_test_apk",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -382,11 +391,11 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/android_webview_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/chrome_public_test_apk.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[upload logcat] load android_webview_unittests data",
+    "name": "[upload logcat] load chrome_public_test_apk data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
@@ -403,8 +412,8 @@
       "RECIPE_MODULE[zip]/resources/unzip.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[upload logcat] unzip results for android_webview_unittests",
-    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/results.zip\"}"
+    "name": "[upload logcat] unzip results for chrome_public_test_apk",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/chrome_public_test_apk/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/chrome_public_test_apk/results.zip\"}"
   },
   {
     "cmd": [
@@ -417,13 +426,13 @@
       "3.25",
       "----",
       "cp",
-      "[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/unzipped_results/appurify_results/logcat.txt",
-      "gs://chrome-amp-results/logcats/logcat_android_webview_unittests_12345abcde.txt"
+      "[TMP_BASE]/amp_results_tmp_2/chrome_public_test_apk/unzipped_results/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_chrome_public_test_apk_12345abcde.txt"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil [upload logcat] android_webview_unittests",
+    "name": "gsutil [upload logcat] chrome_public_test_apk",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_android_webview_unittests_12345abcde.txt@@@"
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_chrome_public_test_apk_12345abcde.txt@@@"
     ]
   },
   {
@@ -448,7 +457,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "1 out of 6 aggregated steps failed. Failures: Step('[collect] android_webview_unittests') failed with return_code 1",
+    "reason": "1 out of 6 aggregated steps failed. Failures: Step('[collect] chrome_public_test_apk') failed with return_code 1",
     "status_code": 1
   }
 ]

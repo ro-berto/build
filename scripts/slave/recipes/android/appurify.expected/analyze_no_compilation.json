@@ -161,7 +161,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"android_webview_unittests\", \"base_unittests\", \"cc_unittests\", \"components_unittests\", \"events_unittests\", \"gl_tests\", \"ipc_tests\", \"skia_unittests\", \"sql_unittests\", \"sync_unit_tests\", \"ui_android_unittests\", \"ui_touch_selection_unittests\", \"junit_unit_tests\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"content_shell_test_apk\", \"chrome_shell_test_apk\", \"chrome_public_test_apk\", \"junit_unit_tests\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",

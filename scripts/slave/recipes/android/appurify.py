@@ -75,8 +75,8 @@ BUILDERS = freeze({
       'try': True,
       'device_name': ['Nexus 5'],
       'device_os': ['4.4.2', '4.4.3'],
-      'unittests': CHROMIUM_AMP_UNITTESTS,
-      'instrumentation_tests': [],
+      'unittests': [],
+      'instrumentation_tests': CHROMIUM_AMP_INSTRUMENTATION_TESTS,
       'java_unittests': JAVA_UNIT_TESTS,
       'python_unittests': PYTHON_UNIT_TESTS,
     },
@@ -89,7 +89,7 @@ BUILDERS = freeze({
       'device_minimum_os': '4.0',
       'device_timeout': 60,
       'unittests': CHROMIUM_AMP_UNITTESTS,
-      'instrumentation_tests': CHROMIUM_AMP_INSTRUMENTATION_TESTS,
+      'instrumentation_tests': [],
     },
   },
   'chromium.linux': {
@@ -290,8 +290,14 @@ def GenTests(api):
             'analyze',
             api.json.output({
                 'status': 'Found dependency',
-                'targets': ['base_unittests', 'junit_unit_tests'],
-                'build_targets': ['base_unittests_apk', 'junit_unit_tests']}))
+                'targets': [
+                    'chrome_public_test_apk',
+                    'base_unittests',
+                    'junit_unit_tests'],
+                'build_targets': [
+                    'chrome_public_test_apk',
+                    'base_unittests_apk',
+                    'junit_unit_tests']}))
 
       if not builder.get('build'):
         test_props += api.properties(
@@ -310,10 +316,15 @@ def GenTests(api):
               'analyze',
               api.json.output({
                   'status': 'Found dependency',
-                  'targets': ['android_webview_unittests'],
-                  'build_targets': ['android_webview_unittests_apk']})) +
+                  'targets': [
+                      'chrome_public_test_apk',
+                      'android_webview_unittests'],
+                  'build_targets': [
+                      'chrome_public_test_apk',
+                      'android_webview_unittests_apk']})) +
           api.step_data('[trigger] components_unittests', retcode=1) +
           # Test runner error
+          api.step_data('[collect] chrome_public_test_apk', retcode=1) +
           api.step_data('[collect] android_webview_unittests', retcode=1) +
           # Test runner infrastructure error
           api.step_data('[collect] base_unittests', retcode=87) +
@@ -330,8 +341,8 @@ def GenTests(api):
     api.test('instrumentation_test_trigger_failure') +
     api.properties.generic(
         revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-        mastername='chromium.fyi',
-        buildername='Android Tests (amp)(dbg)',
+        mastername='tryserver.chromium.linux',
+        buildername='android_amp_rel_tests_recipe',
         slavename='slavename',
         parent_build_archive_url='gs://test-domain/test-archive.zip') +
     api.override_step_data(
@@ -346,8 +357,8 @@ def GenTests(api):
     api.test('instrumentation_test_collect_failure') +
     api.properties.generic(
         revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-        mastername='chromium.fyi',
-        buildername='Android Tests (amp)(dbg)',
+        mastername='tryserver.chromium.linux',
+        buildername='android_amp_rel_tests_recipe',
         slavename='slavename',
         parent_build_archive_url='gs://test-domain/test-archive.zip') +
     api.override_step_data(
