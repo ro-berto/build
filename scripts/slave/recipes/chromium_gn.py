@@ -46,7 +46,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'gclient_apply_config': ['blink'],
-        'should_run_mojo_tests': True,
       },
       'Linux GN (dbg)': {
         'chromium_apply_config': ['gn_component_build'],
@@ -113,8 +112,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
-        'should_run_gn_check': False,
-        'should_run_tests': True,
       },
       'Linux GN Clobber': {
         'chromium_config_kwargs': {
@@ -180,7 +177,6 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
-        'should_run_gn_check': False,
       },
       'android_chromium_gn_compile_dbg': {
         'chromium_apply_config': ['gn_minimal_symbols'],
@@ -197,8 +193,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
-        'should_run_gn_check': False,
-        'should_run_tests': True,
       },
       'linux_chromium_gn_dbg': {
         'chromium_apply_config': ['gn_component_build'],
@@ -499,12 +493,7 @@ def _GenStepsInternal(api):
                          additional_compile_targets,
                          force_clobber=force_clobber)
 
-  # TODO(dpranke): Ensure that every bot runs w/ --check, then make
-  # it be on by default.
-  if bot_config.get('should_run_gn_check', True):
-    api.chromium.run_gn_check()
-
-  if tests and bot_config.get('should_run_tests', False):
+  if tests:
     if api.tryserver.is_tryserver:
       api.chromium_tests.run_tests_and_deapply_as_needed(
           mastername, api, tests, bot_update_step)
@@ -525,13 +514,23 @@ def GenTests(api):
   overrides = {}
   for mastername, master_dict in BUILDERS.items():
     for buildername in master_dict['builders']:
+
+      # The Android bots are currently all only builders and cannot
+      # run tests; more importantly, the recipe isn't set up to run
+      # tests on Android correctly, and if we specify any tests in
+      # the step_data, the recipe will crash :). We will eventually
+      # fix this by killing this recipe altogether and moving to the
+      # main chromium recipes.
+      is_android = ('Android' in buildername or 'android' in buildername)
+      gtest_tests = [] if is_android else ['base_unittests']
+
       overrides.setdefault(mastername, {})
       overrides[mastername][buildername] = (
           api.override_step_data(
               'read test spec',
               api.json.output({
                   buildername: {
-                    'gtest_tests': ['base_unittests'],
+                    'gtest_tests': gtest_tests,
                   },
               })))
 
@@ -540,8 +539,8 @@ def GenTests(api):
             'analyze',
             api.json.output({
                 'status': 'Found dependency',
-                'targets': ['base_unittests'],
-                'build_targets': ['base_unittests'],
+                'targets': gtest_tests,
+                'build_targets': gtest_tests,
             }))
 
   for test in api.chromium.gen_tests_for_builders(BUILDERS, overrides):

@@ -164,15 +164,32 @@
     "name": "compile"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
-      "check",
-      "//out/Debug"
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux GN (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"recipe\": \"chromium_gn\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux GN (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"recipe\": \"chromium_gn\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=base_unittests",
+      "--step-name=base_unittests",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--generate-json-file",
+      "-o",
+      "gtest-results/base_unittests",
+      "--builder-name=Linux GN (dbg)",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "base_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gn check"
+    "name": "base_unittests"
   }
 ]

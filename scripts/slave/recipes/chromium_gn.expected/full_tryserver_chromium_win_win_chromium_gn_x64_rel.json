@@ -261,12 +261,50 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gn.py",
-      "--root=[SLAVE_BUILD]\\src",
-      "check",
-      "//out/Release_x64"
+      "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
+      "--target",
+      "Release_x64"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gn check"
+    "name": "start_crash_service"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"win_chromium_gn_x64_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.win\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_gn\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"win_chromium_gn_x64_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.win\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_gn\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=base_unittests",
+      "--step-name=base_unittests (with patch)",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--generate-json-file",
+      "-o",
+      "gtest-results/base_unittests.exe",
+      "--builder-name=win_chromium_gn_x64_rel",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "base_unittests.exe"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "base_unittests (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\process_dumps.py",
+      "--target",
+      "Release_x64"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "process_dumps"
   }
 ]

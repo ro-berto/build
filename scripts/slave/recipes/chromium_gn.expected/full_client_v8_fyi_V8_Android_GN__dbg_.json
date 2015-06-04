@@ -111,9 +111,7 @@
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/client.v8.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"V8 Android GN (dbg)\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": []@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -157,22 +155,9 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "base_unittests_apk",
       "chrome_shell_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
-      "check",
-      "//out/Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gn check"
   }
 ]
