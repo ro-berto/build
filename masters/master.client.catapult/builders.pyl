@@ -28,6 +28,11 @@
 
       "slavebuilddir": "catapult",
     },
+    "Catapult Cron Linux": {
+      "recipe": "catapult_cron",
+      "scheduler": "catapult_cron",
+      "slave_pools": ["linux_slave_pool"],
+    }
   },
 
   "schedulers": {
@@ -35,6 +40,11 @@
       "type": "git_poller",
       "git_repo_url": "https://chromium.googlesource.com/external/github.com/catapult-project/catapult.git",
     },
+    "catapult_cron": {
+      "type": "cron",
+      "hour": 12,
+      "minute": 0,
+    }
   },
 
   "slave_pools": {

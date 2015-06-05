@@ -33,3 +33,4 @@ per-file chromium_trybot_legacy.py=sergeyberezin@chromium.org
 per-file chromium_trybot_legacy.py=sergiyb@chromium.org
 per-file chromium_trybot_legacy.py=tandrii@chromium.org
 per-file catapult.py=sullivan@chromium.org
+per-file catapult_cron.py=sullivan@chromium.org
