@@ -8,6 +8,7 @@ import os
 from buildbot.schedulers.basic import SingleBranchScheduler
 from buildbot.schedulers.timed import Nightly
 from buildbot.status.mail import MailNotifier
+from buildbot import util
 
 from config_bootstrap import Master
 
@@ -89,12 +90,14 @@ def _ComputeBuilders(builders, m_annotator):
     # we want for repo-triggered builders and cron-triggered builders.
     merge_requests = bool(scheduler_name)
 
+    slavebuilddir = builder_data.get('slavebuilddir',
+                                     util.safeTranslate(builder_name))
     actual_builders.append({
         'auto_reboot': builder_data.get('auto_reboot', True),
         'mergeRequests': merge_requests,
         'name': builder_name,
         'factory': m_annotator.BaseFactory(),
-        'slavebuilddir': builder_data.get('slavebuilddir'),
+        'slavebuilddir': slavebuilddir,
         'slavenames': chromium_utils.GetSlaveNamesForBuilder(builders,
                                                              builder_name),
     })
