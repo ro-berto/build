@@ -3,14 +3,7 @@
 # found in the LICENSE file.
 
 """Recipe to test the deterministic build.
-
-Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
-
-TODO(sebmarchand): This recipe has been moved to the recipe's root directory.
-Remove this copy once all the master have been updated.
 """
-
-from infra.libs.infra_types import freeze
 
 DEPS = [
   'bot_update',
@@ -26,7 +19,7 @@ DEPS = [
   'step',
 ]
 
-DETERMINISTIC_BUILDERS = freeze({
+DETERMINISTIC_BUILDERS = {
   'Android deterministic build': {
     'chromium_config': 'android',
     'chromium_config_kwargs': {
@@ -57,7 +50,15 @@ DETERMINISTIC_BUILDERS = freeze({
     'gclient_config': 'chromium',
     'platform': 'win',
   },
-})
+}
+DETERMINISTIC_BUILDERS['android_deterministic'] = (
+    DETERMINISTIC_BUILDERS['Android deterministic build'])
+DETERMINISTIC_BUILDERS['linux_deterministic'] = (
+    DETERMINISTIC_BUILDERS['Linux deterministic build'])
+DETERMINISTIC_BUILDERS['mac_deterministic'] = (
+    DETERMINISTIC_BUILDERS['Mac deterministic build'])
+DETERMINISTIC_BUILDERS['windows_deterministic'] = (
+    DETERMINISTIC_BUILDERS['Windows deterministic build'])
 
 
 def MoveBuildDirectory(api, src_dir, dst_dir):
@@ -143,7 +144,6 @@ def GenSteps(api):
 
   # Compare the artifacts from the 2 builds, raise an exception if they're
   # not equals.
-  # TODO(sebmarchand): Do a smarter comparison.
   api.isolate.compare_build_artifacts(
       str(api.chromium.output_dir).rstrip('\\/') + '.1',
       str(api.chromium.output_dir).rstrip('\\/') + '.2')
