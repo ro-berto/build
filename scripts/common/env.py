@@ -16,7 +16,7 @@ module and running its 'Install' method:
       os.path.join(os.path.dirname(__file__), os.pardir, ...))
       # (/path/to/build/scripts)
   import common.env
-  env.Install()
+  common.env.Install()
 
 When attempting to export the Chrome Infra path to external scripts, this
 script can be invoked as an executable with various subcommands to emit a valid
