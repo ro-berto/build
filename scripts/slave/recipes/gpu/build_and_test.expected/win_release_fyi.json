@@ -1053,7 +1053,8 @@
       "[dummy hash for audio_unittests]",
       "-I",
       "https://isolateserver.appspot.com",
-      "--"
+      "--",
+      "--require-audio-hardware-for-testing"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "audio_unittests"
