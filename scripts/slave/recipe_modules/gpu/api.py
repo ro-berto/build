@@ -443,8 +443,7 @@ class GpuApi(recipe_api.RecipeApi):
           enable_swarming, swarming_dimensions))
       tests.append(self._create_gtest(
           'audio_unittests', chrome_revision, webkit_revision, enable_swarming,
-          swarming_dimensions,
-          args=['--require-audio-hardware-for-testing']))
+          swarming_dimensions))
 
     # Remove empty entries as some tests may be skipped.
     tests = [test for test in tests if test]
