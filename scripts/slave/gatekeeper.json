@@ -466,6 +466,8 @@
           "V8 Linux - mipsel - sim",
           "V8 Linux - ppc - sim",
           "V8 Linux - ppc64 - sim",
+          "V8 Linux - x32 - nosnap - debug builder",
+          "V8 Linux - x32 - nosnap - debug",
           "V8 Linux - x87 - nosnap - debug builder",
           "V8 Linux - x87 - nosnap - debug",
           "V8 Linux - full debug",

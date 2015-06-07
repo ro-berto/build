@@ -46,6 +46,8 @@ exclusions = {
   'V8 Linux - mipsel - sim': [],
   'V8 Mips - big endian - nosnap - 1': [],
   'V8 Mips - big endian - nosnap - 2': [],
+  'V8 Linux - x32 - nosnap - debug builder': [],
+  'V8 Linux - x32 - nosnap - debug': [],
   'V8 Linux - x87 - nosnap - debug builder': [],
   'V8 Linux - x87 - nosnap - debug': [],
   'V8 Linux - predictable': [],

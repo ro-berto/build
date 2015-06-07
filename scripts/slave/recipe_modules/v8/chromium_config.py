@@ -187,6 +187,11 @@ def vtunejit(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def x32(c):
+  c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'x32'
+
+
+@CONFIG_CTX(includes=['v8'])
 def x87(c):
   # TODO(machenbach): Chromium does not support x87 yet. With the current
   # configuration, target_arch can't be set through a parameter as ARCH=intel
