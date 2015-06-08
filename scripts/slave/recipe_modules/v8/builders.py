@@ -1230,7 +1230,7 @@ BUILDERS = {
         'chromium_apply_config': ['no_snapshot', 'v8_goma', 'x32'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux_x32_nosnap_dbg_archive',
@@ -1244,7 +1244,7 @@ BUILDERS = {
         'chromium_apply_config': ['no_snapshot', 'v8_goma', 'x32'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - x32 - nosnap - debug builder',
