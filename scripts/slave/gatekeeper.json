@@ -477,6 +477,7 @@
           "V8 Linux - arm64 - sim - nosnap - debug - 1",
           "V8 Linux - arm64 - sim - nosnap - debug - 2",
           "V8 Linux - arm64 - sim - gc stress",
+          "V8 Linux64 - debug - greedy allocator",
           "V8 Arm GC Stress",
           "V8 Mips - big endian - nosnap - 1",
           "V8 Mips - big endian - nosnap - 2",
