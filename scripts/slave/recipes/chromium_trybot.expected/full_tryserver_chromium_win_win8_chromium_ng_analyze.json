@@ -80,28 +80,34 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
-      "--version"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
+      "GYP_CHROMIUM_NO_ACTION": "1"
     },
     "name": "gclient runhooks (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
+      "gen",
+      "-v",
+      "-m",
+      "chromium.win",
+      "-b",
+      "Win8 Aura",
+      "--config-file",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]\\goma",
+      "//out/Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files"
   },
   {
     "cmd": [
@@ -186,15 +192,18 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\build\\gyp_chromium",
-      "--analyzer",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
+      "analyze",
+      "-m",
+      "tryserver.chromium.win",
+      "-b",
+      "win8_chromium_ng",
+      "-v",
+      "//out/Debug",
       "{\"files\": [\"foo.cc\"], \"targets\": []}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
-    },
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_TEXT@No compile necessary@@@",

@@ -107,6 +107,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     test_spec_file = bot_config.get('testing', {}).get('test_spec_file',
                                                        '%s.json' % mastername)
 
+    if self.m.chromium.c.project_generator.tool == 'mb':
+      self.m.chromium.run_mb(mastername, buildername)
+
     # TODO(phajdan.jr): Bots should have no generators instead.
     if bot_config.get('disable_tests'):
       test_spec = {}
@@ -481,7 +484,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                                       deapply_patch_fn)
 
   def analyze(self, affected_files, exes, compile_targets, config_file_name,
-              additional_names=None, use_mb=False, build_output_dir=None):
+              additional_names=None):
     """Runs "analyze" step to determine targets affected by the patch.
 
     Returns a tuple of:
@@ -495,6 +498,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if additional_names is None:
       additional_names = ['chromium']
 
+    use_mb = (self.m.chromium.c.project_generator.tool == 'mb')
+    build_output_dir = '//out/%s' % self.m.chromium.c.build_config_fs
     self.m.filter.does_patch_require_compile(
         affected_files,
         exes=exes,

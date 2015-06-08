@@ -272,8 +272,7 @@ BUILDERS = freeze({
       },
       'win8_chromium_ng': {
         'mastername': 'chromium.win',
-        'buildername': 'Win Builder (dbg)',
-        'tester': 'Win8 Aura',
+        'buildername': 'Win8 Aura',
       },
     },
   },

@@ -442,7 +442,7 @@ def _GenStepsInternal(api):
   is_android = ('Android' in buildername or 'android' in buildername)
   force_clobber = bot_config.get('force_clobber', False)
 
-  api.chromium.configure_bot(BUILDERS, ['gn'])
+  api.chromium.configure_bot(BUILDERS, ['mb'])
   bot_update_step = api.bot_update.ensure_checkout(
       force=True, patch_root=bot_config.get('root_override'))
 
@@ -481,9 +481,7 @@ def _GenStepsInternal(api):
             affected_files,
             test_compile_targets + additional_compile_targets,
             test_compile_targets,
-            'trybot_analyze_config.json',
-            use_mb=True,
-            build_output_dir='//out/%s' % api.chromium.c.build_config_fs)
+            'trybot_analyze_config.json')
     if requires_compile:
       api.chromium.compile(compile_targets,
                            force_clobber=force_clobber)

@@ -184,22 +184,19 @@ SPEC = {
     },
     'Win8 Aura': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
       },
-      'bot_type': 'tester',
+      'bot_type': 'builder_tester',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
       ],
-      'parent_buildername': 'Win Builder (dbg)',
       'testing': {
         'platform': 'win',
-      },
-      'swarming_dimensions': {
-        'os': 'Windows-7-SP1',
       },
     },
   },
