@@ -128,7 +128,8 @@ class AndroidApi(recipe_api.RecipeApi):
       **kwargs
     )
 
-  def init_and_sync(self, gclient_config='android_bare'):
+  def init_and_sync(self, gclient_config='android_bare',
+                    with_branch_heads=False):
     # TODO(sivachandra): Move the setting of the gclient spec below to an
     # internal config extension when they are supported by the recipe system.
     spec = self.m.gclient.make_config(gclient_config)
@@ -147,7 +148,8 @@ class AndroidApi(recipe_api.RecipeApi):
     refs = self.m.properties.get('event.patchSet.ref')
     if refs:
       refs = [refs]
-    result = self.m.bot_update.ensure_checkout(spec, refs=refs)
+    result = self.m.bot_update.ensure_checkout(
+        spec, refs=refs, with_branch_heads=with_branch_heads)
     if not result.json.output['did_run']:
       result = self.m.gclient.checkout(spec)
 
