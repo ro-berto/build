@@ -22,6 +22,7 @@ from master.factory import chromium_factory
 from master.factory.dart import dart_commands
 from master.factory.dart.channels import CHANNELS, CHANNELS_BY_NAME
 from master.factory import gclient_factory
+from master import gitiles_poller
 from master import master_utils
 
 import config
@@ -33,6 +34,10 @@ chromium_git = 'http://git.chromium.org/git/'
 
 dartium_url = config.Master.dart_bleeding + '/deps/dartium.deps'
 android_tools_url = chromium_git + 'android_tools.git' + android_tools_rev
+
+github_mirror = 'https://chromium.googlesource.com/external/github.com'
+dart_sdk_mirror = github_mirror + '/dart-lang/sdk/'
+
 if config.Master.v8_internal_url:
   android_resources_url = (config.Master.v8_internal_url +
       '/buildbot_deps/android_testing_resources' + android_resources_rev)
@@ -150,8 +155,7 @@ def BuildChromiumFactory(channel, target_platform='win32'):
   if channel.name == 'be' or channel.name == 'dev':
     custom_deps_file = 'tools/deps/dartium.deps/DEPS'
     name = 'src/dart'
-    deps_url = 'https://github.com/dart-lang/sdk.git'
-
+    deps_url = dart_sdk_mirror
   if target_platform == 'win32':
     factory.add_solution(
         new_solution(deps_url, custom_vars_list, custom_deps_list_win,
@@ -197,7 +201,7 @@ class DartFactory(gclient_factory.GClientFactory):
 
     # Until we have stable/trunk building from github, still support svn
     if channel.name == 'be' or channel.name == 'dev':
-      deps_url = 'https://github.com/dart-lang/sdk.git'
+      deps_url = dart_sdk_mirror
     elif is_standalone:
       deps_url = config.Master.dart_url + self.channel.standalone_deps_path
     else:
@@ -578,6 +582,17 @@ class DartUtils(object):
     repository = 'https://github.com/%s/%s.git' % (project, name)
     revlink = ('https://github.com/' + project + '/' + name + '/commit/%s')
     return DartUtils.get_git_poller(repository, name, revlink, branch, master)
+
+  @staticmethod
+  def get_github_mirror_poller(project, name, branches=None):
+    repository = '%s/%s/%s.git' % (github_mirror, project, name)
+    revlink = ('https://github.com/' + project + '/' + name + '/commit/%s')
+    branches = branches or ['master']
+    return gitiles_poller.GitilesPoller(repository,
+                                        branches=branches,
+                                        project=project,
+                                        revlinktmpl=revlink)
+
 
   @staticmethod
   def prioritize_builders(buildmaster, builders):
