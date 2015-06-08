@@ -1615,6 +1615,22 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
+      'v8_win_nosnap_shared_rel': {
+        'v8_apply_config': ['no_snapshot'],
+        'chromium_apply_config': [
+          'msvs2013',
+          'no_dcheck',
+          'no_snapshot',
+          'shared_library',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'win'},
+      },
       'v8_win64_compile_rel': {
         'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
