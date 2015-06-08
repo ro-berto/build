@@ -16,7 +16,7 @@
       "--master",
       "chromium.swarm",
       "--builder",
-      "windows_deterministic",
+      "win_deterministic",
       "--slave",
       "TestSlavename",
       "--spec",

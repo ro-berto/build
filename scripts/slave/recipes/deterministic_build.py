@@ -57,7 +57,7 @@ DETERMINISTIC_BUILDERS['linux_deterministic'] = (
     DETERMINISTIC_BUILDERS['Linux deterministic build'])
 DETERMINISTIC_BUILDERS['mac_deterministic'] = (
     DETERMINISTIC_BUILDERS['Mac deterministic build'])
-DETERMINISTIC_BUILDERS['windows_deterministic'] = (
+DETERMINISTIC_BUILDERS['win_deterministic'] = (
     DETERMINISTIC_BUILDERS['Windows deterministic build'])
 
 
