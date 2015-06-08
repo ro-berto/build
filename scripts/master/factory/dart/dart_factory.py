@@ -36,7 +36,7 @@ dartium_url = config.Master.dart_bleeding + '/deps/dartium.deps'
 android_tools_url = chromium_git + 'android_tools.git' + android_tools_rev
 
 github_mirror = 'https://chromium.googlesource.com/external/github.com'
-dart_sdk_mirror = github_mirror + '/dart-lang/sdk/'
+dart_sdk_mirror = github_mirror + '/dart-lang/sdk.git'
 
 if config.Master.v8_internal_url:
   android_resources_url = (config.Master.v8_internal_url +
