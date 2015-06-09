@@ -244,7 +244,7 @@ class GitBranchPoller(PollingChangeSource):
           yield stop(err)
           return
 
-    yield self._log('Fetching origin for', self.repo_url)
+    yield self._log('Fetching remotes for', self.repo_url)
     out, err, ret = yield self._git('fetch', '--all')
     if ret:
       yield stop(err)
@@ -253,7 +253,7 @@ class GitBranchPoller(PollingChangeSource):
     new_branch_heads = {}
 
     for branch in self.branch_heads:
-      out, err, ret = yield self._git('rev-parse', 'origin/%s' % branch)
+      out, err, ret = yield self._git('rev-parse', '%s' % branch)
       if ret:
         yield stop(err)
       self._log(branch, 'at', out.rstrip())
@@ -302,9 +302,9 @@ class GitBranchPoller(PollingChangeSource):
     new_branch_heads = {}
 
     for branch, head in self.branch_heads.iteritems():
-      rev_list_args.append('%s..origin/%s' % (head, branch))
+      rev_list_args.append('%s..%s' % (head, branch))
       excluded_branches = [
-        '^origin/%s' % b for b in self.branch_heads.keys() if b != branch
+        '^%s' % b for b in self.branch_heads.keys() if b != branch
       ]
       out, err, ret = yield self._git(
         'rev-list',
