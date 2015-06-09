@@ -367,6 +367,7 @@
       "-s",
       "components_browsertests",
       "--verbose",
+      "--isolate_file_path=[SLAVE_BUILD]/src/components/components_browsertests.isolate",
       "--flakiness-dashboard-server=http://test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"

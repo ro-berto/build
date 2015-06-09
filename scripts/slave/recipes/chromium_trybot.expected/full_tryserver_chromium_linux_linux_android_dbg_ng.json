@@ -751,6 +751,7 @@
       "-s",
       "base_unittests",
       "--verbose",
+      "--isolate_file_path=[SLAVE_BUILD]/src/base/base_unittests.isolate",
       "--flakiness-dashboard-server=http://test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -809,6 +810,7 @@
       "-s",
       "components_unittests",
       "--verbose",
+      "--isolate_file_path=[SLAVE_BUILD]/src/components/components_unittests.isolate",
       "--flakiness-dashboard-server=http://test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -828,6 +830,7 @@
       "-s",
       "content_browsertests",
       "--verbose",
+      "--isolate_file_path=[SLAVE_BUILD]/src/content/content_browsertests.isolate",
       "--flakiness-dashboard-server=http://test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -847,6 +850,7 @@
       "-s",
       "content_unittests",
       "--verbose",
+      "--isolate_file_path=[SLAVE_BUILD]/src/content/content_unittests.isolate",
       "--flakiness-dashboard-server=http://test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -980,6 +984,7 @@
       "-s",
       "media_unittests",
       "--verbose",
+      "--isolate_file_path=[SLAVE_BUILD]/src/media/media_unittests.isolate",
       "--flakiness-dashboard-server=http://test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -999,6 +1004,7 @@
       "-s",
       "net_unittests",
       "--verbose",
+      "--isolate_file_path=[SLAVE_BUILD]/src/net/net_unittests.isolate",
       "--flakiness-dashboard-server=http://test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -1037,6 +1043,7 @@
       "-s",
       "sql_unittests",
       "--verbose",
+      "--isolate_file_path=[SLAVE_BUILD]/src/sql/sql_unittests.isolate",
       "--flakiness-dashboard-server=http://test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -1056,6 +1063,7 @@
       "-s",
       "sync_unit_tests",
       "--verbose",
+      "--isolate_file_path=[SLAVE_BUILD]/src/sync/sync_unit_tests.isolate",
       "--flakiness-dashboard-server=http://test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -1094,6 +1102,7 @@
       "-s",
       "ui_base_unittests",
       "--verbose",
+      "--isolate_file_path=[SLAVE_BUILD]/src/ui/base/ui_base_tests.isolate",
       "--flakiness-dashboard-server=http://test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -1132,6 +1141,7 @@
       "-s",
       "unit_tests",
       "--verbose",
+      "--isolate_file_path=[SLAVE_BUILD]/src/chrome/unit_tests.isolate",
       "--flakiness-dashboard-server=http://test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
