@@ -23,23 +23,15 @@ class IsolateApi(recipe_api.RecipeApi):
     """Changes URL of Isolate server to use."""
     self._isolate_server = value
 
-  def set_isolate_environment(self, config, mode='prepare'):
+  def set_isolate_environment(self, config):
     """Modifies the config to include isolate related GYP_DEFINES.
 
-    Modifies the passed Config (which should generally be api.chromium.c)
-    to set up the appropriate GYP_DEFINES to upload isolates to the isolate
-    server during the build (if mode == 'archive') or to prepare all necessary
-    files to do this after the build (if mode == 'prepare'). This must be called
-    early in your recipe; definitely before the checkout and runhooks steps.
-
-    Uses current values of self.isolate_server. It should be property configured
-    before calling this method if the default value (production instance of
-    Isolate service) is not ok.
+    Modifies the passed Config (which should generally be api.chromium.c) to set
+    up the appropriate GYP_DEFINES to prepare all necessary files to do this
+    after compile. This must be called early in your recipe; definitely before
+    the checkout and runhooks steps.
     """
-    assert mode in ('archive', 'prepare'), mode
-    config.gyp_env.GYP_DEFINES['test_isolation_mode'] = mode
-    if mode == 'archive':
-      config.gyp_env.GYP_DEFINES['test_isolation_outdir'] = self._isolate_server
+    config.gyp_env.GYP_DEFINES['test_isolation_mode'] = 'prepare'
 
   def clean_isolated_files(self, build_dir):
     """Cleans out all *.isolated files from the build directory in

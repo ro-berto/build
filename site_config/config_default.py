@@ -58,10 +58,6 @@ class Master(object):
   bot_password = None
 
   # Fake urls to make various factories happy.
-  swarm_server_internal_url = 'http://fake.swarm.url.server.com'
-  swarm_server_dev_internal_url = 'http://fake.swarm.dev.url.server.com'
-  swarm_hashtable_server_internal = 'http://fake.swarm.hashtable.server.com'
-  swarm_hashtable_server_dev_internal = 'http://fake.swarm.hashtable.server.com'
   trunk_internal_url = None
   trunk_internal_url_src = None
   slave_internal_url = None

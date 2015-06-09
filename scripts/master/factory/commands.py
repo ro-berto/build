@@ -137,29 +137,6 @@ def BuildIsolatedFiles(test_filters, run_default_swarm_tests):
                                           run_default_swarm_tests))
 
 
-class RunHooksShell(shell.ShellCommand):
-  """Runs 'gclient runhooks'.
-
-  Allows modifying its environment right before it starts up.
-  """
-  def setupEnvironment(self, cmd):
-    test_filters = GetTestfilter(self)
-    run_default_swarm_tests = GetProp(self, 'run_default_swarm_tests', [])
-    # If swarm tests are present ensure that the .isolated and the sha-1 of its
-    # content, as required by the swarm steps, is generated.
-    if BuildIsolatedFiles(test_filters, run_default_swarm_tests):
-      environ = cmd.args.get('env', {}).copy()
-      environ.setdefault('GYP_DEFINES', '')
-      environ['GYP_DEFINES'] += ' test_isolation_mode=archive'
-      # TODO(maruel): Set it to be a factory property?
-      environ['GYP_DEFINES'] += (' test_isolation_outdir=' +
-                                 config.Master.swarm_hashtable_server_internal)
-
-      cmd.args['env'] = environ
-
-    shell.ShellCommand.setupEnvironment(self, cmd)
-
-
 def GetSwarmTestsFromTestFilter(test_filters, run_default_swarm_tests):
   """Returns the dict of all the tests in the list that should be run with
   swarm.
@@ -1070,7 +1047,7 @@ class FactoryCommands(object):
       cmd.append('--use-goma')
 
     self._factory.addStep(
-        RunHooksShell,
+        shell.ShellCommand,
         haltOnFailure=True,
         name='runhooks',
         description='gclient hooks',

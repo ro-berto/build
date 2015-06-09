@@ -23,8 +23,7 @@ def GenSteps(api):
 
   # Code coverage for set_isolate_environment.
   api.chromium.set_config('chromium')
-  api.isolate.set_isolate_environment(api.chromium.c, mode='prepare')
-  api.isolate.set_isolate_environment(api.chromium.c, mode='archive')
+  api.isolate.set_isolate_environment(api.chromium.c)
 
   # That would read a list of files to search for, generated in GenTests.
   step_result = api.step('read test spec', ['cat'], stdout=api.json.output())
