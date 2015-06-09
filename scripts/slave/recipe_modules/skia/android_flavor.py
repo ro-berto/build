@@ -35,6 +35,7 @@ def device_from_builder_dict(builder_dict):
       'Nexus9': 'nexus_9',
       'Nexus10': 'nexus_10',
       'NexusPlayer': 'x86',
+      'NVIDIA_Shield': 'arm64',
     }[builder_dict['model']]
   raise Exception(
       'No device found for builder: %s' % str(builder_dict))  # pragma: no cover
