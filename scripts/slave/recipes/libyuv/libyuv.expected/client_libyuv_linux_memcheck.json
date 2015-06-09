@@ -11,7 +11,7 @@
       "--slave",
       "slavename",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_deps': {'src/chromium/src/third_party/valgrind': 'https://chromium.googlesource.com/chromium/deps/valgrind/binaries'}, 'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/libyuv'}]",
+      "cache_dir = None\nsolutions = [{'custom_deps': {'src/chromium/src/third_party/valgrind': 'https://chromium.googlesource.com/chromium/deps/valgrind/binaries'}, 'custom_vars': {'root_dir': 'src'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/libyuv/libyuv'}]",
       "--root",
       "src",
       "--revision_mapping_file",

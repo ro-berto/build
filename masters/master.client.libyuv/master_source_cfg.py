@@ -6,7 +6,7 @@ from master import gitiles_poller
 
 
 def Update(config, c):
-  libyuv_repo_url = config.Master.git_server_url + '/external/libyuv'
+  libyuv_repo_url = config.Master.git_server_url + '/libyuv/libyuv'
   poller = gitiles_poller.GitilesPoller(
       libyuv_repo_url,
       svn_branch='trunk',

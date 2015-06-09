@@ -11,7 +11,7 @@ ChromiumGitURL = DEPS['gclient'].config.ChromiumGitURL
 def libyuv(c):
   s = c.solutions.add()
   s.name = 'src'
-  s.url = ChromiumGitURL(c, 'external', 'libyuv')
+  s.url = ChromiumGitURL(c, 'libyuv', 'libyuv')
   s.deps_file = 'DEPS'
   s.custom_vars['root_dir'] = 'src'
 
