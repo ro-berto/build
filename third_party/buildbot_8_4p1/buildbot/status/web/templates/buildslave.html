@@ -12,10 +12,9 @@
   <ul>
   {% for b in current %}
    <li>{{ build_line(b, True) }}
-     <form method="post" action="{{ b.buildurl }}/stop" class="command stopbuild" style="display:inline">
-       <input type="submit" value="Stop Build" />
-       <input type="hidden" name="url" value="{{ this_url }}" />
-     </form>
+    {% if authz.advertiseAction('stopBuild') %}
+      {{ forms.stop_build(b.buildurl + '/stop', authz, on_all=False, short=True, label='Build') }}
+    {% endif %}
    </li>
   {% endfor %}
   </ul>
