@@ -3988,7 +3988,7 @@ index e7cd932d10a0f874175a8b03bd0a9e29436e2278..1047dd55a791479f7be6143bc5992890
 Date:   Thu Jul 31 07:57:54 2014 -0400
 
     Console page: do revision filtering in the database instead of afterward
-    
+
     Part of a set of changes split out from https://codereview.chromium.org/417513003/
 
 diff --git a/third_party/buildbot_8_4p1/buildbot/db/changes.py b/third_party/buildbot_8_4p1/buildbot/db/changes.py
@@ -3998,7 +3998,7 @@ index a5b6482..c6516b6 100644
 @@ -194,7 +194,8 @@ class ChangesConnectorComponent(base.DBConnectorComponent):
          d = self.db.pool.do(thd)
          return d
- 
+
 -    def getRecentChanges(self, count):
 +    def getRecentChanges(self, count, repository=None, author=None,
 +                         branch=None):
@@ -4030,18 +4030,18 @@ index de922a4..fd4bd11 100644
 @@ -173,9 +173,10 @@ class ConsoleStatusResource(HtmlResource):
      Every change is a line in the page, and it shows the result of the first
      build with this change for each slave."""
- 
+
 -    def __init__(self, orderByTime=False):
 +    def __init__(self, orderByTime=False, repository=None):
          HtmlResource.__init__(self)
- 
+
 +        self.repository = repository
          self.status = None
          self.cache = CacheStatus()
- 
+
 @@ -244,11 +245,11 @@ class ConsoleStatusResource(HtmlResource):
          return allChanges
- 
+
      @defer.deferredGenerator
 -    def getAllChanges(self, request, status, debugInfo):
 +    def getAllChanges(self, request, status, debugInfo, **kwargs):
@@ -4052,9 +4052,9 @@ index de922a4..fd4bd11 100644
 +                master.db.changes.getRecentChanges(limit, **kwargs))
          yield wfd
          chdicts = wfd.getResult()
- 
+
 @@ -762,19 +763,14 @@ class ConsoleStatusResource(HtmlResource):
- 
+
          # Get all changes we can find.  This is a DB operation, so it must use
          # a deferred.
 -        d = self.getAllChanges(request, status, debugInfo)
@@ -4077,13 +4077,13 @@ index de922a4..fd4bd11 100644
 -                                                            filter=revFilter))
 +            revisions = list(self.filterRevisions(allChanges, max_revs=numRevs))
              debugInfo["revision_final"] = len(revisions)
- 
+
              # Fetch all the builds for all builders until we get the next build
 
 Date:   Wed Jul 30 12:11:07 2014 -0400
 
     Add optional builder filter function to console page
-    
+
     This is needed for client.skia, where we want to hide trybots from the console.
 
 diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/console.py b/third_party/buildbot_8_4p1/buildbot/status/web/console.py
@@ -4093,17 +4093,17 @@ index fd4bd11..60383f4 100644
 @@ -173,10 +173,12 @@ class ConsoleStatusResource(HtmlResource):
      Every change is a line in the page, and it shows the result of the first
      build with this change for each slave."""
- 
+
 -    def __init__(self, orderByTime=False, repository=None):
 +    def __init__(self, orderByTime=False, repository=None,
 +                 builder_filter_fn=lambda builderName: True):
          HtmlResource.__init__(self)
- 
+
          self.repository = repository
 +        self.builder_filter_fn = builder_filter_fn
          self.status = None
          self.cache = CacheStatus()
- 
+
 @@ -228,6 +230,8 @@ class ConsoleStatusResource(HtmlResource):
          allChanges = list()
          build_count = 0
@@ -4112,14 +4112,14 @@ index fd4bd11..60383f4 100644
 +                continue
              if build_count > max_builds:
                  break
- 
+
 @@ -407,6 +411,8 @@ class ConsoleStatusResource(HtmlResource):
                  continue
              if builders and builderName not in builders:
                  continue
 +            if not self.builder_filter_fn(builderName):
 +                continue
- 
+
              # We want to display this builder.
              category = builder.category or "default"
 diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/builder.py b/third_party/buildbot_8_4p1/buildbot/status/web/builder.py
@@ -4127,7 +4127,7 @@ index 4a4f19d..92c9544 100644
 --- a/third_party/buildbot_8_4p1/buildbot/status/web/builder.py
 +++ b/third_party/buildbot_8_4p1/buildbot/status/web/builder.py
 @@ -132,7 +132,8 @@ class StatusResourceBuilder(HtmlResource, BuildLineMixin):
- 
+
          cxt['authz'] = self.getAuthz(req)
          cxt['builder_url'] = path_to_builder(req, b)
 -
@@ -4135,13 +4135,13 @@ index 4a4f19d..92c9544 100644
 +            req.site.buildbot_service.master.properties['mastername'])
          template = req.site.buildbot_service.templates.get_template("builder.html")
          yield template.render(**cxt)
- 
+
 diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/console.py b/third_party/buildbot_8_4p1/buildbot/status/web/console.py
 index 60383f4..2d48aca 100644
 --- a/third_party/buildbot_8_4p1/buildbot/status/web/console.py
 +++ b/third_party/buildbot_8_4p1/buildbot/status/web/console.py
 @@ -77,14 +77,15 @@ class ANYBRANCH: pass # a flag value, used below
- 
+
  class CachedStatusBox(object):
      """Basic data class to remember the information for a box on the console."""
 -    def __init__(self, color, pageTitle, details, url, tag, builderName):
@@ -4155,13 +4155,13 @@ index 60383f4..2d48aca 100644
          self.builderName = builderName
 -
 +        self.buildNumber = buildNumber
- 
+
  class CacheStatus(object):
      """Basic cache of CachedStatusBox based on builder names and revisions.
 @@ -105,9 +106,11 @@ class CacheStatus(object):
                                         self.allBoxes[builder][revision].color)
          return data
- 
+
 -    def insert(self, builderName, revision, color, pageTitle, details, url, tag):
 +    def insert(self, builderName, revision, color, pageTitle, details, url,
 +               tag, buildNumber=None):
@@ -4171,12 +4171,12 @@ index 60383f4..2d48aca 100644
 +                              buildNumber)
          if not self.allBoxes.get(builderName):
              self.allBoxes[builderName] = {}
- 
+
 @@ -285,7 +288,7 @@ class ConsoleStatusResource(HtmlResource):
          details = {}
          if not build.getLogs():
              return details
--        
+-
 +
          for step in build.getSteps():
              (result, reason) = step.getResults()
@@ -4185,7 +4185,7 @@ index 60383f4..2d48aca 100644
                  # Remove html tags from the error text.
                  stripHtml = re.compile(r'<.*?>')
                  strippedDetails = stripHtml.sub('', ' '.join(step.getText()))
--                
+-
 +
                  details['buildername'] = builderName
                  details['status'] = strippedDetails
@@ -4194,7 +4194,7 @@ index 60383f4..2d48aca 100644
                      for log in step.getLogs():
                          logname = log.getName()
                          logurl = request.childLink(
--                          "../builders/%s/builds/%s/steps/%s/logs/%s" % 
+-                          "../builders/%s/builds/%s/steps/%s/logs/%s" %
 +                          "../builders/%s/builds/%s/steps/%s/logs/%s" %
                              (urllib.quote(builderName, safe=''),
                               build.getNumber(),
@@ -4203,7 +4203,7 @@ index 60383f4..2d48aca 100644
      def getChangeForBuild(self, build, revision):
          if not build or not build.getChanges(): # Forced build
              return DevBuild(revision, build, None)
--        
+-
 +
          for change in build.getChanges():
              if change.revision == revision:
@@ -4212,38 +4212,38 @@ index 60383f4..2d48aca 100644
          changes = list(build.getChanges())
          changes.sort(key=self.comparator.getSortingKey())
          return changes[-1]
--    
+-
 +
      def getAllBuildsForRevision(self, status, request, lastRevision, numBuilds,
                                  categories, builders, debugInfo):
          """Returns a dictionary of builds we need to inspect to be able to
 @@ -451,9 +454,9 @@ class ConsoleStatusResource(HtmlResource):
- 
+
          categories = builderList.keys()
          categories.sort()
--        
+-
 +
          cs = []
--        
+-
 +
          for category in categories:
              c = {}
- 
+
 @@ -526,14 +529,14 @@ class ConsoleStatusResource(HtmlResource):
          # Sort the categories.
          categories = builderList.keys()
          categories.sort()
--        
+-
 +
          builds = {}
--  
+-
 +
          # Display the boxes by category group.
          for category in categories:
--  
+-
 +
              builds[category] = []
--            
+-
 +
              # Display the boxes for each builder in this category.
              for builder in builderList[category]:
@@ -4253,14 +4253,14 @@ index 60383f4..2d48aca 100644
                      b["tag"] = cached_value.tag
                      b["builderName"] = cached_value.builderName
 +                    b["buildNumber"] = cached_value.buildNumber
- 
+
                      builds[category].append(b)
- 
+
 @@ -564,7 +568,7 @@ class ConsoleStatusResource(HtmlResource):
                          break
                      else:
                          introducedIn = build
--                        
+-
 +
                  # Get the results of the first build with the revision, and the
                  # first build that does not include the revision.
@@ -4278,17 +4278,17 @@ index 60383f4..2d48aca 100644
 +                    buildNumber = introducedIn.number
                      pageTitle += " "
                      pageTitle += urllib.quote(' '.join(introducedIn.text), ' \n\\/:')
- 
+
 @@ -600,17 +606,17 @@ class ConsoleStatusResource(HtmlResource):
- 
+
                  if isRunning:
                      pageTitle += ' ETA: %ds' % (introducedIn.eta or 0)
--                    
+-
 +
                  resultsClass = getResultsClass(results, previousResults, isRunning,
                                                 inProgressResults)
- 
--                b = {}                
+
+-                b = {}
 +                b = {}
                  b["url"] = url
                  b["pageTitle"] = pageTitle
@@ -4298,7 +4298,7 @@ index 60383f4..2d48aca 100644
 -
 +                b["buildNumber"] = buildNumber
                  builds[category].append(b)
- 
+
                  # If the box is red, we add the explaination in the details
 @@ -624,7 +630,8 @@ class ConsoleStatusResource(HtmlResource):
                                          "notstarted"):
@@ -4307,18 +4307,18 @@ index 60383f4..2d48aca 100644
 -                                    pageTitle, current_details, url, tag)
 +                                    pageTitle, current_details, url, tag,
 +                                    buildNumber)
- 
+
          return (builds, details)
- 
+
 @@ -685,10 +692,10 @@ class ConsoleStatusResource(HtmlResource):
          # For each revision we show one line
          for revision in revisions:
              r = {}
--            
+-
 +
              # Fill the dictionary with this new information
              r['id'] = revision.revision
--            r['link'] = revision.revlink 
+-            r['link'] = revision.revlink
 +            r['link'] = revision.revlink
              r['who'] = revision.who
              r['date'] = revision.date
@@ -4326,38 +4326,38 @@ index 60383f4..2d48aca 100644
 @@ -735,7 +742,7 @@ class ConsoleStatusResource(HtmlResource):
          if not reload_time:
              reload_time = 60
- 
--        # Append the tag to refresh the page. 
+
+-        # Append the tag to refresh the page.
 +        # Append the tag to refresh the page.
          if reload_time is not None and reload_time != 0:
              cxt['refresh'] = reload_time
- 
+
 @@ -810,6 +817,8 @@ class ConsoleStatusResource(HtmlResource):
- 
+
              templates = request.site.buildbot_service.templates
              template = templates.get_template("console.html")
 +            cxt['mastername'] = (
 +                request.site.buildbot_service.master.properties['mastername'])
              data = template.render(cxt)
- 
+
              # Clean up the cache.
 @@ -825,9 +834,9 @@ class RevisionComparator(object):
      VCS use a plain counter for revisions (like SVN)
      while others use different concepts (see Git).
      """
--    
+-
 +
      # TODO (avivby): Should this be a zope interface?
--    
+-
 +
      def isRevisionEarlier(self, first_change, second_change):
          """Used for comparing 2 changes"""
          raise NotImplementedError
 @@ -838,7 +847,7 @@ class RevisionComparator(object):
- 
+
      def getSortingKey(self):
          raise NotImplementedError
--    
+-
 +
  class TimeRevisionComparator(RevisionComparator):
      def isRevisionEarlier(self, first, second):
@@ -4370,16 +4370,16 @@ index 923fe0d..3262d1c 100644
              text = []
          text = text[:]
          logs = self.original.getLogs()
--        
+-
 +
          cxt = dict(text=text, logs=[], urls=[])
- 
+
          for num in range(len(logs)):
 @@ -188,9 +188,12 @@ class StepBox(components.Adapter):
- 
+
          template = req.site.buildbot_service.templates.get_template("box_macros.html")
          text = template.module.step_box(**cxt)
--        
+-
 +
          class_ = "BuildStep " + build_get_class(self.original)
 -        return Box(text, class_=class_)
@@ -4388,35 +4388,35 @@ index 923fe0d..3262d1c 100644
 +                   builder=self.original.builder.getName(),
 +                   stepName=self.original.getName())
  components.registerAdapter(StepBox, buildstep.BuildStepStatus, IBox)
- 
- 
+
+
 @@ -202,7 +205,7 @@ class EventBox(components.Adapter):
          class_ = "Event"
          return Box(text, class_=class_)
  components.registerAdapter(EventBox, builder.Event, IBox)
--        
+-
 +
- 
+
  class Spacer:
      implements(interfaces.IStatusEvent)
 @@ -301,7 +304,7 @@ class WaterfallHelp(HtmlResource):
              times.insert(0, (current_reload_time, current_reload_time) )
- 
+
          cxt['times'] = times
--        cxt['current_reload_time'] = current_reload_time   
+-        cxt['current_reload_time'] = current_reload_time
 +        cxt['current_reload_time'] = current_reload_time
- 
+
          template = request.site.buildbot_service.templates.get_template("waterfallhelp.html")
          return template.render(**cxt)
 @@ -459,10 +462,10 @@ class WaterfallStatusResource(HtmlResource):
          failuresOnly = request.args.get("failures_only", ["false"])[0]
          if failuresOnly.lower() == "true":
              builders = [b for b in builders if not self.isSuccess(b)]
--        
+-
 +
          (changeNames, builderNames, timestamps, eventGrid, sourceEvents) = \
                        self.buildGrid(request, builders, changes)
--            
+-
 +
          # start the table: top-header material
          locale_enc = locale.getdefaultlocale()[1]
@@ -4425,64 +4425,64 @@ index 923fe0d..3262d1c 100644
              locale_tz = unicode(time.tzname[time.localtime()[-1]])
          ctx['tz'] = locale_tz
          ctx['changes_url'] = request.childLink("../changes")
--        
+-
 +
          bn = ctx['builders'] = []
--                
+-
 +
          for name in builderNames:
              builder = status.getBuilder(name)
              top_box = ITopBox(builder).getBox(request)
              current_box = ICurrentBox(builder).getBox(status, brcounts)
              bn.append({'name': name,
--                       'url': request.childLink("../builders/%s" % urllib.quote(name, safe='')), 
--                       'top': top_box.text, 
+-                       'url': request.childLink("../builders/%s" % urllib.quote(name, safe='')),
+-                       'top': top_box.text,
 +                       'category': builder.category,
 +                       'url': request.childLink("../builders/%s" % urllib.quote(name, safe='')),
 +                       'top': top_box.text,
                         'top_class': top_box.class_,
                         'status': current_box.text,
--                       'status_class': current_box.class_,                       
+-                       'status_class': current_box.class_,
 +                       'status_class': current_box.class_,
                          })
- 
+
          ctx.update(self.phase2(request, changeNames + builderNames, timestamps, eventGrid,
 @@ -528,9 +532,11 @@ class WaterfallStatusResource(HtmlResource):
              ctx['no_reload_page'] = with_args(request, remove_args=["reload"])
- 
+
          template = request.site.buildbot_service.templates.get_template("waterfall.html")
 +        ctx['mastername'] = (
 +            request.site.buildbot_service.master.properties['mastername'])
          data = template.render(**ctx)
          return data
--    
+-
 +
      def buildGrid(self, request, builders, changes):
          debug = False
          # TODO: see if we can use a cached copy
 @@ -677,21 +683,21 @@ class WaterfallStatusResource(HtmlResource):
- 
+
              if len(timestamps) > maxPageLen:
                  break
--            
--            
+-
+-
 +
 +
              # now loop
--            
+-
 +
          # loop is finished. now we have eventGrid[] and timestamps[]
          if debugGather: log.msg("finished loop")
          assert(len(timestamps) == len(eventGrid))
          return (changeNames, builderNames, timestamps, eventGrid, sourceEvents)
--    
+-
 +
      def phase2(self, request, sourceNames, timestamps, eventGrid,
                 sourceEvents):
- 
+
          if not timestamps:
              return dict(grid=[], gridlen=0)
--        
+-
 +
          # first pass: figure out the height of the chunks, populate grid
          grid = []
@@ -4497,12 +4497,12 @@ index ca83fdb..af764f1 100644
  from twisted.python import log
 +from twisted.python.logfile import LogFile
  from twisted.web import client
- 
- 
+
+
 @@ -109,6 +110,9 @@ class StatusPush(StatusReceiverMultiService):
              # Last shutdown was not clean, don't wait to send events.
              self.queueNextServerPush()
- 
+
 +        self.verboseLog = LogFile.fromFullPath(
 +            'status_push.log', rotateLength=10*1024*1024, maxRotatedFiles=14)
 +
@@ -4529,7 +4529,7 @@ index ca83fdb..af764f1 100644
 +                json.dumps(items, indent=2, sort_keys=True)))
              self.lastPushWasSuccessful = True
              return self.queueNextServerPush()
- 
+
 @@ -413,6 +424,9 @@ class HttpStatusPush(StatusPush):
              # Server is now down.
              log.msg('Failed to push %d events to %s: %s' %
@@ -4546,7 +4546,7 @@ index af764f1..e8319e0 100644
 +++ b/third_party/buildbot_8_4p1/buildbot/status/status_push.py
 @@ -51,7 +51,7 @@ class StatusPush(StatusReceiverMultiService):
      """
- 
+
      def __init__(self, serverPushCb, queue=None, path=None, filter=True,
 -                 bufferDelay=1, retryDelay=5, blackList=None):
 +                 bufferDelay=1, retryDelay=5, blackList=None, filterFunc=None):
@@ -4560,13 +4560,13 @@ index af764f1..e8319e0 100644
 +        @filterFunc: optional function applied to items added to packet payload
          """
          StatusReceiverMultiService.__init__(self)
- 
+
 @@ -90,6 +91,7 @@ class StatusPush(StatusReceiverMultiService):
              return serverPushCb(self)
          self.serverPushCb = hookPushCb
          self.blackList = blackList
 +        self.filterFunc = filterFunc
- 
+
          # Other defaults.
          # IDelayedCall object that represents the next queued push.
 @@ -234,6 +236,8 @@ class StatusPush(StatusReceiverMultiService):
@@ -4590,18 +4590,18 @@ index 9099a08..f5b4f43 100644
 +        self.wasTimeout = False
          self._closeWhenFinished = {}
          RemoteCommand.__init__(self, *args, **kwargs)
- 
+
 @@ -375,6 +376,8 @@ class LoggedRemoteCommand(RemoteCommand):
              self.addHeader("program finished with exit code %d\n" % rc)
          if update.has_key('elapsed'):
              self._remoteElapsed = update['elapsed']
 +        if update.has_key('timeout'):
 +            self.wasTimeout = self.wasTimeout or update['timeout']
- 
+
          for k in update:
              if k not in ('stdout', 'stderr', 'header', 'rc'):
 @@ -1241,6 +1244,8 @@ class LoggingBuildStep(BuildStep):
- 
+
          if self.log_eval_func:
              return self.log_eval_func(cmd, self.step_status)
 +        if getattr(cmd, 'wasTimeout', False):
@@ -4641,7 +4641,7 @@ index f5b4f43..160a4de 100644
 -        return self.finished(RETRY)
 +        # Retry if we're stopping the reactor (resarting the master)
 +        return self.finished(RETRY if reactor._stopped else EXCEPTION)
- 
+
      # to refine the status output, override one or more of the following
      # methods. Change as little as possible: start with the first ones on
 
@@ -4705,11 +4705,11 @@ index 3ac7bbc..7703e57 100644
 +        self.ping_new_slave_done = False
          self.old_slave_connected = True
          self.ping_old_slave(new_tport.getPeer())
- 
+
          # Print a message on the new slave, if possible.
 -        self.ping_new_slave_done = False
          self.ping_new_slave()
- 
+
          return self.new_slave_d
 
 diff --git a/third_party/buildbot_8_4p1/buildbot/process/botmaster.py b/third_party/buildbot_8_4p1/buildbot/process/botmaster.py
@@ -4719,7 +4719,7 @@ index 7703e57..7a83ed7 100644
 @@ -634,8 +634,14 @@ class DuplicateSlaveArbitrator(object):
          self.ping_old_slave_timeout = reactor.callLater(self.PING_TIMEOUT, timeout)
          self.ping_old_slave_timed_out = False
- 
+
 -        d = self.old_slave.slave.callRemote("print",
 -            "master got a duplicate connection from %s; keeping this one" % new_peer)
 +        try:
@@ -4737,7 +4737,7 @@ index 9a1b6d0..3618b3c 100644
 +++ b/third_party/buildbot_8_4p1/buildbot/master.py
 @@ -217,16 +217,8 @@ class BuildMaster(service.MultiService):
                      bname, number_cancelled_builds))
- 
+
      def noNewBuilds(self):
 -        log.msg("stopping schedulers")
 -        self.loadConfig_Schedulers([])
@@ -4751,7 +4751,7 @@ index 9a1b6d0..3618b3c 100644
 -        return d
 +        log.msg("stopping build request driver")
 +        return self.botmaster.brd.stopService()
- 
+
      def loadTheConfigFile(self, configFile=None):
          if not configFile:
 
@@ -4791,7 +4791,7 @@ index dbb8aab..21f7fb8 100644
          return len([ t for t in self.connect_times if t > then ])
 +    def getConnectTimes(self):
 +        return self.connect_times
- 
+
      def setAdmin(self, admin):
          self.admin = admin
 diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
@@ -4799,13 +4799,13 @@ index 9eb0858..1b36daf 100644
 --- a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
 +++ b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
 @@ -27,7 +27,7 @@ from twisted.web import html, resource, server
- 
+
  from buildbot.changes import changes
  from buildbot.status.web.base import HtmlResource
 -from buildbot.util import json
 +from buildbot.util import json, now
- 
- 
+
+
  _IS_INT = re.compile('^[-+]?\d+$')
 @@ -82,6 +82,8 @@ EXAMPLES = """\
      - Builder information plus details information about its slaves. Neat eh?
@@ -4824,7 +4824,7 @@ index 9eb0858..1b36daf 100644
 +            if re.match(r'^[_a-zA-Z$][_a-zA-Z$0-9.]*$', callback):
                  data = '%s(%s);' % (callback, data)
          yield data
- 
+
 @@ -349,6 +351,7 @@ class HelpResource(HtmlResource):
          HtmlResource.__init__(self)
          self.text = text
@@ -4832,7 +4832,7 @@ index 9eb0858..1b36daf 100644
 +        self.flags = getattr(parent_node, 'FLAGS', None) or FLAGS
          self.parent_level = parent_node.level
          self.parent_children = parent_node.children.keys()
- 
+
 @@ -356,7 +359,7 @@ class HelpResource(HtmlResource):
          cxt['level'] = self.parent_level
          cxt['text'] = ToHtml(self.text)
@@ -4844,8 +4844,8 @@ index 9eb0858..1b36daf 100644
                  'href="%sjson' % (self.level * '../'))
 @@ -745,6 +748,204 @@ class MetricsJsonResource(JsonResource):
              return None
- 
- 
+
+
 +class BuildStateJsonResource(JsonResource):
 +    help = ('Holistic build state JSON endpoint.\n\n'
 +            'This endpoint is a fast (unless otherwise noted) and '
@@ -5044,7 +5044,7 @@ index 9eb0858..1b36daf 100644
 +                'last_message_received': slave.lastMessageReceived(),
 +        }
 +
- 
+
  class JsonStatusResource(JsonResource):
      """Retrieves all json data."""
 @@ -766,6 +967,7 @@ For help on any sub directory, use url /child/help
@@ -5054,7 +5054,7 @@ index 9eb0858..1b36daf 100644
 +        self.putChild('buildstate', BuildStateJsonResource(status))
          # This needs to be called before the first HelpResource().body call.
          self.hackExamples()
- 
+
 diff --git a/third_party/buildbot_8_4p1/buildbot/status/build.py b/third_party/buildbot_8_4p1/buildbot/status/build.py
 index ab3150f..723f6ad 100644
 --- a/third_party/buildbot_8_4p1/buildbot/status/build.py
@@ -5062,7 +5062,7 @@ index ab3150f..723f6ad 100644
 @@ -433,29 +433,36 @@ class BuildStatus(styles.Versioned):
                                                       self.number))
              log.err()
- 
+
 -    def asDict(self):
 +    def asDict(self, blame=True, logs=True, properties=True, steps=True,
 +               sourceStamp=True, eta=True):
@@ -5077,7 +5077,7 @@ index ab3150f..723f6ad 100644
 -        result['blame'] = self.getResponsibleUsers()
 +        if blame:
 +          result['blame'] = self.getResponsibleUsers()
- 
+
          # Transient
 -        result['properties'] = self.getProperties().asList()
 +        if properties:
@@ -5115,7 +5115,7 @@ index 1b36daf..9fe46ef 100644
 @@ -760,6 +760,14 @@ class BuildStateJsonResource(JsonResource):
      # be returned.
      CACHED = 'cached'
- 
+
 +    # Specific build fields that will be stripped unless requested. These map
 +    # user-specified query parameters (lowercase) to
 +    # buildbot.status.Build.asDict keyword arguments.
@@ -5161,9 +5161,9 @@ index 1b36daf..9fe46ef 100644
 +                                                  for f in self.BUILD_FIELDS])),
 +        }
 +        self.FLAGS = FLAGS + self.EXTRA_FLAGS % context
- 
+
          self.putChild('project', ProjectJsonResource(status))
- 
+
 @@ -802,6 +822,7 @@ class BuildStateJsonResource(JsonResource):
      @defer.deferredGenerator
      def asDict(self, request):
@@ -5182,7 +5182,7 @@ index 1b36daf..9fe46ef 100644
          yield wfd
          response['builders'] = wfd.getResult()
 @@ -839,7 +860,7 @@ class BuildStateJsonResource(JsonResource):
- 
+
      @defer.deferredGenerator
      def _getBuilderData(self, builder, current_builds, completed_builds,
 -                        pending_builds):
@@ -5197,13 +5197,13 @@ index 1b36daf..9fe46ef 100644
 -                                        current_builds, completed_builds))
 +                                        current_builds, completed_builds,
 +                                        build_fields))
- 
+
          # Get pending builds.
          if pending_builds:
 @@ -872,7 +894,8 @@ class BuildStateJsonResource(JsonResource):
              build_state.update(build_data_entry)
          yield response
- 
+
 -    def _loadBuildData(self, builder, current_builds, completed_builds):
 +    def _loadBuildData(self, builder, current_builds, completed_builds,
 +                       build_fields):
@@ -5213,7 +5213,7 @@ index 1b36daf..9fe46ef 100644
 @@ -902,10 +925,18 @@ class BuildStateJsonResource(JsonResource):
              builds.update(build_numbers)
              build_data_entries.append(('completed', build_numbers))
- 
+
 +        # Determine which build fields to request.
 +        build_fields = [f.lower() for f in build_fields]
 +        build_field_kwargs = {}
@@ -5229,7 +5229,7 @@ index 1b36daf..9fe46ef 100644
 +                         for build_dict in [build.asDict(**build_field_kwargs)
                                              for build in builds
                                              if build])
- 
+
 diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
 index 9fe46ef..6c701ad 100644
 --- a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
@@ -5240,7 +5240,7 @@ index 9fe46ef..6c701ad 100644
          response = builder.asDict()
 +        response['builderName'] = builder.getName()
          tasks = []
- 
+
          # Get current/completed builds.
 
 Trim long comment fields to 1024 characters, but preserve important tags
@@ -5301,13 +5301,13 @@ index 6c701ad..36f8806 100644
 --- a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
 +++ b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
 @@ -18,6 +18,7 @@
- 
+
  import collections
  import datetime
 +import fnmatch
  import os
  import re
- 
+
 @@ -772,6 +773,7 @@ class BuildStateJsonResource(JsonResource):
    - builder
      - A builder name to explicitly include in the results. This can be supplied
@@ -5317,7 +5317,7 @@ index 6c701ad..36f8806 100644
      - Controls whether the builder's current-running build data will be
        returned. By default, no current build data will be returned; setting
 @@ -831,8 +833,10 @@ class BuildStateJsonResource(JsonResource):
- 
+
          builder_names = self.status.getBuilderNames()
          if builders:
 +            builder_regex = re.compile('|'.join(fnmatch.translate(b)
@@ -5325,7 +5325,7 @@ index 6c701ad..36f8806 100644
              builder_names = [b for b in builder_names
 -                             if b in set(builders)]
 +                             if builder_regex.match(b)]
- 
+
          # Collect child endpoint data.
          wfd = defer.waitForDeferred(
 
@@ -5349,17 +5349,17 @@ Author: Ryan Kubiak <rkubiak@google.com>
 Date:   Thu Jan 22 17:19:49 2015 -0800
 
     Fix MailNotifier bug for buildsets
-    
+
     Implementing a fix from buildbot 0.8.6p1.
     http://trac.buildbot.net/ticket/2254
     https://github.com/buildbot/buildbot/commit/4d3b0318025ca38c148a09e2fec5f2f97f61be57
-    
+
     I wasn't entirely sure of the implications of removing self.db from
     status/master.py.  I found two files using status.master.db
     (buildbot/status/builder.py, buildbot/status/web/status_json.py).
     Neither of these are imports and they both seem to still work by
     inherting status from their parent.
-    
+
     I've run this patch on a testing instance and everything seems to still
     work, although I have not tested the MailNotifier.
 
@@ -5372,16 +5372,16 @@ index fd62b52..c03f609 100644
          self.master_status = self.parent.getStatus()
          self.master_status.subscribe(self)
 +        self.master = self.master_status.master
- 
- 
+
+
      def startService(self):
          if self.buildSetSummary:
              self.buildSetSubscription = \
 -            self.parent.subscribeToBuildsetCompletions(self.buildsetFinished)
 +            self.master.subscribeToBuildsetCompletions(self.buildsetFinished)
- 
+
          base.StatusReceiverMultiService.startService(self)
- 
+
 @@ -428,18 +429,18 @@ class MailNotifier(base.StatusReceiverMultiService):
          for breq in breqs:
              buildername = breq['buildername']
@@ -5392,17 +5392,17 @@ index fd62b52..c03f609 100644
              dl.append(d)
          d = defer.DeferredList(dl)
          d.addCallback(self._gotBuilds, builddicts, buildset, builders)
- 
+
      def _gotBuildSet(self, buildset, bsid):
 -        d = self.parent.db.buildrequests.getBuildRequests(bsid=bsid)
 +        d = self.master.db.buildrequests.getBuildRequests(bsid=bsid)
          d.addCallback(self._gotBuildRequests, buildset)
- 
+
      def buildsetFinished(self, bsid, result):
 -        d = self.parent.db.buildsets.getBuildset(bsid=bsid)
 +        d = self.master.db.buildsets.getBuildset(bsid=bsid)
          d.addCallback(self._gotBuildSet, bsid)
- 
+
          return d
 diff --git a/third_party/buildbot_8_4p1/buildbot/status/master.py b/third_party/buildbot_8_4p1/buildbot/status/master.py
 index 1df47a0..7864e2a 100644
@@ -5426,7 +5426,7 @@ index 3c8a70b..3ee4f49 100644
                                  ])
 -        mn.parent = self
 +        mn.master = self # FIXME: Should be FakeMaster
-         
+
          self.status = Mock()
          mn.master_status = Mock()
 
@@ -5446,21 +5446,21 @@ index c03f609..cd86e86 100644
          """
          base.StatusReceiverMultiService.setServiceParent(self, parent)
 -        self.setup()
- 
+
      def setup(self):
          self.master_status = self.parent.getStatus()
          self.master_status.subscribe(self)
          self.master = self.master_status.master
- 
+
 -
      def startService(self):
 +        self.setup()
          if self.buildSetSummary:
              self.buildSetSubscription = \
              self.master.subscribeToBuildsetCompletions(self.buildsetFinished)
- 
+
          base.StatusReceiverMultiService.startService(self)
- 
+
 -
      def stopService(self):
          if self.buildSetSubscription is not None:
@@ -5609,11 +5609,28 @@ index 8469c25..531199b 100644
 --- a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
 +++ b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
 @@ -876,6 +876,8 @@ class BuildStateJsonResource(JsonResource):
- 
+
          # Add timestamp and return.
          response['timestamp'] = now()
 +        response['accepting_builds'] = bool(
 +                self.status.master.botmaster.brd.running)
          yield response
- 
+
      @defer.deferredGenerator
+
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/builder.py b/third_party/buildbot_8_4p1/buildbot/status/web/builder.py
+index 92c9544..f9d5b82 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/builder.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/builder.py
+@@ -155,6 +155,10 @@ class StatusResourceBuilder(HtmlResource, BuildLineMixin):
+             if not self.getAuthz(req).actionAllowed('forceBuild', req, self.builder_status):
+                 log.msg("..but not authorized")
+                 return Redirect(path_to_authfail(req))
++        # ensure that they've filled out the username field at least.
++        if name == "<unknown>":
++            log.msg("..but didn't include a username to blame")
++            return Redirect(path_to_authfail(req))
+
+         # keep weird stuff out of the branch revision, and property strings.
+         # TODO: centralize this somewhere.

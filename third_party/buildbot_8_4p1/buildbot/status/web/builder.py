@@ -155,6 +155,10 @@ class StatusResourceBuilder(HtmlResource, BuildLineMixin):
             if not self.getAuthz(req).actionAllowed('forceBuild', req, self.builder_status):
                 log.msg("..but not authorized")
                 return Redirect(path_to_authfail(req))
+        # ensure that they've filled out the username field at least.
+        if name == "<unknown>":
+            log.msg("..but didn't include a username to blame")
+            return Redirect(path_to_authfail(req))
 
         # keep weird stuff out of the branch revision, and property strings.
         # TODO: centralize this somewhere.
