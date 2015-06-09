@@ -38,7 +38,7 @@ BUILDERS = freeze({
   'tryserver.chromium.linux': {
     'builders': {
       'linux_arm_compile': {
-        'mastername': 'chromium.fyi',
+        'mastername': 'chromium.linux',
         'buildername': 'Linux ARM',
       },
       'android_arm64_dbg_recipe': {
