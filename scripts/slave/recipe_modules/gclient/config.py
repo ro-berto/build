@@ -508,3 +508,10 @@ def catapult(c):
   soln.name = 'catapult'
   soln.url = ('https://chromium.googlesource.com/external/github.com/'
               'catapult-project/catapult.git')
+
+@config_ctx(includes=['infra_internal'], config_vars={'GIT_MODE': True})
+def infradata_config_internal(c):
+  soln = c.solutions.add()
+  soln.name = 'infradata_config'
+  soln.url = 'https://chrome-internal.googlesource.com/infradata/config.git'
+  c.got_revision_mapping['infradata_config'] = 'got_revision'
