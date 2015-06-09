@@ -542,6 +542,7 @@ SPEC = {
     },
     'CrWinClang64(dbg)': {
       'chromium_config': 'chromium_win_clang',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -552,8 +553,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
-      'enable_swarming': True,
+      # TODO(thakis): Reenable when swarming works in gn http://crbug.com/480053
+      #'use_isolate': True,
+      #'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -573,7 +575,8 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
+      # TODO(thakis): Reenable when swarming works in gn http://crbug.com/480053
+      #'enable_swarming': True,
     },
     'CrWinClang64(dll)': {
       'chromium_config': 'chromium_win_clang',
