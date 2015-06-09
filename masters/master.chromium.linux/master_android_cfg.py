@@ -6,7 +6,6 @@ from buildbot.schedulers.basic import SingleBranchScheduler
 
 from master import master_config
 from master.factory import annotator_factory
-from master.factory import chromium_factory
 
 m_annotator = annotator_factory.AnnotatorFactory()
 
@@ -17,10 +16,6 @@ B = helper.Builder
 F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
-
-def linux_android():
-  return chromium_factory.ChromiumFactory(
-    '', 'linux2', nohooks_on_update=True, target_os='android')
 
 defaults['category'] = '5android'
 
