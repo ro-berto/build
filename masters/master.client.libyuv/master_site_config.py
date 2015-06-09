@@ -12,7 +12,7 @@ class Libyuv(Master.Master3):
   slave_port = 8162
   master_port_alt = 8262
   buildbot_url = 'http://build.chromium.org/p/client.libyuv/'
-  server_url = 'http://libyuv.googlecode.com'
-  project_url = 'http://libyuv.googlecode.com'
+  server_url = 'https://chromium.googlesource.com/libyuv/libyuv'
+  project_url = 'https://code.google.com/p/libyuv/'
   from_address = 'libyuv-cb-watchlist@google.com'
   permitted_domains = ('google.com', 'chromium.org', 'webrtc.org')
