@@ -52,7 +52,8 @@ def GenSteps(api):
 
   if webrtc.should_build:
     webrtc.compile()
-    if api.properties.get('mastername') == 'chromium.webrtc.fyi':
+    if (api.properties.get('mastername') == 'chromium.webrtc.fyi' and
+        api.chromium.c.TARGET_PLATFORM != 'android'):
       webrtc.sizes()
 
   if webrtc.should_upload_build:
