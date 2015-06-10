@@ -734,7 +734,6 @@ class ChromiumCommands(commands.FactoryCommands):
     """Adds a step to the factory to run the WebKit layout tests.
 
     Args:
-      with_pageheap: if True, page-heap checking will be enabled for test_shell
       test_timeout: buildbot timeout for the test step
       archive_timeout: buildbot timeout for archiving the test results and
           crashes, if requested
@@ -751,7 +750,6 @@ class ChromiumCommands(commands.FactoryCommands):
       layout_tests: List of layout tests to run.
     """
     factory_properties = factory_properties or {}
-    with_pageheap = factory_properties.get('webkit_pageheap')
     archive_results = factory_properties.get('archive_webkit_results')
     layout_part = factory_properties.get('layout_part')
     test_results_server = factory_properties.get('test_results_server')
@@ -766,10 +764,6 @@ class ChromiumCommands(commands.FactoryCommands):
     result_str = 'results'
     test_name = 'webkit_tests'
 
-    pageheap_description = ''
-    if with_pageheap:
-      pageheap_description = ' (--enable-pageheap)'
-
     webkit_result_dir = '/'.join(['..', '..', 'layout-test-results'])
 
     cmd_args = ['--target', self._target,
@@ -783,9 +777,6 @@ class ChromiumCommands(commands.FactoryCommands):
 
     if layout_part:
       cmd_args.extend(['--run-part', layout_part])
-
-    if with_pageheap:
-      cmd_args.append('--enable-pageheap')
 
     if test_results_server:
       cmd_args.extend(['--test-results-server', test_results_server])
@@ -820,7 +811,6 @@ class ChromiumCommands(commands.FactoryCommands):
 
     self.AddTestStep(webkit_test_command.WebKitCommand,
                      test_name=test_name,
-                     test_description=pageheap_description,
                      test_command=cmd,
                      do_step_if=self.TestStepFilter)
 

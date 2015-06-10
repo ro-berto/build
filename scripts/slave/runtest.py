@@ -1515,9 +1515,6 @@ def _MainWin(options, args, extra_env):
       return 0
     raise chromium_utils.PathNotFound('Unable to find %s' % test_exe_path)
 
-  if options.enable_pageheap:
-    slave_utils.SetPageHeap(build_dir, 'chrome.exe', True)
-
   if options.run_python_script:
     command = [sys.executable, test_exe]
   else:
@@ -1565,9 +1562,6 @@ def _MainWin(options, args, extra_env):
                               test_exe,
                               options.step_name)
       log_processor.ProcessJSONFile(options.build_dir)
-
-  if options.enable_pageheap:
-    slave_utils.SetPageHeap(build_dir, 'chrome.exe', False)
 
   if options.generate_json_file:
     if not _GenerateJSONForTestResults(options, log_processor):
@@ -1790,9 +1784,6 @@ def main():
                            help='pass --build-dir to the spawned test script')
   option_parser.add_option('--test-platform',
                            help='Platform to test on, e.g. ios-simulator')
-  option_parser.add_option('--enable-pageheap', action='store_true',
-                           default=False,
-                           help='enable pageheap checking for chrome.exe')
   # --with-httpd assumes a chromium checkout with src/tools/python.
   option_parser.add_option('--with-httpd', dest='document_root',
                            default=None, metavar='DOC_ROOT',
