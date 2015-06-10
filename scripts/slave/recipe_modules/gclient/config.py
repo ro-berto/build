@@ -512,6 +512,6 @@ def catapult(c):
 @config_ctx(includes=['infra_internal'], config_vars={'GIT_MODE': True})
 def infradata_config_internal(c):
   soln = c.solutions.add()
-  soln.name = 'infra-data-config'
+  soln.name = 'infra-data-configs'
   soln.url = 'https://chrome-internal.googlesource.com/infradata/config.git'
   c.got_revision_mapping['infra-data-config'] = 'got_revision'
