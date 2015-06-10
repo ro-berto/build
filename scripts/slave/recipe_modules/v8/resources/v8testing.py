@@ -9,7 +9,6 @@
 """
 
 import optparse
-import os
 import sys
 
 from common import chromium_utils
@@ -97,8 +96,6 @@ def main():
   options, args = option_parser.parse_args()
   if args:
     option_parser.error('Unsupported arguments: %s' % args)
-
-  os.environ['LD_LIBRARY_PATH'] = os.environ.get('PWD')
 
   cmd = ['python', 'tools/run-tests.py',
          '--progress=verbose',
