@@ -2,9 +2,6 @@
 {% import 'forms.html' as forms %}
 
 {% extends "layout.html" %}
-{%- block header %}
-<a href="http://www.chromium.org">Chromium</a><br/>
-{% endblock header -%}
 {% block content %}
 
 <h1><a href="{{ path_to_root }}waterfall?show={{ name }}">Builder: {{ name }}</a>

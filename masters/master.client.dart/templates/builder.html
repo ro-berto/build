@@ -2,9 +2,6 @@
 {% import 'forms.html' as forms %}
 
 {% extends "layout.html" %}
-{%- block header %}
-<a href="http://www.chromium.org">Chromium</a><br/>
-{% endblock header -%}
 {% block content %}
 
 <h1><a href="{{ path_to_root }}waterfall?show={{ name }}">Builder: {{ name }}</a></h1>
@@ -24,36 +21,36 @@
 
     {% if authz.advertiseAction('stopBuild') %}
       {{ forms.stop_build(b.stop_url, authz, on_all=False, short=True, label='Build') }}
-    {% endif %}    
+    {% endif %}
     </li>
   {% endfor %}
   </ul>
 {% else %}
   <h2>No current builds</h2>
-{% endif %}    
- 
+{% endif %}
+
 {% if pending %}
   <h2>Pending Build Requests:</h2>
   <ul>
   {% for b in pending %}
-    <li><small>({{ b.when }}, waiting {{ b.delay }})</small> 
-    
+    <li><small>({{ b.when }}, waiting {{ b.delay }})</small>
+
     {% if authz.advertiseAction('cancelPendingBuild') %}
       {{ forms.cancel_pending_build(builder_url+"/cancelbuild", authz, short=True, id=b.id) }}
-    {% endif %}    
-    
+    {% endif %}
+
     {% if b.num_changes < 4 %}
         {% for c in b.changes %}{{ c.revision|longrev(c.repo) }}
         (<a href="{{ c.url }}">{{ c.who }}</a>){% if not loop.last %},{% endif %}
         {% endfor %}
     {% else %}
         ({{ b.num_changes }} changes)
-    {% endif %}    
+    {% endif %}
 
     </li>
   {% endfor %}
-  </ul>  
-  
+  </ul>
+
 {% else %}
   <h2>No Pending Build Requests</h2>
 {% endif %}
@@ -81,7 +78,7 @@
     <td class="success">connected</td>
     <td class="admin">{{ s.admin|email if s.admin else ""}}</td>
   {% else %}
-    <td class="offline">offline</td> 
+    <td class="offline">offline</td>
     <td/>
   {% endif %}
   </tr>
