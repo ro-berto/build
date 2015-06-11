@@ -270,6 +270,7 @@
       "out",
       "--testname",
       "simdjs/shell_test_runner",
+      "--download-data",
       "--shell_flags=\"--noenable-sse4-1 --noenable-avx\"",
       "--json-test-results",
       "/path/to/tmp/json"

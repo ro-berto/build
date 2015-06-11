@@ -325,6 +325,7 @@
       "--testname",
       "test262",
       "--no-variants",
+      "--download-data",
       "--shard_count=2",
       "--shard_run=1",
       "--json-test-results",

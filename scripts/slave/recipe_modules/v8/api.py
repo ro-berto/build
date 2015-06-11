@@ -29,6 +29,7 @@ TEST_CONFIGS = freeze({
   'benchmarks': {
     'name': 'Benchmarks',
     'tests': 'benchmarks',
+    'test_args': ['--download-data'],
   },
   'mjsunit': {
     'name': 'Mjsunit',
@@ -49,28 +50,32 @@ TEST_CONFIGS = freeze({
   'simdjs_small': {
     'name': 'SimdJs - small',
     'tests': 'simdjs/shell_test_runner',
+    'test_args': ['--download-data'],
   },
   'simdjs': {
     'name': 'SimdJs - all',
     'tests': 'simdjs',
+    'test_args': ['--download-data'],
   },
   'test262': {
     'name': 'Test262 - no variants',
     'tests': 'test262',
-    'test_args': ['--no-variants'],
+    'test_args': ['--no-variants', '--download-data'],
   },
   'test262_variants': {
     'name': 'Test262',
     'tests': 'test262',
+    'test_args': ['--download-data'],
   },
   'test262_es6': {
     'name': 'Test262-es6 - no variants',
     'tests': 'test262-es6',
-    'test_args': ['--no-variants'],
+    'test_args': ['--no-variants', '--download-data'],
   },
   'test262_es6_variants': {
     'name': 'Test262-es6',
     'tests': 'test262-es6',
+    'test_args': ['--download-data'],
   },
   'unittests': {
     'name': 'Unittests',

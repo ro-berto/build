@@ -226,6 +226,7 @@
       "build",
       "--testname",
       "simdjs/shell_test_runner",
+      "--download-data",
       "--flaky-tests=skip",
       "--dcheck-always-on",
       "--json-test-results",

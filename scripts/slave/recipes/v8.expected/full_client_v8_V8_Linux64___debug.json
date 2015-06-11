@@ -306,6 +306,7 @@
       "--testname",
       "test262",
       "--no-variants",
+      "--download-data",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -342,6 +343,7 @@
       "--testname",
       "test262-es6",
       "--no-variants",
+      "--download-data",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -412,6 +414,7 @@
       "out",
       "--testname",
       "simdjs",
+      "--download-data",
       "--json-test-results",
       "/path/to/tmp/json"
     ],

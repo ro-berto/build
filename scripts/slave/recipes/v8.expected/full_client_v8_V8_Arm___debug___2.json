@@ -398,6 +398,7 @@
       "out",
       "--testname",
       "simdjs/shell_test_runner",
+      "--download-data",
       "--shard_count=2",
       "--shard_run=2",
       "--json-test-results",

@@ -244,6 +244,7 @@
       "out",
       "--testname",
       "simdjs/shell_test_runner",
+      "--download-data",
       "--noi18n",
       "--no-snap",
       "--shard_count=2",

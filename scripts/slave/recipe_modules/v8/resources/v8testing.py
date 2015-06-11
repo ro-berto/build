@@ -92,6 +92,9 @@ def main():
   option_parser.add_option("--msan",
                            help="Regard test expectations for MSAN",
                            default=False, action="store_true")
+  option_parser.add_option("--download-data",
+                           default=False, action='store_true',
+                           help='Download test data')
 
   options, args = option_parser.parse_args()
   if args:
@@ -101,8 +104,7 @@ def main():
          '--progress=verbose',
          '--outdir=' + options.outdir,
          '--arch=' + options.arch,
-         '--mode=' + options.target,
-         '--time']
+         '--mode=' + options.target]
   if options.testname:
     # Make testname hold a list of tests.
     options.testname = options.testname.split(' ')
@@ -131,33 +133,8 @@ def main():
     cmd.extend(['--no-variants'])
   if options.turbo_variant:
     cmd.extend(['--variants=turbofan'])
-  if 'benchmarks' in options.testname:
+  if options.download_data:
     cmd.extend(['--download-data'])
-  if 'test262' in options.testname:
-    cmd.extend(['--download-data'])
-  if 'test262-es6' in options.testname:
-    cmd.extend(['--download-data'])
-  if 'simdjs' in options.testname:
-    cmd.extend(['--download-data'])
-  if 'simdjs/shell_test_runner' in options.testname:
-    cmd.extend(['--download-data'])
-  if 'mozilla' in options.testname:
-    # Mozilla tests requires a number of tests to timeout, set it a bit lower.
-    if options.arch in ('arm', 'mipsel'):
-      cmd.extend(['--timeout=180'])
-    else:
-      cmd.extend(['--timeout=120'])
-  elif options.shell_flags and '--gc-interval' in options.shell_flags:
-    # GC Stress testing takes much longer, set generous timeout.
-    if options.arch in ('arm', 'mipsel'):
-      cmd.extend(['--timeout=1200'])
-    else:
-      cmd.extend(['--timeout=900'])
-  else:
-    if options.arch in ('arm', 'mipsel'):
-      cmd.extend(['--timeout=600'])
-    else:
-      cmd.extend(['--timeout=200'])
   if options.isolates:
     cmd.extend(['--isolates'])
   if options.shell_flags:

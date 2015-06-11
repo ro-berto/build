@@ -329,6 +329,7 @@
       "--testname",
       "test262",
       "--no-variants",
+      "--download-data",
       "--noi18n",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -365,6 +366,7 @@
       "out",
       "--testname",
       "simdjs/shell_test_runner",
+      "--download-data",
       "--noi18n",
       "--json-test-results",
       "/path/to/tmp/json"

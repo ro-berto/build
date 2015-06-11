@@ -266,6 +266,7 @@
       "out",
       "--testname",
       "simdjs",
+      "--download-data",
       "--flaky-tests=skip",
       "--dcheck-always-on",
       "--json-test-results",

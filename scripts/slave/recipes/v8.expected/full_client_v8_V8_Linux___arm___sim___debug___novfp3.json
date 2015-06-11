@@ -217,6 +217,7 @@
       "--testname",
       "test262",
       "--no-variants",
+      "--download-data",
       "--shell_flags=\"--noenable-vfp3\"",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -289,6 +290,7 @@
       "out",
       "--testname",
       "simdjs/shell_test_runner",
+      "--download-data",
       "--shell_flags=\"--noenable-vfp3\"",
       "--json-test-results",
       "/path/to/tmp/json"

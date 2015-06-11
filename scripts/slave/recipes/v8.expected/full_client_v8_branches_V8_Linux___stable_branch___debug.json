@@ -298,6 +298,7 @@
       "--testname",
       "test262",
       "--no-variants",
+      "--download-data",
       "--json-test-results",
       "/path/to/tmp/json"
     ],

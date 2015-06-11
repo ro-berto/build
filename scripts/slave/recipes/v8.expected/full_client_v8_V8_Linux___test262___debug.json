@@ -122,6 +122,7 @@
       "out",
       "--testname",
       "test262",
+      "--download-data",
       "--json-test-results",
       "/path/to/tmp/json"
     ],

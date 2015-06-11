@@ -322,6 +322,7 @@
       "out",
       "--testname",
       "simdjs/shell_test_runner",
+      "--download-data",
       "--json-test-results",
       "/path/to/tmp/json"
     ],

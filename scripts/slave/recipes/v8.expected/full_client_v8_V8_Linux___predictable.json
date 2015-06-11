@@ -256,6 +256,7 @@
       "out",
       "--testname",
       "benchmarks",
+      "--download-data",
       "--predictable",
       "--json-test-results",
       "/path/to/tmp/json"
