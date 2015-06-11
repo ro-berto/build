@@ -421,64 +421,6 @@ def _BuildTestBinaryCommand(build_dir, test_exe_path, options):
   return command
 
 
-def _StartHttpServer(platform, build_dir, test_exe_path, document_root):
-  """Starts an Apache HTTP server instance.
-
-  Args:
-    platform: A string describing the platform: linux, mac or win.
-    build_dir: Path of build directory.
-    test_exe_path: Path to the test executable file.
-    document_root: Document root to use for the HTTP server.
-
-  Returns:
-    The google.http_utils.ApacheHttpd instance that was created.
-  """
-  # The following warnings are related to the fact that another module named
-  # "google" is in the module search path. See the note at the top of this file.
-  # E0611: No name in module. F0401: Unable to import.
-  # pylint: disable=E0611,F0401
-  import google.httpd_utils
-  import google.platform_utils
-  # pylint: enable=E0611,F0401
-  platform_util = google.platform_utils.PlatformUtility(build_dir)
-
-  # Name the output directory for the exe, without its path or suffix.
-  # e.g., chrome-release/httpd_logs/unit_tests/
-  test_exe_name = os.path.splitext(os.path.basename(test_exe_path))[0]
-  output_dir = os.path.join(slave_utils.SlaveBaseDir(build_dir),
-                            'httpd_logs',
-                            test_exe_name)
-
-  # Sanity checks for httpd2_linux.conf.
-  if platform == 'linux':
-    for ssl_file in ['ssl.conf', 'ssl.load']:
-      ssl_path = os.path.join('/etc/apache/mods-enabled', ssl_file)
-      if not os.path.exists(ssl_path):
-        sys.stderr.write('WARNING: %s missing, http server may not start\n' %
-                         ssl_path)
-    if not os.access('/var/run/apache2', os.W_OK):
-      sys.stderr.write('WARNING: cannot write to /var/run/apache2, '
-                       'http server may not start\n')
-
-  apache_config_dir = google.httpd_utils.ApacheConfigDir(build_dir)
-  httpd_conf_path = os.path.join(apache_config_dir, HTTPD_CONF[platform])
-  mime_types_path = os.path.join(apache_config_dir, 'mime.types')
-  document_root = os.path.abspath(document_root)
-
-  start_cmd = platform_util.GetStartHttpdCommand(output_dir,
-                                                 httpd_conf_path,
-                                                 mime_types_path,
-                                                 document_root)
-  stop_cmd = platform_util.GetStopHttpdCommand()
-  http_server = google.httpd_utils.ApacheHttpd(start_cmd, stop_cmd, [8000])
-  try:
-    http_server.StartServer()
-  except google.httpd_utils.HttpdNotStarted as e:
-    raise google.httpd_utils.HttpdNotStarted('%s. See log file in %s' %
-                                             (e, output_dir))
-  return http_server
-
-
 def _UsingGtestJson(options):
   """Returns True if we're using GTest JSON summary."""
   return (options.annotate == 'gtest' and
@@ -1166,12 +1108,6 @@ def _MainMac(options, args, extra_env):
       os.remove(options.test_output_xml)
 
   try:
-    http_server = None
-    if options.document_root:
-      http_server = _StartHttpServer('mac', build_dir=build_dir,
-                                      test_exe_path=test_exe_path,
-                                      document_root=options.document_root)
-
     if _UsingGtestJson(options):
       json_file_name = log_processor.PrepareJSONFile(
           options.test_launcher_summary_output)
@@ -1186,8 +1122,6 @@ def _MainMac(options, args, extra_env):
     result = _RunGTestCommand(options, command, extra_env, pipes=pipes,
                               log_processor=log_processor)
   finally:
-    if http_server:
-      http_server.StopServer()
     if _UsingGtestJson(options):
       _UploadGtestJsonSummary(json_file_name,
                               options.build_properties,
@@ -1408,12 +1342,7 @@ def _MainLinux(options, args, extra_env):
 
   try:
     start_xvfb = False
-    http_server = None
     json_file_name = None
-    if options.document_root:
-      http_server = _StartHttpServer('linux', build_dir=build_dir,
-                                      test_exe_path=test_exe_path,
-                                      document_root=options.document_root)
 
     # TODO(dpranke): checking on test_exe is a temporary hack until we
     # can change the buildbot master to pass --xvfb instead of --no-xvfb
@@ -1446,8 +1375,6 @@ def _MainLinux(options, args, extra_env):
     result = _RunGTestCommand(options, command, extra_env, pipes=pipes,
                               log_processor=log_processor)
   finally:
-    if http_server:
-      http_server.StopServer()
     if start_xvfb:
       xvfb.StopVirtualX(slave_name)
     if _UsingGtestJson(options):
@@ -1539,12 +1466,6 @@ def _MainWin(options, args, extra_env):
       os.remove(options.test_output_xml)
 
   try:
-    http_server = None
-    if options.document_root:
-      http_server = _StartHttpServer('win', build_dir=build_dir,
-                                      test_exe_path=test_exe_path,
-                                      document_root=options.document_root)
-
     if _UsingGtestJson(options):
       json_file_name = log_processor.PrepareJSONFile(
           options.test_launcher_summary_output)
@@ -1554,8 +1475,6 @@ def _MainWin(options, args, extra_env):
                                           command)
     result = _RunGTestCommand(options, command, extra_env, log_processor)
   finally:
-    if http_server:
-      http_server.StopServer()
     if _UsingGtestJson(options):
       _UploadGtestJsonSummary(json_file_name,
                               options.build_properties,
@@ -1784,11 +1703,6 @@ def main():
                            help='pass --build-dir to the spawned test script')
   option_parser.add_option('--test-platform',
                            help='Platform to test on, e.g. ios-simulator')
-  # --with-httpd assumes a chromium checkout with src/tools/python.
-  option_parser.add_option('--with-httpd', dest='document_root',
-                           default=None, metavar='DOC_ROOT',
-                           help='Start a local httpd server using the given '
-                                'document root, relative to the current dir')
   option_parser.add_option('--total-shards', dest='total_shards',
                            default=None, type='int',
                            help='Number of shards to split this test into.')
