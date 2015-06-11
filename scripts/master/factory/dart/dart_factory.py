@@ -584,15 +584,10 @@ class DartUtils(object):
     return DartUtils.get_git_poller(repository, name, revlink, branch, master)
 
   @staticmethod
-  def get_github_mirror_poller(project, name, branches=None):
+  def get_github_mirror_poller(project, name, branch=None, master=None):
     repository = '%s/%s/%s.git' % (github_mirror, project, name)
     revlink = ('https://github.com/' + project + '/' + name + '/commit/%s')
-    branches = branches or ['master']
-    return gitiles_poller.GitilesPoller(repository,
-                                        branches=branches,
-                                        project=project,
-                                        revlinktmpl=revlink)
-
+    return DartUtils.get_git_poller(repository, name, revlink, branch, master)
 
   @staticmethod
   def prioritize_builders(buildmaster, builders):
