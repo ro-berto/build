@@ -421,7 +421,7 @@ def _GenStepsInternal(api):
           override_bot_type='builder_tester',
           override_tests=tests)
 
-  requires_compile, _, compile_targets = \
+  requires_compile, matching_exes, compile_targets = \
       api.chromium_tests.analyze(
           affected_files,
           all_compile_targets(api, tests + tests_including_triggered),
@@ -431,9 +431,9 @@ def _GenStepsInternal(api):
   if not requires_compile:
     return
 
-  tests = tests_in_compile_targets(api, compile_targets, tests)
+  tests = tests_in_compile_targets(api, matching_exes, tests)
   tests_including_triggered = tests_in_compile_targets(
-      api, compile_targets, tests_including_triggered)
+      api, matching_exes, tests_including_triggered)
 
   api.chromium_tests.compile_specific_targets(
       bot_config['mastername'],
