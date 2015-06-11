@@ -15,7 +15,6 @@ DEPS = [
 ]
 
 PERF_TESTS = freeze([
-  'blink_perf.animation',
   'dromaeo.domcoreattr',
   'dromaeo.domcoremodify',
   'dromaeo.domcorequery',
