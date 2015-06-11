@@ -382,6 +382,13 @@ class GpuApi(recipe_api.RecipeApi):
           target_name='webgl_conformance',
           extra_browser_args=['--disable-d3d11']))
 
+    # Run WebGL 2 conformance tests in FYI GPU bots
+    if self.is_fyi_waterfall:
+      tests.append(self._create_telemetry_test(
+          'webgl2_conformance', chrome_revision, webkit_revision,
+          enable_swarming, swarming_dimensions, target_name='webgl_conformance',
+          args=['--webgl-conformance-version=2.0.0', '--webgl2-only=true']))
+
     # Context lost tests.
     tests.append(self._create_telemetry_test(
         'context_lost', chrome_revision, webkit_revision, enable_swarming,
