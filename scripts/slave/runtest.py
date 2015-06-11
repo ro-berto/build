@@ -1255,6 +1255,10 @@ def _MainIOS(options, args, extra_env):
 
 def _MainLinux(options, args, extra_env):
   """Runs the test on Linux."""
+  import platform
+  xvfb_path = os.path.join(os.path.dirname(sys.argv[0]), '..', '..',
+                           'third_party', 'xvfb', platform.architecture()[0])
+
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
@@ -1267,15 +1271,11 @@ def _MainLinux(options, args, extra_env):
 
   # Figure out what we want for a special frame buffer directory.
   special_xvfb_dir = None
-  if options.special_xvfb == 'auto':
-    fp_special_xvfb = options.factory_properties.get('special_xvfb', None)
-    fp_chromeos = options.factory_properties.get('chromeos', None)
-    if fp_special_xvfb or (fp_special_xvfb is None and (fp_chromeos or
-        slave_utils.GypFlagIsOn(options, 'use_aura') or
-        slave_utils.GypFlagIsOn(options, 'chromeos'))):
-      special_xvfb_dir = options.special_xvfb_dir
-  elif options.special_xvfb:
-    special_xvfb_dir = options.special_xvfb_dir
+  fp_chromeos = options.factory_properties.get('chromeos', None)
+  if (fp_chromeos or
+      slave_utils.GypFlagIsOn(options, 'use_aura') or
+      slave_utils.GypFlagIsOn(options, 'chromeos')):
+    special_xvfb_dir = xvfb_path
 
   telemetry_info = _UpdateRunBenchmarkArgs(args, options)
   test_exe = args[0]
@@ -1679,11 +1679,6 @@ def main():
   Returns:
     Exit code for this script.
   """
-  import platform
-
-  xvfb_path = os.path.join(os.path.dirname(sys.argv[0]), '..', '..',
-                           'third_party', 'xvfb', platform.architecture()[0])
-
   option_parser = optparse.OptionParser(usage=USAGE)
 
   # Since the trailing program to run may have has command-line args of its
@@ -1718,17 +1713,6 @@ def main():
   option_parser.add_option('--generate-json-file', action='store_true',
                            default=False,
                            help='output JSON results file if specified.')
-  option_parser.add_option('--special-xvfb-dir', default=xvfb_path,
-                           help='Path to virtual X server directory on Linux.')
-  option_parser.add_option('--special-xvfb', action='store_true',
-                           default='auto',
-                           help='use non-default virtual X server on Linux.')
-  option_parser.add_option('--no-special-xvfb', action='store_false',
-                           dest='special_xvfb',
-                           help='Use default virtual X server on Linux.')
-  option_parser.add_option('--auto-special-xvfb', action='store_const',
-                           const='auto', dest='special_xvfb',
-                           help='Guess as to virtual X server on Linux.')
   option_parser.add_option('--xvfb', action='store_true', dest='xvfb',
                            default=True,
                            help='Start virtual X server on Linux.')
