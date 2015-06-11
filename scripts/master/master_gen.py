@@ -92,11 +92,15 @@ def _ComputeBuilders(builders, m_annotator):
 
     slavebuilddir = builder_data.get('slavebuilddir',
                                      util.safeTranslate(builder_name))
+    factory = m_annotator.BaseFactory(
+        recipe=builder_data['recipe'],
+        factory_properties=builder_data.get('properties')
+    )
     actual_builders.append({
         'auto_reboot': builder_data.get('auto_reboot', True),
         'mergeRequests': merge_requests,
         'name': builder_name,
-        'factory': m_annotator.BaseFactory(),
+        'factory': factory,
         'slavebuilddir': slavebuilddir,
         'slavenames': chromium_utils.GetSlaveNamesForBuilder(builders,
                                                              builder_name),
