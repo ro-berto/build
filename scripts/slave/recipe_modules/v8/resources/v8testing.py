@@ -160,6 +160,8 @@ def main():
     cmd.extend(['--shard-count=%s' % options.shard_count,
                 '--shard-run=%s' % options.shard_run])
 
+  cmd.extend(['--timeout=200'])
+
   return chromium_utils.RunCommand(cmd)
 
 
