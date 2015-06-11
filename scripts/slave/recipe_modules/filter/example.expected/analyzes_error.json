@@ -48,11 +48,8 @@
     ]
   },
   {
-    "cmd": [
-      "echo",
-      "Why hello, there."
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "hello"
+    "name": "$final_result",
+    "reason": "Error: ERROR",
+    "status_code": 1
   }
 ]
