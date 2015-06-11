@@ -816,7 +816,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+        'TARGET_BITS': 64,
       },
       'compile_targets': [ 'chromium_builder_tests' ],
       'goma_canary': True,
