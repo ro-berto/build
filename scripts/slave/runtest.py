@@ -395,7 +395,7 @@ def _GenerateJSONForTestResults(options, log_processor):
   return True
 
 
-def _BuildTestBinaryCommand(build_dir, test_exe_path, options):
+def _BuildTestBinaryCommand(_build_dir, test_exe_path, options):
   """Builds a command to run a test binary.
 
   Args:
@@ -1316,9 +1316,6 @@ def _MainLinux(options, args, extra_env):
 
   extra_env['LD_LIBRARY_PATH'] += '%s:%s/lib:%s/lib.target' % (bin_dir, bin_dir,
                                                                bin_dir)
-  # Figure out what we want for a special llvmpipe directory.
-  if options.llvmpipe_dir and os.path.exists(options.llvmpipe_dir):
-    extra_env['LD_LIBRARY_PATH'] += ':' + options.llvmpipe_dir
 
   if options.run_shell_script:
     command = ['bash', test_exe_path]
@@ -1721,15 +1718,6 @@ def main():
   option_parser.add_option('--generate-json-file', action='store_true',
                            default=False,
                            help='output JSON results file if specified.')
-  option_parser.add_option('--llvmpipe', action='store_const',
-                           const=xvfb_path, dest='llvmpipe_dir',
-                           help='Use software gpu pipe directory.')
-  option_parser.add_option('--no-llvmpipe', action='store_const',
-                           const=None, dest='llvmpipe_dir',
-                           help='Do not use software gpu pipe directory.')
-  option_parser.add_option('--llvmpipe-dir',
-                           default=None, dest='llvmpipe_dir',
-                           help='Path to software gpu library directory.')
   option_parser.add_option('--special-xvfb-dir', default=xvfb_path,
                            help='Path to virtual X server directory on Linux.')
   option_parser.add_option('--special-xvfb', action='store_true',
