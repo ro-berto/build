@@ -22,6 +22,7 @@ def Update(_config, active_master, c):
           'Linux GN Clobber',
           'Linux GN (dbg)',
           'Linux ARM',
+          'Cast Linux',
       ]),
       Triggerable(name='linux_rel_trigger', builderNames=[
           'Linux Tests',

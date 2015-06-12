@@ -82,7 +82,7 @@ def Update(_config_arg, _active_master, c):
       SingleBranchScheduler(name='android_gn',
                             branch='master',
                             treeStableTimer=60,
-                            builderNames=['Android GN', 'Android GN (dbg)']),
+                            builderNames=[s['name'] for s in specs]),
   ])
   c['builders'].extend([
       {
