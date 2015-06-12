@@ -27,9 +27,9 @@ SPEC = {
         chromium_perf.SPEC['builders']['Win x64 Builder'],
     'win_x64_perf_bisect':
         chromium_perf.SPEC['builders']['Win x64 Builder'],
-    'win_x64_ati_gpu_perf_bisect':
+    'winx64ati_perf_bisect':
         chromium_perf.SPEC['builders']['Win x64 Builder'],
-    'win_x64_nvidia_gpu_perf_bisect':
+    'winx64nvidia_perf_bisect':
         chromium_perf.SPEC['builders']['Win x64 Builder'],
     'mac_perf_bisect_builder':
         chromium_perf.SPEC['builders']['Mac Builder'],
