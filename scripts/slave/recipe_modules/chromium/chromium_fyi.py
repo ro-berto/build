@@ -97,23 +97,6 @@ SPEC = {
       },
       'use_isolate': True,
     },
-    'Linux ARM': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_ARCH': 'arm',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'builder',
-      'compile_targets': [
-        'all',
-      ],
-      'use_isolate': True,
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'Linux Trusty': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
