@@ -188,6 +188,8 @@ def GenSteps(api):
           headers={'Metadata-Flavor': 'Google'})).read()
       params = {'status': sys.argv[1],
                 'password': password}
+      if sys.argv[3] == '' and sys.argv[1] == 'Idle':
+        params['last_roll_rev'] = full_hash('origin/master')
       if sys.argv[3] != '':
         params['deps_roll_link'] = sys.argv[3]
         split = sys.argv[3].split('/')

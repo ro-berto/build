@@ -114,7 +114,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport json\nimport shlex\nimport subprocess\nimport sys\nimport urllib\nimport urllib2\n\ndef full_hash(short):\n  return subprocess.check_output(['git', 'rev-parse', short]).rstrip()\n\npassword = urllib2.urlopen(urllib2.Request(\n    sys.argv[2],\n    headers={'Metadata-Flavor': 'Google'})).read()\nparams = {'status': sys.argv[1],\n          'password': password}\nif sys.argv[3] != '':\n  params['deps_roll_link'] = sys.argv[3]\n  split = sys.argv[3].split('/')\n  split.insert(-2, 'api')\n  api_url = '/'.join(split)\n  issue_details = json.load(urllib2.urlopen(api_url))\n  old, new = shlex.split(issue_details['subject'])[-1].split(':')\n  params['last_roll_rev'] = full_hash(old)\n  params['curr_roll_rev'] = full_hash(new)\n\nurllib2.urlopen(urllib2.Request(\n    sys.argv[4],\n    urllib.urlencode(params)))\n",
+      "\nimport json\nimport shlex\nimport subprocess\nimport sys\nimport urllib\nimport urllib2\n\ndef full_hash(short):\n  return subprocess.check_output(['git', 'rev-parse', short]).rstrip()\n\npassword = urllib2.urlopen(urllib2.Request(\n    sys.argv[2],\n    headers={'Metadata-Flavor': 'Google'})).read()\nparams = {'status': sys.argv[1],\n          'password': password}\nif sys.argv[3] == '' and sys.argv[1] == 'Idle':\n  params['last_roll_rev'] = full_hash('origin/master')\nif sys.argv[3] != '':\n  params['deps_roll_link'] = sys.argv[3]\n  split = sys.argv[3].split('/')\n  split.insert(-2, 'api')\n  api_url = '/'.join(split)\n  issue_details = json.load(urllib2.urlopen(api_url))\n  old, new = shlex.split(issue_details['subject'])[-1].split(':')\n  params['last_roll_rev'] = full_hash(old)\n  params['curr_roll_rev'] = full_hash(new)\n\nurllib2.urlopen(urllib2.Request(\n    sys.argv[4],\n    urllib.urlencode(params)))\n",
       "In progress",
       "http://metadata/computeMetadata/v1/project/attributes/skia_tree_status",
       "https://codereview.chromium.org/1234/",
@@ -139,6 +139,8 @@
       "@@@STEP_LOG_LINE@python.inline@    headers={'Metadata-Flavor': 'Google'})).read()@@@",
       "@@@STEP_LOG_LINE@python.inline@params = {'status': sys.argv[1],@@@",
       "@@@STEP_LOG_LINE@python.inline@          'password': password}@@@",
+      "@@@STEP_LOG_LINE@python.inline@if sys.argv[3] == '' and sys.argv[1] == 'Idle':@@@",
+      "@@@STEP_LOG_LINE@python.inline@  params['last_roll_rev'] = full_hash('origin/master')@@@",
       "@@@STEP_LOG_LINE@python.inline@if sys.argv[3] != '':@@@",
       "@@@STEP_LOG_LINE@python.inline@  params['deps_roll_link'] = sys.argv[3]@@@",
       "@@@STEP_LOG_LINE@python.inline@  split = sys.argv[3].split('/')@@@",
