@@ -248,7 +248,39 @@
     "name": "trigger",
     "trigger_specs": [
       {
+        "builder_name": "V8 Linux64 ASAN no inline - release builder",
+        "properties": {
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      },
+      {
         "builder_name": "V8 Linux64 ASAN - debug builder",
+        "properties": {
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      },
+      {
+        "builder_name": "V8 Linux64 ASAN arm64 - debug builder",
+        "properties": {
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      },
+      {
+        "builder_name": "V8 Linux ASAN arm - debug builder",
+        "properties": {
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      },
+      {
+        "builder_name": "V8 Linux ASAN mipsel - debug builder",
         "properties": {
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
@@ -257,7 +289,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@V8 Linux64 ASAN - debug builder@@@"
+      "@@@STEP_TEXT@V8 Linux ASAN arm - debug builder<br />V8 Linux ASAN mipsel - debug builder<br />V8 Linux64 ASAN - debug builder<br />V8 Linux64 ASAN arm64 - debug builder<br />V8 Linux64 ASAN no inline - release builder@@@"
     ]
   }
 ]
