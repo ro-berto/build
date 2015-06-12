@@ -883,7 +883,8 @@ def _UploadGtestJsonSummary(json_path, build_properties, test_exe, step_name):
   builder_name = build_properties.get('buildername')
   build_number = build_properties.get('buildnumber')
   buildbot_json_gs_path = ''
-  if master_name and builder_name and build_number is not None and step_name:
+  if (master_name and builder_name and
+      (build_number is not None and build_number != '') and step_name):
     # build_number could be zero.
     buildbot_json_gs_path = (
         'gs://chrome-gtest-results/buildbot/%s/%s/%d/%s.json.gz' % (
