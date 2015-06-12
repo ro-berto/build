@@ -43,29 +43,6 @@ def BaseConfig(BUILDER_NAME, MASTER_NAME, SLAVE_NAME, **_kwargs):
   )
 
 
-VAR_TEST_MAP = {
-  'BUILDER_NAME': (u'Build-Mac10.8-Clang-Arm7-Debug-Android',
-                   u'Build-Ubuntu-GCC-x86_64-Debug',
-                   u'Build-Ubuntu-GCC-x86_64-Release-Mesa',
-                   u'Build-Win-MSVC-x86-Release',
-                   u'Build-Win-MSVC-x86-Debug-Exceptions',
-                   u'Housekeeper-PerCommit',
-                   u'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug',
-                   u'Test-Mac10.8-Clang-MacMini4.1-GPU-GeForce320M-x86_64-Release',
-                   u'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache',
-                   u'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
-                   u'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Shared',
-                   u'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-TSAN',
-                   u'Perf-Win8-MSVC-ShuttleA-GPU-GTX660-x86-Release',
-                   u'Test-Win8-MSVC-ShuttleB-GPU-HD4600-x86-Debug-GDI',
-                   u'Test-Win8-MSVC-ShuttleB-GPU-HD4600-x86-Release-ANGLE',
-                   u'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release',
-  ),
-  'MASTER_NAME': (u'client.skia',),
-  'SLAVE_NAME': (u'skiabot-shuttle-ubuntu12-003',),
-}
-
-
 def get_extra_env_vars(builder_dict):
   env = {}
   if builder_dict.get('compiler') == 'Clang':
@@ -194,7 +171,7 @@ def build_targets_from_builder_dict(builder_dict):
     return ['most']
 
 
-config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, '%(BUILDER_NAME)s')
+config_ctx = config_item_context(BaseConfig)
 
 
 @config_ctx(is_root=True)

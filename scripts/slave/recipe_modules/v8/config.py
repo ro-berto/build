@@ -42,7 +42,7 @@ def BaseConfig(**_kwargs):
   )
 
 
-config_ctx = config_item_context(BaseConfig, {}, 'v8')
+config_ctx = config_item_context(BaseConfig)
 
 
 @config_ctx()

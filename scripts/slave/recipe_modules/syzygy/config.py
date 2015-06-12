@@ -17,7 +17,7 @@ def BaseConfig(**dummy_kwargs):
   )
 
 
-config_ctx = config_item_context(BaseConfig, {}, 'syzygy')
+config_ctx = config_item_context(BaseConfig)
 
 
 @config_ctx(is_root=True)

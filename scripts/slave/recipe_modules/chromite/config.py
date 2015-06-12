@@ -51,7 +51,7 @@ def BaseConfig(**_kwargs):
     ),
   )
 
-config_ctx = config_item_context(BaseConfig, {}, 'basic')
+config_ctx = config_item_context(BaseConfig)
 
 
 @config_ctx()

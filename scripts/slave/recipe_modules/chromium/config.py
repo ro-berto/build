@@ -103,28 +103,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     lto = Single(bool, empty_val=False, required=False),
   )
 
-TEST_FORMAT = (
-  '%(BUILD_CONFIG)s-'
-  '%(HOST_PLATFORM)s.%(HOST_ARCH)s.%(HOST_BITS)s'
-  '-to-'
-  '%(TARGET_PLATFORM)s.%(TARGET_ARCH)s.%(TARGET_BITS)s'
-)
-
-# Used by the test harness to inspect and generate permutations for this
-# config module.  {varname -> [possible values]}
-VAR_TEST_MAP = {
-  'HOST_PLATFORM':   HOST_PLATFORMS,
-  'HOST_ARCH':       HOST_ARCHS,
-  'HOST_BITS':       HOST_TARGET_BITS,
-
-  'TARGET_PLATFORM': TARGET_PLATFORMS,
-  'TARGET_ARCH':     TARGET_ARCHS,
-  'TARGET_BITS':     HOST_TARGET_BITS,
-  'TARGET_CROS_BOARD': TARGET_CROS_BOARDS,
-
-  'BUILD_CONFIG':    BUILD_CONFIGS,
-}
-config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, TEST_FORMAT)
+config_ctx = config_item_context(BaseConfig)
 
 
 @config_ctx(is_root=True)

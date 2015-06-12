@@ -30,10 +30,7 @@ def BaseConfig(USE_MIRROR=False):
     slave_android_out_path = Static(build_path.join('out')),
   )
 
-config_ctx = config_item_context(
-  BaseConfig,
-  {'USE_MIRROR': (False,)},
-  'android')
+config_ctx = config_item_context(BaseConfig)
 
 @config_ctx()
 def AOSP(c):

@@ -12,7 +12,7 @@ def BaseConfig(**_kwargs):
     url = Single(basestring)
   )
 
-config_ctx = config_item_context(BaseConfig, {}, 'basic')
+config_ctx = config_item_context(BaseConfig)
 
 @config_ctx()
 def production(c):

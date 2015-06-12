@@ -13,15 +13,7 @@ def BaseConfig(PERF_ID=None, PERF_CONFIG=None, TEST_SUITE=None, **_kwargs):
     TEST_SUITE = Static(TEST_SUITE),
   )
 
-VAR_TEST_MAP = {
-  'PERF_ID': (None, 'perf-id'),
-  'PERF_CONFIG': (None, '{}', '{"a_default_rev": "r_webrtc_rev"}'),
-}
-
-def TEST_NAME_FORMAT(kwargs):
-  return 'webrtc'  # pragma: no cover
-
-config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, TEST_NAME_FORMAT)
+config_ctx = config_item_context(BaseConfig)
 
 # Only exists to be able to set the PERF_ID and PERF_CONFIG configurations.
 @config_ctx()

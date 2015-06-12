@@ -73,24 +73,7 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None,
     BUILDSPEC_VERSION= Static(BUILDSPEC_VERSION, hidden=True),
   )
 
-VAR_TEST_MAP = {
-  'USE_MIRROR': (True, False),
-  'GIT_MODE':   (True, False),
-  'CACHE_DIR':  (None, 'CACHE_DIR'),
-  'PATCH_PROJECT': (None, 'v8'),
-  'BUILDSPEC_VERSION': ('40.0.0.1',)
-}
-
-TEST_NAME_FORMAT = lambda kwargs: (
-  'using_mirror-%(USE_MIRROR)s-git_mode-%(GIT_MODE)s-cache_dir-%(using)s'
-  '-patch_project-%(patch_project)s' %
-  dict(using=bool(kwargs['CACHE_DIR']),
-       patch_project=bool(kwargs['PATCH_PROJECT']),
-       **kwargs
-  )
-)
-
-config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, TEST_NAME_FORMAT)
+config_ctx = config_item_context(BaseConfig)
 
 def ChromiumSvnSubURL(c, *pieces):
   BASES = ('https://src.chromium.org',
