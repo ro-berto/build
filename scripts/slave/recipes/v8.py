@@ -32,9 +32,6 @@ def GenSteps(api):
   v8.runhooks()
   api.chromium.cleanup_temp()
 
-  if v8.c.nacl.update_nacl_sdk:
-    v8.update_nacl_sdk()
-
   if v8.should_build:
     v8.compile()
 

@@ -26,10 +26,6 @@ def BaseConfig(**_kwargs):
       RANLIB = Single(basestring, required=False),
     ),
     mips_cross_compile = Single(bool, empty_val=False, required=False),
-    nacl = ConfigGroup(
-      update_nacl_sdk = Single(basestring, required=False),
-      NACL_SDK_ROOT = Single(basestring, required=False),
-    ),
     # Test configuration that is the equal for all tests of a builder. It
     # might be refined later in the test runner for distinct tests.
     testing = ConfigGroup(
@@ -114,40 +110,6 @@ def isolates(c):
 @config_ctx()
 def mips_cross_compile(c):
   c.mips_cross_compile = True
-
-
-@config_ctx()
-def nacl(c):
-  # TODO(iannucci): Figure out how to make api path available here.
-  c.testing.test_args.append('--command_prefix=tools/nacl-run.py')
-  # This switches off buildbot flavor for NaCl, i.e. uses the directory layout
-  # out/nacl_ia32.release instead of out/Release.
-  c.testing.test_args.append('--buildbot=False')
-  c.testing.test_args.append('--no-presubmit')
-
-
-@config_ctx(includes=['nacl'])
-def nacl_stable(c):
-  c.nacl.update_nacl_sdk = 'stable'
-
-
-@config_ctx(includes=['nacl'])
-def nacl_canary(c):
-  c.nacl.update_nacl_sdk = 'canary'
-
-
-@config_ctx(includes=['nacl'])
-def nacl_ia32(c):  # pragma: no cover
-  # Make is executed in the out dir. NaCl points to the toplevel Makefile in
-  # the v8 dir.
-  c.compile_py.compile_extra_args.extend(['-C', '..' , 'nacl_ia32.release'])
-
-
-@config_ctx(includes=['nacl'])
-def nacl_x64(c):
-  # Make is executed in the out dir. NaCl points to the toplevel Makefile in
-  # the v8 dir.
-  c.compile_py.compile_extra_args.extend(['-C', '..' , 'nacl_x64.release'])
 
 
 @config_ctx()

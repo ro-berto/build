@@ -1331,29 +1331,6 @@ BUILDERS = {
         'tests': ['deopt'],
         'testing': {'platform': 'linux'},
       },
-####### Category: NaCl
-      'NaCl V8 Linux64 - stable': {
-        'chromium_apply_config': ['nacl_x64', 'no_i18n'],
-        'v8_apply_config': ['nacl_stable', 'nacl_x64', 'no_i18n'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
-        'testing': {'platform': 'linux'},
-      },
-      'NaCl V8 Linux64 - canary': {
-        'chromium_apply_config': ['nacl_x64', 'no_i18n'],
-        'v8_apply_config': ['nacl_canary', 'nacl_x64', 'no_i18n'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
-        'testing': {'platform': 'linux'},
-      },
     },
   },
 ####### Waterfall: tryserver.v8
@@ -1512,17 +1489,6 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': ['unittests', 'v8testing', 'benchmarks'],
-        'testing': {'platform': 'linux'},
-      },
-      'v8_linux64_nacl_rel': {
-        'chromium_apply_config': ['nacl_x64', 'no_i18n'],
-        'v8_apply_config': ['nacl_canary', 'nacl_x64', 'no_i18n'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing'],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_asan_rel': {

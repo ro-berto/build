@@ -231,9 +231,6 @@ class V8Api(recipe_api.RecipeApi):
       self.m.chromium.apply_config(c)
     for c in self.bot_config.get('v8_apply_config', []):
       self.apply_config(c)
-    if self.c.nacl.update_nacl_sdk:
-      self.c.nacl.NACL_SDK_ROOT = str(self.m.path['slave_build'].join(
-          'nacl_sdk', 'pepper_current'))
     # Test-specific configurations.
     for t in self.bot_config.get('tests', []):
       self.create_test(t).gclient_apply_config(self.m)
@@ -313,14 +310,6 @@ class V8Api(recipe_api.RecipeApi):
     self.c.gyp_env.RANLIB = self.m.path.join(mips_dir, 'mips-linux-gnu-ranlib')
     self.c.gyp_env.LINK = self.m.path.join(mips_dir, 'mips-linux-gnu-g++')
 
-  def update_nacl_sdk(self):
-    return self.m.python(
-      'update NaCl SDK',
-      self.m.path['build'].join('scripts', 'slave', 'update_nacl_sdk.py'),
-      ['--pepper-channel', self.c.nacl.update_nacl_sdk],
-      cwd=self.m.path['slave_build'],
-    )
-
   @property
   def bot_type(self):
     return self.bot_config.get('bot_type', 'builder_tester')
@@ -350,8 +339,6 @@ class V8Api(recipe_api.RecipeApi):
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       env['ANDROID_NDK_ROOT'] = str(self.m.path['checkout'].join(
           'third_party', 'android_tools', 'ndk'))
-    if self.c.nacl.NACL_SDK_ROOT:
-      env['NACL_SDK_ROOT'] = self.c.nacl.NACL_SDK_ROOT
     args = []
     if self.c.compile_py.compile_extra_args:
       args.extend(self.c.compile_py.compile_extra_args)
@@ -635,14 +622,9 @@ class V8Api(recipe_api.RecipeApi):
 
   def _runtest(self, name, test, flaky_tests=None, **kwargs):
     env = {}
-    target = self.m.chromium.c.build_config_fs
-    if self.c.nacl.update_nacl_sdk:
-      # TODO(machenbach): NaCl circumvents the buildbot naming conventions and
-      # uses v8 flavor. Make this more uniform.
-      target = target.lower()
     full_args = [
       '--progress=verbose',
-      '--mode', target,
+      '--mode', self.m.chromium.c.build_config_fs,
       '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
       '--outdir', self.m.path.split(self.m.chromium.c.build_dir)[-1],
       '--buildbot',
@@ -704,10 +686,6 @@ class V8Api(recipe_api.RecipeApi):
       env['MSAN_OPTIONS'] = " ".join([
         'external_symbolizer_path=%s' % llvm_symbolizer_path,
       ])
-
-    # Environment for nacl builds:
-    if self.c.nacl.NACL_SDK_ROOT:
-      env['NACL_SDK_ROOT'] = self.c.nacl.NACL_SDK_ROOT
 
     full_args += [
       '--rerun-failures-count=2',
