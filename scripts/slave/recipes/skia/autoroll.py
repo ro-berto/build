@@ -180,19 +180,24 @@ def GenSteps(api):
       import urllib
       import urllib2
 
+      roll_status = sys.argv[1]
+      password_url = sys.argv[2]
+      issue_url = sys.argv[3]
+      appengine_status_url = sys.argv[4]
+
       def full_hash(short):
         return subprocess.check_output(['git', 'rev-parse', short]).rstrip()
 
       password = urllib2.urlopen(urllib2.Request(
-          sys.argv[2],
+          password_url,
           headers={'Metadata-Flavor': 'Google'})).read()
-      params = {'status': sys.argv[1],
+      params = {'status': roll_status,
                 'password': password}
-      if sys.argv[3] == '' and sys.argv[1] == 'Idle':
+      if issue_url == '' and roll_status == 'Idle':
         params['last_roll_rev'] = full_hash('origin/master')
-      if sys.argv[3] != '':
-        params['deps_roll_link'] = sys.argv[3]
-        split = sys.argv[3].split('/')
+      if issue_url != '':
+        params['deps_roll_link'] = issue_url
+        split = issue_url.split('/')
         split.insert(-2, 'api')
         api_url = '/'.join(split)
         issue_details = json.load(urllib2.urlopen(api_url))
@@ -201,7 +206,7 @@ def GenSteps(api):
         params['curr_roll_rev'] = full_hash(new)
 
       urllib2.urlopen(urllib2.Request(
-          sys.argv[4],
+          appengine_status_url,
           urllib.urlencode(params)))
       ''',
       args=[roll_status,
