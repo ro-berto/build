@@ -752,82 +752,6 @@ def need_to_run_deps2git(repo_base, deps_file, deps_git_file):
   return last_known_deps_ref != merge_base_ref
 
 
-def get_git_buildspec(buildspec_path, buildspec_version):
-  """Get the git buildspec of a version, return its contents.
-
-  The contents are returned instead of the file so that we can check the
-  repository into a temp directory and confine the cleanup logic here.
-  """
-  git('cache', 'populate', '--ignore_locks', '-v', '--cache-dir', CACHE_DIR,
-      GIT_BUILDSPEC_REPO)
-  mirror_dir = git(
-      'cache', 'exists', '--quiet', '--cache-dir', CACHE_DIR,
-      GIT_BUILDSPEC_REPO).strip()
-  TOTAL_TRIES = 30
-  for tries in range(TOTAL_TRIES):
-    try:
-      return git(
-          'show',
-          'master:%s/%s/DEPS' % (buildspec_path, buildspec_version),
-          cwd=mirror_dir
-      )
-    except SubprocessFailed:
-      if tries < TOTAL_TRIES - 1:
-        print 'Git Buildspec for %s not committed yet, waiting 10 seconds...'
-        time.sleep(10)
-        git('cache', 'populate', '--ignore_locks', '-v', '--cache-dir',
-            CACHE_DIR, GIT_BUILDSPEC_REPO)
-      else:
-        print >> sys.stderr, '%s/%s .DEPS.git not found, ' % (
-            buildspec_path, buildspec_version)
-        print >> sys.stderr, 'the publish_deps.py "privategit" step in the ',
-        print >> sys.stderr, 'Chrome release process might have failed. ',
-        print >> sys.stderr, 'Please contact chrome-re@google.com.'
-        raise
-
-
-def buildspecs2git(sln_dir, buildspec):
-  """This is like deps2git, but for buildspecs.
-
-  Because buildspecs are vastly different than normal DEPS files, we cannot
-  use deps2git.py to generate git versions of the git DEPS.  Fortunately
-  we don't have buildspec trybots, and there is already a service that
-  generates git DEPS for every buildspec commit already, so we can leverage
-  that service so that we don't need to run buildspec2git.py serially.
-
-  This checks the commit message of the current DEPS file for the release
-  number, waits in a busy loop for the coorisponding .DEPS.git file to be
-  committed into the git_buildspecs repository.
-  """
-  repo_base = path.join(os.getcwd(), sln_dir)
-  deps_file = path.join(repo_base, buildspec.container, buildspec.version,
-                        'DEPS')
-  deps_git_file = path.join(repo_base, buildspec.container, buildspec.version,
-                            '.DEPS.git')
-  deps_log = git('log', '-1', '--format=%B', deps_file, cwd=repo_base)
-
-  # Identify the path from the container name
-  if buildspec.container == 'branches':
-    # Path to the buildspec is: .../branches/VERSION
-    buildspec_path = buildspec.container
-    buildspec_version = buildspec.version
-  else:
-    # Scan through known commit headers for the number
-    for buildspec_re in BUILDSPEC_COMMIT_RE:
-      m = buildspec_re.search(deps_log)
-      if m:
-        break
-    if not m:
-      raise ValueError("Unable to parse buildspec from:\n%s" % (deps_log,))
-    # Release versioned buildspecs are always in the 'releases' path.
-    buildspec_path = 'releases'
-    buildspec_version = m.group(1)
-
-  git_buildspec = get_git_buildspec(buildspec_path, buildspec_version)
-  with open(deps_git_file, 'wb') as f:
-    f.write(git_buildspec)
-
-
 def ensure_deps2git(solution, shallow):
   repo_base = path.join(os.getcwd(), solution['name'])
   deps_file = path.join(repo_base, 'DEPS')
@@ -1300,9 +1224,7 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
                              apply_issue_key_file, whitelist=[target])
         already_patched.append(target)
 
-  if buildspec:
-    buildspecs2git(first_sln, buildspec)
-  else:
+  if not buildspec:
     # Run deps2git if there is a DEPS change after the last .DEPS.git commit.
     for solution in solutions:
       ensure_deps2git(solution, shallow)
