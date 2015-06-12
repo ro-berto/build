@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.linux",
       "--builder",
-      "chromium_presubmit",
+      "blink_presubmit",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -119,7 +119,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chromium_presubmit\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blink_presubmit\", @@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"compile\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",

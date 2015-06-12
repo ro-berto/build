@@ -46,6 +46,9 @@ def _GenStepsInternal(api):
           'commit', '-a', '-m', 'Committed patch',
           name='commit git patch', cwd=api.path['checkout'].join(root))
 
+  if api.properties.get('runhooks'):
+    api.gclient.runhooks()
+
   presubmit_args = [
     '--root', api.path['checkout'].join(root),
     '--commit',
@@ -96,10 +99,10 @@ def GenTests(api):
       api.test(repo_name) +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='chromium_presubmit',
+          buildername='%s_presubmit' % repo_name,
           repo_name=repo_name,
           patch_project=repo_name) +
-      api.step_data('presubmit', api.json.output([['chromium_presubmit',
+      api.step_data('presubmit', api.json.output([['%s_presubmit' % repo_name,
                                                    ['compile']]]))
     )
 
@@ -123,5 +126,17 @@ def GenTests(api):
         codereview_auth=True,
         patch_project='chromium') +
     api.step_data('presubmit', api.json.output([['chromium_presubmit',
+                                                 ['compile']]]))
+  )
+
+  yield (
+    api.test('infra_with_runhooks') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='infra_presubmit',
+        repo_name='infra',
+        patch_project='infra',
+        runhooks=True) +
+    api.step_data('presubmit', api.json.output([['infra_presubmit',
                                                  ['compile']]]))
   )
