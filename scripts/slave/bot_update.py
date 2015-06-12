@@ -768,7 +768,7 @@ def get_git_buildspec(buildspec_path, buildspec_version):
     try:
       return git(
           'show',
-          'master:%s/%s/.DEPS.git' % (buildspec_path, buildspec_version),
+          'master:%s/%s/DEPS' % (buildspec_path, buildspec_version),
           cwd=mirror_dir
       )
     except SubprocessFailed:
