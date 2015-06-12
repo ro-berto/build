@@ -193,6 +193,7 @@ def main(argv):
   parser.add_argument('--days', type=int, default=14)
   parser.add_argument('--exclude-by-blamelist')
   parser.add_argument('--filter-by-blamelist')
+  parser.add_argument('--filter-by-builder')
   parser.add_argument('--filter-by-patch-project')
   parser.add_argument('--print-builds', action='store_true')
   parser.add_argument('--swarming-py', help='Path to swarming.py')
@@ -209,6 +210,9 @@ def main(argv):
 
   builder_pools = []
   for builder in master_config['builders']:
+    if args.filter_by_builder and builder['name'] != args.filter_by_builder:
+      continue
+
     slave_set = set(builder['slavenames'])
     builddir = builder.get('slavebuilddir', builder['name'])
     for pool in builder_pools:
