@@ -491,10 +491,19 @@ def main():
       needs_reboot = False
     except OSError:
       Log('Could not delete graceful shutdown signal file %s' % shutdown_file)
+
+  # Although prevent_reboot_file looks similar to shutdown_file above, it is not
+  # the same as shutdown.stamp is actually used by Buildbot to shut down the
+  # slave process, while ~/no_reboot prevents rebooting the slave machine.
+  prevent_reboot_file = os.path.join(os.path.expanduser('~'), 'no_reboot')
   if needs_reboot:
-    # Send the appropriate system shutdown command.
-    Reboot()
-    # This line should not be reached.
+    if not os.path.isfile(prevent_reboot_file):
+      # Send the appropriate system shutdown command.
+      Reboot()
+      # This line should not be reached.
+    else:
+      Log('Reboot was prevented by %s. Please remove the file and reboot the '
+          'slave manually to resume automatic reboots.' % prevent_reboot_file)
 
 
 def GetGClientPath():
