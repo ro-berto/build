@@ -73,12 +73,12 @@ def arm_hard_float(c):
 
 @config_ctx()
 def code_serializer(c):
-  c.testing.test_args.add('--extra-flags="--serialize-toplevel --cache=code"')
+  c.testing.test_args.add('--shell_flags="--serialize-toplevel --cache=code"')
 
 
 @config_ctx()
 def deadcode(c):
-  c.testing.test_args.add('--extra-flags="--dead-code-elimination"')
+  c.testing.test_args.add('--shell_flags="--dead-code-elimination"')
 
 
 @config_ctx()
@@ -102,7 +102,7 @@ def gc_stress(c):
 @config_ctx()
 def greedy_allocator(c):
   c.testing.test_args.add(
-      '--extra-flags="--turbo-verify-allocation --turbo-greedy-regalloc"')
+      '--shell_flags="--turbo-verify-allocation --turbo-greedy-regalloc"')
 
 
 @config_ctx()
@@ -161,12 +161,12 @@ def no_snapshot(c):
 
 @config_ctx()
 def nosse3(c):
-  c.testing.test_args.add('--extra-flags="--noenable-sse3 --noenable-avx"')
+  c.testing.test_args.add('--shell_flags="--noenable-sse3 --noenable-avx"')
 
 
 @config_ctx()
 def nosse4(c):
-  c.testing.test_args.add('--extra-flags="--noenable-sse4-1 --noenable-avx"')
+  c.testing.test_args.add('--shell_flags="--noenable-sse4-1 --noenable-avx"')
 
 
 @config_ctx()
@@ -181,12 +181,12 @@ def no_variants(c):
 
 @config_ctx()
 def turbo_variant(c):
-  c.testing.test_args.add('--variants=turbofan')
+  c.testing.test_args.add('--turbo-variant')
 
 
 @config_ctx()
 def novfp3(c):
-  c.testing.test_args.add('--extra-flags="--noenable-vfp3"')
+  c.testing.test_args.add('--shell_flags="--noenable-vfp3"')
 
 
 @config_ctx()
