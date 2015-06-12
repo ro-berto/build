@@ -24,13 +24,11 @@ CACHE_DIR = os.path.join(SLAVE_DIR, 'cache_dir')
 DEPOT_TOOLS = os.path.realpath(os.path.join(BUILD_DIR, '..', 'depot_tools'))
 GIT_CL_PATH = os.path.realpath(os.path.join(DEPOT_TOOLS, 'git_cl.py'))
 
-test_util = imp.load_source(
-    'test_util',
-    os.path.join(os.path.dirname(__file__), 'test_util.py'))
-
-chromium_utils = imp.load_source(
-    'chromium_utils',
-    os.path.join(BUILD_DIR, 'scripts', 'common', 'chromium_utils.py'))
+sys.path.insert(0, os.path.join(BUILD_DIR, 'scripts'))
+import common.env
+common.env.Install()
+from common import chromium_utils
+import test_util
 
 local_rietveld = imp.load_source(
     'local_rietveld',
