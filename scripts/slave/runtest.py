@@ -150,11 +150,10 @@ def _ShutdownDBus():
 
 
 def _RunGTestCommand(
-    options, command, extra_env, log_processor=None, pipes=None):
+    command, extra_env, log_processor=None, pipes=None):
   """Runs a test, printing and possibly processing the output.
 
   Args:
-    options: Options passed for this invocation of runtest.py.
     command: A list of strings in a command (the command and its arguments).
     extra_env: A dictionary of extra environment variables to set.
     log_processor: A log processor instance which has the ProcessLine method.
@@ -181,20 +180,12 @@ def _RunGTestCommand(
   if log_processor:
     log_processors[log_processor.__class__.__name__] = log_processor
 
-  if (not 'GTestLogParser' in log_processors and
-      options.log_processor_output_file):
-    log_processors['GTestLogParser'] = gtest_utils.GTestLogParser()
-
   def _ProcessLine(line):
     for current_log_processor in log_processors.values():
       current_log_processor.ProcessLine(line)
 
   result = chromium_utils.RunCommand(
       command, pipes=pipes, parser_func=_ProcessLine, env=env)
-
-  if options.log_processor_output_file:
-    _WriteLogProcessorResultsToOutput(
-        log_processors['GTestLogParser'], options.log_processor_output_file)
 
   return result
 
@@ -648,23 +639,6 @@ def _GenerateDashboardJson(log_processor, args):
   return None
 
 
-def _WriteLogProcessorResultsToOutput(log_processor, log_output_file):
-  """Writes the log processor's results to a file.
-
-  Args:
-  chartjson_file: Path to the file to write the results.
-    log_processor: An instance of a log processor class, which has been used to
-        process the test output, so it contains the test results.
-  """
-  with open(log_output_file, 'w') as f:
-    results = {
-      'passed': log_processor.PassedTests(),
-      'failed': log_processor.FailedTests(),
-      'flakes': log_processor.FlakyTests(),
-    }
-    json.dump(results, f)
-
-
 def _WriteChartJsonToOutput(chartjson_file, log_processor, args):
   """Writes the dashboard chartjson to a file for display in the waterfall.
 
@@ -1022,54 +996,6 @@ def _SymbolizeSnippetsInJSON(options, json_file_name):
     print stderr
 
 
-def _MainParse(options, _args):
-  """Run input through annotated test parser.
-
-  This doesn't execute a test, but reads test input from a file and runs it
-  through the specified annotation parser (aka log processor).
-  """
-  if not options.annotate:
-    raise chromium_utils.MissingArgument('--parse-input doesn\'t make sense '
-                                         'without --annotate.')
-
-  # If --annotate=list was passed, list the log processor classes and exit.
-  if _ListLogProcessors(options.annotate):
-    return 0
-
-  log_processor_class = _SelectLogProcessor(options, False)
-  log_processor = _CreateLogProcessor(log_processor_class, options, None)
-
-  if options.generate_json_file:
-    if os.path.exists(options.test_output_xml):
-      # remove the old XML output file.
-      os.remove(options.test_output_xml)
-
-  if options.parse_input == '-':
-    f = sys.stdin
-  else:
-    try:
-      f = open(options.parse_input, 'rb')
-    except IOError as e:
-      print 'Error %d opening \'%s\': %s' % (e.errno, options.parse_input,
-                                             e.strerror)
-      return 1
-
-  with f:
-    for line in f:
-      log_processor.ProcessLine(line)
-
-  if options.generate_json_file:
-    if not _GenerateJSONForTestResults(options, log_processor):
-      return 1
-
-  if options.annotate:
-    annotation_utils.annotate(
-        options.test_type, options.parse_result, log_processor,
-        perf_dashboard_id=options.perf_dashboard_id)
-
-  return options.parse_result
-
-
 def _MainMac(options, args, extra_env):
   """Runs the test on mac."""
   if len(args) < 1:
@@ -1120,7 +1046,7 @@ def _MainMac(options, args, extra_env):
 
     command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
                                           command)
-    result = _RunGTestCommand(options, command, extra_env, pipes=pipes,
+    result = _RunGTestCommand(command, extra_env, pipes=pipes,
                               log_processor=log_processor)
   finally:
     if _UsingGtestJson(options):
@@ -1225,7 +1151,7 @@ def _MainIOS(options, args, extra_env):
   crash_files_after = set([])
   crash_files_before = set(crash_utils.list_crash_logs())
 
-  result = _RunGTestCommand(options, command, extra_env, log_processor)
+  result = _RunGTestCommand(command, extra_env, log_processor)
 
   # Because test apps kill themselves, iossim sometimes returns non-zero
   # status even though all tests have passed.  Check the log_processor to
@@ -1370,7 +1296,7 @@ def _MainLinux(options, args, extra_env):
 
     command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
                                           command)
-    result = _RunGTestCommand(options, command, extra_env, pipes=pipes,
+    result = _RunGTestCommand(command, extra_env, pipes=pipes,
                               log_processor=log_processor)
   finally:
     if start_xvfb:
@@ -1471,7 +1397,7 @@ def _MainWin(options, args, extra_env):
 
     command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
                                           command)
-    result = _RunGTestCommand(options, command, extra_env, log_processor)
+    result = _RunGTestCommand(command, extra_env, log_processor)
   finally:
     if _UsingGtestJson(options):
       _UploadGtestJsonSummary(json_file_name,
@@ -1546,7 +1472,7 @@ def _MainAndroid(options, args, extra_env):
         options.flakiness_dashboard_server]
 
   result = _RunGTestCommand(
-      options, command, extra_env, log_processor=log_processor)
+      command, extra_env, log_processor=log_processor)
 
   if options.generate_json_file:
     if not _GenerateJSONForTestResults(options, log_processor):
@@ -1723,8 +1649,6 @@ def main():
                            help='output results directory for JSON file.')
   option_parser.add_option('--chartjson-file', default='',
                            help='File to dump chartjson results.')
-  option_parser.add_option('--log-processor-output-file', default='',
-                           help='File to dump gtest log processor results.')
   option_parser.add_option('--builder-name', default=None,
                            help='The name of the builder running this script.')
   option_parser.add_option('--slave-name', default=None,
@@ -1754,14 +1678,6 @@ def main():
                            help='Annotate output when run as a buildstep. '
                                 'Specify which type of test to parse, available'
                                 ' types listed with --annotate=list.')
-  option_parser.add_option('--parse-input', default='',
-                           help='When combined with --annotate, reads test '
-                                'from a file instead of executing a test '
-                                'binary. Use - for stdin.')
-  option_parser.add_option('--parse-result', default=0,
-                           help='Sets the return value of the simulated '
-                                'executable under test. Only has meaning when '
-                                '--parse-input is used.')
   option_parser.add_option('--results-url', default='',
                            help='The URI of the perf dashboard to upload '
                                 'results to.')
@@ -1900,9 +1816,7 @@ def main():
       _BuildCoverageGtestExclusions(options, args)
 
     temp_files = _GetTempCount()
-    if options.parse_input:
-      result = _MainParse(options, args)
-    elif sys.platform.startswith('darwin'):
+    if sys.platform.startswith('darwin'):
       test_platform = options.factory_properties.get(
           'test_platform', options.test_platform)
       if test_platform in ('ios-simulator',):
