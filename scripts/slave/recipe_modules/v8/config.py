@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 from recipe_engine.config import config_item_context, ConfigGroup
-from recipe_engine.config import List, Set, Single, Static
+from recipe_engine.config import List, Single, Static
 
 
 def BaseConfig(**_kwargs):
@@ -34,7 +34,7 @@ def BaseConfig(**_kwargs):
     # might be refined later in the test runner for distinct tests.
     testing = ConfigGroup(
       add_flaky_step = Single(bool, required=False),
-      test_args = Set(basestring),
+      test_args = List(basestring),
 
       SHARD_COUNT = Static(shard_count),
       SHARD_RUN = Static(shard_run),
@@ -73,41 +73,42 @@ def arm_hard_float(c):
 
 @config_ctx()
 def code_serializer(c):
-  c.testing.test_args.add('--shell_flags="--serialize-toplevel --cache=code"')
+  c.testing.test_args.extend(
+      ['--extra-flags', '--serialize-toplevel --cache=code'])
 
 
 @config_ctx()
 def deadcode(c):
-  c.testing.test_args.add('--shell_flags="--dead-code-elimination"')
+  c.testing.test_args.append('--extra-flags=--dead-code-elimination')
 
 
 @config_ctx()
 def deopt_fuzz_normal(c):
-  c.testing.test_args.add('--coverage=0.4')
-  c.testing.test_args.add('--distribution-mode=smooth')
+  c.testing.test_args.append('--coverage=0.4')
+  c.testing.test_args.append('--distribution-mode=smooth')
 
 
 @config_ctx()
 def deopt_fuzz_random(c):
-  c.testing.test_args.add('--coverage=0.4')
-  c.testing.test_args.add('--coverage-lift=50')
-  c.testing.test_args.add('--distribution-mode=random')
+  c.testing.test_args.append('--coverage=0.4')
+  c.testing.test_args.append('--coverage-lift=50')
+  c.testing.test_args.append('--distribution-mode=random')
 
 
 @config_ctx()
 def gc_stress(c):
-  c.testing.test_args.add('--gc-stress')
+  c.testing.test_args.append('--gc-stress')
 
 
 @config_ctx()
 def greedy_allocator(c):
-  c.testing.test_args.add(
-      '--shell_flags="--turbo-verify-allocation --turbo-greedy-regalloc"')
+  c.testing.test_args.extend(
+      ['--extra-flags', '--turbo-verify-allocation --turbo-greedy-regalloc'])
 
 
 @config_ctx()
 def isolates(c):
-  c.testing.test_args.add('--isolates=on')
+  c.testing.test_args.append('--isolates')
 
 
 @config_ctx()
@@ -118,11 +119,11 @@ def mips_cross_compile(c):
 @config_ctx()
 def nacl(c):
   # TODO(iannucci): Figure out how to make api path available here.
-  c.testing.test_args.add('--command_prefix=tools/nacl-run.py')
+  c.testing.test_args.append('--command_prefix=tools/nacl-run.py')
   # This switches off buildbot flavor for NaCl, i.e. uses the directory layout
   # out/nacl_ia32.release instead of out/Release.
-  c.testing.test_args.add('--buildbot=False')
-  c.testing.test_args.add('--no-presubmit')
+  c.testing.test_args.append('--buildbot=False')
+  c.testing.test_args.append('--no-presubmit')
 
 
 @config_ctx(includes=['nacl'])
@@ -151,50 +152,52 @@ def nacl_x64(c):
 
 @config_ctx()
 def no_i18n(c):
-  c.testing.test_args.add('--noi18n')
+  c.testing.test_args.append('--noi18n')
 
 
 @config_ctx()
 def no_snapshot(c):
-  c.testing.test_args.add('--no-snap')
+  c.testing.test_args.append('--no-snap')
 
 
 @config_ctx()
 def nosse3(c):
-  c.testing.test_args.add('--shell_flags="--noenable-sse3 --noenable-avx"')
+  c.testing.test_args.extend(
+      ['--extra-flags', '--noenable-sse3 --noenable-avx'])
 
 
 @config_ctx()
 def nosse4(c):
-  c.testing.test_args.add('--shell_flags="--noenable-sse4-1 --noenable-avx"')
+  c.testing.test_args.extend(
+      ['--extra-flags', '--noenable-sse4-1 --noenable-avx'])
 
 
 @config_ctx()
 def no_harness(c):
-  c.testing.test_args.add('--no-harness')
+  c.testing.test_args.append('--no-harness')
 
 
 @config_ctx()
 def no_variants(c):
-  c.testing.test_args.add('--no-variants')
+  c.testing.test_args.append('--no-variants')
 
 
 @config_ctx()
 def turbo_variant(c):
-  c.testing.test_args.add('--turbo-variant')
+  c.testing.test_args.append('--variants=turbofan')
 
 
 @config_ctx()
 def novfp3(c):
-  c.testing.test_args.add('--shell_flags="--noenable-vfp3"')
+  c.testing.test_args.append('--extra-flags=--noenable-vfp3')
 
 
 @config_ctx()
 def predictable(c):
-  c.testing.test_args.add('--predictable')
+  c.testing.test_args.append('--predictable')
 
 
 @config_ctx()
 def trybot_flavor(c):
   c.testing.add_flaky_step = False
-  c.testing.test_args.add('--flaky-tests=skip')
+  c.testing.test_args.append('--flaky-tests=skip')

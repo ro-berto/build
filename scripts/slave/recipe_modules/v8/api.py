@@ -28,67 +28,67 @@ MIPS_DIR = 'mips-2013.11'
 TEST_CONFIGS = freeze({
   'benchmarks': {
     'name': 'Benchmarks',
-    'tests': 'benchmarks',
+    'tests': ['benchmarks'],
     'test_args': ['--download-data'],
   },
   'mjsunit': {
     'name': 'Mjsunit',
-    'tests': 'mjsunit',
+    'tests': ['mjsunit'],
     'add_flaky_step': True,
   },
   'mozilla': {
     'name': 'Mozilla',
-    'tests': 'mozilla',
+    'tests': ['mozilla'],
     'gclient_apply_config': ['mozilla_tests'],
   },
   'optimize_for_size': {
     'name': 'OptimizeForSize',
-    'tests': 'optimize_for_size',
+    'tests': ['optimize_for_size'],
     'add_flaky_step': True,
-    'test_args': ['--no-variants', '--shell_flags="--optimize-for-size"'],
+    'test_args': ['--no-variants', '--extra-flags=--optimize-for-size'],
   },
   'simdjs_small': {
     'name': 'SimdJs - small',
-    'tests': 'simdjs/shell_test_runner',
+    'tests': ['simdjs/shell_test_runner'],
     'test_args': ['--download-data'],
   },
   'simdjs': {
     'name': 'SimdJs - all',
-    'tests': 'simdjs',
+    'tests': ['simdjs'],
     'test_args': ['--download-data'],
   },
   'test262': {
     'name': 'Test262 - no variants',
-    'tests': 'test262',
+    'tests': ['test262'],
     'test_args': ['--no-variants', '--download-data'],
   },
   'test262_variants': {
     'name': 'Test262',
-    'tests': 'test262',
+    'tests': ['test262'],
     'test_args': ['--download-data'],
   },
   'test262_es6': {
     'name': 'Test262-es6 - no variants',
-    'tests': 'test262-es6',
+    'tests': ['test262-es6'],
     'test_args': ['--no-variants', '--download-data'],
   },
   'test262_es6_variants': {
     'name': 'Test262-es6',
-    'tests': 'test262-es6',
+    'tests': ['test262-es6'],
     'test_args': ['--download-data'],
   },
   'unittests': {
     'name': 'Unittests',
-    'tests': ('unittests'),
+    'tests': ['unittests'],
   },
   'v8testing': {
     'name': 'Check',
-    'tests': ('default'),
+    'tests': ['default'],
     'add_flaky_step': True,
   },
   'webkit': {
     'name': 'Webkit',
-    'tests': 'webkit',
+    'tests': ['webkit'],
     'add_flaky_step': True,
   },
 })
@@ -641,11 +641,13 @@ class V8Api(recipe_api.RecipeApi):
       # uses v8 flavor. Make this more uniform.
       target = target.lower()
     full_args = [
-      '--target', target,
+      '--progress=verbose',
+      '--mode', target,
       '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
       '--outdir', self.m.path.split(self.m.chromium.c.build_dir)[-1],
-      '--testname', test['tests'],
-    ]
+      '--buildbot',
+      '--timeout=200',
+    ] + list(test['tests'])
 
     # Add test-specific test arguments.
     full_args += test.get('test_args', [])
@@ -663,8 +665,8 @@ class V8Api(recipe_api.RecipeApi):
 
     if self.c.testing.SHARD_COUNT > 1:
       full_args += [
-        '--shard_count=%d' % self.c.testing.SHARD_COUNT,
-        '--shard_run=%d' % self.c.testing.SHARD_RUN,
+        '--shard-count=%d' % self.c.testing.SHARD_COUNT,
+        '--shard-run=%d' % self.c.testing.SHARD_RUN,
       ]
 
     if flaky_tests:
@@ -707,8 +709,11 @@ class V8Api(recipe_api.RecipeApi):
     if self.c.nacl.NACL_SDK_ROOT:
       env['NACL_SDK_ROOT'] = self.c.nacl.NACL_SDK_ROOT
 
-    full_args += ['--json-test-results',
-                  self.m.json.output(add_json_log=False)]
+    full_args += [
+      '--rerun-failures-count=2',
+      '--json-test-results',
+      self.m.json.output(add_json_log=False),
+    ]
     def step_test_data():
       return self.test_api.output_json(
           self._test_data.get('test_failures', False),
@@ -717,7 +722,7 @@ class V8Api(recipe_api.RecipeApi):
 
     step_result = self.m.python(
       name,
-      self.resource('v8testing.py'),
+      self.m.path['checkout'].join('tools', 'run-tests.py'),
       full_args,
       cwd=self.m.path['checkout'],
       env=env,

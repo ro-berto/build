@@ -121,8 +121,8 @@
       "--progress",
       "verbose",
       "--buildbot",
-      "--distribution-mode=smooth",
-      "--coverage=0.4"
+      "--coverage=0.4",
+      "--distribution-mode=smooth"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Deopt Fuzz"
