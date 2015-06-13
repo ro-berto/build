@@ -543,7 +543,7 @@ def solutions_to_git(input_solutions):
           version=buildspec_m.group(2),
       )
       solution['deps_file'] = path.join(buildspec.container, buildspec.version,
-                                        '.DEPS.git')
+                                        'DEPS')
     elif parsed_path in RECOGNIZED_PATHS:
       solution['url'] = RECOGNIZED_PATHS[parsed_path]
       solution['deps_file'] = '.DEPS.git'
