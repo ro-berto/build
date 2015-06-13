@@ -131,7 +131,7 @@ def GenSteps(api):
       # Use the HEAD of the deps repo.
       step_result = api.git(
         'ls-remote', v8_repo, 'HEAD',
-        name='look up %s' % name,
+        name='look up %s' % name.replace('/', '_'),
         stdout=api.raw_io.output(),
       )
       new_rev = step_result.stdout.strip().split('\t')[0]
@@ -140,7 +140,7 @@ def GenSteps(api):
     # Check if an update is necessary.
     if v8_rev != new_rev:
       step_result = api.step(
-          'roll dependency %s' % name,
+          'roll dependency %s' % name.replace('/', '_'),
           ['roll-dep-svn', '--no-verify-revision', 'v8/%s' % name, new_rev],
           ok_ret='any',
           cwd=api.path['checkout'],
@@ -200,11 +200,11 @@ def GenTests(api):
           api.raw_io.stream_output(cr_deps_info, stream='stdout'),
       ) +
       api.override_step_data(
-          'roll dependency odd/dep',
+          'roll dependency odd_dep',
           retcode=1,
       ) +
       api.override_step_data(
-          'look up another/dep',
+          'look up another_dep',
           api.raw_io.stream_output('deadbeaf\tHEAD', stream='stdout'),
       ) +
       api.override_step_data(

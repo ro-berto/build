@@ -155,7 +155,7 @@
       "beefdead"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "roll dependency a/dep"
+    "name": "roll dependency a_dep"
   },
   {
     "cmd": [
@@ -165,7 +165,7 @@
       "HEAD"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "look up another/dep",
+    "name": "look up another_dep",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@deadbeaf@@@"
@@ -179,7 +179,7 @@
       "deadbeaf"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "roll dependency another/dep"
+    "name": "roll dependency another_dep"
   },
   {
     "cmd": [
@@ -189,7 +189,7 @@
       "weird"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "roll dependency odd/dep",
+    "name": "roll dependency odd_dep",
     "~followup_annotations": [
       "@@@STEP_WARNINGS@@@"
     ]
