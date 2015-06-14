@@ -70,12 +70,18 @@ def main():
 
     # Move SVN .gclient away so that no one can run gclient sync while
     # conversion is in progress.
+    print 'Moving .gclient to .gclient.svn in %s' % buildbot_dir
     shutil.move(os.path.join(buildbot_dir, '.gclient'),
                 os.path.join(buildbot_dir, '.gclient.svn'))
 
     # Rename all .svn directories into .svn.backup.
     svn_dirs = []
+    count = 0
+    print 'Searching for .svn folders'
     for root, dirs, _files in os.walk(buildbot_dir):
+      count += 1
+      if count % 1000 == 0:
+        print 'Processed %d directories' % count
       if '.svn' in dirs:
         svn_dirs.append(os.path.join(root, '.svn'))
         dirs.remove('.svn')
