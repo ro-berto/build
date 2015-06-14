@@ -71,6 +71,10 @@ def GenSteps(api):
   api.gclient.set_config('v8')
   api.gclient.apply_config('chromium')
 
+  # Allow rolling all v8 os deps.
+  api.gclient.c.target_os.add('android')
+  api.gclient.c.target_os.add('win')
+
   # Skip large repos.
   s = api.gclient.c.solutions[1]
   s.custom_deps.update({
