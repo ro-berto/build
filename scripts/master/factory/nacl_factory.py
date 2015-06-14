@@ -18,6 +18,10 @@ class NativeClientFactory(gclient_factory.GClientFactory):
   CUSTOM_VARS_SOURCEFORGE_URL = ('sourceforge_url',
                                  config.Master.sourceforge_url)
   CUSTOM_VARS_WEBKIT_MIRROR = ('webkit_trunk', config.Master.webkit_trunk_url)
+  CUSTOM_VARS_NACL_MIRROR = (
+      'native_client_trunk', config.Master.nacl_trunk_url)
+  CUSTOM_VARS_CHROMIUM_MIRROR = (
+      'chromium_trunk', 'svn://svn-mirror.golo.chromium.org/chrome/trunk')
 
   def __init__(self, build_dir, target_platform,
                alternate_url=None, custom_deps_list=None, target_os=None):
@@ -30,6 +34,8 @@ class NativeClientFactory(gclient_factory.GClientFactory):
         nacl_url, custom_deps_list=custom_deps_list,
         custom_vars_list=[self.CUSTOM_VARS_WEBKIT_MIRROR,
                           self.CUSTOM_VARS_GOOGLECODE_URL,
+                          self.CUSTOM_VARS_NACL_MIRROR,
+                          self.CUSTOM_VARS_CHROMIUM_MIRROR,
                           self.CUSTOM_VARS_SOURCEFORGE_URL])
     solutions.append(main)
 
