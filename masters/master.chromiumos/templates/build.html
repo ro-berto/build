@@ -107,9 +107,27 @@ Build #{{ b.getNumber() }}
  #                       (target, ex_url_class, html.escape(name)))
  #}
 
-<ol>
+{% set nest_level = -1 %}
 {% for s in steps %}
-  <li>
+
+  {# Adjust the indentation to the current step level.  We maintain as an
+   # invariant that we are always in a content section (e.g. an li). #}
+  {% set step_nest = s.get('nest_level', 0) %}
+  {% if step_nest > nest_level %}
+    {% for _ in range(nest_level, step_nest - 1) %}
+      <ul type="a"><li>
+    {% endfor %}
+    <ul><li>
+  {% elif step_nest == nest_level %}
+    </li><li>
+  {% elif step_nest < nest_level %}
+    {% for _ in range(step_nest, nest_level) %}
+      </li></ul>
+    {% endfor %}
+    <li>
+  {% endif %}
+  {% set nest_level = step_nest %}
+
     <div class="{{ s.css_class }} result">
       <a href="{{ s.link }}">{{ s.name }}</a> 
       {{ s.text }}&nbsp;<span style="float:right">{{ '( ' + s.time_to_run + ' )' if s.time_to_run else '' }}</span>
@@ -129,7 +147,11 @@ Build #{{ b.getNumber() }}
     </ol>  
   </li>
 {% endfor %}
-</ol>
+
+{# Close out all open indentation sections. #}
+{% for _ in range(-1, nest_level) %}
+ </li></ul>
+{% endfor %}
 
 </div>
 <div class="column">

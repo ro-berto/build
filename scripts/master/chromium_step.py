@@ -531,6 +531,10 @@ class AnnotationObserver(buildstep.LogLineObserver):
   @@@STEP_SUMMARY_TEXT@<msg>@@@
   Append <msg> to the step summary (appears on top of the waterfall).
 
+  @@@STEP_NEST_LEVEL@<level>@@@
+  Set the nesting level of the current step. Steps at level n are assumed to
+  be nested under the most recent step of level n-1.
+
   @@@HALT_ON_FAILURE@@@
   Halt if exception or failure steps are encountered (default is not).
 
@@ -1137,6 +1141,10 @@ class AnnotationObserver(buildstep.LogLineObserver):
     # Support: @@@STEP_SUMMARY_TEXT@<msg>@@@
     self.cursor['step_summary_text'].append(msg)
     self.updateCursorText()
+
+  def STEP_NEST_LEVEL(self, level):
+    # Support: @@@STEP_NEST_LEVEL@<level>@@@
+    self.cursor['step'].setNestLevel(int(level))
 
   def SEED_STEP(self, step_name):
     # Support: @@@SEED_STEP <stepname>@@@ (seed a new section)

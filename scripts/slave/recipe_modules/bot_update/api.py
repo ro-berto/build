@@ -200,7 +200,6 @@ class BotUpdateApi(recipe_api.RecipeApi):
       self(name, cmd, step_test_data=step_test_data, ok_ret=(0, 88), **kwargs)
     finally:
       step_result = self.m.step.active_result
-
       self._properties = step_result.json.output.get('properties', {})
 
       if update_presentation:

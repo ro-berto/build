@@ -67,6 +67,7 @@ class BuildStepStatus(styles.Versioned):
     statistics = {}
     step_number = None
     hidden = False
+    nest_level = 0
 
     def __init__(self, parent, step_number):
         assert interfaces.IBuildStatus(parent)
@@ -82,6 +83,7 @@ class BuildStepStatus(styles.Versioned):
         self.finishedWatchers = []
         self.statistics = {}
         self.skipped = False
+        self.nest_level = 0
 
         self.waitingForLocks = False
 
@@ -175,6 +177,12 @@ class BuildStepStatus(styles.Versioned):
         @returns: (result, strings)
         """
         return (self.results, self.text2)
+
+    def getNestLevel(self):
+        """Return an integer representing the depth of nesting, that is,
+        how many levels of ancestors this step has.
+        """
+        return self.nest_level
 
     def hasStatistic(self, name):
         """Return true if this step has a value for the given statistic.
@@ -281,6 +289,9 @@ class BuildStepStatus(styles.Versioned):
         build = self.getBuild()
         for w in self.watchers:
             w.stepText2Changed(build, self, text)
+
+    def setNestLevel(self, level):
+        self.nest_level = level
 
     def setStatistic(self, name, value):
         """Set the given statistic.  Usually called by subclasses.

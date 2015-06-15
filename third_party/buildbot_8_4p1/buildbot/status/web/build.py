@@ -119,8 +119,10 @@ class StatusResourceBuild(HtmlResource):
                                                                    safe=''))
             step['text'] = " ".join(s.getText())
             step['urls'] = map(lambda x:dict(url=x[1],logname=x[0]), s.getURLs().items())
+            step['nest_level'] = s.getNestLevel()
 
             step['logs']= []
+
             for l in s.getLogs():
                 logname = l.getName()
                 step['logs'].append({ 'link': req.childLink("steps/%s/logs/%s" %
@@ -131,7 +133,7 @@ class StatusResourceBuild(HtmlResource):
         ps = cxt['properties'] = []
         for name, value, source in b.getProperties().asList():
             value = str(value)
-            p = { 'name': name, 'value': value, 'source': source}            
+            p = { 'name': name, 'value': value, 'source': source}
             if len(value) > 500:
                 p['short_value'] = value[:500]
 
