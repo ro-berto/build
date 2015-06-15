@@ -411,7 +411,7 @@ def _GenStepsInternal(api):
   affected_files = api.tryserver.get_files_affected_by_patch()
   if (any([f.startswith('third_party/WebKit') for f in affected_files]) and
       buildername in CHROMIUM_BLINK_TESTS_BUILDERS):
-    tests.append(api.chromium.steps.BlinkTest())
+    tests.append(api.chromium_tests.steps.BlinkTest())
 
   compile_targets, tests_including_triggered = \
       api.chromium_tests.get_compile_targets_and_tests(

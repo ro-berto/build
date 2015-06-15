@@ -61,6 +61,8 @@ def GenSteps(api):
   # Calls bisect script in recipe wrapper with extra_src and path_to_config,
   # to override default behavior.
   if api.properties.get('mastername'):
+    # TODO(akuegel): Load the config explicitly instead of relying on the
+    # builders.py entries in chromium_tests.
     mastername = api.properties.get('mastername')
     buildername = api.properties.get('buildername')
     api.chromium_tests.configure_build(mastername, buildername)

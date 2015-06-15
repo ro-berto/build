@@ -501,7 +501,7 @@ class GpuApi(recipe_api.RecipeApi):
     assert target_name.endswith('test') or target_name.endswith('tests')
 
     results_directory = self.m.path['slave_build'].join('gtest-results', name)
-    return self.m.chromium.steps.GPUGTestTest(
+    return self.m.chromium_tests.steps.GPUGTestTest(
         name,
         xvfb=False,
         args=args,
@@ -537,7 +537,7 @@ class GpuApi(recipe_api.RecipeApi):
       extra_browser_args_string += ' ' + ' '.join(extra_browser_args)
     test_args.append(extra_browser_args_string)
 
-    return self.m.chromium.steps.TelemetryGPUTest(
+    return self.m.chromium_tests.steps.TelemetryGPUTest(
         name, chrome_revision, webkit_revision, args=test_args,
         target_name=target_name, enable_swarming=enable_swarming,
         swarming_dimensions=swarming_dimensions,

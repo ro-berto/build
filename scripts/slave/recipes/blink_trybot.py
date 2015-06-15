@@ -396,7 +396,7 @@ def _GenStepsInternal(api):
                        api.path['checkout'].join('third_party', 'WebKit',
                                                  'LayoutTests',
                                                  'OilpanExpectations')])
-  tests.append(api.chromium.steps.BlinkTest(extra_args=extra_args))
+  tests.append(api.chromium_tests.steps.BlinkTest(extra_args=extra_args))
 
   api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
 

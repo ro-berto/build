@@ -10,11 +10,31 @@ from infra.libs.infra_types import freeze, thaw
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
+from . import builders
+from . import steps
+
 
 class ChromiumTestsApi(recipe_api.RecipeApi):
+  def __init__(self, *args, **kwargs):
+    super(ChromiumTestsApi, self).__init__(*args, **kwargs)
+    self._builders = {}
+    self.add_builders(builders.BUILDERS)
+
+  @property
+  def builders(self):
+    return self._builders
+
+  @property
+  def steps(self):
+    return steps
+
+  def add_builders(self, builders):
+    """Adds builders to our builder map"""
+    self._builders.update(builders)
+
   def configure_build(self, mastername, buildername, override_bot_type=None,
 ):
-    master_dict = self.m.chromium.builders.get(mastername, {})
+    master_dict = self.builders.get(mastername, {})
     bot_config = master_dict.get('builders', {}).get(buildername)
 
     # Get the buildspec version. It can be supplied as a build property or as
@@ -73,7 +93,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def prepare_checkout(self, mastername, buildername):
     # Make an independent copy so that we don't overwrite global state
     # with updates made dynamically based on the test specs.
-    master_dict = thaw(self.m.chromium.builders.get(mastername, {}))
+    master_dict = thaw(self.builders.get(mastername, {}))
     bot_config = master_dict.get('builders', {}).get(buildername)
 
     if self.m.platform.is_win:
@@ -120,7 +140,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                                  test_spec_file)
 
       scripts_compile_targets = \
-          self.m.chromium.get_compile_targets_for_scripts().json.output
+          self.get_compile_targets_for_scripts().json.output
 
     for loop_buildername, builder_dict in master_dict.get(
         'builders', {}).iteritems():
@@ -401,7 +421,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     tests = list(bot_config.get('tests', []))
 
     if bot_config.get('goma_canary'):
-      tests.insert(0, self.m.chromium.steps.DiagnoseGomaTest())
+      tests.insert(0, steps.DiagnoseGomaTest())
 
     if bot_type in ('tester', 'builder_tester'):
       isolated_targets = [t.isolate_target for t in tests if t.uses_swarming]
@@ -618,3 +638,46 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       return self.m.archive.legacy_upload_url(
           master_config.get('build_gs_bucket'),
           extra_url_components=self.m.properties['mastername'])
+
+  def get_common_args_for_scripts(self):
+    args = []
+
+    args.extend(['--build-config-fs', self.m.chromium.c.build_config_fs])
+
+    paths = {}
+    for path in ('build', 'checkout'):
+      paths[path] = self.m.path[path]
+    args.extend(['--paths', self.m.json.input(paths)])
+
+    properties = {}
+    # TODO(phajdan.jr): Remove buildnumber when no longer used.
+
+    mastername = self.m.properties.get('mastername')
+    buildername = self.m.properties.get('buildername')
+    master_dict = self.builders.get(mastername, {})
+    bot_config = master_dict.get('builders', {}).get(buildername, {})
+
+    for name in ('buildername', 'slavename', 'buildnumber', 'mastername'):
+      properties[name] = self.m.properties[name]
+
+    # Optional properties
+    for name in ('perf-id', 'results-url'):
+      if bot_config.get(name):
+        properties[name] = bot_config[name]
+
+    properties['target_platform'] = self.m.chromium.c.TARGET_PLATFORM
+
+    args.extend(['--properties', self.m.json.input(properties)])
+
+    return args
+
+  def get_compile_targets_for_scripts(self):
+    return self.m.python(
+        name='get compile targets for scripts',
+        script=self.m.path['checkout'].join(
+            'testing', 'scripts', 'get_compile_targets.py'),
+        args=[
+            '--output', self.m.json.output(),
+            '--',
+        ] + self.get_common_args_for_scripts(),
+        step_test_data=lambda: self.m.json.test_api.output({}))

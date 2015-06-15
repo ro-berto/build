@@ -103,6 +103,8 @@ BUILDERS = freeze({
 def GenSteps(api):
   mastername = api.properties['mastername']
   buildername = api.properties['buildername']
+  # TODO(akuegel): Move the configs in builders.py in chromium_tests to this
+  # recipe, and get rid of duplications.
   builder = thaw(BUILDERS[mastername][buildername])
   api.chromium_android.set_config(
       builder.get('recipe_config', 'base_config'), REPO_NAME='src',
@@ -135,11 +137,11 @@ def GenSteps(api):
     test_spec = api.chromium_tests.read_test_spec(api, test_spec_file)
 
     scripts_compile_targets = \
-        api.chromium.get_compile_targets_for_scripts().json.output
+        api.chromium_tests.get_compile_targets_for_scripts().json.output
 
     builder['tests'] = api.chromium_tests.generate_tests_from_test_spec(
         api, test_spec, builder, buildername, mastername, False,
-        scripts_compile_targets, [api.chromium.steps.generate_script])
+        scripts_compile_targets, [api.chromium_tests.steps.generate_script])
 
   api.path['checkout'] = api.path['slave_build'].join('src')
   api.chromium_android.clean_local_files()

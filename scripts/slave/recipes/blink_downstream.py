@@ -30,6 +30,7 @@ from infra.libs.infra_types import freeze
 DEPS = [
   'bot_update',
   'chromium',
+  'chromium_tests',
   'gclient',
   'json',
   'path',
@@ -132,7 +133,7 @@ def GenSteps(api):
     ])
 
   tests = [
-    api.chromium.steps.BlinkTest(extra_args=extra_args),
+    api.chromium_tests.steps.BlinkTest(extra_args=extra_args),
   ]
   api.test_utils.determine_new_failures(api, tests, component_pinned_fn)
 

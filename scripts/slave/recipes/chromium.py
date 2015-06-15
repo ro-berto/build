@@ -25,7 +25,7 @@ def GenSteps(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
 
-  if mastername == 'tryserver.chromium.perf' and api.chromium.builders[
+  if mastername == 'tryserver.chromium.perf' and api.chromium_tests.builders[
       mastername]['builders'][buildername]['bot_type'] == 'tester':
     api.bisect_tester.upload_job_url()
 
@@ -52,7 +52,7 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  for mastername, master_config in api.chromium.builders.iteritems():
+  for mastername, master_config in api.chromium_tests.builders.iteritems():
 
     # parent builder name -> list of triggered builders.
     triggered_by_parent = {}

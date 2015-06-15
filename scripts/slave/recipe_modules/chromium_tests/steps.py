@@ -166,7 +166,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
           # for consistency.
           api.path['checkout'].join(
               'testing', 'scripts', api.path.basename(self._script)),
-          args=(api.chromium.get_common_args_for_scripts() +
+          args=(api.chromium_tests.get_common_args_for_scripts() +
                 script_args +
                 ['run', '--output', api.json.output()] +
                 run_args),

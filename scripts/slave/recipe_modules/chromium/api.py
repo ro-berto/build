@@ -7,9 +7,6 @@ import re
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
-from . import builders
-from . import steps
-
 class TestLauncherFilterFileInputPlaceholder(recipe_util.Placeholder):
   def __init__(self, api, tests):
     self.raw = api.m.raw_io.input('\n'.join(tests))
@@ -29,8 +26,6 @@ class ChromiumApi(recipe_api.RecipeApi):
   def __init__(self, *args, **kwargs):
     super(ChromiumApi, self).__init__(*args, **kwargs)
     self._build_properties = None
-    self._builders = {}
-    self.add_builders(builders.BUILDERS)
 
   def get_config_defaults(self):
     return {
@@ -69,14 +64,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     return ret
 
   @property
-  def builders(self):
-    return self._builders
-
-  @property
-  def steps(self):
-    return steps
-
-  @property
   def build_properties(self):
     return self._build_properties
 
@@ -110,10 +97,6 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def set_build_properties(self, props):
     self._build_properties = props
-
-  def add_builders(self, builders):
-    """Adds builders to our builder map"""
-    self._builders.update(builders)
 
   def configure_bot(self, builders_dict, additional_configs=None):
     """Sets up the configurations and gclient to be ready for bot update.
@@ -721,49 +704,6 @@ class ChromiumApi(recipe_api.RecipeApi):
               '27eac9b2869ef6c89391f305a3f01285ea317867',
               '9d9a93134b3eabd003b85b4e7dea06c0eae150ed',
           ])
-
-  def get_common_args_for_scripts(self):
-    args = []
-
-    args.extend(['--build-config-fs', self.c.build_config_fs])
-
-    paths = {}
-    for path in ('build', 'checkout'):
-      paths[path] = self.m.path[path]
-    args.extend(['--paths', self.m.json.input(paths)])
-
-    properties = {}
-    # TODO(phajdan.jr): Remove buildnumber when no longer used.
-
-    mastername = self.m.properties.get('mastername')
-    buildername = self.m.properties.get('buildername')
-    master_dict = self.builders.get(mastername, {})
-    bot_config = master_dict.get('builders', {}).get(buildername, {})
-
-    for name in ('buildername', 'slavename', 'buildnumber', 'mastername'):
-      properties[name] = self.m.properties[name]
-
-    # Optional properties
-    for name in ('perf-id', 'results-url'):
-      if bot_config.get(name):
-        properties[name] = bot_config[name]
-
-    properties['target_platform'] = self.c.TARGET_PLATFORM
-
-    args.extend(['--properties', self.m.json.input(properties)])
-
-    return args
-
-  def get_compile_targets_for_scripts(self):
-    return self.m.python(
-        name='get compile targets for scripts',
-        script=self.m.path['checkout'].join(
-            'testing', 'scripts', 'get_compile_targets.py'),
-        args=[
-            '--output', self.m.json.output(),
-            '--',
-        ] + self.get_common_args_for_scripts(),
-        step_test_data=lambda: self.m.json.test_api.output({}))
 
   def download_lto_plugin(self):
     return self.m.python(

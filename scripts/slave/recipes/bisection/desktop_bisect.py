@@ -12,6 +12,8 @@ DEPS = [
 def GenSteps(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
+  # TODO(akuegel): Explicitly load the builder configs instead of relying on
+  # builder.py from chromium_tests recipe module.
   api.chromium_tests.configure_build(mastername, buildername)
   api.chromium_tests.prepare_checkout(mastername, buildername)
   api.auto_bisect.run_bisect_script()

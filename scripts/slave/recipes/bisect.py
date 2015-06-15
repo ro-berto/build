@@ -234,6 +234,8 @@ def _get_step_data_for_revision(api, revision_data, broken_cp=None,
 def _ensure_checkout(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
+  # TODO(akuegel): Explicitly load the configs for the builders and don't rely
+  # on builders.py in chromium_tests recipe module.
   api.chromium_tests.configure_build(mastername, buildername)
   api.chromium_tests.prepare_checkout(mastername, buildername)
 

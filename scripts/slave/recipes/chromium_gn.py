@@ -458,12 +458,12 @@ def _GenStepsInternal(api):
   test_spec_file = '%s.json' % mastername
   test_spec = api.chromium_tests.read_test_spec(api, test_spec_file)
 
-  tests = list(api.chromium.steps.generate_gtest(
+  tests = list(api.chromium_tests.steps.generate_gtest(
       api, mastername, buildername, test_spec))
 
   scripts_compile_targets = \
-      api.chromium.get_compile_targets_for_scripts().json.output
-  tests += list(api.chromium.steps.generate_script(
+      api.chromium_tests.get_compile_targets_for_scripts().json.output
+  tests += list(api.chromium_tests.steps.generate_script(
       api, mastername, buildername, test_spec,
       scripts_compile_targets=scripts_compile_targets))
 

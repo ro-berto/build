@@ -234,7 +234,7 @@ def _GenStepsInternal(api):
       if isinstance(test_args, basestring):
         test_args = [test_args]
 
-      test = api.chromium.steps.GTestTest(test_name, test_args)
+      test = api.chromium_tests.steps.GTestTest(test_name, test_args)
       assert not test.uses_swarming
 
       gtest_tests.append(test)
@@ -331,22 +331,22 @@ def _GenStepsInternal(api):
       compile_targets = ['all'] + compile_targets
 
     scripts_compile_targets = \
-        api.chromium.get_compile_targets_for_scripts().json.output
+        api.chromium_tests.get_compile_targets_for_scripts().json.output
 
     # Tests that are only run if their compile_targets are going to be built.
     conditional_tests = []
     if bot_config.get('add_nacl_integration_tests', True):
       conditional_tests += [
-          api.chromium.steps.ScriptTest(
+          api.chromium_tests.steps.ScriptTest(
               'nacl_integration', 'nacl_integration.py',
               scripts_compile_targets),
       ]
     if bot_config.get('add_telemetry_tests', True):
       conditional_tests += [
-          api.chromium.steps.ScriptTest(
+          api.chromium_tests.steps.ScriptTest(
               'telemetry_unittests', 'telemetry_unittests.py',
               scripts_compile_targets),
-          api.chromium.steps.ScriptTest(
+          api.chromium_tests.steps.ScriptTest(
               'telemetry_perf_unittests', 'telemetry_perf_unittests.py',
               scripts_compile_targets),
       ]
@@ -378,7 +378,7 @@ def _GenStepsInternal(api):
     tests.extend(find_test_named('nacl_integration', conditional_tests))
 
     if api.platform.is_win:
-      tests.append(api.chromium.steps.MiniInstallerTest())
+      tests.append(api.chromium_tests.steps.MiniInstallerTest())
 
     # Swarming uses Isolate to transfer files to swarming bots.
     # set_isolate_environment modifies GYP_DEFINES to enable test isolation.

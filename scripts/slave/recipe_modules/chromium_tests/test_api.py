@@ -4,10 +4,16 @@
 
 from recipe_engine import recipe_test_api
 
+from . import builders
+
 
 class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
+  @property
+  def builders(self):
+    return builders.BUILDERS
+
   def platform(self, mastername, buildername):
-    bot_config = self.m.chromium.builders[mastername]['builders'][buildername]
+    bot_config = builders.BUILDERS[mastername]['builders'][buildername]
     # TODO(phajdan.jr): Get the bitness from actual config for that bot.
     return self.m.platform(
         bot_config['testing']['platform'],

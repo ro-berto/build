@@ -4,14 +4,8 @@
 
 from recipe_engine import recipe_test_api
 
-from . import builders
-
 
 class ChromiumTestApi(recipe_test_api.RecipeTestApi):
-  @property
-  def builders(self):
-    return builders.BUILDERS
-
   def gen_tests_for_builders(self, builder_dict, overrides=None):
     # TODO: crbug.com/354674. Figure out where to put "simulation"
     # tests. Is this really the right place?

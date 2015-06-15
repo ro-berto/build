@@ -15,6 +15,7 @@ DEPS = [
   'path',
   'platform',
   'properties',
+  'python',
   'step',
   'swarming',
   'test_utils',
