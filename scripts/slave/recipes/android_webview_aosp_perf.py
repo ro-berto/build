@@ -26,8 +26,8 @@ REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 WEBVIEW_APK = 'SystemWebView.apk'
 WEBVIEW_PACKAGE = 'com.android.webview'
 
-TELEMETRY_SHELL_APK = 'AndroidWebViewTelemetryShell.apk'
-TELEMETRY_SHELL_PACKAGE = 'org.chromium.telemetry_shell'
+TELEMETRY_SHELL_APK = 'AndroidWebViewShell.apk'
+TELEMETRY_SHELL_PACKAGE = 'org.chromium.webview_shell'
 
 BUILDER = freeze({
   'perf_id': 'android-webview',
@@ -52,7 +52,7 @@ def GenSteps(api):
 
   # Build the WebView apk, WebView shell and Android testing tools.
   api.chromium.compile(targets=['system_webview_apk',
-                                'android_webview_telemetry_shell_apk',
+                                'android_webview_shell_apk',
                                 'android_tools'])
 
   api.chromium_android.spawn_logcat_monitor()
