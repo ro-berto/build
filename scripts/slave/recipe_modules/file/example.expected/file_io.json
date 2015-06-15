@@ -200,9 +200,10 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2])\n",
+      "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
       "[SLAVE_BUILD]/copytree_example_tmp",
-      "[SLAVE_BUILD]/copytree_example_tmp2"
+      "[SLAVE_BUILD]/copytree_example_tmp2",
+      "0"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "copytree"

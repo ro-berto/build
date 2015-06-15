@@ -26,16 +26,16 @@ class FileApi(recipe_api.RecipeApi):
         **kwargs
     )
 
-  def copytree(self, name, source, dest, **kwargs):
+  def copytree(self, name, source, dest, symlinks=False, **kwargs):
     """Run shutil.copytree in a step."""
     return self.m.python.inline(
         name,
         """
         import shutil
         import sys
-        shutil.copytree(sys.argv[1], sys.argv[2])
+        shutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))
         """,
-        args=[source, dest],
+        args=[source, dest, int(symlinks)],
         add_python_log=False,
         **kwargs
     )
