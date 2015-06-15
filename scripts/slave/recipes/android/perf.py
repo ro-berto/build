@@ -152,14 +152,14 @@ def GenSteps(api):
   api.chromium_android.common_tests_setup_steps(perf_setup=True)
 
   api.chromium_android.adb_install_apk(
-      'ChromeShell.apk',
-      'org.chromium.chrome.shell')
+      'ChromePublic.apk',
+      'org.chromium.chrome')
 
   test_runner = api.chromium_tests.create_test_runner(
       api, builder.get('tests', []))
 
   perf_tests = api.chromium.list_perf_tests(
-      browser='android-chrome-shell',
+      browser='android-chromium',
       num_shards=builder['num_device_shards'],
       devices=api.chromium_android.devices[0:1]).json.output
   try:

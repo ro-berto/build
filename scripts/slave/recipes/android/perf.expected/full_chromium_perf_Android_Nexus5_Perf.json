@@ -265,16 +265,16 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "--apk",
-      "ChromeShell.apk",
+      "ChromePublic.apk",
       "--apk_package",
-      "org.chromium.chrome.shell",
+      "org.chromium.chrome",
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "install ChromeShell.apk"
+    "name": "install ChromePublic.apk"
   },
   {
     "cmd": [
@@ -283,7 +283,7 @@
       "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
       "list",
       "--browser",
-      "android-chrome-shell",
+      "android-chromium",
       "--json-output",
       "/path/to/tmp/json",
       "--num-shards",
