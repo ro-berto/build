@@ -26,6 +26,10 @@ D3D9_TEST_NAME_MAPPING = freeze({
   'webgl_conformance': 'webgl_conformance_d3d9'
 })
 
+GL_TEST_NAME_MAPPING = freeze({
+  'webgl_conformance': 'webgl_conformance_gl'
+})
+
 class GpuApi(recipe_api.RecipeApi):
   def setup(self):
     """Call this once before any of the other APIs in this module."""
@@ -373,14 +377,26 @@ class GpuApi(recipe_api.RecipeApi):
         'webgl_conformance', chrome_revision, webkit_revision, enable_swarming,
         swarming_dimensions))
 
-    # Run extra D3D9 conformance in Windows FYI GPU bots
-    # This ensures the ANGLE/D3D9 gets some testing
+    # Run extra WebGL conformance tests in Windows FYI GPU bots with
+    # ANGLE OpenGL/D3D9.
+    # This ensures the ANGLE OpenGL/D3D9 gets some testing
     if self.is_fyi_waterfall and self.m.platform.is_win:
       tests.append(self._create_telemetry_test(
           D3D9_TEST_NAME_MAPPING['webgl_conformance'], chrome_revision,
           webkit_revision, enable_swarming, swarming_dimensions,
           target_name='webgl_conformance',
           extra_browser_args=['--disable-d3d11']))
+
+      tests.append(self._create_telemetry_test(
+          GL_TEST_NAME_MAPPING['webgl_conformance'], chrome_revision,
+          webkit_revision, enable_swarming, swarming_dimensions,
+          target_name='webgl_conformance',
+          extra_browser_args=[
+            '--use-gpu-in-tests',
+            '--use-angle=gl',
+            '--disable-gpu-sandbox', # TODO(geofflang): Remove dependency on
+                                     # the sandbox being disabled to use WGL
+          ]))
 
     # Run WebGL 2 conformance tests in FYI GPU bots
     if self.is_fyi_waterfall:
