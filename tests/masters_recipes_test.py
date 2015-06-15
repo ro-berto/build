@@ -20,7 +20,7 @@ sys.path.insert(
 sys.path.insert(0, os.path.join(BASE_DIR, 'third_party'))
 
 import chromium_trybot
-from chromium.builders import BUILDERS
+from chromium_tests.builders import BUILDERS
 
 
 MAIN_WATERFALL_MASTERS = [
