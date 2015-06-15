@@ -241,7 +241,6 @@ def main(argv):
       'master.chromiumos.tryserver': 'ChromiumOSTryServer',
       'master.client.art': 'ART',
       'master.client.boringssl': 'Boringssl',
-      'master.client.breakpad': 'Breakpad',
       'master.client.catapult': 'Catapult',
       'master.client.crashpad': 'ClientCrashpad',
       'master.client.dart': 'Dart',
