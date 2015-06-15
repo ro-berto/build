@@ -158,14 +158,18 @@ def GenTests(api):
       },
     ]
 
-  for revision_data in test_data():
+  basic_test_data = test_data()
+  for revision_data in basic_test_data:
     for step_data in _get_step_data_for_revision(api, revision_data):
       basic_test += step_data
       encoded_config_test += step_data
+  basic_test += _get_revision_range_step_data(api, basic_test_data)
   yield basic_test
+  encoded_config_test += _get_revision_range_step_data(api, basic_test_data)
   yield encoded_config_test
 
-  for revision_data in test_data():
+  broken_test_data = test_data()
+  for revision_data in broken_test_data:
     for step_data in _get_step_data_for_revision(api, revision_data,
                                                  broken_cp='306475'):
       broken_cp_test += step_data
@@ -173,7 +177,9 @@ def GenTests(api):
         api, revision_data,
         broken_hash='e28dc0d49c331def2a3bbf3ddd0096eb51551155'):
       broken_hash_test += step_data
+  broken_hash_test += _get_revision_range_step_data(api, broken_test_data)
   yield broken_hash_test
+  broken_cp_test += _get_revision_range_step_data(api, broken_test_data)
   yield broken_cp_test
 
   doctored_data = test_data()
@@ -184,6 +190,7 @@ def GenTests(api):
     for step_data in _get_step_data_for_revision(api, revision_data,
                                                  skip_results=skip_results):
       broken_bad_rev_test += step_data
+  broken_bad_rev_test += _get_revision_range_step_data(api, doctored_data)
   yield broken_bad_rev_test
 
   doctored_data = test_data()
@@ -194,10 +201,23 @@ def GenTests(api):
     for step_data in _get_step_data_for_revision(api, revision_data,
                                                  skip_results=skip_results):
       broken_good_rev_test += step_data
+  broken_good_rev_test += _get_revision_range_step_data(api, doctored_data)
   yield broken_good_rev_test
-
+  invalid_config_test += _get_revision_range_step_data(api, doctored_data)
   yield invalid_config_test
 
+def _get_revision_range_step_data(api, range_data):
+  min_rev = range_data[-1]['hash']
+  max_rev = range_data[0]['hash']
+  # Simulating the output of git log (reverse order from max_rev until and
+  # excluding min_rev).
+  simulated_git_log_output  = '\n'.join(
+      [d['hash'] for d in range_data[:-1]])
+  step_name = ('Expanding revision range for revisions %s:%s' %
+               (min_rev, max_rev))
+  result = api.step_data(step_name, stdout=api.raw_io.output(
+      simulated_git_log_output))
+  return result
 
 def _get_step_data_for_revision(api, revision_data, broken_cp=None,
                                 broken_hash=None, skip_results=False):

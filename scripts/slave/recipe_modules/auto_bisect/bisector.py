@@ -95,12 +95,6 @@ class Bisector(object):
   def api(self):
     return self._api
 
-  @staticmethod
-  def _commit_pos_range(a, b):
-    """Given 2 commit positions, returns a list with the ones between."""
-    a, b = sorted(map(int, [a, b]))
-    return xrange(a + 1, b)
-
   def compute_relative_change(self):
     old_value = float(self.good_rev.mean_value)
     new_value = float(self.bad_rev.mean_value)
@@ -226,6 +220,17 @@ class Bisector(object):
                                       deps_rev=new_commit_hash)
     return patch_text, patched_contents
 
+  def _get_rev_range(self, min_rev, max_rev):
+    depot_path = self.api.m.path['slave_build'].join('src')
+    step_name = ('Expanding revision range for revisions %s:%s' %
+                 (min_rev, max_rev))
+    step_result = self.api.m.git('log', '--format=%H', min_rev + '...' +
+                                 max_rev, stdout=self.api.m.raw_io.output(),
+                                 cwd=depot_path, name=step_name)
+    # We skip the first revision in the list as it is max_rev
+    new_revisions = step_result.stdout.splitlines()[1:][::-1]
+    return new_revisions
+
   def _get_rev_range_for_depot(self, depot_name, min_rev, max_rev,
                                base_revision):
     results = []
@@ -253,8 +258,8 @@ class Bisector(object):
     After running this method, self.revisions should contain all the chromium
     revisions between the good and bad revisions.
     """
-    rev_list = self._commit_pos_range(
-        self.good_rev.commit_pos, self.bad_rev.commit_pos)
+    rev_list = self._get_rev_range(self.good_rev.commit_hash,
+                                   self.bad_rev.commit_hash)
     intermediate_revs = [self.revision_class(str(x), self) for x in rev_list]
     self.revisions = [self.good_rev] + intermediate_revs + [self.bad_rev]
     self._update_revision_list_indexes()

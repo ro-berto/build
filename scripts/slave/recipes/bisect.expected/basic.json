@@ -136,14 +136,11 @@
     "cmd": [
       "git",
       "log",
-      "--format=hash:%H",
-      "--grep",
-      "Cr-Commit-Position: refs/heads/master@{#306476}",
-      "-1",
-      "refs/heads/master"
+      "--format=%H",
+      "e28dc0d49c331def2a3bbf3ddd0096eb51551155...a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "resolving commit_pos 306476",
+    "name": "Expanding revision range for revisions e28dc0d49c331def2a3bbf3ddd0096eb51551155:a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -163,12 +160,12 @@
       "log",
       "--format=hash:%H",
       "--grep",
-      "Cr-Commit-Position: refs/heads/master@{#306477}",
+      "Cr-Commit-Position: refs/heads/master@{#306476}",
       "-1",
       "refs/heads/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "resolving commit_pos 306477",
+    "name": "resolving commit_pos 306476",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -180,6 +177,20 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
+      "log",
+      "--format=hash:%H",
+      "--grep",
+      "Cr-Commit-Position: refs/heads/master@{#306477}",
+      "-1",
+      "refs/heads/master"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "resolving commit_pos 306477",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -534,7 +545,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision 306477",
+    "name": "Waiting for revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -556,7 +567,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Triggering test job for 306477",
+    "name": "Triggering test job for 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "trigger_specs": [
       {
         "builder_name": "linux_perf_tester",
@@ -586,7 +597,7 @@
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision 306477 (2)",
+    "name": "Waiting for revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111 (2)",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -684,7 +695,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_fc6dfc7ff5b1073408499478969261b826441144.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision 306476",
+    "name": "Waiting for revision fc6dfc7ff5b1073408499478969261b826441144",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -706,7 +717,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Triggering test job for 306476",
+    "name": "Triggering test job for fc6dfc7ff5b1073408499478969261b826441144",
     "trigger_specs": [
       {
         "builder_name": "linux_perf_tester",
@@ -736,7 +747,7 @@
       "gs://chrome-perf/bisect-results/fc6dfc7ff5b1073408499478969261b826441144-test.results"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision 306476 (2)",
+    "name": "Waiting for revision fc6dfc7ff5b1073408499478969261b826441144 (2)",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -802,6 +813,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Results",
-    "stdin": "\n===== BISECT JOB RESULTS =====\nStatus: Successful\n\nTest Command: tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\nTest Metric: warm_times/page_load_time\nRelative Change: 75.00%\nEstimated Confidence: 99.90%\nRetested CL with revert: Not Implemented.\n\n\n===== SUSPECTED CL(s) =====\nSubject : Some random CL\nAuthor  : DummyAuthor, dummy@nowhere.com\nCommit description:\n  A long description for a CL.\nContaining multiple lines\nCommit  : 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\nDate    : 01/01/2015\n\n\n===== TESTED REVISIONS =====\ncommit_pos revision_string                              mean_value std_err good_or_bad? tested? culprit? \n306475     306475                                       80         10      good         tested  False    \n306476     306476                                       70         2       good         tested  False    \n306477     306477                                       15         1       bad          tested  True     \n306478     src@a6298e4afedbf2cd461755ea6f45b0ad64222222 20         1       bad          tested  False    \n\n\n\n==== INSTRUCTIONS TO REPRODUCE ====\nTo run locally:\n - Use the test command given under 'BISECT JOB RESULTS' above.\n - Consider using a profiler. Pass --profiler=list to list available profilers.\n\n\nTo reproduce on a performance try bot:\ntools/perf/run_benchmark -v --browser=<bot-name> page_cycler.intl_ar_fa_he\n(Where <bot-name> comes from tools/perf/run_benchmark --browser=list)\n\nFor more details please visit\nhttps://sites.google.com/a/chromium.org/dev/developers/performance-try-bots\n\n\n| O O | Visit http://www.chromium.org/developers/core-principles for Chrome's\n|  X  | policy on perf regressions. Contact chrome-perf-dashboard-team with any\n| / \\ | questions or suggestions about bisecting. THANK YOU."
+    "stdin": "\n===== BISECT JOB RESULTS =====\nStatus: Successful\n\nTest Command: tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\nTest Metric: warm_times/page_load_time\nRelative Change: 75.00%\nEstimated Confidence: 99.90%\nRetested CL with revert: Not Implemented.\n\n\n===== SUSPECTED CL(s) =====\nSubject : Some random CL\nAuthor  : DummyAuthor, dummy@nowhere.com\nCommit description:\n  A long description for a CL.\nContaining multiple lines\nCommit  : 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\nDate    : 01/01/2015\n\n\n===== TESTED REVISIONS =====\ncommit_pos revision_string                              mean_value std_err good_or_bad? tested? culprit? \n306475     306475                                       80         10      good         tested  False    \n306476     fc6dfc7ff5b1073408499478969261b826441144     70         2       good         tested  False    \n306477     00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111     15         1       bad          tested  True     \n306478     src@a6298e4afedbf2cd461755ea6f45b0ad64222222 20         1       bad          tested  False    \n\n\n\n==== INSTRUCTIONS TO REPRODUCE ====\nTo run locally:\n - Use the test command given under 'BISECT JOB RESULTS' above.\n - Consider using a profiler. Pass --profiler=list to list available profilers.\n\n\nTo reproduce on a performance try bot:\ntools/perf/run_benchmark -v --browser=<bot-name> page_cycler.intl_ar_fa_he\n(Where <bot-name> comes from tools/perf/run_benchmark --browser=list)\n\nFor more details please visit\nhttps://sites.google.com/a/chromium.org/dev/developers/performance-try-bots\n\n\n| O O | Visit http://www.chromium.org/developers/core-principles for Chrome's\n|  X  | policy on perf regressions. Contact chrome-perf-dashboard-team with any\n| / \\ | questions or suggestions about bisecting. THANK YOU."
   }
 ]

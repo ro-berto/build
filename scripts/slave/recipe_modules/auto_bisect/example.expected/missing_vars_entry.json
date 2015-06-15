@@ -61,14 +61,11 @@
     "cmd": [
       "git",
       "log",
-      "--format=hash:%H",
-      "--grep",
-      "Cr-Commit-Position: refs/heads/master@{#314016}",
-      "-1",
-      "refs/heads/master"
+      "--format=%H",
+      "a6298e4afedbf2cd461755ea6f45b0ad64222222...00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "resolving commit_pos 314016",
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "Expanding revision range for revisions a6298e4afedbf2cd461755ea6f45b0ad64222222:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -80,6 +77,20 @@
     ],
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
+      "log",
+      "--format=hash:%H",
+      "--grep",
+      "Cr-Commit-Position: refs/heads/master@{#314016}",
+      "-1",
+      "refs/heads/master"
+    ],
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
+    "name": "resolving commit_pos 314016",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -377,7 +388,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision 314016",
+    "name": "Waiting for revision dcdcdc0ff1122212323134879ddceeb1240b0988",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -399,7 +410,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Triggering test job for 314016",
+    "name": "Triggering test job for dcdcdc0ff1122212323134879ddceeb1240b0988",
     "trigger_specs": [
       {
         "builder_name": "linux_perf_tester",
@@ -429,7 +440,7 @@
       "gs://chrome-perf/bisect-results/dcdcdc0ff1122212323134879ddceeb1240b0988-test.results"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision 314016 (2)",
+    "name": "Waiting for revision dcdcdc0ff1122212323134879ddceeb1240b0988 (2)",
     "stdout": "/path/to/tmp/"
   },
   {

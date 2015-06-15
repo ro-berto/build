@@ -235,11 +235,26 @@ def _get_reversed_basic_test_data():
 
 def _make_test(api, test_data, test_name):
   basic_test =  api.test(test_name)
+  basic_test += _get_revision_range_step_data(api, test_data)
   for revision_data in test_data:
     for step_data in _get_step_data_for_revision(api, revision_data):
       basic_test += step_data
   basic_test += api.properties(bisect_config=_get_default_config())
   return basic_test
+
+
+def _get_revision_range_step_data(api, range_data):
+  min_rev = range_data[0]['hash']
+  max_rev = range_data[-1]['hash']
+  # Simulating the output of git log (reverse order from max_rev until and
+  # excluding min_rev).
+  simulated_git_log_output  = '\n'.join(
+      [d['hash'] for d in range_data[:-1]])
+  step_name = ('Expanding revision range for revisions %s:%s' %
+               (min_rev, max_rev))
+  result = api.step_data(step_name, stdout=api.raw_io.output(
+      simulated_git_log_output))
+  return result
 
 
 def _get_default_config():
