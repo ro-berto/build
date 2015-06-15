@@ -3,7 +3,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
 import optparse
 import os
 import subprocess
@@ -16,103 +15,42 @@ sys.path.append(os.path.join(BUILD_ROOT, 'third_party'))
 
 from common import annotator
 from common import chromium_utils
-from common import master_cfg_utils
 from slave import recipe_universe
 
 from recipe_engine import main as recipe_main
 
 
-def get_recipe_properties(factory_properties, build_properties,
-                          master_overrides_slave):
+def get_recipe_properties(factory_properties, build_properties):
   """Constructs the recipe's properties from buildbot's properties.
 
-  This retrieves the current factory properties from the master_config
-  in the slave's checkout (the factory properties handed to us from the
-  master might be out of date), and merges in the build properties.
-
-  Using the values from the checkout allows us to do things like change
-  the recipe and other factory properties for a builder without needing
-  a master restart.
+  This merges factory_properties and build_properties.  Furthermore, it
+  tries to reconstruct the 'recipe' property from builders.pyl if it isn't
+  already there, and in that case merges in properties form builders.pyl.
   """
-  master_properties = factory_properties.copy()
-  master_properties.update(build_properties)
+  properties = factory_properties.copy()
+  properties.update(build_properties)
 
-  mastername = master_properties['mastername']
-  buildername = master_properties['buildername']
-  if mastername and buildername:
-    slave_properties = get_factory_properties_from_disk(mastername, buildername)
-  else:
-    slave_properties = {}
+  # Try to reconstruct the recipe from builders.pyl if not given.
+  if 'recipe' not in properties:
+    mastername = properties['mastername']
+    buildername = properties['buildername']
 
-  properties = master_properties.copy()
-  conflicting_properties = {}
-  for name in slave_properties:
-    if master_properties.get(name) != slave_properties[name]:
-      conflicting_properties[name] = (master_properties.get(name),
-                                   slave_properties[name])
+    master_path = chromium_utils.MasterPath(mastername)
+    builders_file = os.path.join(master_path, 'builders.pyl')
+    if os.path.isfile(builders_file):
+      builders = chromium_utils.ReadBuildersFile(builders_file)
+      assert buildername in builders['builders'], (
+        'buildername %s is not listed in %s' % (buildername, builders_file))
+      builder = builders['builders'][buildername]
 
-  if conflicting_properties:
-    print >> sys.stderr, (
-        'The following build properties differ between master and slave:')
-    for name, (master_value, slave_value) in conflicting_properties.items():
-      print >> sys.stderr, '  "%s": master: "%s", slave: "%s"' % (
-          name,
-          "<unset>" if (master_value is None) else master_value,
-          slave_value)
-    print >> sys.stderr, ("Using the values from the %s." %
-                          ("master" if master_overrides_slave else "slave"))
-
-  if not master_overrides_slave:
-    for name, (_, slave_value) in conflicting_properties.items():
-      properties[name] = slave_value
-
+      # Update properties with builders.pyl data.
+      properties['recipe'] = builder['recipe']
+      properties.update(builder.get('properties', {}))
+    else:
+      raise LookupError('Cannot find recipe for %s on %s' %
+                        (build_properties['buildername'],
+                        build_properties['mastername']))
   return properties
-
-
-def get_factory_properties_from_disk(mastername, buildername):
-  master_list = master_cfg_utils.GetMasters()
-  master_path = None
-  for name, path in master_list:
-    if name == mastername:
-      master_path = path
-
-  if not master_path:
-    raise LookupError('master "%s" not found.' % mastername)
-
-  script_path = os.path.join(BUILD_ROOT, 'scripts', 'tools',
-                             'dump_master_cfg.py')
-  dump_cmd = [sys.executable,
-              script_path,
-              master_path, '-']
-  proc = subprocess.Popen(dump_cmd, cwd=BUILD_ROOT, stdout=subprocess.PIPE)
-  out, _ = proc.communicate()
-  exit_code = proc.returncode
-
-  if exit_code:
-    raise LookupError('Failed to get the master config; dump_master_cfg %s'
-                      'returned %d):\n%s\n'% (
-                      mastername, exit_code, out))
-
-  config = json.loads(out)
-
-  # Now extract just the factory properties for the requested builder
-  # from the master config.
-  props = {}
-  for builder_dict in config['builders']:
-    if builder_dict['name'] == buildername:
-      factory_properties = builder_dict['factory']['properties']
-      for name, (value, _) in factory_properties.items():
-        props[name] = value
-
-  if not props:
-    raise LookupError('builder "%s" not found on in master "%s"' %
-                      (buildername, mastername))
-
-  if 'recipe' not in props:
-    raise LookupError('Cannot find recipe for %s on %s' %
-                      (buildername, mastername))
-
-  return props
 
 
 def get_args(argv):
@@ -138,9 +76,6 @@ def get_args(argv):
                     help='factory properties in b64 gz JSON format')
   parser.add_option('--keep-stdin', action='store_true', default=False,
                     help='don\'t close stdin when running recipe steps')
-  parser.add_option('--master-overrides-slave', action='store_true',
-                    help='use the property values given on the command line '
-                         'from the master, not the ones looked up on the slave')
   return parser.parse_args(argv)
 
 
@@ -178,8 +113,7 @@ def update_scripts():
 def main(argv):
   opts, _ = get_args(argv)
   properties = get_recipe_properties(
-      opts.factory_properties, opts.build_properties,
-      opts.master_overrides_slave)
+      opts.factory_properties, opts.build_properties)
   stream = annotator.StructuredAnnotationStream()
   ret = recipe_main.run_steps(properties, stream,
                               universe=recipe_universe.get_universe())
