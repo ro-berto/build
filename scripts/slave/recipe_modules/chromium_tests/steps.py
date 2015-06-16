@@ -999,8 +999,9 @@ class AndroidTest(Test):
                       for test_name, test_data in result_dict.iteritems()}
 
       # TODO(sergiyb): Figure out how to handle status UNKNOWN.
-      return [test_name for test_name, test_status in test_results.iteritems()
-                        if test_status not in ['SUCCESS', 'SKIPPED']]
+      return sorted(
+          [test_name for test_name, test_status in test_results.iteritems()
+           if test_status not in ['SUCCESS', 'SKIPPED']])
     except (KeyError, IndexError, TypeError,
             AttributeError):  # pragma: no cover
       return None
@@ -1068,9 +1069,18 @@ class AndroidJunitTest(AndroidTest):
 
 class AndroidInstrumentationTest(AndroidTest):
   def __init__(self, name, compile_target, adb_install_apk=None,
-               isolate_file_path=None):
+               isolate_file_path=None,
+               flakiness_dashboard='http://test-results.appspot.com',
+               annotation=None, except_annotation=None, screenshot=False,
+               verbose=True, host_driven_root=None):
     super(AndroidInstrumentationTest, self).__init__(name, compile_target,
         adb_install_apk, isolate_file_path)
+    self._flakiness_dashboard = flakiness_dashboard
+    self._annotation = annotation
+    self._except_annotation = except_annotation
+    self._screenshot = screenshot
+    self._verbose = verbose
+    self._host_driven_root = host_driven_root
 
   #override
   def run_tests(self, api, suffix, json_results_file):
@@ -1080,8 +1090,11 @@ class AndroidInstrumentationTest(AndroidTest):
     }
     api.chromium_android.run_instrumentation_suite(
         self.name, suffix=suffix,
-        flakiness_dashboard='http://test-results.appspot.com',
-        verbose=True, isolate_file_path=self.isolate_file_path,
+        isolate_file_path=self.isolate_file_path,
+        flakiness_dashboard=self._flakiness_dashboard,
+        annotation=self._annotation, except_annotation=self._except_annotation,
+        screenshot=self._screenshot, verbose=self._verbose,
+        host_driven_root=self._host_driven_root,
         json_results_file=json_results_file,
         step_test_data=lambda: api.json.test_api.output(mock_test_results))
 
