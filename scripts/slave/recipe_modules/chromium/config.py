@@ -56,6 +56,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       GYP_GENERATORS = Set(basestring, ','.join),
       GYP_GENERATOR_FLAGS = Dict(equal_fn, ' '.join, (basestring,int)),
       GYP_INCLUDE_LAST = Single(Path, required=False),
+      GYP_LINK_CONCURRENCY = Single(int, required=False),
       GYP_MSVS_VERSION = Single(basestring, required=False),
       GYP_USE_SEPARATE_MSPDBSRV = Single(int, jsonish_fn=str, required=False),
     ),
@@ -472,6 +473,7 @@ def lto(c):
 @config_ctx(includes=['lto'])
 def cfi_vptr(c):
   c.gyp_env.GYP_DEFINES['cfi_vptr'] = 1
+  c.gyp_env.GYP_LINK_CONCURRENCY = 2
 
 @config_ctx()
 def trybot_flavor(c):
