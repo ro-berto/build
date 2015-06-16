@@ -87,26 +87,6 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
-      "gen",
-      "-v",
-      "-m",
-      "chromium.fyi",
-      "-b",
-      "CrWinClang64(dbg)",
-      "--config-file",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
-      "--goma-dir",
-      "[BUILD]\\goma",
-      "//out/Debug_x64"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "generate_build_files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.fyi.json",
       "/path/to/tmp/json"
@@ -149,6 +129,26 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
+      "gen",
+      "-v",
+      "-m",
+      "chromium.fyi",
+      "-b",
+      "CrWinClang64(dbg)",
+      "--config-file",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]\\goma",
+      "//out/Debug_x64"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files"
   },
   {
     "allow_subannotations": true,

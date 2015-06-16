@@ -198,6 +198,7 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'enable_swarming': True,
     },
   },
 }

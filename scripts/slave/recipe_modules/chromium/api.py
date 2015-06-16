@@ -563,23 +563,27 @@ class ChromiumApi(recipe_api.RecipeApi):
         ])
 
   def run_mb(self, mastername, buildername, use_goma=True,
-             mb_config_path=None):
+             mb_config_path=None, swarming_targets=None):
     mb_config_path = (mb_config_path or
                       self.m.path['checkout'].join('tools', 'mb',
                                                    'mb_config.pyl'))
+    swarming_targets = swarming_targets or []
+
     args=[
         'gen', '-v',
         '-m', mastername,
         '-b', buildername,
         '--config-file', mb_config_path,
     ]
+
     if use_goma:
-        args += [
-            '--goma-dir', self.m.path['build'].join('goma'),
-        ]
-    args += [
-        '//out/%s' % self.c.build_config_fs
-    ]
+      args += ['--goma-dir', self.m.path['build'].join('goma')]
+
+    if swarming_targets:
+      data = '\n'.join(swarming_targets) + '\n'
+      args += ['--swarming-targets-file', self.m.raw_io.input(data)]
+
+    args += ['//out/%s' % self.c.build_config_fs]
 
     # This runs with no env being passed along, so we get a clean environment
     # without any GYP_DEFINES being present to cause confusion.

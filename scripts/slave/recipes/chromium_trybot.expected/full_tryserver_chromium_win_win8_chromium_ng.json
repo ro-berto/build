@@ -80,6 +80,20 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "--version"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.4.10@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
@@ -88,26 +102,6 @@
       "GYP_CHROMIUM_NO_ACTION": "1"
     },
     "name": "gclient runhooks (with patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
-      "gen",
-      "-v",
-      "-m",
-      "chromium.win",
-      "-b",
-      "Win8 Aura",
-      "--config-file",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
-      "--goma-dir",
-      "[BUILD]\\goma",
-      "//out/Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "generate_build_files"
   },
   {
     "cmd": [

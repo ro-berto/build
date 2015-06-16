@@ -127,9 +127,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     test_spec_file = bot_config.get('testing', {}).get('test_spec_file',
                                                        '%s.json' % mastername)
 
-    if self.m.chromium.c.project_generator.tool == 'mb':
-      self.m.chromium.run_mb(mastername, buildername)
-
     # TODO(phajdan.jr): Bots should have no generators instead.
     if bot_config.get('disable_tests'):
       test_spec = {}
@@ -314,6 +311,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.clean_local_files()
       self.m.chromium_android.run_tree_truth()
+
+    if self.m.chromium.c.project_generator.tool == 'mb':
+      self.m.chromium.run_mb(mastername, buildername, swarming_targets=[
+          t.name for t in tests_including_triggered if t.uses_swarming])
 
     if bot_type in ['builder', 'builder_tester']:
       isolated_targets = [
