@@ -160,6 +160,9 @@ SPEC = {
       },
       'android_config': 'main_builder',
       'bot_type': 'builder',
+      'compile_targets': [
+        'cronet_test_instrumentation_apk',
+      ],
       'testing': {
         'platform': 'linux',
       },
