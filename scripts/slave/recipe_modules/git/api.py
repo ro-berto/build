@@ -12,6 +12,7 @@ class GitApi(recipe_api.RecipeApi):
   def __call__(self, *args, **kwargs):
     """Return a git command step."""
     name = kwargs.pop('name', 'git '+args[0])
+    infra_step = kwargs.pop('infra_step', True)
     if 'cwd' not in kwargs:
       kwargs.setdefault('cwd', self.m.path['checkout'])
     git_cmd = 'git'
@@ -19,7 +20,7 @@ class GitApi(recipe_api.RecipeApi):
       git_cmd = self.m.path['depot_tools'].join('git.bat')
     can_fail_build = kwargs.pop('can_fail_build', True)
     try:
-      return self.m.step(name, [git_cmd] + list(args), infra_step=True,
+      return self.m.step(name, [git_cmd] + list(args), infra_step=infra_step,
                          **kwargs)
     except self.m.step.StepFailure as f:
       if can_fail_build:
