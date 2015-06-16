@@ -191,7 +191,7 @@ def find_test_named(test_name, tests):
   return [test for test in tests if test.name == test_name]
 
 
-def _GenStepsInternal(api):
+def _RunStepsInternal(api):
   def parse_test_spec(test_spec, should_use_test):
     """Returns a list of tests to run and additional targets to compile.
 
@@ -449,9 +449,9 @@ def _GenStepsInternal(api):
   return api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
 
 
-def GenSteps(api):
+def RunSteps(api):
   with api.tryserver.set_failure_hash():
-    return _GenStepsInternal(api)
+    return _RunStepsInternal(api)
 
 
 def _sanitize_nonalpha(text):

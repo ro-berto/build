@@ -143,7 +143,7 @@ def _UploadShellAndApps(api, buildername):
   api.python('upload shell and app binaries', upload_path, args)
 
 
-def GenSteps(api):
+def RunSteps(api):
   buildername = api.properties.get('buildername')
   _CheckoutSteps(api, buildername)
   build_type = '--debug' if 'dbg' in buildername else '--release'

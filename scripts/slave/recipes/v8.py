@@ -18,7 +18,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   v8 = api.v8
   v8.apply_bot_config(v8.BUILDERS)
 

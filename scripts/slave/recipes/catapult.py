@@ -36,7 +36,7 @@ def _FetchAppEngineSDKSteps(api):
   return api.path['slave_build'].join('google_appengine')
 
 
-def GenSteps(api):
+def RunSteps(api):
   buildername = api.properties.get('buildername')
   _CheckoutSteps(api, buildername)
 

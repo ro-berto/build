@@ -17,7 +17,7 @@ DEPS = [
 
 INDEX_PACK_NAME = 'index_pack.zip'
 
-def GenSteps(api):
+def RunSteps(api):
   bucket_name = api.properties.get('bucket_name', 'chrome-codesearch')
   buildnumber = api.properties.get('buildnumber')
 

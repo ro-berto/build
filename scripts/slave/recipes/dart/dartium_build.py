@@ -11,7 +11,7 @@ DEPS = [
   'python',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   config_vals = {}
   config_vals.update(
     dict((str(k), v) for k, v in api.properties.iteritems() if k.isupper())

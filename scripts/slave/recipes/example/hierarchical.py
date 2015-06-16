@@ -8,7 +8,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   with api.step.context({
       'env': {'mood': 'excellent', 'climate': 'sunny'},
       'name': 'grandparent'}):

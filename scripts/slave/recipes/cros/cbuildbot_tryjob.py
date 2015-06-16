@@ -36,7 +36,7 @@ _TRYJOB_DATA = """
 """
 
 
-def GenSteps(api):
+def RunSteps(api):
   # The 'cbuildbot' config name to build is the name of the builder.
   cbb_config_name = api.properties.get('buildername')
   cbb = cros_chromite.Get()

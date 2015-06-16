@@ -348,7 +348,7 @@ def all_compile_targets(api, tests):
                     for x in test.compile_targets(api)))
 
 
-def _GenStepsInternal(api):
+def _RunStepsInternal(api):
   def get_bot_config(mastername, buildername):
     master_dict = BUILDERS.get(mastername, {})
     return master_dict.get('builders', {}).get(buildername)
@@ -452,9 +452,9 @@ def _GenStepsInternal(api):
                                                      bot_update_step)
 
 
-def GenSteps(api):
+def RunSteps(api):
   with api.tryserver.set_failure_hash():
-    return _GenStepsInternal(api)
+    return _RunStepsInternal(api)
 
 
 def _sanitize_nonalpha(text):

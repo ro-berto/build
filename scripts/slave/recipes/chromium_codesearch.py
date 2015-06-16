@@ -110,7 +110,7 @@ def GenerateCompilationDatabase(api, debug_path, targets, platform):
                   stdout=api.raw_io.output())
 
 
-def GenSteps(api):
+def RunSteps(api):
   buildername = api.properties.get('buildername')
 
   bot_config = SPEC.get('builders', {}).get(buildername)

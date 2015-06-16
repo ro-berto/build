@@ -100,7 +100,7 @@ BUILDERS = freeze({
   },
 })
 
-def GenSteps(api):
+def RunSteps(api):
   mastername = api.properties['mastername']
   buildername = api.properties['buildername']
   # TODO(akuegel): Move the configs in builders.py in chromium_tests to this

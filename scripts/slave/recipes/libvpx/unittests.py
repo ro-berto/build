@@ -16,7 +16,7 @@ DEPS = [
 # scripts in the libvpx directory
 CONFIGURE_PATH_REL = './libvpx/configure'
 
-def GenSteps(api):
+def RunSteps(api):
   # Paths and other constants
   build_root = api.path['slave_build']
 

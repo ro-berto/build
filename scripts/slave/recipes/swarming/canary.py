@@ -28,7 +28,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   # Configure isolate & swarming modules to use canary instances.
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
   api.swarming.swarming_server = 'https://chromium-swarm-dev.appspot.com'

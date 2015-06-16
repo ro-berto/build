@@ -23,7 +23,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   webrtc = api.webrtc
   webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS,
                           git_hashes_as_perf_revisions=True)

@@ -45,7 +45,7 @@ BUILDERS = freeze({
   },
 })
 
-def GenSteps(api):
+def RunSteps(api):
   mastername = api.properties['mastername']
   buildername = api.properties['buildername']
   bot_config = BUILDERS[mastername][buildername]

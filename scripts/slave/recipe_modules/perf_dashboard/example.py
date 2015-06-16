@@ -16,7 +16,7 @@ DEPS = [
 # mastername="client.dart.fyi", buildnumber=75
 
 
-def GenSteps(api):
+def RunSteps(api):
   s1 = api.perf_dashboard.get_skeleton_point(
       "sunspider/string-unpack-code/ref", 33241, "18.5")
   s1['supplemental_columns'] = {

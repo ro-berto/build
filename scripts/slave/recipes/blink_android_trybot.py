@@ -14,7 +14,7 @@ DEPS = [
   'tryserver',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   mastername = api.properties['mastername']
   buildername = api.properties['buildername']
   config = 'Debug' if '_dbg' in buildername else 'Release'

@@ -17,7 +17,7 @@ DEPS = [
 ]
 
 
-def _GenStepsInternal(api):
+def _RunStepsInternal(api):
   root = api.rietveld.calculate_issue_root(extra_patch_project_roots={'v8': []})
 
   repo_name = api.properties['repo_name']
@@ -86,9 +86,9 @@ def _GenStepsInternal(api):
              presubmit_args, env=env)
 
 
-def GenSteps(api):
+def RunSteps(api):
   with api.tryserver.set_failure_hash():
-    return _GenStepsInternal(api)
+    return _RunStepsInternal(api)
 
 
 def GenTests(api):

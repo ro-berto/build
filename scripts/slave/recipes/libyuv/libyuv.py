@@ -604,7 +604,7 @@ BUILDERS = freeze({
   },
 })
 
-def GenSteps(api):
+def RunSteps(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
   master_dict = BUILDERS.get(mastername, {})

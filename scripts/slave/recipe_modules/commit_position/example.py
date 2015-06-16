@@ -14,7 +14,7 @@ VALID_CP = 'refs/heads/master@{#12345}'
 INVALID_CP_BAD_FORMAT = 'foo/var@{missing-hash}'
 INVALID_CP_NON_NUMERIC = 'refs/heads/master@{#foo}'
 
-def GenSteps(api):
+def RunSteps(api):
   # Try to resolve a commit position to a hash
   if 'revision_to_resolve' in api.properties.keys():
     api.commit_position.chromium_hash_from_commit_position(

@@ -18,7 +18,7 @@ DEPS = [
 AVAILABLE_BOTS = 1  # Change this for n-secting instead of bi-.
 
 
-def GenSteps(api):
+def RunSteps(api):
   _ensure_checkout(api)
   # HORRIBLE hack to get buildbot web ui to let us pass stuff as properties
   bisect_config_b32_string = api.properties.get('bcb32')

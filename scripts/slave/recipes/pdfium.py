@@ -54,7 +54,7 @@ def _RunTests(api):
                                                     'run_corpus_tests.py'))
   api.python('corpus tests', corpus_tests_path, cwd=api.path['checkout'])
 
-def GenSteps(api):
+def RunSteps(api):
   _CheckoutSteps(api)
   _BuildSteps(api)
   _RunTests(api)

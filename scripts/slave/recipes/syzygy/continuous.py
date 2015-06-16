@@ -37,7 +37,7 @@ BUILDERS = freeze({
 })
 
 
-def GenSteps(api):
+def RunSteps(api):
   """Generates the sequence of steps that will be run by the slave."""
   buildername = api.properties['buildername']
   assert buildername in BUILDERS

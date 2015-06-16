@@ -13,7 +13,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   # Minimalistic example for running the performance tests.
   api.v8.set_config('v8')
   api.v8.set_bot_config({'perf': ['example1', 'example2']})

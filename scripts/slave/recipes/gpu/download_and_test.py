@@ -27,7 +27,7 @@ DEPS = [
   'tryserver',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   api.gpu.setup()
   api.buildbot.prep()
 

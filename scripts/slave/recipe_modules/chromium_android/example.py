@@ -75,7 +75,7 @@ BUILDERS = freeze({
     },
 })
 
-def GenSteps(api):
+def RunSteps(api):
   config = BUILDERS[api.properties['buildername']]
 
   api.chromium_android.configure_from_properties(

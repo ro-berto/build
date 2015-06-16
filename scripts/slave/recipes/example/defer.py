@@ -6,7 +6,7 @@ DEPS = [
   'step',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   with api.step.defer_results():
     api.step("testa", ["echo", "testa"])
     api.step("testb", ["echo", "testb"])

@@ -67,7 +67,7 @@ def GetDEPS(api, name, repo):
   return deps
 
 
-def GenSteps(api):
+def RunSteps(api):
   api.gclient.set_config('v8')
   api.gclient.apply_config('chromium')
 

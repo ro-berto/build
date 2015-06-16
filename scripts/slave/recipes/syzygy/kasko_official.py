@@ -31,7 +31,7 @@ DEPS = [
 _BUILDERS = {'Kasko Official': ('kasko_official', {})}
 
 
-def GenSteps(api):
+def RunSteps(api):
   """Generates the sequence of steps that will be run by the slave."""
   buildername = api.properties['buildername']
   assert buildername in _BUILDERS

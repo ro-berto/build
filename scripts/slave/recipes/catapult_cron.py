@@ -18,7 +18,7 @@ def _CheckoutSteps(api, buildername):
   api.gclient.runhooks()
 
 
-def GenSteps(api):
+def RunSteps(api):
   buildername = api.properties.get('buildername')
   _CheckoutSteps(api, buildername)
 

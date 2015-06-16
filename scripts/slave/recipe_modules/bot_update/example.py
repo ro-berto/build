@@ -9,7 +9,7 @@ DEPS = [
   'properties',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   api.gclient.use_mirror = True
 
   src_cfg = api.gclient.make_config()

@@ -11,7 +11,7 @@ DEPS = [
     'test_utils',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   assert(0 == api.math_utils.relative_change(0, 0))
   assert(0 == api.math_utils.relative_change(1, 1))
   sample_a = list(range(1, 10))

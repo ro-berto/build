@@ -45,7 +45,7 @@ def _RunApptests(api):
   api.python('app_tests', runner, [tests, api.chromium.output_dir, '--verbose'])
 
 
-def GenSteps(api):
+def RunSteps(api):
   api.chromium.configure_bot(BUILDERS, ['gn'])
 
   api.bot_update.ensure_checkout(force=True)

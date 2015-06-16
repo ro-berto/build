@@ -16,7 +16,7 @@ DEPS = [
   'properties',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   api.gpu.setup()
   api.buildbot.prep()
   api.gpu.checkout_steps()

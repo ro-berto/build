@@ -7,7 +7,7 @@ DEPS = [
   'url',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   api.step('step1',
            ['/bin/echo', api.url.join('foo', 'bar', 'baz')])
   api.step('step2',

@@ -13,7 +13,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   # 'isolate_tests' step needs swarming checkout.
   api.swarming_client.checkout('master')
 

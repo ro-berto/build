@@ -11,7 +11,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   api.gclient.set_config('gyp')
 
   api.bot_update.ensure_checkout(force=True)

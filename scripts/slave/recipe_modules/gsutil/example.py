@@ -8,7 +8,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   """Move things around in a loop!"""
   local_file = api.path['slave_build'].join('boom')
   bucket = 'chromium-recipe-test'

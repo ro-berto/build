@@ -15,7 +15,7 @@ DEPS = [
   'v8',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   api.chromium.cleanup_temp()
   api.gclient.set_config('chromium')
   api.gclient.apply_config('v8')

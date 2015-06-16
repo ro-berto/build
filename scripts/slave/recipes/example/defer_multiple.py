@@ -25,7 +25,7 @@ def composite_step(api):
   api.example('composite finish')
   return "jane"
 
-def GenSteps(api):
+def RunSteps(api):
   with api.step.defer_results():
     api.example('prelude')
     deferrer(api)

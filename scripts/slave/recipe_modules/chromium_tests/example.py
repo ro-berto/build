@@ -13,7 +13,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   api.chromium.set_config('chromium')
   api.bot_update.ensure_checkout(force=True)
 

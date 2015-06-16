@@ -16,7 +16,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   branch = 'stable'
   if api.properties.get('target_environment') == 'canary':
     branch = 'master'

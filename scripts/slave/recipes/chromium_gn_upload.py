@@ -57,7 +57,7 @@ BUILDERS = freeze({
 })
 
 
-def GenSteps(api):
+def RunSteps(api):
   _, bot_config = api.chromium.configure_bot(BUILDERS, ['gn_for_uploads'])
 
   api.bot_update.ensure_checkout(

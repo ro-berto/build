@@ -30,7 +30,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   """Generates the sequence of steps that will be run on the coverage bot."""
   buildername = api.properties['buildername']
   assert buildername == 'Syzygy Smoke Test'

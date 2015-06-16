@@ -7,7 +7,7 @@ DEPS = [
   'swarming_client',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   # Code coverage for these methods.
   api.swarming_client.checkout('master')
   api.swarming_client.query_script_version('swarming.py')

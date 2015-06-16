@@ -108,7 +108,7 @@ BUILDERS = {
 
 AMP_RESULTS_BUCKET = 'chrome-amp-results'
 
-def GenSteps(api):
+def RunSteps(api):
   api.amp.setup()
 
   builder = BUILDERS[api.properties['buildername']]

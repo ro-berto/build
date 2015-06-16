@@ -266,7 +266,7 @@ BLINK_GPU_DIMENSION_SETS = {
 }
 
 
-def _GenStepsInternal(api):
+def _RunStepsInternal(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
   master_dict = BUILDERS.get(mastername, {})
@@ -401,9 +401,9 @@ def _GenStepsInternal(api):
   api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
 
 
-def GenSteps(api):
+def RunSteps(api):
   with api.tryserver.set_failure_hash():
-    return _GenStepsInternal(api)
+    return _RunStepsInternal(api)
 
 
 def _sanitize_nonalpha(text):

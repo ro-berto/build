@@ -8,7 +8,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
 
   def normalize_specs(specs):
     specs = dict(specs)

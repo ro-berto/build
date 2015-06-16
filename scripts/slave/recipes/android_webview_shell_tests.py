@@ -34,7 +34,7 @@ BUILDER = freeze({
   'num_device_shards': 5,
 })
 
-def GenSteps(api):
+def RunSteps(api):
   api.chromium_android.configure_from_properties('webview_perf',
                                                  REPO_NAME='src',
                                                  REPO_URL=REPO_URL,

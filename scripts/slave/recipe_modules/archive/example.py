@@ -17,7 +17,7 @@ TEST_HASH_COMPONENT='deadbeefdda2b170692f8e762d43b7e8e7a96686'
 TEST_COMMIT_POSITON_COMPONENT='refs/heads/master@{#234}'
 
 
-def GenSteps(api):
+def RunSteps(api):
   api.archive.clusterfuzz_archive(
       build_dir=api.path['slave_build'].join('src', 'out', 'Release'),
       update_properties=api.properties.get('update_properties'),

@@ -8,7 +8,7 @@ DEPS = [
   'properties',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   api.ios.host_info()
   api.ios.checkout()
   api.ios.read_build_config()

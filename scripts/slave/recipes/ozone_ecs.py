@@ -63,7 +63,7 @@ dbus_tests = freeze([
     'dbus_unittests',
 ])
 
-def GenSteps(api):
+def RunSteps(api):
 
   api.chromium.set_config('chromium', BUILD_CONFIG='Debug')
 

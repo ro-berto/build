@@ -16,10 +16,10 @@ DEPS = [
 
 # This file is just a recipe showing how one would use this module.
 #
-# The GenSteps and GenTests functions define the required interface for a
+# The RunSteps and GenTests functions define the required interface for a
 # recipe.
 #
-# GenSteps is run by the recipe infrastructure and it defines the actual steps
+# RunSteps is run by the recipe infrastructure and it defines the actual steps
 # required to execute the recipe.
 #
 # GenTests yields test cases to test the recipe using the recipe infrastructure
@@ -28,7 +28,7 @@ DEPS = [
 # the recipe_modules themselves is required.
 #
 # More information is available in scripts/slave/README.recipes.md
-def GenSteps(api):
+def RunSteps(api):
   fake_checkout_path = api.path.mkdtemp('fake_checkout')
   api.path['checkout'] = fake_checkout_path
   bisector = api.auto_bisect.create_bisector(api.properties['bisect_config'])

@@ -23,7 +23,7 @@ efg
 })
 
 
-def GenSteps(api):
+def RunSteps(api):
   # listdir demo.
   result = api.file.listdir('fake dir', '/fake/dir')
   for element in result:

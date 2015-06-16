@@ -97,7 +97,7 @@ def ConfigureAndroidBuilder(api, recipe_config):
   api.chromium.apply_config(recipe_config['chromium_config'])
 
 
-def GenSteps(api):
+def RunSteps(api):
   buildername = api.properties['buildername']
   recipe_config = DETERMINISTIC_BUILDERS[buildername]
   enable_isolate = True

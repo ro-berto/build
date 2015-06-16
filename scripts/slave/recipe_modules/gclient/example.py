@@ -7,7 +7,7 @@ DEPS = [
   'path',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   api.gclient.use_mirror = True
 
   src_cfg = api.gclient.make_config(GIT_MODE=True)

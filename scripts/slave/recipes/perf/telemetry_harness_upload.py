@@ -14,7 +14,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   kwargs = {}
   kwargs['TARGET_PLATFORM'] = 'android'
   kwargs['TARGET_ARCH'] = 'arm'

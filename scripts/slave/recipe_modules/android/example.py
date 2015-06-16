@@ -7,7 +7,7 @@ DEPS = [
   'properties',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   api.android.set_config('AOSP')
   api.android.c.lunch_flavor = 'nakasi-userdebug'
   api.android.c.repo.url = (

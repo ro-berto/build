@@ -20,7 +20,7 @@ path/to/bar-v10 : src/bar
 """)
 
 
-def GenSteps(api):
+def RunSteps(api):
   if api.properties.get('repo_manifest_url'):
     # Create a bundle from 'repo'.
     api.git_clone_bundler.create_repo(

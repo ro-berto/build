@@ -63,7 +63,7 @@ PGO_BUILDERS = freeze({
 })
 
 
-def GenSteps(api):
+def RunSteps(api):
   buildername = api.properties['buildername']
   mastername = api.properties['mastername']
   bot_config = PGO_BUILDERS.get(mastername, {}).get(buildername)

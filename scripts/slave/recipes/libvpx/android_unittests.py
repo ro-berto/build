@@ -34,7 +34,7 @@ BUILDER_TO_DEVICE = freeze({
   'Nexus 7 Builder': 'nexus_7'
 })
 
-def GenSteps(api):
+def RunSteps(api):
   # Paths and other constants
   build_root = api.path['slave_build']
 

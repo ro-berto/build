@@ -8,7 +8,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   url = 'https://chromium.googlesource.com/chromium/src'
   for ref in api.gitiles.refs(url):
     api.gitiles.log(url, ref)

@@ -15,7 +15,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   # Checkout, compile, etc.
   api.skia.gen_steps()
 

@@ -114,7 +114,7 @@ AMP_INSTANCE_PORT = '80'
 AMP_INSTANCE_PROTOCOL = 'http'
 AMP_RESULTS_BUCKET = 'chrome-amp-results'
 
-def GenSteps(api):
+def RunSteps(api):
   api.amp.setup()
 
   mastername = api.properties['mastername']

@@ -10,7 +10,7 @@ DEPS = [
   'zip',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   # Prepare files.
   temp = api.path.mkdtemp('zip-example')
   api.step('touch a', ['touch', temp.join('a')])

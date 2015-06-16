@@ -11,7 +11,7 @@ DEPS = [
   'python',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   api.chromium_android.configure_from_properties(
       'dartium_builder',
       REPO_URL=api.properties.get('deps_url'),

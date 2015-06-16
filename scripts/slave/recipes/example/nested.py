@@ -8,7 +8,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   with api.step.nest('dinosaur'):
     with api.step.nest('bird'):
       api.step('sparrow', ['sleep', '10'])

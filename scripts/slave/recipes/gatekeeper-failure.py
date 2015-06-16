@@ -9,7 +9,7 @@ DEPS = [
   'step',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   if api.platform.is_linux:
     api.step('fail', ['false'])
 

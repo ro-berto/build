@@ -23,7 +23,7 @@ DEPS = [
   'test_utils',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   api.gpu.setup()
   api.buildbot.prep()
 

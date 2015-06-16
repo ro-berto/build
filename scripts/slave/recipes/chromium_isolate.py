@@ -23,7 +23,7 @@ TEST_ARGS = freeze({
 })
 
 
-def GenSteps(api):
+def RunSteps(api):
   config_name = api.properties.get('chromium_config') or 'chromium'
   api.chromium.set_config(config_name)
 

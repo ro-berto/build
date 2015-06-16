@@ -30,7 +30,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   api.skia.gen_steps()
 
 

@@ -56,7 +56,7 @@ ABORTED_BISECT_ATTRIBUTES['failed_confidence'] = True
 ABORTED_BISECT_ATTRIBUTES['culprit_present'] = False
 
 
-def GenSteps(api):
+def RunSteps(api):
   api.path['checkout'] = api.path.mkdtemp('bogus')
   bisector = api.auto_bisect.create_bisector(api.properties['bisect_config'],
                                              dummy_mode=True)

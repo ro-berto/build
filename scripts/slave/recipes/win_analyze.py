@@ -23,7 +23,7 @@ BUILDERS = {
 }
 
 
-def GenSteps(api):
+def RunSteps(api):
   api.chromium.configure_bot(BUILDERS, ['win_analyze'])
 
   api.bot_update.ensure_checkout(force=True)

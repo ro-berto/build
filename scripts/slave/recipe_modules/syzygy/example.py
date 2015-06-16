@@ -14,7 +14,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   # Configure the build environment.
   buildername = api.properties['buildername']
   if buildername == 'Syzygy Debug':

@@ -54,7 +54,7 @@ ROLL_STATUSES = (
 )
 
 
-def GenSteps(api):
+def RunSteps(api):
   # Check out Chrome.
   gclient_cfg = api.gclient.make_config()
   s = gclient_cfg.solutions.add()

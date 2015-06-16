@@ -16,7 +16,7 @@ badline
 """
 
 
-def GenSteps(api):
+def RunSteps(api):
   api.repo.init('http://manifest_url')
   api.repo.init('http://manifest_url/manifest', '-b', 'branch')
   api.repo.reset()

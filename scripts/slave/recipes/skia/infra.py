@@ -57,7 +57,7 @@ def git_checkout(api, url, dest, ref=None):
   rev_parse.presentation.properties['got_revision'] = rev_parse.stdout.strip()
 
 
-def GenSteps(api):
+def RunSteps(api):
   go_dir = api.path['slave_build'].join('go')
   go_src = go_dir.join('src')
   api.file.makedirs('makedirs go/src', go_src)

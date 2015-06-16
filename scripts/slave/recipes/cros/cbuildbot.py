@@ -30,7 +30,7 @@ _MASTER_CONFIG_MAP = {
   },
 }
 
-def GenSteps(api):
+def RunSteps(api):
   # Load the appropriate configuration based on the master.
   api.chromite.configure(
       api.properties,

@@ -21,7 +21,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
 

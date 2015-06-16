@@ -27,7 +27,7 @@ WEBVIEW_EXES = ('android_webview_apk',)
 # checking out the Android source tree and building using the Android build
 # system.
 
-def GenSteps(api):
+def RunSteps(api):
   # Required for us to be able to use filter.
   api.chromium_android.set_config('base_config')
 

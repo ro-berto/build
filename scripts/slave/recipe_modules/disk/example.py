@@ -12,7 +12,7 @@ DEPS = [
 GIB = 1 << 30
 
 
-def GenSteps(api):
+def RunSteps(api):
   default_usage1 = {
     'capacity': 100 * GIB,
     'used': 50 * GIB,

@@ -5,7 +5,7 @@ DEPS = [
   'halt',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   api.halt('Fake failure')
 
 def GenTests(api):

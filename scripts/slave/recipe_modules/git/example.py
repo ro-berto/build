@@ -12,7 +12,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   url = 'https://chromium.googlesource.com/chromium/src.git'
 
   # git.checkout can optionally dump GIT_CURL_VERBOSE traces to a log file,

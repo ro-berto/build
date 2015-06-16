@@ -19,7 +19,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   # Check out Chrome.
   gclient_cfg = api.gclient.make_config()
   src = gclient_cfg.solutions.add()

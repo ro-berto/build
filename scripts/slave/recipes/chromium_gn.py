@@ -435,7 +435,7 @@ def all_compile_targets(api, tests):
                     for x in test.compile_targets(api)))
 
 
-def _GenStepsInternal(api):
+def _RunStepsInternal(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
   bot_config = BUILDERS[mastername]['builders'][buildername]
@@ -503,9 +503,9 @@ def _GenStepsInternal(api):
         test_runner()
 
 
-def GenSteps(api):
+def RunSteps(api):
   with api.tryserver.set_failure_hash():
-    return _GenStepsInternal(api)
+    return _RunStepsInternal(api)
 
 
 def GenTests(api):

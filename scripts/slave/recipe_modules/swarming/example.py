@@ -15,7 +15,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 

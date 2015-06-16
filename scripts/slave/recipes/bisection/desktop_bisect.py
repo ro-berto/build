@@ -9,7 +9,7 @@ DEPS = [
   'properties',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
   # TODO(akuegel): Explicitly load the builder configs instead of relying on

@@ -23,7 +23,7 @@ BUILDERS = freeze({
   },
 })
 
-def GenSteps(api):
+def RunSteps(api):
   buildername = api.properties['buildername']
   builder_config = BUILDERS.get(buildername, {})
   recipe_config = builder_config['recipe_config']

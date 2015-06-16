@@ -13,7 +13,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   api.gclient.set_config('chromium')
   api.chromium.set_config('ninja')
 

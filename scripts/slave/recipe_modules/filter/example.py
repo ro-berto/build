@@ -13,7 +13,7 @@ DEPS = [
   'step',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   exes = api.m.properties.get('exes')
   compile_targets = api.m.properties.get('compile_targets')
 

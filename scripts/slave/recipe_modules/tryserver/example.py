@@ -9,7 +9,7 @@ DEPS = [
 ]
 
 
-def GenSteps(api):
+def RunSteps(api):
   api.path['checkout'] = api.path['slave_build']
   api.tryserver.maybe_apply_issue()
 

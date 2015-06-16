@@ -106,7 +106,7 @@ def _LogFailingTests(api, deferred):
       ])
 
 
-def GenSteps(api):
+def RunSteps(api):
   # Sync and pull in everything.
   api.gclient.set_config('boringssl')
   api.bot_update.ensure_checkout(force=True)

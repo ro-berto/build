@@ -12,7 +12,7 @@ DEPS = [
   'tryserver',
 ]
 
-def GenSteps(api):
+def RunSteps(api):
   with api.tryserver.set_failure_hash():
     api.ios.host_info()
     bot_update_step = api.ios.checkout()
