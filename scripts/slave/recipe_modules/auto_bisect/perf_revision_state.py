@@ -29,10 +29,10 @@ class PerfRevisionState(revision_state.RevisionState):
     # Results will contain the keys 'results' and 'output' where output is the
     # stdout of the command, and 'results' is itself a dict with the keys:
     # 'mean', 'values', 'std_err' unless the test failed, in which case
-    # 'results' will be a string.
+    # 'results' will contain the 'error' key explaining the type of error.
     retcodes = results['retcodes']
     results = results['results']
-    if not len(retcodes) or 0 not in retcodes or 'values' not in results:
+    if results.get('error'):
       self.status = PerfRevisionState.FAILED
       return
     self.mean_value = results['mean']

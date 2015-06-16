@@ -183,7 +183,7 @@ def GenTests(api):
   yield broken_cp_test
 
   doctored_data = test_data()
-  doctored_data[0]['test_results']['retcodes'] = [1]
+  doctored_data[0]['test_results']['results']['error'] = "Dummy error."
   for revision_data in doctored_data:
     revision_data.pop('cl_info', None)
     skip_results = revision_data in doctored_data[1:-1]
@@ -194,7 +194,7 @@ def GenTests(api):
   yield broken_bad_rev_test
 
   doctored_data = test_data()
-  doctored_data[-1]['test_results']['retcodes'] = []
+  doctored_data[-1]['test_results']['results']['error'] = "Dummy error."
   for revision_data in doctored_data:
     revision_data.pop('cl_info', None)
     skip_results = revision_data in doctored_data[1:-1]

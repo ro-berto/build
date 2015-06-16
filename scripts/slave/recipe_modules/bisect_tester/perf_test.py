@@ -39,6 +39,8 @@ def run_perf_test(api, test_config):
 
 
 def truncate_and_aggregate(api, values, truncate_percent):
+  if not values: #pragma: no cover
+    return {'error': 'No values to aggregate.'}
   truncate_proportion = truncate_percent / 100.0
   mean = api.m.math_utils.truncated_mean(values, truncate_proportion)
   std_err = api.m.math_utils.standard_error(values)

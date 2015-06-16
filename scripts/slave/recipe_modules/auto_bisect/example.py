@@ -86,7 +86,9 @@ def GenTests(api):
 
   failed_data = _get_basic_test_data()
   failed_data[0].pop('DEPS')
-  failed_data[1]['test_results']['results'] = 'Failed test'
+  failed_data[1]['test_results']['results']['error'] = 'Dummy error.'
+  failed_data[1]['test_results']['results'].pop('mean')
+  failed_data[1]['test_results']['results'].pop('std_err')
   failed_data[1].pop('DEPS_change')
   failed_data[1].pop('DEPS')
   failed_data[1].pop('DEPS_interval')
