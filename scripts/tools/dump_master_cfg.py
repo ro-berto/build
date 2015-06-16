@@ -15,6 +15,15 @@ import json
 import os
 import sys
 
+SCRIPTS_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), os.pardir))
+if not SCRIPTS_DIR in sys.path:
+  sys.path.insert(0, SCRIPTS_DIR)
+
+from common import env
+
+env.Install()
+
 from common import master_cfg_utils
 from master.factory.build_factory import BuildFactory
 

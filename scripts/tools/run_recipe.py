@@ -75,6 +75,7 @@ def parse_args(args):
   parser = argparse.ArgumentParser(usage=USAGE)
   parser.add_argument('recipe')
   parser.add_argument('--properties-file')
+  parser.add_argument('--master-overrides-slave', action='store_true')
   known_args, extra_args = parser.parse_known_args(args)
 
   if known_args.properties_file:
@@ -89,7 +90,7 @@ def parse_args(args):
 
   assert type(properties) is dict
   properties['recipe'] = known_args.recipe
-  return properties
+  return properties, known_args.master_overrides_slave
 
 
 def get_properties_from_args(args):
@@ -109,7 +110,7 @@ def get_properties_from_file(filename):
 
 def main(args):
   """Gets the recipe name and properties and runs an annotated run."""
-  properties = parse_args(args)
+  properties, master_overrides_slave = parse_args(args)
   properties.setdefault('use_mirror', False)
 
   if not os.path.exists(SLAVE_DIR):
@@ -125,13 +126,15 @@ def main(args):
   env['PYTHONUNBUFFERED'] = '1'
   env['PYTHONIOENCODING'] = 'UTF-8'
 
-  return subprocess.call(
-      ['python', '-u', RUNIT, 'python', '-u', ANNOTATED_RUN,
-       '--keep-stdin',  # so that pdb works for local execution
-       '--factory-properties', json.dumps(properties),
-       '--build-properties', json.dumps(properties)],
-      cwd=SLAVE_DIR,
-      env=env)
+  cmd = ['python', '-u', RUNIT, 'python', '-u', ANNOTATED_RUN,
+         '--keep-stdin',  # so that pdb works for local execution
+         '--factory-properties', json.dumps(properties),
+         '--build-properties', json.dumps(properties)]
+
+  if master_overrides_slave:
+    cmd.append('--master-overrides-slave')
+
+  return subprocess.call(cmd, cwd=SLAVE_DIR, env=env)
 
 
 if __name__ == '__main__':
