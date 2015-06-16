@@ -322,7 +322,8 @@ class PackageFactory(gclient_factory.GClientFactory):
                                             target_platform=target_platform)
 
   def PackagesAnnotatedFactory(self, python_script, target='Release',
-                               env=None, factory_properties=None):
+                               env=None, factory_properties=None,
+                               trigger_schedulers=None):
     factory_properties = factory_properties or {}
     factory_properties['no_gclient_revision'] = True
     AddGeneralGClientProperties(factory_properties)
@@ -340,6 +341,13 @@ class PackageFactory(gclient_factory.GClientFactory):
     dart_cmd_obj.AddKillStep(step_name="Taskkill before running")
     dart_cmd_obj.AddAnnotatedSteps(python_script)
     dart_cmd_obj.AddKillStep(step_name="Taskkill after running")
+
+    if trigger_schedulers:
+      dart_cmd_obj.AddTrigger(trigger.Trigger(
+          schedulerNames=trigger_schedulers,
+          waitForFinish=False,
+          updateSourceStamp=False))
+
     return factory
 
 
