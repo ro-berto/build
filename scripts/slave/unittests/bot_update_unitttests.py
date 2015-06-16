@@ -11,6 +11,8 @@ import unittest
 
 import test_env  # pylint: disable=W0403,W0611
 
+import expect_tests
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.platform = 'linux2'  # For consistency, ya know?
 import bot_update
