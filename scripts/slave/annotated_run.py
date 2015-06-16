@@ -3,11 +3,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import contextlib
 import json
 import optparse
 import os
 import subprocess
 import sys
+import tempfile
 
 BUILD_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(
     os.path.abspath(__file__))))
@@ -21,6 +23,17 @@ from slave import recipe_universe
 
 from recipe_engine import main as recipe_main
 
+@contextlib.contextmanager
+def namedTempFile():
+  fd, name = tempfile.mkstemp()
+  os.close(fd)  # let the exceptions fly
+  try:
+    yield name
+  finally:
+    try:
+      os.remove(name)
+    except OSError as e:
+      print >> sys.stderr, "LEAK: %s: %s" % (name, e)
 
 def get_recipe_properties(factory_properties, build_properties,
                           master_overrides_slave):
@@ -80,20 +93,23 @@ def get_factory_properties_from_disk(mastername, buildername):
 
   script_path = os.path.join(BUILD_ROOT, 'scripts', 'tools',
                              'dump_master_cfg.py')
-  dump_cmd = [sys.executable,
-              script_path,
-              master_path, '-']
-  proc = subprocess.Popen(dump_cmd, cwd=BUILD_ROOT, stdout=subprocess.PIPE,
-                          stderr=subprocess.PIPE)
-  out, err = proc.communicate()
-  exit_code = proc.returncode
 
-  if exit_code:
-    raise LookupError('Failed to get the master config; dump_master_cfg %s'
-                      'returned %d):\n%s\n%s\n'% (
-                      mastername, exit_code, out, err))
+  with namedTempFile() as fname:
+    dump_cmd = [sys.executable,
+                script_path,
+                master_path, fname]
+    proc = subprocess.Popen(dump_cmd, cwd=BUILD_ROOT, stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE)
+    out, err = proc.communicate()
+    exit_code = proc.returncode
 
-  config = json.loads(out)
+    if exit_code:
+      raise LookupError('Failed to get the master config; dump_master_cfg %s'
+                        'returned %d):\n%s\n%s\n'% (
+                        mastername, exit_code, out, err))
+
+    with open(fname, 'r') as f:
+      config = json.load(f)
 
   # Now extract just the factory properties for the requested builder
   # from the master config.
