@@ -47,7 +47,10 @@ class DartCommands(commands.FactoryCommands):
                                             'slave', 'dart')
 
     self._dart_util = self.PathJoin(self._slave_dir, 'dart_util.py')
+
     self._dart_build_dir = self.PathJoin('build', 'sdk')
+    if build_dir:
+      self._dart_build_dir = self.PathJoin('build', build_dir)
     self._repository_root = ''
     self._custom_env = env or {}
 
