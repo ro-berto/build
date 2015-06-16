@@ -174,14 +174,13 @@ class BisectResults(object):
     return footer
 
   def _gather_results(self):
-    # TODO(robertocn): Add support for multiple culprits/suspects
     # TODO(robertocn): Add viewcl link here.
-    # TODO(robertocn): Merge this into constructor
+    # TODO(robertocn): Merge this into constructor.
     bisector = self._bisector
     api = self._bisector.api
     config = bisector.bisect_config
 
-    # TODO(robertocn): Add platform here
+    # TODO(robertocn): Add platform here.
     self.relative_change = bisector.relative_change
     self.warnings = bisector.warnings
     self.command = config['command']
