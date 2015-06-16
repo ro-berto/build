@@ -352,7 +352,7 @@ RETRY = object()
 OK = object()
 FAIL = object()
 
-def call(*args, **kwargs):
+def call(*args, **kwargs):  # pragma: no cover
   """Interactive subprocess call."""
   kwargs['stdout'] = subprocess.PIPE
   kwargs['stderr'] = subprocess.STDOUT
@@ -419,7 +419,7 @@ def call(*args, **kwargs):
                          code, outval)
 
 
-def git(*args, **kwargs):
+def git(*args, **kwargs):  # pragma: no cover
   """Wrapper around call specifically for Git commands."""
   if args and args[0] == 'cache':
     # Rewrite "git cache" calls into "python git_cache.py".
