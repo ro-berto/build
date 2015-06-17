@@ -30,6 +30,12 @@ deps_os = {
 
 hooks = [
   {
+    "pattern": ".",
+    "action": [
+      "python", "-u", "build/scripts/common/remove_orphaned_pycs.py",
+    ],
+  },
+  {
     "name": "cros_chromite",
     "pattern": r".*/cros_chromite\.py",
     "action": [
