@@ -226,8 +226,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return test_runner
 
   def get_compile_targets_and_tests(
-      self, mastername, buildername, master_dict, override_bot_type=None,
-      override_tests=None):
+      self, mastername, buildername, master_dict, test_spec,
+      override_bot_type=None, override_tests=None):
     """Returns a tuple: list of compile targets and list of tests.
 
     The list of tests includes ones on the triggered testers."""
@@ -257,6 +257,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Only add crash_service when we have explicit compile targets.
     if self.m.platform.is_win and compile_targets:
       compile_targets.add('crash_service')
+
+    # Lastly, add any targets the checkout-side test spec told us to use.
+    compile_targets.update(test_spec.get(buildername, {}).get(
+        'additional_compile_targets', []))
 
     return sorted(compile_targets), tests_including_triggered
 
@@ -290,13 +294,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.get_compile_targets_and_tests(
             mastername,
             buildername,
-            master_dict)
+            master_dict, test_spec)
     self.compile_specific_targets(
-        mastername, buildername, update_step, master_dict, test_spec,
+        mastername, buildername, update_step, master_dict,
         compile_targets, tests_including_triggered)
 
   def compile_specific_targets(
-      self, mastername, buildername, update_step, master_dict, test_spec,
+      self, mastername, buildername, update_step, master_dict,
       compile_targets, tests_including_triggered, override_bot_type=None):
     """Runs compile and related steps for given builder.
 

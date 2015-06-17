@@ -454,6 +454,7 @@ def _RunStepsInternal(api):
           bot_config['mastername'],
           bot_config['buildername'],
           master_dict,
+          test_spec,
           override_bot_type='builder_tester',
           override_tests=tests)
 
@@ -476,7 +477,6 @@ def _RunStepsInternal(api):
       bot_config['buildername'],
       bot_update_step,
       master_dict,
-      test_spec,
       compile_targets,
       tests_including_triggered,
       override_bot_type='builder_tester')
