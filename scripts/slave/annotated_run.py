@@ -50,8 +50,8 @@ def get_recipe_properties(factory_properties, build_properties,
   master_properties = factory_properties.copy()
   master_properties.update(build_properties)
 
-  mastername = master_properties['mastername']
-  buildername = master_properties['buildername']
+  mastername = master_properties.get('mastername')
+  buildername = master_properties.get('buildername')
   if mastername and buildername:
     slave_properties = get_factory_properties_from_disk(mastername, buildername)
   else:
