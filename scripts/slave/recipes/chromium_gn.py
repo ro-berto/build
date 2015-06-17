@@ -24,12 +24,14 @@ BUILDERS = freeze({
   'chromium.mac': {
     'builders': {
       'Mac GN': {
+        # TODO(dpranke): Remove once this bot is running chromium.py.
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'mac',
         },
       },
       'Mac GN (dbg)': {
+        # TODO(dpranke): Remove once this bot is running chromium.py.
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'mac',
@@ -73,12 +75,14 @@ BUILDERS = freeze({
   'chromium.chromiumos': {
     'builders': {
       'Linux ChromiumOS GN': {
+        # TODO(dpranke): Remove once this bot is running chromium.py.
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'chromeos',
         },
       },
       'Linux ChromiumOS GN (dbg)': {
+        # TODO(dpranke): Remove once this bot is running chromium.py.
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'chromeos',
@@ -89,6 +93,7 @@ BUILDERS = freeze({
   'chromium.linux': {
     'builders': {
       'Android GN': {
+        # TODO(dpranke): Remove once this bot is running chromium.py.
         'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -98,6 +103,7 @@ BUILDERS = freeze({
         'gclient_apply_config': ['android'],
       },
       'Android GN (dbg)': {
+        # TODO(dpranke): Remove once this bot is running chromium.py.
         'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -107,6 +113,7 @@ BUILDERS = freeze({
         'gclient_apply_config': ['android'],
       },
       'Linux GN': {
+        # TODO(dpranke): Remove once this bot is running chromium.py.
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
@@ -114,6 +121,7 @@ BUILDERS = freeze({
         },
       },
       'Linux GN Clobber': {
+        # TODO(dpranke): Remove once this bot is running chromium.py.
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
@@ -122,6 +130,7 @@ BUILDERS = freeze({
         'force_clobber': True,
       },
       'Linux GN (dbg)': {
+        # TODO(dpranke): Remove once this bot is running chromium.py.
         'chromium_apply_config': ['gn_component_build'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -134,6 +143,7 @@ BUILDERS = freeze({
   'chromium.win': {
     'builders': {
       'Win x64 GN': {
+        # TODO(dpranke): Remove once this bot is running chromium.py.
         'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -142,6 +152,7 @@ BUILDERS = freeze({
         },
       },
      'Win x64 GN (dbg)': {
+        # TODO(dpranke): Remove once this bot is running chromium.py.
         'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -150,6 +161,7 @@ BUILDERS = freeze({
         },
       },
       'Win8 GN': {
+        # TODO(dpranke): Remove once this bot is running chromium.py.
         'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -158,6 +170,7 @@ BUILDERS = freeze({
         },
       },
      'Win8 GN (dbg)': {
+        # TODO(dpranke): Remove once this bot is running chromium.py.
         'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -188,6 +201,7 @@ BUILDERS = freeze({
         'gclient_apply_config': ['android'],
       },
       'linux_chromium_gn_rel': {
+        # TODO(dpranke): Remove once this bot is running chromium_trybot.py.
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
@@ -203,12 +217,14 @@ BUILDERS = freeze({
         },
       },
       'linux_chromium_gn_chromeos_rel': {
+        # TODO(dpranke): Remove once this bot is running chromium_trybot.py.
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'chromeos',
         },
       },
       'linux_chromium_gn_chromeos_dbg': {
+        # TODO(dpranke): Remove once this bot is running chromium_trybot.py.
         'chromium_apply_config': ['gn_component_build'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -220,12 +236,14 @@ BUILDERS = freeze({
   'tryserver.chromium.mac': {
     'builders': {
       'mac_chromium_gn_dbg': {
+        # TODO(dpranke): Remove once this bot is running chromium_trybot.py.
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'mac',
         },
       },
       'mac_chromium_gn_rel': {
+        # TODO(dpranke): Remove once this bot is running chromium_trybot.py.
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'mac',
@@ -236,6 +254,7 @@ BUILDERS = freeze({
   'tryserver.chromium.win': {
     'builders': {
       'win_chromium_gn_x64_dbg': {
+        # TODO(dpranke): Remove once this bot is running chromium_trybot.py.
         'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -244,6 +263,7 @@ BUILDERS = freeze({
         },
       },
       'win_chromium_gn_x64_rel': {
+        # TODO(dpranke): Remove once this bot is running chromium_trybot.py.
         'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -252,6 +272,7 @@ BUILDERS = freeze({
         },
       },
       'win8_chromium_gn_dbg': {
+        # TODO(dpranke): Remove once this bot is running chromium_trybot.py.
         'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -260,6 +281,7 @@ BUILDERS = freeze({
         },
       },
       'win8_chromium_gn_rel': {
+        # TODO(dpranke): Remove once this bot is shut down.
         'chromium_apply_config': ['gn_minimal_symbols'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',

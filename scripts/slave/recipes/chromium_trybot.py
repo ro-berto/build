@@ -89,6 +89,22 @@ BUILDERS = freeze({
         'buildername': 'Linux Builder (dbg)',
         'tester': 'Linux Tests (dbg)(1)',
       },
+      'linux_chromium_gn_chromeos_dbg': {
+        'mastername': 'chromium.chromiumos',
+        'buildername': 'Linux ChromiumOS GN (dbg)',
+      },
+      'linux_chromium_gn_chromeos_rel': {
+        'mastername': 'chromium.chromiumos',
+        'buildername': 'Linux ChromiumOS GN',
+      },
+      'linux_chromium_gn_dbg': {
+        'mastername': 'chromium.linux',
+        'buildername': 'Linux GN (dbg)',
+      },
+      'linux_chromium_gn_rel': {
+        'mastername': 'chromium.linux',
+        'buildername': 'Linux GN',
+      },
       'linux_chromium_rel_ng': {
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder',
@@ -191,6 +207,14 @@ BUILDERS = freeze({
         'buildername': 'Mac Builder (dbg)',
         'tester': 'Mac10.9 Tests (dbg)',
       },
+      'mac_chromium_gn_dbg': {
+        'mastername': 'chromium.mac',
+        'buildername': 'Mac GN (dbg)',
+      },
+      'mac_chromium_gn_rel': {
+        'mastername': 'chromium.mac',
+        'buildername': 'Mac GN',
+      },
       'mac_chromium_rel_ng': {
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder',
@@ -227,6 +251,14 @@ BUILDERS = freeze({
         'mastername': 'chromium.win',
         'buildername': 'Win Builder (dbg)',
         'tester': 'Win7 Tests (dbg)(1)',
+      },
+      'win_chromium_gn_x64_dbg': {
+        'mastername': 'chromium.win',
+        'buildername': 'Win x64 GN (dbg)',
+      },
+      'win_chromium_gn_x64_rel': {
+        'mastername': 'chromium.win',
+        'buildername': 'Win x64 GN',
       },
       'win_chromium_rel_ng': {
         'mastername': 'chromium.win',
@@ -273,6 +305,10 @@ BUILDERS = freeze({
       'win8_chromium_ng': {
         'mastername': 'chromium.win',
         'buildername': 'Win8 Aura',
+      },
+      'win8_chromium_gn_dbg': {
+        'mastername': 'chromium.win',
+        'buildername': 'Win8 GN (dbg)',
       },
     },
   },

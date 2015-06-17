@@ -106,6 +106,23 @@ SPEC = {
         'platform': 'mac',
       },
     },
+    'Mac GN': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'mac',
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'enable_swarming': True,
+      'testing': {
+        'platform': 'mac',
+      },
+    },
     'Mac Builder (dbg)': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
@@ -142,6 +159,23 @@ SPEC = {
       'enable_swarming': True,
       'swarming_dimensions': {
         'os': 'Mac-10.9',
+      },
+    },
+    'Mac GN (dbg)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'mac',
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'enable_swarming': True,
+      'testing': {
+        'platform': 'mac',
       },
     },
   },

@@ -61,6 +61,43 @@ SPEC = {
       },
       'enable_swarming': True,
     },
+    'Linux GN': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'linux',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'enable_swarming': True,
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Linux GN Clobber': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'linux',
+        'TARGET_BITS': 64,
+      },
+      'force_clobber': True,
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'enable_swarming': True,
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Linux Builder (dbg)(32)': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
@@ -116,6 +153,24 @@ SPEC = {
       'enable_swarming': True,
       'use_isolate': True,
     },
+    'Linux GN (dbg)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'linux',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'enable_swarming': True,
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Linux Tests (dbg)(1)': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
@@ -135,6 +190,25 @@ SPEC = {
       'enable_swarming': True,
     },
 
+    'Android GN': {
+      'chromium_config': 'android',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'android',
+        'TARGET_ARCH': 'arm',
+      },
+      'android_config': 'main_builder',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Android Arm64 Builder (dbg)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
@@ -162,6 +236,25 @@ SPEC = {
       'bot_type': 'builder',
       'compile_targets': [
         'cronet_test_instrumentation_apk',
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Android GN (dbg)': {
+      'chromium_config': 'android',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'android',
+        'TARGET_ARCH': 'arm',
+      },
+      'android_config': 'main_builder',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',

@@ -101,6 +101,23 @@ SPEC = {
       },
       'enable_swarming': True,
     },
+    'Linux ChromiumOS GN': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'chromeos',
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'enable_swarming': True,
+      'testing': {
+        'platform': 'linux',
+      },
+    },
 
     'Linux ChromiumOS (Clang dbg)': {
       'chromium_config': 'chromium_clang',
@@ -242,6 +259,23 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': True,
+    },
+    'Linux ChromiumOS GN (dbg)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'chromeos',
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'enable_swarming': True,
+      'testing': {
+        'platform': 'linux',
+      },
     },
   },
 }
