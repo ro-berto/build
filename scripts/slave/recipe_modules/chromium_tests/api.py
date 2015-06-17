@@ -32,8 +32,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """Adds builders to our builder map"""
     self._builders.update(builders)
 
-  def configure_build(self, mastername, buildername, override_bot_type=None,
-):
+  def configure_build(self, mastername, buildername, override_bot_type=None):
     master_dict = self.builders.get(mastername, {})
     bot_config = master_dict.get('builders', {}).get(buildername)
 
