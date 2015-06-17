@@ -48,6 +48,16 @@ hooks = [
     'action':
          [
     'python',
+    '-u',
+    'build/scripts/common/remove_orphaned_pycs.py'
+],
+    'pattern':
+         '.'
+},
+    {
+    'action':
+         [
+    'python',
     'build/scripts/tools/runit.py',
     'python',
     'build/scripts/common/cros_chromite.py',
