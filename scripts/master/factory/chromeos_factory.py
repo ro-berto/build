@@ -46,24 +46,10 @@ class _ChromiteRecipeFactoryFunc(object):
 
     factory_properties = kwargs.setdefault('factory_properties', {})
     # Set the 'cbb_debug' property if we're not running in a production master.
-    debug = kwargs.pop('debug', False)
-    if cls._shouldForceDebug(factory_obj) or debug:
+    if kwargs.pop('debug', False):
       factory_properties['cbb_debug'] = True
     return factory_obj.BaseFactory(recipe, *args, **kwargs)
 
-  @staticmethod
-  def _shouldForceDebug(factory_obj):
-    """Tests whether the debug flag should be forced.
-
-    Requires that AnnotatorFactory's 'active_master' be set.
-
-    Args:
-      factory_obj (annotator_factory.AnnotatorFactory) The annotator factory.
-    Returns (bool): True of debug should be enabled by default, False otherwise.
-    """
-    assert factory_obj.active_master, (
-        "The 'active_master' factory property must be set.")
-    return not factory_obj.active_master.is_production_host
 
 # Callable instance of '_ChromiteFactoryFunc'.
 ChromiteRecipeFactory = _ChromiteRecipeFactoryFunc()

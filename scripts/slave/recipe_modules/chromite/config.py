@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import os
 import types
 
 from common import cros_chromite
@@ -60,6 +61,11 @@ def base(c):
   c.repositories['chromium'] = []
   c.repositories['cros_manifest'] = []
   c.chromite_branch = 'master'
+
+  # If running on a testing slave, enable "--debug" so Chromite doesn't cause
+  # actual production effects.
+  if 'TESTING_MASTER_HOST' in os.environ:  # pragma: no cover
+    c.cbb.debug = True
 
 
 @config_ctx(includes=['base'])
