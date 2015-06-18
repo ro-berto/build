@@ -117,6 +117,7 @@ _DIRECTION_OF_IMPROVEMENT_ABORT_REASON = (
 
 
 class BisectResults(object):
+
   def __init__(self, bisector):
     """Create a new results object from a finished bisect job."""
     if not bisector.bisect_over:
@@ -124,6 +125,11 @@ class BisectResults(object):
           'Invalid parameter, the bisect must be over by the time the '
           'BisectResults constructor is called')  # pragma: no cover
     self._bisector = bisector
+    self.culprit_cl_hash = None
+    self.commit_info = None
+    self.culprit_author = None
+    self.culprit_subject = None
+    self.culprit_date = None
     self._gather_results()
 
   def as_string(self):
@@ -180,7 +186,6 @@ class BisectResults(object):
     # TODO(robertocn): Add viewcl link here.
     # TODO(robertocn): Merge this into constructor.
     bisector = self._bisector
-    api = self._bisector.api
     config = bisector.bisect_config
 
     # TODO(robertocn): Add platform here.

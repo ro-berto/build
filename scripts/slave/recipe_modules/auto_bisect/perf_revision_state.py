@@ -30,7 +30,6 @@ class PerfRevisionState(revision_state.RevisionState):
     # stdout of the command, and 'results' is itself a dict with the keys:
     # 'mean', 'values', 'std_err' unless the test failed, in which case
     # 'results' will contain the 'error' key explaining the type of error.
-    retcodes = results['retcodes']
     results = results['results']
     if results.get('error'):
       self.status = PerfRevisionState.FAILED
@@ -144,7 +143,6 @@ class PerfRevisionState(revision_state.RevisionState):
   def _get_test_results(self):
     """Tries to get the results of a test job from cloud storage."""
     api = self.bisector.api
-    job_name = self.test_job_name
     try:
       stdout = api.m.raw_io.output()
       name = 'Get test results for build ' + self.commit_hash

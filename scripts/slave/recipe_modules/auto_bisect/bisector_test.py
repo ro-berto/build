@@ -59,7 +59,7 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
     bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
     # Check the proper revision range is initialized
     self.assertEqual(4, len(bisector.revisions))
-    a, b, c, d = bisector.revisions
+    a, b, c, d = bisector.revisions  # pylint: disable=unbalanced-tuple-unpacking
     # Check that revisions are properly chained
     self.assertEqual(a, b.previous_revision)
     self.assertEqual(b, c.previous_revision)

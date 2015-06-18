@@ -1,4 +1,6 @@
-# Copyright 2015 The Chromium Authors. All rights reserved.  # Use of this source code is governed by a BSD-style license that can be # found in the LICENSE file.
+# Copyright 2015 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
 
 """An interface for holding state and result of revisions in a bisect job.
 
@@ -7,12 +9,12 @@ class so that the bisect module and recipe can use it.
 
 See perf_revision_state for an example.
 """
+
 import hashlib
 import os
 import re
 
 from . import depot_config
-
 
 
 class RevisionState(object):
@@ -30,11 +32,10 @@ class RevisionState(object):
               # revisions.
   ) = xrange(7)
 
-
   def __init__(self, revision_string, bisector, depot='chromium',
                dependency_depot_name=None,base_revision=None,
                deps_revision=None):
-    """Create a new instance to track the state of a revision.
+    """Creates a new instance to track the state of a revision.
 
     There are two use cases for this constructor:
       - Creating a revision state for a chromium revision, OR
