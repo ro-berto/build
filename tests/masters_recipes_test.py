@@ -57,7 +57,6 @@ SUPPRESSIONS = {
     'master.chromium.gpu': [
         'Android Debug (Nexus 5)',
         'Android Debug (Nexus 6)',
-        'Android Debug (Nexus 7)',
         'Android Debug (Nexus 9)',
         'GPU Linux Builder (dbg)',
         'GPU Linux Builder',
