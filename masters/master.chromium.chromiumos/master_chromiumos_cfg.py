@@ -40,12 +40,15 @@ def Update(config, active_master, c):
         'notify_on_missing': True,
         'category': '1linux',
       } for spec in [
+          # Linux ChromiumOS
           {'buildername': 'Linux ChromiumOS Full'},
           {'buildername': 'Linux ChromiumOS Builder',
-
-          # Linux ChromiumOS
            'triggers': ['chromiumos_rel_trigger']},
           {'buildername': 'Linux ChromiumOS Tests (1)'},
+
+          # Linux ChromiumOS GN
+          {'buildername': 'Linux ChromiumOS GN'},
+          {'buildername': 'Linux ChromiumOS GN (dbg)'},
 
           # Linux ChromiumOS Ozone
           {'buildername': 'Linux ChromiumOS Ozone Builder',
@@ -56,17 +59,5 @@ def Update(config, active_master, c):
           {'buildername': 'Linux ChromiumOS Builder (dbg)',
            'triggers': ['chromiumos_dbg_trigger']},
           {'buildername': 'Linux ChromiumOS Tests (dbg)(1)'},
-      ]
-  ])
-
-  c['builders'].extend([
-      {
-        'name': name,
-        'factory': m_annotator.BaseFactory('chromium_gn'),
-        'notify_on_missing': True,
-        'category': '1linux',
-      } for name in [
-          'Linux ChromiumOS GN',
-          'Linux ChromiumOS GN (dbg)',
       ]
   ])

@@ -41,9 +41,9 @@ def Update(_config, active_master, c):
     {'name': 'Linux Tests (dbg)(1)(32)'},
     {'name': 'Linux Builder (dbg)', 'triggers': ['linux_dbg_trigger']},
     {'name': 'Linux Tests (dbg)(1)'},
-    {'name': 'Linux GN', 'recipe': 'chromium_gn'},
-    {'name': 'Linux GN Clobber', 'recipe': 'chromium_gn'},
-    {'name': 'Linux GN (dbg)', 'recipe': 'chromium_gn'},
+    {'name': 'Linux GN'},
+    {'name': 'Linux GN Clobber'},
+    {'name': 'Linux GN (dbg)'},
     {'name': 'Linux ARM'},
     {'name': 'Cast Linux'},
   ]

@@ -51,8 +51,6 @@ SUPPRESSIONS = {
     ],
     'master.chromium.chromiumos': [
         'Linux ChromiumOS Full',
-        'Linux ChromiumOS GN',
-        'Linux ChromiumOS GN (dbg)',
     ],
     'master.chromium.gpu': [
         'Android Debug (Nexus 5)',
@@ -84,9 +82,7 @@ SUPPRESSIONS = {
     'master.chromium.linux': [
         'Android GN',
         'Android GN (dbg)',
-        'Linux GN',
         'Linux GN Clobber',
-        'Linux GN (dbg)',
     ],
     'master.chromium.mac': [
         'Mac10.9 Tests',
