@@ -128,7 +128,7 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Debug",
+      "Release",
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
@@ -193,7 +193,7 @@
       "-b",
       "win8_chromium_ng",
       "-v",
-      "//out/Debug",
+      "//out/Release",
       "{\"files\": [\"foo.cc\"], \"targets\": []}",
       "/path/to/tmp/json"
     ],

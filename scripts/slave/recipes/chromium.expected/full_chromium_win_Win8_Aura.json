@@ -133,7 +133,7 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Debug",
+      "Release",
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
@@ -172,7 +172,7 @@
       "[BUILD]\\goma",
       "--swarming-targets-file",
       "browser_tests\n",
-      "//out/Debug"
+      "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "generate_build_files"
@@ -183,7 +183,7 @@
       "-u",
       "RECIPE_MODULE[isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Debug",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--clean-isolated-files"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -195,7 +195,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\compile.py",
       "--target",
-      "Debug",
+      "Release",
       "--src-dir",
       "[SLAVE_BUILD]\\src",
       "--build-tool",
@@ -218,7 +218,7 @@
       "-u",
       "RECIPE_MODULE[isolate]\\resources\\remove_build_metadata.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Debug",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--src-dir",
       "[SLAVE_BUILD]\\src"
     ],
@@ -237,7 +237,7 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]\\src\\out\\Debug\\browser_tests.isolated.gen.json"
+      "[SLAVE_BUILD]\\src\\out\\Release\\browser_tests.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
@@ -254,7 +254,7 @@
       "-u",
       "RECIPE_MODULE[isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Debug",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -275,7 +275,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
       "--target",
-      "Debug"
+      "Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "start_crash_service"
@@ -320,7 +320,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\process_dumps.py",
       "--target",
-      "Debug"
+      "Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "process_dumps"
