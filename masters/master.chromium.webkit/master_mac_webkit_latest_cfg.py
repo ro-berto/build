@@ -80,6 +80,10 @@ B('WebKit Mac10.9', 'f_webkit_rel_tests_109',
   scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_109', m_annotator.BaseFactory('chromium'))
 
+B('WebKit Mac10.10', 'f_webkit_rel_tests_1010',
+  scheduler='s5_webkit_rel_trigger')
+F('f_webkit_rel_tests_1010', m_annotator.BaseFactory('chromium'))
+
 B('WebKit Mac Oilpan', 'f_webkit_mac_oilpan_rel', scheduler='global_scheduler',
     category='oilpan')
 F('f_webkit_mac_oilpan_rel', m_annotator.BaseFactory('chromium'))
