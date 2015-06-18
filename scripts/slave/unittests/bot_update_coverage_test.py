@@ -3,15 +3,14 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import codecs
 import copy
+import json
 import os
 import sys
-import json
 import unittest
 
 import test_env  # pylint: disable=W0403,W0611
-
-import expect_tests
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.platform = 'linux2'  # For consistency, ya know?
@@ -148,7 +147,7 @@ class FakeFilesystem():
   def __init__(self):
     self.files = {}
 
-  def open(self, target, mode='r'):
+  def open(self, target, mode='r', encoding=None):
     if 'w' in mode:
       self.files[target] = FakeFile()
       return self.files[target]
@@ -174,11 +173,14 @@ class BotUpdateUnittests(unittest.TestCase):
     setattr(os, 'getcwd', lambda: '/b/build/slave/foo/build')
 
     setattr(bot_update, 'open', self.filesystem.open)
+    self.old_codecs_open = codecs.open
+    setattr(codecs, 'open', self.filesystem.open)
 
   def tearDown(self):
     setattr(bot_update, 'call', self.old_call)
     setattr(os, 'getcwd', self.old_os_cwd)
     delattr(bot_update, 'open')
+    setattr(codecs, 'open', self.old_codecs_open)
 
   def testBasic(self):
     bot_update.ensure_checkout(**self.params)
