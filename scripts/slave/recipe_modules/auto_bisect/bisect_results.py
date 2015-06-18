@@ -131,43 +131,46 @@ class BisectResults(object):
 
   def _make_header(self):
     if not self.status == 'Aborted':
-      header = _RESULTS_BANNER % ({
+      header = _RESULTS_BANNER % {
           'status': self.status,
           'command': self.command,
           'metric': self.metric,
           'change': self.relative_change,
           'confidence': self.results_confidence or 0,
-          'retest': 'Not Implemented.'})
+          'retest': 'Not Implemented.'
+      }
     else:
-      header =  _ABORT_REASON_TEMPLATE % ({
+      header =  _ABORT_REASON_TEMPLATE % {
           'abort_reason': self.abort_reason,
           'bug_id': self.bug_id,
           'command': self.command,
           'metric': self.metric,
           'good_revision': self.good_revision,
-          'bad_revision': self.bad_revision})
+          'bad_revision': self.bad_revision
+      }
     if self.warnings:
-      header += _WARNINGS_TEMPLATE % ({
-          'warnings': '\n * '.join(self.warnings)})
+      header += _WARNINGS_TEMPLATE % {'warnings': '\n * '.join(self.warnings)}
     return header
 
   def _make_body(self):
     body = ''
     if self.culprit_cl_hash:
-      body += _RESULTS_REVISION_INFO % ({
+      body += _RESULTS_REVISION_INFO % {
           'subject': self.culprit_subject,
           'author': self.culprit_author,
           'cl_date': self.culprit_date,
           'commit_info': self.commit_info,
-          'cl': self.culprit_cl_hash})
+          'cl': self.culprit_cl_hash
+      }
     body += self._compose_revisions_table()
     return body
 
   def _make_footer(self):
     footer = _REPRO_STEPS_LOCAL
     if self.is_telemetry:
-      footer += _REPRO_STEPS_TRYJOB_TELEMETRY % ({
-          'command': self.telemetry_command})
+      footer += _REPRO_STEPS_TRYJOB_TELEMETRY % {
+          'command': self.telemetry_command
+      }
     else:
       footer += _REPRO_STEPS_TRYJOB
     footer += _RESULTS_THANKYOU
@@ -254,7 +257,7 @@ class BisectResults(object):
     revisions += [revision_row(r)
                   for r in self._bisector.revisions
                   if r.tested or r.aborted]
-    return _REVISION_TABLE_TEMPLATE % ({'table': _pretty_table(revisions)})
+    return _REVISION_TABLE_TEMPLATE % {'table': _pretty_table(revisions)}
 
 
 def _pretty_table(data):
