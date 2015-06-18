@@ -50,53 +50,17 @@ Date    : %(cl_date)s
 
 """
 
-_REVISION_TABLE_TEMPLATE="""
+_REVISION_TABLE_TEMPLATE = """
 ===== TESTED REVISIONS =====
 %(table)s
 
 """
 
 _RESULTS_THANKYOU = """
-| O O | Visit http://www.chromium.org/developers/core-principles for Chrome's
-|  X  | policy on perf regressions. Contact chrome-perf-dashboard-team with any
-| / \\ | questions or suggestions about bisecting. THANK YOU."""
+| O O | Visit http://www.chromium.org/developers/speed-infra/perf-bug-faq
+|  X  | for more information addressing perf regression bugs. For feedback,
+| / \\ | file a bug with label Cr-Tests-AutoBisect.  Thank you!"""
 
-_REPRO_STEPS_LOCAL = """
-==== INSTRUCTIONS TO REPRODUCE ====
-To run locally:
- - Use the test command given under 'BISECT JOB RESULTS' above.
- - Consider using a profiler. Pass --profiler=list to list available profilers.
-
-"""
-
-_REPRO_STEPS_TRYJOB = """
-To reproduce on a performance try bot:
- 1. Edit run-perf-test.cfg
- 2. $ git try -b <bot> --svn_repo='svn://svn.chromium.org/chrome-try/try-perf'
-
-Notes:
- a) Follow the in-file instructions in run-perf-test.cfg.
- b) run-perf-test.cfg is under tools/ or under third_party/WebKit/Tools.
- c) Do your edits preferably under a new git branch.
- d) --browser=release and --browser=android-chromium-testshell are supported
-    depending on the platform (desktop|android).
- e) Strip any src/ directories from the head of relative path names.
- f) Make sure to use the appropriate bot on step 3.
-
-For more details please visit
-https://sites.google.com/a/chromium.org/dev/developers/performance-try-bots
-
-"""
-
-_REPRO_STEPS_TRYJOB_TELEMETRY = """
-To reproduce on a performance try bot:
-%(command)s
-(Where <bot-name> comes from tools/perf/run_benchmark --browser=list)
-
-For more details please visit
-https://sites.google.com/a/chromium.org/dev/developers/performance-try-bots
-
-"""
 
 _WARNINGS_TEMPLATE = """
 ===== WARNINGS =====
@@ -172,15 +136,7 @@ class BisectResults(object):
     return body
 
   def _make_footer(self):
-    footer = _REPRO_STEPS_LOCAL
-    if self.is_telemetry:
-      footer += _REPRO_STEPS_TRYJOB_TELEMETRY % {
-          'command': self.telemetry_command
-      }
-    else:
-      footer += _REPRO_STEPS_TRYJOB
-    footer += _RESULTS_THANKYOU
-    return footer
+    return _RESULTS_THANKYOU
 
   def _gather_results(self):
     # TODO(robertocn): Add viewcl link here.
