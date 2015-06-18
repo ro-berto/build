@@ -89,8 +89,6 @@ SUPPRESSIONS = {
         'Linux GN (dbg)',
     ],
     'master.chromium.mac': [
-        'Mac GN (dbg)',
-        'Mac GN',
         'Mac10.9 Tests',
         'iOS_Device',
         'iOS_Device_(ninja)',
@@ -101,10 +99,6 @@ SUPPRESSIONS = {
     ],
     'master.chromium.win': [
         'Win x64 Builder (dbg)',
-        'Win x64 GN',
-        'Win x64 GN (dbg)',
-        'Win8 GN',
-        'Win8 GN (dbg)',
     ],
 }
 

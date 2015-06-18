@@ -310,6 +310,10 @@ BUILDERS = freeze({
         'mastername': 'chromium.win',
         'buildername': 'Win8 GN (dbg)',
       },
+      'win8_chromium_gn_rel': {
+        'mastername': 'chromium.win',
+        'buildername': 'Win8 GN',
+      },
     },
   },
 })

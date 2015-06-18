@@ -44,14 +44,8 @@ def Update(config, active_master, c):
       'triggers': ['mac_dbg_trigger'],
     },
     {'name': 'Mac10.9 Tests (dbg)'},
-    {
-      'name': 'Mac GN',
-      'recipe': 'chromium_gn',
-    },
-    {
-      'name': 'Mac GN (dbg)',
-      'recipe': 'chromium_gn',
-    },
+    {'name': 'Mac GN'},
+    {'name': 'Mac GN (dbg)'},
   ]
 
   c['builders'].extend([
