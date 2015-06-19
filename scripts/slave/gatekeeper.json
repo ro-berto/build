@@ -399,6 +399,7 @@
         "categories": [
           "nacl_all"
         ],
+        "sheriff_classes": ["sheriff_nacl"],
         "excluded_builders" : [
             "precise_64-newlib-arm_qemu-pnacl-buildonly-spec",
             "oneiric_32-newlib-arm_hw-pnacl-panda-spec"
@@ -432,6 +433,7 @@
         "categories": [
           "nacl_all"
         ],
+        "sheriff_classes": ["sheriff_nacl"],
         "builders": {
           "*": {}
         },
