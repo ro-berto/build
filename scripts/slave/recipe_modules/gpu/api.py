@@ -17,7 +17,7 @@ SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN = freeze([
   'gles2_conform_test',
 ])
 
-SIMPLE_WIN_ONLY_FYI_ONLY_TESTS = freeze([
+SIMPLE_WIN_AND_LINUX_ONLY_FYI_ONLY_TESTS = freeze([
   'angle_end2end_tests',
 ])
 
@@ -185,11 +185,11 @@ class GpuApi(recipe_api.RecipeApi):
     # build is used).
     is_tryserver = self.m.tryserver.is_tryserver
     if self.is_fyi_waterfall:
-      if self.m.platform.is_win:
+      if self.m.platform.is_win or self.m.platform.is_linux:
         # TODO(kbr): run these tests on the trybots as soon as there is
         # capacity to do so, and on all platforms as soon as ANGLE does.
         isolates = (common.GPU_ISOLATES + common.FYI_ONLY_GPU_ISOLATES +
-                    common.WIN_ONLY_GPU_ISOLATES)
+                    common.WIN_AND_LINUX_ONLY_GPU_ISOLATES)
       else:
         isolates = common.GPU_ISOLATES + common.FYI_ONLY_GPU_ISOLATES
     else:
@@ -310,11 +310,11 @@ class GpuApi(recipe_api.RecipeApi):
       # Only run tests on the tree closers and on the CQ which are
       # available in the open-source repository.
       basic_tests += SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN
-      if self.m.platform.is_win:
+      if self.m.platform.is_win or self.m.platform.is_linux:
         # TODO(kbr): run these tests on the trybots as soon as there
         # is capacity to do so, and on all platforms as soon as ANGLE
         # does.
-        basic_tests += SIMPLE_WIN_ONLY_FYI_ONLY_TESTS
+        basic_tests += SIMPLE_WIN_AND_LINUX_ONLY_FYI_ONLY_TESTS
 
     #TODO(martiniss) convert loop
     for test in basic_tests:

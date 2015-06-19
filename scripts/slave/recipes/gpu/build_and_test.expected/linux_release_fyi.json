@@ -174,10 +174,7 @@
       "gnome-keyring-daemon"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "killall gnome-keyring-daemon",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1"
-    ]
+    "name": "killall gnome-keyring-daemon"
   },
   {
     "allow_subannotations": true,

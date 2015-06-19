@@ -23,6 +23,6 @@ FYI_ONLY_GPU_ISOLATES = (
 
 # This will be folded into the list above once ANGLE is running on all
 # platforms.
-WIN_ONLY_GPU_ISOLATES = (
+WIN_AND_LINUX_ONLY_GPU_ISOLATES = (
   'angle_end2end_tests',
 )
