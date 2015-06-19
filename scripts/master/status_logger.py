@@ -13,7 +13,6 @@ import time
 from logging.handlers import TimedRotatingFileHandler
 
 from buildbot.status.base import StatusReceiverMultiService
-from twisted.internet.utils import getProcessOutputAndValue
 from twisted.python import log as twisted_log
 
 from common import chromium_utils
@@ -26,20 +25,15 @@ class StatusEventLogger(StatusReceiverMultiService):
   through a script in the infra/infra repository (separate checkout).
 
   A file, .logstatus, is used to configure the logger. If it exists then
-  file logging is enabled. If it parses as json, the keys infra_pipeline,
-  file_logging, infra_runpy, logging_ignore_basedir, logfile,
-  monitoring_script and log_pipeline_calls can be used to configure the logger
-  at runtime.
+  file logging is enabled. If it parses as json, the keys event_logging,
+  file_logging, logging_ignore_basedir, logfile, can be used to configure the
+  logger at runtime.
   """
 
-  DEFAULT_INFRA_RUNPY = '/home/chrome-bot/infra/run.py'
-  DEFAULT_MONITORING_SCRIPT = 'infra.tools.send_monitoring_event'
-  DEFAULT_MONITORING_TYPE = 'dry'
   DEFAULT_LOGGING_IGNORE_BASEDIR = False
-  DEFAULT_LOG_PIPELINE_CALLS = False
 
   def __init__(self, logfile='status.log', configfile='.logstatus',
-               basedir=None):
+               basedir=None, event_logging_dir=None):
     """Create a StatusEventLogger.
 
     Args:
@@ -48,26 +42,31 @@ class StatusEventLogger(StatusReceiverMultiService):
       basedir: the basedir of the configuration and log files. Set to the
                service's parent directory by default, mainly overridden for
                testing.
+      event_logging_dir: directory where to write events. This object adds the
+               master name to the path. Mainly overridden for testing.
     """
     self._logfile = self._original_logfile = logfile
     self._configfile = configfile
     self._basedir = basedir
     self.master_dir = os.path.basename(os.path.abspath(os.curdir))
 
+    self._event_logging_dir = os.path.join(
+      event_logging_dir or '/var/log/infra',
+      'status_logger-' + self.master_dir)
+
+    self._event_logfile = os.path.join(self._event_logging_dir, 'events.log')
+
     # These are defaults which may be overridden.
-    self.infra_runpy = self.DEFAULT_INFRA_RUNPY
-    self.monitoring_script = self.DEFAULT_MONITORING_SCRIPT
-    self.monitoring_type = self.DEFAULT_MONITORING_TYPE
     self.logging_ignore_basedir = self.DEFAULT_LOGGING_IGNORE_BASEDIR
-    self.log_pipeline_calls = self.DEFAULT_LOG_PIPELINE_CALLS
 
     # Will be initialized in startService.
     self.logger = None
+    self.event_logger = None
     self.status = None
     self._active = False
     self._last_checked_active = 0
-    self._pipeline = False
     self._logging = False
+    self._event_logging = False
     # Can't use super because StatusReceiverMultiService is an old-style class.
     StatusReceiverMultiService.__init__(self)
 
@@ -76,13 +75,9 @@ class StatusEventLogger(StatusReceiverMultiService):
         'basedir': self.basedir,
         'configfile': self.configfile,
         'file_logging': self._logging,
-        'infra_pipeline': self._pipeline,
-        'infra_runpy': self.infra_runpy,
-        'log_pipeline_calls': self.log_pipeline_calls,
+        'event_logging': self._event_logging,
         'logfile': self.logfile,
         'logging_ignore_basedir': self.logging_ignore_basedir,
-        'monitoring_script': self.monitoring_script,
-        'monitoring_type': self.monitoring_type,
     }
 
   def _configure(self, config_data):
@@ -90,20 +85,11 @@ class StatusEventLogger(StatusReceiverMultiService):
 
     self._logging = config_data.get(
         'file_logging', True)  # Preserve old behavior.
-    self._pipeline = config_data.get(
-        'infra_pipeline')
-    self.infra_runpy = config_data.get(
-        'infra_runpy', self.DEFAULT_INFRA_RUNPY)
+    self._event_logging = config_data.get('event_logging')
     self._logfile = config_data.get(
         'logfile', self._original_logfile)
-    self.log_pipeline_calls = config_data.get(
-        'log_pipeline_calls', self.DEFAULT_LOG_PIPELINE_CALLS)
     self.logging_ignore_basedir = config_data.get(
         'logging_ignore_basedir', self.DEFAULT_LOGGING_IGNORE_BASEDIR)
-    self.monitoring_script = config_data.get(
-        'monitoring_script', self.DEFAULT_MONITORING_SCRIPT)
-    self.monitoring_type = config_data.get(
-        'monitoring_type', self.DEFAULT_MONITORING_TYPE)
 
     new_config = self.as_dict()
     if new_config != old_config:
@@ -111,6 +97,13 @@ class StatusEventLogger(StatusReceiverMultiService):
           'Configuration change detected. Old:\n%s\n\nNew:\n%s\n' % (
               json.dumps(old_config, sort_keys=True, indent=2),
               json.dumps(new_config, sort_keys=True, indent=2)))
+
+    # Clean up if needed.
+    if not old_config['file_logging'] and new_config['file_logging']:
+      self._create_logger()
+
+    if not old_config['event_logging'] and new_config['event_logging']:
+      self._create_event_logger()
 
   @staticmethod
   def _get_requested_at_millis(build):
@@ -166,64 +159,89 @@ class StatusEventLogger(StatusReceiverMultiService):
 
         if not active_before:
           twisted_log.msg(
-              'Enabling status_logger. file_logger: %s / pipeline %s' % (
-                  self._logging, self._pipeline))
+              'Enabling status_logger. file_logger: %s / event_logging: %s' % (
+                  self._logging, self._event_logging))
       else:
-        self._configure({'file_logging': False})  # Reset to defaults.
+        self._configure({'file_logging': False,
+                         'event_logging': False})  # Reset to defaults.
 
       self._last_checked_active = now
     return self._active
 
-  def _construct_monitoring_event_args(
+  def _construct_monitoring_event_json(
       self, timestamp_kind, build_event_type, bot_name,
       builder_name, build_number, build_scheduled_ts,
       step_name=None, step_number=None):
-    args = [
-        self.monitoring_script,
-        '--event-mon-run-type=%s' % self.monitoring_type,
-        '--event-mon-timestamp-kind=%s' % timestamp_kind,
-        '--event-mon-service-name=buildbot/master/%s' % self.master_dir,
-        '--build-event-type=%s' % build_event_type,
-        '--build-event-hostname=%s' % bot_name,
-        '--build-event-build-name=%s' % builder_name,
-        '--build-event-build-number=%d' % build_number,
-        '--build-event-build-scheduling-time=%d' % build_scheduled_ts,
-    ]
+    # List options to pass to send_monitoring_event, without the --, to save
+    # a bit of space.
+    d = {'event-mon-timestamp-kind': timestamp_kind,
+         'event-mon-service-name': 'buildbot/master/%s' % self.master_dir,
+         'build-event-type': build_event_type,
+         'build-event-hostname': bot_name,
+         'build-event-build-name': builder_name,
+         'build-event-build-number': build_number,
+         'build-event-build-scheduling-time': build_scheduled_ts,
+       }
     if step_name:
-      args.append('--build-event-step-name=%s' % step_name)
-      args.append('--build-event-step-number=%s' % step_number)
-    return self.infra_runpy, args
-
-  def _subprocess_spawn(self, cmd, args):
-    """Spawns a subprocess and registers a logging error handler."""
-    cmd = chromium_utils.AbsoluteCanonicalPath(cmd)
-    full_cmd = map(str, [cmd] + args)
-
-    if self.log_pipeline_calls:
-      twisted_log.msg('Calling %s.' % full_cmd)
-    d = getProcessOutputAndValue(cmd, args)
-    def handleErrCode(res):
-      out, err, code = res
-      if code != 0:
-        twisted_log.msg('error running %s: %d\n%s\n%s' % (
-            full_cmd, code, out, err), logLevel=logging.ERROR)
-    d.addCallback(handleErrCode)
-    return d
+      d['build-event-step-name'] = step_name
+      d['build-event-step-number'] = step_number
+    return json.dumps(d)
 
   def send_build_event(self, timestamp_kind, build_event_type, bot_name,
                        builder_name, build_number, build_scheduled_ts,
                        step_name=None, step_number=None):
-    if self.active and self._pipeline:
-      return self._subprocess_spawn(
-          *self._construct_monitoring_event_args(
+    if self.active and self._event_logging:
+      self.event_logger.info(
+          self._construct_monitoring_event_json(
               timestamp_kind, build_event_type, bot_name, builder_name,
               build_number, build_scheduled_ts, step_name=step_name,
               step_number=step_number))
-    return None
 
-  def startService(self):
-    """Start the service and subscribe for updates."""
+  def _create_event_logger(self):
+    """Set up a logger for monitoring events.
+
+    If the destination directory does not exist, ignore data sent to
+    event_logger.
+    """
+    event_logging_dir_exists = os.path.isdir(self._event_logging_dir)
+    if not event_logging_dir_exists:
+      try:
+        os.mkdir(self._event_logging_dir)
+      except OSError:
+        twisted_log.msg('Logging directory cannot be created, no events will '
+                        'be written: %s', self._event_logging_dir)
+      else:
+        event_logging_dir_exists = True
+
+    logger = logging.getLogger(__name__ + '_event')
+    # Remove handlers that may already exist. This is useful when changing the
+    # log file name.
+    for handler in logger.handlers:
+      handler.flush()
+      logger.handlers = []
+
+    logger.propagate = False
+    logger.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(message)s')
+
+    if event_logging_dir_exists:
+      # Use delay=True so we don't open an empty file while self.active=False.
+      handler = TimedRotatingFileHandler(self._event_logfile,
+                                         when='M', interval=1, delay=True)
+    else:
+      handler = logging.NullHandler()
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    self.event_logger = logger
+
+  def _create_logger(self):
     logger = logging.getLogger(__name__)
+    # Remove handlers that may already exist. This is useful when changing the
+    # log file name.
+    for handler in logger.handlers:
+      handler.flush()
+      logger.handlers = []
+
     logger.propagate = False
     logger.setLevel(logging.INFO)
     # %(bbEvent)19s because builderChangedState is 19 characters long
@@ -235,6 +253,11 @@ class StatusEventLogger(StatusReceiverMultiService):
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     self.logger = logger
+
+  def startService(self):
+    """Start the service and subscribe for updates."""
+    self._create_logger()
+    self._create_event_logger()
 
     StatusReceiverMultiService.startService(self)
     self.status = self.parent.getStatus()
