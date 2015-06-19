@@ -21,7 +21,6 @@ def Update(config, active_master, c):
           'Win Builder (dbg)',
           'Win x64 GN',
           'Win x64 GN (dbg)',
-          'Win8 GN',
           'Win8 GN (dbg)',
       ]),
       Triggerable(name='win_rel_trigger', builderNames=[
@@ -59,7 +58,6 @@ def Update(config, active_master, c):
     {'name': 'Win8 Aura'},
     {'name': 'Win x64 GN', 'timeout': 3600},
     {'name': 'Win x64 GN (dbg)'},
-    {'name': 'Win8 GN', 'timeout': 3600},
     {'name': 'Win8 GN (dbg)'},
   ]
 
