@@ -32,13 +32,6 @@ from common import chromium_utils
 from slave import build_directory
 from slave import slave_utils
 
-# Define a bunch of directory paths (same as bot_update.py)
-CURRENT_DIR = os.path.abspath(os.getcwd())
-BUILDER_DIR = os.path.dirname(CURRENT_DIR)
-SLAVE_DIR = os.path.dirname(BUILDER_DIR)
-# GOMA_CACHE_DIR used for caching long-term data.
-GOMA_CACHE_DIR = os.path.join(SLAVE_DIR, 'goma_cache')
-
 # Path of the scripts/slave/ checkout on the slave, found by looking at the
 # current compile.py script's path's dirname().
 SLAVE_SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -136,13 +129,6 @@ def goma_setup(options, env):
   # compile locally. If goma cannot guarantee that, let it make compile
   # as error.
   env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
-
-  # Caches CRLs in GOMA_CACHE_DIR.
-  # Since downloading CRLs is usually slow, caching them may improves
-  # compiler_proxy start time.
-  if not os.path.exists(GOMA_CACHE_DIR):
-    os.mkdir(GOMA_CACHE_DIR, 0700)
-  env['GOMA_CACHE_DIR'] = GOMA_CACHE_DIR
 
   # Enable DepsCache. DepsCache caches the list of files to send goma server.
   # This will greatly improve build speed when cache is warmed.
