@@ -30,10 +30,21 @@ ifndef NO_REVISION_AUDIT
 	@echo "**  `python -c 'import datetime; print datetime.datetime.utcnow().isoformat() + "Z"'`	make $(MAKECMDGOALS)" >> actions.log
 endif
 
+notify:
+	@if (hostname -f | grep -q '^master.*\.chromium\.org'); then \
+		echo ; \
+		echo -e "\033[1;31m***"; \
+		echo "Are you manually restarting a master? This master is most likely"; \
+		echo "being managed by master manager. Check out 'Issuing a restart' at"; \
+		echo -e "\033[1;34mgo/master-manager\033[1;31m for more details."; \
+		echo -e "***\033[0m"; \
+		echo ; \
+	fi
+
 ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
-start: printstep bootstrap
+start: notify printstep bootstrap
 else
-start: printstep
+start: notify printstep
 endif
 ifndef NO_REVISION_AUDIT
 	@if [ ! -f "$(GCLIENT)" ]; then \
@@ -61,7 +72,7 @@ start-prof:
 endif
 	TWISTD_PROFILE=1 PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/common/twistd --no_save -y buildbot.tac
 
-stop: printstep
+stop: notify printstep
 ifndef NO_REVISION_AUDIT
 	@($(INFRA_RUNPY) infra.tools.send_monitoring_event \
                    --service-event-type=STOP \
@@ -74,13 +85,13 @@ endif
 
 	if `test -f twistd.pid`; then kill -TERM -$$(ps h -o pgid= $$(cat twistd.pid) | awk '{print $$1}'); fi;
 
-kill: printstep
+kill: notify printstep
 	if `test -f twistd.pid`; then kill -KILL -$$(ps h -o pgid= $$(cat twistd.pid) | awk '{print $$1}'); fi;
 
 reconfig: printstep
 	kill -HUP `cat twistd.pid`
 
-no-new-builds: printstep
+no-new-builds: notify printstep
 	kill -USR1 `cat twistd.pid`
 
 log:
@@ -99,7 +110,7 @@ last-restart:
 wait:
 	while `test -f twistd.pid`; do sleep 1; done;
 
-restart: stop wait start log
+restart: notify stop wait start log
 
 restart-prof: stop wait start-prof log
 
