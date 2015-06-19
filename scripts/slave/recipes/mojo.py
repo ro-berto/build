@@ -25,7 +25,7 @@ def _CheckoutSteps(api, buildername):
   api.gclient.runhooks()
 
 
-def _BuildSteps(api, buildername, build_type):
+def _BuildSteps(api, buildername, is_debug, is_official):
   mojob_path = api.path['checkout'].join('mojo', 'tools', 'mojob.py')
   args = []
   gn_args = []
@@ -45,6 +45,14 @@ def _BuildSteps(api, buildername, build_type):
     # warm.
     goma_dir = api.path['build'].join('goma')
   env = {}
+
+  if is_debug:
+    build_type = "--debug"
+  elif is_official:
+    build_type = "--official"
+  else:
+    build_type = "--release"
+
   if goma_dir:
     env['GOMA_DIR'] = goma_dir
   api.python('mojob gn',
@@ -97,6 +105,10 @@ def _GetTestConfig(api):
     raise NotImplementedError('Unknown platform')  # pragma: no cover
 
   test_config['is_debug'] = 'dbg' in buildername
+  if 'Official' in buildername:
+    # This is not reached, as we only have Android official builds.
+    raise NotImplementedError(
+        'Testing not supported for official builds') # pragma: no cover
 
   if 'Perf' in buildername:
     test_config['test_types'] = ['perf']
@@ -140,14 +152,19 @@ def _UploadShellAndApps(api, buildername):
   args = []
   if is_android:
     args.append('--android')
+    if 'Official' in buildername:
+      args.append('--official')
   api.python('upload shell and app binaries', upload_path, args)
 
 
 def RunSteps(api):
   buildername = api.properties.get('buildername')
   _CheckoutSteps(api, buildername)
-  build_type = '--debug' if 'dbg' in buildername else '--release'
-  _BuildSteps(api, buildername, build_type)
+
+  is_debug = 'dbg' in buildername
+  is_official = 'Official' in buildername
+
+  _BuildSteps(api, buildername, is_debug, is_official)
 
   is_linux = 'Linux' in buildername
   is_win = 'Win' in buildername
@@ -160,8 +177,8 @@ def RunSteps(api):
   if is_android and is_tester:
     _DeviceCheckStep(api)
 
-  upload_binaries = ((is_linux or is_android) and build_type == '--release'
-      and not is_try and not is_perf and not is_asan)
+  upload_binaries = ((is_linux or is_android)
+      and not is_debug and not is_try and not is_perf and not is_asan)
   if not is_tester and not is_linux and not is_win:
     # TODO(blundell): Eliminate this special case
     # once there's an Android release tester bot.
@@ -184,6 +201,7 @@ def GenTests(api):
       ['mojo_linux_asan', 'Mojo Linux ASan'],
       ['mojo_linux_asan_dbg', 'Mojo Linux ASan (dbg)'],
       ['mojo_android_builder', 'Mojo Android Builder'],
+      ['mojo_android_official', 'Mojo Android Official Builder'],
       ['mojo_android_dbg', 'Mojo Android (dbg)'],
       ['mojo_android_builder_tests_dbg', 'Mojo Android Builder Tests (dbg)'],
       ['mojo_win_dbg', 'Mojo Win (dbg)'],
