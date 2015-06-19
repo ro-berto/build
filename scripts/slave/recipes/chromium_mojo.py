@@ -62,7 +62,7 @@ def RunSteps(api):
     api.chromium.runtest('html_viewer_unittests')
     api.chromium.runtest('ipc_mojo_unittests')
     api.chromium.runtest('mojo_common_unittests')
-    api.chromium.runtest('mojo_public_application_unittest')
+    api.chromium.runtest('mojo_public_application_unittests')
     api.chromium.runtest('mojo_public_bindings_unittests')
     api.chromium.runtest('mojo_public_environment_unittests')
     api.chromium.runtest('mojo_public_system_unittests')
