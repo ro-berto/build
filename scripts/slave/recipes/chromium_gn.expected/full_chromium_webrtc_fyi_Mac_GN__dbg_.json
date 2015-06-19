@@ -91,26 +91,6 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
-      "gen",
-      "-v",
-      "-m",
-      "chromium.webrtc.fyi",
-      "-b",
-      "Mac GN (dbg)",
-      "--config-file",
-      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "//out/Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "generate_build_files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.webrtc.fyi.json",
       "/path/to/tmp/json"

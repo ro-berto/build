@@ -257,8 +257,6 @@ def _RunStepsInternal(api):
   # the runhooks step.
   api.chromium.runhooks()
 
-  api.chromium.run_mb(mastername, buildername, use_goma=True)
-
   # TODO(dpranke): Unify this with the logic in the chromium_trybot and
   # chromium recipes so that we can actually run the tests as well
   # and deapply patches and retry as need be.
@@ -290,6 +288,7 @@ def _RunStepsInternal(api):
             test_compile_targets,
             'trybot_analyze_config.json')
     if requires_compile:
+      api.chromium.run_mb(mastername, buildername, use_goma=True)
       api.chromium.compile(compile_targets,
                            force_clobber=force_clobber)
     tests = tests_in_compile_targets(api, compile_targets, tests)
