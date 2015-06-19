@@ -217,6 +217,15 @@ class AndroidApi(recipe_api.RecipeApi):
         infra_step=True,
         **kwargs)
 
+  def java_method_count(self, dexfile, name='java_method_count'):
+    self.m.chromium.runtest(
+        name,
+        [self.m.path['checkout'].join('build', 'android', 'method_count.py'),
+         dexfile],
+        results_url='https://chromeperf.appspot.com',
+        perf_id=self.m.properties['buildername'],
+        perf_dashboard_id='java_method_count')
+
   def check_webview_licenses(self, name='check licenses'):
     self.m.python(
         name,

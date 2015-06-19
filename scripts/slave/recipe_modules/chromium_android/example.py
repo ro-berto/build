@@ -70,8 +70,13 @@ BUILDERS = freeze({
         'max_battery_temp': 500,
     },
     'gerrit_try_builder': {
-      'build': True,
-      'skip_wipe': True,
+        'build': True,
+        'skip_wipe': True,
+    },
+    'java_method_count_builder': {
+        'build': True,
+        'skip_wipe': False,
+        'java_method_count': True,
     },
 })
 
@@ -107,6 +112,10 @@ def RunSteps(api):
     api.chromium_android.download_build('build-bucket',
                                               'build_product.zip')
   api.chromium_android.git_number()
+
+  if config.get('java_method_count'):
+    api.chromium_android.java_method_count(
+        api.chromium.output_dir.join('chrome_public_apk', 'classes.dex'))
 
   api.adb.root_devices()
   api.chromium_android.spawn_logcat_monitor()
