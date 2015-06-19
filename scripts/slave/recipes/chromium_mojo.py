@@ -41,8 +41,7 @@ BUILDERS = freeze({
 @recipe_api.composite_step
 def _RunApptests(api):
   runner = api.path['checkout'].join('mojo', 'tools', 'apptest_runner.py')
-  tests = api.path['checkout'].join('mojo', 'tools', 'data', 'apptests')
-  api.python('app_tests', runner, [tests, api.chromium.output_dir, '--verbose'])
+  api.python('app_tests', runner, [api.chromium.output_dir, '--verbose'])
 
 
 def RunSteps(api):
@@ -61,10 +60,18 @@ def RunSteps(api):
 
   with api.step.defer_results():
     api.chromium.runtest('html_viewer_unittests')
+    api.chromium.runtest('ipc_mojo_unittests')
     api.chromium.runtest('mojo_common_unittests')
+    api.chromium.runtest('mojo_public_application_unittest')
+    api.chromium.runtest('mojo_public_bindings_unittests')
+    api.chromium.runtest('mojo_public_environment_unittests')
+    api.chromium.runtest('mojo_public_system_unittests')
+    api.chromium.runtest('mojo_public_utility_unittests')
     api.chromium.runtest('mojo_runner_unittests')
     api.chromium.runtest('mojo_shell_unittests')
     api.chromium.runtest('mojo_surfaces_lib_unittests')
+    api.chromium.runtest('mojo_system_unittests')
+    api.chromium.runtest('mojo_view_manager_lib_unittests')
     api.chromium.runtest('resource_provider_unittests')
     api.chromium.runtest('view_manager_unittests')
     _RunApptests(api)
