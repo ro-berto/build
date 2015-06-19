@@ -124,7 +124,7 @@ class GclientApi(recipe_api.RecipeApi):
       return revision.resolve(self.m.properties)
     return revision
 
-  def sync(self, cfg, **kwargs):
+  def sync(self, cfg, with_branch_heads=False, **kwargs):
     revisions = []
     for i, s in enumerate(cfg.solutions):
       if s.safesync_url:  # prefer safesync_url in gclient mode
@@ -151,6 +151,8 @@ class GclientApi(recipe_api.RecipeApi):
         args = ['sync', '--nohooks', '--force', '--verbose']
         if cfg.delete_unversioned_trees:
           args.append('--delete_unversioned_trees')
+        if with_branch_heads:
+          args.append('--with_branch_heads')
         self('sync', args + revisions + ['--output-json', self.m.json.output()],
                    step_test_data=step_test_data,
                    **kwargs)
@@ -215,7 +217,8 @@ class GclientApi(recipe_api.RecipeApi):
             cfg.solutions[0].custom_vars[custom_var] = val
 
   def checkout(self, gclient_config=None, revert=RevertOnTryserver,
-               inject_parent_got_revision=True, **kwargs):
+               inject_parent_got_revision=True, with_branch_heads=False,
+               **kwargs):
     """Return a step generator function for gclient checkouts."""
     cfg = gclient_config or self.c
     assert cfg.complete()
@@ -237,9 +240,11 @@ class GclientApi(recipe_api.RecipeApi):
           if revert:
             self.revert(**kwargs)
         finally:
-          sync_step = self.sync(cfg, **kwargs)
+          sync_step = self.sync(cfg, with_branch_heads=with_branch_heads,
+                                **kwargs)
       else:
-        sync_step = self.sync(cfg, **kwargs)
+        sync_step = self.sync(cfg, with_branch_heads=with_branch_heads,
+                              **kwargs)
 
         cfg_cmds = [
           ('user.name', 'local_bot'),

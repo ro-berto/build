@@ -92,6 +92,7 @@
       "--force",
       "--verbose",
       "--delete_unversioned_trees",
+      "--with_branch_heads",
       "--output-json",
       "/path/to/tmp/json"
     ],

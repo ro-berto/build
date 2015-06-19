@@ -151,7 +151,7 @@ class AndroidApi(recipe_api.RecipeApi):
     result = self.m.bot_update.ensure_checkout(
         spec, refs=refs, with_branch_heads=with_branch_heads)
     if not result.json.output['did_run']:
-      result = self.m.gclient.checkout(spec)
+      result = self.m.gclient.checkout(spec, with_branch_heads=with_branch_heads)
 
     # TODO(sivachandra): Manufacture gclient spec such that it contains "src"
     # solution + repo_name solution. Then checkout will be automatically
