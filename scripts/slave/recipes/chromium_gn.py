@@ -21,24 +21,6 @@ DEPS = [
 
 
 BUILDERS = freeze({
-  'chromium.mac': {
-    'builders': {
-      'Mac GN': {
-        # TODO(dpranke): Remove once this bot is running chromium.py.
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'mac',
-        },
-      },
-      'Mac GN (dbg)': {
-        # TODO(dpranke): Remove once this bot is running chromium.py.
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'mac',
-        },
-      },
-    },
-  },
   'chromium.webkit': {
     'builders': {
       'Linux GN': {
@@ -72,114 +54,6 @@ BUILDERS = freeze({
       },
     },
   },
-  'chromium.chromiumos': {
-    'builders': {
-      'Linux ChromiumOS GN': {
-        # TODO(dpranke): Remove once this bot is running chromium.py.
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'chromeos',
-        },
-      },
-      'Linux ChromiumOS GN (dbg)': {
-        # TODO(dpranke): Remove once this bot is running chromium.py.
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'chromeos',
-        },
-      },
-    },
-  },
-  'chromium.linux': {
-    'builders': {
-      'Android GN': {
-        # TODO(dpranke): Remove once this bot is running chromium.py.
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-        },
-        'gclient_apply_config': ['android'],
-      },
-      'Android GN (dbg)': {
-        # TODO(dpranke): Remove once this bot is running chromium.py.
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-        },
-        'gclient_apply_config': ['android'],
-      },
-      'Linux GN': {
-        # TODO(dpranke): Remove once this bot is running chromium.py.
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-      },
-      'Linux GN Clobber': {
-        # TODO(dpranke): Remove once this bot is running chromium.py.
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-        'force_clobber': True,
-      },
-      'Linux GN (dbg)': {
-        # TODO(dpranke): Remove once this bot is running chromium.py.
-        'chromium_apply_config': ['gn_component_build'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-      },
-    },
-  },
-  'chromium.win': {
-    'builders': {
-      'Win x64 GN': {
-        # TODO(dpranke): Remove once this bot is running chromium.py.
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 64,
-        },
-      },
-     'Win x64 GN (dbg)': {
-        # TODO(dpranke): Remove once this bot is running chromium.py.
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 64,
-        },
-      },
-      'Win8 GN': {
-        # TODO(dpranke): Remove once this bot is running chromium.py.
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 32,
-        },
-      },
-     'Win8 GN (dbg)': {
-        # TODO(dpranke): Remove once this bot is running chromium.py.
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 32,
-        },
-      },
-    },
-  },
   'tryserver.chromium.linux': {
     'builders': {
       'android_chromium_gn_compile_rel': {
@@ -200,96 +74,7 @@ BUILDERS = freeze({
         },
         'gclient_apply_config': ['android'],
       },
-      'linux_chromium_gn_rel': {
-        # TODO(dpranke): Remove once this bot is running chromium_trybot.py.
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-      },
-      'linux_chromium_gn_dbg': {
-        'chromium_apply_config': ['gn_component_build'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-      },
-      'linux_chromium_gn_chromeos_rel': {
-        # TODO(dpranke): Remove once this bot is running chromium_trybot.py.
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'chromeos',
-        },
-      },
-      'linux_chromium_gn_chromeos_dbg': {
-        # TODO(dpranke): Remove once this bot is running chromium_trybot.py.
-        'chromium_apply_config': ['gn_component_build'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'chromeos',
-        },
-      },
     },
-  },
-  'tryserver.chromium.mac': {
-    'builders': {
-      'mac_chromium_gn_dbg': {
-        # TODO(dpranke): Remove once this bot is running chromium_trybot.py.
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'mac',
-        },
-      },
-      'mac_chromium_gn_rel': {
-        # TODO(dpranke): Remove once this bot is running chromium_trybot.py.
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'mac',
-        },
-      },
-    },
-  },
-  'tryserver.chromium.win': {
-    'builders': {
-      'win_chromium_gn_x64_dbg': {
-        # TODO(dpranke): Remove once this bot is running chromium_trybot.py.
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 64,
-        },
-      },
-      'win_chromium_gn_x64_rel': {
-        # TODO(dpranke): Remove once this bot is running chromium_trybot.py.
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 64,
-        },
-      },
-      'win8_chromium_gn_dbg': {
-        # TODO(dpranke): Remove once this bot is running chromium_trybot.py.
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 32,
-        },
-      },
-      'win8_chromium_gn_rel': {
-        # TODO(dpranke): Remove once this bot is shut down.
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 32,
-        },
-      },
-    }
   },
   'tryserver.v8': {
     'builders': {
@@ -571,9 +356,9 @@ def GenTests(api):
     api.platform.name('linux') +
     api.properties.tryserver(
         buildername='linux_chromium_gn_rel',
-        mastername='tryserver.chromium.linux') +
+        mastername='tryserver.blink') +
     api.step_data('compile', retcode=1) +
-    overrides['tryserver.chromium.linux']['linux_chromium_gn_rel']
+    overrides['tryserver.blink']['linux_chromium_gn_rel']
   )
 
   yield (
@@ -581,9 +366,9 @@ def GenTests(api):
     api.platform.name('linux') +
     api.properties.tryserver(
         buildername='linux_chromium_gn_rel',
-        mastername='tryserver.chromium.linux',
+        mastername='tryserver.blink',
         patch_project='v8') +
-    overrides['tryserver.chromium.linux']['linux_chromium_gn_rel']
+    overrides['tryserver.blink']['linux_chromium_gn_rel']
   )
 
   yield (
@@ -591,7 +376,7 @@ def GenTests(api):
     api.platform.name('linux') +
     api.properties.tryserver(
         buildername='linux_chromium_gn_rel',
-        mastername='tryserver.chromium.linux') +
+        mastername='tryserver.blink') +
     api.override_step_data(
         'read test spec',
         api.json.output({'linux_chromium_gn_rel': {
