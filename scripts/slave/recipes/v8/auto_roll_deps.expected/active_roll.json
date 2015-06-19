@@ -20,9 +20,24 @@
     "name": "check roll status",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Rolling deactivated@@@",
-      "@@@STEP_LOG_LINE@stdout@0@@@",
+      "@@@STEP_TEXT@Rolling activated@@@",
+      "@@@STEP_LOG_LINE@stdout@1@@@",
       "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/tools/pycurl.py",
+      "https://codereview.chromium.org/search?owner=v8-autoroll%40chromium.org&limit=30&closed=3&format=json",
+      "--outfile",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "check active roll",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Active rolls found.@@@"
     ]
   }
 ]
