@@ -240,6 +240,7 @@
     "stdout": "/path/to/tmp/"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -251,19 +252,21 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"java_method_count_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"java_method_count_builder\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=java_method_count",
       "--perf-id=java_method_count_builder",
-      "--step-name=java_method_count",
+      "--test-type=java_method_count",
+      "--step-name=method_count",
       "--builder-name=java_method_count_builder",
       "--slave-name=tehslave",
       "--build-number=571",
-      "java_method_count",
+      "--run-python-script",
       "[SLAVE_BUILD]/src/build/android/method_count.py",
       "[SLAVE_BUILD]/src/out/Release/chrome_public_apk/classes.dex"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "java_method_count"
+    "name": "method_count"
   },
   {
     "cmd": [
