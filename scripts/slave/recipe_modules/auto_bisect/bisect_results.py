@@ -103,8 +103,12 @@ class BisectResults(object):
     return self._make_header() + self._make_body() + self._make_footer()
 
   def _make_header(self):
+    # Unconditionally include this string at the top of the results since it is
+    # used by the dashboard to separate the bisect results from other buildbot
+    # output.
+    header = '---bisect results start here---\n'
     if not self.abort_reason:
-      header = _RESULTS_BANNER % {
+      header += _RESULTS_BANNER % {
           'status': self.status,
           'command': self.command,
           'metric': self.metric,
@@ -113,7 +117,7 @@ class BisectResults(object):
           'retest': 'Not Implemented.'
       }
     else:
-      header =  _ABORT_REASON_TEMPLATE % {
+      header +=  _ABORT_REASON_TEMPLATE % {
           'abort_reason': self.abort_reason,
           'bug_id': self.bug_id,
           'command': self.command,

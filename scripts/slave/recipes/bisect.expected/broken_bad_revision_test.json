@@ -616,6 +616,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Results",
-    "stdin": "\n===== BISECT JOB RESULTS =====\nStatus: Negative: Failed to bisect.\n\nTest Command: tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\nTest Metric: warm_times/page_load_time\nRelative Change: None\nEstimated Confidence: 0.00%\nRetested CL with revert: Not Implemented.\n\n\n===== TESTED REVISIONS =====\ncommit_pos revision_string mean_value std_err good_or_bad? tested? culprit? \n306475     306475          80         10      good         tested  False    \n\n\n\n| O O | Visit http://www.chromium.org/developers/speed-infra/perf-bug-faq\n|  X  | for more information addressing perf regression bugs. For feedback,\n| / \\ | file a bug with label Cr-Tests-AutoBisect.  Thank you!"
+    "stdin": "---bisect results start here---\n\n===== BISECT JOB RESULTS =====\nStatus: Negative: Failed to bisect.\n\nTest Command: tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\nTest Metric: warm_times/page_load_time\nRelative Change: None\nEstimated Confidence: 0.00%\nRetested CL with revert: Not Implemented.\n\n\n===== TESTED REVISIONS =====\ncommit_pos revision_string mean_value std_err good_or_bad? tested? culprit? \n306475     306475          80         10      good         tested  False    \n\n\n\n| O O | Visit http://www.chromium.org/developers/speed-infra/perf-bug-faq\n|  X  | for more information addressing perf regression bugs. For feedback,\n| / \\ | file a bug with label Cr-Tests-AutoBisect.  Thank you!"
   }
 ]
