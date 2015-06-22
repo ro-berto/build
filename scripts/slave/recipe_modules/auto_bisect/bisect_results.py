@@ -79,6 +79,8 @@ _DIRECTION_OF_IMPROVEMENT_ABORT_REASON = (
   'expected direction of improvement. Thus, likely represent an improvement '
   'and not a regression.')
 
+_REQUIRED_RESULTS_CONFIDENCE = 99.0
+
 
 class BisectResults(object):
 
@@ -171,11 +173,12 @@ class BisectResults(object):
       self.abort_reason = _DIRECTION_OF_IMPROVEMENT_ABORT_REASON
 
     if bisector.failed:
-      self.status = 'Failed'
-    elif bisector.warnings:
-      self.status = 'Complete'
+      self.status = 'Negative: Failed to bisect.'
+    elif self.results_confidence > _REQUIRED_RESULTS_CONFIDENCE:
+      self.status = 'Positive: A suspected commit was found.'
     else:
-      self.status = 'Successful'
+      self.status = ('Negative: Completed, but no culprit was found with '
+                     'high confidence.')
 
   def _set_culprit_attributes(self, culprit):
     self.culprit_cl_hash = None
