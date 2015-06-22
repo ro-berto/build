@@ -150,6 +150,18 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[isolate]/resources/find_isolated_tests.py",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out/Debug",
+      "--clean-isolated-files"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "clean isolated files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/tools/mb/mb.py",
       "gen",
       "-v",
@@ -167,18 +179,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "generate_build_files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[SLAVE_BUILD]/src/out/Debug",
-      "--clean-isolated-files"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clean isolated files"
   },
   {
     "allow_subannotations": true,

@@ -315,10 +315,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium_android.clean_local_files()
       self.m.chromium_android.run_tree_truth()
 
-    if self.m.chromium.c.project_generator.tool == 'mb':
-      self.m.chromium.run_mb(mastername, buildername, swarming_targets=[
-          t.name for t in tests_including_triggered if t.uses_swarming])
-
     if bot_type in ['builder', 'builder_tester']:
       isolated_targets = [
         t.isolate_target for t in tests_including_triggered if t.uses_swarming
@@ -326,6 +322,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if isolated_targets:
         self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
+
+      if self.m.chromium.c.project_generator.tool == 'mb':
+        self.m.chromium.run_mb(mastername, buildername, swarming_targets=[
+            t.name for t in tests_including_triggered if t.uses_swarming])
 
       self.transient_check(update_step, lambda transform_name:
         self.m.chromium.compile(compile_targets,
