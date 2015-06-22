@@ -108,7 +108,7 @@ def get_factory_properties_from_disk(mastername, buildername):
                         'returned %d):\n%s\n%s\n'% (
                         mastername, exit_code, out, err))
 
-    with open(fname, 'r') as f:
+    with open(fname, 'rU') as f:
       config = json.load(f)
 
   # Now extract just the factory properties for the requested builder
