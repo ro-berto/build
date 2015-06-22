@@ -390,7 +390,9 @@ def asan(c):
     fastbuild(c, invert=True, optional=False)
 
   c.gyp_env.GYP_DEFINES['asan'] = 1
-  c.gyp_env.GYP_DEFINES['lsan'] = 1
+  if c.TARGET_PLATFORM != 'android':
+    # LSAN isn't supported on Android.
+    c.gyp_env.GYP_DEFINES['lsan'] = 1
 
 @config_ctx(deps=['compiler'])
 def lsan(c):
