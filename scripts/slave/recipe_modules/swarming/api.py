@@ -589,35 +589,42 @@ class SwarmingApi(recipe_api.RecipeApi):
       step_result = self.m.python(
           name=self._get_step_name('', task),
           script=self.m.swarming_client.path.join('swarming.py'),
-          args=args,
-          step_test_data=lambda: step_test_data,
+          args=args, step_test_data=lambda: step_test_data,
           **kwargs)
+    finally:
+      # Regardless of the outcome of the test (pass or fail), we try to parse
+      # the results. If any error occurs while parsing results, then we set them
+      # to None, which will be treated as invalid test results by
+      # SwarmingTelemetryGPUTest class in recipe_modules/chromium/steps.py. Note
+      # that try-except block below will not mask the recipe_api.StepFailure
+      # exception from the collect step above. Instead it is being allowed to
+      # propagate after the results have been parsed.
+      try:
+        # Check if it's an internal failure.
+        summary = self.m.json.loads(
+            step_result.raw_io.output_dir['summary.json'])
+        if any(shard['internal_failure'] for shard in summary['shards']):
+          raise recipe_api.InfraFailure('Internal swarming failure.')
 
-      results_path = self.m.path.join('0', 'results.json')
-      results_raw = step_result.raw_io.output_dir.get(results_path)
+        # TODO(sergiyb): Combine telemetry results from multiple shards rather
+        # than assuming that there is always just one shard.
+        assert len(summary['shards']) == 1
+        results_raw = step_result.raw_io.output_dir[
+            self.m.path.join('0', 'results.json')]
 
-      # When swarming doesn't actually execute the test (e.g. when job timed
-      # out), the 'results.json' file wouldn't be created. This is equivalent
-      # to invalid/missing test results.
-      if results_raw is None:
-        step_result.telemetry_results = None
-      # GPU test launcher may bail out early with return code 0 and empty
-      # results file if there were no tests to run, e.g. when all tests are
-      # disabled on current platform.
-      # TODO(sergiyb): We should instead rewrite run_gpu_test.py to always
-      # write valid results.json regardless of the return code.
-      elif step_result.retcode == 0 and results_raw == '':
-        step_result.telemetry_results = {'per_page_values': [], 'pages': []}
-      else:
-        step_result.telemetry_results = self.m.json.loads(results_raw)
+        # GPU test launcher may bail out early with return code 0 and empty
+        # results file if there were no tests to run, e.g. when all tests are
+        # disabled on current platform.
+        # TODO(sergiyb): We should instead rewrite run_gpu_test.py to always
+        # write valid results.json regardless of the return code.
+        if step_result.retcode == 0 and results_raw == '':
+          step_result.telemetry_results = {'per_page_values': [], 'pages': []}
+        else:
+          step_result.telemetry_results = self.m.json.loads(results_raw)
 
-      summary_raw = step_result.raw_io.output_dir.get('summary.json')
-      if summary_raw:
-        self._display_pending(self.m.json.loads(summary_raw),
-                              step_result.presentation)
-    except Exception:
-      self.m.step.active_result.telemetry_results = None
-      raise
+        self._display_pending(summary, step_result.presentation)
+      except Exception:
+        self.m.step.active_result.telemetry_results = None
 
 
   def _get_step_name(self, prefix, task):

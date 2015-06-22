@@ -946,7 +946,7 @@ def GenTests(api):
   )
 
   yield (
-    api.test('telemetry_gpu_no_results') +
+    api.test('telemetry_gpu_no_summary') +
     props(
       mastername='tryserver.chromium.mac',
       buildername='mac_chromium_rel_ng',
@@ -954,6 +954,44 @@ def GenTests(api):
     api.platform.name('mac') +
     api.override_step_data('pixel_test on Intel GPU on Mac (with patch)',
                            api.raw_io.output_dir({'0/results.json': ''})) +
+    api.override_step_data('analyze',
+                           api.json.output({'status': 'Found dependency',
+                                            'targets': gpu_targets,
+                                            'build_targets': gpu_targets}))
+  )
+
+  yield (
+    api.test('telemetry_gpu_swarming_error') +
+    props(
+      mastername='tryserver.chromium.mac',
+      buildername='mac_chromium_rel_ng',
+    ) +
+    api.platform.name('mac') +
+    api.override_step_data(
+        'pixel_test on Intel GPU on Mac (with patch)',
+        api.raw_io.output_dir({
+          '0/results.json': '',
+          'summary.json': '{"shards": [{"internal_failure": true}]}'
+        })) +
+    api.override_step_data('analyze',
+                           api.json.output({'status': 'Found dependency',
+                                            'targets': gpu_targets,
+                                            'build_targets': gpu_targets}))
+  )
+
+  yield (
+    api.test('telemetry_gpu_no_results') +
+    props(
+      mastername='tryserver.chromium.mac',
+      buildername='mac_chromium_rel_ng',
+    ) +
+    api.platform.name('mac') +
+    api.override_step_data(
+        'pixel_test on Intel GPU on Mac (with patch)',
+        api.raw_io.output_dir({
+          '0/results.json': '',
+          'summary.json': '{"shards": [{"internal_failure": false}]}'
+        })) +
     api.override_step_data('analyze',
                            api.json.output({'status': 'Found dependency',
                                             'targets': gpu_targets,

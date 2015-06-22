@@ -123,11 +123,20 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                 '1': {'name': 'Test.Test2'}},
     }
 
+    jsonish_summary = {
+      'shards': [
+        {
+          'failure': not passing,
+          'internal_failure': False
+        }
+      ]
+    }
+
     swarming_path = '0\\results.json' if is_win else '0/results.json'
     results_path = swarming_path if swarming else 'results.json'
     files_dict = {
       results_path: json.dumps(jsonish_results),
-      'summary.json': '{}'
+      'summary.json': json.dumps(jsonish_summary)
     }
     return self.m.raw_io.output_dir(files_dict)
 
