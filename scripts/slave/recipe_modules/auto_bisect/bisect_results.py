@@ -89,6 +89,7 @@ class BisectResults(object):
           'Invalid parameter, the bisect must be over by the time the '
           'BisectResults constructor is called')  # pragma: no cover
     self._bisector = bisector
+    self.abort_reason = None
     self.culprit_cl_hash = None
     self.commit_info = None
     self.culprit_author = None
@@ -100,7 +101,7 @@ class BisectResults(object):
     return self._make_header() + self._make_body() + self._make_footer()
 
   def _make_header(self):
-    if not self.status == 'Aborted':
+    if not self.abort_reason:
       header = _RESULTS_BANNER % {
           'status': self.status,
           'command': self.command,
@@ -164,14 +165,13 @@ class BisectResults(object):
 
     self._set_culprit_attributes(bisector.culprit)
 
-    if bisector.failed:
-      self.status = 'Failed'
-    elif bisector.failed_confidence:
-      self.status = 'Aborted'
+    if bisector.failed_confidence:
       self.abort_reason = _NO_CONFIDENCE_ABORT_REASON
     elif bisector.failed_direction:
-      self.status = 'Aborted'
       self.abort_reason = _DIRECTION_OF_IMPROVEMENT_ABORT_REASON
+
+    if bisector.failed:
+      self.status = 'Failed'
     elif bisector.warnings:
       self.status = 'Complete'
     else:
