@@ -467,7 +467,8 @@ def _RunStepsInternal(api):
           affected_files,
           all_compile_targets(api, tests + tests_including_triggered),
           compile_targets,
-          'trybot_analyze_config.json')
+          'trybot_analyze_config.json',
+          legacy_postprocess=False)
 
   if not requires_compile:
     return

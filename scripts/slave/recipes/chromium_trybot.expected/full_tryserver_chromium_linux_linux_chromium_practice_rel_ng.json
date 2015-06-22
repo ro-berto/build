@@ -171,8 +171,8 @@
       "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromium_swarm_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"blink_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"chromium_swarm_tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"blink_tests\", @@@",
@@ -219,8 +219,8 @@
       "--goma-disable-local-fallback",
       "--ninja-ensure-up-to-date",
       "--",
-      "chromium_swarm_tests",
-      "blink_tests"
+      "blink_tests",
+      "chromium_swarm_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile (with patch)"

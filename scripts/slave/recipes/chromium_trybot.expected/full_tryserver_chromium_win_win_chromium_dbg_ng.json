@@ -194,8 +194,8 @@
       "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"crash_service\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromium_builder_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"chromium_builder_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"crash_service\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chromium_builder_tests\", @@@",
@@ -238,8 +238,8 @@
       "--goma-disable-local-fallback",
       "--ninja-ensure-up-to-date",
       "--",
-      "crash_service",
-      "chromium_builder_tests"
+      "chromium_builder_tests",
+      "crash_service"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile (with patch)"
