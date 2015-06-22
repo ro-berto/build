@@ -34,11 +34,17 @@ class Build(object):
   def getProperty(self, _name):
     return 1427929423.0
 
+  def getTimes(self):
+    return 5000, 6000
+
 
 class Step(object):
   step_number = 8
   def getName(self):
     return 'reticulating_splines'
+
+  def getTimes(self):
+    return 5100, 5500
 
 
 @contextlib.contextmanager

@@ -168,34 +168,26 @@ class StatusEventLogger(StatusReceiverMultiService):
       self._last_checked_active = now
     return self._active
 
-  def _construct_monitoring_event_json(
-      self, timestamp_kind, build_event_type, bot_name,
-      builder_name, build_number, build_scheduled_ts,
-      step_name=None, step_number=None):
-    # List options to pass to send_monitoring_event, without the --, to save
-    # a bit of space.
-    d = {'event-mon-timestamp-kind': timestamp_kind,
-         'event-mon-service-name': 'buildbot/master/%s' % self.master_dir,
-         'build-event-type': build_event_type,
-         'build-event-hostname': bot_name,
-         'build-event-build-name': builder_name,
-         'build-event-build-number': build_number,
-         'build-event-build-scheduling-time': build_scheduled_ts,
-       }
-    if step_name:
-      d['build-event-step-name'] = step_name
-      d['build-event-step-number'] = step_number
-    return json.dumps(d)
-
-  def send_build_event(self, timestamp_kind, build_event_type, bot_name,
-                       builder_name, build_number, build_scheduled_ts,
+  def send_build_event(self, timestamp_kind, timestamp, build_event_type,
+                       bot_name, builder_name, build_number, build_scheduled_ts,
                        step_name=None, step_number=None):
     if self.active and self._event_logging:
-      self.event_logger.info(
-          self._construct_monitoring_event_json(
-              timestamp_kind, build_event_type, bot_name, builder_name,
-              build_number, build_scheduled_ts, step_name=step_name,
-              step_number=step_number))
+      # List options to pass to send_monitoring_event, without the --, to save
+      # a bit of space.
+      d = {'event-mon-timestamp-kind': timestamp_kind,
+           'event-mon-event-timestamp': timestamp,
+           'event-mon-service-name': 'buildbot/master/%s' % self.master_dir,
+           'build-event-type': build_event_type,
+           'build-event-hostname': bot_name,
+           'build-event-build-name': builder_name,
+           'build-event-build-number': build_number,
+           'build-event-build-scheduling-time': build_scheduled_ts,
+         }
+      if step_name:
+        d['build-event-step-name'] = step_name
+        d['build-event-step-number'] = step_number
+
+      self.event_logger.info(json.dumps(d))
 
   def _create_event_logger(self):
     """Set up a logger for monitoring events.
@@ -226,7 +218,7 @@ class StatusEventLogger(StatusReceiverMultiService):
 
     if event_logging_dir_exists:
       # Use delay=True so we don't open an empty file while self.active=False.
-      handler = TimedRotatingFileHandler(self._event_logfile,
+      handler = TimedRotatingFileHandler(self._event_logfile, backupCount=120,
                                          when='M', interval=1, delay=True)
     else:
       handler = logging.NullHandler()
@@ -295,8 +287,9 @@ class StatusEventLogger(StatusReceiverMultiService):
     build_number = build.getNumber()
     bot = build.getSlavename()
     self.log('buildStarted', '%s, %d, %s', builderName, build_number, bot)
+    started, _ = build.getTimes()
     self.send_build_event(
-        'BEGIN', 'BUILD', bot, builderName, build_number,
+        'BEGIN', started * 1000, 'BUILD', bot, builderName, build_number,
         self._get_requested_at_millis(build))
     # Must return self in order to subscribe to stepStarted/Finished events.
     return self
@@ -314,8 +307,9 @@ class StatusEventLogger(StatusReceiverMultiService):
     build_number = build.getNumber()
     step_name = step.getName()
     self.log('stepStarted', '%s, %d, %s', builder_name, build_number, step_name)
+    started, _ = step.getTimes()
     self.send_build_event(
-        'BEGIN', 'STEP', bot, builder_name, build_number,
+        'BEGIN', started * 1000, 'STEP', bot, builder_name, build_number,
         self._get_requested_at_millis(build),
         step_name=step_name, step_number=step.step_number)
     # Must return self in order to subscribe to logStarted/Finished events.
@@ -377,8 +371,9 @@ class StatusEventLogger(StatusReceiverMultiService):
     step_name = step.getName()
     self.log('stepFinished', '%s, %d, %s, %r',
              builder_name, build_number, step_name, results)
+    _, finished = step.getTimes()
     self.send_build_event(
-        'END', 'STEP', bot, builder_name, build_number,
+        'END', finished * 1000, 'STEP', bot, builder_name, build_number,
         self._get_requested_at_millis(build),
         step_name=step_name, step_number=step.step_number)
 
@@ -387,8 +382,9 @@ class StatusEventLogger(StatusReceiverMultiService):
     bot = build.getSlavename()
     self.log('buildFinished', '%s, %d, %s, %r',
              builderName, build_number, bot, results)
+    _, finished = build.getTimes()
     self.send_build_event(
-        'END', 'BUILD', bot, builderName, build_number,
+        'END', finished * 1000, 'BUILD', bot, builderName, build_number,
         self._get_requested_at_millis(build))
 
   def builderRemoved(self, builderName):
