@@ -304,7 +304,7 @@ def _wait_for_revisions(bisector, revisions_to_check):
   while revisions_to_check:
     completed_revision = bisector.wait_for_any(revisions_to_check)
     revisions_to_check.remove(completed_revision)
-    if not completed_revision.aborted:
+    if not(completed_revision.aborted or completed_revision.failed):
       if bisector.check_bisect_finished(completed_revision):
         bisector.bisect_over = True
       bisector.abort_unnecessary_jobs()

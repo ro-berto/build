@@ -23,7 +23,7 @@ SHORT_INTERVAL = 0.4
 # interval.
 LONG_INTERVAL = 60
 # If the 'timeout' interval elapses without any URL becoming ready, we fail.
-TIMEOUT_INTERVAL = 60 * 60
+timeout_interval = 60 * 60
 # Global gsutil path, expected to be set by main.
 gsutil_path = ''
 
@@ -45,8 +45,13 @@ def _gs_file_exists(url):
 
 
 def main(argv):
+  global timeout_interval
+  if argv[-1].startswith('--timeout='):
+    timeout_interval = int(argv[-1].split('=')[1])
+    argv = argv[:-1]
+
   if len(argv) < 3:
-    usage = "Usage: %s <gsutil path> url1 [url2 [url3...]]"
+    usage = "Usage: %s <gsutil path> url1 [url2 [url3...]] [--timeout=<seconds>]"
     print usage % argv[0]
     return 1
 
@@ -61,7 +66,7 @@ def main(argv):
       if _gs_file_exists(url):
           print 'Build finished: ', url
           return 0
-    if time.time() - start_time > TIMEOUT_INTERVAL:
+    if time.time() - start_time > timeout_interval:
       print "Timed out waiting for: ", urls
       return 1
     time.sleep(LONG_INTERVAL)

@@ -458,11 +458,17 @@ class Bisector(object):
     url_mapping = {r.get_next_url(): r for r in revision_list}
     url_list = url_mapping.keys()
     args_list += [url for url in url_list if url and url is not None]
-    step_result = self.api.m.python(
-        str(name),
-        script,
-        args_list,
-        stdout=self.api.m.raw_io.output())
+    try:
+      step_result = self.api.m.python(
+          str(name),
+          script,
+          args_list,
+          stdout=self.api.m.raw_io.output())
+    except self.api.m.step.StepFailure:  # pragma: no cover
+      # StepFailure is interpreted as a timeout.
+      for revision in revision_list:
+        revision.status = RevisionState.FAILED
+      return None
     step_output = step_result.stdout or 'Build finished: Unknown'
     for line in step_output.splitlines():
       if line.startswith('Build finished: '):
