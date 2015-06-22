@@ -8,6 +8,11 @@
     "name": "config"
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Resolving reference range"
+  },
+  {
     "cmd": [
       "git",
       "log",
@@ -18,8 +23,11 @@
       "refs/heads/master"
     ],
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "resolving commit_pos 314017",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving reference range.resolving commit_pos 314017",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -29,8 +37,11 @@
       "dcdcdc0ff1122212323134879ddceeb1240b0988"
     ],
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving reference range.resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -43,8 +54,11 @@
       "refs/heads/master"
     ],
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "resolving commit_pos 314015",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving reference range.resolving commit_pos 314015",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -54,8 +68,16 @@
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving reference range.resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Expanding revision range"
   },
   {
     "cmd": [
@@ -65,8 +87,11 @@
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111...dcdcdc0ff1122212323134879ddceeb1240b0988"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Expanding revision range for revisions 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111:dcdcdc0ff1122212323134879ddceeb1240b0988",
-    "stdout": "/path/to/tmp/"
+    "name": "Expanding revision range.for revisions 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111:dcdcdc0ff1122212323134879ddceeb1240b0988",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -76,8 +101,11 @@
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
-    "stdout": "/path/to/tmp/"
+    "name": "Expanding revision range.resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -90,8 +118,11 @@
       "refs/heads/master"
     ],
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "resolving commit_pos 314016",
-    "stdout": "/path/to/tmp/"
+    "name": "Expanding revision range.resolving commit_pos 314016",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [

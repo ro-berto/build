@@ -83,6 +83,11 @@
     "name": "config"
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Resolving reference range"
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -90,8 +95,11 @@
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving reference range.resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -100,8 +108,9 @@
       "import sys; sys.exit(1)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Recipe failed. Reason: Failed to resolve commit position - Could not parse commit position from git output: ",
+    "name": "Resolving reference range.Recipe failed. Reason: Failed to resolve commit position - Could not parse commit position from git output: ",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys; sys.exit(1)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]

@@ -8,6 +8,11 @@
     "name": "config"
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Resolving reference range"
+  },
+  {
     "cmd": [
       "git",
       "log",
@@ -18,8 +23,11 @@
       "refs/heads/master"
     ],
     "cwd": "[TMP_BASE]/bogus_tmp_1",
-    "name": "resolving commit_pos 314017",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving reference range.resolving commit_pos 314017",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -29,8 +37,11 @@
       "deadbeef"
     ],
     "cwd": "[TMP_BASE]/bogus_tmp_1",
-    "name": "resolving hash deadbeef",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving reference range.resolving hash deadbeef",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -43,8 +54,11 @@
       "refs/heads/master"
     ],
     "cwd": "[TMP_BASE]/bogus_tmp_1",
-    "name": "resolving commit_pos 314015",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving reference range.resolving commit_pos 314015",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -54,8 +68,11 @@
       "c001c0de"
     ],
     "cwd": "[TMP_BASE]/bogus_tmp_1",
-    "name": "resolving hash c001c0de",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving reference range.resolving hash c001c0de",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [

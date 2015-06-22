@@ -124,6 +124,7 @@ def GenTests(api):
 def _get_basic_test_data():
   return [
       {
+          'refrange': True,
           'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
           'commit_pos': '314015',
           'test_results': {
@@ -164,6 +165,7 @@ def _get_basic_test_data():
           'DEPS_interval': {'v8': '004 003 002'.split()},
       },
       {
+          'refrange': True,
           'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
           'commit_pos': '314017',
           'test_results': {
@@ -181,6 +183,7 @@ def _get_basic_test_data():
 def _get_reversed_basic_test_data():
   return [
       {
+          'refrange': True,
           'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
           'commit_pos': '314015',
           'test_results': {
@@ -216,6 +219,7 @@ def _get_reversed_basic_test_data():
           },
       },
       {
+          'refrange': True,
           'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
           'commit_pos': '314017',
           'test_results': {
@@ -252,7 +256,7 @@ def _get_revision_range_step_data(api, range_data):
   # excluding min_rev).
   simulated_git_log_output  = '\n'.join(
       [d['hash'] for d in range_data[:-1]])
-  step_name = ('Expanding revision range for revisions %s:%s' %
+  step_name = ('Expanding revision range.for revisions %s:%s' %
                (min_rev, max_rev))
   result = api.step_data(step_name, stdout=api.raw_io.output(
       simulated_git_log_output))
@@ -287,11 +291,15 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
   commit_hash = revision_data['hash']
   test_results = revision_data['test_results']
 
-  step_name = 'resolving commit_pos ' + commit_pos
+  if 'refrange' in revision_data:
+    parent_step = 'Resolving reference range.'
+  else:
+    parent_step = 'Expanding revision range.'
+  step_name = parent_step + 'resolving commit_pos ' + commit_pos
   yield api.step_data(step_name, stdout=api.raw_io.output('hash:' +
                                                           commit_hash))
 
-  step_name = 'resolving hash ' + commit_hash
+  step_name = parent_step + 'resolving hash ' + commit_hash
   commit_pos_str = 'refs/heads/master@{#%s}' % commit_pos
   yield api.step_data(step_name, stdout=api.raw_io.output(commit_pos_str))
 

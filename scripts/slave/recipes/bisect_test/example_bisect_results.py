@@ -86,10 +86,10 @@ def set_attributes(target, attributes):
       setattr(target, k, v)
 
 def add_revision_mapping(api, test, pos, sha):
-  step_name = 'resolving commit_pos ' + pos
+  step_name = 'Resolving reference range.resolving commit_pos ' + pos
   stdout = api.raw_io.output('hash:' + sha)
   test += api.step_data(step_name, stdout=stdout)
-  step_name = 'resolving hash ' + sha
+  step_name = 'Resolving reference range.resolving hash ' + sha
   pos = 'refs/heads/master@{#%s}' % pos
   stdout = api.raw_io.output(pos)
   test += api.step_data(step_name, stdout=stdout)

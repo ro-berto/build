@@ -83,6 +83,11 @@
     "name": "config"
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Resolving reference range"
+  },
+  {
     "cmd": [
       "git",
       "footers",
@@ -90,8 +95,11 @@
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving reference range.resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -104,8 +112,11 @@
       "refs/heads/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "resolving commit_pos 306478",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving reference range.resolving commit_pos 306478",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -118,8 +129,11 @@
       "refs/heads/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "resolving commit_pos 306475",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving reference range.resolving commit_pos 306475",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -129,8 +143,11 @@
       "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155",
-    "stdout": "/path/to/tmp/"
+    "name": "Resolving reference range.resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -139,8 +156,9 @@
       "import sys; sys.exit(1)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Recipe failed. Reason: Failed to resolve commit position - Could not parse commit position from git output: UnCastable",
+    "name": "Resolving reference range.Recipe failed. Reason: Failed to resolve commit position - Could not parse commit position from git output: UnCastable",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys; sys.exit(1)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]

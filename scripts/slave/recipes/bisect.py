@@ -12,6 +12,7 @@ DEPS = [
     'test_utils',
     'chromium_tests',
     'raw_io',
+    'step',
     'halt',
 ]
 
@@ -30,7 +31,8 @@ def RunSteps(api):
     bisect_config = api.properties.get('bisect_config')
   assert isinstance(bisect_config, collections.Mapping)
   bisector = api.auto_bisect.create_bisector(bisect_config)
-  _gather_reference_range(api, bisector)
+  with api.step.nest('Gathering reference values'):
+    _gather_reference_range(api, bisector)
   if (not bisector.failed and bisector.check_improvement_direction() and
       bisector.check_regression_confidence()):
     if not bisector.check_bisect_finished(bisector.good_rev):
@@ -105,6 +107,7 @@ def GenTests(api):
   def test_data():
     return [
       {
+          'refrange': True,
           'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
           'commit_pos': '306478',
           'test_results': {
@@ -145,6 +148,7 @@ def GenTests(api):
           }
       },
       {
+          'refrange': True,
           'hash': 'e28dc0d49c331def2a3bbf3ddd0096eb51551155',
           'commit_pos': '306475',
           'test_results': {
@@ -213,7 +217,7 @@ def _get_revision_range_step_data(api, range_data):
   # excluding min_rev).
   simulated_git_log_output  = '\n'.join(
       [d['hash'] for d in range_data[:-1]])
-  step_name = ('Expanding revision range for revisions %s:%s' %
+  step_name = ('Expanding revision range.for revisions %s:%s' %
                (min_rev, max_rev))
   result = api.step_data(step_name, stdout=api.raw_io.output(
       simulated_git_log_output))
@@ -226,14 +230,19 @@ def _get_step_data_for_revision(api, revision_data, broken_cp=None,
   commit_hash = revision_data['hash']
   test_results = revision_data['test_results']
 
-  step_name = 'resolving commit_pos ' + commit_pos
+  if 'refrange' in revision_data:
+    parent_step = 'Resolving reference range.'
+  else:
+    parent_step = 'Expanding revision range.'
+
+  step_name = parent_step + 'resolving commit_pos ' + commit_pos
   if commit_pos == broken_cp:
     yield api.step_data(step_name, stdout=api.raw_io.output(''))
   else:
     yield api.step_data(step_name, stdout=api.raw_io.output('hash:' +
                                                             commit_hash))
 
-  step_name = 'resolving hash ' + commit_hash
+  step_name = parent_step + 'resolving hash ' + commit_hash
   if commit_hash == broken_hash:
     yield api.step_data(step_name, stdout=api.raw_io.output('UnCastable'))
   else:
@@ -242,6 +251,10 @@ def _get_step_data_for_revision(api, revision_data, broken_cp=None,
 
   if not skip_results:
     step_name = 'gsutil Get test results for build ' + commit_hash
+    if 'refrange' in revision_data:
+      step_name = 'Gathering reference values.' + step_name
+    else:
+      step_name = 'Working on revision %s.' % commit_hash + step_name
     yield api.step_data(step_name, stdout=api.raw_io.output(json.dumps(
         test_results)))
 
@@ -287,9 +300,11 @@ def _bisect_main_loop(bisector):
     if not revisions_to_check:  # pragma: no cover
       bisector.bisect_over = True
       break
-    for r in revisions_to_check:
-      r.start_job()
-    _wait_for_revisions(bisector, revisions_to_check)
+    with bisector.api.m.step.nest('Working on revision ' +
+                                  revisions_to_check[0].revision_string):
+      for r in revisions_to_check:
+        r.start_job()
+      _wait_for_revisions(bisector, revisions_to_check)
 
 
 def _wait_for_revisions(bisector, revisions_to_check):

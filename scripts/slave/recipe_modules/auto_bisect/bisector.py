@@ -65,11 +65,12 @@ class Bisector(object):
     self.relative_change = None
 
     # Initial revision range
-    self.revisions = []
-    self.bad_rev = revision_class(bisect_config['bad_revision'], self)
-    self.bad_rev.bad = True
-    self.good_rev = revision_class(bisect_config['good_revision'], self)
-    self.good_rev.good = True
+    with api.m.step.nest('Resolving reference range'):
+      self.revisions = []
+      self.bad_rev = revision_class(bisect_config['bad_revision'], self)
+      self.bad_rev.bad = True
+      self.good_rev = revision_class(bisect_config['good_revision'], self)
+      self.good_rev.good = True
     if init_revisions:
       self._expand_revision_range()
 
@@ -222,7 +223,7 @@ class Bisector(object):
 
   def _get_rev_range(self, min_rev, max_rev):
     depot_path = self.api.m.path['slave_build'].join('src')
-    step_name = ('Expanding revision range for revisions %s:%s' %
+    step_name = ('for revisions %s:%s' %
                  (min_rev, max_rev))
     step_result = self.api.m.git('log', '--format=%H', min_rev + '...' +
                                  max_rev, stdout=self.api.m.raw_io.output(),
@@ -258,11 +259,12 @@ class Bisector(object):
     After running this method, self.revisions should contain all the chromium
     revisions between the good and bad revisions.
     """
-    rev_list = self._get_rev_range(self.good_rev.commit_hash,
-                                   self.bad_rev.commit_hash)
-    intermediate_revs = [self.revision_class(str(x), self) for x in rev_list]
-    self.revisions = [self.good_rev] + intermediate_revs + [self.bad_rev]
-    self._update_revision_list_indexes()
+    with self.api.m.step.nest('Expanding revision range'):
+      rev_list = self._get_rev_range(self.good_rev.commit_hash,
+                                     self.bad_rev.commit_hash)
+      intermediate_revs = [self.revision_class(str(x), self) for x in rev_list]
+      self.revisions = [self.good_rev] + intermediate_revs + [self.bad_rev]
+      self._update_revision_list_indexes()
 
   def _expand_deps_revisions(self, revision_to_expand):
     """Populates the revisions attribute with additional deps revisions.
