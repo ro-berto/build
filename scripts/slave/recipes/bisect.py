@@ -34,7 +34,7 @@ def RunSteps(api):
   with api.step.nest('Gathering reference values'):
     _gather_reference_range(api, bisector)
   if (not bisector.failed and bisector.check_improvement_direction() and
-      bisector.check_regression_confidence()):
+      bisector.check_initial_confidence()):
     if not bisector.check_bisect_finished(bisector.good_rev):
       _bisect_main_loop(bisector)
   else:  # pragma: no cover
@@ -85,7 +85,7 @@ def GenTests(api):
       'gs_bucket': 'chrome-perf',
       'builder_host': 'master4.golo.chromium.org',
       'builder_port': '8341',
-      'dummy_regression_confidence': '95',
+      'dummy_initial_confidence': '95',
       'poll_sleep': 0,
       'dummy_builds': True,
   }

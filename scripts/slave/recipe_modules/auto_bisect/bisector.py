@@ -38,8 +38,8 @@ class Bisector(object):
 
     # Test-only properties.
     # TODO: Replace these with proper mod_test_data
-    self.dummy_regression_confidence = bisect_config.get(
-        'dummy_regression_confidence')
+    self.dummy_initial_confidence = bisect_config.get(
+        'dummy_initial_confidence')
     self.dummy_builds = bisect_config.get('dummy_builds', False)
 
     # Loading configuration items
@@ -47,15 +47,15 @@ class Bisector(object):
     self.improvement_direction = int(bisect_config.get(
         'improvement_direction', 0)) or None
 
-    self.required_regression_confidence = bisect_config.get(
-        'required_regression_confidence', 95)
+    self.required_initial_confidence = bisect_config.get(
+        'required_initial_confidence', 95)
 
     self.warnings = []
 
     # Status flags
-    self.initial_regression_confidence = None
+    self.initial_confidence = None
     self.results_confidence = None
-    self.failed_confidence = False
+    self.failed_initial_confidence = False
     self.failed = False
     self.failed_direction = False
     self.lkgr = None  # Last known good revision
@@ -344,34 +344,34 @@ class Bisector(object):
                          'an improvement rather than a regression, given the '
                          'expected direction of improvement.')
 
-  def check_regression_confidence(self):
+  def check_initial_confidence(self):
     """Checks that the initial range presents a clear enough regression.
 
-    We calculate the confidence score of the results of 'good' and 'bad'
-    revisions and compare it against the required regression confidence set for
-    the bisector.
+    We calculate the confidence of the results of the given 'good'
+    and 'bad' revisions and compare it against the required confidence
+    set for the bisector.
 
-    Note that when a dummy regression confidence value has been set via that
+    Note that when a dummy regression confidence value has been set, that
     is used instead.
     """
     if self.test_type != 'perf':
       raise NotImplementedError()  # pragma: no cover
 
-    if self.required_regression_confidence is None:
+    if self.required_initial_confidence is None:
       return True  # pragma: no cover
 
-    if self.dummy_regression_confidence is not None:
-      self.initial_regression_confidence = float(
-          self.dummy_regression_confidence)
+    if self.dummy_initial_confidence is not None:
+      self.initial_confidence = float(
+          self.dummy_initial_confidence)
+
     else:  # pragma: no cover
-      self.initial_regression_confidence = (
+      self.initial_confidence = (
           self.api.m.math_utils.confidence_score(
               self.good_rev.values,
               self.bad_rev.values))
-    if (self.initial_regression_confidence <
-        self.required_regression_confidence):  # pragma: no cover
-      self._set_insufficient_confidence_warning(
-          self.initial_regression_confidence)
+    if (self.initial_confidence <
+        self.required_initial_confidence):  # pragma: no cover
+      self._set_insufficient_confidence_warning(self.initial_confidence)
       return False
     return True
 
@@ -382,11 +382,11 @@ class Bisector(object):
   def _set_insufficient_confidence_warning(
       self, actual_confidence):  # pragma: no cover
     """Adds a warning about the lack of initial regression confidence."""
-    self.failed_confidence = True
+    self.failed_initial_confidence = True
     self.warnings.append(
         ('Bisect failed to reproduce the regression with enough confidence. '
          'Needed {:.2f}%, got {:.2f}%.').format(
-             self.required_regression_confidence, actual_confidence))
+             self.required_initial_confidence, actual_confidence))
 
   def _compute_results_confidence(self):
     self.results_confidence = self.api.m.math_utils.confidence_score(

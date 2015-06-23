@@ -115,43 +115,43 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
     self.assertTrue(bisector.check_improvement_direction())
     self.assertNotIn('direction of improvement', ''.join(bisector.warnings))
 
-  def test_check_regression_confidence_default(self):
+  def test_check_initial_confidence_default(self):
     # Test default required confidence (default may change)
     mock_score = self.dummy_api.m.math_utils.confidence_score
     # A confidence score of 0 should not satisfy any default
     mock_score.return_value = 0
     bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
-    self.assertFalse(bisector.check_regression_confidence())
-    self.assertTrue(bisector.failed_confidence)
+    self.assertFalse(bisector.check_initial_confidence())
+    self.assertTrue(bisector.failed_initial_confidence)
 
     # A confidence score of 100 should satisfy any default
     mock_score.return_value = 100
     bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
-    self.assertTrue(bisector.check_regression_confidence())
-    self.assertFalse(bisector.failed_confidence)
+    self.assertTrue(bisector.check_initial_confidence())
+    self.assertFalse(bisector.failed_initial_confidence)
 
-  def test_check_regression_confidence_not_required(self):
+  def test_check_initial_confidence_not_required(self):
     # When confidence is not required, confidence_score should not be called
     mock_score = self.dummy_api.m.math_utils.confidence_score
-    self.bisect_config['required_regression_confidence'] = None
+    self.bisect_config['required_initial_confidence'] = None
     bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
-    self.assertTrue(bisector.check_regression_confidence())
+    self.assertTrue(bisector.check_initial_confidence())
     self.assertFalse(mock_score.called)
 
-  def test_check_regression_confidence_arbitrary(self):
+  def test_check_initial_confidence_arbitrary(self):
     mock_score = self.dummy_api.m.math_utils.confidence_score
-    self.bisect_config['required_regression_confidence'] = 99
+    self.bisect_config['required_initial_confidence'] = 99
     # A confidence score of 98.5 should not satisfy the required 99
     mock_score.return_value = 98.5
     bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
-    self.assertFalse(bisector.check_regression_confidence())
-    self.assertTrue(bisector.failed_confidence)
+    self.assertFalse(bisector.check_initial_confidence())
+    self.assertTrue(bisector.failed_initial_confidence)
 
     # A confidence score of 99.5 should satisfy the required 99
     mock_score.return_value = 99.5
     bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
-    self.assertTrue(bisector.check_regression_confidence())
-    self.assertFalse(bisector.failed_confidence)
+    self.assertTrue(bisector.check_initial_confidence())
+    self.assertFalse(bisector.failed_initial_confidence)
 
   def test_wait_for_all(self):
     def mock_update_status(s):

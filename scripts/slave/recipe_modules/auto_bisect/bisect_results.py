@@ -70,7 +70,7 @@ The following warnings were raised by the bisect job:
 
 """
 
-_NO_CONFIDENCE_ABORT_REASON = (
+_FAILED_INITIAL_CONFIDENCE_ABORT_REASON = (
   'The metric values for the initial "good" and "bad" revisions '
   'do not represent a clear regression.')
 
@@ -171,8 +171,8 @@ class BisectResults(object):
 
     self._set_culprit_attributes(bisector.culprit)
 
-    if bisector.failed_confidence:
-      self.abort_reason = _NO_CONFIDENCE_ABORT_REASON
+    if bisector.failed_initial_confidence:
+      self.abort_reason = _FAILED_INITIAL_CONFIDENCE_ABORT_REASON
     elif bisector.failed_direction:
       self.abort_reason = _DIRECTION_OF_IMPROVEMENT_ABORT_REASON
 

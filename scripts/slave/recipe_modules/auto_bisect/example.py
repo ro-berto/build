@@ -39,7 +39,7 @@ def RunSteps(api):
   bisector.wait_for_all([bisector.good_rev, bisector.bad_rev])
 
   assert bisector.check_improvement_direction()
-  assert bisector.check_regression_confidence()
+  assert bisector.check_initial_confidence()
   revisions_to_check = bisector.get_revisions_to_eval(1)
   assert len(revisions_to_check) == 1
   revisions_to_check[0].start_job()

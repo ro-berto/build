@@ -52,7 +52,7 @@ FAILED_DIRECTION_ATTRIBUTES['failed_direction'] = True
 FAILED_DIRECTION_ATTRIBUTES['culprit_present'] = False
 
 ABORTED_BISECT_ATTRIBUTES = dict(BASIC_ATTRIBUTES)
-ABORTED_BISECT_ATTRIBUTES['failed_confidence'] = True
+ABORTED_BISECT_ATTRIBUTES['failed_initial_confidence'] = True
 ABORTED_BISECT_ATTRIBUTES['culprit_present'] = False
 
 
