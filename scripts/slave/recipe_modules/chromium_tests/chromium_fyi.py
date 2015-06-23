@@ -173,6 +173,22 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'Linux V8 API Stability': {
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['v8_canary'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+        'all',
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Print Preview Linux': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',

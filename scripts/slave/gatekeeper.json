@@ -594,6 +594,16 @@
               "compile"
             ]
           },
+          "Linux V8 API Stability": {
+            "tree_notify": [
+              "machenbach@chromium.org",
+              "hablich@chromium.org"
+            ],
+            "forgiving_steps": [
+              "*"
+            ],
+            "subject_template": "V8 API checker %(result)s in %(project_name)s, revision %(revision)s"
+          },
           "Site Isolation Linux": {
             "tree_notify": [
               "nasko+fyi-bots@chromium.org",

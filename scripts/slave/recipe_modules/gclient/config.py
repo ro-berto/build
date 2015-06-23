@@ -268,6 +268,10 @@ def v8_bleeding_edge_git(c):
 def v8_blink_flavor(c):
   del c.revisions['src/third_party/WebKit']
 
+@config_ctx()
+def v8_canary(c):
+  c.revisions['src/v8'] = 'origin/canary'
+
 @config_ctx(includes=['chromium'])
 def oilpan(c):  # pragma: no cover
   if c.GIT_MODE:
