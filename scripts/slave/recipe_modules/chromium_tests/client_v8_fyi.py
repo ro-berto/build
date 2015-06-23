@@ -97,6 +97,31 @@ SPEC = {
         'test_spec_file': 'chromium.memory.json',
       },
     },
+    'Linux Snapshot Builder': {
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': [
+        'v8_bleeding_edge_git',
+        'chromium_lkcr',
+        'show_v8_revision',
+      ],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      'tests': [
+        steps.ArchiveBuildStep(
+            'chromium-v8-snapshots',
+            gs_acl='public-read',
+        ),
+      ],
+      'testing': {
+        'platform': 'linux',
+        'test_spec_file': 'chromium.linux.json',
+      },
+    },
     'Chrome Linux Perf': {
       'disable_tests': True,
       'chromium_config': 'chromium_official',
