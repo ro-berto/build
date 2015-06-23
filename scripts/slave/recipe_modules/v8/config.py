@@ -151,7 +151,7 @@ def turbo_variant(c):
 
 @config_ctx()
 def novfp3(c):
-  c.testing.test_args.append('--extra-flags=--noenable-vfp3')
+  c.testing.test_args.append('--novfp3')
 
 
 @config_ctx()

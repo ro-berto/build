@@ -106,7 +106,7 @@
       "--buildbot",
       "--timeout=200",
       "unittests",
-      "--extra-flags=--noenable-vfp3",
+      "--novfp3",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -145,7 +145,7 @@
       "--buildbot",
       "--timeout=200",
       "default",
-      "--extra-flags=--noenable-vfp3",
+      "--novfp3",
       "--flaky-tests",
       "skip",
       "--rerun-failures-count=2",
@@ -186,7 +186,7 @@
       "--buildbot",
       "--timeout=200",
       "default",
-      "--extra-flags=--noenable-vfp3",
+      "--novfp3",
       "--flaky-tests",
       "run",
       "--rerun-failures-count=2",
@@ -229,7 +229,7 @@
       "test262",
       "--no-variants",
       "--download-data",
-      "--extra-flags=--noenable-vfp3",
+      "--novfp3",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -268,7 +268,7 @@
       "--buildbot",
       "--timeout=200",
       "mozilla",
-      "--extra-flags=--noenable-vfp3",
+      "--novfp3",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -308,7 +308,7 @@
       "--timeout=200",
       "simdjs/shell_test_runner",
       "--download-data",
-      "--extra-flags=--noenable-vfp3",
+      "--novfp3",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
