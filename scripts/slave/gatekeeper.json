@@ -110,7 +110,7 @@
         "builders": {
           "gnumbd": {
             "categories": [
-              "chromium_gnumbd_not_yet_closer"
+              "chromium_gnumbd_closer"
             ]
           }
         }
@@ -759,7 +759,7 @@
         "chrome-troopers+infra-continuous@google.com"
       ]
     },
-    "chromium_gnumbd_not_yet_closer": {
+    "chromium_gnumbd_closer": {
       "closing_optional": [
         "gnumbd"
       ],
@@ -769,7 +769,7 @@
       "tree_notify": [
         "chrome-troopers+gnumbd@google.com"
       ],
-      "status_template": "Auto-closed (Cron %(builder_name)s failed)",
+      "status_template": "Auto-closed (Infra Gnumbd cron \"%(builder_name)s\" %(build_url)s failed)",
       "subject_template": "Tree-closing infra failure on %(builder_name)s"
     },
     "nacl_all": {
