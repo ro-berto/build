@@ -228,8 +228,8 @@
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"browser_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"browser_tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"angle_unittests_run\", @@@",
@@ -289,8 +289,8 @@
       "--ninja-ensure-up-to-date",
       "--",
       "chrome",
-      "browser_tests",
-      "base_unittests"
+      "base_unittests",
+      "browser_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile (with patch)"

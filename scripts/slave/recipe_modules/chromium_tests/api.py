@@ -544,15 +544,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       else:
         compile_targets = list(set(compile_targets) &
                                set(self.m.filter.compile_targets))
-      # Always add |matching_exes|. They will be covered by |compile_targets|,
-      # but adding |matching_exes| makes determing if conditional tests are
-      # necessary easier. For example, if we didn't do this we could end up
-      # with chrome_run as a compile_target and not chrome (since chrome_run
-      # depends upon chrome). This results in not picking up
-      # NaclIntegrationTest as it depends upon chrome not chrome_run.
-      compile_targets = list(set(self.m.filter.matching_exes + compile_targets))
     else:
       compile_targets = self.m.filter.compile_targets
+    # Always add |matching_exes|. They will be covered by |compile_targets|, but
+    # adding |matching_exes| makes determing if conditional tests are necessary
+    # easier. For example, if we didn't do this we could end up with chrome_run
+    # as a compile_target and not chrome (since chrome_run depends upon chrome).
+    # This results in not picking up NaclIntegrationTest as it depends upon
+    # chrome not chrome_run.
+    compile_targets = list(set(self.m.filter.matching_exes) |
+                           set(compile_targets))
 
     # Add crash_service to compile_targets. This is done after filtering compile
     # targets out because crash_service should always be there on windows.
