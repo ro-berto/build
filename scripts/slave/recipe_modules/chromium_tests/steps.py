@@ -618,6 +618,74 @@ class SwarmingGTestTest(SwarmingTest):
     return True, gtest_results.failures
 
 
+class AMPGTestTest(Test):
+  AMP_INSTANCE_ADDRESS = '172.22.21.180'
+  AMP_INSTANCE_PORT = '80'
+  AMP_INSTANCE_PROTOCOL = 'http'
+  AMP_RESULTS_BUCKET = 'chrome-amp-results'
+  def __init__(self, name, args=None, target_name=None, device_name=['Nexus 5'],
+               device_os=['4.4.2'], android_isolate_path=None,
+               **runtest_kwargs):
+    self._name = name
+    self._args = args
+    self._target_name = target_name
+    self._android_isolate_path = android_isolate_path
+    # LocalGTestTest is used when AMP tests are not triggered successfully.
+    self._local_test = LocalGTestTest(name, args, target_name, **runtest_kwargs)
+    self._device_name = device_name
+    self._device_os = device_os
+    self._trigger_successful = None
+
+  @property
+  def name(self):
+    return self._name
+
+  def compile_targets(self, api):
+    return self._local_test.compile_targets(api)
+
+  def pre_run(self, api, suffix):
+    """Triggers an AMP test."""
+    amp_arguments = api.amp.amp_arguments(
+        api_address=AMPGTestTest.AMP_INSTANCE_ADDRESS,
+        api_port=AMPGTestTest.AMP_INSTANCE_PORT,
+        api_protocol=AMPGTestTest.AMP_INSTANCE_PROTOCOL,
+        device_name=self._device_name,
+        device_os=self._device_os)
+
+    isolate_file_path = (api.path['checkout'].join(self._android_isolate_path)
+                         if self._android_isolate_path else None)
+    try:
+      api.amp.trigger_test_suite(
+          self._name, 'gtest',
+          api.amp.gtest_arguments(self._name,
+                                  isolate_file_path=isolate_file_path),
+          amp_arguments)
+      self._trigger_successful = True
+    except api.step.StepFailure:
+      self._trigger_successful = False
+
+  def run(self, api, suffix):  # pylint: disable=R0201
+    # If we were unable to successfully trigger the AMP job, run locally;
+    # otherwise return no results as results will be collected in post_run.
+    if not self._trigger_successful:
+      return self._local_test.run(api, suffix)
+    else:
+      return []
+
+  def post_run(self, api, suffix):
+    if self._trigger_successful:
+      amp_arguments = api.amp.amp_arguments(
+          api_address=AMPGTestTest.AMP_INSTANCE_ADDRESS,
+          api_port=AMPGTestTest.AMP_INSTANCE_PORT,
+          api_protocol=AMPGTestTest.AMP_INSTANCE_PROTOCOL,
+          device_name=self._device_name,
+          device_os=self._device_os)
+
+      api.amp.collect_test_suite(
+          self._name, 'gtest', api.amp.gtest_arguments(self._name),
+          amp_arguments)
+
+
 class GTestTest(Test):
   def __init__(self, name, args=None, target_name=None, enable_swarming=False,
                swarming_shards=1, swarming_dimensions=None, swarming_tags=None,

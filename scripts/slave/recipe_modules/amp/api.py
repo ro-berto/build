@@ -238,15 +238,11 @@ class AmpApi(recipe_api.RecipeApi):
     Returns:
       A list of command-line arguments as strings.
     """
-    if not api_address:
-      raise self.m.step.StepFailure('api_address not specified')
-    if not api_port:
-      raise self.m.step.StepFailure('api_port not specified')
-    if not api_protocol:
-      raise self.m.step.StepFailure('api_protocol not specified')
-    if device_minimum_os and device_os:
-      raise self.m.step.StepFailure(
-          'cannot specify both device_minimum_os and device_os')
+    assert api_address, 'api_address not specified'
+    assert api_port, 'api_port not specified'
+    assert api_protocol, 'api_protocol not specified'
+    assert not (device_minimum_os and device_os), (
+        'cannot specify both device_minimum_os and device_os')
 
     amp_args = [
         '--enable-platform-mode',

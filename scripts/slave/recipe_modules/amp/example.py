@@ -26,24 +26,6 @@ BUILDERS = {
     'api_port': '80',
     'api_protocol': 'http',
   },
-  'no_api_address': {
-    'device_name': ['SampleDevice'],
-    'device_os': ['SampleDeviceOS'],
-    'api_port': '80',
-    'api_protocol': 'http',
-  },
-  'no_api_port': {
-    'device_name': ['SampleDevice'],
-    'device_os': ['SampleDeviceOS'],
-    'api_address': '127.0.0.1',
-    'api_protocol': 'http',
-  },
-  'no_api_protocol': {
-    'device_name': ['SampleDevice'],
-    'device_os': ['SampleDeviceOS'],
-    'api_address': '127.0.0.1',
-    'api_port': '80',
-  },
   'split_example': {
     'device_name': ['SampleDevice'],
     'device_os': ['SampleDeviceOS'],
@@ -76,14 +58,6 @@ BUILDERS = {
   'minimum_device_os': {
     'device_minimum_os': 'MinimumSampleDeviceOS',
     'device_name': ['SampleDevice'],
-    'api_address': '127.0.0.1',
-    'api_port': '80',
-    'api_protocol': 'http',
-  },
-  'device_os_and_minimum_device_os': {
-    'device_minimum_os': 'MinimumSampleDeviceOS',
-    'device_name': ['SampleDevice'],
-    'device_os': ['SampleDeviceOS'],
     'api_address': '127.0.0.1',
     'api_port': '80',
     'api_protocol': 'http',

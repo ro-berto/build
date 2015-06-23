@@ -4,6 +4,7 @@
 
 DEPS = [
   'adb',
+  'amp',
   'bisect_tester',
   'chromium',
   'chromium_android',
@@ -15,9 +16,9 @@ DEPS = [
   'properties',
   'python',
   'raw_io',
-  'test_utils',
   'step',
   'swarming',
+  'test_utils',
 ]
 
 
@@ -455,4 +456,41 @@ def GenTests(api):
         parent_got_webkit_revision='191269',
         revision='1e74b372f951d4491f305ec64f6decfcda739e73') +
     api.platform('win', 32)
+  )
+
+  yield (
+    api.test('amp_split_recipe_trigger_failure') +
+    api.properties(
+        mastername='chromium.fyi',
+        buildername='Android Tests (amp split)',
+        slavename='build1-a1',
+        buildnumber='77457',
+        parent_build_archive_url='gs://test-domain/test-archive.zip'
+    ) +
+    api.override_step_data('[trigger] base_unittests', retcode=1)
+  )
+
+  yield (
+    api.test('amp_split_recipe_trigger_local_failure') +
+    api.properties(
+        mastername='chromium.fyi',
+        buildername='Android Tests (amp split)',
+        slavename='build1-a1',
+        buildnumber='77457',
+        parent_build_archive_url='gs://test-domain/test-archive.zip'
+    ) +
+    api.override_step_data('[trigger] base_unittests', retcode=1) +
+    api.override_step_data('base_unittests', retcode=1)
+  )
+
+  yield (
+    api.test('amp_split_recipe_collect_failure') +
+    api.properties(
+        mastername='chromium.fyi',
+        buildername='Android Tests (amp split)',
+        slavename='build1-a1',
+        buildnumber='77457',
+        parent_build_archive_url='gs://test-domain/test-archive.zip'
+    ) +
+    api.override_step_data('[collect] base_unittests', retcode=1)
   )
