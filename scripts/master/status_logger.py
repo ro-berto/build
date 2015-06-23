@@ -51,7 +51,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     self.master_dir = os.path.basename(os.path.abspath(os.curdir))
 
     self._event_logging_dir = os.path.join(
-      event_logging_dir or '/var/log/infra',
+      event_logging_dir or '/var/log/chrome-infra',
       'status_logger-' + self.master_dir)
 
     self._event_logfile = os.path.join(self._event_logging_dir, 'events.log')
