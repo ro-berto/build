@@ -76,6 +76,25 @@
   },
   {
     "cmd": [
+      "git",
+      "update-ref",
+      "refs/heads/master",
+      "refs/remotes/origin/master"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "git update-ref"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "master"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "git checkout"
+  },
+  {
+    "cmd": [
       "echo",
       "{\n  \"bad_revision\": \"src@a6298e4afedbf2cd461755ea6f45b0ad64222222\", \n  \"bug_id\": \"425582\", \n  \"builder_host\": \"master4.golo.chromium.org\", \n  \"builder_port\": \"8341\", \n  \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \n  \"dummy_builds\": true, \n  \"dummy_initial_confidence\": \"95\", \n  \"good_revision\": \"306475\", \n  \"gs_bucket\": \"chrome-perf\", \n  \"max_time_minutes\": \"5\", \n  \"metric\": \"warm_times/page_load_time\", \n  \"poll_sleep\": 0, \n  \"repeat_count\": \"2\", \n  \"test_type\": \"perf\", \n  \"truncate_percent\": \"25\"\n}"
     ],
@@ -262,7 +281,7 @@
       "refs/remotes/origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Gathering reference values.git update-ref",
+    "name": "Gathering reference values.git update-ref (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -274,7 +293,7 @@
       "master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Gathering reference values.git checkout",
+    "name": "Gathering reference values.git checkout (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -327,7 +346,7 @@
       "refs/remotes/origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Gathering reference values.git update-ref (2)",
+    "name": "Gathering reference values.git update-ref (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -339,7 +358,7 @@
       "master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Gathering reference values.git checkout (2)",
+    "name": "Gathering reference values.git checkout (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -614,7 +633,7 @@
       "refs/remotes/origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.git update-ref (3)",
+    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.git update-ref (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -626,7 +645,7 @@
       "master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.git checkout (3)",
+    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.git checkout (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -799,7 +818,7 @@
       "refs/remotes/origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.git update-ref (4)",
+    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.git update-ref (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -811,7 +830,7 @@
       "master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.git checkout (4)",
+    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.git checkout (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

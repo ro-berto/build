@@ -75,10 +75,7 @@ class PerfRevisionState(revision_state.RevisionState):
     ]
     try:
       if not self.bisector.bisect_config.get('skip_gclient_ops'):
-        # This is to avoid the detached HEAD state that breaks git try.
-        api.m.git('update-ref', 'refs/heads/master',
-                  'refs/remotes/origin/master')
-        api.m.git('checkout', 'master', cwd=api.m.path['checkout'])
+        self.bisector.ensure_sync_master_branch()
       api.m.git(*try_cmd, name='Requesting build for %s via git try.'
                 % str(self.commit_hash))
     finally:

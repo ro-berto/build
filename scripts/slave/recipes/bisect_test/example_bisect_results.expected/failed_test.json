@@ -1,6 +1,25 @@
 [
   {
     "cmd": [
+      "git",
+      "update-ref",
+      "refs/heads/master",
+      "refs/remotes/origin/master"
+    ],
+    "cwd": "[TMP_BASE]/bogus_tmp_1",
+    "name": "git update-ref"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "master"
+    ],
+    "cwd": "[TMP_BASE]/bogus_tmp_1",
+    "name": "git checkout"
+  },
+  {
+    "cmd": [
       "echo",
       "{\n  \"bad_revision\": \"314017\", \n  \"bug_id\": \"\", \n  \"builder_host\": \"master4.golo.chromium.org\", \n  \"builder_port\": \"8341\", \n  \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \n  \"dummy_builds\": \"True\", \n  \"good_revision\": \"314015\", \n  \"gs_bucket\": \"chrome-perf\", \n  \"max_time_minutes\": \"5\", \n  \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \n  \"repeat_count\": \"2\", \n  \"skip_gclient_ops\": \"True\", \n  \"test_type\": \"perf\", \n  \"truncate_percent\": \"0\"\n}"
     ],
