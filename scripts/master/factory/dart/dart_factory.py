@@ -142,20 +142,10 @@ def BuildChromiumFactory(channel, target_platform='win32'):
     def add_solution(self, solution):
       self._solutions.append(solution)
 
-  # 'channel.dartium_deps_path' can be for example:
-  #   "/branches/bleeding_edge/deps/dartium.deps"
-  # config.Master.dart_url will be the base svn url. It will point to the
-  # mirror if we're in golo and otherwise to the googlecode location.
-  dartium_deps_url = config.Master.dart_url + channel.dartium_deps_path
-
   factory = DartiumFactory(target_platform)
-  custom_deps_file = None
-  name = 'dartium.deps'
-  deps_url = dartium_deps_url
-  if channel.name == 'be' or channel.name == 'dev':
-    custom_deps_file = 'tools/deps/dartium.deps/DEPS'
-    name = 'src/dart'
-    deps_url = dart_sdk_mirror
+  custom_deps_file = 'tools/deps/dartium.deps/DEPS'
+  name = 'src/dart'
+  deps_url = dart_sdk_mirror
   if target_platform == 'win32':
     factory.add_solution(
         new_solution(deps_url, custom_vars_list, custom_deps_list_win,
@@ -199,13 +189,7 @@ class DartFactory(gclient_factory.GClientFactory):
       channel = CHANNELS_BY_NAME['be']
     self.channel = channel
 
-    # Until we have stable/trunk building from github, still support svn
-    if channel.name == 'be' or channel.name == 'dev':
-      deps_url = dart_sdk_mirror
-    elif is_standalone:
-      deps_url = config.Master.dart_url + self.channel.standalone_deps_path
-    else:
-      deps_url = config.Master.dart_url + self.channel.all_deps_path
+    deps_url = dart_sdk_mirror
 
     if not custom_deps_list:
       custom_deps_list = []
