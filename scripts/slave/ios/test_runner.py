@@ -430,9 +430,10 @@ class SimulatorTestRunner(TestRunner):
       'pkill',
       '-9',
       '-x',
-      # Prior to Xcode 6, the iOS simulator was called iPhone Simulator.
-      'iPhone Simulator',
-      'iOS Simulator',
+      # The iOS simulator has a different name depending on the Xcode version.
+      'iPhone Simulator',  # Xcode 5
+      'iOS Simulator',  # Xcode 6
+      'Simulator',  # Xcode 7
     ]
 
     # If a signal was sent, wait for the simulator to actually be killed.
