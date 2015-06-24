@@ -211,8 +211,6 @@
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"angle_unittests_run\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"All\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"angle_unittests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"crash_service\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
@@ -286,8 +284,6 @@
       "--ninja-ensure-up-to-date",
       "--",
       "angle_unittests_run",
-      "All",
-      "angle_unittests",
       "crash_service"
     ],
     "cwd": "[SLAVE_BUILD]",

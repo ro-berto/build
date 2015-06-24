@@ -210,7 +210,6 @@
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_test_run\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"All\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"crash_service\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
@@ -283,7 +282,6 @@
       "--ninja-ensure-up-to-date",
       "--",
       "telemetry_gpu_test_run",
-      "All",
       "crash_service"
     ],
     "cwd": "[SLAVE_BUILD]",
