@@ -134,6 +134,15 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]\\src\\tools\\clang\\scripts\\update.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "update_clang"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
       "gen",
       "-v",

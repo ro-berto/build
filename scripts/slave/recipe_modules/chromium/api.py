@@ -591,6 +591,15 @@ class ChromiumApi(recipe_api.RecipeApi):
                   script=self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
                   args=args)
 
+  def update_clang(self):
+    # The hooks in DEPS call `update.py --if-needed`, which updates clang by
+    # default on Mac and Linux, or if clang=1 is in GYP_DEFINES.  This step
+    # is only needed on bots that use clang but where --if-needed doesn't update
+    # clang. (In practice, this means on Windows when using gn, not gyp.)
+    self.m.python(name='update_clang',
+                  script=self.m.path['checkout'].join('tools', 'clang',
+                                                      'scripts', 'update.py'))
+
   def taskkill(self):
     self.m.python(
       'taskkill',

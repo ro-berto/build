@@ -324,6 +324,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
 
       if self.m.chromium.c.project_generator.tool == 'mb':
+        if bot_config.get('chromium_config') == 'chromium_win_clang':
+          self.m.chromium.update_clang()
         self.m.chromium.run_mb(mastername, buildername, swarming_targets=[
             t.name for t in tests_including_triggered if t.uses_swarming])
 
