@@ -7,7 +7,7 @@ from . import steps
 
 def _GetTargetName(platform, target_bits):
   return ('Release_x64' if platform is 'win' and target_bits is 64
-            else 'Release')
+          else 'Release')
 
 def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
   return {
@@ -175,10 +175,10 @@ _AddBotSpec(
 _AddBotSpec(
     name='Win 8 Perf',
     platform='win',
-    parent_builder='Win Builder',
+    parent_builder='Win x64 Builder',
     perf_id='chromium-rel-win8-dual',
     target_bits=32,
-    num_shards=2)
+    num_shards=5)
 _AddBotSpec(
     name='Win 7 Perf',
     platform='win',
@@ -192,7 +192,7 @@ _AddBotSpec(
     parent_builder='Win x64 Builder',
     perf_id='chromium-rel-win7-x64-dual',
     target_bits=64,
-    num_shards=2)
+    num_shards=5)
 _AddBotSpec(
     name='Win 7 ATI GPU Perf',
     platform='win',

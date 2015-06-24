@@ -188,7 +188,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--num-shards",
-      "2"
+      "5"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "List Perf Tests",
