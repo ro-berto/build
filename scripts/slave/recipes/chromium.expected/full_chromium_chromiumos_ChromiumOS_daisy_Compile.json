@@ -78,10 +78,6 @@
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "chromeos=1 component=static_library ffmpeg_branding=ChromeOS gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1"
-    },
     "name": "gclient runhooks"
   },
   {
@@ -119,8 +115,7 @@
       "--cros-board",
       "daisy",
       "--",
-      "chrome",
-      "chrome_initial"
+      "all"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"

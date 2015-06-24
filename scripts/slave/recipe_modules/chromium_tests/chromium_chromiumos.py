@@ -288,15 +288,13 @@ for board in ('x86-generic', 'amd64-generic', 'daisy'):
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': 64,
       'TARGET_PLATFORM': 'chromeos',
       'TARGET_CROS_BOARD': board,
     },
     'bot_type': 'builder',
     'disable_tests': True,
     'compile_targets': [
-      'chrome',
-      'chrome_initial',
+      'all',
     ],
     'testing': {
       'platform': 'linux',

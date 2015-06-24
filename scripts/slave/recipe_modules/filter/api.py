@@ -137,10 +137,14 @@ class FilterApi(recipe_api.RecipeApi):
                    'build_targets': []}
 
     kwargs.setdefault('env', {})
-    kwargs['env'].update(self.m.chromium.c.gyp_env.as_jsonish())
 
+    # If building for CrOS, execute through the "chrome_sdk" wrapper. This will
+    # override GYP environment variables, so we'll refrain from defining them
+    # to avoid confusing output.
     if cros_board:
       kwargs['wrapper'] = self.m.chromium.get_cros_chrome_sdk_wrapper()
+    else:
+      kwargs['env'].update(self.m.chromium.c.gyp_env.as_jsonish())
 
     if use_mb:
       if 'env' in kwargs:

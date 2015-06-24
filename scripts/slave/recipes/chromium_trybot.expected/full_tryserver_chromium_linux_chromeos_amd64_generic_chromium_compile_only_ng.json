@@ -84,10 +84,6 @@
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "chromeos=1 component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=ChromeOS gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1"
-    },
     "name": "gclient runhooks (with patch)"
   },
   {
@@ -143,17 +139,14 @@
       "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chrome\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_initial\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"all\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chrome\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_initial\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"all\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"original_exes\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chrome\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_initial\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"all\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.matching_exes\": []@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
@@ -197,8 +190,7 @@
       "--cros-board",
       "amd64-generic",
       "--",
-      "chrome",
-      "chrome_initial"
+      "all"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile (with patch)"
