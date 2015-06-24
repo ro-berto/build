@@ -46,7 +46,7 @@ TOT_BRANCH = 'master'
 # - Update the value here.
 # - Run "gclient runhooks --force".
 PINS = collections.OrderedDict((
-  (TOT_BRANCH, '1e675ee26f3804e7efcee2b6eb08775a05777537'),
+  (TOT_BRANCH, '511dfa2443b6b2c5f61d83d213868281f3946bfb'),
   ('release-R44-7077.B', '139892011501a919d306bed80e645506f29e4db8'),
   ('release-R43-6946.B', '504196e05c2d8cb5448646a5f036431ec2ee5da1'),
   ('release-R42-6812.B', '719914944802dede1a0dd1cd93376b76880c63f4'),
@@ -78,6 +78,7 @@ class ChromiteTarget(object):
   FIRMWARE = 'firmware'
   FULL = 'full'
   INCREMENTAL = 'incremental'
+  LLVM = 'llvm'
   PALADIN = 'paladin'
   PFQ = 'pfq'
   PRE_CQ = 'pre-cq'
@@ -97,6 +98,10 @@ class ChromiteTarget(object):
     'chrome': PFQ,
   }
 
+  BUILDER_NAME_CATEGORY_MAP = {
+    'refresh-packages': REFRESH_PACKAGES,
+  }
+
   # Maps configuration name suffixes to target type constants.
   # (see Categorize)
   SUFFIX_MAP = collections.OrderedDict((
@@ -106,11 +111,11 @@ class ChromiteTarget(object):
     (FIRMWARE, ('firmware',)),
     (FULL, ('full',)),
     (INCREMENTAL, ('incremental',)),
+    (LLVM, ('llvm',)),
     (PALADIN, ('paladin',)),
     (PFQ, ('chrome-pfq', 'chromium-pfq',)),
     (PRE_CQ, ('pre-cq',)),
     (PRE_FLIGHT_BRANCH, ('pre-flight-branch',)),
-    (REFRESH_PACKAGES, ('refresh-packages',)),
     (SDK, ('sdk',)),
     (TOOLCHAIN, ('toolchain-major', 'toolchain-minor',)),
   ))
@@ -267,8 +272,8 @@ class ChromiteTarget(object):
     """
     name = name or ''
 
-    category = None
-    if build_type:
+    category = cls.BUILDER_NAME_CATEGORY_MAP.get(name)
+    if not category and build_type:
       category = cls.BUILD_TYPE_CATEGORY_MAP.get(build_type)
 
     if not category:
