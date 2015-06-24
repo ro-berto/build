@@ -76,7 +76,7 @@ class AppLaunchError(TestRunnerError):
 
 class TestRunner(object):
   """Base class containing common TestRunner functionality."""
-  def __init__(self, app_path, xcode_version=None, gs_bucket=None):
+  def __init__(self, app_path, xcode_version='', gs_bucket=None):
     """Initializes a new instance of the TestRunner class.
 
     Args:
@@ -98,7 +98,7 @@ class TestRunner(object):
     if ext not in ('.app', '.ipa'):
       raise UnexpectedAppExtensionError(app_path, ['.app', '.ipa'])
 
-    if xcode_version is not None:
+    if xcode_version:
       xcode_summary = find_xcode.find_xcode(xcode_version)
 
       if not xcode_summary['found']:
@@ -369,7 +369,7 @@ class TestRunner(object):
 class SimulatorTestRunner(TestRunner):
   """Class for running a test app on an iOS simulator."""
   def __init__(self, app_path, iossim_path, platform, version,
-               xcode_version=None, gs_bucket=None):
+               xcode_version='', gs_bucket=None):
     """Initializes an instance of the SimulatorTestRunner class.
 
     Args:
@@ -430,10 +430,20 @@ class SimulatorTestRunner(TestRunner):
       'pkill',
       '-9',
       '-x',
-      # Prior to Xcode 6, the iOS simulator was called iPhone Simulator.
-      'iPhone Simulator',
-      'iOS Simulator',
     ]
+
+    # In Xcode 5, the simulator is called "iPhone Simulator", in Xcode 6
+    # it's called "iOS Simulator", and in Xcode 7 it's just called "Simulator".
+    # Try to kill the appropriate simulator if the Xcode version is known,
+    # otherwise just try to kill them all.
+    if self.xcode_version.startswith('5'):
+      kill_cmd.append('iPhone Simulator')
+    elif self.xcode_version.startswith('6'):
+      kill_cmd.append('iOS Simulator')
+    elif self.xcode_version.startswith('7'):
+      kill_cmd.append('Simulator')
+    else:
+      kill_cmd.extend(['iPhone Simulator', 'iOS Simulator', 'Simulator'])
 
     # If a signal was sent, wait for the simulator to actually be killed.
     if not utils.call(*kill_cmd).returncode:
