@@ -388,8 +388,8 @@ def chrome_golo(c): # pragma: no cover
   c.got_revision_mapping['chrome_golo'] = 'got_revision'
 
 @config_ctx(config_vars={'GIT_MODE': True})
-def build_internal(c):  # pragma: no cover
-  if not c.GIT_MODE:
+def build_internal(c):
+  if not c.GIT_MODE:  # pragma: no cover
     raise BadConf('build_internal only supports git')
   s = c.solutions.add()
   s.name = 'build_internal'
@@ -400,6 +400,15 @@ def build_internal(c):  # pragma: no cover
   # from the first solution.
   build(c)
   c.got_revision_mapping['build'] = 'got_build_revision'
+
+@config_ctx(config_vars={'GIT_MODE': True})
+def build_limited(c):
+  if not c.GIT_MODE:  # pragma: no cover
+    raise BadConf('build_limited only supports git')
+  s = c.solutions.add()
+  s.name = 'build_limited'
+  s.url = 'https://chrome-internal.googlesource.com/chrome/tools/build_limited'
+  c.got_revision_mapping['build_limited'] = 'got_revision'
 
 @config_ctx(includes=['chromium', 'chrome_internal'])
 def perf(c):
