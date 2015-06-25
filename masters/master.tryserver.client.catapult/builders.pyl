@@ -10,6 +10,15 @@
   "buildbucket_bucket": "master.tryserver.client.catapult",
 
   "builders": {
+    "Catapult Presubmit": {
+      "recipe": "run_presubmit",
+      "properties": {
+        "repo_name": "catapult",
+      },
+      "scheduler": "catapult_commits",
+      "slave_pools": ["linux_slave_pool"],
+      "slavebuilddir": "presubmit_catapult",
+    },
     "Catapult Linux Tryserver": {
       "recipe": "catapult",
       "scheduler": None,
