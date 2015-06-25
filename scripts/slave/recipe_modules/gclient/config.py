@@ -409,6 +409,11 @@ def build_limited(c):
   s.name = 'build_limited'
   s.url = 'https://chrome-internal.googlesource.com/chrome/tools/build_limited'
   c.got_revision_mapping['build_limited'] = 'got_revision'
+  # We do not use 'includes' here, because we want build_internal to be the
+  # first solution in the list as run_presubmit computes upstream revision
+  # from the first solution.
+  build(c)
+  c.got_revision_mapping['build'] = 'got_build_revision'
 
 @config_ctx(includes=['chromium', 'chrome_internal'])
 def perf(c):
