@@ -186,7 +186,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver:
       # We rely on goma to meet cycle time goals on the tryserver. It's better
       # to fail early.
-      args += ['--goma-disable-local-fallback']
+      args += ['--goma-fail-fast', '--goma-disable-local-fallback']
     if self.c.compile_py.ninja_confirm_noop:
       args.append('--ninja-ensure-up-to-date')
     if (self.m.properties.get('clobber') is not None or

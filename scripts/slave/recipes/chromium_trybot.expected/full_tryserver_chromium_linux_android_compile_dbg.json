@@ -406,6 +406,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
       "ui_base_unittests_apk",

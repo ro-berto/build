@@ -252,6 +252,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
       "base_unittests"

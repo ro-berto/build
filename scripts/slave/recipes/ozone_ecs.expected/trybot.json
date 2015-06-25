@@ -158,6 +158,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
       "content_shell"
@@ -189,6 +190,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
       "aura_unittests",

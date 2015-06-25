@@ -222,6 +222,7 @@
       "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
+      "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
       "angle_unittests_run",

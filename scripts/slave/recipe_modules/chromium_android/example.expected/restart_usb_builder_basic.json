@@ -207,6 +207,7 @@
       "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
+      "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--"
     ],

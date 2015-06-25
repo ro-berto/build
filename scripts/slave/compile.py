@@ -131,11 +131,15 @@ def goma_setup(options, env):
                   'vm820-m1', 'vm821-m1', 'vm848-m1']:
     env['NO_NACL_GOMA'] = 'false'
 
-  # If a network error continues 30 minutes, compiler_proxy make the compile
-  # failed.  When people use goma, they expect using goma is faster than
-  # compile locally. If goma cannot guarantee that, let it make compile
-  # as error.
-  env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
+  if options.goma_fail_fast:
+    # startup fails when initial ping failed.
+    env['GOMA_FAIL_FAST'] = 'true'
+  else:
+    # If a network error continues 30 minutes, compiler_proxy make the compile
+    # failed.  When people use goma, they expect using goma is faster than
+    # compile locally. If goma cannot guarantee that, let it make compile
+    # as error.
+    env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
 
   # Caches CRLs in GOMA_CACHE_DIR.
   # Since downloading CRLs is usually slow, caching them may improves
@@ -1303,6 +1307,7 @@ def real_main():
                            help='Enable goma remote link.')
   option_parser.add_option('--goma-store-local-run-output', default=None,
                            help='Store local run output to goma servers.')
+  option_parser.add_option('--goma-fail-fast', action='store_true')
   option_parser.add_option('--goma-disable-local-fallback', action='store_true')
   option_parser.add_option('--verbose', action='store_true')
   option_parser.add_option('--ninja-ensure-up-to-date', action='store_true',
