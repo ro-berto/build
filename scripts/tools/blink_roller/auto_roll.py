@@ -126,6 +126,7 @@ PROJECT_CONFIGS = {
     'cq_extra_trybots': ['tryserver.blink:linux_blink_rel'],
     'extra_emails_fn': lambda: [_get_skia_sheriff()],
     'path_to_project': os.path.join('third_party', 'skia'),
+    'include_commit_log': True,
   },
 }
 
@@ -179,6 +180,7 @@ class AutoRoller(object):
     self._path_to_project = project_config['path_to_project']
     self._get_extra_emails = project_config.get('extra_emails_fn', lambda: [])
     self._cq_extra_trybots = project_config.get('cq_extra_trybots', [])
+    self._include_commit_log = project_config.get('include_commit_log', False)
 
     self._chromium_git_dir = self._path_from_chromium_root('.git')
     self._project_git_dir = self._path_from_chromium_root(
@@ -255,7 +257,7 @@ class AutoRoller(object):
   def _emails_to_cc_on_rolls(self):
     return _filter_emails(self._get_extra_emails())
 
-  def _start_roll(self, new_roll_revision):
+  def _start_roll(self, last_roll_revision, new_roll_revision):
     roll_branch = '%s_roll' % self._project
     cwd_kwargs = {'cwd': self._path_to_chrome}
     subprocess2.check_call(['git', 'clean', '-d', '-f'], **cwd_kwargs)
@@ -276,7 +278,7 @@ class AutoRoller(object):
       upload_cmd = ['git', 'cl', 'upload', '--bypass-hooks',
                     '--use-commit-queue', '-f']
       if self._cq_extra_trybots:
-        commit_msg += ('\n\n' + CQ_INCLUDE_TRYBOTS +
+        commit_msg += ('\n' + CQ_INCLUDE_TRYBOTS +
                        ','.join(self._cq_extra_trybots))
       tbr = '\nTBR='
       emails = self._emails_to_cc_on_rolls()
@@ -285,6 +287,11 @@ class AutoRoller(object):
         tbr += emails_str
         upload_cmd.extend(['--cc', emails_str, '--send-mail'])
       commit_msg += tbr
+      if self._include_commit_log:
+        log_cmd = ['git', 'log', '--format=%h %ae %s',
+                   '%s..%s' % (last_roll_revision, new_roll_revision)]
+        git_log = subprocess2.check_output(log_cmd, cwd=self._project_git_dir)
+        commit_msg += '\n\nCommits in this roll:\n' + git_log
       upload_cmd.extend(['-m', commit_msg])
       subprocess2.check_call(upload_cmd, **cwd_kwargs)
     finally:
@@ -382,7 +389,7 @@ class AutoRoller(object):
     if not self._compare_revisions(last_roll_revision, new_roll_revision):
       return 0
 
-    self._start_roll(new_roll_revision)
+    self._start_roll(last_roll_revision, new_roll_revision)
     return 0
 
 
