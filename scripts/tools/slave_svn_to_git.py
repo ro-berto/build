@@ -3,11 +3,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import datetime
 import os
 import shutil
 import subprocess
 import sys
 import tempfile
+import traceback
 
 
 SLAVE_GCLIENT_CONFIG = """solutions = [
@@ -62,6 +64,7 @@ def main():
 
   # Set up credentials for the download_from_google_storage hook.
   boto_file = os.path.join(b_dir, 'build', 'site_config', '.boto')
+  assert os.path.isfile(boto_file), 'Did not find %s file' % boto_file
   env = os.environ.copy()
   env['AWS_CREDENTIAL_FILE'] = boto_file
 
@@ -76,7 +79,7 @@ def main():
   assert len(solutions) == 1, 'More than one solution in .gclient'
   if not solutions[0]['url'].startswith('svn:'):
     print 'Non-SVN URL in .gclient: %s' % solutions[0]['url']
-    return
+    return 0
   sol_name = solutions[0]['name']
   assert sol_name in GCLIENT_CONFIGS, 'Unknown type of checkout: ' % sol_name
   gclient_config = GCLIENT_CONFIGS[sol_name]
@@ -164,7 +167,15 @@ def main():
 
   # Run gclient sync again.
   check_call(['gclient', 'sync'], cwd=b_dir, env=env)
+  return 0
 
 
 if __name__ == '__main__':
-  sys.exit(main())
+  print 'Running slave_svn_to_git on %s UTC' % datetime.datetime.now()
+  try:
+    retcode = main()
+  except Exception as e:
+    traceback.print_exc(e)
+    retcode = 1
+  print 'Return code: %d' % retcode
+  sys.exit(retcode)
