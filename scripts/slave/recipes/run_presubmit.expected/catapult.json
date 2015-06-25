@@ -5,22 +5,27 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "master.client.catapult",
+      "tryserver.chromium.linux",
       "--builder",
-      "windows",
+      "catapult_presubmit",
       "--slave",
-      "windows_slave",
+      "TestSlavename",
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'catapult', 'url': 'https://chromium.googlesource.com/external/github.com/catapult-project/catapult.git'}]",
       "--root",
       "catapult",
       "--revision_mapping_file",
       "{\"catapult\": \"got_revision\"}",
+      "--issue",
+      "12853011",
+      "--patchset",
+      "1",
+      "--rietveld_server",
+      "https://codereview.chromium.org",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "catapult@HEAD",
-      "--force"
+      "catapult@HEAD"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
@@ -44,59 +49,61 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gclient.py",
-      "runhooks"
+      "git",
+      "-c",
+      "user.email=commit-bot@chromium.org",
+      "-c",
+      "user.name=The Commit Bot",
+      "commit",
+      "-a",
+      "-m",
+      "Committed patch"
     ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gclient runhooks"
+    "cwd": "[SLAVE_BUILD]/catapult",
+    "name": "commit git patch"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/tools/pycurl.py",
-      "https://chromium.googlesource.com/infra/infra/+/f849aad85ac3589c931197bff861faf0e2ef0ece/bootstrap/get_appengine.py?format=text",
-      "--outfile",
-      "/path/to/tmp/"
+      "[DEPOT_TOOLS]/presubmit_support.py",
+      "--root",
+      "[SLAVE_BUILD]/catapult",
+      "--commit",
+      "--verbose",
+      "--verbose",
+      "--issue",
+      "12853011",
+      "--patchset",
+      "1",
+      "--skip_canned",
+      "CheckRietveldTryJobExecution",
+      "--skip_canned",
+      "CheckTreeIsOpen",
+      "--skip_canned",
+      "CheckBuildbotPendingBuilds",
+      "--rietveld_url",
+      "https://codereview.chromium.org",
+      "--rietveld_fetch",
+      "--upstream",
+      "c812fca9479aacda33f5f5a74d588acef2b4fb02",
+      "--trybot-json",
+      "/path/to/tmp/json",
+      "--rietveld_email",
+      ""
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Fetch SDK downloader"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\"<simulated contents of get_appengine.py>\"",
-      "--dest=."
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Run SDK downloader",
+    "name": "presubmit",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@\"<simulated contents of get_appengine.py>\"@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"catapult_presubmit\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"compile\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/catapult/base/util/run_tests.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Util Tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/catapult/dashboard/run_tests.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": "%(PYTHONPATH)s:[SLAVE_BUILD]/google_appengine"
-    },
-    "name": "Dashboard Tests"
   }
 ]

@@ -7,6 +7,15 @@
   "templates": ["../master.chromium/templates"],
 
   "builders": {
+    "Catapult Presubmit": {
+      "recipe": "run_presubmit",
+      "properties": {
+        "repo_name": "catapult",
+      },
+      "scheduler": "catapult_commits",
+      "slave_pools": ["linux_slave_pool"],
+      "slavebuilddir": "presubmit_catapult",
+    },
     "Catapult Linux": {
       "recipe": "catapult",
       "scheduler": "catapult_commits",

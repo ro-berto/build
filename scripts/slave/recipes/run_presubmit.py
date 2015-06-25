@@ -96,7 +96,7 @@ def GenTests(api):
   # reflect reality (cosmetical problem only).
   for repo_name in ['blink', 'chromium', 'v8', 'nacl', 'naclports', 'gyp',
                     'build', 'build_limited', 'build_internal', 'depot_tools',
-                    'skia', 'chrome_golo', 'webrtc']:
+                    'skia', 'chrome_golo', 'webrtc', 'catapult']:
     yield (
       api.test(repo_name) +
       api.properties.tryserver(
