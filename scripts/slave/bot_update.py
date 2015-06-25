@@ -206,78 +206,6 @@ RECOGNIZED_PATHS = {
 }
 RECOGNIZED_PATHS.update(internal_data.get('RECOGNIZED_PATHS', {}))
 
-ENABLED_MASTERS = [
-    'bot_update.always_on',
-    'chromium.chrome',
-    'chromium.chromedriver',
-    'chromium.chromiumos',
-    'chromium',
-    'chromium.fyi',
-    'chromium.gpu',
-    'chromium.gpu.fyi',
-    'chromium.infra',
-    'chromium.infra.cron',
-    'chromium.linux',
-    'chromium.lkgr',
-    'chromium.mac',
-    'chromium.memory',
-    'chromium.memory.fyi',
-    'chromium.perf',
-    'chromium.perf.fyi',
-    'chromium.swarm',
-    'chromium.webkit',
-    'chromium.webrtc',
-    'chromium.webrtc.fyi',
-    'chromium.win',
-    'client.drmemory',
-    'client.mojo',
-    'client.nacl',
-    'client.nacl.ports',
-    'client.nacl.sdk',
-    'client.nacl.toolchain',
-    'client.skia',
-    'client.skia.fyi',
-    'client.v8',
-    'client.v8.branches',
-    'client.v8.fyi',
-    'client.webrtc',
-    'client.webrtc.fyi',
-    'tryserver.blink',
-    'tryserver.client.mojo',
-    'tryserver.chromium.linux',
-    'tryserver.chromium.mac',
-    'tryserver.chromium.perf',
-    'tryserver.chromium.win',
-    'tryserver.nacl',
-    'tryserver.v8',
-    'tryserver.webrtc',
-]
-ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
-
-ENABLED_BUILDERS = {
-    'client.dart.fyi': [
-        'v8-linux-release',
-        'v8-mac-release',
-        'v8-win-release',
-    ],
-    'client.dynamorio': [
-        'linux-v8-dr',
-    ],
-}
-ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
-
-ENABLED_SLAVES = {}
-ENABLED_SLAVES.update(internal_data.get('ENABLED_SLAVES', {}))
-
-# Disabled filters get run AFTER enabled filters, so for example if a builder
-# config is enabled, but a bot on that builder is disabled, that bot will
-# be disabled.
-DISABLED_BUILDERS = {}
-DISABLED_BUILDERS.update(internal_data.get('DISABLED_BUILDERS', {}))
-
-DISABLED_SLAVES = {}
-DISABLED_SLAVES.update(internal_data.get('DISABLED_SLAVES', {}))
-
 HEAD_BUILDERS = {}
 HEAD_BUILDERS.update(internal_data.get('HEAD_BUILDERS', {}))
 
@@ -441,34 +369,6 @@ def get_gclient_spec(solutions, target_os, target_os_only):
       'target_os': ('\ntarget_os=%s' % target_os) if target_os else '',
       'target_os_only': '\ntarget_os_only=%s' % target_os_only
   }
-
-
-def check_enabled(master, builder, slave):
-  if master in ENABLED_MASTERS:
-    return True
-  builder_list = ENABLED_BUILDERS.get(master)
-  if builder_list and builder in builder_list:
-    return True
-  slave_list = ENABLED_SLAVES.get(master)
-  if slave_list and slave in slave_list:
-    return True
-  return False
-
-
-def check_disabled(master, builder, slave):
-  """Returns True if disabled, False if not disabled."""
-  builder_list = DISABLED_BUILDERS.get(master)
-  if builder_list and builder in builder_list:
-    return True
-  slave_list = DISABLED_SLAVES.get(master)
-  if slave_list and slave in slave_list:
-    return True
-  return False
-
-
-def check_valid_host(master, builder, slave):
-  return (check_enabled(master, builder, slave)
-          and not check_disabled(master, builder, slave))
 
 
 def maybe_ignore_revision(master, builder, revision):
@@ -1337,7 +1237,7 @@ def parse_args():
                    default='codereview.chromium.org',
                    help='Rietveld server.')
   parse.add_option('--specs', help='Gcilent spec.')
-  parse.add_option('--master', help='Master name.')
+  parse.add_option('--master', help='DEPRECATED: Master name.')
   parse.add_option('-f', '--force', action='store_true',
                    help='Bypass check to see if we want to be run. '
                         'Should ONLY be used locally or by smart recipes.')
@@ -1357,9 +1257,9 @@ def parse_args():
   parse.add_option('--output_manifest', action='store_true',
                    help=('Add manifest json to the json output.'))
   parse.add_option('--slave_name', default=socket.getfqdn().split('.')[0],
-                   help='Hostname of the current machine, '
+                   help='DEPRECATED: Hostname of the current machine, '
                    'used for determining whether or not to activate.')
-  parse.add_option('--builder_name', help='Name of the builder, '
+  parse.add_option('--builder_name', help='DEPRECATED: Name of the builder, '
                    'used for determining whether or not to activate.')
   parse.add_option('--build_dir', default=os.getcwd())
   parse.add_option('--flag_file', default=path.join(os.getcwd(),
@@ -1583,7 +1483,7 @@ def main():
   master = options.master
 
   # Check if this script should activate or not.
-  active = check_valid_host(master, builder, slave) or options.force or False
+  active = True
 
   options.revision = maybe_ignore_revision(master, builder, options.revision)
 
