@@ -21,7 +21,7 @@ def _CheckoutSteps(api, buildername):
   api.gclient.set_config('mojo')
   if 'Android' in buildername:
     api.gclient.apply_config('android')
-  api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout()
   api.gclient.runhooks()
 
 

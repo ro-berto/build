@@ -25,7 +25,8 @@
       "--revision",
       "src@origin/lkcr",
       "--revision",
-      "src/v8@267739"
+      "src/v8@267739",
+      "--force"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

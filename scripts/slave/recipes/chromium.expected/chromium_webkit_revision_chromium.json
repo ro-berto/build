@@ -21,7 +21,8 @@
       "--revision",
       "src@3edb4989f8f69c968c0df14cb1c26d21dd19bf1f",
       "--revision",
-      "src/third_party/WebKit@HEAD"
+      "src/third_party/WebKit@HEAD",
+      "--force"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

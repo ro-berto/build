@@ -17,7 +17,7 @@ DEPS = [
 def RunSteps(api):
   api.chromium.cleanup_temp()
   api.gclient.set_config('v8')
-  api.bot_update.ensure_checkout(force=True, no_shallow=True)
+  api.bot_update.ensure_checkout(no_shallow=True)
 
   step_result = api.python(
       'check roll status',

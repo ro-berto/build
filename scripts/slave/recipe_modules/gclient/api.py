@@ -137,11 +137,6 @@ class GclientApi(recipe_api.RecipeApi):
         if fixed_revision:
           revisions.extend(['--revision', '%s@%s' % (s.name, fixed_revision)])
 
-    for name, revision in sorted(cfg.revisions.items()):
-      fixed_revision = self.resolve_revision(revision)
-      if fixed_revision:
-        revisions.extend(['--revision', '%s@%s' % (name, fixed_revision)])
-
     test_data_paths = set(cfg.got_revision_mapping.keys() +
                           [s.name for s in cfg.solutions])
     step_test_data = lambda: (

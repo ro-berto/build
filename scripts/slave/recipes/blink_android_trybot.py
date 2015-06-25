@@ -29,32 +29,17 @@ def RunSteps(api):
   # TODO(dpranke): crbug.com/348435. We need to figure out how to separate
   # out the retry and recovery logic from the rest of the recipe.
 
-  step_result = api.bot_update.ensure_checkout()
-  # The first time we run bot update, remember if bot_update mode is on or off.
-  bot_update_mode = step_result.json.output['did_run']
-  if not bot_update_mode:
-    try:
-      api.gclient.checkout(revert=True)
-    except api.step.StepFailure:
-      api.file.rmcontents('slave build directory',
-                                api.path['slave_build'])
-      api.gclient.checkout(revert=False)
-    api.tryserver.maybe_apply_issue()
+  api.bot_update.ensure_checkout()
 
   api.chromium.runhooks()
 
   api.chromium.run_mb(mastername, buildername)
 
-  step_result = None
   try:
-    step_result = api.chromium.compile()
+    api.chromium.compile()
   except api.step.StepFailure:
     api.file.rmcontents('slave build directory', api.path['slave_build'])
-    if bot_update_mode:
-      api.bot_update.ensure_checkout(suffix='clean')
-    else:
-      api.gclient.checkout(revert=False)
-      api.tryserver.maybe_apply_issue()
+    api.bot_update.ensure_checkout(suffix='clean')
     api.chromium.runhooks()
     api.chromium.run_mb(api.properties['mastername'],
                         api.properties['buildername'])
@@ -62,12 +47,6 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-    api.test('unittest_checkout_fails') +
-    api.properties.tryserver(buildername='fake_trybot_buildername') +
-    api.step_data('gclient revert', retcode=1)
-  )
-
   yield (
     api.test('unittest_compile_fails') +
     api.properties.tryserver(buildername='fake_trybot_buildername') +

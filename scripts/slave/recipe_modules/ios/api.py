@@ -34,7 +34,6 @@ class iOSApi(recipe_api.RecipeApi):
 
   def checkout(self, **kwargs):
     """Checks out Chromium."""
-    kwargs.setdefault('force', True)
     self.m.gclient.set_config('ios')
     update_step = self.m.bot_update.ensure_checkout(**kwargs)
     self.m.path['checkout'] = self.m.path['slave_build'].join('src')

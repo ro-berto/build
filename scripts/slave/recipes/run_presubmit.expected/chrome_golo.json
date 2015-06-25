@@ -25,7 +25,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "chrome_golo@HEAD"
+      "chrome_golo@HEAD",
+      "--force"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

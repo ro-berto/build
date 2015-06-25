@@ -23,7 +23,8 @@
       "--revision",
       "src/third_party/libjingle/source/talk@HEAD",
       "--revision",
-      "src/third_party/webrtc@HEAD"
+      "src/third_party/webrtc@HEAD",
+      "--force"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

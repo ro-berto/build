@@ -30,7 +30,8 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/skia@1111111"
+      "src/third_party/skia@1111111",
+      "--force"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

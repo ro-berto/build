@@ -303,7 +303,7 @@ def _RunStepsInternal(api):
     api.chromium.apply_config('trybot_flavor')
     api.gclient.set_config('chromium')
 
-    bot_update_step = api.bot_update.ensure_checkout(force=True)
+    bot_update_step = api.bot_update.ensure_checkout()
 
     test_spec = get_test_spec(mastername, buildername)
 

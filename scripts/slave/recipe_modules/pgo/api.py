@@ -106,7 +106,7 @@ class PGOApi(recipe_api.RecipeApi):
     if self.m.properties.get('slavename') != 'fake_slave':
       self.m.chromium.taskkill()
 
-    self.m.bot_update.ensure_checkout(force=True)
+    self.m.bot_update.ensure_checkout()
     if bot_config.get('patch_root'):
       self.m.path['checkout'] = self.m.path['slave_build'].join(
           bot_config.get('patch_root'))

@@ -30,7 +30,8 @@
       "--revision",
       "src@7496f63cbefd34b2d791022fbad64a82838a3f3f",
       "--revision",
-      "src/third_party/WebKit@191275"
+      "src/third_party/WebKit@191275",
+      "--force"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

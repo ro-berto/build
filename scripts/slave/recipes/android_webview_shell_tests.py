@@ -39,7 +39,7 @@ def RunSteps(api):
   # Sync code.
   api.gclient.set_config('perf')
   api.gclient.apply_config('android')
-  api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout()
   api.chromium_android.clean_local_files()
 
   # Gyp the chromium checkout.

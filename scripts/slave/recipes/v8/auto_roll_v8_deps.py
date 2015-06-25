@@ -86,7 +86,7 @@ def RunSteps(api):
     'src/tools/valgrind': None,
     'src/v8': None,
   })
-  api.bot_update.ensure_checkout(force=True, no_shallow=True)
+  api.bot_update.ensure_checkout(no_shallow=True)
 
   # Enforce a clean state.
   api.git(

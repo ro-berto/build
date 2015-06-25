@@ -101,7 +101,7 @@ def RunSteps(api):
   # Ensure we remember the chromium revision.
   api.gclient.c.got_revision_mapping['src'] = 'got_cr_revision'
 
-  step_result = api.bot_update.ensure_checkout(force=True)
+  step_result = api.bot_update.ensure_checkout()
 
   api.chromium.runhooks()
   api.chromium.compile()
@@ -120,7 +120,7 @@ def RunSteps(api):
     # Update without changing got_revision. The first sync is the revision
     # that is tested. The second is just for comparison. Setting got_revision
     # again confuses the waterfall's console view.
-    api.bot_update.ensure_checkout(force=True, update_presentation=False)
+    api.bot_update.ensure_checkout(update_presentation=False)
 
     api.chromium.runhooks()
     api.chromium.compile()

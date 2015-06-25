@@ -18,13 +18,11 @@ def RunSteps(api):
   soln.url = 'svn://svn.chromium.org/chrome/trunk/src'
   api.gclient.c = src_cfg
   clobber = True if api.properties.get('clobber') else False
-  force = True if api.properties.get('force') else False
   output_manifest = api.properties.get('output_manifest', False)
   with_branch_heads = api.properties.get('with_branch_heads', False)
   refs = api.properties.get('refs', [])
   oauth2 = api.properties.get('oauth2', False)
-  api.bot_update.ensure_checkout(force=force,
-                                 with_branch_heads=with_branch_heads,
+  api.bot_update.ensure_checkout(with_branch_heads=with_branch_heads,
                                  output_manifest=output_manifest,
                                  refs=refs, patch_oauth2=oauth2,
                                  clobber=clobber)

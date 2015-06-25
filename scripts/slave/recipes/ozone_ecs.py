@@ -67,11 +67,7 @@ def RunSteps(api):
 
   api.chromium.set_config('chromium', BUILD_CONFIG='Debug')
 
-  step_result = api.bot_update.ensure_checkout()
-  if not step_result.json.output['did_run']:
-    api.gclient.checkout()
-
-    api.tryserver.maybe_apply_issue()
+  api.bot_update.ensure_checkout()
 
   api.chromium.c.gyp_env.GYP_DEFINES['embedded'] = 1
 

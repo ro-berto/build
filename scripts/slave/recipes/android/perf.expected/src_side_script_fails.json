@@ -19,7 +19,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@deadbeef"
+      "src@deadbeef",
+      "--force"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

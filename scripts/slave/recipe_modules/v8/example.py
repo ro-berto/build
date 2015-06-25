@@ -18,7 +18,7 @@ def RunSteps(api):
   api.v8.set_config('v8')
   api.v8.set_bot_config({'perf': ['example1', 'example2']})
   api.perf_dashboard.set_config('testing')
-  update_step = api.bot_update.ensure_checkout(force=True, no_shallow=True)
+  update_step = api.bot_update.ensure_checkout(no_shallow=True)
   api.v8.revision_number = '12345'
   api.v8.revision = 'deadbeef'
   perf_config = {

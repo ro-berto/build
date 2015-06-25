@@ -295,7 +295,7 @@ def _RunStepsInternal(api):
   # Set patch_root used when applying the patch after checkout. Default None
   # makes bot_update determine the patch_root from tryserver root, e.g. 'src'.
   bot_update_step = api.bot_update.ensure_checkout(
-      force=True, patch_root=bot_config.get('root_override'))
+      patch_root=bot_config.get('root_override'))
 
   tests = []
 
@@ -384,7 +384,7 @@ def _RunStepsInternal(api):
     api.gclient.c.revisions['src/third_party/WebKit'] = str(
         properties['got_webkit_revision'])
 
-    api.bot_update.ensure_checkout(patch=False, force=True)
+    api.bot_update.ensure_checkout(patch=False)
     api.chromium.runhooks()
     api.isolate.clean_isolated_files(api.chromium.output_dir)
     api.chromium.compile()

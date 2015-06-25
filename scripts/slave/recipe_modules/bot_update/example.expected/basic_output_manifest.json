@@ -20,6 +20,7 @@
       "/path/to/tmp/json",
       "--revision",
       "src@HEAD",
+      "--force",
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",

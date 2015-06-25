@@ -21,7 +21,8 @@
       "--revision",
       "src@HEAD",
       "--refs",
-      "+refs/change/1/2/333"
+      "+refs/change/1/2/333",
+      "--force"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

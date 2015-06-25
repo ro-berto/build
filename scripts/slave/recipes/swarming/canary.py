@@ -62,9 +62,7 @@ def RunSteps(api):
 
   api.chromium.cleanup_temp()
   # Checkout chromium + deps (including 'master' of swarming_client).
-  step_result = api.bot_update.ensure_checkout()
-  if not step_result.json.output['did_run']:
-    api.gclient.checkout()
+  api.bot_update.ensure_checkout()
 
   # Ensure swarming_client version is fresh enough.
   api.swarming.check_client_version()

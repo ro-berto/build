@@ -47,7 +47,7 @@ def _RunApptests(api):
 def RunSteps(api):
   api.chromium.configure_bot(BUILDERS, ['gn'])
 
-  api.bot_update.ensure_checkout(force=True)
+  api.bot_update.ensure_checkout()
 
   api.chromium.runhooks()
 

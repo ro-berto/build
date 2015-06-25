@@ -20,6 +20,7 @@
       "/path/to/tmp/json",
       "--revision",
       "src@HEAD",
+      "--force",
       "--with_branch_heads"
     ],
     "cwd": "[SLAVE_BUILD]",

@@ -66,7 +66,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
 
   def ensure_checkout(self, gclient_config=None, suffix=None,
                       patch=True, update_presentation=True,
-                      force=False, patch_root=None, no_shallow=False,
+                      patch_root=None, no_shallow=False,
                       with_branch_heads=False, refs=None,
                       patch_project_roots=None, patch_oauth2=False,
                       output_manifest=False, clobber=False, **kwargs):
@@ -77,6 +77,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
     spec_string = jsonish_to_python(cfg.as_jsonish(), True)
 
     # Used by bot_update to determine if we want to run or not.
+    # TODO(hinoka): Remove master/builder/slave
     master = self.m.properties['mastername']
     builder = self.m.properties['buildername']
     slave = self.m.properties['slavename']
@@ -117,9 +118,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
     else:
       email_file = key_file = None
 
-    rev_map = {}
-    if self.m.gclient.c:
-      rev_map = self.m.gclient.c.got_revision_mapping.as_jsonish()
+    rev_map = cfg.got_revision_mapping.as_jsonish() or {}
 
     flags = [
         # 1. Do we want to run? (master/builder/slave).
@@ -167,11 +166,10 @@ class BotUpdateApi(recipe_api.RecipeApi):
     # Filter out flags that are None.
     cmd = [item for flag_set in flags
            for item in flag_set if flag_set[1] is not None]
+    cmd.append('--force')
 
     if clobber:
       cmd.append('--clobber')
-    if force:
-      cmd.append('--force')
     if no_shallow:
       cmd.append('--no_shallow')
     if output_manifest:
@@ -183,7 +181,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
     git_mode = self.m.properties.get('mastername') not in SVN_MASTERS
     first_sln = cfg.solutions[0].name
     step_test_data = lambda: self.test_api.output_json(
-        master, builder, slave, root, first_sln, rev_map, git_mode, force,
+        root, first_sln, rev_map, git_mode,
         self.m.properties.get('fail_patch', False),
         output_manifest=output_manifest)
 

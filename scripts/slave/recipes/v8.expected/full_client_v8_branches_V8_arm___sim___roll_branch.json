@@ -20,6 +20,7 @@
       "/path/to/tmp/json",
       "--revision",
       "v8@refs/heads/4.4.42:20123",
+      "--force",
       "--no_shallow",
       "--output_manifest"
     ],
