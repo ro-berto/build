@@ -177,7 +177,7 @@ _AddBotSpec(
     platform='win',
     parent_builder='Win x64 Builder',
     perf_id='chromium-rel-win8-dual',
-    target_bits=32,
+    target_bits=64,
     num_shards=5)
 _AddBotSpec(
     name='Win 7 Perf',

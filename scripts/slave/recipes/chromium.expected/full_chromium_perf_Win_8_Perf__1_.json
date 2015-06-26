@@ -79,7 +79,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "branding=Chrome buildtype=Official chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "branding=Chrome buildtype=Official chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -108,7 +108,7 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Release",
+      "Release_x64",
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
@@ -135,7 +135,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]\\src\\out\\Release"
+      "[SLAVE_BUILD]\\src\\out\\Release_x64"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "rmtree build directory",
@@ -155,7 +155,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\extract_build.py",
       "--target",
-      "Release",
+      "Release_x64",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--factory-properties",
@@ -172,7 +172,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
       "--target",
-      "Release"
+      "Release_x64"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "start_crash_service"
@@ -184,7 +184,7 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "list",
       "--browser",
-      "release",
+      "release_x64",
       "--json-output",
       "/path/to/tmp/json",
       "--num-shards",
@@ -227,7 +227,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\runtest.py",
       "--target",
-      "Release",
+      "Release_x64",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win 8 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
@@ -263,7 +263,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\runtest.py",
       "--target",
-      "Release",
+      "Release_x64",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win 8 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
@@ -298,7 +298,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\process_dumps.py",
       "--target",
-      "Release"
+      "Release_x64"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "process_dumps"
