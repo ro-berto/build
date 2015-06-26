@@ -144,7 +144,7 @@ def RunSteps(api):
   fail_on_exit = []
 
   api.gclient.set_config('v8')
-  api.bot_update.ensure_checkout(no_shallow=True)
+  api.bot_update.ensure_checkout(force=True, no_shallow=True)
 
   # Get current lkgr ref and update.
   new_lkgr = GetLKGR(api)

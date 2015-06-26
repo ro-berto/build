@@ -21,8 +21,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@12345",
-      "--force"
+      "src@12345"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

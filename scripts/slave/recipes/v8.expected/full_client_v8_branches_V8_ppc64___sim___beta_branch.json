@@ -20,7 +20,6 @@
       "/path/to/tmp/json",
       "--revision",
       "v8@refs/branch-heads/4.3:20123",
-      "--force",
       "--no_shallow",
       "--output_manifest",
       "--with_branch_heads"

@@ -21,8 +21,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/skia@origin/master",
-      "--force"
+      "src/third_party/skia@origin/master"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

@@ -36,8 +36,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/v8@HEAD",
-      "--force"
+      "src/v8@HEAD"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

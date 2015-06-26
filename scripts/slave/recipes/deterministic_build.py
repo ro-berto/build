@@ -84,7 +84,7 @@ def ConfigureChromiumBuilder(api, recipe_config):
   api.chromium.cleanup_temp()
 
   # Checkout chromium.
-  api.bot_update.ensure_checkout()
+  api.bot_update.ensure_checkout(force=True)
 
 
 def ConfigureAndroidBuilder(api, recipe_config):

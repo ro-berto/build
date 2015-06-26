@@ -23,8 +23,7 @@
       "--revision",
       "src/third_party/libjingle/source/talk@1161aa63",
       "--revision",
-      "src/third_party/webrtc@deadbeef",
-      "--force"
+      "src/third_party/webrtc@deadbeef"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

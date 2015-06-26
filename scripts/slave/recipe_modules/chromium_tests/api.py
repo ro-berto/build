@@ -474,7 +474,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot_update_json = bot_update_step.json.output
     self.m.gclient.c.revisions['src'] = str(
         bot_update_json['properties']['got_revision'])
-    self.m.bot_update.ensure_checkout(patch=False, update_presentation=False)
+    self.m.bot_update.ensure_checkout(
+        force=True, patch=False, update_presentation=False)
     try:
       self.m.chromium.runhooks(name='runhooks (without patch)')
     except self.m.step.StepFailure:

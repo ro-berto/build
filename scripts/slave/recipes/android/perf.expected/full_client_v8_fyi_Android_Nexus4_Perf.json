@@ -21,8 +21,7 @@
       "--revision",
       "src@origin/lkcr",
       "--revision",
-      "src/v8@deadbeef",
-      "--force"
+      "src/v8@deadbeef"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

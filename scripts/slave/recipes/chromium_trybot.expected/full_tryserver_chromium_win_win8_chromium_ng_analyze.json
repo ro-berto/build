@@ -34,8 +34,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
-      "--force"
+      "src@HEAD"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

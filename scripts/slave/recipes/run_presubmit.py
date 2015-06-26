@@ -22,11 +22,12 @@ def _RunStepsInternal(api):
 
   repo_name = api.properties['repo_name']
   codereview_auth = api.properties.get('codereview_auth', False)
+  force_checkout = api.properties.get('force_checkout', False)
 
   api.gclient.set_config(repo_name)
 
   bot_update_step = api.bot_update.ensure_checkout(
-      patch_project_roots={'v8': []},
+      force=force_checkout, patch_project_roots={'v8': []},
       patch_oauth2=codereview_auth)
   relative_root = '%s/%s' % (api.gclient.c.solutions[0].name, root)
   relative_root = relative_root.strip('/')

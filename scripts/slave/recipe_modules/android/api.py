@@ -31,7 +31,10 @@ class AOSPApi(recipe_api.RecipeApi):
     return spec
 
   def sync_chromium(self, spec):
-    self.m.bot_update.ensure_checkout(spec)
+    result = self.m.bot_update.ensure_checkout(spec)
+    if not result.json.output['did_run']:
+      self.m.gclient.checkout(spec)
+
     self.m.gclient.runhooks(env={'GYP_CHROMIUM_NO_ACTION': 1})
 
   def lastchange_steps(self):

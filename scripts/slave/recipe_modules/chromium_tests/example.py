@@ -15,7 +15,7 @@ DEPS = [
 
 def RunSteps(api):
   api.chromium.set_config('chromium')
-  api.bot_update.ensure_checkout()
+  api.bot_update.ensure_checkout(force=True)
 
   exes = list(api.m.properties.get('exes', []))
   compile_targets = list(api.m.properties.get('compile_targets', []))

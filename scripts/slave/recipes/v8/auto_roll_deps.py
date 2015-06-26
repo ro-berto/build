@@ -63,7 +63,7 @@ def RunSteps(api):
     api.step.active_result.presentation.step_text = 'Active rolls found.'
     return
 
-  api.bot_update.ensure_checkout(no_shallow=True)
+  api.bot_update.ensure_checkout(force=True, no_shallow=True)
 
   api.python(
       'roll deps',

@@ -60,7 +60,8 @@ BUILDERS = freeze({
 def RunSteps(api):
   _, bot_config = api.chromium.configure_bot(BUILDERS, ['gn_for_uploads'])
 
-  api.bot_update.ensure_checkout(patch_root=bot_config.get('root_override'))
+  api.bot_update.ensure_checkout(
+      force=True, patch_root=bot_config.get('root_override'))
 
   # We need to explicitly pass in the GYP_DEFINES in an environment
   # since we do not normally set it when GN is the project generator.

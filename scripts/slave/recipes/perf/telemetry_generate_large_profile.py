@@ -65,7 +65,7 @@ def _GenerateProfile(api, output_directory):
 
 def RunSteps(api):
   api.chromium.set_config('chromium')
-  api.bot_update.ensure_checkout()
+  api.bot_update.ensure_checkout(force=True)
 
   try:
     profile_directory = api.path.mkdtemp('large-profile')

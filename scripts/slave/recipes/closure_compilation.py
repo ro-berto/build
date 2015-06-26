@@ -17,7 +17,7 @@ def RunSteps(api):
   api.gclient.set_config('chromium')
   api.chromium.set_config('ninja')
 
-  api.bot_update.ensure_checkout()
+  api.bot_update.ensure_checkout(force=True)
 
   api.python(
       'run_tests',

@@ -14,7 +14,7 @@ DEPS = [
 def RunSteps(api):
   api.gclient.set_config('gyp')
 
-  api.bot_update.ensure_checkout()
+  api.bot_update.ensure_checkout(force=True)
 
   api.python('run tests',
              api.path['checkout'].join('gyptest.py'), ['-a'],

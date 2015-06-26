@@ -20,7 +20,6 @@
       "/path/to/tmp/json",
       "--revision",
       "v8@54321",
-      "--force",
       "--no_shallow",
       "--output_manifest"
     ],

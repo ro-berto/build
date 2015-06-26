@@ -168,7 +168,7 @@ class GpuApi(recipe_api.RecipeApi):
     return self.m.properties['mastername'] == 'chromium.gpu.fyi'
 
   def checkout_steps(self):
-    self._bot_update = self.m.bot_update.ensure_checkout()
+    self._bot_update = self.m.bot_update.ensure_checkout(force=True)
 
   def _trim_run(self, str):
     assert str.endswith('_run')
@@ -218,7 +218,8 @@ class GpuApi(recipe_api.RecipeApi):
         bot_update_json = self._bot_update.json.output
         self.m.gclient.c.revisions['src'] = str(
             bot_update_json['properties']['got_revision'])
-        self.m.bot_update.ensure_checkout(patch=False,
+        self.m.bot_update.ensure_checkout(force=True,
+                                          patch=False,
                                           update_presentation=False)
         try:
           self.m.chromium.runhooks()

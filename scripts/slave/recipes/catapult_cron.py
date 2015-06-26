@@ -14,7 +14,7 @@ DEPS = [
 def _CheckoutSteps(api, buildername):
   """Checks out the catapult repo (and any dependencies) using gclient."""
   api.gclient.set_config('catapult')
-  api.bot_update.ensure_checkout()
+  api.bot_update.ensure_checkout(force=True)
   api.gclient.runhooks()
 
 
