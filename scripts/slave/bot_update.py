@@ -206,7 +206,9 @@ RECOGNIZED_PATHS = {
 }
 RECOGNIZED_PATHS.update(internal_data.get('RECOGNIZED_PATHS', {}))
 
-DISABLED_MASTERS = []
+DISABLED_MASTERS = [
+    'client.dart'
+]
 DISABLED_MASTERS += internal_data.get('DISABLED_MASTERS', [])
 
 DISABLED_BUILDERS = {}
