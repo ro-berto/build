@@ -41,9 +41,9 @@ SLAVE_INFO = {
   'skiabot-shuttle-ubuntu12-galaxys3-002':
       SlaveInfo('32309a56e9b3a09f', DEFAULT_SDK_ROOT, False),
   'skiabot-shuttle-ubuntu12-galaxys4-001':
-      SlaveInfo('4d0032a5d8cb6125', DEFAULT_SDK_ROOT, False),
+      SlaveInfo('4d0032a5d8cb6125', MACMINI_SDK_ROOT, False),
   'skiabot-shuttle-ubuntu12-galaxys4-002':
-      SlaveInfo('4d00353cd8ed61c3', DEFAULT_SDK_ROOT, False),
+      SlaveInfo('4d00353cd8ed61c3', MACMINI_SDK_ROOT, False),
   'skiabot-shuttle-ubuntu12-nexus5-001':
       SlaveInfo('03f61449437cc47b', DEFAULT_SDK_ROOT, True),
   'skiabot-shuttle-ubuntu12-nexus5-002':
@@ -57,7 +57,7 @@ SLAVE_INFO = {
   'skiabot-shuttle-ubuntu12-nexus7-001':
       SlaveInfo('015d210a13480604', DEFAULT_SDK_ROOT, True),
   'skiabot-shuttle-ubuntu12-nexus7-002':
-      SlaveInfo('015d18848c280217', MACMINI_SDK_ROOT, True),
+      SlaveInfo('015d18848c280217', DEFAULT_SDK_ROOT, True),
   'skiabot-shuttle-ubuntu12-nexus7-003':
       SlaveInfo('015d16897c401e17', DEFAULT_SDK_ROOT, True),
   'skiabot-shuttle-ubuntu12-nexus9-001':
