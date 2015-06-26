@@ -206,6 +206,15 @@ RECOGNIZED_PATHS = {
 }
 RECOGNIZED_PATHS.update(internal_data.get('RECOGNIZED_PATHS', {}))
 
+DISABLED_MASTERS = []
+DISABLED_MASTERS += internal_data.get('DISABLED_MASTERS', [])
+
+DISABLED_BUILDERS = {}
+DISABLED_BUILDERS.update(internal_data.get('DISABLED_BUILDERS', {}))
+
+DISABLED_SLAVES = {}
+DISABLED_SLAVES.update(internal_data.get('DISABLED_SLAVES', {}))
+
 HEAD_BUILDERS = {}
 HEAD_BUILDERS.update(internal_data.get('HEAD_BUILDERS', {}))
 
@@ -370,6 +379,17 @@ def get_gclient_spec(solutions, target_os, target_os_only):
       'target_os_only': '\ntarget_os_only=%s' % target_os_only
   }
 
+def check_disabled(master, builder, slave):
+   """Returns True if disabled, False if not disabled."""
+   if master in DISABLED_MASTERS:
+     return True
+   builder_list = DISABLED_BUILDERS.get(master)
+   if builder_list and builder in builder_list:
+     return True
+   slave_list = DISABLED_SLAVES.get(master)
+   if slave_list and slave in slave_list:
+     return True
+   return False
 
 def maybe_ignore_revision(master, builder, revision):
   """Handle builders that don't care what buildbot tells them to build.
@@ -1483,7 +1503,7 @@ def main():
   master = options.master
 
   # Check if this script should activate or not.
-  active = True
+  active = not check_disabled(master, builder, slave)
 
   options.revision = maybe_ignore_revision(master, builder, options.revision)
 
