@@ -46,9 +46,6 @@
       "panther_embedded-minimal-paladin": [
         "build203-m2"
       ], 
-      "veyron_pinky-chromium-pfq": [
-        "build326-m2"
-      ], 
       "x86-generic-full": [
         "build89-m2"
       ], 
@@ -71,5 +68,7 @@
       ]
     }
   }, 
-  "unallocated": []
+  "unallocated": [
+    "build326-m2"
+  ]
 }
