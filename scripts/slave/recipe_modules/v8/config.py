@@ -14,6 +14,9 @@ def BaseConfig(**_kwargs):
   assert shard_run <= shard_count
 
   return ConfigGroup(
+    compile_py = ConfigGroup(
+      compile_extra_args = List(basestring),
+    ),
     gyp_env = ConfigGroup(
       AR = Single(basestring, required=False),
       CC = Single(basestring, required=False),
@@ -41,6 +44,21 @@ config_ctx = config_item_context(BaseConfig)
 @config_ctx()
 def v8(c):
   pass
+
+
+@config_ctx()
+def android_arm(c):
+  # Make is executed in the out dir. Android points to the toplevel Makefile in
+  # the v8 dir.
+  c.compile_py.compile_extra_args.extend(['-C', '..' , 'android_arm.release'])
+
+
+@config_ctx()
+def android_arm64(c):
+  # Make is executed in the out dir. Android points to the toplevel Makefile in
+  # the v8 dir.
+  c.compile_py.compile_extra_args.extend(
+      ['-C', '..' , 'android_arm64.release'])
 
 
 @config_ctx()

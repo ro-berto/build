@@ -59,8 +59,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android gomadir='[BUILD]/goma' target_arch=arm64 use_goma=1 v8_target_arch=arm64",
-      "GYP_GENERATORS": "ninja"
+      "GYP_DEFINES": "target_arch=arm64 v8_target_arch=android_arm64"
     },
     "name": "gclient runhooks"
   },
@@ -79,18 +78,20 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Release",
+      "android_arm64.release",
       "--src-dir",
       "[SLAVE_BUILD]/v8",
       "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--"
+      "make",
+      "--",
+      "-C",
+      "..",
+      "android_arm64.release"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_NDK_ROOT": "[SLAVE_BUILD]/v8/third_party/android_tools/ndk"
+    },
     "name": "compile"
   },
   {
@@ -100,7 +101,7 @@
       "-u",
       "[BUILD]/scripts/slave/zip_build.py",
       "--target",
-      "Release",
+      "android_arm64.release",
       "--build-url",
       "gs://chromium-v8/v8-android-arm64-rel",
       "--src-dir",
