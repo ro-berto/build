@@ -335,7 +335,14 @@ class V8Api(recipe_api.RecipeApi):
     return self.bot_config.get('perf', [])
 
   def compile(self, **kwargs):
-    self.m.chromium.compile(**kwargs)
+    env={}
+    if self.m.chromium.c.TARGET_PLATFORM == 'android':
+      env['ANDROID_NDK_ROOT'] = str(self.m.path['checkout'].join(
+          'third_party', 'android_tools', 'ndk'))
+    args = []
+    if self.c.compile_py.compile_extra_args:
+      args.extend(self.c.compile_py.compile_extra_args)
+    self.m.chromium.compile(args, env=env, **kwargs)
 
   # TODO(machenbach): This should move to a dynamorio module as soon as one
   # exists.

@@ -726,7 +726,8 @@ BUILDERS = {
       },
       'V8 Android Arm - builder': {
         'gclient_apply_config': ['android'],
-        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma'],
+        'chromium_apply_config': ['android_arm'],
+        'v8_apply_config': ['android_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
@@ -739,7 +740,8 @@ BUILDERS = {
       },
       'V8 Android Arm64 - builder': {
         'gclient_apply_config': ['android'],
-        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma'],
+        'chromium_apply_config': ['android_arm'],
+        'v8_apply_config': ['android_arm64'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
@@ -1799,12 +1801,8 @@ BUILDERS = {
       },
       'v8_android_arm_compile_rel': {
         'gclient_apply_config': ['android'],
-        'chromium_apply_config': [
-          'v8_ninja',
-          'default_compiler',
-          'goma',
-          'no_dcheck',
-        ],
+        'chromium_apply_config': ['android_arm'],
+        'v8_apply_config': ['android_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',

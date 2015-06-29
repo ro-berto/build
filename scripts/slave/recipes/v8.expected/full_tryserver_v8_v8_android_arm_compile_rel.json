@@ -61,8 +61,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android dcheck_always_on=0 fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1 v8_target_arch=arm",
-      "GYP_GENERATORS": "ninja"
+      "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 target_arch=arm v8_target_arch=android_arm"
     },
     "name": "gclient runhooks"
   },
@@ -81,20 +80,22 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Release",
+      "android_arm.release",
       "--src-dir",
       "[SLAVE_BUILD]/v8",
       "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]/goma",
+      "make",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
-      "--"
+      "--",
+      "-C",
+      "..",
+      "android_arm.release"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_NDK_ROOT": "[SLAVE_BUILD]/v8/third_party/android_tools/ndk"
+    },
     "name": "compile"
   }
 ]
