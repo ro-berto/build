@@ -118,9 +118,10 @@ def _SendResultsFromCache(cache_file_name, url):
     # If the dashboard returned an error, we will re-try next time.
     if error:
       if 'HTTPError: 400' in error:
-        # This is a special case.  If the remote app rejects the json, its
-        # probably malformed and we don't want to retry it.
+        # If the remote app rejects the JSON, it's probably malformed,
+        # so we don't want to retry it.
         print 'Discarding JSON, error:\n%s' % error
+        fatal_error = True
         break
 
       if index != len(cache_lines) - 1:
