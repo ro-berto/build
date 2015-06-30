@@ -188,7 +188,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"angle_unittests_run\", \"chrome\", \"content_gl_tests_run\", \"gl_tests_run\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"angle_unittests_run\", \"chrome\", \"chromium_swarm_tests\", \"content_gl_tests_run\", \"gl_tests_run\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",

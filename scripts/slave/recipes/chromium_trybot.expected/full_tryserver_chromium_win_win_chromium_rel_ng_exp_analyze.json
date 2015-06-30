@@ -188,7 +188,7 @@
       "-u",
       "[SLAVE_BUILD]\\src\\build\\gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"mini_installer\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"chromium_builder_tests\", \"crash_service\", \"mini_installer\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
