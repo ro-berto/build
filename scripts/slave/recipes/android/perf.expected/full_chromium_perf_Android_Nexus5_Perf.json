@@ -253,7 +253,7 @@
       "--disable-network",
       "--disable-java-debug",
       "--max-battery-temp",
-      "300"
+      "350"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
