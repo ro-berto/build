@@ -188,6 +188,15 @@
   },
   {
     "cmd": [
+      "cat",
+      "[SLAVE_BUILD]/src/chrome/VERSION"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "get version",
+    "stdout": "/path/to/tmp/version"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
@@ -198,12 +207,12 @@
       "----",
       "cp",
       "[SLAVE_BUILD]/src/out/Debug/cronet/VERSION",
-      "gs://chromium-cronet/android/cronet-Debug-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00/VERSION"
+      "gs://chromium-cronet/android/37.0.2021.0/Debug/VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload_cronet_version",
     "~followup_annotations": [
-      "@@@STEP_LINK@Cronet version@https://storage.cloud.google.com/chromium-cronet/android/cronet-Debug-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00/VERSION@@@"
+      "@@@STEP_LINK@Cronet version@https://storage.cloud.google.com/chromium-cronet/android/37.0.2021.0/Debug/VERSION@@@"
     ]
   },
   {
@@ -219,12 +228,12 @@
       "cp",
       "-R",
       "[SLAVE_BUILD]/src/out/Debug/cronet",
-      "gs://chromium-cronet/android/cronet-Debug-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
+      "gs://chromium-cronet/android/37.0.2021.0/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload_cronet_package",
     "~followup_annotations": [
-      "@@@STEP_LINK@Cronet package@https://storage.cloud.google.com/chromium-cronet/android/cronet-Debug-4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00@@@"
+      "@@@STEP_LINK@Cronet package@https://storage.cloud.google.com/chromium-cronet/android/37.0.2021.0/Debug@@@"
     ]
   },
   {

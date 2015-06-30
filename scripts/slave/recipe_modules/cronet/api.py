@@ -60,14 +60,18 @@ class CronetApi(recipe_api.RecipeApi):
     self.m.chromium.runhooks()
     self.m.chromium.compile()
 
+  def get_version(self):
+    version = self.m.chromium.get_version()
+    return "%s.%s.%s.%s" % (version['MAJOR'], version['MINOR'],
+                            version['BUILD'], version['PATCH'])
+
 
   def upload_package(self, build_config):
     droid = self.m.chromium_android
-    revision = self.m.properties.get('revision')
     cronetdir = self.m.path['checkout'].join('out',
                                              droid.c.BUILD_CONFIG,
                                              'cronet')
-    destdir = 'cronet-%s-%s' % (build_config, revision)
+    destdir = self.get_version() + '/' + build_config
     # Upload cronet version first to ensure that destdir is created.
     self.m.gsutil.upload(
         source=cronetdir.join('VERSION'),
