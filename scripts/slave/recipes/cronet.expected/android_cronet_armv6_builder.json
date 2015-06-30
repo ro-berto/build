@@ -188,56 +188,6 @@
   },
   {
     "cmd": [
-      "cat",
-      "[SLAVE_BUILD]/src/chrome/VERSION"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "get version",
-    "stdout": "/path/to/tmp/version"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "----",
-      "cp",
-      "[SLAVE_BUILD]/src/out/Release/cronet/VERSION",
-      "gs://chromium-cronet/android/37.0.2021.0/Release/VERSION"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil upload_cronet_version",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Cronet version@https://storage.cloud.google.com/chromium-cronet/android/37.0.2021.0/Release/VERSION@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "----",
-      "cp",
-      "-R",
-      "[SLAVE_BUILD]/src/out/Release/cronet",
-      "gs://chromium-cronet/android/37.0.2021.0/Release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil upload_cronet_package",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Cronet package@https://storage.cloud.google.com/chromium-cronet/android/37.0.2021.0/Release@@@"
-    ]
-  },
-  {
-    "cmd": [
       "[BUILD]/scripts/slave/daemonizer.py",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
