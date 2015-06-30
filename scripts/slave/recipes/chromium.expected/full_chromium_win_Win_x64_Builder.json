@@ -183,7 +183,6 @@
       "--goma-dir",
       "[BUILD]\\goma",
       "--",
-      "all",
       "browser_tests",
       "browser_tests_run",
       "crash_service",

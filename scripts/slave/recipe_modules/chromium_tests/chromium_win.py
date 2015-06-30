@@ -98,9 +98,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-        'all',
-      ],
       'testing': {
         'platform': 'win',
       },
@@ -173,9 +170,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-        'all',
-      ],
       'testing': {
         'platform': 'win',
       },

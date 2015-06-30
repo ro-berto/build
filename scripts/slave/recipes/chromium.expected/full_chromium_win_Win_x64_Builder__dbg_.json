@@ -160,8 +160,8 @@
       "--goma-dir",
       "[BUILD]\\goma",
       "--",
-      "all",
-      "crash_service"
+      "All",
+      "chromium_builder_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
