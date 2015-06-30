@@ -362,7 +362,9 @@
       "-u",
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
-      "Release"
+      "Release",
+      "--output-device-blacklist",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -438,6 +440,8 @@
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Release",
+      "--output-device-blacklist",
+      "/path/to/tmp/json",
       "--disable-location"
     ],
     "cwd": "[SLAVE_BUILD]",

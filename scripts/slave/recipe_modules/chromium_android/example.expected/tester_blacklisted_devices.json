@@ -31,7 +31,7 @@
       "--master",
       "chromium.testing.master",
       "--builder",
-      "coverage_builder",
+      "tester",
       "--slave",
       "tehslave",
       "--spec",
@@ -200,37 +200,27 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--goma-fail-fast",
-      "--goma-disable-local-fallback",
-      "--"
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "----",
+      "cp",
+      "gs://build-bucket/build_product.zip",
+      "[SLAVE_BUILD]/src/out/build_product.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "compile"
+    "name": "gsutil download_build_product"
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/android/archive_build.py",
-      "--target",
-      "Release",
-      "--name",
-      "archive.zip",
-      "--filters",
-      "*.apk"
+      "unzip",
+      "-o",
+      "[SLAVE_BUILD]/src/out/build_product.zip"
     ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "zip_build_proudct"
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "unzip_build_product"
   },
   {
     "cmd": [
@@ -380,7 +370,14 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "provision_devices"
+    "name": "provision_devices",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@blacklisted abc123@abc123@@@",
+      "@@@STEP_LOG_END@blacklisted abc123@@@",
+      "@@@STEP_LOG_LINE@blacklisted def456@def456@@@",
+      "@@@STEP_LOG_END@blacklisted def456@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
   },
   {
     "cmd": [
@@ -493,9 +490,6 @@
       "FlakyTest",
       "--screenshot",
       "--release",
-      "--coverage-dir",
-      "[SLAVE_BUILD]/src/out/Release/coverage",
-      "--python-only",
       "--host-driven-root",
       "[SLAVE_BUILD]/src/chrome/test",
       "--official-build"
@@ -596,42 +590,5 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_for_asan"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/generate_emma_html.py",
-      "--coverage-dir",
-      "[SLAVE_BUILD]/src/out/Release/coverage",
-      "--metadata-dir",
-      "[SLAVE_BUILD]/src/out/Release",
-      "--cleanup",
-      "--output",
-      "[SLAVE_BUILD]/src/out/Release/coverage/coverage_html/index.html"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Generate coverage report"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "4.7",
-      "----",
-      "cp",
-      "-R",
-      "[SLAVE_BUILD]/src/out/Release/coverage/coverage_html",
-      "gs://chrome-code-coverage/java/coverage_builder/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil upload coverage report",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Coverage report@https://storage.cloud.google.com/chrome-code-coverage/java/coverage_builder/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00@@@"
-    ]
   }
 ]

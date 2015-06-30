@@ -375,6 +375,8 @@ class AndroidApi(recipe_api.RecipeApi):
                         disable_java_debug=False, reboot_timeout=None,
                         max_battery_temp=None, **kwargs):
     args = ['-t', self.m.chromium.c.BUILD_CONFIG]
+    args.extend(['--output-device-blacklist',
+                 self.m.json.output(add_json_log=False)])
     if skip_wipe:
       args.append('--skip-wipe')
     if disable_location:
@@ -397,7 +399,7 @@ class AndroidApi(recipe_api.RecipeApi):
       assert max_battery_temp >= 0
       assert max_battery_temp <= 500
       args.extend(['--max-battery-temp', max_battery_temp])
-    self.m.python(
+    result = self.m.python(
       'provision_devices',
       self.m.path['checkout'].join(
           'build', 'android', 'provision_devices.py'),
@@ -405,6 +407,12 @@ class AndroidApi(recipe_api.RecipeApi):
       env=self.m.chromium.get_env(),
       infra_step=True,
       **kwargs)
+    blacklisted_devices = result.json.output
+    if blacklisted_devices:
+      result.presentation.status = self.m.step.WARNING
+      for d in blacklisted_devices:
+        key = 'blacklisted %s' % d
+        result.presentation.logs[key] = [d]
 
   def adb_install_apk(self, apk, apk_package):
     install_cmd = [

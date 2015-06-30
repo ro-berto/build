@@ -197,6 +197,11 @@ def GenTests(api):
          properties_for('tester') +
          api.step_data('device_status_check', retcode=2))
 
+  yield (api.test('tester_blacklisted_devices') +
+         properties_for('tester') +
+         api.override_step_data('provision_devices',
+                                api.json.output(['abc123', 'def456'])))
+
   yield (api.test('perf_tests_failure') +
       properties_for('perf_runner') +
       api.step_data('perf_test.foo', retcode=1))

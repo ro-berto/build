@@ -210,6 +210,8 @@
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Release",
+      "--output-device-blacklist",
+      "/path/to/tmp/json",
       "--min-battery-level",
       "95",
       "--disable-network",
