@@ -12,6 +12,8 @@ import time
 
 from logging.handlers import TimedRotatingFileHandler
 
+import buildbot.status.results
+
 from buildbot.status.base import StatusReceiverMultiService
 from twisted.python import log as twisted_log
 
@@ -170,7 +172,7 @@ class StatusEventLogger(StatusReceiverMultiService):
 
   def send_build_event(self, timestamp_kind, timestamp, build_event_type,
                        bot_name, builder_name, build_number, build_scheduled_ts,
-                       step_name=None, step_number=None):
+                       step_name=None, step_number=None, result=None):
     if self.active and self._event_logging:
       # List options to pass to send_monitoring_event, without the --, to save
       # a bit of space.
@@ -186,6 +188,8 @@ class StatusEventLogger(StatusReceiverMultiService):
       if step_name:
         d['build-event-step-name'] = step_name
         d['build-event-step-number'] = step_number
+      if result:
+        d['build-event-result'] = result.upper()
 
       self.event_logger.info(json.dumps(d))
 
@@ -201,7 +205,7 @@ class StatusEventLogger(StatusReceiverMultiService):
         os.mkdir(self._event_logging_dir)
       except OSError:
         twisted_log.msg('Logging directory cannot be created, no events will '
-                        'be written: %s', self._event_logging_dir)
+                        'be written:', self._event_logging_dir)
       else:
         event_logging_dir_exists = True
 
@@ -375,7 +379,8 @@ class StatusEventLogger(StatusReceiverMultiService):
     self.send_build_event(
         'END', finished * 1000, 'STEP', bot, builder_name, build_number,
         self._get_requested_at_millis(build),
-        step_name=step_name, step_number=step.step_number)
+        step_name=step_name, step_number=step.step_number,
+        result=buildbot.status.results.Results[results[0]])
 
   def buildFinished(self, builderName, build, results):
     build_number = build.getNumber()
@@ -385,7 +390,8 @@ class StatusEventLogger(StatusReceiverMultiService):
     _, finished = build.getTimes()
     self.send_build_event(
         'END', finished * 1000, 'BUILD', bot, builderName, build_number,
-        self._get_requested_at_millis(build))
+        self._get_requested_at_millis(build),
+        result=buildbot.status.results.Results[results])
 
   def builderRemoved(self, builderName):
     self.log('builderRemoved', '%s', builderName)

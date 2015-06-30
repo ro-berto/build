@@ -138,7 +138,7 @@ class StatusLoggerTest(unittest.TestCase):
         'event_logging': True,
     }
     with _make_logger(config_dict) as logger:
-      logger.buildFinished('coconuts', Build(), [0])
+      logger.buildFinished('coconuts', Build(), 0)
       self.assertTrue(os.path.exists(logger.logfile))
       self.assertTrue(os.path.isdir(logger._event_logging_dir))
       self.assertTrue(os.path.exists(logger._event_logfile))
