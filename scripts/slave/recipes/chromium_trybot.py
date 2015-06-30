@@ -310,6 +310,23 @@ BUILDERS = freeze({
         'mastername': 'chromium.win',
         'buildername': 'Win8 GN (dbg)',
       },
+      # Experimental clang/win bots.
+      'win_clang_dbg': {
+        'mastername': 'chromium.fyi',
+        'buildername': 'CrWinClang(dbg)',
+      },
+      'win_clang_rel': {
+        'mastername': 'chromium.fyi',
+        'buildername': 'CrWinClang',
+      },
+      'win_clang_x64_dbg': {
+        'mastername': 'chromium.fyi',
+        'buildername': 'CrWinClang64(dbg)',
+      },
+      'win_clang_x64_rel': {
+        'mastername': 'chromium.fyi',
+        'buildername': 'CrWinClang64',
+      },
     },
   },
 })
