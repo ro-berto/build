@@ -947,7 +947,7 @@ def main_ninja(options, args):
     print 'chdir to %s' % options.src_dir
     os.chdir(options.src_dir)
 
-    command = ['ninja', '-C', options.target_output_dir]
+    command = ['ninja', '-w', 'dupbuild=err', '-C', options.target_output_dir]
 
     # HACK(yyanagisawa): update environment files on |env| update.
     # For compiling on Windows, environment in environment files are used.
