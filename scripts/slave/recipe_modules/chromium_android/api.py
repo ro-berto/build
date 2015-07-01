@@ -350,11 +350,20 @@ class AndroidApi(recipe_api.RecipeApi):
           env=self.m.chromium.get_env(),
           infra_step=True,
           **kwargs)
-      self._devices = [d['serial'] for d in result.json.output]
-      result.presentation.step_text = 'Online devices: %s' % len(self._devices)
+      self._devices = []
+      offline_device_index = 1
       for d in result.json.output:
-        key = '%s %s %s' % (d['type'], d['build'], d['serial'])
-        result.presentation.logs[key] = self.m.json.dumps(d, indent=2).splitlines()
+        try:
+          self._devices.append(d['serial'])
+          key = '%s %s %s' % (d['type'], d['build'], d['serial'])
+        except KeyError:
+          # We expect device_status_check to return an empty dict for
+          # offline devices.
+          key = 'offline device %d' % offline_device_index
+          offline_device_index += 1
+        result.presentation.logs[key] = self.m.json.dumps(
+            d, indent=2).splitlines()
+      result.presentation.step_text = 'Online devices: %s' % len(self._devices)
     except self.m.step.InfraFailure as f:
       params = {
         'summary': ('Device Offline on %s %s' %

@@ -202,6 +202,11 @@ def GenTests(api):
          api.override_step_data('provision_devices',
                                 api.json.output(['abc123', 'def456'])))
 
+  yield (api.test('tester_offline_devices') +
+         properties_for('tester') +
+         api.override_step_data('device_status_check',
+                                api.json.output([{}, {}])))
+
   yield (api.test('perf_tests_failure') +
       properties_for('perf_runner') +
       api.step_data('perf_test.foo', retcode=1))
