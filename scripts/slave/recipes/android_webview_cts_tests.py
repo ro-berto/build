@@ -72,8 +72,11 @@ def RunSteps(api):
       cwd=cts_dir)
 
   # Step 3 Run cts tests
+  adb_path = api.path['slave_build'].join('src', 'third_party', 'android_tools',
+      'sdk', 'platform-tools')
+  env = {'PATH': api.path.pathsep.join([str(adb_path), '%(PATH)s'])}
   api.step('Run Cts', [cts_dir.join('android-cts', 'tools', 'cts-tradefed'),
-      'run', 'cts', '-p', 'android.webkit'])
+      'run', 'cts', '-p', 'android.webkit'], env=env)
 
   api.chromium_android.logcat_dump()
   api.chromium_android.stack_tool_steps()
