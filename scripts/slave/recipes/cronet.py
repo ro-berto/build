@@ -83,6 +83,16 @@ BUILDERS = freeze({
       'BUILD_CONFIG': 'Release',
     },
   },
+  'Android Cronet Data Reduction Proxy Builder': {
+    'recipe_config': 'main_builder',
+    'run_tests': True,
+    'kwargs': {
+      'BUILD_CONFIG': 'Release',
+    },
+    'gyp_defs': {
+      'enable_data_reduction_proxy_support': 1,
+    }
+  },
 })
 
 def RunSteps(api):
