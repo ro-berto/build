@@ -907,7 +907,7 @@ class V8Api(recipe_api.RecipeApi):
     json.
     """
     return self.m.python(
-      'merge perf results' + kwargs.get('suffix', ''),
+      'merge perf results' + kwargs.pop('suffix', ''),
       self.resource('merge_perf_results.py'),
       map(str, args),
       stdout=self.m.json.output(),
