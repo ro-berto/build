@@ -292,7 +292,6 @@ for board in ('x86-generic', 'amd64-generic', 'daisy'):
       'TARGET_CROS_BOARD': board,
     },
     'bot_type': 'builder',
-    'disable_tests': True,
     'compile_targets': [
       'all',
     ],
