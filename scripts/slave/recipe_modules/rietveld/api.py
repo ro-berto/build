@@ -32,7 +32,6 @@ class RietveldApi(recipe_api.RecipeApi):
     patch_project_roots = {
       'blink': ['third_party', 'WebKit'],
       'v8': ['v8'],
-      'build_limited_scripts_slave': ['scripts', 'slave'],
     }
 
     # Make sure to update common projects (above) with extra projects (and not
