@@ -1,0 +1,43 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[cipd]/resources/bootstrap.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "install cipd",
+    "stdin": "{\"bin_path\": \"[SLAVE_BUILD]/cipd\", \"platform\": \"linux-amd64\"}"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/cipd/cipd",
+      "ensure",
+      "--root",
+      "[TMP_BASE]/cipd-example_tmp_1/bin",
+      "--list",
+      "infra/monitoring/dispatcher/linux-amd64 7f751b2237df2fdf3c1405be00590fefffbaea2d"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ensure_installed"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[TMP_BASE]/cipd-example_tmp_1"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rmtree cleanup",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  }
+]
