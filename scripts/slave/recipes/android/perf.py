@@ -29,6 +29,7 @@ BUILDERS = freeze({
                            api.properties['parent_revision']),
       'num_device_shards': 8,
       'test_spec_file': 'chromium.perf.json',
+      'max_battery_temp': 350,
     },
     'Android Nexus5 Perf': {
       'perf_id': 'android-nexus5',
@@ -173,7 +174,7 @@ def RunSteps(api):
     api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=perf_tests),
       perf_id=builder['perf_id'],
-      chartjson_file=True)
+      chartjson_file=True, max_battery_temp=builder.get('max_battery_temp'))
 
     if failures:
       raise api.step.StepFailure('src-side perf tests failed %s' % failures)

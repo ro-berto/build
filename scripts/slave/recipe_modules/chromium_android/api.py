@@ -455,11 +455,15 @@ class AndroidApi(recipe_api.RecipeApi):
                          config='sharded_perf_tests.json',
                          flaky_config=None,
                          chartjson_output=False,
+                         max_battery_temp=None,
                          **kwargs):
     args = ['perf', '--release', '--verbose', '--steps', config]
     if flaky_config:
       args.extend(['--flaky-steps', flaky_config])
-    args.extend(['--collect-chartjson-data'] if chartjson_output else [])
+    if chartjson_output:
+      args.append('--collect-chartjson-data')
+    if max_battery_temp:
+      args.extend(['--max-battery-temp', max_battery_temp])
 
     self.test_runner(
         'Sharded Perf Tests',
@@ -470,7 +474,8 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def run_sharded_perf_tests(self, config, flaky_config=None, perf_id=None,
                              test_type_transform=lambda x: x,
-                             chartjson_file=False, **kwargs):
+                             chartjson_file=False, max_battery_temp=None,
+                             **kwargs):
     """Run the perf tests from the given config file.
 
     config: the path of the config file containing perf tests.
@@ -481,7 +486,8 @@ class AndroidApi(recipe_api.RecipeApi):
     """
     # test_runner.py actually runs the tests and records the results
     self._run_sharded_tests(config=config, flaky_config=flaky_config,
-                            chartjson_output=chartjson_file, **kwargs)
+                            chartjson_output=chartjson_file,
+                            max_battery_temp=max_battery_temp, **kwargs)
 
     # now obtain the list of tests that were executed.
     result = self.m.step(
