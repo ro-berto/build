@@ -63,9 +63,6 @@ def RunSteps(api):
     api.step.active_result.presentation.step_text = 'Active rolls found.'
     return
 
-  # Prevent race with gnumbd by waiting.
-  api.step('wait for gnumbd', ['wait', '20'])
-
   api.bot_update.ensure_checkout(force=True, no_shallow=True)
 
   api.python(

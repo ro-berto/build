@@ -39,14 +39,6 @@
   },
   {
     "cmd": [
-      "wait",
-      "20"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "wait for gnumbd"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
