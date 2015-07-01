@@ -645,20 +645,11 @@ def ios(c):
   gyp_defs['OS'] = c.TARGET_PLATFORM
   gyp_defs['chromium_ios_signing'] = 0
 
-  if c.TARGET_BITS == 64:
-    gyp_defs['target_subarch'] = 'both'
-
   # Do not pass target_arch explicitly, this is the current practice on iOS.
   # TODO(phajdan.jr): Clean this up and pass target_arch explicitly.
   del gyp_defs['target_arch']
 
   c.gyp_env.GYP_GENERATOR_FLAGS['xcode_project_version'] = '3.2'
-
-@config_ctx(includes=['ios'])
-def chromium_ios_device(c):
-  c.compile_py.build_tool = 'xcode'
-  c.compile_py.default_targets = ['All']
-  c.compile_py.xcode_sdk = 'iphoneos7.1'
 
 @config_ctx(includes=['ios', 'ninja'])
 def chromium_ios_ninja(c):
@@ -672,12 +663,6 @@ def chromium_ios_ninja(c):
 def clang_tot_ios(c):
   # Use ToT Clang.
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
-
-@config_ctx(includes=['ios'])
-def chromium_ios_simulator(c):
-  c.compile_py.build_tool = 'xcode'
-  c.compile_py.default_targets = ['All']
-  c.compile_py.xcode_sdk = 'iphonesimulator7.1'
 
 @config_ctx(includes=['chromium', 'official'])
 def chromium_official(c):

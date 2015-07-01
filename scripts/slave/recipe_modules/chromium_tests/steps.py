@@ -238,11 +238,6 @@ class LocalGTestTest(Test):
     if api.chromium.c.TARGET_PLATFORM == 'android':
       return [self.target_name + '_apk']
 
-    # On iOS we rely on 'All' target being compiled instead of using
-    # individual targets.
-    if api.chromium.c.TARGET_PLATFORM == 'ios':
-      return []
-
     return [self.target_name]
 
   def run(self, api, suffix):
@@ -1310,21 +1305,6 @@ class DiagnoseGomaTest(Test):
                                                   'diagnose_goma_log.py')
     api.python('diagnose_goma', diagnose_goma_log_py, [])
 
-
-IOS_TESTS = [
-  GTestTest('ios_chrome_unittests'),
-  GTestTest('base_unittests'),
-  GTestTest('components_unittests'),
-  GTestTest('crypto_unittests'),
-  GTestTest('gfx_unittests'),
-  GTestTest('url_unittests'),
-  GTestTest('content_unittests'),
-  GTestTest('net_unittests'),
-  GTestTest('ui_base_unittests'),
-  GTestTest('ui_ios_unittests'),
-  GTestTest('sync_unit_tests'),
-  GTestTest('sql_unittests'),
-]
 
 GOMA_TESTS = [
   GTestTest('base_unittests'),

@@ -11,52 +11,6 @@ SPEC = {
     'build_gs_bucket': 'chromium-fyi-archive',
   },
   'builders': {
-     'Chromium iOS Device': {
-      'chromium_config': 'chromium_ios_device',
-      'gclient_config': 'ios',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'ios',
-        'TARGET_BITS': 32,
-      },
-      'gclient_config_kwargs': {
-        'GIT_MODE': True,
-      },
-      'testing': {
-        'platform': 'mac',
-      }
-    },
-    'Chromium iOS Simulator (dbg)': {
-      'chromium_config': 'chromium_ios_simulator',
-      'gclient_config': 'ios',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_PLATFORM': 'ios',
-        'TARGET_BITS': 32,
-      },
-      'gclient_config_kwargs': {
-        'GIT_MODE': True,
-      },
-      'tests': steps.IOS_TESTS,
-      'testing': {
-        'platform': 'mac',
-      }
-    },
-    'Chromium iOS Device (ninja)': {
-      'chromium_config': 'chromium_ios_ninja',
-      'gclient_config': 'ios',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'ios',
-        'TARGET_BITS': 64,
-      },
-      'gclient_config_kwargs': {
-        'GIT_MODE': True,
-      },
-      'testing': {
-        'platform': 'mac',
-      }
-    },
     'Chromium Mac 10.10': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',

@@ -207,12 +207,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       assert not self.c.compile_py.solution
       args.append('--')
       if self.c.compile_py.build_tool == 'xcode':
-        for target in targets:
-          args.extend(['-target', target])
         if self.c.compile_py.xcode_project:  # pragma: no cover
           args.extend(['-project', self.c.compile_py.xcode_project])
-        if self.c.compile_py.xcode_sdk:
-          args.extend(['-sdk', self.c.compile_py.xcode_sdk])
       else:
         args.extend(targets)
 
@@ -250,8 +246,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       test += '.exe'
 
     full_args = ['--target', self.c.build_config_fs]
-    if self.c.TARGET_PLATFORM == 'ios':
-      full_args.extend(['--test-platform', 'ios-simulator'])
     if self.c.TARGET_PLATFORM == 'android':
       full_args.extend(['--test-platform', 'android'])
     if self.m.platform.is_linux:
