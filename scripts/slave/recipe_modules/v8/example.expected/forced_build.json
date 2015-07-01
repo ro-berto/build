@@ -127,5 +127,30 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "do something with the results"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[v8]/resources/merge_perf_result_maps.py",
+      "{\"example1\": \"[SLAVE_BUILD]/test_output1.json\", \"example2\": \"[SLAVE_BUILD]/test_output2.json\"}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "merge perf results (maps)",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"example1\": \"the result\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "echo",
+      "the result"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "do something with the results (2)"
   }
 ]

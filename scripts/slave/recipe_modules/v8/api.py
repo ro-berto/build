@@ -902,6 +902,7 @@ class V8Api(recipe_api.RecipeApi):
 
     return results_mapping
 
+  # TODO(machenbach): Deprecated in favor of method below.
   def merge_perf_results(self, *args, **kwargs):
     """Merge perf results from a list of result files and return the resulting
     json.
@@ -912,6 +913,17 @@ class V8Api(recipe_api.RecipeApi):
       map(str, args),
       stdout=self.m.json.output(),
       **kwargs
+    ).stdout
+
+  def merge_perf_result_maps(self, results_file_map, **kwargs):
+    """Merge perf results from a mapping of result files and return the
+    resulting json.
+    """
+    return self.m.python(
+      'merge perf results' + kwargs.pop('suffix', ''),
+      self.resource('merge_perf_result_maps.py'),
+      [self.m.json.input(results_file_map)],
+      stdout=self.m.json.output(),
     ).stdout
 
   def maybe_trigger(self, **additional_properties):

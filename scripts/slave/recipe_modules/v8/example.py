@@ -39,6 +39,14 @@ def RunSteps(api):
   results = api.v8.merge_perf_results(output1, output2)
   api.step('do something with the results', ['echo', results['res']])
 
+  results_file_map = {
+    'example1': str(output1),
+    'example2': str(output2),
+  }
+  results_map = api.v8.merge_perf_result_maps(
+      results_file_map, suffix=' (maps)')
+  api.step('do something with the results', ['echo', results_map['example1']])
+
 
 def GenTests(api):
   yield (
@@ -55,5 +63,8 @@ def GenTests(api):
                            buildername='Fake Builder') +
     api.step_data(
       'merge perf results',
-      stdout=api.json.output({'res': 'the result'}))
+      stdout=api.json.output({'res': 'the result'})) +
+    api.step_data(
+      'merge perf results (maps)',
+      stdout=api.json.output({'example1': 'the result'}))
   )

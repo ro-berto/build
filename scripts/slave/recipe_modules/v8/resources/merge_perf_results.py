@@ -16,7 +16,7 @@ import os
 import sys
 
 
-def Main(argv):
+def main(argv):
   errors = []
   traces = []
   for path in argv:
@@ -32,4 +32,4 @@ def Main(argv):
 
 
 if __name__ == '__main__':
-  sys.exit(Main(sys.argv[1:]))
+  sys.exit(main(sys.argv[1:]))
