@@ -95,8 +95,8 @@ def GenTests(api):
   # TODO(machenbach): This uses the same tryserver for all repos, which doesn't
   # reflect reality (cosmetical problem only).
   for repo_name in ['blink', 'chromium', 'v8', 'nacl', 'naclports', 'gyp',
-                    'build', 'build_limited', 'build_internal', 'depot_tools',
-                    'skia', 'chrome_golo', 'webrtc', 'catapult']:
+                    'build', 'build_internal', 'depot_tools', 'skia',
+                    'chrome_golo', 'webrtc', 'catapult']:
     yield (
       api.test(repo_name) +
       api.properties.tryserver(
@@ -107,6 +107,17 @@ def GenTests(api):
       api.step_data('presubmit', api.json.output([['%s_presubmit' % repo_name,
                                                    ['compile']]]))
     )
+
+  yield (
+    api.test('build_limited_scripts_slave') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='build-limited-scripts-slave-presubmit',
+        repo_name='build_limited',
+        patch_project='build_limited_scripts_slave') +
+    api.step_data('presubmit', api.json.output(
+        [['build-limited-scripts-slave-presubmit', ['compile']]]))
+  )
 
   yield (
     api.test('fake_svn_master') +

@@ -408,7 +408,14 @@ def build_limited(c):
   s = c.solutions.add()
   s.name = 'build_limited'
   s.url = 'https://chrome-internal.googlesource.com/chrome/tools/build_limited'
+  # In order to run presubmit, we checkout the whole build_limited repository
+  # and build repository next to it. However, the patch in CQ needs to be
+  # applied to one of the subfolders of build_limited only and run_presubmit.py
+  # uses the patch to this directory (from gclient root) to find the property
+  # with checked out revision. Since all these subfolders are the part of a
+  # single repository, we map them to the same property here.
   c.got_revision_mapping['build_limited'] = 'got_revision'
+  c.got_revision_mapping['build_limited/scripts/slave'] = 'got_revision'
   # We do not use 'includes' here, because we want build_internal to be the
   # first solution in the list as run_presubmit computes upstream revision
   # from the first solution.
