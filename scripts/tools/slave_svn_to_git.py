@@ -5,6 +5,7 @@
 
 import datetime
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -147,9 +148,15 @@ def main():
       shutil.move(src_git, dest_git)
 
     # Revert any local modifications after the conversion to Git.
+    home_dir = os.path.realpath(os.path.expanduser('~'))
     for relpath in sorted(repos):
       abspath = os.path.join(b_dir, relpath)
-      check_call(['git', 'reset', '--hard'], cwd=abspath)
+      diff = check_output(['git', 'diff'], cwd=abspath)
+      if diff:
+        diff_name = '%s.diff' % re.sub('[^a-zA-Z0-9]', '_', relpath)
+        with open(os.path.join(home_dir, diff_name), 'w') as diff_file:
+          diff_file.write(diff)
+        check_call(['git', 'reset', '--hard'], cwd=abspath)
 
     # Update .gclient file to reference Git DEPS.
     with open(os.path.join(b_dir, '.gclient'), 'w') as gclient_file:
