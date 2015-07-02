@@ -70,13 +70,17 @@ def GenTests(api):
             'Unexpected parent_buildername for builder %r on master %r.' %
                 (buildername, mastername))
 
+      properties = {
+        'mastername': mastername,
+        'buildername': buildername,
+        'parent_buildername': bot_config.get('parent_buildername'),
+      }
+      if mastername == 'chromium.webkit':
+        properties['gs_acl'] = 'public-read'
       test = (
         api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
                                  _sanitize_nonalpha(buildername))) +
-        api.properties.generic(mastername=mastername,
-                               buildername=buildername,
-                               parent_buildername=bot_config.get(
-                                   'parent_buildername')) +
+        api.properties.generic(**properties) +
         api.platform(bot_config['testing']['platform'],
                      bot_config.get(
                          'chromium_config_kwargs', {}).get('TARGET_BITS', 64))

@@ -1231,17 +1231,20 @@ class BlinkTest(Test):
         archive_layout_test_results = api.path['build'].join(
             'scripts', 'slave', 'chromium', 'archive_layout_test_results.py')
 
+        archive_layout_test_args = [
+          '--results-dir', results_dir,
+          '--build-dir', api.chromium.c.build_dir,
+          '--build-number', buildnumber,
+          '--builder-name', buildername,
+          '--gs-bucket', 'gs://chromium-layout-test-archives',
+        ]
+        # TODO(phajdan.jr): Pass gs_acl as a parameter, not build property.
+        if api.properties.get('gs_acl'):
+          archive_layout_test_args.extend(['--gs-acl', api.properties['gs_acl']])
         archive_result = api.python(
           'archive_webkit_tests_results',
           archive_layout_test_results,
-          [
-            '--results-dir', results_dir,
-            '--build-dir', api.chromium.c.build_dir,
-            '--build-number', buildnumber,
-            '--builder-name', buildername,
-            '--gs-bucket', 'gs://chromium-layout-test-archives',
-          ] + api.json.property_args(),
-        )
+          archive_layout_test_args)
 
         # TODO(infra): http://crbug.com/418946 .
         sanitized_buildername = re.sub('[ .()]', '_', buildername)

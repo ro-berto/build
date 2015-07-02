@@ -212,11 +212,7 @@
       "--builder-name",
       "WebKit Linux",
       "--gs-bucket",
-      "gs://chromium-layout-test-archives",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "gs://chromium-layout-test-archives"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "archive_webkit_tests_results",

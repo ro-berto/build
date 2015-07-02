@@ -196,11 +196,7 @@
       "--builder-name",
       "ChromiumPracticeFullTester",
       "--gs-bucket",
-      "gs://chromium-layout-test-archives",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ChromiumPracticeFullTester\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ChromiumPracticeFullTester\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "gs://chromium-layout-test-archives"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "archive_webkit_tests_results",
