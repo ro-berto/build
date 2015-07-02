@@ -571,7 +571,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+        'TARGET_BITS': 64,
       },
       'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
       'bot_type': 'builder',
@@ -589,7 +589,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+        'TARGET_BITS': 64,
       },
       'test_generators': [
         steps.generate_gtest,

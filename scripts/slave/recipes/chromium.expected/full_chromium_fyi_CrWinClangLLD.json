@@ -93,7 +93,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 target_arch=ia32 test_isolation_mode=prepare use_lld=1",
+      "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 target_arch=x64 test_isolation_mode=prepare use_lld=1",
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "gclient runhooks"
@@ -134,7 +134,7 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Release",
+      "Release_x64",
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
@@ -162,7 +162,7 @@
       "-u",
       "RECIPE_MODULE[isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--clean-isolated-files"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -197,7 +197,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\compile.py",
       "--target",
-      "Release",
+      "Release_x64",
       "--src-dir",
       "[SLAVE_BUILD]\\src",
       "--build-tool",
@@ -218,7 +218,7 @@
       "-u",
       "RECIPE_MODULE[isolate]\\resources\\remove_build_metadata.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--src-dir",
       "[SLAVE_BUILD]\\src"
     ],
@@ -237,7 +237,7 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]\\src\\out\\Release\\browser_tests.isolated.gen.json"
+      "[SLAVE_BUILD]\\src\\out\\Release_x64\\browser_tests.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
@@ -255,7 +255,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\zip_build.py",
       "--target",
-      "Release",
+      "Release_x64",
       "--build-url",
       "gs://chromium-fyi-archive/chromium.fyi/CrWinClangLLD",
       "--build_revision",
