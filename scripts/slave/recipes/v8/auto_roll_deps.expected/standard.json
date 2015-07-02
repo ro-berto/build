@@ -41,6 +41,19 @@
     "cmd": [
       "python",
       "-u",
+      "import time; time.sleep(20)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "wait for gnumbd",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@import time; time.sleep(20)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
       "client.v8.fyi",
