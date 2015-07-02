@@ -276,6 +276,37 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "--apk",
+      "AndroidWebViewShell.apk",
+      "--apk_package",
+      "org.chromium.webview_shell",
+      "--release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install AndroidWebViewShell.apk (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "AndroidWebViewShell",
+      "--isolate-file-path",
+      "android_webview/android_webview_shell_test_apk.isolate",
+      "--verbose",
+      "--release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Instrumentation test AndroidWebViewShell"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[BUILD]/scripts/slave/tee.py",

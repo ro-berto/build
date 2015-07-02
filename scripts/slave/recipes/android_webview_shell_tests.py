@@ -3,7 +3,8 @@
 # found in the LICENSE file.
 
 """
-Recipe for testing with the AndroidWebViewShell using system WebView.
+Recipe for running AndroidWebViewShell instrumentation layout tests using
+system WebView.
 """
 
 from infra.libs.infra_types import freeze
@@ -28,6 +29,22 @@ WEBVIEW_PACKAGE = 'com.android.webview'
 
 WEBVIEW_SHELL_APK = 'AndroidWebViewShell.apk'
 WEBVIEW_SHELL_PACKAGE = 'org.chromium.webview_shell'
+
+INSTRUMENTATION_TESTS = freeze([
+  {
+    'test': 'AndroidWebViewShell',
+    'gyp_target': 'android_webview_shell_apk',
+    'kwargs': {
+      'install_apk': {
+        'package': 'org.chromium.webview_shell',
+        'apk': 'AndroidWebViewShell.apk'
+      },
+      'isolate_file_path':
+        'android_webview/android_webview_shell_test_apk.isolate',
+    },
+  },
+])
+
 
 def RunSteps(api):
   api.chromium_android.configure_from_properties('webview_perf',
@@ -56,19 +73,26 @@ def RunSteps(api):
       min_battery_level=95, disable_network=True, disable_java_debug=True,
       reboot_timeout=180)
 
-  # Install WebView
+  # Install system WebView.
   api.chromium_android.adb_install_apk(WEBVIEW_APK, WEBVIEW_PACKAGE)
 
-  # Install the telemetry shell.
-  api.chromium_android.adb_install_apk(WEBVIEW_SHELL_APK,
-                                       WEBVIEW_SHELL_PACKAGE)
+  # Install the WebViewShell.
+  api.chromium_android.adb_install_apk(WEBVIEW_SHELL_APK, WEBVIEW_SHELL_PACKAGE)
 
-  # TODO: Run the tests here.
   api.adb.list_devices()
+
+  # Run the instrumentation tests from the package.
+  run_tests(api)
 
   api.chromium_android.logcat_dump()
   api.chromium_android.stack_tool_steps()
   api.chromium_android.test_report()
+
+def run_tests(api):
+  droid = api.chromium_android
+  for suite in INSTRUMENTATION_TESTS:
+    droid.run_instrumentation_suite(suite['test'], verbose=True,
+                                    **suite.get('kwargs', {}))
 
 def GenTests(api):
   yield api.test('basic') + api.properties.scheduled()
