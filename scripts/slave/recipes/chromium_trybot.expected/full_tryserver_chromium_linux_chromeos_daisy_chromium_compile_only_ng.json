@@ -182,11 +182,15 @@
       "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"all\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"original_exes\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"original_exes\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"all\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"all\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.matching_exes\": []@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.matching_exes\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"all\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
     ]

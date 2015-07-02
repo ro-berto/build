@@ -149,14 +149,17 @@ BUILDERS = freeze({
       'chromeos_x86-generic_chromium_compile_only_ng': {
         'mastername': 'chromium.chromiumos',
         'buildername': 'ChromiumOS x86-generic Compile',
+        'analyze_mode': 'compile',
       },
       'chromeos_amd64-generic_chromium_compile_only_ng': {
         'mastername': 'chromium.chromiumos',
         'buildername': 'ChromiumOS amd64-generic Compile',
+        'analyze_mode': 'compile',
       },
       'chromeos_daisy_chromium_compile_only_ng': {
         'mastername': 'chromium.chromiumos',
         'buildername': 'ChromiumOS daisy Compile',
+        'analyze_mode': 'compile',
       },
       'linux_chromium_chromeos_compile_rel_ng': {
         'mastername': 'chromium.chromiumos',
@@ -479,15 +482,27 @@ def _RunStepsInternal(api):
           override_bot_type='builder_tester',
           override_tests=tests)
 
-  targets_for_analyze = sorted(set(
-      all_compile_targets(api, tests + tests_including_triggered) +
-      [t for t in compile_targets if t.lower() != 'all']))
-  requires_compile, matching_exes, compile_targets = \
-      api.chromium_tests.analyze(
-          affected_files,
-          targets_for_analyze,
-          compile_targets,
-          'trybot_analyze_config.json')
+  if bot_config.get('analyze_mode') == 'compile':
+    targets_for_analyze = sorted(set(
+        all_compile_targets(api, tests + tests_including_triggered) +
+        compile_targets))
+    requires_compile, matching_exes, compile_targets = \
+        api.chromium_tests.analyze(
+            affected_files,
+            targets_for_analyze,
+            compile_targets,
+            'trybot_analyze_config.json',
+            legacy_postprocess=False)
+  else:
+    targets_for_analyze = sorted(set(
+        all_compile_targets(api, tests + tests_including_triggered) +
+        [t for t in compile_targets if t.lower() != 'all']))
+    requires_compile, matching_exes, compile_targets = \
+        api.chromium_tests.analyze(
+            affected_files,
+            targets_for_analyze,
+            compile_targets,
+            'trybot_analyze_config.json')
 
   if not requires_compile:
     return
