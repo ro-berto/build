@@ -601,6 +601,9 @@
             "forgiving_steps": [
               "*"
             ],
+            "closing_steps": [
+              "compile"
+            ],
             "subject_template": "V8 API checker %(result)s in %(project_name)s, revision %(revision)s"
           },
           "Site Isolation Linux": {
