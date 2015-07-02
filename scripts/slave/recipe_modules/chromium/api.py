@@ -340,9 +340,14 @@ class ChromiumApi(recipe_api.RecipeApi):
     full_args.extend(self.c.runtests.test_args)
     full_args.extend(args)
 
+    runtest_path = self.m.path['build'].join('scripts', 'slave', 'runtest.py')
+    if self.c.runtest_py.src_side:
+      runtest_path = self.m.path['checkout'].join(
+          'infra', 'scripts', 'runtest_wrapper.py')
+      full_args = ['--path-build', self.m.path['build'], '--'] + full_args
     return self.m.python(
       step_name,
-      self.m.path['build'].join('scripts', 'slave', 'runtest.py'),
+      runtest_path,
       full_args,
       **kwargs
     )

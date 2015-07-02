@@ -51,6 +51,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if bot_config.get('use_isolate'):
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
 
+    # WARNING: src-side runtest.py is only tested with chromium CQ builders.
+    # Usage not covered by chromium CQ is not supported and can break
+    # without notice.
+    if master_dict.get('settings', {}).get('src_side_runtest_py'):
+      self.m.chromium.c.runtest_py.src_side = True
+
     self.m.gclient.set_config(
         bot_config.get('gclient_config'),
         PATCH_PROJECT=self.m.properties.get('patch_project'),

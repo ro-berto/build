@@ -189,7 +189,10 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[SLAVE_BUILD]/src/infra/scripts/runtest_wrapper.py",
+      "--path-build",
+      "[BUILD]",
+      "--",
       "--target",
       "Release",
       "--xvfb",
@@ -218,7 +221,10 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[SLAVE_BUILD]/src/infra/scripts/runtest_wrapper.py",
+      "--path-build",
+      "[BUILD]",
+      "--",
       "--target",
       "Release",
       "--xvfb",

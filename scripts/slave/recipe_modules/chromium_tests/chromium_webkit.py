@@ -12,6 +12,7 @@ for b in SPEC['builders'].itervalues():
     b['gclient_apply_config'] = ['blink']
 
 SPEC['settings']['build_gs_bucket'] = 'chromium-webkit-archive'
+SPEC['settings']['src_side_runtest_py'] = False
 
 SPEC['builders'].update({
   'WebKit Win Builder': {
