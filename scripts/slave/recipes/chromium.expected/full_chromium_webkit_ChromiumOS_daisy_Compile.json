@@ -155,7 +155,7 @@
       "--cros-board",
       "daisy",
       "--",
-      "all"
+      "All"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"

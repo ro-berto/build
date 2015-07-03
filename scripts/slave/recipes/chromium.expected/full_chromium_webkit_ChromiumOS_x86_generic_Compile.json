@@ -155,7 +155,7 @@
       "--cros-board",
       "x86-generic",
       "--",
-      "all"
+      "All"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"

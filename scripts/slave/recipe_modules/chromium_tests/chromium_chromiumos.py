@@ -297,7 +297,7 @@ for board in ('x86-generic', 'amd64-generic', 'daisy'):
     },
     'bot_type': 'builder',
     'compile_targets': [
-      'all',
+      'All',
     ],
     'testing': {
       'platform': 'linux',

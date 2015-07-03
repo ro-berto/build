@@ -155,7 +155,7 @@
       "--cros-board",
       "amd64-generic",
       "--",
-      "all"
+      "All"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
