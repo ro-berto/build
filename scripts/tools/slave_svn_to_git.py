@@ -64,10 +64,10 @@ def main():
   assert os.path.isdir(b_dir), 'Did not find b dir'
 
   # Set up credentials for the download_from_google_storage hook.
-  boto_file = os.path.join(b_dir, 'build', 'site_config', '.boto')
-  assert os.path.isfile(boto_file), 'Did not find %s file' % boto_file
   env = os.environ.copy()
-  env['AWS_CREDENTIAL_FILE'] = boto_file
+  boto_file = os.path.join(b_dir, 'build', 'site_config', '.boto')
+  if os.path.isfile(boto_file):
+    env['AWS_CREDENTIAL_FILE'] = boto_file
 
   # Find old .gclient config.
   gclient_path = os.path.join(b_dir, '.gclient')
