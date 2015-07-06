@@ -1,9 +1,31 @@
+import json
 import re
 
 
+def parse_chartjson_metric(results_str, metric):  # pragma: no cover
+  """Interpret results-chart.json, finding the needed values.
+
+  Args:
+    results: The contents of results-chart.json.
+    metric: A pair of strings indicating chart and trace names.
+
+  Returns:
+    A triad (valid_values, values, all_results) where valid_values is a boolean,
+    values is a list of floating point numbers, and all_results is a dictionary
+    containing all the results originally in results_str.
+  """
+  chart_name, trace_name = metric
+  results = json.loads(results_str)
+  if trace_name == chart_name:
+    trace_name = 'summary'
+  try:
+    values = results['charts'][chart_name][trace_name]['values']
+    return bool(len(values)), values, results
+  except KeyError:
+    # e.g. metric not found
+    return False, [], results
+
 # The following has largely been copied from bisect_perf_regression.py
-# TODO(robertocn): Look into the possibility of getting structured data from
-# run_benchmark and similar scripts instead of this markup.
 def parse_metric(out, err, metric):  # pragma: no cover
   """Tries to parse the output in RESULT line format or HISTOGRAM format.
 
@@ -12,15 +34,18 @@ def parse_metric(out, err, metric):  # pragma: no cover
     out, err: stdout and stderr that may contain the output to be parsed
 
   Returns:
-    A list of floating point numbers found.
+    A pair (valid_values, values) where valid_values is a boolean and values is
+    a list of floating point numbers.
   """
   text = (out or '') + (err or '')
   result = _parse_result_values_from_output(metric, text)
   if not result:
     result = _parse_histogram_values_from_output(metric, text)
-  return len(result), result
+  return bool(len(result)), result
 
 
+# TODO: Deprecate the text parsing approach to get results in favor of
+#       chartjson.
 def _parse_result_values_from_output(metric, text):  # pragma: no cover
   """Attempts to parse a metric in the format RESULT <graph>: <trace>= ...
 

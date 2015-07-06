@@ -1,5 +1,6 @@
 DEPS = [
   'properties',
+  'file',
   'gsutil',
   'step',
   'raw_io',
