@@ -49,23 +49,35 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     self.mox.ReplayAll()
     v1json = results_dashboard.MakeDashboardJsonV1(
         {'some_json': 'from_telemetry'},
-        {'rev': 'f46bf3c',
-         'git_revision': 'f46bf3c',
-         'v8_rev': '73a34f',
-         'commit_pos': 307226},
-        'win7', 'chromium.perf', 'Windows Builder (1)', '432', {'x': 'y'},
+        {
+            'rev': 'f46bf3c',
+             'git_revision': 'f46bf3c',
+             'v8_rev': '73a34f',
+             'commit_pos': 307226
+        },
+        'win7',
+        'chromium.perf',
+        'Windows Builder (1)',
+        '432',
+        {'a_annotation': 'xyz', 'r_my_rev': '789abc01'},
         True)
-    self.assertEqual({
-        'master': 'ChromiumPerf',
-        'masterid': 'chromium.perf',
-        'bot': 'win7',
-        'buildername': 'Windows Builder (1)',
-        'buildnumber': '432',
-        'chart_data': {'some_json': 'from_telemetry'},
-        'is_ref': True,
-        'point_id': 307226,
-        'supplemental': {'x': 'y'},
-        'versions': {'v8_rev': '73a34f', 'chromium': 'f46bf3c'}},
+    self.assertEqual(
+        {
+            'master': 'ChromiumPerf',
+            'masterid': 'chromium.perf',
+            'bot': 'win7',
+            'buildername': 'Windows Builder (1)',
+            'buildnumber': '432',
+            'chart_data': {'some_json': 'from_telemetry'},
+            'is_ref': True,
+            'point_id': 307226,
+            'supplemental': {'annotation': 'xyz'},
+            'versions': {
+                'v8_rev': '73a34f',
+                'chromium': 'f46bf3c',
+                'my_rev': '789abc01'
+              }
+        },
         v1json)
 
   def test_MakeListOfPoints_MinimalCase(self):

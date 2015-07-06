@@ -224,12 +224,14 @@ def MakeDashboardJsonV1(chart_json, revision_data, bot, mastername,
 
   Args:
     chart_json: A dict containing the telmetry output.
-    revision_data: Data about revisions to include in the upload.
+    revision_dict: Dictionary of revisions to include, include "rev",
+        which determines the point ID.
     bot: A string which comes from perf_id, e.g. linux-release.
     mastername: Buildbot master name, e.g. chromium.perf.
     buildername: Builder name (for stdio links).
     buildnumber: Build number (for stdio links).
-    supplemental_columns: A dictionary of extra data to send with a point.
+    supplemental_dict: A dictionary of extra data to send with a point;
+        this includes revisions and annotation data.
     is_ref: True if this is a reference build, False otherwise.
 
   Returns:
@@ -238,13 +240,19 @@ def MakeDashboardJsonV1(chart_json, revision_data, bot, mastername,
   if not chart_json:
     print 'Error: No json output from telemetry.'
     print '@@@STEP_FAILURE@@@'
+
   # The master name used for the dashboard is the CamelCase name returned by
   # GetActiveMaster(), and not the canonical master name with dots.
   master = slave_utils.GetActiveMaster()
-  point_id, revision_columns = _RevisionNumberColumns(revision_data, prefix='')
-  supplemental_columns = {}
+  point_id, versions = _RevisionNumberColumns(revision_data, prefix='')
+
+  supplemental = {}
   for key in supplemental_dict:
-    supplemental_columns[key.replace('a_', '', 1)] = supplemental_dict[key]
+    if key.startswith('r_'):
+      versions[key.replace('r_', '', 1)] = supplemental_dict[key]
+    if key.startswith('a_'):
+      supplemental[key.replace('a_', '', 1)] = supplemental_dict[key]
+
   fields = {
       'master': master,
       'bot': bot,
@@ -252,8 +260,8 @@ def MakeDashboardJsonV1(chart_json, revision_data, bot, mastername,
       'buildername': buildername,
       'buildnumber': buildnumber,
       'point_id': point_id,
-      'supplemental': supplemental_columns,
-      'versions': revision_columns,
+      'supplemental': supplemental,
+      'versions': versions,
       'chart_data': chart_json,
       'is_ref': is_ref,
   }
