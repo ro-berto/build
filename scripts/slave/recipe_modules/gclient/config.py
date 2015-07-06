@@ -482,6 +482,10 @@ def infra_internal(c):  # pragma: no cover
   soln.url = 'https://chrome-internal.googlesource.com/infra/infra_internal.git'
   c.got_revision_mapping['infra_internal'] = 'got_revision'
 
+@config_ctx(includes=['infra', 'chromium'])
+def infra_with_chromium(c):
+  pass
+
 @config_ctx(includes=['infra'])
 def luci_go(c):
   # luci-go is checked out as a part of infra.git solution at HEAD.
