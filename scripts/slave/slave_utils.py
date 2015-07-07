@@ -168,18 +168,18 @@ def GetBuildRevisions(src_dir, webkit_dir=None, revision_dir=None):
   return (build_revision, webkit_revision)
 
 
-def GetZipFileNames(build_properties, build_revision, webkit_revision=None,
-                    extract=False, use_try_buildnumber=True):
+def GetZipFileNames(
+    mastername, buildnumber, parent_buildnumber, build_revision,
+    webkit_revision=None, extract=False, use_try_buildnumber=True):
   base_name = 'full-build-%s' % chromium_utils.PlatformName()
 
-  if 'try' in build_properties.get('mastername', '') and use_try_buildnumber:
+  if 'try' in mastername and use_try_buildnumber:
     if extract:
-      if not build_properties.get('parent_buildnumber'):
-        raise Exception('build_props does not have parent data: %s' %
-                        build_properties)
-      version_suffix = '_%(parent_buildnumber)s' % build_properties
+      if not parent_buildnumber:
+        raise Exception('missing parent_buildnumber')
+      version_suffix = '_%s' % parent_buildnumber
     else:
-      version_suffix = '_%(buildnumber)s' % build_properties
+      version_suffix = '_%s' % buildnumber
   elif webkit_revision:
     version_suffix = '_wk%s_%s' % (webkit_revision, build_revision)
   else:

@@ -31,7 +31,7 @@ class ExtractBuildTest(unittest.TestCase):
     options = MockOptions()
 
     base_filename, version_suffix = slave_utils.GetZipFileNames(
-        options.build_properties, build_revision=self._build_revision,
+        '', None, None, build_revision=self._build_revision,
         webkit_revision=self._webkit_revision,
         extract=True)
 

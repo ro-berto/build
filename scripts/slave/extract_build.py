@@ -66,7 +66,10 @@ def GetBuildUrl(options, build_revision, webkit_revision=None):
     return options.build_archive_url, None
 
   base_filename, version_suffix = slave_utils.GetZipFileNames(
-      options.build_properties, build_revision, webkit_revision, extract=True)
+      options.build_properties.get('mastername', ''),
+      options.build_properties.get('buildnumber'),
+      options.build_properties.get('parent_buildnumber'),
+      build_revision, webkit_revision, extract=True)
 
   replace_dict = dict(options.build_properties)
   # If builddir isn't specified, assume buildbot used the builder name

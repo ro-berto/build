@@ -24,36 +24,32 @@ class TestGetZipFileNames(unittest.TestCase):
     chromium_utils.OverridePlatformName(sys.platform)
 
   def testNormalBuildName(self):
-    (base_name, version_suffix) = slave_utils.GetZipFileNames({}, 123)
+    (base_name, version_suffix) = slave_utils.GetZipFileNames(
+        '', None, None, 123)
     self._verifyBaseName(base_name)
     self.assertEqual('_123', version_suffix)
 
   def testNormalBuildNameTryBot(self):
-    build_properties = {'mastername': 'master.tryserver.chromium.linux',
-                        'buildnumber': 666}
     (base_name, version_suffix) = slave_utils.GetZipFileNames(
-        build_properties, 123)
+        'master.tryserver.chromium.linux', 666, None, 123)
     self._verifyBaseName(base_name)
     self.assertEqual('_666', version_suffix)
 
   def testNormalBuildNameTryBotExtractNoParentBuildNumber(self):
-    build_properties = {'mastername': 'master.tryserver.chromium.linux',
-                        'buildnumber': 666}
     def dummy():
-      slave_utils.GetZipFileNames(build_properties, 123, extract=True)
+      slave_utils.GetZipFileNames(
+          'master.tryserver.chromium.linux', 666, None, 123, extract=True)
     self.assertRaises(Exception, dummy)
 
   def testNormalBuildNameTryBotExtractWithParentBuildNumber(self):
-    build_properties = {'mastername': 'master.tryserver.chromium.linux',
-                        'buildnumber': 666,
-                        'parent_buildnumber': 999}
     (base_name, version_suffix) = slave_utils.GetZipFileNames(
-        build_properties, 123, extract=True)
+        'master.tryserver.chromium.linux', 666, 999, 123, extract=True)
     self._verifyBaseName(base_name)
     self.assertEqual('_999', version_suffix)
 
   def testWebKitName(self):
-    (base_name, version_suffix) = slave_utils.GetZipFileNames({}, 123, 456)
+    (base_name, version_suffix) = slave_utils.GetZipFileNames(
+        '', None, None, 123, 456)
     self._verifyBaseName(base_name)
     self.assertEqual('_wk456_123', version_suffix)
 

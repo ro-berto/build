@@ -292,7 +292,10 @@ def Archive(options):
     webkit_revision = options.webkit_revision
 
   unversioned_base_name, version_suffix = slave_utils.GetZipFileNames(
-      options.build_properties, build_revision, webkit_revision,
+      options.build_properties.get('mastername', ''),
+      options.build_properties.get('buildnumber'),
+      options.build_properties.get('parent_buildnumber'),
+      build_revision, webkit_revision,
       use_try_buildnumber=(not options.append_deps_patch_sha))
 
   if options.append_deps_patch_sha:
