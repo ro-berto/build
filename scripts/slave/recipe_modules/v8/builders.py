@@ -551,7 +551,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - builder',
         'build_gs_archive': 'win32_rel_archive',
-        'tests': ['unittests', 'v8testing', 'webkit', 'mozilla'],
+        'tests': ['unittests', 'v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - 2': {
@@ -564,7 +564,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - builder',
         'build_gs_archive': 'win32_rel_archive',
-        'tests': ['unittests', 'v8testing', 'webkit', 'mozilla'],
+        'tests': ['unittests', 'v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - nosnap - shared': {
@@ -588,7 +588,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - debug builder',
         'build_gs_archive': 'win32_dbg_archive',
-        'tests': ['unittests', 'v8testing', 'webkit', 'mozilla'],
+        'tests': ['unittests', 'v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - debug - 2': {
@@ -601,7 +601,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - debug builder',
         'build_gs_archive': 'win32_dbg_archive',
-        'tests': ['unittests', 'v8testing', 'webkit', 'mozilla'],
+        'tests': ['unittests', 'v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - debug - 3': {
@@ -614,7 +614,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - debug builder',
         'build_gs_archive': 'win32_dbg_archive',
-        'tests': ['unittests', 'v8testing', 'webkit', 'mozilla'],
+        'tests': ['unittests', 'v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
       'V8 Win64': {
@@ -624,7 +624,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing', 'webkit', 'test262', 'mozilla'],
+        'tests': ['unittests', 'v8testing', 'webkit', 'mozilla'],
         'testing': {'platform': 'win'},
       },
       'V8 Win64 - debug': {
@@ -634,7 +634,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing', 'webkit', 'test262', 'mozilla'],
+        'tests': ['unittests', 'v8testing', 'webkit', 'mozilla'],
         'testing': {'platform': 'win'},
       },
 ####### Category: Mac
