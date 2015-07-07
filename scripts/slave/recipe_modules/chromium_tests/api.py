@@ -660,6 +660,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     args.extend(['--build-config-fs', self.m.chromium.c.build_config_fs])
 
+    if self.m.chromium.c.runtest_py.src_side:
+      args.append('--use-src-side-runtest-py')
+
     paths = {}
     for path in ('build', 'checkout'):
       paths[path] = self.m.path[path]
