@@ -364,6 +364,7 @@ class AndroidApi(recipe_api.RecipeApi):
         result.presentation.logs[key] = self.m.json.dumps(
             d, indent=2).splitlines()
       result.presentation.step_text = 'Online devices: %s' % len(self._devices)
+      return result
     except self.m.step.InfraFailure as f:
       params = {
         'summary': ('Device Offline on %s %s' %
