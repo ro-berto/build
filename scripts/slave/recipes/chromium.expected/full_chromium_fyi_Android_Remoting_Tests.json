@@ -301,7 +301,7 @@
       "remoting_unittests",
       "--verbose",
       "--release",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -335,7 +335,7 @@
       "--test-apk",
       "ChromotingTest",
       "--flakiness-dashboard-server",
-      "http://test-results.appspot.com",
+      "test-results.appspot.com",
       "--verbose",
       "--release",
       "--json-results-file",

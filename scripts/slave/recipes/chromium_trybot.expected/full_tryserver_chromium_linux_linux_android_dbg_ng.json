@@ -579,7 +579,7 @@
       "--isolate-file-path",
       "android_webview/android_webview_test_apk.isolate",
       "--flakiness-dashboard-server",
-      "http://test-results.appspot.com",
+      "test-results.appspot.com",
       "--verbose",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -615,7 +615,7 @@
       "--isolate-file-path",
       "chrome/chrome_public_test_apk.isolate",
       "--flakiness-dashboard-server",
-      "http://test-results.appspot.com",
+      "test-results.appspot.com",
       "--verbose",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -651,7 +651,7 @@
       "--isolate-file-path",
       "chrome/chrome_shell_test_apk.isolate",
       "--flakiness-dashboard-server",
-      "http://test-results.appspot.com",
+      "test-results.appspot.com",
       "--verbose",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -687,7 +687,7 @@
       "--isolate-file-path",
       "content/content_shell_test_apk.isolate",
       "--flakiness-dashboard-server",
-      "http://test-results.appspot.com",
+      "test-results.appspot.com",
       "--verbose",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -721,7 +721,7 @@
       "--test-apk",
       "ChromeSyncShellTest",
       "--flakiness-dashboard-server",
-      "http://test-results.appspot.com",
+      "test-results.appspot.com",
       "--verbose",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -741,7 +741,7 @@
       "-s",
       "android_webview_unittests",
       "--verbose",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -761,7 +761,7 @@
       "base_unittests",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/base/base_unittests.isolate",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -781,7 +781,7 @@
       "breakpad_unittests",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/breakpad/breakpad_unittests.isolate",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -800,7 +800,7 @@
       "-s",
       "cc_unittests",
       "--verbose",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -820,7 +820,7 @@
       "components_unittests",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/components/components_unittests.isolate",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -840,7 +840,7 @@
       "content_browsertests",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/content/content_browsertests.isolate",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -860,7 +860,7 @@
       "content_unittests",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/content/content_unittests.isolate",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -879,7 +879,7 @@
       "-s",
       "device_unittests",
       "--verbose",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -898,7 +898,7 @@
       "-s",
       "events_unittests",
       "--verbose",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -917,7 +917,7 @@
       "-s",
       "gl_tests",
       "--verbose",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -936,7 +936,7 @@
       "-s",
       "gl_unittests",
       "--verbose",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -955,7 +955,7 @@
       "-s",
       "gpu_unittests",
       "--verbose",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -974,7 +974,7 @@
       "-s",
       "ipc_tests",
       "--verbose",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -994,7 +994,7 @@
       "media_unittests",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/media/media_unittests.isolate",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -1014,7 +1014,7 @@
       "net_unittests",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/net/net_unittests.isolate",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -1033,7 +1033,7 @@
       "-s",
       "sandbox_linux_unittests",
       "--verbose",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -1053,7 +1053,7 @@
       "sql_unittests",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/sql/sql_unittests.isolate",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -1073,7 +1073,7 @@
       "sync_unit_tests",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/sync/sync_unit_tests.isolate",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -1092,7 +1092,7 @@
       "-s",
       "ui_android_unittests",
       "--verbose",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -1112,7 +1112,7 @@
       "ui_base_unittests",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/ui/base/ui_base_tests.isolate",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -1131,7 +1131,7 @@
       "-s",
       "ui_touch_selection_unittests",
       "--verbose",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -1151,7 +1151,7 @@
       "unit_tests",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/chrome/unit_tests.isolate",
-      "--flakiness-dashboard-server=http://test-results.appspot.com",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -1372,7 +1372,7 @@
       "--isolate-file-path",
       "android_webview/android_webview_test_apk.isolate",
       "--flakiness-dashboard-server",
-      "http://test-results.appspot.com",
+      "test-results.appspot.com",
       "--verbose",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -1408,7 +1408,7 @@
       "--isolate-file-path",
       "chrome/chrome_public_test_apk.isolate",
       "--flakiness-dashboard-server",
-      "http://test-results.appspot.com",
+      "test-results.appspot.com",
       "--verbose",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -1444,7 +1444,7 @@
       "--isolate-file-path",
       "chrome/chrome_shell_test_apk.isolate",
       "--flakiness-dashboard-server",
-      "http://test-results.appspot.com",
+      "test-results.appspot.com",
       "--verbose",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -1480,7 +1480,7 @@
       "--isolate-file-path",
       "content/content_shell_test_apk.isolate",
       "--flakiness-dashboard-server",
-      "http://test-results.appspot.com",
+      "test-results.appspot.com",
       "--verbose",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -1514,7 +1514,7 @@
       "--test-apk",
       "ChromeSyncShellTest",
       "--flakiness-dashboard-server",
-      "http://test-results.appspot.com",
+      "test-results.appspot.com",
       "--verbose",
       "--json-results-file",
       "/path/to/tmp/json"

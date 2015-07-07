@@ -269,7 +269,7 @@ class LocalGTestTest(Test):
         isolate_path = api.path['checkout'].join(self._android_isolate_path)
         kwargs['isolate_file_path'] = isolate_path
       kwargs['json_results_file'] = gtest_results_file
-      kwargs['flakiness_dashboard'] = 'http://test-results.appspot.com'
+      kwargs['flakiness_dashboard'] = 'test-results.appspot.com'
     else:
       kwargs['xvfb'] = True
       kwargs['test_type'] = self.name
@@ -1133,7 +1133,7 @@ class AndroidJunitTest(AndroidTest):
 class AndroidInstrumentationTest(AndroidTest):
   def __init__(self, name, compile_target, adb_install_apk=None,
                isolate_file_path=None,
-               flakiness_dashboard='http://test-results.appspot.com',
+               flakiness_dashboard='test-results.appspot.com',
                annotation=None, except_annotation=None, screenshot=False,
                verbose=True, host_driven_root=None):
     super(AndroidInstrumentationTest, self).__init__(name, compile_target,
