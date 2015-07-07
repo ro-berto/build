@@ -624,7 +624,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing', 'webkit', 'mozilla'],
+        'tests': ['unittests', 'v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
       'V8 Win64 - debug': {
@@ -634,7 +634,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing', 'webkit', 'mozilla'],
+        'tests': ['unittests', 'v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
 ####### Category: Mac
