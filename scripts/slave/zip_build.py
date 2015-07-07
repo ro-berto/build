@@ -93,19 +93,12 @@ def FileRegexWhitelist(options):
 
 def FileRegexBlacklist(options):
   if chromium_utils.IsWindows():
-    # Remove all .ilk/.7z and maybe PDB files
-    # TODO(phajdan.jr): Remove package_pdb_files when nobody uses it.
-    include_pdbs = options.factory_properties.get('package_pdb_files', True)
-    if include_pdbs:
-      return r'^.+\.(rc|res|lib|exp|ilk|7z|([pP]recompile\.h\.pch.*))$'
-    else:
-      return r'^.+\.(rc|res|lib|exp|ilk|pdb|7z|([pP]recompile\.h\.pch.*))$'
+    return r'^.+\.(rc|res|lib|exp|ilk|7z|([pP]recompile\.h\.pch.*))$'
   if chromium_utils.IsMac():
     # The static libs are just built as intermediate targets, and we don't
     # need to pull the dSYMs over to the testers most of the time (except for
     # the memory tools).
-    if options.factory_properties.get(
-        'package_dsym_files', options.package_dsym_files):
+    if options.package_dsym_files:
       return r'^.+\.(a)$'
     else:
       return r'^.+\.(a|dSYM)$'
@@ -298,14 +291,11 @@ def Archive(options):
     build_revision = options.build_revision
     webkit_revision = options.webkit_revision
 
-  append_deps_patch_sha = options.factory_properties.get(
-      'append_deps_patch_sha')
-
   unversioned_base_name, version_suffix = slave_utils.GetZipFileNames(
       options.build_properties, build_revision, webkit_revision,
-      use_try_buildnumber=(not append_deps_patch_sha))
+      use_try_buildnumber=(not options.append_deps_patch_sha))
 
-  if append_deps_patch_sha:
+  if options.append_deps_patch_sha:
     deps_sha = os.path.join('src', 'DEPS.sha')
     if os.path.exists(deps_sha):
       sha = open(deps_sha).read()
@@ -357,23 +347,19 @@ def Archive(options):
   zip_base, zip_ext, versioned_file = MakeVersionedArchive(
       zip_file, version_suffix, options)
 
-  prune_limit = max(0, int(options.factory_properties.get('prune_limit', 10)))
-  PruneOldArchives(staging_dir, zip_base, zip_ext, prune_limit=prune_limit)
+  PruneOldArchives(staging_dir, zip_base, zip_ext, prune_limit=10)
 
   # Update the latest revision file in the staging directory
   # to allow testers to figure out the latest packaged revision
   # without downloading tarballs.
   revision_file = WriteRevisionFile(staging_dir, build_revision)
 
-  build_url = (options.build_url or
-               options.factory_properties.get('build_url', ''))
-  if build_url.startswith('gs://'):
-    gs_acl = options.factory_properties.get('gs_acl')
+  if options.build_url.startswith('gs://'):
     zip_url = UploadToGoogleStorage(
-        versioned_file, revision_file, build_url, gs_acl)
+        versioned_file, revision_file, options.build_url, options.gs_acl)
 
     storage_url = ('https://storage.googleapis.com/%s/%s' %
-        (build_url[len('gs://'):], os.path.basename(versioned_file)))
+        (options.build_url[len('gs://'):], os.path.basename(versioned_file)))
     print '@@@STEP_LINK@download@%s@@@' % storage_url
   else:
     slavename = options.build_properties['slavename']
@@ -422,18 +408,21 @@ def main(argv):
                                  'target CROS board.'))
   option_parser.add_option('--package-dsym-files', action='store_true',
                            default=False, help='Add also dSYM files.')
+  option_parser.add_option('--append-deps-patch-sha', action='store_true')
+  option_parser.add_option('--gs-acl')
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args(argv)
 
   if not options.target:
     options.target = options.factory_properties.get('target', 'Release')
-  if not options.webkit_dir:
-    options.webkit_dir = options.factory_properties.get('webkit_dir')
-  if not options.revision_dir:
-    options.revision_dir = options.factory_properties.get('revision_dir')
-  options.src_dir = (options.factory_properties.get('zip_build_src_dir')
-                     or options.src_dir)
+  if not options.build_url:
+    options.build_url = options.factory_properties.get('build_url', '')
+  if not options.append_deps_patch_sha:
+    options.append_deps_patch_sha = options.factory_properties.get(
+        'append_deps_patch_sha')
+  if not options.gs_acl:
+    options.gs_acl = options.factory_properties.get('gs_acl')
 
   # When option_parser is passed argv as a list, it can return the caller as
   # first unknown arg.  So throw a warning if we have two or more unknown

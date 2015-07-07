@@ -108,6 +108,8 @@ class ArchiveApi(recipe_api.RecipeApi):
       args.append('--package-dsym-files')
     if exclude_files:
       args.extend(['--exclude-files', exclude_files])
+    if 'gs_acl' in self.m.properties:
+      args.extend(['--gs-acl', self.m.properties['gs_acl']])
     args.extend(self.m.json.property_args())
     kwargs['allow_subannotations'] = True
     self.m.python(
