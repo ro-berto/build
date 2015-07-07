@@ -52,10 +52,16 @@ def get_recipe_properties(factory_properties, build_properties,
 
   mastername = master_properties.get('mastername')
   buildername = master_properties.get('buildername')
+  slave_properties = {}
   if mastername and buildername:
-    slave_properties = get_factory_properties_from_disk(mastername, buildername)
-  else:
-    slave_properties = {}
+    try:
+      slave_properties = get_factory_properties_from_disk(
+          mastername, buildername)
+    except LookupError as e:
+      if master_overrides_slave:
+        print 'WARNING in annotated_run.py (non-fatal): %s' % e
+      else:
+        raise e
 
   properties = master_properties.copy()
   conflicting_properties = {}
