@@ -381,6 +381,7 @@ class AndroidApi(recipe_api.RecipeApi):
       raise
 
   def provision_devices(self, skip_wipe=False, disable_location=False,
+                        enable_mock_location=False,
                         min_battery_level=None, disable_network=False,
                         disable_java_debug=False, reboot_timeout=None,
                         max_battery_temp=None, **kwargs):
@@ -391,6 +392,8 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--skip-wipe')
     if disable_location:
       args.append('--disable-location')
+    if enable_mock_location:
+      args.append('--enable-mock-location')
     if reboot_timeout is not None:
       assert isinstance(reboot_timeout, int)
       assert reboot_timeout > 0
