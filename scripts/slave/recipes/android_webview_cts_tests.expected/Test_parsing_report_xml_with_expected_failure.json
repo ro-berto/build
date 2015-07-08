@@ -5,7 +5,7 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "chromium.testing.master",
+      "chromium.fyi",
       "--builder",
       "TestBuilder",
       "--slave",
@@ -19,7 +19,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@204787",
+      "src@HEAD",
       "--force"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -293,7 +293,23 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:%(PATH)s"
     },
-    "name": "Run Cts"
+    "name": "Run Cts",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@Created xml report file at file:///path/to/testResult.xml@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "/path/to/testResult.xml",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Read the test report"
   },
   {
     "cmd": [
