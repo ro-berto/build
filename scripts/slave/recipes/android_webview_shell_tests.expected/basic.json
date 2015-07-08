@@ -244,21 +244,6 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "--apk",
-      "AndroidWebViewShell.apk",
-      "--apk_package",
-      "org.chromium.webview_shell",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install AndroidWebViewShell.apk"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[adb]/resources/list_devices.py",
@@ -287,7 +272,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "install AndroidWebViewShell.apk (2)"
+    "name": "install AndroidWebViewShell.apk"
   },
   {
     "cmd": [
