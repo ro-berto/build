@@ -184,16 +184,15 @@ class GpuApi(recipe_api.RecipeApi):
     # aren't supported on the current configuration (because the component
     # build is used).
     is_tryserver = self.m.tryserver.is_tryserver
+    isolates = common.GPU_ISOLATES
     if self.is_fyi_waterfall:
+      isolates += common.FYI_ONLY_GPU_ISOLATES
       if self.m.platform.is_win or self.m.platform.is_linux:
         # TODO(kbr): run these tests on the trybots as soon as there is
         # capacity to do so, and on all platforms as soon as ANGLE does.
-        isolates = (common.GPU_ISOLATES + common.FYI_ONLY_GPU_ISOLATES +
-                    common.WIN_AND_LINUX_ONLY_FYI_ONLY_GPU_ISOLATES)
-      else:
-        isolates = common.GPU_ISOLATES + common.FYI_ONLY_GPU_ISOLATES
-    else:
-      isolates = common.GPU_ISOLATES
+        isolates += common.WIN_AND_LINUX_ONLY_FYI_ONLY_GPU_ISOLATES
+      if self.m.platform.is_win:
+        isolates += common.WIN_ONLY_FYI_ONLY_GPU_ISOLATES
     targets = [u'%s_run' % test for test in isolates]
     self.m.isolate.clean_isolated_files(
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))

@@ -26,3 +26,7 @@ FYI_ONLY_GPU_ISOLATES = (
 WIN_AND_LINUX_ONLY_FYI_ONLY_GPU_ISOLATES = (
   'angle_end2end_tests',
 )
+
+WIN_ONLY_FYI_ONLY_GPU_ISOLATES = (
+  'angle_deqp_tests',
+)
