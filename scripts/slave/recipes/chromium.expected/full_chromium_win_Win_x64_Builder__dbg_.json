@@ -160,6 +160,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]\\goma",
+      "--ninja-ensure-up-to-date",
       "--",
       "All",
       "chromium_builder_tests"
