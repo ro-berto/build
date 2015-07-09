@@ -154,7 +154,7 @@ class SendResultsToDashboardTest(unittest.TestCase):
 
     # Then the data is re-formatted to a format that the dashboard accepts.
     MakeListOfPoints.assert_called_with(
-        fake_charts_data, 'linux', 'sunspider', 'my.master', 'Builder', 123, {})
+        fake_charts_data, 'linux', 'sunspider', 'Builder', 123, {})
 
     # Then a function is called to send the data (and any cached data).
     SendResults.assert_called_with(
@@ -192,8 +192,8 @@ class SendResultsToDashboardTest(unittest.TestCase):
 
     # Then the data is re-formatted to a format that the dashboard accepts.
     MakeDashboardJsonV1.assert_called_with(
-        fake_json_data, {'rev': 343}, 'linux',
-        'my.master', 'Builder', 123, {}, False)
+        fake_json_data, {'rev': 343}, 'sunspider', 'linux',
+        'Builder', 123, {}, False)
 
     # Then a function is called to send the data (and any cached data).
     SendResults.assert_called_with(

@@ -35,6 +35,8 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     super(ResultsDashboardFormatTest, self).setUp()
     self.mox = mox.Mox()
     self.maxDiff = None
+    os.environ['BUILDBOT_BUILDBOTURL'] = (
+        'http://build.chromium.org/p/my.master')
 
   def tearDown(self):
     self.mox.UnsetStubs()
@@ -47,6 +49,7 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     results_dashboard._GetTimestamp().AndReturn(307226)
     results_dashboard._GetTimestamp().AndReturn(307226)
     self.mox.ReplayAll()
+
     v1json = results_dashboard.MakeDashboardJsonV1(
         {'some_json': 'from_telemetry'},
         {
@@ -55,23 +58,25 @@ class ResultsDashboardFormatTest(unittest.TestCase):
              'v8_rev': '73a34f',
              'commit_pos': 307226
         },
-        'win7',
-        'chromium.perf',
-        'Windows Builder (1)',
-        '432',
+        'foo_test',
+        'my-bot',
+        'Builder',
+        '10',
         {'a_annotation': 'xyz', 'r_my_rev': '789abc01'},
         True)
     self.assertEqual(
         {
             'master': 'ChromiumPerf',
-            'masterid': 'chromium.perf',
-            'bot': 'win7',
-            'buildername': 'Windows Builder (1)',
-            'buildnumber': '432',
+            'bot': 'my-bot',
             'chart_data': {'some_json': 'from_telemetry'},
             'is_ref': True,
             'point_id': 307226,
-            'supplemental': {'annotation': 'xyz'},
+            'supplemental': {
+                'annotation': 'xyz',
+                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                                '/my.master/builders/Builder/builds/10/steps/'
+                                'foo_test/logs/stdio)')
+            },
             'versions': {
                 'v8_rev': '73a34f',
                 'chromium': 'f46bf3c',
@@ -96,7 +101,7 @@ class ResultsDashboardFormatTest(unittest.TestCase):
                 'rev': '307226',
             }
         },
-        'my-bot', 'foo_test', 'my.master', 'Builder', 10, {})
+        'my-bot', 'foo_test', 'Builder', 10, {})
     expected_points = [
         {
             'master': 'MyMaster',
@@ -105,10 +110,12 @@ class ResultsDashboardFormatTest(unittest.TestCase):
             'revision': 307226,
             'value': '100.0',
             'error': '5.0',
-            'masterid': 'my.master',
-            'buildername': 'Builder',
-            'buildnumber': 10,
-            'supplemental_columns': {'r_commit_pos': 307226},
+            'supplemental_columns': {
+                'r_commit_pos': 307226,
+                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                                '/my.master/builders/Builder/builds/10/steps/'
+                                'foo_test/logs/stdio)')
+            },
         }
     ]
     self.assertEqual(expected_points, actual_points)
@@ -145,10 +152,9 @@ class ResultsDashboardFormatTest(unittest.TestCase):
                 'units': 'count',
             },
         },
-        'my-bot', 'foo_test', 'my.master', 'Builder', 10,
+        'my-bot', 'foo_test', 'Builder', 10,
         {
             'r_bar': '89abcdef',
-            'a_stdio_uri': 'http://mylogs.com/Builder/10',
             # The supplemental columns here are included in all points.
         })
     expected_points = [
@@ -160,14 +166,13 @@ class ResultsDashboardFormatTest(unittest.TestCase):
             'value': '100.0',
             'error': '5.0',
             'units': 'KB',
-            'masterid': 'my.master',
-            'buildername': 'Builder',
-            'buildnumber': 10,
             'supplemental_columns': {
                 'r_webkit_rev': '6789',
                 'r_bar': '89abcdef',
                 'r_chromium': '46790669f8a2ecd7249ab92418260316b1c60dbf',
-                'a_stdio_uri': 'http://mylogs.com/Builder/10',
+                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                                '/my.master/builders/Builder/builds/10/steps/'
+                                'foo_test/logs/stdio)')
                 # Note that v8 rev is not included since it was 'undefined'.
             },
         },
@@ -179,14 +184,13 @@ class ResultsDashboardFormatTest(unittest.TestCase):
             'value': '98.5',
             'error': '5.0',
             'units': 'KB',
-            'masterid': 'my.master',
-            'buildername': 'Builder',
-            'buildnumber': 10,
             'supplemental_columns': {
                 'r_webkit_rev': '6789',
                 'r_bar': '89abcdef',
                 'r_chromium': '46790669f8a2ecd7249ab92418260316b1c60dbf',
-                'a_stdio_uri': 'http://mylogs.com/Builder/10',
+                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                                '/my.master/builders/Builder/builds/10/steps/'
+                                'foo_test/logs/stdio)')
             },
         },
         {
@@ -198,14 +202,13 @@ class ResultsDashboardFormatTest(unittest.TestCase):
             'error': 0,
             'units': 'count',
             'important': True,
-            'masterid': 'my.master',
-            'buildername': 'Builder',
-            'buildnumber': 10,
             'supplemental_columns': {
                 'r_v8_rev': '2345',
                 'r_bar': '89abcdef',
                 'r_chromium': '46790669f8a2ecd7249ab92418260316b1c60dbf',
-                'a_stdio_uri': 'http://mylogs.com/Builder/10',
+                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                                '/my.master/builders/Builder/builds/10/steps/'
+                                'foo_test/logs/stdio)')
             },
         },
     ]
@@ -226,7 +229,7 @@ class ResultsDashboardFormatTest(unittest.TestCase):
                 'rev': '2eca27b067e3e57c70e40b8b95d0030c5d7c1a7f',
             }
         },
-        'my-bot', 'foo_test', 'chromium.perf', 'Builder', 10, {})
+        'my-bot', 'foo_test', 'Builder', 10, {})
     expected_points = [
         {
             'master': 'ChromiumPerf',
@@ -236,15 +239,32 @@ class ResultsDashboardFormatTest(unittest.TestCase):
             'revision': 1375315200,
             'value': '100.0',
             'error': '5.0',
-            'masterid': 'chromium.perf',
-            'buildername': 'Builder',
-            'buildnumber': 10,
             'supplemental_columns': {
                 'r_chromium': '2eca27b067e3e57c70e40b8b95d0030c5d7c1a7f',
+                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                                '/my.master/builders/Builder/builds/10/steps/'
+                                'foo_test/logs/stdio)')
             },
         }
     ]
     self.assertEqual(expected_points, actual_points)
+
+
+  def test_GetStdioUri(self):
+    self.mox.StubOutWithMock(datetime, 'datetime')
+    datetime.datetime.utcnow().AndReturn(FakeDateTime())
+    self.mox.StubOutWithMock(slave_utils, 'GetActiveMaster')
+    slave_utils.GetActiveMaster().AndReturn('ChromiumPerf')
+    self.mox.ReplayAll()
+
+    expected_supplemental_column = {
+        'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                        '/my.master/builders/Builder/builds/10/steps/'
+                        'foo_test/logs/stdio)')
+    }
+    stdio_uri_column = results_dashboard._GetStdioUriColumn(
+        'foo_test', 'Builder', 10)
+    self.assertEqual(expected_supplemental_column, stdio_uri_column)
 
 
 class IsEncodedJson(mox.Comparator):

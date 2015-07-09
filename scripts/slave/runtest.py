@@ -642,7 +642,7 @@ def _GenerateDashboardJson(log_processor, args):
   if chart_json:
     return results_dashboard.MakeDashboardJsonV1(
         chart_json,
-        args['revisions'], args['system'], args['mastername'],
+        args['revisions'], args['test'], args['system'],
         args['buildername'], args['buildnumber'],
         args['supplemental_columns'], log_processor.IsReferenceBuild())
   return None
@@ -708,8 +708,8 @@ def _SendResultsToDashboard(log_processor, args):
   else:
     charts = _GetDataFromLogProcessor(log_processor)
     results = results_dashboard.MakeListOfPoints(
-        charts, args['system'], args['test'], args['mastername'],
-        args['buildername'], args['buildnumber'], args['supplemental_columns'])
+        charts, args['system'], args['test'], args['buildername'],
+        args['buildnumber'], args['supplemental_columns'])
 
   if not results:
     return False
