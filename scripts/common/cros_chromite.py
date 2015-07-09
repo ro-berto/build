@@ -301,10 +301,11 @@ class ChromiteTarget(object):
 class ChromiteConfig(collections.OrderedDict):
   """Wraps a full Chromite configuration dictionary."""
 
-  def __init__(self, default_config=None, templates=None):
+  def __init__(self, default_config=None, templates=None, site_params=None):
     super(ChromiteConfig, self).__init__(self)
     self._default = default_config or {}
     self._templates = templates
+    self._site_params = site_params
 
   def AddTarget(self, name, config):
     """Adds a named Chromite target to the config object.
@@ -330,7 +331,8 @@ class ChromiteConfig(collections.OrderedDict):
     config = config.copy()
     default = config.pop('_default', None)
     templates = config.pop('_templates', None)
-    chromite_config = cls(default, templates)
+    site_params = config.pop('_site_params', None)
+    chromite_config = cls(default, templates, site_params)
     for k, v in config.iteritems():
       chromite_config.AddTarget(k, v)
     return chromite_config
