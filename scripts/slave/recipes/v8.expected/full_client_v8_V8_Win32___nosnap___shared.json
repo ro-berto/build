@@ -68,6 +68,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "component=shared_library target_arch=ia32 v8_target_arch=ia32 v8_use_snapshot=false",
+      "GYP_GENERATORS": "ninja",
       "GYP_MSVS_VERSION": "2013"
     },
     "name": "gclient runhooks"
@@ -91,7 +92,7 @@
       "--src-dir",
       "[SLAVE_BUILD]\\v8",
       "--build-tool",
-      "vs",
+      "ninja",
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -108,7 +109,7 @@
       "--arch",
       "ia32",
       "--outdir",
-      "build",
+      "out",
       "--buildbot",
       "--timeout=200",
       "unittests",
@@ -147,7 +148,7 @@
       "--arch",
       "ia32",
       "--outdir",
-      "build",
+      "out",
       "--buildbot",
       "--timeout=200",
       "default",
@@ -188,7 +189,7 @@
       "--arch",
       "ia32",
       "--outdir",
-      "build",
+      "out",
       "--buildbot",
       "--timeout=200",
       "default",

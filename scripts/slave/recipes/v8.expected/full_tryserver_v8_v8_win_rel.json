@@ -70,6 +70,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 target_arch=ia32 v8_target_arch=ia32",
+      "GYP_GENERATORS": "ninja",
       "GYP_MSVS_VERSION": "2013"
     },
     "name": "gclient runhooks"
@@ -93,7 +94,7 @@
       "--src-dir",
       "[SLAVE_BUILD]\\v8",
       "--build-tool",
-      "vs",
+      "ninja",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--"
@@ -112,7 +113,7 @@
       "--arch",
       "ia32",
       "--outdir",
-      "build",
+      "out",
       "--buildbot",
       "--timeout=200",
       "unittests",
@@ -152,7 +153,7 @@
       "--arch",
       "ia32",
       "--outdir",
-      "build",
+      "out",
       "--buildbot",
       "--timeout=200",
       "default",
@@ -192,7 +193,7 @@
       "--arch",
       "ia32",
       "--outdir",
-      "build",
+      "out",
       "--buildbot",
       "--timeout=200",
       "webkit",
