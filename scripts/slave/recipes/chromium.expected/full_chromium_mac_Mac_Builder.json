@@ -224,6 +224,7 @@
       "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
+      "--ninja-ensure-up-to-date",
       "--",
       "browser_tests",
       "browser_tests_run",

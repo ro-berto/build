@@ -176,6 +176,7 @@
       "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
+      "--ninja-ensure-up-to-date",
       "--",
       "chromium_builder_tests"
     ],
