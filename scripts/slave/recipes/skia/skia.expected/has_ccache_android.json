@@ -56,6 +56,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
+      "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_MAKE_CCACHE": "/usr/bin/ccache",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Debug",

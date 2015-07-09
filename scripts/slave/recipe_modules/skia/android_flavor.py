@@ -97,6 +97,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         self)
     self._has_root = slave_info.has_root
     self._default_env = {'ANDROID_SDK_ROOT': self._android_sdk_root,
+                         'ANDROID_HOME': self._android_sdk_root,
                          'SKIA_ANDROID_VERBOSE_SETUP': 1}
 
   def step(self, name, cmd, **kwargs):
