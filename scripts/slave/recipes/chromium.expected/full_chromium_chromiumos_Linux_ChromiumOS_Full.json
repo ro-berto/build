@@ -137,6 +137,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--ninja-ensure-up-to-date",
       "--",
       "app_list_unittests",
       "aura_builder",

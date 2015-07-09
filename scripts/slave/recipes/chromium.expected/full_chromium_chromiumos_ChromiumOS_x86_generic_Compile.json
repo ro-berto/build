@@ -151,6 +151,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--ninja-ensure-up-to-date",
       "--cros-board",
       "x86-generic",
       "--",

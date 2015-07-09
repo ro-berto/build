@@ -175,6 +175,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--ninja-ensure-up-to-date",
       "--",
       "aura_builder",
       "browser_tests",

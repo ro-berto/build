@@ -15,7 +15,7 @@ SPEC = {
   'builders': {
     'Linux ChromiumOS Full': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos'],
+      'chromium_apply_config': ['chromeos', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -70,7 +70,7 @@ SPEC = {
 
     'Linux ChromiumOS Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos'],
+      'chromium_apply_config': ['chromeos', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -88,7 +88,7 @@ SPEC = {
     },
     'Linux ChromiumOS Tests (1)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos'],
+      'chromium_apply_config': ['chromeos', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -125,7 +125,7 @@ SPEC = {
 
     'Linux ChromiumOS (Clang dbg)': {
       'chromium_config': 'chromium_clang',
-      'chromium_apply_config': ['chromeos'],
+      'chromium_apply_config': ['chromeos', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -173,7 +173,7 @@ SPEC = {
 
     'Linux ChromiumOS Ozone Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos', 'ozone'],
+      'chromium_apply_config': ['chromeos', 'ozone', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -191,7 +191,7 @@ SPEC = {
     },
     'Linux ChromiumOS Ozone Tests (1)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos', 'ozone'],
+      'chromium_apply_config': ['chromeos', 'ozone', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -211,7 +211,7 @@ SPEC = {
     },
     'Linux ChromiumOS Ozone Builder (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos', 'ozone'],
+      'chromium_apply_config': ['chromeos', 'ozone', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -229,7 +229,7 @@ SPEC = {
     },
     'Linux ChromiumOS Builder (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos'],
+      'chromium_apply_config': ['chromeos', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -247,7 +247,7 @@ SPEC = {
     },
     'Linux ChromiumOS Tests (dbg)(1)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos'],
+      'chromium_apply_config': ['chromeos', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -288,7 +288,7 @@ SPEC = {
 for board in ('x86-generic', 'amd64-generic', 'daisy'):
   SPEC['builders']['ChromiumOS %s Compile' % (board,)] = {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['chromeos'],
+    'chromium_apply_config': ['chromeos', 'ninja_confirm_noop'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
