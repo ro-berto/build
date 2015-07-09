@@ -44,7 +44,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.chromium.set_config(
         bot_config.get('chromium_config'),
         **bot_config.get('chromium_config_kwargs', {}))
-
     # Set GYP_DEFINES explicitly because chromium config constructor does
     # not support that.
     self.m.chromium.c.gyp_env.GYP_DEFINES.update(
