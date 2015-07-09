@@ -167,11 +167,6 @@ class GpuApi(recipe_api.RecipeApi):
     """Indicates whether the recipe is running on the GPU FYI waterfall."""
     return self.m.properties['mastername'] == 'chromium.gpu.fyi'
 
-  @property
-  def is_deqp_tester(self):
-    """Indicates whether the receipe is running on the dEQP tester bot."""
-    return 'dEQP' in self.m.properties['buildername']
-
   def checkout_steps(self):
     self._bot_update = self.m.bot_update.ensure_checkout(force=True)
 
@@ -307,13 +302,6 @@ class GpuApi(recipe_api.RecipeApi):
       result.presentation.status = self.m.step.SUCCESS
 
     tests = []
-
-    # Run only the dEQP tests on the dEQP GPU bots.
-    if self.is_deqp_tester:
-      tests.append(self._create_gtest(
-          'angle_deqp_tests', chrome_revision, webkit_revision,
-          enable_swarming, swarming_dimensions))
-      return tests
 
     # Copy the test list to avoid mutating it.
     basic_tests = list(SIMPLE_TESTS_TO_RUN)
