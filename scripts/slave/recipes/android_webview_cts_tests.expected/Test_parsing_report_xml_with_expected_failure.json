@@ -212,7 +212,6 @@
       "Release",
       "--output-device-blacklist",
       "/path/to/tmp/json",
-      "--enable-mock-location",
       "--reboot-timeout",
       "180",
       "--min-battery-level",

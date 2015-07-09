@@ -65,8 +65,8 @@ def RunSteps(api):
   api.chromium_android.spawn_logcat_monitor()
   api.chromium_android.device_status_check()
   api.chromium_android.provision_devices(
-      min_battery_level=95, enable_mock_location=True, disable_network=True,
-      disable_java_debug=True, reboot_timeout=180)
+      min_battery_level=95, disable_network=True, disable_java_debug=True,
+      reboot_timeout=180)
 
   api.adb.list_devices()
   # Install WebView
