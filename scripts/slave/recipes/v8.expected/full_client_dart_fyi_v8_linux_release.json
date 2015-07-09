@@ -104,10 +104,12 @@
       "gs://chromium-v8/v8-for-dart-rel",
       "--src-dir",
       "v8",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"4.2\", \"buildername\": \"v8-linux-release\", \"buildnumber\": 571, \"mastername\": \"client.dart.fyi\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"4.2\", \"buildername\": \"v8-linux-release\", \"buildnumber\": 571, \"mastername\": \"client.dart.fyi\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--master-name",
+      "client.dart.fyi",
+      "--slave-name",
+      "TestSlavename",
+      "--build-number",
+      "571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"

@@ -154,10 +154,12 @@
       "gs://chromium-webrtc/Mac Builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"revision\": \"c321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"revision\": \"c321321\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--master-name",
+      "chromium.webrtc",
+      "--slave-name",
+      "TestSlavename",
+      "--build-number",
+      "571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"

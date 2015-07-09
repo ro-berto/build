@@ -250,10 +250,12 @@
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--package-dsym-files",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac ASan 64 Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac ASan 64 Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--master-name",
+      "chromium.memory",
+      "--slave-name",
+      "TestSlavename",
+      "--build-number",
+      "571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"

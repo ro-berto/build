@@ -490,10 +490,12 @@
       "Release",
       "--build-url",
       "gs://chromium-fyi-archive/win_pgo_builds",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Win PGO Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"recipe\": \"chromium_pgo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Win PGO Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"recipe\": \"chromium_pgo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--master-name",
+      "chromium.fyi",
+      "--slave-name",
+      "TestSlavename",
+      "--build-number",
+      "571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"

@@ -129,10 +129,12 @@
       "gs://chromium-webrtc/fyi_android_dbg",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android Builder (dbg)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android Builder (dbg)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}"
+      "--master-name",
+      "client.webrtc.fyi",
+      "--slave-name",
+      "slavename",
+      "--build-number",
+      "1337"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"

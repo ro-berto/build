@@ -143,10 +143,12 @@
       "[SLAVE_BUILD]/src",
       "--exclude-files",
       "lib.target,gen,android_webview,jingle_unittests",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"android_arm64_perf_bisect_builder\", \"buildnumber\": 257, \"got_revision\": \"267739\", \"issue\": \"8675309\", \"mastername\": \"tryserver.chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"267739\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"android_arm64_perf_bisect_builder\", \"buildnumber\": 257, \"got_revision\": \"267739\", \"issue\": \"8675309\", \"mastername\": \"tryserver.chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"267739\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--master-name",
+      "tryserver.chromium.perf",
+      "--slave-name",
+      "TestSlavename",
+      "--build-number",
+      "257"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "zip_build"

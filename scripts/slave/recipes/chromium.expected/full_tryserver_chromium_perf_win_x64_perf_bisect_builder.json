@@ -128,10 +128,12 @@
       "Release_x64",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"win_x64_perf_bisect_builder\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"win_x64_perf_bisect_builder\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--master-name",
+      "tryserver.chromium.perf",
+      "--slave-name",
+      "TestSlavename",
+      "--build-number",
+      "571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"

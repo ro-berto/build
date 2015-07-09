@@ -194,10 +194,12 @@
       "gs://chromium-skia-gm/client.skia/Mac Builder-Trybot",
       "--build_revision",
       "d9c4a4d173a97ef2832b65636b4200bb93ea8ee1",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac Builder-Trybot\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac Builder-Trybot\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--master-name",
+      "client.skia",
+      "--slave-name",
+      "TestSlavename",
+      "--build-number",
+      "571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
