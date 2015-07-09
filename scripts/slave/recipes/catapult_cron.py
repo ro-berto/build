@@ -24,7 +24,7 @@ def RunSteps(api):
 
   api.python('chromium.perf success rates',
              api.path['checkout'].join(
-                'base', 'util', 'perfbot-stats', 'chrome_perf_stats.py'))
+                'base', 'util', 'perfbot_stats', 'chrome_perf_stats.py'))
 
 
 def GenTests(api):

@@ -56,7 +56,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/base/util/perfbot-stats/chrome_perf_stats.py"
+      "[SLAVE_BUILD]/catapult/base/util/perfbot_stats/chrome_perf_stats.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "chromium.perf success rates"
