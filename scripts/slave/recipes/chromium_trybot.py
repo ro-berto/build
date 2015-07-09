@@ -434,7 +434,7 @@ def _RunStepsInternal(api):
   # and trybots, http://crbug.com/501744 .
   if (api.chromium.c.TARGET_PLATFORM != 'android'
       and 'win8' not in buildername):
-    api.chromium.apply_config('ninja_confirm_noop')
+    api.chromium.apply_config('ninja_confirm_noop', optional=True)
 
   bot_update_step, master_dict, test_spec = \
       api.chromium_tests.prepare_checkout(
