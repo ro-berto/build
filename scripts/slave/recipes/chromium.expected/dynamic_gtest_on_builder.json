@@ -162,6 +162,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--ninja-ensure-up-to-date",
       "--",
       "base_unittests",
       "browser_tests",

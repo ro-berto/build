@@ -156,6 +156,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--ninja-ensure-up-to-date",
       "--",
       "chromium_swarm_tests"
     ],

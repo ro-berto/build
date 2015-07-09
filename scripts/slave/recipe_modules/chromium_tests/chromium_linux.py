@@ -15,6 +15,7 @@ SPEC = {
   'builders': {
     'Linux ARM': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -32,6 +33,7 @@ SPEC = {
     },
     'Linux Builder': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -49,6 +51,7 @@ SPEC = {
     },
     'Linux Tests': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -104,6 +107,7 @@ SPEC = {
     },
     'Linux Builder (dbg)(32)': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -126,6 +130,7 @@ SPEC = {
     },
     'Linux Tests (dbg)(1)(32)': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -145,6 +150,7 @@ SPEC = {
 
     'Linux Builder (dbg)': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -177,6 +183,7 @@ SPEC = {
     },
     'Linux Tests (dbg)(1)': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -512,6 +519,7 @@ SPEC = {
 
     'Cast Linux': {
       'chromium_config': 'cast_linux',
+      'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
