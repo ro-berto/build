@@ -513,7 +513,7 @@ BUILDERS = {
       },
 ####### Category: Windows
       'V8 Win32 - builder': {
-        'chromium_apply_config': ['v8_ninja', 'msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -527,7 +527,7 @@ BUILDERS = {
         ],
       },
       'V8 Win32 - debug builder': {
-        'chromium_apply_config': ['v8_ninja', 'msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -569,12 +569,7 @@ BUILDERS = {
       },
       'V8 Win32 - nosnap - shared': {
         'v8_apply_config': ['no_snapshot'],
-        'chromium_apply_config': [
-          'v8_ninja',
-          'msvs2013',
-          'shared_library',
-          'no_snapshot',
-         ],
+        'chromium_apply_config': ['msvs2013', 'shared_library', 'no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -623,7 +618,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'V8 Win64': {
-        'chromium_apply_config': ['v8_ninja', 'msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -633,7 +628,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'V8 Win64 - debug': {
-        'chromium_apply_config': ['v8_ninja', 'msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1639,7 +1634,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_win_rel': {
-        'chromium_apply_config': ['v8_ninja', 'msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1649,7 +1644,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win_dbg': {
-        'chromium_apply_config': ['v8_ninja', 'msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1659,7 +1654,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win_compile_dbg': {
-        'chromium_apply_config': ['v8_ninja', 'msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1669,12 +1664,7 @@ BUILDERS = {
       },
       'v8_win_nosnap_shared_compile_rel': {
         'v8_apply_config': ['no_snapshot'],
-        'chromium_apply_config': [
-          'v8_ninja',
-          'msvs2013',
-          'shared_library',
-          'no_snapshot',
-         ],
+        'chromium_apply_config': ['msvs2013', 'shared_library', 'no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1685,7 +1675,6 @@ BUILDERS = {
       'v8_win_nosnap_shared_rel': {
         'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [
-          'v8_ninja',
           'msvs2013',
           'no_dcheck',
           'no_snapshot',
@@ -1700,7 +1689,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_compile_rel': {
-        'chromium_apply_config': ['v8_ninja', 'msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1709,7 +1698,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_rel': {
-        'chromium_apply_config': ['v8_ninja', 'msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1719,7 +1708,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_dbg': {
-        'chromium_apply_config': ['v8_ninja', 'msvs2013'],
+        'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1940,7 +1929,7 @@ dart_mac_release = BUILDERS['client.dart.fyi']['builders']['v8-mac-release']
 dart_mac_release['chromium_apply_config'].extend(['v8_ninja', 'clang', 'goma'])
 
 dart_win_release = BUILDERS['client.dart.fyi']['builders']['v8-win-release']
-dart_win_release['chromium_apply_config'].extend(['v8_ninja', 'msvs2013'])
+dart_win_release['chromium_apply_config'].extend(['msvs2013'])
 
 BUILDERS = freeze(BUILDERS)
 BRANCH_BUILDERS = freeze(BRANCH_BUILDERS)
