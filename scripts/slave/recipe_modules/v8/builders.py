@@ -1707,6 +1707,16 @@ BUILDERS = {
         'tests': ['unittests', 'v8testing', 'webkit', 'simdjs_small'],
         'testing': {'platform': 'win'},
       },
+      'v8_win64_ninja_rel': {
+        'chromium_apply_config': ['v8_ninja', 'msvs2013'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'win'},
+      },
       'v8_win64_dbg': {
         'chromium_apply_config': ['msvs2013'],
         'v8_config_kwargs': {
