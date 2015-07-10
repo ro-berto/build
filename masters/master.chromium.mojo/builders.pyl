@@ -26,6 +26,16 @@
       },
       "slavebuilddir": "chromium_mojo",
     },
+    "Chromium Mojo Linux Perf": {
+      "recipe": "chromium_mojo",
+      "scheduler": "chromium_commits",
+      "slave_pools": ["linux_precise_perf"],
+
+      "properties": {
+        "config": "Release",
+      },
+      "slavebuilddir": "chromium_mojo",
+    },
   },
 
   "schedulers": {
@@ -51,6 +61,14 @@
         "version": "precise",
       },
       "slaves": ["build136-a1"],
+    },
+    "linux_precise_perf": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "linux",
+        "version": "precise",
+      },
+      "slaves": ["build153-m1"],
     },
   },
 }
