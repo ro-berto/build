@@ -293,20 +293,17 @@ class JsonResource(resource.Resource):
         """Generates the json dictionary.
 
         By default, renders every childs."""
-        if self.children:
-            data = {}
-            for name in self.children:
-                child = self.getChildWithDefault(name, request)
-                if isinstance(child, JsonResource):
-                    wfd = defer.waitForDeferred(
-                            defer.maybeDeferred(lambda :
-                                child.asDict(request)))
-                    yield wfd
-                    data[name] = wfd.getResult()
-                # else silently pass over non-json resources.
-            yield data
-        else:
-            raise NotImplementedError()
+        data = {}
+        for name in self.children:
+            child = self.getChildWithDefault(name, request)
+            if isinstance(child, JsonResource):
+                wfd = defer.waitForDeferred(
+                        defer.maybeDeferred(lambda :
+                            child.asDict(request)))
+                yield wfd
+                data[name] = wfd.getResult()
+            # else silently pass over non-json resources.
+        yield data
 
 
 def ToHtml(text):

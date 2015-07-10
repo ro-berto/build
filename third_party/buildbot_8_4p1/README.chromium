@@ -5654,3 +5654,39 @@ index 0689e87..7ae3c9a 100644
     </li>
    {% endfor %}
    </ul>
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
+index 531199b..8675da9 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
+@@ -293,20 +293,17 @@ class JsonResource(resource.Resource):
+         """Generates the json dictionary.
+ 
+         By default, renders every childs."""
+-        if self.children:
+-            data = {}
+-            for name in self.children:
+-                child = self.getChildWithDefault(name, request)
+-                if isinstance(child, JsonResource):
+-                    wfd = defer.waitForDeferred(
+-                            defer.maybeDeferred(lambda :
+-                                child.asDict(request)))
+-                    yield wfd
+-                    data[name] = wfd.getResult()
+-                # else silently pass over non-json resources.
+-            yield data
+-        else:
+-            raise NotImplementedError()
++        data = {}
++        for name in self.children:
++            child = self.getChildWithDefault(name, request)
++            if isinstance(child, JsonResource):
++                wfd = defer.waitForDeferred(
++                        defer.maybeDeferred(lambda :
++                            child.asDict(request)))
++                yield wfd
++                data[name] = wfd.getResult()
++            # else silently pass over non-json resources.
++        yield data
+ 
+ 
+ def ToHtml(text):
