@@ -16,6 +16,7 @@ from common.skia import builder_name_schema
 from common.skia import global_constants
 from master import master_utils
 from master import slaves_list
+from master import status_logger
 from master.builders_pools import BuildersPools
 from master.factory import annotator_factory
 from master.gitiles_poller import GitilesPoller
@@ -353,6 +354,7 @@ def SetupMaster(ActiveMaster):
 
   if ActiveMaster.is_production_host:
     # Build result emails.
+    c['status'].append(status_logger.StatusEventLogger())
     c['status'].append(skia_notifier.SkiaMailNotifier(
         fromaddr=ActiveMaster.from_address,
         mode='change',
