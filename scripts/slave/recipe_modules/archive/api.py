@@ -316,7 +316,25 @@ class ArchiveApi(recipe_api.RecipeApi):
         args.extend(['--build_revision', build_revision])
       elif src_dir:
         args.extend(['--src-dir', src_dir])
-    args.extend(self.m.json.property_args())
+
+    properties = (
+      ('mastername', '--master-name'),
+      ('buildnumber', '--build-number'),
+      ('parent_builddir', '--parent-build-dir'),
+      ('parentname', '--parent-builder-name'),
+      ('parentslavename', '--parent-slave-name'),
+      ('parent_buildnumber', '--parent-build-number'),
+      ('webkit_dir', '--webkit-dir'),
+      ('revision_dir', '--revision-dir'),
+    )
+    for property_name, switch_name in properties:
+      if self.m.properties.get(property_name):
+        args.extend([switch_name, self.m.properties[property_name]])
+
+    # TODO(phajdan.jr): Always halt on missing build.
+    if self.m.properties.get('halt_on_missing_build'):  # pragma: no cover
+      args.append('--halt-on-missing-build')
+
     self.m.python(
       step_name,
       self.m.path['build'].join('scripts', 'slave', 'extract_build.py'),

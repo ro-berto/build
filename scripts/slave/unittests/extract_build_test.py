@@ -20,6 +20,12 @@ _BUILD_DIR = os.path.abspath(os.path.join(
 class MockOptions(object):
   build_properties = {}
   build_archive_url = None
+  master_name = 'chromium.fyi'
+  build_number = 456
+  parent_build_number = 789
+  parent_builder_name = 'Builder'
+  parent_slave_name = 'slave'
+  parent_build_dir = '/b/foo'
 
 
 class ExtractBuildTest(unittest.TestCase):

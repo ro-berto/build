@@ -172,10 +172,10 @@
       "gs://chromium-memory-archive/chromium.memory/Mac ASan 64 Builder/full-build-mac.zip",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac ASan 64 Tests (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"parent_buildername\": \"Mac ASan 64 Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac ASan 64 Tests (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"parent_buildername\": \"Mac ASan 64 Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--master-name",
+      "chromium.memory",
+      "--build-number",
+      "571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "extract build"

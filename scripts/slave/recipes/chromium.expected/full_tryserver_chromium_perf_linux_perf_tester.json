@@ -180,10 +180,10 @@
       "Release",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
-      "--factory-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"300148\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \"good_revision\": \"300138\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"linux_perf_tester\", \"buildnumber\": 571, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"bisect_config\": {\"bad_revision\": \"300148\", \"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \"good_revision\": \"300138\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"linux_perf_tester\", \"buildnumber\": 571, \"job_name\": \"f7a7b4135624439cbd27fdd5133d74ec\", \"mastername\": \"tryserver.chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--master-name",
+      "tryserver.chromium.perf",
+      "--build-number",
+      "571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "extract build"

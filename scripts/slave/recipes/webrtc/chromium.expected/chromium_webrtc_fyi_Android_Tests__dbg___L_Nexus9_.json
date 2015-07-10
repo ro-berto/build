@@ -156,10 +156,10 @@
       "gs://chromium-webrtc/android_chromium_trunk_arm64_dbg",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (L Nexus9)\", \"buildnumber\": 571, \"got_libjingle_revision\": \"1161aa63\", \"got_revision\": \"c321321\", \"got_webrtc_revision\": \"deadbeef\", \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Android Builder ARM64 (dbg)\", \"parent_got_libjingle_revision\": \"1161aa63\", \"parent_got_revision\": \"c321321\", \"parent_got_webrtc_revision\": \"deadbeef\", \"recipe\": \"webrtc/chromium\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Tests (dbg) (L Nexus9)\", \"buildnumber\": 571, \"got_libjingle_revision\": \"1161aa63\", \"got_revision\": \"c321321\", \"got_webrtc_revision\": \"deadbeef\", \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": \"Android Builder ARM64 (dbg)\", \"parent_got_libjingle_revision\": \"1161aa63\", \"parent_got_revision\": \"c321321\", \"parent_got_webrtc_revision\": \"deadbeef\", \"recipe\": \"webrtc/chromium\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--master-name",
+      "chromium.webrtc.fyi",
+      "--build-number",
+      "571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "extract build"

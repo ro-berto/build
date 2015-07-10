@@ -189,10 +189,10 @@
       "Release",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
-      "--factory-properties",
-      "{\"buildername\": \"Android Tests (amp split)\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"recipe\": \"chromium\", \"slavename\": \"build1-a1\"}",
-      "--build-properties",
-      "{\"buildername\": \"Android Tests (amp split)\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"recipe\": \"chromium\", \"slavename\": \"build1-a1\"}"
+      "--master-name",
+      "chromium.fyi",
+      "--build-number",
+      "77457"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "extract build"

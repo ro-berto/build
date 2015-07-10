@@ -176,10 +176,10 @@
       "gs://chromium-webkit-archive/chromium.webkit/WebKit Win Builder/full-build-win32.zip",
       "--build_revision",
       "1e74b372f951d4491f305ec64f6decfcda739e73",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit XP\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"parent_buildername\": \"WebKit Win Builder\", \"parent_got_revision\": \"1e74b372f951d4491f305ec64f6decfcda739e73\", \"parent_got_webkit_revision\": \"191269\", \"project\": \"chromium\", \"recipe\": \"chromium\", \"revision\": \"1e74b372f951d4491f305ec64f6decfcda739e73\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit XP\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"parent_buildername\": \"WebKit Win Builder\", \"parent_got_revision\": \"1e74b372f951d4491f305ec64f6decfcda739e73\", \"parent_got_webkit_revision\": \"191269\", \"project\": \"chromium\", \"recipe\": \"chromium\", \"revision\": \"1e74b372f951d4491f305ec64f6decfcda739e73\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--master-name",
+      "chromium.webkit",
+      "--build-number",
+      "571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "extract build"
