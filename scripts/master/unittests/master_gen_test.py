@@ -41,7 +41,8 @@ SAMPLE_WATERFALL_PYL = """\
       "recipe": "test_nightly_recipe",
       "scheduler": "nightly",
       "slave_pools": ["main"],
-      "slavebuilddir": "test"
+      "slavebuilddir": "test",
+      "category": "0nightly"
     }
   },
 
