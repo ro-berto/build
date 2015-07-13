@@ -490,6 +490,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       wrapper += ['--clear-sdk-cache']
     if self.c.compile_py.goma_dir:
       wrapper += ['--gomadir', self.c.compile_py.goma_dir]
+    if self.c.gyp_env.GYP_DEFINES.get('fastbuild', 0) == 1:
+      wrapper += ['--fastbuild']
     wrapper += ['--']
     return wrapper
 
