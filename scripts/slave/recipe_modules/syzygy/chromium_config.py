@@ -29,6 +29,9 @@ def _syzygy_msvs(dummy_c):
 
 @CONFIG_CTX(includes=['ninja', '_syzygy_base'])
 def _syzygy_ninja(c):
+  # Generate MSVS projects as well for ease of debugging on the bot.
+  c.gyp_env.GYP_GENERATORS.add('ninja')
+  c.gyp_env.GYP_GENERATORS.add('msvs-ninja')
   # Inject a Ninja no-op build confirmation step.
   c.compile_py.ninja_confirm_noop = True
 
