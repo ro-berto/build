@@ -96,13 +96,13 @@ F('win_asan_rel_cov', win_out().ChromiumASANFactory(
 
 
 # ASan/Win supports neither the component build nor NaCL at the moment.
-proprietary_codecs_gyp = (' proprietary_codecs=1 ffmpeg_branding=Chrome')
-asan_win_proprietary_codecs_gyp = asan_win_gyp + proprietary_codecs_gyp
+media_gyp = (' proprietary_codecs=1 ffmpeg_branding=Chrome')
+asan_win_media_gyp = asan_win_gyp + media_gyp
 
 # Clang is not stable enough on Windows to use a gatekeeper yet.
-B('Win Asan Release Proprietary Codecs', 'win_asan_rel_prop_codecs',
+B('Win ASan Release Media', 'win_asan_rel_media',
    scheduler='chromium_lkgr')
-F('win_asan_rel_prop_codecs', win_out().ChromiumASANFactory(
+F('win_asan_rel_media', win_out().ChromiumASANFactory(
     compile_timeout=8*3600,  # We currently use a VM, which is extremely slow.
     clobber=True,
     options=['--build-tool=ninja', '--', 'chromium_builder_asan'],
@@ -110,7 +110,7 @@ F('win_asan_rel_prop_codecs', win_out().ChromiumASANFactory(
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan',
        'gs_bucket': 'gs://chrome-test-builds/media',
-       'gclient_env': {'GYP_DEFINES': asan_win_proprietary_codecs_gyp}}))
+       'gclient_env': {'GYP_DEFINES': asan_win_media_gyp}}))
 
 # Win SyzyASan bot.
 B('Win SyzyASAN LKGR', 'win_syzyasan_lkgr', 'compile', 'chromium_lkgr')
@@ -140,16 +140,15 @@ F('mac_asan_rel', linux().ChromiumASANFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_mac_gyp}}))
 
-B('Mac ASAN Release Proprietary Codecs', 'mac_asan_rel_prop_codecs','compile',
-  'chromium_lkgr')
-F('mac_asan_rel_prop_codecs', linux().ChromiumASANFactory(
+B('Mac ASAN Release Media', 'mac_asan_rel_media', 'compile', 'chromium_lkgr')
+F('mac_asan_rel_media', linux().ChromiumASANFactory(
     clobber=True,
     options=['--compiler=goma-clang', '--', '-target', 'chromium_builder_asan'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan',
        'gs_bucket': 'gs://chrome-test-builds/media',
-       'gclient_env': {'GYP_DEFINES': asan_mac_gyp + proprietary_codecs_gyp}}))
+       'gclient_env': {'GYP_DEFINES': asan_mac_gyp + media_gyp}}))
 
 B('Mac ASAN Debug', 'mac_asan_dbg', 'compile', 'chromium_lkgr')
 F('mac_asan_dbg', linux().ChromiumASANFactory(
@@ -199,11 +198,10 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_rel_gyp}}))
 
-linux_proprietary_codecs_gyp = (' proprietary_codecs=1 '
-                                'ffmpeg_branding=ChromeOS')
-B('ASAN Release Proprietary Codecs', 'linux_asan_rel_prop_codecs',
+linux_media_gyp = (' proprietary_codecs=1 ffmpeg_branding=ChromeOS')
+B('ASAN Release Media', 'linux_asan_rel_media',
   'compile', 'chromium_lkgr')
-F('linux_asan_rel_prop_codecs', linux().ChromiumASANFactory(
+F('linux_asan_rel_media', linux().ChromiumASANFactory(
     compile_timeout=2400,  # We started seeing 29 minute links, bug 360158
     clobber=True,
     options=['--compiler=goma-clang', 'chromium_builder_asan'],
@@ -212,7 +210,7 @@ F('linux_asan_rel_prop_codecs', linux().ChromiumASANFactory(
        'cf_archive_name': 'asan',
        'gs_bucket': 'gs://chrome-test-builds/media',
        'gclient_env': {'GYP_DEFINES': asan_rel_gyp +
-                       linux_proprietary_codecs_gyp}}))
+                       linux_media_gyp}}))
 
 asan_rel_sym_gyp = ('asan=1 lsan=1 sanitizer_coverage=3 '
                     'v8_enable_verify_heap=1 enable_ipc_fuzzer=1 '
@@ -301,10 +299,10 @@ F('linux_asan_rel_ia32_v8_arm', linux().ChromiumASANFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm_rel}}))
 
-B('ASan Release Proprietary Codecs (32-bit x86 with V8-ARM)',
-  'linux_asan_rel_prop_codecs_ia32_v8_arm',
+B('ASan Release Media (32-bit x86 with V8-ARM)',
+  'linux_asan_rel_media_ia32_v8_arm',
   'compile', 'chromium_lkgr')
-F('linux_asan_rel_prop_codecs_ia32_v8_arm', linux().ChromiumASANFactory(
+F('linux_asan_rel_media_ia32_v8_arm', linux().ChromiumASANFactory(
     clobber=True,
     options=['--compiler=goma-clang', 'chromium_builder_asan'],
     factory_properties={
@@ -312,8 +310,7 @@ F('linux_asan_rel_prop_codecs_ia32_v8_arm', linux().ChromiumASANFactory(
        'cf_archive_subdir_suffix': 'v8-arm',
        'cf_archive_name': 'asan-v8-arm',
        'gs_bucket': 'gs://chrome-test-builds/media',
-       'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm_rel +
-                       linux_proprietary_codecs_gyp}}))
+       'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm_rel + linux_media_gyp}}))
 
 B('ASan Release (32-bit x86 with V8-ARM, symbolized)',
   'linux_asan_rel_sym_ia32_v8_arm',
