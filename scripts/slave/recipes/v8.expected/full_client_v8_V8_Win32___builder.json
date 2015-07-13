@@ -68,6 +68,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "target_arch=ia32 v8_target_arch=ia32",
+      "GYP_GENERATORS": "ninja",
       "GYP_MSVS_VERSION": "2013"
     },
     "name": "gclient runhooks"
@@ -91,7 +92,7 @@
       "--src-dir",
       "[SLAVE_BUILD]\\v8",
       "--build-tool",
-      "vs",
+      "ninja",
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",

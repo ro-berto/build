@@ -70,6 +70,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 target_arch=x64 v8_target_arch=x64",
+      "GYP_GENERATORS": "ninja",
       "GYP_MSVS_VERSION": "2013"
     },
     "name": "gclient runhooks"
@@ -89,11 +90,11 @@
       "-u",
       "[BUILD]\\scripts\\slave\\compile.py",
       "--target",
-      "Release",
+      "Release_x64",
       "--src-dir",
       "[SLAVE_BUILD]\\v8",
       "--build-tool",
-      "vs",
+      "ninja",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--arch",
