@@ -32,8 +32,8 @@ def v8(c):
     c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 1
     c.gyp_env.GYP_DEFINES['v8_enable_slow_dchecks'] = 1
 
-  # Chromium adds '_x64' to the output folder, which is neither needed nor
-  # understood when compiling v8 standalone.
+  # Chromium adds '_x64' to the output folder, which is only understood when
+  # compiling v8 standalone with ninja.
   if c.HOST_PLATFORM == 'win' and c.TARGET_BITS == 64:
     c.build_config_fs = c.BUILD_CONFIG
     c.compile_py.pass_arch_flag = True
@@ -81,6 +81,11 @@ def make(c):
 @CONFIG_CTX(includes=['ninja'])
 def v8_ninja(c):
   c.gyp_env.GYP_GENERATORS.add('ninja')
+
+  if c.HOST_PLATFORM == 'win' and c.TARGET_BITS == 64:
+    # Windows requires 64-bit builds to be in <dir>_x64 with ninja. See
+    # crbug.com/470681.
+    c.build_config_fs = c.BUILD_CONFIG + '_x64'
 
 
 @CONFIG_CTX(includes=['v8'])
