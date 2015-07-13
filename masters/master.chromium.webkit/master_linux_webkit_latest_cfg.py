@@ -31,8 +31,13 @@ defaults['category'] = 'layout'
 #
 # Linux Rel Builder/Tester
 #
+# FIXME: Rename this builder to indicate that it is running precise.
 B('WebKit Linux', 'f_webkit_linux_rel', scheduler='global_scheduler')
 F('f_webkit_linux_rel', m_annotator.BaseFactory('chromium'))
+
+B('WebKit Linux Trusty', 'f_webkit_linux_rel_trusty',
+    scheduler='global_scheduler')
+F('f_webkit_linux_rel_trusty', m_annotator.BaseFactory('chromium'))
 
 B('WebKit Linux 32', 'f_webkit_linux_rel_32', scheduler='global_scheduler')
 F('f_webkit_linux_rel_32', m_annotator.BaseFactory('chromium'))
