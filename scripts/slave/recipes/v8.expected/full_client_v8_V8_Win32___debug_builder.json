@@ -110,12 +110,10 @@
       "gs://chromium-v8/v8-win32-dbg",
       "--src-dir",
       "v8",
-      "--master-name",
-      "client.v8",
-      "--slave-name",
-      "TestSlavename",
-      "--build-number",
-      "571"
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"V8 Win32 - debug builder\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"V8 Win32 - debug builder\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"

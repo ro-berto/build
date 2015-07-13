@@ -108,22 +108,9 @@ class ArchiveApi(recipe_api.RecipeApi):
       args.append('--package-dsym-files')
     if exclude_files:
       args.extend(['--exclude-files', exclude_files])
-
-    properties = (
-      ('mastername', '--master-name'),
-      ('slavename', '--slave-name'),
-      ('buildnumber', '--build-number'),
-      ('parent_buildnumber', '--parent-build-number'),
-      ('gs_acl', '--gs-acl'),
-    )
-    for property_name, switch_name in properties:
-      if self.m.properties.get(property_name):
-        args.extend([switch_name, self.m.properties[property_name]])
-
-    # TODO(phajdan.jr): Move DEPS patch sha config entirely to recipes.
-    if self.m.properties.get('append_deps_patch_sha'):  # pragma: no cover
-      args.append('--append-deps-patch-sha')
-
+    if 'gs_acl' in self.m.properties:
+      args.extend(['--gs-acl', self.m.properties['gs_acl']])
+    args.extend(self.m.json.property_args())
     kwargs['allow_subannotations'] = True
     self.m.python(
       step_name,

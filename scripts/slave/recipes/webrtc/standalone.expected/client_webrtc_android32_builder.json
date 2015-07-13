@@ -129,12 +129,10 @@
       "gs://chromium-webrtc/android_rel",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--master-name",
-      "client.webrtc",
-      "--slave-name",
-      "slavename",
-      "--build-number",
-      "1337"
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Builder\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Builder\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"

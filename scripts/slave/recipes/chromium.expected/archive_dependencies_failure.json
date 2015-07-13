@@ -193,10 +193,10 @@
       "gs://chromium-linux-archive/chromium.linux/Linux Builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--master-name",
-      "chromium.linux",
-      "--slave-name",
-      "TestSlavename"
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Builder\", \"buildnumber\": 0, \"mastername\": \"chromium.linux\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Builder\", \"buildnumber\": 0, \"mastername\": \"chromium.linux\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"

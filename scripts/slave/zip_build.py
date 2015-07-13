@@ -292,9 +292,9 @@ def Archive(options):
     webkit_revision = options.webkit_revision
 
   unversioned_base_name, version_suffix = slave_utils.GetZipFileNames(
-      options.master_name,
-      options.build_number,
-      options.parent_build_number,
+      options.build_properties.get('mastername', ''),
+      options.build_properties.get('buildnumber'),
+      options.build_properties.get('parent_buildnumber'),
       build_revision, webkit_revision,
       use_try_buildnumber=(not options.append_deps_patch_sha))
 
@@ -365,9 +365,10 @@ def Archive(options):
         (options.build_url[len('gs://'):], os.path.basename(versioned_file)))
     print '@@@STEP_LINK@download@%s@@@' % storage_url
   else:
+    slavename = options.build_properties['slavename']
     staging_path = (
         os.path.splitdrive(versioned_file)[1].replace(os.path.sep, '/'))
-    zip_url = 'http://' + options.slave_name + staging_path
+    zip_url = 'http://' + slavename + staging_path
 
   print '@@@SET_BUILD_PROPERTY@build_archive_url@"%s"@@@' % zip_url
 
@@ -387,12 +388,6 @@ def main(argv):
   option_parser.add_option('--include-files', default='',
                            help='Comma separated list of files that should '
                                 'always be included in the zip.')
-  option_parser.add_option('--master-name', help='Name of the buildbot master.')
-  option_parser.add_option('--slave-name', help='Name of the buildbot slave.')
-  option_parser.add_option('--build-number', type=int,
-                           help='Buildbot build number.')
-  option_parser.add_option('--parent-build-number', type=int,
-                           help='Buildbot parent build number.')
   option_parser.add_option('--webkit-dir',
                            help='webkit directory path, relative to --src-dir')
   option_parser.add_option('--revision-dir',
@@ -422,15 +417,6 @@ def main(argv):
 
   options, args = option_parser.parse_args(argv)
 
-  if not options.master_name:
-    options.master_name = options.build_properties.get('mastername', '')
-  if not options.slave_name:
-    options.slave_name = options.build_properties.get('slavename')
-  if not options.build_number:
-    options.build_number = options.build_properties.get('buildnumber')
-  if not options.parent_build_number:
-    options.parent_build_number = options.build_properties.get(
-        'parent_buildumber')
   if not options.target:
     options.target = options.factory_properties.get('target', 'Release')
   if not options.build_url:

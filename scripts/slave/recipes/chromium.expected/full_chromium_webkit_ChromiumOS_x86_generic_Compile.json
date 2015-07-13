@@ -175,14 +175,12 @@
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--cros-board",
       "x86-generic",
-      "--master-name",
-      "chromium.webkit",
-      "--slave-name",
-      "TestSlavename",
-      "--build-number",
-      "571",
       "--gs-acl",
-      "public-read"
+      "public-read",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ChromiumOS x86-generic Compile\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ChromiumOS x86-generic Compile\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"

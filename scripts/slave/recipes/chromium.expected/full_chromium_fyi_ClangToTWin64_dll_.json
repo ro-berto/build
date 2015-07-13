@@ -260,12 +260,10 @@
       "gs://chromium-fyi-archive/chromium.fyi/ClangToTWin64(dll)",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--master-name",
-      "chromium.fyi",
-      "--slave-name",
-      "TestSlavename",
-      "--build-number",
-      "571"
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ClangToTWin64(dll)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ClangToTWin64(dll)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
