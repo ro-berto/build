@@ -25,6 +25,10 @@ def syzygy(c):
   s.url = 'svn://svn.chromium.org/chrome-internal/trunk/syzygy/internal.DEPS'
   s.managed = False
 
+@CONFIG_CTX(includes=['syzygy'])
+def syzygy_msvs(dummy_c):
+  pass
+
 
 @CONFIG_CTX(includes=['syzygy'])
 def syzygy_official(dummy_c):

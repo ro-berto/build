@@ -32,6 +32,11 @@ def syzygy(c):
   c.version_file = Path('[CHECKOUT]', 'syzygy', 'SYZYGY_VERSION')
 
 
+@config_ctx(includes=['syzygy'])
+def syzygy_msvs(dummy_c):
+  pass
+
+
 @config_ctx()
 def syzygy_official(c):
   c.official_build = True

@@ -63,7 +63,6 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "official_build=1 target_arch=ia32",
-      "GYP_GENERATORS": "msvs",
       "GYP_MSVS_VERSION": "2013"
     },
     "name": "gclient runhooks"
@@ -78,11 +77,10 @@
       "--src-dir",
       "[SLAVE_BUILD]\\src",
       "--build-tool",
-      "vs",
+      "ninja",
+      "--ninja-ensure-up-to-date",
       "--clobber",
-      "--solution",
-      "[SLAVE_BUILD]\\src\\syzygy\\build\\all.sln",
-      "--project",
+      "--",
       "official_build"
     ],
     "cwd": "[SLAVE_BUILD]",

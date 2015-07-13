@@ -31,7 +31,7 @@ DEPS = [
 
 # Valid continuous builders and the Syzygy configurations they load.
 BUILDERS = freeze({
-  'Syzygy Debug': ('syzygy', {'BUILD_CONFIG': 'Debug'}),
+  'Syzygy Debug': ('syzygy_msvs', {'BUILD_CONFIG': 'Debug'}),
   'Syzygy Release': ('syzygy', {'BUILD_CONFIG': 'Release'}),
   'Syzygy Official': ('syzygy_official', {}),
 })

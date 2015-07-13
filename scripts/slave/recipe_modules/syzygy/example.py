@@ -18,7 +18,7 @@ def RunSteps(api):
   # Configure the build environment.
   buildername = api.properties['buildername']
   if buildername == 'Syzygy Debug':
-    api.syzygy.set_config('syzygy', BUILD_CONFIG='Debug')
+    api.syzygy.set_config('syzygy_msvs', BUILD_CONFIG='Debug')
   elif buildername == 'Syzygy Coverage':
     api.syzygy.set_config('syzygy', BUILD_CONFIG='Coverage')
   else:
@@ -60,7 +60,7 @@ def GenTests(api):
   """Generates an end-to-end successful test for this builder."""
   yield api.syzygy.generate_test(api, 'Syzygy Debug')
 
-  # Use 'fake_slave' as a slave name to ensure that wewe get coverage of the
+  # Use 'fake_slave' as a slave name to ensure that we get coverage of the
   # alternate code paths in Coverage and Official specific commands builds.
   yield api.syzygy.generate_test(api, 'Syzygy Coverage', slavename='fake_slave')
   yield api.syzygy.generate_test(api, 'Syzygy Official', slavename='fake_slave')
