@@ -93,7 +93,7 @@ def no_clang(c):
   c.gyp_env.GYP_DEFINES['clang'] = 0
 
 
-@CONFIG_CTX(includes=['v8'])
+@CONFIG_CTX(includes=['v8', 'dcheck'])
 def no_dcheck(c):
   c.gyp_env.GYP_DEFINES['dcheck_always_on'] = 0
 

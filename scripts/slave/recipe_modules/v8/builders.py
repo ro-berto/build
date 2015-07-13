@@ -1719,7 +1719,12 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_ninja_rel': {
-        'chromium_apply_config': ['v8_ninja', 'msvs2013'],
+        'chromium_apply_config': [
+          'default_compiler',
+          'v8_ninja',
+          'goma',
+          'msvs2013',
+        ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
