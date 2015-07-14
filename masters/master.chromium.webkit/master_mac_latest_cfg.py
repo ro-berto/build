@@ -21,14 +21,23 @@ defaults['category'] = 'nonlayout'
 ## Debug
 ################################################################################
 
+# Archive location
+dbg_archive = master_config.GetGSUtilUrl('chromium-build-transfer',
+                                         'mac-latest-dbg')
+
 # Triggerable scheduler for testers
 T('mac_builder_dbg_trigger')
 
 #
 # Mac Dbg Builder
 #
-B('Mac Builder (dbg)', 'f_mac_builder_dbg', scheduler='global_scheduler')
+B('Mac Builder (dbg)', 'f_mac_builder_dbg', scheduler='global_scheduler',
+  builddir='mac-latest-dbg')
+# Note: This step both uploads the build to transfer to its triggered builder
+# AND archives the build to chromium-webkit-snapshots for prosperity.
 F('f_mac_builder_dbg', mac().ChromiumFactory(
+    build_url=dbg_archive,
+    slave_type='Builder',
     target='Debug',
     # Build 'all' instead of 'chromium_builder_tests' so that archiving works.
     # TODO: Define a new build target that is archive-friendly?
@@ -49,6 +58,8 @@ F('f_mac_builder_dbg', mac().ChromiumFactory(
 B('Mac10.6 Tests', 'f_mac_tester_10_06_dbg',
   scheduler='mac_builder_dbg_trigger')
 F('f_mac_tester_10_06_dbg', mac().ChromiumFactory(
+    slave_type='Tester',
+    build_url=dbg_archive,
     tests=[
       'browser_tests',
       'cc_unittests',
@@ -66,6 +77,8 @@ F('f_mac_tester_10_06_dbg', mac().ChromiumFactory(
 B('Mac10.8 Tests', 'f_mac_tester_10_08_dbg',
   scheduler='mac_builder_dbg_trigger')
 F('f_mac_tester_10_08_dbg', mac().ChromiumFactory(
+    slave_type='Tester',
+    build_url=dbg_archive,
     tests=[
       'browser_tests',
       'content_browsertests',
