@@ -156,6 +156,10 @@ def gyp_defs_from_builder_dict(builder_dict):
       builder_dict.get('cpu_or_gpu_value') == 'Mesa'):
     gyp_defs['skia_mesa'] = '1'
 
+  # SKNX_NO_SIMD
+  if builder_dict.get('extra_config') == 'SKNX_NO_SIMD':
+    gyp_defs['sknx_no_simd'] = '1'
+
   return gyp_defs
 
 

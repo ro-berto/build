@@ -41,6 +41,7 @@ def GenTests(api):
         'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug',
       ],
       'skiabot-linux-tester-000': [
+        'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-SKNX_NO_SIMD',
         'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Shared',
         'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-TSAN',
       ],
