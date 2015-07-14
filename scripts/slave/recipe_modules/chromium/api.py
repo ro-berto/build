@@ -688,6 +688,11 @@ class ChromiumApi(recipe_api.RecipeApi):
             "perf_dashboard_id": "blink_perf.all",
             "device_affinity": 0
           },
+          "blink_perf.dom": {
+            "cmd": "/path/to/run_benchmark -v --upload-results blink_perf.dom",
+            "perf_dashboard_id": "blink_perf.dom",
+            "device_affinity": 0
+          },
           "dromaeo.cssqueryjquery.release": {
             "cmd": "/path/to/run_benmark",
             "perf_dashboard_id": "dromaeo.cssqueryjquery",

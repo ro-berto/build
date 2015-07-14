@@ -167,6 +167,11 @@
       "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"perf_dashboard_id\": \"blink_perf.all\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blink_perf.dom\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/path/to/run_benchmark -v --upload-results blink_perf.dom\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"perf_dashboard_id\": \"blink_perf.dom\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"dromaeo.cssqueryjquery\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"cmd\": \"/path/to/run_benmark\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"device_affinity\": 1@@@",
@@ -249,6 +254,41 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "blink_perf.all.release",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win 7 Intel GPU Perf (Xeon)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 FYI Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win 7 Intel GPU Perf (Xeon)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Win x64 FYI Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=blink_perf.dom",
+      "--perf-id=chromium-rel-win7-gpu-intel",
+      "--test-type=blink_perf.dom",
+      "--step-name=blink_perf.dom",
+      "--chartjson-file",
+      "/path/to/tmp/json",
+      "--builder-name=Win 7 Intel GPU Perf (Xeon)",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "--run-python-script",
+      "-v",
+      "--upload-results",
+      "blink_perf.dom"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "blink_perf.dom",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@"
