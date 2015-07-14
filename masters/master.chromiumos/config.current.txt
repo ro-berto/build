@@ -1340,6 +1340,7 @@ config = {
         'amd64-generic ASAN',
         'x86-generic ASAN',
         'chromiumos sdk',
+        'amd64-generic-llvm',
       ],
       treeStableTimer: None,
       properties: Properties(**{'scheduler': 'chromeos'}),
