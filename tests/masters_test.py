@@ -278,6 +278,7 @@ def main(argv):
       'master.tryserver.client.catapult': 'CatapultTryserver',
       'master.tryserver.client.mojo': 'MojoTryServer',
       'master.tryserver.blink': 'BlinkTryServer',
+      'master.tryserver.infra': 'InfraTryServer',
       'master.tryserver.libyuv': 'LibyuvTryServer',
       'master.tryserver.nacl': 'NativeClientTryServer',
       'master.tryserver.v8': 'V8TryServer',

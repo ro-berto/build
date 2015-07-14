@@ -1,0 +1,88 @@
+{
+  "master_base_class": "Master4a",
+  "master_classname": "InfraTryServer",
+  "master_port": 21402,
+  "master_port_alt": 41402,
+  "slave_port": 31402,
+  "templates": [
+    "../master.chromium.infra/templates",
+    "../master.chromium/templates",
+  ],
+
+  "service_account_file": "service-account-chromium-tryserver.json",
+  "buildbucket_bucket": "master.tryserver.infra",
+
+  "builders": {
+    "Infra Presubmit": {
+      "recipe": "run_presubmit",
+      "properties": {
+        "repo_name": "infra",
+        "run_hooks": True,
+      },
+      "scheduler": "infra_commits",
+      "slave_pools": ["trusty64_slave_pool"],
+      "slavebuilddir": "presubmit_infra",
+    },
+    "Infra Linux Precise 32 Tester": {
+      "recipe": "infra",
+      "scheduler": None,
+      "slave_pools": ["precise32_slave_pool"],
+      "slavebuilddir": "infra",
+    },
+    "Infra Linux Trusty 64 Tester": {
+      "recipe": "infra",
+      "scheduler": None,
+      "slave_pools": ["trusty64_slave_pool"],
+      "slavebuilddir": "infra",
+    },
+    "Infra Mac Tester": {
+      "recipe": "infra",
+      "scheduler": None,
+      "slave_pools": ["mac_slave_pool"],
+      "slavebuilddir": "Infra",
+    },
+    "Infra Win Tester": {
+      "recipe": "infra",
+      "scheduler": None,
+      "slave_pools": ["win64_slave_pool"],
+      "slavebuilddir": "infra",
+    },
+  },
+
+  "schedulers": {},
+
+  "slave_pools": {
+    "precise32_slave_pool": {
+      "slave_data": {
+        "bits": 32,
+        "os": "linux",
+        "version": "precise",
+      },
+      "slaves": ["vm252-m4"],
+    },
+    "trusty64_slave_pool": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave864-c4"],
+    },
+    "mac_slave_pool": {
+      "slave_data": {
+        "bits": 64,
+        "os": "mac",
+        "version": "10.9",
+      },
+      "slaves": ["vm608-m4"],
+    },
+    "win64_slave_pool": {
+      "slave_data": {
+        "bits": 64,
+        "os": "win",
+        "version": "win7",
+      },
+      "slaves": ["vm253-m4"],
+    },
+  },
+}
