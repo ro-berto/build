@@ -444,12 +444,6 @@ def _RunStepsInternal(api):
   if enable_gpu_tests:
     api.chromium.apply_config('archive_gpu_tests')
 
-  # TODO(phajdan.jr): Make ninja_confirm_noop consistent between main waterfall
-  # and trybots, http://crbug.com/501744 .
-  if (api.chromium.c.TARGET_PLATFORM != 'android'
-      and 'win8' not in buildername):
-    api.chromium.apply_config('ninja_confirm_noop', optional=True)
-
   bot_update_step, master_dict, test_spec = \
       api.chromium_tests.prepare_checkout(
           bot_config['mastername'],

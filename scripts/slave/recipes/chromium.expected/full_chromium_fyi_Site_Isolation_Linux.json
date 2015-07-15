@@ -136,6 +136,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--ninja-ensure-up-to-date",
       "--",
       "content_browsertests",
       "content_unittests"

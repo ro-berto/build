@@ -285,7 +285,6 @@
       "[BUILD]\\goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
-      "--ninja-ensure-up-to-date",
       "--",
       "angle_unittests_run",
       "crash_service",

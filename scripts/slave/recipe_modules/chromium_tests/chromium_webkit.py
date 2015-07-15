@@ -388,6 +388,7 @@ SPEC['builders'].update({
   },
   'WebKit Linux': {
     'chromium_config': 'chromium',
+    'chromium_apply_config': ['ninja_confirm_noop'],
     'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {

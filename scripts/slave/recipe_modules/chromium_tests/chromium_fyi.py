@@ -236,6 +236,7 @@ SPEC = {
     },
     'Site Isolation Linux': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -332,6 +333,7 @@ SPEC = {
     },
     'ChromiumPracticeFullTester': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'blink_merged',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1340,7 +1342,7 @@ SPEC = {
     'Linux Builder (clobber)': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['clobber'],
+      'chromium_apply_config': ['clobber', 'ninja_confirm_noop'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
