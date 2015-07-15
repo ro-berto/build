@@ -176,7 +176,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
       cmd.append('--no_shallow')
     if output_manifest:
       cmd.append('--output_manifest')
-    if with_branch_heads:
+    if with_branch_heads or cfg.with_branch_heads:
       cmd.append('--with_branch_heads')
 
     # Inject Json output for testing.

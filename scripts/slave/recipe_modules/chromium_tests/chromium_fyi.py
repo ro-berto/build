@@ -130,7 +130,7 @@ SPEC = {
     'Linux V8 API Stability': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['v8_canary'],
+      'gclient_apply_config': ['v8_canary', 'with_branch_heads'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

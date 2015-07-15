@@ -67,6 +67,14 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None,
     parent_got_revision_mapping = Dict(hidden=True),
     delete_unversioned_trees = Single(bool, empty_val=True, required=False),
 
+    # Check out refs/branch-heads.
+    # TODO (machenbach): Only implemented for bot_update atm.
+    with_branch_heads = Single(
+        bool,
+        empty_val=False,
+        required=False,
+        hidden=True),
+
     GIT_MODE = Static(bool(GIT_MODE)),
     USE_MIRROR = Static(bool(USE_MIRROR)),
     PATCH_PROJECT = Static(str(PATCH_PROJECT), hidden=True),
@@ -522,3 +530,7 @@ def infradata_master_manager(c):
   soln.url = (
       'https://chrome-internal.googlesource.com/infradata/master-manager.git')
   c.got_revision_mapping['infra-data-master-manager'] = 'got_revision'
+
+@config_ctx()
+def with_branch_heads(c):
+  c.with_branch_heads = True

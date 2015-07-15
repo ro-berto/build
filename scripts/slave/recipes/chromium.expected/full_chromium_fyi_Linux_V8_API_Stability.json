@@ -21,7 +21,8 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/v8@origin/canary"
+      "src/v8@origin/canary",
+      "--with_branch_heads"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
