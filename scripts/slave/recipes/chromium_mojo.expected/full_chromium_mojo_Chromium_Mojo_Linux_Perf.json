@@ -185,8 +185,7 @@
       "-v",
       "--upload-results",
       "blink_perf.dom",
-      "--extra-browser-args",
-      "--use-test-config"
+      "--extra-browser-args=--use-headless-config"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "blink_perf.dom",
