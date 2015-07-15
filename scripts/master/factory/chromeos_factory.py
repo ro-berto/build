@@ -217,7 +217,7 @@ class CbuildbotFactory(ChromiteFactory):
       params: space-delimited string of parameters to pass to the cbuildbot
           command, or IRenderable.
       script: name of the cbuildbot command.  Default cbuildbot.
-      buildroot: buildroot to set. Default is /b/cbuild.
+      buildroot: buildroot to set. Default /b/cbuild.
       dry_run: Don't push anything as we're running a test run.
       trybot: Whether this is creating builders for the trybot waterfall.
       chrome_root: The place to put or use the chrome source.
@@ -260,9 +260,8 @@ class CbuildbotFactory(ChromiteFactory):
 
 
   def compute_buildbot_params(self):
-
-    cmd = [WithProperties('--buildnumber=%(buildnumber)s')]
-    cmd.append('--buildroot=%s' % Property('buildroot', self.buildroot))
+    cmd = [WithProperties('--buildnumber=%(buildnumber)s'),
+           '--buildroot=%s' % self.buildroot]
 
     # Add '--master-build-id' flag when build ID property is present
     cmd.append(
@@ -275,7 +274,6 @@ class CbuildbotFactory(ChromiteFactory):
 
     if self.trybot:
       cmd.append(Property('extra_args'))
-      cmd.append(Property('chromeos_config'))
     else:
       cmd += ['--buildbot']
 
