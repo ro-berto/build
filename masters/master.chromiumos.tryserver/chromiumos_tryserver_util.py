@@ -22,15 +22,17 @@ from common import cros_chromite
 configs = cros_chromite.Get()
 
 # Load builder sets from the 'cbuildbot' config.
-cbb_builders = set(configs.iterkeys())
+cbb_builders = set(v['_template'] or k for k, v in configs.iteritems())
 etc_builders = set(['etc'])
 all_builders = cbb_builders.union(etc_builders)
 
-target_builders = set(b for b in all_builders if b in configs)
-precq_builders = set(b for b in target_builders if configs[b].IsPreCqBuilder())
-precq_novmtest_builders = set(b for b in precq_builders
-                              if not (configs[b].HasVmTests() or
-                                      configs[b].HasHwTests()))
+precq_builders = set(
+    v['_template'] or k for k, v in configs.iteritems() if v.IsPreCqBuilder())
+precq_novmtest_builders = set(
+    v['_template'] or k for k, v in configs.iteritems()
+    if v.IsPreCqBuilder() and not v.HasVmTests() and not v.HasHwTests())
+
+GCE_SUFFIX = '-c2'
 
 
 class TestingSlavePool(object):
@@ -148,6 +150,16 @@ class NextSlaveAndBuild(object):
     """
     return self.testing_slave_pool.is_testing_slave(slave.slavename)
 
+  def GetSlaves(self, br):
+    chromeos_config_name = br.properties.getProperty('chromeos_config', None)
+    chromeos_config = configs.get(chromeos_config_name)
+    has_vm_tests = chromeos_config.HasVmTests() or chromeos_config.HasHwTests()
+    builder = br.master.status.getBuilder(br.buildername)
+    slaves = builder.getSlaves()
+    if has_vm_tests:
+      slaves = [s for s in slaves if not s.getName().endswith(GCE_SUFFIX)]
+    return slaves
+
   def __call__(self, slaves, buildrequests):
     """Called by master to determine which job to run and which slave to use.
 
@@ -197,13 +209,14 @@ class NextSlaveAndBuild(object):
                      if not self.is_testing_slave(s.slave)]
 
     for br in remaining:
-      builder = br.master.status.getBuilder(br.buildername)
       normal_slaves.sort(key=lambda s:
-          len(self.get_slave_builders(s.slave, br)))
+          len(self.get_slave_builders(s.slave, br)) +
+          int(s.slave.endswith(GCE_SUFFIX)))
 
       # Iterate through slaves and choose the appropriate one.
+      slaves = self.GetSlaves(br)
       for s in normal_slaves:
-        for builder_slave in builder.getSlaves():
+        for builder_slave in slaves:
           if s.slave.slavename == builder_slave.getName():
             return s, br
     return None, None

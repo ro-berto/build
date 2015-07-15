@@ -111,7 +111,7 @@ class CrOSTryJobGit(TryBase):
     self.from_addr = from_addr
     self.reply_to = reply_to
     self.email_footer = email_footer
-    self.cbuildbot_configs = set(cbuildbot_configs)
+    self.cbuildbot_configs = cbuildbot_configs
     self.etc_builder = etc_builder
 
   def startService(self):
@@ -188,11 +188,23 @@ class CrOSTryJobGit(TryBase):
   def get_props(self, config, options):
     """Overriding base class method."""
     props = Properties()
+
+    # Calculate the buildroot for builds.
+    config_dict = self.cbuildbot_configs.get(config)
+    if config_dict is None:
+      buildroot = '/b/cbuild/etc_master'
+    elif config_dict['internal']:
+      buildroot = '/b/cbuild/internal_master'
+    else:
+      buildroot = '/b/cbuild/external_master'
+    props.setProperty('buildroot', buildroot, self._PROPERTY_SOURCE)
+
     props.setProperty('extra_args', options.get('extra_args', []),
                       self._PROPERTY_SOURCE)
     props.setProperty('slaves_request', options.get('slaves_request', []),
                       self._PROPERTY_SOURCE)
     props.setProperty('chromeos_config', config, self._PROPERTY_SOURCE)
+
     return props
 
   def create_buildset(self, ssid, parsed_job):
@@ -200,7 +212,11 @@ class CrOSTryJobGit(TryBase):
     dlist = []
     buildset_name = '%s:%s' % (parsed_job['user'], parsed_job['name'])
     for bot in parsed_job['bot']:
-      builder_name = bot if bot in self.cbuildbot_configs else self.etc_builder
+      config = self.cbuildbot_configs.get(bot)
+      if config:
+        builder_name = config['_template'] or bot
+      else:
+        builder_name = self.etc_builder
       log.msg("Creating '%s' try job(s) %s for %s" % (builder_name, ssid, bot))
       dlist.append(self.addBuildsetForSourceStamp(ssid=ssid,
               reason=buildset_name,
