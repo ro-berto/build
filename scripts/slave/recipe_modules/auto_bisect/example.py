@@ -84,6 +84,17 @@ def GenTests(api):
                                slavename='dummyslave')
   yield basic_test
 
+  basic_data = _get_basic_test_data()
+  windows_test = _make_test(api, basic_data, 'windows', platform='windows')
+  windows_test += api.step_data(
+      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      stdout=api.raw_io.output(wait_for_any_output))
+
+  windows_test += api.properties(mastername='tryserver.chromium.perf',
+                                 buildername='linux_perf_bisect',
+                                 slavename='dummyslave')
+  yield windows_test
+
   failed_data = _get_basic_test_data()
   failed_data[0].pop('DEPS')
   failed_data[1]['test_results']['results']['error'] = 'Dummy error.'
@@ -239,13 +250,16 @@ def _get_reversed_basic_test_data():
   ]
 
 
-def _make_test(api, test_data, test_name):
+def _make_test(api, test_data, test_name, platform='linux'):
   basic_test =  api.test(test_name)
   basic_test += _get_revision_range_step_data(api, test_data)
   for revision_data in test_data:
     for step_data in _get_step_data_for_revision(api, revision_data):
       basic_test += step_data
-  basic_test += api.properties(bisect_config=_get_default_config())
+  if 'win' in platform:
+    basic_test += api.properties(bisect_config=_get_windows_config())
+  else:
+    basic_test += api.properties(bisect_config=_get_default_config())
   return basic_test
 
 
@@ -281,6 +295,29 @@ def _get_default_config():
       'builder_port': '8341',
       'dummy_builds': 'True',
       'skip_gclient_ops': 'True',
+      'original_bot_name': 'chromium_rel_linux'
+  }
+  return example_config
+
+def _get_windows_config():
+  example_config = {
+      'test_type':'perf',
+      'command':
+          ('src/tools/perf/run_benchmark -v --browser=release smoothness.'
+           'tough_scrolling_cases'),
+      'good_revision': '314015',
+      'bad_revision': '314017',
+      'metric': 'mean_input_event_latency/mean_input_event_latency',
+      'repeat_count': '2',
+      'max_time_minutes': '5',
+      'truncate_percent': '0',
+      'bug_id': '',
+      'gs_bucket': 'chrome-perf',
+      'builder_host': 'master4.golo.chromium.org',
+      'builder_port': '8341',
+      'dummy_builds': 'True',
+      'skip_gclient_ops': 'True',
+      'original_bot_name': 'chromium_rel_win7'
   }
   return example_config
 

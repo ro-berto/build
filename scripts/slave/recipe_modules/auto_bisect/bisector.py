@@ -534,15 +534,19 @@ class Bisector(object):
     assert self.lkgr and self.fkbr
 
   def get_perf_tester_name(self):
-    # TODO: Actually check the current platform
+    if 'win' in self.bisect_config.get('original_bot_name', ''):
+      return 'winx64_nvidia_perf_tester'
+    # Reasonable fallback
     return 'linux_perf_tester'
 
   def get_builder_bot_for_this_platform(self):
-    # TODO: Actually look at the current platform.
+    if 'win' in self.bisect_config.get('original_bot_name', ''):
+      return 'win_x64_perf_bisect_builder'
     return 'linux_perf_bisect_builder'
 
   def get_platform_gs_prefix(self):
-    # TODO: Actually check the current platform
+    if 'win' in self.bisect_config.get('original_bot_name', ''):
+      return 'gs://chrome-perf/Win x64 Builder/full-build-win32_'
     return 'gs://chrome-perf/Linux Builder/full-build-linux_'
 
   def ensure_sync_master_branch(self):
