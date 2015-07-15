@@ -393,8 +393,8 @@ def asan(c):
     fastbuild(c, invert=True, optional=False)
 
   c.gyp_env.GYP_DEFINES['asan'] = 1
-  if c.TARGET_PLATFORM != 'android':
-    # LSAN isn't supported on Android.
+  if c.TARGET_PLATFORM != 'android' and c.TARGET_BITS == 64:
+    # LSAN isn't supported on Android or 32 bits platforms.
     c.gyp_env.GYP_DEFINES['lsan'] = 1
 
 @config_ctx(deps=['compiler'])
@@ -517,8 +517,6 @@ def chromium_win_clang_official(c):
 
 @config_ctx(includes=['chromium_win_clang', 'asan', 'static_library'])
 def chromium_win_clang_asan(c):
-  # Clear lsan configuration for win.
-  del c.gyp_env.GYP_DEFINES['lsan']
   # These are set on the lkgr bot, and the fyi bots should match the lkgr bot.
   # TODO(thakis): Once the lkgr bot uses recipes, the lkgr and the fyi bots
   # should use the same context to ensure they use the same gyp defines.
