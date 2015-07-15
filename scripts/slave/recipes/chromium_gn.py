@@ -293,6 +293,7 @@ def _RunStepsInternal(api):
                            force_clobber=force_clobber)
     tests = tests_in_compile_targets(api, compile_targets, tests)
   else:
+    api.chromium.run_mb(mastername, buildername, use_goma=True)
     api.chromium.compile(all_compile_targets(api, tests) +
                          additional_compile_targets,
                          force_clobber=force_clobber)
