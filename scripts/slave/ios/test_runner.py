@@ -10,6 +10,7 @@ import environment_setup
 
 import collections
 import errno
+import json
 import os
 import shutil
 import subprocess
@@ -76,7 +77,18 @@ class AppLaunchError(TestRunnerError):
 
 class TestRunner(object):
   """Base class containing common TestRunner functionality."""
-  def __init__(self, app_path, xcode_version=None, gs_bucket=None):
+  def __init__(
+    self,
+    app_path,
+    xcode_version=None,
+    gs_bucket=None,
+    perf_bot_name=None,
+    perf_build_number=None,
+    perf_builder_name=None,
+    perf_master_name=None,
+    perf_revision=None,
+    perf_x_value=None
+  ):
     """Initializes a new instance of the TestRunner class.
 
     Args:
@@ -84,6 +96,14 @@ class TestRunner(object):
       xcode_version: Version of Xcode to use.
       gs_bucket: Google Storage bucket to upload test data to, or None if the
         test data should not be uploaded.
+      perf_bot_name: Name of this bot as indicated to the perf dashboard.
+      perf_build_number: Build number to indicate to the perf dashboard.
+      perf_builder_name: Name of this builder as indicated to the perf
+        dashboard.
+      perf_master_name: Name of the master as indicated to the perf dashboard.
+      perf_revision: Revision to indicate to the perf dashboard.
+      perf_x_value: Value to use on the x axis for all data uploaded to the
+      perf dashboard.
 
     Raises:
       AppNotFoundError: If the specified app cannot be found.
@@ -105,6 +125,12 @@ class TestRunner(object):
         raise XcodeVersionNotFoundError(xcode_version)
 
     self.gs_bucket = gs_bucket
+    self.perf_bot_name = perf_bot_name
+    self.perf_master_name = perf_master_name
+    self.perf_revision = perf_revision
+    self.perf_build_number = perf_build_number
+    self.perf_builder_name = perf_builder_name
+    self.perf_x_value = perf_x_value
 
     self.summary = {
       'links': collections.OrderedDict(),
@@ -368,8 +394,21 @@ class TestRunner(object):
 
 class SimulatorTestRunner(TestRunner):
   """Class for running a test app on an iOS simulator."""
-  def __init__(self, app_path, iossim_path, platform, version,
-               xcode_version=None, gs_bucket=None):
+  def __init__(
+    self,
+    app_path,
+    iossim_path,
+    platform,
+    version,
+    xcode_version=None,
+    gs_bucket=None,
+    perf_bot_name=None,
+    perf_build_number=None,
+    perf_builder_name=None,
+    perf_master_name=None,
+    perf_revision=None,
+    perf_x_value=None
+  ):
     """Initializes an instance of the SimulatorTestRunner class.
 
     Args:
@@ -382,6 +421,14 @@ class SimulatorTestRunner(TestRunner):
       xcode_version: Version of Xcode to use.
       gs_bucket: Google Storage bucket to upload test data to, or None if the
         test data should not be uploaded.
+      perf_bot_name: Name of this bot as indicated to the perf dashboard.
+      perf_build_number: Build number to indicate to the perf dashboard.
+      perf_builder_name: Name of this builder as indicated to the perf
+        dashboard.
+      perf_master_name: Name of the master as indicated to the perf dashboard.
+      perf_revision: Revision to indicate to the perf dashboard.
+      perf_x_value: Value to use on the x axis for all data uploaded to the
+      perf dashboard.
 
     Raises:
       SimulatorNotFoundError: If the given iossim path cannot be found.
@@ -390,6 +437,12 @@ class SimulatorTestRunner(TestRunner):
       app_path,
       xcode_version=xcode_version,
       gs_bucket=gs_bucket,
+      perf_bot_name=perf_bot_name,
+      perf_build_number=perf_build_number,
+      perf_builder_name=perf_builder_name,
+      perf_master_name=perf_master_name,
+      perf_revision=perf_revision,
+      perf_x_value=perf_x_value
     )
 
     if not os.path.exists(iossim_path):
@@ -586,10 +639,19 @@ class SimulatorTestRunner(TestRunner):
         docs_dir,
       )
 
+      summary = os.path.join(docs_dir, 'summary.json')
+      if os.path.exists(summary):
+        self.HandleJsonFileWithPath(summary)
+
       shutil.rmtree(docs_dir, ignore_errors=True)
       return True
 
     return False
+
+  def HandleJsonFileWithPath(self, summary):
+    """Parse data in summarydir and send to perf dashboard."""
+    with open(summary) as jsonFile:
+      return json.load(jsonFile)
 
   def GetCrashReports(self):
     # A crash report's naming scheme is [app]_[timestamp]_[hostname].crash.
