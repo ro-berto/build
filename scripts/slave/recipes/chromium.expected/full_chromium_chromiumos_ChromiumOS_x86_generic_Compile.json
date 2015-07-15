@@ -155,7 +155,7 @@
       "--cros-board",
       "x86-generic",
       "--",
-      "All"
+      "chromiumos_preflight"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"

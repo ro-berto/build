@@ -182,7 +182,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"All\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"chromiumos_preflight\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",

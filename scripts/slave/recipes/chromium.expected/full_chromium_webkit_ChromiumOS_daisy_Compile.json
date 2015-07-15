@@ -156,7 +156,7 @@
       "--cros-board",
       "daisy",
       "--",
-      "All"
+      "chromiumos_preflight"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
