@@ -313,6 +313,11 @@ BUILDERS = freeze({
         'mastername': 'chromium.win',
         'buildername': 'Win8 GN (dbg)',
       },
+      'win_angle_rel_ng': {
+        'mastername': 'chromium.fyi',
+        'buildername': 'Win Builder (ANGLE)',
+        'tester': 'Win7 Tests (ANGLE)',
+      },
       # Experimental clang/win bots.
       'win_clang_dbg': {
         'mastername': 'chromium.fyi',
@@ -360,6 +365,15 @@ CHROMIUM_GPU_DIMENSION_SETS = freeze({
   },
   'tryserver.chromium.win': {
     'win_chromium_rel_ng': [
+      {
+        'gpu': '10de:104a',  # NVIDIA GeForce GT 610
+        'os': 'Windows',
+      }, {
+        'gpu': '1002:6779',  # AMD Radeon HD 6450
+        'os': 'Windows',
+      },
+    ],
+    'win_angle_rel_ng': [
       {
         'gpu': '10de:104a',  # NVIDIA GeForce GT 610
         'os': 'Windows',
