@@ -93,7 +93,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library fastbuild=1 target_arch=x64 test_isolation_mode=prepare",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library fastbuild=1 target_arch=x64 test_isolation_mode=prepare",
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "gclient runhooks"
@@ -204,6 +204,9 @@
       "ninja",
       "--compiler",
       "clang",
+      "--mode",
+      "official",
+      "--clobber",
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",
