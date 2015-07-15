@@ -82,7 +82,12 @@ def _RunPerfTests(api):
   # TODO(yzshen): Remove this filter once we annotate tests disabled for
   # Mandoline in Telemetry. Consider reusing
   # chromium_tests.steps.DynamicPerfTests.
-  supported_testnames = [ 'blink_perf.dom' ]
+  supported_testnames = [
+    'blink_perf.dom',
+    'blink_perf.events',
+    'blink_perf.mutation',
+    'blink_perf.shadow_dom',
+  ]
   tests = dict((k, v) for k, v in tests.json.output['steps'].iteritems()
       if str(k) in supported_testnames)
 
