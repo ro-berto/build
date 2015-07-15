@@ -98,32 +98,5 @@
       "PYTHONPATH": "%(PYTHONPATH)s:[SLAVE_BUILD]/google_appengine"
     },
     "name": "Dashboard Tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/catapult/temporary/tracing/run_py_tests"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Tracing python Tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/catapult/temporary/tracing/run_d8_tests"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Tracing d8 Tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/catapult/temporary/tracing/build/run_dev_server_tests"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Tracing UI Tests"
   }
 ]

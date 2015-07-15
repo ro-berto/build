@@ -52,15 +52,6 @@ def RunSteps(api):
   api.python('Dashboard Tests',
              api.path['checkout'].join('dashboard', 'run_tests.py'),
              env=modified_env)
-  # TEMORARY: Test tracing tests on waterfall
-  api.python('Tracing python Tests',
-              api.path['checkout'].join('temporary', 'tracing', 'run_py_tests'))
-  api.python('Tracing d8 Tests',
-              api.path['checkout'].join('temporary', 'tracing', 'run_d8_tests'))
-  api.python('Tracing UI Tests',
-              api.path['checkout'].join('temporary', 'tracing', 'build',
-                                        'run_dev_server_tests'))
-  # END TEMPORARY CODE
 
 
 def GenTests(api):
