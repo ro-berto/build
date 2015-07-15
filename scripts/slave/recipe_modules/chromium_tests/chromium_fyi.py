@@ -1168,7 +1168,7 @@ SPEC = {
       }
     },
     'ClangToTWin': {
-      'chromium_config': 'chromium_win_clang_official_tot',
+      'chromium_config': 'chromium_win_clang_tot',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1253,7 +1253,7 @@ SPEC = {
       'enable_swarming': True,
     },
     'ClangToTWin64': {
-      'chromium_config': 'chromium_win_clang_official_tot',
+      'chromium_config': 'chromium_win_clang_tot',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',

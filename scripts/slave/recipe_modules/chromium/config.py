@@ -515,10 +515,6 @@ def chromium_win_clang_tot(c):
 def chromium_win_clang_official(c):
   pass
 
-@config_ctx(includes=['chromium_win_clang', 'official'])
-def chromium_win_clang_official_tot(c):
-  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
-
 @config_ctx(includes=['chromium_win_clang', 'asan', 'static_library'])
 def chromium_win_clang_asan(c):
   # These are set on the lkgr bot, and the fyi bots should match the lkgr bot.
