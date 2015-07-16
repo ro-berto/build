@@ -74,7 +74,7 @@ SPEC = freeze({
       'package_filename': 'chromiumos-src',
       'platform': 'chromeos',
     },
-    'Chromium Linux Codesearch Staging': {
+    'Chromium Linux Codesearch Builder': {
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
       },
@@ -85,7 +85,7 @@ SPEC = freeze({
       'package_filename': 'chromium-src',
       'platform': 'linux',
     },
-    'ChromiumOS Codesearch Staging': {
+    'ChromiumOS Codesearch Builder': {
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_PLATFORM': 'chromeos',
@@ -196,30 +196,31 @@ def RunSteps(api):
 
   # Upload the index pack
   environment = bot_config.get('environment', 'prod')
-  api.gsutil.upload(
-      name='upload index pack',
-      source=debug_path.join(index_pack_name),
-      bucket=BUCKET_NAME,
-      dest='%s/%s' % (environment, index_pack_name_with_revision)
-  )
+  if environment == 'prod':
+    api.gsutil.upload(
+        name='upload index pack',
+        source=debug_path.join(index_pack_name),
+        bucket=BUCKET_NAME,
+        dest='%s/%s' % (environment, index_pack_name_with_revision)
+    )
 
-  # Package the source code.
-  tarball_name = 'chromium_src_%s.tar.bz2' % platform
-  tarball_name_with_revision = 'chromium_src_%s_%s.tar.bz2' % (
-      platform,commit_position)
-  api.python('archive source',
-             api.path['build'].join('scripts','slave',
-                                    'archive_source_codesearch.py'),
-             ['src', 'build', 'infra', 'tools', '/usr/include', '-f',
-              tarball_name])
+    # Package the source code.
+    tarball_name = 'chromium_src_%s.tar.bz2' % platform
+    tarball_name_with_revision = 'chromium_src_%s_%s.tar.bz2' % (
+        platform,commit_position)
+    api.python('archive source',
+               api.path['build'].join('scripts','slave',
+                                      'archive_source_codesearch.py'),
+               ['src', 'build', 'infra', 'tools', '/usr/include', '-f',
+                tarball_name])
 
-  # Upload the source code.
-  api.gsutil.upload(
-      name='upload source tarball',
-      source=api.path['slave_build'].join(tarball_name),
-      bucket=BUCKET_NAME,
-      dest='%s/%s' % (environment, tarball_name_with_revision)
-  )
+    # Upload the source code.
+    api.gsutil.upload(
+        name='upload source tarball',
+        source=api.path['slave_build'].join(tarball_name),
+        bucket=BUCKET_NAME,
+        dest='%s/%s' % (environment, tarball_name_with_revision)
+    )
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
@@ -235,18 +236,18 @@ def GenTests(api):
       test += api.step_data('generate compilation database for linux',
                             stdout=api.raw_io.output('some compilation data'))
     test += api.properties.generic(buildername=buildername,
-                                   mastername='chromium.fyi')
+                                   mastername='chromium.infra.cron')
 
     yield test
 
   yield (
     api.test(
-        'full_%s_fail' % _sanitize_nonalpha('ChromiumOS Codesearch Staging')) +
+        'full_%s_fail' % _sanitize_nonalpha('ChromiumOS Codesearch Builder')) +
     api.step_data('generate compilation database for chromeos',
                   stdout=api.raw_io.output('some compilation data')) +
     api.step_data('generate compilation database for linux',
                   stdout=api.raw_io.output('some compilation data')) +
     api.step_data('run translation_unit clang tool', retcode=2) +
-    api.properties.generic(buildername='ChromiumOS Codesearch Staging',
-                           mastername='chromium.fyi')
+    api.properties.generic(buildername='ChromiumOS Codesearch Builder',
+                           mastername='tryserver.chromium.linux')
   )

@@ -5,9 +5,9 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "chromium.fyi",
+      "tryserver.chromium.linux",
       "--builder",
-      "ChromiumOS Codesearch Staging",
+      "ChromiumOS Codesearch Builder",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -208,7 +208,12 @@
       "--all"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "run translation_unit clang tool"
+    "name": "run translation_unit clang tool",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 2",
+      "@@@STEP_TEXT@Step('run translation_unit clang tool') failed with return_code 2@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -240,62 +245,6 @@
       "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
       "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
       "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "----",
-      "cp",
-      "[SLAVE_BUILD]/src/out/Debug/index_pack_chromeos.zip",
-      "gs://chrome-codesearch/staging/index_pack_chromeos_170242.zip"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil upload index pack",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/staging/index_pack_chromeos_170242.zip@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/archive_source_codesearch.py",
-      "src",
-      "build",
-      "infra",
-      "tools",
-      "/usr/include",
-      "-f",
-      "chromium_src_chromeos.tar.bz2"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "archive source"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "----",
-      "cp",
-      "[SLAVE_BUILD]/chromium_src_chromeos.tar.bz2",
-      "gs://chrome-codesearch/staging/chromium_src_chromeos_170242.tar.bz2"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil upload source tarball",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/staging/chromium_src_chromeos_170242.tar.bz2@@@"
     ]
   }
 ]
