@@ -1170,8 +1170,9 @@ SPEC = {
       }
     },
     'ClangToTWin': {
-      'chromium_config': 'chromium_win_clang_tot',
+      'chromium_config': 'chromium_win_clang_official_tot',
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -1255,8 +1256,9 @@ SPEC = {
       'enable_swarming': True,
     },
     'ClangToTWin64': {
-      'chromium_config': 'chromium_win_clang_tot',
+      'chromium_config': 'chromium_win_clang_official_tot',
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
