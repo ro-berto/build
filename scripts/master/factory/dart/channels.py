@@ -20,7 +20,7 @@ CHANNELS = [
   Channel('be', 'master', 0, '', 4),
   Channel('dev', 'dev', 1, '-dev', 2),
   Channel('stable', 'stable', 2, '-stable', 1),
-  Channel('integration', 'branches/dartium_integration', 3, '-integration', 3),
+  Channel('integration', 'integration', 3, '-integration', 3),
 ]
 
 CHANNELS_BY_NAME = {}
