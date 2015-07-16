@@ -21,9 +21,6 @@ BUILDERS = freeze({
     'android_one_perf_bisect': {
       'recipe_config': 'perf',
     },
-    'android_motoe_perf_bisect': {
-      'recipe_config': 'perf',
-    },
     'android_nexus4_perf_bisect': {
       'recipe_config': 'perf',
     },
@@ -37,9 +34,6 @@ BUILDERS = freeze({
       'recipe_config': 'perf',
     },
     'android_nexus9_perf_bisect': {
-      'recipe_config': 'perf',
-    },
-    'android_nexus10_perf_bisect': {
       'recipe_config': 'perf',
     },
   },
