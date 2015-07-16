@@ -44,6 +44,7 @@ def GenTests(api):
         'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-SKNX_NO_SIMD',
         'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Shared',
         'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-TSAN',
+        'Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot',
       ],
       'skiabot-macmini-10_8-000': [
         'Test-Mac10.8-Clang-MacMini4.1-GPU-GeForce320M-x86_64-Release',

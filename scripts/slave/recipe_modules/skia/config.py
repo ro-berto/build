@@ -18,9 +18,10 @@ sys.path.append(
 from common.skia import builder_name_schema
 
 
+CONFIG_COVERAGE = 'Coverage'
 CONFIG_DEBUG = 'Debug'
 CONFIG_RELEASE = 'Release'
-VALID_CONFIGS = (CONFIG_DEBUG, CONFIG_RELEASE)
+VALID_CONFIGS = (CONFIG_COVERAGE, CONFIG_DEBUG, CONFIG_RELEASE)
 
 
 def BaseConfig(BUILDER_NAME, MASTER_NAME, SLAVE_NAME, **_kwargs):

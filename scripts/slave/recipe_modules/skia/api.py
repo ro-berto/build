@@ -10,6 +10,8 @@ import sys
 from recipe_engine import recipe_api
 from . import android_flavor
 from . import chromeos_flavor
+from . import config
+from . import coverage_flavor
 from . import default_flavor
 from . import ios_flavor
 from . import valgrind_flavor
@@ -72,6 +74,8 @@ class SkiaApi(recipe_api.RecipeApi):
       self.flavor = valgrind_flavor.ValgrindFlavorUtils(self)
     elif is_xsan(self.c.builder_cfg):
       self.flavor = xsan_flavor.XSanFlavorUtils(self)
+    elif self.c.configuration == config.CONFIG_COVERAGE:
+      self.flavor = coverage_flavor.CoverageFlavorUtils(self)
     else:
       self.flavor = default_flavor.DefaultFlavorUtils(self)
 
