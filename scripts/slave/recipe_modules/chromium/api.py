@@ -352,13 +352,16 @@ class ChromiumApi(recipe_api.RecipeApi):
       **kwargs
     )
 
-  def sizes(self, results_url=None, perf_id=None, **kwargs):
+  def sizes(self, results_url=None, perf_id=None, platform=None, **kwargs):
     """Return a sizes.py invocation.
     This uses runtests.py to upload the results to the perf dashboard."""
     sizes_script = self.m.path['build'].join('scripts', 'slave', 'chromium',
                                              'sizes.py')
-    sizes_args = ['--target', self.c.BUILD_CONFIG,
-                  '--platform', self.c.TARGET_PLATFORM]
+    sizes_args = ['--target', self.c.BUILD_CONFIG]
+    if platform:
+      sizes_args.extend(['--platform', platform])
+    else:
+      sizes_args.extend(['--platform', self.c.TARGET_PLATFORM])
 
     run_tests_args = ['--target', self.c.build_config_fs,
                       '--no-xvfb']

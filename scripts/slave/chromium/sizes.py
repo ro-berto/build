@@ -345,6 +345,25 @@ def main_android_webview(options, args):
   return check_android_binaries(binaries, target_dir, options)
 
 
+def main_android_cronet(options, args):
+  """Print appropriate size information about Android Cronet targets.
+
+  Returns the first non-zero exit status of any command it executes,
+  or zero on success.
+  """
+  target_dir = os.path.join(build_directory.GetBuildOutputDirectory(),
+                            options.target)
+
+  binaries = ['cronet_sample_apk/libs/arm64-v8a/libcronet.so',
+              'cronet_sample_apk/libs/armeabi-v7a/libcronet.so',
+              'cronet_sample_apk/libs/armeabi/libcronet.so',
+              'cronet_sample_apk/libs/mips/libcronet.so',
+              'cronet_sample_apk/libs/x86_64/libcronet.so',
+              'cronet_sample_apk/libs/x86/libcronet.so']
+
+  return check_android_binaries(binaries, target_dir, options)
+
+
 def main_win(options, args):
   """Print appropriate size information about built Windows targets.
 
@@ -396,6 +415,7 @@ def main():
   main_map = {
     'android' : main_android,
     'android-webview' : main_android_webview,
+    'android-cronet' : main_android_cronet,
     'linux' : main_linux,
     'mac' : main_mac,
     'win' : main_win,

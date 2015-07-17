@@ -39,6 +39,7 @@ class CronetApi(recipe_api.RecipeApi):
     super(CronetApi, self).__init__(**kwargs)
     self._repo_path = None
 
+  DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
   def init_and_sync(self, recipe_config, kwargs, gyp_defs):
     default_kwargs = {
@@ -59,6 +60,7 @@ class CronetApi(recipe_api.RecipeApi):
   def build(self, use_revision=True):
     self.m.chromium.runhooks()
     self.m.chromium.compile()
+
 
   def get_version(self):
     version = self.m.chromium.get_version()
@@ -86,6 +88,11 @@ class CronetApi(recipe_api.RecipeApi):
         args=['-R'],
         name='upload_cronet_package',
         link_name='Cronet package')
+
+
+  def sizes(self, perf_id):
+    self.m.chromium.sizes(results_url=self.DASHBOARD_UPLOAD_URL,
+                          perf_id=perf_id, platform='android-cronet')
 
 
   def run_tests(self, build_config):
