@@ -1385,6 +1385,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'tests': ['mjsunit', 'webkit', 'benchmarks', 'mozilla'],
         'testing': {'platform': 'linux'},
+        'show_changes': True,
       },
       'V8 Linux - ppc - sim': {
         'chromium_apply_config': ['simulate_ppc', 'v8_goma'],

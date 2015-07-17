@@ -3,6 +3,22 @@
     "cmd": [
       "python",
       "-u",
+      "# Empty program"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Show changes (experimental)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@# Empty program@@@",
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@STEP_LOG_LINE@changes.json@{@@@",
+      "@@@STEP_LOG_LINE@changes.json@}@@@",
+      "@@@STEP_LOG_END@changes.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
       "client.v8",

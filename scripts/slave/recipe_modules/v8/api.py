@@ -237,6 +237,8 @@ class V8Api(recipe_api.RecipeApi):
     # Initialize perf_dashboard api if any perf test should run.
     self.m.perf_dashboard.set_default_config()
 
+    self.maybe_show_changes()
+
   def set_bot_config(self, bot_config):
     """Set bot configuration for testing only."""
     self.bot_config = bot_config
@@ -939,3 +941,10 @@ class V8Api(recipe_api.RecipeApi):
         'builder_name': builder_name,
         'properties': properties,
       } for builder_name in triggers])
+
+  def maybe_show_changes(self):
+    if self.bot_config.get('show_changes', False):
+      step_result = self.m.python.inline(
+          'Show changes (experimental)', '# Empty program')
+      step_result.presentation.logs['changes.json'] = self.m.json.dumps(
+          self.m.properties.get('changes', {}), indent=2)
