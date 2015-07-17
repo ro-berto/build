@@ -29,7 +29,7 @@ WEBVIEW_EXES = ('android_webview_apk',)
 
 def RunSteps(api):
   # Required for us to be able to use filter.
-  api.chromium_android.set_config('base_config')
+  api.chromium_android.configure_from_properties('base_config')
 
   droid = api.android
   droid.set_config('AOSP_webview')

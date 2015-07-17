@@ -45,11 +45,19 @@ def RunSteps(api):
   bot_config = BUILDERS[mastername][buildername]
   # The following lines configures android bisect bot to to checkout codes,
   # executes runhooks, provisions devices and runs legacy bisect script.
+  recipe_config = bot_config.get('recipe_config', 'perf')
+  kwargs = {
+    'REPO_NAME': 'src',
+    'REPO_URL': REPO_URL,
+    'INTERNAL': False,
+    'BUILD_CONFIG': 'Release',
+    'TARGET_PLATFORM': 'android',
+  }
+
   api.chromium_android.set_config(
-      bot_config.get('recipe_config', 'perf'), REPO_NAME='src',
-      REPO_URL=REPO_URL, INTERNAL=False, BUILD_CONFIG='Release',
-      TARGET_PLATFORM='android')
-  api.gclient.set_config(bot_config.get('recipe_config', 'perf'))
+      recipe_config, **kwargs)
+  api.gclient.set_config(recipe_config, **kwargs)
+  api.chromium.set_config(recipe_config, **kwargs)
   api.gclient.apply_config('android')
 
   api.bot_update.ensure_checkout()

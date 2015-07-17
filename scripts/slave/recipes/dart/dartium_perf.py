@@ -44,6 +44,7 @@ def RunSteps(api):
   )
 
   api.chromium.set_config('chromium', **config_vals)
+  api.gclient.set_config('chromium', **config_vals)
 
   api.chromium.c.gyp_env.GYP_GENERATORS.add('ninja')
   api.chromium.c.gyp_env.GYP_DEFINES['linux_strip_binary'] = 1

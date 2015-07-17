@@ -47,11 +47,14 @@ class GpuApi(recipe_api.RecipeApi):
     if self.m.gclient.is_blink_mode:
       self._configuration = 'blink'
 
-    self.m.chromium.set_config(self._configuration, GIT_MODE=self._use_git)
-    # This is needed to make GOMA work properly on Mac.
+    config = self._configuration
     if self.m.platform.is_mac:
-      self.m.chromium.set_config(self._configuration + '_clang',
-                                 GIT_MODE=self._use_git)
+      config += '_clang'
+
+    self.m.chromium.set_config(
+      config, GIT_MODE=self._use_git)
+    self.m.gclient.set_config(
+      self._configuration, GIT_MODE=self._use_git)
     self.m.gclient.apply_config('chrome_internal')
 
     # To catch errors earlier on Release bots, in particular the try

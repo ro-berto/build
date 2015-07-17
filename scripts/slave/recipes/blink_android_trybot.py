@@ -18,12 +18,18 @@ def RunSteps(api):
   mastername = api.properties['mastername']
   buildername = api.properties['buildername']
   config = 'Debug' if '_dbg' in buildername else 'Release'
-  api.chromium.set_config(
-      'blink', TARGET_PLATFORM='android', TARGET_ARCH='arm', TARGET_BITS=32,
-      BUILD_CONFIG=config)
+  kwargs = {
+    'TARGET_PLATFORM': 'android',
+    'TARGET_ARCH': 'arm',
+    'TARGET_BITS': 32,
+    'BUILD_CONFIG': config,
+  }
+  api.chromium.set_config('blink', **kwargs)
   api.chromium.apply_config('trybot_flavor')
   api.chromium.apply_config('android')
   api.chromium.apply_config('mb')  # Turns off gyp in runhooks().
+
+  api.gclient.set_config('blink', **kwargs)
   api.gclient.apply_config('android')
 
   # TODO(dpranke): crbug.com/348435. We need to figure out how to separate

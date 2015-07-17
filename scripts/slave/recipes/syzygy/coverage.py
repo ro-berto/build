@@ -37,7 +37,10 @@ def RunSteps(api):
 
   # Configure the build environment.
   s = api.syzygy
-  s.set_config('syzygy', BUILD_CONFIG='Coverage')
+  kwargs = {'BUILD_CONFIG': 'Coverage'}
+  s.set_config('syzygy', **kwargs)
+  api.chromium.set_config('syzygy', **kwargs)
+  api.gclient.set_config('syzygy', **kwargs)
 
   # Clean up any running processes on the slave.
   s.taskkill()

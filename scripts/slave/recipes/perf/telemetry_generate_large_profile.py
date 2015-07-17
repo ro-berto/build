@@ -7,6 +7,7 @@ DEPS = [
   'bot_update',
   'chromium',
   'file',
+  'gclient',
   'gsutil',
   'path',
   'platform',
@@ -65,6 +66,7 @@ def _GenerateProfile(api, output_directory):
 
 def RunSteps(api):
   api.chromium.set_config('chromium')
+  api.gclient.set_config('chromium')
   api.bot_update.ensure_checkout(force=True)
 
   try:

@@ -4,7 +4,9 @@
 
 DEPS = [
   'bot_update',
+  'chromium',
   'json',
+  'gclient',
   'path',
   'perf_dashboard',
   'properties',
@@ -16,6 +18,9 @@ DEPS = [
 def RunSteps(api):
   # Minimalistic example for running the performance tests.
   api.v8.set_config('v8')
+  api.chromium.set_config('v8')
+  api.gclient.set_config('v8')
+
   api.v8.set_bot_config({'perf': ['example1', 'example2']})
   api.perf_dashboard.set_config('testing')
   update_step = api.bot_update.ensure_checkout(force=True, no_shallow=True)

@@ -107,10 +107,17 @@ def RunSteps(api):
   # TODO(akuegel): Move the configs in builders.py in chromium_tests to this
   # recipe, and get rid of duplications.
   builder = thaw(BUILDERS[mastername][buildername])
-  api.chromium_android.set_config(
-      builder.get('recipe_config', 'base_config'), REPO_NAME='src',
-      REPO_URL=REPO_URL, INTERNAL=False, BUILD_CONFIG='Release',
-      TARGET_PLATFORM='android')
+  builder_config = builder.get('recipe_config', 'base_config')
+  kwargs = {
+    'REPO_NAME':'src',
+    'REPO_URL':REPO_URL,
+    'INTERNAL':False,
+    'BUILD_CONFIG':'Release',
+    'TARGET_PLATFORM':'android',
+  }
+
+  api.chromium_android.set_config(builder_config, **kwargs)
+  api.chromium.set_config(builder_config, **kwargs)
   api.gclient.set_config('perf')
   api.gclient.apply_config('android')
   for c in builder.get('gclient_apply_config', []):

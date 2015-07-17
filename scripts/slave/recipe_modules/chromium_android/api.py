@@ -95,6 +95,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def configure_from_properties(self, config_name, **kwargs):
     self.set_config(config_name, **kwargs)
+    self.m.chromium.set_config(config_name, optional=True, **kwargs)
 
   def make_zip_archive(self, step_name, archive_name, files=None,
                        preserve_paths=True, filters=None, **kwargs):

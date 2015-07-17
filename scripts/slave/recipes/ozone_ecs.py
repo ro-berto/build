@@ -66,6 +66,7 @@ dbus_tests = freeze([
 def RunSteps(api):
 
   api.chromium.set_config('chromium', BUILD_CONFIG='Debug')
+  api.gclient.set_config('chromium', BUILD_CONFIG='Debug')
 
   step_result = api.bot_update.ensure_checkout()
   if not step_result.json.output['did_run']:

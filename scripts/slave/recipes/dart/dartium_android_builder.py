@@ -5,6 +5,7 @@
 DEPS = [
   'chromium',
   'chromium_android',
+  'gclient',
   'json',
   'path',
   'properties',
@@ -12,12 +13,17 @@ DEPS = [
 ]
 
 def RunSteps(api):
+  recipe_config = 'dartium_builder'
+  kwargs = {
+    'REPO_URL': api.properties.get('deps_url'),
+    'REPO_NAME': api.properties.get('deps_path'),
+    'BUILD_CONFIG':  'Release',
+    'INTERNAL': False,
+  }
+
   api.chromium_android.configure_from_properties(
-      'dartium_builder',
-      REPO_URL=api.properties.get('deps_url'),
-      REPO_NAME=api.properties.get('deps_path'),
-      BUILD_CONFIG='Release',
-      INTERNAL=False)
+    recipe_config, **kwargs)
+
   revision = api.properties.get('revision', 'HEAD')
   api.chromium_android.c.revision = revision
   api.chromium_android.c.revisions['src/dart'] = revision

@@ -88,15 +88,18 @@ def ConfigureChromiumBuilder(api, recipe_config):
 
 
 def ConfigureAndroidBuilder(api, recipe_config):
-  api.chromium_android.configure_from_properties(
-      'base_config',
-      REPO_NAME='src',
-      REPO_URL='https://chromium.googlesource.com/chromium/src.git',
-      Internal=False,
-      **recipe_config.get('chromium_config_kwargs',
-                          {'BUILD_CONFIG': 'Release'}))
-  api.chromium.apply_config(recipe_config['chromium_config'])
+  kwargs = {
+    'REPO_NAME': 'src',
+    'REPO_URL': 'https://chromium.googlesource.com/chromium/src.git',
+    'Internal': False,
+  }
+  kwargs.update(recipe_config.get('chromium_config_kwargs',
+                                  {'BUILD_CONFIG': 'Release'}))
 
+  api.chromium_android.configure_from_properties(
+      'base_config', **kwargs)
+  api.chromium.set_config('base_config', **kwargs)
+  api.chromium.apply_config(recipe_config['chromium_config'])
 
 def RunSteps(api):
   buildername = api.properties['buildername']

@@ -7,6 +7,7 @@ DEPS = [
   'chromium',
   'chromium_tests',
   'filter',
+  'gclient',
   'json',
   'properties',
   'tryserver',
@@ -15,6 +16,7 @@ DEPS = [
 
 def RunSteps(api):
   api.chromium.set_config('chromium')
+  api.gclient.set_config('chromium')
   api.bot_update.ensure_checkout(force=True)
 
   exes = list(api.m.properties.get('exes', []))

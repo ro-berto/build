@@ -59,7 +59,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         **bot_config.get('gclient_config_kwargs', {}))
 
     if 'android_config' in bot_config:
-      self.m.chromium_android.set_config(
+      self.m.chromium_android.configure_from_properties(
           bot_config['android_config'],
           **bot_config.get('chromium_config_kwargs', {}))
 

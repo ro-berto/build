@@ -14,7 +14,7 @@ class AmpApi(recipe_api.RecipeApi):
 
   def setup(self):
     """Sets up necessary configs."""
-    self.m.chromium_android.set_config('base_config')
+    self.m.chromium_android.configure_from_properties('base_config')
 
   def _get_trigger_dir(self):
     if not self._trigger_file_dir:
