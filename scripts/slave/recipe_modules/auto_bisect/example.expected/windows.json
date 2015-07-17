@@ -218,7 +218,8 @@
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/Win x64 Builder/full-build-win32_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
-      "gs://chrome-perf/Win x64 Builder/full-build-win32_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
+      "gs://chrome-perf/Win x64 Builder/full-build-win32_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
+      "--timeout=14400"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision 314015 and 1 other revision(s).",
@@ -246,7 +247,7 @@
     "name": "Triggering test job for 314015",
     "trigger_specs": [
       {
-        "builder_name": "winx64_nvidia_perf_tester",
+        "builder_name": "win64_nv_tester",
         "properties": {
           "bisect_config": {
             "command": "src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases",
@@ -286,7 +287,7 @@
     "name": "Triggering test job for 314017",
     "trigger_specs": [
       {
-        "builder_name": "winx64_nvidia_perf_tester",
+        "builder_name": "win64_nv_tester",
         "properties": {
           "bisect_config": {
             "command": "src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases",
@@ -311,7 +312,8 @@
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results",
-      "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results"
+      "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results",
+      "--timeout=14400"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision 314015 and 1 other revision(s). (2)",
@@ -356,7 +358,8 @@
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results"
+      "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results",
+      "--timeout=14400"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision 314017",
@@ -435,7 +438,8 @@
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/Win x64 Builder/full-build-win32_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
+      "gs://chrome-perf/Win x64 Builder/full-build-win32_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
+      "--timeout=14400"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision dcdcdc0ff1122212323134879ddceeb1240b0988",
@@ -463,7 +467,7 @@
     "name": "Triggering test job for dcdcdc0ff1122212323134879ddceeb1240b0988",
     "trigger_specs": [
       {
-        "builder_name": "winx64_nvidia_perf_tester",
+        "builder_name": "win64_nv_tester",
         "properties": {
           "bisect_config": {
             "command": "src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases",
@@ -487,7 +491,8 @@
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/bisect-results/dcdcdc0ff1122212323134879ddceeb1240b0988-test.results"
+      "gs://chrome-perf/bisect-results/dcdcdc0ff1122212323134879ddceeb1240b0988-test.results",
+      "--timeout=14400"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision dcdcdc0ff1122212323134879ddceeb1240b0988 (2)",

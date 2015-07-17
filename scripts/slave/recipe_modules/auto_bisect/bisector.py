@@ -461,6 +461,9 @@ class Bisector(object):
     url_mapping = {r.get_next_url(): r for r in revision_list}
     url_list = url_mapping.keys()
     args_list += [url for url in url_list if url and url is not None]
+    args_list.append(
+        '--timeout=%d' % (
+            self.get_build_timeout_minutes() * 60))
     try:
       step_result = self.api.m.python(
           str(name),
@@ -535,9 +538,14 @@ class Bisector(object):
 
   def get_perf_tester_name(self):
     if 'win' in self.bisect_config.get('original_bot_name', ''):
-      return 'winx64_nvidia_perf_tester'
+      return 'win64_nv_tester'
     # Reasonable fallback
     return 'linux_perf_tester'
+
+  def get_build_timeout_minutes(self):
+    if 'win' in self.bisect_config.get('original_bot_name', ''):
+      return 4 * 60
+    return 2 * 60
 
   def get_builder_bot_for_this_platform(self):
     if 'win' in self.bisect_config.get('original_bot_name', ''):

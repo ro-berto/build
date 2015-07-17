@@ -218,7 +218,8 @@
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
-      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
+      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
+      "--timeout=7200"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision 314015 and 1 other revision(s).",
@@ -311,7 +312,8 @@
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results",
-      "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results"
+      "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results",
+      "--timeout=7200"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision 314015 and 1 other revision(s). (2)",
@@ -356,7 +358,8 @@
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results"
+      "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results",
+      "--timeout=7200"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision 314017",
@@ -435,7 +438,8 @@
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
+      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
+      "--timeout=7200"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision dcdcdc0ff1122212323134879ddceeb1240b0988",
@@ -487,7 +491,8 @@
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/bisect-results/dcdcdc0ff1122212323134879ddceeb1240b0988-test.results"
+      "gs://chrome-perf/bisect-results/dcdcdc0ff1122212323134879ddceeb1240b0988-test.results",
+      "--timeout=7200"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision dcdcdc0ff1122212323134879ddceeb1240b0988 (2)",

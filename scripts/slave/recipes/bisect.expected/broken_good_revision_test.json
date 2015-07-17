@@ -391,7 +391,8 @@
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip",
-      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
+      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
+      "--timeout=7200"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.Waiting for revision 306475 and 1 other revision(s).",
@@ -499,7 +500,8 @@
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results",
-      "gs://chrome-perf/bisect-results/e28dc0d49c331def2a3bbf3ddd0096eb51551155-test.results"
+      "gs://chrome-perf/bisect-results/e28dc0d49c331def2a3bbf3ddd0096eb51551155-test.results",
+      "--timeout=7200"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.Waiting for revision 306475 and 1 other revision(s). (2)",
@@ -553,7 +555,8 @@
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results"
+      "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results",
+      "--timeout=7200"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Gathering reference values.Waiting for revision src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
