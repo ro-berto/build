@@ -19,7 +19,7 @@ class CoverageFlavorUtils(default_flavor.DefaultFlavorUtils):
     # We have to use Clang 3.6 because earlier versions do not support the
     # compile flags we use and 3.7 and 3.8 hit asserts during compilation.
     env['CC'] = '/usr/bin/clang-3.6'
-    env['CXX'] = '/usr/bin/clang-3.6'
+    env['CXX'] = '/usr/bin/clang++-3.6'
     cmd = [self._skia_api.m.path['slave_build'].join('skia', 'tools',
                                                      'llvm_coverage_build'),
            target]

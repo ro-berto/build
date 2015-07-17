@@ -109,7 +109,7 @@
     "env": {
       "BUILDTYPE": "Coverage",
       "CC": "/usr/bin/clang-3.6",
-      "CXX": "/usr/bin/clang-3.6",
+      "CXX": "/usr/bin/clang++-3.6",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     },
     "name": "build dm"
@@ -123,7 +123,7 @@
     "env": {
       "BUILDTYPE": "Coverage",
       "CC": "/usr/bin/clang-3.6",
-      "CXX": "/usr/bin/clang-3.6",
+      "CXX": "/usr/bin/clang++-3.6",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     },
     "name": "build nanobench"
