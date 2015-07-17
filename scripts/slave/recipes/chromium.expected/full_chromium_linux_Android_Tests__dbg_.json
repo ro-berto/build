@@ -603,6 +603,26 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
+      "components_browsertests",
+      "--verbose",
+      "--isolate_file_path=[SLAVE_BUILD]/src/components/components_browsertests.isolate",
+      "--flakiness-dashboard-server=test-results.appspot.com",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "components_browsertests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
       "components_unittests",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/components/components_unittests.isolate",

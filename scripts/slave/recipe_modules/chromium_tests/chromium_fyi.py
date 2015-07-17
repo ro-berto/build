@@ -1452,9 +1452,6 @@ SPEC = {
       'android_config': 'main_builder',
       'root_devices': True,
       'tests': [
-        steps.GTestTest(
-            'components_browsertests',
-            android_isolate_path='components/components_browsertests.isolate'),
         steps.GTestTest('gfx_unittests'),
       ],
       'testing': {

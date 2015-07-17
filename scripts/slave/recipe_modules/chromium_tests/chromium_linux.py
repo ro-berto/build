@@ -318,6 +318,9 @@ SPEC = {
             android_isolate_path='breakpad/breakpad_unittests.isolate'),
         steps.GTestTest('cc_unittests'),
         steps.GTestTest(
+            'components_browsertests',
+            android_isolate_path='components/components_browsertests.isolate'),
+        steps.GTestTest(
             'components_unittests',
             android_isolate_path='components/components_unittests.isolate'),
         steps.GTestTest(
@@ -430,6 +433,9 @@ SPEC = {
             override_compile_targets=['breakpad_unittests_deps'],
             android_isolate_path='breakpad/breakpad_unittests.isolate'),
         steps.GTestTest('cc_unittests'),
+        steps.GTestTest(
+            'components_browsertests',
+            android_isolate_path='components/components_browsertests.isolate'),
         steps.GTestTest(
             'components_unittests',
             android_isolate_path='components/components_unittests.isolate'),
