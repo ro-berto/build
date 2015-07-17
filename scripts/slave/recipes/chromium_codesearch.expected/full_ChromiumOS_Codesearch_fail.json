@@ -5,9 +5,9 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "tryserver.chromium.linux",
+      "chromium.infra.cron",
       "--builder",
-      "ChromiumOS Codesearch Builder",
+      "ChromiumOS Codesearch",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -245,6 +245,62 @@
       "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
       "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
       "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "----",
+      "cp",
+      "[SLAVE_BUILD]/src/out/Debug/index_pack_chromeos.zip",
+      "gs://chrome-codesearch/prod/index_pack_chromeos_170242.zip"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload index pack",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/index_pack_chromeos_170242.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/archive_source_codesearch.py",
+      "src",
+      "build",
+      "infra",
+      "tools",
+      "/usr/include",
+      "-f",
+      "chromium_src_chromeos.tar.bz2"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "archive source"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "----",
+      "cp",
+      "[SLAVE_BUILD]/chromium_src_chromeos.tar.bz2",
+      "gs://chrome-codesearch/prod/chromium_src_chromeos_170242.tar.bz2"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload source tarball",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_src_chromeos_170242.tar.bz2@@@"
     ]
   }
 ]
