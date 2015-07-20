@@ -60,21 +60,6 @@ gpu_slave_info = [
     'build_config': 'Debug',
   },
   {
-    'builder': 'GPU Mac10.7',
-    'factory_id': 'f_gpu_mac_rel',
-    'recipe': 'gpu/download_and_test',
-    'build_config': 'Release',
-    'perf_id': 'gpu-webkit-mac',
-    'triggered_by': 'GPU Mac Builder',
-  },
-  {
-    'builder': 'GPU Mac10.7 (dbg)',
-    'factory_id': 'f_gpu_mac_dbg',
-    'recipe': 'gpu/download_and_test',
-    'build_config': 'Debug',
-    'triggered_by': 'GPU Mac Builder (dbg)',
-  },
-  {
     'builder': 'GPU Mac 10.9 (Intel)',
     'factory_id': 'f_gpu_mac_10_9_rel',
     'recipe': 'gpu/download_and_test',
