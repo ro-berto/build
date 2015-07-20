@@ -60,8 +60,10 @@ def check_output(cmd, cwd=None, env=None):
 
 def main():
   parser = argparse.ArgumentParser()
-  parser.add_argument('-m', '--manual', action='store_true',
+  parser.add_argument('-m', '--manual', action='store_true', default=False,
                       help='Run in manual mode')
+  parser.add_argument('--leak-tmp-dir', action='store_true', default=False,
+                      help='Leaves temporary checkout dir on disk')
   options = parser.parse_args()
 
   if not options.manual:
@@ -182,7 +184,8 @@ def main():
       gclient_file.write(gclient_config)
   finally:
     # Remove the temporary directory.
-    shutil.rmtree(tmpdir)
+    if not options.leak_tmp_dir:
+      shutil.rmtree(tmpdir)
 
     # Remove no_reboot file if it was created by this script.
     if os.path.isfile(prevent_reboot_path):
