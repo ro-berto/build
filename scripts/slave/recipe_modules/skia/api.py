@@ -108,6 +108,7 @@ class SkiaApi(recipe_api.RecipeApi):
     self.storage_skp_dirs = default_flavor.SKPDirs(
         'playback', self.c.BUILDER_NAME, '/')
     self.tmp_dir = self.m.path['slave_build'].join('tmp')
+    self.gsutil_version = GSUTIL_VERSION
 
     self.device_dirs = None
     self._ccache = None
@@ -197,7 +198,7 @@ class SkiaApi(recipe_api.RecipeApi):
           fail_build_on_failure=True, **kwargs):
     """Run a step. If it fails, keep going but mark the build status failed."""
     try:
-      return steptype(name, **kwargs)
+      return steptype(name=name, **kwargs)
     except self.m.step.StepFailure as e:
       if abort_on_failure:
         raise  # pragma: no cover

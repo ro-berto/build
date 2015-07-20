@@ -15,5 +15,6 @@ DEPS = [
   'python',
   'raw_io',
   'step',
+  'time',
   'tryserver',
 ]

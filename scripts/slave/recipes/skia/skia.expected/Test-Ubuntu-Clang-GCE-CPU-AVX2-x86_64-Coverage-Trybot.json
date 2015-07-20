@@ -262,18 +262,6 @@
   },
   {
     "cmd": [
-      "git",
-      "show",
-      "HEAD",
-      "--format=%at",
-      "-s"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "git show",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
       "python",
       "[SLAVE_BUILD]/skia/tools/llvm_coverage_run.py",
       "dm",
@@ -309,13 +297,80 @@
       "--nogpu",
       "--dummy-flags",
       "--outResultsFile",
-      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/coverage_results/nanobench_164710_1408633190.json"
+      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/coverage_results/164710.cov"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     },
     "name": "dm"
+  },
+  {
+    "cmd": [
+      "git",
+      "show",
+      "HEAD",
+      "--format=%at",
+      "-s"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "git show",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "[SLAVE_BUILD]/skia/tools/parse_llvm_coverage.py",
+      "--report",
+      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/coverage_results/164710.cov",
+      "--nanobench",
+      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/coverage_results/nanobench_164710_1408633190.json",
+      "--linebyline",
+      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/coverage_results/coverage_by_line_164710_1408633190.json",
+      "--key",
+      "arch",
+      "x86_64",
+      "compiler",
+      "Clang",
+      "configuration",
+      "Coverage",
+      "cpu_or_gpu",
+      "CPU",
+      "cpu_or_gpu_value",
+      "AVX2",
+      "model",
+      "GCE",
+      "os",
+      "Ubuntu",
+      "--properties",
+      "gitHash",
+      "164710",
+      "build_number",
+      "5"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "Generate Coverage Data"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "----",
+      "cp",
+      "-R",
+      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/coverage_results/164710.cov",
+      "gs://skia-infra/coverage-raw-v1/trybot/2012/05/14/12/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5/500/164710.cov"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload raw coverage data",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-infra/coverage-raw-v1/trybot/2012/05/14/12/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5/500/164710.cov@@@"
+    ]
   },
   {
     "cmd": [
@@ -330,6 +385,27 @@
       "500"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
-    "name": "Upload Coverage Results"
+    "name": "upload nanobench coverage results"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "----",
+      "cp",
+      "-R",
+      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/coverage_results/coverage_by_line_164710_1408633190.json",
+      "gs://skia-infra/coverage-json-v1/trybot/2012/05/14/12/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5/500/coverage_by_line_164710_1408633190.json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload line-by-line coverage data",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-infra/coverage-json-v1/trybot/2012/05/14/12/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5/500/coverage_by_line_164710_1408633190.json@@@"
+    ]
   }
 ]
