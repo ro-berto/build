@@ -7,6 +7,7 @@ import datetime
 import os
 import re
 import shutil
+import socket
 import subprocess
 import sys
 import tempfile
@@ -38,6 +39,11 @@ GCLIENT_CONFIGS = {
 
 PREVENT_REBOOT_FILE_CONTENT = 'slave_svn_to_git'
 
+WHITELISTED_HOSTS = [
+  re.compile(r'^slave10[1-9]-c4$'),
+  re.compile(r'^slave110-c4$'),
+]
+
 is_win = sys.platform.startswith('win')
 
 
@@ -52,6 +58,11 @@ def check_output(cmd, cwd=None, env=None):
 
 
 def main():
+  current_host = socket.gethostname()
+  if not any(host.match(current_host) for host in WHITELISTED_HOSTS):
+    print 'Host %s is not whitelisted for SVN-to-Git conversion' % current_host
+    return 0
+
   # Find b directory.
   b_dir = None
   if is_win:
@@ -74,10 +85,11 @@ def main():
   assert os.path.isfile(gclient_path), 'Did not find old .gclient config'
 
   # Detect type of checkout.
-  solutions = []
   with open(gclient_path) as gclient_file:
-    exec gclient_file
-  assert len(solutions) == 1, 'More than one solution in .gclient'
+    exec_env = {}
+    exec gclient_file in exec_env
+    solutions = exec_env['solutions']
+  assert len(solutions) == 1, 'Number of solutions in .gclient is not 1'
   if not solutions[0]['url'].startswith('svn:'):
     print 'Non-SVN URL in .gclient: %s' % solutions[0]['url']
     return 0
