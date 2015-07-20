@@ -3,6 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import argparse
 import datetime
 import os
 import re
@@ -58,10 +59,16 @@ def check_output(cmd, cwd=None, env=None):
 
 
 def main():
-  current_host = socket.gethostname()
-  if not any(host.match(current_host) for host in WHITELISTED_HOSTS):
-    print 'Host %s is not whitelisted for SVN-to-Git conversion' % current_host
-    return 0
+  parser = argparse.ArgumentParser()
+  parser.add_argument('-m', '--manual', action='store_true',
+                      help='Run in manual mode')
+  options = parser.parse_args()
+
+  if not options.manual:
+    cur_host = socket.gethostname()
+    if not any(host.match(cur_host) for host in WHITELISTED_HOSTS):
+      print 'Host %s is not whitelisted for SVN-to-Git conversion' % cur_host
+      return 0
 
   # Find b directory.
   b_dir = None
