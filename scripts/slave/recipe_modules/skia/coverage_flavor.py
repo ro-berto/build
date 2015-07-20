@@ -100,6 +100,8 @@ class CoverageFlavorUtils(default_flavor.DefaultFlavorUtils):
         bucket='skia-infra',
         dest='/'.join(('coverage-raw-v1', gs_json_path, report_file_basename)),
         args=['-R'],
+        env={'AWS_CREDENTIAL_FILE': None,
+             'BOTO_CONFIG': None},
         version=self._skia_api.gsutil_version)
 
     # Upload nanobench JSON data.
@@ -129,5 +131,7 @@ class CoverageFlavorUtils(default_flavor.DefaultFlavorUtils):
         dest='/'.join(('coverage-json-v1', gs_json_path,
                        line_by_line_basename)),
         args=['-R'],
+        env={'AWS_CREDENTIAL_FILE': None,
+             'BOTO_CONFIG': None},
         version=self._skia_api.gsutil_version)
 

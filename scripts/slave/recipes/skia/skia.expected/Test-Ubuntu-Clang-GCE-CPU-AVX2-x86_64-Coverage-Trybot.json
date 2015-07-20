@@ -367,6 +367,10 @@
       "gs://skia-infra/coverage-raw-v1/trybot/2012/05/14/12/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5/500/164710.cov"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": null,
+      "BOTO_CONFIG": null
+    },
     "name": "gsutil upload raw coverage data",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-infra/coverage-raw-v1/trybot/2012/05/14/12/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5/500/164710.cov@@@"
@@ -403,6 +407,10 @@
       "gs://skia-infra/coverage-json-v1/trybot/2012/05/14/12/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5/500/coverage_by_line_164710_1408633190.json"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": null,
+      "BOTO_CONFIG": null
+    },
     "name": "gsutil upload line-by-line coverage data",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-infra/coverage-json-v1/trybot/2012/05/14/12/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5/500/coverage_by_line_164710_1408633190.json@@@"
