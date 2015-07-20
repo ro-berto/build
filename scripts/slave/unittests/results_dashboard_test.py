@@ -36,7 +36,7 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     self.mox = mox.Mox()
     self.maxDiff = None
     os.environ['BUILDBOT_BUILDBOTURL'] = (
-        'http://build.chromium.org/p/my.master')
+        'http://build.chromium.org/p/my.master/')
 
   def tearDown(self):
     self.mox.UnsetStubs()

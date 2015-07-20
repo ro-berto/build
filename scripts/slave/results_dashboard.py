@@ -271,7 +271,7 @@ def _GetStdioUriColumn(test_name, buildername, buildnumber):
   if not buildername or not buildnumber:
     return {}
 
-  url = '%s/builders/%s/builds/%s/steps/%s/logs/stdio' % (
+  url = '%sbuilders/%s/builds/%s/steps/%s/logs/stdio' % (
       _GetBuildBotUrl(),
       urllib.quote(buildername),
       urllib.quote(str(buildnumber)),
@@ -286,7 +286,8 @@ def _CreateLinkColumn(name, label, url):
 
 def _GetBuildBotUrl():
   """Gets the buildbot URL which contains hostname and master name."""
-  return os.environ.get('BUILDBOT_BUILDBOTURL', '')
+  return os.environ.get('BUILDBOT_BUILDBOTURL',
+                        'http://build.chromium.org/p/chromium/')
 
 
 def _GetTimestamp():
