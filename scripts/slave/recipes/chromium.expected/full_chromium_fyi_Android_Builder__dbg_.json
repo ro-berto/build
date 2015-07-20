@@ -199,6 +199,7 @@
       "ipc_tests_apk",
       "junit_unit_tests",
       "media_unittests_apk",
+      "net_junit_tests",
       "net_unittests_apk",
       "sandbox_linux_unittests_deps",
       "sql_unittests_apk",
