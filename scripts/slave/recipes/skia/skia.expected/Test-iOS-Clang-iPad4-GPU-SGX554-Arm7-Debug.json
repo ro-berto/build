@@ -412,8 +412,6 @@
       "skiabot/skia_skp/skps",
       "--images",
       "skiabot/skia_images",
-      "--writePath",
-      "skiabot/skia_dm",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -437,6 +435,8 @@
       "iOS",
       "--uninterestingHashesFile",
       "skiabot/skia_tmp_dir/uninteresting_hashes.txt",
+      "--writePath",
+      "skiabot/skia_dm",
       "--nocpu",
       "--dummy-flags"
     ],

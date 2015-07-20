@@ -352,61 +352,76 @@ class SkiaApi(recipe_api.RecipeApi):
     """Run the DM test."""
     self._run_once(self.download_and_copy_skps)
     self._run_once(self.download_and_copy_images)
-    # This must run before we write anything into self.device_dirs.dm_dir
-    # or we may end up deleting our output on machines where they're the same.
-    host_dm_dir = self.m.path['slave_build'].join('dm')
-    self.flavor.create_clean_host_dir(host_dm_dir)
-    if str(host_dm_dir) != str(self.device_dirs.dm_dir):
-      self.flavor.create_clean_device_dir(self.device_dirs.dm_dir)
 
-    # Obtain the list of already-generated hashes.
-    hash_filename = 'uninteresting_hashes.txt'
-    host_hashes_file = self.tmp_dir.join(hash_filename)
-    hashes_file = self.flavor.device_path_join(
-        self.device_dirs.tmp_dir, hash_filename)
+    skip_upload_bots = [
+        'ASAN',
+        'Coverage',
+        'TSAN',
+        'UBSAN',
+        'Valgrind',
+    ]
+    do_upload_results = True
+    for s in skip_upload_bots:
+      if s in self.c.BUILDER_NAME:
+        do_upload_results = False
+        break
     use_hash_file = False
-    self.run(
-        self.m.python.inline,
-        'get uninteresting hashes',
-        program="""
-        import contextlib
-        import math
-        import socket
-        import sys
-        import time
-        import urllib2
 
-        HASHES_URL = 'https://gold.skia.org/_/hashes'
-        RETRIES = 5
-        TIMEOUT = 60
-        WAIT_BASE = 15
+    if do_upload_results:
+      # This must run before we write anything into self.device_dirs.dm_dir
+      # or we may end up deleting our output on machines where they're the same.
+      host_dm_dir = self.m.path['slave_build'].join('dm')
+      self.flavor.create_clean_host_dir(host_dm_dir)
+      if str(host_dm_dir) != str(self.device_dirs.dm_dir):
+        self.flavor.create_clean_device_dir(self.device_dirs.dm_dir)
 
-        socket.setdefaulttimeout(TIMEOUT)
-        for retry in range(RETRIES):
-          try:
-            with contextlib.closing(
-                urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:
-              hashes = w.read()
-              with open(sys.argv[1], 'w') as f:
-                f.write(hashes)
-                break
-          except:
-            print 'Failed to get uninteresting hashes from %s' % HASHES_URL
-            if retry == RETRIES:
-              raise
-            waittime = WAIT_BASE * math.pow(2, retry)
-            print 'Retry in %d seconds.' % waittime
-            time.sleep(waittime)
-        """,
-        args=[host_hashes_file],
-        cwd=self.skia_dir,
-        abort_on_failure=False,
-        fail_build_on_failure=False,
-        infra_step=True)
+      # Obtain the list of already-generated hashes.
+      hash_filename = 'uninteresting_hashes.txt'
+      host_hashes_file = self.tmp_dir.join(hash_filename)
+      hashes_file = self.flavor.device_path_join(
+          self.device_dirs.tmp_dir, hash_filename)
+      self.run(
+          self.m.python.inline,
+          'get uninteresting hashes',
+          program="""
+          import contextlib
+          import math
+          import socket
+          import sys
+          import time
+          import urllib2
 
-    if self.m.path.exists(host_hashes_file):
-      self.flavor.copy_file_to_device(host_hashes_file, hashes_file)
-      use_hash_file = True
+          HASHES_URL = 'https://gold.skia.org/_/hashes'
+          RETRIES = 5
+          TIMEOUT = 60
+          WAIT_BASE = 15
+
+          socket.setdefaulttimeout(TIMEOUT)
+          for retry in range(RETRIES):
+            try:
+              with contextlib.closing(
+                  urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:
+                hashes = w.read()
+                with open(sys.argv[1], 'w') as f:
+                  f.write(hashes)
+                  break
+            except:
+              print 'Failed to get uninteresting hashes from %s' % HASHES_URL
+              if retry == RETRIES:
+                raise
+              waittime = WAIT_BASE * math.pow(2, retry)
+              print 'Retry in %d seconds.' % waittime
+              time.sleep(waittime)
+          """,
+          args=[host_hashes_file],
+          cwd=self.skia_dir,
+          abort_on_failure=False,
+          fail_build_on_failure=False,
+          infra_step=True)
+
+      if self.m.path.exists(host_hashes_file):
+        self.flavor.copy_file_to_device(host_hashes_file, hashes_file)
+        use_hash_file = True
 
     # Run DM.
     args = [
@@ -416,7 +431,6 @@ class SkiaApi(recipe_api.RecipeApi):
       '--resourcePath', self.device_dirs.resource_dir,
       '--skps',         self.device_dirs.skp_dir,
       '--images',       self.device_dirs.images_dir,
-      '--writePath',    self.device_dirs.dm_dir,
       '--nameByHash',
       '--properties',  'gitHash',      self.got_revision,
                        'build_number', self.m.properties['buildnumber'],
@@ -425,6 +439,8 @@ class SkiaApi(recipe_api.RecipeApi):
     args.extend(self._KeyParams())
     if use_hash_file:
       args.extend(['--uninterestingHashesFile', hashes_file])
+    if do_upload_results:
+      args.extend(['--writePath', self.device_dirs.dm_dir])
 
     skip_flag = None
     if self.c.builder_cfg.get('cpu_or_gpu') == 'CPU':
@@ -437,24 +453,25 @@ class SkiaApi(recipe_api.RecipeApi):
     args.extend(self.flags_from_file(self.skia_dir.join('tools/dm_flags.py')))
     self.run(self.flavor.step, 'dm', cmd=args, abort_on_failure=False)
 
-    # Copy images and JSON to host machine if needed.
-    self.flavor.copy_directory_contents_to_host(self.device_dirs.dm_dir,
+    if do_upload_results:
+      # Copy images and JSON to host machine if needed.
+      self.flavor.copy_directory_contents_to_host(self.device_dirs.dm_dir,
                                                 host_dm_dir)
-    # Upload them to Google Storage.
-    self.run(self.m.python,
-             'Upload DM Results',
-             script=self.resource('upload_dm_results.py'),
-             args=[
-               host_dm_dir,
-               self.got_revision,
-               self.c.BUILDER_NAME,
-               self.m.properties['buildnumber'],
-               self.m.properties['issue'] if self.c.is_trybot else '',
-               self.m.path['slave_build'].join("skia", "common", "py", "utils"),
-             ],
-             cwd=self.m.path['checkout'],
-             abort_on_failure=False,
-             infra_step=True)
+      # Upload them to Google Storage.
+      self.run(self.m.python,
+               'Upload DM Results',
+               script=self.resource('upload_dm_results.py'),
+               args=[
+                 host_dm_dir,
+                 self.got_revision,
+                 self.c.BUILDER_NAME,
+                 self.m.properties['buildnumber'],
+                 self.m.properties['issue'] if self.c.is_trybot else '',
+                 self.m.path['slave_build'].join("skia", "common", "py", "utils"),
+               ],
+               cwd=self.m.path['checkout'],
+               abort_on_failure=False,
+               infra_step=True)
 
     # See skia:2789.
     if ('Valgrind' in self.c.BUILDER_NAME and
@@ -463,13 +480,7 @@ class SkiaApi(recipe_api.RecipeApi):
       abandonGpuContext.append('--abandonGpuContext')
       self.run(self.flavor.step, 'dm --abandonGpuContext',
                cmd=abandonGpuContext, abort_on_failure=False)
-      # preAbandonGpuContext does not write out any images
       preAbandonGpuContext = list(args)
-      index = 0
-      for i, x in enumerate(preAbandonGpuContext):
-        if isinstance(x, basestring) and x == '--writePath':
-          index = i
-      del preAbandonGpuContext[index:index+2]
       preAbandonGpuContext.append('--preAbandonGpuContext')
       self.run(self.flavor.step, 'dm --preAbandonGpuContext',
                cmd=preAbandonGpuContext, abort_on_failure=False)

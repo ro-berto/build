@@ -516,8 +516,6 @@
       "/usr/local/skiabot/skia_skp/skps",
       "--images",
       "/usr/local/skiabot/skia_images",
-      "--writePath",
-      "/usr/local/skiabot/skia_dm_out",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -541,6 +539,8 @@
       "ChromeOS",
       "--uninterestingHashesFile",
       "/usr/local/skiabot/skia_tmp_dir/uninteresting_hashes.txt",
+      "--writePath",
+      "/usr/local/skiabot/skia_dm_out",
       "--nogpu",
       "--dummy-flags"
     ],

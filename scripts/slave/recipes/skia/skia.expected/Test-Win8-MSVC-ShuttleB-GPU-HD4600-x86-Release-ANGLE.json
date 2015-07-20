@@ -301,8 +301,6 @@
       "[SLAVE_BUILD]\\playback\\skps",
       "--images",
       "[SLAVE_BUILD]\\images",
-      "--writePath",
-      "[SLAVE_BUILD]\\dm",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -328,6 +326,8 @@
       "Win8",
       "--uninterestingHashesFile",
       "[SLAVE_BUILD]\\tmp\\uninteresting_hashes.txt",
+      "--writePath",
+      "[SLAVE_BUILD]\\dm",
       "--nocpu",
       "--dummy-flags"
     ],

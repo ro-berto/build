@@ -671,8 +671,6 @@
       "/storage/emulated/legacy/skiabot/skia_skp/skps",
       "--images",
       "/storage/emulated/legacy/skiabot/skia_images",
-      "--writePath",
-      "/storage/emulated/legacy/skiabot/skia_dm",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -696,6 +694,8 @@
       "Android",
       "--uninterestingHashesFile",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/uninteresting_hashes.txt",
+      "--writePath",
+      "/storage/emulated/legacy/skiabot/skia_dm",
       "--nocpu",
       "--dummy-flags"
     ],
