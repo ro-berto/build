@@ -172,29 +172,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       result['errors'].extend(['Error line 1.', 'Error line 2.'])
     return self.m.json.output(result)
 
-  def perf_improvement_json(self):
-    result = {
-      'errors': [],
-      'traces':[
-        {
-          'units': 'score',
-          'graphs': ['v8', 'Richards'],
-          'results': ['50', '20', '30'],
-        },
-        {
-          'units': 'ms',
-          'graphs': ['v8', 'DeltaBlue'],
-          'results': ['2.2', '2.2'],
-        },
-        {
-          'units': 'score',
-          'graphs': ['v8', 'Empty'],
-          'results': [],
-        },
-      ],
-    }
-    return self.m.json.output(result)
-
   @recipe_test_api.mod_test_data
   @staticmethod
   def test_failures(has_failures):

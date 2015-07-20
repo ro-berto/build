@@ -813,8 +813,8 @@ class V8Api(recipe_api.RecipeApi):
       self.m.perf_dashboard.post(points)
 
 
-  def _runperf(self, tests, perf_configs, category=None, suffix='',
-              upload=True, extra_flags=None, out_dir_no_patch=None):
+  def runperf(self, tests, perf_configs, category=None, suffix='',
+              upload=True, extra_flags=None):
     """Run v8 performance tests and upload results.
 
     Args:
@@ -825,20 +825,13 @@ class V8Api(recipe_api.RecipeApi):
                 like ia32.
       suffix: Optional name suffix to differentiate multiple runs of the same
               step.
-      upload: If true, adds a link to the uploaded data on the performance
-              dashboard.
+      upload: If true, uploads results to the performance dashboard.
       extra_flags: List of flags to be passed to the test executable.
-      out_dir_no_patch: A folder pointing to executables without patch on a
-                        trybot. Using this parameter will execute the tests
-                        in interleaved mode.
-    Returns: A tuple with 1) A mapping of test config name->results map.
-             Each results map has an errors and a traces item. 2) A mapping
-             without patch. Undefined, if out_dir_no_patch wasn't specified.
-             3) A boolean indicating if any step has failed.
+    Returns: A mapping of test config name->results map. Each results map has
+             an errors and a traces item.
     """
 
     results_mapping = collections.defaultdict(dict)
-    results_mapping_no_patch = collections.defaultdict(dict)
     def run_single_perf_test(test, name, json_file, download_test=None):
       """Call the v8 perf test runner.
 
@@ -849,24 +842,14 @@ class V8Api(recipe_api.RecipeApi):
         '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
         '--buildbot',
         '--json-test-results', self.m.json.output(add_json_log=False),
+        json_file,
       ]
-
-      if out_dir_no_patch:
-        full_args.extend([
-          '--outdir-no-patch', out_dir_no_patch,
-          '--json-test-results-no-patch',
-          self.m.json.output(add_json_log=False),
-        ])
-
-      full_args.append(json_file)
 
       if extra_flags:
         full_args.append('--extra-flags="%s"' % ' '.join(extra_flags))
 
-      test_data = self.test_api.perf_json(
+      step_test_data = lambda: self.test_api.perf_json(
           self._test_data.get('perf_failures', False))
-      if out_dir_no_patch:
-        test_data += self.test_api.perf_improvement_json()
 
       try:
         if download_test is not None:
@@ -875,21 +858,19 @@ class V8Api(recipe_api.RecipeApi):
             self.m.path['checkout'].join('tools', 'run-tests.py'),
             ['--download-data-only', download_test],
             cwd=self.m.path['checkout'],
+            step_test_data=step_test_data,
           )
         self.m.python(
           '%s%s' % (name, suffix),
           self.m.path['checkout'].join('tools', 'run_perf.py'),
           full_args,
           cwd=self.m.path['checkout'],
-          step_test_data=lambda: test_data,
+          step_test_data=step_test_data,
         )
       finally:
         step_result = self.m.step.active_result
-        results_mapping[test] = step_result.json.output_all[0]
-        errors = results_mapping[test]['errors']
-        if out_dir_no_patch:
-          results_mapping_no_patch[test] = step_result.json.output_all[1]
-          errors += results_mapping_no_patch[test]['errors']
+        results_mapping[test] = step_result.json.output
+        errors = step_result.json.output['errors']
         if errors:
           step_result.presentation.logs['Errors'] = errors
         elif upload:
@@ -914,21 +895,6 @@ class V8Api(recipe_api.RecipeApi):
       except self.m.step.StepFailure:
         failed = True
 
-    return results_mapping, results_mapping_no_patch, failed
-
-
-  def runperf(self, tests, perf_configs, category=None, suffix='',
-              upload=True, extra_flags=None):
-    """Convenience wrapper."""
-    results_mapping, _, failed = self._runperf(
-      tests,
-      perf_configs,
-      category=category,
-      upload=upload,
-      suffix=suffix,
-      extra_flags=extra_flags,
-    )
-
     # Collect all perf data of the previous steps.
     if upload:
       self.perf_upload(
@@ -939,22 +905,6 @@ class V8Api(recipe_api.RecipeApi):
       raise self.m.step.StepFailure('One or more performance tests failed.')
 
     return results_mapping
-
-  def runperf_interleaved(
-      self, tests, perf_configs, out_dir_no_patch, category=None,
-      extra_flags=None):
-    """Convenience wrapper."""
-    # A failure of a single step is not required to be raised on perf trybots
-    # as the overall builds don't get inspected on a waterfall.
-    results_mapping, results_mapping_no_patch, _ = self._runperf(
-      tests,
-      perf_configs,
-      category=category,
-      upload=False,
-      extra_flags=extra_flags,
-      out_dir_no_patch=out_dir_no_patch,
-    )
-    return results_mapping, results_mapping_no_patch
 
   # TODO(machenbach): Deprecated in favor of method below.
   def merge_perf_results(self, *args, **kwargs):

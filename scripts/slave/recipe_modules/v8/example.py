@@ -52,17 +52,6 @@ def RunSteps(api):
       results_file_map, suffix=' (maps)')
   api.step('do something with the results', ['echo', results_map['example1']])
 
-  result, result_no_patch = (
-      api.v8.runperf_interleaved(
-          api.v8.perf_tests, perf_config, 'out-no-patch'))
-  api.step(
-      'first trace with patch',
-      ['echo', api.json.dumps(
-          result['example1']['traces'][0]['results'])])
-  api.step(
-      'first trace no patch',
-      ['echo', api.json.dumps(
-          result_no_patch['example1']['traces'][0]['results'])])
 
 def GenTests(api):
   yield (
