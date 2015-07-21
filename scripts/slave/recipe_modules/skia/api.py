@@ -26,6 +26,9 @@ from common.skia import builder_name_schema
 from common.skia import global_constants
 
 
+BOTO_CHROMIUM_SKIA_GM = 'chromium-skia-gm.boto'
+
+
 # The gsutil recipe API uses a different gsutil version which does not work
 # on our bots. Force the version using this constant.
 GSUTIL_VERSION = '3.25'
@@ -79,6 +82,12 @@ class SkiaApi(recipe_api.RecipeApi):
     else:
       self.flavor = default_flavor.DefaultFlavorUtils(self)
 
+  def gsutil_env(self, boto_file):
+    """Environment variables for gsutil."""
+    boto_path = self.m.path.join(self.home_dir, boto_file)
+    return {'AWS_CREDENTIAL_FILE': boto_path,
+            'BOTO_CONFIG': boto_path}
+
   def gen_steps(self):
     """Generate all build steps."""
     # Setup
@@ -95,6 +104,9 @@ class SkiaApi(recipe_api.RecipeApi):
     # Set some important paths.
     slave_dir = self.m.path['slave_build']
     self.skia_dir = slave_dir.join('skia')
+    self.home_dir = os.path.expanduser('~')
+    if self._test_data.enabled:
+      self.home_dir = '[HOME]'
     self.perf_data_dir = None
     if self.c.role == builder_name_schema.BUILDER_ROLE_PERF:
       self.perf_data_dir = slave_dir.join('perfdata', self.c.BUILDER_NAME,
@@ -108,7 +120,8 @@ class SkiaApi(recipe_api.RecipeApi):
     self.storage_skp_dirs = default_flavor.SKPDirs(
         'playback', self.c.BUILDER_NAME, '/')
     self.tmp_dir = self.m.path['slave_build'].join('tmp')
-    self.gsutil_version = GSUTIL_VERSION
+
+    self.gsutil_env_chromium_skia_gm = self.gsutil_env(BOTO_CHROMIUM_SKIA_GM)
 
     self.device_dirs = None
     self._ccache = None
@@ -205,6 +218,22 @@ class SkiaApi(recipe_api.RecipeApi):
       if fail_build_on_failure:
         self.failed.append(e)
 
+  def gsutil_upload(self, name, source, bucket, dest):
+    """Upload to Google Storage."""
+    self.run(
+        self.m.gsutil.upload,
+        name,
+        source=source,
+        bucket=bucket,
+        dest=dest,
+        args=['-R'],
+        # TODO(borenet): This works on GCE instance because we fall back on
+        # service account auth. What about our local bots?
+        env={'AWS_CREDENTIAL_FILE': None,
+             'BOTO_CONFIG': None},
+        version=GSUTIL_VERSION,
+        abort_on_failure=False)
+
   def _download_and_copy_dir(self, expected_version, version_file, gs_path,
                              host_path, device_path, test_actual_version):
     actual_version_file = self.m.path.join(self.tmp_dir, version_file)
@@ -229,6 +258,7 @@ class SkiaApi(recipe_api.RecipeApi):
           host_path,
           name='download %s' % self.m.path.basename(host_path),
           args=['-R'],
+          env=self.gsutil_env_chromium_skia_gm,
           version=GSUTIL_VERSION)
       self._writefile(actual_version_file, expected_version)
 
@@ -264,6 +294,7 @@ class SkiaApi(recipe_api.RecipeApi):
     expected_version = self.m.gsutil.cat(
         url,
         name='cat %s' % timestamp_file,
+        env=self.gsutil_env_chromium_skia_gm,
         version=GSUTIL_VERSION,
         stdout=self.m.raw_io.output()).stdout.rstrip()
 
@@ -471,6 +502,7 @@ class SkiaApi(recipe_api.RecipeApi):
                  self.m.path['slave_build'].join("skia", "common", "py", "utils"),
                ],
                cwd=self.m.path['checkout'],
+               env=self.gsutil_env_chromium_skia_gm,
                abort_on_failure=False,
                infra_step=True)
 
@@ -563,6 +595,7 @@ class SkiaApi(recipe_api.RecipeApi):
                script=self.resource('upload_bench_results.py'),
                args=upload_args,
                cwd=self.m.path['checkout'],
+               env=self.gsutil_env_chromium_skia_gm,
                abort_on_failure=False,
                infra_step=True)
 

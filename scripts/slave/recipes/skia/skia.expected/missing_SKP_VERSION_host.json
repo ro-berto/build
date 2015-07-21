@@ -221,6 +221,10 @@
       "[SLAVE_BUILD]/playback/skps"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
+      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto"
+    },
     "name": "gsutil download skps"
   },
   {
@@ -248,6 +252,10 @@
       "gs://chromium-skia-gm/skimage/input/TIMESTAMP_LAST_UPLOAD_COMPLETED"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
+      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto"
+    },
     "name": "gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED",
     "stdout": "/path/to/tmp/"
   },
@@ -419,6 +427,10 @@
       "[SLAVE_BUILD]/skia/common/py/utils"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
+    "env": {
+      "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
+      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto"
+    },
     "name": "Upload DM Results"
   },
   {

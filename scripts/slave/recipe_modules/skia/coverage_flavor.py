@@ -93,16 +93,11 @@ class CoverageFlavorUtils(default_flavor.DefaultFlavorUtils):
       gs_json_path = '/'.join(('trybot', gs_json_path,
                                str(self._skia_api.m.properties['issue'])))
 
-    self._skia_api.run(
-        self._skia_api.m.gsutil.upload,
+    self._skia_api.gsutil_upload(
         'upload raw coverage data',
         source=report_file,
         bucket='skia-infra',
-        dest='/'.join(('coverage-raw-v1', gs_json_path, report_file_basename)),
-        args=['-R'],
-        env={'AWS_CREDENTIAL_FILE': None,
-             'BOTO_CONFIG': None},
-        version=self._skia_api.gsutil_version)
+        dest='/'.join(('coverage-raw-v1', gs_json_path, report_file_basename)))
 
     # Upload nanobench JSON data.
     gsutil_path = self._skia_api.m.path['depot_tools'].join(
@@ -123,15 +118,10 @@ class CoverageFlavorUtils(default_flavor.DefaultFlavorUtils):
         infra_step=True)
 
     # Upload line-by-line coverage data.
-    self._skia_api.run(
-        self._skia_api.m.gsutil.upload,
+    self._skia_api.gsutil_upload(
         'upload line-by-line coverage data',
         source=line_by_line,
         bucket='skia-infra',
         dest='/'.join(('coverage-json-v1', gs_json_path,
-                       line_by_line_basename)),
-        args=['-R'],
-        env={'AWS_CREDENTIAL_FILE': None,
-             'BOTO_CONFIG': None},
-        version=self._skia_api.gsutil_version)
+                       line_by_line_basename)))
 
