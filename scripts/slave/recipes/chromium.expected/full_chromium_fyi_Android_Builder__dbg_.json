@@ -186,6 +186,7 @@
       "chrome_junit_tests",
       "chrome_shell_test_apk",
       "chrome_sync_shell_test_apk",
+      "chromedriver_webview_shell_apk",
       "components_browsertests_apk",
       "components_unittests_apk",
       "content_browsertests_apk",
