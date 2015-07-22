@@ -121,8 +121,7 @@
       "telemetry_gpu_test_run",
       "audio_unittests_run",
       "content_unittests_run",
-      "angle_end2end_tests_run",
-      "angle_deqp_tests_run"
+      "angle_end2end_tests_run"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
@@ -147,14 +146,12 @@
       "[SLAVE_BUILD]\\src\\out\\Release\\telemetry_gpu_test.isolated.gen.json",
       "[SLAVE_BUILD]\\src\\out\\Release\\audio_unittests.isolated.gen.json",
       "[SLAVE_BUILD]\\src\\out\\Release\\content_unittests.isolated.gen.json",
-      "[SLAVE_BUILD]\\src\\out\\Release\\angle_end2end_tests.isolated.gen.json",
-      "[SLAVE_BUILD]\\src\\out\\Release\\angle_deqp_tests.isolated.gen.json"
+      "[SLAVE_BUILD]\\src\\out\\Release\\angle_end2end_tests.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"angle_deqp_tests\": \"[dummy hash for angle_deqp_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"angle_end2end_tests\": \"[dummy hash for angle_end2end_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"angle_unittests\": \"[dummy hash for angle_unittests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"audio_unittests\": \"[dummy hash for audio_unittests]\", @@@",
@@ -167,7 +164,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"angle_deqp_tests\": \"[dummy hash for angle_deqp_tests]\", \"angle_end2end_tests\": \"[dummy hash for angle_end2end_tests]\", \"angle_unittests\": \"[dummy hash for angle_unittests]\", \"audio_unittests\": \"[dummy hash for audio_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"angle_end2end_tests\": \"[dummy hash for angle_end2end_tests]\", \"angle_unittests\": \"[dummy hash for angle_unittests]\", \"audio_unittests\": \"[dummy hash for audio_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"content_unittests\": \"[dummy hash for content_unittests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"gpu_unittests\": \"[dummy hash for gpu_unittests]\", \"tab_capture_end2end_tests\": \"[dummy hash for tab_capture_end2end_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}@@@"
     ]
   }
 ]

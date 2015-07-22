@@ -313,9 +313,10 @@ class GpuApi(recipe_api.RecipeApi):
 
     # Run only the dEQP tests on the dEQP GPU bots.
     if self.is_deqp_tester:
-      tests.append(self._create_gtest(
-          'angle_deqp_tests', chrome_revision, webkit_revision,
-          enable_swarming, swarming_dimensions))
+      # TODO(jmadill): re-enable this once the GLES3 tests are ready
+      #tests.append(self._create_gtest(
+      #    'angle_deqp_tests', chrome_revision, webkit_revision,
+      #    enable_swarming, swarming_dimensions))
       return tests
 
     # Copy the test list to avoid mutating it.
