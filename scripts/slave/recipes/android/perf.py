@@ -12,10 +12,11 @@ DEPS = [
     'chromium_tests',
     'gclient',
     'json',
-    'step',
     'path',
     'properties',
     'python',
+    'step',
+    'test_utils',
 ]
 
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'

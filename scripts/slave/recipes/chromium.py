@@ -385,14 +385,37 @@ def GenTests(api):
     api.platform('linux', 64) +
     api.override_step_data('read test spec', api.json.output({
       'Linux Tests': {
-        "scripts": [
+        'scripts': [
           {
-            "name": "media_perftests",
-            "script": "gtest_perf_test.py",
-            "args": ["media_perftests", "--single-process-tests"]
+            'name': 'media_perftests',
+            'script': 'gtest_perf_test.py',
+            'args': ['media_perftests', '--single-process-tests']
           },
         ],
       },
+    }))
+  )
+
+  yield (
+    api.test('dynamic_script_test_failure') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux Tests': {
+        'scripts': [
+          {
+            'name': 'test_script_with_broken_tests',
+            'script': 'test_script_with_broken_tests.py'
+          }
+        ]
+      }
+    })) +
+    api.override_step_data('test_script_with_broken_tests',
+                           api.json.output({
+      'valid': True,
+      'failures': ['FailSuite.Test1', 'FlakySuite.TestA']
     }))
   )
 

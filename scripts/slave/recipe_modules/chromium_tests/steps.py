@@ -174,6 +174,11 @@ class ScriptTest(Test):  # pylint: disable=W0232
               {'valid': True, 'failures': []}))
     finally:
       self._test_runs[suffix] = api.step.active_result
+      if self.has_valid_results(api, suffix):
+        self._test_runs[suffix].presentation.step_text += (
+            api.test_utils.format_step_text([
+              ['failures:', self.failures(api, suffix)]
+            ]))
 
     return self._test_runs[suffix]
 
