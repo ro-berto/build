@@ -92,10 +92,10 @@
       "-u",
       "\nimport sys\nfrom common import chromium_utils\n\nchromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])\n",
       "metrics.csv",
-      "[SLAVE_BUILD]\\src\\build\\Release"
+      "[SLAVE_BUILD]\\src\\out\\Release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "rmwildcard metrics.csv in [SLAVE_BUILD]\\src\\build\\Release",
+    "name": "rmwildcard metrics.csv in [SLAVE_BUILD]\\src\\out\\Release",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
@@ -135,7 +135,7 @@
       "--run-python-script",
       "[SLAVE_BUILD]\\src\\syzygy\\build\\app_verifier.py",
       "--on-waterfall",
-      "[SLAVE_BUILD]\\src\\build\\Release\\bar_unittests.exe",
+      "[SLAVE_BUILD]\\src\\out\\Release\\bar_unittests.exe",
       "--",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
@@ -163,7 +163,7 @@
       "--run-python-script",
       "[SLAVE_BUILD]\\src\\syzygy\\build\\app_verifier.py",
       "--on-waterfall",
-      "[SLAVE_BUILD]\\src\\build\\Release\\baz_unittests.exe",
+      "[SLAVE_BUILD]\\src\\out\\Release\\baz_unittests.exe",
       "--",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
@@ -191,7 +191,7 @@
       "--run-python-script",
       "[SLAVE_BUILD]\\src\\syzygy\\build\\app_verifier.py",
       "--on-waterfall",
-      "[SLAVE_BUILD]\\src\\build\\Release\\foo_unittests.exe",
+      "[SLAVE_BUILD]\\src\\out\\Release\\foo_unittests.exe",
       "--",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
@@ -207,7 +207,7 @@
       "-t",
       "-a",
       "public-read",
-      "[SLAVE_BUILD]\\src\\build\\Release\\metrics.csv",
+      "[SLAVE_BUILD]\\src\\out\\Release\\metrics.csv",
       "gs://syzygy-archive/builds/metrics/170242/release.csv"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -222,7 +222,7 @@
       "-u",
       "[SLAVE_BUILD]\\src\\syzygy\\internal\\build\\randomize_chrome.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\build",
+      "[SLAVE_BUILD]\\src\\out",
       "--target",
       "Release",
       "--verbose"
@@ -236,7 +236,7 @@
       "-u",
       "[SLAVE_BUILD]\\src\\syzygy\\internal\\build\\benchmark_chrome.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\build",
+      "[SLAVE_BUILD]\\src\\out",
       "--target",
       "Release",
       "--verbose"

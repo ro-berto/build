@@ -117,7 +117,7 @@
       "--run-python-script",
       "[SLAVE_BUILD]\\src\\syzygy\\build\\app_verifier.py",
       "--on-waterfall",
-      "[SLAVE_BUILD]\\src\\build\\Release\\bar_unittests.exe",
+      "[SLAVE_BUILD]\\src\\out\\Release\\bar_unittests.exe",
       "--",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
@@ -145,7 +145,7 @@
       "--run-python-script",
       "[SLAVE_BUILD]\\src\\syzygy\\build\\app_verifier.py",
       "--on-waterfall",
-      "[SLAVE_BUILD]\\src\\build\\Release\\baz_unittests.exe",
+      "[SLAVE_BUILD]\\src\\out\\Release\\baz_unittests.exe",
       "--",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
@@ -173,7 +173,7 @@
       "--run-python-script",
       "[SLAVE_BUILD]\\src\\syzygy\\build\\app_verifier.py",
       "--on-waterfall",
-      "[SLAVE_BUILD]\\src\\build\\Release\\foo_unittests.exe",
+      "[SLAVE_BUILD]\\src\\out\\Release\\foo_unittests.exe",
       "--",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
@@ -198,7 +198,7 @@
       "python",
       "-u",
       "[BUILD]\\scripts\\slave\\syzygy\\gsutil_cp_dir.py",
-      "[SLAVE_BUILD]\\src\\build\\Release\\archive",
+      "[SLAVE_BUILD]\\src\\out\\Release\\archive",
       "gs://syzygy-archive/builds/official/170242"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -214,7 +214,7 @@
       "[SLAVE_BUILD]\\src\\syzygy\\internal\\scripts\\archive_symbols.py",
       "-s",
       "-b",
-      "[SLAVE_BUILD]\\src\\build\\Release\\*kasko.dll"
+      "[SLAVE_BUILD]\\src\\out\\Release\\*kasko.dll"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "upload_symbols"

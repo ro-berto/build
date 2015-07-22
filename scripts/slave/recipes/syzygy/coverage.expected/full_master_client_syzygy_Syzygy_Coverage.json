@@ -94,7 +94,7 @@
       "--verbose",
       "--syzygy",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\build\\Coverage"
+      "[SLAVE_BUILD]\\src\\out\\Coverage"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "capture_unittest_coverage"
@@ -104,7 +104,7 @@
       "python",
       "-u",
       "[BUILD]\\scripts\\slave\\syzygy\\gsutil_cp_dir.py",
-      "[SLAVE_BUILD]\\src\\build\\Coverage\\cov",
+      "[SLAVE_BUILD]\\src\\out\\Coverage\\cov",
       "gs://syzygy-archive/builds/coverage/170242"
     ],
     "cwd": "[SLAVE_BUILD]",
