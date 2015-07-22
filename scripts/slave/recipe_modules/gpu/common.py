@@ -28,8 +28,7 @@ WIN_AND_LINUX_ONLY_FYI_ONLY_GPU_ISOLATES = (
 )
 
 WIN_ONLY_FYI_ONLY_GPU_ISOLATES = (
-# TODO(jmadill): re-enable this once the GLES3 tests are ready
-#  'angle_deqp_tests',
+  'angle_deqp_gles2_tests',
 )
 
 # A list of all Windows FYI isolates for testing
