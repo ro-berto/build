@@ -161,6 +161,10 @@ def gyp_defs_from_builder_dict(builder_dict):
   if builder_dict.get('extra_config') == 'SKNX_NO_SIMD':
     gyp_defs['sknx_no_simd'] = '1'
 
+  # skia_use_android_framework_defines.
+  if builder_dict.get('extra_config') == 'Android_FrameworkDefs':
+    gyp_defs['skia_use_android_framework_defines'] = '1'
+
   return gyp_defs
 
 

@@ -73,10 +73,11 @@ def GenTests(api):
     },
     'client.skia.compile': {
       'skiabot-linux-compile-000': [
+        'Build-Ubuntu-GCC-Arm7-Debug-Android_FrameworkDefs',
+        'Build-Ubuntu-GCC-Arm7-Debug-Android_NoNeon',
         'Build-Ubuntu-GCC-Arm7-Debug-CrOS_Daisy',
         'Build-Ubuntu-GCC-Arm7-Debug-CrOS_Link',
         'Build-Ubuntu-GCC-x86_64-Release-Mesa',
-        'Build-Ubuntu-GCC-Arm7-Debug-Android_NoNeon',
       ],
       'skiabot-mac-10_8-compile-001': [
         'Build-Mac10.8-Clang-Arm7-Debug-Android',
