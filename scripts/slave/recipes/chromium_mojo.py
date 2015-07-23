@@ -9,6 +9,7 @@ DEPS = [
   'bot_update',
   'chromium',
   'chromium_android',
+  'gsutil',
   'path',
   'properties',
   'python',
@@ -43,6 +44,7 @@ BUILDERS = freeze({
   },
 })
 
+
 PERF_TEST_INFO = freeze({
   'Chromium Mojo Linux Perf': {
     'browser_type': 'mandoline-release',
@@ -50,10 +52,19 @@ PERF_TEST_INFO = freeze({
   },
 })
 
+
+@recipe_api.composite_step
+def _UploadMandolineAPKToGoogleStorage(api):
+  with api.step.defer_results():
+    apk = api.chromium.output_dir.join('apks', 'Mandoline.apk')
+    api.gsutil.upload(apk, 'mandoline', 'Mandoline.apk')
+
+
 @recipe_api.composite_step
 def _RunApptests(api):
   runner = api.path['checkout'].join('mojo', 'tools', 'apptest_runner.py')
   api.python('app_tests', runner, [api.chromium.output_dir, '--verbose'])
+
 
 def _RunUnitAndAppTests(api):
   with api.step.defer_results():
@@ -73,6 +84,7 @@ def _RunUnitAndAppTests(api):
     api.chromium.runtest('resource_provider_unittests')
     api.chromium.runtest('view_manager_unittests')
     _RunApptests(api)
+
 
 def _RunPerfTests(api):
   test_info = PERF_TEST_INFO[api.properties.get('buildername')]
@@ -111,6 +123,7 @@ def _RunPerfTests(api):
           xvfb=True,
           chartjson_file=True)
 
+
 def RunSteps(api):
   # TODO(yzshen): Perf bots should retrieve build results from builders of the
   # same architecture.
@@ -126,6 +139,7 @@ def RunSteps(api):
   api.chromium.compile(targets=['mandoline:all'])
 
   if api.chromium.c.TARGET_PLATFORM == 'android':
+    _UploadMandolineAPKToGoogleStorage(api)
     api.chromium_android.detect_and_setup_devices()
 
   buildername = api.properties.get('buildername')
@@ -133,6 +147,7 @@ def RunSteps(api):
     _RunPerfTests(api)
   else:
     _RunUnitAndAppTests(api)
+
 
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
