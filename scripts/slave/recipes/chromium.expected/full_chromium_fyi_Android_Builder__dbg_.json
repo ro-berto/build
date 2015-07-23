@@ -184,6 +184,7 @@
       "breakpad_unittests_deps",
       "cc_unittests_apk",
       "chrome_junit_tests",
+      "chrome_public_test_apk",
       "chrome_shell_test_apk",
       "chrome_sync_shell_test_apk",
       "chromedriver_webview_shell_apk",

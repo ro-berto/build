@@ -1436,6 +1436,10 @@ SPEC = {
             'components_browsertests',
             android_isolate_path='components/components_browsertests.isolate'),
         steps.GTestTest('gfx_unittests'),
+        steps.AndroidInstrumentationTest(
+            'ChromePublicTest', 'chrome_public_test_apk',
+            isolate_file_path='chrome/chrome_public_test_apk.isolate',
+            adb_install_apk=('ChromePublic.apk', 'org.chromium.chrome')),
       ],
       'testing': {
         'platform': 'linux',
