@@ -1362,7 +1362,7 @@ SPEC = {
     },
     'Win Builder (ANGLE)': {
       'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
+      'gclient_config': 'chromium_angle',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -1374,13 +1374,13 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'patch_root': 'src',
+      'patch_root': 'src/third_party/angle',
       'enable_swarming': True,
       'use_isolate': True,
     },
     'Win7 Tests (ANGLE)': {
       'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
+      'gclient_config': 'chromium_angle',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
