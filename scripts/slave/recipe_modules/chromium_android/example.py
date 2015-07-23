@@ -78,6 +78,11 @@ BUILDERS = freeze({
         'skip_wipe': False,
         'java_method_count': True,
     },
+    'webview_tester': {
+        'build': False,
+        'skip_wipe': False,
+        'remove_system_webview': True,
+    },
 })
 
 def RunSteps(api):
@@ -132,7 +137,8 @@ def RunSteps(api):
         skip_wipe=config['skip_wipe'],
         disable_location=config.get('disable_location', False),
         min_battery_level=config.get('min_battery_level'),
-        max_battery_temp=config.get('max_battery_temp'))
+        max_battery_temp=config.get('max_battery_temp'),
+        remove_system_webview=config.get('remove_system_webview', False))
 
   except api.step.StepFailure as f:
     failure = f
