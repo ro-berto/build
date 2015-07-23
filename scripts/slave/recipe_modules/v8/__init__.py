@@ -5,6 +5,7 @@ DEPS = [
   'commit_position',
   'file',
   'gclient',
+  'git',
   'gsutil',
   'json',
   'path',

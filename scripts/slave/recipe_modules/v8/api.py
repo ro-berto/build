@@ -6,6 +6,7 @@ import collections
 import datetime
 import math
 import re
+import urllib
 
 from infra.libs.infra_types import freeze
 from recipe_engine import recipe_api
@@ -239,8 +240,6 @@ class V8Api(recipe_api.RecipeApi):
     # Initialize perf_dashboard api if any perf test should run.
     self.m.perf_dashboard.set_default_config()
 
-    self.maybe_show_changes()
-
   def set_bot_config(self, bot_config):
     """Set bot configuration for testing only."""
     self.bot_config = bot_config
@@ -277,6 +276,8 @@ class V8Api(recipe_api.RecipeApi):
     self.revision_cp = update_step.presentation.properties['got_revision_cp']
     self.revision_number = str(self.m.commit_position.parse_revision(
         self.revision_cp))
+
+    self.maybe_show_changes()
 
     return update_step
 
@@ -999,7 +1000,28 @@ class V8Api(recipe_api.RecipeApi):
 
   def maybe_show_changes(self):
     if self.bot_config.get('show_changes', False):
-      step_result = self.m.python.inline(
-          'Show changes (experimental)', '# Empty program')
-      step_result.presentation.logs['changes.json'] = self.m.json.dumps(
-          self.m.properties.get('changes', {}), indent=2)
+      url = '%sjson/builders/%s/builds/%s/source_stamp' % (
+          self.m.properties['buildbotURL'],
+          urllib.quote(self.m.properties['buildername']),
+          str(self.m.properties['buildnumber']),
+      )
+      step_result = self.m.python(
+          'Fetch changes (experimental)',
+          self.m.path['build'].join('scripts', 'tools', 'runit.py'),
+          [
+            self.m.path['build'].join('scripts', 'tools', 'pycurl.py'),
+            url,
+            '--outfile',
+            self.m.json.output(),
+          ],
+          step_test_data=lambda: self.test_api.example_buildbot_changes(),
+      )
+      assert step_result.json.output['changes']
+      first_change = step_result.json.output['changes'][0]['revision']
+      last_change = step_result.json.output['changes'][-1]['revision']
+
+      self.m.git(
+          'log', '%s~1..%s' % (first_change, last_change),
+          name='Show changes (experimental)',
+          cwd=self.m.path['checkout'],
+      )

@@ -195,6 +195,15 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     }
     return self.m.json.output(result)
 
+  def example_buildbot_changes(self):
+    return self.m.json.output({
+      'changes': [
+        {'revision': 'deadbeef1'},
+        {'revision': 'deadbeef2'},
+        {'revision': 'deadbeef3'},
+      ]
+    })
+
   @recipe_test_api.mod_test_data
   @staticmethod
   def test_failures(has_failures):
