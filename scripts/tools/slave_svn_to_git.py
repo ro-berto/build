@@ -13,6 +13,7 @@ import subprocess
 import sys
 import tempfile
 import traceback
+import urllib2
 
 
 SLAVE_GCLIENT_CONFIG = """solutions = [
@@ -66,12 +67,6 @@ def main():
                       help='Leaves temporary checkout dir on disk')
   options = parser.parse_args()
 
-  if not options.manual:
-    cur_host = socket.gethostname()
-    if not any(host.match(cur_host) for host in WHITELISTED_HOSTS):
-      print 'Host %s is not whitelisted for SVN-to-Git conversion' % cur_host
-      return 0
-
   # Find b directory.
   b_dir = None
   if is_win:
@@ -82,6 +77,28 @@ def main():
   elif os.path.exists('/b'):
     b_dir = '/b'
   assert os.path.isdir(b_dir), 'Did not find b dir'
+
+  # Report host state to the tracking app.
+  cur_host = socket.gethostname()
+  if os.path.isdir(os.path.join(b_dir, 'build', '.svn')):
+    state = 'SVN'
+  elif os.path.isdir(os.path.join(b_dir, 'build', '.git')):
+    state = 'GIT'
+  else:
+    state = 'UNKNOWN'
+
+  try:
+    url = ('https://svn-to-git-tracking.appspot.com/api/reportState?host=%s&'
+           'state=%s' % (urllib2.quote(cur_host), urllib2.quote(state)))
+    urllib2.urlopen(url)
+  except Exception:
+    pass
+
+  # Check if host is whitelisted.
+  if not options.manual:
+    if not any(host.match(cur_host) for host in WHITELISTED_HOSTS):
+      print 'Host %s is not whitelisted for SVN-to-Git conversion' % cur_host
+      return 0
 
   # Set up credentials for the download_from_google_storage hook.
   env = os.environ.copy()
@@ -200,7 +217,7 @@ def main():
 
 
 if __name__ == '__main__':
-  print 'Running slave_svn_to_git on %s UTC' % datetime.datetime.now()
+  print 'Running slave_svn_to_git on %s UTC' % datetime.datetime.utcnow()
   try:
     retcode = main()
   except Exception as e:
