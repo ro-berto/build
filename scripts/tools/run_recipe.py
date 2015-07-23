@@ -116,7 +116,12 @@ def main(args):
   if not os.path.exists(SLAVE_DIR):
     os.makedirs(SLAVE_DIR)
 
+  # Remove any GYP environment variables for the run.
   env = os.environ.copy()
+  for k in env.keys():
+    if k.startswith('GYP'):
+      del env[k]
+
   env['RUN_SLAVE_UPDATED_SCRIPTS'] = '1'
   env['PYTHONUNBUFFERED'] = '1'
   env['PYTHONIOENCODING'] = 'UTF-8'
