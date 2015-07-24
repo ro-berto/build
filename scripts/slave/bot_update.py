@@ -416,7 +416,7 @@ def call(*args, **kwargs):  # pragma: no cover
       return outval
     if result is FAIL:
       break
-    if result is RETRY:
+    if result is RETRY and attempt < tries:
       sleep_backoff = 4 ** attempt
       sleep_time = random.randint(sleep_backoff, int(sleep_backoff * 1.2))
       print '===backing off, sleeping for %d secs===' % sleep_time
