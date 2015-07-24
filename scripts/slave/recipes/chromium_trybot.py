@@ -461,6 +461,9 @@ def _RunStepsInternal(api):
   if enable_gpu_tests:
     api.chromium.apply_config('archive_gpu_tests')
 
+  if api.properties.get('patch_project') == 'blink':
+    api.gclient.apply_config('blink')
+
   bot_update_step, master_dict, test_spec = \
       api.chromium_tests.prepare_checkout(
           bot_config['mastername'],
