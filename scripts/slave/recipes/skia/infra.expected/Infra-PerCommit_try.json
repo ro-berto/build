@@ -34,21 +34,6 @@
   },
   {
     "cmd": [
-      "go",
-      "get",
-      "-u",
-      "./..."
-    ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
-    "env": {
-      "GIT_USER_AGENT": "git/1.9.1",
-      "GOPATH": "[SLAVE_BUILD]/go",
-      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
-    },
-    "name": "update_deps"
-  },
-  {
-    "cmd": [
       "git",
       "fetch",
       "origin"
@@ -78,19 +63,6 @@
   },
   {
     "cmd": [
-      "git",
-      "rev-parse",
-      "HEAD"
-    ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
-    "name": "git rev-parse",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@got_revision@\"abc123\"@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[DEPOT_TOOLS]/apply_issue.py",
@@ -108,6 +80,94 @@
     "name": "apply_issue",
     "~followup_annotations": [
       "@@@STEP_LINK@Applied issue 1234@https://codereview.chromium.org/1234@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "go",
+      "get",
+      "-u",
+      "./..."
+    ],
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "env": {
+      "GIT_USER_AGENT": "git/1.9.1",
+      "GOPATH": "[SLAVE_BUILD]/go",
+      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
+    },
+    "name": "update_deps"
+  },
+  {
+    "cmd": [
+      "git",
+      "clone",
+      "https://skia.googlesource.com/buildbot",
+      "[SLAVE_BUILD]/go/src/go.skia.org/infra"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "git clone (2)"
+  },
+  {
+    "cmd": [
+      "git",
+      "fetch",
+      "origin"
+    ],
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "name": "git fetch (2)"
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-d",
+      "-f"
+    ],
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "name": "git clean (2)"
+  },
+  {
+    "cmd": [
+      "git",
+      "reset",
+      "--hard",
+      "origin/master"
+    ],
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "name": "git reset (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/apply_issue.py",
+      "-r",
+      "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+      "-i",
+      "1234",
+      "-p",
+      "1",
+      "-s",
+      "https://codereview.chromium.org",
+      "--no-auth"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "apply_issue (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Applied issue 1234@https://codereview.chromium.org/1234@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "name": "git rev-parse",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@got_revision@\"abc123\"@@@"
     ]
   },
   {

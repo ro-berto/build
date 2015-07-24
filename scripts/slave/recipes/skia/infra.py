@@ -33,21 +33,43 @@ def git(api, *cmd, **kwargs):
       **kwargs)
 
 
+def git_checkout(api, url, dest, ref=None):
+  """Create a git checkout of the given repo in dest."""
+  if api.path.exists(dest.join('.git')):
+    # Already have a git checkout. Ensure that the correct remote is set.
+    git(api, 'remote', 'set-url', 'origin', INFRA_GIT_URL, cwd=dest)
+  else:
+    # Clone the repo
+    git(api, 'clone', INFRA_GIT_URL, dest)
+
+  # Ensure that the correct ref is checked out.
+  git(api, 'fetch', 'origin', cwd=dest)
+  git(api, 'clean', '-d', '-f', cwd=dest)
+  if ref == REF_HEAD:
+    ref = REF_ORIGIN_MASTER
+  git(api, 'reset', '--hard', ref or REF_ORIGIN_MASTER, cwd=dest)
+
+  api.path['checkout'] = dest
+
+  # Maybe apply a patch.
+  if (api.properties.get('rietveld') and
+      api.properties.get('issue') and
+      api.properties.get('patchset')):
+    api.rietveld.apply_issue()
+
+
 def RunSteps(api):
   go_dir = api.path['slave_build'].join('go')
   go_src = go_dir.join('src')
   api.file.makedirs('makedirs go/src', go_src)
   infra_dir = go_src.join(INFRA_GO)
 
-  # Check out the repo if necessary.
-  if api.path.exists(infra_dir.join('.git')):
-    # Already have a git checkout. Ensure that the correct remote is set.
-    git(api, 'remote', 'set-url', 'origin', INFRA_GIT_URL, cwd=infra_dir)
-  else:
-    # Clone the repo
-    git(api, 'clone', INFRA_GIT_URL, infra_dir)
-
-  api.path['checkout'] = infra_dir
+  # Check out the infra repo.
+  git_checkout(
+      api,
+      INFRA_GIT_URL,
+      dest=infra_dir,
+      ref=api.properties.get('revision', 'origin/master'))
 
   # Fetch Go dependencies.
   env = {'GOPATH': go_dir,
@@ -56,13 +78,12 @@ def RunSteps(api):
   api.step('update_deps', cmd=['go', 'get', '-u', './...'], cwd=infra_dir,
            env=env)
 
-  # Ensure that the correct ref is checked out.
-  ref = api.properties.get('revision', 'origin/master')
-  git(api, 'fetch', 'origin', cwd=infra_dir)
-  git(api, 'clean', '-d', '-f', cwd=infra_dir)
-  if ref == REF_HEAD:
-    ref = REF_ORIGIN_MASTER
-  git(api, 'reset', '--hard', ref or REF_ORIGIN_MASTER, cwd=infra_dir)
+  # Checkout AGAIN to undo whatever `go get -u` did to the infra repo.
+  git_checkout(
+      api,
+      INFRA_GIT_URL,
+      dest=infra_dir,
+      ref=api.properties.get('revision', 'origin/master'))
 
   # Set got_revision.
   test_data = lambda: api.raw_io.test_api.stream_output('abc123')
@@ -70,12 +91,6 @@ def RunSteps(api):
                   cwd=infra_dir, stdout=api.raw_io.output(),
                   step_test_data=test_data)
   rev_parse.presentation.properties['got_revision'] = rev_parse.stdout.strip()
-
-  # Maybe apply a patch.
-  if (api.properties.get('rietveld') and
-      api.properties.get('issue') and
-      api.properties.get('patchset')):
-    api.rietveld.apply_issue()
 
   # More prerequisites.
   api.step(

@@ -35,21 +35,6 @@
   },
   {
     "cmd": [
-      "go",
-      "get",
-      "-u",
-      "./..."
-    ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
-    "env": {
-      "GIT_USER_AGENT": "git/1.9.1",
-      "GOPATH": "[SLAVE_BUILD]/go",
-      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
-    },
-    "name": "update_deps"
-  },
-  {
-    "cmd": [
       "git",
       "fetch",
       "origin"
@@ -76,6 +61,61 @@
     ],
     "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
     "name": "git reset"
+  },
+  {
+    "cmd": [
+      "go",
+      "get",
+      "-u",
+      "./..."
+    ],
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "env": {
+      "GIT_USER_AGENT": "git/1.9.1",
+      "GOPATH": "[SLAVE_BUILD]/go",
+      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
+    },
+    "name": "update_deps"
+  },
+  {
+    "cmd": [
+      "git",
+      "remote",
+      "set-url",
+      "origin",
+      "https://skia.googlesource.com/buildbot"
+    ],
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "name": "git remote (2)"
+  },
+  {
+    "cmd": [
+      "git",
+      "fetch",
+      "origin"
+    ],
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "name": "git fetch (2)"
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-d",
+      "-f"
+    ],
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "name": "git clean (2)"
+  },
+  {
+    "cmd": [
+      "git",
+      "reset",
+      "--hard",
+      "origin/master"
+    ],
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "name": "git reset (2)"
   },
   {
     "cmd": [
