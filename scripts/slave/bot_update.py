@@ -294,8 +294,8 @@ GIT_MASTERS = [
 GIT_MASTERS += internal_data.get('GIT_MASTERS', [])
 
 
-# How many times to retry failed subprocess calls.
-RETRIES = 3
+# How many times to try before giving up.
+ATTEMPTS = 5
 
 # Find deps2git
 DEPS2GIT_DIR_PATH = path.join(SCRIPTS_DIR, 'tools', 'deps2git')
@@ -363,7 +363,7 @@ def call(*args, **kwargs):  # pragma: no cover
   cwd = kwargs.get('cwd', os.getcwd())
   result_fn = kwargs.pop('result_fn', lambda code, out: RETRY if code else OK)
   stdin_data = kwargs.pop('stdin_data', None)
-  tries = kwargs.pop('tries', RETRIES)
+  tries = kwargs.pop('tries', ATTEMPTS)
   if stdin_data:
     kwargs['stdin'] = subprocess.PIPE
   out = cStringIO.StringIO()
@@ -930,11 +930,11 @@ def git_checkout(solutions, revisions, shallow, refs):
 
 def _download(url):
   """Fetch url and return content, with retries for flake."""
-  for attempt in xrange(RETRIES):
+  for attempt in xrange(ATTEMPTS):
     try:
       return urllib2.urlopen(url).read()
     except Exception:
-      if attempt == RETRIES - 1:
+      if attempt == ATTEMPTS - 1:
         raise
 
 
