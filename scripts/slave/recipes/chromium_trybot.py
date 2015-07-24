@@ -40,32 +40,26 @@ BUILDERS = freeze({
       'linux_arm_compile': {
         'mastername': 'chromium.linux',
         'buildername': 'Linux ARM',
-        'analyze_mode': 'compile',
       },
       'android_arm64_dbg_recipe': {
         'mastername': 'chromium.linux',
         'buildername': 'Android Arm64 Builder (dbg)',
-        'analyze_mode': 'compile',
       },
       'android_clang_dbg_recipe': {
         'mastername': 'chromium.linux',
         'buildername': 'Android Clang Builder (dbg)',
-        'analyze_mode': 'compile',
       },
       'android_compile_dbg': {
         'mastername': 'chromium.linux',
         'buildername': 'Android Builder (dbg)',
-        'analyze_mode': 'compile',
       },
       'android_compile_rel': {
         'mastername': 'chromium.linux',
         'buildername': 'Android Builder',
-        'analyze_mode': 'compile',
       },
       'android_x86_dbg_recipe': {
         'mastername': 'chromium.linux',
         'buildername': 'Android x86 Builder (dbg)',
-        'analyze_mode': 'compile',
       },
       'cast_shell_linux': {
         'mastername': 'chromium.linux',
@@ -124,17 +118,14 @@ BUILDERS = freeze({
       'linux_chromium_compile_dbg_ng': {
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder (dbg)',
-        'analyze_mode': 'compile',
       },
       'linux_chromium_compile_rel_ng': {
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder',
-        'analyze_mode': 'compile',
       },
       'linux_chromium_clobber_rel_ng': {
         'mastername': 'chromium.fyi',
         'buildername': 'Linux Builder (clobber)',
-        'analyze_mode': 'compile',
       },
       'linux_chromium_chromeos_dbg_ng': {
         'mastername': 'chromium.chromiumos',
@@ -144,7 +135,6 @@ BUILDERS = freeze({
       'linux_chromium_chromeos_compile_dbg_ng': {
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS Builder (dbg)',
-        'analyze_mode': 'compile',
       },
       'linux_chromium_chromeos_rel_ng': {
         'mastername': 'chromium.chromiumos',
@@ -174,7 +164,6 @@ BUILDERS = freeze({
       'linux_chromium_chromeos_compile_rel_ng': {
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS Builder',
-        'analyze_mode': 'compile',
       },
       'linux_chromium_chromeos_msan_rel_ng': {
         'mastername': 'chromium.memory.fyi',
@@ -193,7 +182,6 @@ BUILDERS = freeze({
       'linux_chromium_compile_dbg_32_ng': {
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder (dbg)(32)',
-        'analyze_mode': 'compile',
       },
       'linux_chromium_msan_rel_ng': {
         'mastername': 'chromium.memory.fyi',
@@ -248,12 +236,10 @@ BUILDERS = freeze({
       'mac_chromium_compile_dbg_ng': {
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder (dbg)',
-        'analyze_mode': 'compile',
       },
       'mac_chromium_compile_rel_ng': {
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder',
-        'analyze_mode': 'compile',
       },
       'mac_chromium_asan_rel_ng': {
         'mastername': 'chromium.memory',
@@ -300,17 +286,14 @@ BUILDERS = freeze({
       'win_chromium_compile_dbg_ng': {
         'mastername': 'chromium.win',
         'buildername': 'Win Builder (dbg)',
-        'analyze_mode': 'compile',
       },
       'win_chromium_compile_dbg_ng_exp': {
         'mastername': 'chromium.win',
         'buildername': 'Win Builder (dbg)',
-        'analyze_mode': 'compile',
       },
       'win_chromium_compile_rel_ng': {
         'mastername': 'chromium.win',
         'buildername': 'Win Builder',
-        'analyze_mode': 'compile',
       },
       'win_chromium_x64_rel_ng': {
         'mastername': 'chromium.win',
