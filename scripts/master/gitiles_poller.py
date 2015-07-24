@@ -304,15 +304,18 @@ class GitilesPoller(PollingChangeSource):
     """Query gitiles for all commits on 'branch' more recent than 'since'."""
     result = []
     log_json = {'next': branch}
+    log.msg('GitilesPoller: starting scan for branch %s.' % branch)
     while 'next' in log_json:
       log_spec = '%s..%s' % (since, log_json['next'])
       path = LOG_TEMPLATE % (self.repo_path, log_spec, 100)
+      log.msg('GitilesPoller: checking for commits on %s' % path)
       if self.dry_run:
         log_json = {}
       else:
         log_json = yield self.agent.request('GET', path, retry=5)
       if log_json.get('log'):
         result.extend(log_json['log'])
+    log.msg('GitilesPoller: finished scan for branch %s' % branch)
     result.reverse()
     defer.returnValue(result)
 
