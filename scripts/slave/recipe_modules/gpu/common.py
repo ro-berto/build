@@ -29,6 +29,7 @@ WIN_AND_LINUX_ONLY_FYI_ONLY_GPU_ISOLATES = (
 
 WIN_ONLY_FYI_ONLY_GPU_ISOLATES = (
   'angle_deqp_gles2_tests',
+  'angle_deqp_gles3_tests',
 )
 
 # A list of all Windows FYI isolates for testing
