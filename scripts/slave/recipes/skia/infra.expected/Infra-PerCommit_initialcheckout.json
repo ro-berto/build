@@ -34,6 +34,21 @@
   },
   {
     "cmd": [
+      "go",
+      "get",
+      "-u",
+      "./..."
+    ],
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "env": {
+      "GIT_USER_AGENT": "git/1.9.1",
+      "GOPATH": "[SLAVE_BUILD]/go",
+      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
+    },
+    "name": "update_deps"
+  },
+  {
+    "cmd": [
       "git",
       "fetch",
       "origin"
@@ -73,20 +88,6 @@
     "~followup_annotations": [
       "@@@SET_BUILD_PROPERTY@got_revision@\"abc123\"@@@"
     ]
-  },
-  {
-    "cmd": [
-      "go",
-      "get",
-      "./..."
-    ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
-    "env": {
-      "GIT_USER_AGENT": "git/1.9.1",
-      "GOPATH": "[SLAVE_BUILD]/go",
-      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
-    },
-    "name": "update_deps"
   },
   {
     "cmd": [

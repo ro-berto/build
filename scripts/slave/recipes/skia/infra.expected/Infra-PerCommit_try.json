@@ -34,6 +34,21 @@
   },
   {
     "cmd": [
+      "go",
+      "get",
+      "-u",
+      "./..."
+    ],
+    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
+    "env": {
+      "GIT_USER_AGENT": "git/1.9.1",
+      "GOPATH": "[SLAVE_BUILD]/go",
+      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
+    },
+    "name": "update_deps"
+  },
+  {
+    "cmd": [
       "git",
       "fetch",
       "origin"
@@ -94,20 +109,6 @@
     "~followup_annotations": [
       "@@@STEP_LINK@Applied issue 1234@https://codereview.chromium.org/1234@@@"
     ]
-  },
-  {
-    "cmd": [
-      "go",
-      "get",
-      "./..."
-    ],
-    "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
-    "env": {
-      "GIT_USER_AGENT": "git/1.9.1",
-      "GOPATH": "[SLAVE_BUILD]/go",
-      "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
-    },
-    "name": "update_deps"
   },
   {
     "cmd": [
