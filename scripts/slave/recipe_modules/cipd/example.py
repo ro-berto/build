@@ -32,5 +32,6 @@ def RunSteps(api):
 
 def GenTests(api):
   yield api.test('basic')
+  yield api.test('mac64') + api.platform('mac', 64)
   yield api.test('install-failed') + api.step_data('install cipd', retcode=1)
 

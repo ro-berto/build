@@ -2,8 +2,9 @@ DEPS = [
   "file",
   "json",
   "path",
-  "python",
+  "platform",
   "properties",
+  "python",
   "raw_io",
   "step",
 ]

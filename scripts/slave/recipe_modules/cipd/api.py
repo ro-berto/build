@@ -25,8 +25,13 @@ class CIPDApi(recipe_api.RecipeApi):
     # TODO(seanmccullough): clean up older CIPD installations.
 
   def platform_tag(self):
-    # TODO(seanmccullough): get the arch from env instead of hardcoding it.
-    return "linux-amd64"
+    return "%s-%s" % (
+        self.m.platform.name.replace('win', 'windows'),
+        {
+            32: '386',
+            64: 'amd64',
+        }[self.m.platform.bits],
+    )
 
   def ensure_installed(self, root, pkgs):
     pkg_list = []
