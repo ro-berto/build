@@ -373,7 +373,7 @@ def call(*args, **kwargs):  # pragma: no cover
   kwargs['env'] = env
   attempt = 0
   for attempt in range(1, tries + 1):
-    attempt_msg = ' (retry #%d)' % attempt if attempt else ''
+    attempt_msg = ' (attempt #%d)' % attempt if attempt else ''
     if new_env:
       print '===Injecting Environment Variables==='
       for k, v in sorted(new_env.items()):
