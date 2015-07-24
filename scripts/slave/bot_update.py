@@ -14,6 +14,7 @@ import json
 import optparse
 import os
 import pprint
+import random
 import re
 import socket
 import subprocess
@@ -415,6 +416,11 @@ def call(*args, **kwargs):  # pragma: no cover
       return outval
     if result is FAIL:
       break
+    if result is RETRY:
+      sleep_backoff = 4 ** attempt
+      sleep_time = random.randint(sleep_backoff, int(sleep_backoff * 1.2))
+      print '===backing off, sleeping for %d secs===' % sleep_time
+      time.sleep(sleep_time)
 
   raise SubprocessFailed('%s failed with code %d in %s after %d attempts.' %
                          (' '.join(args), code, cwd, attempt),
