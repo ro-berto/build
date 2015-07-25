@@ -1,0 +1,69 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "config",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'native_client', 'url': 'https://chromium.googlesource.com/native_client/src/native_client.git'}]"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gclient setup"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "sync",
+      "--nohooks",
+      "--force",
+      "--verbose",
+      "--delete_unversioned_trees",
+      "--revision",
+      "native_client@abcd",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gclient sync",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"native_client/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 256160@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@256160@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gclient runhooks"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/native_client/buildbot/buildbot_selector.py"
+    ],
+    "cwd": "[BUILD]",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "precise-64-newlib-opt-test",
+      "BUILDBOT_MASTERNAME": "client.nacl",
+      "BUILDBOT_REVISION": "abcd",
+      "RUNTEST": "[BUILD]/scripts/slave/runtest.py"
+    },
+    "name": "annotated steps"
+  }
+]
