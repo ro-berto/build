@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'bot_update',
   'gclient',
   'path',
   'platform',
@@ -29,7 +30,7 @@ def _CheckoutSteps(api):
   api.gclient.set_config('nacl')
   # TODO: check if the 'DEPS' in the solution in my home directory means
   # anything.
-  api.gclient.checkout()
+  api.bot_update.ensure_checkout(force=True)
   api.gclient.runhooks()
 
 def _AnnotatedStepsSteps(api):
@@ -56,4 +57,5 @@ def GenTests(api):
   yield api.test('linux') + api.platform('linux', 64) + \
     api.properties(mastername = 'client.nacl') + \
     api.properties(buildername = 'precise-64-newlib-opt-test') +\
-    api.properties(revision = 'abcd')
+    api.properties(revision = 'abcd') +\
+    api.properties(slavename='TestSlave')
