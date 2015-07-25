@@ -59,7 +59,7 @@
       "-u",
       "[SLAVE_BUILD]/native_client/buildbot/buildbot_selector.py"
     ],
-    "cwd": "[BUILD]",
+    "cwd": "[SLAVE_BUILD]/native_client",
     "env": {
       "BUILDBOT_BUILDERNAME": "precise-64-newlib-opt-test",
       "BUILDBOT_MASTERNAME": "client.nacl",

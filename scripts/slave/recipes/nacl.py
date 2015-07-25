@@ -37,7 +37,7 @@ def _AnnotatedStepsSteps(api):
   api.python('annotated steps',
       api.path['checkout'].join('buildbot', 'buildbot_selector.py'),
       allow_subannotations=True,
-      cwd = api.path['build'],
+      cwd = api.path['checkout'],
       env = {'BUILDBOT_MASTERNAME': api.properties['mastername'],
         'BUILDBOT_BUILDERNAME': api.properties['buildername'],
         'BUILDBOT_REVISION': api.properties['revision'],
