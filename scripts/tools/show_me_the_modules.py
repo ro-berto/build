@@ -93,7 +93,7 @@ def main():
       base_path=None)
 
   inst = loader.create_recipe_api(
-      deps, recipe_main.SequentialRecipeEngine(None, {}, None))
+      deps, recipe_main.RecipeEngine(None, {}, None))
 
   for mod_name, mod in deps.iteritems():
     p(0)
