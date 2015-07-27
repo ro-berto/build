@@ -598,10 +598,8 @@
               "machenbach@chromium.org",
               "hablich@chromium.org"
             ],
-            "forgiving_steps": [
-              "*"
-            ],
-            "closing_steps": [
+            "forgive_all": "true",
+            "closing_optional": [
               "compile"
             ],
             "subject_template": "V8 API checker %(result)s in %(project_name)s, revision %(revision)s"
