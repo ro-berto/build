@@ -18,7 +18,9 @@ import urllib2
 # Default package repository URL.
 CIPD_BACKEND_URL = 'https://chrome-infra-packages.appspot.com'
 CLIENT_VERSIONS = {
-  'linux-amd64': '9579504cec0336688292f5b0b68c3ed4e288e273',
+  'linux-386': '22d3a1cb4608d36ce02b32032ad8b2ce78809a91',
+  'linux-amd64': '899e62ec9ea3bf6fdef9e13d1af30d45dd31b445',
+  'mac-amd64': '107a9f99a6e4f9192f3b981a9c1acae4c7995073',
 }
 
 
