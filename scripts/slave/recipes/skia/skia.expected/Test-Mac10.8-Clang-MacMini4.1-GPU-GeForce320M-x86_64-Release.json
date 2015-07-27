@@ -97,7 +97,7 @@
       "CC": "/usr/bin/clang",
       "CHROME_PATH": "/home/chrome-bot/src",
       "CXX": "/usr/bin/clang++",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_clang_build=1 skia_run_pdfviewer_in_gm=1 skia_warnings_as_errors=0",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_run_pdfviewer_in_gm=1 skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Mac10.8-Clang-MacMini4.1-GPU-GeForce320M-x86_64-Release"
     },
     "name": "build dm"
@@ -113,7 +113,7 @@
       "CC": "/usr/bin/clang",
       "CHROME_PATH": "/home/chrome-bot/src",
       "CXX": "/usr/bin/clang++",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_clang_build=1 skia_run_pdfviewer_in_gm=1 skia_warnings_as_errors=0",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_run_pdfviewer_in_gm=1 skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Mac10.8-Clang-MacMini4.1-GPU-GeForce320M-x86_64-Release"
     },
     "name": "build nanobench"

@@ -55,7 +55,7 @@ def get_extra_env_vars(builder_dict):
 def gyp_defs_from_builder_dict(builder_dict):
   gyp_defs = {}
 
-  # skia_arch_width.
+  # skia_arch_type.
   if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_BUILD:
     arch = builder_dict['target_arch']
   elif builder_dict['role'] == builder_name_schema.BUILDER_ROLE_HOUSEKEEPER:
@@ -63,20 +63,17 @@ def gyp_defs_from_builder_dict(builder_dict):
   else:
     arch = builder_dict['arch']
 
-  #TODO(scroggo + mtklein): when safe, only set skia_arch_type
-  arch_widths_and_types = {
-    'x86':      ('32', 'x86'),
-    'x86_64':   ('64', 'x86_64'),
-    'Arm7':     ('32', 'arm'),
-    'Arm64':    ('64', 'arm64'),
-    'Mips':     ('32', 'mips'),
-    'Mips64':   ('64', 'mips'),
-    'MipsDSP2': ('32', 'mips'),
+  arch_types = {
+    'x86':      'x86',
+    'x86_64':   'x86_64',
+    'Arm7':     'arm',
+    'Arm64':    'arm64',
+    'Mips':     'mips32',
+    'Mips64':   'mips64',
+    'MipsDSP2': 'mips32',
   }
-  if arch in arch_widths_and_types:
-    skia_arch_width, skia_arch_type = arch_widths_and_types[arch]
-    gyp_defs['skia_arch_width'] = skia_arch_width
-    gyp_defs['skia_arch_type']  = skia_arch_type
+  if arch in arch_types:
+    gyp_defs['skia_arch_type']  = arch_types[arch]
 
   # housekeeper: build shared lib.
   if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_HOUSEKEEPER:

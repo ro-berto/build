@@ -78,7 +78,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
       "PATH": "%(PATH)s:/home/chrome-bot/depot_tools/third_party/gsutil",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
@@ -94,7 +94,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
       "PATH": "%(PATH)s:/home/chrome-bot/depot_tools/third_party/gsutil",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
