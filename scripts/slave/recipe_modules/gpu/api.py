@@ -316,6 +316,9 @@ class GpuApi(recipe_api.RecipeApi):
       tests.append(self._create_gtest(
           'angle_deqp_gles2_tests', chrome_revision, webkit_revision,
           enable_swarming, swarming_dimensions))
+      tests.append(self._create_gtest(
+          'angle_deqp_gles3_tests', chrome_revision, webkit_revision,
+          enable_swarming, swarming_dimensions))
       return tests
 
     # Copy the test list to avoid mutating it.
