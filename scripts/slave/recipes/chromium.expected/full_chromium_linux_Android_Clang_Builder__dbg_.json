@@ -201,7 +201,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "all"
+      "chromium_builder_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

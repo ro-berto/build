@@ -139,7 +139,7 @@
       "--ninja-ensure-up-to-date",
       "--clobber",
       "--",
-      "all"
+      "chromium_builder_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"

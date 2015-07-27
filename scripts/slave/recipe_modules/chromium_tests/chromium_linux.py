@@ -24,7 +24,7 @@ SPEC = {
       },
       'bot_type': 'builder',
       'compile_targets': [
-        'all',
+        'chromium_builder_tests',
       ],
       'use_isolate': True,
       'testing': {
@@ -502,7 +502,7 @@ SPEC = {
       'android_config': 'clang_builder',
       'bot_type': 'builder_tester',
       'compile_targets': [
-        'all',
+        'chromium_builder_tests',
       ],
       'testing': {
         'platform': 'linux',

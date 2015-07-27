@@ -1351,10 +1351,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'compile_targets': [
-        # chromium_tests.analyze treats "all" compile target in a special way;
-        # Make sure to trigger it to make sure we respect compile targets
-        # returned by gyp analyzer.
-        'all',
+        'chromium_builder_tests',
       ],
       'testing': {
         'platform': 'linux',
