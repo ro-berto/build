@@ -344,6 +344,27 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "junit",
+      "-s",
+      "components_junit_tests",
+      "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "components_junit_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
       "gfx_unittests",
