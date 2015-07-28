@@ -93,7 +93,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "component=static_library target_arch=x64 test_isolation_mode=prepare"
+      "GYP_DEFINES": "component=static_library target_arch=ia32 test_isolation_mode=prepare"
     },
     "name": "gclient runhooks"
   },
@@ -133,7 +133,7 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Release_x64",
+      "Release",
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
@@ -160,7 +160,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]\\src\\out\\Release_x64"
+      "[SLAVE_BUILD]\\src\\out\\Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "rmtree build directory",
@@ -180,7 +180,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\extract_build.py",
       "--target",
-      "Release_x64",
+      "Release",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--master-name",
@@ -197,7 +197,7 @@
       "-u",
       "RECIPE_MODULE[isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release_x64",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -218,7 +218,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
       "--target",
-      "Release_x64"
+      "Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "start_crash_service"
@@ -330,7 +330,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\process_dumps.py",
       "--target",
-      "Release_x64"
+      "Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "process_dumps"

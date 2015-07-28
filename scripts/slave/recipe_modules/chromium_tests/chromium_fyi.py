@@ -574,7 +574,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
+        'TARGET_BITS': 32,
       },
       'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
       'bot_type': 'builder',
@@ -592,13 +592,48 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
+        'TARGET_BITS': 32,
       },
       'test_generators': [
         steps.generate_gtest,
       ],
       'bot_type': 'tester',
       'parent_buildername': 'CrWinClangLLD',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+    },
+    'CrWinClangLLD64': {
+      'chromium_config': 'chromium_win_clang_tot',
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'use_isolate': True,
+      'enable_swarming': True,
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
+    'CrWinClangLLD64 tester': {
+      'chromium_config': 'chromium_no_goma',
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'CrWinClangLLD64',
       'testing': {
         'platform': 'win',
       },
