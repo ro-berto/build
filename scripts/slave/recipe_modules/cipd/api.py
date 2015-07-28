@@ -22,7 +22,44 @@ class CIPDApi(recipe_api.RecipeApi):
         script=self.resource('bootstrap.py'),
         stdin=self.m.json.input(script_input))
 
+    self.bin_path = bin_path.join('cipd')
     # TODO(seanmccullough): clean up older CIPD installations.
+
+  def build(self, input_dir, output_package, package_name):
+    self.m.step('build %s' % package_name, [
+        self.bin_path,
+        'pkg-build',
+        '-in', input_dir,
+        '-json-output', self.m.json.output(),
+        '-name', package_name,
+        '-out', output_package,
+    ], step_test_data=lambda: self.m.json.test_api.output({
+        'result': {
+            'package': package_name,
+            'instance_id': 'fake-inst',
+        },
+    }))
+
+  def register(self, package_path, service_account_credentials, *refs, **tags):
+    package_name = self.m.path.basename(package_path)
+    cmd = [
+        self.bin_path,
+        'pkg-register',
+        '-json-output', self.m.json.output(),
+        '-service-account-json', service_account_credentials,
+    ]
+    for ref in refs:
+      cmd.extend(['-ref', ref])
+    for tag, value in tags.iteritems():
+      cmd.extend(['-tag', '%s:%s' % (tag, value)])
+    cmd.append(package_path)
+    self.m.step('register %s' % package_name, cmd,
+                step_test_data=lambda: self.m.json.test_api.output({
+                    'result': {
+                        'package': package_name,
+                        'instance_id': 'fake-inst',
+                },
+    }))
 
   def platform_tag(self):
     return "%s-%s" % (

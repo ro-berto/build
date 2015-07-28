@@ -23,6 +23,61 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/cipd/cipd",
+      "pkg-build",
+      "-in",
+      "fake-input-dir",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-name",
+      "fake-package-name",
+      "-out",
+      "fake-output-path"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "build fake-package-name",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"fake-inst\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"fake-package-name\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/cipd/cipd",
+      "pkg-register",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-service-account-json",
+      "fake-credential-path",
+      "-ref",
+      "fake-ref-1",
+      "-ref",
+      "fake-ref-2",
+      "-tag",
+      "fake_tag_1:fake_value_1",
+      "-tag",
+      "fake_tag_2:fake_value_2",
+      "fake-package-path"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "register fake-package-path",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"fake-inst\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"fake-package-path\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
