@@ -10,6 +10,7 @@ DEPS = [
   'properties',
   'python',
   'step',
+  'trigger',
 ]
 
 # TODO list:
@@ -40,14 +41,29 @@ def _AnnotatedStepsSteps(api):
         'BUILDBOT_SLAVE_TYPE': 'BuilderTester',
         })
 
+def _TriggerTestsSteps(api):
+  trigger_map = {
+      'precise_64-newlib-arm_qemu-pnacl-dbg':
+        'oneiric_32-newlib-arm_hw-pnacl-panda-dbg',
+      'precise_64-newlib-arm_qemu-pnacl-opt':
+        'oneiric_32-newlib-arm_hw-pnacl-panda-opt',
+      'precise_64-newlib-arm_qemu-pnacl-buildonly-spec':
+        'oneiric_32-newlib-arm_hw-pnacl-panda-spec',
+      }
+
+  if api.properties['buildername'] in trigger_map:
+    api.trigger(
+        {'builder_name': trigger_map[api.properties['buildername']]})
+
 def RunSteps(api):
   _CheckoutSteps(api)
   _AnnotatedStepsSteps(api)
+  _TriggerTestsSteps(api)
 
 def GenTests(api):
   # yield api.test('win') + api.platform('win', 64)
   yield api.test('linux') + api.platform('linux', 64) + \
     api.properties(mastername = 'client.nacl') + \
-    api.properties(buildername = 'precise-64-newlib-opt-test') +\
+    api.properties(buildername = 'precise_64-newlib-arm_qemu-pnacl-dbg') +\
     api.properties(revision = 'abcd') +\
     api.properties(slavename='TestSlave')
