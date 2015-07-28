@@ -278,7 +278,11 @@ class CbuildbotFactory(ChromiteFactory):
 
     if self.trybot:
       cmd.append(Property('extra_args'))
-      cmd.append(Property('chromeos_config'))
+      cmd.append(ConditionalProperty(
+          'chromeos_config',
+          WithProperties('%(chromeos_config)s'),
+          [], # Will be flattened to nothing.
+      ))
     else:
       cmd += ['--buildbot']
 
