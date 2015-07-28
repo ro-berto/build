@@ -43,7 +43,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -103,7 +103,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -163,7 +163,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -223,7 +223,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -283,7 +283,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -343,7 +343,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -403,7 +403,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -463,7 +463,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -523,7 +523,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -583,7 +583,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -643,7 +643,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -703,7 +703,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -763,7 +763,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -823,7 +823,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -883,7 +883,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -943,7 +943,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -1003,7 +1003,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -1063,7 +1063,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -1123,7 +1123,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -1183,7 +1183,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
@@ -1243,7 +1243,7 @@ config = {
               'command': [
                 'chromite/bin/cbuildbot',
                 <buildbot.process.properties.WithProperties instance>,
-                '--buildroot=/b/cbuild/external_master',
+                <master.master_utils.ConditionalProperty instance>,
                 <master.master_utils.ConditionalProperty instance>,
                 '--buildbot',
                 '--debug',
