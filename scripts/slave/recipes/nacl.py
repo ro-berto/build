@@ -13,17 +13,10 @@ DEPS = [
 ]
 
 # TODO list:
-# Convert this to use bot_update.
-# Convert this to use GOMA.
 # Consolidate the build process as much as possible. (optional, but strongly
 #   desired.)
 # e-mail thread from Pawel about the Mac bots not using compile.py, causing
 #   goma errors.
-# Check if gclient runhooks should run before or after the cleanuptemp and
-# clobber steps.
-# Check whether allow_subannotations=True propagates environment variables;
-#   fix it if it doesn't.
-# Remove the test env data.
 # Remove this todo list.
 
 def _CheckoutSteps(api):
@@ -41,12 +34,11 @@ def _AnnotatedStepsSteps(api):
       env = {'BUILDBOT_MASTERNAME': api.properties['mastername'],
         'BUILDBOT_BUILDERNAME': api.properties['buildername'],
         'BUILDBOT_REVISION': api.properties['revision'],
-        'RUNTEST': api.path['build'].join('scripts', 'slave', 'runtest.py')})
-#      env = {'BUILDBOT_MASTERNAME': 'client.nacl',
-#        'BUILDBOT_BUILDERNAME': 'precise-64-newlib-opt-test',
-#        'BUILDBOT_REVISION': ,
-#        # Required by the buildbot_selector.
-#        'RUNTEST': api.path['build'].join('scripts', 'slave', 'runtest.py')})
+        'RUNTEST': api.path['build'].join('scripts', 'slave', 'runtest.py'),
+        # NOTE: If this recipe is used for a tryserver/trybots, please change
+        # 'BuilderTester' to 'Trybot'.
+        'BUILDBOT_SLAVE_TYPE': 'BuilderTester',
+        })
 
 def RunSteps(api):
   _CheckoutSteps(api)

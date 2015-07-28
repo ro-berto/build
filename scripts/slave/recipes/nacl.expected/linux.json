@@ -64,6 +64,7 @@
       "BUILDBOT_BUILDERNAME": "precise-64-newlib-opt-test",
       "BUILDBOT_MASTERNAME": "client.nacl",
       "BUILDBOT_REVISION": "abcd",
+      "BUILDBOT_SLAVE_TYPE": "BuilderTester",
       "RUNTEST": "[BUILD]/scripts/slave/runtest.py"
     },
     "name": "annotated steps"
