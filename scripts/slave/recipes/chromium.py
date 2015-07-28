@@ -86,7 +86,7 @@ def GenTests(api):
                          'chromium_config_kwargs', {}).get('TARGET_BITS', 64))
       )
 
-      if(bot_type == 'tester' and 'linux_perf' in buildername):
+      if bot_type == 'tester' and mastername == 'tryserver.chromium.perf':
         bisect_config = {
             'test_type': 'perf',
             'command': 'tools/perf/run_benchmark -v '

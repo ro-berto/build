@@ -75,6 +75,20 @@ SPEC = {
       'tests':[steps.BisectTest()],
       'chromium_apply_config': ['chromium_perf']
     },
+    'win64_nv_tester':{
+      'bot_type': 'tester',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'parent_buildername': 'Win x64 Builder',
+      'chromium_config': 'chromium_official',
+      'gclient_config': 'perf',
+      'testing': {
+        'platform': 'win',
+      },
+      'tests':[steps.BisectTest()],
+    },
   }
 }
 
