@@ -283,6 +283,10 @@
       "164710",
       "build_number",
       "5",
+      "issue",
+      "500",
+      "patchset",
+      "1",
       "--key",
       "arch",
       "x86_64",
@@ -350,7 +354,11 @@
       "gitHash",
       "164710",
       "build_number",
-      "5"
+      "5",
+      "issue",
+      "500",
+      "patchset",
+      "1"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "Generate Coverage Data"

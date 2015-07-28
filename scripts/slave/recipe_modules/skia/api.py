@@ -456,6 +456,16 @@ class SkiaApi(recipe_api.RecipeApi):
         use_hash_file = True
 
     # Run DM.
+    properties = [
+      'gitHash',      self.got_revision,
+      'build_number', self.m.properties['buildnumber'],
+    ]
+    if self.c.is_trybot:
+      properties.extend([
+        'issue',    self.m.properties['issue'],
+        'patchset', self.m.properties['patchset'],
+      ])
+
     args = [
       'dm',
       '--undefok',   # This helps branches that may not know new flags.
@@ -464,9 +474,9 @@ class SkiaApi(recipe_api.RecipeApi):
       '--skps',         self.device_dirs.skp_dir,
       '--images',       self.device_dirs.images_dir,
       '--nameByHash',
-      '--properties',  'gitHash',      self.got_revision,
-                       'build_number', self.m.properties['buildnumber'],
-    ]
+      '--properties'
+    ] + properties
+
     args.append('--key')
     args.extend(self._KeyParams())
     if use_hash_file:
