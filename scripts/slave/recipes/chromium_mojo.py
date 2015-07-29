@@ -39,18 +39,31 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
         },
+        'run_perf_tests': True,
+        'perf_test_info': {
+          'browser_type': 'mandoline-release',
+          'perf_id': 'mandoline-linux-release',
+        },
+      },
+      'Chromium Mojo Android Nexus5 Perf': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+        },
+        'gclient_apply_config': ['android'],
       },
     },
   },
 })
 
 
-PERF_TEST_INFO = freeze({
-  'Chromium Mojo Linux Perf': {
-    'browser_type': 'mandoline-release',
-    'perf_id': 'mandoline-linux-release',
-  },
-})
+def _GetBotConfig(api):
+  mastername = api.properties.get('mastername')
+  buildername = api.properties.get('buildername')
+  master_dict = BUILDERS.get(mastername, {})
+  bot_config = master_dict.get('builders', {}).get(buildername, {})
+  return bot_config
 
 
 @recipe_api.composite_step
@@ -86,10 +99,8 @@ def _RunUnitAndAppTests(api):
     _RunApptests(api)
 
 
-def _RunPerfTests(api):
-  test_info = PERF_TEST_INFO[api.properties.get('buildername')]
-
-  tests = api.chromium.list_perf_tests(test_info['browser_type'], 1)
+def _RunPerfTests(api, perf_test_info):
+  tests = api.chromium.list_perf_tests(perf_test_info['browser_type'], 1)
 
   # TODO(yzshen): Remove this filter once we annotate tests disabled for
   # Mandoline in Telemetry. Consider reusing
@@ -118,7 +129,7 @@ def _RunPerfTests(api):
           python_mode=True,
           results_url='https://chromeperf.appspot.com',
           perf_dashboard_id=test.get('perf_dashboard_id', test_name),
-          perf_id=test_info['perf_id'],
+          perf_id=perf_test_info['perf_id'],
           test_type=test.get('perf_dashboard_id', test_name),
           xvfb=True,
           chartjson_file=True)
@@ -127,7 +138,6 @@ def _RunPerfTests(api):
 def RunSteps(api):
   # TODO(yzshen): Perf bots should retrieve build results from builders of the
   # same architecture.
-
   api.chromium.configure_bot(BUILDERS, ['gn'])
 
   api.bot_update.ensure_checkout(force=True)
@@ -142,9 +152,9 @@ def RunSteps(api):
     _UploadMandolineAPKToGoogleStorage(api)
     api.chromium_android.detect_and_setup_devices()
 
-  buildername = api.properties.get('buildername')
-  if 'Perf' in buildername:
-    _RunPerfTests(api)
+  bot_config = _GetBotConfig(api)
+  if bot_config.get('run_perf_tests', False):
+    _RunPerfTests(api, bot_config['perf_test_info'])
   else:
     _RunUnitAndAppTests(api)
 

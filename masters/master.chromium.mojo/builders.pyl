@@ -11,9 +11,6 @@
       "scheduler": "chromium_commits",
       "slave_pools": ["linux_precise"],
 
-      "properties": {
-        "config": "Release",
-      },
       "slavebuilddir": "chromium_mojo",
     },
     "Chromium Mojo Android": {
@@ -21,9 +18,6 @@
       "scheduler": "chromium_commits",
       "slave_pools": ["linux_precise_android"],
 
-      "properties": {
-        "config": "Release",
-      },
       "slavebuilddir": "chromium_mojo",
     },
     "Chromium Mojo Linux Perf": {
@@ -31,9 +25,13 @@
       "scheduler": "chromium_commits",
       "slave_pools": ["linux_precise_perf"],
 
-      "properties": {
-        "config": "Release",
-      },
+      "slavebuilddir": "chromium_mojo",
+    },
+    "Chromium Mojo Android Nexus5 Perf": {
+      "recipe": "chromium_mojo",
+      "scheduler": "chromium_commits",
+      "slave_pools": ["linux_precise_android_nexus5_perf"],
+
       "slavebuilddir": "chromium_mojo",
     },
   },
@@ -69,6 +67,14 @@
         "version": "precise",
       },
       "slaves": ["build153-m1"],
+    },
+    "linux_precise_android_nexus5_perf": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "linux",
+        "version": "precise",
+      },
+      "slaves": ["build13-a1"],
     },
   },
 }
