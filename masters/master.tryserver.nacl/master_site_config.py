@@ -15,5 +15,5 @@ class NativeClientTryServer(Master.Master4):
   reply_to = 'chrome-troopers+tryserver@google.com'
   svn_url = 'svn://svn-mirror.golo.chromium.org/chrome-try/try-nacl'
   buildbot_url = 'http://build.chromium.org/p/tryserver.nacl/'
-  service_account_file = 'service-account-chromium-tryserver.json'
+  service_account_file = 'service-account-nacl.json'
   buildbucket_bucket = 'master.tryserver.nacl'
