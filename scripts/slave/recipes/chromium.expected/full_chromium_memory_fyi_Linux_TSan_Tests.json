@@ -258,6 +258,8 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
+      "stepname:browser_tests",
+      "--tag",
       "tsan:1",
       "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",

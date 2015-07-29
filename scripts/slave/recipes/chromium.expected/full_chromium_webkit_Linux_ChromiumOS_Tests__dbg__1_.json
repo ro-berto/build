@@ -259,6 +259,8 @@
       "purpose:CI",
       "--tag",
       "purpose:post-commit",
+      "--tag",
+      "stepname:browser_tests",
       "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",

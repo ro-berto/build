@@ -258,6 +258,8 @@
       "purpose:CI",
       "--tag",
       "purpose:post-commit",
+      "--tag",
+      "stepname:browser_tests on Mac-10.9",
       "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
