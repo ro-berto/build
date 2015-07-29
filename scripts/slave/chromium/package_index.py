@@ -81,6 +81,10 @@ class IndexPack(object):
         for line in filepaths_file:
           fname = os.path.join(entry['directory'],
                                line.strip().replace('//', '/'))
+          # We should not package builtin clang header files, see
+          # crbug.com/513826
+          if 'third_party/llvm-build' in fname:
+            continue
           if not fname in self.filehashes:
             # Derive the new filename from the SHA256 hash.
             with open(fname, 'rb') as source_file:
@@ -164,6 +168,10 @@ class IndexPack(object):
       with open(filepath, 'rb') as filepaths_file:
         for line in filepaths_file:
           fname = line.strip()
+          # We should not package builtin clang header files, see
+          # crbug.com/513826
+          if 'third_party/llvm-build' in fname:
+            continue
           # The clang tool uses '//' to separate the system path where system
           # headers can be found from the relative path used in the #include
           # statement.
