@@ -67,7 +67,6 @@
       "BUILDBOT_SLAVE_TYPE": "BuilderTester",
       "BUILDBOT_TRIGGERED_BY_BUILDERNAME": "precise_64-newlib-arm_qemu-pnacl-dbg",
       "BUILDBOT_TRIGGERED_BY_BUILDNUMBER": "1",
-      "BUILDBOT_TRIGGERED_BY_REVISION": "abcd",
       "BUILDBOT_TRIGGERED_BY_SLAVENAME": "TestSlave",
       "RUNTEST": "[BUILD]/scripts/slave/runtest.py"
     },

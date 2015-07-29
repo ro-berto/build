@@ -53,13 +53,11 @@ def _AnnotatedStepsSteps(api):
   if api.properties['buildername'] in trigger_map.values():
     env.update({
         'BUILDBOT_TRIGGERED_BY_BUILDERNAME':
-          api.properties['triggered_by_buildername'],
+          api.properties['parent_buildername'],
         'BUILDBOT_TRIGGERED_BY_BUILDNUMBER':
-          api.properties['triggered_by_buildnumber'],
-        'BUILDBOT_TRIGGERED_BY_REVISION':
-          api.properties['triggered_by_revision'],
+          api.properties['parent_buildnumber'],
         'BUILDBOT_TRIGGERED_BY_SLAVENAME':
-          api.properties['triggered_by_slavename'],
+          api.properties['parent_slavename'],
     })
   api.python('annotated steps',
       api.path['checkout'].join('buildbot', 'buildbot_selector.py'),
@@ -72,7 +70,8 @@ def _TriggerTestsSteps(api):
 
   if api.properties['buildername'] in trigger_map:
     api.trigger(
-        {'builder_name': trigger_map[api.properties['buildername']]})
+        {'builder_name': trigger_map[api.properties['buildername']],
+         'properties': {'parent_slavename': api.properties['slavename']}})
 
 def RunSteps(api):
   _CheckoutSteps(api)
@@ -85,15 +84,15 @@ def GenTests(api):
     api.properties(mastername = 'client.nacl') +\
     api.properties(buildername = 'precise_64-newlib-arm_qemu-pnacl-dbg') +\
     api.properties(revision = 'abcd') +\
-    api.properties(slavename='TestSlave')
+    api.properties(slavename = 'TestSlave') +\
+    api.properties(buildnumber = '1234')
   yield api.test('linux_triggered') +\
     api.platform('linux', 32) +\
     api.properties(mastername = 'client.nacl') +\
     api.properties(buildername = 'oneiric_32-newlib-arm_hw-pnacl-panda-dbg') +\
     api.properties(revision = 'abcd') +\
     api.properties(slavename='TestSlave') +\
-    api.properties(triggered_by_revision = 'abcd') +\
-    api.properties(triggered_by_slavename = 'TestSlave') +\
-    api.properties(triggered_by_buildername =
+    api.properties(parent_slavename = 'TestSlave') +\
+    api.properties(parent_buildername =
         'precise_64-newlib-arm_qemu-pnacl-dbg') +\
-    api.properties(triggered_by_buildnumber = '1')
+    api.properties(parent_buildnumber = '1')
