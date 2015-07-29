@@ -89,35 +89,62 @@ def RunSteps(api):
   env = {'PATH': api.path.pathsep.join([str(adb_path), '%(PATH)s'])}
   result = api.step('Run Cts', [cts_dir.join('android-cts', 'tools',
       'cts-tradefed'), 'run', 'cts', '-p', 'android.webkit'], env=env,
-      stdout=api.raw_io.output(), step_test_data=(
-          lambda: api.raw_io.test_api.stream_output('Passed 100, Failed 1',
-              stream='stdout')))
+      stdout=api.raw_io.output())
 
   result.presentation.logs['stdout'] = result.stdout.splitlines()
 
   # This import is okay since we don't use any os-accessing functions.
   from xml.etree import ElementTree
 
-  report_xml = api.file.read('Read the test report',
+  report_xml = api.file.read('Read test result and report failures',
       FindTestReportXml(result.stdout))
   root = ElementTree.fromstring(report_xml)
   failed_classes = root.findall('./TestPackage/TestSuite/TestSuite/TestSuite/' +
       'TestCase/Test/FailedScene/../..')
+  # Tests will show as not executed if test apk installation fails.
+  not_executed_tests = root.findall(
+      './TestPackage/TestSuite/TestSuite/TestSuite/' +
+      'TestCase/Test[@result="notExecuted"]')
+  if len(not_executed_tests) > 0:
+    api.step.active_result.presentation.status = api.step.FAILURE
 
   for failed_class in failed_classes:
     failed_class_name = 'android.webkit.cts.' + failed_class.get('name')
     if failed_class_name not in EXPECTED_FAILURE:
-      raise api.step.StepFailure('CTS test failed')
+      api.step.active_result.presentation.status = api.step.FAILURE
+      continue
     failed_methods = failed_class.findall('Test/FailedScene/..')
     for failed_method in failed_methods:
       if failed_method.get('name') not in EXPECTED_FAILURE[failed_class_name]:
-        raise api.step.StepFailure('CTS test failed')
+        api.step.active_result.presentation.status = api.step.FAILURE
 
   api.chromium_android.logcat_dump()
   api.chromium_android.stack_tool_steps()
   api.chromium_android.test_report()
 
 def GenTests(api):
+  result_xml_with_unexecuted_tests = """<TestResult>
+                          <TestPackage>
+                            <TestSuite name='android'>
+                              <TestSuite name='webkit'>
+                                <TestSuite name='cts'>
+                                  <TestCase name='WebSettingsTest'>
+                                    <Test name='test' result='notExecuted'>
+                                    </Test>
+                                  </TestCase>
+                                </TestSuite>
+                              </TestSuite>
+                            </TestSuite>
+                          </TestPackage>
+                        </TestResult>  """
+  yield api.test('Test_parsing_report_xml_with_unexecuted_tests') + \
+      api.override_step_data('Run Cts', api.raw_io.stream_output(
+          'Created xml report file at file:///path/to/testResult.xml',
+          stream='stdout')) + \
+      api.override_step_data('Read test result and report failures',
+          api.raw_io.output(result_xml_with_unexecuted_tests)) + \
+      api.properties.generic(mastername='chromium.fyi')
+
   result_xml_with_expected_failure = """<TestResult>
                           <TestPackage>
                             <TestSuite name='android'>
@@ -138,7 +165,7 @@ def GenTests(api):
       api.override_step_data('Run Cts', api.raw_io.stream_output(
           'Created xml report file at file:///path/to/testResult.xml',
           stream='stdout')) + \
-      api.override_step_data('Read the test report',
+      api.override_step_data('Read test result and report failures',
           api.raw_io.output(result_xml_with_expected_failure)) + \
       api.properties.generic(mastername='chromium.fyi')
 
@@ -162,7 +189,7 @@ def GenTests(api):
       api.override_step_data('Run Cts', api.raw_io.stream_output(
           'Created xml report file at file:///path/to/testResult.xml',
           stream='stdout')) + \
-      api.override_step_data('Read the test report',
+      api.override_step_data('Read test result and report failures',
           api.raw_io.output(result_xml_with_unexpected_failure_class)) + \
       api.properties.generic(mastername='chromium.fyi')
 
@@ -186,7 +213,7 @@ def GenTests(api):
       api.override_step_data('Run Cts', api.raw_io.stream_output(
           'Created xml report file at file:///path/to/testResult.xml',
           stream='stdout')) + \
-      api.override_step_data('Read the test report',
+      api.override_step_data('Read test result and report failures',
           api.raw_io.output(result_xml_with_unexpected_failure_method)) + \
       api.properties.generic(mastername='chromium.fyi')
 

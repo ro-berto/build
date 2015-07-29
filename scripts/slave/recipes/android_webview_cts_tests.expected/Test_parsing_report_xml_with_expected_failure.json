@@ -309,7 +309,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Read the test report"
+    "name": "Read test result and report failures"
   },
   {
     "cmd": [
