@@ -27,7 +27,7 @@ def RunSteps(api):
 
   api.cipd.platform_tag()
 
-  api.cipd.build('fake-input-dir', 'fake-output-path', 'fake-package-name')
+  api.cipd.build('fake-input-dir', 'fake-output-path', 'infra/fake-package')
 
   api.cipd.register('fake-package-path', 'fake-credential-path',
                     'fake-ref-1', 'fake-ref-2',

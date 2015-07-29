@@ -26,7 +26,7 @@ class CIPDApi(recipe_api.RecipeApi):
     # TODO(seanmccullough): clean up older CIPD installations.
 
   def build(self, input_dir, output_package, package_name):
-    self.m.step('build %s' % package_name, [
+    self.m.step('build %s' % self.m.path.basename(package_name), [
         self.bin_path,
         'pkg-build',
         '-in', input_dir,

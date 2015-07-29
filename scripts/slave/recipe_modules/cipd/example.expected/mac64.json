@@ -30,17 +30,17 @@
       "-json-output",
       "/path/to/tmp/json",
       "-name",
-      "fake-package-name",
+      "infra/fake-package",
       "-out",
       "fake-output-path"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "build fake-package-name",
+    "name": "build fake-package",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"fake-inst\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"package\": \"fake-package-name\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/fake-package\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
