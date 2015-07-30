@@ -214,8 +214,7 @@ class NextSlaveAndBuild(object):
 
     for br in remaining:
       normal_slaves.sort(key=lambda s:
-          len(self.get_slave_builders(s.slave, br)) +
-          int(builder_config.IsGCESlave(s.slave.slavename)))
+          -int(builder_config.IsGCESlave(s.slave.slavename)))
 
       # Iterate through slaves and choose the appropriate one.
       chromeos_config_name = br.properties.getProperty('chromeos_config', None)
