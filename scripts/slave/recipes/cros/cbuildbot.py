@@ -137,5 +137,6 @@ def GenTests(api):
           cbb_branch='checkout-this-chromite-branch',
           cbb_variant='test',
           cbb_debug=True,
+          config_repo='https://fake.googlesource.com/myconfig/repo.git',
       )
   )

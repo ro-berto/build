@@ -49,6 +49,9 @@ def BaseConfig(**_kwargs):
 
       # If True, add cbuildbot flag: '--clobber'.
       clobber = Single(bool),
+
+      # The (optional) configuration repository to use.
+      config_repo = Single(basestring),
     ),
   )
 

@@ -51,6 +51,8 @@
       "--chrome_rev",
       "stable",
       "--debug",
+      "--config_repo",
+      "https://fake.googlesource.com/myconfig/repo.git",
       "x86-generic-full"
     ],
     "name": "cbuildbot [x86-generic-full]"

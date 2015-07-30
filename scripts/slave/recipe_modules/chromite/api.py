@@ -235,6 +235,10 @@ class ChromiteApi(recipe_api.RecipeApi):
     if 'clobber' in properties:
       self.c.cbb.clobber = True
 
+    # If a config repo was specified, use it.
+    if 'config_repo' in properties:
+      self.c.cbb.config_repo = self.m.properties['config_repo']
+
   def run_cbuildbot(self, config, tryjob=False):
     """Runs a 'cbuildbot' checkout-and-build workflow.
 
@@ -307,6 +311,8 @@ class ChromiteApi(recipe_api.RecipeApi):
       cbb_args.extend(['--clobber'])
     if self.c.cbb.chrome_version:
       cbb_args.extend(['--chrome_version', self.c.cbb.chrome_version])
+    if self.c.cbb.config_repo:
+      cbb_args.extend(['--config_repo', self.c.cbb.config_repo])
 
     # Set the build ID, if specified.
     if self.c.cbb.build_id:
