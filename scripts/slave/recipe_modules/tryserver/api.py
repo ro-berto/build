@@ -194,6 +194,18 @@ class TryserverApi(recipe_api.RecipeApi):
     if self.is_tryserver:
       self.set_transient_failure_tryjob_result()
 
+  def set_test_failure_tryjob_result(self):
+    """Mark the tryjob result as a test failure.
+
+    This means we started running actual tests (not prerequisite steps
+    like checkout or compile), and some of these tests have failed.
+    """
+    if not self.is_tryserver:
+      return
+
+    step_result = self.m.step.active_result
+    step_result.presentation.properties['failure_type'] = 'TEST_FAILURE'
+
   def add_failure_reason(self, reason):
     """
     Records a more detailed reason why build is failing.

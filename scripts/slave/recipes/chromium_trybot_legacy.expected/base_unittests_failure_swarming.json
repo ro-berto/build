@@ -476,7 +476,8 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
       "@@@STEP_LOG_END@python.inline@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_FAILURE@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@"
     ]
   }
 ]

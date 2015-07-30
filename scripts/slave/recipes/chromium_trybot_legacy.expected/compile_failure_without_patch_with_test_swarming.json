@@ -482,6 +482,7 @@
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
       "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_FAILURE@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@",
       "@@@SET_BUILD_PROPERTY@failure_hash@\"716f1ed01f0f98b7d163919eb5a166f061188d43\"@@@"
     ]
   },

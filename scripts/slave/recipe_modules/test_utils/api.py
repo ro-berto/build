@@ -179,6 +179,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
       if new_failures:
         p.status = self.m.step.FAILURE
+        self.m.tryserver.set_test_failure_tryjob_result()
       elif ignored_failures:
         p.status = self.m.step.WARNING
 
