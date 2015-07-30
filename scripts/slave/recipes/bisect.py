@@ -300,8 +300,8 @@ def _bisect_main_loop(bisector):
     if not revisions_to_check:  # pragma: no cover
       bisector.bisect_over = True
       break
-    with bisector.api.m.step.nest('Working on revision ' +
-                                  revisions_to_check[0].revision_string):
+    with bisector.api.m.step.nest(str('Working on revision ' +
+                                  revisions_to_check[0].revision_string)):
       for r in revisions_to_check:
         r.start_job()
       _wait_for_revisions(bisector, revisions_to_check)

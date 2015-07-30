@@ -10,13 +10,18 @@ from . import parse_metric
 
 
 def _set_output_dir(command, output_dir):  # pragma: no cover
+  placeholder = "OUTPUTDIRGOESHERE"
   new_arg = '--output-dir=' + output_dir
   if not '--output-dir' in command:
     return '%s %s' % (command, new_arg)
   else:
     out_dir_regex = re.compile(
         r"--output-dir[= ](?P<path>([\"'][^\"']+[\"']|\S+))")
-    return out_dir_regex.sub(new_arg, command)
+    # Backslash escape sequences in the replacement string given to |re.sub| are
+    # processed -- that is, \t is converted to a tab character, etc. Hence we
+    # use a placeholder with no backslashes and later replace with str.replace .
+    command = out_dir_regex.sub(placeholder, command)
+    return command.replace(placeholder, new_arg)
 
 def run_perf_test(api, test_config):
   """Runs the command N times and parses a metric from the output."""
