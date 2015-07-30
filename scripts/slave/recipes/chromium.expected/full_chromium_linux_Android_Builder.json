@@ -188,6 +188,7 @@
       "chrome_public_test_apk",
       "chrome_sync_shell_test_apk",
       "components_browsertests_apk",
+      "components_junit_tests",
       "components_unittests_apk",
       "content_browsertests_apk",
       "content_junit_tests",

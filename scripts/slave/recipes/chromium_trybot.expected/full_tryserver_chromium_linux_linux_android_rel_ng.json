@@ -181,13 +181,14 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"content_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"ipc_tests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"ui_touch_selection_unittests_apk\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"junit_unit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"cc_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_public_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"unit_tests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_unittests_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"events_unittests_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"components_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"base_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"ui_android_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"sql_unittests_apk\", @@@",
@@ -204,8 +205,8 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"android_webview_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"net_unittests_apk\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_junit_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"android_webview_unittests_apk\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"android_webview_unittests_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"junit_unit_tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"android_webview_test_apk\", @@@",
@@ -218,6 +219,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_public_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_sync_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_browsertests_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"components_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_browsertests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
@@ -252,6 +254,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_public_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_sync_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_browsertests_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"components_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_browsertests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
@@ -286,6 +289,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_public_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_sync_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_browsertests_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"components_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_browsertests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
@@ -320,6 +324,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_public_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_sync_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_browsertests_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"components_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_unittests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_browsertests_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
@@ -419,13 +424,14 @@
       "content_shell_test_apk",
       "ipc_tests_apk",
       "ui_touch_selection_unittests_apk",
-      "junit_unit_tests",
       "cc_unittests_apk",
       "content_junit_tests",
       "chrome_public_test_apk",
       "unit_tests_apk",
       "components_unittests_apk",
+      "chrome_junit_tests",
       "events_unittests_apk",
+      "components_junit_tests",
       "base_junit_tests",
       "ui_android_unittests_apk",
       "sql_unittests_apk",
@@ -442,8 +448,8 @@
       "android_webview_test_apk",
       "base_unittests_apk",
       "net_unittests_apk",
-      "chrome_junit_tests",
-      "android_webview_unittests_apk"
+      "android_webview_unittests_apk",
+      "junit_unit_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -1228,6 +1234,28 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "junit",
       "-s",
+      "components_junit_tests",
+      "--verbose",
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "components_junit_tests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "junit",
+      "-s",
       "content_junit_tests",
       "--verbose",
       "--release",
@@ -1378,6 +1406,7 @@
       "chrome_junit_tests",
       "chrome_public_test_apk",
       "chrome_sync_shell_test_apk",
+      "components_junit_tests",
       "content_junit_tests",
       "content_shell_test_apk",
       "junit_unit_tests",
@@ -1579,6 +1608,28 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "chrome_junit_tests (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "junit",
+      "-s",
+      "components_junit_tests",
+      "--verbose",
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "components_junit_tests (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
@@ -1823,6 +1874,39 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "chrome_junit_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
+      "@@@STEP_LOG_LINE@python.inline@failures = json.load(open(sys.argv[1], 'rb'))@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@success = True@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if failures['new']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  success = False@@@",
+      "@@@STEP_LOG_LINE@python.inline@  print 'New failures:'@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for f in failures['new']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if failures['ignored']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  print 'Ignored failures:'@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for f in failures['ignored']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for f in failures['new']:\n    print f\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for f in failures['ignored']:\n    print f\n\nsys.exit(0 if success else 1)\n",
+      "{\"ignored\": [\"TestB\"], \"new\": []}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "components_junit_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
