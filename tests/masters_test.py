@@ -249,6 +249,7 @@ def main(argv):
       'master.client.drmemory': 'DrMemory',
       'master.client.dynamorio': 'DynamoRIO',
       'master.client.gyp': 'GYP',
+      'master.client.legion': 'ClientLegion',
       'master.client.libyuv': 'Libyuv',
       'master.client.libvpx': 'Libvpx',
       'master.client.mojo': 'Mojo',

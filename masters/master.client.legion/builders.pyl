@@ -1,0 +1,34 @@
+{
+  "master_base_class": "Master3",
+  "master_port": 20315,
+  "master_port_alt": 40315,
+  "slave_port": 30315,
+  "templates": ["../master.chromium/templates"],
+
+  "builders": {
+     "Linux Test": {
+       "recipe": "legion/legion",
+       "scheduler": "hourly",
+       "slave_pools": ["linux_trusty"],
+     },
+  },
+
+  "schedulers": {
+    "hourly": {
+      "hour": "*",
+      "minute": 0,
+      "type": "cron",
+    },
+  },
+
+  "slave_pools": {
+    "linux_trusty": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ['slave79-c3'],
+    },
+  },
+}
