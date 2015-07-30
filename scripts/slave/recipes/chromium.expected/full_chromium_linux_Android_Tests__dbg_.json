@@ -416,42 +416,6 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "--apk",
-      "ChromeShell.apk",
-      "--apk_package",
-      "org.chromium.chrome.shell"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ChromeShell.apk"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "ChromeShellTest",
-      "--isolate-file-path",
-      "chrome/chrome_shell_test_apk.isolate",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
-      "--verbose",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ChromeShellTest",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "--apk",
       "ContentShell.apk",
       "--apk_package",
       "org.chromium.content_shell_apk"

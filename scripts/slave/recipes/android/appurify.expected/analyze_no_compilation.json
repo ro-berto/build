@@ -161,7 +161,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"content_shell_test_apk\", \"chrome_shell_test_apk\", \"chrome_public_test_apk\", \"junit_unit_tests\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"content_shell_test_apk\", \"chrome_public_test_apk\", \"junit_unit_tests\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",

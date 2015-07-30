@@ -1547,11 +1547,6 @@ SPEC = {
             adb_install_apk=(
                 'AndroidWebView.apk', 'org.chromium.android_webview.shell')),
         steps.AndroidInstrumentationTest(
-            'ChromeShellTest', 'chrome_shell_test_apk',
-            isolate_file_path='chrome/chrome_shell_test_apk.isolate',
-            adb_install_apk=(
-                'ChromeShell.apk', 'org.chromium.chrome.shell')),
-        steps.AndroidInstrumentationTest(
             'ContentShellTest', 'content_shell_test_apk',
             isolate_file_path='content/content_shell_test_apk.isolate',
             adb_install_apk=(
