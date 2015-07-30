@@ -791,6 +791,13 @@ def chromium_deterministic_build(c):
 def chromium_mac_sdk_10_10(c):
   c.gyp_env.GYP_DEFINES['mac_sdk_min'] = '10.10'
 
+@config_ctx()
+# TODO(erikchen): This config is used by bots that run tests, but don't compile.
+# If these bots are given the 10.10 SDK, we wouldn't need this special config.
+# http://crbug.com/515310
+def chromium_mac_sdk_10_6(c):
+  c.gyp_env.GYP_DEFINES['mac_sdk_min'] = '10.6'
+
 @config_ctx(includes=['chromium_clang'])
 def cast_linux(c):
   c.gyp_env.GYP_DEFINES['chromecast'] = 1
