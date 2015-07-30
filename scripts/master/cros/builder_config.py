@@ -5,6 +5,8 @@
 """Utility classes to define and coordinate CrOS Chromite builder display.
 """
 
+import re
+
 from collections import OrderedDict, namedtuple
 
 from common.cros_chromite import ChromiteTarget, SlaveType
@@ -357,3 +359,14 @@ def GetBuilderConfigs(targets):
              for t in targets.itervalues()]
   configs.sort()
   return OrderedDict((c.config.name, c) for c in configs)
+
+
+def IsGCESlave(slavename):
+  """Returns (bool): Whether |slavename| is hosted on GCE.
+
+  Args:
+    slavename: The hostname of the slave.
+  """
+  # The "-c2" suffix indicates that a builder is in GCE (as opposed to
+  # in the Chrome Golo, which has a -m2 suffix).
+  return bool(re.search(r'-c\d+$', slavename))
