@@ -161,7 +161,7 @@ class NextSlaveAndBuild(object):
     """
     if (not chromeos_config or chromeos_config.HasVmTests() or
         chromeos_config.HasHwTests()):
-      slaves = [s for s in slaves if builder_config.IsGCESlave(s.getName())]
+      slaves = [s for s in slaves if not builder_config.IsGCESlave(s.getName())]
     return slaves
 
   def __call__(self, slaves, buildrequests):
