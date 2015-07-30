@@ -76,7 +76,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium.c.runtest_py.src_side = True
 
     if bot_config.get('goma_canary'):
-      self.m.goma.update_goma_canary()
+      self.m.goma.update_goma_canary(buildername)
 
     bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
 

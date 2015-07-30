@@ -7,9 +7,14 @@ from recipe_engine import recipe_api
 class GomaApi(recipe_api.RecipeApi):
   """GomaApi contains helper functions for using goma."""
 
-  def update_goma_canary(self):
+  def update_goma_canary(self, buildername):
     """Returns a step for updating goma canary."""
+    head = 'HEAD'
+    # git checkout doesn't work with @HEAD, but @refs/heads/master
+    # As of July 29, Mac goma canaries are git checkout, others are not.
+    if 'Mac' in buildername:
+      head = 'refs/heads/master'
     self.m.gclient('update goma canary',
                    ['sync', '--verbose', '--force',
-                    '--revision', 'build/goma@HEAD'],
+                    '--revision', 'build/goma@%s' % head],
                    cwd=self.m.path['build'])
