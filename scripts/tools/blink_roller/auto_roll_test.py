@@ -240,7 +240,7 @@ Rollbot was stopped by the presence of 'STOP' in an earlier comment.
 The last update to this issue was over 12:00:00 hours ago.
 Please close this issue as soon as possible to allow the bot to continue.
 
-Please email (eseidel@chromium.org) if the Rollbot is causing trouble.
+Please email (dpranke@chromium.org) if the Rollbot is causing trouble.
 ''')
 
     self.mox.ReplayAll()

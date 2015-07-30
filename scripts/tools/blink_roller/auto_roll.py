@@ -140,7 +140,7 @@ class AutoRoller(object):
   RIETVELD_TIME_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
   ROLL_TIME_LIMIT = datetime.timedelta(hours=24)
   STOP_NAG_TIME_LIMIT = datetime.timedelta(hours=12)
-  ADMIN_EMAIL = 'eseidel@chromium.org'
+  ADMIN_EMAIL = 'dpranke@chromium.org'
 
   ROLL_DESCRIPTION_REGEXP = ROLL_DESCRIPTION_STR % {
     'dep_path': '%(project)s',
