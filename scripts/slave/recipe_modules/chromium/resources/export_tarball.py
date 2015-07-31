@@ -115,7 +115,9 @@ class MyTarFile(tarfile.TarFile):
         dir_path = os.path.join(self.__src_dir, nonessential_dir)
         if (name.startswith(dir_path) and
             os.path.isfile(name) and
-            'gyp' not in name):
+            'gyp' not in name and
+            'isolate' not in name and
+            'grd' not in name):
           self.__report_skipped(name)
           return
 
