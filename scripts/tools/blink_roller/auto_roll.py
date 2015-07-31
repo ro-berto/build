@@ -49,6 +49,13 @@ Summary of changes available at:
 %(revlog_url)s
 ''')
 
+NO_TRY_STR = (
+'''
+Sheriffs: In case of breakage, do NOT revert this roll, revert the
+offending commit in the %(project)s repository instead.
+
+NOTRY=true''')
+
 BLINK_SHERIFF_URL = (
   'http://build.chromium.org/p/chromium.webkit/sheriff_webkit.js')
 CHROMIUM_SHERIFF_URL = (
@@ -165,12 +172,14 @@ class AutoRoller(object):
     Please email (%(admin)s) if the Rollbot is causing trouble.
     ''' % {'admin': ADMIN_EMAIL, 'stop_nag_timeout': STOP_NAG_TIME_LIMIT})
 
-  def __init__(self, project, author, path_to_chrome, auth_config=None):
+  def __init__(self, project, author, path_to_chrome, auth_config=None,
+               options=None):
     self._author = author
     self._project = project
     self._path_to_chrome = path_to_chrome
     self._rietveld = rietveld.Rietveld(
       self.RIETVELD_URL, auth_config, self._author)
+    self._notry = options and options.notry
     self._cached_last_roll_revision = None
 
     project_config = PROJECT_CONFIGS.get(self._project, {
@@ -274,6 +283,9 @@ class AutoRoller(object):
       subprocess2.check_call(['git', 'commit', '--no-edit'], **cwd_kwargs)
       commit_msg = subprocess2.check_output(['git', 'log', '-n1', '--format=%B',
                                              'HEAD'], **cwd_kwargs)
+
+      if self._notry:
+        commit_msg += NO_TRY_STR % { 'project': self._project }
 
       upload_cmd = ['git', 'cl', 'upload', '--bypass-hooks',
                     '--use-commit-queue', '-f']
@@ -407,6 +419,10 @@ def main():
   parser = optparse.OptionParser(usage=usage,
                                  description=sys.modules[__name__].__doc__,
                                  formatter=VanillaHelpFormatter())
+
+  parser.add_option('--no-try', action='store_true', dest='notry',
+                    help='Create the CL with NOTRY=true')
+
   auth.add_auth_options(parser)
   options, args = parser.parse_args()
   auth_config = auth.extract_auth_config_from_options(options)
@@ -414,7 +430,7 @@ def main():
     parser.print_usage()
     return 1
 
-  AutoRoller(*args, auth_config=auth_config).main()
+  AutoRoller(*args, auth_config=auth_config, options=options).main()
 
 
 if __name__ == '__main__':

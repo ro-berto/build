@@ -324,6 +324,27 @@ Please email (dpranke@chromium.org) if the Rollbot is causing trouble.
     self.mox.ReplayAll()
     self.assertEquals(self._arb.main(), 0)
 
+  def test_notry(self):
+    class MockOptions:
+      def __init__(self):
+        self.notry = True
+
+    self._arb = auto_roll.AutoRoller(self.TEST_PROJECT,
+                                     self.TEST_AUTHOR,
+                                     self.PATH_TO_CHROME,
+                                     options=MockOptions())
+
+    self._arb._rietveld.search(owner=self.TEST_AUTHOR, closed=2).AndReturn([])
+    svn_range_str = ''
+    commit_msg = self._make_issue(self.OLD_REV, self.NEW_REV,
+                                  svn_range_str=svn_range_str)['description']
+    commit_msg += ('\nSheriffs: In case of breakage, do NOT revert this roll, '
+                   'revert the\noffending commit in the test_project '
+                   'repository instead.\n\nNOTRY=true')
+    self._upload_issue(custom_message=commit_msg)
+    self.mox.ReplayAll()
+    self.assertEquals(self._arb.main(), 0)
+
   def test_last_revision(self):
     # Verify that AutoRoll._last_roll_revision() returns a string.
     self._get_last_revision()
