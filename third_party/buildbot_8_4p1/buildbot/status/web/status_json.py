@@ -1025,6 +1025,41 @@ class AcceptingBuildsResource(JsonResource):
         }
 
 
+class VarzResource(JsonResource):
+    help = 'Minimal set of metrics that are scraped frequently for monitoring.'
+    pageTitle = 'Varz'
+
+    @defer.deferredGenerator
+    def asDict(self, _request):
+        builders = {}
+        for builder_name in self.status.getBuilderNames():
+            builder = self.status.getBuilder(builder_name)
+            slaves = builder.getSlaves()
+            builders[builder_name] = {
+                'connected_slaves': sum(1 for x in slaves if x.connected),
+                'current_builds': len(builder.getCurrentBuilds()),
+                'pending_builds': 0,
+                'state': builder.currentBigState,
+                'total_slaves': len(slaves),
+            }
+
+        # Get pending build requests directly from the db for all builders at
+        # once.
+        d = self.status.master.db.buildrequests.getBuildRequests(claimed=False)
+        def pending_builds_callback(brdicts):
+            for brdict in brdicts:
+                builders[brdict.buildername]['pending_builds'] += 1
+        d.addCallback(pending_builds_callback)
+        yield defer.waitForDeferred(d)
+
+        yield {
+            'accepting_builds': bool(self.status.master.botmaster.brd.running),
+            'builders': builders,
+            'server_uptime': (
+                    get_timeblock()['utc_ts'] - SERVER_STARTED['utc_ts']),
+        }
+
+
 class JsonStatusResource(JsonResource):
     """Retrieves all json data."""
     help = """JSON status
@@ -1048,6 +1083,7 @@ For help on any sub directory, use url /child/help
         self.putChild('clock', MasterClockResource(status))
         self.putChild('accepting_builds', AcceptingBuildsResource(status))
         self.putChild('buildstate', BuildStateJsonResource(status))
+        self.putChild('varz', VarzResource(status))
         # This needs to be called before the first HelpResource().body call.
         self.hackExamples()
 
