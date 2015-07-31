@@ -186,8 +186,8 @@
       "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"sync_integration_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"google_apis_unittests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"google_apis_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"sync_integration_tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"google_apis_unittests\", @@@",
@@ -237,8 +237,8 @@
       "--goma-disable-local-fallback",
       "--ninja-ensure-up-to-date",
       "--",
-      "sync_integration_tests",
-      "google_apis_unittests"
+      "google_apis_unittests",
+      "sync_integration_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile (with patch)"

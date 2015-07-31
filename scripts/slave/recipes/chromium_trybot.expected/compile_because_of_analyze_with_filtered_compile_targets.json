@@ -229,8 +229,8 @@
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"browser_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"browser_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"angle_unittests_run\", @@@",
@@ -291,9 +291,9 @@
       "--goma-disable-local-fallback",
       "--ninja-ensure-up-to-date",
       "--",
-      "chrome",
       "base_unittests",
-      "browser_tests"
+      "browser_tests",
+      "chrome"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile (with patch)"

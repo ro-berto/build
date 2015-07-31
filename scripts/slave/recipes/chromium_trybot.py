@@ -510,18 +510,17 @@ def _RunStepsInternal(api):
           override_bot_type='builder_tester',
           override_tests=tests)
 
+  targets_for_analyze = sorted(set(
+      all_compile_targets(api, tests + tests_including_triggered) +
+      compile_targets))
+  requires_compile, matching_exes, compile_targets = \
+      api.chromium_tests.analyze(
+          affected_files,
+          targets_for_analyze,
+          compile_targets,
+          'trybot_analyze_config.json',
+          legacy_postprocess=False)
   if bot_config.get('analyze_mode') == 'compile':
-    targets_for_analyze = sorted(set(
-        all_compile_targets(api, tests + tests_including_triggered) +
-        compile_targets))
-    requires_compile, matching_exes, compile_targets = \
-        api.chromium_tests.analyze(
-            affected_files,
-            targets_for_analyze,
-            compile_targets,
-            'trybot_analyze_config.json',
-            legacy_postprocess=False)
-
     # Do not pass tests to compile_specific_targets below. It assumes
     # all of these targets would be compiled (matching_exes), but that's
     # explicitly what we're not doing here. One example of how this may
@@ -532,15 +531,11 @@ def _RunStepsInternal(api):
     tests = []
     tests_including_triggered = []
   else:
-    targets_for_analyze = sorted(set(
-        all_compile_targets(api, tests + tests_including_triggered) +
-        [t for t in compile_targets if t.lower() != 'all']))
-    requires_compile, matching_exes, compile_targets = \
-        api.chromium_tests.analyze(
-            affected_files,
-            targets_for_analyze,
-            compile_targets,
-            'trybot_analyze_config.json')
+    # Note that compile_targets doesn't necessarily include matching_exes,
+    # and for correctness we need to add them. Otherwise it's possible we'd
+    # only build say foo_unittests but not foo_unittests_run and fail when
+    # trying to isolate the tests. Also see above comment.
+    compile_targets = sorted(set(compile_targets + matching_exes))
 
   if not requires_compile:
     return
