@@ -209,6 +209,18 @@
             ]
           }
         }
+      },
+      {
+        "tree_notify": [
+          "chrome-security-sheriff@grotations.appspotmail.com"
+        ],
+
+        "subject_template": "LKGR build failure on %(builder_name)s",
+
+        "forgive_all": true,
+        "builders": {
+          "*": {}
+        }
       }
     ],
     "https://build.chromium.org/p/chromium.mac": [
