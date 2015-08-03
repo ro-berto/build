@@ -20,6 +20,17 @@ class ChromiteApi(recipe_api.RecipeApi):
   _MANIFEST_CMD_RE = re.compile(r'Automatic:\s+Start\s+([^\s]+)\s+([^\s]+)')
   _BUILD_ID_RE = re.compile(r'CrOS-Build-Id: (.+)')
 
+  def get_config_defaults(self):
+    defaults = {
+        'CBB_CONFIG': self.m.properties.get('cbb_config'),
+        'CBB_BRANCH': self.m.properties.get('cbb_branch'),
+        'CBB_DEBUG': self.m.properties.get('cbb_debug') is not None,
+        'CBB_CLOBBER': 'clobber' in self.m.properties,
+    }
+    if 'buildnumber' in self.m.properties:
+      defaults['CBB_BUILD_NUMBER'] = int(self.m.properties['buildnumber'])
+    return defaults
+
   def check_repository(self, repo_type_key, value):
     """Scans through registered repositories for a specified value.
 
@@ -121,6 +132,7 @@ class ChromiteApi(recipe_api.RecipeApi):
       loaded.insert(0, '')
       result.presentation.step_text += '<br/>'.join(loaded)
 
+  @property
   def default_chromite_path(self):
     """Returns: (Path) The default Chromite checkout path."""
     return self.m.path['slave_build'].join(self.chromite_subpath)
@@ -146,6 +158,12 @@ class ChromiteApi(recipe_api.RecipeApi):
     self.m.repo.init(manifest_url, '--repo-url', repo_url)
     self.m.repo.sync()
 
+  @property
+  def using_old_chromite_layout(self):
+    """Returns (bool): True if we're using old Chromite checkout layout.
+    """
+    return self.c.chromite_branch in self.c.old_chromite_branches
+
   def cbuildbot(self, name, config, args=None, chromite_path=None, **kwargs):
     """Runs the cbuildbot command defined by the arguments.
 
@@ -154,23 +172,24 @@ class ChromiteApi(recipe_api.RecipeApi):
       config: (str) The name of the 'cbuildbot' configuration to invoke.
       args: (list) If not None, addition arguments to pass to 'cbuildbot'.
       chromite_path: (str) The path to the Chromite checkout; if None, the
-          'default_chromite_path()' will be used.
+          'default_chromite_path' will be used.
 
     Returns: (Step) The step that was run.
     """
-    chromite_path = chromite_path or self.default_chromite_path()
+    chromite_path = chromite_path or self.default_chromite_path
     args = (args or [])[:]
     args.append(config)
 
-    cmd = [self.m.path.join(chromite_path, 'bin', 'cbuildbot')] + args
-
-    # TODO(petermayo): Wrap this nested annotation in a stabilizing wrapper.
+    bindir = 'bin'
+    if self.using_old_chromite_layout:
+      bindir = 'buildbot'
+    cmd = [self.m.path.join(chromite_path, bindir, 'cbuildbot')] + args
     return self.m.step(name, cmd, allow_subannotations=True, **kwargs)
 
   def cros_sdk(self, name, cmd, args=None, environ=None, chromite_path=None,
                  **kwargs):
     """Return a step to run a command inside the cros_sdk."""
-    chromite_path = chromite_path or self.default_chromite_path()
+    chromite_path = chromite_path or self.default_chromite_path
 
     chroot_cmd = self.m.path.join(chromite_path, 'bin', 'cros_sdk')
 
@@ -216,30 +235,12 @@ class ChromiteApi(recipe_api.RecipeApi):
       for config_name in config_map.get('variants', {}).get(variant, ()):
         self.apply_config(config_name)
 
-    # If a Chromite branch is supplied, use it to override the default Chromite
-    # checkout revision.
-    if properties.get('cbb_branch'):
-      self.c.chromite_branch = properties['cbb_branch']
-
-    # Set the build number if one is defined in the properties.
-    if self.m.properties.get('buildnumber') is not None:
-      # On a developer system, it's been noted that when the build number is
-      # zero, it's passed as an empty string in the properties JSON blob.
-      self.c.cbb.build_number = int(self.m.properties['buildnumber'] or 0)
-
-    # Run a debug build if instructed.
-    if properties.get('cbb_debug'):
-      self.c.cbb.debug = True
-
-    # If a clobber build was requested, set this builder to clobber.
-    if 'clobber' in properties:
-      self.c.cbb.clobber = True
 
     # If a config repo was specified, use it.
     if 'config_repo' in properties:
       self.c.cbb.config_repo = self.m.properties['config_repo']
 
-  def run_cbuildbot(self, config, tryjob=False):
+  def run_cbuildbot(self, tryjob=False):
     """Runs a 'cbuildbot' checkout-and-build workflow.
 
     This workflow uses the registered configuration dictionary to make master-
@@ -258,14 +259,12 @@ class ChromiteApi(recipe_api.RecipeApi):
     - Executes the 'cbuildbot' command.
 
     Args:
-      config (str): The name of the 'cbuildbot' configuration target to build.
       tryjob (bool): If True, load a tryjob description from the source
           repository and augment the cbuildbot command-line with it.
     Returns: (Step) the 'cbuildbot' execution step.
     """
-
     # Assert correct configuration.
-    assert config, 'An empty configuration was specified.'
+    assert self.c.cbb.config, 'An empty configuration was specified.'
     assert self.c.cbb.builddir, 'A build directory name must be specified.'
 
     # Load properties from the commit being processed. This requires both a
@@ -328,8 +327,8 @@ class ChromiteApi(recipe_api.RecipeApi):
         force=True)
 
     # Run cbuildbot.
-    return self.cbuildbot(str('cbuildbot [%s]' % (config,)),
-                          config,
+    return self.cbuildbot(str('cbuildbot [%s]' % (self.c.cbb.config,)),
+                          self.c.cbb.config,
                           args=cbb_args,
                           chromite_path=self.m.path['checkout'],
                           cwd=self.m.path['slave_root'])

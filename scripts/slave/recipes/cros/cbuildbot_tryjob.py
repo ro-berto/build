@@ -39,6 +39,7 @@ _TRYJOB_DATA = """
 def RunSteps(api):
   # The 'cbuildbot' config name to build is the name of the builder.
   cbb_config_name = api.properties.get('buildername')
+
   cbb = cros_chromite.Get()
   cbb_config = cbb.get(cbb_config_name)
 
@@ -46,6 +47,7 @@ def RunSteps(api):
   api.chromite.configure(
       api.properties,
       _MASTER_CONFIG_MAP)
+  api.chromite.c.cbb.config = cbb_config_name
 
   # Determine our build directory name.
   namebase = cbb_config_name
@@ -54,9 +56,7 @@ def RunSteps(api):
   api.chromite.c.cbb.builddir = '%s_master' % (namebase,)
 
   # Run our 'cbuildbot'.
-  api.chromite.run_cbuildbot(
-      cbb_config_name,
-      tryjob=True)
+  api.chromite.run_cbuildbot(tryjob=True)
 
 
 def GenTests(api):

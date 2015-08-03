@@ -37,8 +37,7 @@ def RunSteps(api):
       _MASTER_CONFIG_MAP)
 
   # Run 'cbuildbot' common recipe.
-  api.chromite.run_cbuildbot(
-        api.properties['cbb_config'])
+  api.chromite.run_cbuildbot()
 
 def GenTests(api):
   #
@@ -128,13 +127,13 @@ def GenTests(api):
           mastername='chromiumos.coverage',
           buildername='Test',
           slavename='test',
-          buildnumber='', # Possibility from BuildBot when buildnumber is '0'.
+          buildnumber=0,
           repository='https://chromium.googlesource.com/chromiumos/'
                      'chromite.git',
           revision='fdea0dde664e229976ddb2224328da152fba15b1',
           branch='master',
           cbb_config='x86-generic-full',
-          cbb_branch='checkout-this-chromite-branch',
+          cbb_branch='factory-1412.B',
           cbb_variant='test',
           cbb_debug=True,
           config_repo='https://fake.googlesource.com/myconfig/repo.git',

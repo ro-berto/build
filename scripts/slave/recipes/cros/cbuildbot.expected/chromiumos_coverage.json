@@ -19,7 +19,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "chromite@checkout-this-chromite-branch:",
+      "chromite@factory-1412.B:",
       "--force"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -40,12 +40,12 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[SLAVE_BUILD]/chromite/bin/cbuildbot",
+      "[SLAVE_BUILD]/chromite/buildbot/cbuildbot",
       "--buildroot",
       "[ROOT]/cbuild/external_master",
       "--buildbot",
       "--branch",
-      "checkout-this-chromite-branch",
+      "factory-1412.B",
       "--buildnumber",
       "0",
       "--chrome_rev",

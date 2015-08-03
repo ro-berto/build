@@ -13,13 +13,14 @@ import DEPS
 path_api = DEPS['path'].api
 
 
-def BaseConfig(**_kwargs):
+def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
+               CBB_DEBUG=False, CBB_CLOBBER=False, **_kwargs):
   return ConfigGroup(
     # Base mapping of repository key to repository name.
     repositories = Dict(value_type=Set(basestring)),
 
     # Checkout Chromite at this branch. "origin/" will be prepended.
-    chromite_branch = Single(basestring),
+    chromite_branch = Single(basestring, empty_val=CBB_BRANCH or 'master'),
 
     # Should the Chrome version be supplied to cbuildbot?
     use_chrome_version = Single(bool),
@@ -29,6 +30,9 @@ def BaseConfig(**_kwargs):
     read_cros_manifest = Single(bool),
 
     cbb = ConfigGroup(
+      # The Chromite configuration to use.
+      config = Single(basestring, empty_val=CBB_CONFIG),
+
       # The buildroot directory name to use.
       builddir = Single(basestring),
 
@@ -36,7 +40,7 @@ def BaseConfig(**_kwargs):
       build_id = Single(basestring),
 
       # If supplied, forward to cbuildbot as '--buildnumber'.
-      build_number = Single(int),
+      build_number = Single(int, empty_val=CBB_BUILD_NUMBER),
 
       # If supplied, forward to cbuildbot as '--chrome-rev'.
       chrome_rev = Single(basestring),
@@ -45,14 +49,22 @@ def BaseConfig(**_kwargs):
       chrome_version = Single(basestring),
 
       # If True, add cbuildbot flag: '--debug'.
-      debug = Single(bool),
+      debug = Single(bool, empty_val=CBB_DEBUG),
 
       # If True, add cbuildbot flag: '--clobber'.
-      clobber = Single(bool),
+      clobber = Single(bool, empty_val=CBB_CLOBBER),
 
       # The (optional) configuration repository to use.
       config_repo = Single(basestring),
     ),
+
+    # A list of branches whose Chromite version is "old". Old Chromite
+    # buildbot commands reside in the "buildbot" subdirectory of the Chromite
+    # repository instead of the "bin".
+    old_chromite_branches = Set(basestring),
+
+    # A list of branches whose builders should not use a shared buildroot.
+    non_shared_root_branches = Set(basestring),
   )
 
 config_ctx = config_item_context(BaseConfig)
@@ -63,7 +75,15 @@ def base(c):
   c.repositories['tryjob'] = []
   c.repositories['chromium'] = []
   c.repositories['cros_manifest'] = []
-  c.chromite_branch = 'master'
+
+  c.old_chromite_branches.update((
+    'firmware-uboot_v2-1299.B',
+    'factory-1412.B',
+  ))
+  c.non_shared_root_branches.update(c.old_chromite_branches)
+  c.non_shared_root_branches.update((
+    'factory-2305.B',
+  ))
 
   # If running on a testing slave, enable "--debug" so Chromite doesn't cause
   # actual production effects.

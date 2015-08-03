@@ -8,6 +8,8 @@ DEPS = [
 
 
 def RunSteps(api):
+  api.chromite.set_config('base')
+
   # Basic checkout exercise.
   api.chromite.checkout()
   api.chromite.setup_board('amd64-generic', args=['--cache-dir', '.cache'])
