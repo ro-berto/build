@@ -216,7 +216,7 @@ class WithJsonProperties(WithProperties):
     # asDict returns key -> (value, source), so get the values, and convert
     # empty values to blank strings.
     for k in ret:
-      ret[k] = ret[k][0] or ''
+      ret[k] = ret[k][0] if ret[k][0] is not None else ''
     for k, v in self.lambda_subs.iteritems():
       ret[k] = v(build)
     return self.fmtstring % self.transform(ret)
