@@ -105,7 +105,7 @@ def _ComputeBuilders(builders, m_annotator):
         'slavebuilddir': slavebuilddir,
         'slavenames': chromium_utils.GetSlaveNamesForBuilder(builders,
                                                              builder_name),
-        'category': builders.get('category'),
+        'category': builder_data.get('category'),
     })
 
   return actual_builders
