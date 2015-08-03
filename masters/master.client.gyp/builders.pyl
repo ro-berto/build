@@ -1,33 +1,50 @@
 {
   "master_base_class": "Master3",
+  "master_classname": "GYP",
   "master_port": 20302,
   "master_port_alt": 40302,
   "slave_port": 30302,
   "templates": ["templates", "../master.chromium/templates"],
 
-  "master_classname": "GYP",
+  "buildbucket_bucket": "master.client.gyp",
+  "service_account_file": "service-account-gyp-master.json",
 
   "builders": {
-    "gyp_linux": {
+    "linux": {
+      "category": "continuous",
       "recipe": "gyp",
       "scheduler": "gyp_commits",
       "slave_pools": ["linux"],
-
-      "slavebuilddir": "gyp",
     },
-    "gyp_mac": {
+    "linux_try": {
+      "category": "tryserver",
+      "recipe": "gyp",
+      "scheduler": None,
+      "slave_pools": ["linux"],
+    },
+    "mac": {
+      "category": "continuous",
       "recipe": "gyp",
       "scheduler": "gyp_commits",
       "slave_pools": ["mac10.9"],
-
-      "slavebuilddir": "gyp",
     },
-    "gyp_win": {
+    "mac_try": {
+      "category": "tryserver",
+      "recipe": "gyp",
+      "scheduler": None,
+      "slave_pools": ["mac10.9"],
+    },
+    "win": {
+      "category": "continuous",
       "recipe": "gyp",
       "scheduler": "gyp_commits",
       "slave_pools": ["win7"],
-
-      "slavebuilddir": "gyp",
+    },
+    "win_try": {
+      "category": "tryserver",
+      "recipe": "gyp",
+      "scheduler": None,
+      "slave_pools": ["win7"],
     },
   },
 

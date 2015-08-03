@@ -351,10 +351,10 @@ def naclports(c):
 @config_ctx()
 def gyp(c):
   s = c.solutions.add()
-  s.name = 'trunk'
+  s.name = 'gyp'
   s.url = ChromiumGitURL(c, 'external', 'gyp.git')
   m = c.got_revision_mapping
-  m['trunk'] = 'got_revision'
+  m['gyp'] = 'got_revision'
 
 @config_ctx(config_vars={'GIT_MODE': True})
 def build(c):  # pragma: no cover

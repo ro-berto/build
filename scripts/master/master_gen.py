@@ -115,7 +115,8 @@ def _ComputeSchedulers(builders):
   scheduler_to_builders = {}
   for builder_name, builder_data in builders['builders'].items():
     scheduler_name = builder_data['scheduler']
-    scheduler_to_builders.setdefault(scheduler_name, []).append(builder_name)
+    if scheduler_name:
+      scheduler_to_builders.setdefault(scheduler_name, []).append(builder_name)
 
   schedulers = []
   for scheduler_name, scheduler_values in builders['schedulers'].items():
