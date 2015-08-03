@@ -267,5 +267,18 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "ClangToTWin64(dll) tester"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@ClangToTWin64(dll) tester@@@"
+    ]
   }
 ]

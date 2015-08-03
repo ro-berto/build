@@ -19,5 +19,6 @@ DEPS = [
   'step',
   'swarming',
   'test_utils',
+  'trigger',
   'tryserver',
 ]

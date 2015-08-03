@@ -253,5 +253,31 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Linux Tests-Trybot"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Linux Tests-Trybot@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (2)",
+    "trigger_specs": [
+      {
+        "builder_name": "Linux Tests"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Linux Tests@@@"
+    ]
   }
 ]

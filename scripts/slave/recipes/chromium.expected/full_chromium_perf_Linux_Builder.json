@@ -127,5 +127,70 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Linux Perf (3)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Linux Perf (3)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (2)",
+    "trigger_specs": [
+      {
+        "builder_name": "Linux Perf (5)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Linux Perf (5)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (3)",
+    "trigger_specs": [
+      {
+        "builder_name": "Linux Perf (1)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Linux Perf (1)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (4)",
+    "trigger_specs": [
+      {
+        "builder_name": "Linux Perf (2)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Linux Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (5)",
+    "trigger_specs": [
+      {
+        "builder_name": "Linux Perf (4)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Linux Perf (4)@@@"
+    ]
   }
 ]

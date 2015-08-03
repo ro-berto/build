@@ -234,5 +234,44 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Android Tests (L Nexus5)(dbg)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Tests (L Nexus5)(dbg)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (2)",
+    "trigger_specs": [
+      {
+        "builder_name": "Android Tests (trial)(dbg)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Tests (trial)(dbg)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (3)",
+    "trigger_specs": [
+      {
+        "builder_name": "Android Tests (amp split)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Tests (amp split)@@@"
+    ]
   }
 ]

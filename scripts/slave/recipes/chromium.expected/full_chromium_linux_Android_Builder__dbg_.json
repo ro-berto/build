@@ -238,5 +238,18 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Android Tests (dbg)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Tests (dbg)@@@"
+    ]
   }
 ]

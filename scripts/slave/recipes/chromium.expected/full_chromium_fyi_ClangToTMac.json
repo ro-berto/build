@@ -260,6 +260,19 @@
     "name": "package build"
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "ClangToTMac tester"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@ClangToTMac tester@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",

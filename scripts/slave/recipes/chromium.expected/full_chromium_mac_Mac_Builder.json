@@ -288,5 +288,57 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Mac10.8 Tests"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac10.8 Tests@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (2)",
+    "trigger_specs": [
+      {
+        "builder_name": "Mac10.9 Tests"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac10.9 Tests@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (3)",
+    "trigger_specs": [
+      {
+        "builder_name": "Mac10.6 Tests"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac10.6 Tests@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (4)",
+    "trigger_specs": [
+      {
+        "builder_name": "Mac10.10 Tests"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac10.10 Tests@@@"
+    ]
   }
 ]

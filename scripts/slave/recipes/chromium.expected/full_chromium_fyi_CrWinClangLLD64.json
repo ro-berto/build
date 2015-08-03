@@ -267,5 +267,18 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "CrWinClangLLD64 tester"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@CrWinClangLLD64 tester@@@"
+    ]
   }
 ]

@@ -210,5 +210,18 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "WebKit Android (Nexus4)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@WebKit Android (Nexus4)@@@"
+    ]
   }
 ]

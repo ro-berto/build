@@ -248,5 +248,18 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Win7 Tests (dbg)(1)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win7 Tests (dbg)(1)@@@"
+    ]
   }
 ]

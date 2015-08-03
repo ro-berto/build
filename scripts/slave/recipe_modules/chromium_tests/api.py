@@ -388,6 +388,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                 self.m.chromium.c.HOST_PLATFORM == 'mac'),
         )
 
+      for loop_buildername, builder_dict in master_dict.get(
+          'builders', {}).iteritems():
+        if builder_dict.get('parent_buildername') == buildername:
+          self.m.trigger({
+            'builder_name': loop_buildername,
+          })
+
   def tests_for_builder(self, mastername, buildername, update_step, master_dict,
                         override_bot_type=None):
     got_revision = update_step.presentation.properties['got_revision']

@@ -260,5 +260,31 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "WebKit Win7"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@WebKit Win7@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (2)",
+    "trigger_specs": [
+      {
+        "builder_name": "WebKit XP"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@WebKit XP@@@"
+    ]
   }
 ]

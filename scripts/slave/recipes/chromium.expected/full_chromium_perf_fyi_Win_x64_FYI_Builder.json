@@ -131,5 +131,18 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Win 7 Intel GPU Perf (Xeon)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 7 Intel GPU Perf (Xeon)@@@"
+    ]
   }
 ]

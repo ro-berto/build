@@ -273,5 +273,31 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Mac10.9 Tests-Trybot"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac10.9 Tests-Trybot@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (2)",
+    "trigger_specs": [
+      {
+        "builder_name": "Mac10.9 Tests"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac10.9 Tests@@@"
+    ]
   }
 ]
