@@ -1620,5 +1620,52 @@ SPEC = {
         'platform': 'win',
       },
     },
+    'Android Coverage (dbg)': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'Android Builder (dbg)',
+      'android_config': 'incremental_coverage_builder_tests',
+      'root_devices': True,
+      'tests': [
+        steps.AndroidInstrumentationTest(
+            'AndroidWebViewTest', 'android_webview_test_apk',
+            isolate_file_path='android_webview/android_webview_test_apk.isolate',
+            adb_install_apk=(
+                'AndroidWebView.apk', 'org.chromium.android_webview.shell')),
+        steps.AndroidInstrumentationTest(
+            'ChromePublicTest', 'chrome_public_test_apk',
+            isolate_file_path='chrome/chrome_public_test_apk.isolate',
+            adb_install_apk=('ChromePublic.apk', 'org.chromium.chrome')),
+        steps.AndroidInstrumentationTest(
+            'ChromeShellTest', 'chrome_shell_test_apk',
+            isolate_file_path='chrome/chrome_shell_test_apk.isolate',
+            adb_install_apk=(
+                'ChromeShell.apk', 'org.chromium.chrome.shell')),
+        steps.AndroidInstrumentationTest(
+            'ContentShellTest', 'content_shell_test_apk',
+            isolate_file_path='content/content_shell_test_apk.isolate',
+            adb_install_apk=(
+                'ContentShell.apk', 'org.chromium.content_shell_apk')),
+        steps.AndroidInstrumentationTest(
+            'ChromeSyncShellTest', 'chrome_sync_shell_test_apk',
+            adb_install_apk=(
+                'ChromeSyncShell.apk', 'org.chromium.chrome.browser.sync')),
+        steps.IncrementalCoverageTest(),
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
   },
 }

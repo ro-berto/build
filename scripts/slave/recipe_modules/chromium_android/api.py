@@ -753,11 +753,19 @@ class AndroidApi(recipe_api.RecipeApi):
         env=self.m.chromium.get_env(),
         **kwargs)
 
-  def coverage_report(self, **kwargs):
+  def coverage_report(self, upload=True, **kwargs):
+    """Creates an EMMA HTML report and optionally uploads it to storage bucket.
+
+    Creates an EMMA HTML report using generate_emma_html.py, and uploads the
+    HTML report to the chrome-code-coverage storage bucket if |upload| is True.
+
+    Args:
+      upload: Uploads EMMA HTML report to storage bucket unless False is passed
+        in.
+      **kwargs: Kwargs for python and gsutil steps.
+    """
     assert self.c.coverage, (
         'Trying to generate coverage report but coverage is not enabled')
-    gs_dest = 'java/%s/%s' % (
-        self.m.properties['buildername'], self.m.properties['revision'])
 
     self.m.python(
         'Generate coverage report',
@@ -771,15 +779,90 @@ class AndroidApi(recipe_api.RecipeApi):
         infra_step=True,
         **kwargs)
 
+    if upload:
+      gs_dest = 'java/%s/%s' % (
+          self.m.properties['buildername'], self.m.properties['revision'])
+      self.m.gsutil.upload(
+          source=self.coverage_dir.join('coverage_html'),
+          bucket='chrome-code-coverage',
+          dest=gs_dest,
+          args=['-R'],
+          name='upload coverage report',
+          link_name='Coverage report',
+          version='4.7',
+          **kwargs)
+
+  def incremental_coverage_report(self):
+    """Creates and uploads an incremental code coverage report.
+
+    Generates a JSON file containing incremental coverage stats. Requires a file
+    named 'files_for_coverage.json' to be saved in the coverage directory.
+    """
+    files_for_coverage_path = self.coverage_dir.join(
+        'files_for_coverage.json')
+    incremental_report_path = self.coverage_dir.join(
+        'incremental_report.json')
+
+    self.m.python(
+        'Generate incremental coverage report.',
+        self.m.path['checkout'].join(
+            'build', 'android', 'emma_coverage_stats.py'),
+        args=['-v',
+              '--out', incremental_report_path,
+              '--emma-dir', self.coverage_dir.join('coverage_html'),
+              '--lines-for-coverage', files_for_coverage_path])
+
     self.m.gsutil.upload(
-        source=self.coverage_dir.join('coverage_html'),
+        source=incremental_report_path,
         bucket='chrome-code-coverage',
-        dest=gs_dest,
-        args=['-R'],
+        dest='java/%s/%s/%s' % (
+            self.m.properties['mastername'],
+            self.m.properties['buildername'],
+            self.m.chromium.build_properties['got_revision']),
         name='upload coverage report',
-        link_name='Coverage report',
-        version='4.7',
-        **kwargs)
+        link_name='Incremental coverage report')
+
+  def get_changed_lines_for_revision(self):
+    """Saves a JSON file containing the files/lines requiring coverage analysis.
+
+    Saves a JSON object mapping file paths to lists of changed lines to the
+    coverage directory.
+    """
+    revision = self.m.chromium.build_properties['got_revision']
+    # Find which files have changed for this revision.
+    diff_cmd = ['diff-tree', '--diff-filter', 'ACMRTUX', '--no-commit-id',
+                '--name-only', '-r', revision]
+    diff = self.m.git(
+        *diff_cmd,
+        cwd=self.m.path['checkout'],
+        stdout=self.m.raw_io.output(),
+        name='Finding changed files.',
+        step_test_data=(
+            lambda: self.m.raw_io.test_api.stream_output(
+                'fake/file1.java\nfake/file2.java\nfake/file3.java')))
+    changed_files = diff.stdout.splitlines()
+
+    # Find which lines have changed for each file.
+    file_changes = {}
+    for changed_file in changed_files:
+      blame_cmd = ['blame', '-l', '-s', changed_file]
+      blame = self.m.git(
+          *blame_cmd,
+          cwd=self.m.path['checkout'],
+          stdout=self.m.raw_io.output(),
+          name='Finding lines changed.',
+          step_test_data=(
+              lambda: self.m.raw_io.test_api.stream_output(
+                  'int n = 0;\nn++;\nfor (int i = 0; i < n; i++) {')))
+      blame_lines = blame.stdout.splitlines()
+      file_changes[changed_file] = [i + 1 for i, line in enumerate(blame_lines)
+                                    if line.startswith(revision)]
+
+    self.m.file.write(
+        'Saving changed lines for revision.',
+        os.path.join(
+            str(self.coverage_dir), 'files_for_coverage.json'),
+        self.m.json.dumps(file_changes))
 
   def test_runner(self, step_name, args=None, **kwargs):
     """Wrapper for the python testrunner script.

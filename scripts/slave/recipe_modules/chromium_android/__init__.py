@@ -5,8 +5,10 @@
 DEPS = [
   'bot_update',
   'chromium',
+  'file',
   'gclient',
   'generator_script',
+  'git',
   'gsutil',
   'json',
   'path',

@@ -1314,6 +1314,31 @@ class DiagnoseGomaTest(Test):
     api.python('diagnose_goma', diagnose_goma_log_py, [])
 
 
+class IncrementalCoverageTest(Test):
+  name = 'incremental_coverage'
+
+  def has_valid_results(self, api, suffix):
+    return True
+
+  def failures(self, api, suffix):
+    return []
+
+  @property
+  def name(self):  # pragma: no cover
+    """Name of the test."""
+    return self.name
+
+  @staticmethod
+  def compile_targets(api):
+    """List of compile targets needed by this test."""
+    return []
+
+  def run(self, api, suffix):
+    api.chromium_android.coverage_report(upload=False)
+    api.chromium_android.get_changed_lines_for_revision()
+    api.chromium_android.incremental_coverage_report()
+
+
 GOMA_TESTS = [
   GTestTest('base_unittests'),
   GTestTest('content_unittests'),

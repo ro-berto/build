@@ -187,6 +187,10 @@ def x86_try_instrumentation_tests(c):
 def coverage_builder_tests(c):  # pragma: no cover
   pass
 
+@config_ctx(includes=['coverage_builder_tests'])
+def incremental_coverage_builder_tests(c):
+  c.coverage = True
+
 @config_ctx(includes=['component_builder'])
 def oilpan_builder(c):
   pass
