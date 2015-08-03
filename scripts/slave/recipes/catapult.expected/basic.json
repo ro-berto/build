@@ -98,5 +98,53 @@
       "PYTHONPATH": "%(PYTHONPATH)s:[SLAVE_BUILD]/google_appengine"
     },
     "name": "Dashboard Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/tracing/run_py_tests",
+      "--no-install-hooks"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Tracing Python Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/tracing/build/run_dev_server_tests",
+      "--no-install-hooks"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Tracing Dev Server Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/perf_insights/run_py_tests",
+      "--no-install-hooks"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Perf Insights Python Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/third_party/vinn/run_test"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Vinn Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/tracing/run_d8_tests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Tracing D8 Tests"
   }
 ]

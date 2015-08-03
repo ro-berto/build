@@ -7,6 +7,7 @@ DEPS = [
   'gclient',
   'gitiles',
   'path',
+  'platform',
   'properties',
   'python',
 ]
@@ -52,6 +53,23 @@ def RunSteps(api):
   api.python('Dashboard Tests',
              api.path['checkout'].join('dashboard', 'run_tests.py'),
              env=modified_env)
+  api.python('Tracing Python Tests',
+             api.path['checkout'].join('tracing', 'run_py_tests'),
+             ['--no-install-hooks'])
+  api.python('Tracing Dev Server Tests',
+             api.path['checkout'].join(
+                 'tracing', 'build', 'run_dev_server_tests'),
+             ['--no-install-hooks'])
+  api.python('Perf Insights Python Tests',
+             api.path['checkout'].join('perf_insights', 'run_py_tests'),
+             ['--no-install-hooks'])
+  if not api.platform.is_win:
+    # D8/vinn currently unavailable on Windows.
+    # TODO(sullivan): Add these tests on Windows when available.
+    api.python('Vinn Tests',
+               api.path['checkout'].join('third_party', 'vinn', 'run_test'))
+    api.python('Tracing D8 Tests',
+               api.path['checkout'].join('tracing', 'run_d8_tests'))
 
 
 def GenTests(api):
