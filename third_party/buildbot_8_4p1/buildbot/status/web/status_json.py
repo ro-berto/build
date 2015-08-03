@@ -1048,7 +1048,8 @@ class VarzResource(JsonResource):
         d = self.status.master.db.buildrequests.getBuildRequests(claimed=False)
         def pending_builds_callback(brdicts):
             for brdict in brdicts:
-                builders[brdict['buildername']]['pending_builds'] += 1
+                if brdict['buildername'] in builders:
+                    builders[brdict['buildername']]['pending_builds'] += 1
         d.addCallback(pending_builds_callback)
         yield defer.waitForDeferred(d)
 

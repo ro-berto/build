@@ -5691,10 +5691,10 @@ index 531199b..8675da9 100644
  
  def ToHtml(text):
 diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
-index 8675da9..57919d5 100644
+index 8675da9..082b098 100644
 --- a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
 +++ b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
-@@ -1025,6 +1025,41 @@ class AcceptingBuildsResource(JsonResource):
+@@ -1025,6 +1025,42 @@ class AcceptingBuildsResource(JsonResource):
          }
  
  
@@ -5721,7 +5721,8 @@ index 8675da9..57919d5 100644
 +        d = self.status.master.db.buildrequests.getBuildRequests(claimed=False)
 +        def pending_builds_callback(brdicts):
 +            for brdict in brdicts:
-+                builders[brdict['buildername']]['pending_builds'] += 1
++                if brdict['buildername'] in builders:
++                    builders[brdict['buildername']]['pending_builds'] += 1
 +        d.addCallback(pending_builds_callback)
 +        yield defer.waitForDeferred(d)
 +
@@ -5736,7 +5737,7 @@ index 8675da9..57919d5 100644
  class JsonStatusResource(JsonResource):
      """Retrieves all json data."""
      help = """JSON status
-@@ -1048,6 +1083,7 @@ For help on any sub directory, use url /child/help
+@@ -1048,6 +1084,7 @@ For help on any sub directory, use url /child/help
          self.putChild('clock', MasterClockResource(status))
          self.putChild('accepting_builds', AcceptingBuildsResource(status))
          self.putChild('buildstate', BuildStateJsonResource(status))
