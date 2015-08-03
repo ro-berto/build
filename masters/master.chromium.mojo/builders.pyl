@@ -34,6 +34,13 @@
 
       "slavebuilddir": "chromium_mojo",
     },
+    "Chromium Mojo Windows": {
+      "recipe": "chromium_mojo",
+      "scheduler": "chromium_commits",
+      "slave_pools": ["windows_7"],
+
+      "slavebuilddir": "chromium_mojo",
+    },
   },
 
   "schedulers": {
@@ -75,6 +82,14 @@
         "version": "precise",
       },
       "slaves": ["build13-a1"],
+    },
+    "windows_7": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "win",
+        "version": "win7",
+      },
+      "slaves": ["vm16-m1"],
     },
   },
 }

@@ -53,6 +53,12 @@ BUILDERS = freeze({
         },
         'gclient_apply_config': ['android'],
       },
+      'Chromium Mojo Windows': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'win',
+        },
+      },
     },
   },
 })
