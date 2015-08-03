@@ -33,6 +33,21 @@ BUILDERS = freeze({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux',
       },
+      'linux_blink_oilpan_compile_rel': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux Oilpan',
+        'analyze_mode': 'compile',
+      },
+      'mac_blink_oilpan_compile_rel': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Mac Oilpan',
+        'analyze_mode': 'compile',
+      },
+      'win_blink_oilpan_compile_rel': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Win Oilpan',
+        'analyze_mode': 'compile',
+      },
     },
   },
   'tryserver.chromium.linux': {
