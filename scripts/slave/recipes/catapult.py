@@ -60,9 +60,6 @@ def RunSteps(api):
              api.path['checkout'].join(
                  'tracing', 'build', 'run_dev_server_tests'),
              ['--no-install-hooks'])
-  api.python('Perf Insights Python Tests',
-             api.path['checkout'].join('perf_insights', 'run_py_tests'),
-             ['--no-install-hooks'])
   if not api.platform.is_win:
     # D8/vinn currently unavailable on Windows.
     # TODO(sullivan): Add these tests on Windows when available.
@@ -70,6 +67,10 @@ def RunSteps(api):
                api.path['checkout'].join('third_party', 'vinn', 'run_test'))
     api.python('Tracing D8 Tests',
                api.path['checkout'].join('tracing', 'run_d8_tests'))
+    # TODO(nduca): re-enable these if they should be working on Windows.
+    api.python('Perf Insights Python Tests',
+               api.path['checkout'].join('perf_insights', 'run_py_tests'),
+               ['--no-install-hooks'])
 
 
 def GenTests(api):
