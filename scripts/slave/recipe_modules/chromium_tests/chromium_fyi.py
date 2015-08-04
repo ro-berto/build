@@ -876,7 +876,7 @@ SPEC = {
         'platform': 'linux'
       }
     },
-    'Chromium Mac 10.6 Goma Canary': {
+    'Chromium Mac 10.9 Goma Canary': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['goma_canary'],
       'gclient_config': 'chromium',
@@ -891,12 +891,12 @@ SPEC = {
         'platform': 'mac'
       }
     },
-    'Chromium Mac 10.7 Goma Canary': {
+    'Chromium Mac 10.9 Goma Canary (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['goma_canary'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
+        'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
       'compile_targets': [ 'chromium_builder_tests' ],
@@ -906,7 +906,7 @@ SPEC = {
         'platform': 'mac'
       }
     },
-    'Chromium Mac 10.6 Goma Canary (clobber)': {
+    'Chromium Mac 10.9 Goma Canary (clobber)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['goma_canary', 'clobber'],
       'gclient_config': 'chromium',
@@ -921,12 +921,12 @@ SPEC = {
         'platform': 'mac'
       }
     },
-    'Chromium Mac 10.7 Goma Canary (clobber)': {
+    'Chromium Mac 10.9 Goma Canary (dbg)(clobber)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['goma_canary', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
+        'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
       'compile_targets': [ 'chromium_builder_tests' ],
