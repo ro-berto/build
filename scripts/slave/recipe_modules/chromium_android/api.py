@@ -800,27 +800,15 @@ class AndroidApi(recipe_api.RecipeApi):
     """
     files_for_coverage_path = self.coverage_dir.join(
         'files_for_coverage.json')
-    incremental_report_path = self.coverage_dir.join(
-        'incremental_report.json')
 
     self.m.python(
         'Generate incremental coverage report.',
         self.m.path['checkout'].join(
             'build', 'android', 'emma_coverage_stats.py'),
         args=['-v',
-              '--out', incremental_report_path,
+              '--out', self.m.json.output(),
               '--emma-dir', self.coverage_dir.join('coverage_html'),
               '--lines-for-coverage', files_for_coverage_path])
-
-    self.m.gsutil.upload(
-        source=incremental_report_path,
-        bucket='chrome-code-coverage',
-        dest='java/%s/%s/%s' % (
-            self.m.properties['mastername'],
-            self.m.properties['buildername'],
-            self.m.chromium.build_properties['got_revision']),
-        name='upload coverage report',
-        link_name='Incremental coverage report')
 
   def get_changed_lines_for_revision(self):
     """Saves a JSON file containing the files/lines requiring coverage analysis.

@@ -670,33 +670,17 @@
       "[SLAVE_BUILD]/src/build/android/emma_coverage_stats.py",
       "-v",
       "--out",
-      "[SLAVE_BUILD]/src/out/Debug/coverage/incremental_report.json",
+      "/path/to/tmp/json",
       "--emma-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage/coverage_html",
       "--lines-for-coverage",
       "[SLAVE_BUILD]/src/out/Debug/coverage/files_for_coverage.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Generate incremental coverage report."
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "----",
-      "cp",
-      "[SLAVE_BUILD]/src/out/Debug/coverage/incremental_report.json",
-      "gs://chrome-code-coverage/java/tryserver.chromium.linux/android_coverage/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil upload coverage report",
+    "name": "Generate incremental coverage report.",
     "~followup_annotations": [
-      "@@@STEP_LINK@Incremental coverage report@https://storage.cloud.google.com/chrome-code-coverage/java/tryserver.chromium.linux/android_coverage/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9@@@"
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
   },
   {
