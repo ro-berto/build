@@ -72,6 +72,51 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "/path/to/tmp/json",
+      "Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "exec buildbot_spec.py",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dm\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"arch\": \"x86_64\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"GCC\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Release\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu\": \"GPU\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu_value\": \"GTX550Ti\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"extra_config\": \"Valgrind\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"model\": \"ShuttleA\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Ubuntu\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"role\": \"Test\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dm_flags\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"upload_dm_results\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"upload_perf_results\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport os\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write(os.path.join(os.path.expanduser('~'), 'src'))\n",
       "/path/to/tmp/"
     ],
@@ -89,30 +134,16 @@
   {
     "cmd": [
       "make",
-      "dm",
-      "BUILDTYPE=Release"
+      "dm"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
+      "BUILDTYPE": "Release",
       "CHROME_PATH": "/home/chrome-bot/src",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
     },
     "name": "build dm"
-  },
-  {
-    "cmd": [
-      "make",
-      "nanobench",
-      "BUILDTYPE=Release"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "env": {
-      "CHROME_PATH": "/home/chrome-bot/src",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
-    },
-    "name": "build nanobench"
   },
   {
     "cmd": [
@@ -193,23 +224,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/skia/tools/dm_flags.py",
-      "/path/to/tmp/json",
-      "Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec dm_flags.py",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "valgrind",
       "--gen-suppressions=all",
       "--leak-check=full",
@@ -253,6 +267,11 @@
       "--dummy-flags"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Release",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
+    },
     "name": "dm"
   },
   {
@@ -301,6 +320,11 @@
       "--abandonGpuContext"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Release",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
+    },
     "name": "dm --abandonGpuContext"
   },
   {
@@ -349,24 +373,12 @@
       "--preAbandonGpuContext"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Release",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
+    },
     "name": "dm --preAbandonGpuContext"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
-      "/path/to/tmp/json",
-      "Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec nanobench_flags.py",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [
@@ -387,6 +399,11 @@
       "--dummy-flags"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Release",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
+    },
     "name": "nanobench"
   },
   {
@@ -410,6 +427,11 @@
       "--nocpu"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Release",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
+    },
     "name": "nanobench --abandonGpuContext"
   }
 ]

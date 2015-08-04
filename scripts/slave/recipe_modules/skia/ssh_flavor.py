@@ -14,7 +14,7 @@ import ssh_devices
 class SSHFlavorUtils(default_flavor.DefaultFlavorUtils):
   def __init__(self, *args, **kwargs):
     super(SSHFlavorUtils, self).__init__(*args, **kwargs)
-    slave_info = ssh_devices.SLAVE_INFO.get(self._skia_api.c.SLAVE_NAME,
+    slave_info = ssh_devices.SLAVE_INFO.get(self._skia_api.slave_name,
                                             ssh_devices.SLAVE_INFO['default'])
     self._host = slave_info.ssh_host
     self._port = slave_info.ssh_port
@@ -42,7 +42,8 @@ class SSHFlavorUtils(default_flavor.DefaultFlavorUtils):
       dest = self.user + '@' + dest
     ssh_cmd.append(dest)
     ssh_cmd.extend(cmd)
-    return self._skia_api.m.step(name, ssh_cmd, **kwargs)
+    return self._skia_api.run(self._skia_api.m.step, name, cmd=ssh_cmd,
+                              **kwargs)
 
   def step(self, *args, **kwargs):
     """Run the given step over SSH."""
@@ -97,15 +98,18 @@ class SSHFlavorUtils(default_flavor.DefaultFlavorUtils):
     _, remote_path = self._make_scp_cmd(device_dir)
     cmd = [self._skia_api.resource('scp_dir_contents.sh'),
            host_dir, remote_path]
-    self._skia_api.m.step(
-        name='scp %s' % self._skia_api.m.path.basename(host_dir), cmd=cmd)
+    self._skia_api.run(self._skia_api.m.step,
+                       name='scp %s' % self._skia_api.m.path.basename(host_dir),
+                       cmd=cmd,
+                       infra_step=True)
 
   def copy_directory_contents_to_host(self, device_dir, host_dir):
     """Like shutil.copytree(), but for copying from a remote device."""
     _, remote_path = self._make_scp_cmd(device_dir)
     cmd = [self._skia_api.resource('scp_dir_contents.sh'),
            remote_path, host_dir]
-    self._skia_api.m.step(
+    self._skia_api.run(
+        self._skia_api.m.step,
         name='scp %s' % self._skia_api.m.path.basename(device_dir),
         cmd=cmd,
         infra_step=True)
@@ -114,7 +118,8 @@ class SSHFlavorUtils(default_flavor.DefaultFlavorUtils):
     """Like shutil.copyfile, but for copying to a connected device."""
     cmd, remote_path = self._make_scp_cmd(device_path, recurse=False)
     cmd.extend([host_path, remote_path])
-    self._skia_api.m.step(
+    self._skia_api.run(
+        self._skia_api.m.step,
         name='scp %s' % self._skia_api.m.path.basename(host_path),
         cmd=cmd,
         infra_step=True)

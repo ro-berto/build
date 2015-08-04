@@ -33,7 +33,7 @@ def RunSteps(api):
 
   gsutil_path = api.path['depot_tools'].join('third_party', 'gsutil',
                                              'gsutil')
-  if not api.skia.c.is_trybot:
+  if not api.skia.is_trybot:
     api.skia.run(
       api.step,
       'generate and upload doxygen',
@@ -47,7 +47,7 @@ def RunSteps(api):
          '--githash', api.skia.got_revision,
          '--commit_ts', api.skia.m.git.get_timestamp(test_data='1408633190'),
          '--gsutil_path', gsutil_path]
-  if api.skia.c.is_trybot:
+  if api.skia.is_trybot:
     cmd.extend(['--issue_number', str(api.skia.m.properties['issue'])])
   api.skia.run(
     api.step,

@@ -70,11 +70,59 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "/path/to/tmp/json",
+      "Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "exec buildbot_spec.py",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"iOSShell\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"arch\": \"Arm7\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"Clang\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu\": \"GPU\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu_value\": \"SGX554\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"model\": \"iPad4\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"os\": \"iOS\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"role\": \"Test\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dm_flags\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"CC\": \"/usr/bin/clang\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"CXX\": \"/usr/bin/clang++\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"upload_dm_results\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"upload_perf_results\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_ninja"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
@@ -86,7 +134,11 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "BUILDTYPE": "Debug"
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "install iOSShell"
   },
@@ -97,6 +149,13 @@
       "skiabot/skia_resources"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "push resources to skia_resources"
   },
   {
@@ -150,6 +209,13 @@
       "skiabot/skia_tmp_dir/SKP_VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "read SKP_VERSION",
     "stdout": "/path/to/tmp/"
   },
@@ -159,6 +225,13 @@
       "skiabot/skia_tmp_dir/SKP_VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "rm skiabot/skia_tmp_dir/SKP_VERSION"
   },
   {
@@ -167,6 +240,13 @@
       "skiabot/skia_skp/skps"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "rmdir skiabot/skia_skp/skps"
   },
   {
@@ -175,6 +255,13 @@
       "skiabot/skia_skp/skps"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "mkdir skiabot/skia_skp/skps"
   },
   {
@@ -184,6 +271,13 @@
       "skiabot/skia_skp/skps"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "push skps to skps"
   },
   {
@@ -193,6 +287,13 @@
       "skiabot/skia_tmp_dir/SKP_VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "push [SLAVE_BUILD]/tmp/SKP_VERSION"
   },
   {
@@ -233,6 +334,13 @@
       "skiabot/skia_tmp_dir/SKIMAGE_VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "read SKIMAGE_VERSION",
     "stdout": "/path/to/tmp/"
   },
@@ -242,6 +350,13 @@
       "skiabot/skia_tmp_dir/SKIMAGE_VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "rm skiabot/skia_tmp_dir/SKIMAGE_VERSION"
   },
   {
@@ -250,6 +365,13 @@
       "skiabot/skia_images"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "rmdir skiabot/skia_images"
   },
   {
@@ -258,6 +380,13 @@
       "skiabot/skia_images"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "mkdir skiabot/skia_images"
   },
   {
@@ -267,6 +396,13 @@
       "skiabot/skia_images"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "push images to skia_images"
   },
   {
@@ -276,6 +412,13 @@
       "skiabot/skia_tmp_dir/SKIMAGE_VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "push [SLAVE_BUILD]/tmp/SKIMAGE_VERSION"
   },
   {
@@ -326,6 +469,13 @@
       "skiabot/skia_dm"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "rmdir skiabot/skia_dm"
   },
   {
@@ -334,6 +484,13 @@
       "skiabot/skia_dm"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "mkdir skiabot/skia_dm"
   },
   {
@@ -344,6 +501,13 @@
       "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "get uninteresting hashes",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -385,24 +549,14 @@
       "skiabot/skia_tmp_dir/uninteresting_hashes.txt"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "push [SLAVE_BUILD]/tmp/uninteresting_hashes.txt"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/skia/tools/dm_flags.py",
-      "/path/to/tmp/json",
-      "Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec dm_flags.py",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [
@@ -447,6 +601,9 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "dm"
@@ -458,6 +615,13 @@
       "[SLAVE_BUILD]/dm"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "pull skia_dm"
   },
   {
@@ -475,26 +639,14 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
-      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto"
+      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "Upload DM Results"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
-      "/path/to/tmp/json",
-      "Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec nanobench_flags.py",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [
@@ -511,6 +663,9 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "nanobench"

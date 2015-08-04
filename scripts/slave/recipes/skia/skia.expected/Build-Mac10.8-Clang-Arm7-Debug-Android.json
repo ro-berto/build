@@ -34,7 +34,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]\ntarget_os = ['android']"
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gclient setup"
@@ -70,10 +70,62 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "/path/to/tmp/json",
+      "Build-Mac10.8-Clang-Arm7-Debug-Android"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "exec buildbot_spec.py",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"most\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"Clang\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"extra_config\": \"Android\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Mac10.8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"role\": \"Build\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"target_arch\": \"Arm7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"device_cfg\": \"arm_v7_neon\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dm_flags\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"CC\": \"/usr/bin/clang\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"CXX\": \"/usr/bin/clang++\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=arm skia_clang_build=1 skia_warnings_as_errors=0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"upload_dm_results\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"upload_perf_results\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "which",
       "ccache"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Build-Mac10.8-Clang-Arm7-Debug-Android"
+    },
     "name": "has ccache?",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -94,6 +146,8 @@
       "ANDROID_HOME": "/Users/chrome-bot/adt-bundle-mac-x86_64-20140702/sdk",
       "ANDROID_SDK_ROOT": "/Users/chrome-bot/adt-bundle-mac-x86_64-20140702/sdk",
       "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Build-Mac10.8-Clang-Arm7-Debug-Android"

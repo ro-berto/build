@@ -42,6 +42,51 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "/path/to/tmp/json",
+      "Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "exec buildbot_spec.py",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dm\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"nanobench\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"arch\": \"x86_64\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"GCC\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu\": \"CPU\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu_value\": \"AVX\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"model\": \"ShuttleA\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Ubuntu\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"role\": \"Test\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dm_flags\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"upload_dm_results\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"upload_perf_results\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport os\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write(os.path.join(os.path.expanduser('~'), 'src'))\n",
       "/path/to/tmp/"
     ],
@@ -59,28 +104,28 @@
   {
     "cmd": [
       "make",
-      "dm",
-      "BUILDTYPE=Debug"
+      "dm"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
+      "BUILDTYPE": "Debug",
       "CHROME_PATH": "/home/chrome-bot/src",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug-Recipes"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug"
     },
     "name": "build dm"
   },
   {
     "cmd": [
       "make",
-      "nanobench",
-      "BUILDTYPE=Debug"
+      "nanobench"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
+      "BUILDTYPE": "Debug",
       "CHROME_PATH": "/home/chrome-bot/src",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug-Recipes"
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug"
     },
     "name": "build nanobench"
   },
@@ -211,6 +256,11 @@
       "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug"
+    },
     "name": "get uninteresting hashes",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -247,25 +297,8 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/skia/tools/dm_flags.py",
-      "/path/to/tmp/json",
-      "Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug-Recipes"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec dm_flags.py",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "catchsegv",
-      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug-Recipes/Debug/dm",
+      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug/Debug/dm",
       "--undefok",
       "--verbose",
       "--resourcePath",
@@ -291,8 +324,6 @@
       "CPU",
       "cpu_or_gpu_value",
       "AVX",
-      "extra_config",
-      "Recipes",
       "model",
       "ShuttleA",
       "os",
@@ -303,6 +334,11 @@
       "--dummy-flags"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug"
+    },
     "name": "dm",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -316,7 +352,7 @@
       "RECIPE_MODULE[skia]/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
-      "Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug-Recipes",
+      "Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug",
       "6",
       "",
       "[SLAVE_BUILD]/skia/common/py/utils"
@@ -324,31 +360,17 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
-      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto"
+      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
+      "BUILDTYPE": "Debug",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug"
     },
     "name": "Upload DM Results"
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/skia/tools/nanobench_flags.py",
-      "/path/to/tmp/json",
-      "Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug-Recipes"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec nanobench_flags.py",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "catchsegv",
-      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug-Recipes/Debug/nanobench",
+      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug/Debug/nanobench",
       "--undefok",
       "-i",
       "[SLAVE_BUILD]/skia/resources",
@@ -358,6 +380,11 @@
       "--dummy-flags"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug"
+    },
     "name": "nanobench"
   },
   {

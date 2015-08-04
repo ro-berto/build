@@ -3,9 +3,6 @@
 # found in the LICENSE file.
 
 
-import base_flavor
-
-
 """Default flavor utils class, used for desktop builders."""
 
 
@@ -70,7 +67,7 @@ class DeviceDirs(object):
     return self._tmp_dir
 
 
-class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
+class DefaultFlavorUtils(object):
   """Utilities to be used by build steps.
 
   The methods in this class define how certain high-level functions should
@@ -82,23 +79,23 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
   copying files between the host and Android device, as well as the
   'step' function, so that commands may be run through ADB.
   """
-  def __init__(self, *args, **kwargs):
-    super(DefaultFlavorUtils, self).__init__(*args, **kwargs)
+  def __init__(self, skia_api, *args, **kwargs):
+    self._skia_api = skia_api
     self._chrome_path = None
 
   def step(self, name, cmd, **kwargs):
     """Wrapper for the Step API; runs a step as appropriate for this flavor."""
     path_to_app = self._skia_api.out_dir.join(
-        self._skia_api.c.configuration, cmd[0])
+        self._skia_api.configuration, cmd[0])
     if (self._skia_api.m.platform.is_linux and
-        'x86_64' in self._skia_api.c.BUILDER_NAME and
-        not 'TSAN' in self._skia_api.c.BUILDER_NAME):
+        'x86_64' in self._skia_api.builder_name and
+        not 'TSAN' in self._skia_api.builder_name):
       new_cmd = ['catchsegv', path_to_app]
     else:
       new_cmd = [path_to_app]
     new_cmd.extend(cmd[1:])
-    return self._skia_api.m.step(name, new_cmd,
-                                 env=self._skia_api.c.extra_env_vars, **kwargs)
+    return self._skia_api.run(self._skia_api.m.step,
+                              name, cmd=new_cmd, **kwargs)
 
   @property
   def chrome_path(self):
@@ -120,21 +117,18 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
       ).raw_io.output
     return self._chrome_path
 
-  def compile(self, target, env=None):
+  def compile(self, target):
     """Build the given target."""
-    env = env or {}
     # The CHROME_PATH environment variable is needed for builders that use
     # toolchains downloaded by Chrome.
-    env['CHROME_PATH'] = self.chrome_path
-    env.update(self._skia_api.c.gyp_env.as_jsonish())
-    env.update(self._skia_api.c.extra_env_vars)
+    env = {'CHROME_PATH': self.chrome_path}
     if self._skia_api.m.platform.is_win:
       make_cmd = ['python', 'make.py']
     else:
       make_cmd = ['make']
-    cmd = make_cmd + [target, 'BUILDTYPE=%s' % self._skia_api.c.configuration]
-    self._skia_api.m.step('build %s' % target, cmd, env=env,
-                          cwd=self._skia_api.m.path['checkout'])
+    cmd = make_cmd + [target]
+    self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
+                       env=env, cwd=self._skia_api.m.path['checkout'])
 
   def device_path_join(self, *args):
     """Like os.path.join(), but for paths on a connected device."""
@@ -209,3 +203,6 @@ class DefaultFlavorUtils(base_flavor.BaseFlavorUtils):
         images_dir=join('images'),
         skp_dirs=self._skia_api.local_skp_dirs,
         tmp_dir=join('tmp'))
+
+  def __repr__(self):
+    return '<%s object>' % self.__class__.__name__  # pragma: no cover

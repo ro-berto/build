@@ -5,20 +5,6 @@
 
 # Recipe module for Skia builders.
 
-# We do this so recipe_lint doesn't find our use of os and sys.
-def setup_path():
-  import os
-  import sys
-
-  # TODO(luqui): Separate the skia common scripts out so we can make this
-  # independent of build/.
-  sys.path.append(
-      os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
-          os.path.abspath(__file__))))))
-setup_path()
-
-from common.skia import builder_name_schema
-
 
 DEPS = [
   'json',
@@ -41,13 +27,8 @@ def GenTests(api):
         'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug',
       ],
       'skiabot-linux-tester-000': [
-        'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-SKNX_NO_SIMD',
-        'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Shared',
         'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-TSAN',
         'Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot',
-      ],
-      'skiabot-macmini-10_8-000': [
-        'Test-Mac10.8-Clang-MacMini4.1-GPU-GeForce320M-x86_64-Release',
       ],
       'skiabot-shuttle-ubuntu12-003': [
         'Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug',
@@ -56,14 +37,8 @@ def GenTests(api):
         'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
         'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache',
       ],
-      'skiabot-shuttle-win8-i7-4790k-000': [
-        'Test-Win8-MSVC-ShuttleB-GPU-HD4600-x86-Release-ANGLE',
-      ],
       'skiabot-shuttle-win8-i7-4790k-001': [
         'Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot',
-      ],
-      'skiabot-shuttle-win8-hd7770-000': [
-        'Test-Win8-MSVC-ShuttleA-CPU-AVX-x86_64-Debug',
       ],
     },
     'client.skia.android': {
@@ -72,20 +47,8 @@ def GenTests(api):
       ],
     },
     'client.skia.compile': {
-      'skiabot-linux-compile-000': [
-        'Build-Ubuntu-GCC-Arm7-Debug-Android_FrameworkDefs',
-        'Build-Ubuntu-GCC-Arm7-Debug-Android_NoNeon',
-        'Build-Ubuntu-GCC-Arm7-Debug-CrOS_Daisy',
-        'Build-Ubuntu-GCC-Arm7-Debug-CrOS_Link',
-        'Build-Ubuntu-GCC-x86_64-Release-Mesa',
-      ],
       'skiabot-mac-10_8-compile-001': [
         'Build-Mac10.8-Clang-Arm7-Debug-Android',
-      ],
-      'skiabot-win-compile-000': [
-        'Build-Win-MSVC-x86-Debug',
-        'Build-Win-MSVC-x86-Debug-GDI',
-        'Build-Win-MSVC-x86-Debug-Exceptions',
       ],
     },
   }
@@ -151,7 +114,7 @@ def GenTests(api):
           test += api.platform('win', 64)
         yield test
 
-  builder = 'Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug-Recipes'
+  builder = 'Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug'
   yield (
     api.test('failed_dm') +
     api.properties(buildername=builder,

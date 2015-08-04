@@ -4,41 +4,11 @@
 
 
 import android_devices
-import config
 import copy
 import default_flavor
 
 
 """Android flavor utils, used for building for and running tests on Android."""
-
-
-def device_from_builder_dict(builder_dict):
-  """Given a builder name dictionary, return an Android device name."""
-  if 'Android' in builder_dict.get('extra_config', ''):
-    if 'NoNeon' in builder_dict['extra_config']:
-      return 'arm_v7'
-    return {
-      'Arm64': 'arm64',
-      'x86': 'x86',
-      'x86_64': 'x86_64',
-      'Mips': 'mips',
-      'Mips64': 'mips64',
-      'MipsDSP2': 'mips_dsp2',
-    }.get(builder_dict['target_arch'], 'arm_v7_neon')
-  elif builder_dict['os'] == 'Android':
-    return {
-      'GalaxyS3': 'arm_v7_neon',
-      'GalaxyS4': 'arm_v7_neon',
-      'Nexus5': 'arm_v7', # This'd be 'nexus_5', but we simulate no-NEON Clank.
-      'Nexus6': 'arm_v7_neon',
-      'Nexus7': 'nexus_7',
-      'Nexus9': 'nexus_9',
-      'Nexus10': 'nexus_10',
-      'NexusPlayer': 'x86',
-      'NVIDIA_Shield': 'arm64',
-    }[builder_dict['model']]
-  raise Exception(
-      'No device found for builder: %s' % str(builder_dict))  # pragma: no cover
 
 
 class _ADBWrapper(object):
@@ -62,7 +32,8 @@ class _ADBWrapper(object):
         self._android_flavor.android_bin.join('adb_wait_for_device'),
         '-s', self._serial,
     ]
-    self._android_flavor._skia_api.m.step(
+    self._android_flavor._skia_api.run(
+        self._android_flavor._skia_api.m.step,
         name='wait for device (%d)' % self._wait_count,
         cmd=cmd,
         env=self._android_flavor._default_env,
@@ -75,15 +46,15 @@ class _ADBWrapper(object):
 
   def __call__(self, *args, **kwargs):
     self.maybe_wait_for_device()
-    return self._adb(*args, **kwargs)
+    return self._android_flavor._skia_api.run(self._adb, *args, **kwargs)
 
 
 class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
   def __init__(self, skia_api):
     super(AndroidFlavorUtils, self).__init__(skia_api)
-    self.device = device_from_builder_dict(self._skia_api.c.builder_cfg)
+    self.device = self._skia_api.builder_spec['device_cfg']
     slave_info = android_devices.SLAVE_INFO.get(
-        self._skia_api.c.SLAVE_NAME,
+        self._skia_api.slave_name,
         android_devices.SLAVE_INFO['default'])
     self.serial = slave_info.serial
     self.android_bin = self._skia_api.m.path['slave_build'].join(
@@ -100,37 +71,33 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
                          'ANDROID_HOME': self._android_sdk_root,
                          'SKIA_ANDROID_VERBOSE_SETUP': 1}
 
-  def step(self, name, cmd, **kwargs):
+  def step(self, name, cmd, env=None, **kwargs):
     self._adb.maybe_wait_for_device()
     args = [self.android_bin.join('android_run_skia'),
             '--verbose',
             '--logcat',
             '-d', self.device,
             '-s', self.serial,
+            '-t', self._skia_api.configuration,
     ]
-    env = {'SKIA_OUT': self._skia_api.out_dir}
+    env = dict(env or {})
     env.update(self._default_env)
-    if self._skia_api.c.configuration == config.CONFIG_RELEASE:
-      args.append('--release')
 
-    return self._skia_api.m.step(name=name, cmd=args + cmd,
-                                 env=env, **kwargs)
+    return self._skia_api.run(self._skia_api.m.step, name=name, cmd=args + cmd,
+                              env=env, **kwargs)
 
-  def compile(self, target, env=None):
+  def compile(self, target):
     """Build the given target."""
-    env = env or {}
-    env.update(self._default_env)
-    env.update(self._skia_api.c.gyp_env.as_jsonish())
-    env['BUILDTYPE'] = self._skia_api.c.configuration
-    ccache = self._skia_api.ccache
+    env = dict(self._default_env)
+    ccache = self._skia_api.ccache()
     if ccache:
       env['ANDROID_MAKE_CCACHE'] = ccache
 
     cmd = [self.android_bin.join('android_ninja'), target, '-d', self.device]
-    if 'Clang' in self._skia_api.c.BUILDER_NAME:
+    if 'Clang' in self._skia_api.builder_name:
       cmd.append('--clang')
-    self._skia_api.m.step('build %s' % target, cmd, env=env,
-                          cwd=self._skia_api.m.path['checkout'])
+    self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
+                       env=env, cwd=self._skia_api.m.path['checkout'])
 
   def device_path_join(self, *args):
     """Like os.path.join(), but for paths on a connected Android device."""
@@ -167,7 +134,8 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def copy_directory_contents_to_device(self, host_dir, device_dir):
     """Like shutil.copytree(), but for copying to a connected device."""
-    self._skia_api.m.step(
+    self._skia_api.run(
+        self._skia_api.m.step,
         name='push %s' % self._skia_api.m.path.basename(host_dir),
         cmd=[self.android_bin.join('adb_push_if_needed'), '--verbose',
              '-s', self.serial, host_dir, device_dir],
@@ -176,7 +144,8 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def copy_directory_contents_to_host(self, device_dir, host_dir):
     """Like shutil.copytree(), but for copying from a connected device."""
-    self._skia_api.m.step(
+    self._skia_api.run(
+        self._skia_api.m.step,
         name='pull %s' % self._skia_api.m.path.basename(device_dir),
         cmd=[self.android_bin.join('adb_pull_if_needed'), '--verbose',
              '-s', self.serial, device_dir, host_dir],
@@ -203,18 +172,20 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
                 cmd=['root'],
                 infra_step=True)
       # Wait for the device to reconnect.
-      self._skia_api.m.step(
+      self._skia_api.run(
+          self._skia_api.m.step,
           name='wait',
           cmd=['sleep', '10'],
           infra_step=True)
       self._adb.wait_for_device()
 
     # TODO(borenet): Set CPU scaling mode to 'performance'.
-    self._skia_api.m.step(name='kill skia',
-                          cmd=[self.android_bin.join('android_kill_skia'),
-                               '--verbose', '-s', self.serial],
-                          env=self._default_env,
-                          infra_step=True)
+    self._skia_api.run(self._skia_api.m.step,
+                       name='kill skia',
+                       cmd=[self.android_bin.join('android_kill_skia'),
+                            '--verbose', '-s', self.serial],
+                       env=self._default_env,
+                       infra_step=True)
     if self._has_root:
       self._adb(name='stop shell',
                 serial=self.serial,
@@ -227,7 +198,8 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
               serial=self.serial,
               cmd=['reboot'],
               infra_step=True)
-    self._skia_api.m.step(
+    self._skia_api.run(
+        self._skia_api.m.step,
         name='wait for reboot',
         cmd=['sleep', '10'],
         infra_step=True)
@@ -266,6 +238,6 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         resource_dir=prefix + 'resources',
         images_dir=prefix + 'images',
         skp_dirs=default_flavor.SKPDirs(
-            prefix + 'skp', self._skia_api.c.BUILDER_NAME, '/'),
+            prefix + 'skp', self._skia_api.builder_name, '/'),
         tmp_dir=prefix + 'tmp_dir')
 

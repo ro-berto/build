@@ -10,25 +10,10 @@ import ssh_flavor
 """Utils for building for and running tests on ChromeOS."""
 
 
-def board_from_builder_dict(builder_dict):
-  if 'CrOS' in builder_dict.get('extra_config', ''):
-    if 'Link' in builder_dict['extra_config']:
-      return 'link'
-    if 'Daisy' in builder_dict['extra_config']:
-      return 'daisy'
-  elif builder_dict['os'] == 'ChromeOS':
-    return {
-      'Link': 'link',
-      'Daisy': 'daisy',
-    }[builder_dict['model']]
-  raise Exception(
-      'No board found for builder: %s' % builder_cfg)  # pragma: no cover
-
-
 class ChromeOSFlavorUtils(ssh_flavor.SSHFlavorUtils):
   def __init__(self, skia_api):
     super(ChromeOSFlavorUtils, self).__init__(skia_api)
-    self.board = board_from_builder_dict(self._skia_api.c.builder_cfg)
+    self.board = self._skia_api.builder_spec['device_cfg']
     self.device_root_dir = '/usr/local/skiabot'
     self.device_bin_dir = self.device_path_join(self.device_root_dir, 'bin')
 
@@ -36,25 +21,23 @@ class ChromeOSFlavorUtils(ssh_flavor.SSHFlavorUtils):
     """Wrapper for the Step API; runs a step as appropriate for this flavor."""
     local_path = self._skia_api.out_dir.join(
       'config', 'chromeos-%s' % self.board,
-      self._skia_api.c.configuration, cmd[0])
+      self._skia_api.configuration, cmd[0])
     remote_path = self.device_path_join(self.device_bin_dir, cmd[0])
     self.copy_file_to_device(local_path, remote_path)
     super(ChromeOSFlavorUtils, self).step(name=name,
                                           cmd=[remote_path]+cmd[1:],
                                           **kwargs)
 
-  def compile(self, target, env=None):
+  def compile(self, target):
     """Build the given target."""
-    env = env or {}
     # Add depot_tools/third_party/gsutil to PATH.
-    env['PATH'] = '%(PATH)s:/home/chrome-bot/depot_tools/third_party/gsutil'
-    env.update(self._skia_api.c.gyp_env.as_jsonish())
+    env = {'PATH': '%(PATH)s:/home/chrome-bot/depot_tools/third_party/gsutil'}
     skia_dir = self._skia_api.m.path['checkout']
     cmd = [skia_dir.join('platform_tools', 'chromeos', 'bin', 'chromeos_make'),
            '-d', self.board,
-           target,
-           'BUILDTYPE=%s' % self._skia_api.c.configuration]
-    self._skia_api.m.step('build %s' % target, cmd, cwd=skia_dir, env=env)
+           target]
+    self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
+                       cwd=skia_dir, env=env)
 
   def install(self):
     """Run any device-specific installation steps."""
@@ -71,6 +54,6 @@ class ChromeOSFlavorUtils(ssh_flavor.SSHFlavorUtils):
         resource_dir=join('resources'),
         images_dir=join('images'),
         skp_dirs=default_flavor.SKPDirs(
-            join('skp'), self._skia_api.c.BUILDER_NAME, '/'),
+            join('skp'), self._skia_api.builder_name, '/'),
         tmp_dir=join('tmp_dir'))
 

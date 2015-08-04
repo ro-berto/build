@@ -22,32 +22,30 @@ class XSanFlavorUtils(default_flavor.DefaultFlavorUtils):
       'UBSAN': ('bool,integer-divide-by-zero,null,object-size,return,'
                 'nonnull-attribute,returns-nonnull-attribute,unreachable,'
                 'vla-bound'),
-    }[self._skia_api.c.builder_cfg['extra_config']]
+    }[self._skia_api.builder_cfg['extra_config']]
 
-  def compile(self, target, env=None):
-    env = env or {}
-    env.update(self._skia_api.c.gyp_env.as_jsonish())
+  def compile(self, target):
     cmd = [self._skia_api.m.path['checkout'].join('tools', 'xsan_build'),
-           self._sanitizer, target,
-           'BUILDTYPE=%s' % self._skia_api.c.configuration]
-    self._skia_api.m.step('build %s' % target, cmd, env=env,
-                          cwd=self._skia_api.m.path['checkout'])
+           self._sanitizer, target]
+    self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
+                       cwd=self._skia_api.m.path['checkout'])
 
-  def step(self, name, cmd, **kwargs):
+  def step(self, name, cmd, env=None, **kwargs):
     """Wrapper for the Step API; runs a step as appropriate for this flavor."""
-    env = {}
     lsan_suppressions = self._skia_api.m.path['checkout'].join('tools',
                                                                'lsan.supp')
     tsan_suppressions = self._skia_api.m.path['checkout'].join('tools',
                                                                'tsan.supp')
+    env = dict(env or {})
     env['ASAN_OPTIONS'] = 'symbolize=1 detect_leaks=1'
     env['LSAN_OPTIONS'] = ('symbolize=1 print_suppressions=1 suppressions=%s' %
                            lsan_suppressions)
     env['TSAN_OPTIONS'] = 'suppressions=%s' % tsan_suppressions
 
     path_to_app = self._skia_api.out_dir.join(
-        self._skia_api.c.configuration, cmd[0])
+        self._skia_api.configuration, cmd[0])
     new_cmd = [path_to_app]
     new_cmd.extend(cmd[1:])
-    return self._skia_api.m.step(name, new_cmd, env=env, **kwargs)
+    return self._skia_api.run(self._skia_api.m.step, name, cmd=new_cmd, env=env,
+                              **kwargs)
 

@@ -102,6 +102,52 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "/path/to/tmp/json",
+      "Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "exec buildbot_spec.py",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dm\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"arch\": \"x86_64\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"Clang\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Coverage\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu\": \"CPU\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu_value\": \"AVX2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"model\": \"GCE\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Ubuntu\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"role\": \"Test\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Coverage\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dm_flags\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"CC\": \"/usr/bin/clang-3.6\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"CXX\": \"/usr/bin/clang++-3.6\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"upload_dm_results\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"upload_perf_results\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/skia/tools/llvm_coverage_build",
       "dm"
     ],
@@ -110,23 +156,10 @@
       "BUILDTYPE": "Coverage",
       "CC": "/usr/bin/clang-3.6",
       "CXX": "/usr/bin/clang++-3.6",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     },
     "name": "build dm"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/skia/tools/llvm_coverage_build",
-      "nanobench"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "env": {
-      "BUILDTYPE": "Coverage",
-      "CC": "/usr/bin/clang-3.6",
-      "CXX": "/usr/bin/clang++-3.6",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
-    },
-    "name": "build nanobench"
   },
   {
     "cmd": [
@@ -204,23 +237,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Get downloaded SKIMAGE_VERSION"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/skia/tools/dm_flags.py",
-      "/path/to/tmp/json",
-      "Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "exec dm_flags.py",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"--dummy-flags\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [
@@ -309,6 +325,10 @@
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
+      "BUILDTYPE": "Coverage",
+      "CC": "/usr/bin/clang-3.6",
+      "CXX": "/usr/bin/clang++-3.6",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     },
     "name": "dm"
@@ -361,6 +381,13 @@
       "1"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
+    "env": {
+      "BUILDTYPE": "Coverage",
+      "CC": "/usr/bin/clang-3.6",
+      "CXX": "/usr/bin/clang++-3.6",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
+    },
     "name": "Generate Coverage Data"
   },
   {
@@ -381,7 +408,12 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "AWS_CREDENTIAL_FILE": null,
-      "BOTO_CONFIG": null
+      "BOTO_CONFIG": null,
+      "BUILDTYPE": "Coverage",
+      "CC": "/usr/bin/clang-3.6",
+      "CXX": "/usr/bin/clang++-3.6",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     },
     "name": "gsutil upload raw coverage data",
     "~followup_annotations": [
@@ -401,6 +433,13 @@
       "500"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
+    "env": {
+      "BUILDTYPE": "Coverage",
+      "CC": "/usr/bin/clang-3.6",
+      "CXX": "/usr/bin/clang++-3.6",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
+    },
     "name": "upload nanobench coverage results"
   },
   {
@@ -421,7 +460,12 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "AWS_CREDENTIAL_FILE": null,
-      "BOTO_CONFIG": null
+      "BOTO_CONFIG": null,
+      "BUILDTYPE": "Coverage",
+      "CC": "/usr/bin/clang-3.6",
+      "CXX": "/usr/bin/clang++-3.6",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     },
     "name": "gsutil upload line-by-line coverage data",
     "~followup_annotations": [

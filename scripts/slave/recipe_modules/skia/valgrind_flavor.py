@@ -20,8 +20,9 @@ class ValgrindFlavorUtils(default_flavor.DefaultFlavorUtils):
                '--track-origins=yes', '--error-exitcode=1', '--num-callers=40',
                '--suppressions=%s' % self._suppressions_file]
     path_to_app = self._skia_api.out_dir.join(
-        self._skia_api.c.configuration, cmd[0])
+        self._skia_api.configuration, cmd[0])
     new_cmd.append(path_to_app)
     new_cmd.extend(cmd[1:])
-    return self._skia_api.m.step(name, new_cmd, **kwargs)
+    return self._skia_api.run(self._skia_api.m.step, name, cmd=new_cmd,
+                              **kwargs)
 

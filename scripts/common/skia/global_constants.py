@@ -9,6 +9,11 @@
 # TODO(borenet): Keep these in sync with those in the skia-buildbot repo:
 # https://skia.googlesource.com/buildbot/+/3de60f3003e3/site_config/global_variables.json
 
+CONFIG_COVERAGE = 'Coverage'
+CONFIG_DEBUG = 'Debug'
+CONFIG_RELEASE = 'Release'
+VALID_CONFIGS = (CONFIG_COVERAGE, CONFIG_DEBUG, CONFIG_RELEASE)
+
 GM_ACTUAL_FILENAME = 'actual-results.json'
 GM_EXPECTATIONS_FILENAME = 'expected-results.json'
 GM_IGNORE_TESTS_FILENAME = 'ignored-tests.txt'
