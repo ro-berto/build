@@ -13,15 +13,16 @@ class XSanFlavorUtils(default_flavor.DefaultFlavorUtils):
   def __init__(self, *args, **kwargs):
     super(XSanFlavorUtils, self).__init__(*args, **kwargs)
     self._sanitizer = {
-      'ASAN': 'address',
-      'TSAN': 'thread',
-      # We'd love to just pass 'undefined' and get all the checks, but we're not
-      # anywhere close to being able to do that.  Instead we start with a set of
-      # checks that we know pass or nearly pass.  See here for more information:
+      # We'd love to just pass 'address,undefined' and get all the checks, but
+      # we're not anywhere close to being able to do that.  Instead we start
+      # with a set of checks that we know pass or nearly pass.  See here for
+      # more information:
       # http://clang.llvm.org/docs/UsersManual.html#controlling-code-generation
-      'UBSAN': ('bool,integer-divide-by-zero,null,object-size,return,'
-                'nonnull-attribute,returns-nonnull-attribute,unreachable,'
-                'vla-bound'),
+      'ASAN': ('address,bool,integer-divide-by-zero,null,object-size,return,'
+               'nonnull-attribute,returns-nonnull-attribute,unreachable,'
+               'vla-bound'),
+      # TSAN and ASAN can't play together, so the TSAN stands alone.
+      'TSAN': 'thread',
     }[self._skia_api.builder_cfg['extra_config']]
 
   def compile(self, target):
@@ -32,15 +33,16 @@ class XSanFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def step(self, name, cmd, env=None, **kwargs):
     """Wrapper for the Step API; runs a step as appropriate for this flavor."""
-    lsan_suppressions = self._skia_api.m.path['checkout'].join('tools',
-                                                               'lsan.supp')
-    tsan_suppressions = self._skia_api.m.path['checkout'].join('tools',
-                                                               'tsan.supp')
+    skia_dir = self._skia_api.m.path['checkout']
+    lsan_suppressions = skia_dir.join('tools', 'lsan.supp')
+    tsan_suppressions = skia_dir.join('tools', 'tsan.supp')
+    ubsan_suppressions = skia_dir.join('tools', 'ubsan.supp')
     env = dict(env or {})
     env['ASAN_OPTIONS'] = 'symbolize=1 detect_leaks=1'
     env['LSAN_OPTIONS'] = ('symbolize=1 print_suppressions=1 suppressions=%s' %
                            lsan_suppressions)
     env['TSAN_OPTIONS'] = 'suppressions=%s' % tsan_suppressions
+    env['UBSAN_OPTIONS'] = 'suppressions=%s' % ubsan_suppressions
 
     path_to_app = self._skia_api.out_dir.join(
         self._skia_api.configuration, cmd[0])

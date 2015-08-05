@@ -667,12 +667,6 @@
               "abort rebase"
             ]
           },
-          "*UBSAN*": {
-            "closing_optional": ["*"],
-            "excluded_steps": [
-              "abort rebase"
-            ]
-          },
           "*Valgrind*": {
             "closing_optional": ["*"],
             "excluded_steps": [

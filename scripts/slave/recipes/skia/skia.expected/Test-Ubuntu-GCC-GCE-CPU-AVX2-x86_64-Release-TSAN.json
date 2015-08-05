@@ -248,7 +248,8 @@
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
       "LSAN_OPTIONS": "symbolize=1 print_suppressions=1 suppressions=[SLAVE_BUILD]/skia/tools/lsan.supp",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-TSAN",
-      "TSAN_OPTIONS": "suppressions=[SLAVE_BUILD]/skia/tools/tsan.supp"
+      "TSAN_OPTIONS": "suppressions=[SLAVE_BUILD]/skia/tools/tsan.supp",
+      "UBSAN_OPTIONS": "suppressions=[SLAVE_BUILD]/skia/tools/ubsan.supp"
     },
     "name": "dm"
   }

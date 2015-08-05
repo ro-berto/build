@@ -58,8 +58,7 @@ def is_valgrind(builder_cfg):
 
 def is_xsan(builder_cfg):
   return (builder_cfg.get('extra_config') == 'ASAN' or
-          builder_cfg.get('extra_config') == 'TSAN' or
-          builder_cfg.get('extra_config') == 'UBSAN')
+          builder_cfg.get('extra_config') == 'TSAN')
 
 
 class SkiaApi(recipe_api.RecipeApi):
