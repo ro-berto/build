@@ -163,6 +163,12 @@ class PerfTryJobApi(recipe_api.RecipeApi):
         test_spec,
         override_bot_type='builder_tester',
         override_tests=[])
+    # Removes any chrome temporary files or build.dead directories.
+    self.m.chromium.cleanup_temp()
+    if self.m.chromium.c.TARGET_PLATFORM == 'android':  # pragma: no cover
+      self.m.chromium_android.clean_local_files()
+      self.m.chromium_android.run_tree_truth()
+
     if 'With Patch' in name:
       self.m.chromium_tests.transient_check(
           update_step,

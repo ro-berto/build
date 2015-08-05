@@ -257,6 +257,15 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/cleanup_temp.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Release",
@@ -360,6 +369,15 @@
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks on d49c331def2a3bbf3ddd0096eb51551155"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/cleanup_temp.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "cleanup_temp (2)"
   },
   {
     "cmd": [

@@ -161,6 +161,15 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/cleanup_temp.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Release",
