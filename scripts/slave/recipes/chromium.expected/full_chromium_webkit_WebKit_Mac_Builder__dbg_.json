@@ -277,11 +277,11 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "WebKit Mac10.7 (dbg)"
+        "builder_name": "WebKit Mac10.6 (dbg)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@WebKit Mac10.7 (dbg)@@@"
+      "@@@STEP_TEXT@WebKit Mac10.6 (dbg)@@@"
     ]
   },
   {
@@ -290,11 +290,11 @@
     "name": "trigger (2)",
     "trigger_specs": [
       {
-        "builder_name": "WebKit Mac10.6 (dbg)"
+        "builder_name": "WebKit Mac10.7 (dbg)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@WebKit Mac10.6 (dbg)@@@"
+      "@@@STEP_TEXT@WebKit Mac10.7 (dbg)@@@"
     ]
   }
 ]

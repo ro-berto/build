@@ -280,11 +280,11 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Mac10.9 Tests-Trybot"
+        "builder_name": "Mac10.9 Tests"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Mac10.9 Tests-Trybot@@@"
+      "@@@STEP_TEXT@Mac10.9 Tests@@@"
     ]
   },
   {
@@ -293,11 +293,11 @@
     "name": "trigger (2)",
     "trigger_specs": [
       {
-        "builder_name": "Mac10.9 Tests"
+        "builder_name": "Mac10.9 Tests-Trybot"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Mac10.9 Tests@@@"
+      "@@@STEP_TEXT@Mac10.9 Tests-Trybot@@@"
     ]
   }
 ]

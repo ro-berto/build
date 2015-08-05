@@ -144,11 +144,11 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Win 7 Nvidia GPU Perf (3)"
+        "builder_name": "Win 7 ATI GPU Perf (1)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win 7 Nvidia GPU Perf (3)@@@"
+      "@@@STEP_TEXT@Win 7 ATI GPU Perf (1)@@@"
     ]
   },
   {
@@ -157,11 +157,11 @@
     "name": "trigger (2)",
     "trigger_specs": [
       {
-        "builder_name": "Win 7 Nvidia GPU Perf (1)"
+        "builder_name": "Win 7 ATI GPU Perf (2)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win 7 Nvidia GPU Perf (1)@@@"
+      "@@@STEP_TEXT@Win 7 ATI GPU Perf (2)@@@"
     ]
   },
   {
@@ -183,136 +183,6 @@
     "name": "trigger (4)",
     "trigger_specs": [
       {
-        "builder_name": "Win 7 ATI GPU Perf (1)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win 7 ATI GPU Perf (1)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (5)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win 8 Perf (5)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win 8 Perf (5)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (6)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win 8 Perf (1)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win 8 Perf (1)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (7)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win 7 x64 Perf (3)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win 7 x64 Perf (3)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (8)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win 7 x64 Perf (5)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win 7 x64 Perf (5)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (9)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win 8 Perf (3)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win 8 Perf (3)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (10)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win 7 x64 Perf (1)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win 7 x64 Perf (1)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (11)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win 7 Nvidia GPU Perf (4)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win 7 Nvidia GPU Perf (4)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (12)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win 7 Nvidia GPU Perf (2)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win 7 Nvidia GPU Perf (2)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (13)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win 7 ATI GPU Perf (2)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win 7 ATI GPU Perf (2)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (14)",
-    "trigger_specs": [
-      {
         "builder_name": "Win 7 ATI GPU Perf (4)"
       }
     ],
@@ -323,20 +193,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (15)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win 8 Perf (4)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win 8 Perf (4)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (16)",
+    "name": "trigger (5)",
     "trigger_specs": [
       {
         "builder_name": "Win 7 ATI GPU Perf (5)"
@@ -349,7 +206,59 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (17)",
+    "name": "trigger (6)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win 7 Nvidia GPU Perf (1)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 7 Nvidia GPU Perf (1)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (7)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win 7 Nvidia GPU Perf (2)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 7 Nvidia GPU Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (8)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win 7 Nvidia GPU Perf (3)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 7 Nvidia GPU Perf (3)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (9)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win 7 Nvidia GPU Perf (4)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 7 Nvidia GPU Perf (4)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (10)",
     "trigger_specs": [
       {
         "builder_name": "Win 7 Nvidia GPU Perf (5)"
@@ -362,20 +271,46 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (18)",
+    "name": "trigger (11)",
     "trigger_specs": [
       {
-        "builder_name": "Win 8 Perf (2)"
+        "builder_name": "Win 7 x64 Perf (1)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win 8 Perf (2)@@@"
+      "@@@STEP_TEXT@Win 7 x64 Perf (1)@@@"
     ]
   },
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (19)",
+    "name": "trigger (12)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win 7 x64 Perf (2)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 7 x64 Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (13)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win 7 x64 Perf (3)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 7 x64 Perf (3)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (14)",
     "trigger_specs": [
       {
         "builder_name": "Win 7 x64 Perf (4)"
@@ -388,14 +323,79 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (20)",
+    "name": "trigger (15)",
     "trigger_specs": [
       {
-        "builder_name": "Win 7 x64 Perf (2)"
+        "builder_name": "Win 7 x64 Perf (5)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win 7 x64 Perf (2)@@@"
+      "@@@STEP_TEXT@Win 7 x64 Perf (5)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (16)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win 8 Perf (1)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 8 Perf (1)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (17)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win 8 Perf (2)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 8 Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (18)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win 8 Perf (3)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 8 Perf (3)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (19)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win 8 Perf (4)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 8 Perf (4)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (20)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win 8 Perf (5)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win 8 Perf (5)@@@"
     ]
   }
 ]

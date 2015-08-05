@@ -260,11 +260,11 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Linux Tests-Trybot"
+        "builder_name": "Linux Tests"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Linux Tests-Trybot@@@"
+      "@@@STEP_TEXT@Linux Tests@@@"
     ]
   },
   {
@@ -273,11 +273,11 @@
     "name": "trigger (2)",
     "trigger_specs": [
       {
-        "builder_name": "Linux Tests"
+        "builder_name": "Linux Tests-Trybot"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Linux Tests@@@"
+      "@@@STEP_TEXT@Linux Tests-Trybot@@@"
     ]
   }
 ]

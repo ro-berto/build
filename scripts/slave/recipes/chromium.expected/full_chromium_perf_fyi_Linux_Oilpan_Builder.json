@@ -145,11 +145,11 @@
     "name": "trigger (2)",
     "trigger_specs": [
       {
-        "builder_name": "Linux Oilpan Perf (4)"
+        "builder_name": "Linux Oilpan Perf (2)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Linux Oilpan Perf (4)@@@"
+      "@@@STEP_TEXT@Linux Oilpan Perf (2)@@@"
     ]
   },
   {
@@ -171,11 +171,11 @@
     "name": "trigger (4)",
     "trigger_specs": [
       {
-        "builder_name": "Linux Oilpan Perf (2)"
+        "builder_name": "Linux Oilpan Perf (4)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Linux Oilpan Perf (2)@@@"
+      "@@@STEP_TEXT@Linux Oilpan Perf (4)@@@"
     ]
   }
 ]

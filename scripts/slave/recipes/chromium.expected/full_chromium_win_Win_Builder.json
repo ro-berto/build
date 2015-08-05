@@ -276,11 +276,11 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "XP Tests (1)"
+        "builder_name": "Vista Tests (1)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@XP Tests (1)@@@"
+      "@@@STEP_TEXT@Vista Tests (1)@@@"
     ]
   },
   {
@@ -302,11 +302,11 @@
     "name": "trigger (3)",
     "trigger_specs": [
       {
-        "builder_name": "Vista Tests (1)"
+        "builder_name": "XP Tests (1)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Vista Tests (1)@@@"
+      "@@@STEP_TEXT@XP Tests (1)@@@"
     ]
   }
 ]

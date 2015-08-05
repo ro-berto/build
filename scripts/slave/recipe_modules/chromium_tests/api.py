@@ -388,8 +388,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                 self.m.chromium.c.HOST_PLATFORM == 'mac'),
         )
 
-      for loop_buildername, builder_dict in master_dict.get(
-          'builders', {}).iteritems():
+      for loop_buildername, builder_dict in sorted(master_dict.get(
+          'builders', {}).iteritems()):
         if builder_dict.get('parent_buildername') == buildername:
           self.m.trigger({
             'builder_name': loop_buildername,

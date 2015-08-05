@@ -144,11 +144,11 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Win XP Perf (4)"
+        "builder_name": "Win 7 Intel GPU Perf"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win XP Perf (4)@@@"
+      "@@@STEP_TEXT@Win 7 Intel GPU Perf@@@"
     ]
   },
   {
@@ -170,11 +170,11 @@
     "name": "trigger (3)",
     "trigger_specs": [
       {
-        "builder_name": "Win 7 Perf (4)"
+        "builder_name": "Win 7 Low-End Perf (2)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win 7 Perf (4)@@@"
+      "@@@STEP_TEXT@Win 7 Low-End Perf (2)@@@"
     ]
   },
   {
@@ -183,30 +183,17 @@
     "name": "trigger (4)",
     "trigger_specs": [
       {
-        "builder_name": "Win 7 Intel GPU Perf"
+        "builder_name": "Win 7 Perf (1)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win 7 Intel GPU Perf@@@"
+      "@@@STEP_TEXT@Win 7 Perf (1)@@@"
     ]
   },
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
     "name": "trigger (5)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win XP Perf (1)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win XP Perf (1)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (6)",
     "trigger_specs": [
       {
         "builder_name": "Win 7 Perf (2)"
@@ -219,33 +206,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (7)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win XP Perf (2)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win XP Perf (2)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (8)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win 7 Low-End Perf (2)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win 7 Low-End Perf (2)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (9)",
+    "name": "trigger (6)",
     "trigger_specs": [
       {
         "builder_name": "Win 7 Perf (3)"
@@ -258,20 +219,20 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (10)",
+    "name": "trigger (7)",
     "trigger_specs": [
       {
-        "builder_name": "Win XP Perf (3)"
+        "builder_name": "Win 7 Perf (4)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win XP Perf (3)@@@"
+      "@@@STEP_TEXT@Win 7 Perf (4)@@@"
     ]
   },
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (11)",
+    "name": "trigger (8)",
     "trigger_specs": [
       {
         "builder_name": "Win 7 Perf (5)"
@@ -284,14 +245,53 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (12)",
+    "name": "trigger (9)",
     "trigger_specs": [
       {
-        "builder_name": "Win 7 Perf (1)"
+        "builder_name": "Win XP Perf (1)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win 7 Perf (1)@@@"
+      "@@@STEP_TEXT@Win XP Perf (1)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (10)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win XP Perf (2)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win XP Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (11)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win XP Perf (3)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win XP Perf (3)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (12)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win XP Perf (4)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win XP Perf (4)@@@"
     ]
   },
   {
