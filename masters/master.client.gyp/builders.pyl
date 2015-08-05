@@ -7,7 +7,7 @@
   "templates": ["templates", "../master.chromium/templates"],
 
   "buildbucket_bucket": "master.client.gyp",
-  "service_account_file": "service-account-gyp-master.json",
+  "service_account_file": "service-account-gyp.json",
 
   "builders": {
     "linux": {
