@@ -30,8 +30,7 @@ def Update(config, active_master, c):
         'name': spec['name'],
         'factory': m_annotator.BaseFactory(
             'ios/unified_builder_tester',
-            factory_properties=spec.get('factory_properties'),
-            triggers=spec.get('triggers')),
+            factory_properties=spec.get('factory_properties')),
         'notify_on_missing': True,
         'category': '3mac',
       } for spec in specs
