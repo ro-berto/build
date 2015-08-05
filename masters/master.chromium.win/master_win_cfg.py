@@ -22,6 +22,7 @@ def Update(config, active_master, c):
           'Win x64 GN',
           'Win x64 GN (dbg)',
           'Win8 GN (dbg)',
+          'Win8 Aura',
       ]),
   ])
   specs = [
