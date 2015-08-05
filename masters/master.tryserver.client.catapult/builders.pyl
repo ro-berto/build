@@ -15,7 +15,7 @@
       "properties": {
         "repo_name": "catapult",
       },
-      "scheduler": "catapult_commits",
+      "scheduler": None,
       "slave_pools": ["linux_slave_pool"],
       "slavebuilddir": "presubmit_catapult",
     },
