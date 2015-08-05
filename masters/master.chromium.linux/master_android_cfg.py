@@ -47,7 +47,7 @@ F('f_android_arm64_dbg',
 B('Android Builder (dbg)', 'f_android_dbg', 'android', 'android',
   auto_reboot=False, notify_on_missing=True)
 F('f_android_dbg',
-  m_annotator.BaseFactory('chromium', triggers=['android_trigger_dbg']))
+  m_annotator.BaseFactory('chromium'))
 
 B('Android Tests (dbg)', 'f_android_dbg_tests', 'android',
   'android_trigger_dbg', notify_on_missing=True)
@@ -57,7 +57,7 @@ F('f_android_dbg_tests',
 B('Android Builder', 'f_android_rel', 'android', 'android',
   notify_on_missing=True)
 F('f_android_rel',
-  m_annotator.BaseFactory('chromium', triggers=['android_trigger_rel']))
+  m_annotator.BaseFactory('chromium'))
 
 B('Android Tests', 'f_android_rel_tests', 'android', 'android_trigger_rel',
   notify_on_missing=True)
@@ -89,8 +89,7 @@ def Update(_config_arg, _active_master, c):
         'name': spec['name'],
         'factory': m_annotator.BaseFactory(
               spec.get('recipe', 'chromium'),
-              factory_properties=spec.get('factory_properties'),
-              triggers=spec.get('triggers')),
+              factory_properties=spec.get('factory_properties')),
         'notify_on_missing': True,
         'category': '5android',
       } for spec in specs

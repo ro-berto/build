@@ -24,22 +24,13 @@ def Update(_config, active_master, c):
           'Linux ARM',
           'Cast Linux',
       ]),
-      Triggerable(name='linux_rel_trigger', builderNames=[
-          'Linux Tests',
-      ]),
-      Triggerable(name='linux_dbg_32_trigger', builderNames=[
-          'Linux Tests (dbg)(1)(32)',
-      ]),
-      Triggerable(name='linux_dbg_trigger', builderNames=[
-          'Linux Tests (dbg)(1)',
-      ]),
   ])
   specs = [
-    {'name': 'Linux Builder', 'triggers': ['linux_rel_trigger'], },
+    {'name': 'Linux Builder'},
     {'name': 'Linux Tests'},
-    {'name': 'Linux Builder (dbg)(32)', 'triggers': ['linux_dbg_32_trigger']},
+    {'name': 'Linux Builder (dbg)(32)'},
     {'name': 'Linux Tests (dbg)(1)(32)'},
-    {'name': 'Linux Builder (dbg)', 'triggers': ['linux_dbg_trigger']},
+    {'name': 'Linux Builder (dbg)'},
     {'name': 'Linux Tests (dbg)(1)'},
     {'name': 'Linux GN'},
     {'name': 'Linux GN Clobber'},
@@ -53,8 +44,7 @@ def Update(_config, active_master, c):
         'name': spec['name'],
         'factory': m_annotator.BaseFactory(
             spec.get('recipe', 'chromium'),
-            factory_properties=spec.get('factory_properties'),
-            triggers=spec.get('triggers')),
+            factory_properties=spec.get('factory_properties')),
         'notify_on_missing': True,
         'category': '4linux',
       } for spec in specs
