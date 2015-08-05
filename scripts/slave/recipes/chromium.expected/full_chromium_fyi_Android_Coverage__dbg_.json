@@ -605,7 +605,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"fake/file1.java\": [], \"fake/file2.java\": [], \"fake/file3.java\": []}",
-      "[SLAVE_BUILD]/src/out/Debug/coverage/files_for_coverage.json"
+      "[TMP_BASE]/coverage_tmp_1/files_changes.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Saving changed lines for revision."
@@ -621,7 +621,7 @@
       "--emma-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage/coverage_html",
       "--lines-for-coverage",
-      "[SLAVE_BUILD]/src/out/Debug/coverage/files_for_coverage.json"
+      "[TMP_BASE]/coverage_tmp_1/files_changes.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Generate incremental coverage report.",

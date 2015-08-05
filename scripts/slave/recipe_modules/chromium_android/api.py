@@ -70,6 +70,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(AndroidApi, self).__init__(**kwargs)
     self._devices = None
+    self._file_changes_path = None
 
   def get_config_defaults(self):
     return {
@@ -92,6 +93,18 @@ class AndroidApi(recipe_api.RecipeApi):
   @property
   def coverage_dir(self):
     return self.out_path.join(self.c.BUILD_CONFIG, 'coverage')
+
+  @property
+  def file_changes_path(self):
+    """Get or create the path to the file containing changes for this revision.
+
+    This file will contain a dict mapping file paths to lists of changed lines
+    for each file. This is used to generate incremental coverage reports.
+    """
+    if not self._file_changes_path:
+      self._file_changes_path = (
+          self.m.path.mkdtemp('coverage').join('files_changes.json'))
+    return self._file_changes_path
 
   def configure_from_properties(self, config_name, **kwargs):
     self.set_config(config_name, **kwargs)
@@ -793,14 +806,11 @@ class AndroidApi(recipe_api.RecipeApi):
           **kwargs)
 
   def incremental_coverage_report(self):
-    """Creates and uploads an incremental code coverage report.
+    """Creates an incremental code coverage report.
 
-    Generates a JSON file containing incremental coverage stats. Requires a file
-    named 'files_for_coverage.json' to be saved in the coverage directory.
+    Generates a JSON file containing incremental coverage stats. Requires
+    |file_changes_path| to contain a file with a valid JSON object.
     """
-    files_for_coverage_path = self.coverage_dir.join(
-        'files_for_coverage.json')
-
     self.m.python(
         'Generate incremental coverage report.',
         self.m.path['checkout'].join(
@@ -808,7 +818,7 @@ class AndroidApi(recipe_api.RecipeApi):
         args=['-v',
               '--out', self.m.json.output(),
               '--emma-dir', self.coverage_dir.join('coverage_html'),
-              '--lines-for-coverage', files_for_coverage_path])
+              '--lines-for-coverage', self.file_changes_path])
 
   def get_changed_lines_for_revision(self):
     """Saves a JSON file containing the files/lines requiring coverage analysis.
@@ -848,8 +858,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     self.m.file.write(
         'Saving changed lines for revision.',
-        os.path.join(
-            str(self.coverage_dir), 'files_for_coverage.json'),
+        self.file_changes_path,
         self.m.json.dumps(file_changes))
 
   def test_runner(self, step_name, args=None, **kwargs):
