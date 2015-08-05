@@ -20,38 +20,33 @@ class BisectTesterApi(recipe_api.RecipeApi):
 
   def load_config_from_dict(self, bisect_config):
     """Copies the required configuration keys to a new dict."""
-    if bisect_config['test_type'] == 'perf':
-      return {
-          'test_type': 'perf',
-          'command': bisect_config['command'],
-          'metric': bisect_config['metric'],
-          'repeat_count': int(bisect_config['repeat_count']),
-          'timeout_seconds': float(bisect_config['max_time_minutes']) * 60,
-          'truncate_percent': float(bisect_config['truncate_percent']),
-      }
-    else:  # pragma: no cover
-      # TODO(robertocn): Add test to remove this pragma
-      raise NotImplementedError('Test type %s not supported.' %
-                                bisect_config['test_type'])
+    return {
+        'command': bisect_config['command'],
+        'metric': bisect_config.get('metric'),
+        'repeat_count': int(bisect_config.get('repeat_count', 20)),
+        'max_time_minutes': float(bisect_config.get('max_time_minutes', 25)),
+        'truncate_percent': float(bisect_config.get('truncate_percent', 25)),
+        'return_code': bool(bisect_config.get('return_code', False))
+    }
 
-  def run_test(self, test_config):
-    """Call the appropriate test function depending on the type of bisect."""
-    if test_config['test_type'] == 'perf':
-      return perf_test.run_perf_test(self, test_config)
-    else:  # pragma: no cover
-      # TODO(robertocn): Add test to remove this pragma
-      raise NotImplementedError('Test type %s not supported.' %
-                                test_config['test_type'])
+  def run_test(self, test_config, **kwargs):
+    """Exposes perf tests implementation."""
+    return perf_test.run_perf_test(self, test_config, **kwargs)
 
-  def digest_run_results(self, results, test_config):
+  def digest_run_results(self, results, retcodes, test_config):
     """Calculates relevant statistical functions from the results."""
-    if test_config['test_type'] == 'perf':
+    if test_config.get('return_code', False):  # pragma: no cover
+      # If any of the return codes is non-zero, output 1.
+      overall_return_code = 0 if all(v == 0 for v in retcodes) else 1
+      return {
+          'mean': overall_return_code,
+          'std_err': 0.0,
+          'std_dev': 0.0,
+          'values': results,
+      }
+    else:
       return perf_test.truncate_and_aggregate(self, results,
                                               test_config['truncate_percent'])
-    else:  # pragma: no cover
-      # TODO(robertocn): Add test to remove this pragma
-      raise NotImplementedError('Test type %s not supported.' %
-                                test_config['test_type'])
 
   def upload_results(self, output, results, retcodes):
     """Puts the results as a JSON file in a GS bucket."""

@@ -78,8 +78,6 @@ def _parse_result_values_from_output(metric, text):  # pragma: no cover
       r'\s*\{\s*(?P<MEAN>[-]?\d*(\.\d*)?),\s*(?P<STDDEV>\d+(\.\d*)?)\s*\}')
 
   text_lines = text.split('\n')
-  print text_lines
-  print metric
   values_list = []
   for current_line in text_lines:
     # Parse the output from the performance test for the metric we're

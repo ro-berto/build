@@ -12,6 +12,8 @@ from recipe_engine import recipe_api
 from . import bisector
 from . import perf_revision_state
 
+BISECT_CONFIG_FILE = 'tools/auto_bisect/bisect.cfg'
+
 
 class AutoBisectApi(recipe_api.RecipeApi):
   """A module for bisect specific functions."""
@@ -135,3 +137,40 @@ class AutoBisectApi(recipe_api.RecipeApi):
         ['-w', self.m.path['slave_build']] + args,
         name='Running Bisection',
         xvfb=True, **kwargs)
+
+  def start_test_run_for_bisect(self, api, update_step, master_dict):
+    mastername = api.properties.get('mastername')
+    buildername = api.properties.get('buildername')
+    api.bisect_tester.upload_job_url()
+    tests = api.chromium_tests.tests_for_builder(
+        mastername,
+        buildername,
+        update_step,
+        master_dict,
+        override_bot_type='tester')
+    if not tests:  # pragma: no cover
+      return
+    api.chromium_tests.configure_swarming(  # pragma: no cover
+        'chromium', precommit=False, mastername=mastername)
+    test_runner = api.chromium_tests.create_test_runner(api, tests)
+
+    with api.chromium_tests.wrap_chromium_tests(mastername):
+      test_runner()
+
+  def start_try_job(self, api, update_step=None, master_dict=None, extra_src='',
+                    path_to_config='', **kwargs):
+    if master_dict is None:  # pragma: no cover
+      master_dict = {}
+    affected_files = self.m.tryserver.get_files_affected_by_patch()
+
+    # TODO(prasadv): Remove condition to check buildername once we build
+    # condifence on perf try job and CQ telemetry test jobs
+    # ran on linux_perf_tester.
+    if (api.properties.get('buildername') != 'linux_perf_tester' or
+        BISECT_CONFIG_FILE in affected_files):
+      self.run_bisect_script(extra_src='', path_to_config='', **kwargs)
+    elif api.properties.get('bisect_config'):
+      self.start_test_run_for_bisect(api, update_step, master_dict)
+    else:
+      self.m.perf_try.start_perf_try_job(
+          affected_files, update_step, master_dict)

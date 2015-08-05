@@ -891,8 +891,8 @@ class BisectTest(Test):  # pylint: disable=W0232
         api.bisect_tester.run_test(self.test_config))
 
   def post_run(self, api, _):
-      self.values = api.bisect_tester.digest_run_results(self._run_results,
-                                                         self.test_config)
+      self.values = api.bisect_tester.digest_run_results(
+          self._run_results, self.retcodes, self.test_config)
       api.bisect_tester.upload_results(self.test_output, self.values,
                                        self.retcodes)
 
