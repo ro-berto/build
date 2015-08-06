@@ -147,7 +147,7 @@
     "name": "load config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"command\": \"tools/perf/run_benchmark -v --browser=release sunspider\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"command\": \"./tools/perf/run_benchmark -v --browser=release sunspider\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"max_time_minutes\": \"25\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"repeat_count\": \"1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"target_arch\": \"ia32\", @@@",
@@ -194,7 +194,7 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "tools/perf/run_benchmark",
+      "src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "sunspider",
@@ -311,7 +311,7 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "tools/perf/run_benchmark",
+      "src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "sunspider",

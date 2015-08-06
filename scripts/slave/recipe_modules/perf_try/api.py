@@ -57,6 +57,10 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     """Runs performance try job with and without patch."""
     r = self._resolve_revisions_from_config(perf_cfg)
     test_cfg = self.m.bisect_tester.load_config_from_dict(perf_cfg)
+    
+    # TODO(prasadv): This is tempory hack to prepend 'src' to test command,
+    # until dashboard and trybot scripts are changed.
+    _prepend_src_to_path_in_command(test_cfg)
     # Run with patch.
     results_with_patch = self._build_and_run_tests(
         test_cfg, bot_update_step, master_dict, r[0],
@@ -409,3 +413,13 @@ def _pretty_table(data):
     result += '\n'
   return result
 
+
+def _prepend_src_to_path_in_command(test_cfg):
+  command_to_run = []
+  for v in test_cfg.get('command').split():
+    if v in  ['./tools/perf/run_benchmark',
+              'tools/perf/run_benchmark',
+              'tools\\perf\\run_benchmark']:
+      v = 'src/tools/perf/run_benchmark'
+    command_to_run.append(v)
+  test_cfg.update({'command': ' '.join(command_to_run)})

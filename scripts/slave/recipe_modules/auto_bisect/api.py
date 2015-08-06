@@ -164,10 +164,10 @@ class AutoBisectApi(recipe_api.RecipeApi):
     affected_files = self.m.tryserver.get_files_affected_by_patch()
 
     # TODO(prasadv): Remove condition to check buildername once we build
-    # condifence on perf try job and CQ telemetry test jobs
-    # ran on linux_perf_tester.
-    if (api.properties.get('buildername') != 'linux_perf_tester' or
-        BISECT_CONFIG_FILE in affected_files):
+    # support perf try job and CQ telemetry test jobs ran on
+    # non-linux bots
+    if (BISECT_CONFIG_FILE in affected_files or
+        'linux_perf' not in api.properties.get('buildername')):
       self.run_bisect_script(extra_src='', path_to_config='', **kwargs)
     elif api.properties.get('bisect_config'):
       self.start_test_run_for_bisect(api, update_step, master_dict)

@@ -147,7 +147,7 @@
     "name": "load config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"command\": \"tools/perf/run_benchmark -v --browser=release sunspider\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"command\": \"./tools/perf/run_benchmark -v --browser=release sunspider\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"max_time_minutes\": \"25\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"metric\": \"dummy/dummy\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"repeat_count\": \"1\", @@@",
@@ -195,7 +195,7 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "tools/perf/run_benchmark",
+      "src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "sunspider",
@@ -312,7 +312,7 @@
     "cmd": [
       "xvfb-run",
       "-a",
-      "tools/perf/run_benchmark",
+      "src/tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "sunspider",
@@ -331,7 +331,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@",
       "===== PERF TRY JOB RESULTS =====",
-      "Test Command: tools/perf/run_benchmark -v --browser=release sunspider",
+      "Test Command: src/tools/perf/run_benchmark -v --browser=release sunspider",
       "Test Metric: dummy/dummy",
       "Relative Change: 0.00000%",
       "Standard Error: +- 0.18047 delta",

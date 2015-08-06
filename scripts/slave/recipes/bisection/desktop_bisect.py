@@ -37,7 +37,7 @@ def GenTests(api):
       api.raw_io.stream_output('tools/auto_bisect/bisect.cfg')))
 
   config_json = {
-    "command": "tools/perf/run_benchmark -v --browser=release sunspider",
+    "command": "./tools/perf/run_benchmark -v --browser=release sunspider",
     "max_time_minutes": "25",
     "repeat_count": "1",
     "truncate_percent": "25",
@@ -184,7 +184,7 @@ View online at http://storage.googleapis.com/chromium-telemetry/html-results/res
 
   bisect_config = {
       'test_type': 'perf',
-      'command': 'tools/perf/run_benchmark -v '
+      'command': './tools/perf/run_benchmark -v '
                  '--browser=release page_cycler.intl_ar_fa_he',
       'good_revision': '300138',
       'bad_revision': '300148',
