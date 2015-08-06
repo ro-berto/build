@@ -175,11 +175,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
           lambda transform_name: self.m.chromium.compile(
               compile_targets, name=transform_name('compile')))
     else:
-      try:
-        self.m.chromium.compile(compile_targets, 'compile %s' % name)
-      except self.m.step.StepFailure:  # pragma: no cover
-        self.m.tryserver.set_transient_failure_tryjob_result()
-        raise
+      self.m.chromium.compile(compile_targets, 'compile %s' % name)
 
   def _run_test(self, cfg, **kwargs):
     """Runs test from config and return results."""

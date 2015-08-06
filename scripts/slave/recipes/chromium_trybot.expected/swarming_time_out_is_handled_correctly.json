@@ -2632,10 +2632,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gpu_rasterization on ATI GPU on Windows (with patch) on Windows",
-    "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@failure_type@\"TRANSIENT_FAILURE\"@@@"
-    ]
+    "name": "gpu_rasterization on ATI GPU on Windows (with patch) on Windows"
   },
   {
     "cmd": [

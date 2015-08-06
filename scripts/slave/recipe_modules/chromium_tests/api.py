@@ -284,11 +284,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         command(lambda name: '%s (with patch)' % name)
       except self.m.step.StepFailure:
         self.deapply_patch(update_step)
-        try:
-          command(lambda name: '%s (without patch)' % name)
-        except self.m.step.StepFailure:
-          self.m.tryserver.set_transient_failure_tryjob_result()
-          raise
+        command(lambda name: '%s (without patch)' % name)
         raise
     else:
       command(lambda name: name)
@@ -490,11 +486,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot_update_json['properties']['got_revision'])
     self.m.bot_update.ensure_checkout(
         force=True, patch=False, update_presentation=False)
-    try:
-      self.m.chromium.runhooks(name='runhooks (without patch)')
-    except self.m.step.StepFailure:
-      self.m.tryserver.set_transient_failure_tryjob_result()
-      raise
+    self.m.chromium.runhooks(name='runhooks (without patch)')
 
   def run_tests_and_deapply_as_needed(self, mastername, api, tests,
                                       bot_update_step):
@@ -509,12 +501,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             t for t in failing_tests if t.uses_swarming]
         if has_failing_swarming_tests:
           self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
-        try:
-          self.m.chromium.compile(
-              compile_targets, name='compile (without patch)')
-        except self.m.step.StepFailure:
-          self.m.tryserver.set_transient_failure_tryjob_result()
-          raise
+        self.m.chromium.compile(compile_targets, name='compile (without patch)')
         if has_failing_swarming_tests:
           self.m.isolate.isolate_tests(self.m.chromium.output_dir,
                                        verbose=True)

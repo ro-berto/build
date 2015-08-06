@@ -2105,8 +2105,7 @@
     "name": "base_unittests (without patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"TRANSIENT_FAILURE\"@@@"
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {

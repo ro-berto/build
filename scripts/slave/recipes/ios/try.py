@@ -24,11 +24,7 @@ def RunSteps(api):
       api.gclient.c.revisions['src'] = str(
           bot_update_json['properties']['got_revision'])
       api.ios.checkout(patch=False, update_presentation=False)
-      try:
-        api.ios.build(suffix='without patch')
-      except api.step.StepFailure:
-        api.tryserver.set_transient_failure_tryjob_result()
-        raise
+      api.ios.build(suffix='without patch')
       raise
     api.ios.test()
 

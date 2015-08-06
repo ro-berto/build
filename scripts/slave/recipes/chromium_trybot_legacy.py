@@ -403,17 +403,8 @@ def _RunStepsInternal(api):
       api.chromium.compile(compile_targets, name='compile (with patch)')
     except api.step.StepFailure:
       api.chromium_tests.deapply_patch(bot_update_step)
-      try:
-        api.chromium.compile(
-            compile_targets, name='compile (without patch)')
-
-        # TODO(phajdan.jr): Set failed tryjob result after recognizing infra
-        # compile failures. We've seen cases of compile with patch failing
-        # with build steps getting killed, compile without patch succeeding,
-        # and compile with patch succeeding on another attempt with same patch.
-      except api.step.StepFailure:
-        api.tryserver.set_transient_failure_tryjob_result()
-        raise
+      api.chromium.compile(
+          compile_targets, name='compile (without patch)')
       raise
 
     if bot_config.get('use_isolate'):
@@ -439,12 +430,8 @@ def _RunStepsInternal(api):
     compile_targets = sorted(list(set(api.itertools.chain(
         *[t.compile_targets(api) for t in failing_tests]))))
     if compile_targets:
-      try:
-        api.chromium.compile(
-            compile_targets, name='compile (without patch)')
-      except api.step.StepFailure:
-        api.tryserver.set_transient_failure_tryjob_result()
-        raise
+      api.chromium.compile(
+          compile_targets, name='compile (without patch)')
 
   return api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
 

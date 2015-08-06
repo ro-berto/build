@@ -270,7 +270,6 @@
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"TRANSIENT_FAILURE\"@@@",
       "@@@SET_BUILD_PROPERTY@failure_hash@\"5efacf6fa93d551b32a0023e205679db72d8ac1f\"@@@"
     ]
   },
