@@ -49,6 +49,10 @@ def RunSteps(api):
 
   if v8.should_test:
     test_results = v8.runtests()
+
+    # Experimental step testing minimal reruns.
+    v8.maybe_rerun(test_results)
+
     if test_results.is_negative:
       # Let the overall build fail for failures and flakes.
       raise api.step.StepFailure('Failures or flakes in build.')

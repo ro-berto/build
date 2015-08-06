@@ -23,6 +23,9 @@ MAX_LABEL_SIZE = 23
 # Make sure that a step is not flooded with log lines.
 MAX_FAILURE_LOGS = 10
 
+# Maximum test duration in seconds to trigger experimental rerun step.
+RERUN_MAX_DURATION_SECONDS = 5
+
 MIPS_TOOLCHAIN = 'mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2'
 MIPS_DIR = 'mips-2013.11'
 
@@ -95,88 +98,96 @@ TEST_CONFIGS = freeze({
 })
 
 
-# TODO(machenbach): Clean up api indirection. "Run" needs the v8 api while
-# "gclient_apply_config" needs the general injection module.
-class V8Test(object):
-  def __init__(self, name):
+class BaseTest(object):
+  def __init__(self, name, api, v8):
     self.name = name
+    self.api = api
+    self.v8 = v8
 
-  def run(self, api, **kwargs):
-    return api.runtest(
-        TEST_CONFIGS[self.name],
+  def run(self, **kwargs):  # pragma: no cover
+    raise NotImplementedError()
+
+  def rerun(self, failure_dict, **kwargs):  # pragma: no cover
+    raise NotImplementedError()
+
+  def gclient_apply_config(self):
+    pass
+
+
+class V8Test(BaseTest):
+  def run(self, test_config=None, **kwargs):
+    return self.v8.runtest(
+        test_config or TEST_CONFIGS[self.name],
         failure_factory=Failure.factory_func(self.name),
         **kwargs
     )
 
-  def gclient_apply_config(self, api):
+  def rerun(self, failure_dict, **kwargs):
+    if not failure_dict.get('variant') or not failure_dict.get('random_seed'):
+      # Rerunning is disabled if variant or random seed is not known.
+      # E.g. on branch builders, the v8 test results json doesn't include the
+      # variant (yet).
+      self.api.python.inline('Retry disabled', '# Empty program')
+      return TestResults.empty()
+
+    # Filter variant manipulation and data downloading from test arguments.
+    # We'll specify exactly the variant which failed. Downloading is not
+    # necessary as this is a rerun and all test data is already downloaded
+    # in the original run.
+    orig_args = filter(
+        lambda x: x not in ['--no-variants', '--download-data'],
+        TEST_CONFIGS[self.name].get('test_args', []),
+    )
+    new_args = [
+      '--variant', failure_dict['variant'],
+      '--random-seed', failure_dict['random_seed'],
+    ]
+    rerun_config = {
+      'name': 'Retry',
+      'tests': [failure_dict['name']],
+      'test_args' : orig_args + new_args,
+    }
+    return self.run(test_config=rerun_config, **kwargs)
+
+  def gclient_apply_config(self):
     for c in TEST_CONFIGS[self.name].get('gclient_apply_config', []):
-      api.gclient.apply_config(c)
+      self.api.gclient.apply_config(c)
 
 
-class V8Presubmit(object):
-  @staticmethod
-  def run(api, **kwargs):
-    api.presubmit()
+class V8Presubmit(BaseTest):
+  def run(self, **kwargs):
+    self.v8.presubmit()
     return TestResults.empty()
 
-  @staticmethod
-  def gclient_apply_config(_):
-    pass
 
-
-class V8CheckInitializers(object):
-  @staticmethod
-  def run(api, **kwargs):
-    api.check_initializers()
+class V8CheckInitializers(BaseTest):
+  def run(self, **kwargs):
+    self.v8.check_initializers()
     return TestResults.empty()
 
-  @staticmethod
-  def gclient_apply_config(_):
-    pass
 
-
-class V8Fuzzer(object):
-  @staticmethod
-  def run(api, **kwargs):
-    api.fuzz()
+class V8Fuzzer(BaseTest):
+  def run(self, **kwargs):
+    self.v8.fuzz()
     return TestResults.empty()
 
-  @staticmethod
-  def gclient_apply_config(_):
-    pass
 
-
-class V8DeoptFuzzer(object):
-  @staticmethod
-  def run(api, **kwargs):
-    api.deopt_fuzz()
+class V8DeoptFuzzer(BaseTest):
+  def run(self, **kwargs):
+    self.v8.deopt_fuzz()
     return TestResults.empty()
 
-  @staticmethod
-  def gclient_apply_config(_):
-    pass
 
-
-class V8GCMole(object):
-  @staticmethod
-  def run(api, **kwargs):
-    api.gc_mole('ia32', 'x64', 'arm', 'arm64')
+class V8GCMole(BaseTest):
+  def run(self, **kwargs):
+    self.v8.gc_mole('ia32', 'x64', 'arm', 'arm64')
     return TestResults.empty()
 
-  @staticmethod
-  def gclient_apply_config(_):
-    pass
 
-
-class V8SimpleLeakCheck(object):
-  @staticmethod
-  def run(api, **kwargs):
-    api.simple_leak_check()
+class V8SimpleLeakCheck(BaseTest):
+  def run(self, **kwargs):
+    self.v8.simple_leak_check()
     return TestResults.empty()
-
-  @staticmethod
-  def gclient_apply_config(_):
-    pass
 
 
 V8_NON_STANDARD_TESTS = freeze({
@@ -281,7 +292,7 @@ class V8Api(recipe_api.RecipeApi):
       self.apply_config(c)
     # Test-specific configurations.
     for t in self.bot_config.get('tests', []):
-      self.create_test(t).gclient_apply_config(self.m)
+      self.create_test(t).gclient_apply_config()
     # Initialize perf_dashboard api if any perf test should run.
     self.m.perf_dashboard.set_default_config()
 
@@ -445,18 +456,37 @@ class V8Api(recipe_api.RecipeApi):
   # parameter passing later.
   def create_test(self, test):
     """Wrapper that allows to shortcut common tests with their names.
-    Returns a runnable test instance.
+
+    Returns: A runnable test instance.
     """
-    if test in V8_NON_STANDARD_TESTS:
-      return V8_NON_STANDARD_TESTS[test]()
-    else:
-      return V8Test(test)
+    return V8_NON_STANDARD_TESTS.get(test, V8Test)(test, self.m, self)
 
   def runtests(self):
     test_results = TestResults.empty()
     for t in self.bot_config.get('tests', []):
-      test_results += self.create_test(t).run(self)
+      test_results += self.create_test(t).run()
     return test_results
+
+  def maybe_rerun(self, test_results):
+    """Experimentally rerun minimal failure configurations."""
+
+    # Prefer rerunning failures. Rerun only the fastest test.
+    try:
+      failure = min(
+          test_results.failures or test_results.flakes,
+          key=lambda r: r.duration,
+      )
+    except ValueError:
+      return
+
+    # Don't differentiate between flaky and non-flaky tests. Only rerun
+    # failures faster than a threshold.
+    if failure.duration < RERUN_MAX_DURATION_SECONDS:
+      self.create_test(failure.test_config).rerun(
+          failure_dict=failure.failure_dict,
+          suffix=' - experimental',
+          add_flaky_step_override=False,
+      )
 
 
   def presubmit(self):
@@ -785,7 +815,8 @@ class V8Api(recipe_api.RecipeApi):
 
     return TestResults(failures, flakes, [])
 
-  def runtest(self, test, failure_factory=None, **kwargs):
+  def runtest(self, test, failure_factory=None, add_flaky_step_override=None,
+              suffix='', **kwargs):
     # Get the flaky-step configuration default per test.
     add_flaky_step = test.get('add_flaky_step', False)
 
@@ -793,17 +824,19 @@ class V8Api(recipe_api.RecipeApi):
     # types of builders (e.g. branch, try) don't have any flaky steps.
     if self.c.testing.add_flaky_step is not None:
       add_flaky_step = self.c.testing.add_flaky_step
+    if add_flaky_step_override is not None:
+      add_flaky_step = add_flaky_step_override
     if add_flaky_step:
       return (
           self._runtest(
-              test['name'],
+              test['name'] + suffix,
               test,
               flaky_tests='skip',
               failure_factory=failure_factory,
               **kwargs
           ) +
           self._runtest(
-              test['name'] + ' - flaky',
+              test['name'] + ' - flaky' + suffix,
               test,
               flaky_tests='run',
               failure_factory=failure_factory,
@@ -812,7 +845,7 @@ class V8Api(recipe_api.RecipeApi):
       )
     else:
       return self._runtest(
-          test['name'],
+          test['name'] + suffix,
           test,
           failure_factory=failure_factory,
           **kwargs
