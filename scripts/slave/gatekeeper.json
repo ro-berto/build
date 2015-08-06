@@ -754,11 +754,12 @@
       "sheriff_classes": ["sheriff_android"]
     },
     "infra_tree_closer": {
+      "forgiving_optional": [
+        "update_scripts",
+        "steps"
+      ],
       "closing_optional": [
-        "gclient runhooks",
-        "infra python tests",
-        "infra go tests",
-        "build cipd packages"
+        "*"
       ],
       "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)",
       "tree_notify": [
