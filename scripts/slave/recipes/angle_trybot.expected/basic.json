@@ -1,0 +1,10 @@
+[
+  {
+    "cmd": [
+      "echo",
+      "Tryjob triggered: test.url"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "print_gerrit_url"
+  }
+]
