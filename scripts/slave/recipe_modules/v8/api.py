@@ -102,7 +102,11 @@ class V8Test(object):
     self.name = name
 
   def run(self, api, **kwargs):
-    return api.runtest(TEST_CONFIGS[self.name], **kwargs)
+    return api.runtest(
+        TEST_CONFIGS[self.name],
+        failure_factory=Failure.factory_func(self.name),
+        **kwargs
+    )
 
   def gclient_apply_config(self, api):
     for c in TEST_CONFIGS[self.name].get('gclient_apply_config', []):
@@ -112,7 +116,8 @@ class V8Test(object):
 class V8Presubmit(object):
   @staticmethod
   def run(api, **kwargs):
-    return api.presubmit()
+    api.presubmit()
+    return TestResults.empty()
 
   @staticmethod
   def gclient_apply_config(_):
@@ -122,7 +127,8 @@ class V8Presubmit(object):
 class V8CheckInitializers(object):
   @staticmethod
   def run(api, **kwargs):
-    return api.check_initializers()
+    api.check_initializers()
+    return TestResults.empty()
 
   @staticmethod
   def gclient_apply_config(_):
@@ -132,7 +138,8 @@ class V8CheckInitializers(object):
 class V8Fuzzer(object):
   @staticmethod
   def run(api, **kwargs):
-    return api.fuzz()
+    api.fuzz()
+    return TestResults.empty()
 
   @staticmethod
   def gclient_apply_config(_):
@@ -142,7 +149,8 @@ class V8Fuzzer(object):
 class V8DeoptFuzzer(object):
   @staticmethod
   def run(api, **kwargs):
-    return api.deopt_fuzz()
+    api.deopt_fuzz()
+    return TestResults.empty()
 
   @staticmethod
   def gclient_apply_config(_):
@@ -152,7 +160,8 @@ class V8DeoptFuzzer(object):
 class V8GCMole(object):
   @staticmethod
   def run(api, **kwargs):
-    return api.gc_mole('ia32', 'x64', 'arm', 'arm64')
+    api.gc_mole('ia32', 'x64', 'arm', 'arm64')
+    return TestResults.empty()
 
   @staticmethod
   def gclient_apply_config(_):
@@ -162,7 +171,8 @@ class V8GCMole(object):
 class V8SimpleLeakCheck(object):
   @staticmethod
   def run(api, **kwargs):
-    return api.simple_leak_check()
+    api.simple_leak_check()
+    return TestResults.empty()
 
   @staticmethod
   def gclient_apply_config(_):
@@ -177,6 +187,41 @@ V8_NON_STANDARD_TESTS = freeze({
   'simpleleak': V8SimpleLeakCheck,
   'v8initializers': V8CheckInitializers,
 })
+
+
+class Failure(object):
+  def __init__(self, test_config, failure_dict, duration):
+    self.test_config = test_config
+    self.failure_dict = failure_dict
+    self.duration = duration
+
+  @staticmethod
+  def factory_func(test_config):
+    def create(failure_dict, duration):
+      return Failure(test_config, failure_dict, duration)
+    return create
+
+
+class TestResults(object):
+  def __init__(self, failures, flakes, infra_failures):
+    self.failures = failures
+    self.flakes = flakes
+    self.infra_failures = infra_failures
+
+  @staticmethod
+  def empty():
+    return TestResults([], [], [])
+
+  @property
+  def is_negative(self):
+    return bool(self.failures or self.flakes or self.infra_failures)
+
+  def __add__(self, other):
+    return TestResults(
+        self.failures + other.failures,
+        self.flakes + other.flakes,
+        self.infra_failures + other.infra_failures,
+    )
 
 
 class V8Api(recipe_api.RecipeApi):
@@ -407,11 +452,12 @@ class V8Api(recipe_api.RecipeApi):
     else:
       return V8Test(test)
 
-  #TODO(martiniss) convert loop
   def runtests(self):
-    with self.m.step.defer_results():
-      for t in self.bot_config.get('tests', []):
-        self.create_test(t).run(self)
+    test_results = TestResults.empty()
+    for t in self.bot_config.get('tests', []):
+      test_results += self.create_test(t).run(self)
+    return test_results
+
 
   def presubmit(self):
     self.m.python(
@@ -557,12 +603,12 @@ class V8Api(recipe_api.RecipeApi):
       lines.extend(self._duration_results_text(test))
     presentation.logs['durations'] = lines
 
-  def _get_failure_logs(self, output):
+  def _get_failure_logs(self, output, failure_factory):
     def all_same(items):
       return all(x == items[0] for x in items)
 
     if not output['results']:
-      return {}, 0, {}, 0
+      return {}, [], {}, []
 
     unique_results = {}
     for result in output['results']:
@@ -575,10 +621,10 @@ class V8Api(recipe_api.RecipeApi):
       # different configurations).
       unique_results.setdefault(label, []).append(result)
 
-    failure_count = 0
-    flake_count = 0
     failure_log = {}
     flake_log = {}
+    failures = []
+    flakes = []
     for label in sorted(unique_results.keys()[:MAX_FAILURE_LOGS]):
       failure_lines = []
       flake_lines = []
@@ -593,13 +639,17 @@ class V8Api(recipe_api.RecipeApi):
         # Determine flakiness. A test is flaky if not all results from a unique
         # command are the same (e.g. all 'FAIL').
         if all_same(map(lambda x: x['result'], results_per_command[command])):
-          # This is a failure.
-          failure_count += 1
+          # This is a failure. Only add the data of the first run to the final
+          # test results, as rerun data is not important for bisection.
+          failure = results_per_command[command][0]
+          failures.append(failure_factory(failure, failure['duration']))
           failure_lines += self._command_results_text(
               results_per_command[command], False)
         else:
-          # This is a flake.
-          flake_count += 1
+          # This is a flake. Only add the data of the first run to the final
+          # test results, as rerun data is not important for bisection.
+          flake = results_per_command[command][0]
+          flakes.append(failure_factory(flake, flake['duration']))
           flake_lines += self._command_results_text(
               results_per_command[command], True)
 
@@ -608,17 +658,18 @@ class V8Api(recipe_api.RecipeApi):
       if flake_lines:
         flake_log[label] = flake_lines
 
-    return failure_log, failure_count, flake_log, flake_count
+    return failure_log, failures, flake_log, flakes
 
-  def _update_failure_presentation(self, log, count, presentation):
+  def _update_failure_presentation(self, log, failures, presentation):
     for label in sorted(log):
       presentation.logs[label] = log[label]
 
-    if count:
+    if failures:
       # Number of failures.
-      presentation.step_text += ('failures: %d<br/>' % count)
+      presentation.step_text += ('failures: %d<br/>' % len(failures))
 
-  def _runtest(self, name, test, flaky_tests=None, **kwargs):
+  def _runtest(self, name, test, flaky_tests=None, failure_factory=None,
+               **kwargs):
     env = {}
     full_args = [
       '--progress=verbose',
@@ -714,29 +765,27 @@ class V8Api(recipe_api.RecipeApi):
     assert len(step_result.json.output) == 1
     self._update_durations(
         step_result.json.output[0], step_result.presentation)
-    failure_log, failure_count, flake_log, flake_count = (
-        self._get_failure_logs(step_result.json.output[0]))
+    failure_log, failures, flake_log, flakes = (
+        self._get_failure_logs(step_result.json.output[0], failure_factory))
     self._update_failure_presentation(
-        failure_log, failure_count, step_result.presentation)
+        failure_log, failures, step_result.presentation)
 
-    if failure_log and failure_count:
+    if failure_log and failures:
       # Mark the test step as failure only if there were real failures (i.e.
       # non-flakes) present.
       step_result.presentation.status = self.m.step.FAILURE
 
-    if flake_log and flake_count:
+    if flake_log and flakes:
       # Emit a separate step to show flakes from the previous step
       # to not close the tree.
       step_result = self.m.python.inline(name + ' (flakes)', '# Empty program')
       step_result.presentation.status = self.m.step.WARNING
       self._update_failure_presentation(
-            flake_log, flake_count, step_result.presentation)
+            flake_log, flakes, step_result.presentation)
 
-    if failure_count or flake_count:
-      # Let the overall build fail for failures and flakes.
-      raise self.m.step.StepFailure('Falures or flakes in step %s.' % name)
+    return TestResults(failures, flakes, [])
 
-  def runtest(self, test, **kwargs):
+  def runtest(self, test, failure_factory=None, **kwargs):
     # Get the flaky-step configuration default per test.
     add_flaky_step = test.get('add_flaky_step', False)
 
@@ -745,13 +794,29 @@ class V8Api(recipe_api.RecipeApi):
     if self.c.testing.add_flaky_step is not None:
       add_flaky_step = self.c.testing.add_flaky_step
     if add_flaky_step:
-      try:
-        self._runtest(test['name'], test, flaky_tests='skip', **kwargs)
-      finally:
-        self._runtest(test['name'] + ' - flaky', test, flaky_tests='run',
-                      **kwargs)
+      return (
+          self._runtest(
+              test['name'],
+              test,
+              flaky_tests='skip',
+              failure_factory=failure_factory,
+              **kwargs
+          ) +
+          self._runtest(
+              test['name'] + ' - flaky',
+              test,
+              flaky_tests='run',
+              failure_factory=failure_factory,
+              **kwargs
+          )
+      )
     else:
-      self._runtest(test['name'], test, **kwargs)
+      return self._runtest(
+          test['name'],
+          test,
+          failure_factory=failure_factory,
+          **kwargs
+      )
 
   @staticmethod
   def mean(values):

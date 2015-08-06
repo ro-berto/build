@@ -19,7 +19,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@54321",
+      "v8@HEAD",
       "--no_shallow",
       "--output_manifest"
     ],
@@ -123,14 +123,8 @@
     "name": "Simple Leak Check",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@stderr@tons of leaks@@@",
-      "@@@STEP_LOG_END@stderr@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_LINE@stderr@no leaks are possible@@@",
+      "@@@STEP_LOG_END@stderr@@@"
     ]
-  },
-  {
-    "name": "$final_result",
-    "reason": "Failed leak check",
-    "status_code": 1
   }
 ]

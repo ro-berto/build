@@ -12,6 +12,7 @@ DEPS = [
   'path',
   'platform',
   'properties',
+  'raw_io',
   'step',
   'tryserver',
   'v8',
@@ -47,7 +48,10 @@ def RunSteps(api):
     v8.download_build()
 
   if v8.should_test:
-    v8.runtests()
+    test_results = v8.runtests()
+    if test_results.is_negative:
+      # Let the overall build fail for failures and flakes.
+      raise api.step.StepFailure('Failures or flakes in build.')
 
   v8.maybe_trigger()
 
@@ -183,4 +187,21 @@ def GenTests(api):
     api.platform(bot_config['testing']['platform'],
                  v8_config_kwargs.get('TARGET_BITS', 64)) +
     api.override_step_data('Check', api.v8.one_failure())
+  )
+
+  buildername = 'V8 Linux - memcheck'
+  yield (
+    api.test('full_%s_%s_no_errors' % (
+        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
+    api.properties.generic(mastername=mastername,
+                           buildername=buildername,
+                           branch='master',
+                           parent_buildername=bot_config.get(
+                               'parent_buildername')) +
+    api.platform(bot_config['testing']['platform'],
+                 v8_config_kwargs.get('TARGET_BITS', 64)) +
+    api.override_step_data(
+        'Simple Leak Check',
+        api.raw_io.stream_output('no leaks are possible', stream='stderr'),
+    )
   )

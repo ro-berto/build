@@ -1537,7 +1537,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "2 out of 2 aggregated steps failed. Failures: Falures or flakes in step Unittests., Falures or flakes in step Check - flaky.",
+    "reason": "Failures or flakes in build.",
     "status_code": 1
   }
 ]

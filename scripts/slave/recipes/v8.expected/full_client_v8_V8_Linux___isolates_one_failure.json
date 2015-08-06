@@ -251,7 +251,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "1 out of 2 aggregated steps failed. Failures: Falures or flakes in step Check.",
+    "reason": "Failures or flakes in build.",
     "status_code": 1
   }
 ]
