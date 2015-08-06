@@ -388,6 +388,13 @@
         }
       }
     ],
+    "https://build.chromium.org/p/client.catapult": [
+      {
+        "tree_notify": [
+          "catapult-sheriff@chromium.org"
+        ]
+      }
+    ],
     "https://build.chromium.org/p/client.libvpx": [
       {
         "tree_notify": [

@@ -95,6 +95,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.lkgr\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.memory.fyi\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.boringssl\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.catapult\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.crashpad\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.libvpx\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
@@ -186,6 +187,7 @@
       "https://build.chromium.org/p/chromium.lkgr",
       "https://build.chromium.org/p/chromium.memory.fyi",
       "https://build.chromium.org/p/client.boringssl",
+      "https://build.chromium.org/p/client.catapult",
       "https://build.chromium.org/p/client.crashpad",
       "https://build.chromium.org/p/client.libvpx"
     ],
