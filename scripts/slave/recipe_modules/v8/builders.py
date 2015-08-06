@@ -629,6 +629,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        # FIXME(machenbach): Add back simdjs_small once download is fixed.
         'tests': ['unittests', 'v8testing', 'webkit', 'mozilla'],
         'testing': {'platform': 'win'},
       },
@@ -639,6 +640,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        # FIXME(machenbach): Add back simdjs_small once download is fixed.
         'tests': ['unittests', 'v8testing', 'webkit', 'mozilla'],
         'testing': {'platform': 'win'},
       },
@@ -1716,7 +1718,8 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing', 'webkit', 'simdjs_small'],
+        # FIXME(machenbach): Add back simdjs_small once download is fixed.
+        'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'win'},
       },
       'v8_win64_ninja_rel': {
@@ -1741,7 +1744,8 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['unittests', 'v8testing', 'webkit', 'simdjs_small'],
+        # FIXME(machenbach): Add back simdjs_small once download is fixed.
+        'tests': ['unittests', 'v8testing', 'webkit'],
         'testing': {'platform': 'win'},
       },
       'v8_mac_rel': {
