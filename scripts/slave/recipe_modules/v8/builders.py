@@ -1545,6 +1545,7 @@ BUILDERS = {
           'v8testing',
           'optimize_for_size',
           'webkit',
+          'test262_es6',
           'simdjs',
         ],
         'testing': {'platform': 'linux'},
