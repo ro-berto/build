@@ -332,9 +332,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.chromium.run_mb(mastername, buildername, swarming_targets=[
             t.name for t in tests_including_triggered if t.uses_swarming])
 
-      self.transient_check(update_step, lambda transform_name:
-        self.m.chromium.compile(compile_targets,
-                                name=transform_name('compile')))
+      try:
+        self.transient_check(update_step, lambda transform_name:
+          self.m.chromium.compile(compile_targets,
+                                  name=transform_name('compile')))
+      except self.m.step.StepFailure:
+        self.m.tryserver.set_compile_failure_tryjob_result()
+        raise
 
       if isolated_targets:
         self.m.isolate.remove_build_metadata()

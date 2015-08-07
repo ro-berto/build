@@ -170,6 +170,14 @@ class TryserverApi(recipe_api.RecipeApi):
     step_result.presentation.logs['files'] = paths
     return paths
 
+  def set_compile_failure_tryjob_result(self):
+    """Mark the tryjob result as a compile failure."""
+    if not self.is_tryserver:  # pragma: no cover
+      return
+
+    step_result = self.m.step.active_result
+    step_result.presentation.properties['failure_type'] = 'COMPILE_FAILURE'
+
   def set_test_failure_tryjob_result(self):
     """Mark the tryjob result as a test failure.
 

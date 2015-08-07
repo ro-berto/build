@@ -394,6 +394,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "compile (without patch)",
     "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@failure_type@\"COMPILE_FAILURE\"@@@",
       "@@@SET_BUILD_PROPERTY@failure_hash@\"4d6a903860330c798a14ca4fb8a3b9ea8c90b814\"@@@"
     ]
   },
