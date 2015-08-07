@@ -46,6 +46,8 @@ POLLING_BRANCH = re.compile('refs/heads/(?!infra/config).+')
 SLAVE_WORKDIR = 'workdir'
 TRY_SCHEDULER_NAME = 'try_job_rietveld_skia'
 TRY_SCHEDULER_PROJECT = 'skia'
+SERVICE_ACCOUNT_FILE = 'service-account-skia.json'
+SERVICE_ACCOUNT_INTERNAL_FILE = 'service-account-skia-internal.json'
 
 SCHEDULERS = [
   PERCOMMIT_SCHEDULER_NAME,

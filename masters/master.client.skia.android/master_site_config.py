@@ -7,6 +7,7 @@
 
 from common.skia import global_constants
 from config_bootstrap import Master
+from master.skia import skia_master_utils
 
 
 class SkiaAndroid(Master.Master3):
@@ -17,5 +18,5 @@ class SkiaAndroid(Master.Master3):
   repo_url = global_constants.SKIA_REPO
   buildbot_url = 'http://build.chromium.org/p/client.skia.android/'
   code_review_site = 'https://codereview.chromium.org'
-  service_account_file = global_constants.SERVICE_ACCOUNT_FILE
+  service_account_file = skia_master_utils.SERVICE_ACCOUNT_FILE
   buildbucket_bucket = 'master.client.skia.android'
