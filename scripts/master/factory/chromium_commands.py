@@ -944,7 +944,7 @@ class ChromiumCommands(commands.FactoryCommands):
                           command=cmd)
 
   def AddAnnotationStep(self, name, cmd, factory_properties=None, env=None,
-                        timeout=6000, maxTime=8*60*60):
+                        timeout=6000, maxTime=8*60*60, active_master=None):
     """Add an @@@BUILD_STEP step@@@ annotation script build command.
 
     This function allows the caller to specify the name of the
@@ -971,7 +971,8 @@ class ChromiumCommands(commands.FactoryCommands):
                           command=cmd,
                           env=env,
                           maxTime=maxTime,
-                          factory_properties=factory_properties)
+                          factory_properties=factory_properties,
+                          active_master=active_master)
 
   def AddMiniInstallerTestStep(self, factory_properties):
     cmd = [self._python, self._mini_installer_tests_tool,
