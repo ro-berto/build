@@ -71,7 +71,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library emma_coverage=1 emma_filter='org.chromium.content.browser.*' fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
@@ -647,7 +647,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/third_party/android_platform/development/scripts/stack",
       "--arch",
-      "x86",
+      "arm",
       "--more-info",
       "[SLAVE_BUILD]/src/out/Debug/full_log"
     ],
