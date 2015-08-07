@@ -8,8 +8,8 @@ from config_bootstrap import Master
 
 class TryServerANGLE(Master.Master4a):
   project_name = 'ANGLE Try Server'
-  master_port = 8090
-  slave_port = 8190
-  master_port_alt = 8290
+  master_port = 21403
+  slave_port = 31403
+  master_port_alt = 41403
   buildbot_url = 'http://build.chromium.org/p/tryserver.chromium.angle/'
   gerrit_host = 'https://chromium-review.googlesource.com'
