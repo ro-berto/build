@@ -34,6 +34,7 @@ DEFAULT_AUTO_REBOOT = False
 DEFAULT_DO_TRYBOT = True
 DEFAULT_RECIPE = 'skia/skia'
 DEFAULT_TRYBOT_ONLY = False
+BUILDBUCKET_SCHEDULER_NAME = 'buildbucket'
 PERCOMMIT_SCHEDULER_NAME = 'skia_percommit'
 MASTER_ONLY_SCHEDULER_NAME = 'skia_master_only'
 PERIODIC_15MINS_SCHEDULER_NAME = 'skia_periodic_15mins'
@@ -54,6 +55,7 @@ SCHEDULERS = [
   NIGHTLY_SCHEDULER_NAME,
   WEEKLY_SCHEDULER_NAME,
   INFRA_PERCOMMIT_SCHEDULER_NAME,
+  BUILDBUCKET_SCHEDULER_NAME,
 ]
 
 KEYWORD_NO_MERGE_BUILDS = 'NO_MERGE_BUILDS'
@@ -165,7 +167,11 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       builders_by_scheduler[TRY_SCHEDULER_NAME].append(builder_name)
     else:
       scheduler = builder.get('scheduler', PERCOMMIT_SCHEDULER_NAME)
-      builders_by_scheduler[scheduler].append(builder_name)
+      # Setting the scheduler to BUILDBUCKET_SCHEDULER_NAME indicates that
+      # BuildBucket is the only way to schedule builds for this bot; don't
+      # add a scheduler in those cases.
+      if scheduler != BUILDBUCKET_SCHEDULER_NAME:
+        builders_by_scheduler[scheduler].append(builder_name)
 
   # Create builders and trybots.
   for builder in builders:
