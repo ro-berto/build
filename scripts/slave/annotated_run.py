@@ -120,13 +120,15 @@ def get_factory_properties_from_disk(mastername, buildername):
   # Now extract just the factory properties for the requested builder
   # from the master config.
   props = {}
+  found = False
   for builder_dict in config['builders']:
     if builder_dict['name'] == buildername:
+      found = True
       factory_properties = builder_dict['factory']['properties']
       for name, (value, _) in factory_properties.items():
         props[name] = value
 
-  if not props:
+  if not found:
     raise LookupError('builder "%s" not found on in master "%s"' %
                       (buildername, mastername))
 
