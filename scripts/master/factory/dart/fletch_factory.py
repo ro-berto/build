@@ -57,7 +57,7 @@ class FletchFactory(gclient_factory.GClientFactory):
       dart_cmd_obj.AddTrigger(trigger.Trigger(
           schedulerNames=trigger_schedulers,
           waitForFinish=False,
-          updateSourceStamp=True))
+          updateSourceStamp=False))
 
     return factory
 
