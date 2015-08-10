@@ -103,7 +103,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/run_py_tests",
+      "[SLAVE_BUILD]/catapult/tracing/bin/run_py_tests",
       "--no-install-hooks"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -113,7 +113,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/build/run_dev_server_tests",
+      "[SLAVE_BUILD]/catapult/tracing/bin/run_dev_server_tests",
       "--no-install-hooks"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -132,7 +132,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/run_d8_tests"
+      "[SLAVE_BUILD]/catapult/tracing/bin/run_vinn_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Tracing D8 Tests"
@@ -141,7 +141,16 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/perf_insights/run_py_tests",
+      "[SLAVE_BUILD]/catapult/perf_insights/bin/run_vinn_tests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Perf Insights Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/perf_insights/bin/run_py_tests",
       "--no-install-hooks"
     ],
     "cwd": "[SLAVE_BUILD]",
