@@ -167,7 +167,7 @@
       "--grep",
       "Cr-Commit-Position: refs/heads/master@{#306476}",
       "-1",
-      "refs/heads/master"
+      "origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "resolving commit_pos 306476",
@@ -181,7 +181,7 @@
       "--grep",
       "Cr-Commit-Position: refs/heads/master@{#306475}",
       "-1",
-      "refs/heads/master"
+      "origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "resolving commit_pos 306475",

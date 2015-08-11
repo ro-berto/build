@@ -46,7 +46,7 @@ class CommitPositionApi(recipe_api.RecipeApi):
                                     % (commit_pos,))
     step_result = self.m.git('log', '--format=hash:%H', '--grep',
                              self.COMMIT_POS_STR % int_pos, '-1',
-                             'refs/heads/master',
+                             'origin/master',
                              stdout=self.m.raw_io.output(),
                              name='resolving commit_pos ' + str(commit_pos))
     try:

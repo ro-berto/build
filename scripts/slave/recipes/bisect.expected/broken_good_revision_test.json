@@ -128,7 +128,7 @@
       "--grep",
       "Cr-Commit-Position: refs/heads/master@{#306478}",
       "-1",
-      "refs/heads/master"
+      "origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "Resolving reference range.resolving commit_pos 306478",
@@ -145,7 +145,7 @@
       "--grep",
       "Cr-Commit-Position: refs/heads/master@{#306475}",
       "-1",
-      "refs/heads/master"
+      "origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "Resolving reference range.resolving commit_pos 306475",
@@ -209,7 +209,7 @@
       "--grep",
       "Cr-Commit-Position: refs/heads/master@{#306476}",
       "-1",
-      "refs/heads/master"
+      "origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "Expanding revision range.resolving commit_pos 306476",
@@ -240,7 +240,7 @@
       "--grep",
       "Cr-Commit-Position: refs/heads/master@{#306477}",
       "-1",
-      "refs/heads/master"
+      "origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "Expanding revision range.resolving commit_pos 306477",

@@ -39,7 +39,7 @@
       "--grep",
       "Cr-Commit-Position: refs/heads/master@{#314017}",
       "-1",
-      "refs/heads/master"
+      "origin/master"
     ],
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "Resolving reference range.resolving commit_pos 314017",
@@ -70,7 +70,7 @@
       "--grep",
       "Cr-Commit-Position: refs/heads/master@{#314015}",
       "-1",
-      "refs/heads/master"
+      "origin/master"
     ],
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "Resolving reference range.resolving commit_pos 314015",
@@ -134,7 +134,7 @@
       "--grep",
       "Cr-Commit-Position: refs/heads/master@{#314016}",
       "-1",
-      "refs/heads/master"
+      "origin/master"
     ],
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "Expanding revision range.resolving commit_pos 314016",
