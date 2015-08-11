@@ -64,7 +64,6 @@ IGNORED_STEPS = [
 ]
 
 KNOWN_TESTERS_LIST = [
-    'Android Nexus4 Perf',
     'Android Nexus5 Perf',
     'Android Nexus6 Perf',
     'Android Nexus10 Perf',

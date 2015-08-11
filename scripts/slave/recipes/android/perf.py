@@ -23,15 +23,6 @@ REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
 BUILDERS = freeze({
   'chromium.perf': {
-    'Android Nexus4 Perf': {
-      'perf_id': 'android-nexus4',
-      'bucket': 'chrome-perf',
-      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                           api.properties['parent_revision']),
-      'num_device_shards': 8,
-      'test_spec_file': 'chromium.perf.json',
-      'max_battery_temp': 350,
-    },
     'Android Nexus5 Perf': {
       'perf_id': 'android-nexus5',
       'bucket': 'chrome-perf',
@@ -182,7 +173,7 @@ def RunSteps(api):
     api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=perf_tests),
       perf_id=builder['perf_id'],
-      chartjson_file=True, max_battery_temp=builder.get('max_battery_temp'))
+      chartjson_file=True)
 
     if failures:
       raise api.step.StepFailure('src-side perf tests failed %s' % failures)

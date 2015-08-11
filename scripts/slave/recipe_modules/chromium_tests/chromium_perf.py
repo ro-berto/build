@@ -244,10 +244,6 @@ _AddBotSpec(
     num_shards=5)
 
 _AndroidSpecs = {
-  'Android Nexus4 Perf': {
-    'perf_id': 'android-nexus4',
-    'num_device_shards': 8,
-  },
   'Android Nexus5 Perf': {
     'perf_id': 'android-nexus5',
     'num_device_shards': 8,
