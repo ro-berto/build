@@ -329,19 +329,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if self.m.chromium.c.project_generator.tool == 'mb':
         if bot_config.get('chromium_config') == 'chromium_win_clang':
           self.m.chromium.update_clang()
-
-        # We don't use the mastername and buildername passed in, because
-        # those may be the values of the continuous builder the trybot may
-        # be configured to match; we need to use the actual mastername
-        # and buildername we're running on, because it may be configured
-        # with different MB settings.
-        real_mastername = self.m.properties['mastername']
-        real_buildername = self.m.properties['buildername']
-        self.m.chromium.run_mb(
-            real_mastername,
-            real_buildername,
-            swarming_targets=[t.name for t in tests_including_triggered
-                              if t.uses_swarming])
+        self.m.chromium.run_mb(mastername, buildername, swarming_targets=[
+            t.name for t in tests_including_triggered if t.uses_swarming])
 
       try:
         self.transient_check(update_step, lambda transform_name:
