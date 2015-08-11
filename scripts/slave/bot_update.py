@@ -638,7 +638,7 @@ def gclient_sync(with_branch_heads, shallow):
     cmd += ['--shallow']
 
   try:
-    call(*cmd)
+    call(*cmd, tries=1)
   except SubprocessFailed as e:
     # Throw a GclientSyncFailed exception so we can catch this independently.
     raise GclientSyncFailed(e.message, e.code, e.output)
