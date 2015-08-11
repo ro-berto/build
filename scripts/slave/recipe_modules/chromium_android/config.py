@@ -35,6 +35,7 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     upload_dest_prefix = Single(basestring, empty_val=''),
     gclient_custom_vars = Dict(value_type=(basestring, types.NoneType)),
     coverage = Single(bool, required=False, empty_val=False),
+    incremental_coverage = Single(bool, required=False, empty_val=False),
     env = ConfigGroup(
       LLVM_FORCE_HEAD_REVISION = Single(basestring, required=False),
     ),
@@ -189,7 +190,7 @@ def coverage_builder_tests(c):  # pragma: no cover
 
 @config_ctx(includes=['main_builder'])
 def incremental_coverage_builder_tests(c):
-  c.coverage = True
+  c.incremental_coverage = True
 
 @config_ctx(includes=['component_builder'])
 def oilpan_builder(c):

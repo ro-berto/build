@@ -590,6 +590,8 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.c.coverage:
       args.extend(['--coverage-dir', self.coverage_dir,
                    '--python-only'])
+    if self.c.incremental_coverage:
+      args.extend(['--coverage-dir', self.coverage_dir])
     if host_driven_root:
       args.extend(['--host-driven-root', host_driven_root])
     if official_build:
@@ -777,7 +779,7 @@ class AndroidApi(recipe_api.RecipeApi):
         in.
       **kwargs: Kwargs for python and gsutil steps.
     """
-    assert self.c.coverage, (
+    assert self.c.coverage or self.c.incremental_coverage, (
         'Trying to generate coverage report but coverage is not enabled')
 
     self.m.python(
@@ -826,12 +828,13 @@ class AndroidApi(recipe_api.RecipeApi):
     Saves a JSON object mapping file paths to lists of changed lines to the
     coverage directory.
     """
-    revision = self.m.chromium.build_properties['got_revision']
-    # Find which files have changed for this revision.
-    diff_cmd = ['diff-tree', '--diff-filter', 'ACMRTUX', '--no-commit-id',
-                '--name-only', '-r', revision]
+    # Git provides this default value for the commit hash for staged files when
+    # the -l option is used with git blame.
+    blame_cached_revision = '0000000000000000000000000000000000000000'
+
+    # Find which files have changed.
     diff = self.m.git(
-        *diff_cmd,
+        'diff', '--staged', '--name-only',
         cwd=self.m.path['checkout'],
         stdout=self.m.raw_io.output(),
         name='Finding changed files.',
@@ -843,9 +846,8 @@ class AndroidApi(recipe_api.RecipeApi):
     # Find which lines have changed for each file.
     file_changes = {}
     for changed_file in changed_files:
-      blame_cmd = ['blame', '-l', '-s', changed_file]
       blame = self.m.git(
-          *blame_cmd,
+          'blame', '-l', '-s', changed_file,
           cwd=self.m.path['checkout'],
           stdout=self.m.raw_io.output(),
           name='Finding lines changed.',
@@ -854,7 +856,7 @@ class AndroidApi(recipe_api.RecipeApi):
                   'int n = 0;\nn++;\nfor (int i = 0; i < n; i++) {')))
       blame_lines = blame.stdout.splitlines()
       file_changes[changed_file] = [i + 1 for i, line in enumerate(blame_lines)
-                                    if line.startswith(revision)]
+                                    if line.startswith(blame_cached_revision)]
 
     self.m.file.write(
         'Saving changed lines for revision.',

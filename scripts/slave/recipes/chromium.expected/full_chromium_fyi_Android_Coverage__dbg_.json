@@ -368,7 +368,6 @@
       "--verbose",
       "--coverage-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage",
-      "--python-only",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -407,7 +406,6 @@
       "--verbose",
       "--coverage-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage",
-      "--python-only",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -446,7 +444,6 @@
       "--verbose",
       "--coverage-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage",
-      "--python-only",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -485,7 +482,6 @@
       "--verbose",
       "--coverage-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage",
-      "--python-only",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -522,7 +518,6 @@
       "--verbose",
       "--coverage-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage",
-      "--python-only",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -551,13 +546,9 @@
   {
     "cmd": [
       "git",
-      "diff-tree",
-      "--diff-filter",
-      "ACMRTUX",
-      "--no-commit-id",
-      "--name-only",
-      "-r",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+      "diff",
+      "--staged",
+      "--name-only"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "Finding changed files.",
