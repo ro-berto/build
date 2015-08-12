@@ -90,7 +90,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
+      "GYP_CHROMIUM_NO_ACTION": "1"
     },
     "name": "gclient runhooks (with patch)"
   },
@@ -212,6 +212,26 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-v",
+      "-m",
+      "tryserver.chromium.linux",
+      "-b",
+      "linux_chromium_compile_rel_ng",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files"
   },
   {
     "cmd": [

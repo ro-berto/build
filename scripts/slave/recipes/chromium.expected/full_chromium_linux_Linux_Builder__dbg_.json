@@ -84,7 +84,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "component=shared_library gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
+      "GYP_CHROMIUM_NO_ACTION": "1"
     },
     "name": "gclient runhooks"
   },
@@ -158,6 +158,28 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "clean isolated files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-v",
+      "-m",
+      "chromium.linux",
+      "-b",
+      "Linux Builder (dbg)",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--swarming-targets-file",
+      "browser_tests\n",
+      "//out/Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files"
   },
   {
     "cmd": [
