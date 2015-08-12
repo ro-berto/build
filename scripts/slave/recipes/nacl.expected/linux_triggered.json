@@ -62,7 +62,7 @@
     "cwd": "[SLAVE_BUILD]/native_client",
     "env": {
       "BUILDBOT_BUILDERNAME": "oneiric_32-newlib-arm_hw-pnacl-panda-dbg",
-      "BUILDBOT_GOT_REVISION": "abcde",
+      "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
       "BUILDBOT_MASTERNAME": "client.nacl",
       "BUILDBOT_REVISION": "abcd",
       "BUILDBOT_SLAVE_TYPE": "BuilderTester",
