@@ -17,5 +17,6 @@ DEPS = [
   'raw_io',
   'step',
   'test_utils',
+  'url',
   'archive',
 ]

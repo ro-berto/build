@@ -596,7 +596,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"fake/file1.java\": [], \"fake/file2.java\": [], \"fake/file3.java\": []}",
-      "[TMP_BASE]/coverage_tmp_1/files_changes.json"
+      "[TMP_BASE]/coverage_tmp_1/file_changes.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Saving changed lines for revision."
@@ -605,20 +605,51 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/emma_coverage_stats.py",
+      "build/android/emma_coverage_stats.py",
       "-v",
       "--out",
       "/path/to/tmp/json",
       "--emma-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage/coverage_html",
       "--lines-for-coverage",
-      "[TMP_BASE]/coverage_tmp_1/files_changes.json"
+      "[TMP_BASE]/coverage_tmp_1/file_changes.json"
     ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Generate incremental coverage report.",
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "Incremental coverage report",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"files\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sample file 1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"absolute\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"covered\": 70, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"total\": 100@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"incremental\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"covered\": 30, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"total\": 50@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sample file 2\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"absolute\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"covered\": 50, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"total\": 100@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"incremental\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"covered\": 50, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"total\": 50@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"incremental\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"covered\": 80, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"total\": 100@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@moreInfoURL@\"http://c.org/p/cr/builders/Android Coverage (dbg)/builds/571/steps/Incremental%20coverage%20report/logs/json.output\"@@@",
+      "@@@SET_BUILD_PROPERTY@summary@\"Test coverage for this patch: 80/100 lines (80%).\"@@@"
     ]
   },
   {

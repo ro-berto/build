@@ -104,7 +104,7 @@ class AndroidApi(recipe_api.RecipeApi):
     """
     if not self._file_changes_path:
       self._file_changes_path = (
-          self.m.path.mkdtemp('coverage').join('files_changes.json'))
+          self.m.path.mkdtemp('coverage').join('file_changes.json'))
     return self._file_changes_path
 
   def configure_from_properties(self, config_name, **kwargs):
@@ -814,14 +814,70 @@ class AndroidApi(recipe_api.RecipeApi):
     Generates a JSON file containing incremental coverage stats. Requires
     |file_changes_path| to contain a file with a valid JSON object.
     """
-    self.m.python(
-        'Generate incremental coverage report.',
-        self.m.path['checkout'].join(
-            'build', 'android', 'emma_coverage_stats.py'),
+    step_result = self.m.python(
+        'Incremental coverage report',
+        self.m.path.join('build', 'android', 'emma_coverage_stats.py'),
         args=['-v',
               '--out', self.m.json.output(),
               '--emma-dir', self.coverage_dir.join('coverage_html'),
-              '--lines-for-coverage', self.file_changes_path])
+              '--lines-for-coverage', self.file_changes_path],
+        cwd=self.m.path['checkout'],
+        step_test_data=lambda: self.m.json.test_api.output({
+          'files': {
+            'sample file 1': {
+              'absolute': {
+                'covered': 70,
+                'total': 100,
+              },
+              'incremental': {
+                'covered': 30,
+                'total': 50,
+              },
+            },
+            'sample file 2': {
+              'absolute': {
+                'covered': 50,
+                'total': 100,
+              },
+              'incremental': {
+                'covered': 50,
+                'total': 50,
+              },
+            },
+          },
+          'patch': {
+            'incremental': {
+              'covered': 80,
+              'total': 100,
+            },
+          },
+        })
+    )
+
+    if step_result.json.output:
+      covered_lines = step_result.json.output['patch']['incremental']['covered']
+      total_lines = step_result.json.output['patch']['incremental']['total']
+      percentage = covered_lines * 100.0 / total_lines if total_lines else 0
+
+      step_result.presentation.properties['summary'] = (
+          'Test coverage for this patch: %s/%s lines (%s%%).' % (
+            covered_lines,
+            total_lines,
+            int(percentage),
+        )
+      )
+
+      step_result.presentation.properties['moreInfoURL'] = self.m.url.join(
+          self.m.properties['buildbotURL'],
+          'builders',
+          self.m.properties['buildername'],
+          'builds',
+          self.m.properties['buildnumber'] or '0',
+          'steps',
+          'Incremental%20coverage%20report',
+          'logs',
+          'json.output',
+      )
 
   def get_changed_lines_for_revision(self):
     """Saves a JSON file containing the files/lines requiring coverage analysis.
