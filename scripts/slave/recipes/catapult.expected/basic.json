@@ -114,7 +114,8 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/catapult/tracing/bin/run_dev_server_tests",
-      "--no-install-hooks"
+      "--no-install-hooks",
+      "--no-use-local-chrome"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Tracing Dev Server Tests"
