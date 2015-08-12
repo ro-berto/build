@@ -41,6 +41,13 @@
 
       "slavebuilddir": "chromium_mojo",
     },
+    "Chromium Mojo Windows 7 Perf": {
+      "recipe": "chromium_mojo",
+      "scheduler": "chromium_commits",
+      "slave_pools": ["windows_7_perf"],
+
+      "slavebuilddir": "chromium_mojo",
+    },
   },
 
   "schedulers": {
@@ -90,6 +97,14 @@
         "version": "win7",
       },
       "slaves": ["vm16-m1"],
+    },
+    "windows_7_perf": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "win",
+        "version": "win7",
+      },
+      "slaves": ["build137-m1"],
     },
   },
 }

@@ -43,6 +43,12 @@ BUILDERS = freeze({
         'perf_test_info': {
           'browser_type': 'mandoline-release',
           'perf_id': 'mandoline-linux-release',
+          'supported_testnames': [
+            'blink_perf.dom',
+            'blink_perf.events',
+            'blink_perf.mutation',
+            'blink_perf.shadow_dom',
+          ],
         },
       },
       'Chromium Mojo Android Nexus5 Perf': {
@@ -57,6 +63,24 @@ BUILDERS = freeze({
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'win',
+        },
+      },
+      'Chromium Mojo Windows 7 Perf': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'win',
+        },
+        'run_perf_tests': True,
+        'perf_test_info': {
+          'browser_type': 'mandoline-release',
+          'perf_id': 'mandoline-win7-release',
+          'supported_testnames': [
+            'blink_perf.dom',
+            'blink_perf.events',
+            'blink_perf.mutation',
+            'blink_perf.shadow_dom',
+            'page_cycler.typical_25',
+          ],
         },
       },
     },
@@ -111,14 +135,8 @@ def _RunPerfTests(api, perf_test_info):
   # TODO(yzshen): Remove this filter once we annotate tests disabled for
   # Mandoline in Telemetry. Consider reusing
   # chromium_tests.steps.DynamicPerfTests.
-  supported_testnames = [
-    'blink_perf.dom',
-    'blink_perf.events',
-    'blink_perf.mutation',
-    'blink_perf.shadow_dom',
-  ]
   tests = dict((k, v) for k, v in tests.json.output['steps'].iteritems()
-      if str(k) in supported_testnames)
+      if str(k) in perf_test_info['supported_testnames'])
 
   with api.step.defer_results():
     for test_name, test in sorted(tests.iteritems()):
