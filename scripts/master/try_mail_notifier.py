@@ -25,13 +25,14 @@ from master import build_utils
 
 class TryMailNotifier(mail.MailNotifier):
   def __init__(self, reply_to=None, failure_message=None,
-               footer=None, no_email_on_success=None, **kwargs):
+               footer=None, no_email_on_success=None, get_info=None, **kwargs):
     mail.MailNotifier.__init__(self, **kwargs)
     self.reply_to = reply_to
     self.failure_message = failure_message
     self.footer = footer
     # List of builders to NOT send email about if build was successful
     self.no_email_on_success = no_email_on_success or []
+    self.get_info = get_info
 
   def buildMessage_internal(self, name, build, results):
     """Send an email about the result. Send it as a nice HTML message."""
@@ -83,6 +84,8 @@ class TryMailNotifier(mail.MailNotifier):
                                                       job_stamp.revision),
         'timestamp': getattr(job_stamp, "timestamp", "")
     }
+    if self.get_info:
+      info = self.get_info(info, build)
     subject = self.subject % info
     first_line = (
         "try %(result)s for %(reason)s on %(builder)s @ r%(revision)s" % info)
