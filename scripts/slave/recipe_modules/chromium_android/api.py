@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import contextlib
 import os
 import re
 import urllib
@@ -863,6 +864,25 @@ class AndroidApi(recipe_api.RecipeApi):
         self.file_changes_path,
         self.m.json.dumps(file_changes))
 
+  @contextlib.contextmanager
+  def handle_exit_codes(self):
+    """Handles exit codes emitted by the test runner and other scripts."""
+    EXIT_CODES = {
+      'error': 1,
+      'infra': 87,
+      'warning': 88,
+    }
+    try:
+      yield
+    except self.m.step.StepFailure as f:
+      if (f.result.retcode == EXIT_CODES['error']):
+        f.result.presentation.status = self.m.step.FAILURE
+      elif (f.result.retcode == EXIT_CODES['infra']):
+        f.result.presentation.status = self.m.step.EXCEPTION
+      elif (f.result.retcode == EXIT_CODES['warning']):
+        f.result.presentation.status = self.m.step.WARNING
+      raise
+
   def test_runner(self, step_name, args=None, **kwargs):
     """Wrapper for the python testrunner script.
 
@@ -870,22 +890,6 @@ class AndroidApi(recipe_api.RecipeApi):
       step_name: Name of the step.
       args: Testrunner arguments.
     """
-    EXIT_CODES = {
-      'error': 1,
-      'infra': 87,
-      'warning': 88,
-    }
-    try:
-      step_result = self.m.python(
+    with self.handle_exit_codes():
+      return self.m.python(
           step_name, self.c.test_runner, args, **kwargs)
-      return step_result
-    except self.m.step.StepFailure as f:
-      step_result = f.result
-      raise
-    finally:
-      if (step_result.retcode == EXIT_CODES['error']):
-        step_result.presentation.status = self.m.step.FAILURE
-      elif (step_result.retcode == EXIT_CODES['infra']):
-        step_result.presentation.status = self.m.step.EXCEPTION
-      elif (step_result.retcode == EXIT_CODES['warning']):
-        step_result.presentation.status = self.m.step.WARNING
