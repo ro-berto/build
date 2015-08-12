@@ -44,6 +44,7 @@ def _AnnotatedStepsSteps(api):
       'BUILDBOT_MASTERNAME': api.properties['mastername'],
       'BUILDBOT_BUILDERNAME': api.properties['buildername'],
       'BUILDBOT_REVISION': api.properties['revision'],
+      'BUILDBOT_GOT_REVISION': api.properties['got_revision'],
       'RUNTEST': api.path['build'].join('scripts', 'slave', 'runtest.py'),
       # NOTE: If this recipe is used for a tryserver/trybots, please change
       # 'BuilderTester' to 'Trybot'.
@@ -83,6 +84,7 @@ def GenTests(api):
     api.platform('linux', 64) +\
     api.properties(mastername = 'client.nacl') +\
     api.properties(buildername = 'precise_64-newlib-arm_qemu-pnacl-dbg') +\
+    api.properties(got_revision = 'abcde') +\
     api.properties(revision = 'abcd') +\
     api.properties(slavename = 'TestSlave') +\
     api.properties(buildnumber = '1234')
@@ -90,6 +92,7 @@ def GenTests(api):
     api.platform('linux', 32) +\
     api.properties(mastername = 'client.nacl') +\
     api.properties(buildername = 'oneiric_32-newlib-arm_hw-pnacl-panda-dbg') +\
+    api.properties(got_revision = 'abcde') +\
     api.properties(revision = 'abcd') +\
     api.properties(slavename='TestSlave') +\
     api.properties(parent_slavename = 'TestSlave') +\

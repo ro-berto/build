@@ -62,6 +62,7 @@
     "cwd": "[SLAVE_BUILD]/native_client",
     "env": {
       "BUILDBOT_BUILDERNAME": "precise_64-newlib-arm_qemu-pnacl-dbg",
+      "BUILDBOT_GOT_REVISION": "abcde",
       "BUILDBOT_MASTERNAME": "client.nacl",
       "BUILDBOT_REVISION": "abcd",
       "BUILDBOT_SLAVE_TYPE": "BuilderTester",
