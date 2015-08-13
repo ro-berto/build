@@ -224,6 +224,10 @@ BUILDERS = freeze({
         'buildername': 'Chromium Linux TSan Builder',
         'tester': 'Linux TSan Tests',
       },
+      'linux_chromium_cfi_rel_ng': {
+        'mastername': 'chromium.fyi',
+        'buildername': 'CFI Linux',
+      },
       'linux_site_isolation': {
         'mastername': 'chromium.fyi',
         'buildername': 'Site Isolation Linux',
