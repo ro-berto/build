@@ -295,7 +295,7 @@ GIT_MASTERS += internal_data.get('GIT_MASTERS', [])
 
 
 # How many times to try before giving up.
-ATTEMPTS = 3
+ATTEMPTS = 5
 
 # Find deps2git
 DEPS2GIT_DIR_PATH = path.join(SCRIPTS_DIR, 'tools', 'deps2git')
@@ -417,7 +417,7 @@ def call(*args, **kwargs):  # pragma: no cover
     if result is FAIL:
       break
     if result is RETRY and attempt < tries:
-      sleep_backoff = 2 ** attempt
+      sleep_backoff = 4 ** attempt
       sleep_time = random.randint(sleep_backoff, int(sleep_backoff * 1.2))
       print '===backing off, sleeping for %d secs===' % sleep_time
       time.sleep(sleep_time)
