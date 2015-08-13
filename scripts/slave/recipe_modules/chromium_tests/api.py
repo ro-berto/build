@@ -96,10 +96,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       dep = bot_config.get('set_component_rev')
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
-  def prepare_checkout(self, mastername, buildername):
-    # Make an independent copy so that we don't overwrite global state
-    # with updates made dynamically based on the test specs.
-    master_dict = thaw(self.builders.get(mastername, {}))
+  def ensure_checkout(self, mastername, buildername):
+    master_dict = self.builders.get(mastername, {})
     bot_config = master_dict.get('builders', {}).get(buildername)
 
     if self.m.platform.is_win:
@@ -112,6 +110,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # HACK(dnj): Remove after 'crbug.com/398105' has landed
     self.m.chromium.set_build_properties(update_step.json.output['properties'])
 
+    return update_step
+
+  def set_up_swarming(self, mastername, buildername):
+    master_dict = self.builders.get(mastername, {})
+    bot_config = master_dict.get('builders', {}).get(buildername)
+
     enable_swarming = bot_config.get('enable_swarming')
     if enable_swarming:
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
@@ -119,6 +123,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       for key, value in bot_config.get('swarming_dimensions', {}).iteritems():
         self.m.swarming.set_default_dimension(key, value)
 
+  def runhooks(self, mastername, buildername, update_step):
+    master_dict = self.builders.get(mastername, {})
+    bot_config = master_dict.get('builders', {}).get(buildername)
+
+    # TODO(phajdan.jr): See if disable_runhooks is still used, try to remove.
     if not bot_config.get('disable_runhooks'):
       if self.m.tryserver.is_tryserver:
         try:
@@ -130,32 +139,64 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       else:
         self.m.chromium.runhooks()
 
-    test_spec_file = bot_config.get('testing', {}).get('test_spec_file',
-                                                       '%s.json' % mastername)
+  def get_test_spec(self, mastername, buildername):
+    master_dict = self.builders.get(mastername, {})
+    bot_config = master_dict.get('builders', {}).get(buildername)
+
+    test_spec_file = bot_config.get('testing', {}).get(
+        'test_spec_file', '%s.json' % mastername)
 
     # TODO(phajdan.jr): Bots should have no generators instead.
     if bot_config.get('disable_tests'):
-      test_spec = {}
-      scripts_compile_targets = {}
-    else:
-      test_spec = self.read_test_spec(self.m, test_spec_file)
-      test_spec_path = self.m.path['checkout'].join('testing', 'buildbot',
-                                                 test_spec_file)
+      return {}
+    return self.read_test_spec(self.m, test_spec_file)
 
-      scripts_compile_targets = \
-          self.get_compile_targets_for_scripts().json.output
+  def get_master_dict_with_dynamic_tests(
+      self, mastername, buildername, test_spec, scripts_compile_targets):
+    # Make an independent copy so that we don't overwrite global state
+    # with updates made dynamically based on the test specs.
+    master_dict = thaw(self.builders.get(mastername, {}))
+    bot_config = master_dict.get('builders', {}).get(buildername)
 
+    enable_swarming = bot_config.get('enable_swarming')
     for loop_buildername, builder_dict in master_dict.get(
         'builders', {}).iteritems():
       builder_dict['tests'] = self.generate_tests_from_test_spec(
           self.m, test_spec, builder_dict,
-          loop_buildername, mastername, enable_swarming,
+          loop_buildername, mastername,
+          # TODO(phajdan.jr): Get enable_swarming value from builder_dict.
+          # Above should remove the need to get bot_config and buildername
+          # in this method.
+          bot_config.get('enable_swarming', False),
           scripts_compile_targets, builder_dict.get('test_generators', []))
+
+    return freeze(master_dict)
+
+  def prepare_checkout(self, mastername, buildername):
+    master_dict = self.builders.get(mastername, {})
+    bot_config = master_dict.get('builders', {}).get(buildername)
+
+    update_step = self.ensure_checkout(mastername, buildername)
+
+    self.set_up_swarming(mastername, buildername)
+    self.runhooks(mastername, buildername, update_step)
+
+    test_spec = self.get_test_spec(mastername, buildername)
+
+    # TODO(phajdan.jr): Bots should have no generators instead.
+    if bot_config.get('disable_tests'):
+      scripts_compile_targets = {}
+    else:
+      scripts_compile_targets = \
+          self.get_compile_targets_for_scripts().json.output
+
+    master_dict = self.get_master_dict_with_dynamic_tests(
+        mastername, buildername, test_spec, scripts_compile_targets)
 
     if self.m.chromium.c.lto:
       self.m.chromium.download_lto_plugin()
 
-    return update_step, freeze(master_dict), test_spec
+    return update_step, master_dict, test_spec
 
   def generate_tests_from_test_spec(self, api, test_spec, builder_dict,
       buildername, mastername, enable_swarming, scripts_compile_targets,
