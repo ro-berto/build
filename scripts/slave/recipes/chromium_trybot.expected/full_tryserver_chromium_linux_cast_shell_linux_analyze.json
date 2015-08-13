@@ -76,7 +76,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_CHROMIUM_NO_ACTION": "1"
+      "GYP_DEFINES": "chromecast=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks (with patch)"
   },
@@ -164,18 +164,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
-      "analyze",
-      "-m",
-      "tryserver.chromium.linux",
-      "-b",
-      "cast_shell_linux",
-      "-v",
-      "//out/Release",
+      "[SLAVE_BUILD]/src/build/gyp_chromium",
+      "--analyzer",
       "{\"files\": [\"foo.cc\"], \"targets\": [\"cast_shell\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GYP_DEFINES": "chromecast=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+    },
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_TEXT@No compile necessary@@@",
