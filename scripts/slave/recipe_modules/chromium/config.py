@@ -531,6 +531,10 @@ def chromium_win_clang_asan(c):
 def chromium_win_clang_asan_tot(c):
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
 
+@config_ctx(includes=['chromium_win_clang_asan_tot', 'sanitizer_coverage'])
+def chromium_win_clang_asan_tot_coverage(c):
+  pass
+
 @config_ctx(includes=['chromium_win_clang', 'goma'])
 def chromium_win_clang_goma(c):
   pass

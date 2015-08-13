@@ -708,6 +708,40 @@ SPEC = {
       },
       'enable_swarming': True,
     },
+    'CrWinAsanCov': {
+      'chromium_config': 'chromium_win_clang_asan_tot_coverage',
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'use_isolate': True,
+      'enable_swarming': True,
+      'compile_targets': [ 'chromium_builder_asan' ],
+      # add_tests_as_compile_targets not needed for the asan bot, it doesn't
+      # build everything.
+    },
+    'CrWinAsanCov tester': {
+      'chromium_config': 'chromium_win_asan',
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'CrWinAsanCov',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+    },
     'CrWinGoma': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['goma_canary'],
