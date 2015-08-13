@@ -164,19 +164,12 @@ def goma_setup(options, env):
   goma_key = os.path.join(options.goma_dir, 'goma.key')
   if os.path.exists(goma_key):
     env['GOMA_API_KEY_FILE'] = goma_key
-  result = -1
-  if not chromium_utils.IsWindows():
-    goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
-    goma_start_command = ['ensure_start']
-    if options.clobber:
-      goma_start_command = ['restart']
-    result = chromium_utils.RunCommand(goma_ctl_cmd + goma_start_command,
-                                       env=env)
-  else:
+  if chromium_utils.IsWindows():
     env['GOMA_RPC_EXTRA_PARAMS'] = '?win'
-    goma_ctl_cmd = [sys.executable,
-                    os.path.join(options.goma_dir, 'goma_ctl.py')]
-    result = chromium_utils.RunCommand(goma_ctl_cmd + ['start'], env=env)
+  goma_start_command = ['restart'] if options.clobber else ['ensure_start']
+  goma_ctl_cmd = [sys.executable,
+                  os.path.join(options.goma_dir, 'goma_ctl.py')]
+  result = chromium_utils.RunCommand(goma_ctl_cmd + goma_start_command, env=env)
   if not result:
     # goma started sucessfully.
     return True
@@ -268,11 +261,8 @@ def goma_teardown(options, env):
   """Tears down goma if necessary. """
   if (options.compiler in ('goma', 'goma-clang') and
       options.goma_dir):
-    if not chromium_utils.IsWindows():
-      goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
-    else:
-      goma_ctl_cmd = [sys.executable,
-                      os.path.join(options.goma_dir, 'goma_ctl.py')]
+    goma_ctl_cmd = [sys.executable,
+                    os.path.join(options.goma_dir, 'goma_ctl.py')]
     # Show goma stats so that we can investigate goma when
     # something weird happens.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stat'], env=env)
