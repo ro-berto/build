@@ -236,7 +236,8 @@ class ChromiumApi(recipe_api.RecipeApi):
               python_mode=False, spawn_dbus=True, parallel=False,
               revision=None, webkit_revision=None, master_class_name=None,
               test_launcher_summary_output=None, flakiness_dash=None,
-              perf_id=None, perf_config=None, chartjson_file=False, **kwargs):
+              perf_id=None, perf_config=None, chartjson_file=False,
+              disable_src_side_runtest_py=False, **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
@@ -341,7 +342,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     full_args.extend(args)
 
     runtest_path = self.m.path['build'].join('scripts', 'slave', 'runtest.py')
-    if self.c.runtest_py.src_side:
+    if self.c.runtest_py.src_side and not disable_src_side_runtest_py:
       runtest_path = self.m.path['checkout'].join(
           'infra', 'scripts', 'runtest_wrapper.py')
       full_args = ['--path-build', self.m.path['build'], '--'] + full_args

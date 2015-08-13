@@ -1206,6 +1206,8 @@ class BlinkTest(Test):
           api.path['build'].join('scripts', 'slave', 'chromium',
                                  'layout_test_wrapper.py'),
           args, name=self._step_name(suffix),
+          # TODO(phajdan.jr): Clean up the runtest.py mess.
+          disable_src_side_runtest_py=True,
           step_test_data=lambda: api.test_utils.test_api.canned_test_output(
               passing=True, minimal=True))
 
