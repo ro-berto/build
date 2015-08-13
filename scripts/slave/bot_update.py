@@ -251,6 +251,7 @@ ENABLED_MASTERS = [
     'tryserver.chromium.mac',
     'tryserver.chromium.perf',
     'tryserver.chromium.win',
+    'tryserver.infra',
     'tryserver.nacl',
     'tryserver.v8',
     'tryserver.webrtc',
