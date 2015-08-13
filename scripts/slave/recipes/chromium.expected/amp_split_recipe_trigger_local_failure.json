@@ -922,6 +922,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "-v",
       "--apk",
       "AndroidWebView.apk",
       "--apk_package",
@@ -960,6 +961,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "-v",
       "--apk",
       "ContentShell.apk",
       "--apk_package",
@@ -998,6 +1000,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "-v",
       "--apk",
       "ChromeSyncShell.apk",
       "--apk_package",

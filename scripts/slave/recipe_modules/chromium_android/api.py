@@ -447,6 +447,7 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.path['checkout'].join('build',
                                      'android',
                                      'adb_install_apk.py'),
+        '-v',
         '--apk', apk,
         '--apk_package', apk_package
     ]

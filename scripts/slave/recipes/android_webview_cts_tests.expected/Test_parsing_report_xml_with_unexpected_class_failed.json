@@ -245,6 +245,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "-v",
       "--apk",
       "SystemWebView.apk",
       "--apk_package",

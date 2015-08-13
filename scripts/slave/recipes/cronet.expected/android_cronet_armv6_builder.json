@@ -341,6 +341,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "-v",
       "--apk",
       "CronetSample.apk",
       "--apk_package",
@@ -370,6 +371,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "-v",
       "--apk",
       "CronetTest.apk",
       "--apk_package",
