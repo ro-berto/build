@@ -23,6 +23,12 @@
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "presubmit_infra",
     },
+    "Infra Linux Precise 32 Tester": {
+      "recipe": "infra/infra_repo_trybot",
+      "scheduler": None,
+      "slave_pools": ["precise32_slave_pool"],
+      "slavebuilddir": "infra",
+    },
     "Infra Linux Trusty 64 Tester": {
       "recipe": "infra/infra_repo_trybot",
       "scheduler": None,
@@ -46,6 +52,14 @@
   "schedulers": {},
 
   "slave_pools": {
+    "precise32_slave_pool": {
+      "slave_data": {
+        "bits": 32,
+        "os": "linux",
+        "version": "precise",
+      },
+      "slaves": ["vm252-m4"],
+    },
     "trusty64_slave_pool": {
       "slave_data": {
         "bits": 64,
