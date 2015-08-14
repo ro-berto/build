@@ -82,6 +82,15 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/catapult/bin/run_py_tests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Build Python Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/catapult/base/util/run_tests.py"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -124,6 +133,17 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/catapult/perf_insights/bin/run_dev_server_tests",
+      "--no-install-hooks",
+      "--no-use-local-chrome"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Perf Insights Dev Server Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/catapult/third_party/vinn/run_test"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -145,7 +165,7 @@
       "[SLAVE_BUILD]/catapult/perf_insights/bin/run_vinn_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Perf Insights Tests"
+    "name": "Perf Vinn Insights Tests"
   },
   {
     "cmd": [

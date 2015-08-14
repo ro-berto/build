@@ -48,6 +48,8 @@ def RunSteps(api):
     'PYTHONPATH': api.path.pathsep.join(['%(PYTHONPATH)s', str(sdk_path)])
   }
 
+  api.python('Build Python Tests',
+             api.path['checkout'].join('bin', 'run_py_tests'))
   api.python('Util Tests',
              api.path['checkout'].join('base', 'util', 'run_tests.py'))
   api.python('Dashboard Tests',
@@ -60,6 +62,10 @@ def RunSteps(api):
              api.path['checkout'].join(
                  'tracing', 'bin', 'run_dev_server_tests'),
              ['--no-install-hooks', '--no-use-local-chrome'])
+  api.python('Perf Insights Dev Server Tests',
+             api.path['checkout'].join(
+                 'perf_insights', 'bin', 'run_dev_server_tests'),
+             ['--no-install-hooks', '--no-use-local-chrome'])
   if not api.platform.is_win:
     # D8/vinn currently unavailable on Windows.
     # TODO(sullivan): Add these tests on Windows when available.
@@ -67,7 +73,7 @@ def RunSteps(api):
                api.path['checkout'].join('third_party', 'vinn', 'run_test'))
     api.python('Tracing D8 Tests',
                api.path['checkout'].join('tracing', 'bin', 'run_vinn_tests'))
-    api.python('Perf Insights Tests',
+    api.python('Perf Vinn Insights Tests',
                api.path['checkout'].join(
                    'perf_insights', 'bin', 'run_vinn_tests'))
     # TODO(nduca): re-enable these if they should be working on Windows.
