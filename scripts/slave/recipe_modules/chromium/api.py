@@ -632,6 +632,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         'process_dumps',
         self.m.path['build'].join('scripts', 'slave', 'process_dumps.py'),
         ['--target', self.c.build_config_fs],
+        infra_step=True,
         **kwargs)
 
   def apply_syzyasan(self):
