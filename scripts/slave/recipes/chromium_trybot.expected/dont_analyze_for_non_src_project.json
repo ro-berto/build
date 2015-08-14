@@ -197,7 +197,7 @@
       "linux_chromium_rel_ng",
       "-v",
       "//out/Release",
-      "{\"files\": [\"third_party/WebKit/foo.cc\"], \"targets\": [\"angle_unittests_run\", \"chrome\", \"chromium_swarm_tests\", \"content_gl_tests_run\", \"gl_tests_run\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
+      "{\"files\": [\"third_party/WebKit/foo.cc\"], \"targets\": [\"angle_unittests_run\", \"blink_heap_unittests\", \"blink_platform_unittests\", \"chrome\", \"chromium_swarm_tests\", \"content_gl_tests_run\", \"gl_tests_run\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\", \"webkit_unit_tests\", \"wtf_unittests\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -264,6 +264,58 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/testing/scripts/webkit_lint.py",
+      "--build-config-fs",
+      "Release",
+      "--use-src-side-runtest-py",
+      "--paths",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "--properties",
+      "{\"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}",
+      "run",
+      "--output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "webkit_lint (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/testing/scripts/webkit_python_tests.py",
+      "--build-config-fs",
+      "Release",
+      "--use-src-side-runtest-py",
+      "--paths",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "--properties",
+      "{\"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}",
+      "run",
+      "--output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "webkit_python_tests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
