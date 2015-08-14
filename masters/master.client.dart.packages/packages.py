@@ -86,6 +86,8 @@ class Package(object):
 #     this to the name as well.
 PACKAGES = [
   # Packages in the 'dart-lang' project which are published.
+  Package(github_repo='analyzer_cli', published=False,
+          extra_branches=['test_me']),
   Package(github_repo='args'),
   Package(github_repo='async'),
   Package(github_repo='barback'),
