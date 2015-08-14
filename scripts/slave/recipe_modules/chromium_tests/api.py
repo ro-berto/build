@@ -32,6 +32,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """Adds builders to our builder map"""
     self._builders.update(builders)
 
+  def get_bot_config(self, mastername, buildername):
+    master_dict = self.builders.get(mastername, {})
+    return freeze(master_dict.get('builders', {}).get(buildername))
+
   def configure_build(self, mastername, buildername, override_bot_type=None):
     master_dict = self.builders.get(mastername, {})
     bot_config = master_dict.get('builders', {}).get(buildername)
@@ -97,8 +101,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
   def ensure_checkout(self, mastername, buildername):
-    master_dict = self.builders.get(mastername, {})
-    bot_config = master_dict.get('builders', {}).get(buildername)
+    bot_config = self.get_bot_config(mastername, buildername)
 
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
@@ -113,8 +116,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return update_step
 
   def set_up_swarming(self, mastername, buildername):
-    master_dict = self.builders.get(mastername, {})
-    bot_config = master_dict.get('builders', {}).get(buildername)
+    bot_config = self.get_bot_config(mastername, buildername)
 
     enable_swarming = bot_config.get('enable_swarming')
     if enable_swarming:
@@ -124,8 +126,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.swarming.set_default_dimension(key, value)
 
   def runhooks(self, mastername, buildername, update_step):
-    master_dict = self.builders.get(mastername, {})
-    bot_config = master_dict.get('builders', {}).get(buildername)
+    bot_config = self.get_bot_config(mastername, buildername)
 
     # TODO(phajdan.jr): See if disable_runhooks is still used, try to remove.
     if not bot_config.get('disable_runhooks'):
@@ -140,8 +141,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.chromium.runhooks()
 
   def get_test_spec(self, mastername, buildername):
-    master_dict = self.builders.get(mastername, {})
-    bot_config = master_dict.get('builders', {}).get(buildername)
+    bot_config = self.get_bot_config(mastername, buildername)
 
     test_spec_file = bot_config.get('testing', {}).get(
         'test_spec_file', '%s.json' % mastername)
@@ -173,8 +173,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return freeze(master_dict)
 
   def prepare_checkout(self, mastername, buildername):
-    master_dict = self.builders.get(mastername, {})
-    bot_config = master_dict.get('builders', {}).get(buildername)
+    bot_config = self.get_bot_config(mastername, buildername)
 
     update_step = self.ensure_checkout(mastername, buildername)
 
