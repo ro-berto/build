@@ -628,12 +628,15 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def process_dumps(self, **kwargs):
     # Dumps are especially useful when other steps (e.g. tests) are failing.
-    self.m.python(
-        'process_dumps',
-        self.m.path['build'].join('scripts', 'slave', 'process_dumps.py'),
-        ['--target', self.c.build_config_fs],
-        infra_step=True,
-        **kwargs)
+    try:
+      self.m.python(
+          'process_dumps',
+          self.m.path['build'].join('scripts', 'slave', 'process_dumps.py'),
+          ['--target', self.c.build_config_fs],
+          infra_step=True,
+          **kwargs)
+    except self.m.step.InfraFailure:
+      pass
 
   def apply_syzyasan(self):
     args = ['--target', self.c.BUILD_CONFIG]

@@ -685,6 +685,20 @@ def GenTests(api):
                        'build_targets': ['base_unittests', 'net_unittests']}))
   )
 
+  # Do not fail the build if process_dumps fails.
+  # http://crbug.com/520660
+  yield (
+    api.test('process_dumps_failure') +
+    props(mastername='tryserver.chromium.win',
+          buildername='win_chromium_rel_ng') +
+    api.platform.name('win') +
+    api.override_step_data('read test spec', api.json.output({
+        'gtest_tests': ['blink_tests'],
+    })) +
+    suppress_analyze() +
+    api.override_step_data('process_dumps', retcode=1)
+  )
+
   yield (
     api.test('invalid_results') +
     props() +
