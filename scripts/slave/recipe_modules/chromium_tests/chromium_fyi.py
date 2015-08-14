@@ -1528,6 +1528,10 @@ SPEC = {
       'tests': [
         steps.GTestTest('gfx_unittests'),
       ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
       'testing': {
         'platform': 'linux',
       },
