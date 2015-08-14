@@ -14,6 +14,7 @@
 
   "builders": {
     "Infra Presubmit": {
+      "category": "Infra",
       "recipe": "run_presubmit",
       "properties": {
         "repo_name": "infra",
@@ -30,22 +31,64 @@
       "slavebuilddir": "infra",
     },
     "Infra Linux Trusty 64 Tester": {
+      "category": "Infra",
       "recipe": "infra/infra_repo_trybot",
       "scheduler": None,
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "infra",
     },
     "Infra Mac Tester": {
+      "category": "Infra",
       "recipe": "infra/infra_repo_trybot",
       "scheduler": None,
       "slave_pools": ["mac_slave_pool"],
       "slavebuilddir": "Infra",
     },
     "Infra Win Tester": {
+      "category": "Infra",
       "recipe": "infra/infra_repo_trybot",
       "scheduler": None,
       "slave_pools": ["win64_slave_pool"],
       "slavebuilddir": "infra",
+    },
+    "Luci-py Presubmit": {
+      "category": "Luci-py",
+      "recipe": "run_presubmit",
+      "properties": {
+        "repo_name": "luci_py",
+        "runhooks": True,
+      },
+      "scheduler": None,
+      "slave_pools": ["trusty64_slave_pool"],
+      "slavebuilddir": "presubmit_lucipy",
+    },
+    "Luci-go Linux Trusty 64 Tester": {
+      "category": "Luci-go",
+      "recipe": "infra/luci_go",
+      "scheduler": None,
+      "slave_pools": ["trusty64_slave_pool"],
+      "slavebuilddir": "luci-go",
+    },
+    "Luci-go Linux Precise 32 Tester": {
+      "category": "Luci-go",
+      "recipe": "infra/luci_go",
+      "scheduler": None,
+      "slave_pools": ["precise32_slave_pool"],
+      "slavebuilddir": "luci-go",
+    },
+    "Luci-go Mac Tester": {
+      "category": "Luci-go",
+      "recipe": "infra/luci_go",
+      "scheduler": None,
+      "slave_pools": ["mac_slave_pool"],
+      "slavebuilddir": "luci-go",
+    },
+    "Luci-go Win Tester": {
+      "category": "Luci-go",
+      "recipe": "infra/luci_go",
+      "scheduler": None,
+      "slave_pools": ["win64_slave_pool"],
+      "slavebuilddir": "luci-go",
     },
   },
 
