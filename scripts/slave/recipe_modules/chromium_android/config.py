@@ -30,9 +30,7 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     cr_build_android = Static(Path('[CHECKOUT]', 'build', 'android')),
     test_runner = Single(Path),
     gclient_custom_deps = Dict(value_type=(basestring, types.NoneType)),
-    storage_bucket = Single(basestring),
     channel = Single(basestring, empty_val='chrome'),
-    upload_dest_prefix = Single(basestring, empty_val=''),
     gclient_custom_vars = Dict(value_type=(basestring, types.NoneType)),
     coverage = Single(bool, required=False, empty_val=False),
     incremental_coverage = Single(bool, required=False, empty_val=False),
@@ -60,8 +58,6 @@ def clang_builder(c):
 @config_ctx(config_vars={'BUILD_CONFIG': 'Release'})
 def clang_asan_release_builder(c):  # pragma: no cover
   c.asan_symbolize = True
-  c.storage_bucket = 'chrome-test-builds/android'
-  c.upload_dest_prefix = 'asan-android-release-'
 
 @config_ctx(includes=['clang_asan_release_builder'])
 def clang_asan_tot_release_builder(c):  # pragma: no cover
@@ -70,8 +66,6 @@ def clang_asan_tot_release_builder(c):  # pragma: no cover
 @config_ctx(config_vars={'BUILD_CONFIG': 'Release'})
 def clang_asan_release_builder_l(c):  # pragma: no cover
   c.asan_symbolize = True
-  c.storage_bucket = 'chrome-test-builds/android'
-  c.upload_dest_prefix = 'asan-android-release-l-'
 
 @config_ctx()
 def component_builder(c):

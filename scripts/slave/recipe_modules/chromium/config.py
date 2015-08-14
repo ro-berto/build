@@ -62,6 +62,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       GYP_LINK_CONCURRENCY = Single(int, required=False),
       GYP_MSVS_VERSION = Single(basestring, required=False),
       GYP_USE_SEPARATE_MSPDBSRV = Single(int, jsonish_fn=str, required=False),
+      LLVM_DOWNLOAD_GOLD_PLUGIN = Single(int, required=False),
     ),
     env = ConfigGroup(
       PATH = List(Path),
