@@ -317,8 +317,6 @@
       "-v",
       "--apk",
       "Chromoting.apk",
-      "--apk_package",
-      "org.chromium.chromoting",
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",

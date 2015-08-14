@@ -32,7 +32,6 @@ EXPECTED_FAILURE = {
     'android.webkit.cts.WebSettingsTest': ['testUserAgentString_default']}
 
 WEBVIEW_APK = 'SystemWebView.apk'
-WEBVIEW_PACKAGE = 'com.android.webview'
 
 def FindTestReportXml(test_output):
   for line in test_output.split('\n'):
@@ -70,7 +69,7 @@ def RunSteps(api):
 
   api.adb.list_devices()
   # Install WebView
-  api.chromium_android.adb_install_apk(WEBVIEW_APK, WEBVIEW_PACKAGE)
+  api.chromium_android.adb_install_apk(WEBVIEW_APK)
 
   cts_dir = api.path['slave_build'].join('tmp', 'cts')
   cts_zip_path = cts_dir.join(CTS_FILE_NAME)

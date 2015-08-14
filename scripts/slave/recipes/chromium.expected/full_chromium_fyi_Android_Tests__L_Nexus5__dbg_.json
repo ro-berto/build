@@ -404,9 +404,7 @@
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "-v",
       "--apk",
-      "ChromePublic.apk",
-      "--apk_package",
-      "org.chromium.chrome"
+      "ChromePublic.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

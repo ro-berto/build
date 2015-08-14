@@ -346,8 +346,6 @@
       "-v",
       "--apk",
       "AndroidWebView.apk",
-      "--apk_package",
-      "org.chromium.android_webview.shell",
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -385,8 +383,6 @@
       "-v",
       "--apk",
       "ChromePublic.apk",
-      "--apk_package",
-      "org.chromium.chrome",
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -424,8 +420,6 @@
       "-v",
       "--apk",
       "ContentShell.apk",
-      "--apk_package",
-      "org.chromium.content_shell_apk",
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -463,8 +457,6 @@
       "-v",
       "--apk",
       "ChromeSyncShell.apk",
-      "--apk_package",
-      "org.chromium.chrome.browser.sync",
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",

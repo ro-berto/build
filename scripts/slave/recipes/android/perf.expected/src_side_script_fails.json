@@ -278,8 +278,6 @@
       "-v",
       "--apk",
       "ChromePublic.apk",
-      "--apk_package",
-      "org.chromium.chrome",
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",

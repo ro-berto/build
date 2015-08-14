@@ -156,9 +156,7 @@ def RunSteps(api):
 
   api.chromium_android.common_tests_setup_steps(perf_setup=True)
 
-  api.chromium_android.adb_install_apk(
-      'ChromePublic.apk',
-      'org.chromium.chrome')
+  api.chromium_android.adb_install_apk('ChromePublic.apk')
 
   test_runner = api.chromium_tests.create_test_runner(
       api, builder.get('tests', []))

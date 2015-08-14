@@ -344,8 +344,6 @@
       "-v",
       "--apk",
       "CronetSample.apk",
-      "--apk_package",
-      "org.chromium.cronet_sample_apk",
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -374,8 +372,6 @@
       "-v",
       "--apk",
       "CronetTest.apk",
-      "--apk_package",
-      "org.chromium.net",
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",

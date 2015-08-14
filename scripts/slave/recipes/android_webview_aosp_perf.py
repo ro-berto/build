@@ -24,10 +24,8 @@ DEPS = [
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
 WEBVIEW_APK = 'SystemWebView.apk'
-WEBVIEW_PACKAGE = 'com.android.webview'
 
 TELEMETRY_SHELL_APK = 'AndroidWebViewShell.apk'
-TELEMETRY_SHELL_PACKAGE = 'org.chromium.webview_shell'
 
 BUILDER = freeze({
   'perf_id': 'android-webview',
@@ -62,11 +60,10 @@ def RunSteps(api):
       reboot_timeout=180)
 
   # Install WebView
-  api.chromium_android.adb_install_apk(WEBVIEW_APK, WEBVIEW_PACKAGE)
+  api.chromium_android.adb_install_apk(WEBVIEW_APK)
 
   # Install the telemetry shell.
-  api.chromium_android.adb_install_apk(TELEMETRY_SHELL_APK,
-                                       TELEMETRY_SHELL_PACKAGE)
+  api.chromium_android.adb_install_apk(TELEMETRY_SHELL_APK)
 
   # Run the tests.
   api.adb.list_devices()

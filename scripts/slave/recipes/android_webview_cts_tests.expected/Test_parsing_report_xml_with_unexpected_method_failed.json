@@ -248,8 +248,6 @@
       "-v",
       "--apk",
       "SystemWebView.apk",
-      "--apk_package",
-      "com.android.webview",
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",

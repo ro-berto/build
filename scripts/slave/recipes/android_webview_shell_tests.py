@@ -25,7 +25,6 @@ DEPS = [
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
 WEBVIEW_APK = 'SystemWebView.apk'
-WEBVIEW_PACKAGE = 'com.android.webview'
 
 INSTRUMENTATION_TESTS = freeze([
   {
@@ -71,7 +70,7 @@ def RunSteps(api):
       reboot_timeout=180)
 
   # Install system WebView.
-  api.chromium_android.adb_install_apk(WEBVIEW_APK, WEBVIEW_PACKAGE)
+  api.chromium_android.adb_install_apk(WEBVIEW_APK)
 
   api.adb.list_devices()
 

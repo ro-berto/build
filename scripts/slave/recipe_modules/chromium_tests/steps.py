@@ -1087,8 +1087,7 @@ class AndroidTest(Test):
   def run(self, api, suffix):
     assert api.chromium.c.TARGET_PLATFORM == 'android'
     if self.adb_install_apk:
-      api.chromium_android.adb_install_apk(
-          self.adb_install_apk[0], self.adb_install_apk[1])
+      api.chromium_android.adb_install_apk(self.adb_install_apk)
     try:
       json_results_file = api.json.output(add_json_log=False)
       self.run_tests(api, suffix, json_results_file)

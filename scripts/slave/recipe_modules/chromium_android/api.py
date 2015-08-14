@@ -16,7 +16,6 @@ INSTRUMENTATION_TESTS = freeze([
     'gyp_target': 'android_webview_test_apk',
     'kwargs': {
       'install_apk': {
-        'package': 'org.chromium.android_webview.shell',
         'apk': 'AndroidWebView.apk'
       },
       'isolate_file_path': 'android_webview/android_webview_test_apk.isolate',
@@ -27,7 +26,6 @@ INSTRUMENTATION_TESTS = freeze([
     'gyp_target': 'chrome_shell_test_apk',
     'kwargs': {
       'install_apk': {
-        'package': 'org.chromium.chrome.shell',
         'apk': 'ChromeShell.apk',
       },
       'isolate_file_path': 'chrome/chrome_shell_test_apk.isolate',
@@ -38,7 +36,6 @@ INSTRUMENTATION_TESTS = freeze([
     'gyp_target': 'content_shell_test_apk',
     'kwargs': {
       'install_apk': {
-        'package': 'org.chromium.content_shell_apk',
         'apk': 'ContentShell.apk',
       },
       'isolate_file_path': 'content/content_shell_test_apk.isolate',
@@ -49,7 +46,6 @@ INSTRUMENTATION_TESTS = freeze([
     'gyp_target': 'chrome_sync_shell_test_apk',
     'kwargs': {
       'install_apk': {
-        'package': 'org.chromium.chrome.browser.sync',
         'apk': 'ChromeSyncShell.apk',
       },
     },
@@ -59,7 +55,6 @@ INSTRUMENTATION_TESTS = freeze([
     'gyp_target': 'remoting_test_apk',
     'kwargs': {
       'install_apk': {
-        'package': 'org.chromium.chromoting',
         'apk': 'Chromoting.apk',
       },
     },
@@ -442,14 +437,13 @@ class AndroidApi(recipe_api.RecipeApi):
         key = 'blacklisted %s' % d
         result.presentation.logs[key] = [d]
 
-  def adb_install_apk(self, apk, apk_package):
+  def adb_install_apk(self, apk):
     install_cmd = [
         self.m.path['checkout'].join('build',
                                      'android',
                                      'adb_install_apk.py'),
         '-v',
         '--apk', apk,
-        '--apk_package', apk_package
     ]
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       install_cmd.append('--release')
@@ -572,7 +566,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                 official_build=False, install_apk=None,
                                 json_results_file=None, suffix=None, **kwargs):
     if install_apk:
-      self.adb_install_apk(install_apk['apk'], install_apk['package'])
+      self.adb_install_apk(install_apk['apk'])
 
     args = ['--test-apk', test_apk]
     if isolate_file_path:

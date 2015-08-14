@@ -572,9 +572,7 @@
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "-v",
       "--apk",
-      "AndroidWebView.apk",
-      "--apk_package",
-      "org.chromium.android_webview.shell"
+      "AndroidWebView.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -609,9 +607,7 @@
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "-v",
       "--apk",
-      "ChromePublic.apk",
-      "--apk_package",
-      "org.chromium.chrome"
+      "ChromePublic.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -646,9 +642,7 @@
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "-v",
       "--apk",
-      "ContentShell.apk",
-      "--apk_package",
-      "org.chromium.content_shell_apk"
+      "ContentShell.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -683,9 +677,7 @@
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "-v",
       "--apk",
-      "ChromeSyncShell.apk",
-      "--apk_package",
-      "org.chromium.chrome.browser.sync"
+      "ChromeSyncShell.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -1396,9 +1388,7 @@
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "-v",
       "--apk",
-      "AndroidWebView.apk",
-      "--apk_package",
-      "org.chromium.android_webview.shell"
+      "AndroidWebView.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -1433,9 +1423,7 @@
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "-v",
       "--apk",
-      "ChromePublic.apk",
-      "--apk_package",
-      "org.chromium.chrome"
+      "ChromePublic.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -1470,9 +1458,7 @@
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "-v",
       "--apk",
-      "ContentShell.apk",
-      "--apk_package",
-      "org.chromium.content_shell_apk"
+      "ContentShell.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -1507,9 +1493,7 @@
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "-v",
       "--apk",
-      "ChromeSyncShell.apk",
-      "--apk_package",
-      "org.chromium.chrome.browser.sync"
+      "ChromeSyncShell.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

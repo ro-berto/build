@@ -342,9 +342,7 @@
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "-v",
       "--apk",
-      "CronetSample.apk",
-      "--apk_package",
-      "org.chromium.cronet_sample_apk"
+      "CronetSample.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -370,9 +368,7 @@
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "-v",
       "--apk",
-      "CronetTest.apk",
-      "--apk_package",
-      "org.chromium.net"
+      "CronetTest.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
