@@ -50,7 +50,8 @@ Sd  dummy: 0.255921ms
 RESULT telemetry_page_measurement_results: num_failed= 0 count
 RESULT telemetry_page_measurement_results: num_errored= 0 count
 
-View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch
+View online at http://storage.googleapis.com/chromium-telemetry/\
+html-results/results-with_patch
 """
 
   results_without_patch = """*RESULT dummy: dummy= [5.83,6.013,5.573]ms
@@ -59,7 +60,8 @@ Sd  dummy: 0.255921ms
 RESULT telemetry_page_measurement_results: num_failed= 0 count
 RESULT telemetry_page_measurement_results: num_errored= 0 count
 
-View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch
+View online at http://storage.googleapis.com/chromium-telemetry/html-results/\
+results-without_patch
 """
   yield (api.test('basic_perf_tryjob')
   + api.properties.tryserver(
@@ -71,9 +73,9 @@ View online at http://storage.googleapis.com/chromium-telemetry/html-results/res
   + api.override_step_data(
       'load config',
       api.json.output(config_json))
-  + api.step_data('Performance Test (Without Patch) 1/1',
+  + api.step_data('Performance Test (Without Patch) 1 of 1',
       stdout=api.raw_io.output(str(results_without_patch)))
-  + api.step_data('Performance Test (With Patch) 1/1',
+  + api.step_data('Performance Test (With Patch) 1 of 1',
       stdout=api.raw_io.output(str(results_with_patch)))
 
   )
@@ -90,9 +92,9 @@ View online at http://storage.googleapis.com/chromium-telemetry/html-results/res
   + api.override_step_data(
       'load config',
       api.json.output(config_json))
-  + api.step_data('Performance Test (Without Patch) 1/1',
+  + api.step_data('Performance Test (Without Patch) 1 of 1',
       stdout=api.raw_io.output(results_without_patch))
-  + api.step_data('Performance Test (With Patch) 1/1',
+  + api.step_data('Performance Test (With Patch) 1 of 1',
       stdout=api.raw_io.output(results_with_patch))
   )
 
@@ -106,7 +108,7 @@ View online at http://storage.googleapis.com/chromium-telemetry/html-results/res
   + api.override_step_data(
       'load config',
       api.json.output(config_json))
-  + api.step_data('Performance Test (Without Patch) 1/1', retcode=1)
+  + api.step_data('Performance Test (Without Patch) 1 of 1', retcode=1)
   + api.step_data('Performance Test (With Patch) 1/1', retcode=1)
   )
 
@@ -126,9 +128,11 @@ View online at http://storage.googleapis.com/chromium-telemetry/html-results/res
       stdout=api.raw_io.output('hash:d49c331def2a3bbf3ddd0096eb51551155'))
   + api.step_data('resolving commit_pos ' + config_json['bad_revision'],
       stdout=api.raw_io.output('hash:bad49c331def2a3bbf3ddd0096eb51551155'))
-  + api.step_data('Performance Test (d49c331def2a3bbf3ddd0096eb51551155) 1/1',
+  + api.step_data(
+      'Performance Test (d49c331def2a3bbf3ddd0096eb51551155) 1 of 1',
       stdout=api.raw_io.output(results_without_patch))
-  + api.step_data('Performance Test (bad49c331def2a3bbf3ddd0096eb51551155) 1/1',
+  + api.step_data(
+      'Performance Test (bad49c331def2a3bbf3ddd0096eb51551155) 1 of 1',
       stdout=api.raw_io.output(results_with_patch))
   )
 

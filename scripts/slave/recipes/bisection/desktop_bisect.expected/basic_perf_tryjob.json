@@ -203,7 +203,7 @@
       "--results-label=Patch"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Performance Test (With Patch) 1/1",
+    "name": "Performance Test (With Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/"
   },
@@ -319,7 +319,7 @@
       "--results-label=TOT"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Performance Test (Without Patch) 1/1",
+    "name": "Performance Test (Without Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/"
   },

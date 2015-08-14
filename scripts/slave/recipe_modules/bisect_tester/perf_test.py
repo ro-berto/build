@@ -61,7 +61,7 @@ def run_perf_test(api, test_config, **kwargs):
       command = _set_output_dir(command, str(temp_dir))
       results_path = temp_dir.join('results-chart.json')
 
-    step_name = "Performance Test%s %d/%d" % (
+    step_name = "Performance Test%s %d of %d" % (
         ' (%s)' % kwargs['name'] if 'name' in kwargs else '', i + 1, repeat_cnt)
     if api.m.platform.is_linux:
       os.environ['CHROME_DEVEL_SANDBOX'] = api.m.path.join(
