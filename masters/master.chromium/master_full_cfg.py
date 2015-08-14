@@ -52,7 +52,7 @@ F('win_clobber', win().ChromiumFactory(
       'show_perf_results': True,
       'perf_id': 'chromium-rel-xp',
       'expectations': True,
-      'process_dumps': True,
+      'process_dumps': False,
       'start_crash_handler': True,
       'generate_gtest_json': ActiveMaster.is_production_host,
       'gclient_env': {
