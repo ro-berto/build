@@ -17,7 +17,7 @@
       "recipe": "run_presubmit",
       "properties": {
         "repo_name": "infra",
-        "run_hooks": True,
+        "runhooks": True,
       },
       "scheduler": None,
       "slave_pools": ["trusty64_slave_pool"],
