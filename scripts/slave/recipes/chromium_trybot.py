@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import collections
+
 from infra.libs.infra_types import freeze
 
 DEPS = [
@@ -586,9 +588,10 @@ def _RunStepsInternal(api):
   if add_blink_tests:
     blink_tests = [
         api.chromium_tests.steps.ScriptTest(
-            'webkit_lint', 'webkit_lint.py', {}),
+            'webkit_lint', 'webkit_lint.py', collections.defaultdict(list)),
         api.chromium_tests.steps.ScriptTest(
-            'webkit_python_tests', 'webkit_python_tests.py', {}),
+            'webkit_python_tests', 'webkit_python_tests.py',
+            collections.defaultdict(list)),
         api.chromium_tests.steps.BlinkTest(),
     ]
     tests.extend(blink_tests)
