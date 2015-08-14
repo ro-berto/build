@@ -517,13 +517,6 @@ def _RunStepsInternal(api):
         enable_swarming=True,
         swarming_dimension_sets=CHROMIUM_GPU_DIMENSION_SETS[master][builder]))
 
-  # TODO(phajdan.jr): Remove special case for layout tests.
-  # This could be done by moving layout tests to main waterfall.
-  affected_files = api.tryserver.get_files_affected_by_patch()
-  if (any([f.startswith('third_party/WebKit') for f in affected_files]) and
-      buildername in CHROMIUM_BLINK_TESTS_BUILDERS):
-    tests.append(api.chromium_tests.steps.BlinkTest())
-
   compile_targets, tests_including_triggered = \
       api.chromium_tests.get_compile_targets_and_tests(
           bot_config['mastername'],
@@ -533,6 +526,7 @@ def _RunStepsInternal(api):
           override_bot_type='builder_tester',
           override_tests=tests)
 
+  affected_files = api.tryserver.get_files_affected_by_patch()
   targets_for_analyze = sorted(set(
       all_compile_targets(api, tests + tests_including_triggered) +
       compile_targets))
@@ -560,12 +554,32 @@ def _RunStepsInternal(api):
     # trying to isolate the tests. Also see above comment.
     compile_targets = sorted(set(compile_targets + matching_exes))
 
-  if not requires_compile:
+  # TODO(phajdan.jr): Remove special case for layout tests.
+  add_blink_tests = False
+  if (any([f.startswith('third_party/WebKit') for f in affected_files]) and
+      buildername in CHROMIUM_BLINK_TESTS_BUILDERS):
+    add_blink_tests = True
+
+  # Blink tests have to bypass "analyze", see below.
+  if not requires_compile and not add_blink_tests:
     return
 
   tests = tests_in_compile_targets(api, matching_exes, tests)
   tests_including_triggered = tests_in_compile_targets(
       api, matching_exes, tests_including_triggered)
+
+  # Blink tests are tricky at this moment. We'd like to use "analyze" for
+  # everything else. However, there are blink changes that only add or modify
+  # layout test files (html etc). This is not recognized by "analyze" as
+  # compile dependency. However, the blink tests should still be executed.
+  if add_blink_tests:
+    # TODO(phajdan.jr): Add all remaining tests running on blink tryserver.
+    blink_tests = [api.chromium_tests.steps.BlinkTest()]
+    tests.extend(blink_tests)
+    tests_including_triggered.extend(blink_tests)
+    for test in blink_tests:
+      compile_targets.extend(test.compile_targets(api))
+    compile_targets = sorted(set(compile_targets))
 
   api.chromium_tests.compile_specific_targets(
       bot_config['mastername'],
