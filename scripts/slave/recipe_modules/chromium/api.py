@@ -504,12 +504,16 @@ class ChromiumApi(recipe_api.RecipeApi):
     env = self.get_env()
     env.update(kwargs.get('env', {}))
 
-    if self.c.project_generator.tool == 'gyp':
-      # CrOS "chrome_sdk" builds fully override GYP_DEFINES in the wrapper. Zero
-      # it to not show confusing information in the build logs.
-      if not self.c.TARGET_CROS_BOARD:
-        env.update(self.c.gyp_env.as_jsonish())
-    else:
+    # CrOS "chrome_sdk" builds fully override GYP_DEFINES in the wrapper. Zero
+    # it to not show confusing information in the build logs.
+    if not self.c.TARGET_CROS_BOARD:
+      # TODO(sbc): Ideally we would not need gyp_env set during runhooks when
+      # we are not running gyp, but there are some hooks (such as sysroot
+      # installation that peek at GYP_DEFINES and modify thier behaviour
+      # accordingly.
+      env.update(self.c.gyp_env.as_jsonish())
+
+    if self.c.project_generator.tool != 'gyp':
       env['GYP_CHROMIUM_NO_ACTION'] = 1
     kwargs['env'] = env
     if self.c.TARGET_CROS_BOARD:

@@ -77,7 +77,9 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_CHROMIUM_NO_ACTION": "1"
+      "GYP_CHROMIUM_NO_ACTION": "1",
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=arm64 use_goma=1"
     },
     "name": "gclient runhooks"
   },
