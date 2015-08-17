@@ -113,16 +113,6 @@
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"WebKit Mac10.11\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"WebKit Mac10.6\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
@@ -330,19 +320,6 @@
     "name": "trigger (2)",
     "trigger_specs": [
       {
-        "builder_name": "WebKit Mac10.11"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@WebKit Mac10.11@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (3)",
-    "trigger_specs": [
-      {
         "builder_name": "WebKit Mac10.6"
       }
     ],
@@ -353,7 +330,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (4)",
+    "name": "trigger (3)",
     "trigger_specs": [
       {
         "builder_name": "WebKit Mac10.7"
@@ -366,7 +343,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (5)",
+    "name": "trigger (4)",
     "trigger_specs": [
       {
         "builder_name": "WebKit Mac10.8"
@@ -379,7 +356,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (6)",
+    "name": "trigger (5)",
     "trigger_specs": [
       {
         "builder_name": "WebKit Mac10.9"
