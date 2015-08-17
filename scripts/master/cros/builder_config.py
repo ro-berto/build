@@ -172,7 +172,7 @@ class PreCqLauncherBuilderConfig(BuilderConfig):
 
   UNIQUE = True
   CLOSER = True
-  SLAVE_TYPE = SlaveType.VM
+  SLAVE_TYPE = SlaveType.GCE_WIMPY
 
   def _GetBuilderName(self):
     return 'Pre-CQ Launcher'

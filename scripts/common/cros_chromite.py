@@ -71,6 +71,8 @@ class SlaveType(object):
   BAREMETAL = 'baremetal'
   VM = 'vm'
   GCE = 'gce'
+  # A wimpy GCE instance well suited to run cbuildbot's master build-types.
+  GCE_WIMPY = 'gce_wimpy'
 
 
 class ChromiteTarget(object):
