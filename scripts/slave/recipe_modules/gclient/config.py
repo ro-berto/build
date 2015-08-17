@@ -515,6 +515,14 @@ def luci_go(c):
   m['infra/go/src/github.com/luci/luci-go'] = 'got_revision'
 
 @config_ctx()
+def luci_py(c):
+  soln = c.solutions.add()
+  soln.name = 'luci_py'
+  soln.url = ('https://chromium.googlesource.com/external/github.com/'
+              'luci/luci-py.git')
+  c.got_revision_mapping['luci_py'] = 'got_revision'
+
+@config_ctx()
 def chrome_from_buildspec(c):  # pragma: no cover
   soln = c.solutions.add()
   soln.name = 'chrome_from_buildspec'
