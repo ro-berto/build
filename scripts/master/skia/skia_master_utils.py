@@ -35,7 +35,6 @@ DEFAULT_DO_TRYBOT = True
 DEFAULT_RECIPE = 'skia/skia'
 DEFAULT_TRYBOT_ONLY = False
 BUILDBUCKET_SCHEDULER_NAME = 'buildbucket'
-PERCOMMIT_SCHEDULER_NAME = 'skia_percommit'
 MASTER_ONLY_SCHEDULER_NAME = 'skia_master_only'
 PERIODIC_15MINS_SCHEDULER_NAME = 'skia_periodic_15mins'
 NIGHTLY_SCHEDULER_NAME = 'skia_nightly'
@@ -48,7 +47,6 @@ TRY_SCHEDULER_NAME = 'try_job_rietveld_skia'
 TRY_SCHEDULER_PROJECT = 'skia'
 
 SCHEDULERS = [
-  PERCOMMIT_SCHEDULER_NAME,
   MASTER_ONLY_SCHEDULER_NAME,
   TRY_SCHEDULER_NAME,
   PERIODIC_15MINS_SCHEDULER_NAME,
@@ -166,12 +164,11 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
     elif is_trybot:
       builders_by_scheduler[TRY_SCHEDULER_NAME].append(builder_name)
     else:
-      scheduler = builder.get('scheduler', PERCOMMIT_SCHEDULER_NAME)
+      scheduler = builder.get('scheduler', BUILDBUCKET_SCHEDULER_NAME)
       # Setting the scheduler to BUILDBUCKET_SCHEDULER_NAME indicates that
-      # BuildBucket is the only way to schedule builds for this bot; don't
-      # add a scheduler in those cases.
-      if scheduler != BUILDBUCKET_SCHEDULER_NAME:
-        builders_by_scheduler[scheduler].append(builder_name)
+      # BuildBucket is the only way to schedule builds for this bot; just
+      # pretend to add a scheduler in those cases.
+      builders_by_scheduler[scheduler].append(builder_name)
 
   # Create builders and trybots.
   for builder in builders:
@@ -187,7 +184,7 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
 
   # Verify that all parent builders exist.
   all_nontriggered_builders = set(
-      builders_by_scheduler[PERCOMMIT_SCHEDULER_NAME]
+      builders_by_scheduler[BUILDBUCKET_SCHEDULER_NAME]
   ).union(set(builders_by_scheduler[TRY_SCHEDULER_NAME]))
   trigger_parents = set(triggered_builders.keys())
   nonexistent_parents = trigger_parents - all_nontriggered_builders
@@ -196,8 +193,6 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
                     ', '.join(nonexistent_parents))
 
   # Create the schedulers.
-  skia_change_filter = change_filter.ChangeFilter(
-      project='skia', repository=ActiveMaster.repo_url)
   infra_change_filter = change_filter.ChangeFilter(
       project='buildbot', repository=global_constants.INFRA_REPO)
   skia_master_only_change_filter = change_filter.ChangeFilter(
@@ -207,13 +202,6 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
     return 'triggers_%s' % parent_builder
 
   c['schedulers'] = []
-
-  s = AnyBranchScheduler(
-      name=PERCOMMIT_SCHEDULER_NAME,
-      treeStableTimer=60,
-      change_filter=skia_change_filter,
-      builderNames=builders_by_scheduler[PERCOMMIT_SCHEDULER_NAME])
-  c['schedulers'].append(s)
 
   s = Scheduler(
       name=MASTER_ONLY_SCHEDULER_NAME,
