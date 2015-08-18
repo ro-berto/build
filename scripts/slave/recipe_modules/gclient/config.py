@@ -510,13 +510,16 @@ def luci_go(c):
   del m['infra']
   m['infra/go/src/github.com/luci/luci-go'] = 'got_revision'
 
-@config_ctx()
+@config_ctx(includes=['infra'])
 def luci_py(c):
-  soln = c.solutions.add()
-  soln.name = 'luci_py'
-  soln.url = ('https://chromium.googlesource.com/external/github.com/'
-              'luci/luci-py.git')
-  c.got_revision_mapping['luci_py'] = 'got_revision'
+  # luci-py is checked out as part of infra just to have appengine
+  # pre-installed, as that's what luci-py PRESUBMIT relies on.
+  c.revisions['infra'] = 'origin/master'
+  c.revisions['infra/luci'] = (
+      gclient_api.RevisionFallbackChain('origin/master'))
+  m = c.got_revision_mapping
+  del m['infra']
+  m['infra/luci'] = 'got_revision'
 
 @config_ctx()
 def chrome_from_buildspec(c):  # pragma: no cover
