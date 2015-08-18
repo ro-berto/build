@@ -25,6 +25,7 @@
       "slavebuilddir": "presubmit_infra",
     },
     "Infra Linux Precise 32 Tester": {
+      "category": "Infra",
       "recipe": "infra/infra_repo_trybot",
       "scheduler": None,
       "slave_pools": ["precise32_slave_pool"],
