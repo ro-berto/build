@@ -5,7 +5,14 @@
 from recipe_engine import recipe_api
 
 
-class RevisionFallbackChain(object):
+class RevisionResolver(object):
+  """Resolves the revision based on build properties."""
+
+  def resolve(self, properties):  # pragma: no cover
+    raise NotImplementedError()
+
+
+class RevisionFallbackChain(RevisionResolver):
   """Specify that a given project's sync revision follows the fallback chain."""
   def __init__(self, default=None):
     self._default = default
@@ -25,7 +32,7 @@ class RevisionFallbackChain(object):
             self._default)
 
 
-class ProjectRevisionResolver(object):
+class ProjectRevisionResolver(RevisionResolver):
   """Revision resolver that takes into account the project."""
   def __init__(self, project, parent_got_revision=None):
     self.project = project

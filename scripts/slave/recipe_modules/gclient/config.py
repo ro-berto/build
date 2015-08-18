@@ -28,9 +28,7 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None,
         safesync_url = Single(basestring, required=False),
 
         revision = Single(
-            (basestring,
-             gclient_api.RevisionFallbackChain,
-             gclient_api.ProjectRevisionResolver),
+            (basestring, gclient_api.RevisionResolver),
             required=False, hidden=True),
       )
     ),
@@ -50,10 +48,8 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None,
     # Addition revisions we want to pass in.  For now theres a duplication
     # of code here of setting custom vars AND passing in --revision. We hope
     # to remove custom vars later.
-    revisions = Dict(value_type=(
-        basestring,
-        gclient_api.RevisionFallbackChain,
-        gclient_api.ProjectRevisionResolver),
+    revisions = Dict(
+        value_type=(basestring, gclient_api.RevisionResolver),
         hidden=True),
 
     # TODO(iannucci): HACK! The use of None here to indicate that we apply this
