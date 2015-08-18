@@ -377,11 +377,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         # with different MB settings.
         real_mastername = self.m.properties['mastername']
         real_buildername = self.m.properties['buildername']
-        self.m.chromium.run_mb(
-            real_mastername,
-            real_buildername,
-            swarming_targets=[t.name for t in tests_including_triggered
-                              if t.uses_swarming])
+        self.m.chromium.run_mb(real_mastername, real_buildername,
+                               isolated_targets=isolated_targets)
 
       try:
         self.transient_check(update_step, lambda transform_name:

@@ -292,7 +292,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--swarming-targets-file",
-      "content_gl_tests on NVIDIA GPU on Linux\ngl_tests on NVIDIA GPU on Linux\nangle_unittests on NVIDIA GPU on Linux\nmaps_pixel_test on NVIDIA GPU on Linux\npixel_test on NVIDIA GPU on Linux\nwebgl_conformance on NVIDIA GPU on Linux\ncontext_lost on NVIDIA GPU on Linux\nmemory_test on NVIDIA GPU on Linux\ntrace_test on NVIDIA GPU on Linux\nscreenshot_sync on NVIDIA GPU on Linux\nhardware_accelerated_feature on NVIDIA GPU on Linux\ngpu_process_launch on NVIDIA GPU on Linux\ngpu_rasterization on NVIDIA GPU on Linux\ntab_capture_end2end_tests on NVIDIA GPU on Linux\n",
+      "content_gl_tests\ngl_tests\nangle_unittests\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntab_capture_end2end_tests\n",
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",

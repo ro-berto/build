@@ -575,11 +575,11 @@ class ChromiumApi(recipe_api.RecipeApi):
         ])
 
   def run_mb(self, mastername, buildername, use_goma=True,
-             mb_config_path=None, swarming_targets=None):
+             mb_config_path=None, isolated_targets=None):
     mb_config_path = (mb_config_path or
                       self.m.path['checkout'].join('tools', 'mb',
                                                    'mb_config.pyl'))
-    swarming_targets = swarming_targets or []
+    isolated_targets = isolated_targets or []
 
     args=[
         'gen', '-v',
@@ -591,8 +591,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     if use_goma:
       args += ['--goma-dir', self.m.path['build'].join('goma')]
 
-    if swarming_targets:
-      data = '\n'.join(swarming_targets) + '\n'
+    if isolated_targets:
+      data = '\n'.join(isolated_targets) + '\n'
+
+      # TODO(dpranke): Change the MB flag to '--isolate-targets-file', maybe?
       args += ['--swarming-targets-file', self.m.raw_io.input(data)]
 
     args += ['//out/%s' % self.c.build_config_fs]
