@@ -114,5 +114,7 @@ def _run_command(api, command, step_name):
         stdout=stdout,
         stderr=stderr)
   except api.m.step.StepFailure as sf:
+    sf.result.presentation.logs['Failure Output'] = (
+        sf.result.stdout or '').splitlines()
     return sf.result.stdout, sf.result.stderr, sf.result.retcode
   return step_result.stdout, step_result.stderr, step_result.retcode
