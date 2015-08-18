@@ -97,7 +97,6 @@ def main():
   # Check if host is whitelisted.
   if not options.manual:
     if not any(host.match(cur_host) for host in WHITELISTED_HOSTS):
-      print 'Host %s is not whitelisted for SVN-to-Git conversion' % cur_host
       return 0
 
   # Set up credentials for the download_from_google_storage hook.
@@ -117,7 +116,6 @@ def main():
     solutions = exec_env['solutions']
   assert len(solutions) == 1, 'Number of solutions in .gclient is not 1'
   if not solutions[0]['url'].startswith('svn:'):
-    print 'Non-SVN URL in .gclient: %s' % solutions[0]['url']
     return 0
   sol_name = solutions[0]['name']
   assert sol_name in GCLIENT_CONFIGS, 'Unknown type of checkout: ' % sol_name
