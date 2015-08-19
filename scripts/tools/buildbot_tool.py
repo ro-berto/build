@@ -42,6 +42,9 @@ def parse_args(argv):
                          'a builders.pyl file).')
   subp.set_defaults(func=run_gen)
 
+  subp = subps.add_parser('genall', help=run_gen_all.__doc__)
+  subp.set_defaults(func=run_gen_all)
+
   subp = subps.add_parser('help', help=run_help.__doc__)
   subp.add_argument(nargs='?', action='store', dest='subcommand',
                     help='The command to get help for.')
@@ -50,17 +53,11 @@ def parse_args(argv):
   return parser.parse_args(argv)
 
 
-def run_gen(args, fs):
+def generate(builders_path, fs, print_prefix=''):
   """Generate a new master config."""
 
-  master_dirname = args.master_dirname[0]
-  master_subpath = fs.relpath(master_dirname, BASE_DIR)
-  builders_path = fs.join(BASE_DIR, master_subpath, 'builders.pyl')
-
-  if not fs.exists(builders_path):
-    print("%s not found" % master_dirname, file=sys.stderr)
-    return 1
-
+  out_dir = fs.dirname(builders_path)
+  out_subpath = fs.relpath(out_dir, BASE_DIR)
   values = chromium_utils.ParseBuildersFileContents(
       builders_path,
       fs.read_text_file(builders_path))
@@ -69,10 +66,44 @@ def run_gen(args, fs):
     template = fs.read_text_file(fs.join(TEMPLATE_DIR, filename))
     contents = _expand(template, values,
                        '%s/%s' % (TEMPLATE_SUBPATH, filename),
-                       master_subpath)
-    fs.write_text_file(fs.join(BASE_DIR, master_subpath, filename), contents)
-    print("Wrote %s." % filename)
+                       out_subpath)
+    fs.write_text_file(fs.join(out_dir, filename), contents)
+    print('%sWrote %s.' % (print_prefix, filename))
 
+  return 0
+
+
+def run_gen(args, fs):
+  """Generate a new master config."""
+
+  master_dirname = args.master_dirname[0]
+  builders_path = fs.join(master_dirname, 'builders.pyl')
+
+  if not fs.exists(builders_path):
+    print("%s not found" % master_dirname, file=sys.stderr)
+    return 1
+
+  generate(builders_path, fs)
+  return 0
+
+
+def run_gen_all(args, fs):
+  """Generate new master configs for all masters that use builders.pyl."""
+
+  masters_dirs = [
+    fs.join(BASE_DIR, 'masters'),
+    fs.join(BASE_DIR, '..', 'build_internal', 'masters'),
+  ]
+  for masters_dir in masters_dirs:
+    if not fs.isdir(masters_dir):
+      continue
+    for master_dir in fs.listdirs(masters_dir):
+      if not master_dir.startswith('master.'):
+        continue
+      builders_path = fs.join(masters_dir, master_dir, 'builders.pyl')
+      if fs.isfile(builders_path):
+        print('%s:' % master_dir)
+        generate(builders_path, fs, print_prefix='  ')
   return 0
 
 

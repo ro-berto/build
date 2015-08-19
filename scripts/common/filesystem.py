@@ -24,13 +24,24 @@ class Filesystem(object):
   def exists(self, *comps):
     return os.path.exists(self.join(*comps))
 
+  def isfile(self, *comps):
+    return os.path.isfile(self.join(*comps))
+
+  def isdir(self, *comps):
+    return os.path.isdir(self.join(*comps))
+
   def join(self, *comps):
     return os.path.join(*comps)
 
   def listfiles(self, path):
-    return [path for path in os.listdir(path)
-            if not os.path.isdir(path) and
-               not os.path.basename(path).startswith('.')]
+    return [f for f in os.listdir(path)
+            if not self.isdir(path, f) and
+               not f.startswith('.')]
+
+  def listdirs(self, path):
+    return [d for d in os.listdir(path)
+            if self.isdir(path, d) and
+               not d.startswith('.')]
 
   def normpath(self, path):
     return os.path.normpath(path)
