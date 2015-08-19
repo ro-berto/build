@@ -168,7 +168,9 @@ def RunSteps(api):
 
   api.chromium.runhooks()
 
-  api.chromium.run_gn(use_goma=True)
+  api.chromium.run_mb(api.properties.get('mastername'),
+                      api.properties.get('buildername'),
+                      use_goma=True)
 
   api.chromium.compile(targets=['mandoline:all'])
 
