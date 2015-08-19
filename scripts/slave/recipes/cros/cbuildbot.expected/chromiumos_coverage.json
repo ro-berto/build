@@ -44,8 +44,6 @@
       "--buildroot",
       "[ROOT]/cbuild/external_master",
       "--buildbot",
-      "--branch",
-      "factory-1412.B",
       "--buildnumber",
       "0",
       "--chrome_rev",

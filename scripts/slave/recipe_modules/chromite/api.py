@@ -298,7 +298,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     ]
     if not tryjob:
       cbb_args.append('--buildbot')
-    if self.c.chromite_branch:
+    if self.c.chromite_branch and not self.c.cbb.disable_bootstrap:
       cbb_args.extend(['--branch', self.c.chromite_branch])
     if self.c.cbb.build_number is not None:
       cbb_args.extend(['--buildnumber', self.c.cbb.build_number])

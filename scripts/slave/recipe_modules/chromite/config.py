@@ -56,6 +56,10 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
 
       # The (optional) configuration repository to use.
       config_repo = Single(basestring),
+
+      # This disables Chromite bootstrapping by omitting the explicit "--branch"
+      # argument.
+      disable_bootstrap = Single(bool),
     ),
 
     # A list of branches whose Chromite version is "old". Old Chromite
@@ -124,3 +128,4 @@ def chromiumos_coverage_test(c):
   c.use_chrome_version = True
   c.read_cros_manifest = True
   c.cbb.chrome_rev = 'stable'
+  c.cbb.disable_bootstrap = True

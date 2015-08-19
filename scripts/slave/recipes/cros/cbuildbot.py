@@ -136,6 +136,7 @@ def GenTests(api):
           cbb_branch='factory-1412.B',
           cbb_variant='test',
           cbb_debug=True,
+          cbb_disable_branch=True,
           config_repo='https://fake.googlesource.com/myconfig/repo.git',
       )
   )
