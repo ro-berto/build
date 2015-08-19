@@ -206,7 +206,10 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Performance Test (With Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/"
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@Captured Output@@@"
+    ]
   },
   {
     "cmd": [

@@ -205,7 +205,17 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Performance Test (With Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/"
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@Captured Output@*RESULT dummy: dummy= [5.83,6.013,5.573]ms@@@",
+      "@@@STEP_LOG_LINE@Captured Output@Avg dummy: 5.907711ms@@@",
+      "@@@STEP_LOG_LINE@Captured Output@Sd  dummy: 0.255921ms@@@",
+      "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_failed= 0 count@@@",
+      "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_errored= 0 count@@@",
+      "@@@STEP_LOG_LINE@Captured Output@@@@",
+      "@@@STEP_LOG_LINE@Captured Output@View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch@@@",
+      "@@@STEP_LOG_END@Captured Output@@@"
+    ]
   },
   {
     "cmd": [
@@ -321,7 +331,17 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Performance Test (Without Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/"
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@Captured Output@*RESULT dummy: dummy= [5.83,6.013,5.573]ms@@@",
+      "@@@STEP_LOG_LINE@Captured Output@Avg dummy: 5.907711ms@@@",
+      "@@@STEP_LOG_LINE@Captured Output@Sd  dummy: 0.255921ms@@@",
+      "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_failed= 0 count@@@",
+      "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_errored= 0 count@@@",
+      "@@@STEP_LOG_LINE@Captured Output@@@@",
+      "@@@STEP_LOG_LINE@Captured Output@View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch@@@",
+      "@@@STEP_LOG_END@Captured Output@@@"
+    ]
   },
   {
     "cmd": [],

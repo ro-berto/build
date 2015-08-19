@@ -113,6 +113,8 @@ def _run_command(api, command, step_name):
         command_parts,
         stdout=stdout,
         stderr=stderr)
+    step_result.presentation.logs['Captured Output'] = (
+        step_result.stdout or '').splitlines()
   except api.m.step.StepFailure as sf:
     sf.result.presentation.logs['Failure Output'] = (
         sf.result.stdout or '').splitlines()

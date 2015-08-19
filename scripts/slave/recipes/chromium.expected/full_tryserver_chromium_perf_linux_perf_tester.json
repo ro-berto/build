@@ -200,7 +200,10 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Performance Test 1 of 2",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/"
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@Captured Output@@@"
+    ]
   },
   {
     "cmd": [
@@ -214,7 +217,10 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Performance Test 2 of 2",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/"
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@Captured Output@@@"
+    ]
   },
   {
     "cmd": [
