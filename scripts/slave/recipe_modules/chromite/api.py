@@ -325,6 +325,15 @@ class ChromiteApi(recipe_api.RecipeApi):
         gclient_config=self.gclient_config(),
         update_presentation=False,
         force=True)
+    if self.c.chromite_branch and self.c.cbb.disable_bootstrap:
+      # Chromite auto-detects which branch to build for based on its current
+      # checkout. "bot_update" checks out remote branches, but Chromite requires
+      # a local branch.
+      #
+      # Normally we'd bootstrap, but if we're disabling bootstrapping, we have
+      # to checkout the local branch to let Chromite know which branch to build.
+      self.m.git('checkout', self.c.chromite_branch,
+          name='checkout chromite branch [%s]' % (self.c.chromite_branch))
 
     # Run cbuildbot.
     return self.cbuildbot(str('cbuildbot [%s]' % (self.c.cbb.config,)),

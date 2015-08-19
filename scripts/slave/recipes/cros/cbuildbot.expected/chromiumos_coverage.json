@@ -38,6 +38,15 @@
     ]
   },
   {
+    "cmd": [
+      "git",
+      "checkout",
+      "factory-1412.B"
+    ],
+    "cwd": "[SLAVE_BUILD]/chromite",
+    "name": "checkout chromite branch [factory-1412.B]"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "[SLAVE_BUILD]/chromite/buildbot/cbuildbot",
