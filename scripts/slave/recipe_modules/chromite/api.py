@@ -333,7 +333,7 @@ class ChromiteApi(recipe_api.RecipeApi):
       # Normally we'd bootstrap, but if we're disabling bootstrapping, we have
       # to checkout the local branch to let Chromite know which branch to build.
       self.m.git('checkout', self.c.chromite_branch,
-          name='checkout chromite branch [%s]' % (self.c.chromite_branch))
+          name=str('checkout chromite branch [%s]' % (self.c.chromite_branch)))
 
     # Run cbuildbot.
     return self.cbuildbot(str('cbuildbot [%s]' % (self.c.cbb.config,)),
