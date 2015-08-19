@@ -116,6 +116,8 @@ def _ComputeSchedulers(builders):
   for builder_name, builder_data in builders['builders'].items():
     scheduler_name = builder_data['scheduler']
     if scheduler_name:
+      if scheduler_name not in builders['schedulers']:
+        raise ValueError('unknown scheduler "%s"' % scheduler_name)
       scheduler_to_builders.setdefault(scheduler_name, []).append(builder_name)
 
   schedulers = []
