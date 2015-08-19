@@ -209,6 +209,7 @@ RECOGNIZED_PATHS.update(internal_data.get('RECOGNIZED_PATHS', {}))
 
 ENABLED_MASTERS = [
     'bot_update.always_on',
+    'chromium.android',
     'chromium.chrome',
     'chromium.chromedriver',
     'chromium.chromiumos',

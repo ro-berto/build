@@ -142,7 +142,7 @@ def GenTests(api):
           stream='stdout')) + \
       api.override_step_data('Read test result and report failures',
           api.raw_io.output(result_xml_with_unexecuted_tests)) + \
-      api.properties.generic(mastername='chromium.fyi')
+      api.properties.generic(mastername='chromium.android')
 
   result_xml_with_expected_failure = """<TestResult>
                           <TestPackage>
@@ -166,7 +166,7 @@ def GenTests(api):
           stream='stdout')) + \
       api.override_step_data('Read test result and report failures',
           api.raw_io.output(result_xml_with_expected_failure)) + \
-      api.properties.generic(mastername='chromium.fyi')
+      api.properties.generic(mastername='chromium.android')
 
   result_xml_with_unexpected_failure_class= """<TestResult>
                           <TestPackage>
@@ -190,7 +190,7 @@ def GenTests(api):
           stream='stdout')) + \
       api.override_step_data('Read test result and report failures',
           api.raw_io.output(result_xml_with_unexpected_failure_class)) + \
-      api.properties.generic(mastername='chromium.fyi')
+      api.properties.generic(mastername='chromium.android')
 
   result_xml_with_unexpected_failure_method = """<TestResult>
                           <TestPackage>
@@ -214,11 +214,11 @@ def GenTests(api):
           stream='stdout')) + \
       api.override_step_data('Read test result and report failures',
           api.raw_io.output(result_xml_with_unexpected_failure_method)) + \
-      api.properties.generic(mastername='chromium.fyi')
+      api.properties.generic(mastername='chromium.android')
 
   yield api.test('Test_parsing_invalid_cts_output') + \
       api.override_step_data('Run Cts', api.raw_io.stream_output(
           'Invalid CTS output here...',
           stream='stdout')) + \
-      api.properties.generic(mastername='chromium.fyi') + \
+      api.properties.generic(mastername='chromium.android') + \
       api.expect_exception('Exception')
