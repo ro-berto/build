@@ -1,0 +1,162 @@
+{
+  "master_base_class": "Master1",
+  "master_port": 20102,
+  "master_port_alt": 40102,
+  "slave_port": 30102,
+  "templates": ["templates", "../master.chromium/templates"],
+
+  "builders": {
+    "Android Cronet Builder": {
+      "recipe": "android_cronet",
+      "scheduler": "android_commits",
+      "slave_pools": ["cronet_common"],
+      "category": "0Cronet",
+    },
+    "Android Cronet ARMv6 Builder": {
+      "recipe": "android_cronet",
+      "scheduler": "android_commits",
+      "slave_pools": ["cronet_common"],
+      "category": "0Cronet",
+    },
+    "Android Cronet ARM64 Builder": {
+      "recipe": "android_cronet",
+      "scheduler": "android_commits",
+      "slave_pools": ["cronet_arm64"],
+      "category": "0Cronet",
+    },
+    "Android Cronet x86 Builder": {
+      "recipe": "android_cronet",
+      "scheduler": "android_commits",
+      "slave_pools": ["cronet_common"],
+      "category": "0Cronet",
+    },
+    "Android Cronet MIPS Builder": {
+      "recipe": "android_cronet",
+      "scheduler": "android_commits",
+      "slave_pools": ["cronet_common"],
+      "category": "0Cronet",
+    },
+    "Android Cronet Data Reduction Proxy Builder": {
+      "recipe": "android_cronet",
+      "scheduler": "android_commits",
+      "slave_pools": ["cronet_common"],
+      "category": "0Cronet",
+    },
+    "Android Cronet Builder (dbg)": {
+      "recipe": "android_cronet",
+      "scheduler": "android_commits",
+      "slave_pools": ["cronet_common"],
+      "category": "0Cronet",
+    },
+    "Android Cronet ARM64 Builder (dbg)": {
+      "recipe": "android_cronet",
+      "scheduler": "android_commits",
+      "slave_pools": ["cronet_arm64_dbg"],
+      "category": "0Cronet",
+    },
+    "Android Cronet x86 Builder (dbg)": {
+      "recipe": "android_cronet",
+      "scheduler": "android_commits",
+      "slave_pools": ["cronet_x86"],
+      "category": "0Cronet",
+    },
+    "Android WebView CTS L-MR1 (dbg)": {
+      "recipe": "android_webview_shell_tests",
+      "scheduler": "android_commits",
+      "slave_pools": ["webview_cts"],
+      "category": "1Webview",
+    },
+    "Android Webview L (dbg)": {
+      "recipe": "android_webview_shell_tests",
+      "scheduler": "android_commits",
+      "slave_pools": ["webview_l"],
+      "category": "1Webview",
+    },
+    "Android Remoting Tests": {
+      "recipe": "chromium",
+      "scheduler": "android_commits",
+      "slave_pools": ["remoting"],
+      "category": "3Testers",
+    },
+    "Android MIPS Builder (dbg)": {
+      "recipe": "android/builder",
+      "scheduler": "android_commits",
+      "slave_pools": ["mips_builder"],
+      "category": "2Builders",
+    },
+  },
+
+  "schedulers": {
+    "android_commits": {
+      "type": "git_poller",
+      "git_repo_url": "https://chromium.googlesource.com/chromium/src",
+    },
+  },
+
+  "slave_pools": {
+    "mips_builder": {
+      "slave_data": {
+        "os": "linux",
+        "version": "precise",
+        "bits": 64,
+      },
+      "slaves": ["vm971-m1"],
+    },
+    "remoting": {
+      "slave_data": {
+        "os": "linux",
+        "version": "precise",
+        "bits": 64,
+      },
+      "slaves": ["build123-a1"],
+    },
+    "webview_l": {
+      "slave_data": {
+        "os": "linux",
+        "version": "precise",
+        "bits": 64,
+      },
+      "slaves": ["build36-a1"],
+    },
+    "webview_cts": {
+      "slave_data": {
+        "os": "linux",
+        "version": "precise",
+        "bits": 64,
+      },
+      "slaves": ["build137-a1"],
+    },
+    "cronet_arm64": {
+      "slave_data": {
+        "os": "linux",
+        "version": "precise",
+        "bits": 64,
+      },
+      "slaves": ["vm982-m1"],
+    },
+    "cronet_arm64_dbg": {
+      "slave_data": {
+        "os": "linux",
+        "version": "precise",
+        "bits": 64,
+      },
+      "slaves": ["vm983-m1"],
+    },
+    "cronet_x86": {
+      "slave_data": {
+        "os": "linux",
+        "version": "precise",
+        "bits": 64,
+      },
+      "slaves": ["vm990-m1"],
+    },
+    "cronet_common": {
+      "slave_data": {
+        "os": "linux",
+        "version": "precise",
+        "bits": "64",
+      },
+      "slaves": ["build29-a1"],
+    },
+  }
+}
