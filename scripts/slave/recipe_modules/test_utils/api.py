@@ -115,9 +115,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
       return
 
     try:
-      return deapply_patch_fn(failing_tests)
-    finally:
+      result = deapply_patch_fn(failing_tests)
       run('without patch', failing_tests)
+      return result
+    finally:
       with self.m.step.defer_results():
         for t in failing_tests:
           self._summarize_retried_test(caller_api, t)
