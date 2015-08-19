@@ -16,9 +16,9 @@ from config_bootstrap import Master
 
 class ChromiumAndroid(Master.Master1):
   project_name = 'ChromiumAndroid'
-  master_port = 20102
-  slave_port = 30102
-  master_port_alt = 40102
+  master_port = 20101
+  slave_port = 30101
+  master_port_alt = 40101
   buildbot_url = 'https://build.chromium.org/p/chromium.android/'
   buildbucket_bucket = None
   service_account_file = None
