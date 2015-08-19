@@ -811,12 +811,12 @@ class AndroidApi(recipe_api.RecipeApi):
     """
     step_result = self.m.python(
         'Incremental coverage report',
-        self.m.path.join('build', 'android', 'emma_coverage_stats.py'),
+        self.m.path['checkout'].join(
+            'build', 'android', 'emma_coverage_stats.py'),
         args=['-v',
               '--out', self.m.json.output(),
               '--emma-dir', self.coverage_dir.join('coverage_html'),
               '--lines-for-coverage', self.file_changes_path],
-        cwd=self.m.path['checkout'],
         step_test_data=lambda: self.m.json.test_api.output({
           'files': {
             'sample file 1': {
@@ -884,28 +884,26 @@ class AndroidApi(recipe_api.RecipeApi):
     # the -l option is used with git blame.
     blame_cached_revision = '0000000000000000000000000000000000000000'
 
-    # Find which files have changed.
-    diff = self.m.git(
-        'diff', '--staged', '--name-only',
-        cwd=self.m.path['checkout'],
-        stdout=self.m.raw_io.output(),
-        name='Finding changed files.',
-        step_test_data=(
-            lambda: self.m.raw_io.test_api.stream_output(
-                'fake/file1.java\nfake/file2.java\nfake/file3.java')))
-    changed_files = diff.stdout.splitlines()
-
-    # Find which lines have changed for each file.
     file_changes = {}
+    new_files = self.staged_files_matching_filter('A')
+    for new_file in new_files:
+      lines = self.m.file.read(
+          ('Finding lines changed in added file %s' % new_file),
+          new_file,
+          test_data='int n = 0;\nn++;\nfor (int i = 0; i < n; i++) {'
+      )
+      file_changes[new_file] = range(1, len(lines.splitlines()) + 1)
+
+    changed_files = self.staged_files_matching_filter('M')
     for changed_file in changed_files:
       blame = self.m.git(
           'blame', '-l', '-s', changed_file,
-          cwd=self.m.path['checkout'],
           stdout=self.m.raw_io.output(),
-          name='Finding lines changed.',
+          name='Finding lines changed in modified file %s' % changed_file,
           step_test_data=(
               lambda: self.m.raw_io.test_api.stream_output(
-                  'int n = 0;\nn++;\nfor (int i = 0; i < n; i++) {')))
+                  'int n = 0;\nn++;\nfor (int i = 0; i < n; i++) {'))
+      )
       blame_lines = blame.stdout.splitlines()
       file_changes[changed_file] = [i + 1 for i, line in enumerate(blame_lines)
                                     if line.startswith(blame_cached_revision)]
@@ -913,7 +911,27 @@ class AndroidApi(recipe_api.RecipeApi):
     self.m.file.write(
         'Saving changed lines for revision.',
         self.file_changes_path,
-        self.m.json.dumps(file_changes))
+        self.m.json.dumps(file_changes)
+    )
+
+  def staged_files_matching_filter(self, diff_filter):
+    """Returns list of files changed matching the provided diff-filter.
+
+    Args:
+      diff_filter: A string to be used as the diff-filter.
+
+    Returns:
+      A list of file paths (strings) matching the provided |diff-filter|.
+    """
+    diff = self.m.git(
+        'diff', '--staged', '--name-only', '--diff-filter', diff_filter,
+        stdout=self.m.raw_io.output(),
+        name='Finding changed files matching diff filter: %s' % diff_filter,
+        step_test_data=(
+            lambda: self.m.raw_io.test_api.stream_output(
+                'fake/file1.java\nfake/file2.java;\nfake/file3.java'))
+    )
+    return diff.stdout.splitlines()
 
   @contextlib.contextmanager
   def handle_exit_codes(self):

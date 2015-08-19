@@ -596,10 +596,58 @@
       "git",
       "diff",
       "--staged",
-      "--name-only"
+      "--name-only",
+      "--diff-filter",
+      "A"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Finding changed files.",
+    "name": "Finding changed files matching diff filter: A",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "fake/file1.java",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Finding lines changed in added file fake/file1.java"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "fake/file2.java;",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Finding lines changed in added file fake/file2.java;"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "fake/file3.java",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Finding lines changed in added file fake/file3.java"
+  },
+  {
+    "cmd": [
+      "git",
+      "diff",
+      "--staged",
+      "--name-only",
+      "--diff-filter",
+      "M"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "Finding changed files matching diff filter: M",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -611,7 +659,7 @@
       "fake/file1.java"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Finding lines changed.",
+    "name": "Finding lines changed in modified file fake/file1.java",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -620,10 +668,10 @@
       "blame",
       "-l",
       "-s",
-      "fake/file2.java"
+      "fake/file2.java;"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Finding lines changed. (2)",
+    "name": "Finding lines changed in modified file fake/file2.java;",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -635,7 +683,7 @@
       "fake/file3.java"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Finding lines changed. (3)",
+    "name": "Finding lines changed in modified file fake/file3.java",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -643,7 +691,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"fake/file1.java\": [], \"fake/file2.java\": [], \"fake/file3.java\": []}",
+      "{\"fake/file1.java\": [], \"fake/file2.java;\": [], \"fake/file3.java\": []}",
       "[TMP_BASE]/coverage_tmp_1/file_changes.json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -653,7 +701,7 @@
     "cmd": [
       "python",
       "-u",
-      "build/android/emma_coverage_stats.py",
+      "[SLAVE_BUILD]/src/build/android/emma_coverage_stats.py",
       "-v",
       "--out",
       "/path/to/tmp/json",
@@ -662,7 +710,7 @@
       "--lines-for-coverage",
       "[TMP_BASE]/coverage_tmp_1/file_changes.json"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[SLAVE_BUILD]",
     "name": "Incremental coverage report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
