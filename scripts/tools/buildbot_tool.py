@@ -128,9 +128,8 @@ def _update_generated_file_disclaimer(contents, source, master_subpath):
   pattern = '# This file is used by scripts/tools/buildbot-tool.*'
   replacement = ('# This file was generated from\n'
                  '# %s\n'
-                 '# by "scripts/tools/buildbot-tool gen %s".\n'
-                 '# DO NOT EDIT BY HAND!\n' %
-                 (source, master_subpath))
+                 '# by "../../build/scripts/tools/buildbot-tool gen .".\n'
+                 '# DO NOT EDIT BY HAND!\n' % source)
   return re.sub(pattern, replacement, contents)
 
 
