@@ -669,5 +669,34 @@
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "nanobench"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_restart"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
+    "name": "reboot"
+  },
+  {
+    "cmd": [
+      "sleep",
+      "20"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
+    "name": "wait for reboot"
   }
 ]
