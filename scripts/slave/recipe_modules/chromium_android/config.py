@@ -56,9 +56,16 @@ def clang_builder(c):
   pass
 
 @config_ctx(config_vars={'BUILD_CONFIG': 'Release'})
-def clang_asan_tot_release_builder(c):  # pragma: no cover
+def clang_asan_release_builder(c):  # pragma: no cover
   c.asan_symbolize = True
+
+@config_ctx(includes=['clang_asan_release_builder'])
+def clang_asan_tot_release_builder(c):  # pragma: no cover
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+
+@config_ctx(config_vars={'BUILD_CONFIG': 'Release'})
+def clang_asan_release_builder_l(c):  # pragma: no cover
+  c.asan_symbolize = True
 
 @config_ctx()
 def component_builder(c):
