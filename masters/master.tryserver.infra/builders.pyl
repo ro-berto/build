@@ -63,6 +63,13 @@
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "presubmit_lucipy",
     },
+    "Luci-GAE Linux Trusty 64 Tester": {
+      "category": "Luci-GAE",
+      "recipe": "infra/luci_gae",
+      "scheduler": None,
+      "slave_pools": ["trusty64_slave_pool"],
+      "slavebuilddir": "luci-gae",
+    },
     "Luci-go Linux Trusty 64 Tester": {
       "category": "Luci-go",
       "recipe": "infra/luci_go",
