@@ -4,6 +4,7 @@
 
 from infra.libs.infra_types import freeze
 
+from . import chromium_android
 from . import chromium_chrome
 from . import chromium_chromiumos
 from . import chromium_fyi
@@ -23,6 +24,7 @@ from . import tryserver_chromium_mac
 from . import tryserver_chromium_perf
 
 BUILDERS = freeze({
+  'chromium.android': chromium_android.SPEC,
   'chromium.chrome': chromium_chrome.SPEC,
   'chromium.chromiumos': chromium_chromiumos.SPEC,
   'chromium.fyi': chromium_fyi.SPEC,

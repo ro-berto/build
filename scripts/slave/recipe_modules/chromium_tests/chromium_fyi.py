@@ -1623,31 +1623,6 @@ SPEC = {
       },
     },
 
-    'Android Remoting Tests': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'compile_targets': [
-        'remoting_apk',
-      ],
-      'bot_type': 'builder_tester',
-      'android_config': 'main_builder',
-      'root_devices': True,
-      'tests': [
-        steps.GTestTest('remoting_unittests'),
-        steps.AndroidInstrumentationTest(
-            'ChromotingTest', 'remoting_test_apk',
-            adb_install_apk='Chromoting.apk'),
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'Android Tests (amp split)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
