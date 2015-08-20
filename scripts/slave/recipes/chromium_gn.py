@@ -284,8 +284,8 @@ def _RunStepsInternal(api):
     requires_compile, _, compile_targets = \
         api.chromium_tests.analyze(
             affected_files,
-            test_compile_targets + additional_compile_targets,
             test_compile_targets,
+            test_compile_targets + additional_compile_targets,
             'trybot_analyze_config.json')
     if requires_compile:
       api.chromium.run_mb(mastername, buildername, use_goma=True)
