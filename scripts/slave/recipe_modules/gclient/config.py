@@ -504,6 +504,8 @@ def infra_with_chromium(c):
 def luci_gae(c):
   # luci/gae is checked out as a part of infra.git solution at HEAD.
   c.revisions['infra'] = 'origin/master'
+  # luci/gae is developed together with luci-go, which should be at HEAD.
+  c.revisions['infra/go/src/github.com/luci/luci-go'] = 'origin/master'
   c.revisions['infra/go/src/github.com/luci/gae'] = (
       gclient_api.RevisionFallbackChain('origin/master'))
   m = c.got_revision_mapping
