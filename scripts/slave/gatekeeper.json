@@ -143,6 +143,16 @@
             "categories": [
               "infra_tree_closer"
             ]
+          },
+          "infra-continuous-win-64": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "infra-continuous-win-32": {
+            "categories": [
+              "infra_tree_closer"
+            ]
           }
         }
       }
