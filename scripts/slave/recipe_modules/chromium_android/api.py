@@ -811,8 +811,8 @@ class AndroidApi(recipe_api.RecipeApi):
     """
     step_result = self.m.python(
         'Incremental coverage report',
-        self.m.path['checkout'].join(
-            'build', 'android', 'emma_coverage_stats.py'),
+        self.m.path.join('build', 'android', 'emma_coverage_stats.py'),
+        cwd=self.m.path['checkout'],
         args=['-v',
               '--out', self.m.json.output(),
               '--emma-dir', self.coverage_dir.join('coverage_html'),
