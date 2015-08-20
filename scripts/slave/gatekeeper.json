@@ -390,9 +390,13 @@
     ],
     "https://build.chromium.org/p/client.catapult": [
       {
+        "forgive_all": "true",
         "tree_notify": [
           "catapult-sheriff@chromium.org"
-        ]
+        ],
+        "builders": {
+          "*": {}
+        }
       }
     ],
     "https://build.chromium.org/p/client.libvpx": [
