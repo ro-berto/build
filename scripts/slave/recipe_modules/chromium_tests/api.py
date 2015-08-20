@@ -590,7 +590,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         cros_board=self.m.chromium.c.TARGET_CROS_BOARD)
 
     if self.m.filter.matches_exclusion:
-      return True, exes, compile_targets
+      requires_compile = bool(exes or compile_targets)
+      return requires_compile, exes, compile_targets
 
     if not self.m.filter.result:
       # Patch does not require compile.

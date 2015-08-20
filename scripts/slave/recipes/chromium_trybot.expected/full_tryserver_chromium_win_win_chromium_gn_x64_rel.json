@@ -195,58 +195,5 @@
       "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
       "@@@STEP_LOG_END@excluded_files@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "cleanup_temp"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
-      "gen",
-      "-v",
-      "-m",
-      "tryserver.chromium.win",
-      "-b",
-      "win_chromium_gn_x64_rel",
-      "--config-file",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
-      "--goma-dir",
-      "[BUILD]\\goma",
-      "//out/Release_x64"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "generate_build_files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
-      "--target",
-      "Release_x64",
-      "--src-dir",
-      "[SLAVE_BUILD]\\src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]\\goma",
-      "--goma-fail-fast",
-      "--goma-disable-local-fallback",
-      "--",
-      "All",
-      "chromium_builder_tests"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "compile (with patch)"
   }
 ]
