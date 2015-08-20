@@ -501,6 +501,16 @@ def infra_with_chromium(c):
   pass
 
 @config_ctx(includes=['infra'])
+def luci_gae(c):
+  # luci/gae is checked out as a part of infra.git solution at HEAD.
+  c.revisions['infra'] = 'origin/master'
+  c.revisions['infra/go/src/github.com/luci/gae'] = (
+      gclient_api.RevisionFallbackChain('origin/master'))
+  m = c.got_revision_mapping
+  del m['infra']
+  m['infra/go/src/github.com/luci/gae'] = 'got_revision'
+
+@config_ctx(includes=['infra'])
 def luci_go(c):
   # luci-go is checked out as a part of infra.git solution at HEAD.
   c.revisions['infra'] = 'origin/master'
