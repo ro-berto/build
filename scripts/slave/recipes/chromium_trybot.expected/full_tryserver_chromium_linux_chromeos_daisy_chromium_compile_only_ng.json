@@ -176,25 +176,7 @@
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
-      "@@@STEP_LOG_END@excluded_files@@@",
-      "@@@STEP_LOG_LINE@analyze_details@{@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromiumos_preflight\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromiumos_preflight\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"original_exes\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromiumos_preflight\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromiumos_preflight\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.matching_exes\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromiumos_preflight\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
-      "@@@STEP_LOG_LINE@analyze_details@}@@@",
-      "@@@STEP_LOG_END@analyze_details@@@"
+      "@@@STEP_LOG_END@excluded_files@@@"
     ]
   },
   {

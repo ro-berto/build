@@ -193,15 +193,60 @@
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
-      "@@@STEP_LOG_END@excluded_files@@@",
-      "@@@STEP_LOG_LINE@analyze_details@{@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"original_exes\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.matching_exes\": []@@@",
-      "@@@STEP_LOG_LINE@analyze_details@}@@@",
-      "@@@STEP_LOG_END@analyze_details@@@"
+      "@@@STEP_LOG_END@excluded_files@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
+      "gen",
+      "-v",
+      "-m",
+      "tryserver.chromium.win",
+      "-b",
+      "win_chromium_gn_x64_dbg",
+      "--config-file",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]\\goma",
+      "//out/Debug_x64"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\compile.py",
+      "--target",
+      "Debug_x64",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[BUILD]\\goma",
+      "--goma-fail-fast",
+      "--goma-disable-local-fallback",
+      "--",
+      "All",
+      "chromium_builder_tests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "compile (with patch)"
   }
 ]

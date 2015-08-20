@@ -11,6 +11,7 @@ class FilterApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(FilterApi, self).__init__(**kwargs)
     self._result = False
+    self._matches_exclusion = False
     self._matching_exes = []
     self._compile_targets = []
     self._paths = []
@@ -29,6 +30,12 @@ class FilterApi(recipe_api.RecipeApi):
     """Returns the result from most recent call to
     does_patch_require_compile."""
     return self._result
+
+  @property
+  def matches_exclusion(self):
+    """Returns true if the patch matches an exclusion, i.e. "analyze" should
+    not be used and all compile targets and tests should be used."""
+    return self._matches_exclusion
 
   @property
   def matching_exes(self):
@@ -128,6 +135,7 @@ class FilterApi(recipe_api.RecipeApi):
         step_result.presentation.logs.setdefault('excluded_files', []).append(
             '%s (regex = \'%s\')' % (path, first_match))
         self._result = True
+        self._matches_exclusion = True
         return
 
     analyze_input = {'files': self.paths, 'targets': self._matching_exes}

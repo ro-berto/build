@@ -184,15 +184,61 @@
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
-      "@@@STEP_LOG_END@excluded_files@@@",
-      "@@@STEP_LOG_LINE@analyze_details@{@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"original_exes\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.matching_exes\": []@@@",
-      "@@@STEP_LOG_LINE@analyze_details@}@@@",
-      "@@@STEP_LOG_END@analyze_details@@@"
+      "@@@STEP_LOG_END@excluded_files@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/cleanup_temp.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-v",
+      "-m",
+      "tryserver.chromium.linux",
+      "-b",
+      "linux_chromium_dbg_ng",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--goma-fail-fast",
+      "--goma-disable-local-fallback",
+      "--ninja-ensure-up-to-date",
+      "--",
+      "All",
+      "chromium_builder_tests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "compile (with patch)"
   }
 ]
