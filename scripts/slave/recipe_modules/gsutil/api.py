@@ -37,7 +37,8 @@ class GSUtilApi(recipe_api.RecipeApi):
       cmd_prefix = ['--', gsutil_path]
       gsutil_path = self.resource('gsutil_wrapper.py')
 
-    cmd_prefix.extend(['--force-version', version])
+    if version:
+      cmd_prefix.extend(['--force-version', version])
 
     if use_retry_wrapper:
       # The -- argument for the wrapped gsutil.py is escaped as ---- as python
