@@ -192,7 +192,7 @@
       "-v",
       "--upload-results",
       "blink_perf.dom",
-      "--extra-browser-args=--use-headless-config"
+      "--extra-browser-args=--override-use-gl-with-osmesa-for-tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "blink_perf.dom",

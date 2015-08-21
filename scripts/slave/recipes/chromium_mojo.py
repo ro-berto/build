@@ -143,7 +143,8 @@ def _RunPerfTests(api, perf_test_info):
       test_name = str(test_name)
       annotate = api.chromium.get_annotate_by_test_name(test_name)
       cmd = test['cmd'].split()
-      cmd.extend(['--extra-browser-args=--use-headless-config'])
+      cmd.extend(
+          ['--extra-browser-args=--override-use-gl-with-osmesa-for-tests'])
 
       api.chromium.runtest(
           cmd[1] if len(cmd) > 1 else cmd[0],
