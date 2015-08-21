@@ -1212,3 +1212,14 @@ def GenTests(api):
     ) +
     api.platform.name('linux')
   )
+
+  yield (
+    api.test('webkit_tests_fail_compile_without_patch_fail') +
+    props(buildername='linux_chromium_rel_ng') +
+    props(patch_project='blink') +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({})) +
+    api.override_step_data('webkit_tests (with patch)',
+                           api.test_utils.canned_test_output(False)) +
+    api.override_step_data('compile (without patch)', retcode=1)
+  )

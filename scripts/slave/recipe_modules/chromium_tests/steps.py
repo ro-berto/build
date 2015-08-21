@@ -1264,6 +1264,8 @@ class BlinkTest(Test):
             base + '/layout-test-results.zip')
 
   def has_valid_results(self, api, suffix):
+    if suffix not in self._test_runs:
+      return False
     step = self._test_runs[suffix]
     # TODO(dpranke): crbug.com/357866 - note that all comparing against
     # MAX_FAILURES_EXIT_STATUS tells us is that we did not exit early
