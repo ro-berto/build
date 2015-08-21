@@ -534,8 +534,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
     bot_update_json = bot_update_step.json.output
-    self.m.gclient.c.revisions['src'] = str(
-        bot_update_json['properties']['got_revision'])
+    for solution, revision in self.m.gclient.c.got_revision_mapping.iteritems():
+      self.m.gclient.c.revisions[solution] = str(
+          bot_update_json['properties'][revision])
     self.m.bot_update.ensure_checkout(
         force=True, patch=False, update_presentation=False)
     self.m.chromium.runhooks(name='runhooks (without patch)')
