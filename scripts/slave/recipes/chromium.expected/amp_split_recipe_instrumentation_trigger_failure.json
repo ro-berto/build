@@ -379,29 +379,11 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] AndroidWebViewTest",
     "~followup_annotations": [
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_FAILURE@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save AndroidWebViewTest data"
   },
   {
     "cmd": [
@@ -464,7 +446,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save AndroidWebViewTest data (2)"
+    "name": "[trigger] save AndroidWebViewTest data"
   },
   {
     "cmd": [
@@ -527,7 +509,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save AndroidWebViewTest data (3)"
+    "name": "[trigger] save AndroidWebViewTest data (2)"
   },
   {
     "cmd": [
@@ -1132,6 +1114,43 @@
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "-v",
       "--apk",
+      "AndroidWebView",
+      "--release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install AndroidWebView"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "AndroidWebViewTest",
+      "--isolate-file-path",
+      "[SLAVE_BUILD]/src/android_webview/android_webview_test_apk.isolate",
+      "--flakiness-dashboard-server",
+      "test-results.appspot.com",
+      "--verbose",
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Instrumentation test AndroidWebViewTest",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "-v",
+      "--apk",
       "ContentShell.apk",
       "--release"
     ],
@@ -1515,7 +1534,7 @@
       "--device-type",
       "Android",
       "--remote-device",
-      "Nexus 5",
+      "Galaxy S5",
       "--remote-device-os",
       "4.4.2",
       "--collect",
@@ -1580,71 +1599,6 @@
       "--device-type",
       "Android",
       "--remote-device",
-      "Galaxy S5",
-      "--remote-device-os",
-      "4.4.2",
-      "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json",
-      "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/AndroidWebViewTest/results.zip",
-      "--verbose",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] AndroidWebViewTest (2)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load AndroidWebViewTest data (3)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--apk-under-test",
-      "AndroidWebView",
-      "--test-apk",
-      "AndroidWebViewTest",
-      "--enable-platform-mode",
-      "-e",
-      "remote_device",
-      "--api-key-file",
-      "[BUILD]/site_config/.amp_api_key",
-      "--api-secret-file",
-      "[BUILD]/site_config/.amp_api_secret",
-      "--api-address",
-      "172.22.21.180",
-      "--api-port",
-      "80",
-      "--api-protocol",
-      "http",
-      "--device-type",
-      "Android",
-      "--remote-device",
       "Moto E",
       "--remote-device-os",
       "4.4.2",
@@ -1656,7 +1610,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] AndroidWebViewTest (3)",
+    "name": "[collect] AndroidWebViewTest (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
@@ -1784,9 +1738,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] base_unittests",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
   },
   {
@@ -2352,10 +2304,5 @@
       "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
-  },
-  {
-    "name": "$final_result",
-    "reason": "1 tests failed: ['base_unittests']",
-    "status_code": 1
   }
 ]

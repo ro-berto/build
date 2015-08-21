@@ -618,48 +618,36 @@ class SwarmingGTestTest(SwarmingTest):
     return True, gtest_results.failures
 
 
-class AMPGTestTest(Test):
+class AMPTest(Test):
   AMP_INSTANCE_ADDRESS = '172.22.21.180'
   AMP_INSTANCE_PORT = '80'
   AMP_INSTANCE_PROTOCOL = 'http'
   AMP_RESULTS_BUCKET = 'chrome-amp-results'
-  def __init__(self, name, args=None, target_name=None, device_name=['Nexus 5'],
-               device_os=['4.4.2'], android_isolate_path=None,
-               **runtest_kwargs):
+  def __init__(self, name, device_name, device_os, fallback_to_local=True):
     self._name = name
-    self._args = args
-    self._target_name = target_name
-    self._android_isolate_path = android_isolate_path
-    # LocalGTestTest is used when AMP tests are not triggered successfully.
-    self._local_test = LocalGTestTest(name, args, target_name, **runtest_kwargs)
     self._device_name = device_name
     self._device_os = device_os
+    self._fallback_to_local = fallback_to_local
     self._trigger_successful = None
 
   @property
   def name(self):
     return self._name
 
-  def compile_targets(self, api):
-    return self._local_test.compile_targets(api)
-
-  def pre_run(self, api, suffix):
-    """Triggers an AMP test."""
-    amp_arguments = api.amp.amp_arguments(
-        api_address=AMPGTestTest.AMP_INSTANCE_ADDRESS,
-        api_port=AMPGTestTest.AMP_INSTANCE_PORT,
-        api_protocol=AMPGTestTest.AMP_INSTANCE_PROTOCOL,
+  def amp_arguments(self, api):
+    return api.amp.amp_arguments(
+        api_address=AMPTest.AMP_INSTANCE_ADDRESS,
+        api_port=AMPTest.AMP_INSTANCE_PORT,
+        api_protocol=AMPTest.AMP_INSTANCE_PROTOCOL,
         device_name=self._device_name,
         device_os=self._device_os)
 
+  def pre_run(self, api, suffix):
+    """Triggers an AMP test."""
     isolate_file_path = (api.path['checkout'].join(self._android_isolate_path)
                          if self._android_isolate_path else None)
     try:
-      api.amp.trigger_test_suite(
-          self._name, 'gtest',
-          api.amp.gtest_arguments(self._name,
-                                  isolate_file_path=isolate_file_path),
-          amp_arguments)
+      self.trigger_test(api)
       self._trigger_successful = True
     except api.step.StepFailure:
       self._trigger_successful = False
@@ -667,23 +655,107 @@ class AMPGTestTest(Test):
   def run(self, api, suffix):  # pylint: disable=R0201
     # If we were unable to successfully trigger the AMP job, run locally;
     # otherwise return no results as results will be collected in post_run.
-    if not self._trigger_successful:
-      return self._local_test.run(api, suffix)
+    if not self._trigger_successful and self._fallback_to_local:
+      return self.run_test_locally(api, suffix)
     else:
       return []
 
   def post_run(self, api, suffix):
     if self._trigger_successful:
-      amp_arguments = api.amp.amp_arguments(
-          api_address=AMPGTestTest.AMP_INSTANCE_ADDRESS,
-          api_port=AMPGTestTest.AMP_INSTANCE_PORT,
-          api_protocol=AMPGTestTest.AMP_INSTANCE_PROTOCOL,
-          device_name=self._device_name,
-          device_os=self._device_os)
+      self.collect_test(api)
 
-      api.amp.collect_test_suite(
-          self._name, 'gtest', api.amp.gtest_arguments(self._name),
-          amp_arguments)
+  def trigger_test(self, api):
+    raise NotImplementedError # pragma: no cover
+
+  def collect_test(self, api):
+    raise NotImplementedError # pragma: no cover
+
+  def run_test_locally(self, api):
+    raise NotImplementedError # pragma: no cover
+
+
+class AMPGTestTest(AMPTest):
+  def __init__(self, name, args=None, target_name=None, device_name=['Nexus 5'],
+               device_os=['4.4.2'], android_isolate_path=None,
+               fallback_to_local=True, **runtest_kwargs):
+    super(AMPGTestTest, self).__init__(
+        name=name, device_name=device_name, device_os=device_os,
+        fallback_to_local=fallback_to_local)
+    self._args = args
+    self._target_name = target_name
+    self._android_isolate_path = android_isolate_path
+    # LocalGTestTest is used when AMP tests are not triggered successfully.
+    self._local_test = LocalGTestTest(name, args, target_name, **runtest_kwargs)
+
+  def compile_targets(self, api):
+    return self._local_test.compile_targets(api)
+
+  #override
+  def trigger_test(self, api):
+    isolate_file_path = (api.path['checkout'].join(self._android_isolate_path)
+                         if self._android_isolate_path else None)
+    api.amp.trigger_test_suite(
+        suite=self.name, test_type='gtest',
+        test_type_args=api.amp.gtest_arguments(
+            self.name, isolate_file_path=isolate_file_path),
+        amp_args=self.amp_arguments(api))
+
+  #override
+  def collect_test(self, api):
+    api.amp.collect_test_suite(
+        suite=self.name, test_type='gtest',
+        test_type_args=api.amp.gtest_arguments(self.name),
+        amp_args=self.amp_arguments(api))
+
+  #override
+  def run_test_locally(self, api, suffix):
+    self._local_test.run(api, suffix)
+
+
+class AMPInstrumentationTest(AMPTest):
+  def __init__(self, test_apk, apk_under_test, compile_target=None,
+               device_name=['Nexus 5'], device_os=['4.4.2'],
+               android_isolate_path=None, fallback_to_local=True):
+    super(AMPInstrumentationTest, self).__init__(
+        test_apk, device_name=device_name, device_os=device_os,
+        fallback_to_local=fallback_to_local)
+    self._apk_under_test = apk_under_test
+    self._compile_target = compile_target
+    self._android_isolate_path = android_isolate_path
+
+  def compile_targets(self, api):
+    return self._compile_target
+
+  #override
+  def trigger_test(self, api):
+    isolate_file_path = (api.path['checkout'].join(self._android_isolate_path)
+                         if self._android_isolate_path else None)
+    api.amp.trigger_test_suite(
+        suite=self.name, test_type='instrumentation',
+        test_type_args=api.amp.instrumentation_test_arguments(
+            apk_under_test=self._apk_under_test,
+            test_apk=self.name,
+            isolate_file_path=isolate_file_path),
+        amp_args=self.amp_arguments(api))
+
+  #override
+  def collect_test(self, api):
+    api.amp.collect_test_suite(
+        suite=self.name, test_type='instrumentation',
+        test_type_args=api.amp.instrumentation_test_arguments(
+            apk_under_test=self._apk_under_test,
+            test_apk=self.name),
+        amp_args=self.amp_arguments(api))
+
+  #override
+  def run_test_locally(self, api, suffix):
+    isolate_file_path = (api.path['checkout'].join(self._android_isolate_path)
+                         if self._android_isolate_path else None)
+    AndroidInstrumentationTest(
+        name=self.name,
+        compile_target=self._compile_target,
+        adb_install_apk=self._apk_under_test,
+        isolate_file_path=isolate_file_path).run(api, suffix)
 
 
 class GTestTest(Test):

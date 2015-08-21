@@ -1638,10 +1638,29 @@ SPEC = {
       'root_devices': True,
       'enable_swarming': False,
       'tests': [
-        steps.AndroidInstrumentationTest(
-            'AndroidWebViewTest', 'android_webview_test_apk',
-            isolate_file_path='android_webview/android_webview_test_apk.isolate',
-            adb_install_apk='AndroidWebView.apk'),
+        steps.AMPInstrumentationTest(
+            test_apk='AndroidWebViewTest',
+            apk_under_test='AndroidWebView',
+            android_isolate_path=
+                'android_webview/android_webview_test_apk.isolate',
+            compile_target='android_webview_test_apk',
+            device_name=['Nexus 5'], device_os=['4.4.2']),
+        steps.AMPInstrumentationTest(
+            test_apk='AndroidWebViewTest',
+            apk_under_test='AndroidWebView',
+            android_isolate_path=
+                'android_webview/android_webview_test_apk.isolate',
+            compile_target='android_webview_test_apk',
+            device_name=['Galaxy S5'], device_os=['4.4.2'],
+            fallback_to_local=False),
+        steps.AMPInstrumentationTest(
+            test_apk='AndroidWebViewTest',
+            apk_under_test='AndroidWebView',
+            android_isolate_path=
+                'android_webview/android_webview_test_apk.isolate',
+            compile_target='android_webview_test_apk',
+            device_name=['Moto E'], device_os=['4.4.2'],
+            fallback_to_local=False),
         steps.AndroidInstrumentationTest(
             'ContentShellTest', 'content_shell_test_apk',
             isolate_file_path='content/content_shell_test_apk.isolate',
