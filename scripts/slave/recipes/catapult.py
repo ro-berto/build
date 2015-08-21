@@ -53,7 +53,7 @@ def RunSteps(api):
   api.python('Util Tests',
              api.path['checkout'].join('base', 'util', 'run_tests.py'))
   api.python('Dashboard Tests',
-             api.path['checkout'].join('dashboard', 'run_tests.py'),
+             api.path['checkout'].join('dashboard', 'bin', 'run_tests'),
              env=modified_env)
   api.python('Tracing Python Tests',
              api.path['checkout'].join('tracing', 'bin', 'run_py_tests'),
