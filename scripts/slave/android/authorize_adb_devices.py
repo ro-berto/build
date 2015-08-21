@@ -11,6 +11,7 @@ not authorized.
 """
 
 import argparse
+import logging
 import os
 import subprocess
 import sys
@@ -20,6 +21,10 @@ ADB_KEYS_PATH = '/data/misc/adb/adb_keys'
 
 
 def GetCmdOutput(cmd, env=None):
+  if env:
+    logging.debug('%s (env=%s)' % (' '.join(cmd), env))
+  else:
+    logging.debug(' '.join(cmd))
   env = {} if not env else env
   env['HOME'] = os.environ['HOME']
   stdout, stderr = subprocess.Popen(cmd, stdout=subprocess.PIPE,
@@ -57,7 +62,13 @@ def main(argv):
   parser.add_argument('--adb-keys-dir',
                       help='Point to directory that contains adb keys.',
                       default=os.path.join(os.environ['HOME'], '.android'))
+  parser.add_argument('-v', '--verbose', action='store_true',
+                      help='turn on extra debugging information')
+
   options = parser.parse_args()
+
+  logging.basicConfig(level=logging.DEBUG if options.verbose else logging.INFO)
+
   dir_contents = os.listdir(options.adb_keys_dir)
   adb_path = options.adb_path
   private_key_files = [os.path.join(options.adb_keys_dir, key)
@@ -70,7 +81,7 @@ def main(argv):
       public_keys_set.add(f.read().strip())
 
   # Kill server and find unauthorized devices without ADB_VENDOR_KEYS
-  GetCmdOutput([adb_path, 'kill-server'], env={}).splitlines()
+  GetCmdOutput([adb_path, 'kill-server']).splitlines()
   unauthorized_devices = GetUnauthorizedDevices(adb_path)
 
   # Kill server launched with ADB_VENDOR_KEYS
