@@ -1,0 +1,18 @@
+# Copyright 2015 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+{
+  'variables': {
+    'files': [
+      '../../../environment.cfg.py',
+      '../../../third_party/infra/',
+      '../../../third_party/mock-1.0.1/',
+      '../../../third_party/recipe_engine/',
+      '../../common/',
+      '../__init__.py',
+      '../bot_update.py',
+      '../recipe_modules/',
+    ],
+  },
+}

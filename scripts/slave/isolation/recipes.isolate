@@ -12,24 +12,18 @@
 #   '--build-properties={...}' '--factory-properties={...}'
 #
 {
+  'includes': ['common.isolate'],
   'variables': {
     'command': [
       'python', '../../tools/runit.py', '--show-path', '../annotated_run.py',
     ],
     'files': [
       '../../../../depot_tools/',
-      '../../../environment.cfg.py',
       '../../../site_config/',
       '../../../goma/',
-      '../../../third_party/infra/',
-      '../../../third_party/mock-1.0.1/',
-      '../../../third_party/recipe_engine/',
-      '../../common/',
       '../../tools/runit.py',
-      '../__init__.py',
       '../annotation_utils.py',
       '../bootstrap.py',
-      '../bot_update.py',
       '../build_directory.py',
       '../cleanup_temp.py',
       '../compile.py',
@@ -39,7 +33,6 @@
       '../gtest/',
       '../gtest_slave_utils.py',
       '../performance_log_processor.py',
-      '../recipe_modules/',
       '../recipes/',
       '../results_dashboard.py',
       '../runtest.py',

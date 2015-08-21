@@ -1,0 +1,24 @@
+# Copyright 2015 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+{
+  'includes': ['common.isolate'],
+  'variables': {
+    'files': [
+      '../../../third_party/coverage-3.7.1/',
+      '../gatekeeper_trees.json',
+      '../recipe_universe.py',
+      '../unittests/recipe_simulation_test.py',
+      '../unittests/test_env.py',
+      '../../../../build_internal/scripts/slave/recipe_modules/',
+      '../../../../build_internal/scripts/slave/gatekeeper_internal.json',
+      '../../../../build_internal/scripts/slave/gatekeeper_trees_chromeos.json',
+      '../../../../build_internal/scripts/slave/gatekeeper_trees_internal.json',
+      '../../../../build_internal/scripts/slave/gatekeeper_chromeos.json',
+      '../../../../build_internal/scripts/slave-internal/gatekeeper_trees_corp.json',
+      '../../../../build_internal/scripts/slave-internal/gatekeeper_corp.json',
+      '../../../../build_internal/scripts/slave/bot_update_cfg.py',
+    ],
+  },
+}
