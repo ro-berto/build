@@ -307,10 +307,11 @@ class AndroidApi(recipe_api.RecipeApi):
   def authorize_adb_devices(self):
     script = self.m.path['build'].join('scripts', 'slave', 'android',
                                     'authorize_adb_devices.py')
-    args = ['--adb-path', self.m.path['checkout'].join('third_party',
-                               'android_tools', 'sdk', 'platform-tools', 'adb')]
+    adb_path = self.m.path['checkout'].join(
+        'third_party', 'android_tools', 'sdk', 'platform-tools', 'adb')
+    args = ['--verbose', '--adb-path', adb_path]
     return self.m.python('authorize_adb_devices', script, args, infra_step=True,
-                       env=self.m.chromium.get_env())
+                         env=self.m.chromium.get_env())
 
 
   def detect_and_setup_devices(self, restart_usb=False, skip_wipe=False,

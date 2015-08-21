@@ -205,6 +205,7 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/android/authorize_adb_devices.py",
+      "--verbose",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
