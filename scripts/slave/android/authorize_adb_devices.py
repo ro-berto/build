@@ -83,12 +83,14 @@ def main(argv):
   # Kill server and find unauthorized devices without ADB_VENDOR_KEYS
   GetCmdOutput([adb_path, 'kill-server']).splitlines()
   unauthorized_devices = GetUnauthorizedDevices(adb_path)
+  logging.debug('Unauthorized devices: %s' % unauthorized_devices)
 
   # Kill server launched with ADB_VENDOR_KEYS
   GetCmdOutput([adb_path, 'kill-server']).splitlines()
   env = ({'ADB_VENDOR_KEYS': ':'.join(private_key_files)} if private_key_files
                                                           else {})
   for device in unauthorized_devices:
+    logging.debug('Attempting to authorize device %s' % device)
     PushHostPubkey(device, adb_path, env, public_keys_set)
 
 
