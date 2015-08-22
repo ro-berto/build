@@ -46,7 +46,7 @@ def PushHostPubkey(device, adb, env, public_keys_set):
    public_keys_set.update(dev_keys)
 
  with tempfile.NamedTemporaryFile() as f:
-   f.write('\n'.join(public_keys_set))
+   f.write(''.join('%s\n' % pk for pk in public_keys_set))
    f.flush()
    GetCmdOutput([adb, '-s', device, 'push', f.name, ADB_KEYS_PATH], env)
 
