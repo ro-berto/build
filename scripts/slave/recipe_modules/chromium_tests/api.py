@@ -550,12 +550,24 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if compile_targets:
         # Remove duplicate targets.
         compile_targets = sorted(set(compile_targets))
-        has_failing_swarming_tests = [
-            t for t in failing_tests if t.uses_swarming]
-        if has_failing_swarming_tests:
+        failing_swarming_tests = [
+            t.isolate_target for t in failing_tests if t.uses_swarming]
+        if failing_swarming_tests:
           self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
+        if self.m.chromium.c.project_generator.tool == 'mb':
+          # We don't use the mastername and buildername passed in, because
+          # those may be the values of the continuous builder the trybot may
+          # be configured to match; we need to use the actual mastername
+          # and buildername we're running on, because it may be configured
+          # with different MB settings.
+          real_mastername = self.m.properties['mastername']
+          real_buildername = self.m.properties['buildername']
+
+          self.m.chromium.run_mb(real_mastername, real_buildername,
+                                 isolated_targets=failing_swarming_tests,
+                                 name='generate_build_files (without patch)')
         self.m.chromium.compile(compile_targets, name='compile (without patch)')
-        if has_failing_swarming_tests:
+        if failing_swarming_tests:
           self.m.isolate.isolate_tests(self.m.chromium.output_dir,
                                        verbose=True)
 

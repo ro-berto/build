@@ -575,7 +575,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         ])
 
   def run_mb(self, mastername, buildername, use_goma=True,
-             mb_config_path=None, isolated_targets=None):
+             mb_config_path=None, isolated_targets=None, name=None):
     mb_config_path = (mb_config_path or
                       self.m.path['checkout'].join('tools', 'mb',
                                                    'mb_config.pyl'))
@@ -601,7 +601,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     # This runs with no env being passed along, so we get a clean environment
     # without any GYP_DEFINES being present to cause confusion.
-    self.m.python(name='generate_build_files',
+    self.m.python(name=name or 'generate_build_files',
                   script=self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
                   args=args)
 
