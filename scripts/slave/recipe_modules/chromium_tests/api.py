@@ -158,7 +158,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     master_dict = thaw(self.builders.get(mastername, {}))
     bot_config = master_dict.get('builders', {}).get(buildername)
 
-    enable_swarming = bot_config.get('enable_swarming')
     for loop_buildername, builder_dict in master_dict.get(
         'builders', {}).iteritems():
       builder_dict['tests'] = self.generate_tests_from_test_spec(
@@ -280,7 +279,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     The list of tests includes ones on the triggered testers."""
 
     bot_config = master_dict.get('builders', {}).get(buildername)
-    master_config = master_dict.get('settings', {})
     bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
 
     tests = bot_config.get('tests', [])
@@ -292,7 +290,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     compile_targets = set(bot_config.get('compile_targets', []))
     tests_including_triggered = list(tests)
-    for loop_buildername, builder_dict in master_dict.get(
+    for _, builder_dict in master_dict.get(
         'builders', {}).iteritems():
       if builder_dict.get('parent_buildername') == buildername:
         tests_including_triggered.extend(builder_dict.get('tests', []))
@@ -370,20 +368,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         if bot_config.get('chromium_config') == 'chromium_win_clang':
           self.m.chromium.update_clang()
 
-        # We don't use the mastername and buildername passed in, because
-        # those may be the values of the continuous builder the trybot may
-        # be configured to match; we need to use the actual mastername
-        # and buildername we're running on, because it may be configured
-        # with different MB settings.
-        real_mastername = self.m.properties['mastername']
-        real_buildername = self.m.properties['buildername']
-        self.m.chromium.run_mb(real_mastername, real_buildername,
-                               isolated_targets=isolated_targets)
-
       try:
         self.transient_check(update_step, lambda transform_name:
-          self.m.chromium.compile(compile_targets,
-                                  name=transform_name('compile')))
+            self.run_mb_and_compile(compile_targets, isolated_targets,
+                                    name_suffix=transform_name('')))
       except self.m.step.StepFailure:
         self.m.tryserver.set_compile_failure_tryjob_result()
         raise
@@ -442,6 +430,21 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.trigger({
             'builder_name': loop_buildername,
           })
+
+  def run_mb_and_compile(self, compile_targets, isolated_targets, name_suffix):
+    if self.m.chromium.c.project_generator.tool == 'mb':
+      # We don't use the mastername and buildername passed in, because
+      # those may be the values of the continuous builder the trybot may
+      # be configured to match; we need to use the actual mastername
+      # and buildername we're running on, because it may be configured
+      # with different MB settings.
+      real_mastername = self.m.properties['mastername']
+      real_buildername = self.m.properties['buildername']
+      self.m.chromium.run_mb(real_mastername, real_buildername,
+                             isolated_targets=isolated_targets,
+                             name='generate_build_files%s' % name_suffix)
+
+    self.m.chromium.compile(compile_targets, name='compile%s' % name_suffix)
 
   def tests_for_builder(self, mastername, buildername, update_step, master_dict,
                         override_bot_type=None):
@@ -554,19 +557,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             t.isolate_target for t in failing_tests if t.uses_swarming]
         if failing_swarming_tests:
           self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
-        if self.m.chromium.c.project_generator.tool == 'mb':
-          # We don't use the mastername and buildername passed in, because
-          # those may be the values of the continuous builder the trybot may
-          # be configured to match; we need to use the actual mastername
-          # and buildername we're running on, because it may be configured
-          # with different MB settings.
-          real_mastername = self.m.properties['mastername']
-          real_buildername = self.m.properties['buildername']
-
-          self.m.chromium.run_mb(real_mastername, real_buildername,
-                                 isolated_targets=failing_swarming_tests,
-                                 name='generate_build_files (without patch)')
-        self.m.chromium.compile(compile_targets, name='compile (without patch)')
+        self.run_mb_and_compile(compile_targets, failing_swarming_tests,
+                                ' (without patch)')
         if failing_swarming_tests:
           self.m.isolate.isolate_tests(self.m.chromium.output_dir,
                                        verbose=True)
