@@ -7,6 +7,7 @@
 
 import json
 import logging
+import logging.handlers
 import os
 import time
 
@@ -57,6 +58,7 @@ class StatusEventLogger(StatusReceiverMultiService):
       'status_logger-' + self.master_dir)
 
     self._event_logfile = os.path.join(self._event_logging_dir, 'events.log')
+    self._ts_mon_logfile = os.path.join(self._event_logging_dir, 'ts_mon.log')
 
     # These are defaults which may be overridden.
     self.logging_ignore_basedir = self.DEFAULT_LOGGING_IGNORE_BASEDIR
@@ -64,11 +66,13 @@ class StatusEventLogger(StatusReceiverMultiService):
     # Will be initialized in startService.
     self.logger = None
     self.event_logger = None
+    self.ts_mon_logger = None
     self.status = None
     self._active = False
     self._last_checked_active = 0
     self._logging = False
     self._event_logging = False
+    self._ts_mon_logging = False
     # Can't use super because StatusReceiverMultiService is an old-style class.
     StatusReceiverMultiService.__init__(self)
 
@@ -78,6 +82,7 @@ class StatusEventLogger(StatusReceiverMultiService):
         'configfile': self.configfile,
         'file_logging': self._logging,
         'event_logging': self._event_logging,
+        'ts_mon_logging': self._ts_mon_logging,
         'logfile': self.logfile,
         'logging_ignore_basedir': self.logging_ignore_basedir,
     }
@@ -87,7 +92,10 @@ class StatusEventLogger(StatusReceiverMultiService):
 
     self._logging = config_data.get(
         'file_logging', True)  # Preserve old behavior.
-    self._event_logging = config_data.get('event_logging')
+    self._event_logging = config_data.get('event_logging',
+                                          self._event_logging)
+    self._ts_mon_logging = config_data.get('ts_mon_logging',
+                                           self._ts_mon_logging)
     self._logfile = config_data.get(
         'logfile', self._original_logfile)
     self.logging_ignore_basedir = config_data.get(
@@ -106,6 +114,9 @@ class StatusEventLogger(StatusReceiverMultiService):
 
     if not old_config['event_logging'] and new_config['event_logging']:
       self._create_event_logger()
+
+    if not old_config['ts_mon_logging'] and new_config['ts_mon_logging']:
+      self._create_ts_mon_logger()
 
   @staticmethod
   def _get_requested_at_millis(build):
@@ -161,18 +172,35 @@ class StatusEventLogger(StatusReceiverMultiService):
 
         if not active_before:
           twisted_log.msg(
-              'Enabling status_logger. file_logger: %s / event_logging: %s' % (
-                  self._logging, self._event_logging))
+              'Enabling status_logger. file_logger: %s / event_logging: %s '
+              '/ ts_mon_logging: %s' % (
+              self._logging, self._event_logging, self._ts_mon_logging))
       else:
         self._configure({'file_logging': False,
-                         'event_logging': False})  # Reset to defaults.
+                         'event_logging': False,
+                         'ts_mon_logging': False})  # Reset to defaults.
 
       self._last_checked_active = now
     return self._active
 
+
+  def send_build_result(self, timestamp, builder_name, bot_name, result):
+    """Log a build result for ts_mon.
+
+    The purpose of this function is to count builds through ts_mon.
+    """
+    d = {'timestamp': timestamp,
+         'builder': builder_name,
+         'slave': bot_name,
+         'result': result.lower()}
+    self.ts_mon_logger.info(json.dumps(d))
+
+
   def send_build_event(self, timestamp_kind, timestamp, build_event_type,
                        bot_name, builder_name, build_number, build_scheduled_ts,
                        step_name=None, step_number=None, result=None):
+    """Log a build/step event for event_mon."""
+
     if self.active and self._event_logging:
       # List options to pass to send_monitoring_event, without the --, to save
       # a bit of space.
@@ -193,11 +221,15 @@ class StatusEventLogger(StatusReceiverMultiService):
 
       self.event_logger.info(json.dumps(d))
 
-  def _create_event_logger(self):
-    """Set up a logger for monitoring events.
+  def _create_logging_dir(self):
+    """Make sure the logging directory exists.
 
-    If the destination directory does not exist, ignore data sent to
-    event_logger.
+    Try to create the directory if it doesn't exist, returns False if it
+    fails.
+
+    Returns:
+      logs_dir_exists(bool): True is the directory is available
+
     """
     event_logging_dir_exists = os.path.isdir(self._event_logging_dir)
     if not event_logging_dir_exists:
@@ -208,6 +240,48 @@ class StatusEventLogger(StatusReceiverMultiService):
                         'be written:', self._event_logging_dir)
       else:
         event_logging_dir_exists = True
+
+    return event_logging_dir_exists
+
+  def _create_ts_mon_logger(self):
+    """Set up a logger for ts_mon events.
+
+    If the destination directory does not exist, ignore data sent to
+    ts_mon_logger.
+    """
+
+    event_logging_dir_exists = self._create_logging_dir()
+    logger = logging.getLogger(__name__ + '_ts_mon')
+    # Remove handlers that may already exist. This is useful when changing the
+    # log file name.
+    for handler in logger.handlers:
+      handler.flush()
+      logger.handlers = []
+
+    logger.propagate = False
+    logger.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(message)s')
+
+    if event_logging_dir_exists:
+      # Use delay=True so we don't open an empty file while self.active=False.
+      # Also use WatchedFileHandler because it'll be rotated by an external
+      # process.
+      handler = logging.handlers.WatchedFileHandler(self._ts_mon_logfile,
+                                                    encoding='utf-8',
+                                                    delay=True)
+    else:
+      handler = logging.NullHandler()
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    self.ts_mon_logger = logger
+
+  def _create_event_logger(self):
+    """Set up a logger for monitoring events.
+
+    If the destination directory does not exist, ignore data sent to
+    event_logger.
+    """
+    event_logging_dir_exists = self._create_logging_dir()
 
     logger = logging.getLogger(__name__ + '_event')
     # Remove handlers that may already exist. This is useful when changing the
@@ -254,6 +328,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     """Start the service and subscribe for updates."""
     self._create_logger()
     self._create_event_logger()
+    self._create_ts_mon_logger()
 
     StatusReceiverMultiService.startService(self)
     self.status = self.parent.getStatus()
@@ -392,6 +467,8 @@ class StatusEventLogger(StatusReceiverMultiService):
         'END', finished * 1000, 'BUILD', bot, builderName, build_number,
         self._get_requested_at_millis(build),
         result=buildbot.status.results.Results[results])
+    self.send_build_result(finished*1000, builderName, bot,
+                          buildbot.status.results.Results[results])
 
   def builderRemoved(self, builderName):
     self.log('builderRemoved', '%s', builderName)

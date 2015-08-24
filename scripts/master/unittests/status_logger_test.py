@@ -66,6 +66,7 @@ def _make_logger(file_content=None):
     configfile=filename, basedir=tempdir, event_logging_dir=tempdir)
   logger._create_logger()
   logger._create_event_logger()
+  logger._create_ts_mon_logger()
   yield logger
 
   if os.path.exists(tempdir):
