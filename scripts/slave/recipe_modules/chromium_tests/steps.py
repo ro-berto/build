@@ -1009,7 +1009,7 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
     return self.target_name  # pragma: no cover
 
   def compile_targets(self, _):
-    # TODO(sergiyb): Build 'chrome_shell_apk' instead of 'chrome' on Android.
+    # TODO(sergiyb): Build 'chrome_public_apk' instead of 'chrome' on Android.
     return ['chrome', 'telemetry_gpu_test_run']  # pragma: no cover
 
   def run(self, api, suffix):  # pylint: disable=R0201
@@ -1065,7 +1065,7 @@ class SwarmingTelemetryGPUTest(SwarmingTest):
     self._telemetry_target_name = target_name or name
 
   def compile_targets(self, _):
-    # TODO(sergiyb): Build 'chrome_shell_apk' instead of 'chrome' on Android.
+    # TODO(sergiyb): Build 'chrome_public_apk' instead of 'chrome' on Android.
     return ['chrome', 'telemetry_gpu_test_run']
 
   def create_task(self, api, suffix, isolated_hash):
