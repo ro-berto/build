@@ -5745,3 +5745,65 @@ index 8675da9..082b098 100644
          # This needs to be called before the first HelpResource().body call.
          self.hackExamples()
  
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
+index 082b098..84c0e09 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
+@@ -27,6 +27,7 @@ from twisted.python import log as twlog
+ from twisted.web import html, resource, server
+ 
+ from buildbot.changes import changes
++from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE
+ from buildbot.status.web.base import HtmlResource
+ from buildbot.util import json, now
+ 
+@@ -1029,15 +1030,49 @@ class VarzResource(JsonResource):
+     help = 'Minimal set of metrics that are scraped frequently for monitoring.'
+     pageTitle = 'Varz'
+ 
++    RECENT_BUILDS_COUNT = 50
++
+     @defer.deferredGenerator
+     def asDict(self, _request):
+         builders = {}
+         for builder_name in self.status.getBuilderNames():
+             builder = self.status.getBuilder(builder_name)
++
++            build_range = range(-1, -self.RECENT_BUILDS_COUNT - 1, -1)
++            recent_builds = [b for b in builder.getBuilds(build_range)
++                             if b is not None]
++            recent_pending_builds = [b for b in recent_builds
++                                     if not b.isFinished()]
++            recent_finished_builds = [b for b in recent_builds
++                                      if b.isFinished()]
++            recent_successful_builds = [
++                b for b in recent_finished_builds
++                if b.getResults() in (SUCCESS, WARNINGS)]
++            recent_infra_failed_builds = [
++                b for b in recent_finished_builds
++                if b.getResults() not in (SUCCESS, WARNINGS, FAILURE)]
++            recent_failed_builds = [
++                b for b in recent_finished_builds
++                if b.getResults() == FAILURE]
++
++            recent_successful_build_times = [
++                int(b.getTimes()[1] - b.getTimes()[0])
++                for b in recent_successful_builds]
++            recent_finished_build_times = [
++                int(b.getTimes()[1] - b.getTimes()[0])
++                for b in recent_finished_builds]
++
+             slaves = builder.getSlaves()
+             builders[builder_name] = {
+                 'connected_slaves': sum(1 for x in slaves if x.connected),
+                 'current_builds': len(builder.getCurrentBuilds()),
++                'recent_builds': len(recent_builds),
++                'recent_pending_builds': len(recent_pending_builds),
++                'recent_successful_builds': len(recent_successful_builds),
++                'recent_infra_failed_builds': len(recent_infra_failed_builds),
++                'recent_failed_builds': len(recent_failed_builds),
++                'recent_successful_build_times': recent_successful_build_times,
++                'recent_finished_build_times': recent_finished_build_times,
+                 'pending_builds': 0,
+                 'state': builder.currentBigState,
+                 'total_slaves': len(slaves),
