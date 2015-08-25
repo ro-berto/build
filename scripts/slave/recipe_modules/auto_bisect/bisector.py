@@ -548,8 +548,11 @@ class Bisector(object):
     return 2 * 60
 
   def get_builder_bot_for_this_platform(self):
-    if 'win' in self.bisect_config.get('original_bot_name', ''):
-      return 'win_x64_perf_bisect_builder'
+    bot_name = self.bisect_config.get('original_bot_name', '')
+    if 'win' in bot_name:
+      if any(b in bot_name for b in ['x64', 'gpu']):
+        return 'winx64_bisect_builder'  # pragma: no cover
+      return 'win_perf_bisect_builder'
     return 'linux_perf_bisect_builder'
 
   def get_platform_gs_prefix(self):

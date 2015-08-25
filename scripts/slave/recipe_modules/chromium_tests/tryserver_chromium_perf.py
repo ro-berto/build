@@ -23,7 +23,7 @@ SPEC = {
         chromium_perf.SPEC['builders']['Win Builder'],
     'win_xp_perf_bisect':
         chromium_perf.SPEC['builders']['Win Builder'],
-    'win_x64_perf_bisect_builder':
+    'winx64_bisect_builder':
         chromium_perf.SPEC['builders']['Win x64 Builder'],
     'win_x64_perf_bisect':
         chromium_perf.SPEC['builders']['Win x64 Builder'],
