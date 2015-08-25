@@ -30,6 +30,8 @@ DEFAULT_PARAMS = {
     'patchset': None,
     'patch_url': None,
     'rietveld_server': None,
+    'gerrit_ref': None,
+    'gerrit_repo': None,
     'revision_mapping': {},
     'apply_issue_email_file': None,
     'apply_issue_key_file': None,

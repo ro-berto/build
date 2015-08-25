@@ -1051,6 +1051,14 @@ def apply_rietveld_issue(issue, patchset, root, server, _rev_map, _revision,
   except SubprocessFailed as e:
     raise PatchFailed(e.message, e.code, e.output)
 
+def apply_gerrit_ref(gerrit_repo, gerrit_ref, root):
+  gerrit_repo = gerrit_repo or 'origin'
+  assert gerrit_ref
+  try:
+    git('retry', 'fetch', gerrit_repo, gerrit_ref, cwd=root, tries=1)
+    git('checkout', 'FETCH_HEAD', cwd=root)
+  except SubprocessFailed as e:
+    raise PatchFailed(e.message, e.code, e.output)
 
 def check_flag(flag_file):
   """Returns True if the flag file is present."""
@@ -1204,9 +1212,9 @@ def ensure_deps_revisions(deps_url_mapping, solutions, revisions):
 
 def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
                     patch_root, issue, patchset, patch_url, rietveld_server,
-                    revision_mapping, apply_issue_email_file,
-                    apply_issue_key_file, buildspec, gyp_env, shallow, runhooks,
-                    refs):
+                    gerrit_repo, gerrit_ref, revision_mapping,
+                    apply_issue_email_file, apply_issue_key_file, buildspec,
+                    gyp_env, shallow, runhooks, refs):
   # Get a checkout of each solution, without DEPS or hooks.
   # Calling git directly because there is no way to run Gclient without
   # invoking DEPS.
@@ -1271,6 +1279,8 @@ def ensure_checkout(solutions, revisions, first_sln, target_os, target_os_only,
     apply_rietveld_issue(issue, patchset, patch_root, rietveld_server,
                          revision_mapping, git_ref, apply_issue_email_file,
                          apply_issue_key_file, blacklist=already_patched)
+  elif gerrit_ref:
+    apply_gerrit_ref(gerrit_repo, gerrit_ref, patch_root)
 
   # Reset the deps_file point in the solutions so that hooks get run properly.
   for sln in solutions:
@@ -1346,6 +1356,9 @@ def parse_args():
   parse.add_option('--rietveld_server',
                    default='codereview.chromium.org',
                    help='Rietveld server.')
+  parse.add_option('--gerrit_repo',
+                   help='Gerrit repository to pull the ref from.')
+  parse.add_option('--gerrit_ref', help='Gerrit ref to apply.')
   parse.add_option('--specs', help='Gcilent spec.')
   parse.add_option('--master', help='Master name.')
   parse.add_option('-f', '--force', action='store_true',
@@ -1493,6 +1506,8 @@ def checkout(options, git_slns, specs, buildspec, master,
           patchset=options.patchset,
           patch_url=options.patch_url,
           rietveld_server=options.rietveld_server,
+          gerrit_repo=options.gerrit_repo,
+          gerrit_ref=options.gerrit_ref,
           revision_mapping=options.revision_mapping,
           apply_issue_email_file=options.apply_issue_email_file,
           apply_issue_key_file=options.apply_issue_key_file,

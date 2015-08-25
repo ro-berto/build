@@ -94,10 +94,14 @@ class BotUpdateApi(recipe_api.RecipeApi):
       issue = self.m.properties.get('issue')
       patchset = self.m.properties.get('patchset')
       patch_url = self.m.properties.get('patch_url')
+      gerrit_repo = self.m.properties.get('repository')
+      gerrit_ref = self.m.properties.get('event.patchSet.ref')
     else:
       # The trybot recipe sometimes wants to de-apply the patch. In which case
       # we pretend the issue/patchset/patch_url never existed.
       issue = patchset = patch_url = email_file = key_file = None
+      gerrit_repo = gerrit_ref = None
+
     # Issue and patchset must come together.
     if issue:
       assert patchset
@@ -106,6 +110,12 @@ class BotUpdateApi(recipe_api.RecipeApi):
     if patch_url:
       # If patch_url is present, bot_update will actually ignore issue/ps.
       issue = patchset = None
+
+    # The gerrit_ref and gerrit_repo must be together or not at all.  If one is
+    # missing, clear both of them.
+    if not gerrit_ref or not gerrit_repo:
+      gerrit_repo = gerrit_ref = None
+    assert (gerrit_ref != None) == (gerrit_repo != None)
 
     # Point to the oauth2 auth files if specified.
     # These paths are where the bots put their credential files.
@@ -137,6 +147,8 @@ class BotUpdateApi(recipe_api.RecipeApi):
         ['--patchset', patchset],
         ['--patch_url', patch_url],
         ['--rietveld_server', self.m.properties.get('rietveld')],
+        ['--gerrit_repo', gerrit_repo],
+        ['--gerrit_ref', gerrit_ref],
         ['--apply_issue_email_file', email_file],
         ['--apply_issue_key_file', key_file],
 

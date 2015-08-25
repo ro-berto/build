@@ -16,6 +16,9 @@ def GenTests(api):
     'event.change.id': 'test.change.id',
     'event.change.number': 0,
     'event.change.url': 'test.url',
-    'event.patchSet.ref': 'test.patch.ref'
+    'event.patchSet.ref': 'test.patch.ref',
+    'repository': 'test.repo.url',
+    'buildnumber': 0,
+    'slavename': 'test.slave',
   }
   yield api.test('basic') + api.properties(**gerrit_test_args)
