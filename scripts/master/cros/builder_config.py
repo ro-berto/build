@@ -54,13 +54,14 @@ class BuilderConfig(object):
   CBB_VARIANT = None
   TIMEOUT = None
 
-  def __init__(self, config):
+  def __init__(self, config, branch=None):
     """Initializes a new configuration.
 
     Args:
       config (ChromiteTarget): The underlying Chromite configuration object.
     """
     self.config = config
+    self.branch = branch
 
   def __repr__(self):
     return '%s/%s' % (self.config.name, self.config.category)
@@ -82,7 +83,7 @@ class BuilderConfig(object):
   @property
   def slave_type(self):
     """Returns (str): A SlaveType enumeration value."""
-    return self.SLAVE_TYPE
+    return self._GetSlaveType()
 
   @property
   def slave_class(self):
@@ -157,6 +158,14 @@ class BuilderConfig(object):
     name.
     """
     return self.config.name
+
+  def _GetSlaveType(self):
+    """Returns (str): Returns the generated builder name.
+
+    Unless overloaded, the builder name will default to the target configuration
+    name.
+    """
+    return self.SLAVE_TYPE
 
   def _IsExperimental(self):
     """Returns (bool): If this builder is experimental.
@@ -276,6 +285,16 @@ class CanaryBuilderConfig(BuilderConfig):
                  else 'full')
     return ' '.join(parts)
 
+  def _GetSlaveType(self):
+    if self.config.is_master and not self.config['boards']:
+      # For boardless release masters, use a wimpy builder.
+      #
+      # NOTE: Currently only implemented on release branch.
+      if self.branch:
+        return SlaveType.GCE_WIMPY
+    return SlaveType.BAREMETAL
+
+
 class SdkBuilderConfig(BuilderConfig):
   """BuilderConfig for SDK launcher targets."""
 
@@ -339,23 +358,23 @@ ORDINALS = dict((k, _config_map_keys.index(k))
                 for k in CONFIG_MAP.iterkeys())
 
 
-def GetBuilderConfig(target):
+def GetBuilderConfig(target, **kwargs):
   """Returns (BuilderConfig): a typed BuilderConfig instance for a target.
 
   Args:
     target (ChromiteTarget): The Chromite target to configure.
   """
-  return CONFIG_MAP.get(target.category, CONFIG_MAP[None])(target)
+  return CONFIG_MAP.get(target.category, CONFIG_MAP[None])(target, **kwargs)
 
 
-def GetBuilderConfigs(targets):
+def GetBuilderConfigs(targets, **kwargs):
   """Returns (OrderedDict): BuilderConfig instances for a set of targets.
 
   Args:
     targets (list): A list of ChromiteTarget instances to generate
         BuilderConfigs for.
   """
-  configs = [GetBuilderConfig(t)
+  configs = [GetBuilderConfig(t, **kwargs)
              for t in targets.itervalues()]
   configs.sort()
   return OrderedDict((c.config.name, c) for c in configs)
