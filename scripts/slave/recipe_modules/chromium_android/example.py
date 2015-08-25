@@ -153,18 +153,15 @@ def RunSteps(api):
   except api.step.StepFailure as f:
     failure = f
 
-  for suite_name in ('AndroidWebViewTest', 'FooBarTest'):
-    suite = api.chromium_android.get_instrumentation_suite(suite_name)
-    if suite:
-      api.chromium_android.run_instrumentation_suite(
-          test_apk=suite['test'],
-          isolate_file_path=suite['kwargs']['isolate_file_path'],
-          flakiness_dashboard='test-results.appspot.com',
-          annotation='SmallTest',
-          except_annotation='FlakyTest',
-          screenshot=True,
-          official_build=True,
-          host_driven_root=api.path['checkout'].join('chrome', 'test'))
+  api.chromium_android.run_instrumentation_suite(
+      test_apk='AndroidWebViewTest',
+      isolate_file_path='android_webview/android_webview_test_apk.isolate',
+      flakiness_dashboard='test-results.appspot.com',
+      annotation='SmallTest',
+      except_annotation='FlakyTest',
+      screenshot=True,
+      official_build=True,
+      host_driven_root=api.path['checkout'].join('chrome', 'test'))
   api.chromium_android.run_test_suite(
       'unittests',
       isolate_file_path=api.path['checkout'].join('some_file.isolate'),

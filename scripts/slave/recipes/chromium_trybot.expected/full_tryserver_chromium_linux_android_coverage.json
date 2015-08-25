@@ -240,7 +240,6 @@
       "--",
       "android_webview_test_apk",
       "chrome_public_test_apk",
-      "chrome_shell_test_apk",
       "chrome_sync_shell_test_apk",
       "content_shell_test_apk"
     ],
@@ -425,43 +424,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromePublicTest (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "-v",
-      "--apk",
-      "ChromeShell.apk"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ChromeShell.apk"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "ChromeShellTest",
-      "--isolate-file-path",
-      "chrome/chrome_shell_test_apk.isolate",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
-      "--verbose",
-      "--coverage-dir",
-      "[SLAVE_BUILD]/src/out/Debug/coverage",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ChromeShellTest (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
@@ -809,7 +771,6 @@
       "--",
       "android_webview_test_apk",
       "chrome_public_test_apk",
-      "chrome_shell_test_apk",
       "chrome_sync_shell_test_apk",
       "content_shell_test_apk"
     ],
@@ -889,43 +850,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromePublicTest (without patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "-v",
-      "--apk",
-      "ChromeShell.apk"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ChromeShell.apk (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "ChromeShellTest",
-      "--isolate-file-path",
-      "chrome/chrome_shell_test_apk.isolate",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
-      "--verbose",
-      "--coverage-dir",
-      "[SLAVE_BUILD]/src/out/Debug/coverage",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ChromeShellTest (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
@@ -1044,39 +968,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "ChromePublicTest",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
-      "@@@STEP_LOG_LINE@python.inline@failures = json.load(open(sys.argv[1], 'rb'))@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@success = True@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  success = False@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'New failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Ignored failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for f in failures['new']:\n    print f\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for f in failures['ignored']:\n    print f\n\nsys.exit(0 if success else 1)\n",
-      "{\"ignored\": [\"TestB\"], \"new\": []}"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "ChromeShellTest",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",

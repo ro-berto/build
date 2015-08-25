@@ -10,57 +10,6 @@ import urllib
 from infra.libs.infra_types import freeze
 from recipe_engine import recipe_api
 
-INSTRUMENTATION_TESTS = freeze([
-  {
-    'test': 'AndroidWebViewTest',
-    'gyp_target': 'android_webview_test_apk',
-    'kwargs': {
-      'install_apk': {
-        'apk': 'AndroidWebView.apk'
-      },
-      'isolate_file_path': 'android_webview/android_webview_test_apk.isolate',
-    },
-  },
-  {
-    'test': 'ChromeShellTest',
-    'gyp_target': 'chrome_shell_test_apk',
-    'kwargs': {
-      'install_apk': {
-        'apk': 'ChromeShell.apk',
-      },
-      'isolate_file_path': 'chrome/chrome_shell_test_apk.isolate',
-    },
-  },
-  {
-    'test': 'ContentShellTest',
-    'gyp_target': 'content_shell_test_apk',
-    'kwargs': {
-      'install_apk': {
-        'apk': 'ContentShell.apk',
-      },
-      'isolate_file_path': 'content/content_shell_test_apk.isolate',
-    },
-  },
-  {
-    'test': 'ChromeSyncShellTest',
-    'gyp_target': 'chrome_sync_shell_test_apk',
-    'kwargs': {
-      'install_apk': {
-        'apk': 'ChromeSyncShell.apk',
-      },
-    },
-  },
-  {
-    'test': 'ChromotingTest',
-    'gyp_target': 'remoting_test_apk',
-    'kwargs': {
-      'install_apk': {
-        'apk': 'Chromoting.apk',
-      },
-    },
-  },
-])
-
 
 class AndroidApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
@@ -551,12 +500,6 @@ class AndroidApi(recipe_api.RecipeApi):
 
     if failures:
       raise self.m.step.StepFailure('sharded perf tests failed %s' % failures)
-
-  def get_instrumentation_suite(self, suite_name):
-    for suite in INSTRUMENTATION_TESTS:
-      if suite['test'] == suite_name:
-        return suite
-    return None
 
   def run_instrumentation_suite(self, test_apk,
                                 isolate_file_path=None,

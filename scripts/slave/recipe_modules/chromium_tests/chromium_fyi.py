@@ -1757,10 +1757,6 @@ SPEC = {
             isolate_file_path='chrome/chrome_public_test_apk.isolate',
             adb_install_apk='ChromePublic.apk'),
         steps.AndroidInstrumentationTest(
-            'ChromeShellTest', 'chrome_shell_test_apk',
-            isolate_file_path='chrome/chrome_shell_test_apk.isolate',
-            adb_install_apk='ChromeShell.apk'),
-        steps.AndroidInstrumentationTest(
             'ContentShellTest', 'content_shell_test_apk',
             isolate_file_path='content/content_shell_test_apk.isolate',
             adb_install_apk='ContentShell.apk'),
