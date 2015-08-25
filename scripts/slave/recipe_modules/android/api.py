@@ -7,9 +7,12 @@
 from recipe_engine import recipe_api
 
 class AOSPApi(recipe_api.RecipeApi):
-  def __init__(self, **kwargs):
+  def __init__(self, patch_project, revision, clobber, **kwargs):
     super(AOSPApi, self).__init__(**kwargs)
     self._repo_path = None
+    self._patch_project = patch_project
+    self._revision = revision
+    self._clobber = clobber
 
   @property
   def with_lunch_command(self):
@@ -20,13 +23,10 @@ class AOSPApi(recipe_api.RecipeApi):
 
   def create_spec(self):
     spec = self.m.gclient.make_config(
-      'chromium', PATCH_PROJECT=self.m.properties.get('patch_project'))
+      'chromium', PATCH_PROJECT=self._patch_project)
     spec.target_os = ['android']
 
-    svn_revision = 'HEAD'
-    if 'revision' in self.m.properties:
-      svn_revision = str(self.m.properties['revision'])
-    spec.solutions[0].revision = svn_revision
+    spec.solutions[0].revision = self._revision
 
     return spec
 
@@ -161,7 +161,7 @@ class AOSPApi(recipe_api.RecipeApi):
       compiler_option = ['--compiler', 'goma',
                          '--goma-dir', self.m.path['build'].join('goma')]
 
-    if 'clobber' in self.m.properties or force_clobber:
+    if self._clobber or force_clobber:
       compiler_option.append('--clobber')
 
     self.m.step(step_name,

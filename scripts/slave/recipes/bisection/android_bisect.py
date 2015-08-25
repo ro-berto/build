@@ -69,9 +69,15 @@ BUILDERS = freeze({
   },
 })
 
-def RunSteps(api):
-  mastername = api.properties['mastername']
-  buildername = api.properties['buildername']
+from recipe_engine.recipe_api import Property
+
+PROPERTIES = {
+  'mastername': Property(),
+  'buildername': Property(),
+}
+
+
+def RunSteps(api, mastername, buildername):
   master_dict = BUILDERS.get(mastername, {})
   bot_config = master_dict.get('builders', {}).get(buildername)
   # The following lines configures android bisect bot to to checkout codes,

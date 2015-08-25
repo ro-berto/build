@@ -14,9 +14,15 @@ DEPS = [
   'tryserver',
 ]
 
-def RunSteps(api):
-  mastername = api.properties['mastername']
-  buildername = api.properties['buildername']
+from recipe_engine.recipe_api import Property
+
+PROPERTIES = {
+  'mastername': Property(),
+  'buildername': Property(),
+}
+
+
+def RunSteps(api, mastername, buildername):
   config = 'Debug' if '_dbg' in buildername else 'Release'
   kwargs = {
     'TARGET_PLATFORM': 'android',
@@ -62,8 +68,7 @@ def RunSteps(api):
       api.gclient.checkout(revert=False)
       api.tryserver.maybe_apply_issue()
     api.chromium.runhooks()
-    api.chromium.run_mb(api.properties['mastername'],
-                        api.properties['buildername'])
+    api.chromium.run_mb(mastername, buildername)
     api.chromium.compile()
 
 

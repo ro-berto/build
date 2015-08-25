@@ -130,10 +130,15 @@ BUILDERS = freeze({
   },
 })
 
+from recipe_engine.recipe_api import Property
 
-def _RunStepsInternal(api):
-  mastername = api.properties['mastername']
-  buildername = api.properties['buildername']
+PROPERTIES = {
+  'mastername': Property(),
+  'buildername': Property(),
+  'revision': Property(default='HEAD'),
+}
+
+def _RunStepsInternal(api, mastername, buildername, revision):
   bot_config = BUILDERS[mastername][buildername]
   droid = api.chromium_android
 
@@ -158,7 +163,7 @@ def _RunStepsInternal(api):
     # dynamically set to either:
     # (1) 'revision' from the waterfall, or
     # (2) 'HEAD' for forced builds with unspecified 'revision'.
-    component_rev = api.properties.get('revision') or 'HEAD'
+    component_rev = revision
     dep = bot_config.get('set_component_rev')
     api.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
@@ -182,9 +187,9 @@ def _RunStepsInternal(api):
     droid.zip_and_upload_build(upload_config['bucket'])
 
 
-def RunSteps(api):
+def RunSteps(api, mastername, buildername, revision):
   with api.tryserver.set_failure_hash():
-    return _RunStepsInternal(api)
+    return _RunStepsInternal(api, mastername, buildername, revision)
 
 
 def _sanitize_nonalpha(text):

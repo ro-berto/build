@@ -34,7 +34,14 @@ BUILDER_TO_DEVICE = freeze({
   'Nexus 7 Builder': 'nexus_7'
 })
 
-def RunSteps(api):
+from recipe_engine.recipe_api import Property
+
+PROPERTIES = {
+  'libvpx_git_url': Property(),
+  'buildername': Property(),
+}
+
+def RunSteps(api, libvpx_git_url, buildername):
   # Paths and other constants
   build_root = api.path['slave_build']
 
@@ -44,7 +51,6 @@ def RunSteps(api):
   ndk_root = android_tools_root.join('ndk')
 
   # libvpx paths
-  libvpx_git_url = api.properties['libvpx_git_url']
   libvpx_root = build_root.join('libvpx')
   test_data = build_root.join('test_data')
 
@@ -135,7 +141,7 @@ def RunSteps(api):
   # threadCount: #ofthreads
   # framesPerSecond: fps
   points = []
-  device = BUILDER_TO_DEVICE[api.properties["buildername"]]
+  device = BUILDER_TO_DEVICE[buildername]
 
   #TODO(martiniss) convert loop
   for i in data:

@@ -85,8 +85,14 @@ BUILDERS = freeze({
     },
 })
 
-def RunSteps(api):
-  config = BUILDERS[api.properties['buildername']]
+from recipe_engine.recipe_api import Property
+
+PROPERTIES = {
+  'buildername': Property(),
+}
+
+def RunSteps(api, buildername):
+  config = BUILDERS[buildername]
 
   api.chromium_android.configure_from_properties(
       'base_config',

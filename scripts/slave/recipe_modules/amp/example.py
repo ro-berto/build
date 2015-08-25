@@ -82,10 +82,16 @@ BUILDERS = {
 
 AMP_RESULTS_BUCKET = 'chrome-amp-results'
 
-def RunSteps(api):
+from recipe_engine.recipe_api import Property
+
+PROPERTIES = {
+  'buildername': Property(),
+}
+
+def RunSteps(api, buildername):
   api.amp.setup()
 
-  builder = BUILDERS[api.properties['buildername']]
+  builder = BUILDERS[buildername]
   api.path['checkout'] = api.path['slave_build'].join('src')
 
   api.amp.trigger_test_suite(

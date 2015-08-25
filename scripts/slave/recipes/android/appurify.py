@@ -108,11 +108,17 @@ AMP_INSTANCE_PORT = '80'
 AMP_INSTANCE_PROTOCOL = 'http'
 AMP_RESULTS_BUCKET = 'chrome-amp-results'
 
-def RunSteps(api):
+from recipe_engine.recipe_api import Property
+
+PROPERTIES = {
+  'buildername': Property(),
+  'mastername': Property(),
+}
+
+
+def RunSteps(api, mastername, buildername):
   api.amp.setup()
 
-  mastername = api.properties['mastername']
-  buildername = api.properties['buildername']
   builder = BUILDERS[mastername][buildername]
   api.chromium_android.configure_from_properties(
       builder['config'],
