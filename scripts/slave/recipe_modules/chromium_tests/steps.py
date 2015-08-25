@@ -724,7 +724,7 @@ class AMPInstrumentationTest(AMPTest):
     self._android_isolate_path = android_isolate_path
 
   def compile_targets(self, api):
-    return self._compile_target
+    return [self._compile_target]
 
   #override
   def trigger_test(self, api):
