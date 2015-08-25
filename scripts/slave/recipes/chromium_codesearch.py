@@ -127,6 +127,12 @@ def RunSteps(api):
   update_step = api.bot_update.ensure_checkout()
   api.chromium.set_build_properties(update_step.json.output['properties'])
 
+  # Remove the llvm-build directory, so that gclient runhooks will download
+  # the pre-built clang binary and not use the locally compiled binary from
+  # the 'compile translation_unit clang tool' step.
+  api.file.rmtree('llvm-build',
+                  api.path['checkout'].join('third_party', 'llvm-build'))
+
   debug_path = api.path['checkout'].join('out', 'Debug')
   targets = bot_config.get('compile_targets', [])
 
@@ -191,12 +197,6 @@ def RunSteps(api):
                                     'package_index.py'),
              ['--path-to-compdb', debug_path.join('compile_commands.json'),
               '--path-to-archive-output', debug_path.join(index_pack_name)])
-
-  # Remove the llvm-build directory, so that gclient runhooks will download
-  # the pre-built clang binary and not use the locally compiled binary from
-  # the 'compile translation_unit clang tool' step.
-  api.file.rmtree('llvm-build',
-                  api.path['checkout'].join('third_party', 'llvm-build'))
 
   # Upload the index pack
   api.gsutil.upload(
