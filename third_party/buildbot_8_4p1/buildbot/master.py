@@ -28,7 +28,7 @@ try:
 except ImportError:
   print 'Unable to load the epoll module, falling back to select.'
   print 'This may be caused by the lack of cython, python-dev, or'
-  print 'you may be on a platform other than linux 2.6' 
+  print 'you may be on a platform other than linux 2.6'
 except twisted.internet.error.ReactorAlreadyInstalledError:
   pass
 
@@ -63,10 +63,10 @@ from buildbot import monkeypatches
 
 class _Unset: pass  # marker
 
-class LogRotation: 
+class LogRotation:
     '''holds log rotation parameters (for WebStatus)'''
     def __init__(self):
-        self.rotateLength = 1 * 1000 * 1000 
+        self.rotateLength = 1 * 1000 * 1000
         self.maxRotatedFiles = 10
 
 class BuildMaster(service.MultiService):
@@ -264,7 +264,7 @@ class BuildMaster(service.MultiService):
 
             localDict = {'basedir': os.path.expanduser(self.basedir),
                          '__file__': os.path.abspath(self.configFileName)}
-            
+
             try:
                 exec f in localDict
             except:
@@ -553,6 +553,8 @@ class BuildMaster(service.MultiService):
             self.buildHorizon = buildHorizon
             self.slavePortnum = slavePortnum # TODO: move this to master.config.slavePortnum
             self.autoBuildCacheRatio = autoBuildCacheRatio
+
+            self.trybots = [b['name'] for b in builders if b.get('trybot')]
 
             # Set up the database
             d.addCallback(lambda res:
@@ -1207,7 +1209,7 @@ class BuildMaster(service.MultiService):
             wfd.getResult()
 
         # cleanup unclaimed builds
-        since_last_cleanup = reactor.seconds() - self._last_claim_cleanup 
+        since_last_cleanup = reactor.seconds() - self._last_claim_cleanup
         if since_last_cleanup < self.RECLAIM_BUILD_INTERVAL:
             unclaimed_age = (self.RECLAIM_BUILD_INTERVAL
                            * self.UNCLAIMED_BUILD_FACTOR)

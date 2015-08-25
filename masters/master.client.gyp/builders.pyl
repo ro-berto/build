@@ -17,10 +17,11 @@
       "slave_pools": ["linux"],
     },
     "linux_try": {
-      "category": "tryserver",
+      "category": "trybots",
       "recipe": "gyp",
       "scheduler": None,
       "slave_pools": ["linux"],
+      "trybot": True,
     },
     "mac": {
       "category": "continuous",
@@ -29,10 +30,11 @@
       "slave_pools": ["mac10.9"],
     },
     "mac_try": {
-      "category": "tryserver",
+      "category": "trybots",
       "recipe": "gyp",
       "scheduler": None,
       "slave_pools": ["mac10.9"],
+      "trybot": True,
     },
     "win": {
       "category": "continuous",
@@ -41,10 +43,11 @@
       "slave_pools": ["win7"],
     },
     "win_try": {
-      "category": "tryserver",
+      "category": "trybots",
       "recipe": "gyp",
       "scheduler": None,
       "slave_pools": ["win7"],
+      "trybot": True,
     },
   },
 

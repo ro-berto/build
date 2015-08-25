@@ -433,6 +433,24 @@ class BuildersJsonResource(JsonResource):
                           BuilderJsonResource(status,
                                               status.getBuilder(builder_name)))
 
+    @defer.deferredGenerator
+    def asDict(self, request):
+        """Generates the json dictionary.
+
+        By default, renders every builder. If 'trybots=1' is passed in
+        the request, then it renders only the builders that were marked as
+        trybots.
+        """
+        wfd = defer.waitForDeferred(
+                defer.maybeDeferred(JsonResource.asDict, self, request))
+        yield wfd
+        data = wfd.getResult()
+        trybots = request.args.get('trybots')
+        if trybots:
+          data = {name: builder for name, builder in data.iteritems()
+                  if name in self.status.master.trybots}
+        yield data
+
 
 class BuilderSlavesJsonResources(JsonResource):
     help = """Describe the slaves attached to a single builder.
