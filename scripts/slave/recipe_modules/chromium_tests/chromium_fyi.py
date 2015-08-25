@@ -27,22 +27,6 @@ SPEC = {
         'platform': 'mac',
       },
     },
-    'Chromium Mac 10.11': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromium_mac_sdk_10_10'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-      ],
-      'testing': {
-        'platform': 'mac',
-      },
-    },
     'Linux ARM Cross-Compile': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
