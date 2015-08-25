@@ -141,13 +141,21 @@ class AutoBisectApi(recipe_api.RecipeApi):
   def start_test_run_for_bisect(self, api, update_step, master_dict):
     mastername = api.properties.get('mastername')
     buildername = api.properties.get('buildername')
+    bot_config = master_dict.get('builders', {}).get(buildername)
     api.bisect_tester.upload_job_url()
-    tests = api.chromium_tests.tests_for_builder(
-        mastername,
-        buildername,
-        update_step,
-        master_dict,
-        override_bot_type='tester')
+    if api.chromium.c.TARGET_PLATFORM == 'android':
+      api.chromium_android.download_build(bucket=bot_config['bucket'],
+          path=bot_config['path'](api))
+    else:
+      api.chromium_tests.tests_for_builder(
+          mastername,
+          buildername,
+          update_step,
+          master_dict,
+          override_bot_type='tester')
+
+    tests = [api.chromium_tests.steps.BisectTest()]
+
     if not tests:  # pragma: no cover
       return
     api.chromium_tests.configure_swarming(  # pragma: no cover
@@ -163,14 +171,28 @@ class AutoBisectApi(recipe_api.RecipeApi):
       master_dict = {}
     affected_files = self.m.tryserver.get_files_affected_by_patch()
 
-    # TODO(prasadv): Remove condition to check buildername once we build
-    # support perf try job and CQ telemetry test jobs ran on
-    # non-linux bots
-    if (BISECT_CONFIG_FILE in affected_files or
-        'linux_perf' not in api.properties.get('buildername')):
-      self.run_bisect_script(extra_src='', path_to_config='', **kwargs)
-    elif api.properties.get('bisect_config'):
-      self.start_test_run_for_bisect(api, update_step, master_dict)
-    else:
-      self.m.perf_try.start_perf_try_job(
-          affected_files, update_step, master_dict)
+    # Avoid duplication of device setup steps for bisect recipe tester which
+    # is ran while executing tests in chromium_tests.wrap_chromium_tests and
+    # also we don't want to execute runhooks since this just tests the build.
+    if (api.properties.get('bisect_config') is None and
+        api.chromium.c.TARGET_PLATFORM == 'android'):
+      api.chromium_android.common_tests_setup_steps(perf_setup=True)
+      api.chromium.runhooks()
+    try:
+      # TODO(prasadv): Remove condition to check buildername once we build
+      # support perf try job and CQ telemetry test jobs ran on
+      # non-linux bots
+      if (BISECT_CONFIG_FILE in affected_files or
+          api.chromium.c.TARGET_PLATFORM not in ['linux', 'android']):
+        self.run_bisect_script(extra_src='', path_to_config='', **kwargs)
+      elif api.properties.get('bisect_config'):
+        self.start_test_run_for_bisect(api, update_step, master_dict)
+      else:
+        self.m.perf_try.start_perf_try_job(
+            affected_files, update_step, master_dict)
+    finally:
+      # Avoid duplication of device setup steps for bisect recipe tester, which
+      # are run while running tests in chromium_tests.wrap_chromium_tests.
+      if (api.properties.get('bisect_config') is None and
+          api.chromium.c.TARGET_PLATFORM == 'android'):
+        api.chromium_android.common_tests_final_steps()

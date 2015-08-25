@@ -5,6 +5,7 @@
 DEPS = [
   'auto_bisect',
   'bisect_tester',
+  'chromium',
   'chromium_tests',
   'gclient',
   'json',

@@ -105,6 +105,9 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     self._compile('With Patch', self.m.properties['mastername'],
                   self.m.properties['buildername'], update_step, master_dict)
 
+    if self.m.chromium.c.TARGET_PLATFORM == 'android':
+      self.m.chromium_android.adb_install_apk('ChromePublic.apk')
+
     tests = self.m.chromium.list_perf_tests(_get_browser(buildername), 1)
 
     tests = dict((k, v) for k, v in tests.json.output['steps'].iteritems()
@@ -167,11 +170,12 @@ class PerfTryJobApi(recipe_api.RecipeApi):
         test_spec,
         override_bot_type='builder_tester',
         override_tests=[])
-    # Removes any chrome temporary files or build.dead directories.
-    self.m.chromium.cleanup_temp()
-    if self.m.chromium.c.TARGET_PLATFORM == 'android':  # pragma: no cover
+    if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.clean_local_files()
-      self.m.chromium_android.run_tree_truth()
+      compile_targets = None
+    else:
+      # Removes any chrome temporary files or build.dead directories.
+      self.m.chromium.cleanup_temp()
 
     if 'With Patch' in name:
       self.m.chromium_tests.transient_check(
@@ -205,6 +209,9 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     update_step = self._checkout_revision(update_step, master_dict, revision)
     self._compile(kwargs['name'], self.m.properties['mastername'],
                   self.m.properties['buildername'], update_step, master_dict)
+
+    if self.m.chromium.c.TARGET_PLATFORM == 'android':
+      self.m.chromium_android.adb_install_apk('ChromePublic.apk')
 
     return self._run_test(cfg, **kwargs)
 

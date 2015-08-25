@@ -2,6 +2,7 @@ DEPS = [
   'bot_update',
   'bisect_tester',
   'chromium',
+  'chromium_android',
   'chromium_tests',
   'commit_position',
   'file',

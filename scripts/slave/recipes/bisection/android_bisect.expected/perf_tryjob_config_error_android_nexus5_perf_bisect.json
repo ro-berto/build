@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.perf",
       "--builder",
-      "android_nexus4_perf_bisect",
+      "android_nexus5_perf_bisect",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -106,7 +106,7 @@
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@tools/auto_bisect/bisect.cfg@@@",
+      "@@@STEP_LOG_LINE@files@tools/run-perf-test.cfg@@@",
       "@@@STEP_LOG_END@files@@@"
     ]
   },
@@ -240,41 +240,36 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/prepare-bisect-perf-regression.py",
-      "-w",
-      "[SLAVE_BUILD]"
+      "RECIPE_MODULE[perf_try]/resources/load_config_to_json.py",
+      "--source",
+      "[SLAVE_BUILD]/src/tools/run-perf-test.cfg",
+      "--output_json",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Preparing for Bisection"
+    "name": "load config",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"max_time_minutes\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"repeat_count\": \"1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"target_arch\": \"ia32\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"truncate_percent\": \"25\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--test-platform",
-      "android",
-      "--xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus4_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus4_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--step-name=Running Bisection",
-      "--builder-name=android_nexus4_perf_bisect",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/run-bisect-perf-regression.py",
-      "-w",
-      "[SLAVE_BUILD]",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus4_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "import sys; sys.exit(1)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Running Bisection"
+    "name": "Recipe failed. Reason: Could not load config file. Double check your changes to config files for syntax errors.",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@import sys; sys.exit(1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "cmd": [

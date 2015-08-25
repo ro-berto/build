@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.perf",
       "--builder",
-      "android_nexus4_perf_bisect",
+      "android_nexus9_perf_bisect",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -25,7 +25,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@1111111"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
@@ -106,9 +106,66 @@
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@tools/auto_bisect/bisect.cfg@@@",
+      "@@@STEP_LOG_LINE@files@foo.cc@@@",
       "@@@STEP_LOG_END@files@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[bisect_tester]/resources/put_temp.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "saving url to temp file",
+    "stdin": "http://build.chromium.org/p/tryserver.chromium.perf/json/builders/android_nexus9_perf_bisect/builds/571",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "----",
+      "cp",
+      "/tmp/dummy1",
+      "gs://chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil bisect-results/f7a7b4135624439cbd27fdd5133d74ec",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "----",
+      "cp",
+      "gs://chrome-perf/android_perf_rel_arm64/full-build-linux_1111111.zip",
+      "[SLAVE_BUILD]/src/out/build_product.zip"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil download_build_product"
+  },
+  {
+    "cmd": [
+      "unzip",
+      "-o",
+      "[SLAVE_BUILD]/src/out/build_product.zip"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "unzip_build_product"
   },
   {
     "cmd": [
@@ -223,58 +280,68 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gclient.py",
-      "runhooks"
+      "xvfb-run",
+      "-a",
+      "./tools/perf/run_benchmark",
+      "-v",
+      "--browser=android-chromium",
+      "page_cycler.intl_ar_fa_he"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "gclient runhooks"
+    "name": "Performance Test 1 of 2",
+    "stderr": "/path/to/tmp/",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@Captured Output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "xvfb-run",
+      "-a",
+      "./tools/perf/run_benchmark",
+      "-v",
+      "--browser=android-chromium",
+      "page_cycler.intl_ar_fa_he"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Performance Test 2 of 2",
+    "stderr": "/path/to/tmp/",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@Captured Output@@@"
+    ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/prepare-bisect-perf-regression.py",
-      "-w",
-      "[SLAVE_BUILD]"
+      "RECIPE_MODULE[bisect_tester]/resources/put_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Preparing for Bisection"
+    "name": "saving json to temp file",
+    "stdin": "{\"output\": [], \"results\": {\"std_err\": 0.0, \"values\": [0, 0], \"mean\": 0.0}, \"retcodes\": [0, 0]}",
+    "stdout": "/path/to/tmp/"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--test-platform",
-      "android",
-      "--xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus4_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus4_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--step-name=Running Bisection",
-      "--builder-name=android_nexus4_perf_bisect",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/run-bisect-perf-regression.py",
-      "-w",
-      "[SLAVE_BUILD]",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus4_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "----",
+      "cp",
+      "/tmp/dummy2",
+      "gs://chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec.results"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Running Bisection"
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec.results@@@"
+    ]
   },
   {
     "cmd": [
@@ -293,7 +360,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/third_party/android_platform/development/scripts/stack",
       "--arch",
-      "arm",
+      "arm64",
       "--more-info",
       "[SLAVE_BUILD]/src/out/Release/full_log"
     ],

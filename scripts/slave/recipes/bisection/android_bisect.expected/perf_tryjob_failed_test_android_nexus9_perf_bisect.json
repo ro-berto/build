@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.perf",
       "--builder",
-      "android_nexus4_perf_bisect",
+      "android_nexus9_perf_bisect",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -106,7 +106,7 @@
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@tools/auto_bisect/bisect.cfg@@@",
+      "@@@STEP_LOG_LINE@files@tools/run-perf-test.cfg@@@",
       "@@@STEP_LOG_END@files@@@"
     ]
   },
@@ -231,7 +231,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm64 use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
@@ -240,41 +240,114 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/prepare-bisect-perf-regression.py",
-      "-w",
-      "[SLAVE_BUILD]"
+      "RECIPE_MODULE[perf_try]/resources/load_config_to_json.py",
+      "--source",
+      "[SLAVE_BUILD]/src/tools/run-perf-test.cfg",
+      "--output_json",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Preparing for Bisection"
+    "name": "load config",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"command\": \"./tools/perf/run_benchmark -v --browser=android-chrome sunspider\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"max_time_minutes\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"metric\": \"dummy/dummy\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"repeat_count\": \"1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"target_arch\": \"ia32\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"truncate_percent\": \"25\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--test-platform",
-      "android",
-      "--xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus4_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus4_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--step-name=Running Bisection",
-      "--builder-name=android_nexus4_perf_bisect",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/run-bisect-perf-regression.py",
-      "-w",
-      "[SLAVE_BUILD]",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"android_nexus4_perf_bisect\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"bisection/android_bisect\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
+      "[SLAVE_BUILD]/src/out/Release/debug_info_dumps",
+      "[SLAVE_BUILD]/src/out/Release/test_logs",
+      "[SLAVE_BUILD]/src/out/build_product.zip",
+      "[SLAVE_BUILD]/src"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Running Bisection"
+    "name": "clean local files (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil, sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1], True)@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[2], True)@@@",
+      "@@@STEP_LOG_LINE@python.inline@try:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.remove(sys.argv[3])@@@",
+      "@@@STEP_LOG_LINE@python.inline@except OSError:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  pass@@@",
+      "@@@STEP_LOG_LINE@python.inline@for base, _dirs, files in os.walk(sys.argv[4]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for f in files:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    if f.endswith('.pyc'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@      os.remove(os.path.join(base, f))@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--goma-fail-fast",
+      "--goma-disable-local-fallback",
+      "--"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "compile (with patch)"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "-v",
+      "--apk",
+      "ChromePublic.apk",
+      "--release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install ChromePublic.apk"
+  },
+  {
+    "cmd": [
+      "xvfb-run",
+      "-a",
+      "src/tools/perf/run_benchmark",
+      "-v",
+      "--browser=android-chrome",
+      "sunspider",
+      "--reset-results",
+      "--upload-results",
+      "--results-label=Patch"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Performance Test (With Patch) 1 of 1",
+    "stderr": "/path/to/tmp/",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_END@Failure Output@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -293,7 +366,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/third_party/android_platform/development/scripts/stack",
       "--arch",
-      "arm",
+      "arm64",
       "--more-info",
       "[SLAVE_BUILD]/src/out/Release/full_log"
     ],
@@ -335,5 +408,10 @@
       "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
+  },
+  {
+    "name": "$final_result",
+    "reason": "Patched version failed to run performance test.",
+    "status_code": 1
   }
 ]

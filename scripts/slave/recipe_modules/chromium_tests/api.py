@@ -511,8 +511,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   @contextlib.contextmanager
   def wrap_chromium_tests(self, mastername):
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
+      #TODO(prasadv): Remove this hack and implement specific functions
+      # at the point of call.
       self.m.chromium_android.common_tests_setup_steps(
-          perf_setup=mastername.startswith('chromium.perf'))
+          perf_setup=(mastername.startswith('chromium.perf') or
+                      mastername.startswith('tryserver.chromium.perf')))
 
     if self.m.platform.is_win:
       self.m.chromium.crash_handler()
