@@ -1030,30 +1030,37 @@ class VarzResource(JsonResource):
     help = 'Minimal set of metrics that are scraped frequently for monitoring.'
     pageTitle = 'Varz'
 
-    RECENT_BUILDS_COUNT = 50
+    RECENT_BUILDS_COUNT_DEFAULT = 50
+    RECENT_BUILDS_COUNT_LIMIT = 200
 
     @defer.deferredGenerator
-    def asDict(self, _request):
+    def asDict(self, request):
+        recent_builds_count = int(RequestArg(
+            request, 'recent_builds_count', self.RECENT_BUILDS_COUNT_DEFAULT))
+
+        # Enforce a hard limit to avoid DoS-ing buildbot with a heavy request.
+        recent_builds_count = min(
+            recent_builds_count, self.RECENT_BUILDS_COUNT_LIMIT)
+
         builders = {}
         for builder_name in self.status.getBuilderNames():
             builder = self.status.getBuilder(builder_name)
 
-            build_range = range(-1, -self.RECENT_BUILDS_COUNT - 1, -1)
+            build_range = range(-1, -recent_builds_count - 1, -1)
             recent_builds = [b for b in builder.getBuilds(build_range)
                              if b is not None]
-            recent_pending_builds = [b for b in recent_builds
+            recent_running_builds = [b for b in recent_builds
                                      if not b.isFinished()]
             recent_finished_builds = [b for b in recent_builds
                                       if b.isFinished()]
             recent_successful_builds = [
                 b for b in recent_finished_builds
                 if b.getResults() in (SUCCESS, WARNINGS)]
-            recent_infra_failed_builds = [
-                b for b in recent_finished_builds
-                if b.getResults() not in (SUCCESS, WARNINGS, FAILURE)]
-            recent_failed_builds = [
-                b for b in recent_finished_builds
-                if b.getResults() == FAILURE]
+
+            recent_builds_by_status = collections.defaultdict(int)
+            recent_builds_by_status['running'] = len(recent_running_builds)
+            for b in recent_finished_builds:
+              recent_builds_by_status[b.getResults()] += 1
 
             recent_successful_build_times = [
                 int(b.getTimes()[1] - b.getTimes()[0])
@@ -1066,11 +1073,7 @@ class VarzResource(JsonResource):
             builders[builder_name] = {
                 'connected_slaves': sum(1 for x in slaves if x.connected),
                 'current_builds': len(builder.getCurrentBuilds()),
-                'recent_builds': len(recent_builds),
-                'recent_pending_builds': len(recent_pending_builds),
-                'recent_successful_builds': len(recent_successful_builds),
-                'recent_infra_failed_builds': len(recent_infra_failed_builds),
-                'recent_failed_builds': len(recent_failed_builds),
+                'recent_builds_by_status': recent_builds_by_status,
                 'recent_successful_build_times': recent_successful_build_times,
                 'recent_finished_build_times': recent_finished_build_times,
                 'pending_builds': 0,
