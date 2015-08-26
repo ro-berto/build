@@ -158,8 +158,7 @@ class DevRevision:
 class DevBuild:
     """Helper class that contains all the information we need for a build."""
 
-    def __init__(self, revision, build, details, inProgressResults=None,
-                 revisions=[]):
+    def __init__(self, revision, build, details, inProgressResults=None):
         self.revision = revision
         self.results =  build.getResults()
         self.number = build.getNumber()
@@ -170,10 +169,6 @@ class DevBuild:
         self.when = build.getTimes()[0]
         self.source = build.getSourceStamp()
         self.inProgressResults = inProgressResults
-        for rev in revisions:
-          if rev.revision == revision:
-            self.when = rev.when
-            break
 
 
 class ConsoleStatusResource(HtmlResource):
@@ -321,7 +316,7 @@ class ConsoleStatusResource(HtmlResource):
         return details
 
     def getBuildsForRevision(self, request, builder, builderName, lastRevision,
-                             numBuilds, debugInfo, revisions):
+                             numBuilds, debugInfo):
         """Return the list of all the builds for a given builder that we will
         need to be able to display the console page. We start by the most recent
         build, and we go down until we find a build that was built prior to the
@@ -362,7 +357,7 @@ class ConsoleStatusResource(HtmlResource):
             if got_rev and got_rev != -1:
                 details = self.getBuildDetails(request, builderName, build)
                 devBuild = DevBuild(got_rev, build, details,
-                                    getInProgressResults(build), revisions)
+                                    getInProgressResults(build))
                 builds.append(devBuild)
 
                 # Now break if we have enough builds.
@@ -390,7 +385,7 @@ class ConsoleStatusResource(HtmlResource):
         return changes[-1]
 
     def getAllBuildsForRevision(self, status, request, lastRevision, numBuilds,
-                                categories, builders, debugInfo, revisions):
+                                categories, builders, debugInfo):
         """Returns a dictionary of builds we need to inspect to be able to
         display the console page. The key is the builder name, and the value is
         an array of build we care about. We also returns a dictionary of
@@ -441,8 +436,7 @@ class ConsoleStatusResource(HtmlResource):
                                                                builderName,
                                                                lastRevision,
                                                                numBuilds,
-                                                               debugInfo,
-                                                               revisions)
+                                                               debugInfo)
 
         return (builderList, allBuilds)
 
@@ -806,8 +800,7 @@ class ConsoleStatusResource(HtmlResource):
                                                     numBuilds,
                                                     categories,
                                                     builders,
-                                                    debugInfo,
-                                                    revisions)
+                                                    debugInfo)
 
             debugInfo["added_blocks"] = 0
             debugInfo["from_cache"] = 0
