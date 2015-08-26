@@ -47,11 +47,12 @@ WHITELISTED_HOSTS = [
 
   # SVN bots on chromium.fyi
   'build85-a1', 'build123-a1', 'build38-a1', 'chromeperf80', 'chromeperf87',
-  'vm977-m1', 'vm835-m1', 'vm641-m1', 'vm49-m1', 'vm823-m1', 'vm678-m1',
-  'build36-a1', 'vm9-m1', 'vm990-m1', 'build87-a95', 'build98-m1', 'vm999-m1',
-  'build63-a1', 'build99-m1', 'vm982-m1', 'vm973-m1', 'build5-a1', 'build84-a1',
-  'vm971-m1', 'vm847-m1', 'vm52-m1', 'vm687-m1', 'build137-a1', 'vm693-m1',
-  'build29-a1',
+  'vm977-m1', 'vm835-m1', 'vm49-m1', 'vm823-m1', 'build36-a1', 'vm9-m1',
+  'vm990-m1', 'build87-a95', 'vm999-m1', 'build63-a1', 'vm982-m1', 'vm973-m1',
+  'build5-a1', 'build84-a1', 'vm971-m1', 'vm847-m1', 'vm52-m1', 'build137-a1',
+  'build29-a1', 'vm641-m1.golo.chromium.org', 'build99-m1.golo.chromium.org',
+  'build98-m1.golo.chromium.org', 'vm687-m1.golo.chromium.org',
+  'vm678-m1.golo.chromium.org', 'vm693-m1.golo.chromium.org',
 ]
 
 is_win = sys.platform.startswith('win')
