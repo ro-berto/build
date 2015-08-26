@@ -84,7 +84,7 @@ def main():
       b_dir = 'C:\\b'
   elif os.path.exists('/b'):
     b_dir = '/b'
-  assert os.path.isdir(b_dir), 'Did not find b dir'
+  assert b_dir is not None and os.path.isdir(b_dir), 'Did not find b dir'
 
   # Report host state to the tracking app.
   cur_host = socket.gethostname()
@@ -114,6 +114,11 @@ def main():
   boto_file = os.path.join(b_dir, 'build', 'site_config', '.boto')
   if os.path.isfile(boto_file):
     env['AWS_CREDENTIAL_FILE'] = boto_file
+
+  # Add depot_tools to PATH, so that gclient can be found.
+  env_path_sep = ';' if is_win else ':'
+  env['PATH'] = '%s%s%s' % (env['PATH'], env_path_sep,
+                            os.path.join(b_dir, 'depot_tools'))
 
   # Find old .gclient config.
   gclient_path = os.path.join(b_dir, '.gclient')
@@ -145,7 +150,7 @@ def main():
     check_call(['gclient', 'sync'], cwd=tmpdir, env=env)
 
     # Find repositories handled by gclient.
-    revinfo = check_output(['gclient', 'revinfo'], cwd=tmpdir)
+    revinfo = check_output(['gclient', 'revinfo'], cwd=tmpdir, env=env)
     repos = {}
     for line in revinfo.splitlines():
       relpath, repospec = line.split(':', 1)
