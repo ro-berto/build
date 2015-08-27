@@ -443,6 +443,7 @@
       "Release",
       "--output-device-blacklist",
       "/path/to/tmp/json",
+      "--disable-system-chrome",
       "--remove-system-webview"
     ],
     "cwd": "[SLAVE_BUILD]",

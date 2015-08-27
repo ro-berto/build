@@ -343,8 +343,8 @@ class AndroidApi(recipe_api.RecipeApi):
   def provision_devices(self, skip_wipe=False, disable_location=False,
                         min_battery_level=None, disable_network=False,
                         disable_java_debug=False, reboot_timeout=None,
-                        max_battery_temp=None, remove_system_webview=False,
-                        **kwargs):
+                        max_battery_temp=None, disable_system_chrome=False,
+                        remove_system_webview=False, **kwargs):
     args = ['-t', self.m.chromium.c.BUILD_CONFIG]
     args.extend(['--output-device-blacklist',
                  self.m.json.output(add_json_log=False)])
@@ -370,6 +370,8 @@ class AndroidApi(recipe_api.RecipeApi):
       assert max_battery_temp >= 0
       assert max_battery_temp <= 500
       args.extend(['--max-battery-temp', max_battery_temp])
+    if disable_system_chrome:
+      args.append('--disable-system-chrome')
     if remove_system_webview:
       args.append('--remove-system-webview')
     result = self.m.python(
