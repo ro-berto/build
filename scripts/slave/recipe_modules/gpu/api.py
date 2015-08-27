@@ -35,6 +35,7 @@ D3D9_TEST_NAME_MAPPING = freeze({
 })
 
 GL_TEST_NAME_MAPPING = freeze({
+  'gles2_conform_test': 'gles2_conform_gl_test',
   'webgl_conformance': 'webgl_conformance_gl'
 })
 
@@ -340,13 +341,22 @@ class GpuApi(recipe_api.RecipeApi):
                                       enable_swarming, swarming_dimensions,
                                       args=['--use-gpu-in-tests']))
 
-    # Run closed source tests with ANGLE-D3D9
+    # Run closed source tests with ANGLE-D3D9 and ANGLE-GL
     if self.is_fyi_waterfall and self.m.platform.is_win:
       for test in SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN:
         tests.append(self._create_gtest(
             D3D9_TEST_NAME_MAPPING[test], chrome_revision, webkit_revision,
             enable_swarming, swarming_dimensions,
-            args=['--use-gpu-in-tests', '--disable-d3d11'], target_name=test))
+            args=['--use-gpu-in-tests', '--use-angle=d3d9'], target_name=test))
+        tests.append(self._create_gtest(
+            GL_TEST_NAME_MAPPING[test], chrome_revision, webkit_revision,
+            enable_swarming, swarming_dimensions, target_name=test,
+            args=[
+              '--use-gpu-in-tests',
+              '--use-angle=gl',
+              '--disable-gpu-sandbox', # TODO(geofflang): Remove dependency on
+                                       # the sandbox being disabled to use WGL
+            ]))
 
     # Google Maps Pixel tests.
     tests.append(self._create_telemetry_test(
@@ -403,7 +413,7 @@ class GpuApi(recipe_api.RecipeApi):
           D3D9_TEST_NAME_MAPPING['webgl_conformance'], chrome_revision,
           webkit_revision, enable_swarming, swarming_dimensions,
           target_name='webgl_conformance',
-          extra_browser_args=['--disable-d3d11']))
+          extra_browser_args=['--use-angle=d3d9']))
 
       tests.append(self._create_telemetry_test(
           GL_TEST_NAME_MAPPING['webgl_conformance'], chrome_revision,
