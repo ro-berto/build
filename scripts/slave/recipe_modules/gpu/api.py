@@ -21,6 +21,14 @@ SIMPLE_WIN_AND_LINUX_ONLY_FYI_ONLY_TESTS = freeze([
   'angle_end2end_tests',
 ])
 
+DEQP_TESTS_TO_RUN = freeze([
+  'angle_deqp_gles2_tests'
+])
+
+WIN_ONLY_DEQP_TESTS_TO_RUN = freeze([
+  'angle_deqp_gles3_tests'
+])
+
 D3D9_TEST_NAME_MAPPING = freeze({
   'gles2_conform_test': 'gles2_conform_d3d9_test',
   'webgl_conformance': 'webgl_conformance_d3d9'
@@ -303,12 +311,15 @@ class GpuApi(recipe_api.RecipeApi):
 
     # Run only the dEQP tests on the dEQP GPU bots.
     if self.is_deqp_tester:
-      tests.append(self._create_gtest(
-          'angle_deqp_gles2_tests', chrome_revision, webkit_revision,
-          enable_swarming, swarming_dimensions))
-      tests.append(self._create_gtest(
-          'angle_deqp_gles3_tests', chrome_revision, webkit_revision,
-          enable_swarming, swarming_dimensions))
+      test_names = list(DEQP_TESTS_TO_RUN)
+      if self.m.platform.is_win:
+          test_names += WIN_ONLY_DEQP_TESTS_TO_RUN
+
+      for test_name in test_names:
+        tests.append(self._create_gtest(
+            test_name, chrome_revision, webkit_revision, enable_swarming,
+            swarming_dimensions))
+
       return tests
 
     # Copy the test list to avoid mutating it.

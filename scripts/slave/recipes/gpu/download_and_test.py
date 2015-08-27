@@ -90,8 +90,16 @@ def GenTests(api):
   win_fyi_hashes = api.gpu.dummy_win_fyi_swarm_hashes
 
   yield (
-    api.test('win_debug_deqp') +
-    named_props('win', 'Debug', 'win Debug dEQP tester', win_fyi_hashes) +
+    api.test('win_release_deqp') +
+    named_props('win', 'Release', 'win release dEQP tester', win_fyi_hashes) +
     api.platform.name('win')
   )
 
+  linux_fyi_hashes = api.gpu.dummy_linux_fyi_swarm_hashes
+
+  yield (
+    api.test('linux_release_deqp') +
+    named_props('linux', 'Release', 'linux release dEQP tester',
+        linux_fyi_hashes) +
+    api.platform.name('linux')
+  )

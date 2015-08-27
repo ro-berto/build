@@ -25,11 +25,18 @@ FYI_ONLY_GPU_ISOLATES = (
 # platforms.
 WIN_AND_LINUX_ONLY_FYI_ONLY_GPU_ISOLATES = (
   'angle_end2end_tests',
+  'angle_deqp_gles2_tests',
 )
 
 WIN_ONLY_FYI_ONLY_GPU_ISOLATES = (
-  'angle_deqp_gles2_tests',
   'angle_deqp_gles3_tests',
+)
+
+# A list of all the Linux FYI isolates for testing
+ALL_LINUX_FYI_GPU_ISOLATES = (
+  GPU_ISOLATES +
+  FYI_ONLY_GPU_ISOLATES +
+  WIN_AND_LINUX_ONLY_FYI_ONLY_GPU_ISOLATES
 )
 
 # A list of all Windows FYI isolates for testing
