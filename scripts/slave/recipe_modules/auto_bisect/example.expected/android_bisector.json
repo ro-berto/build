@@ -21,7 +21,7 @@
   {
     "cmd": [
       "echo",
-      "{\n  \"bad_revision\": \"314017\", \n  \"bug_id\": \"\", \n  \"builder_host\": \"master4.golo.chromium.org\", \n  \"builder_port\": \"8341\", \n  \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", \n  \"dummy_builds\": \"True\", \n  \"good_revision\": \"314015\", \n  \"gs_bucket\": \"chrome-perf\", \n  \"max_time_minutes\": \"5\", \n  \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \n  \"original_bot_name\": \"chromium_rel_linux\", \n  \"repeat_count\": \"2\", \n  \"skip_gclient_ops\": \"True\", \n  \"test_type\": \"perf\", \n  \"truncate_percent\": \"0\"\n}"
+      "{\n  \"bad_revision\": \"314017\", \n  \"bug_id\": \"\", \n  \"builder_host\": \"master4.golo.chromium.org\", \n  \"builder_port\": \"8341\", \n  \"command\": \"src/tools/perf/run_benchmark -v --browser=android-chromium smoothness.tough_scrolling_cases\", \n  \"dummy_builds\": \"True\", \n  \"good_revision\": \"314015\", \n  \"gs_bucket\": \"chrome-perf\", \n  \"max_time_minutes\": \"5\", \n  \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \n  \"original_bot_name\": \"android-nexus7\", \n  \"repeat_count\": \"2\", \n  \"skip_gclient_ops\": \"True\", \n  \"test_type\": \"perf\", \n  \"truncate_percent\": \"0\"\n}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "config"
@@ -154,7 +154,7 @@
       "3.25",
       "----",
       "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
+      "gs://chrome-perf/android_perf_rel/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls"
@@ -166,7 +166,7 @@
       "user.email=FAKE_PERF_PUMPKIN@chromium.org",
       "try",
       "--bot",
-      "linux_perf_bisect_builder",
+      "android_perf_bisect_builder",
       "--revision",
       "a6298e4afedbf2cd461755ea6f45b0ad64222222",
       "--name",
@@ -190,7 +190,7 @@
       "3.25",
       "----",
       "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
+      "gs://chrome-perf/android_perf_rel/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (2)"
@@ -202,7 +202,7 @@
       "user.email=FAKE_PERF_PUMPKIN@chromium.org",
       "try",
       "--bot",
-      "linux_perf_bisect_builder",
+      "android_perf_bisect_builder",
       "--revision",
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
       "--name",
@@ -221,8 +221,8 @@
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
-      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
+      "gs://chrome-perf/android_perf_rel/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
+      "gs://chrome-perf/android_perf_rel/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
       "--timeout=7200"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -240,7 +240,7 @@
       "3.25",
       "----",
       "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
+      "gs://chrome-perf/android_perf_rel/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (3)"
@@ -254,7 +254,7 @@
         "builder_name": "linux_perf_tester",
         "properties": {
           "bisect_config": {
-            "command": "src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases",
+            "command": "src/tools/perf/run_benchmark -v --browser=android-chromium smoothness.tough_scrolling_cases",
             "max_time_minutes": "5",
             "metric": "mean_input_event_latency/mean_input_event_latency",
             "repeat_count": "2",
@@ -262,7 +262,7 @@
             "truncate_percent": "0"
           },
           "job_name": "a6298e4afedbf2cd461755ea6f45b0ad64222222-test",
-          "parent_build_archive_url": "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
+          "parent_build_archive_url": "gs://chrome-perf/android_perf_rel/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
           "parent_got_revision": "a6298e4afedbf2cd461755ea6f45b0ad64222222",
           "revision": "a6298e4afedbf2cd461755ea6f45b0ad64222222"
         }
@@ -280,7 +280,7 @@
       "3.25",
       "----",
       "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
+      "gs://chrome-perf/android_perf_rel/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (4)"
@@ -294,7 +294,7 @@
         "builder_name": "linux_perf_tester",
         "properties": {
           "bisect_config": {
-            "command": "src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases",
+            "command": "src/tools/perf/run_benchmark -v --browser=android-chromium smoothness.tough_scrolling_cases",
             "max_time_minutes": "5",
             "metric": "mean_input_event_latency/mean_input_event_latency",
             "repeat_count": "2",
@@ -302,7 +302,7 @@
             "truncate_percent": "0"
           },
           "job_name": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test",
-          "parent_build_archive_url": "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
+          "parent_build_archive_url": "gs://chrome-perf/android_perf_rel/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
           "parent_got_revision": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
           "revision": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
         }
@@ -413,7 +413,7 @@
       "3.25",
       "----",
       "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
+      "gs://chrome-perf/android_perf_rel/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (7)"
@@ -425,7 +425,7 @@
       "user.email=FAKE_PERF_PUMPKIN@chromium.org",
       "try",
       "--bot",
-      "linux_perf_bisect_builder",
+      "android_perf_bisect_builder",
       "--revision",
       "dcdcdc0ff1122212323134879ddceeb1240b0988",
       "--name",
@@ -444,7 +444,7 @@
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
+      "gs://chrome-perf/android_perf_rel/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
       "--timeout=7200"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -462,7 +462,7 @@
       "3.25",
       "----",
       "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
+      "gs://chrome-perf/android_perf_rel/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (8)"
@@ -476,7 +476,7 @@
         "builder_name": "linux_perf_tester",
         "properties": {
           "bisect_config": {
-            "command": "src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases",
+            "command": "src/tools/perf/run_benchmark -v --browser=android-chromium smoothness.tough_scrolling_cases",
             "max_time_minutes": "5",
             "metric": "mean_input_event_latency/mean_input_event_latency",
             "repeat_count": "2",
@@ -484,7 +484,7 @@
             "truncate_percent": "0"
           },
           "job_name": "dcdcdc0ff1122212323134879ddceeb1240b0988-test",
-          "parent_build_archive_url": "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
+          "parent_build_archive_url": "gs://chrome-perf/android_perf_rel/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
           "parent_got_revision": "dcdcdc0ff1122212323134879ddceeb1240b0988",
           "revision": "dcdcdc0ff1122212323134879ddceeb1240b0988"
         }
@@ -669,7 +669,7 @@
       "3.25",
       "----",
       "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_40d3da8b7d11006dcf015af3710534d7af12c2db.zip"
+      "gs://chrome-perf/android_perf_rel/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_40d3da8b7d11006dcf015af3710534d7af12c2db.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil ls (10)"
@@ -692,7 +692,7 @@
       "user.email=FAKE_PERF_PUMPKIN@chromium.org",
       "try",
       "--bot",
-      "linux_perf_bisect_builder",
+      "android_perf_bisect_builder",
       "--revision",
       "a6298e4afedbf2cd461755ea6f45b0ad64222222",
       "--name",

@@ -79,21 +79,51 @@ def GenTests(api):
       'Waiting for revision 314015 and 1 other revision(s). (2)',
       stdout=api.raw_io.output(wait_for_any_output))
 
-  basic_test += api.properties(mastername='tryserver.chromium.perf',
-                               buildername='linux_perf_bisect',
-                               slavename='dummyslave')
   yield basic_test
 
   basic_data = _get_basic_test_data()
-  windows_test = _make_test(api, basic_data, 'windows', platform='windows')
+  windows_test = _make_test(
+      api, basic_data, 'windows_bisector', platform='windows')
   windows_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
       stdout=api.raw_io.output(wait_for_any_output))
 
-  windows_test += api.properties(mastername='tryserver.chromium.perf',
-                                 buildername='linux_perf_bisect',
-                                 slavename='dummyslave')
   yield windows_test
+
+  basic_data = _get_basic_test_data()
+  winx64_test = _make_test(
+      api, basic_data, 'windows_x64_bisector', platform='win_x64')
+  winx64_test += api.step_data(
+      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      stdout=api.raw_io.output(wait_for_any_output))
+
+  yield winx64_test
+
+  basic_data = _get_basic_test_data()
+  mac_test = _make_test(api, basic_data, 'mac_bisector', platform='mac')
+  mac_test += api.step_data(
+      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      stdout=api.raw_io.output(wait_for_any_output))
+
+  yield mac_test
+
+  basic_data = _get_basic_test_data()
+  android_test = _make_test(
+      api, basic_data, 'android_bisector', platform='android')
+  android_test += api.step_data(
+      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      stdout=api.raw_io.output(wait_for_any_output))
+
+  yield android_test
+
+  basic_data = _get_basic_test_data()
+  android_arm64_test = _make_test(
+      api, basic_data, 'android_arm64_bisector', platform='android_arm64')
+  android_arm64_test += api.step_data(
+      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      stdout=api.raw_io.output(wait_for_any_output))
+
+  yield android_arm64_test
 
   failed_data = _get_basic_test_data()
   failed_data[0].pop('DEPS')
@@ -130,6 +160,18 @@ def GenTests(api):
   bad_deps_syntax_data = _get_basic_test_data()
   bad_deps_syntax_data[1]['DEPS']='raise RuntimeError("")'
   yield _make_test(api, bad_deps_syntax_data, 'bad_deps_syntax')
+
+
+  basic__data = _get_basic_test_data()
+  bisect_script_test = _make_test(api, basic_data, 'basic_bisect_script')
+  bisect_script_test += api.step_data(
+      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      stdout=api.raw_io.output(wait_for_any_output))
+
+  bisect_script_test += api.properties(mastername='tryserver.chromium.perf',
+                                       buildername='linux_perf_bisect',
+                                       slavename='dummyslave')
+  yield bisect_script_test
 
 
 def _get_basic_test_data():
@@ -256,10 +298,29 @@ def _make_test(api, test_data, test_name, platform='linux'):
   for revision_data in test_data:
     for step_data in _get_step_data_for_revision(api, revision_data):
       basic_test += step_data
-  if 'win' in platform:
-    basic_test += api.properties(bisect_config=_get_windows_config())
+  if 'win_x64' in platform:
+    basic_test += api.properties(bisect_config=_get_config({
+        'command': ('src/tools/perf/run_benchmark -v --browser=release_x64'
+            ' smoothness.tough_scrolling_cases'),
+        'original_bot_name': 'chromium_rel_win7_x64'}))
+  elif 'win' in platform:    
+    basic_test += api.properties(bisect_config=_get_config(
+        {'original_bot_name': 'chromium_rel_win7'}))
+  elif 'mac' in platform:
+    basic_test += api.properties(bisect_config=_get_config(
+        {'original_bot_name': 'chromium_rel_mac'}))
+  elif 'android_arm64' in platform:
+    basic_test += api.properties(bisect_config=_get_config({
+        'command': ('src/tools/perf/run_benchmark -v --browser=android-chromium'
+            ' smoothness.tough_scrolling_cases'),
+        'original_bot_name': 'android-nexus9'}))
+  elif 'android' in platform:
+    basic_test += api.properties(bisect_config=_get_config({
+        'command': ('src/tools/perf/run_benchmark -v --browser=android-chromium'
+            ' smoothness.tough_scrolling_cases'),
+        'original_bot_name': 'android-nexus7'}))
   else:
-    basic_test += api.properties(bisect_config=_get_default_config())
+    basic_test += api.properties(bisect_config=_get_config())
   return basic_test
 
 
@@ -277,7 +338,7 @@ def _get_revision_range_step_data(api, range_data):
   return result
 
 
-def _get_default_config():
+def _get_config(params={}):
   example_config = {
       'test_type':'perf',
       'command':
@@ -297,28 +358,7 @@ def _get_default_config():
       'skip_gclient_ops': 'True',
       'original_bot_name': 'chromium_rel_linux'
   }
-  return example_config
-
-def _get_windows_config():
-  example_config = {
-      'test_type':'perf',
-      'command':
-          ('src/tools/perf/run_benchmark -v --browser=release smoothness.'
-           'tough_scrolling_cases'),
-      'good_revision': '314015',
-      'bad_revision': '314017',
-      'metric': 'mean_input_event_latency/mean_input_event_latency',
-      'repeat_count': '2',
-      'max_time_minutes': '5',
-      'truncate_percent': '0',
-      'bug_id': '',
-      'gs_bucket': 'chrome-perf',
-      'builder_host': 'master4.golo.chromium.org',
-      'builder_port': '8341',
-      'dummy_builds': 'True',
-      'skip_gclient_ops': 'True',
-      'original_bot_name': 'chromium_rel_win7'
-  }
+  example_config.update(params)
   return example_config
 
 

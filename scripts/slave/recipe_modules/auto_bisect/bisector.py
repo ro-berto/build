@@ -548,16 +548,39 @@ class Bisector(object):
     return 2 * 60
 
   def get_builder_bot_for_this_platform(self):
+    # TODO(prasadv): We should refactor these codes to remove hard coded values.
     bot_name = self.bisect_config.get('original_bot_name', '')
     if 'win' in bot_name:
       if any(b in bot_name for b in ['x64', 'gpu']):
-        return 'winx64_bisect_builder'  # pragma: no cover
+        return 'winx64_bisect_builder'
       return 'win_perf_bisect_builder'
+
+    if 'android' in bot_name:
+      if 'nexus9' in bot_name:
+        return 'android_arm64_perf_bisect_builder'
+      return 'android_perf_bisect_builder'
+
+    if 'mac' in bot_name:
+      return 'mac_perf_bisect_builder'
+
     return 'linux_perf_bisect_builder'
 
   def get_platform_gs_prefix(self):
-    if 'win' in self.bisect_config.get('original_bot_name', ''):
-      return 'gs://chrome-perf/Win x64 Builder/full-build-win32_'
+    # TODO(prasadv): We should refactor these codes to remove hard coded values.
+    bot_name = self.bisect_config.get('original_bot_name', '')
+    if 'win' in bot_name:
+      if any(b in bot_name for b in ['x64', 'gpu']):
+        return 'gs://chrome-perf/Win x64 Builder/full-build-win32_'
+      return 'gs://chrome-perf/Win Builder/full-build-win32_'
+
+    if 'android' in bot_name:
+      if 'nexus9' in bot_name:
+        return 'gs://chrome-perf/android_perf_rel_arm64/full-build-linux_'
+      return 'gs://chrome-perf/android_perf_rel/full-build-linux_'
+
+    if 'mac' in bot_name:
+      return 'gs://chrome-perf/Mac Builder/full-build-mac_'
+
     return 'gs://chrome-perf/Linux Builder/full-build-linux_'
 
   def ensure_sync_master_branch(self):
