@@ -109,6 +109,7 @@ Build #{{ b.getNumber() }}
  #}
 
 {% set nest_level = -1 %}
+{% set previous_name = "unknown step" %}
 {% for s in steps %}
 
   {# Adjust the indentation to the current step level.  We maintain as an
@@ -116,14 +117,20 @@ Build #{{ b.getNumber() }}
   {% set step_nest = s.get('nest_level', 0) %}
   {% if step_nest > nest_level %}
     {% for _ in range(nest_level, step_nest - 1) %}
+    <details>
+      <summary> Nested step(s) for: {{ previous_name }}</summary>
       <ol type="a"><li>
     {% endfor %}
+    {% if nest_level == -1 %}
     <ol><li>
+    {% else %}
+    <details><summary> Nested step(s) for: {{ previous_name }}</summary><ol><li>
+    {% endif %}
   {% elif step_nest == nest_level %}
     </li><li>
   {% elif step_nest < nest_level %}
     {% for _ in range(step_nest, nest_level) %}
-      </li></ol>
+    </li></ol></details>
     {% endfor %}
     <li>
   {% endif %}
@@ -131,6 +138,7 @@ Build #{{ b.getNumber() }}
 
     <div class="{{ s.css_class }} result">
       <a href="{{ s.link }}">{{ s.name }}</a>
+      {% set previous_name = s.name %}
       {{ s.text }}&nbsp;<span style="float:right">{{ '( ' + s.time_to_run + ' )' if s.time_to_run else '' }}</span>
     </div>
 
