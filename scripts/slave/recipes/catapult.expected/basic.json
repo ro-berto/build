@@ -144,6 +144,15 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/catapult/systrace/bin/run_tests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Systrace Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/catapult/third_party/vinn/run_test"
     ],
     "cwd": "[SLAVE_BUILD]",

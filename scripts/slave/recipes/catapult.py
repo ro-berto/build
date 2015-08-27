@@ -66,6 +66,8 @@ def RunSteps(api):
              api.path['checkout'].join(
                  'perf_insights', 'bin', 'run_dev_server_tests'),
              ['--no-install-hooks', '--no-use-local-chrome'])
+  api.python('Systrace Tests',
+             api.path['checkout'].join('systrace', 'bin', 'run_tests'))
   if not api.platform.is_win:
     # D8/vinn currently unavailable on Windows.
     # TODO(sullivan): Add these tests on Windows when available.
