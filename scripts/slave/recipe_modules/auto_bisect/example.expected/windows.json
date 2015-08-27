@@ -162,6 +162,8 @@
   {
     "cmd": [
       "git",
+      "-c",
+      "user.email=FAKE_PERF_PUMPKIN@chromium.org",
       "try",
       "--bot",
       "win_perf_bisect_builder",
@@ -196,6 +198,8 @@
   {
     "cmd": [
       "git",
+      "-c",
+      "user.email=FAKE_PERF_PUMPKIN@chromium.org",
       "try",
       "--bot",
       "win_perf_bisect_builder",
@@ -417,6 +421,8 @@
   {
     "cmd": [
       "git",
+      "-c",
+      "user.email=FAKE_PERF_PUMPKIN@chromium.org",
       "try",
       "--bot",
       "win_perf_bisect_builder",
@@ -682,6 +688,8 @@
   {
     "cmd": [
       "git",
+      "-c",
+      "user.email=FAKE_PERF_PUMPKIN@chromium.org",
       "try",
       "--bot",
       "win_perf_bisect_builder",

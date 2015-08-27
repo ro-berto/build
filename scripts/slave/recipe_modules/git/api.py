@@ -15,12 +15,15 @@ class GitApi(recipe_api.RecipeApi):
     infra_step = kwargs.pop('infra_step', True)
     if 'cwd' not in kwargs:
       kwargs.setdefault('cwd', self.m.path['checkout'])
-    git_cmd = 'git'
+    git_cmd = ['git']
     if self.m.platform.is_win:
-      git_cmd = self.m.path['depot_tools'].join('git.bat')
+      git_cmd = [self.m.path['depot_tools'].join('git.bat')]
+    options = kwargs.pop('git_config_options', {})
+    for k, v in sorted(options.iteritems()):
+      git_cmd.extend(['-c', '%s=%s' % (k, v)])
     can_fail_build = kwargs.pop('can_fail_build', True)
     try:
-      return self.m.step(name, [git_cmd] + list(args), infra_step=infra_step,
+      return self.m.step(name, git_cmd + list(args), infra_step=infra_step,
                          **kwargs)
     except self.m.step.StepFailure as f:
       if can_fail_build:

@@ -76,8 +76,11 @@ class PerfRevisionState(revision_state.RevisionState):
     try:
       if not self.bisector.bisect_config.get('skip_gclient_ops'):
         self.bisector.ensure_sync_master_branch()
-      api.m.git(*try_cmd, name='Requesting build for %s via git try.'
-                % str(self.commit_hash))
+      api.m.git(
+          *try_cmd, name='Requesting build for %s via git try.'
+          % str(self.commit_hash), git_config_options={
+              'user.email': 'FAKE_PERF_PUMPKIN@chromium.org',
+          })
     finally:
       if (self.patch_file != '/dev/null' and not 'TESTING_SLAVENAME' in
           os.environ):
