@@ -42,17 +42,17 @@ GCLIENT_CONFIGS = {
 PREVENT_REBOOT_FILE_CONTENT = 'slave_svn_to_git'
 
 WHITELISTED_HOSTS = [
-  re.compile(r'^slave10[1-9]-c4$'),
-  re.compile(r'^slave110-c4$'),
+  # Initial slaves to test script on.
+  'slave101-c4', 'slave102-c4', 'slave103-c4', 'slave104-c4', 'slave105-c4',
+  'slave106-c4', 'slave107-c4', 'slave108-c4', 'slave109-c4', 'slave110-c4',
 
   # SVN bots on chromium.fyi
   'build85-a1', 'build123-a1', 'build38-a1', 'chromeperf80', 'chromeperf87',
   'vm977-m1', 'vm835-m1', 'vm49-m1', 'vm823-m1', 'build36-a1', 'vm9-m1',
   'vm990-m1', 'build87-a95', 'vm999-m1', 'build63-a1', 'vm982-m1', 'vm973-m1',
   'build5-a1', 'build84-a1', 'vm971-m1', 'vm847-m1', 'vm52-m1', 'build137-a1',
-  'build29-a1', 'vm641-m1.golo.chromium.org', 'build99-m1.golo.chromium.org',
-  'build98-m1.golo.chromium.org', 'vm687-m1.golo.chromium.org',
-  'vm678-m1.golo.chromium.org', 'vm693-m1.golo.chromium.org',
+  'build29-a1', 'vm641-m1', 'build99-m1', 'build98-m1', 'vm687-m1', 'vm678-m1',
+  'vm693-m1',
 ]
 
 is_win = sys.platform.startswith('win')
@@ -105,8 +105,7 @@ def main():
 
   # Check if host is whitelisted.
   if not options.manual:
-    if not any(cur_host == h if isinstance(h, basestring) else h.match(cur_host)
-               for h in WHITELISTED_HOSTS):
+    if not any(host.lower() in cur_host.lower() for host in WHITELISTED_HOSTS):
       print 'Host %s is not whitelisted for SVN-to-Git conversion' % cur_host
       return 0
 
