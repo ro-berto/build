@@ -89,7 +89,7 @@ GS_COMMIT_POSITION_NUMBER_KEY = 'Cr-Commit-Position-Number'
 GS_GIT_COMMIT_KEY = 'Cr-Git-Commit'
 
 # Regular expression to identify a Git hash
-GIT_COMMIT_HASH_RE = re.compile(r'[a-zA-Z0-9]{40}')
+GIT_COMMIT_HASH_RE = re.compile(r'[a-fA-F0-9]{40}')
 #
 # Regular expression to parse a commit position
 COMMIT_POSITION_RE = re.compile(r'([^@]+)@{#(\d+)}')
