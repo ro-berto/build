@@ -140,7 +140,7 @@ class BisectResults(object):
           'cl': self.culprit_cl_hash
       }
     body += self._compose_revisions_table()
-    return body
+    return body.encode('ascii','replace')
 
   def _make_footer(self):
     return _RESULTS_THANKYOU
