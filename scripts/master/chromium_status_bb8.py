@@ -232,13 +232,8 @@ class ConsoleStatusResource(console.ConsoleStatusResource):
         lastRevision = revisions[-1].revision
         debugInfo["last_revision"] = lastRevision
 
-        (builderList, allBuilds) = self.getAllBuildsForRevision(status,
-                                            request,
-                                            lastRevision,
-                                            40,
-                                            [],
-                                            [],
-                                            debugInfo)
+        (builderList, allBuilds) = self.getAllBuildsForRevision(
+            status, request, lastRevision, 40, [], [], debugInfo, revisions)
 
         for revision in revisions:
           builds = self.displayStatusLine(builderList,
