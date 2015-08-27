@@ -46,13 +46,25 @@ WHITELISTED_HOSTS = [
   'slave101-c4', 'slave102-c4', 'slave103-c4', 'slave104-c4', 'slave105-c4',
   'slave106-c4', 'slave107-c4', 'slave108-c4', 'slave109-c4', 'slave110-c4',
 
-  # SVN bots on chromium.fyi
-  'build85-a1', 'build123-a1', 'build38-a1', 'chromeperf80', 'chromeperf87',
-  'vm977-m1', 'vm835-m1', 'vm49-m1', 'vm823-m1', 'build36-a1', 'vm9-m1',
-  'vm990-m1', 'build87-a95', 'vm999-m1', 'build63-a1', 'vm982-m1', 'vm973-m1',
-  'build5-a1', 'build84-a1', 'vm971-m1', 'vm847-m1', 'vm52-m1', 'build137-a1',
-  'build29-a1', 'vm641-m1', 'build99-m1', 'build98-m1', 'vm687-m1', 'vm678-m1',
-  'vm693-m1',
+  # All slaves on chromium.fyi.
+  'build1-m1', 'build4-m1', 'build5-a1', 'build27-m1', 'build28-m1',
+  'build29-m1', 'build38-a1', 'build58-m1', 'build60-m1', 'build61-m1',
+  'build63-a1', 'build70-m1', 'build84-a1', 'build85-a1', 'build85-m1',
+  'build87-a95', 'build97-m1', 'build98-m1', 'build99-m1', 'build127-m1',
+  'build128-m1', 'build129-m1', 'build130-m1', 'build154-m1', 'chromeperf80',
+  'chromeperf87', 'panda8', 'slave3-c1', 'slave4-c1', 'slave5-c1', 'slave20-c1',
+  'vm9-m1', 'vm12-m1', 'vm17-m1', 'vm49-m1', 'vm52-m1', 'vm190-m1', 'vm191-m1',
+  'vm310-m1', 'vm311-m1', 'vm312-m1', 'vm313-m1', 'vm448-m1', 'vm452-m1',
+  'vm455-m1', 'vm471-m1', 'vm480-m1', 'vm481-m1', 'vm482-m1', 'vm498-m1',
+  'vm634-m1', 'vm641-m1', 'vm646-m1', 'vm649-m1', 'vm650-m1', 'vm657-m1',
+  'vm658-m1', 'vm678-m1', 'vm683-m1', 'vm687-m1', 'vm693-m1', 'vm800-m1',
+  'vm803-m1', 'vm820-m1', 'vm821-m1', 'vm823-m1', 'vm832-m1', 'vm835-m1',
+  'vm845-m1', 'vm847-m1', 'vm848-m1', 'vm859-m1', 'vm866-m1', 'vm877-m1',
+  'vm879-m1', 'vm889-m1', 'vm899-m1', 'vm909-m1', 'vm912-m1', 'vm928-m1',
+  'vm929-m1', 'vm933-m1', 'vm939-m1', 'vm943-m1', 'vm950-m1', 'vm951-m1',
+  'vm954-m1', 'vm961-m1', 'vm962-m1', 'vm970-m1', 'vm973-m1', 'vm974-m1',
+  'vm976-m1', 'vm977-m1', 'vm978-m1', 'vm992-m1', 'vm993-m1', 'vm994-m1',
+  'vm999-m1',
 ]
 
 is_win = sys.platform.startswith('win')
