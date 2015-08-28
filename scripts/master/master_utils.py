@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import os
+import random
 import re
 
 import buildbot
@@ -593,3 +594,19 @@ class ConditionalProperty(util.ComparableMixin):
     renderer = (self.present) if is_present else (self.absent)
     # Disable 'too many positional arguments' error | pylint: disable=E1121
     return IRenderable(renderer).getRenderingFor(build)
+
+
+class PreferredBuilderNextSlaveFunc(object):
+  """
+  This object, when used as a Builder's 'nextSlave' function, will choose
+  a slave builder whose 'preferred_builder' value is the same as the builder
+  name. If there is no such a builder, a builder is randomly chosen.
+  """
+
+  def __call__(self, builder, slave_builders):
+    if not slave_builders:
+      return None
+
+    preferred_slaves = [ s for s in slave_builders
+                         if s.get('preferred_builder') == builder.name ]
+    return random.choice(preferred_slaves or slave_builders)
