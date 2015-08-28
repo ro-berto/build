@@ -79,7 +79,7 @@ class AmpApi(recipe_api.RecipeApi):
 
   def collect_test_suite(
       self, suite, test_type, test_type_args, amp_args, verbose=True,
-      json_results_path=None, **kwargs):
+      json_results_file=None, **kwargs):
     args = ([test_type] + test_type_args + amp_args
         + ['--collect', self._get_trigger_file_for_suite(suite)]
         + ['--results-path', self._get_results_zip_path(suite)])
@@ -107,8 +107,8 @@ class AmpApi(recipe_api.RecipeApi):
 
     if verbose:
       args += ['--verbose']
-    if json_results_path:
-      args += ['--json-results-path', json_results_path]
+    if json_results_file:
+      args += ['--json-results-file', json_results_file]
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       args += ['--release']
     try:

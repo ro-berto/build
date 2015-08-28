@@ -692,7 +692,7 @@ class AMPTest(Test):
           suite=self.name, test_type=self.test_type(),
           test_type_args=self.test_type_args(api),
           amp_args=self.amp_arguments(api),
-          json_results_path=gtest_results_file,
+          json_results_file=gtest_results_file,
           step_test_data=step_test_data)
     finally:
       step_result = api.step.active_result

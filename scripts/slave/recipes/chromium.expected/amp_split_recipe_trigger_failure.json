@@ -1527,7 +1527,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/AndroidWebViewTest/results.zip",
       "--verbose",
-      "--json-results-path",
+      "--json-results-file",
       "/path/to/tmp/json",
       "--release"
     ],
@@ -1596,7 +1596,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/AndroidWebViewTest/results.zip",
       "--verbose",
-      "--json-results-path",
+      "--json-results-file",
       "/path/to/tmp/json",
       "--release"
     ],
@@ -1665,7 +1665,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/AndroidWebViewTest/results.zip",
       "--verbose",
-      "--json-results-path",
+      "--json-results-file",
       "/path/to/tmp/json",
       "--release"
     ],
@@ -1730,7 +1730,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/results.zip",
       "--verbose",
-      "--json-results-path",
+      "--json-results-file",
       "/path/to/tmp/json",
       "--release"
     ],
@@ -1797,7 +1797,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/components_unittests/results.zip",
       "--verbose",
-      "--json-results-path",
+      "--json-results-file",
       "/path/to/tmp/json",
       "--release"
     ],
@@ -1862,7 +1862,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/events_unittests/results.zip",
       "--verbose",
-      "--json-results-path",
+      "--json-results-file",
       "/path/to/tmp/json",
       "--release"
     ],
@@ -1927,7 +1927,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/gl_tests/results.zip",
       "--verbose",
-      "--json-results-path",
+      "--json-results-file",
       "/path/to/tmp/json",
       "--release"
     ],
@@ -1992,7 +1992,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/ipc_tests/results.zip",
       "--verbose",
-      "--json-results-path",
+      "--json-results-file",
       "/path/to/tmp/json",
       "--release"
     ],
@@ -2059,7 +2059,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/sql_unittests/results.zip",
       "--verbose",
-      "--json-results-path",
+      "--json-results-file",
       "/path/to/tmp/json",
       "--release"
     ],
@@ -2126,7 +2126,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/sync_unit_tests/results.zip",
       "--verbose",
-      "--json-results-path",
+      "--json-results-file",
       "/path/to/tmp/json",
       "--release"
     ],
@@ -2191,7 +2191,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/ui_android_unittests/results.zip",
       "--verbose",
-      "--json-results-path",
+      "--json-results-file",
       "/path/to/tmp/json",
       "--release"
     ],
@@ -2256,7 +2256,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/ui_touch_selection_unittests/results.zip",
       "--verbose",
-      "--json-results-path",
+      "--json-results-file",
       "/path/to/tmp/json",
       "--release"
     ],
