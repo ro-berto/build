@@ -16,6 +16,7 @@ DEPS = [
     'path',
     'properties',
     'raw_io',
+    'step',
 ]
 
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
