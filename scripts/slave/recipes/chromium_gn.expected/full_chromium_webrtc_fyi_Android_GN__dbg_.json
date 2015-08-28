@@ -167,7 +167,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "chrome_shell_apk"
+      "chrome_public_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"

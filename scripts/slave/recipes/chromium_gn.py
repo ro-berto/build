@@ -274,7 +274,7 @@ def _RunStepsInternal(api):
 
   additional_compile_targets = test_spec.get(buildername, {}).get(
       'additional_compile_targets',
-      ['chrome_shell_apk' if is_android else 'all'])
+      ['chrome_public_apk' if is_android else 'all'])
 
   if api.tryserver.is_tryserver:
     affected_files = api.tryserver.get_files_affected_by_patch()
