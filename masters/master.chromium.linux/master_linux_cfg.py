@@ -21,7 +21,6 @@ def Update(_config, active_master, c):
           'Linux GN',
           'Linux GN Clobber',
           'Linux GN (dbg)',
-          'Linux ARM',
           'Cast Linux',
       ]),
   ])
@@ -35,7 +34,6 @@ def Update(_config, active_master, c):
     {'name': 'Linux GN'},
     {'name': 'Linux GN Clobber'},
     {'name': 'Linux GN (dbg)'},
-    {'name': 'Linux ARM'},
     {'name': 'Cast Linux'},
   ]
 

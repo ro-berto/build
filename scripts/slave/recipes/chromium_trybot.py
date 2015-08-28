@@ -55,11 +55,6 @@ BUILDERS = freeze({
   },
   'tryserver.chromium.linux': {
     'builders': {
-      'linux_arm_compile': {
-        'mastername': 'chromium.linux',
-        'buildername': 'Linux ARM',
-        'analyze_mode': 'compile',
-      },
       'android_amp': {
         'mastername': 'chromium.fyi',
         'buildername': 'Android Tests (amp split)',

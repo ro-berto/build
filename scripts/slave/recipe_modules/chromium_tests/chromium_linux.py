@@ -13,24 +13,6 @@ SPEC = {
     'src_side_runtest_py': True,
   },
   'builders': {
-    'Linux ARM': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_ARCH': 'arm',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'builder',
-      'compile_targets': [
-        'chromium_builder_tests',
-      ],
-      'use_isolate': True,
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'Linux Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
