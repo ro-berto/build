@@ -179,11 +179,8 @@ class AutoBisectApi(recipe_api.RecipeApi):
       api.chromium_android.common_tests_setup_steps(perf_setup=True)
       api.chromium.runhooks()
     try:
-      # TODO(prasadv): Remove condition to check buildername once we build
-      # support perf try job and CQ telemetry test jobs ran on
-      # non-linux bots
-      if (BISECT_CONFIG_FILE in affected_files or
-          api.chromium.c.TARGET_PLATFORM not in ['linux', 'android']):
+      # Run legacy bisect script if the patch contains bisect.cfg.
+      if BISECT_CONFIG_FILE in affected_files:
         self.run_bisect_script(extra_src='', path_to_config='', **kwargs)
       elif api.properties.get('bisect_config'):
         self.start_test_run_for_bisect(api, update_step, master_dict)
