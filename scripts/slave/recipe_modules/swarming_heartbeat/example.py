@@ -17,4 +17,4 @@ def GenTests(api):
 
   yield (
       api.test('staging') +
-      api.properties.scheduled(target_environment='canary'))
+      api.properties.scheduled(target_environment='staging'))

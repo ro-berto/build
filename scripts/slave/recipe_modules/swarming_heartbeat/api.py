@@ -10,7 +10,7 @@ class SwarmingHeartbeatApi(recipe_api.RecipeApi):
   def run(self):
     """Runs job_runs_fine.py to run an heartbeat check."""
     args = []
-    if self.m.properties.get('target_environment') == 'canary':
-      args = ['--canary']
+    if self.m.properties.get('target_environment') == 'staging':
+      args = ['--staging']
     self.m.python(
         'job_runs_fine.py', script=self.resource('job_runs_fine.py'), args=args)

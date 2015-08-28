@@ -2,8 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Swarming canary recipe: runs tests for HEAD of chromium using HEAD of
-swarming_client toolset on Swarming canary server instances (*-dev.appspot.com).
+"""Swarming staging recipe: runs tests for HEAD of chromium using HEAD of
+swarming_client toolset on Swarming staging server instances
+(*-dev.appspot.com).
 
 Intended to catch bugs in swarming_client and Swarming servers early on, before
 full roll out.
@@ -29,7 +30,7 @@ DEPS = [
 
 
 def RunSteps(api):
-  # Configure isolate & swarming modules to use canary instances.
+  # Configure isolate & swarming modules to use staging instances.
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
   api.swarming.swarming_server = 'https://chromium-swarm-dev.appspot.com'
   api.swarming.verbose = True
@@ -126,4 +127,15 @@ def GenTests(api):
             minimal=True,
             extra_json={'missing_shards': [1]}),
     )
+  )
+  yield (
+    api.test('android') +
+    api.platform.name('linux') +
+    api.properties.scheduled() +
+    api.properties(configuration='Release', platform='android')
+    #api.override_step_data(
+    #    'dummy_target_1 on Android',
+    #    # TODO(maruel): It's not going to generate gtest output.
+    #    #api.test_utils.canned_gtest_output(True)
+    #)
   )

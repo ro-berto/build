@@ -69,14 +69,14 @@ def main():
   cwd = os.getcwd()
 
   parser = optparse.OptionParser()
-  parser.add_option('--canary', action='store_true')
+  parser.add_option('--staging', action='store_true')
   options, args = parser.parse_args()
 
   if args:
     parser.error('Unknown args: %s' % args)
 
   # Testing parameters:
-  if options.canary:
+  if options.staging:
     swarming_server = 'https://chromium-swarm-dev.appspot.com'
     isolate_server = 'https://isolateserver-dev.appspot.com'
   else:
@@ -118,8 +118,8 @@ def main():
   print 'Archiving heartbeat.isolate took %3.1fs' % (time.time() - start)
 
   now = datetime.datetime.utcnow()
-  if options.canary:
-    task_name = 'heartbeat-canary-%s' % now.strftime('%Y-%m-%d_%H:%M:%S')
+  if options.staging:
+    task_name = 'heartbeat-staging-%s' % now.strftime('%Y-%m-%d_%H:%M:%S')
   else:
     task_name = 'heartbeat-%s' % now.strftime('%Y-%m-%d_%H:%M:%S')
 

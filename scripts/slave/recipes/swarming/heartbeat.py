@@ -18,7 +18,7 @@ DEPS = [
 
 def RunSteps(api):
   branch = 'stable'
-  if api.properties.get('target_environment') == 'canary':
+  if api.properties.get('target_environment') == 'staging':
     branch = 'master'
   api.swarming_client.checkout(branch, can_fail_build=False)
   api.swarming.check_client_version()
@@ -31,6 +31,6 @@ def GenTests(api):
     api.properties.scheduled()
   )
   yield (
-    api.test('heartbeat_canary') +
-    api.properties.scheduled(target_environment='canary')
+    api.test('heartbeat_staging') +
+    api.properties.scheduled(target_environment='staging')
   )
