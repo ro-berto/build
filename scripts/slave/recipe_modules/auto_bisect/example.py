@@ -302,23 +302,23 @@ def _make_test(api, test_data, test_name, platform='linux'):
     basic_test += api.properties(bisect_config=_get_config({
         'command': ('src/tools/perf/run_benchmark -v --browser=release_x64'
             ' smoothness.tough_scrolling_cases'),
-        'original_bot_name': 'chromium_rel_win7_x64'}))
+        'recipe_tester_name': 'chromium_rel_win7_x64'}))
   elif 'win' in platform:    
     basic_test += api.properties(bisect_config=_get_config(
-        {'original_bot_name': 'chromium_rel_win7'}))
+        {'recipe_tester_name': 'chromium_rel_win7'}))
   elif 'mac' in platform:
     basic_test += api.properties(bisect_config=_get_config(
-        {'original_bot_name': 'chromium_rel_mac'}))
+        {'recipe_tester_name': 'chromium_rel_mac'}))
   elif 'android_arm64' in platform:
     basic_test += api.properties(bisect_config=_get_config({
         'command': ('src/tools/perf/run_benchmark -v --browser=android-chromium'
             ' smoothness.tough_scrolling_cases'),
-        'original_bot_name': 'android-nexus9'}))
+        'recipe_tester_name': 'android-nexus9'}))
   elif 'android' in platform:
     basic_test += api.properties(bisect_config=_get_config({
         'command': ('src/tools/perf/run_benchmark -v --browser=android-chromium'
             ' smoothness.tough_scrolling_cases'),
-        'original_bot_name': 'android-nexus7'}))
+        'recipe_tester_name': 'android-nexus7'}))
   else:
     basic_test += api.properties(bisect_config=_get_config())
   return basic_test
@@ -356,7 +356,7 @@ def _get_config(params={}):
       'builder_port': '8341',
       'dummy_builds': 'True',
       'skip_gclient_ops': 'True',
-      'original_bot_name': 'chromium_rel_linux'
+      'recipe_tester_name': 'linux_perf_tester'
   }
   example_config.update(params)
   return example_config

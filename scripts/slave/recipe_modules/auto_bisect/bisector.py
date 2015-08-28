@@ -537,19 +537,24 @@ class Bisector(object):
     assert self.lkgr and self.fkbr
 
   def get_perf_tester_name(self):
-    if 'win' in self.bisect_config.get('original_bot_name', ''):
+    recipe_tester_name = self.bisect_config.get('recipe_tester_name')
+    original_bot_name = self.bisect_config.get('original_bot_name', '')
+    if recipe_tester_name:
+      return recipe_tester_name
+    elif 'win' in original_bot_name:  # pragma: no cover
       return 'win64_nv_tester'
-    # Reasonable fallback
-    return 'linux_perf_tester'
+    else:  # pragma: no cover
+      # Reasonable fallback
+      return 'linux_perf_tester'
 
   def get_build_timeout_minutes(self):
-    if 'win' in self.bisect_config.get('original_bot_name', ''):
+    if 'win' in self.get_perf_tester_name():
       return 4 * 60
     return 2 * 60
 
   def get_builder_bot_for_this_platform(self):
     # TODO(prasadv): We should refactor these codes to remove hard coded values.
-    bot_name = self.bisect_config.get('original_bot_name', '')
+    bot_name = self.get_perf_tester_name()
     if 'win' in bot_name:
       if any(b in bot_name for b in ['x64', 'gpu']):
         return 'winx64_bisect_builder'
@@ -567,7 +572,7 @@ class Bisector(object):
 
   def get_platform_gs_prefix(self):
     # TODO(prasadv): We should refactor these codes to remove hard coded values.
-    bot_name = self.bisect_config.get('original_bot_name', '')
+    bot_name = self.get_perf_tester_name()
     if 'win' in bot_name:
       if any(b in bot_name for b in ['x64', 'gpu']):
         return 'gs://chrome-perf/Win x64 Builder/full-build-win32_'
