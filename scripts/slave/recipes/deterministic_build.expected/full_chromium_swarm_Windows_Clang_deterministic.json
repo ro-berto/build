@@ -16,7 +16,7 @@
       "--master",
       "chromium.swarm",
       "--builder",
-      "Windows Clang deterministic build",
+      "Windows Clang deterministic",
       "--slave",
       "TestSlavename",
       "--spec",

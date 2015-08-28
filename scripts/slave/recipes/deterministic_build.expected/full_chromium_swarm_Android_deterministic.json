@@ -31,7 +31,7 @@
       "--master",
       "chromium.swarm",
       "--builder",
-      "Android deterministic build",
+      "Android deterministic",
       "--slave",
       "TestSlavename",
       "--spec",

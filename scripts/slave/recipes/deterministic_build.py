@@ -20,7 +20,7 @@ DEPS = [
 ]
 
 DETERMINISTIC_BUILDERS = {
-  'Android deterministic build': {
+  'Android deterministic': {
     'chromium_config': 'android',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -30,35 +30,35 @@ DETERMINISTIC_BUILDERS = {
     'platform': 'linux',
     'targets': ['all'],
   },
-  'Linux deterministic build': {
+  'Linux deterministic': {
     'chromium_config': 'chromium',
     'gclient_config': 'chromium',
     'platform': 'linux',
   },
-  'Mac deterministic build': {
+  'Mac deterministic': {
     'chromium_config': 'chromium',
     'gclient_config': 'chromium',
     'platform': 'mac',
   },
-  'Windows deterministic build': {
+  'Windows deterministic': {
     'chromium_config': 'chromium',
     'gclient_config': 'chromium',
     'platform': 'win',
   },
-  'Windows Clang deterministic build': {
+  'Windows Clang deterministic': {
     'chromium_config': 'chromium_win_clang',
     'gclient_config': 'chromium',
     'platform': 'win',
   },
 }
 DETERMINISTIC_BUILDERS['android_deterministic'] = (
-    DETERMINISTIC_BUILDERS['Android deterministic build'])
+    DETERMINISTIC_BUILDERS['Android deterministic'])
 DETERMINISTIC_BUILDERS['linux_deterministic'] = (
-    DETERMINISTIC_BUILDERS['Linux deterministic build'])
+    DETERMINISTIC_BUILDERS['Linux deterministic'])
 DETERMINISTIC_BUILDERS['mac_deterministic'] = (
-    DETERMINISTIC_BUILDERS['Mac deterministic build'])
+    DETERMINISTIC_BUILDERS['Mac deterministic'])
 DETERMINISTIC_BUILDERS['win_deterministic'] = (
-    DETERMINISTIC_BUILDERS['Windows deterministic build'])
+    DETERMINISTIC_BUILDERS['Windows deterministic'])
 
 
 def MoveBuildDirectory(api, src_dir, dst_dir):

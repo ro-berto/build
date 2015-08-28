@@ -16,7 +16,7 @@
       "--master",
       "chromium.swarm",
       "--builder",
-      "Mac deterministic build",
+      "Linux deterministic",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -80,29 +80,9 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library dont_embed_build_metadata=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "component=static_library dont_embed_build_metadata=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [
@@ -116,7 +96,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-dir",
       "[BUILD]/goma",
       "--clobber",
@@ -209,29 +189,9 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library dont_embed_build_metadata=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "component=static_library dont_embed_build_metadata=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks (2)"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clang_revision (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [
@@ -245,7 +205,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-dir",
       "[BUILD]/goma",
       "--clobber",
@@ -335,7 +295,7 @@
       "--second-build-dir",
       "[SLAVE_BUILD]/src/out/Release.2",
       "--target-platform",
-      "mac"
+      "linux"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compare_build_artifacts"
