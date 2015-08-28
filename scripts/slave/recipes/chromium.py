@@ -501,7 +501,7 @@ def GenTests(api):
     api.test('amp_split_recipe_instrumentation_trigger_failure') +
     api.properties(
         mastername='chromium.fyi',
-        buildername='Android Tests (amp split)',
+        buildername='Android Tests (amp instrumentation test split)',
         slavename='build1-a1',
         buildnumber='77457',
         parent_build_archive_url='gs://test-domain/test-archive.zip'

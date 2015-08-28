@@ -1622,29 +1622,10 @@ SPEC = {
       'root_devices': True,
       'enable_swarming': False,
       'tests': [
-        steps.AMPInstrumentationTest(
-            test_apk='AndroidWebViewTest',
-            apk_under_test='AndroidWebView',
-            android_isolate_path=
-                'android_webview/android_webview_test_apk.isolate',
-            compile_target='android_webview_test_apk',
-            device_name=['Nexus 5'], device_os=['4.4.2']),
-        steps.AMPInstrumentationTest(
-            test_apk='AndroidWebViewTest',
-            apk_under_test='AndroidWebView',
-            android_isolate_path=
-                'android_webview/android_webview_test_apk.isolate',
-            compile_target='android_webview_test_apk',
-            device_name=['Galaxy S5'], device_os=['4.4.2'],
-            fallback_to_local=False),
-        steps.AMPInstrumentationTest(
-            test_apk='AndroidWebViewTest',
-            apk_under_test='AndroidWebView',
-            android_isolate_path=
-                'android_webview/android_webview_test_apk.isolate',
-            compile_target='android_webview_test_apk',
-            device_name=['Moto E'], device_os=['4.4.2'],
-            fallback_to_local=False),
+        steps.AndroidInstrumentationTest(
+            'AndroidWebViewTest', 'android_webview_test_apk',
+            isolate_file_path='android_webview/android_webview_test_apk.isolate',
+            adb_install_apk='AndroidWebView.apk'),
         steps.AndroidInstrumentationTest(
             'ContentShellTest', 'content_shell_test_apk',
             isolate_file_path='content/content_shell_test_apk.isolate',
@@ -1703,6 +1684,89 @@ SPEC = {
         'platform': 'linux',
       },
     },
+
+    'Android Tests (amp instrumentation test split)': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'Android Builder (dbg)',
+      'android_config': 'main_builder',
+      'root_devices': True,
+      'enable_swarming': False,
+      'tests': [
+        steps.AMPInstrumentationTest(
+            test_apk='AndroidWebViewTest',
+            apk_under_test='AndroidWebView',
+            android_isolate_path=
+                'android_webview/android_webview_test_apk.isolate',
+            compile_target='android_webview_test_apk',
+            device_name=['Nexus 5'], device_os=['4.4.2'],
+            fallback_to_local=True),
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
+    'Android WebView (amp)': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'Android Builder (dbg)',
+      'android_config': 'main_builder',
+      'root_devices': True,
+      'enable_swarming': False,
+      'tests': [
+        steps.AMPInstrumentationTest(
+            test_apk='AndroidWebViewTest',
+            apk_under_test='AndroidWebView',
+            android_isolate_path=
+                'android_webview/android_webview_test_apk.isolate',
+            compile_target='android_webview_test_apk',
+            device_oem=['Sony'], device_os=['4.4.2'],
+            fallback_to_local=False),
+        steps.AMPInstrumentationTest(
+            test_apk='AndroidWebViewTest',
+            apk_under_test='AndroidWebView',
+            android_isolate_path=
+                'android_webview/android_webview_test_apk.isolate',
+            compile_target='android_webview_test_apk',
+            device_oem=['Motorola', 'motorola'], device_os=['4.4.2'],
+            fallback_to_local=False),
+        steps.AMPInstrumentationTest(
+            test_apk='AndroidWebViewTest',
+            apk_under_test='AndroidWebView',
+            android_isolate_path=
+                'android_webview/android_webview_test_apk.isolate',
+            compile_target='android_webview_test_apk',
+            device_oem=['Samsung', 'samsung'], device_os=['4.4.2'],
+            fallback_to_local=False),
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
     'Chromium Win 10': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',

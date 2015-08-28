@@ -381,195 +381,6 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--apk-under-test",
-      "AndroidWebView",
-      "--test-apk",
-      "AndroidWebViewTest",
-      "--isolate-file-path",
-      "[SLAVE_BUILD]/src/android_webview/android_webview_test_apk.isolate",
-      "--enable-platform-mode",
-      "-e",
-      "remote_device",
-      "--api-key-file",
-      "[BUILD]/site_config/.amp_api_key",
-      "--api-secret-file",
-      "[BUILD]/site_config/.amp_api_secret",
-      "--api-address",
-      "172.22.21.180",
-      "--api-port",
-      "80",
-      "--api-protocol",
-      "http",
-      "--device-type",
-      "Android",
-      "--remote-device",
-      "Nexus 5",
-      "--remote-device-os",
-      "4.4.2",
-      "--trigger",
-      "/path/to/tmp/json",
-      "--verbose",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] AndroidWebViewTest",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save AndroidWebViewTest data"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--apk-under-test",
-      "AndroidWebView",
-      "--test-apk",
-      "AndroidWebViewTest",
-      "--isolate-file-path",
-      "[SLAVE_BUILD]/src/android_webview/android_webview_test_apk.isolate",
-      "--enable-platform-mode",
-      "-e",
-      "remote_device",
-      "--api-key-file",
-      "[BUILD]/site_config/.amp_api_key",
-      "--api-secret-file",
-      "[BUILD]/site_config/.amp_api_secret",
-      "--api-address",
-      "172.22.21.180",
-      "--api-port",
-      "80",
-      "--api-protocol",
-      "http",
-      "--device-type",
-      "Android",
-      "--remote-device",
-      "Galaxy S5",
-      "--remote-device-os",
-      "4.4.2",
-      "--trigger",
-      "/path/to/tmp/json",
-      "--verbose",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] AndroidWebViewTest (2)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save AndroidWebViewTest data (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--apk-under-test",
-      "AndroidWebView",
-      "--test-apk",
-      "AndroidWebViewTest",
-      "--isolate-file-path",
-      "[SLAVE_BUILD]/src/android_webview/android_webview_test_apk.isolate",
-      "--enable-platform-mode",
-      "-e",
-      "remote_device",
-      "--api-key-file",
-      "[BUILD]/site_config/.amp_api_key",
-      "--api-secret-file",
-      "[BUILD]/site_config/.amp_api_secret",
-      "--api-address",
-      "172.22.21.180",
-      "--api-port",
-      "80",
-      "--api-protocol",
-      "http",
-      "--device-type",
-      "Android",
-      "--remote-device",
-      "Moto E",
-      "--remote-device-os",
-      "4.4.2",
-      "--trigger",
-      "/path/to/tmp/json",
-      "--verbose",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] AndroidWebViewTest (3)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save AndroidWebViewTest data (3)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
       "android_webview_unittests",
@@ -1168,6 +979,43 @@
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "-v",
       "--apk",
+      "AndroidWebView.apk",
+      "--release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install AndroidWebView.apk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "AndroidWebViewTest",
+      "--isolate-file-path",
+      "android_webview/android_webview_test_apk.isolate",
+      "--flakiness-dashboard-server",
+      "test-results.appspot.com",
+      "--verbose",
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Instrumentation test AndroidWebViewTest (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "-v",
+      "--apk",
       "ContentShell.apk",
       "--release"
     ],
@@ -1500,213 +1348,6 @@
     "name": "content_junit_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load AndroidWebViewTest data",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--apk-under-test",
-      "AndroidWebView",
-      "--test-apk",
-      "AndroidWebViewTest",
-      "--isolate-file-path",
-      "[SLAVE_BUILD]/src/android_webview/android_webview_test_apk.isolate",
-      "--enable-platform-mode",
-      "-e",
-      "remote_device",
-      "--api-key-file",
-      "[BUILD]/site_config/.amp_api_key",
-      "--api-secret-file",
-      "[BUILD]/site_config/.amp_api_secret",
-      "--api-address",
-      "172.22.21.180",
-      "--api-port",
-      "80",
-      "--api-protocol",
-      "http",
-      "--device-type",
-      "Android",
-      "--remote-device",
-      "Nexus 5",
-      "--remote-device-os",
-      "4.4.2",
-      "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json",
-      "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/AndroidWebViewTest/results.zip",
-      "--verbose",
-      "--json-results-file",
-      "/path/to/tmp/json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] AndroidWebViewTest",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load AndroidWebViewTest data (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--apk-under-test",
-      "AndroidWebView",
-      "--test-apk",
-      "AndroidWebViewTest",
-      "--isolate-file-path",
-      "[SLAVE_BUILD]/src/android_webview/android_webview_test_apk.isolate",
-      "--enable-platform-mode",
-      "-e",
-      "remote_device",
-      "--api-key-file",
-      "[BUILD]/site_config/.amp_api_key",
-      "--api-secret-file",
-      "[BUILD]/site_config/.amp_api_secret",
-      "--api-address",
-      "172.22.21.180",
-      "--api-port",
-      "80",
-      "--api-protocol",
-      "http",
-      "--device-type",
-      "Android",
-      "--remote-device",
-      "Galaxy S5",
-      "--remote-device-os",
-      "4.4.2",
-      "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json",
-      "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/AndroidWebViewTest/results.zip",
-      "--verbose",
-      "--json-results-file",
-      "/path/to/tmp/json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] AndroidWebViewTest (2)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load AndroidWebViewTest data (3)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--apk-under-test",
-      "AndroidWebView",
-      "--test-apk",
-      "AndroidWebViewTest",
-      "--isolate-file-path",
-      "[SLAVE_BUILD]/src/android_webview/android_webview_test_apk.isolate",
-      "--enable-platform-mode",
-      "-e",
-      "remote_device",
-      "--api-key-file",
-      "[BUILD]/site_config/.amp_api_key",
-      "--api-secret-file",
-      "[BUILD]/site_config/.amp_api_secret",
-      "--api-address",
-      "172.22.21.180",
-      "--api-port",
-      "80",
-      "--api-protocol",
-      "http",
-      "--device-type",
-      "Android",
-      "--remote-device",
-      "Moto E",
-      "--remote-device-os",
-      "4.4.2",
-      "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json",
-      "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/AndroidWebViewTest/results.zip",
-      "--verbose",
-      "--json-results-file",
-      "/path/to/tmp/json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] AndroidWebViewTest (3)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
   },
   {
@@ -2463,6 +2104,7 @@
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
+      "android_webview_test_apk",
       "chrome_junit_tests",
       "chrome_sync_shell_test_apk",
       "content_junit_tests",
@@ -2474,6 +2116,43 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "compile (without patch)"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "-v",
+      "--apk",
+      "AndroidWebView.apk",
+      "--release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install AndroidWebView.apk (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "AndroidWebViewTest",
+      "--isolate-file-path",
+      "android_webview/android_webview_test_apk.isolate",
+      "--flakiness-dashboard-server",
+      "test-results.appspot.com",
+      "--verbose",
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Instrumentation test AndroidWebViewTest (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
   },
   {
     "cmd": [
@@ -2611,6 +2290,39 @@
     "name": "content_junit_tests (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for f in failures['new']:\n    print f\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for f in failures['ignored']:\n    print f\n\nsys.exit(0 if success else 1)\n",
+      "{\"ignored\": [\"TestB\"], \"new\": []}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "AndroidWebViewTest",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
+      "@@@STEP_LOG_LINE@python.inline@failures = json.load(open(sys.argv[1], 'rb'))@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@success = True@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if failures['new']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  success = False@@@",
+      "@@@STEP_LOG_LINE@python.inline@  print 'New failures:'@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for f in failures['new']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if failures['ignored']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  print 'Ignored failures:'@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for f in failures['ignored']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {

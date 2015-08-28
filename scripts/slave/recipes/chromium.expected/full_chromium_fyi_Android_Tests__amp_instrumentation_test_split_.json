@@ -9,7 +9,7 @@
       "--builder",
       "Android Tests (amp instrumentation test split)",
       "--slave",
-      "build1-a1",
+      "TestSlavename",
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']",
       "--root",
@@ -19,7 +19,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@1111111"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
@@ -105,7 +105,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Android Tests (amp instrumentation test split)\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"slavename\": \"build1-a1\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Android Tests (amp instrumentation test split)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -192,7 +192,7 @@
       "--master-name",
       "chromium.fyi",
       "--build-number",
-      "77457"
+      "571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "extract build"
@@ -379,25 +379,52 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] AndroidWebViewTest",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "-v",
-      "--apk",
-      "AndroidWebView",
-      "--release"
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install AndroidWebView"
+    "name": "[trigger] save AndroidWebViewTest data"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "[collect] load AndroidWebViewTest data",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -405,21 +432,44 @@
       "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
+      "--apk-under-test",
+      "AndroidWebView",
       "--test-apk",
       "AndroidWebViewTest",
       "--isolate-file-path",
       "[SLAVE_BUILD]/src/android_webview/android_webview_test_apk.isolate",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
+      "--enable-platform-mode",
+      "-e",
+      "remote_device",
+      "--api-key-file",
+      "[BUILD]/site_config/.amp_api_key",
+      "--api-secret-file",
+      "[BUILD]/site_config/.amp_api_secret",
+      "--api-address",
+      "172.22.21.180",
+      "--api-port",
+      "80",
+      "--api-protocol",
+      "http",
+      "--device-type",
+      "Android",
+      "--remote-device",
+      "Nexus 5",
+      "--remote-device-os",
+      "4.4.2",
+      "--collect",
+      "[TMP_BASE]/amp_trigger_tmp_1/AndroidWebViewTest.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/AndroidWebViewTest/results.zip",
       "--verbose",
-      "--release",
       "--json-results-file",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test AndroidWebViewTest",
+    "name": "[collect] AndroidWebViewTest",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
   },
   {

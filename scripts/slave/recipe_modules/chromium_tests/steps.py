@@ -623,10 +623,12 @@ class AMPTest(Test):
   AMP_INSTANCE_PORT = '80'
   AMP_INSTANCE_PROTOCOL = 'http'
   AMP_RESULTS_BUCKET = 'chrome-amp-results'
-  def __init__(self, name, device_name, device_os, fallback_to_local=True):
+  def __init__(self, name, device_name=None, device_os=None, device_oem=None,
+               fallback_to_local=True):
     self._name = name
     self._device_name = device_name
     self._device_os = device_os
+    self._device_oem = device_oem
     self._fallback_to_local = fallback_to_local
     self._trigger_successful = None
     self._step_results = {}
@@ -641,6 +643,7 @@ class AMPTest(Test):
         api_port=AMPTest.AMP_INSTANCE_PORT,
         api_protocol=AMPTest.AMP_INSTANCE_PROTOCOL,
         device_name=self._device_name,
+        device_oem=self._device_oem,
         device_os=self._device_os)
 
   def pre_run(self, api, suffix):
@@ -724,12 +727,12 @@ class AMPTest(Test):
 
 
 class AMPGTestTest(AMPTest):
-  def __init__(self, name, args=None, target_name=None, device_name=['Nexus 5'],
-               device_os=['4.4.2'], android_isolate_path=None,
+  def __init__(self, name, args=None, target_name=None, device_name=None,
+               device_os=None, device_oem=None, android_isolate_path=None,
                fallback_to_local=True, **runtest_kwargs):
     super(AMPGTestTest, self).__init__(
         name=name, device_name=device_name, device_os=device_os,
-        fallback_to_local=fallback_to_local)
+        device_oem=device_oem, fallback_to_local=fallback_to_local)
     self._args = args
     self._target_name = target_name
     self._android_isolate_path = android_isolate_path
@@ -757,11 +760,11 @@ class AMPGTestTest(AMPTest):
 
 class AMPInstrumentationTest(AMPTest):
   def __init__(self, test_apk, apk_under_test, compile_target=None,
-               device_name=['Nexus 5'], device_os=['4.4.2'],
+               device_name=None, device_os=None, device_oem=None,
                android_isolate_path=None, fallback_to_local=True):
     super(AMPInstrumentationTest, self).__init__(
         test_apk, device_name=device_name, device_os=device_os,
-        fallback_to_local=fallback_to_local)
+        device_oem=device_oem, fallback_to_local=fallback_to_local)
     self._apk_under_test = apk_under_test
     self._compile_target = compile_target
     self._android_isolate_path = android_isolate_path

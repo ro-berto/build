@@ -267,6 +267,19 @@
     "name": "trigger (3)",
     "trigger_specs": [
       {
+        "builder_name": "Android Tests (amp instrumentation test split)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Tests (amp instrumentation test split)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (4)",
+    "trigger_specs": [
+      {
         "builder_name": "Android Tests (amp split)"
       }
     ],
@@ -277,7 +290,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (4)",
+    "name": "trigger (5)",
     "trigger_specs": [
       {
         "builder_name": "Android Tests (trial)(dbg)"
@@ -285,6 +298,19 @@
     ],
     "~followup_annotations": [
       "@@@STEP_TEXT@Android Tests (trial)(dbg)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (6)",
+    "trigger_specs": [
+      {
+        "builder_name": "Android WebView (amp)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android WebView (amp)@@@"
     ]
   }
 ]
