@@ -76,6 +76,8 @@ SLAVE_INFO = {
       SlaveInfo('8AB5139A', DEFAULT_SDK_ROOT, True),
   'skiabot-shuttle-ubuntu15-nvidia-shield-001':
       SlaveInfo('04217150066510000078', MACMINI_SDK_ROOT, False),
+  'skiabot-linux-housekeeper-003':
+      SlaveInfo('noserial', DEFAULT_SDK_ROOT, False),
   'default':
       SlaveInfo('noserial', DEFAULT_SDK_ROOT, False),
 }

@@ -110,6 +110,38 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
+  'Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify': {
+    'build_targets': [
+      'VisualBenchTest_APK',
+    ],
+    'builder_cfg': {
+      'arch': 'Arm7',
+      'compiler': 'GCC',
+      'configuration': 'Release',
+      'cpu_or_gpu': 'GPU',
+      'cpu_or_gpu_value': 'Adreno330',
+      'extra_config': 'Appurify',
+      'is_trybot': False,
+      'model': 'Nexus5',
+      'os': 'Android',
+      'role': 'Perf',
+    },
+    'configuration': 'Release',
+    'device_cfg': 'arm_v7',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': True,
+    'do_test_steps': False,
+    'env': {
+      'GYP_DEFINES': 'skia_arch_type=arm skia_warnings_as_errors=0',
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': True,
+  },
   'Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release': {
     'build_targets': [
       'nanobench',

@@ -51,6 +51,11 @@ def GenTests(api):
         'Build-Mac10.8-Clang-Arm7-Debug-Android',
       ],
     },
+    'client.skia.fyi': {
+      'skiabot-linux-housekeeper-003': [
+        'Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify',
+      ],
+    },
   }
 
   def AndroidTestData(builder):
@@ -96,9 +101,11 @@ def GenTests(api):
         if 'Test' in builder:
           test += api.step_data('gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED',
                                 stdout=api.raw_io.output('42'))
-        if 'Android' in builder:
+        if 'Android' in builder and not 'Appurify' in builder:
           test += api.step_data('has ccache?', retcode=1)
-        if 'Android' in builder and ('Test' in builder or 'Perf' in builder):
+        if ('Android' in builder and
+            ('Test' in builder or 'Perf' in builder) and
+            not 'Appurify' in builder):
           test += AndroidTestData(builder)
         if 'ChromeOS' in builder:
           test += api.step_data('read SKP_VERSION',
@@ -112,6 +119,10 @@ def GenTests(api):
                                  rietveld='https://codereview.chromium.org')
         if 'Win' in builder:
           test += api.platform('win', 64)
+        if 'Appurify' in builder:
+          test += api.step_data('has ccache?', retcode=0,
+                                stdout=api.raw_io.output('/usr/bin/ccache'))
+
         yield test
 
   builder = 'Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug'

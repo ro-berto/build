@@ -17,6 +17,7 @@ sys.path.append(
 from common.skia import global_constants
 
 from . import android_flavor
+from . import appurify_flavor
 from . import chromeos_flavor
 from . import coverage_flavor
 from . import default_flavor
@@ -41,6 +42,9 @@ def is_android(builder_cfg):
   return ('Android' in builder_cfg.get('extra_config', '') or
           builder_cfg.get('os') == 'Android')
 
+def is_appurify(builder_cfg):
+  """Determine whether the builder is an Android bot running in Appurify."""
+  return 'Appurify' in builder_cfg.get('extra_config', '')
 
 def is_chromeos(builder_cfg):
   return ('CrOS' in builder_cfg.get('extra_config', '') or
@@ -65,7 +69,9 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def get_flavor(self, builder_cfg):
     """Return a flavor utils object specific to the given builder."""
-    if is_android(builder_cfg):
+    if is_appurify(builder_cfg):
+      return appurify_flavor.AppurifyFlavorUtils(self)
+    elif is_android(builder_cfg):
       return android_flavor.AndroidFlavorUtils(self)
     elif is_chromeos(builder_cfg):
       return chromeos_flavor.ChromeOSFlavorUtils(self)
