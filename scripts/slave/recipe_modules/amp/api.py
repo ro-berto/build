@@ -78,7 +78,8 @@ class AmpApi(recipe_api.RecipeApi):
         self.m.json.dumps(trigger_data))
 
   def collect_test_suite(
-      self, suite, test_type, test_type_args, amp_args, verbose=True):
+      self, suite, test_type, test_type_args, amp_args, verbose=True,
+      json_results_path=None, **kwargs):
     args = ([test_type] + test_type_args + amp_args
         + ['--collect', self._get_trigger_file_for_suite(suite)]
         + ['--results-path', self._get_results_zip_path(suite)])
@@ -106,12 +107,14 @@ class AmpApi(recipe_api.RecipeApi):
 
     if verbose:
       args += ['--verbose']
+    if json_results_path:
+      args += ['--json-results-path', json_results_path]
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       args += ['--release']
     try:
       step_result = self.m.chromium_android.test_runner(
           '[collect] %s' % suite,
-          args=args)
+          args=args, **kwargs)
     except self.m.step.StepFailure as f:
       step_result = f.result
       raise
@@ -120,6 +123,8 @@ class AmpApi(recipe_api.RecipeApi):
       if (not device_data and
           step_result.presentation.status == self.m.step.SUCCESS):
         step_result.presentation.status = self.m.step.WARNING
+
+    return step_result
 
   def upload_logcat_to_gs(self, bucket, suite):
     """Upload the logcat file returned from the appurify results to

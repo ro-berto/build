@@ -7,6 +7,7 @@ import collections
 from infra.libs.infra_types import freeze
 
 DEPS = [
+  'amp',
   'bot_update',
   'chromium',
   'chromium_android',
@@ -58,6 +59,10 @@ BUILDERS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'Linux ARM',
         'analyze_mode': 'compile',
+      },
+      'android_amp': {
+        'mastername': 'chromium.fyi',
+        'buildername': 'Android Tests (amp split)',
       },
       'android_arm64_dbg_recipe': {
         'mastername': 'chromium.linux',
@@ -749,6 +754,16 @@ def GenTests(api):
     suppress_analyze() +
     api.override_step_data('gl_tests (with patch)',
                            canned_test(passing=False))
+  )
+
+  yield (
+    api.test('amp_test_failure') +
+    props(buildername='android_amp',
+          mastername='tryserver.chromium.linux') +
+    api.platform.name('linux') +
+    suppress_analyze() +
+    api.override_step_data('[collect] load android_webview_unittests data',
+                           retcode=1)
   )
 
   yield (

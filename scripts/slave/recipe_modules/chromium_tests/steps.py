@@ -629,6 +629,7 @@ class AMPTest(Test):
     self._device_os = device_os
     self._fallback_to_local = fallback_to_local
     self._trigger_successful = None
+    self._step_results = {}
 
   @property
   def name(self):
@@ -652,26 +653,74 @@ class AMPTest(Test):
     except api.step.StepFailure:
       self._trigger_successful = False
 
+  def trigger_test(self, api):
+    api.amp.trigger_test_suite(
+        suite=self.name,
+        test_type=self.test_type(),
+        test_type_args=self.test_type_args(api),
+        amp_args=self.amp_arguments(api))
+
+  def test_type(self):
+    raise NotImplementedError() # pragma: no cover
+
+  def test_type_args(self, api):
+    raise NotImplementedError() # pragma: no cover
+
   def run(self, api, suffix):  # pylint: disable=R0201
     # If we were unable to successfully trigger the AMP job, run locally;
     # otherwise return no results as results will be collected in post_run.
     if not self._trigger_successful and self._fallback_to_local:
-      return self.run_test_locally(api, suffix)
+      step_result = self.run_test_locally(api, suffix)
+      valid, failures = self.validate_task_results(api, step_result)
+      self._step_results[suffix] = {'valid': valid, 'failures': failures}
     else:
-      return []
+      self._step_results[suffix] = {'valid': False, 'failures': []}
+
+  def run_test_locally(self, api):
+    raise NotImplementedError() # pragma: no cover
 
   def post_run(self, api, suffix):
     if self._trigger_successful:
-      self.collect_test(api)
+      self.collect_test(api, suffix)
 
-  def trigger_test(self, api):
-    raise NotImplementedError # pragma: no cover
+  def collect_test(self, api, suffix):
+    gtest_results_file = api.test_utils.gtest_results(add_json_log=False)
+    step_test_data = lambda: api.test_utils.test_api.canned_gtest_output(True)
 
-  def collect_test(self, api):
-    raise NotImplementedError # pragma: no cover
+    try:
+      api.amp.collect_test_suite(
+          suite=self.name, test_type=self.test_type(),
+          test_type_args=self.test_type_args(api),
+          amp_args=self.amp_arguments(api),
+          json_results_path=gtest_results_file,
+          step_test_data=step_test_data)
+    finally:
+      step_result = api.step.active_result
+      valid, failures = self.validate_task_results(api, step_result)
+      self._step_results[suffix] = {'valid': valid, 'failures': failures}
 
-  def run_test_locally(self, api):
-    raise NotImplementedError # pragma: no cover
+  def validate_task_results(self, api, step_result):
+    try:
+      gtest_results = step_result.test_utils.gtest_results
+      valid = gtest_results.valid
+      failures = gtest_results.failures
+    except (AttributeError, KeyError, ValueError): # pragma: no cover
+      valid = False
+      failures = None
+
+    if valid:
+      step_result.presentation.step_text += api.test_utils.format_step_text([
+        ['failures:', failures]
+      ])
+
+    return valid, failures
+
+  def has_valid_results(self, api, suffix):
+    return suffix in self._step_results and self._step_results[suffix]['valid']
+
+  def failures(self, api, suffix):
+    assert self.has_valid_results(api, suffix)
+    return self._step_results[suffix]['failures']
 
 
 class AMPGTestTest(AMPTest):
@@ -691,21 +740,15 @@ class AMPGTestTest(AMPTest):
     return self._local_test.compile_targets(api)
 
   #override
-  def trigger_test(self, api):
-    isolate_file_path = (api.path['checkout'].join(self._android_isolate_path)
-                         if self._android_isolate_path else None)
-    api.amp.trigger_test_suite(
-        suite=self.name, test_type='gtest',
-        test_type_args=api.amp.gtest_arguments(
-            self.name, isolate_file_path=isolate_file_path),
-        amp_args=self.amp_arguments(api))
+  def test_type(self):
+    return 'gtest'
 
   #override
-  def collect_test(self, api):
-    api.amp.collect_test_suite(
-        suite=self.name, test_type='gtest',
-        test_type_args=api.amp.gtest_arguments(self.name),
-        amp_args=self.amp_arguments(api))
+  def test_type_args(self, api):
+    isolate_file_path = (api.path['checkout'].join(self._android_isolate_path)
+                         if self._android_isolate_path else None)
+    return api.amp.gtest_arguments(
+        self.name, isolate_file_path=isolate_file_path)
 
   #override
   def run_test_locally(self, api, suffix):
@@ -727,25 +770,17 @@ class AMPInstrumentationTest(AMPTest):
     return [self._compile_target]
 
   #override
-  def trigger_test(self, api):
-    isolate_file_path = (api.path['checkout'].join(self._android_isolate_path)
-                         if self._android_isolate_path else None)
-    api.amp.trigger_test_suite(
-        suite=self.name, test_type='instrumentation',
-        test_type_args=api.amp.instrumentation_test_arguments(
-            apk_under_test=self._apk_under_test,
-            test_apk=self.name,
-            isolate_file_path=isolate_file_path),
-        amp_args=self.amp_arguments(api))
+  def test_type(self):
+    return 'instrumentation'
 
   #override
-  def collect_test(self, api):
-    api.amp.collect_test_suite(
-        suite=self.name, test_type='instrumentation',
-        test_type_args=api.amp.instrumentation_test_arguments(
-            apk_under_test=self._apk_under_test,
-            test_apk=self.name),
-        amp_args=self.amp_arguments(api))
+  def test_type_args(self, api):
+    isolate_file_path = (api.path['checkout'].join(self._android_isolate_path)
+                         if self._android_isolate_path else None)
+    return api.amp.instrumentation_test_arguments(
+        apk_under_test=self._apk_under_test,
+        test_apk=self.name,
+        isolate_file_path=isolate_file_path)
 
   #override
   def run_test_locally(self, api, suffix):

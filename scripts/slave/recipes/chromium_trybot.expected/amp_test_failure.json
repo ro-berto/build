@@ -5,17 +5,23 @@
       "-u",
       "[BUILD]/scripts/slave/bot_update.py",
       "--master",
-      "chromium.fyi",
+      "tryserver.chromium.linux",
       "--builder",
-      "Android Tests (amp split)",
+      "android_amp",
       "--slave",
-      "build1-a1",
+      "TestSlavename",
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']",
       "--root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/WebKit\": \"got_webkit_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
+      "--issue",
+      "12853011",
+      "--patchset",
+      "1",
+      "--rietveld_server",
+      "https://codereview.chromium.org",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -71,10 +77,10 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "gclient runhooks"
+    "name": "gclient runhooks (with patch)"
   },
   {
     "cmd": [
@@ -105,13 +111,66 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Android Tests (amp split)\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"slavename\": \"build1-a1\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"android_amp\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "diff",
+      "--cached",
+      "--name-only"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "git diff to analyze patch",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@files@foo.cc@@@",
+      "@@@STEP_LOG_END@files@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "read filter exclusion spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"f.*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "analyze",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
+      "@@@STEP_LOG_END@excluded_files@@@"
     ]
   },
   {
@@ -165,75 +224,52 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree build directory",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/extract_build.py",
+      "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Release",
-      "--build-archive-url",
-      "gs://test-domain/test-archive.zip",
-      "--master-name",
-      "chromium.fyi",
-      "--build-number",
-      "77457"
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--goma-fail-fast",
+      "--goma-disable-local-fallback",
+      "--",
+      "android_webview_test_apk",
+      "android_webview_unittests_apk",
+      "base_unittests_apk",
+      "breakpad_unittests_deps",
+      "cc_unittests_apk",
+      "chrome_junit_tests",
+      "chrome_sync_shell_test_apk",
+      "components_unittests_apk",
+      "content_browsertests_apk",
+      "content_junit_tests",
+      "content_shell_test_apk",
+      "content_unittests_apk",
+      "events_unittests_apk",
+      "gl_tests_apk",
+      "gpu_unittests_apk",
+      "ipc_tests_apk",
+      "junit_unit_tests",
+      "media_unittests_apk",
+      "net_unittests_apk",
+      "sandbox_linux_unittests_deps",
+      "sql_unittests_apk",
+      "sync_unit_tests_apk",
+      "ui_android_unittests_apk",
+      "ui_base_unittests_apk",
+      "ui_touch_selection_unittests_apk",
+      "unit_tests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "extract build"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[adb]/resources/list_devices.py",
-      "['[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "List adb devices",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C009\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport subprocess\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
-      "014E1F310401C009"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Root devices",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import subprocess@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@adb_path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@for device in sys.argv[2:]:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  subprocess.check_call([adb_path, '-s', device, 'root'])@@@",
-      "@@@STEP_LOG_LINE@python.inline@  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "compile (with patch)"
   },
   {
     "cmd": [
@@ -1159,7 +1195,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ContentShellTest",
+    "name": "Instrumentation test ContentShellTest (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
@@ -1194,7 +1230,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ChromeSyncShellTest",
+    "name": "Instrumentation test ChromeSyncShellTest (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
@@ -1218,7 +1254,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "breakpad_unittests"
+    "name": "breakpad_unittests (with patch)"
   },
   {
     "cmd": [
@@ -1238,7 +1274,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "cc_unittests"
+    "name": "cc_unittests (with patch)"
   },
   {
     "cmd": [
@@ -1258,7 +1294,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "content_browsertests"
+    "name": "content_browsertests (with patch)"
   },
   {
     "cmd": [
@@ -1278,7 +1314,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "content_unittests"
+    "name": "content_unittests (with patch)"
   },
   {
     "cmd": [
@@ -1298,7 +1334,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "gpu_unittests"
+    "name": "gpu_unittests (with patch)"
   },
   {
     "cmd": [
@@ -1318,7 +1354,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "media_unittests"
+    "name": "media_unittests (with patch)"
   },
   {
     "cmd": [
@@ -1338,7 +1374,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "net_unittests"
+    "name": "net_unittests (with patch)"
   },
   {
     "cmd": [
@@ -1358,7 +1394,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "sandbox_linux_unittests"
+    "name": "sandbox_linux_unittests (with patch)"
   },
   {
     "cmd": [
@@ -1378,7 +1414,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "ui_base_unittests"
+    "name": "ui_base_unittests (with patch)"
   },
   {
     "cmd": [
@@ -1398,7 +1434,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "unit_tests"
+    "name": "unit_tests (with patch)"
   },
   {
     "cmd": [
@@ -1417,7 +1453,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "junit_unit_tests",
+    "name": "junit_unit_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
@@ -1439,7 +1475,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "chrome_junit_tests",
+    "name": "chrome_junit_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
@@ -1461,7 +1497,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "content_junit_tests",
+    "name": "content_junit_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
@@ -1684,58 +1720,10 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] load android_webview_unittests data",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "android_webview_unittests",
-      "--enable-platform-mode",
-      "-e",
-      "remote_device",
-      "--api-key-file",
-      "[BUILD]/site_config/.amp_api_key",
-      "--api-secret-file",
-      "[BUILD]/site_config/.amp_api_secret",
-      "--api-address",
-      "172.22.21.180",
-      "--api-port",
-      "80",
-      "--api-protocol",
-      "http",
-      "--device-type",
-      "Android",
-      "--remote-device",
-      "Nexus 5",
-      "--remote-device-os",
-      "4.4.2",
-      "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/android_webview_unittests.json",
-      "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/results.zip",
-      "--verbose",
-      "--json-results-path",
-      "/path/to/tmp/json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] android_webview_unittests",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1802,9 +1790,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] base_unittests",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
   },
   {
@@ -2337,6 +2323,20 @@
     "cmd": [
       "python",
       "-u",
+      "import sys; sys.exit(1)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "android_webview_unittests",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/tee.py",
       "[SLAVE_BUILD]/src/out/Release/full_log",
       "--",
@@ -2390,12 +2390,13 @@
       "@@@STEP_LOG_LINE@python.inline@    for l in f.readlines():@@@",
       "@@@STEP_LOG_LINE@python.inline@      print l@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"69d8b89f5921651b8acee0cd73d39b80fbce2690\"@@@"
     ]
   },
   {
     "name": "$final_result",
-    "reason": "1 tests failed: ['base_unittests']",
+    "reason": "1 out of 1 aggregated steps failed. Failures: Step('android_webview_unittests') failed with return_code 1",
     "status_code": 1
   }
 ]

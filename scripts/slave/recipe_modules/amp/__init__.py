@@ -11,5 +11,6 @@ DEPS = [
     'path',
     'python',
     'step',
+    'test_utils',
     'zip',
 ]
