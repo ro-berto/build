@@ -72,7 +72,6 @@
     step('ui_unittests'),
     step('unit_tests'),
     step('androidwebview_instrumentation_tests'),
-    step('chromeshell_instrumentation_tests'),
     step('contentshell_instrumentation_tests'),
     step('logcat_dump'),
     step('test_report'),
