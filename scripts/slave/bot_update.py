@@ -1052,7 +1052,7 @@ def apply_gerrit_ref(gerrit_repo, gerrit_ref, root):
   assert gerrit_ref
   try:
     git('retry', 'fetch', gerrit_repo, gerrit_ref, cwd=root, tries=1)
-    git('checkout', 'FETCH_HEAD', cwd=root)
+    git('reset', '--soft', 'FETCH_HEAD', cwd=root)
   except SubprocessFailed as e:
     raise PatchFailed(e.message, e.code, e.output)
 
