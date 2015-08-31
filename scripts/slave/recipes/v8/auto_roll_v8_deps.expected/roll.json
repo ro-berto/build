@@ -219,7 +219,7 @@
       "-m",
       "Rolling v8/another/dep to deadbeaf",
       "-m",
-      "TBR=machenbach@chromium.org"
+      "TBR=machenbach@chromium.org,vogelheim@chromium.org,hablich@chromium.org"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "git commit",

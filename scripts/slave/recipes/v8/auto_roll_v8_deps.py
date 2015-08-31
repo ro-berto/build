@@ -18,6 +18,11 @@ DEPS = [
   'v8',
 ]
 
+AUTO_REVIEWERS = [
+  'machenbach@chromium.org',
+  'vogelheim@chromium.org',
+  'hablich@chromium.org',
+]
 BASE_URL = 'https://chromium.googlesource.com'
 V8_REPO = BASE_URL + '/v8/v8'
 CR_REPO = BASE_URL + '/chromium/src'
@@ -168,7 +173,7 @@ def RunSteps(api):
     args = ['commit', '-a', '-m', 'Update V8 DEPS.']
     for message in commit_message:
       args.extend(['-m', message])
-    args.extend(['-m', 'TBR=machenbach@chromium.org'])
+    args.extend(['-m', 'TBR=%s' % ','.join(AUTO_REVIEWERS)])
     kwargs = {'stdout': api.raw_io.output(), 'cwd': api.path['checkout']}
     api.git(*args, **kwargs)
     api.git(
