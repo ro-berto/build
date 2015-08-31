@@ -41,21 +41,25 @@ DETERMINISTIC_BUILDERS = freeze({
     'chromium_config': 'chromium',
     'gclient_config': 'chromium',
     'platform': 'linux',
+    'targets': ['all'],
   },
   'Mac deterministic': {
     'chromium_config': 'chromium',
     'gclient_config': 'chromium',
     'platform': 'mac',
+    'targets': ['all'],
   },
   'Windows deterministic': {
     'chromium_config': 'chromium',
     'gclient_config': 'chromium',
     'platform': 'win',
+    'targets': ['all'],
   },
   'Windows Clang deterministic': {
     'chromium_config': 'chromium_win_clang',
     'gclient_config': 'chromium',
     'platform': 'win',
+    'targets': ['all'],
   },
 })
 

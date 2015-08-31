@@ -119,7 +119,7 @@
       "clang",
       "--clobber",
       "--",
-      "chromium_swarm_tests"
+      "all"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "First build"
@@ -246,7 +246,7 @@
       "clang",
       "--clobber",
       "--",
-      "chromium_swarm_tests"
+      "all"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Second build"
