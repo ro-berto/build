@@ -257,7 +257,7 @@
       "--config-src",
       "[SLAVE_BUILD]/skia/platform_tools/android/apps/robotium.cfg",
       "--app-src",
-      "[SLAVE_BUILD]/skia/platform_tools/android/apps/visualbench/build/outputs/apk/visualbench-arm-debug.apk",
+      "[SLAVE_BUILD]/skia/platform_tools/android/apps/visualbench/build/outputs/apk/visualbench-arm-release.apk",
       "--test-src",
       "[SLAVE_BUILD]/skia/platform_tools/android/apps/visualbench/build/outputs/apk/visualbench-arm-debug-androidTest-unaligned.apk",
       "--result-dir",

@@ -38,7 +38,7 @@ class AppurifyFlavorUtils(default_flavor.DefaultFlavorUtils):
     if len(cmd) > i + 1:
       json_file = cmd[i + 1]
 
-    main_apk = self.apk_dir.join('visualbench-arm-debug.apk')
+    main_apk = self.apk_dir.join('visualbench-arm-release.apk')
     test_apk = self.apk_dir.join(
         'visualbench-arm-debug-androidTest-unaligned.apk')
     cmd = ['python', self._skia_api.resource('appurify_wrapper.py'),
