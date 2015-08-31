@@ -37,6 +37,8 @@ def RunSteps(api):
       bisector.check_initial_confidence()):
     if not bisector.check_bisect_finished(bisector.good_rev):
       _bisect_main_loop(bisector)
+    else:  # pragma: no cover
+      bisector.bisect_over = True
   else:  # pragma: no cover
     bisector.bisect_over = True
   bisector.print_result()

@@ -48,8 +48,8 @@ class Bisector(object):
     self.improvement_direction = int(bisect_config.get(
         'improvement_direction', 0)) or None
 
-    self.required_initial_confidence = bisect_config.get(
-        'required_initial_confidence', 95)
+    self.required_initial_confidence = float(bisect_config.get(
+        'required_initial_confidence', 95))
 
     self.warnings = []
 
