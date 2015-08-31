@@ -108,7 +108,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     with self.m.step.defer_results():
       for t in tests:
         if not t.has_valid_results(caller_api, 'with patch'):
-          self.m.python.failing_step(t.name, 'TEST RESULTS WERE INVALID')
+          self._invalid_test_results(t)
         elif t.failures(caller_api, 'with patch'):
           failing_tests.append(t)
     if not failing_tests:
@@ -123,9 +123,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
         for t in failing_tests:
           self._summarize_retried_test(caller_api, t)
 
+  def _invalid_test_results(self, test):
+    self.m.tryserver.set_invalid_test_results_tryjob_result()
+    self.m.python.failing_step(test.name, 'TEST RESULTS WERE INVALID')
+
   def _summarize_retried_test(self, caller_api, test):
     if not test.has_valid_results(caller_api, 'without patch'):
-      self.m.python.failing_step(test.name, 'TEST RESULTS WERE INVALID')
+      self._invalid_test_results(test)
 
     ignored_failures = set(test.failures(caller_api, 'without patch'))
     new_failures = (

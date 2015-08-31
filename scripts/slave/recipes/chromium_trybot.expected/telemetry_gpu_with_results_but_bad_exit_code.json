@@ -3650,7 +3650,10 @@
       "tab_capture_end2end_tests on NVIDIA GPU on Mac Retina (with patch)/Mac-10.9/[dummy has/mac_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "tab_capture_end2end_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
+    "name": "tab_capture_end2end_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
+    ]
   },
   {
     "cmd": [

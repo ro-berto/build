@@ -1949,7 +1949,10 @@
       "tab_capture_end2end_tests on NVIDIA GPU on Linux (with patch)/Linux/[dummy has/linux_blink_rel/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "tab_capture_end2end_tests on NVIDIA GPU on Linux (with patch) on Linux"
+    "name": "tab_capture_end2end_tests on NVIDIA GPU on Linux (with patch) on Linux",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
+    ]
   },
   {
     "cmd": [

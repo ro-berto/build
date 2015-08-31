@@ -1957,7 +1957,8 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] ui_touch_selection_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
     ]
   },
   {

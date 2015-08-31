@@ -170,13 +170,16 @@ class TryserverApi(recipe_api.RecipeApi):
     step_result.presentation.logs['files'] = paths
     return paths
 
-  def set_compile_failure_tryjob_result(self):
-    """Mark the tryjob result as a compile failure."""
-    if not self.is_tryserver:  # pragma: no cover
+  def _set_failure_type(self, failure_type):
+    if not self.is_tryserver:
       return
 
     step_result = self.m.step.active_result
-    step_result.presentation.properties['failure_type'] = 'COMPILE_FAILURE'
+    step_result.presentation.properties['failure_type'] = failure_type
+
+  def set_compile_failure_tryjob_result(self):
+    """Mark the tryjob result as a compile failure."""
+    self._set_failure_type('COMPILE_FAILURE')
 
   def set_test_failure_tryjob_result(self):
     """Mark the tryjob result as a test failure.
@@ -184,11 +187,16 @@ class TryserverApi(recipe_api.RecipeApi):
     This means we started running actual tests (not prerequisite steps
     like checkout or compile), and some of these tests have failed.
     """
-    if not self.is_tryserver:
-      return
+    self._set_failure_type('TEST_FAILURE')
 
-    step_result = self.m.step.active_result
-    step_result.presentation.properties['failure_type'] = 'TEST_FAILURE'
+  def set_invalid_test_results_tryjob_result(self):
+    """Mark the tryjob result as having invalid test results.
+
+    This means we run some tests, but the results were not valid
+    (e.g. no list of specific test cases that failed, or too many
+    tests failing, etc).
+    """
+    self._set_failure_type('INVALID_TEST_RESULTS')
 
   def add_failure_reason(self, reason):
     """
