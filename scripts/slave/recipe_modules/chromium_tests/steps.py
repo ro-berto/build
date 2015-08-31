@@ -416,7 +416,7 @@ class AndroidPerfTests(Test):
     exception = None
     api.adb.list_devices(step_test_data=api.adb.test_api.two_devices)
     perf_tests = api.chromium.list_perf_tests(
-        browser='android-chrome-shell',
+        browser='android-chromium',
         num_shards=self.num_shards,
         devices=api.adb.devices[0:1]).json.output
     try:

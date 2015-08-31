@@ -78,7 +78,7 @@ class TelemetryTest(unittest.TestCase):
             '\'--\' ' +
             '\'src/tools/perf/run_benchmark\' \'-v\' ' +
             '\'--output-format=buildbot\' ' +
-            '\'--browser=android-chrome-shell\' \'sunspider\''
+            '\'--browser=android-chromium\' \'sunspider\''
         ])
 
     self.assertEqual(expectedText, self.capture.text)
@@ -113,7 +113,7 @@ class TelemetryTest(unittest.TestCase):
             '\'src/tools/perf/run_benchmark\' \'-v\' ' +
             '\'--output-format=buildbot\' ' +
             '\'--profile-dir=fake_dir\' '+
-            '\'--browser=android-chrome-shell\' \'sunspider\''
+            '\'--browser=android-chromium\' \'sunspider\''
         ])
 
     self.assertEqual(expectedText, self.capture.text)

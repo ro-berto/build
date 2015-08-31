@@ -295,7 +295,7 @@
       "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
       "list",
       "--browser",
-      "android-chrome-shell",
+      "android-chromium",
       "--json-output",
       "/path/to/tmp/json",
       "--num-shards",
