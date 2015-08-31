@@ -163,6 +163,8 @@ class AutoBisectApi(recipe_api.RecipeApi):
     test_runner = api.chromium_tests.create_test_runner(api, tests)
 
     with api.chromium_tests.wrap_chromium_tests(mastername):
+      if api.chromium.c.TARGET_PLATFORM == 'android':
+        api.chromium_android.adb_install_apk('ChromePublic.apk')
       test_runner()
 
   def start_try_job(self, api, update_step=None, master_dict=None, extra_src='',
