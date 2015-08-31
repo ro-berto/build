@@ -54,6 +54,28 @@ BUILDERS = freeze({
       },
     },
   },
+  'tryserver.chromium.linux': {
+    'builders': {
+      'android_chromium_gn_compile_rel': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+        },
+        'gclient_apply_config': ['android'],
+      },
+      'android_chromium_gn_compile_dbg': {
+        'chromium_apply_config': ['gn_minimal_symbols'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+        },
+        'gclient_apply_config': ['android'],
+      },
+    },
+  },
   'tryserver.v8': {
     'builders': {
       'v8_linux_chromium_gn_rel': {
