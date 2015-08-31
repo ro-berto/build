@@ -451,8 +451,7 @@ def chromium_skia(c):
 def chromium_angle(c):
   c.solutions[0].revision = 'HEAD'
   del c.solutions[0].custom_deps
-  c.revisions['src/third_party/angle'] = (
-      gclient_api.RevisionFallbackChain('origin/master'))
+  c.revisions['src/third_party/angle'] = 'HEAD'
   c.got_revision_mapping['src'] = 'got_chromium_revision'
   c.got_revision_mapping['src/third_party/angle'] = 'got_revision'
   c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'

@@ -30,7 +30,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/angle@origin/master"
+      "src/third_party/angle@HEAD"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

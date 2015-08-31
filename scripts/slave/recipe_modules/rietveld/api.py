@@ -30,6 +30,7 @@ class RietveldApi(recipe_api.RecipeApi):
     # CLs are being run by multiple recipes. Instead pass patch_project_roots to
     # ensure_checkout.
     patch_project_roots = {
+      'angle/angle': ['third_party', 'angle'],
       'blink': ['third_party', 'WebKit'],
       'v8': ['v8'],
       'luci-py': ['luci'],
