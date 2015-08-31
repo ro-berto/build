@@ -46,7 +46,7 @@ TOT_BRANCH = 'master'
 # - Update the value here.
 # - Run "gclient runhooks --force".
 PINS = collections.OrderedDict((
-  (TOT_BRANCH, 'c5e1e32f4014be9bb0dc455e7589964568347968'),
+  (TOT_BRANCH, '4f5fb649541dbdeaf3f448f58a5c0c902a37fa9d'),
 
   # Release waterfall branches.
   #
