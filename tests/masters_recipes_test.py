@@ -80,8 +80,6 @@ SUPPRESSIONS = {
         'Win7 Release (ATI)',
     ],
     'master.chromium.linux': [
-        'Android GN',
-        'Android GN (dbg)',
         'Linux GN Clobber',
     ],
     'master.chromium.mac': [
