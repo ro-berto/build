@@ -56,8 +56,10 @@ class AdbApi(recipe_api.RecipeApi):
         import sys
         adb_path = sys.argv[1]
         for device in sys.argv[2:]:
+          print 'Attempting to root device %s ...' % (device)
           subprocess.check_call([adb_path, '-s', device, 'root'])
           subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])
+          print 'Finished rooting device %s' % (device)
         """,
         args=[self.adb_path()] + self.devices,
         **kwargs)
