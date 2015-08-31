@@ -23,47 +23,5 @@ class MasterUtilsTest(unittest.TestCase):
     self.assertEquals([['a', 'b'], ['c']], partitions)
 
 
-class MockBuilder(object):
-  def __init__(self, name):
-    self.name = name
-
-
-class PreferredBuilderNextSlaveFuncTest(unittest.TestCase):
-  def testNextSlave(self):
-    builder1 = MockBuilder('builder1')
-    builder2 = MockBuilder('builder2')
-    builder3 = MockBuilder('builder3')
-    slaves = [{
-      'name': 'slave1',
-      'preferred_builder': 'builder1'
-    }, {
-      'name': 'slave2',
-      'preferred_builder': 'builder2',
-    }, {
-      'name': 'slave3',
-      'preferred_builder': 'builder3',
-    }]
-
-    f = master_utils.PreferredBuilderNextSlaveFunc()
-    self.assertEqual('slave1', f(builder1, slaves).get('name'))
-    self.assertEqual('slave2', f(builder2, slaves).get('name'))
-    self.assertEqual('slave3', f(builder3, slaves).get('name'))
-
-    # Remove slave 3.
-    del slaves[2]
-
-    # When there is no slave that matches preferred_builder,
-    # any slave builder might be chosen.
-    self.assertTrue(f(builder3, slaves).get('name') in ['slave1', 'slave2'])
-
-  def testNextSlaveEmpty(self):
-    builder = MockBuilder('builder')
-    slaves = []
-
-    f = master_utils.PreferredBuilderNextSlaveFunc()
-
-    self.assertIsNone(f(builder, slaves))
-
-
 if __name__ == '__main__':
   unittest.main()
