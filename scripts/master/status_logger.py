@@ -184,15 +184,19 @@ class StatusEventLogger(StatusReceiverMultiService):
     return self._active
 
 
-  def send_build_result(self, timestamp, builder_name, bot_name, result):
+  def send_build_result(
+      self, started, finished, builder_name, bot_name, result):
     """Log a build result for ts_mon.
 
     The purpose of this function is to count builds through ts_mon.
     """
-    d = {'timestamp': timestamp,
-         'builder': builder_name,
-         'slave': bot_name,
-         'result': result.lower()}
+    d = {
+        'timestamp_ms': finished * 1000,
+        'builder': builder_name,
+        'slave': bot_name,
+        'result': result.lower(),
+        'duration_s': finished - started,
+    }
     self.ts_mon_logger.info(json.dumps(d))
 
 
@@ -462,13 +466,13 @@ class StatusEventLogger(StatusReceiverMultiService):
     bot = build.getSlavename()
     self.log('buildFinished', '%s, %d, %s, %r',
              builderName, build_number, bot, results)
-    _, finished = build.getTimes()
+    started, finished = build.getTimes()
     self.send_build_event(
         'END', finished * 1000, 'BUILD', bot, builderName, build_number,
         self._get_requested_at_millis(build),
         result=buildbot.status.results.Results[results])
-    self.send_build_result(finished*1000, builderName, bot,
-                          buildbot.status.results.Results[results])
+    self.send_build_result(started, finished, builderName, bot,
+                           buildbot.status.results.Results[results])
 
   def builderRemoved(self, builderName):
     self.log('builderRemoved', '%s', builderName)
