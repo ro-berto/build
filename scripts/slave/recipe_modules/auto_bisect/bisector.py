@@ -7,6 +7,7 @@ import re
 
 from . import bisect_results
 from . import depot_config
+from . import revision_state
 
 _DEPS_SHA_PATCH = """
 diff --git DEPS.sha DEPS.sha
@@ -473,7 +474,7 @@ class Bisector(object):
     except self.api.m.step.StepFailure:  # pragma: no cover
       # StepFailure is interpreted as a timeout.
       for revision in revision_list:
-        revision.status = RevisionState.FAILED
+        revision.status = revision_state.RevisionState.FAILED
       return None
     step_output = step_result.stdout or 'Build finished: Unknown'
     for line in step_output.splitlines():
