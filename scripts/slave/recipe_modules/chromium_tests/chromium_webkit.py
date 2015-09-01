@@ -121,7 +121,11 @@ SPEC['builders'].update({
       # to Windows builds (so that start_crash_service step works).
       'crash_service',
     ],
-    'bot_type': 'builder',
+    'bot_type': 'builder_tester',
+    'test_generators': [
+      steps.generate_gtest,
+      steps.generate_script,
+    ],
     'testing': {
       'platform': 'win',
     },
@@ -187,7 +191,11 @@ SPEC['builders'].update({
       # to Windows builds (so that start_crash_service step works).
       'crash_service',
     ],
-    'bot_type': 'builder',
+    'bot_type': 'builder_tester',
+    'test_generators': [
+      steps.generate_gtest,
+      steps.generate_script,
+    ],
     'testing': {
       'platform': 'win',
     },
