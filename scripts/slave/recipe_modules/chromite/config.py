@@ -69,6 +69,9 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
 
     # A list of branches whose builders should not use a shared buildroot.
     non_shared_root_branches = Set(basestring),
+
+    # A list of branches whose builders checkout Chrome from SVN instead of Git.
+    chrome_svn_branches = Set(basestring),
   )
 
 config_ctx = config_item_context(BaseConfig)
@@ -87,6 +90,9 @@ def base(c):
   c.non_shared_root_branches.update(c.old_chromite_branches)
   c.non_shared_root_branches.update((
     'factory-2305.B',
+  ))
+  c.chrome_svn_branches.update((
+    'factory-rambi-5517.B',
   ))
 
   # If running on a testing slave, enable "--debug" so Chromite doesn't cause
