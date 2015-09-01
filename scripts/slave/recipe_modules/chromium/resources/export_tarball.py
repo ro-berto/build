@@ -72,7 +72,6 @@ TESTDIRS = (
     'content/test/data',
     'media/test/data',
     'net/data',
-    'third_party/trace-viewer/test_data',
 )
 
 
