@@ -29,7 +29,12 @@ def ensure_coverage_importable():
     import coverage
     if (StrictVersion(coverage.__version__) < StrictVersion('3.7') or
         not coverage.collector.CTracer):
-      del sys.modules['coverage']
+      toDel = set()
+      for m in sys.modules:
+        if m == 'coverage' or m.startswith('coverage.'):
+          toDel.add(m)
+      for k in toDel:
+        del sys.modules[k]
       del coverage
     else:
       return
