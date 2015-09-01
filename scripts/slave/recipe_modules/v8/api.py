@@ -23,8 +23,8 @@ MAX_LABEL_SIZE = 23
 # Make sure that a step is not flooded with log lines.
 MAX_FAILURE_LOGS = 10
 
-# Maximum test duration in seconds to trigger experimental rerun step.
-RERUN_MAX_DURATION_SECONDS = 5
+# Maximum test duration in seconds to consider tests for bisection.
+BISECT_MAX_TEST_DURATION_SECONDS = 5
 
 MIPS_TOOLCHAIN = 'mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2'
 MIPS_DIR = 'mips-2013.11'
@@ -123,12 +123,10 @@ class V8Test(BaseTest):
     )
 
   def rerun(self, failure_dict, **kwargs):
-    if not failure_dict.get('variant') or not failure_dict.get('random_seed'):
-      # Rerunning is disabled if variant or random seed is not known.
-      # E.g. on branch builders, the v8 test results json doesn't include the
-      # variant (yet).
-      self.api.python.inline('Retry disabled', '# Empty program')
-      return TestResults.empty()
+    # Make sure bisection is only activated on builders that give enough
+    # information to retry.
+    assert failure_dict.get('variant')
+    assert failure_dict.get('random_seed')
 
     # Filter variant manipulation and data downloading from test arguments.
     # We'll specify exactly the variant which failed. Downloading is not
@@ -296,6 +294,9 @@ class V8Api(recipe_api.RecipeApi):
     # Initialize perf_dashboard api if any perf test should run.
     self.m.perf_dashboard.set_default_config()
 
+    # Default failure retry.
+    self.rerun_failures_count = 2
+
   def set_bot_config(self, bot_config):
     """Set bot configuration for testing only."""
     self.bot_config = bot_config
@@ -332,8 +333,6 @@ class V8Api(recipe_api.RecipeApi):
     self.revision_cp = update_step.presentation.properties['got_revision_cp']
     self.revision_number = str(self.m.commit_position.parse_revision(
         self.revision_cp))
-
-    self.maybe_show_changes()
 
     return update_step
 
@@ -467,24 +466,36 @@ class V8Api(recipe_api.RecipeApi):
       test_results += self.create_test(t).run()
     return test_results
 
-  def maybe_rerun(self, test_results):
-    """Experimentally rerun minimal failure configurations."""
+  def maybe_bisect(self, test_results):
+    """Experimental bisection for one failure."""
+    if not self.bot_config.get('enable_bisect'):
+      return
 
-    # Prefer rerunning failures. Rerun only the fastest test.
+    # Only bisect over failures not flakes. Rerun only the fastest test.
     try:
-      failure = min(
-          test_results.failures or test_results.flakes,
-          key=lambda r: r.duration,
-      )
+      failure = min(test_results.failures, key=lambda r: r.duration)
     except ValueError:
       return
 
+    # Don't retry failures during bisection.
+    self.rerun_failures_count = 0
+
     # Don't differentiate between flaky and non-flaky tests. Only rerun
     # failures faster than a threshold.
-    if failure.duration < RERUN_MAX_DURATION_SECONDS:
+    if failure.duration < BISECT_MAX_TEST_DURATION_SECONDS:
+      # Setup bisection range ("from" exclusive).
+      from_change, to_change = self.get_change_range()
+      assert from_change
+      assert to_change
+
+      # TODO: Add bisection.
+      # TODO: Add building/downloading.
+
+      # Experimental: Simple rerun of the latest (already checked-out) version
+      # only.
       self.create_test(failure.test_config).rerun(
           failure_dict=failure.failure_dict,
-          suffix=' - experimental',
+          suffix=' - %s' % to_change[:8],
           add_flaky_step_override=False,
       )
 
@@ -767,7 +778,7 @@ class V8Api(recipe_api.RecipeApi):
       ])
 
     full_args += [
-      '--rerun-failures-count=2',
+      '--rerun-failures-count=%d' % self.rerun_failures_count,
       '--json-test-results',
       self.m.json.output(add_json_log=False),
     ]
@@ -1096,30 +1107,38 @@ class V8Api(recipe_api.RecipeApi):
         'properties': properties,
       } for builder_name in triggers])
 
-  def maybe_show_changes(self):
-    if self.bot_config.get('show_changes', False):
-      url = '%sjson/builders/%s/builds/%s/source_stamp' % (
-          self.m.properties['buildbotURL'],
-          urllib.quote(self.m.properties['buildername']),
-          str(self.m.properties['buildnumber']),
-      )
-      step_result = self.m.python(
-          'Fetch changes (experimental)',
-          self.m.path['build'].join('scripts', 'tools', 'runit.py'),
-          [
-            self.m.path['build'].join('scripts', 'tools', 'pycurl.py'),
-            url,
-            '--outfile',
-            self.m.json.output(),
-          ],
-          step_test_data=lambda: self.test_api.example_buildbot_changes(),
-      )
-      assert step_result.json.output['changes']
-      first_change = step_result.json.output['changes'][0]['revision']
-      last_change = step_result.json.output['changes'][-1]['revision']
+  def get_change_range(self):
+    url = '%sjson/builders/%s/builds/%s/source_stamp' % (
+        self.m.properties['buildbotURL'],
+        urllib.quote(self.m.properties['buildername']),
+        str(self.m.properties['buildnumber']),
+    )
+    step_result = self.m.python(
+        'Fetch changes',
+        self.m.path['build'].join('scripts', 'tools', 'runit.py'),
+        [
+          self.m.path['build'].join('scripts', 'tools', 'pycurl.py'),
+          url,
+          '--outfile',
+          self.m.json.output(),
+        ],
+        step_test_data=lambda: self.test_api.example_buildbot_changes(),
+    )
+    assert step_result.json.output['changes']
+    first_change = step_result.json.output['changes'][0]['revision']
+    last_change = step_result.json.output['changes'][-1]['revision']
 
-      self.m.git(
-          'log', '%s~1..%s' % (first_change, last_change),
-          name='Show changes (experimental)',
-          cwd=self.m.path['checkout'],
-      )
+    self.m.git(
+        'log', '%s~1..%s' % (first_change, last_change),
+        name='Show changes',
+        cwd=self.m.path['checkout'],
+    )
+
+    step_result = self.m.git(
+        'log', '%s~1' % first_change, '--format=%H', '-n1',
+        name='Get latest previous change',
+        cwd=self.m.path['checkout'],
+        stdout=self.m.raw_io.output(),
+        step_test_data=lambda: self.test_api.example_latest_previous_hash()
+    )
+    return step_result.stdout.strip(), str(last_change)

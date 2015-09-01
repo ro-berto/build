@@ -1536,19 +1536,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "# Empty program"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Retry disabled",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@# Empty program@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
     "name": "$final_result",
     "reason": "Failures or flakes in build.",
     "status_code": 1

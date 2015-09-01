@@ -179,6 +179,43 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'slowest_tests': V8TestApi.SLOWEST_TESTS,
     }])
 
+  def bisect_failures_example(self):
+    return self.m.json.output([{
+      'arch': 'theArch',
+      'mode': 'theMode',
+      'results': [
+        {
+          'flags': [],
+          'result': 'FAIL',
+          'expected': ['PASS', 'SLOW'],
+          'duration': 3,
+          'variant': 'default',
+          'random_seed': 123,
+          'run': 1,
+          'stdout': 'Some output.',
+          'stderr': 'Some errput.',
+          'name': 'suite-name/dir/slow',
+          'command': 'd8 test.js',
+          'exit_code': 1,
+        },
+        {
+          'flags': [],
+          'result': 'FAIL',
+          'expected': ['PASS', 'SLOW'],
+          'duration': 1.5,
+          'variant': 'default',
+          'random_seed': 123,
+          'run': 1,
+          'stdout': 'Some output.',
+          'stderr': 'Some errput.',
+          'name': 'suite-name/dir/fast',
+          'command': 'd8 test.js',
+          'exit_code': 1,
+        },
+      ],
+      'slowest_tests': V8TestApi.SLOWEST_TESTS,
+    }])
+
   def perf_json(self, has_failures=False):
     result = {
       'errors': [],
@@ -230,11 +267,14 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
   def example_buildbot_changes(self):
     return self.m.json.output({
       'changes': [
-        {'revision': 'deadbeef1'},
-        {'revision': 'deadbeef2'},
-        {'revision': 'deadbeef3'},
+        {'revision': 'a1'},
+        {'revision': 'a2'},
+        {'revision': 'a3'},
       ]
     })
+
+  def example_latest_previous_hash(self):
+    return self.m.raw_io.stream_output('a0', stream='stdout')
 
   @recipe_test_api.mod_test_data
   @staticmethod

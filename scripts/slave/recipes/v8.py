@@ -49,9 +49,7 @@ def RunSteps(api):
 
   if v8.should_test:
     test_results = v8.runtests()
-
-    # Experimental step testing minimal reruns.
-    v8.maybe_rerun(test_results)
+    v8.maybe_bisect(test_results)
 
     if test_results.is_negative:
       # Let the overall build fail for failures and flakes.
@@ -208,4 +206,16 @@ def GenTests(api):
         'Simple Leak Check',
         api.raw_io.stream_output('no leaks are possible', stream='stderr'),
     )
+  )
+
+  buildername = 'V8 Linux - predictable'
+  yield (
+    api.test('full_%s_%s_bisect' % (
+        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
+    api.properties.generic(mastername=mastername,
+                           buildername=buildername,
+                           branch='master') +
+    api.platform(bot_config['testing']['platform'],
+                 v8_config_kwargs.get('TARGET_BITS', 64)) +
+    api.override_step_data('Mjsunit', api.v8.bisect_failures_example())
   )
