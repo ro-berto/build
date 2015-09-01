@@ -111,6 +111,23 @@ def check_output(cmd, cwd=None, env=None):
   return subprocess.check_output(cmd, cwd=cwd, shell=is_win, env=env)
 
 
+def report_host_state(b_dir, cur_host):
+  """Report host state to the tracking app."""
+  if os.path.isdir(os.path.join(b_dir, 'build', '.svn')):
+    state = 'SVN'
+  elif os.path.isdir(os.path.join(b_dir, 'build', '.git')):
+    state = 'GIT'
+  else:
+    state = 'UNKNOWN'
+
+  try:
+    url = ('https://svn-to-git-tracking.appspot.com/api/reportState?host=%s&'
+           'state=%s' % (urllib2.quote(cur_host), urllib2.quote(state)))
+    urllib2.urlopen(url)
+  except Exception:
+    pass
+
+
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('-m', '--manual', action='store_true', default=False,
@@ -130,21 +147,10 @@ def main():
     b_dir = '/b'
   assert b_dir is not None and os.path.isdir(b_dir), 'Did not find b dir'
 
-  # Report host state to the tracking app.
+  # Report state before doing anything else, so we can keep track of the state
+  # of this host even if something later in this script fails.
   cur_host = socket.gethostname()
-  if os.path.isdir(os.path.join(b_dir, 'build', '.svn')):
-    state = 'SVN'
-  elif os.path.isdir(os.path.join(b_dir, 'build', '.git')):
-    state = 'GIT'
-  else:
-    state = 'UNKNOWN'
-
-  try:
-    url = ('https://svn-to-git-tracking.appspot.com/api/reportState?host=%s&'
-           'state=%s' % (urllib2.quote(cur_host), urllib2.quote(state)))
-    urllib2.urlopen(url)
-  except Exception:
-    pass
+  report_host_state(b_dir, cur_host)
 
   # Check if host is whitelisted.
   if not options.manual:
@@ -270,6 +276,10 @@ def main():
 
   # Run gclient sync again.
   check_call(['gclient', 'sync'], cwd=b_dir, env=env)
+
+  # Report state again, since we've converted to Git.
+  report_host_state(b_dir, cur_host)
+
   return 0
 
 
