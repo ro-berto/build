@@ -76,6 +76,26 @@ WHITELISTED_HOSTS = [
   'vm956-m1', 'vm957-m1', 'vm958-m1', 'vm963-m1', 'vm964-m1', 'vm965-m1',
   'vm966-m1', 'vm967-m1', 'vm985-m1', 'vm986-m1', 'vm987-m1', 'vm988-m1',
   'vm989-m1', 'vm995-m1',
+
+  # Some slaves on tryserver.chromium.linux.
+  'build1-b4', 'build2-b4', 'build3-b4', 'build4-b4', 'build5-b4', 'build6-b4',
+  'build103-a4', 'build104-a4', 'build105-a4', 'build106-a4', 'build107-a4',
+  'slave105-c4', 'slave106-c4', 'slave107-c4', 'slave108-c4', 'slave109-c4',
+  'slave863-c4', 'slave866-c4', 'slave867-c4', 'vm117-m4', 'vm162-m4',
+  'vm163-m4', 'vm188-m4', 'vm193-m4', 'vm196-m4', 'vm198-m4', 'vm201-m4',
+  'vm203-m4', 'vm211-m4', 'vm227-m4', 'vm260-m4', 'vm338-m4', 'vm786-m4',
+
+  # Some slaves on tryserver.chromium.win.
+  'build44-m4', 'slave0-c4', 'slave1-c4', 'slave2-c4', 'slave3-c4', 'slave4-c4',
+  'slave5-c4', 'slave6-c4', 'slave7-c4', 'slave8-c4', 'slave9-c4', 'slave10-c4',
+  'vm158-m4', 'vm159-m4', 'vm160-m4', 'vm161-m4', 'vm168-m4', 'vm177-m4',
+  'vm182-m4', 'vm183-m4', 'vm187-m4', 'vm192-m4', 'vm197-m4', 'vm202-m4',
+
+  # Some slaves on tryserver.chromium.mac.
+  'build21-m4', 'build73-m4', 'build79-a4', 'build80-a4', 'build81-a4',
+  'build83-a4', 'build84-a4', 'build85-a4', 'build86-a4', 'build87-a4',
+  'vm257-m4', 'vm258-m4', 'vm277-m4', 'vm278-m4', 'vm279-m4', 'vm280-m4',
+  'vm982-m4', 'vm983-m4', 'vm984-m4', 'vm985-m4', 'vm986-m4', 'vm1000-m4',
 ]
 
 is_win = sys.platform.startswith('win')
