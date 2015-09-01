@@ -42,9 +42,7 @@ def _AnnotatedStepsSteps(api, got_revision):
       'BUILDBOT_REVISION': api.properties['revision'],
       'BUILDBOT_GOT_REVISION': got_revision,
       'RUNTEST': api.path['build'].join('scripts', 'slave', 'runtest.py'),
-      # NOTE: If this recipe is used for a tryserver/trybots, please change
-      # 'BuilderTester' to 'Trybot'.
-      'BUILDBOT_SLAVE_TYPE': 'BuilderTester',
+      'BUILDBOT_SLAVE_TYPE': api.properties['slavetype'],
   }
   # Set up env for the triggered builders.
   if api.properties['buildername'] in trigger_map.values():
@@ -84,6 +82,7 @@ def GenTests(api):
       revision = 'abcd',
       slavename = 'TestSlave',
       buildnumber = 1234,
+      slavetype = 'BuilderTester',
     ))
 
   yield (
@@ -98,4 +97,5 @@ def GenTests(api):
       parent_slavename = 'TestSlave',
       parent_buildername = 'precise_64-newlib-arm_qemu-pnacl-dbg',
       parent_buildnumber = 1,
+      slavetype = 'BuilderTester',
     ))

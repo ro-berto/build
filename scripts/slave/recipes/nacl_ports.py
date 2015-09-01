@@ -29,9 +29,7 @@ def _AnnotatedStepsSteps(api, got_revision):
       'BUILDBOT_BUILDERNAME': api.properties['buildername'],
       'BUILDBOT_REVISION': api.properties['revision'],
       'BUILDBOT_GOT_REVISION': got_revision,
-      # NOTE: If this recipe is used for a tryserver/trybots, please change
-      # 'BuilderTester' to 'Trybot'.
-      'BUILDBOT_SLAVE_TYPE': 'BuilderTester',
+      'BUILDBOT_SLAVE_TYPE': api.properties['slavetype'],
   }
   api.step('annotated steps',
       [api.path['checkout'].join('build_tools',
@@ -52,4 +50,5 @@ def GenTests(api):
     api.properties(mastername = 'client.nacl.ports') +\
     api.properties(buildername = 'linux-glibc-0') +\
     api.properties(revision = 'abcd') +\
-    api.properties(slavename = 'TestSlave')
+    api.properties(slavename = 'TestSlave') +\
+    api.properties(slavetype = 'BuilderTester')
