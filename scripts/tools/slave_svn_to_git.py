@@ -65,6 +65,17 @@ WHITELISTED_HOSTS = [
   'vm954-m1', 'vm961-m1', 'vm962-m1', 'vm970-m1', 'vm973-m1', 'vm974-m1',
   'vm976-m1', 'vm977-m1', 'vm978-m1', 'vm992-m1', 'vm993-m1', 'vm994-m1',
   'vm999-m1',
+
+  # All slaves on chromium.memory.fyi.
+  'build25-m1', 'build26-m1', 'build45-m1', 'build54-m1', 'build62-m1',
+  'build124-a1', 'mini9-m1', 'mini17-m1', 'vm13-m1', 'vm14-m1', 'vm47-m1',
+  'vm48-m1', 'vm192-m1', 'vm400-m1', 'vm401-m1', 'vm469-m1', 'vm483-m1',
+  'vm496-m1', 'vm833-m1', 'vm839-m1', 'vm841-m1', 'vm857-m1', 'vm860-m1',
+  'vm861-m1', 'vm862-m1', 'vm863-m1', 'vm864-m1', 'vm900-m1', 'vm908-m1',
+  'vm924-m1', 'vm925-m1', 'vm926-m1', 'vm927-m1', 'vm953-m1', 'vm955-m1',
+  'vm956-m1', 'vm957-m1', 'vm958-m1', 'vm963-m1', 'vm964-m1', 'vm965-m1',
+  'vm966-m1', 'vm967-m1', 'vm985-m1', 'vm986-m1', 'vm987-m1', 'vm988-m1',
+  'vm989-m1', 'vm995-m1',
 ]
 
 is_win = sys.platform.startswith('win')
