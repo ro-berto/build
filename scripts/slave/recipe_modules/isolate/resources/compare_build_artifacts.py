@@ -21,22 +21,22 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # List of files that are known to be non deterministic. This is a "temporary"
 # workaround to find regression on the deterministic builders.
 #
-# PNaCl general bug: http://crbug.com/429358
+# PNaCl general bug: https://crbug.com/429358
 #
 # TODO(sebmarchand): Remove this once all the files are deterministic.
 WHITELIST = freeze({
-  # http://crbug.com/383340
+  # https://crbug.com/383340
   'android': {
     'd8',
     'mksnapshot',
   },
 
-  # http://crbug.com/330263
+  # https://crbug.com/330263
   'linux': {
     # Completed.
   },
 
-  # http://crbug.com/330262
+  # https://crbug.com/330262
   'mac': {
     'accessibility_unittests',
     'accessibility_unittests.isolated',
@@ -315,19 +315,26 @@ WHITELIST = freeze({
     'yasm',
 },
 
-  # http://crbug.com/330260
+  # https://crbug.com/330260
   'win': {
     'accessibility_unittests.exe',
     'accessibility_unittests.isolated',
+    'angle_end2end_tests.exe',
     'angle_unittests.exe',
     'app_list_demo.exe',
+    'app_list_unittests.exe',
+    'app_list_unittests.isolated',
+    'app_shell.exe',
     'app_shell_unittests.exe',
     'app_shell_unittests.isolated',
-    'app_shell.exe',
+    'ar_sample_test_driver.exe',
     'ash_shell.exe',
+    'ash_unittests.exe',
     'ash_unittests.isolated',
     'audio_unittests.exe',
     'audio_unittests.isolated',
+    'base_i18n_perftests.exe',
+    'base_perftests.exe',
     'base_unittests.exe',
     'base_unittests.isolated',
     'blink_heap_unittests.exe',
@@ -340,12 +347,19 @@ WHITELIST = freeze({
     'cc_perftests.exe',
     'cc_unittests.exe',
     'cc_unittests.isolated',
-    'chrome_child.dll',
-    'chrome_watcher.dll',
     'chrome.dll',
     'chrome.exe',
     'chrome.isolated',
+    'chrome_child.dll',
+    'chrome_elf_unittests.exe',
+    'chrome_watcher.dll',
+    'chromedriver.exe',
+    'chromedriver_tests.exe',
+    'chromoting_test_driver.exe',
     'clearkeycdm.dll',
+    'cloud_print_service.exe',
+    'cloud_print_service_config.exe',
+    'cloud_print_unittests.exe',
     'components_browsertests.exe',
     'components_browsertests.isolated',
     'components_unittests.exe',
@@ -362,10 +376,11 @@ WHITELIST = freeze({
     'content_unittests.isolated',
     'courgette64.exe',
     'crash_service64.exe',
+    'crypto_unittests.exe',
     'crypto_unittests.isolated',
     'd8.exe',
-    'delegate_execute_unittests.exe',
     'delegate_execute.exe',
+    'delegate_execute_unittests.exe',
     'device_unittests.exe',
     'device_unittests.isolated',
     'events_unittests.exe',
@@ -376,7 +391,10 @@ WHITELIST = freeze({
     'extensions_unittests.isolated',
     'gcm_unit_tests.exe',
     'gcm_unit_tests.isolated',
+    'gcp20_device.exe',
+    'gcp20_device_unittests.exe',
     'gcp_portmon64.dll',
+    'get_server_time.exe',
     'gfx_unittests.exe',
     'gin_shell.exe',
     'gin_unittests.exe',
@@ -384,6 +402,7 @@ WHITELIST = freeze({
     'gl_unittests.isolated',
     'google_apis_unittests.exe',
     'google_apis_unittests.isolated',
+    'gpu_perftests.exe',
     'gpu_unittests.exe',
     'gpu_unittests.isolated',
     'interactive_ui_tests.exe',
@@ -391,8 +410,11 @@ WHITELIST = freeze({
     'ipc_mojo_perftests.exe',
     'ipc_mojo_unittests.exe',
     'ipc_perftests.exe',
+    'ipc_tests.exe',
+    'ipc_tests.isolated',
     'jingle_unittests.exe',
     'jingle_unittests.isolated',
+    'keyboard_unittests.exe',
     'libaddressinput_unittests.exe',
     'media_unittests.exe',
     'media_unittests.isolated',
@@ -404,19 +426,44 @@ WHITELIST = freeze({
     'mock_nacl_gdb.exe',
     'mojo_js_integration_tests.exe',
     'mojo_js_unittests.exe',
+    'mojo_message_pipe_perftests.exe',
+    'mojo_public_bindings_perftests.exe',
+    'mojo_public_bindings_unittests.exe',
+    'mojo_public_bindings_unittests.isolated',
+    'mojo_public_environment_unittests.exe',
+    'mojo_public_environment_unittests.isolated',
+    'mojo_public_system_perftests.exe',
+    'mojo_public_system_unittests.exe',
+    'mojo_public_system_unittests.isolated',
+    'mojo_public_utility_unittests.exe',
+    'mojo_public_utility_unittests.isolated',
+    'mojo_system_unittests.exe',
+    'nacl_loader_unittests.exe',
+    'nacl_loader_unittests.isolated',
     'net_perftests.exe',
     'net_unittests.exe',
     'net_unittests.isolated',
     'np_test_netscape_plugin.dll',
     'npapi_test_plugin.dll',
+    'pdfium_test.exe',
     'peerconnection_server.exe',
     'performance_browser_tests.exe',
+    'ppapi_perftests.exe',
     'ppapi_unittests.exe',
+    'printing_unittests.exe',
+    'printing_unittests.isolated',
     'remoting_core.dll',
+    'remoting_start_host.exe',
+    'remoting_unittests.exe',
+    'remoting_unittests.isolated',
     'sbox_integration_tests.isolated',
+    'setup_unittests.exe',
+    'setup_unittests.isolated',
+    'skia_unittests.exe',
     'skia_unittests.isolated',
     'sql_unittests.exe',
     'sql_unittests.isolated',
+    'sync_client.exe',
     'sync_integration_tests.exe',
     'sync_integration_tests.isolated',
     'sync_performance_tests.exe',
@@ -431,6 +478,7 @@ WHITELIST = freeze({
     'views_examples_with_content_exe.exe',
     'views_unittests.exe',
     'webkit_unit_tests.exe',
+    'wtf_unittests.exe',
   },
 })
 
@@ -601,11 +649,11 @@ def compare_build_artifacts(first_dir, second_dir, target_platform,
   if unexpected_diffs:
     print('Unexpected files with diffs:\n')
     for u in unexpected_diffs:
-      print('  %s\n' % u)
+      print('  %s' % u)
   if unexpected_equals:
     print('Unexpected files with no diffs:\n')
     for u in unexpected_equals:
-      print('  %s\n' % u)
+      print('  %s' % u)
 
   return int(bool(unexpected_diffs))
 
