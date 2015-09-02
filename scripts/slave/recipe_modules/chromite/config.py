@@ -92,7 +92,10 @@ def base(c):
     'factory-2305.B',
   ))
   c.chrome_svn_branches.update((
+    'factory-4455.B',
+    'factory-zako-5220.B',
     'factory-rambi-5517.B',
+    'factory-nyan-5772.B',
   ))
 
   # If running on a testing slave, enable "--debug" so Chromite doesn't cause
