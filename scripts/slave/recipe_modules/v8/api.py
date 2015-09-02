@@ -10,6 +10,7 @@ import urllib
 
 from infra.libs.infra_types import freeze
 from recipe_engine import recipe_api
+from . import bisection
 from . import builders
 
 
@@ -305,9 +306,9 @@ class V8Api(recipe_api.RecipeApi):
     self.m.chromium.apply_config('trybot_flavor')
     self.apply_config('trybot_flavor')
 
-  def checkout(self, revert=False):
+  def checkout(self, revision=None, revert=False, **kwargs):
     # Set revision for bot_update.
-    revision = self.m.properties.get(
+    revision = revision or self.m.properties.get(
         'parent_got_revision', self.m.properties.get('revision', 'HEAD'))
     solution = self.m.gclient.c.solutions[0]
     branch = self.m.properties.get('branch', 'master')
@@ -324,7 +325,8 @@ class V8Api(recipe_api.RecipeApi):
         patch_root=[None, 'v8'][bool(self.m.tryserver.is_tryserver)],
         output_manifest=True,
         with_branch_heads=needs_branch_heads,
-        patch_project_roots={'v8': []})
+        patch_project_roots={'v8': []},
+        **kwargs)
 
     assert update_step.json.output['did_run']
 
@@ -480,25 +482,52 @@ class V8Api(recipe_api.RecipeApi):
     # Don't retry failures during bisection.
     self.rerun_failures_count = 0
 
-    # Don't differentiate between flaky and non-flaky tests. Only rerun
-    # failures faster than a threshold.
+    test = self.create_test(failure.test_config)
+    def test_func(revision):
+      return test.rerun(
+          failure_dict=failure.failure_dict,
+          suffix=' - ' + revision[:8],
+          # Don't differentiate between flaky and non-flaky tests. 
+          add_flaky_step_override=False,
+      )
+
+    # TODO: Bisection function for builder_tester bots. Add function for pure
+    # testers.
+    def is_bad(revision):
+      self.checkout(revision, suffix=revision[:8])
+      self.runhooks(name='runhooks - ' + revision[:8])
+      # TODO: Get compile targets for test under bisection.
+      self.compile(name='compile - ' + revision[:8])
+      result = test_func(revision)
+      if result.infra_failures:  # pragma: no cover
+        raise self.m.step.InfraFailure(
+            'Cannot continue bisection due to infra failures.')
+      return result.failures
+
+    # Only rerun failures faster than a threshold.
     if failure.duration < BISECT_MAX_TEST_DURATION_SECONDS:
       # Setup bisection range ("from" exclusive).
       from_change, to_change = self.get_change_range()
       assert from_change
       assert to_change
 
-      # TODO: Add bisection.
-      # TODO: Add building/downloading.
-
-      # Experimental: Simple rerun of the latest (already checked-out) version
-      # only.
-      self.create_test(failure.test_config).rerun(
-          failure_dict=failure.failure_dict,
-          suffix=' - %s' % to_change[:8],
-          add_flaky_step_override=False,
+      # Initialize bisection range.
+      step_result = self.m.git(
+        'log', '%s..%s' % (from_change, to_change), '--format=%H',
+        name='Fetch bisection range',
+        cwd=self.m.path['checkout'],
+        stdout=self.m.raw_io.output(),
+        step_test_data=lambda: self.test_api.example_bisection_range()
       )
+      bisect_range = list(reversed(step_result.stdout.strip().splitlines()))
 
+      # TODO: Check which builds are available for a pure tester bot.
+      # TODO: Check that from_change is a "good" build. Currently we assume it
+      # is good as an experiment to see bisection in action. This will lead to
+      # the wrong suspect if it was bad already.
+
+      culprit = bisection.keyed_bisect(bisect_range, is_bad)
+      self.m.python.inline('Suspecting %s' % culprit[:8], '# Empty program')
 
   def presubmit(self):
     self.m.python(

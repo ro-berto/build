@@ -208,6 +208,7 @@ def GenTests(api):
     )
   )
 
+  # Bisect over range a1, a2, a3. Assume a2 is the culprit.
   buildername = 'V8 Linux - predictable'
   yield (
     api.test('full_%s_%s_bisect' % (
@@ -217,5 +218,6 @@ def GenTests(api):
                            branch='master') +
     api.platform(bot_config['testing']['platform'],
                  v8_config_kwargs.get('TARGET_BITS', 64)) +
-    api.override_step_data('Mjsunit', api.v8.bisect_failures_example())
+    api.override_step_data('Mjsunit', api.v8.bisect_failures_example()) +
+    api.override_step_data('Retry - a2', api.v8.bisect_failures_example())
   )

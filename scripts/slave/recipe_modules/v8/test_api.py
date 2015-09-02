@@ -273,6 +273,10 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       ]
     })
 
+  def example_bisection_range(self):
+    # Git returns changes in the order newest -> oldest.
+    return self.m.raw_io.stream_output('a3\na2\na1', stream='stdout')
+
   def example_latest_previous_hash(self):
     return self.m.raw_io.stream_output('a0', stream='stdout')
 
