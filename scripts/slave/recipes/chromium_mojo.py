@@ -82,7 +82,9 @@ BUILDERS = freeze({
             'blink_perf.mutation',
             'blink_perf.shadow_dom',
             'page_cycler.typical_25',
-            'startup.cold.blank_page',
+            # TODO(msw): Far too slow on Windows: http://crbug.com/527254
+            # TODO(msw): Disable via test rules: http://crbug.com/520120
+            # 'startup.cold.blank_page',
             'startup.warm.blank_page',
           ],
         },
