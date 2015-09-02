@@ -2290,7 +2290,13 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "pixel_test on NVIDIA GPU on Windows (with patch) on Windows"
+    "name": "pixel_test on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@no_results_exc@'summary.json'@@@",
+      "@@@STEP_LOG_END@no_results_exc@@@",
+      "@@@STEP_LOG_LINE@invalid_results_exc@'per_page_values'@@@",
+      "@@@STEP_LOG_END@invalid_results_exc@@@"
+    ]
   },
   {
     "cmd": [

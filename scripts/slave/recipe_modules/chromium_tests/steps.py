@@ -1133,7 +1133,8 @@ class SwarmingTelemetryGPUTest(SwarmingTest):
                   if value['type'] == 'failure']
 
       valid = True
-    except (ValueError, KeyError):  # pragma: no cover
+    except (ValueError, KeyError) as e:  # pragma: no cover
+      step_result.presentation.logs['invalid_results_exc'] = [str(e)]
       valid = False
       failures = None
 

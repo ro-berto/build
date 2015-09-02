@@ -4,7 +4,6 @@
 
 import datetime
 import functools
-import logging
 
 from infra.libs.infra_types import freeze
 from recipe_engine import recipe_api
@@ -626,7 +625,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
         self._display_pending(summary, step_result.presentation)
       except Exception as e:
-        logging.debug('Exception when parsing GPU telemetry results: %s', e)
+        self.m.step.active_result.presentation.logs['no_results_exc'] = [str(e)]
         self.m.step.active_result.telemetry_results = None
 
 
