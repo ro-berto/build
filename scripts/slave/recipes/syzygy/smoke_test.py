@@ -30,9 +30,15 @@ DEPS = [
 ]
 
 
-def RunSteps(api):
+from recipe_engine.recipe_api import Property
+
+PROPERTIES = {
+  'buildername': Property(),
+}
+
+
+def RunSteps(api, buildername):
   """Generates the sequence of steps that will be run on the coverage bot."""
-  buildername = api.properties['buildername']
   assert buildername == 'Syzygy Smoke Test'
 
   # Configure the build environment.

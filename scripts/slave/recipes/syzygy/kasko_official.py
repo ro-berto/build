@@ -31,9 +31,15 @@ DEPS = [
 _BUILDERS = {'Kasko Official': ('kasko_official', {})}
 
 
-def RunSteps(api):
+from recipe_engine.recipe_api import Property
+
+PROPERTIES = {
+  'buildername': Property(),
+}
+
+
+def RunSteps(api, buildername):
   """Generates the sequence of steps that will be run by the slave."""
-  buildername = api.properties['buildername']
   assert buildername in _BUILDERS
 
   # Configure the build environment.

@@ -14,9 +14,15 @@ DEPS = [
 ]
 
 
-def RunSteps(api):
+from recipe_engine.recipe_api import Property
+
+PROPERTIES = {
+  'buildername': Property(),
+}
+
+
+def RunSteps(api, buildername):
   # Configure the build environment.
-  buildername = api.properties['buildername']
   if buildername == 'Syzygy Debug':
     api.syzygy.set_config('syzygy_msvs', BUILD_CONFIG='Debug')
     api.chromium.set_config('syzygy_msvs', BUILD_CONFIG='Debug')

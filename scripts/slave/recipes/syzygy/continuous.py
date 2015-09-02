@@ -37,9 +37,17 @@ BUILDERS = freeze({
 })
 
 
-def RunSteps(api):
+from recipe_engine.recipe_api import Property
+
+PROPERTIES = {
+  'buildername': Property(),
+  'blamelist': Property(),
+  'revision': Property(),
+}
+
+
+def RunSteps(api, buildername, blamelist, revision):
   """Generates the sequence of steps that will be run by the slave."""
-  buildername = api.properties['buildername']
   assert buildername in BUILDERS
 
   # Configure the build environment.
@@ -75,13 +83,12 @@ def RunSteps(api):
 
     # Sometimes these come as a tuple, sometimes as a list, which messes up the
     # simulation unittests.
-    blamelist = api.properties['blamelist']
     blamelist = list(blamelist) if type(blamelist) is tuple else blamelist
 
     # Trigger a smoke test build for the same revision.
     props = {'blamelist': blamelist,
              'buildername': 'Syzygy Smoke Test',
-             'revision': api.properties['revision']}
+             'revision': revision}
     api.trigger(props)
 
 
