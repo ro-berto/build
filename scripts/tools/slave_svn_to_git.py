@@ -199,6 +199,8 @@ WHITELISTED_HOSTS = [
   'slave5-c4', 'slave6-c4', 'slave7-c4', 'slave8-c4', 'slave9-c4', 'slave10-c4',
   'vm158-m4', 'vm159-m4', 'vm160-m4', 'vm161-m4', 'vm168-m4', 'vm177-m4',
   'vm182-m4', 'vm183-m4', 'vm187-m4', 'vm192-m4', 'vm197-m4', 'vm202-m4',
+  'vm224-m4', 'vm228-m4', 'vm231-m4', 'vm232-m4', 'vm233-m4', 'vm235-m4',
+  'vm236-m4', 'vm237-m4', 'vm238-m4', 'vm239-m4', 'vm240-m4', 'vm241-m4',
 
   # Some slaves on tryserver.chromium.mac.
   'build21-m4', 'build73-m4', 'build79-a4', 'build80-a4', 'build81-a4',
