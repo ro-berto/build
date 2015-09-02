@@ -24,6 +24,7 @@ bots = [
     'Housekeeper-PerCommit',
     'Housekeeper-PerCommit-Trybot',
     'Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release',
+    'Perf-Android-GCC-Nexus5-CPU-NEON-Arm7-Release-Appurify',
     'Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify',
     'Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot',
     'Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug',

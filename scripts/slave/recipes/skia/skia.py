@@ -53,6 +53,7 @@ def GenTests(api):
     },
     'client.skia.fyi': {
       'skiabot-linux-housekeeper-003': [
+        'Perf-Android-GCC-Nexus5-CPU-NEON-Arm7-Release-Appurify',
         'Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify',
       ],
     },

@@ -23,6 +23,8 @@ class AppurifyFlavorUtils(default_flavor.DefaultFlavorUtils):
     self.android_bin = self.android_tools.join('bin')
     self.apk_dir = self.android_tools.join('apps', 'visualbench', 'build',
                                            'outputs', 'apk')
+    self.assets_dir = self.android_tools.join('apps', 'visualbench', 'src',
+                                              'main', 'assets')
     self._android_sdk_root = slave_info.android_sdk_root
     self._default_env = {'ANDROID_SDK_ROOT': self._android_sdk_root,
                          'ANDROID_HOME': self._android_sdk_root,
@@ -81,6 +83,13 @@ class AppurifyFlavorUtils(default_flavor.DefaultFlavorUtils):
     ccache = self._skia_api.ccache()
     if ccache:
       env['ANDROID_MAKE_CCACHE'] = ccache
+
+    # Write the nanobench flags to a file inside the APK.
+    args = list(self._skia_api.nanobench_flags)
+    args.extend(['--outResultsFile', '/sdcard/skia_results/visualbench.json'])
+    self.create_clean_host_dir(self.assets_dir)
+    self._skia_api._writefile(self.assets_dir.join('nanobench_flags.txt'),
+                              ' '.join(args))
 
     cmd = [self.android_bin.join('android_ninja'), target, '-d', self.device]
     self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
