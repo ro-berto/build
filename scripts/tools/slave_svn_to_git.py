@@ -304,7 +304,22 @@ def main():
       gclient_file.write(gclient_config)
 
     # Sync both repos (SVN first since mirroring happens from SVN to Git).
-    check_call(['gclient', 'sync'], cwd=b_dir, env=env)
+    try:
+      check_call(['gclient', 'sync'], cwd=b_dir, env=env)
+    except subprocess.CalledProcessError:
+      # On Windows, gclient sync occasionally reports 'checksum mismatch' error
+      # for build/scripts/slave/recipes/deterministic_build.expected/
+      # full_chromium_swarm_linux_deterministic.json when calling 'svn update'
+      # on 'build' directory. As a workaround, we delete parent dir containing
+      # invalid .svn files and try again. The missing directory should be
+      # re-created with the correct checksum by repeated call to 'svn update'.
+      if is_win:
+        shutil.rmtree(os.path.join(b_dir, 'build', 'scripts', 'slave',
+                                   'recipes', 'deterministic_build.expected'))
+        check_call(['gclient', 'sync'], cwd=b_dir, env=env)
+      else:
+        raise
+
     check_call(['gclient', 'sync'], cwd=tmpdir, env=env)
 
     # Find repositories handled by gclient.
