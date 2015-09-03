@@ -259,7 +259,9 @@
       "--trigger",
       "/path/to/tmp/json",
       "--verbose",
-      "--release"
+      "--release",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] chrome_public_test_apk",
@@ -297,7 +299,9 @@
       "-s",
       "junit_unit_tests",
       "--verbose",
-      "--release"
+      "--release",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -313,7 +317,9 @@
       "python",
       "-s",
       "gyp_py_unittests",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -329,7 +335,9 @@
       "python",
       "-s",
       "pylib_py_unittests",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -396,7 +404,9 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/chrome_public_test_apk/results.zip",
       "--verbose",
-      "--release"
+      "--release",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] chrome_public_test_apk",

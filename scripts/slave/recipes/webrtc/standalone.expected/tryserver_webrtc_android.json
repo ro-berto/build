@@ -157,7 +157,9 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--json-output",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -221,6 +223,8 @@
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Debug",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json"
     ],
@@ -238,7 +242,9 @@
       "gtest",
       "-s",
       "audio_decoder_unittests",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -254,7 +260,9 @@
       "gtest",
       "-s",
       "common_audio_unittests",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -270,7 +278,9 @@
       "gtest",
       "-s",
       "common_video_unittests",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -286,7 +296,9 @@
       "gtest",
       "-s",
       "modules_tests",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -302,7 +314,9 @@
       "gtest",
       "-s",
       "modules_unittests",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -318,7 +332,9 @@
       "gtest",
       "-s",
       "system_wrappers_unittests",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -334,7 +350,9 @@
       "gtest",
       "-s",
       "test_support_unittests",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -350,7 +368,9 @@
       "gtest",
       "-s",
       "tools_unittests",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -366,7 +386,9 @@
       "gtest",
       "-s",
       "video_engine_core_unittests",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -382,7 +404,9 @@
       "gtest",
       "-s",
       "video_engine_tests",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -398,7 +422,9 @@
       "gtest",
       "-s",
       "voice_engine_unittests",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -414,7 +440,9 @@
       "gtest",
       "-s",
       "webrtc_perf_tests",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -441,7 +469,9 @@
       "instrumentation",
       "--test-apk",
       "AppRTCDemoTest",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test AppRTCDemoTest"
@@ -454,7 +484,9 @@
       "instrumentation",
       "--test-apk",
       "libjingle_peerconnection_android_unittest",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test libjingle_peerconnection_android_unittest"

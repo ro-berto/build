@@ -252,7 +252,6 @@ class AndroidApi(recipe_api.RecipeApi):
         env=self.m.chromium.get_env(),
         infra_step=True)
 
-
   def authorize_adb_devices(self):
     script = self.m.path['build'].join('scripts', 'slave', 'android',
                                     'authorize_adb_devices.py')
@@ -261,7 +260,6 @@ class AndroidApi(recipe_api.RecipeApi):
     args = ['--verbose', '--adb-path', adb_path]
     return self.m.python('authorize_adb_devices', script, args, infra_step=True,
                          env=self.m.chromium.get_env())
-
 
   def detect_and_setup_devices(self, restart_usb=False, skip_wipe=False,
                                disable_location=False, min_battery_level=None,
@@ -275,8 +273,15 @@ class AndroidApi(recipe_api.RecipeApi):
       disable_java_debug=disable_java_debug, reboot_timeout=reboot_timeout,
       max_battery_temp=max_battery_temp)
 
+  @property
+  def blacklist_file(self):
+    return self.out_path.join('bad_devices.json')
+
   def device_status_check(self, restart_usb=False, **kwargs):
-    args = ['--json-output', self.m.json.output()]
+    args = [
+        '--json-output', self.m.json.output(),
+        '--blacklist-file', self.blacklist_file,
+    ]
     if restart_usb:
       args += ['--restart-usb']
 
@@ -345,9 +350,11 @@ class AndroidApi(recipe_api.RecipeApi):
                         disable_java_debug=False, reboot_timeout=None,
                         max_battery_temp=None, disable_system_chrome=False,
                         remove_system_webview=False, **kwargs):
-    args = ['-t', self.m.chromium.c.BUILD_CONFIG]
-    args.extend(['--output-device-blacklist',
-                 self.m.json.output(add_json_log=False)])
+    args = [
+        '-t', self.m.chromium.c.BUILD_CONFIG,
+        '--blacklist-file', self.blacklist_file,
+        '--output-device-blacklist', self.m.json.output(add_json_log=False),
+    ]
     if skip_wipe:
       args.append('--skip-wipe')
     if disable_location:
@@ -394,8 +401,7 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.path['checkout'].join('build',
                                      'android',
                                      'adb_install_apk.py'),
-        '-v',
-        '--apk', apk,
+        apk, '-v', '--blacklist-file', self.blacklist_file,
     ]
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       install_cmd.append('--release')
@@ -459,7 +465,8 @@ class AndroidApi(recipe_api.RecipeApi):
     result = self.m.step(
         'get perf test list',
         [self.c.test_runner,
-         'perf', '--steps', config, '--output-json-list', self.m.json.output()],
+         'perf', '--steps', config, '--output-json-list', self.m.json.output(),
+         '--blacklist-file', self.blacklist_file],
         step_test_data=lambda: self.m.json.test_api.output([
             {'test': 'perf_test.foo', 'device_affinity': 0},
             {'test': 'page_cycler.foo', 'device_affinity': 0}]),
@@ -482,7 +489,8 @@ class AndroidApi(recipe_api.RecipeApi):
       try:
         self.m.chromium.runtest(
           self.c.test_runner,
-          ['perf', '--print-step', test_name, '--verbose'],
+          ['perf', '--print-step', test_name, '--verbose',
+           '--blacklist-file', self.blacklist_file],
           name=test_name,
           perf_dashboard_id=test_type,
           test_type=test_type,
@@ -905,6 +913,12 @@ class AndroidApi(recipe_api.RecipeApi):
       step_name: Name of the step.
       args: Testrunner arguments.
     """
+    additional_args = ['--blacklist-file', self.blacklist_file]
+    if args:
+      args = args + additional_args
+    else: # pragma: no cover
+      args = additional_args
+
     with self.handle_exit_codes():
       return self.m.python(
           step_name, self.c.test_runner, args, **kwargs)
