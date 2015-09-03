@@ -3182,10 +3182,6 @@
     "name": "pixel_test on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 255",
-      "@@@STEP_LOG_LINE@no_results_exc@local variable 'step_result' referenced before assignment@@@",
-      "@@@STEP_LOG_END@no_results_exc@@@",
-      "@@@STEP_LOG_LINE@invalid_results_exc@'per_page_values'@@@",
-      "@@@STEP_LOG_END@invalid_results_exc@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -3654,29 +3650,6 @@
       "tab_capture_end2end_tests on NVIDIA GPU on Mac Retina (with patch)/Mac-10.9/[dummy has/mac_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "tab_capture_end2end_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
-    "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "pixel_test on Intel GPU on Mac",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
-      "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"4cd189d31a78721966a6a6d2208248a1c6db1f3a\"@@@"
-    ]
-  },
-  {
-    "name": "$final_result",
-    "reason": "1 out of 1 aggregated steps failed. Failures: Step('pixel_test on Intel GPU on Mac') failed with return_code 1",
-    "status_code": 1
+    "name": "tab_capture_end2end_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
   }
 ]

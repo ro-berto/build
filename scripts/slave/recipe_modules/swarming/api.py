@@ -587,7 +587,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     args.extend(['--task-output-dir', self.m.raw_io.output_dir()])
 
     try:
-      step_result = self.m.python(
+      self.m.python(
           name=self._get_step_name('', task),
           script=self.m.swarming_client.path.join('swarming.py'),
           args=args, step_test_data=lambda: step_test_data,
@@ -601,6 +601,8 @@ class SwarmingApi(recipe_api.RecipeApi):
       # exception from the collect step above. Instead it is being allowed to
       # propagate after the results have been parsed.
       try:
+        step_result = self.m.step.active_result
+
         # Check if it's an internal failure.
         summary = self.m.json.loads(
             step_result.raw_io.output_dir['summary.json'])
