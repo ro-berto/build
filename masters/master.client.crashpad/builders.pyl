@@ -50,6 +50,28 @@
       },
       "slavebuilddir": "chromium_win_rel",
     },
+    "crashpad_win_x86_dbg": {
+      "recipe": "crashpad/continuous",
+      "scheduler": "crashpad_commits",
+      "slave_pools": ["win7"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Debug",
+      },
+      "slavebuilddir": "chromium_win_x86_dbg",
+    },
+    "crashpad_win_x86_rel": {
+      "recipe": "crashpad/continuous",
+      "scheduler": "crashpad_commits",
+      "slave_pools": ["win7"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Release",
+      },
+      "slavebuilddir": "chromium_win_x86_rel",
+    },
   },
 
   "schedulers": {

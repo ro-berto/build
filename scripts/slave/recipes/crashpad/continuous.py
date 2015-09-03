@@ -24,9 +24,12 @@ def RunSteps(api):
   if 'clobber' in api.properties:
     api.file.rmtree('out', api.path['checkout'].join('out'))
 
-  api.gclient.runhooks()
-
   buildername = api.properties['buildername']
+  env = {}
+  if '_x86' in buildername:
+    env = {'GYP_DEFINES': 'target_arch=ia32'}
+  api.gclient.runhooks(env=env)
+
   dirname = 'Debug' if '_dbg' in buildername else 'Release'
   path = api.path['checkout'].join('out', dirname)
   api.step('compile with ninja', ['ninja', '-C', path])
@@ -41,6 +44,8 @@ def GenTests(api):
       'crashpad_mac_rel',
       'crashpad_win_dbg',
       'crashpad_win_rel',
+      'crashpad_win_x86_dbg',
+      'crashpad_win_x86_rel',
   ]
   for t in tests:
     yield(api.test(t) + api.properties.generic(buildername=t))
