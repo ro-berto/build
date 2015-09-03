@@ -24,6 +24,21 @@ import common.env
 common.env.Install(hermetic=False)
 
 def ensure_coverage_importable():
+
+  # We want to use the compiled coverage if we can
+  from pkg_resources import get_build_platform
+  try:
+    # Python 2.7 or >= 3.2
+    from sysconfig import get_python_version
+  except ImportError:
+    from distutils.sysconfig import get_python_version
+
+  cov_dir = os.path.join(BASE_DIR, 'third_party', 'coverage-3.7.1')
+  cov_egg = os.path.join(cov_dir, 'dist', 'coverage-3.7.1-py%s-%s.egg' % (
+      get_python_version(), get_build_platform()))
+  if cov_egg not in sys.path:
+    sys.path.insert(0, cov_egg)
+
   try:
     from distutils.version import StrictVersion
     import coverage
@@ -79,17 +94,6 @@ def ensure_coverage_importable():
     """)
     sys.exit(1)
 
-  from pkg_resources import get_build_platform
-  try:
-    # Python 2.7 or >= 3.2
-    from sysconfig import get_python_version
-  except ImportError:
-    from distutils.sysconfig import get_python_version
-
-  cov_dir = os.path.join(BASE_DIR, 'third_party', 'coverage-3.7.1')
-  cov_egg = os.path.join(cov_dir, 'dist', 'coverage-3.7.1-py%s-%s.egg' % (
-      get_python_version(), get_build_platform()))
-
   # The C-compiled coverage engine is WAY faster (and less buggy) than the pure
   # python version, so we build the dist_egg if necessary.
   if not os.path.exists(cov_egg):
@@ -115,8 +119,6 @@ def ensure_coverage_importable():
         and the approprite command-line build tools for your platform.
         """)
       sys.exit(1)
-
-  sys.path.insert(0, cov_egg)
 
 ensure_coverage_importable()
 
