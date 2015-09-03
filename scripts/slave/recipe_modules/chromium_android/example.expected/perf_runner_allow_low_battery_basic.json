@@ -302,7 +302,9 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--json-output",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -366,6 +368,8 @@
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Release",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json"
     ],
@@ -379,7 +383,9 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--json-output",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -443,6 +449,8 @@
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Release",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "--min-battery-level",
@@ -462,7 +470,9 @@
       "monkey",
       "-v",
       "--package=chrome",
-      "--event-count=50000"
+      "--event-count=50000",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -480,6 +490,8 @@
       "--verbose",
       "--steps",
       "fake_config.json",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--flaky-steps",
       "flake_fakes.json"
     ],
@@ -496,7 +508,9 @@
       "--steps",
       "fake_config.json",
       "--output-json-list",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -543,7 +557,9 @@
       "perf",
       "--print-step",
       "page_cycler.foo",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -580,7 +596,9 @@
       "perf",
       "--print-step",
       "perf_test.foo",
-      "--verbose"
+      "--verbose",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -599,6 +617,8 @@
       "instrumentation",
       "--test-apk",
       "AndroidWebViewTest",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--isolate-file-path",
       "android_webview/android_webview_test_apk.isolate",
       "--flakiness-dashboard-server",
@@ -624,6 +644,8 @@
       "gtest",
       "-s",
       "unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--release",
       "--isolate_file_path=[SLAVE_BUILD]/src/some_file.isolate",

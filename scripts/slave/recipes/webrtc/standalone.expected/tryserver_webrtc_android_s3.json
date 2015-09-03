@@ -157,7 +157,9 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--json-output",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -221,6 +223,8 @@
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Debug",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json"
     ],
@@ -238,6 +242,8 @@
       "gtest",
       "-s",
       "audio_decoder_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -254,6 +260,8 @@
       "gtest",
       "-s",
       "common_audio_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -270,6 +278,8 @@
       "gtest",
       "-s",
       "common_video_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -286,6 +296,8 @@
       "gtest",
       "-s",
       "modules_tests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -302,6 +314,8 @@
       "gtest",
       "-s",
       "modules_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -318,6 +332,8 @@
       "gtest",
       "-s",
       "system_wrappers_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -334,6 +350,8 @@
       "gtest",
       "-s",
       "test_support_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -350,6 +368,8 @@
       "gtest",
       "-s",
       "tools_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -366,6 +386,8 @@
       "gtest",
       "-s",
       "video_engine_core_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -382,6 +404,8 @@
       "gtest",
       "-s",
       "video_engine_tests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -398,6 +422,8 @@
       "gtest",
       "-s",
       "voice_engine_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -414,6 +440,8 @@
       "gtest",
       "-s",
       "webrtc_perf_tests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -441,6 +469,8 @@
       "instrumentation",
       "--test-apk",
       "AppRTCDemoTest",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -454,6 +484,8 @@
       "instrumentation",
       "--test-apk",
       "libjingle_peerconnection_android_unittest",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",

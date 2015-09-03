@@ -312,7 +312,9 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--json-output",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -376,6 +378,8 @@
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Debug",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json"
     ],
@@ -388,9 +392,10 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "AndroidWebView.apk",
       "-v",
-      "--apk",
-      "AndroidWebView.apk"
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -406,6 +411,8 @@
       "instrumentation",
       "--test-apk",
       "AndroidWebViewTest",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--isolate-file-path",
       "android_webview/android_webview_test_apk.isolate",
       "--flakiness-dashboard-server",
@@ -423,9 +430,10 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "ChromePublic.apk",
       "-v",
-      "--apk",
-      "ChromePublic.apk"
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -441,6 +449,8 @@
       "instrumentation",
       "--test-apk",
       "ChromePublicTest",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--isolate-file-path",
       "chrome/chrome_public_test_apk.isolate",
       "--flakiness-dashboard-server",
@@ -458,9 +468,10 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "ContentShell.apk",
       "-v",
-      "--apk",
-      "ContentShell.apk"
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -476,6 +487,8 @@
       "instrumentation",
       "--test-apk",
       "ContentShellTest",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--isolate-file-path",
       "content/content_shell_test_apk.isolate",
       "--flakiness-dashboard-server",
@@ -493,9 +506,10 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "ChromeSyncShell.apk",
       "-v",
-      "--apk",
-      "ChromeSyncShell.apk"
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -511,6 +525,8 @@
       "instrumentation",
       "--test-apk",
       "ChromeSyncShellTest",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",
@@ -531,6 +547,8 @@
       "gtest",
       "-s",
       "android_webview_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
@@ -550,6 +568,8 @@
       "gtest",
       "-s",
       "base_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/base/base_unittests.isolate",
       "--flakiness-dashboard-server=test-results.appspot.com",
@@ -570,6 +590,8 @@
       "gtest",
       "-s",
       "breakpad_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/breakpad/breakpad_unittests.isolate",
       "--flakiness-dashboard-server=test-results.appspot.com",
@@ -590,6 +612,8 @@
       "gtest",
       "-s",
       "cc_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
@@ -609,6 +633,8 @@
       "gtest",
       "-s",
       "components_browsertests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/components/components_browsertests.isolate",
       "--flakiness-dashboard-server=test-results.appspot.com",
@@ -629,6 +655,8 @@
       "gtest",
       "-s",
       "components_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/components/components_unittests.isolate",
       "--flakiness-dashboard-server=test-results.appspot.com",
@@ -649,6 +677,8 @@
       "gtest",
       "-s",
       "content_browsertests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/content/content_browsertests.isolate",
       "--flakiness-dashboard-server=test-results.appspot.com",
@@ -669,6 +699,8 @@
       "gtest",
       "-s",
       "content_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/content/content_unittests.isolate",
       "--flakiness-dashboard-server=test-results.appspot.com",
@@ -689,6 +721,8 @@
       "gtest",
       "-s",
       "device_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
@@ -708,6 +742,8 @@
       "gtest",
       "-s",
       "events_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
@@ -727,6 +763,8 @@
       "gtest",
       "-s",
       "gl_tests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
@@ -746,6 +784,8 @@
       "gtest",
       "-s",
       "gl_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
@@ -765,6 +805,8 @@
       "gtest",
       "-s",
       "gpu_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
@@ -784,6 +826,8 @@
       "gtest",
       "-s",
       "ipc_tests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
@@ -803,6 +847,8 @@
       "gtest",
       "-s",
       "media_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/media/media_unittests.isolate",
       "--flakiness-dashboard-server=test-results.appspot.com",
@@ -823,6 +869,8 @@
       "gtest",
       "-s",
       "net_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/net/net_unittests.isolate",
       "--flakiness-dashboard-server=test-results.appspot.com",
@@ -843,6 +891,8 @@
       "gtest",
       "-s",
       "sandbox_linux_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
@@ -862,6 +912,8 @@
       "gtest",
       "-s",
       "sql_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/sql/sql_unittests.isolate",
       "--flakiness-dashboard-server=test-results.appspot.com",
@@ -882,6 +934,8 @@
       "gtest",
       "-s",
       "sync_unit_tests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/sync/sync_unit_tests.isolate",
       "--flakiness-dashboard-server=test-results.appspot.com",
@@ -902,6 +956,8 @@
       "gtest",
       "-s",
       "ui_android_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
@@ -921,6 +977,8 @@
       "gtest",
       "-s",
       "ui_base_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/ui/base/ui_base_tests.isolate",
       "--flakiness-dashboard-server=test-results.appspot.com",
@@ -941,6 +999,8 @@
       "gtest",
       "-s",
       "ui_touch_selection_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
@@ -960,6 +1020,8 @@
       "gtest",
       "-s",
       "unit_tests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/chrome/unit_tests.isolate",
       "--flakiness-dashboard-server=test-results.appspot.com",
@@ -1214,9 +1276,10 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "AndroidWebView.apk",
       "-v",
-      "--apk",
-      "AndroidWebView.apk"
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -1232,6 +1295,8 @@
       "instrumentation",
       "--test-apk",
       "AndroidWebViewTest",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--isolate-file-path",
       "android_webview/android_webview_test_apk.isolate",
       "--flakiness-dashboard-server",
@@ -1249,9 +1314,10 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "ChromePublic.apk",
       "-v",
-      "--apk",
-      "ChromePublic.apk"
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -1267,6 +1333,8 @@
       "instrumentation",
       "--test-apk",
       "ChromePublicTest",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--isolate-file-path",
       "chrome/chrome_public_test_apk.isolate",
       "--flakiness-dashboard-server",
@@ -1284,9 +1352,10 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "ContentShell.apk",
       "-v",
-      "--apk",
-      "ContentShell.apk"
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -1302,6 +1371,8 @@
       "instrumentation",
       "--test-apk",
       "ContentShellTest",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--isolate-file-path",
       "content/content_shell_test_apk.isolate",
       "--flakiness-dashboard-server",
@@ -1319,9 +1390,10 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "ChromeSyncShell.apk",
       "-v",
-      "--apk",
-      "ChromeSyncShell.apk"
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -1337,6 +1409,8 @@
       "instrumentation",
       "--test-apk",
       "ChromeSyncShellTest",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",
