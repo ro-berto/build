@@ -48,6 +48,7 @@ BUILDERS = freeze({
             'blink_perf.events',
             'blink_perf.mutation',
             'blink_perf.shadow_dom',
+            'page_cycler.typical_25',
             'startup.cold.blank_page',
             'startup.warm.blank_page',
           ],
@@ -60,6 +61,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
         },
         'gclient_apply_config': ['android'],
+        # TODO(yzshen): Actually run perf tests.
       },
       'Chromium Mojo Windows': {
         'chromium_config_kwargs': {
