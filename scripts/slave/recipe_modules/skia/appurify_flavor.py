@@ -84,6 +84,9 @@ class AppurifyFlavorUtils(default_flavor.DefaultFlavorUtils):
     if ccache:
       env['ANDROID_MAKE_CCACHE'] = ccache
 
+    # Clean out any previous builds.
+    self.create_clean_host_dir(self.apk_dir)
+
     # Write the nanobench flags to a file inside the APK.
     args = list(self._skia_api.nanobench_flags)
     args.extend(['--outResultsFile', '/sdcard/skia_results/visualbench.json'])
