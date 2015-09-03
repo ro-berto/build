@@ -25,6 +25,8 @@ def _RunStepsInternal(api):
   force_checkout = api.properties.get('force_checkout', False)
 
   api.gclient.set_config(repo_name)
+  if api.properties.get('patch_project') == 'blink':
+    api.gclient.apply_config('blink', optional=True)
 
   bot_update_step = api.bot_update.ensure_checkout(
       force=force_checkout, patch_project_roots={'v8': []},
