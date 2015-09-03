@@ -148,9 +148,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--json-output",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -214,8 +212,6 @@
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "--reboot-timeout",
@@ -234,10 +230,9 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "SystemWebView.apk",
       "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--apk",
+      "SystemWebView.apk",
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -266,10 +261,9 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "AndroidWebViewShell.apk",
       "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--apk",
+      "AndroidWebViewShell.apk",
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -289,9 +283,7 @@
       "--isolate-file-path",
       "android_webview/android_webview_shell_test_apk.isolate",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test AndroidWebViewShell"

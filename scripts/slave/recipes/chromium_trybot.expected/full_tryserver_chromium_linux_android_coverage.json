@@ -281,9 +281,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--json-output",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -347,8 +345,6 @@
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Debug",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json"
     ],
@@ -361,10 +357,9 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "AndroidWebView.apk",
       "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--apk",
+      "AndroidWebView.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -388,9 +383,7 @@
       "--coverage-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage",
       "--json-results-file",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test AndroidWebViewTest (with patch)",
@@ -401,10 +394,9 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "ChromePublic.apk",
       "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--apk",
+      "ChromePublic.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -428,9 +420,7 @@
       "--coverage-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage",
       "--json-results-file",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromePublicTest (with patch)",
@@ -441,10 +431,9 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "ContentShell.apk",
       "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--apk",
+      "ContentShell.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -468,9 +457,7 @@
       "--coverage-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage",
       "--json-results-file",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ContentShellTest (with patch)",
@@ -481,10 +468,9 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "ChromeSyncShell.apk",
       "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--apk",
+      "ChromeSyncShell.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -506,9 +492,7 @@
       "--coverage-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage",
       "--json-results-file",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromeSyncShellTest (with patch)",
@@ -799,10 +783,9 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "AndroidWebView.apk",
       "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--apk",
+      "AndroidWebView.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -826,9 +809,7 @@
       "--coverage-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage",
       "--json-results-file",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test AndroidWebViewTest (without patch)",
@@ -839,10 +820,9 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "ChromePublic.apk",
       "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--apk",
+      "ChromePublic.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -866,9 +846,7 @@
       "--coverage-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage",
       "--json-results-file",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromePublicTest (without patch)",
@@ -879,10 +857,9 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "ContentShell.apk",
       "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--apk",
+      "ContentShell.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -906,9 +883,7 @@
       "--coverage-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage",
       "--json-results-file",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ContentShellTest (without patch)",
@@ -919,10 +894,9 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "ChromeSyncShell.apk",
       "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--apk",
+      "ChromeSyncShell.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -944,9 +918,7 @@
       "--coverage-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage",
       "--json-results-file",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromeSyncShellTest (without patch)",

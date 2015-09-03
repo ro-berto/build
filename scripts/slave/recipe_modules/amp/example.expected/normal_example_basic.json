@@ -28,9 +28,7 @@
       "SampleDeviceOS",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] example_gtest_suite",
@@ -94,9 +92,7 @@
       "SampleDeviceOS",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] example_instrumentation_suite",
@@ -156,9 +152,7 @@
       "SampleDeviceOS",
       "--trigger",
       "/path/to/tmp/json",
-      "--verbose",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] example_uirobot_suite",
@@ -237,9 +231,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/example_gtest_suite.json",
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/example_gtest_suite/results.zip",
-      "--verbose",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] example_gtest_suite",
@@ -348,9 +340,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/example_instrumentation_suite.json",
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/example_instrumentation_suite/results.zip",
-      "--verbose",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] example_instrumentation_suite",
@@ -457,9 +447,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/example_uirobot_suite.json",
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/results.zip",
-      "--verbose",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] example_uirobot_suite",

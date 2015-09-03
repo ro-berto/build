@@ -157,9 +157,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--json-output",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -223,8 +221,6 @@
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json"
     ],
@@ -243,9 +239,7 @@
       "-s",
       "audio_decoder_unittests",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -262,9 +256,7 @@
       "-s",
       "common_audio_unittests",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -281,9 +273,7 @@
       "-s",
       "common_video_unittests",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -300,9 +290,7 @@
       "-s",
       "modules_tests",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -319,9 +307,7 @@
       "-s",
       "modules_unittests",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -338,9 +324,7 @@
       "-s",
       "system_wrappers_unittests",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -357,9 +341,7 @@
       "-s",
       "test_support_unittests",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -376,9 +358,7 @@
       "-s",
       "tools_unittests",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -395,9 +375,7 @@
       "-s",
       "video_engine_core_unittests",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -414,9 +392,7 @@
       "-s",
       "video_engine_tests",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -433,9 +409,7 @@
       "-s",
       "voice_engine_unittests",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -452,9 +426,7 @@
       "-s",
       "webrtc_perf_tests",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -483,9 +455,7 @@
       "--test-apk",
       "AppRTCDemoTest",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test AppRTCDemoTest"
@@ -499,9 +469,7 @@
       "--test-apk",
       "libjingle_peerconnection_android_unittest",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test libjingle_peerconnection_android_unittest"

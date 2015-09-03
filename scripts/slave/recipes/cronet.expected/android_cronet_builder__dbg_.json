@@ -249,9 +249,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--json-output",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -315,8 +313,6 @@
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Debug",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json"
     ],
@@ -334,9 +330,7 @@
       "gtest",
       "-s",
       "net_unittests",
-      "--verbose",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -347,10 +341,9 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "CronetSample.apk",
       "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--apk",
+      "CronetSample.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -366,9 +359,7 @@
       "instrumentation",
       "--test-apk",
       "CronetSampleTest",
-      "--verbose",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test CronetSampleTest"
@@ -376,10 +367,9 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "CronetTest.apk",
       "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--apk",
+      "CronetTest.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -395,9 +385,7 @@
       "instrumentation",
       "--test-apk",
       "CronetTestInstrumentation",
-      "--verbose",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test CronetTestInstrumentation"

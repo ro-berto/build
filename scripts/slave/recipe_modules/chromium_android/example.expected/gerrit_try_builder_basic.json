@@ -312,9 +312,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--json-output",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -378,8 +376,6 @@
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json"
     ],
@@ -393,9 +389,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--json-output",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -459,8 +453,6 @@
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "--skip-wipe"
@@ -479,9 +471,7 @@
       "monkey",
       "-v",
       "--package=chrome",
-      "--event-count=50000",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--event-count=50000"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -509,9 +499,7 @@
       "--release",
       "--host-driven-root",
       "[SLAVE_BUILD]/src/chrome/test",
-      "--official-build",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--official-build"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test SmallTest"
@@ -528,9 +516,7 @@
       "--release",
       "--isolate_file_path=[SLAVE_BUILD]/src/some_file.isolate",
       "--gtest_filter=WebRtc*",
-      "--tool=asan",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--tool=asan"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

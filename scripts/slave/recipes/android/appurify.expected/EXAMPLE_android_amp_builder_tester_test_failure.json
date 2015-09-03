@@ -179,9 +179,7 @@
       "--trigger",
       "/path/to/tmp/json",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] android_webview_unittests",
@@ -244,9 +242,7 @@
       "--trigger",
       "/path/to/tmp/json",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] base_unittests",
@@ -307,9 +303,7 @@
       "--trigger",
       "/path/to/tmp/json",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] cc_unittests",
@@ -372,9 +366,7 @@
       "--trigger",
       "/path/to/tmp/json",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] components_unittests",
@@ -425,9 +417,7 @@
       "--trigger",
       "/path/to/tmp/json",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] events_unittests",
@@ -488,9 +478,7 @@
       "--trigger",
       "/path/to/tmp/json",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] gl_tests",
@@ -551,9 +539,7 @@
       "--trigger",
       "/path/to/tmp/json",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] ipc_tests",
@@ -614,9 +600,7 @@
       "--trigger",
       "/path/to/tmp/json",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] skia_unittests",
@@ -679,9 +663,7 @@
       "--trigger",
       "/path/to/tmp/json",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] sql_unittests",
@@ -744,9 +726,7 @@
       "--trigger",
       "/path/to/tmp/json",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] sync_unit_tests",
@@ -807,9 +787,7 @@
       "--trigger",
       "/path/to/tmp/json",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] ui_android_unittests",
@@ -870,9 +848,7 @@
       "--trigger",
       "/path/to/tmp/json",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] ui_touch_selection_unittests",
@@ -910,9 +886,7 @@
       "-s",
       "junit_unit_tests",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -928,9 +902,7 @@
       "python",
       "-s",
       "gyp_py_unittests",
-      "--verbose",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -946,9 +918,7 @@
       "python",
       "-s",
       "pylib_py_unittests",
-      "--verbose",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -1013,9 +983,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/results.zip",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] android_webview_unittests",
@@ -1131,9 +1099,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/base_unittests/results.zip",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] base_unittests",
@@ -1200,9 +1166,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/cc_unittests/results.zip",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] cc_unittests",
@@ -1269,9 +1233,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/events_unittests/results.zip",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] events_unittests",
@@ -1336,9 +1298,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/gl_tests/results.zip",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] gl_tests",
@@ -1403,9 +1363,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/ipc_tests/results.zip",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] ipc_tests",
@@ -1470,9 +1428,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/skia_unittests/results.zip",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] skia_unittests",
@@ -1537,9 +1493,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/sql_unittests/results.zip",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] sql_unittests",
@@ -1604,9 +1558,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/sync_unit_tests/results.zip",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] sync_unit_tests",
@@ -1671,9 +1623,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/ui_android_unittests/results.zip",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] ui_android_unittests",
@@ -1738,9 +1688,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/ui_touch_selection_unittests/results.zip",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] ui_touch_selection_unittests",

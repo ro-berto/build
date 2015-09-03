@@ -253,9 +253,7 @@
       "--trigger",
       "/path/to/tmp/json",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] content_shell_test_apk",
@@ -292,9 +290,7 @@
       "python",
       "-s",
       "gyp_py_unittests",
-      "--verbose",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -310,9 +306,7 @@
       "python",
       "-s",
       "pylib_py_unittests",
-      "--verbose",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -379,9 +373,7 @@
       "--results-path",
       "[TMP_BASE]/amp_results_tmp_2/content_shell_test_apk/results.zip",
       "--verbose",
-      "--release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[collect] content_shell_test_apk",

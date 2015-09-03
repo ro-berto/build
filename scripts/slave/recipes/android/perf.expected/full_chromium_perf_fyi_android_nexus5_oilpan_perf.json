@@ -147,9 +147,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--json-output",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -213,8 +211,6 @@
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Release",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "--min-battery-level",
@@ -233,10 +229,9 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "ChromePublic.apk",
       "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--apk",
+      "ChromePublic.apk",
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -305,9 +300,7 @@
       "--verbose",
       "--steps",
       "{\"steps\": {\"blink_perf.all.exact\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"blink_perf.all.release\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"blink_perf.dom\": {\"cmd\": \"/path/to/run_benchmark -v --upload-results blink_perf.dom\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.dom\"}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1}, \"dromaeo.cssqueryjquery.release\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1, \"perf_dashboard_id\": \"dromaeo.cssqueryjquery\"}}, \"version\": 2}",
-      "--collect-chartjson-data",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--collect-chartjson-data"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
@@ -322,9 +315,7 @@
       "--steps",
       "{\"steps\": {\"blink_perf.all.exact\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"blink_perf.all.release\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"blink_perf.dom\": {\"cmd\": \"/path/to/run_benchmark -v --upload-results blink_perf.dom\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.dom\"}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1}, \"dromaeo.cssqueryjquery.release\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1, \"perf_dashboard_id\": \"dromaeo.cssqueryjquery\"}}, \"version\": 2}",
       "--output-json-list",
-      "/path/to/tmp/json",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -376,9 +367,7 @@
       "perf",
       "--print-step",
       "page_cycler.foo",
-      "--verbose",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -422,9 +411,7 @@
       "perf",
       "--print-step",
       "perf_test.foo",
-      "--verbose",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
