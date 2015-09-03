@@ -53,8 +53,13 @@ ROLL_STATUSES = (
   (REGEXP_ROLL_TOO_OLD,  ROLL_STATUS_IDLE),
 )
 
+from recipe_engine.recipe_api import Property
 
-def RunSteps(api):
+PROPERTIES = {
+  "test_arb_is_stopped": Property(default=None),
+}
+
+def RunSteps(api, test_arb_is_stopped):
   # Check out Chrome.
   gclient_cfg = api.gclient.make_config()
   s = gclient_cfg.solutions.add()
@@ -94,7 +99,7 @@ def RunSteps(api):
       ''',
       args=[APPENGINE_IS_STOPPED_URL, api.json.output()],
       step_test_data=lambda: api.json.test_api.output({
-        'is_stopped': api.properties['test_arb_is_stopped'],
+        'is_stopped': test_arb_is_stopped,
        }))
   is_stopped = res.json.output['is_stopped']
 

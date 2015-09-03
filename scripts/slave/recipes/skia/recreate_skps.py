@@ -19,7 +19,14 @@ DEPS = [
 ]
 
 
-def RunSteps(api):
+from recipe_engine.recipe_api import Property
+
+PROPERTIES = {
+  'buildername': Property(),
+}
+
+
+def RunSteps(api, buildername):
   # Check out Chrome.
   gclient_cfg = api.gclient.make_config()
   src = gclient_cfg.solutions.add()
@@ -43,7 +50,7 @@ def RunSteps(api):
                                           'recreate_skps.py'),
          api.path['checkout'],
          api.path['checkout'].join('out', 'Release', 'chrome')]
-  if 'Canary' in api.properties['buildername']:
+  if 'Canary' in buildername:
     cmd.append('--dry-run')
   api.step('Recreate SKPs',
            cmd=cmd,
