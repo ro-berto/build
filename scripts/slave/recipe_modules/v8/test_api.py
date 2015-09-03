@@ -280,6 +280,13 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
   def example_latest_previous_hash(self):
     return self.m.raw_io.stream_output('a0', stream='stdout')
 
+  def example_available_builds(self):
+    return self.m.raw_io.stream_output(
+        'gs://chromium-v8/v8-linux64-dbg/full-build-linux_a1.zip\n'
+        'gs://chromium-v8/v8-linux64-dbg/full-build-linux_a3.zip',
+        stream='stdout',
+    )
+
   @recipe_test_api.mod_test_data
   @staticmethod
   def test_failures(has_failures):

@@ -510,6 +510,7 @@ BUILDERS = {
         'build_gs_archive': 'linux64_dbg_archive',
         'tests': ['unittests', 'v8testing', 'benchmarks', 'simdjs_small'],
         'testing': {'platform': 'linux'},
+        'enable_bisect': True,
       },
 ####### Category: Windows
       'V8 Win32 - builder': {

@@ -133,12 +133,12 @@ class V8Test(BaseTest):
     # We'll specify exactly the variant which failed. Downloading is not
     # necessary as this is a rerun and all test data is already downloaded
     # in the original run.
-    orig_args = filter(
+    orig_args = list(filter(
         lambda x: x not in ['--no-variants', '--download-data'],
         TEST_CONFIGS[self.name].get('test_args', []),
-    )
+    ))
     new_args = [
-      '--variant', failure_dict['variant'],
+      '--variants', failure_dict['variant'],
       '--random-seed', failure_dict['random_seed'],
     ]
     rerun_config = {
@@ -306,7 +306,7 @@ class V8Api(recipe_api.RecipeApi):
     self.m.chromium.apply_config('trybot_flavor')
     self.apply_config('trybot_flavor')
 
-  def checkout(self, revision=None, revert=False, **kwargs):
+  def checkout(self, revision=None, **kwargs):
     # Set revision for bot_update.
     revision = revision or self.m.properties.get(
         'parent_got_revision', self.m.properties.get('revision', 'HEAD'))
@@ -330,9 +330,10 @@ class V8Api(recipe_api.RecipeApi):
 
     assert update_step.json.output['did_run']
 
-    # Whatever step is run right before this line needs to emit got_revision.
-    self.revision = update_step.presentation.properties['got_revision']
-    self.revision_cp = update_step.presentation.properties['got_revision_cp']
+    # Bot_update maintains the properties independent of the UI
+    # presentation.
+    self.revision = self.m.bot_update.properties['got_revision']
+    self.revision_cp = self.m.bot_update.properties['got_revision_cp']
     self.revision_number = str(self.m.commit_position.parse_revision(
         self.revision_cp))
 
@@ -491,13 +492,17 @@ class V8Api(recipe_api.RecipeApi):
           add_flaky_step_override=False,
       )
 
-    # TODO: Bisection function for builder_tester bots. Add function for pure
-    # testers.
     def is_bad(revision):
-      self.checkout(revision, suffix=revision[:8])
-      self.runhooks(name='runhooks - ' + revision[:8])
-      # TODO: Get compile targets for test under bisection.
-      self.compile(name='compile - ' + revision[:8])
+      self.checkout(revision, suffix=revision[:8], update_presentation=False)
+      if self.bot_type == 'builder_tester':
+        self.runhooks(name='runhooks - ' + revision[:8])
+        # TODO: Get compile targets for test under bisection.
+        self.compile(name='compile - ' + revision[:8])
+      elif self.bot_type == 'tester':
+        self.download_build(name_suffix=' - ' + revision[:8])
+      else:  # pragma: no cover
+        raise self.m.step.InfraFailure(
+            'Bot type %s not supported.' % self.bot_type)
       result = test_func(revision)
       if result.infra_failures:  # pragma: no cover
         raise self.m.step.InfraFailure(
@@ -521,7 +526,11 @@ class V8Api(recipe_api.RecipeApi):
       )
       bisect_range = list(reversed(step_result.stdout.strip().splitlines()))
 
-      # TODO: Check which builds are available for a pure tester bot.
+      if self.bot_type == 'tester':
+        # Filter the bisect range to the revisions for which builds are
+        # available.
+        bisect_range = self.get_available_build_archives(bisect_range)
+
       # TODO: Check that from_change is a "good" build. Currently we assume it
       # is good as an experiment to see bisection in action. This will lead to
       # the wrong suspect if it was bad already.
@@ -1171,3 +1180,21 @@ class V8Api(recipe_api.RecipeApi):
         step_test_data=lambda: self.test_api.example_latest_previous_hash()
     )
     return step_result.stdout.strip(), str(last_change)
+
+  def get_available_build_archives(self, bisect_range):
+    assert self.bot_type == 'tester'
+    archive_name_pattern = '%s/full-build-%s_%%s.zip' % (
+        self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
+        self.m.archive.legacy_platform_name(),
+    )
+    # TODO: Split into multiple calls for too many files to avoid problems on
+    # windows.
+    args = ['ls']
+    args.extend(map(lambda s: archive_name_pattern % s, bisect_range))
+    step_result = self.m.gsutil(
+        args,
+        name='check builds',
+        stdout=self.m.raw_io.output(),
+        step_test_data=lambda: self.test_api.example_available_builds(),
+    )
+    return [r for r in bisect_range if r in step_result.stdout.strip()]

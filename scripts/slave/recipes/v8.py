@@ -26,7 +26,7 @@ def RunSteps(api):
   if api.platform.is_win:
     api.chromium.taskkill()
 
-  update_step = v8.checkout(revert=api.tryserver.is_tryserver)
+  update_step = v8.checkout()
 
   if v8.c.mips_cross_compile:
     v8.setup_mips_toolchain()
@@ -220,4 +220,20 @@ def GenTests(api):
                  v8_config_kwargs.get('TARGET_BITS', 64)) +
     api.override_step_data('Mjsunit', api.v8.bisect_failures_example()) +
     api.override_step_data('Retry - a2', api.v8.bisect_failures_example())
+  )
+
+  buildername = 'V8 Linux64 - debug - greedy allocator'
+  bot_config = api.v8.BUILDERS[mastername]['builders'][buildername]
+  yield (
+    api.test('full_%s_%s_bisect_tester' % (
+        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
+    api.properties.generic(mastername=mastername,
+                           buildername=buildername,
+                           branch='master',
+                           parent_buildername=bot_config.get(
+                               'parent_buildername')) +
+    api.platform(bot_config['testing']['platform'],
+                 v8_config_kwargs.get('TARGET_BITS', 64)) +
+    api.override_step_data('Check', api.v8.bisect_failures_example()) +
+    api.override_step_data('Retry - a1', api.v8.bisect_failures_example())
   )

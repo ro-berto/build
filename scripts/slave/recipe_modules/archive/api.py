@@ -234,7 +234,7 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     # Use the legacy platform name as Clusterfuzz has some expectations on
     # this (it only affects Windows, where it replace 'win' by 'win32').
-    pieces = [self._legacy_platform_name(), target.lower()]
+    pieces = [self.legacy_platform_name(), target.lower()]
     if archive_subdir_suffix:
       pieces.append(archive_subdir_suffix)
     subdir = '-'.join(pieces)
@@ -247,7 +247,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     sortkey_path = self._get_comparable_upload_path_for_sort_key(
         cp_branch, cp_number)
     zip_file_base_name = '%s-%s-%s%s-%s' % (archive_prefix,
-                                            self._legacy_platform_name(),
+                                            self.legacy_platform_name(),
                                             target.lower(),
                                             component,
                                             sortkey_path)
@@ -330,7 +330,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       **kwargs
     )
 
-  def _legacy_platform_name(self):
+  def legacy_platform_name(self):
     """Replicates the behavior of PlatformName() in chromium_utils.py."""
     if self.m.platform.is_win:
       return 'win32'
@@ -367,7 +367,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       result += ('/' + extra_url_components)
     if is_download:
       result += ('/' + self.m.properties['parent_buildername'] + '/' +
-                 'full-build-' + self._legacy_platform_name() +
+                 'full-build-' + self.legacy_platform_name() +
                  '.zip')
     else:
       result += '/' + self.m.properties['buildername']
