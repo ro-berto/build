@@ -47,6 +47,11 @@ def arm_hard_float(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def cfi(c):
+  c.gyp_env.GYP_DEFINES['cfi_vptr'] = 1
+
+
+@CONFIG_CTX(includes=['v8'])
 def default_target_d8(c):
   c.compile_py.default_targets = ['d8']
 

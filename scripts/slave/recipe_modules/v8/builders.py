@@ -512,6 +512,25 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
         'enable_bisect': True,
       },
+      'V8 Linux64 - cfi': {
+        'chromium_apply_config': ['v8_ninja', 'clang', 'goma', 'cfi'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          'unittests',
+          'v8testing',
+          'optimize_for_size',
+          'webkit',
+          'benchmarks',
+          'test262_es6',
+          'mozilla',
+          'simdjs',
+        ],
+        'testing': {'platform': 'linux'},
+      },
 ####### Category: Windows
       'V8 Win32 - builder': {
         'chromium_apply_config': ['v8_ninja', 'msvs2013'],
