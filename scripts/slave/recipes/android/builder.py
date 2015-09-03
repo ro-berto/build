@@ -31,6 +31,11 @@ BUILDERS = freeze({
       'check_licenses': FYIStep,
       'gclient_apply_config': ['android', 'chrome_internal'],
     },
+    'Android x86 Builder (dbg)' : {
+      'recipe_config': 'x86_builder',
+      'check_licenses': FYIStep,
+      'gclient_apply_config': ['android', 'chrome_internal'],
+    },
   },
   'chromium.android': {
     'Android MIPS Builder (dbg)': {
