@@ -693,7 +693,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Linux Asan': {
-        'recipe_config': 'webrtc_clang',
+        'recipe_config': 'webrtc_parallel_clang',
         'chromium_apply_config': ['asan', 'lsan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -969,16 +969,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-      },
-      'Linux Asan (parallel)': {
-        'recipe_config': 'webrtc_parallel_clang',
-        'chromium_apply_config': ['asan', 'lsan'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
       },
       'Android Builder (dbg)': {
         'recipe_config': 'webrtc_android',
