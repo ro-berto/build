@@ -1,4 +1,16 @@
 {
+    "blink": {
+        "build-db": "blink_build_db.json",
+        "masters": [
+            "https://build.chromium.org/p/chromium.webkit"
+        ],
+        "open-tree": true,
+        "password-file": "/creds/gatekeeper/blink_status_password",
+        "revision-properties": "got_revision_cp,got_webkit_revision_cp",
+        "set-status": true,
+        "status-url": "https://blink-status.appspot.com",
+        "track-revisions": true
+    },
     "chromium": {
         "build-db": "waterfall_build_db.json",
         "masters": [
@@ -10,7 +22,6 @@
             "https://build.chromium.org/p/chromium.linux",
             "https://build.chromium.org/p/chromium.mac",
             "https://build.chromium.org/p/chromium.memory",
-            "https://build.chromium.org/p/chromium.webkit",
             "https://build.chromium.org/p/chromium.win"
         ],
         "open-tree": true,
