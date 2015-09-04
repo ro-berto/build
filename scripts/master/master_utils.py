@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import os
+import random
 import re
 
 import buildbot
@@ -71,7 +72,9 @@ class InvalidConfig(Exception):
 
 
 def AutoSetupSlaves(builders, bot_password, max_builds=1,
-                    missing_recipients=None, missing_timeout=300):
+                    missing_recipients=None,
+                    preferred_builder_dict=None,
+                    missing_timeout=300):
   """Helper function for master.cfg to quickly setup c['slaves']."""
   slaves_dict = {}
   for builder in builders:
@@ -81,9 +84,16 @@ def AutoSetupSlaves(builders, bot_password, max_builds=1,
     if 'slavename' in builder:
       slavenames.append(builder['slavename'])
     for slavename in slavenames:
-      slaves_dict[slavename] = (auto_reboot, notify_on_missing)
+      properties = {}
+      if preferred_builder_dict:
+        preferred_builder = preferred_builder_dict.get(slavename)
+        if preferred_builder:
+          properties['preferred_builder'] = preferred_builder
+      slaves_dict[slavename] = (auto_reboot, notify_on_missing, properties)
+
   slaves = []
-  for (slavename, (auto_reboot, notify_on_missing)) in slaves_dict.iteritems():
+  for (slavename,
+       (auto_reboot, notify_on_missing, properties)) in slaves_dict.iteritems():
     if auto_reboot:
       slave_class = AutoRebootBuildSlave
     else:
@@ -91,10 +101,13 @@ def AutoSetupSlaves(builders, bot_password, max_builds=1,
 
     if notify_on_missing:
       slaves.append(slave_class(slavename, bot_password, max_builds=max_builds,
+                                properties=properties,
                                 notify_on_missing=missing_recipients,
                                 missing_timeout=missing_timeout))
     else:
-      slaves.append(slave_class(slavename, bot_password, max_builds=max_builds))
+      slaves.append(slave_class(slavename, bot_password,
+                                properties=properties, max_builds=max_builds))
+
   return slaves
 
 
@@ -593,3 +606,20 @@ class ConditionalProperty(util.ComparableMixin):
     renderer = (self.present) if is_present else (self.absent)
     # Disable 'too many positional arguments' error | pylint: disable=E1121
     return IRenderable(renderer).getRenderingFor(build)
+
+
+class PreferredBuilderNextSlaveFunc(object):
+  """
+  This object, when used as a Builder's 'nextSlave' function, will choose
+  a slave builder whose 'preferred_builder' value is the same as the builder
+  name. If there is no such a builder, a builder is randomly chosen.
+  """
+
+  def __call__(self, builder, slave_builders):
+    if not slave_builders:
+      return None
+
+    preferred_slaves = [
+        s for s in slave_builders
+        if s.slave.properties.getProperty('preferred_builder') == builder.name]
+    return random.choice(preferred_slaves or slave_builders)

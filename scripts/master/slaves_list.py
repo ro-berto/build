@@ -122,6 +122,15 @@ class BaseSlavesList(object):
     return EntryToHostName(
         self.GetSlave(master, builder, os, tester, bits, version))
 
+  def GetPreferredBuildersDict(self, master=None, builder=None, os=None,
+                               tester=None, bits=None, version=None):
+    """Make a dict that is from slave name to preferred_builder."""
+    d = {}
+    for e in self.GetSlaves(master, builder, os, tester, bits, version):
+      if e.has_key('preferred_builder'):
+        d[chromium_utils.EntryToSlaveName(e)] = e.get('preferred_builder')
+    return d
+
 
 class SlavesList(BaseSlavesList):
   def __init__(self, filename, default_master=None):
