@@ -23,7 +23,9 @@ BRANCH_RE = re.compile(r'^\d+\.\d+$')
 def GetCommitForRef(api, repo, ref):
   step_result = api.git(
       'ls-remote', repo, ref,
-      name='git ls-remote %s' % ref.split('/')[-1],
+      # For strange reasons, this string is not a string in production without
+      # str().
+      name=str('git ls-remote %s' % ref.split('/')[-1]),
       cwd=api.path['checkout'],
       stdout=api.raw_io.output(),
   )
