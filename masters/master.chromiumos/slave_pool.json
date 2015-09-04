@@ -34,12 +34,6 @@
       "gizmo-paladin": [
         "build118-m2"
       ], 
-      "mipsel-o32-generic-full": [
-        "build93-m2"
-      ], 
-      "mipsel-o32-generic-paladin": [
-        "build327-m2"
-      ], 
       "oak-full": [
         "build323-m2"
       ], 
@@ -69,6 +63,8 @@
     }
   }, 
   "unallocated": [
-    "build326-m2"
+    "build326-m2", 
+    "build327-m2", 
+    "build93-m2"
   ]
 }
