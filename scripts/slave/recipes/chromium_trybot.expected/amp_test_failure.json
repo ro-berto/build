@@ -244,6 +244,7 @@
       "breakpad_unittests_deps",
       "cc_unittests_apk",
       "chrome_junit_tests",
+      "chrome_public_test_apk",
       "chrome_sync_shell_test_apk",
       "components_unittests_apk",
       "content_browsertests_apk",
@@ -1054,6 +1055,46 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ContentShellTest (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "ChromePublic.apk",
+      "-v",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "install ChromePublic.apk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "ChromePublicTest",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--isolate-file-path",
+      "chrome/chrome_public_test_apk.isolate",
+      "--flakiness-dashboard-server",
+      "test-results.appspot.com",
+      "--verbose",
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Instrumentation test ChromePublicTest (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]

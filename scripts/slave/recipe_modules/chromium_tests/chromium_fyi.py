@@ -1631,6 +1631,10 @@ SPEC = {
             isolate_file_path='content/content_shell_test_apk.isolate',
             adb_install_apk='ContentShell.apk'),
         steps.AndroidInstrumentationTest(
+            'ChromePublicTest', 'chrome_public_test_apk',
+            isolate_file_path='chrome/chrome_public_test_apk.isolate',
+            adb_install_apk='ChromePublic.apk'),
+        steps.AndroidInstrumentationTest(
             'ChromeSyncShellTest', 'chrome_sync_shell_test_apk',
             adb_install_apk='ChromeSyncShell.apk'),
         steps.AMPGTestTest('android_webview_unittests',
