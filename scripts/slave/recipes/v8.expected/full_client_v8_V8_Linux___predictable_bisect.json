@@ -593,7 +593,8 @@
     "name": "Suspecting a3",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@# Empty program@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@STEP_LINK@a3@https://chromium.googlesource.com/v8/v8/+/a3@@@"
     ]
   },
   {

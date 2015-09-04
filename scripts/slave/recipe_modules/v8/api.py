@@ -14,6 +14,8 @@ from . import bisection
 from . import builders
 
 
+COMMIT_TEMPLATE = 'https://chromium.googlesource.com/v8/v8/+/%s'
+
 # Regular expressions for v8 branch names.
 RELEASE_BRANCH_RE = re.compile(r'^\d+\.\d+$')
 ROLL_BRANCH_RE = re.compile(r'^\d+\.\d+\.\d+$')
@@ -531,14 +533,22 @@ class V8Api(recipe_api.RecipeApi):
         if self.bot_type == 'tester':
           # Filter the bisect range to the revisions for which builds are
           # available.
-          bisect_range = self.get_available_build_archives(bisect_range)
+          available_bisect_range = self.get_available_build_archives(
+              bisect_range)
+        else:
+          available_bisect_range = bisect_range
 
       # TODO: Check that from_change is a "good" build. Currently we assume it
       # is good as an experiment to see bisection in action. This will lead to
       # the wrong suspect if it was bad already.
 
-      culprit = bisection.keyed_bisect(bisect_range, is_bad)
-      self.m.python.inline('Suspecting %s' % culprit[:8], '# Empty program')
+      culprit = bisection.keyed_bisect(available_bisect_range, is_bad)
+      culprit_range = self.calc_missing_values_in_sequence(
+          bisect_range,
+          available_bisect_range,
+          culprit,
+      )
+      self.report_culprits(culprit_range)
 
   def presubmit(self):
     self.m.python(
@@ -1200,3 +1210,36 @@ class V8Api(recipe_api.RecipeApi):
         step_test_data=lambda: self.test_api.example_available_builds(),
     )
     return [r for r in bisect_range if r in step_result.stdout.strip()]
+
+  def calc_missing_values_in_sequence(
+        self, sequence, subsequence, value):
+    """Calculate a list of missing values from a subsequence.
+
+    Args:
+      sequence: The complete sequence including all values.
+      subsequence: A subsequence from the sequence above.
+      value: An element from subsequence.
+    Returns: A subsequence from sequence [a..b], where b is the value and
+             for all x in a..b-1 holds x not in subsequence. Also
+             a-1 is either in subsequence or value was the first
+             element in subsequence.
+    """
+    from_index = 0
+    to_index = sequence.index(value) + 1
+    index_on_subsequence = subsequence.index(value)
+    if index_on_subsequence > 0:
+      # Value is not the first element in subsequence.
+      previous = subsequence[index_on_subsequence - 1]
+      from_index = sequence.index(previous) + 1
+    return sequence[from_index:to_index]
+
+  def report_culprits(self, culprit_range):
+    assert culprit_range
+    if len(culprit_range) > 1:
+      text = 'Suspecting multiple commits'
+    else:
+      text = 'Suspecting %s' % culprit_range[0][:8]
+
+    step_result = self.m.python.inline(text, '# Empty program')
+    for culprit in culprit_range:
+      step_result.presentation.links[culprit[:8]] = COMMIT_TEMPLATE % culprit

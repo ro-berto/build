@@ -603,10 +603,12 @@
       "# Empty program"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Suspecting a3",
+    "name": "Suspecting multiple commits",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@# Empty program@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@STEP_LINK@a2@https://chromium.googlesource.com/v8/v8/+/a2@@@",
+      "@@@STEP_LINK@a3@https://chromium.googlesource.com/v8/v8/+/a3@@@"
     ]
   },
   {
