@@ -192,7 +192,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     all_values = self.m.bisect_tester.digest_run_results(values, retcodes, cfg)
     overall_success = True
     if (not kwargs.get('allow_flakes', True) and
-        not cfg.get('return_codes', False)):
+        cfg.get('test_type', 'perf') != 'return_code'):
       overall_success = True if (all(v == 0 for v in retcodes)) else False
     if not overall_success:  # pragma: no cover
       raise self.m.step.StepFailure(

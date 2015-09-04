@@ -216,3 +216,34 @@ results-without_patch
   + api.properties(parent_got_revision='1111111')
   + api.properties(parent_build_archive_url='gs://test-domain/test-archive.zip')
   )
+
+  bisect_ret_code_config = {
+      'test_type': 'return_code',
+      'command': './tools/perf/run_benchmark -v '
+                 '--browser=release page_cycler.intl_ar_fa_he',
+      'good_revision': '300138',
+      'bad_revision': '300148',
+      'metric': 'warm_times/page_load_time',
+      'repeat_count': '2',
+      'max_time_minutes': '5',
+      'truncate_percent': '25',
+      'bug_id': '425582',
+      'gs_bucket': 'chrome-perf',
+      'builder_host': 'master4.golo.chromium.org',
+      'builder_port': '8341',
+  }
+  yield (api.test('basic_linux_bisect_tester_recipe_ret_code')
+  + api.properties.tryserver(
+      mastername='tryserver.chromium.perf',
+      buildername='linux_perf_tester')
+  + api.step_data('saving url to temp file',
+                  stdout=api.raw_io.output('/tmp/dummy1'))
+  + api.step_data('saving json to temp file',
+                   stdout=api.raw_io.output('/tmp/dummy2'))
+  + api.properties(bisect_config=bisect_ret_code_config)
+  + api.properties(job_name='f7a7b4135624439cbd27fdd5133d74ec')
+  + api.bisect_tester(tempfile='/tmp/dummy')
+  + api.properties(parent_got_revision='1111111')
+  + api.properties(parent_build_archive_url='gs://test-domain/test-archive.zip')
+  )
+

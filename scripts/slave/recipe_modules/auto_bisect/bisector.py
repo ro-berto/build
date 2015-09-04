@@ -357,7 +357,7 @@ class Bisector(object):
     is used instead.
     """
     if self.test_type != 'perf':
-      raise NotImplementedError()  # pragma: no cover
+      return True
 
     if self.required_initial_confidence is None:
       return True  # pragma: no cover

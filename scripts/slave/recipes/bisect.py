@@ -52,6 +52,7 @@ def GenTests(api):
   broken_cp_test = api.test('broken_cp_test')
   broken_hash_test = api.test('broken_hash_test')
   invalid_config_test = api.test('invalid_config_test')
+  return_code_test = api.test('basic_return_code_test')
   basic_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
       buildername='linux_perf_bisect_builder')
@@ -73,6 +74,10 @@ def GenTests(api):
   encoded_config_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
       buildername='linux_perf_bisect_builder')
+  return_code_test += api.properties.generic(
+      mastername='tryserver.chromium.perf',
+      buildername='linux_perf_bisect_builder')
+
   bisect_config = {
       'test_type': 'perf',
       'command': ('tools/perf/run_benchmark -v '
@@ -211,6 +216,74 @@ def GenTests(api):
   yield broken_good_rev_test
   invalid_config_test += _get_revision_range_step_data(api, doctored_data)
   yield invalid_config_test
+
+  def return_code_test_data():
+    return [
+      {
+          'refrange': True,
+          'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
+          'commit_pos': '306478',
+          'test_results': {
+              'results':{
+                  'mean': 1,
+                  'std_err': 0,
+                  'values': [],
+               },
+              'retcodes':[1],
+          },
+          'cl_info': 'S3P4R4T0R'.join(['DummyAuthor', 'dummy@nowhere.com',
+                                       'Some random CL', '01/01/2015',
+                                       'A long description for a CL.\n'
+                                       'Containing multiple lines'])
+      },
+      {
+          'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
+          'commit_pos': '306477',
+          'test_results': {
+              'results':{
+                  'mean': 1,
+                  'std_err': 0,
+                  'values': [],
+               },
+              'retcodes':[1],
+          }
+      },
+      {
+          'hash': 'fc6dfc7ff5b1073408499478969261b826441144',
+          'commit_pos': '306476',
+          'test_results': {
+              'results':{
+                  'mean': 1,
+                  'std_err': 0,
+                  'values': [],
+               },
+              'retcodes':[1],
+          }
+      },
+      {
+          'refrange': True,
+          'hash': 'e28dc0d49c331def2a3bbf3ddd0096eb51551155',
+          'commit_pos': '306475',
+          'test_results': {
+              'results':{
+                  'mean': 0,
+                  'std_err': 0,
+                  'values': [],
+               },
+              'retcodes':[0],
+          }
+      },
+    ]
+
+  bisect_config_ret_code = bisect_config.copy()
+  bisect_config_ret_code['test_type'] = 'return_code'
+  return_code_test += api.properties(bisect_config=bisect_config_ret_code)
+  return_code_test_data = return_code_test_data()
+  for revision_data in return_code_test_data:
+    for step_data in _get_step_data_for_revision(api, revision_data):
+      return_code_test += step_data
+  return_code_test += _get_revision_range_step_data(api, return_code_test_data)
+  yield return_code_test
 
 def _get_revision_range_step_data(api, range_data):
   min_rev = range_data[-1]['hash']
