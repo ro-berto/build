@@ -10,6 +10,7 @@ import gzip
 import inspect
 import logging
 import logging.handlers
+import multiprocessing
 import os
 import re
 import subprocess
@@ -568,6 +569,24 @@ def set_logging(loglevel, output_dir, timezone='US/Pacific'):
   logger.setLevel(level=logging.DEBUG)
 
 
+def upload_task(task):
+  storage = task['storage']
+
+  # Beginning of critical section
+  storage.mark_upload_started(task['builder_name'], task['build_number'])
+  storage.put(task['builder_name'], task['build_number'],
+              'METADATA', task['build_properties'], source_type='content')
+
+  for ref, log_filename in task['log_filenames']:
+    assert ref[0] == task['builder_name']
+    assert ref[1] == task['build_number']
+    log_name = ref[2]
+    storage.put(
+        task['builder_name'], task['build_number'], log_name, log_filename)
+  storage.mark_upload_ended(task['builder_name'], task['build_number'])
+  # End of critical section
+
+
 def main():
   if not os.path.exists(GSUTIL_BIN):
     print >> sys.stderr, ('gsutil not found in %s\n' % GSUTIL_BIN)
@@ -595,6 +614,8 @@ def main():
                    options.builder_name)
       return 1
     builder_names = [options.builder_name]
+
+  upload_tasks = []
 
   for builder_name in builder_names:
     logger.info('Starting processing builder %s', builder_name)
@@ -627,21 +648,20 @@ def main():
     for build_number in missing_builds:
       logger.info('Starting processing build %s/%d',
                   builder_name, build_number)
-      bp_str, bp = w.get_build_properties(builder_name, build_number)
+      build_properties, bp = w.get_build_properties(builder_name, build_number)
       log_filenames = w.get_log_filenames(bp, builders[builder_name]['basedir'])
 
-      # Beginning of critical section
-      storage.mark_upload_started(builder_name, build_number)
-      storage.put(builder_name, build_number,
-                  'METADATA', bp_str, source_type='content')
+      upload_tasks.append({
+          'storage': storage,
+          'builder_name': builder_name,
+          'build_number': build_number,
+          'build_properties': build_properties,
+          'log_filenames': log_filenames,
+      })
 
-      for ref, log_filename in log_filenames:
-        assert ref[0] == builder_name
-        assert ref[1] == build_number
-        log_name = ref[2]
-        storage.put(builder_name, build_number, log_name, log_filename)
-      storage.mark_upload_ended(builder_name, build_number)
-      # End of critical section
+  pool = multiprocessing.Pool(10)
+  pool.map(upload_task, upload_tasks)
+
   return 0
 
 
