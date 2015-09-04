@@ -8,7 +8,7 @@
 # This script is intended to be run from cron.
 
 UPLOAD_SCRIPT=~/buildbot/build/scripts/master/upload_logs_to_storage.py
-LIMIT=2
+LIMIT=20
 
 function msg_exit() {
     echo 'Upload script already running, exiting.'
