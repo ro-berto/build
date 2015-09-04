@@ -493,43 +493,45 @@ class V8Api(recipe_api.RecipeApi):
       )
 
     def is_bad(revision):
-      self.checkout(revision, suffix=revision[:8], update_presentation=False)
-      if self.bot_type == 'builder_tester':
-        self.runhooks(name='runhooks - ' + revision[:8])
-        # TODO: Get compile targets for test under bisection.
-        self.compile(name='compile - ' + revision[:8])
-      elif self.bot_type == 'tester':
-        self.download_build(name_suffix=' - ' + revision[:8])
-      else:  # pragma: no cover
-        raise self.m.step.InfraFailure(
-            'Bot type %s not supported.' % self.bot_type)
-      result = test_func(revision)
-      if result.infra_failures:  # pragma: no cover
-        raise self.m.step.InfraFailure(
-            'Cannot continue bisection due to infra failures.')
-      return result.failures
+      with self.m.step.nest('Bisect into ' + revision[:8]):
+        self.checkout(revision, suffix=revision[:8], update_presentation=False)
+        if self.bot_type == 'builder_tester':
+          self.runhooks(name='runhooks - ' + revision[:8])
+          # TODO: Get compile targets for test under bisection.
+          self.compile(name='compile - ' + revision[:8])
+        elif self.bot_type == 'tester':
+          self.download_build(name_suffix=' - ' + revision[:8])
+        else:  # pragma: no cover
+          raise self.m.step.InfraFailure(
+              'Bot type %s not supported.' % self.bot_type)
+        result = test_func(revision)
+        if result.infra_failures:  # pragma: no cover
+          raise self.m.step.InfraFailure(
+              'Cannot continue bisection due to infra failures.')
+        return result.failures
 
     # Only rerun failures faster than a threshold.
     if failure.duration < BISECT_MAX_TEST_DURATION_SECONDS:
-      # Setup bisection range ("from" exclusive).
-      from_change, to_change = self.get_change_range()
-      assert from_change
-      assert to_change
+      with self.m.step.nest('Initialize bisection'):
+        # Setup bisection range ("from" exclusive).
+        from_change, to_change = self.get_change_range()
+        assert from_change
+        assert to_change
 
-      # Initialize bisection range.
-      step_result = self.m.git(
-        'log', '%s..%s' % (from_change, to_change), '--format=%H',
-        name='Fetch bisection range',
-        cwd=self.m.path['checkout'],
-        stdout=self.m.raw_io.output(),
-        step_test_data=lambda: self.test_api.example_bisection_range()
-      )
-      bisect_range = list(reversed(step_result.stdout.strip().splitlines()))
+        # Initialize bisection range.
+        step_result = self.m.git(
+          'log', '%s..%s' % (from_change, to_change), '--format=%H',
+          name='Fetch bisection range',
+          cwd=self.m.path['checkout'],
+          stdout=self.m.raw_io.output(),
+          step_test_data=lambda: self.test_api.example_bisection_range()
+        )
+        bisect_range = list(reversed(step_result.stdout.strip().splitlines()))
 
-      if self.bot_type == 'tester':
-        # Filter the bisect range to the revisions for which builds are
-        # available.
-        bisect_range = self.get_available_build_archives(bisect_range)
+        if self.bot_type == 'tester':
+          # Filter the bisect range to the revisions for which builds are
+          # available.
+          bisect_range = self.get_available_build_archives(bisect_range)
 
       # TODO: Check that from_change is a "good" build. Currently we assume it
       # is good as an experiment to see bisection in action. This will lead to

@@ -357,6 +357,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Initialize bisection"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -367,8 +372,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Fetch changes",
+    "name": "Initialize bisection.Fetch changes",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"changes\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -392,7 +398,10 @@
       "a1~1..a3"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Show changes"
+    "name": "Initialize bisection.Show changes",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -403,8 +412,11 @@
       "-n1"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Get latest previous change",
-    "stdout": "/path/to/tmp/"
+    "name": "Initialize bisection.Get latest previous change",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -414,8 +426,11 @@
       "--format=%H"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Fetch bisection range",
-    "stdout": "/path/to/tmp/"
+    "name": "Initialize bisection.Fetch bisection range",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -433,8 +448,16 @@
       "gs://chromium-v8/v8-linux64-dbg/full-build-linux_a3.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil check builds",
-    "stdout": "/path/to/tmp/"
+    "name": "Initialize bisection.gsutil check builds",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Bisect into a1"
   },
   {
     "cmd": [
@@ -461,8 +484,9 @@
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "bot_update - a1",
+    "name": "Bisect into a1.bot_update - a1",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
@@ -492,8 +516,9 @@
       "[SLAVE_BUILD]/v8/out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree build directory - a1",
+    "name": "Bisect into a1.rmtree build directory - a1",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
       "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
@@ -520,7 +545,10 @@
       "571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "extract build - a1"
+    "name": "Bisect into a1.extract build - a1",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -549,9 +577,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Retry - a1",
+    "name": "Bisect into a1.Retry - a1",
     "~followup_annotations": [
-      "@@@STEP_TEXT@failures: 2<br/>@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
       "@@@STEP_LOG_LINE@durations@@@@",
@@ -565,42 +593,7 @@
       "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
       "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
       "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
-      "@@@STEP_LOG_END@durations@@@",
-      "@@@STEP_LOG_LINE@fast@Test: suite-name/dir/fast@@@",
-      "@@@STEP_LOG_LINE@fast@Flags: @@@",
-      "@@@STEP_LOG_LINE@fast@Command: d8 test.js@@@",
-      "@@@STEP_LOG_LINE@fast@@@@",
-      "@@@STEP_LOG_LINE@fast@Run #1@@@",
-      "@@@STEP_LOG_LINE@fast@Exit code: 1@@@",
-      "@@@STEP_LOG_LINE@fast@Result: FAIL@@@",
-      "@@@STEP_LOG_LINE@fast@Expected outcomes: PASS, SLOW@@@",
-      "@@@STEP_LOG_LINE@fast@Duration: 00:01:500@@@",
-      "@@@STEP_LOG_LINE@fast@@@@",
-      "@@@STEP_LOG_LINE@fast@Stdout:@@@",
-      "@@@STEP_LOG_LINE@fast@Some output.@@@",
-      "@@@STEP_LOG_LINE@fast@@@@",
-      "@@@STEP_LOG_LINE@fast@Stderr:@@@",
-      "@@@STEP_LOG_LINE@fast@Some errput.@@@",
-      "@@@STEP_LOG_LINE@fast@@@@",
-      "@@@STEP_LOG_END@fast@@@",
-      "@@@STEP_LOG_LINE@slow@Test: suite-name/dir/slow@@@",
-      "@@@STEP_LOG_LINE@slow@Flags: @@@",
-      "@@@STEP_LOG_LINE@slow@Command: d8 test.js@@@",
-      "@@@STEP_LOG_LINE@slow@@@@",
-      "@@@STEP_LOG_LINE@slow@Run #1@@@",
-      "@@@STEP_LOG_LINE@slow@Exit code: 1@@@",
-      "@@@STEP_LOG_LINE@slow@Result: FAIL@@@",
-      "@@@STEP_LOG_LINE@slow@Expected outcomes: PASS, SLOW@@@",
-      "@@@STEP_LOG_LINE@slow@Duration: 00:03:000@@@",
-      "@@@STEP_LOG_LINE@slow@@@@",
-      "@@@STEP_LOG_LINE@slow@Stdout:@@@",
-      "@@@STEP_LOG_LINE@slow@Some output.@@@",
-      "@@@STEP_LOG_LINE@slow@@@@",
-      "@@@STEP_LOG_LINE@slow@Stderr:@@@",
-      "@@@STEP_LOG_LINE@slow@Some errput.@@@",
-      "@@@STEP_LOG_LINE@slow@@@@",
-      "@@@STEP_LOG_END@slow@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_END@durations@@@"
     ]
   },
   {
@@ -610,7 +603,7 @@
       "# Empty program"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Suspecting a1",
+    "name": "Suspecting a3",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@# Empty program@@@",
       "@@@STEP_LOG_END@python.inline@@@"
