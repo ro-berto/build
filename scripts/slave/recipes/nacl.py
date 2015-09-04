@@ -16,12 +16,18 @@ DEPS = [
 # Maps from triggering builder to triggered builder;
 # key builder triggers value builder.
 trigger_map = {
+    # client.nacl builders
     'precise_64-newlib-arm_qemu-pnacl-dbg':
       'oneiric_32-newlib-arm_hw-pnacl-panda-dbg',
     'precise_64-newlib-arm_qemu-pnacl-opt':
       'oneiric_32-newlib-arm_hw-pnacl-panda-opt',
     'precise_64-newlib-arm_qemu-pnacl-buildonly-spec':
       'oneiric_32-newlib-arm_hw-pnacl-panda-spec',
+    # tryserver.nacl builders
+    'nacl-arm_opt_panda':
+      'nacl-arm_hw_opt_panda',
+    'nacl-arm_perf_panda':
+      'nacl-arm_hw_perf_panda',
 }
 
 def _CheckoutSteps(api):

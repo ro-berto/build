@@ -10,7 +10,6 @@ DEPS = [
   'properties',
   'python',
   'step',
-  'trigger',
 ]
 
 
