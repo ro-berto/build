@@ -381,6 +381,8 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--disable-system-chrome')
     if remove_system_webview:
       args.append('--remove-system-webview')
+    if self.c and self.c.chrome_specific_wipe:
+      args.append('--chrome-specific-wipe')
     result = self.m.python(
       'provision_devices',
       self.m.path['checkout'].join(

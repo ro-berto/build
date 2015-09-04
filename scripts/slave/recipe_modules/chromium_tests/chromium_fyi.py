@@ -1593,7 +1593,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'Android Builder (dbg)',
-      'android_config': 'main_builder',
+      'android_config': 'non_device_wipe_provisioning',
       'root_devices': True,
       'tests': [
         steps.GTestTest('gfx_unittests'),

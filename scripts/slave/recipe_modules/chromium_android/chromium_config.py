@@ -148,6 +148,10 @@ def incremental_coverage_builder_tests(c):
   gyp_defs['emma_filter'] = 'org.chromium.content.browser.*'
 
 @CONFIG_CTX(includes=['main_builder'])
+def non_device_wipe_provisioning(c):
+  pass
+
+@CONFIG_CTX(includes=['main_builder'])
 def oilpan_builder(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['enable_oilpan'] = 1

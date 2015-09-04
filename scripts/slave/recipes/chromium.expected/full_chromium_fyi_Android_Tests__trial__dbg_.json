@@ -338,7 +338,8 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--chrome-specific-wipe"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

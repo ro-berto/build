@@ -33,6 +33,7 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     channel = Single(basestring, empty_val='chrome'),
     gclient_custom_vars = Dict(value_type=(basestring, types.NoneType)),
     coverage = Single(bool, required=False, empty_val=False),
+    chrome_specific_wipe = Single(bool, required=False, empty_val=False),
     incremental_coverage = Single(bool, required=False, empty_val=False),
     env = ConfigGroup(
       LLVM_FORCE_HEAD_REVISION = Single(basestring, required=False),
@@ -174,6 +175,10 @@ def x86_try_instrumentation_tests(c):
 @config_ctx(includes=['main_builder'])
 def coverage_builder_tests(c):  # pragma: no cover
   pass
+
+@config_ctx(includes=['main_builder'])
+def non_device_wipe_provisioning(c):
+  c.chrome_specific_wipe = True
 
 @config_ctx(includes=['main_builder'])
 def incremental_coverage_builder_tests(c):
