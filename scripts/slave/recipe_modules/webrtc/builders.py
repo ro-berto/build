@@ -995,7 +995,7 @@ BUILDERS = freeze({
   'tryserver.webrtc': {
     'builders': {
       'win': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1004,7 +1004,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'win_rel': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1013,7 +1013,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'win_x64_rel': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1260,7 +1260,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'linux_asan': {
-        'recipe_config': 'webrtc_clang',
+        'recipe_config': 'webrtc_parallel_clang',
         'chromium_apply_config': ['asan', 'lsan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
