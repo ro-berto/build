@@ -316,8 +316,9 @@ def main():
       # invalid .svn files and try again. The missing directory should be
       # re-created with the correct checksum by repeated call to 'svn update'.
       if is_win:
-        shutil.rmtree(os.path.join(b_dir, 'build', 'scripts', 'slave',
-                                   'recipes', 'deterministic_build.expected'))
+        parent_dir = os.path.join(b_dir, 'build', 'scripts', 'slave', 'recipes',
+                                  'deterministic_build.expected')
+        check_call(['rmdir', parent_dir, '/s', '/q'], cwd=b_dir, env=env)
         check_call(['gclient', 'sync'], cwd=b_dir, env=env)
       else:
         raise
