@@ -42,8 +42,6 @@ GCLIENT_CONFIGS = {
 
 PREVENT_REBOOT_FILE_CONTENT = 'slave_svn_to_git'
 
-PENDING_ENDPOINT = 'https://svn-to-git-tracking.appspot.com/api/pending'
-
 is_win = sys.platform.startswith('win')
 
 
@@ -58,7 +56,15 @@ def check_output(cmd, cwd=None, env=None):
 
 
 def report_host_state(b_dir, cur_host):
-  """Report host state to the tracking app."""
+  """Report host state to the tracking app.
+
+  Args:
+    b_dir: Directory where checkout is located.
+    cur_host: Name of the current host.
+
+  Returns:
+    True if host should be converted, False otherwise.
+  """
   if os.path.isdir(os.path.join(b_dir, 'build', '.svn')):
     state = 'SVN'
   elif os.path.isdir(os.path.join(b_dir, 'build', '.git')):
@@ -69,9 +75,9 @@ def report_host_state(b_dir, cur_host):
   try:
     url = ('https://svn-to-git-tracking.appspot.com/api/reportState?host=%s&'
            'state=%s' % (urllib2.quote(cur_host), urllib2.quote(state)))
-    urllib2.urlopen(url)
+    return json.load(urllib2.urlopen(url))
   except Exception:
-    pass
+    return False
 
 
 def main():
@@ -96,11 +102,7 @@ def main():
   # Report state before doing anything else, so we can keep track of the state
   # of this host even if something later in this script fails.
   cur_host = socket.gethostname()
-  report_host_state(b_dir, cur_host)
-
-  # Check if host is pending conversion.
-  pending_hosts = json.load(urllib2.urlopen(PENDING_ENDPOINT))
-  if not options.manual and cur_host not in pending_hosts:
+  if not options.manual and not report_host_state(b_dir, cur_host):
     print 'Host %s is not pending SVN-to-Git conversion' % cur_host
     return 0
 
