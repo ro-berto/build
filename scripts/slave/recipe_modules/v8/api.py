@@ -497,6 +497,11 @@ class V8Api(recipe_api.RecipeApi):
     # Don't retry failures during bisection.
     self.rerun_failures_count = 0
 
+    # Only rebuild the target of the test to retry. Works only with ninja.
+    targets = None
+    if 'ninja' in self.m.chromium.c.gyp_env.GYP_GENERATORS:
+      targets = [failure.failure_dict.get('target_name', 'All')]
+
     test = self.create_test(failure.test_config)
     def test_func(revision):
       return test.rerun(
@@ -511,8 +516,7 @@ class V8Api(recipe_api.RecipeApi):
         self.checkout(revision, suffix=revision[:8], update_presentation=False)
         if self.bot_type == 'builder_tester':
           self.runhooks(name='runhooks - ' + revision[:8])
-          # TODO: Get compile targets for test under bisection.
-          self.compile(name='compile - ' + revision[:8])
+          self.compile(name='compile - ' + revision[:8], targets=targets)
         elif self.bot_type == 'tester':
           self.download_build(name_suffix=' - ' + revision[:8])
         else:  # pragma: no cover

@@ -196,6 +196,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           'stderr': 'Some errput.',
           'name': 'suite-name/dir/slow',
           'command': 'd8 test.js',
+          'target_name': 'd8',
           'exit_code': 1,
         },
         {
@@ -210,6 +211,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           'stderr': 'Some errput.',
           'name': 'suite-name/dir/fast',
           'command': 'd8 test.js',
+          'target_name': 'd8',
           'exit_code': 1,
         },
       ],

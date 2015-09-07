@@ -1399,7 +1399,7 @@ BUILDERS = {
       },
       'V8 Linux - predictable': {
         'v8_apply_config': ['predictable'],
-        'chromium_apply_config': ['predictable', 'v8_goma'],
+        'chromium_apply_config': ['v8_ninja', 'clang', 'goma', 'predictable'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
