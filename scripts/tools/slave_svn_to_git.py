@@ -55,7 +55,7 @@ def check_output(cmd, cwd=None, env=None):
   return subprocess.check_output(cmd, cwd=cwd, shell=is_win, env=env)
 
 
-def report_host_state(b_dir, cur_host):
+def report_and_need_conversion(b_dir, cur_host):
   """Report host state to the tracking app.
 
   Args:
@@ -102,7 +102,7 @@ def main():
   # Report state before doing anything else, so we can keep track of the state
   # of this host even if something later in this script fails.
   cur_host = socket.gethostname()
-  if not options.manual and not report_host_state(b_dir, cur_host):
+  if not report_and_need_conversion(b_dir, cur_host) and not options.manual:
     print 'Host %s is not pending SVN-to-Git conversion' % cur_host
     return 0
 
@@ -242,7 +242,7 @@ def main():
   check_call(['gclient', 'sync'], cwd=b_dir, env=env)
 
   # Report state again, since we've converted to Git.
-  report_host_state(b_dir, cur_host)
+  report_and_need_conversion(b_dir, cur_host)
 
   return 0
 
