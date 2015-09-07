@@ -14,15 +14,10 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
-                              'Win SyzyASan (parallel)',
                             ]),
   ])
 
   specs = [
-    {
-      'name': 'Win SyzyASan (parallel)',
-      'slavebuilddir': 'win-syzyasan',
-    },
   ]
 
   c['builders'].extend([

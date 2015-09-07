@@ -14,16 +14,11 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
-                                'Linux MSan (parallel)',
                                 'Linux Tsan v2 (parallel)',
       ]),
   ])
 
   specs = [
-    {
-      'name': 'Linux MSan (parallel)',
-      'slavebuilddir': 'linux_msan',
-    },
     {
       'name': 'Linux Tsan v2 (parallel)',
       'slavebuilddir': 'linux_tsan2',

@@ -115,7 +115,6 @@
     "name": "compile"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -127,23 +126,21 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=audio_decoder_unittests",
       "--step-name=audio_decoder_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/audio_decoder_unittests",
       "--builder-name=Linux MSan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--run-python-script",
       "--enable-msan",
-      "audio_decoder_unittests"
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/audio_decoder_unittests",
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "audio_decoder_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -155,23 +152,21 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=common_audio_unittests",
       "--step-name=common_audio_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/common_audio_unittests",
       "--builder-name=Linux MSan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--run-python-script",
       "--enable-msan",
-      "common_audio_unittests"
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/common_audio_unittests",
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "common_audio_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -183,23 +178,21 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=common_video_unittests",
       "--step-name=common_video_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/common_video_unittests",
       "--builder-name=Linux MSan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--run-python-script",
       "--enable-msan",
-      "common_video_unittests"
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/common_video_unittests",
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "common_video_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -211,23 +204,21 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=libjingle_media_unittest",
       "--step-name=libjingle_media_unittest",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/libjingle_media_unittest",
       "--builder-name=Linux MSan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--run-python-script",
       "--enable-msan",
-      "libjingle_media_unittest"
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/libjingle_media_unittest",
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "libjingle_media_unittest"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -239,23 +230,21 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=libjingle_p2p_unittest",
       "--step-name=libjingle_p2p_unittest",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/libjingle_p2p_unittest",
       "--builder-name=Linux MSan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--run-python-script",
       "--enable-msan",
-      "libjingle_p2p_unittest"
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/libjingle_p2p_unittest",
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "libjingle_p2p_unittest"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -267,23 +256,21 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=libjingle_peerconnection_unittest",
       "--step-name=libjingle_peerconnection_unittest",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/libjingle_peerconnection_unittest",
       "--builder-name=Linux MSan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--run-python-script",
       "--enable-msan",
-      "libjingle_peerconnection_unittest"
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/libjingle_peerconnection_unittest",
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "libjingle_peerconnection_unittest"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -295,23 +282,21 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=modules_tests",
       "--step-name=modules_tests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/modules_tests",
       "--builder-name=Linux MSan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--run-python-script",
       "--enable-msan",
-      "modules_tests"
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/modules_tests",
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "modules_tests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -323,23 +308,21 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=modules_unittests",
       "--step-name=modules_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/modules_unittests",
       "--builder-name=Linux MSan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--run-python-script",
       "--enable-msan",
-      "modules_unittests"
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/modules_unittests",
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "modules_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -351,23 +334,21 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=rtc_unittests",
       "--step-name=rtc_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/rtc_unittests",
       "--builder-name=Linux MSan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--run-python-script",
       "--enable-msan",
-      "rtc_unittests"
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/rtc_unittests",
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "rtc_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -379,23 +360,21 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=system_wrappers_unittests",
       "--step-name=system_wrappers_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/system_wrappers_unittests",
       "--builder-name=Linux MSan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--run-python-script",
       "--enable-msan",
-      "system_wrappers_unittests"
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/system_wrappers_unittests",
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "system_wrappers_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -407,23 +386,21 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=test_support_unittests",
       "--step-name=test_support_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/test_support_unittests",
       "--builder-name=Linux MSan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--run-python-script",
       "--enable-msan",
-      "test_support_unittests"
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/test_support_unittests",
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "test_support_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -435,23 +412,21 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=tools_unittests",
       "--step-name=tools_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/tools_unittests",
       "--builder-name=Linux MSan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--run-python-script",
       "--enable-msan",
-      "tools_unittests"
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/tools_unittests",
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "tools_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -463,23 +438,21 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=video_engine_core_unittests",
       "--step-name=video_engine_core_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/video_engine_core_unittests",
       "--builder-name=Linux MSan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--run-python-script",
       "--enable-msan",
-      "video_engine_core_unittests"
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/video_engine_core_unittests",
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "video_engine_core_unittests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -491,23 +464,21 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=video_engine_tests",
       "--step-name=video_engine_tests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/video_engine_tests",
       "--builder-name=Linux MSan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--run-python-script",
       "--enable-msan",
-      "video_engine_tests"
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/video_engine_tests",
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "video_engine_tests"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -519,17 +490,16 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux MSan\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
       "--test-type=voice_engine_unittests",
       "--step-name=voice_engine_unittests",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/voice_engine_unittests",
       "--builder-name=Linux MSan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--run-python-script",
       "--enable-msan",
-      "voice_engine_unittests"
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/voice_engine_unittests",
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "voice_engine_unittests"
