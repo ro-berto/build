@@ -97,6 +97,9 @@
       ""
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PYTHONPATH": ""
+    },
     "name": "presubmit",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",

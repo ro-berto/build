@@ -78,7 +78,7 @@ def _RunStepsInternal(api):
     presubmit_args.extend(['--rietveld_email', ''])  # activate anonymous mode
 
   env = {}
-  if repo_name == 'build':
+  if repo_name in ['build', 'build_internal', 'build_limited_scripts_slave']:
     # This should overwrite the existing pythonpath which includes references to
     # the local build checkout (but the presubmit scripts should only pick up
     # the scripts from presubmit_build checkout).
