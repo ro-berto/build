@@ -14,6 +14,7 @@ DEPS = [
   'properties',
   'raw_io',
   'step',
+  'time',
   'tryserver',
   'v8',
 ]
@@ -219,7 +220,20 @@ def GenTests(api):
     api.platform(bot_config['testing']['platform'],
                  v8_config_kwargs.get('TARGET_BITS', 64)) +
     api.override_step_data('Mjsunit', api.v8.bisect_failures_example()) +
-    api.override_step_data('Retry - a2', api.v8.bisect_failures_example())
+    api.override_step_data('Retry - a2', api.v8.bisect_failures_example()) +
+    api.time.step(120)
+  )
+
+  yield (
+    api.test('full_%s_%s_bisect_tests_too_long' % (
+        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
+    api.properties.generic(mastername=mastername,
+                           buildername=buildername,
+                           branch='master') +
+    api.platform(bot_config['testing']['platform'],
+                 v8_config_kwargs.get('TARGET_BITS', 64)) +
+    api.override_step_data('Mjsunit', api.v8.bisect_failures_example()) +
+    api.time.step(7)
   )
 
   buildername = 'V8 Linux64 - debug - greedy allocator'
@@ -235,5 +249,6 @@ def GenTests(api):
     api.platform(bot_config['testing']['platform'],
                  v8_config_kwargs.get('TARGET_BITS', 64)) +
     api.override_step_data('Check', api.v8.bisect_failures_example()) +
-    api.override_step_data('Retry - a1', api.v8.bisect_failures_example())
+    api.override_step_data('Retry - a1', api.v8.bisect_failures_example()) +
+    api.time.step(120)
   )

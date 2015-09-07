@@ -26,8 +26,9 @@ MAX_LABEL_SIZE = 23
 # Make sure that a step is not flooded with log lines.
 MAX_FAILURE_LOGS = 10
 
-# Maximum test duration in seconds to consider tests for bisection.
-BISECT_MAX_TEST_DURATION_SECONDS = 5
+# Factor by which the considered failure for bisection must be faster than the
+# ongoing build's total.
+BISECT_DURATION_FACTOR = 5
 
 MIPS_TOOLCHAIN = 'mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2'
 MIPS_DIR = 'mips-2013.11'
@@ -300,6 +301,9 @@ class V8Api(recipe_api.RecipeApi):
     # Default failure retry.
     self.rerun_failures_count = 2
 
+    # If tests are run, this value will be set to their total duration.
+    self.test_duration_sec = 0
+
   def set_bot_config(self, bot_config):
     """Set bot configuration for testing only."""
     self.bot_config = bot_config
@@ -455,7 +459,6 @@ class V8Api(recipe_api.RecipeApi):
           archive,
           src_dir='v8')
 
-
   # TODO(machenbach): Pass api already in constructor to avoid redundant api
   # parameter passing later.
   def create_test(self, test):
@@ -466,9 +469,11 @@ class V8Api(recipe_api.RecipeApi):
     return V8_NON_STANDARD_TESTS.get(test, V8Test)(test, self.m, self)
 
   def runtests(self):
+    start_time_sec = self.m.time.time()
     test_results = TestResults.empty()
     for t in self.bot_config.get('tests', []):
       test_results += self.create_test(t).run()
+    self.test_duration_sec = self.m.time.time() - start_time_sec
     return test_results
 
   def maybe_bisect(self, test_results):
@@ -480,6 +485,13 @@ class V8Api(recipe_api.RecipeApi):
     try:
       failure = min(test_results.failures, key=lambda r: r.duration)
     except ValueError:
+      return
+
+    # Only bisect if the fastest failure is significantly faster than the
+    # ongoing build's total.
+    if failure.duration * BISECT_DURATION_FACTOR > self.test_duration_sec:
+      step_result = self.m.python.inline(
+          'Bisection disabled - test too slow', '# Empty program')
       return
 
     # Don't retry failures during bisection.
@@ -512,43 +524,41 @@ class V8Api(recipe_api.RecipeApi):
               'Cannot continue bisection due to infra failures.')
         return result.failures
 
-    # Only rerun failures faster than a threshold.
-    if failure.duration < BISECT_MAX_TEST_DURATION_SECONDS:
-      with self.m.step.nest('Initialize bisection'):
-        # Setup bisection range ("from" exclusive).
-        from_change, to_change = self.get_change_range()
-        assert from_change
-        assert to_change
+    with self.m.step.nest('Initialize bisection'):
+      # Setup bisection range ("from" exclusive).
+      from_change, to_change = self.get_change_range()
+      assert from_change
+      assert to_change
 
-        # Initialize bisection range.
-        step_result = self.m.git(
-          'log', '%s..%s' % (from_change, to_change), '--format=%H',
-          name='Fetch bisection range',
-          cwd=self.m.path['checkout'],
-          stdout=self.m.raw_io.output(),
-          step_test_data=lambda: self.test_api.example_bisection_range()
-        )
-        bisect_range = list(reversed(step_result.stdout.strip().splitlines()))
-
-        if self.bot_type == 'tester':
-          # Filter the bisect range to the revisions for which builds are
-          # available.
-          available_bisect_range = self.get_available_build_archives(
-              bisect_range)
-        else:
-          available_bisect_range = bisect_range
-
-      # TODO: Check that from_change is a "good" build. Currently we assume it
-      # is good as an experiment to see bisection in action. This will lead to
-      # the wrong suspect if it was bad already.
-
-      culprit = bisection.keyed_bisect(available_bisect_range, is_bad)
-      culprit_range = self.calc_missing_values_in_sequence(
-          bisect_range,
-          available_bisect_range,
-          culprit,
+      # Initialize bisection range.
+      step_result = self.m.git(
+        'log', '%s..%s' % (from_change, to_change), '--format=%H',
+        name='Fetch bisection range',
+        cwd=self.m.path['checkout'],
+        stdout=self.m.raw_io.output(),
+        step_test_data=lambda: self.test_api.example_bisection_range()
       )
-      self.report_culprits(culprit_range)
+      bisect_range = list(reversed(step_result.stdout.strip().splitlines()))
+
+      if self.bot_type == 'tester':
+        # Filter the bisect range to the revisions for which builds are
+        # available.
+        available_bisect_range = self.get_available_build_archives(
+            bisect_range)
+      else:
+        available_bisect_range = bisect_range
+
+    # TODO: Check that from_change is a "good" build. Currently we assume it
+    # is good as an experiment to see bisection in action. This will lead to
+    # the wrong suspect if it was bad already.
+
+    culprit = bisection.keyed_bisect(available_bisect_range, is_bad)
+    culprit_range = self.calc_missing_values_in_sequence(
+        bisect_range,
+        available_bisect_range,
+        culprit,
+    )
+    self.report_culprits(culprit_range)
 
   def presubmit(self):
     self.m.python(
