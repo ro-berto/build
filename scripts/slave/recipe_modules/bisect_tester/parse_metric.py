@@ -1,12 +1,11 @@
-import json
 import re
 
 
-def parse_chartjson_metric(results_str, metric):  # pragma: no cover
+def parse_chartjson_metric(results, metric):  # pragma: no cover
   """Interpret results-chart.json, finding the needed values.
 
   Args:
-    results: The contents of results-chart.json.
+    results: The dictionary parsed from the chartjson file.
     metric: A pair of strings indicating chart and trace names.
 
   Returns:
@@ -15,7 +14,6 @@ def parse_chartjson_metric(results_str, metric):  # pragma: no cover
     containing all the results originally in results_str.
   """
   chart_name, trace_name = metric
-  results = json.loads(results_str)
   if trace_name == chart_name:
     trace_name = 'summary'
   try:

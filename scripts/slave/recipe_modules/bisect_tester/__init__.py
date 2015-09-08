@@ -1,11 +1,12 @@
 DEPS = [
-  'properties',
   'file',
   'gsutil',
-  'step',
-  'raw_io',
+  'json',
   'math_utils',
-  'python',
   'path',
   'platform',
+  'properties',
+  'python',
+  'raw_io',
+  'step',
 ]

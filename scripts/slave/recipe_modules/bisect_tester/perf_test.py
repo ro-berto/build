@@ -73,10 +73,9 @@ def run_perf_test(api, test_config, **kwargs):
       values.append(0)
     elif metric:  # pragma: no cover
       if use_chartjson:
-        file_contents = api.m.file.read(
-            'Reading chartjson results', results_path)
+        step_result = api.m.json.read('Reading chartjson results', results_path)
         valid_value, value, result = parse_metric.parse_chartjson_metric(
-            file_contents, metric.split('/'))
+            step_result.json.output, metric.split('/'))
       else:
         valid_value, value = parse_metric.parse_metric(
             out, err, metric.split('/'))
