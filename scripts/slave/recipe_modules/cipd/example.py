@@ -24,12 +24,13 @@ def RunSteps(api):
   }
 
   api.cipd.ensure_installed(temp.join('bin'), pkgs)
+  api.cipd.ensure_installed(temp.join('bin'), pkgs, 'fake-credentials.json')
 
   api.cipd.platform_tag()
 
   api.cipd.build('fake-input-dir', 'fake-output-path', 'infra/fake-package')
 
-  api.cipd.register('fake-package-path', 'fake-credential-path',
+  api.cipd.register('fake-package-path', 'fake-credentials.json',
                     'fake-ref-1', 'fake-ref-2',
                     fake_tag_1='fake_value_1', fake_tag_2='fake_value_2')
 

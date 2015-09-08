@@ -70,7 +70,7 @@ class CIPDApi(recipe_api.RecipeApi):
         }[self.m.platform.bits],
     )
 
-  def ensure_installed(self, root, pkgs):
+  def ensure_installed(self, root, pkgs, service_account_credentials=None):
     pkg_list = []
     for pkg_name in sorted(pkgs):
       pkg_spec = pkgs[pkg_name]
@@ -78,9 +78,8 @@ class CIPDApi(recipe_api.RecipeApi):
 
     list_data = self.m.raw_io.input("\n".join(pkg_list))
     bin_path = self.m.path['slave_build'].join('cipd')
-    self.m.step(
-      "ensure_installed",
-			[bin_path.join('cipd'), "ensure",
-          "--root", root, "--list", list_data],
-    )
-
+    cmd = [bin_path.join('cipd'), 'ensure',
+          "--root", root, "--list", list_data]
+    if service_account_credentials:
+      cmd.extend(['-service-account-json', service_account_credentials])
+    self.m.step("ensure_installed", cmd)

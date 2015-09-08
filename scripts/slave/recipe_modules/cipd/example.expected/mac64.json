@@ -24,6 +24,20 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/cipd/cipd",
+      "ensure",
+      "--root",
+      "[TMP_BASE]/cipd-example_tmp_1/bin",
+      "--list",
+      "infra/monitoring/dispatcher/linux-amd64 7f751b2237df2fdf3c1405be00590fefffbaea2d",
+      "-service-account-json",
+      "fake-credentials.json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ensure_installed (2)"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/cipd/cipd",
       "pkg-build",
       "-in",
       "fake-input-dir",
@@ -53,7 +67,7 @@
       "-json-output",
       "/path/to/tmp/json",
       "-service-account-json",
-      "fake-credential-path",
+      "fake-credentials.json",
       "-ref",
       "fake-ref-1",
       "-ref",
