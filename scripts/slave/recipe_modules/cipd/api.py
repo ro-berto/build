@@ -62,7 +62,7 @@ class CIPDApi(recipe_api.RecipeApi):
     }))
 
   def platform_tag(self):
-    return "%s-%s" % (
+    return '%s-%s' % (
         self.m.platform.name.replace('win', 'windows'),
         {
             32: '386',
@@ -74,12 +74,12 @@ class CIPDApi(recipe_api.RecipeApi):
     pkg_list = []
     for pkg_name in sorted(pkgs):
       pkg_spec = pkgs[pkg_name]
-      pkg_list.append("%s %s" % (pkg_name, pkg_spec['version']))
+      pkg_list.append('%s %s' % (pkg_name, pkg_spec['version']))
 
-    list_data = self.m.raw_io.input("\n".join(pkg_list))
+    list_data = self.m.raw_io.input('\n'.join(pkg_list))
     bin_path = self.m.path['slave_build'].join('cipd')
     cmd = [bin_path.join('cipd'), 'ensure',
-          "--root", root, "--list", list_data]
+          '--root', root, '--list', list_data]
     if service_account_credentials:
       cmd.extend(['-service-account-json', service_account_credentials])
-    self.m.step("ensure_installed", cmd)
+    self.m.step('ensure_installed', cmd)

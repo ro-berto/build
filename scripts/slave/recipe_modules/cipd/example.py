@@ -15,10 +15,10 @@ def RunSteps(api):
   # Prepare files.
   temp = api.path.mkdtemp('cipd-example')
 
-  api.cipd.install_client("install cipd")
+  api.cipd.install_client('install cipd')
 
   pkgs = {
-    "infra/monitoring/dispatcher/linux-amd64": {
+    'infra/monitoring/dispatcher/linux-amd64': {
       'version': '7f751b2237df2fdf3c1405be00590fefffbaea2d',
     },
   }
