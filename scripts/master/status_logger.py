@@ -185,10 +185,10 @@ class StatusEventLogger(StatusReceiverMultiService):
 
 
   def send_build_result(
-      self, started, finished, builder_name, bot_name, result):
+      self, started, finished, builder_name, bot_name, result, project_id=None):
     """Log a build result for ts_mon.
 
-    The purpose of this function is to count builds through ts_mon.
+    This allows computing metrics for builds in mastermon.
     """
     d = {
         'timestamp_ms': finished * 1000,
@@ -197,6 +197,8 @@ class StatusEventLogger(StatusReceiverMultiService):
         'result': result.lower(),
         'duration_s': finished - started,
     }
+    if project_id:
+      d['project_id'] = project_id
     self.ts_mon_logger.info(json.dumps(d))
 
 
@@ -467,12 +469,17 @@ class StatusEventLogger(StatusReceiverMultiService):
     self.log('buildFinished', '%s, %d, %s, %r',
              builderName, build_number, bot, results)
     started, finished = build.getTimes()
+    # If property doesn't exist, this function returns None.
+    # Note: this is not true for build.GetProperty(), it raises KeyError.
+    project_id = build.getProperties().getProperty('patch_project')
     self.send_build_event(
         'END', finished * 1000, 'BUILD', bot, builderName, build_number,
         self._get_requested_at_millis(build),
         result=buildbot.status.results.Results[results])
-    self.send_build_result(started, finished, builderName, bot,
-                           buildbot.status.results.Results[results])
+    self.send_build_result(
+        started, finished, builderName, bot,
+        buildbot.status.results.Results[results],
+        project_id)
 
   def builderRemoved(self, builderName):
     self.log('builderRemoved', '%s', builderName)

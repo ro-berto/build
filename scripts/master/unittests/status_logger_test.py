@@ -21,6 +21,11 @@ class Builder(object):
   name = 'coconuts'
 
 
+class Properties(object):
+  def getProperty(self, _name):
+    return 'whatever'
+
+
 class Build(object):
   def getNumber(self):
     return 5
@@ -33,6 +38,9 @@ class Build(object):
 
   def getProperty(self, _name):
     return 1427929423.0
+
+  def getProperties(self):
+    return Properties()
 
   def getTimes(self):
     return 5000, 6000
