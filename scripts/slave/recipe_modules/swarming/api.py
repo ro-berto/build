@@ -602,6 +602,8 @@ class SwarmingApi(recipe_api.RecipeApi):
       # propagate after the results have been parsed.
       try:
         step_result = self.m.step.active_result
+        outdir_json = self.m.json.dumps(step_result.raw_io.output_dir, indent=2)
+        step_result.presentation.logs['outdir_json'] = outdir_json.splitlines()
 
         # Check if it's an internal failure.
         summary = self.m.json.loads(

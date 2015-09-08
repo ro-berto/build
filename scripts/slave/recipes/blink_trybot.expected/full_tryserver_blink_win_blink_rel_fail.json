@@ -3043,7 +3043,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "maps_pixel_test on NVIDIA GPU on Windows (with patch) on Windows"
+    "name": "maps_pixel_test on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3062,7 +3069,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "pixel_test on NVIDIA GPU on Windows (with patch) on Windows"
+    "name": "pixel_test on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3081,7 +3095,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "webgl_conformance on NVIDIA GPU on Windows (with patch) on Windows"
+    "name": "webgl_conformance on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3100,7 +3121,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "context_lost on NVIDIA GPU on Windows (with patch) on Windows"
+    "name": "context_lost on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3119,7 +3147,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "memory_test on NVIDIA GPU on Windows (with patch) on Windows"
+    "name": "memory_test on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3138,7 +3173,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trace_test on NVIDIA GPU on Windows (with patch) on Windows"
+    "name": "trace_test on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3157,7 +3199,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "screenshot_sync on NVIDIA GPU on Windows (with patch) on Windows"
+    "name": "screenshot_sync on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3176,7 +3225,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "hardware_accelerated_feature on NVIDIA GPU on Windows (with patch) on Windows"
+    "name": "hardware_accelerated_feature on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3195,7 +3251,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gpu_process_launch on NVIDIA GPU on Windows (with patch) on Windows"
+    "name": "gpu_process_launch on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3214,7 +3277,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gpu_rasterization on NVIDIA GPU on Windows (with patch) on Windows"
+    "name": "gpu_rasterization on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -3333,7 +3403,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "maps_pixel_test on ATI GPU on Windows (with patch) on Windows"
+    "name": "maps_pixel_test on ATI GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3352,7 +3429,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "pixel_test on ATI GPU on Windows (with patch) on Windows"
+    "name": "pixel_test on ATI GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3371,7 +3455,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "webgl_conformance on ATI GPU on Windows (with patch) on Windows"
+    "name": "webgl_conformance on ATI GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3390,7 +3481,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "context_lost on ATI GPU on Windows (with patch) on Windows"
+    "name": "context_lost on ATI GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3409,7 +3507,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "memory_test on ATI GPU on Windows (with patch) on Windows"
+    "name": "memory_test on ATI GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3428,7 +3533,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trace_test on ATI GPU on Windows (with patch) on Windows"
+    "name": "trace_test on ATI GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3447,7 +3559,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "screenshot_sync on ATI GPU on Windows (with patch) on Windows"
+    "name": "screenshot_sync on ATI GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3466,7 +3585,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "hardware_accelerated_feature on ATI GPU on Windows (with patch) on Windows"
+    "name": "hardware_accelerated_feature on ATI GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3485,7 +3611,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gpu_process_launch on ATI GPU on Windows (with patch) on Windows"
+    "name": "gpu_process_launch on ATI GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3504,7 +3637,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gpu_rasterization on ATI GPU on Windows (with patch) on Windows"
+    "name": "gpu_rasterization on ATI GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "allow_subannotations": true,

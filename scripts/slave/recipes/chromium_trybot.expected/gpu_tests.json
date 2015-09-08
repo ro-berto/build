@@ -3160,7 +3160,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "maps_pixel_test on Intel GPU on Mac (with patch)"
+    "name": "maps_pixel_test on Intel GPU on Mac (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3181,7 +3188,12 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "pixel_test on Intel GPU on Mac (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@",
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"failure\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": true}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
     ]
   },
   {
@@ -3201,7 +3213,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "webgl_conformance on Intel GPU on Mac (with patch)"
+    "name": "webgl_conformance on Intel GPU on Mac (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3220,7 +3239,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "context_lost on Intel GPU on Mac (with patch)"
+    "name": "context_lost on Intel GPU on Mac (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3239,7 +3265,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "memory_test on Intel GPU on Mac (with patch)"
+    "name": "memory_test on Intel GPU on Mac (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3258,7 +3291,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trace_test on Intel GPU on Mac (with patch)"
+    "name": "trace_test on Intel GPU on Mac (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3277,7 +3317,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "screenshot_sync on Intel GPU on Mac (with patch)"
+    "name": "screenshot_sync on Intel GPU on Mac (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3296,7 +3343,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "hardware_accelerated_feature on Intel GPU on Mac (with patch)"
+    "name": "hardware_accelerated_feature on Intel GPU on Mac (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3315,7 +3369,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gpu_process_launch on Intel GPU on Mac (with patch)"
+    "name": "gpu_process_launch on Intel GPU on Mac (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3334,7 +3395,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gpu_rasterization on Intel GPU on Mac (with patch)"
+    "name": "gpu_rasterization on Intel GPU on Mac (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -3453,7 +3521,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "maps_pixel_test on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
+    "name": "maps_pixel_test on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3472,7 +3547,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "pixel_test on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
+    "name": "pixel_test on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3491,7 +3573,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "webgl_conformance on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
+    "name": "webgl_conformance on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3510,7 +3599,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "context_lost on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
+    "name": "context_lost on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3529,7 +3625,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "memory_test on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
+    "name": "memory_test on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3548,7 +3651,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trace_test on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
+    "name": "trace_test on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3567,7 +3677,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "screenshot_sync on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
+    "name": "screenshot_sync on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3586,7 +3703,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "hardware_accelerated_feature on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
+    "name": "hardware_accelerated_feature on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3605,7 +3729,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gpu_process_launch on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
+    "name": "gpu_process_launch on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "cmd": [
@@ -3624,7 +3755,14 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gpu_rasterization on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
+    "name": "gpu_rasterization on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"success\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -3947,7 +4085,12 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "pixel_test on Intel GPU on Mac (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@",
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/results.json\": \"{\\\"per_page_values\\\": [{\\\"page_id\\\": 0, \\\"type\\\": \\\"failure\\\"}, {\\\"page_id\\\": 1, \\\"type\\\": \\\"success\\\"}], \\\"pages\\\": {\\\"1\\\": {\\\"name\\\": \\\"Test.Test2\\\"}, \\\"0\\\": {\\\"name\\\": \\\"Test.Test1\\\"}}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": true}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@"
     ]
   },
   {
