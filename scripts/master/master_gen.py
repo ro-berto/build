@@ -83,7 +83,18 @@ def _Populate(BuildmasterConfig, builders, active_master_cls):
 
 def _ComputeBuilders(builders, m_annotator):
   actual_builders = []
-  for builder_name, builder_data in builders['builders'].items():
+
+  def cmp_fn(a, b):
+    a_cat = builders['builders'][a].get('category')
+    b_cat = builders['builders'][b].get('category')
+    if a_cat != b_cat:
+      return 1 if a_cat > b_cat else -1
+    if a != b:
+      return 1 if a > b else -1
+    return 0
+
+  for builder_name in sorted(builders['builders'], cmp=cmp_fn):
+    builder_data = builders['builders'][builder_name]
     scheduler_name = builder_data['scheduler']
 
     # We will automatically merge all build requests for any
