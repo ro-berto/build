@@ -122,6 +122,7 @@ PACKAGES = [
   Package(github_repo='polymer-dart', name='polymer'),
   Package(github_repo='polymer-expressions'),
   Package(github_repo='pool'),
+  Package(github_repo='pub'),
   Package(github_repo='reflectable'),
   Package(github_repo='scheduled_test'),
   Package(github_repo='shelf'),
