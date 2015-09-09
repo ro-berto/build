@@ -32,19 +32,98 @@ DEPS = [
 BUILDERS = freeze({
   'tryserver.blink': {
     'builders': {
+      # TODO(joelo): Remove this builder.
       'linux_blink_rel_ng': {
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux',
+      },
+      'linux_blink_dbg': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux (dbg)',
+      },
+      'linux_blink_rel': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux',
+      },
+      'linux_blink_compile_dbg': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux (dbg)',
+        'analyze_mode': 'compile',
+      },
+      'linux_blink_compile_rel': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux',
+        'analyze_mode': 'compile',
+      },
+      'linux_blink_oilpan_dbg': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux Oilpan (dbg)',
+      },
+      'linux_blink_oilpan_rel': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux Oilpan',
       },
       'linux_blink_oilpan_compile_rel': {
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux Oilpan',
         'analyze_mode': 'compile',
       },
+      'mac_blink_dbg': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Mac10.6 (dbg)',
+      },
+      'mac_blink_rel': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Mac10.9',
+      },
+      'mac_blink_compile_dbg': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Mac10.6 (dbg)',
+        'analyze_mode': 'compile',
+      },
+      'mac_blink_compile_rel': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Mac10.9',
+        'analyze_mode': 'compile',
+      },
+      'mac_blink_oilpan_dbg': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Mac Oilpan (dbg)',
+      },
+      'mac_blink_oilpan_rel': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Mac Oilpan',
+      },
       'mac_blink_oilpan_compile_rel': {
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac Oilpan',
         'analyze_mode': 'compile',
+      },
+      'win_blink_dbg': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Win7 (dbg)',
+      },
+      'win_blink_rel': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Win7',
+      },
+      'win_blink_compile_dbg': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Win7 (dbg)',
+        'analyze_mode': 'compile',
+      },
+      'win_blink_compile_rel': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Win7',
+        'analyze_mode': 'compile',
+      },
+      'win_blink_oilpan_dbg': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Win Oilpan (dbg)',
+      },
+      'win_blink_oilpan_rel': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Win Oilpan',
       },
       'win_blink_oilpan_compile_rel': {
         'mastername': 'chromium.webkit',
@@ -539,8 +618,9 @@ def _RunStepsInternal(api):
 
   # TODO(phajdan.jr): Remove special case for layout tests.
   add_blink_tests = False
-  if (any([f.startswith('third_party/WebKit') for f in affected_files]) and
-      buildername in CHROMIUM_BLINK_TESTS_BUILDERS):
+  if (mastername == 'tryserver.blink' or
+      (any([f.startswith('third_party/WebKit') for f in affected_files]) and
+       buildername in CHROMIUM_BLINK_TESTS_BUILDERS)):
     add_blink_tests = True
 
   # Add blink tests that work well with "analyze" here. The tricky ones
@@ -689,6 +769,30 @@ def GenTests(api):
           (api.empty_test_data() if analyze else suppress_analyze()) +
           props(mastername=mastername, buildername=buildername)
         )
+
+  # Additional tests for blink trybots.
+  blink_trybots = BUILDERS['tryserver.blink']['builders'].iteritems()
+  for buildername, bot_config in blink_trybots:
+    if bot_config.get('analyze_mode') == 'compile':
+      continue
+
+    for pass_first in (True, False):
+      test_name = 'full_%s_%s_%s' % (_sanitize_nonalpha('tryserver.blink'),
+                                     _sanitize_nonalpha(buildername),
+                                     'pass' if pass_first else 'fail')
+      test = (api.test(test_name) +
+              suppress_analyze() +
+              props(mastername='tryserver.blink',
+                    buildername=buildername,
+                    patch_project='blink') +
+              api.chromium_tests.platform(
+                  bot_config['mastername'], bot_config['buildername']) +
+              api.override_step_data('webkit_tests (with patch)',
+                  api.test_utils.canned_test_output(passing=pass_first)))
+      if not pass_first:
+        test += api.override_step_data('webkit_tests (without patch)',
+            api.test_utils.canned_test_output(passing=False, minimal=True))
+      yield test
 
   # Regression test for http://crbug.com/453471#c16
   yield (
@@ -1248,4 +1352,105 @@ def GenTests(api):
     api.override_step_data('webkit_tests (with patch)',
                            api.test_utils.canned_test_output(False)) +
     api.override_step_data('compile (without patch)', retcode=1)
+  )
+
+  # This tests that if the first fails, but the second pass succeeds
+  # that we fail the whole build.
+  yield (
+    api.test('blink_minimal_pass_continues') +
+    props(mastername='tryserver.blink',
+          buildername='linux_blink_rel',
+          patch_project='blink') +
+    api.platform.name('linux') +
+    api.override_step_data('webkit_tests (with patch)',
+        api.test_utils.canned_test_output(passing=False)) +
+    api.override_step_data('webkit_tests (without patch)',
+        api.test_utils.canned_test_output(passing=True, minimal=True))
+  )
+
+  yield (
+    api.test('blink_preamble_test_failure') +
+    props(mastername='tryserver.blink',
+          buildername='linux_blink_rel') +
+    suppress_analyze() +
+    api.platform.name('linux') +
+    api.step_data('webkit_unit_tests (with patch)', retcode=1)
+  )
+  for test in (
+          'blink_platform_unittests',
+          'blink_heap_unittests',
+          'wtf_unittests'):
+    yield (
+      api.test(_sanitize_nonalpha('%s_failure' % test)) +
+      props(mastername='tryserver.blink',
+            buildername='linux_blink_rel') +
+      suppress_analyze() +
+      api.platform.name('linux') +
+      api.step_data('%s (with patch)' % test, retcode=1)
+    )
+
+  # This tests what happens if something goes horribly wrong in
+  # run-webkit-tests and we return an internal error; the step should
+  # be considered a hard failure and we shouldn't try to compare the
+  # lists of failing tests.
+  # 255 == test_run_results.UNEXPECTED_ERROR_EXIT_STATUS in run-webkit-tests.
+  yield (
+    api.test('webkit_tests_unexpected_error') +
+    props(mastername='tryserver.blink',
+          buildername='linux_blink_rel',
+          patch_project='blink') +
+    api.platform.name('linux') +
+    api.override_step_data('webkit_tests (with patch)',
+        api.test_utils.canned_test_output(passing=False, retcode=255))
+  )
+
+  # TODO(dpranke): crbug.com/357866 . This tests what happens if we exceed the
+  # number of failures specified with --exit-after-n-crashes-or-times or
+  # --exit-after-n-failures; the step should be considered a hard failure and
+  # we shouldn't try to compare the lists of failing tests.
+  # 130 == test_run_results.INTERRUPTED_EXIT_STATUS in run-webkit-tests.
+  yield (
+    api.test('webkit_tests_interrupted') +
+    props(mastername='tryserver.blink',
+          buildername='linux_blink_rel',
+          patch_project='blink') +
+    api.platform.name('linux') +
+    api.override_step_data('webkit_tests (with patch)',
+        api.test_utils.canned_test_output(passing=False, retcode=130))
+  )
+
+  # This tests what happens if we don't trip the thresholds listed
+  # above, but fail more tests than we can safely fit in a return code.
+  # (this should be a soft failure and we can still retry w/o the patch
+  # and compare the lists of failing tests).
+  yield (
+    api.test('too_many_failures_for_retcode') +
+    props(mastername='tryserver.blink',
+          buildername='linux_blink_rel',
+          patch_project='blink') +
+    api.platform.name('linux') +
+    api.override_step_data('webkit_tests (with patch)',
+        api.test_utils.canned_test_output(passing=False,
+                                          num_additional_failures=125)) +
+    api.override_step_data('webkit_tests (without patch)',
+        api.test_utils.canned_test_output(passing=True, minimal=True))
+  )
+
+  yield (
+    api.test('non_cq_blink_tryjob') +
+    props(mastername='tryserver.blink',
+          buildername='win_blink_rel',
+          patch_project='blink',
+          requester='someone@chromium.org') +
+    api.platform.name('win') +
+    api.override_step_data('webkit_tests (with patch)',
+                           api.test_utils.canned_test_output(passing=True))
+  )
+
+  yield (
+    api.test('use_v8_patch_on_blink_trybot') +
+    props(mastername='tryserver.blink',
+          buildername='mac_blink_rel',
+          patch_project='v8') +
+    api.platform.name('mac')
   )

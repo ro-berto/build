@@ -25,191 +25,8 @@ DEPS = [
 ]
 
 
+# TODO(joelo): Move this to chromium_trybot.py and delete this recipe.
 BUILDERS = freeze({
-  'tryserver.blink': {
-    'builders': {
-      'linux_blink_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'linux_blink_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'linux_blink_compile_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': True,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'linux_blink_compile_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': True,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'linux_blink_oilpan_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'linux_blink_oilpan_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'linux',
-        },
-      },
-      'mac_blink_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'mac',
-        },
-      },
-      'mac_blink_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'mac',
-        },
-      },
-      'mac_blink_compile_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': True,
-        'testing': {
-          'platform': 'mac',
-        },
-      },
-      'mac_blink_compile_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': True,
-        'testing': {
-          'platform': 'mac',
-        },
-      },
-      'mac_blink_oilpan_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'mac',
-        },
-      },
-      'mac_blink_oilpan_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'mac',
-        },
-      },
-      'win_blink_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'win',
-        },
-      },
-      'win_blink_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'win',
-        },
-      },
-      'win_blink_compile_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'compile_only': True,
-        'testing': {
-          'platform': 'win',
-        },
-      },
-      'win_blink_compile_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'compile_only': True,
-        'testing': {
-          'platform': 'win',
-        },
-      },
-      'win_blink_oilpan_dbg': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'win',
-        },
-      },
-      'win_blink_oilpan_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'compile_only': False,
-        'testing': {
-          'platform': 'win',
-        },
-      },
-    },
-  },
   'tryserver.v8': {
     'builders': {
       'v8_linux_layout_dbg': {
@@ -232,40 +49,6 @@ BUILDERS = freeze({
 })
 
 
-# TODO(sergiyb): This config should be read from an external JSON file
-# in a custom step, which can then be mocked in the GenTests.
-BLINK_GPU_DIMENSION_SETS = {
-  'tryserver.blink': {
-    'linux_blink_rel': [
-      {
-        'gpu': '10de:104a',  # NVIDIA GeForce GT 610
-        'os': 'Linux',
-      },
-    ],
-    'mac_blink_rel': [
-      {
-        'gpu': '8086:0116',  # Intel HD Graphics 3000
-        'hidpi': '0',
-        'os': 'Mac-10.8',
-      }, {
-        'gpu': '10de:0fe9',  # NVIDIA GeForce GT 750M
-        'hidpi': '1',
-        'os': 'Mac-10.9',
-      },
-    ],
-    'win_blink_rel': [
-      {
-        'gpu': '10de:104a',  # NVIDIA GeForce GT 610
-        'os': 'Windows',
-      }, {
-        'gpu': '1002:6779',  # AMD Radeon HD 6450
-        'os': 'Windows',
-      },
-    ],
-  },
-}
-
-
 def _RunStepsInternal(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
@@ -284,9 +67,6 @@ def _RunStepsInternal(api):
     for dep, rev in bot_config.get('set_custom_revs', {}).iteritems():
       api.gclient.c.revisions[dep] = rev % api.properties
 
-  if 'oilpan' in buildername:
-    api.chromium.apply_config('oilpan')
-
   webkit_lint = api.path['build'].join('scripts', 'slave', 'chromium',
                                        'lint_test_files_wrapper.py')
   webkit_python_tests = api.path['build'].join('scripts', 'slave', 'chromium',
@@ -296,26 +76,6 @@ def _RunStepsInternal(api):
   # makes bot_update determine the patch_root from tryserver root, e.g. 'src'.
   bot_update_step = api.bot_update.ensure_checkout(
       force=True, patch_root=bot_config.get('root_override'))
-
-  tests = []
-
-  master = api.properties['mastername']
-  builder = api.properties['buildername']
-  if builder in BLINK_GPU_DIMENSION_SETS.get(master, {}):
-    # TODO(sergiyb): This option should be removed/refactored, because it was
-    # originally created to prevent buidling GPU tests on Chromium waterfalls.
-    api.chromium.c.gyp_env.GYP_DEFINES['archive_gpu_tests'] = 1
-    api.chromium.apply_config('gpu_tests')
-    tests.extend(api.gpu.create_tests(
-        bot_update_step.presentation.properties['got_revision'],
-        bot_update_step.presentation.properties['got_webkit_revision'],
-        enable_swarming=True,
-        swarming_dimension_sets=BLINK_GPU_DIMENSION_SETS[master][builder]))
-
-  if bot_config['compile_only']:
-    api.chromium.runhooks()
-    api.chromium.compile()
-    return
 
   api.chromium_tests.configure_swarming('blink', precommit=True)
 
@@ -390,13 +150,7 @@ def _RunStepsInternal(api):
     api.chromium.compile()
     api.isolate.isolate_tests(api.chromium.output_dir)
 
-  extra_args = []
-  if 'oilpan' in buildername:
-    extra_args.extend(['--additional-expectations',
-                       api.path['checkout'].join('third_party', 'WebKit',
-                                                 'LayoutTests',
-                                                 'OilpanExpectations')])
-  tests.append(api.chromium_tests.steps.BlinkTest(extra_args=extra_args))
+  tests = [api.chromium_tests.steps.BlinkTest()]
 
   api.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
 
@@ -427,18 +181,15 @@ def GenTests(api):
       test_name = 'full_%s_%s' % (_sanitize_nonalpha(mastername),
                                   _sanitize_nonalpha(buildername))
       tests = []
-      if bot_config['compile_only']:
-        tests.append(api.test(test_name))
-      else:
-        for pass_first in (True, False):
-          test = (
-            api.test(test_name + ('_pass' if pass_first else '_fail')) +
-            api.override_step_data(with_patch, canned_test(passing=pass_first))
-          )
-          if not pass_first:
-            test += api.override_step_data(
-                without_patch, canned_test(passing=False, minimal=True))
-          tests.append(test)
+      for pass_first in (True, False):
+        test = (
+          api.test(test_name + ('_pass' if pass_first else '_fail')) +
+          api.override_step_data(with_patch, canned_test(passing=pass_first))
+        )
+        if not pass_first:
+          test += api.override_step_data(
+              without_patch, canned_test(passing=False, minimal=True))
+        tests.append(test)
 
       for test in tests:
         test += (
@@ -455,7 +206,7 @@ def GenTests(api):
   # that we fail the whole build.
   yield (
     api.test('minimal_pass_continues') +
-    properties('tryserver.blink', 'linux_blink_rel') +
+    properties('tryserver.v8', 'v8_linux_layout_dbg') +
     api.override_step_data(with_patch, canned_test(passing=False)) +
     api.override_step_data(without_patch,
                            canned_test(passing=True, minimal=True))
@@ -463,7 +214,7 @@ def GenTests(api):
 
   yield (
     api.test('preamble_test_failure') +
-    properties('tryserver.blink', 'linux_blink_rel') +
+    properties('tryserver.v8', 'v8_linux_layout_dbg') +
     api.step_data('webkit_unit_tests', retcode=1)
   )
   for test in (
@@ -472,7 +223,7 @@ def GenTests(api):
           'wtf_unittests'):
     yield (
       api.test('%s_failure' % test) +
-      properties('tryserver.blink', 'linux_blink_rel') +
+      properties('tryserver.v8', 'v8_linux_layout_dbg') +
       api.step_data(test, retcode=1)
     )
 
@@ -483,7 +234,7 @@ def GenTests(api):
   # 255 == test_run_results.UNEXPECTED_ERROR_EXIT_STATUS in run-webkit-tests.
   yield (
     api.test('webkit_tests_unexpected_error') +
-    properties('tryserver.blink', 'linux_blink_rel') +
+    properties('tryserver.v8', 'v8_linux_layout_dbg') +
     api.override_step_data(with_patch, canned_test(passing=False,
                                                    retcode=255))
   )
@@ -495,7 +246,7 @@ def GenTests(api):
   # 130 == test_run_results.INTERRUPTED_EXIT_STATUS in run-webkit-tests.
   yield (
     api.test('webkit_tests_interrupted') +
-    properties('tryserver.blink', 'linux_blink_rel') +
+    properties('tryserver.v8', 'v8_linux_layout_dbg') +
     api.override_step_data(with_patch, canned_test(passing=False,
                                                    retcode=130))
   )
@@ -506,7 +257,7 @@ def GenTests(api):
   # and compare the lists of failing tests).
   yield (
     api.test('too_many_failures_for_retcode') +
-    properties('tryserver.blink', 'linux_blink_rel') +
+    properties('tryserver.v8', 'v8_linux_layout_dbg') +
     api.override_step_data(with_patch,
                            canned_test(passing=False,
                                        num_additional_failures=125)) +
@@ -516,31 +267,16 @@ def GenTests(api):
 
   yield (
     api.test('non_cq_tryjob') +
-    properties('tryserver.blink', 'win_blink_rel',
+    properties('tryserver.v8', 'v8_linux_layout_dbg',
                requester='someone@chromium.org') +
     api.platform.name('win') +
     api.override_step_data(with_patch, canned_test(passing=True))
   )
 
   yield (
-    api.test('gpu_tests') +
-    properties(mastername='tryserver.blink', buildername='mac_blink_rel') +
-    api.platform.name('mac') +
-    api.override_step_data(with_patch, canned_test(passing=True)) +
-    api.override_step_data(
-        'pixel_test on Intel GPU on Mac (with patch)',
-        api.test_utils.canned_telemetry_gpu_output(
-            passing=False, is_win=False, swarming=True)) +
-    api.override_step_data(
-        'pixel_test on Intel GPU on Mac (without patch)',
-        api.test_utils.canned_telemetry_gpu_output(
-            passing=False, is_win=False, swarming=True))
-  )
-
-  yield (
     api.test('use_v8_patch_on_blink_trybot') +
-    properties(buildername='mac_blink_rel',
-               mastername='tryserver.blink',
+    properties(buildername='v8_linux_layout_dbg',
+               mastername='tryserver.v8',
                patch_project='v8') +
     api.platform.name('mac')
   )
