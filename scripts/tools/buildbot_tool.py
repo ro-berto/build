@@ -80,7 +80,7 @@ def run_gen(args, fs):
   builders_path = fs.join(master_dirname, 'builders.pyl')
 
   if not fs.exists(builders_path):
-    print("%s not found" % master_dirname, file=sys.stderr)
+    print("%s not found" % builders_path, file=sys.stderr)
     return 1
 
   generate(builders_path, fs)

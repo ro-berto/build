@@ -114,7 +114,8 @@ class GenTest(unittest.TestCase):
     ret, out, err, _, _ = self._run_gen(None)
     self.assertEqual(ret, 1)
     self.assertEqual(out, '')
-    self.assertEqual(err, '/build/masters/master.test not found\n')
+    self.assertEqual(err,
+                     '/build/masters/master.test/builders.pyl not found\n')
 
   def test_bad_template(self):
     files = {
