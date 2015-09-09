@@ -281,7 +281,7 @@
       "refs/remotes/origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Gathering reference values.git update-ref (2)",
+    "name": "Gathering reference values.git update-ref",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -293,7 +293,7 @@
       "master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Gathering reference values.git checkout (2)",
+    "name": "Gathering reference values.git checkout",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -348,7 +348,7 @@
       "refs/remotes/origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Gathering reference values.git update-ref (3)",
+    "name": "Gathering reference values.git update-ref (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -360,7 +360,7 @@
       "master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Gathering reference values.git checkout (3)",
+    "name": "Gathering reference values.git checkout (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

@@ -2,14 +2,26 @@
   {
     "cmd": [
       "echo",
-      "testa"
+      "billy"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "climate": "rainy",
       "mood": "excellent"
     },
-    "name": "grandparent.parent.child"
+    "name": "grandparent.mom.child"
+  },
+  {
+    "cmd": [
+      "echo",
+      "sam"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "climate": "cloudy",
+      "mood": "excellent"
+    },
+    "name": "grandparent.dad.child"
   },
   {
     "cmd": [

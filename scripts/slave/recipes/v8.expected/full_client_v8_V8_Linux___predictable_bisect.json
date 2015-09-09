@@ -550,7 +550,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Bisect into a2.clang_revision (2)",
+    "name": "Bisect into a2.clang_revision",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

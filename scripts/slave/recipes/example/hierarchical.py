@@ -12,8 +12,10 @@ def RunSteps(api):
   with api.step.context({
       'env': {'mood': 'excellent', 'climate': 'sunny'},
       'name': 'grandparent'}):
-    with api.step.context({'env': {'climate': 'rainy'}, 'name': 'parent'}):
-      api.step("child", ["echo", "testa"])
+    with api.step.context({'env': {'climate': 'rainy'}, 'name': 'mom'}):
+      api.step("child", ["echo", "billy"])
+    with api.step.context({'env': {'climate': 'cloudy'}, 'name': 'dad'}):
+      api.step("child", ["echo", "sam"])
     api.step("aunt", ["echo", "testb"])
 
 

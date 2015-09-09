@@ -281,7 +281,7 @@
       "refs/remotes/origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Gathering reference values.git update-ref (2)",
+    "name": "Gathering reference values.git update-ref",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -293,7 +293,7 @@
       "master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Gathering reference values.git checkout (2)",
+    "name": "Gathering reference values.git checkout",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -348,7 +348,7 @@
       "refs/remotes/origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Gathering reference values.git update-ref (3)",
+    "name": "Gathering reference values.git update-ref (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -360,7 +360,7 @@
       "master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Gathering reference values.git checkout (3)",
+    "name": "Gathering reference values.git checkout (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -627,7 +627,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.gsutil ls (7)",
+    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -640,7 +640,7 @@
       "refs/remotes/origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.git update-ref (4)",
+    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.git update-ref",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -652,7 +652,7 @@
       "master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.git checkout (4)",
+    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.git checkout",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -710,7 +710,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.gsutil ls (8)",
+    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -772,7 +772,7 @@
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.gsutil ls (9)",
+    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.gsutil ls (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -816,7 +816,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_fc6dfc7ff5b1073408499478969261b826441144.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.gsutil ls (10)",
+    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -829,7 +829,7 @@
       "refs/remotes/origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.git update-ref (5)",
+    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.git update-ref",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -841,7 +841,7 @@
       "master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.git checkout (5)",
+    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.git checkout",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -899,7 +899,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_fc6dfc7ff5b1073408499478969261b826441144.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.gsutil ls (11)",
+    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -961,7 +961,7 @@
       "gs://chrome-perf/bisect-results/fc6dfc7ff5b1073408499478969261b826441144-test.results"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.gsutil ls (12)",
+    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.gsutil ls (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
