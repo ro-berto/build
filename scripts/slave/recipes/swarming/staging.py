@@ -15,6 +15,7 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 DEPS = [
   'bot_update',
   'chromium',
+  'commit_position',
   'file',
   'gclient',
   'isolate',
@@ -25,6 +26,7 @@ DEPS = [
   'step',
   'swarming',
   'swarming_client',
+  'test_results',
   'test_utils',
 ]
 
@@ -101,6 +103,28 @@ def RunSteps(api):
   with api.step.defer_results():
     for task in tasks:
       api.swarming.collect_task(task)
+
+      # TODO(estaab): Move this into the swarming recipe_module behind a flag
+      # after testing on staging.
+      step_result = api.step.active_result
+      gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
+      if gtest_results and gtest_results.raw:
+        # This is a potentially large json file (on the order of 10s of MiB) but
+        # swarming/api.py is already parsing it to get failed shards so we reuse
+        # it here.
+        parsed_gtest_data = gtest_results.raw
+        chrome_revision_cp = api.bot_update.properties.get(
+            'got_revision_cp', 'x@{#0}')
+        chrome_revision = str(api.commit_position.parse_revision(
+            chrome_revision_cp))
+        webkit_revision = api.bot_update.properties.get(
+            'got_webkit_revision', '0')
+        api.test_results.upload(
+            api.json.input(parsed_gtest_data),
+            chrome_revision=chrome_revision,
+            webkit_revision=webkit_revision,
+            test_type=task.title,
+            test_results_server='test-results-test.appspot.com')
 
 
 def GenTests(api):

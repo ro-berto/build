@@ -431,6 +431,31 @@
     "name": "dummy_target_1 on Mac"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "chromium.testing.master",
+      "--builder-name",
+      "TestBuilder",
+      "--build-number",
+      "571",
+      "--test-type",
+      "dummy_target_1",
+      "--test-results-server",
+      "test-results-test.appspot.com",
+      "--webkit-revision",
+      "0",
+      "--chrome-revision",
+      "0"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [dummy_target_1]"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -455,5 +480,30 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "dummy_target_2 on Mac"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "chromium.testing.master",
+      "--builder-name",
+      "TestBuilder",
+      "--build-number",
+      "571",
+      "--test-type",
+      "dummy_target_2",
+      "--test-results-server",
+      "test-results-test.appspot.com",
+      "--webkit-revision",
+      "0",
+      "--chrome-revision",
+      "0"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [dummy_target_2]"
   }
 ]
