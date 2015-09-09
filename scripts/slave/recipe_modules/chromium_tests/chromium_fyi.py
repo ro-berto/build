@@ -1319,6 +1319,7 @@ SPEC = {
       },
       'bot_type': 'builder',
       'testing': { 'platform': 'win', },
+      'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin') },
       'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
@@ -1347,6 +1348,7 @@ SPEC = {
       },
       'bot_type': 'builder',
       'testing': { 'platform': 'win', },
+      'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin(dbg)') },
       'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
@@ -1376,6 +1378,7 @@ SPEC = {
       'GYP_DEFINES': { 'component': 'shared_library' },
       'bot_type': 'builder',
       'testing': { 'platform': 'win', },
+      'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin(dll)') },
       'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
@@ -1405,6 +1408,7 @@ SPEC = {
       },
       'bot_type': 'builder',
       'testing': { 'platform': 'win', },
+      'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin64') },
       'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
@@ -1433,6 +1437,7 @@ SPEC = {
       },
       'bot_type': 'builder',
       'testing': { 'platform': 'win', },
+      'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin64(dbg)') },
       'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
@@ -1462,6 +1467,7 @@ SPEC = {
       'GYP_DEFINES': { 'component': 'shared_library' },
       'bot_type': 'builder',
       'testing': { 'platform': 'win', },
+      'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin64(dll)') },
       'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
