@@ -1115,10 +1115,10 @@ class SwarmingTelemetryGPUTest(SwarmingTest):
     # If rerunning without a patch, run only tests that failed.
     if suffix == 'without patch':
       failed_tests = sorted(self.failures(api, 'with patch'))
-      # Telemetry test launcher uses re.compile to parse --page-filter argument,
+      # Telemetry test launcher uses re.compile to parse --story-filter argument,
       # therefore we escape any special characters in test names.
       failed_tests = [re.escape(test_name) for test_name in failed_tests]
-      args.append('--page-filter=%s' % '|'.join(failed_tests))
+      args.append('--story-filter=%s' % '|'.join(failed_tests))
 
     return api.swarming.telemetry_gpu_task(
         title=self._step_name(suffix), isolated_hash=isolated_hash,

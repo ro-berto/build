@@ -4043,7 +4043,7 @@
       "--test-machine-name",
       "mac_chromium_rel_ng",
       "--extra-browser-args=--enable-logging=stderr --js-flags=--expose-gc",
-      "--page-filter=Test\\.Test1",
+      "--story-filter=Test\\.Test1",
       "--output-format",
       "json",
       "--output-dir",
