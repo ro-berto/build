@@ -14,14 +14,22 @@ DEPS = [
   'swarming_client',
 ]
 
+from recipe_engine.recipe_api import Property
 
-def RunSteps(api):
+PROPERTIES = {
+  'simulated_version': Property(),
+  'show_isolated_out_in_collect_step': Property(default=True),
+  'show_shards_in_collect_step': Property(default=False),
+}
+
+def RunSteps(api, simulated_version,
+             show_isolated_out_in_collect_step, show_shards_in_collect_step):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
   # Ensure swarming_client version is fresh enough.
   api.swarming.check_client_version(
-      step_test_data=api.properties['simulated_version'])
+      step_test_data=simulated_version)
 
   # Configure isolate & swarming modules (this is optional).
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
@@ -35,10 +43,9 @@ def RunSteps(api):
 
   api.swarming.set_default_dimension('inexistent', None)
 
-  api.swarming.show_shards_in_collect_step = api.properties.get(
-    'show_shards_in_collect_step', False)
-  api.swarming.show_isolated_out_in_collect_step = api.properties.get(
-    'show_isolated_out_in_collect_step', True)
+  api.swarming.show_shards_in_collect_step = show_shards_in_collect_step
+  api.swarming.show_isolated_out_in_collect_step = (
+      show_isolated_out_in_collect_step)
 
   try:
     # Testing ReadOnlyDict.__setattr__() coverage.

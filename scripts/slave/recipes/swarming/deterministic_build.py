@@ -11,6 +11,7 @@ Remove this copy once all the master have been updated.
 """
 
 from infra.libs.infra_types import freeze
+from recipe_engine.recipe_api import Property
 
 DEPS = [
   'bot_update',
@@ -104,9 +105,12 @@ def ConfigureAndroidBuilder(api, recipe_config):
   api.chromium.set_config('base_config', **kwargs)
   api.chromium.apply_config(recipe_config['chromium_config'])
 
+PROPERTIES = {
+  'buildername': Property(),
+}
 
-def RunSteps(api):
-  buildername = api.properties['buildername']
+
+def RunSteps(api, buildername):
   recipe_config = DETERMINISTIC_BUILDERS[buildername]
   enable_isolate = True
 

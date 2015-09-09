@@ -14,3 +14,10 @@ DEPS = [
   'swarming_client',
   'test_utils',
 ]
+
+from recipe_engine.recipe_api import Property
+
+PROPERTIES = {
+  'show_shards_in_collect_step': Property(default=False, kind=bool),
+  'show_isolated_out_in_collect_step': Property(default=True, kind=bool),
+}
