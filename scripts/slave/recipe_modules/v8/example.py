@@ -39,6 +39,8 @@ def RunSteps(api):
   }
   api.v8.runperf(api.v8.perf_tests, perf_config, category='ia32',
                  extra_flags=['--flag1', '--flag2'])
+  api.v8.runperf(api.v8.perf_tests, perf_config, category='ia32',
+                 extra_flags=['--flag1', '--flag2'], profiler=True)
   output1 = api.path['slave_build'].join('test_output1.json')
   output2 = api.path['slave_build'].join('test_output2.json')
   results = api.v8.merge_perf_results(output1, output2)
@@ -52,6 +54,9 @@ def RunSteps(api):
       results_file_map, suffix=' (maps)')
   api.step('do something with the results', ['echo', results_map['example1']])
 
+  api.v8.runperf_interleaved(
+      api.v8.perf_tests, perf_config, 'out-no-patch',
+      profiler=True)
   result, result_no_patch = (
       api.v8.runperf_interleaved(
           api.v8.perf_tests, perf_config, 'out-no-patch'))

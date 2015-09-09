@@ -106,6 +106,67 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/v8/tools/run_perf.py",
+      "--arch",
+      "x64",
+      "--buildbot",
+      "--json-test-results",
+      "/path/to/tmp/json",
+      "--profiler",
+      "example1.json",
+      "--extra-flags=\"--flag1 --flag2\""
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Example1 (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Results Dashboard@https://chrome-perf.googleplex.com/report?rev=12345&masters=Fake_Master&tests=v8%2FExample1&bots=ia32@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/run-tests.py",
+      "--download-data-only",
+      "foo"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Example2 - download-data (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/run_perf.py",
+      "--arch",
+      "x64",
+      "--buildbot",
+      "--json-test-results",
+      "/path/to/tmp/json",
+      "--profiler",
+      "example2.json",
+      "--extra-flags=\"--flag1 --flag2\""
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Example2 (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Results Dashboard@https://chrome-perf.googleplex.com/report?rev=12345&masters=Fake_Master&tests=v8%2FExample2&bots=ia32@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[perf_dashboard]/resources/post_json.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "perf dashboard post (2)",
+    "stdin": "{\"data\": [{\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"8.16496580928\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": \"12345\", \"supplemental_columns\": {\"a_default_rev\": \"r_v8_git\", \"r_v8_git\": \"deadbeef\"}, \"test\": \"v8/v8/Richards\", \"units\": \"score\", \"value\": \"20.0\"}, {\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"0.0\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": \"12345\", \"supplemental_columns\": {\"a_default_rev\": \"r_v8_git\", \"r_v8_git\": \"deadbeef\"}, \"test\": \"v8/v8/DeltaBlue\", \"units\": \"ms\", \"value\": \"1.2\"}, {\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"8.16496580928\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": \"12345\", \"supplemental_columns\": {\"a_default_rev\": \"r_v8_git\", \"r_v8_git\": \"deadbeef\"}, \"test\": \"v8/v8/Richards\", \"units\": \"score\", \"value\": \"20.0\"}, {\"bot\": \"ia32\", \"buildername\": \"Fake Builder\", \"buildnumber\": 571, \"error\": \"0.0\", \"master\": \"Fake_Master\", \"masterid\": \"Fake_Master\", \"revision\": \"12345\", \"supplemental_columns\": {\"a_default_rev\": \"r_v8_git\", \"r_v8_git\": \"deadbeef\"}, \"test\": \"v8/v8/DeltaBlue\", \"units\": \"ms\", \"value\": \"1.2\"}], \"url\": \"https://chrome-perf.googleplex.com/add_point\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[v8]/resources/merge_perf_results.py",
       "[SLAVE_BUILD]/test_output1.json",
       "[SLAVE_BUILD]/test_output2.json"
@@ -163,6 +224,7 @@
       "--buildbot",
       "--json-test-results",
       "/path/to/tmp/json",
+      "--profiler",
       "--outdir-no-patch",
       "out-no-patch",
       "--json-test-results-no-patch",
@@ -170,7 +232,7 @@
       "example1.json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Example1 (2)"
+    "name": "Example1 (3)"
   },
   {
     "cmd": [
@@ -181,7 +243,57 @@
       "foo"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Example2 - download-data (2)"
+    "name": "Example2 - download-data (3)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/run_perf.py",
+      "--arch",
+      "x64",
+      "--buildbot",
+      "--json-test-results",
+      "/path/to/tmp/json",
+      "--profiler",
+      "--outdir-no-patch",
+      "out-no-patch",
+      "--json-test-results-no-patch",
+      "/path/to/tmp/json",
+      "example2.json"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Example2 (3)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/run_perf.py",
+      "--arch",
+      "x64",
+      "--buildbot",
+      "--json-test-results",
+      "/path/to/tmp/json",
+      "--outdir-no-patch",
+      "out-no-patch",
+      "--json-test-results-no-patch",
+      "/path/to/tmp/json",
+      "example1.json"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Example1 (4)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/run-tests.py",
+      "--download-data-only",
+      "foo"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Example2 - download-data (4)"
   },
   {
     "cmd": [
@@ -200,7 +312,7 @@
       "example2.json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Example2 (2)"
+    "name": "Example2 (4)"
   },
   {
     "cmd": [
