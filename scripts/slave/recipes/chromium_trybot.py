@@ -618,9 +618,8 @@ def _RunStepsInternal(api):
 
   # TODO(phajdan.jr): Remove special case for layout tests.
   add_blink_tests = False
-  if (mastername == 'tryserver.blink' or
-      (any([f.startswith('third_party/WebKit') for f in affected_files]) and
-       buildername in CHROMIUM_BLINK_TESTS_BUILDERS)):
+  if (any([f.startswith('third_party/WebKit') for f in affected_files]) and
+      buildername in CHROMIUM_BLINK_TESTS_BUILDERS):
     add_blink_tests = True
 
   # Add blink tests that work well with "analyze" here. The tricky ones
@@ -783,8 +782,7 @@ def GenTests(api):
       test = (api.test(test_name) +
               suppress_analyze() +
               props(mastername='tryserver.blink',
-                    buildername=buildername,
-                    patch_project='blink') +
+                    buildername=buildername) +
               api.chromium_tests.platform(
                   bot_config['mastername'], bot_config['buildername']) +
               api.override_step_data('webkit_tests (with patch)',
@@ -1359,35 +1357,14 @@ def GenTests(api):
   yield (
     api.test('blink_minimal_pass_continues') +
     props(mastername='tryserver.blink',
-          buildername='linux_blink_rel',
-          patch_project='blink') +
+          buildername='linux_blink_rel') +
+    suppress_analyze() +
     api.platform.name('linux') +
     api.override_step_data('webkit_tests (with patch)',
         api.test_utils.canned_test_output(passing=False)) +
     api.override_step_data('webkit_tests (without patch)',
         api.test_utils.canned_test_output(passing=True, minimal=True))
   )
-
-  yield (
-    api.test('blink_preamble_test_failure') +
-    props(mastername='tryserver.blink',
-          buildername='linux_blink_rel') +
-    suppress_analyze() +
-    api.platform.name('linux') +
-    api.step_data('webkit_unit_tests (with patch)', retcode=1)
-  )
-  for test in (
-          'blink_platform_unittests',
-          'blink_heap_unittests',
-          'wtf_unittests'):
-    yield (
-      api.test(_sanitize_nonalpha('%s_failure' % test)) +
-      props(mastername='tryserver.blink',
-            buildername='linux_blink_rel') +
-      suppress_analyze() +
-      api.platform.name('linux') +
-      api.step_data('%s (with patch)' % test, retcode=1)
-    )
 
   # This tests what happens if something goes horribly wrong in
   # run-webkit-tests and we return an internal error; the step should
@@ -1397,8 +1374,8 @@ def GenTests(api):
   yield (
     api.test('webkit_tests_unexpected_error') +
     props(mastername='tryserver.blink',
-          buildername='linux_blink_rel',
-          patch_project='blink') +
+          buildername='linux_blink_rel') +
+    suppress_analyze() +
     api.platform.name('linux') +
     api.override_step_data('webkit_tests (with patch)',
         api.test_utils.canned_test_output(passing=False, retcode=255))
@@ -1412,8 +1389,8 @@ def GenTests(api):
   yield (
     api.test('webkit_tests_interrupted') +
     props(mastername='tryserver.blink',
-          buildername='linux_blink_rel',
-          patch_project='blink') +
+          buildername='linux_blink_rel') +
+    suppress_analyze() +
     api.platform.name('linux') +
     api.override_step_data('webkit_tests (with patch)',
         api.test_utils.canned_test_output(passing=False, retcode=130))
@@ -1426,8 +1403,8 @@ def GenTests(api):
   yield (
     api.test('too_many_failures_for_retcode') +
     props(mastername='tryserver.blink',
-          buildername='linux_blink_rel',
-          patch_project='blink') +
+          buildername='linux_blink_rel') +
+    suppress_analyze() +
     api.platform.name('linux') +
     api.override_step_data('webkit_tests (with patch)',
         api.test_utils.canned_test_output(passing=False,
@@ -1440,8 +1417,8 @@ def GenTests(api):
     api.test('non_cq_blink_tryjob') +
     props(mastername='tryserver.blink',
           buildername='win_blink_rel',
-          patch_project='blink',
           requester='someone@chromium.org') +
+    suppress_analyze() +
     api.platform.name('win') +
     api.override_step_data('webkit_tests (with patch)',
                            api.test_utils.canned_test_output(passing=True))
