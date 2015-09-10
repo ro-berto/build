@@ -394,7 +394,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Initialize bisection"
+    "name": "Bisect"
   },
   {
     "cmd": [
@@ -407,7 +407,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Initialize bisection.Fetch changes",
+    "name": "Bisect.Fetch changes",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -433,7 +433,7 @@
       "a1~1..a3"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Initialize bisection.Show changes",
+    "name": "Bisect.Show changes",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -447,7 +447,7 @@
       "-n1"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Initialize bisection.Get latest previous change",
+    "name": "Bisect.Get latest previous change",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -461,7 +461,7 @@
       "--format=%H"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Initialize bisection.Fetch bisection range",
+    "name": "Bisect.Fetch range",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -470,7 +470,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Bisect into a2"
+    "name": "Bisect a2"
   },
   {
     "cmd": [
@@ -497,7 +497,7 @@
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Bisect into a2.bot_update - a2",
+    "name": "Bisect a2.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -533,7 +533,7 @@
       "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja"
     },
-    "name": "Bisect into a2.gclient runhooks - a2",
+    "name": "Bisect a2.gclient runhooks",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -550,7 +550,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Bisect into a2.clang_revision",
+    "name": "Bisect a2.clang_revision",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -578,7 +578,7 @@
       "d8"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Bisect into a2.compile - a2",
+    "name": "Bisect a2.compile",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -608,7 +608,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Bisect into a2.Retry - a2",
+    "name": "Bisect a2.Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",

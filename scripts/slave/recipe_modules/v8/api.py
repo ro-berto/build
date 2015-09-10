@@ -506,19 +506,18 @@ class V8Api(recipe_api.RecipeApi):
     def test_func(revision):
       return test.rerun(
           failure_dict=failure.failure_dict,
-          suffix=' - ' + revision[:8],
           # Don't differentiate between flaky and non-flaky tests. 
           add_flaky_step_override=False,
       )
 
     def is_bad(revision):
-      with self.m.step.nest('Bisect into ' + revision[:8]):
-        self.checkout(revision, suffix=revision[:8], update_presentation=False)
+      with self.m.step.nest('Bisect ' + revision[:8]):
+        self.checkout(revision, update_presentation=False)
         if self.bot_type == 'builder_tester':
-          self.runhooks(name='runhooks - ' + revision[:8])
-          self.compile(name='compile - ' + revision[:8], targets=targets)
+          self.runhooks()
+          self.compile(targets=targets)
         elif self.bot_type == 'tester':
-          self.download_build(name_suffix=' - ' + revision[:8])
+          self.download_build()
         else:  # pragma: no cover
           raise self.m.step.InfraFailure(
               'Bot type %s not supported.' % self.bot_type)
@@ -528,7 +527,7 @@ class V8Api(recipe_api.RecipeApi):
               'Cannot continue bisection due to infra failures.')
         return result.failures
 
-    with self.m.step.nest('Initialize bisection'):
+    with self.m.step.nest('Bisect'):
       # Setup bisection range ("from" exclusive).
       from_change, to_change = self.get_change_range()
       assert from_change
@@ -537,7 +536,7 @@ class V8Api(recipe_api.RecipeApi):
       # Initialize bisection range.
       step_result = self.m.git(
         'log', '%s..%s' % (from_change, to_change), '--format=%H',
-        name='Fetch bisection range',
+        name='Fetch range',
         cwd=self.m.path['checkout'],
         stdout=self.m.raw_io.output(),
         step_test_data=lambda: self.test_api.example_bisection_range()

@@ -359,7 +359,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Initialize bisection"
+    "name": "Bisect"
   },
   {
     "cmd": [
@@ -372,7 +372,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Initialize bisection.Fetch changes",
+    "name": "Bisect.Fetch changes",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -398,7 +398,7 @@
       "a1~1..a3"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Initialize bisection.Show changes",
+    "name": "Bisect.Show changes",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -412,7 +412,7 @@
       "-n1"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Initialize bisection.Get latest previous change",
+    "name": "Bisect.Get latest previous change",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -426,7 +426,7 @@
       "--format=%H"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Initialize bisection.Fetch bisection range",
+    "name": "Bisect.Fetch range",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -448,7 +448,7 @@
       "gs://chromium-v8/v8-linux64-dbg/full-build-linux_a3.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Initialize bisection.gsutil check builds",
+    "name": "Bisect.gsutil check builds",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -457,7 +457,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Bisect into a1"
+    "name": "Bisect a1"
   },
   {
     "cmd": [
@@ -484,7 +484,7 @@
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Bisect into a1.bot_update - a1",
+    "name": "Bisect a1.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -516,7 +516,7 @@
       "[SLAVE_BUILD]/v8/out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Bisect into a1.rmtree build directory - a1",
+    "name": "Bisect a1.rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -545,7 +545,7 @@
       "571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Bisect into a1.extract build - a1",
+    "name": "Bisect a1.extract build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -577,7 +577,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Bisect into a1.Retry - a1",
+    "name": "Bisect a1.Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
