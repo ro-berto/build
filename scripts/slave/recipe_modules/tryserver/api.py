@@ -177,6 +177,10 @@ class TryserverApi(recipe_api.RecipeApi):
     step_result = self.m.step.active_result
     step_result.presentation.properties['failure_type'] = failure_type
 
+  def set_patch_failure_tryjob_result(self):
+    """Mark the tryjob result as failure to apply the patch."""
+    self._set_failure_type('PATCH_FAILURE')
+
   def set_compile_failure_tryjob_result(self):
     """Mark the tryjob result as a compile failure."""
     self._set_failure_type('COMPILE_FAILURE')

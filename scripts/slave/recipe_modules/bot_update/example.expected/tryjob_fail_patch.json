@@ -43,7 +43,8 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@patch error@Patch failed to apply@@@",
-      "@@@STEP_LOG_END@patch error@@@"
+      "@@@STEP_LOG_END@patch error@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"PATCH_FAILURE\"@@@"
     ]
   },
   {

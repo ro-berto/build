@@ -235,6 +235,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
         # TODO(phajdan.jr): Differentiate between failure to download the patch
         # and failure to apply it. The first is an infra failure, the latter
         # a definite patch failure.
+        self.m.tryserver.set_patch_failure_tryjob_result()
         self.m.python.failing_step(
             'Patch failure', 'Check the bot_update step for details')
 
