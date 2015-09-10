@@ -487,6 +487,18 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux64 - internal snapshot': {
+        'chromium_apply_config': [
+          'v8_ninja', 'clang', 'goma', 'internal_snapshot',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['unittests', 'v8testing'],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux64 - custom snapshot - debug': {
         'v8_apply_config': ['no_harness'],
         'v8_config_kwargs': {

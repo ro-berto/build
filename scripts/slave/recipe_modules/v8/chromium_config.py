@@ -73,6 +73,11 @@ def enable_slow_dchecks(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def internal_snapshot(c):
+  c.gyp_env.GYP_DEFINES['v8_use_external_startup_data'] = 0
+
+
+@CONFIG_CTX(includes=['v8'])
 def interpreted_regexp(c):
   c.gyp_env.GYP_DEFINES['v8_interpreted_regexp'] = 1
 
