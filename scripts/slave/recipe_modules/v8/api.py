@@ -551,9 +551,17 @@ class V8Api(recipe_api.RecipeApi):
       else:
         available_bisect_range = bisect_range
 
-    # TODO: Check that from_change is a "good" build. Currently we assume it
-    # is good as an experiment to see bisection in action. This will lead to
-    # the wrong suspect if it was bad already.
+    if is_bad(from_change):
+      # If from_change is already "bad", the test failed before the current
+      # build's change range, i.e. it is a recurring failure.
+      # TODO: Try to be smarter here, fetch the build data from the previous
+      # one or two builds and check if the failure happened in revision
+      # from_change. Otherwise, the cost of calling is_bad is as much as one
+      # bisect step.
+      step_result = self.m.python.inline(
+          'Bisection disabled - recurring failure', '# Empty program')
+      step_result.presentation.status = self.m.step.WARNING
+      return
 
     culprit = bisection.keyed_bisect(available_bisect_range, is_bad)
     culprit_range = self.calc_missing_values_in_sequence(

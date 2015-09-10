@@ -457,6 +457,148 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
+    "name": "Bisect a0"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/bot_update.py",
+      "--master",
+      "client.v8",
+      "--builder",
+      "V8 Linux64 - debug - greedy allocator",
+      "--slave",
+      "TestSlavename",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "--root",
+      "v8",
+      "--revision_mapping_file",
+      "{\"v8\": \"got_revision\"}",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "v8@a0",
+      "--no_shallow",
+      "--output_manifest"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Bisect a0.bot_update",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#50110}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/v8/out/Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Bisect a0.rmtree build directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/extract_build.py",
+      "--target",
+      "Debug",
+      "--build-url",
+      "gs://chromium-v8/v8-linux64-dbg",
+      "--src-dir",
+      "v8",
+      "--master-name",
+      "client.v8",
+      "--build-number",
+      "571"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Bisect a0.extract build",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/run-tests.py",
+      "--progress=verbose",
+      "--mode",
+      "Debug",
+      "--arch",
+      "x64",
+      "--outdir",
+      "out",
+      "--buildbot",
+      "--timeout=200",
+      "suite-name/dir/fast",
+      "--variants",
+      "default",
+      "--random-seed",
+      "123",
+      "--extra-flags",
+      "--turbo-verify-allocation --turbo-greedy-regalloc",
+      "--variants=turbofan",
+      "--rerun-failures-count=0",
+      "--json-test-results",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]/v8",
+    "name": "Bisect a0.Retry",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a1"
   },
   {

@@ -252,3 +252,18 @@ def GenTests(api):
     api.override_step_data('Retry - a1', api.v8.bisect_failures_example()) +
     api.time.step(120)
   )
+
+  buildername = 'V8 Linux - predictable'
+  yield (
+    api.test('full_%s_%s_bisect_recurring_failure' % (
+        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
+    api.properties.generic(mastername=mastername,
+                           buildername=buildername,
+                           branch='master') +
+    api.platform(bot_config['testing']['platform'],
+                 v8_config_kwargs.get('TARGET_BITS', 64)) +
+    api.override_step_data('Mjsunit', api.v8.bisect_failures_example()) +
+    api.override_step_data(
+        'Bisect a0.Retry', api.v8.bisect_failures_example()) +
+    api.time.step(120)
+  )
