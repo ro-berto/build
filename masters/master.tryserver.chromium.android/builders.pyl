@@ -1,0 +1,28 @@
+{
+  "master_base_class": "Master4a",
+  "master_port": 21401,
+  "master_port_alt": 41401,
+  "slave_port": 31401,
+  "templates": ["templates", "../master.chromium/templates"],
+
+  "builders": {
+    "Blink Trybot": {
+      "recipe": "chromium",
+      "scheduler": None,
+      "slave_pools": ["blink"],
+    },
+  },
+
+  "schedulers": { },
+
+  "slave_pools": {
+    "blink": {
+      "slave_data": {
+        "os": "linux",
+        "version": "precise",
+        "bits": 64,
+      },
+      "slaves": ["build38-b4"],
+    },
+  }
+}

@@ -273,6 +273,7 @@ def main(argv):
       'master.client.webrtc.fyi': 'WebRTCFYI',
       'master.experimental': 'Experimental',
       'master.push.canary': 'PushCanary',
+      'master.tryserver.chromium.android': 'TryserverChromiumAndroid',
       'master.tryserver.chromium.angle': 'TryServerANGLE',
       'master.tryserver.chromium.linux': 'TryServerChromiumLinux',
       'master.tryserver.chromium.mac': 'TryServerChromiumMac',
