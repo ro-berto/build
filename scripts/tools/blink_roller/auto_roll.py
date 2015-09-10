@@ -281,8 +281,9 @@ class AutoRoller(object):
                               new_roll_revision], **cwd_kwargs)
       subprocess2.check_call(['git', 'add', 'DEPS'], **cwd_kwargs)
       subprocess2.check_call(['git', 'commit', '--no-edit'], **cwd_kwargs)
-      commit_msg = subprocess2.check_output(['git', 'log', '-n1', '--format=%B',
-                                             'HEAD'], **cwd_kwargs)
+      commit_msg = subprocess2.check_output(
+          ['git', 'log', '-n1', '--format=%B', 'HEAD'],
+          **cwd_kwargs).decode('utf-8')
 
       if self._notry:
         commit_msg += NO_TRY_STR % { 'project': self._project }
@@ -303,7 +304,7 @@ class AutoRoller(object):
         log_cmd = ['git', 'log', '--format=%h %ae %s',
                    '%s..%s' % (last_roll_revision, new_roll_revision)]
         git_log = subprocess2.check_output(log_cmd, cwd=self._project_git_dir)
-        commit_msg += '\n\nCommits in this roll:\n' + git_log
+        commit_msg += '\n\nCommits in this roll:\n' + git_log.decode('utf-8')
       upload_cmd.extend(['-m', commit_msg])
       subprocess2.check_call(upload_cmd, **cwd_kwargs)
     finally:
