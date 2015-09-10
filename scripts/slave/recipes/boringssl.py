@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.recipe_api import Property
+
 DEPS = [
   'bot_update',
   'file',
@@ -106,7 +108,12 @@ def _LogFailingTests(api, deferred):
       ])
 
 
-def RunSteps(api):
+PROPERTIES = {
+  'buildername': Property(),
+}
+
+
+def RunSteps(api, buildername):
   # Sync and pull in everything.
   api.gclient.set_config('boringssl')
   api.bot_update.ensure_checkout(force=True)
@@ -122,14 +129,13 @@ def RunSteps(api):
   # This is necessary both to find the toolchain and the runtime dlls. Rather
   # than copy the runtime to every directory where a binary is installed, just
   # run the tests with the toolchain prefix as well.
-  msvc_prefix = _GetTargetMSVCPrefix(api.properties['buildername'], bot_utils)
+  msvc_prefix = _GetTargetMSVCPrefix(buildername, bot_utils)
 
   # Build BoringSSL itself.
   cmake = bot_utils.join('cmake-' + _GetHostToolSuffix(api.platform), 'bin',
                          'cmake' + _GetHostExeSuffix(api.platform))
   cmake_args = _GetHostCMakeArgs(api.platform, bot_utils)
-  cmake_args.update(_GetTargetCMakeArgs(api.properties['buildername'],
-                                        bot_utils))
+  cmake_args.update(_GetTargetCMakeArgs(buildername, bot_utils))
   api.python('cmake', go_env,
              msvc_prefix + [cmake, '-GNinja'] +
              ['-D%s=%s' % (k, v) for (k, v) in sorted(cmake_args.items())] +
@@ -144,7 +150,7 @@ def RunSteps(api):
              cwd=runner_dir)
 
   with api.step.defer_results():
-    env = _GetTargetEnv(api.properties['buildername'], bot_utils)
+    env = _GetTargetEnv(buildername, bot_utils)
 
     # Run the unit tests.
     deferred = api.python('unit tests', go_env,
