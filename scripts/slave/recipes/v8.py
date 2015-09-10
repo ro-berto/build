@@ -209,7 +209,11 @@ def GenTests(api):
     )
   )
 
-  # Bisect over range a1, a2, a3. Assume a2 is the culprit.
+  # Bisect over range a1, a2, a3. Assume a2 is the culprit. Steps:
+  # Bisect a0 -> no failures.
+  # Bisect a2 -> failures.
+  # Bisect a1 -> no failures.
+  # Report culprit a2.
   buildername = 'V8 Linux - predictable'
   yield (
     api.test('full_%s_%s_bisect' % (
@@ -220,10 +224,13 @@ def GenTests(api):
     api.platform(bot_config['testing']['platform'],
                  v8_config_kwargs.get('TARGET_BITS', 64)) +
     api.override_step_data('Mjsunit', api.v8.bisect_failures_example()) +
-    api.override_step_data('Retry - a2', api.v8.bisect_failures_example()) +
+    api.override_step_data(
+        'Bisect a2.Retry', api.v8.bisect_failures_example()) +
     api.time.step(120)
   )
 
+  # Disable bisection, because the failing test is too long compared to the
+  # overall test time.
   yield (
     api.test('full_%s_%s_bisect_tests_too_long' % (
         _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
@@ -236,6 +243,11 @@ def GenTests(api):
     api.time.step(7)
   )
 
+  # Bisect over range a1, a2, a3. Assume a3 is the culprit. This is a tester
+  # and the build for a2 is not available. Steps:
+  # Bisect a0 -> no failures.
+  # Bisect a1 -> no failures.
+  # Report a2 and a3 as possible culprits.
   buildername = 'V8 Linux64 - debug - greedy allocator'
   bot_config = api.v8.BUILDERS[mastername]['builders'][buildername]
   yield (
@@ -249,10 +261,11 @@ def GenTests(api):
     api.platform(bot_config['testing']['platform'],
                  v8_config_kwargs.get('TARGET_BITS', 64)) +
     api.override_step_data('Check', api.v8.bisect_failures_example()) +
-    api.override_step_data('Retry - a1', api.v8.bisect_failures_example()) +
     api.time.step(120)
   )
 
+  # Disable bisection due to a recurring failure. Steps:
+  # Bisect a0 -> failures.
   buildername = 'V8 Linux - predictable'
   yield (
     api.test('full_%s_%s_bisect_recurring_failure' % (
