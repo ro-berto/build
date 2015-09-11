@@ -33,9 +33,9 @@ SPEC = {
         chromium_perf.SPEC['builders']['Win x64 Builder'],
     'mac_perf_bisect_builder':
         chromium_perf.SPEC['builders']['Mac Builder'],
-    'mac_perf_bisect':
-        chromium_perf.SPEC['builders']['Mac Builder'],
     'mac_10_9_perf_bisect':
+        chromium_perf.SPEC['builders']['Mac Builder'],
+    'mac_10_10_perf_bisect':
         chromium_perf.SPEC['builders']['Mac Builder'],
     'linux_perf_tester':{
       'chromium_config': 'chromium_official',

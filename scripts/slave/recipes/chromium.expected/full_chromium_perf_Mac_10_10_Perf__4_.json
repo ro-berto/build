@@ -7,7 +7,7 @@
       "--master",
       "chromium.perf",
       "--builder",
-      "Mac 10.8 Perf (1)",
+      "Mac 10.10 Perf (4)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -70,7 +70,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library gomadir='[BUILD]/goma' mac_sdk_min=10.6 target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -103,7 +103,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Mac 10.8 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"chromium-rel-mac8\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
+      "{\"buildername\": \"Mac 10.10 Perf (4)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"chromium-rel-mac10\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -202,113 +202,6 @@
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"version\": 2@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac 10.8 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac 10.8 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=graphing",
-      "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=blink_perf.all",
-      "--perf-id=chromium-rel-mac8",
-      "--test-type=blink_perf.all",
-      "--step-name=blink_perf.all.exact",
-      "--chartjson-file",
-      "/path/to/tmp/json",
-      "--builder-name=Mac 10.8 Perf (1)",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--run-python-script",
-      "/path/to/run_benmark",
-      "--a=1",
-      "-v",
-      "--b=2"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "blink_perf.all.exact",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac 10.8 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac 10.8 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=graphing",
-      "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=blink_perf.all",
-      "--perf-id=chromium-rel-mac8",
-      "--test-type=blink_perf.all",
-      "--step-name=blink_perf.all.release",
-      "--chartjson-file",
-      "/path/to/tmp/json",
-      "--builder-name=Mac 10.8 Perf (1)",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--run-python-script",
-      "/path/to/run_benmark",
-      "--a=1",
-      "-v",
-      "--b=2"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "blink_perf.all.release",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac 10.8 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Mac 10.8 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Mac Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=graphing",
-      "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=blink_perf.dom",
-      "--perf-id=chromium-rel-mac8",
-      "--test-type=blink_perf.dom",
-      "--step-name=blink_perf.dom",
-      "--chartjson-file",
-      "/path/to/tmp/json",
-      "--builder-name=Mac 10.8 Perf (1)",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--run-python-script",
-      "-v",
-      "--upload-results",
-      "blink_perf.dom"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "blink_perf.dom",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   }

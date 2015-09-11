@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.perf",
       "--builder",
-      "mac_perf_bisect",
+      "mac_10_10_perf_bisect",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -139,9 +139,9 @@
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"mac_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"mac_10_10_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"mac_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"mac_10_10_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"

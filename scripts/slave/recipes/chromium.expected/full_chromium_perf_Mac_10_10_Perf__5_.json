@@ -7,7 +7,7 @@
       "--master",
       "chromium.perf",
       "--builder",
-      "Mac 10.8 Perf (5)",
+      "Mac 10.10 Perf (5)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -70,7 +70,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library gomadir='[BUILD]/goma' mac_sdk_min=10.6 target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -103,7 +103,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Mac 10.8 Perf (5)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"chromium-rel-mac8\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
+      "{\"buildername\": \"Mac 10.10 Perf (5)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"chromium-rel-mac10\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
