@@ -126,8 +126,13 @@ def main():
   env['PATH'] = '%s%s%s' % (env['PATH'], env_path_sep,
                             os.path.join(b_dir, 'depot_tools'))
 
-  # Find old .gclient config.
+  # Find old .gclient config. If it doesn't exit - try .gclient.svn to handle
+  # bots where we failed conversion half-way.
   gclient_path = os.path.join(b_dir, '.gclient')
+  gclient_path_svn = os.path.join(b_dir, '.gclient.svn')
+  if not os.path.isfile(gclient_path) and os.path.isfile(gclient_path_svn):
+    print 'Copying %s to %s' % (gclient_path_svn, gclient_path)
+    shutil.copy(gclient_path_svn, gclient_path)
   assert os.path.isfile(gclient_path), 'Did not find old .gclient config'
 
   # Detect type of checkout.
@@ -189,8 +194,8 @@ def main():
 
     # Move SVN .gclient away so that no one can run gclient sync while
     # conversion is in progress.
-    print 'Moving .gclient to .gclient.svn in %s' % b_dir
-    shutil.move(gclient_path, '%s.svn' % gclient_path)
+    print 'Moving %s to %s' % (gclient_path, gclient_path_svn)
+    shutil.move(gclient_path, gclient_path_svn)
 
     # Rename all .svn directories into .svn.backup. We use set because .svn dirs
     # may be found several times as some repos are subdirs of other repos.
