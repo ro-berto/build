@@ -522,7 +522,6 @@ BUILDERS = {
         'build_gs_archive': 'linux64_dbg_archive',
         'tests': ['unittests', 'v8testing', 'benchmarks', 'simdjs_small'],
         'testing': {'platform': 'linux'},
-        'enable_bisect': True,
       },
       'V8 Linux64 - cfi': {
         'chromium_apply_config': ['v8_ninja', 'clang', 'goma', 'cfi'],
@@ -1419,7 +1418,6 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'tests': ['mjsunit', 'webkit', 'benchmarks', 'mozilla'],
         'testing': {'platform': 'linux'},
-        'enable_bisect': True,
       },
       'V8 Linux - ppc - sim': {
         'chromium_apply_config': ['simulate_ppc', 'v8_goma'],

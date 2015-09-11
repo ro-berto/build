@@ -477,8 +477,9 @@ class V8Api(recipe_api.RecipeApi):
     return test_results
 
   def maybe_bisect(self, test_results):
-    """Experimental bisection for one failure."""
-    if not self.bot_config.get('enable_bisect'):
+    """Build-local bisection for one failure."""
+    # Don't activate for branch or fyi bots.
+    if self.m.properties['mastername'] != 'client.v8':
       return
 
     # Only bisect over failures not flakes. Rerun only the fastest test.
