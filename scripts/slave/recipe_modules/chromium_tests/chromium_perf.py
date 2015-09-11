@@ -39,14 +39,11 @@ def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
 
 def _AddBotSpec(name, platform, parent_builder, perf_id, target_bits,
     num_shards):
-  if num_shards > 1:
-    for i in range(0, num_shards):
-      builder_name = "%s (%d)" % (name, i + 1)
-      SPEC['builders'][builder_name] = _Spec(platform, parent_builder, perf_id,
-        i, num_shards, target_bits)
-  else:
-    SPEC['builders'][name] = _Spec(platform, parent_builder, perf_id,
-        0, 1, target_bits)
+  assert num_shards > 1
+  for i in range(0, num_shards):
+    builder_name = "%s (%d)" % (name, i + 1)
+    SPEC['builders'][builder_name] = _Spec(platform, parent_builder, perf_id,
+      i, num_shards, target_bits)
 
 
 SPEC = {
@@ -203,10 +200,10 @@ _AddBotSpec(
 _AddBotSpec(
     name='Win 7 Intel GPU Perf',
     platform='win',
-    parent_builder='Win Builder',
+    parent_builder='Win x64 Builder',
     perf_id='chromium-rel-win7-gpu-intel',
-    target_bits=32,
-    num_shards=1)
+    target_bits=64,
+    num_shards=5)
 _AddBotSpec(
     name='Win 7 Nvidia GPU Perf',
     platform='win',
