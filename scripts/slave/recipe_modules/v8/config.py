@@ -145,3 +145,8 @@ def predictable(c):
 def trybot_flavor(c):
   c.testing.add_flaky_step = False
   c.testing.test_args.append('--flaky-tests=skip')
+
+
+@config_ctx()
+def vector_stores(c):
+  c.testing.test_args.extend(['--extra-flags', '--vector-stores'])

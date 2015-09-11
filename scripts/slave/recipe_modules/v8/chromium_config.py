@@ -172,6 +172,11 @@ def v8_goma(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def vector_stores(c):
+  c.gyp_env.GYP_DEFINES['v8_vector_stores'] = 1
+
+
+@CONFIG_CTX(includes=['v8'])
 def verify_heap(c):
   c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
 

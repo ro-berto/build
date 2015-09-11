@@ -523,6 +523,28 @@ BUILDERS = {
         'tests': ['unittests', 'v8testing', 'benchmarks', 'simdjs_small'],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux64 - debug - vector stores': {
+        'chromium_apply_config': [
+          'v8_ninja', 'clang', 'goma', 'vector_stores',
+        ],
+        'v8_apply_config': ['vector_stores'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          'unittests',
+          'v8testing',
+          'optimize_for_size',
+          'webkit',
+          'benchmarks',
+          'test262_es6',
+          'mozilla',
+          'simdjs',
+        ],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux64 - cfi': {
         'chromium_apply_config': ['v8_ninja', 'clang', 'goma', 'cfi'],
         'v8_config_kwargs': {
