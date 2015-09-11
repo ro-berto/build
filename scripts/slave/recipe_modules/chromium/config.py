@@ -446,7 +446,12 @@ def tsan2(c):
   gyp_defs['tsan'] = 1
   gyp_defs['disable_nacl'] = 1
 
-@config_ctx(deps=['compiler'], group='memory_tool')
+@config_ctx()
+def separate_mspdbsrv(c):
+  c.gyp_env.GYP_USE_SEPARATE_MSPDBSRV = 1
+
+@config_ctx(
+    deps=['compiler'], group='memory_tool', includes=['separate_mspdbsrv'])
 def syzyasan(c):
   if c.gyp_env.GYP_DEFINES['component'] != 'static_library':  # pragma: no cover
     raise BadConf('SyzyASan requires component=static_library')
