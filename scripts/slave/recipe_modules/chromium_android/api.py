@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import contextlib
+import json
 import os
 import re
 import urllib
@@ -251,6 +252,26 @@ class AndroidApi(recipe_api.RecipeApi):
          self.m.chromium.c.build_dir.join('logcat')],
         env=self.m.chromium.get_env(),
         infra_step=True)
+
+  def spawn_device_temp_monitor(self):
+    script = self.m.path['build'].join('scripts', 'slave', 'daemonizer.py')
+    args = [
+        '--action', 'restart', 
+        '--pid-file-path', '/tmp/device_monitor.pid',
+        '--', self.resource('spawn_device_temp_monitor.py'),
+        self.m.adb.adb_path(),
+        json.dumps(self._devices),
+        self.m.properties['slavename']
+    ]
+    self.m.python('spawn_device_temp_monitor', script, args, infra_step=True)
+
+  def shutdown_device_temp_monitor(self):
+    script = self.m.path['build'].join('scripts', 'slave', 'daemonizer.py')
+    args = [
+        '--action', 'stop', 
+        '--pid-file-path', '/tmp/device_monitor.pid',
+    ]
+    self.m.python('shutdown_device_temp_monitor', script, args, infra_step=True)
 
   def authorize_adb_devices(self):
     script = self.m.path['build'].join('scripts', 'slave', 'android',

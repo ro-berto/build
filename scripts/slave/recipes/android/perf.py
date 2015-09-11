@@ -155,6 +155,7 @@ def RunSteps(api):
     path=builder['path'](api))
 
   api.chromium_android.common_tests_setup_steps(perf_setup=True)
+  api.chromium_android.spawn_device_temp_monitor()
 
   api.chromium_android.adb_install_apk('ChromePublic.apk')
 
@@ -182,6 +183,7 @@ def RunSteps(api):
     if failures:
       raise api.step.StepFailure('src-side perf tests failed %s' % failures)
   finally:
+    api.chromium_android.shutdown_device_temp_monitor()
     api.chromium_android.common_tests_final_steps()
 
 def _sanitize_nonalpha(text):

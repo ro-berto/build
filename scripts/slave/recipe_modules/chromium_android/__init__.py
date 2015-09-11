@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'adb',
   'bot_update',
   'chromium',
   'file',
