@@ -91,15 +91,14 @@ def main(adb_path,
 
   devices = json.loads(devices_json)
   while True:
-    upload_cmd_args = []
     for device in devices:
-      upload_cmd_args += get_device_args(adb_path, slave_name, device)
+      upload_cmd_args = get_device_args(adb_path, slave_name, device)
 
-    cmd = [_RUN_PY, 'infra.tools.send_ts_mon_values'] + upload_cmd_args
-    try:
-      subprocess.Popen(cmd)
-    except OSError:
-      logging.exception('Unable to call %s', _RUN_PY)
+      cmd = [_RUN_PY, 'infra.tools.send_ts_mon_values'] + upload_cmd_args
+      try:
+        subprocess.Popen(cmd)
+      except OSError:
+        logging.exception('Unable to call %s', _RUN_PY)
 
     time.sleep(60)
 
