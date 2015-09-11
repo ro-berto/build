@@ -40,8 +40,6 @@ GCLIENT_CONFIGS = {
   'internal.DEPS': INTERNAL_GCLIENT_CONFIG,
 }
 
-PREVENT_REBOOT_FILE_CONTENT = 'slave_svn_to_git'
-
 is_win = sys.platform.startswith('win')
 
 
@@ -134,7 +132,6 @@ def main():
   assert sol_name in GCLIENT_CONFIGS, 'Unknown type of checkout: ' % sol_name
   gclient_config = GCLIENT_CONFIGS[sol_name]
 
-  prevent_reboot_path = os.path.join(os.path.expanduser('~'), 'no_reboot')
   tmpdir = tempfile.mkdtemp(dir=os.path.realpath(b_dir),
                             prefix='slave_svn_to_git')
   try:
@@ -179,27 +176,24 @@ def main():
       # Make sure Git directory exists.
       assert os.path.isdir(os.path.join(tmpdir, relpath, '.git'))
 
-    # Prevent slave from rebooting unless no_reboot already exists.
-    if not os.path.exists(prevent_reboot_path):
-      with open(prevent_reboot_path, 'w') as prevent_reboot_file:
-        prevent_reboot_file.write(PREVENT_REBOOT_FILE_CONTENT)
-
     # Move SVN .gclient away so that no one can run gclient sync while
     # conversion is in progress.
     print 'Moving .gclient to .gclient.svn in %s' % b_dir
     shutil.move(gclient_path, '%s.svn' % gclient_path)
 
-    # Rename all .svn directories into .svn.backup.
-    svn_dirs = []
+    # Rename all .svn directories into .svn.backup. We use set because .svn dirs
+    # may be found several times as some repos are subdirs of other repos.
+    svn_dirs = set()
     count = 0
     print 'Searching for .svn folders'
-    for root, dirs, _files in os.walk(b_dir):
-      count += 1
-      if count % 100 == 0:
-        print 'Processed %d directories' % count
-      if '.svn' in dirs:
-        svn_dirs.append(os.path.join(root, '.svn'))
-        dirs.remove('.svn')
+    for relpath in sorted(repos):
+      for root, dirs, _files in os.walk(os.path.join(b_dir, relpath)):
+        count += 1
+        if count % 100 == 0:
+          print 'Processed %d directories' % count
+        if '.svn' in dirs:
+          svn_dirs.add(os.path.join(relpath, root, '.svn'))
+          dirs.remove('.svn')
     for rel_svn_dir in svn_dirs:
       svn_dir = os.path.join(b_dir, rel_svn_dir)
       print 'Moving %s to %s.backup' % (svn_dir, svn_dir)
@@ -230,13 +224,6 @@ def main():
     # Remove the temporary directory.
     if not options.leak_tmp_dir:
       shutil.rmtree(tmpdir)
-
-    # Remove no_reboot file if it was created by this script.
-    if os.path.isfile(prevent_reboot_path):
-      with open(prevent_reboot_path, 'r') as prevent_reboot_file:
-        prevent_reboot_content = prevent_reboot_file.read()
-      if prevent_reboot_content == PREVENT_REBOOT_FILE_CONTENT:
-        os.unlink(prevent_reboot_path)
 
   # Run gclient sync again.
   check_call(['gclient', 'sync'], cwd=b_dir, env=env)
