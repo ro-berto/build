@@ -42,6 +42,8 @@ GCLIENT_CONFIGS = {
 
 is_win = sys.platform.startswith('win')
 
+PREVENT_REBOOT_FILE_CONTENT = 'slave_svn_to_git'
+
 
 def check_call(cmd, cwd=None, env=None):
   print 'Running %s%s' % (cmd, ' in %s' % cwd if cwd else '')
@@ -96,6 +98,15 @@ def main():
   elif os.path.exists('/b'):
     b_dir = '/b'
   assert b_dir is not None and os.path.isdir(b_dir), 'Did not find b dir'
+
+  # Remove noreboot file left from previous run.
+  prevent_reboot_path = os.path.join(os.path.expanduser('~'), 'no_reboot')
+  if os.path.isfile(prevent_reboot_path):
+    with open(prevent_reboot_path, 'r') as prevent_reboot_file:
+      prevent_reboot_content = prevent_reboot_file.read()
+    if prevent_reboot_content == PREVENT_REBOOT_FILE_CONTENT:
+      print "Removing no_reboot left from previous run"
+      os.unlink(prevent_reboot_path)
 
   # Report state before doing anything else, so we can keep track of the state
   # of this host even if something later in this script fails.
