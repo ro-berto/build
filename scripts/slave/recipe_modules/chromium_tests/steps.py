@@ -368,11 +368,17 @@ def generate_script(api, mastername, buildername, test_spec,
 
 
 class DynamicPerfTests(Test):
-  def __init__(self, browser, perf_id, shard_index, num_shards):
-    self.browser = browser
+  def __init__(self, platform, target_bits, perf_id, shard_index, num_shards):
+    self.browser = self._browser_name(platform, target_bits)
     self.perf_id = perf_id
     self.shard_index = shard_index
     self.num_shards = num_shards
+
+  @staticmethod
+  def _browser_name(platform, target_bits):
+    if platform == 'win' and target_bits == 64:
+      return 'release_x64'
+    return 'release'
 
   @property
   def name(self):

@@ -4,11 +4,9 @@
 
 from . import steps
 
+
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
-def _GetTargetName(platform, target_bits):
-  return ('Release_x64' if platform is 'win' and target_bits is 64
-            else 'Release')
 
 def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
   if platform == 'android':
@@ -51,7 +49,7 @@ def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
       'results-url': RESULTS_URL,
       'tests': [
         steps.DynamicPerfTests(
-            _GetTargetName(platform, target_bits).lower(),
+            platform, target_bits,
             perf_id, index, num_shards),
       ],
     }

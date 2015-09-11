@@ -140,7 +140,7 @@ SPEC = {
       ],
       'tests': [
         steps.DynamicPerfTests(
-            'release',
+            'linux', 64,
             'chromium-rel-linux-v8', 0, 1),
       ],
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
@@ -170,7 +170,7 @@ SPEC = {
       ],
       'tests': [
         steps.DynamicPerfTests(
-            'release',
+            'win', 32,
             'chromium-rel-win7-dual-v8', 0, 1),
       ],
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
@@ -199,7 +199,7 @@ SPEC = {
       ],
       'tests': [
         steps.DynamicPerfTests(
-            'release',
+            'mac', 64,
             'chromium-rel-mac9-v8', 0, 1),
       ],
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},

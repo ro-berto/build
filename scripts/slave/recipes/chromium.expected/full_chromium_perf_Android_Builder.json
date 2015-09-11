@@ -177,19 +177,6 @@
     "name": "trigger (4)",
     "trigger_specs": [
       {
-        "builder_name": "Android Nexus9 Perf"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus9 Perf@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (5)",
-    "trigger_specs": [
-      {
         "builder_name": "Android One Perf"
       }
     ],
