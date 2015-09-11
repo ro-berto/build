@@ -317,7 +317,7 @@
       "--perf-config={'r_clang_rev': '123456'}",
       "[BUILD]\\scripts\\slave\\chromium\\sizes.py",
       "--target",
-      "Debug",
+      "Debug_x64",
       "--platform",
       "win"
     ],

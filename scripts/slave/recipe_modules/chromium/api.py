@@ -358,7 +358,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     This uses runtests.py to upload the results to the perf dashboard."""
     sizes_script = self.m.path['build'].join('scripts', 'slave', 'chromium',
                                              'sizes.py')
-    sizes_args = ['--target', self.c.BUILD_CONFIG]
+    sizes_args = ['--target', self.c.build_config_fs]
     if platform:
       sizes_args.extend(['--platform', platform])
     else:

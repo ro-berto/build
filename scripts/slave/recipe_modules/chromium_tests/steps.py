@@ -103,6 +103,9 @@ class SizesStep(Test):
   def compile_targets(_):
     return ['chrome']
 
+  @property
+  def name(self):
+    return 'sizes'  # pragma: no cover
 
 class ScriptTest(Test):  # pylint: disable=W0232
   """
