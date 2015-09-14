@@ -996,8 +996,7 @@ class V8Api(recipe_api.RecipeApi):
 
 
   def _runperf(self, tests, perf_configs, category=None, suffix='',
-              upload=True, extra_flags=None, out_dir_no_patch=None,
-              profiler=False):
+              upload=True, extra_flags=None, out_dir_no_patch=None):
     """Run v8 performance tests and upload results.
 
     Args:
@@ -1014,7 +1013,6 @@ class V8Api(recipe_api.RecipeApi):
       out_dir_no_patch: A folder pointing to executables without patch on a
                         trybot. Using this parameter will execute the tests
                         in interleaved mode.
-      profiler: Run with sampling profiler.
     Returns: A tuple with 1) A mapping of test config name->results map.
              Each results map has an errors and a traces item. 2) A mapping
              without patch. Undefined, if out_dir_no_patch wasn't specified.
@@ -1034,9 +1032,6 @@ class V8Api(recipe_api.RecipeApi):
         '--buildbot',
         '--json-test-results', self.m.json.output(add_json_log=False),
       ]
-
-      if profiler:
-        full_args += ['--profiler']
 
       if out_dir_no_patch:
         full_args.extend([
@@ -1108,7 +1103,7 @@ class V8Api(recipe_api.RecipeApi):
 
 
   def runperf(self, tests, perf_configs, category=None, suffix='',
-              upload=True, extra_flags=None, profiler=False):
+              upload=True, extra_flags=None):
     """Convenience wrapper."""
     results_mapping, _, failed = self._runperf(
       tests,
@@ -1117,7 +1112,6 @@ class V8Api(recipe_api.RecipeApi):
       upload=upload,
       suffix=suffix,
       extra_flags=extra_flags,
-      profiler=profiler,
     )
 
     # Collect all perf data of the previous steps.
@@ -1133,7 +1127,7 @@ class V8Api(recipe_api.RecipeApi):
 
   def runperf_interleaved(
       self, tests, perf_configs, out_dir_no_patch, category=None,
-      extra_flags=None, profiler=False):
+      extra_flags=None):
     """Convenience wrapper."""
     # A failure of a single step is not required to be raised on perf trybots
     # as the overall builds don't get inspected on a waterfall.
@@ -1144,7 +1138,6 @@ class V8Api(recipe_api.RecipeApi):
       upload=False,
       extra_flags=extra_flags,
       out_dir_no_patch=out_dir_no_patch,
-      profiler=profiler,
     )
     return results_mapping, results_mapping_no_patch
 
