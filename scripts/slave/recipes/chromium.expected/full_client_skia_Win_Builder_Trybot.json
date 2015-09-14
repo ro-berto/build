@@ -115,7 +115,18 @@
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Win7 Tests (1)-Trybot\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -154,6 +165,18 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[isolate]\\resources\\find_isolated_tests.py",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--clean-isolated-files"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "clean isolated files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]\\scripts\\slave\\compile.py",
       "--target",
       "Release",
@@ -167,11 +190,50 @@
       "[BUILD]\\goma",
       "--ninja-ensure-up-to-date",
       "--",
+      "browser_tests",
+      "browser_tests_run",
       "chromium_builder_tests",
-      "crash_service"
+      "crash_service",
+      "mini_installer"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[isolate]\\resources\\remove_build_metadata.py",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "remove_build_metadata"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[isolate]\\resources\\isolate.py",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "[SLAVE_BUILD]\\src\\out\\Release\\browser_tests.isolated.gen.json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -192,5 +254,18 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Win7 Tests (1)-Trybot"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win7 Tests (1)-Trybot@@@"
+    ]
   }
 ]
