@@ -9,34 +9,13 @@
 
 
 import datetime
+import imp
 import json
 import os
 import re
 import subprocess
 import sys
 import tempfile
-
-
-# These are the bots which are run by the recipe simulation tests.
-bots = [
-    'Build-Mac10.8-Clang-Arm7-Debug-Android',
-    'Build-Ubuntu-GCC-Arm7-Debug-Android',
-    'Housekeeper-PerCommit',
-    'Housekeeper-PerCommit-Trybot',
-    'Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release',
-    'Perf-Android-GCC-Nexus5-CPU-NEON-Arm7-Release-Appurify',
-    'Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify',
-    'Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot',
-    'Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug',
-    'Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug',
-    'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug',
-    'Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot',
-    'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug',
-    'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-TSAN',
-    'Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug',
-    'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
-    'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache',
-]
 
 
 def prettier_print(obj, indent, stream=sys.stdout, max_line_length=80):
@@ -124,6 +103,17 @@ def prettier_print(obj, indent, stream=sys.stdout, max_line_length=80):
 
 def main(buildbot_spec_path):
   """Generate a spec for each of the above bots. Dump them all to a file."""
+  # Get the list of bots.
+  cwd = os.path.realpath(os.path.dirname(__file__))
+  skia_recipe = os.path.join(cwd, os.pardir, 'recipes', 'skia', 'skia.py')
+  skia = imp.load_source('skia', skia_recipe)
+  bots = []
+  for _, slaves in skia.TEST_BUILDERS.iteritems():
+    for _, builders in slaves.iteritems():
+      bots.extend(builders)
+  bots.sort()
+
+  # Create the fake specs.
   specs = {}
   tmp_spec_file = tempfile.NamedTemporaryFile(delete=False)
   tmp_spec_file.close()

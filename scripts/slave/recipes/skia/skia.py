@@ -16,49 +16,57 @@ DEPS = [
 ]
 
 
+TEST_BUILDERS = {
+  'client.skia': {
+    'skiabot-ipad4-000': [
+      'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug',
+    ],
+    'skiabot-linux-tester-000': [
+      'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug',
+      'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-TSAN',
+      'Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot',
+    ],
+    'skiabot-shuttle-ubuntu12-003': [
+      'Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug',
+    ],
+    'skiabot-shuttle-ubuntu12-gtx550ti-001': [
+      'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
+      'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache',
+    ],
+    'skiabot-shuttle-win8-i7-4790k-001': [
+      'Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot',
+    ],
+  },
+  'client.skia.android': {
+    'skiabot-shuttle-ubuntu12-nexus7-001': [
+      'Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release',
+      'Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug',
+    ],
+  },
+  'client.skia.compile': {
+    'skiabot-mac-10_8-compile-001': [
+      'Build-Mac10.8-Clang-Arm7-Debug-Android',
+    ],
+    'skiabot-linux-compile-000': [
+      'Build-Ubuntu-GCC-Arm7-Debug-Android',
+    ],
+  },
+  'client.skia.fyi': {
+    'skiabot-linux-housekeeper-003': [
+      'Housekeeper-PerCommit',
+      'Housekeeper-PerCommit-Trybot',
+      'Perf-Android-GCC-Nexus5-CPU-NEON-Arm7-Release-Appurify',
+      'Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify',
+    ],
+  },
+}
+
+
 def RunSteps(api):
   api.skia.gen_steps()
 
 
 def GenTests(api):
-  builders = {
-    'client.skia': {
-      'skiabot-ipad4-000': [
-        'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug',
-      ],
-      'skiabot-linux-tester-000': [
-        'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-TSAN',
-        'Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot',
-      ],
-      'skiabot-shuttle-ubuntu12-003': [
-        'Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug',
-      ],
-      'skiabot-shuttle-ubuntu12-gtx550ti-001': [
-        'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
-        'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache',
-      ],
-      'skiabot-shuttle-win8-i7-4790k-001': [
-        'Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot',
-      ],
-    },
-    'client.skia.android': {
-      'skiabot-shuttle-ubuntu12-nexus7-001': [
-        'Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release',
-      ],
-    },
-    'client.skia.compile': {
-      'skiabot-mac-10_8-compile-001': [
-        'Build-Mac10.8-Clang-Arm7-Debug-Android',
-      ],
-    },
-    'client.skia.fyi': {
-      'skiabot-linux-housekeeper-003': [
-        'Perf-Android-GCC-Nexus5-CPU-NEON-Arm7-Release-Appurify',
-        'Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify',
-      ],
-    },
-  }
-
   def AndroidTestData(builder):
     test_data = (
         api.step_data(
@@ -84,7 +92,7 @@ def GenTests(api):
           stdout=api.raw_io.output(''))
     return test_data
 
-  for mastername, slaves in builders.iteritems():
+  for mastername, slaves in TEST_BUILDERS.iteritems():
     for slavename, builders_by_slave in slaves.iteritems():
       for builder in builders_by_slave:
         test = (
@@ -126,7 +134,7 @@ def GenTests(api):
 
         yield test
 
-  builder = 'Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug'
+  builder = 'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug'
   yield (
     api.test('failed_dm') +
     api.properties(buildername=builder,

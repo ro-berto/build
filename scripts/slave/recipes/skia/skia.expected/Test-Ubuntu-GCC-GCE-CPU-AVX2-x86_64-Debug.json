@@ -1,6 +1,34 @@
 [
   {
     "cmd": [
+      "git",
+      "fetch"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "git fetch"
+  },
+  {
+    "cmd": [
+      "git",
+      "reset",
+      "--hard",
+      "abc123"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "git reset"
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-d",
+      "-f"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "git clean"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[DEPOT_TOOLS]/gclient.py",
@@ -21,6 +49,8 @@
       "--force",
       "--verbose",
       "--delete_unversioned_trees",
+      "--revision",
+      "skia@abc123",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -312,7 +342,7 @@
       "gitHash",
       "164710",
       "build_number",
-      "6",
+      "5",
       "--key",
       "arch",
       "x86_64",
@@ -328,6 +358,8 @@
       "GCE",
       "os",
       "Ubuntu",
+      "--uninterestingHashesFile",
+      "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt",
       "--writePath",
       "[SLAVE_BUILD]/dm",
       "--nogpu",
@@ -339,11 +371,7 @@
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug"
     },
-    "name": "dm",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_FAILURE@@@"
-    ]
+    "name": "dm"
   },
   {
     "cmd": [
@@ -353,7 +381,7 @@
       "[SLAVE_BUILD]/dm",
       "164710",
       "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug",
-      "6",
+      "5",
       "",
       "[SLAVE_BUILD]/skia/common/py/utils"
     ],
@@ -386,10 +414,5 @@
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug"
     },
     "name": "nanobench"
-  },
-  {
-    "name": "$final_result",
-    "reason": "Failed build steps: dm",
-    "status_code": 1
   }
 ]

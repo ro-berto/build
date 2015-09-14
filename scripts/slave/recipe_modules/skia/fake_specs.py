@@ -400,38 +400,6 @@ FAKE_SPECS = {
     'upload_dm_results': False,
     'upload_perf_results': False,
   },
-  'Test-Ubuntu-GCC-ShuttleA-CPU-AVX-x86_64-Debug': {
-    'build_targets': [
-      'dm',
-      'nanobench',
-    ],
-    'builder_cfg': {
-      'arch': 'x86_64',
-      'compiler': 'GCC',
-      'configuration': 'Debug',
-      'cpu_or_gpu': 'CPU',
-      'cpu_or_gpu_value': 'AVX',
-      'is_trybot': False,
-      'model': 'ShuttleA',
-      'os': 'Ubuntu',
-      'role': 'Test',
-    },
-    'configuration': 'Debug',
-    'dm_flags': [
-      '--dummy-flags',
-    ],
-    'do_perf_steps': True,
-    'do_test_steps': True,
-    'env': {
-      'GYP_DEFINES':
-          'skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0',
-    },
-    'nanobench_flags': [
-      '--dummy-flags',
-    ],
-    'upload_dm_results': True,
-    'upload_perf_results': False,
-  },
   'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache': {
     'build_targets': [
       'dm',
