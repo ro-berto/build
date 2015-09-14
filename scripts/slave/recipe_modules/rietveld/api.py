@@ -33,6 +33,7 @@ class RietveldApi(recipe_api.RecipeApi):
       'angle/angle': ['third_party', 'angle'],
       'blink': ['third_party', 'WebKit'],
       'v8': ['v8'],
+      'luci-go': 'infra/go/src/github.com/luci/luci-go'.split('/'),
       'luci-py': ['luci'],
     }
 
