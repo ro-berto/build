@@ -582,7 +582,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     isolated_targets = isolated_targets or []
 
     args=[
-        'gen',
+        'gen', '-v',
         '-m', mastername,
         '-b', buildername,
         '--config-file', mb_config_path,

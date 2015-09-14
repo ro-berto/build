@@ -137,6 +137,7 @@
       "-u",
       "[SLAVE_BUILD]/src/tools/mb/mb.py",
       "gen",
+      "-v",
       "-m",
       "chromium.webrtc.fyi",
       "-b",
