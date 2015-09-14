@@ -223,6 +223,8 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
+      "bb:tryserver.chromium.perf:linux_perf_bisect_builder:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-build",
+      "bb:tryserver.chromium.perf:linux_perf_bisect_builder:a6298e4afedbf2cd461755ea6f45b0ad64222222-build",
       "--timeout=7200"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -317,6 +319,8 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results",
       "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results",
+      "bb:tryserver.chromium.perf:linux_perf_tester:a6298e4afedbf2cd461755ea6f45b0ad64222222-test",
+      "bb:tryserver.chromium.perf:linux_perf_tester:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test",
       "--timeout=7200"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -363,6 +367,7 @@
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results",
+      "bb:tryserver.chromium.perf:linux_perf_tester:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test",
       "--timeout=7200"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -445,6 +450,7 @@
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
+      "bb:tryserver.chromium.perf:linux_perf_bisect_builder:dcdcdc0ff1122212323134879ddceeb1240b0988-build",
       "--timeout=7200"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -498,6 +504,7 @@
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py",
       "gs://chrome-perf/bisect-results/dcdcdc0ff1122212323134879ddceeb1240b0988-test.results",
+      "bb:tryserver.chromium.perf:linux_perf_tester:dcdcdc0ff1122212323134879ddceeb1240b0988-test",
       "--timeout=7200"
     ],
     "cwd": "[SLAVE_BUILD]",

@@ -140,6 +140,19 @@ class PerfRevisionState(revision_state.RevisionState):
     if self.status == PerfRevisionState.TESTING:
       return self.test_results_url
 
+  def get_buildbot_locator(self):
+    if self.status == PerfRevisionState.BUILDING:
+      # TODO(robertocn): Remove hardcoded master.
+      master = 'tryserver.chromium.perf'
+      bot_name = self.bisector.get_builder_bot_for_this_platform()
+      job_name = self.build_job_name
+      return 'bb:%s:%s:%s' % (master, bot_name, job_name)
+    if self.status == PerfRevisionState.TESTING:
+      master = 'tryserver.chromium.perf'
+      bot_name = self.bisector.get_perf_tester_name()
+      job_name = self.test_job_name
+      return 'bb:%s:%s:%s' % (master, bot_name, job_name)
+
   def _get_test_results(self):
     """Tries to get the results of a test job from cloud storage."""
     api = self.bisector.api

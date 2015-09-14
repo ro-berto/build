@@ -460,8 +460,12 @@ class Bisector(object):
     script = self.api.resource('wait_for_any.py')
     args_list = [gsutil_path]
     url_mapping = {r.get_next_url(): r for r in revision_list}
+    bb_locator_mapping = {r.get_buildbot_locator(): r for r in revision_list}
+    bb_locator_list = bb_locator_mapping.keys()
     url_list = url_mapping.keys()
     args_list += [url for url in url_list if url and url is not None]
+    args_list += [entry for entry in bb_locator_list
+                  if entry and entry is not None]
     args_list.append(
         '--timeout=%d' % (
             self.get_build_timeout_minutes() * 60))
@@ -481,6 +485,14 @@ class Bisector(object):
       if line.startswith('Build finished: '):
         finished_url = line[len('Build finished: '):].strip()
         return url_mapping.get(finished_url)
+      if line.startswith('Failed build url: '):  # pragma: no cover
+        url = line[len('Failed build url: '):].strip()
+        step_result.presentation.links['Failed build'] = url
+      if line.startswith('Build failed: '):  # pragma: no cover
+        failed_build_locator = line[len('Build failed: '):].strip()
+        failed_build = bb_locator_mapping.get(failed_build_locator)
+        failed_build.status = revision_state.RevisionState.FAILED
+        return failed_build
 
   def wait_for_any(self, revision_list):
     """Waits for any of the revisions in the list to finish its job(s)."""
