@@ -70,6 +70,17 @@
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "luci-gae",
     },
+    "Luci-go Presubmit": {
+      "category": "Luci-go",
+      "recipe": "run_presubmit",
+      "properties": {
+        "repo_name": "luci_go",
+        "runhooks": True,
+      },
+      "scheduler": None,
+      "slave_pools": ["trusty64_slave_pool"],
+      "slavebuilddir": "presubmit_lucigo",
+    },
     "Luci-go Linux Trusty 64 Tester": {
       "category": "Luci-go",
       "recipe": "infra/luci_go",
