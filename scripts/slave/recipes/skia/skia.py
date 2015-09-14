@@ -49,6 +49,7 @@ TEST_BUILDERS = {
     ],
     'skiabot-linux-compile-000': [
       'Build-Ubuntu-GCC-Arm7-Debug-Android',
+      'Build-Ubuntu-GCC-x86_64-Release-CMake',
     ],
   },
   'client.skia.fyi': {

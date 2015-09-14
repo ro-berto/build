@@ -19,6 +19,7 @@ from common.skia import global_constants
 from . import android_flavor
 from . import appurify_flavor
 from . import chromeos_flavor
+from . import cmake_flavor
 from . import coverage_flavor
 from . import default_flavor
 from . import fake_specs
@@ -50,6 +51,8 @@ def is_chromeos(builder_cfg):
   return ('CrOS' in builder_cfg.get('extra_config', '') or
           builder_cfg.get('os') == 'ChromeOS')
 
+def is_cmake(builder_cfg):
+  return 'CMake' in builder_cfg.get('extra_config', '')
 
 def is_ios(builder_cfg):
   return ('iOS' in builder_cfg.get('extra_config', '') or
@@ -75,6 +78,8 @@ class SkiaApi(recipe_api.RecipeApi):
       return android_flavor.AndroidFlavorUtils(self)
     elif is_chromeos(builder_cfg):
       return chromeos_flavor.ChromeOSFlavorUtils(self)
+    elif is_cmake(builder_cfg):
+      return cmake_flavor.CMakeFlavorUtils(self)
     elif is_ios(builder_cfg):
       return ios_flavor.iOSFlavorUtils(self)
     elif is_valgrind(builder_cfg):
