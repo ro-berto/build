@@ -184,6 +184,11 @@ class GpuApi(recipe_api.RecipeApi):
     """Indicates whether the receipe is running on the dEQP tester bot."""
     return 'dEQP' in self.m.properties['buildername']
 
+  @property
+  def is_angle_trybot(self):
+    """Indicates whether the receipe is running on an ANGLE trybot."""
+    return self.m.properties['mastername'] == 'tryserver.chromium.angle'
+
   def checkout_steps(self):
     self._bot_update = self.m.bot_update.ensure_checkout(force=True)
 
@@ -329,6 +334,10 @@ class GpuApi(recipe_api.RecipeApi):
       # Only run tests on the tree closers and on the CQ which are
       # available in the open-source repository.
       basic_tests += SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN
+
+    if self.is_fyi_waterfall or self.is_angle_trybot:
+      # Run the same open source tests on the FYI waterfall and the ANGLE
+      # trybots.
       if self.m.platform.is_win or self.m.platform.is_linux:
         # TODO(kbr): run these tests on the trybots as soon as there
         # is capacity to do so, and on all platforms as soon as ANGLE

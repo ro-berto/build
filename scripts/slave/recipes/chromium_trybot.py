@@ -727,7 +727,7 @@ def GenTests(api):
             buildername='linux_chromium_rel_ng', extra_swarmed_tests=None,
             **kwargs):
     kwargs.setdefault('revision', None)
-    swarm_hashes = api.gpu.dummy_swarm_hashes
+    swarm_hashes = api.gpu.get_dummy_swarm_hashes_for_trybot(mastername)
     if extra_swarmed_tests:
       for test in extra_swarmed_tests:
         swarm_hashes[test] = '[dummy hash for %s]' % test
