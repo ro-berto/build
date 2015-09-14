@@ -250,9 +250,8 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       builderNames=builders_by_scheduler[INFRA_PERCOMMIT_SCHEDULER_NAME])
   c['schedulers'].append(s)
 
-  for parent, builders_to_trigger in triggered_builders.iteritems():
-    c['schedulers'].append(Triggerable(name=trigger_name(parent),
-                                       builderNames=builders_to_trigger))
+  # Don't add triggerable schedulers for triggered_builders; triggers are now
+  # handled on the slave-side through buildbucket.
 
   pools = BuildersPools(TRY_SCHEDULER_NAME)
   pools[TRY_SCHEDULER_NAME].extend(builders_by_scheduler[TRY_SCHEDULER_NAME])
