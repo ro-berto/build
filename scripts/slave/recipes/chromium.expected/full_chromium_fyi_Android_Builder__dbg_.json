@@ -299,18 +299,5 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Android Tests (trial)(dbg)@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (6)",
-    "trigger_specs": [
-      {
-        "builder_name": "Android WebView (amp)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android WebView (amp)@@@"
-    ]
   }
 ]
