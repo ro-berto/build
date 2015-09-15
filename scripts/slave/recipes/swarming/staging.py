@@ -110,6 +110,7 @@ def RunSteps(api):
     if task.title.endswith('_apk'):  # pragma: no cover
       task.dimensions['os'] = 'Android'
       task.dimensions['android_devices'] = '1'
+      del task.dimensions['cpu']
 
   for task in tasks:
     api.swarming.trigger_task(task)
