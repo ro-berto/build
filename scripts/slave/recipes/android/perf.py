@@ -165,7 +165,7 @@ def RunSteps(api):
   perf_tests = api.chromium.list_perf_tests(
       browser='android-chromium',
       num_shards=builder['num_device_shards'],
-      devices=api.chromium_android.devices[0:1]).json.output
+      device=api.chromium_android.devices[0]).json.output
   try:
     failures = []
     if test_runner:

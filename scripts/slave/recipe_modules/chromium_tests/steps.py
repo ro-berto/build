@@ -368,14 +368,19 @@ def generate_script(api, mastername, buildername, test_spec,
 
 
 class DynamicPerfTests(Test):
-  def __init__(self, platform, target_bits, perf_id, shard_index, num_shards):
-    self.browser = self._browser_name(platform, target_bits)
-    self.perf_id = perf_id
-    self.shard_index = shard_index
-    self.num_shards = num_shards
+  def __init__(self, platform, target_bits, perf_id, shard_index,
+               num_host_shards, num_device_shards):
+    self._platform = platform
+    self._target_bits = target_bits
+    self._perf_id = perf_id
+    self._shard_index = shard_index
+    self._num_host_shards = num_host_shards
+    self._num_device_shards = num_device_shards
 
   @staticmethod
   def _browser_name(platform, target_bits):
+    if platform == 'android':
+      return 'android-chromium'
     if platform == 'win' and target_bits == 64:
       return 'release_x64'
     return 'release'
@@ -385,11 +390,40 @@ class DynamicPerfTests(Test):
     return 'dynamic_perf_tests'
 
   def run(self, api, suffix):
-    exception = None
-    tests = api.chromium.list_perf_tests(self.browser, self.num_shards)
-    tests = dict((k, v) for k, v in tests.json.output['steps'].iteritems()
-        if v['device_affinity'] == self.shard_index)
-    for test_name, test in sorted(tests.iteritems()):
+    tests = self._test_list(api)
+
+    if self._num_device_shards == 1:
+      self._run_serially(api, tests)
+    else:
+      self._run_sharded(api, tests)
+
+  def _test_list(self, api):
+    if self._platform == 'android':
+      api.adb.list_devices(step_test_data=api.adb.test_api.two_devices)
+      device = api.adb.devices[0]
+    else:
+      device = None
+
+    tests = api.chromium.list_perf_tests(
+        browser=self._browser_name(self._platform, self._target_bits),
+        num_shards=self._num_host_shards * self._num_device_shards,
+        device=device).json.output
+
+    tests['steps'] = {k: v for k, v in tests['steps'].iteritems()
+        if v['device_affinity'] / self._num_device_shards == self._shard_index}
+    for test_info in tests['steps'].itervalues():
+      test_info['device_affinity'] %= self._num_device_shards
+
+    return tests
+
+  def _run_sharded(self, api, tests):
+    api.chromium_android.run_sharded_perf_tests(
+      config=api.json.input(data=tests),
+      perf_id=self._perf_id)
+
+  def _run_serially(self, api, tests):
+    failure = None
+    for test_name, test in sorted(tests['steps'].iteritems()):
       test_name = str(test_name)
       annotate = api.chromium.get_annotate_by_test_name(test_name)
       cmd = test['cmd'].split()
@@ -402,40 +436,15 @@ class DynamicPerfTests(Test):
             python_mode=True,
             results_url='https://chromeperf.appspot.com',
             perf_dashboard_id=test.get('perf_dashboard_id', test_name),
-            perf_id=self.perf_id,
+            perf_id=self._perf_id,
             test_type=test.get('perf_dashboard_id', test_name),
             xvfb=True,
             chartjson_file=True)
       except api.step.StepFailure as f:
-        exception = f
-    if exception:
-      raise exception
+        failure = f
 
-  @staticmethod
-  def compile_targets(_):
-    return []
-
-
-class AndroidPerfTests(Test):
-  def __init__(self, perf_id, num_shards):
-    self.perf_id = perf_id
-    self.num_shards = num_shards
-
-  def run(self, api, suffix):
-    exception = None
-    api.adb.list_devices(step_test_data=api.adb.test_api.two_devices)
-    perf_tests = api.chromium.list_perf_tests(
-        browser='android-chromium',
-        num_shards=self.num_shards,
-        devices=api.adb.devices[0:1]).json.output
-    try:
-      api.chromium_android.run_sharded_perf_tests(
-        config=api.json.input(data=perf_tests),
-        perf_id=self.perf_id)
-    except api.step.StepFailure as f:  # pragma: no cover
-      exception = f
-    if exception:
-      raise exception  # pragma: no cover
+    if failure:
+      raise failure
 
   @staticmethod
   def compile_targets(_):

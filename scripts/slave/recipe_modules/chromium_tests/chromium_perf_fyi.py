@@ -48,9 +48,8 @@ def _Spec(platform, parent_builder, perf_id, index, num_shards, target_bits):
       'perf-id': perf_id,
       'results-url': RESULTS_URL,
       'tests': [
-        steps.DynamicPerfTests(
-            platform, target_bits,
-            perf_id, index, num_shards),
+        steps.DynamicPerfTests(platform, target_bits, perf_id,
+                               index, num_shards, 1),
       ],
     }
 
@@ -181,5 +180,6 @@ _AddBotSpec(
     perf_id='android-nexus5-oilpan',
     target_bits=32,
     num_shards=1,
-    extra_tests=[steps.AndroidPerfTests('android-nexus5-oilpan', 1)])
-
+    extra_tests=[
+      steps.DynamicPerfTests('android', 32, 'android-nexus5-oilpan', 0, 1, 1),
+    ])

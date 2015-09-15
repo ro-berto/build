@@ -70,7 +70,7 @@ def RunSteps(api):
   perf_tests = api.chromium.list_perf_tests(
       browser='android-webview',
       num_shards=BUILDER['num_device_shards'],
-      devices=api.adb.devices[0:1]).json.output
+      device=api.adb.devices[0]).json.output
   try:
     api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=perf_tests),

@@ -64,19 +64,18 @@ def _TestSpec(parent_builder, perf_id, platform, target_bits,
   spec['parent_buildername'] = parent_builder
   spec['perf-id'] = perf_id
   spec['results-url'] = 'https://chromeperf.appspot.com'
+  spec['tests'] = [
+    steps.DynamicPerfTests(platform, target_bits, perf_id, shard_index,
+                           num_host_shards, num_device_shards),
+  ]
 
   if platform == 'android':
     spec['android_config'] = 'perf'
     spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
     spec['gclient_apply_config'] = ['android']
-    spec['tests'] = [steps.AndroidPerfTests(perf_id, num_device_shards)]
   else:
     spec['test_generators'] = [steps.generate_script]
     spec['test_spec_file'] = 'chromium.perf.json'
-    spec['tests'] = [
-      steps.DynamicPerfTests(platform, target_bits, perf_id, shard_index,
-                             num_host_shards),
-    ]
 
   return spec
 

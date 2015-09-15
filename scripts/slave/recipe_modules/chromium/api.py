@@ -680,11 +680,11 @@ class ChromiumApi(recipe_api.RecipeApi):
       infra_step=True,
       **kwargs)
 
-  def list_perf_tests(self, browser, num_shards, devices=[]):
+  def list_perf_tests(self, browser, num_shards, device=None):
     args = ['list', '--browser', browser, '--json-output',
             self.m.json.output(), '--num-shards', num_shards]
-    for x in devices:
-      args += ['--device', x]
+    if device:
+      args += ['--device', device]
 
     return self.m.python(
       'List Perf Tests',
