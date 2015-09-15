@@ -51,12 +51,18 @@ def RunSteps(api):
   api.swarming.default_idempotent = True
 
   # We are building simplest Chromium flavor possible.
-  api.chromium.set_config(
-      'chromium', BUILD_CONFIG=api.properties.get('configuration', 'Release'))
+  if api.properties.get('platform') == 'android':
+    api.chromium.set_config(
+        'android', BUILD_CONFIG=api.properties.get('configuration', 'Release'))
+  else:
+    api.chromium.set_config(
+        'chromium', BUILD_CONFIG=api.properties.get('configuration', 'Release'))
 
   # We are checking out Chromium with swarming_client dep unpinned and pointing
   # to ToT of swarming_client repo, see recipe_modules/gclient/config.py.
   api.gclient.set_config('chromium')
+  if api.properties.get('platform') == 'android':
+    api.gclient.apply_config('android')
   api.gclient.c.solutions[0].custom_vars['swarming_revision'] = ''
   api.gclient.c.revisions['src/tools/swarming_client'] = 'HEAD'
 
@@ -72,10 +78,14 @@ def RunSteps(api):
   # Ensure swarming_client version is fresh enough.
   api.swarming.check_client_version()
 
+  targets = ['chromium_swarm_tests']
+  if api.properties.get('platform') == 'android':
+    targets = ['ui_android_unittests_apk_run']
+
   # Build all supported tests.
   api.chromium.runhooks()
   api.isolate.clean_isolated_files(api.chromium.output_dir)
-  api.chromium.compile(targets=['chromium_swarm_tests'])
+  api.chromium.compile(targets=targets)
   api.isolate.remove_build_metadata()
 
   # Will search for *.isolated.gen.json files in the build directory and isolate
@@ -95,6 +105,11 @@ def RunSteps(api):
             add_json_log=False))
     for test, isolated_hash in sorted(api.isolate.isolated_tests.iteritems())
   ]
+
+  for task in tasks:
+    if task.title.endswith('_apk'):  # pragma: no cover
+      task.dimensions['os'] = 'Android'
+      task.dimensions['android_devices'] = 1
 
   for task in tasks:
     api.swarming.trigger_task(task)
