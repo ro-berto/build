@@ -111,6 +111,7 @@ def RunSteps(api):
       task.dimensions['os'] = 'Android'
       task.dimensions['android_devices'] = '1'
       del task.dimensions['cpu']
+      del task.dimensions['gpu']
 
   for task in tasks:
     api.swarming.trigger_task(task)
