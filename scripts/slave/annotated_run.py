@@ -220,8 +220,9 @@ def main(argv):
 
   os.execvp(sys.executable,
       [ sys.executable, '-u', recipe_runner,
-        'run', properties['recipe'],
-        '--properties=%s' % json.dumps(properties) ])
+        'run',
+        '--properties=%s' % json.dumps(properties),
+        properties['recipe']])
 
 
 def shell_main(argv):
