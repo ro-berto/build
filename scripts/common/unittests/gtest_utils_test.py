@@ -700,6 +700,25 @@ class TestGTestJSONParserTests(auto_stub.TestCase):
     self.assertEqual(['SUCCESS'], parser.TriesForTest('Test.One'))
     self.assertEqual(['SUCCESS'], parser.TriesForTest('Test.Two'))
 
+  def testInvalidEscape(self):
+    parser = gtest_utils.GTestJSONParser()
+    parser.ProcessJSONData({
+      'disabled_tests': [],
+      'global_tags': [],
+      'per_iteration_data': [
+        {
+          'Test.One': [{'status': 'SUCCESS', 'output_snippet': '\\x5'}],
+          'Test.Two': [{'status': 'SUCCESS', 'output_snippet': ''}],
+        }
+      ]
+    })
+    self.assertEqual(['Test.One', 'Test.Two'], parser.PassedTests())
+    self.assertEqual([], parser.FailedTests())
+    self.assertEqual(0, parser.FlakyTests())
+    self.assertEqual(0, parser.DisabledTests())
+    self.assertEqual(['SUCCESS'], parser.TriesForTest('Test.One'))
+    self.assertEqual(['SUCCESS'], parser.TriesForTest('Test.Two'))
+
   def testFailedTests(self):
     parser = gtest_utils.GTestJSONParser()
     parser.ProcessJSONData({

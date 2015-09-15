@@ -651,7 +651,7 @@ class GTestJSONParser(object):
           ascii_lines = run_data['output_snippet'].encode('ascii',
                                                           errors='replace')
           decoded_lines = CompressList(
-              ascii_lines.decode('string_escape').split('\n'),
+              ascii_lines.decode('string_escape', errors='replace').split('\n'),
               self.OUTPUT_SNIPPET_LINES_LIMIT,
               '<truncated, full output is in gzipped JSON '
               'output at end of step>')
