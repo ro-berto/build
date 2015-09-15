@@ -134,10 +134,45 @@ BUILDERS = freeze({
   },
   'tryserver.chromium.angle': {
     'builders': {
+      'linux_angle_rel_ng': {
+        'mastername': 'chromium.angle',
+        'buildername': 'Linux Builder (ANGLE)',
+        'tester': 'Linux Tests (ANGLE)',
+      },
+      'linux_angle_dbg_ng': {
+        'mastername': 'chromium.angle',
+        'buildername': 'Linux Builder (dbg) (ANGLE)',
+        'tester': 'Linux Tests (dbg) (ANGLE)',
+      },
+      'mac_angle_rel_ng': {
+        'mastername': 'chromium.angle',
+        'buildername': 'Mac Builder (ANGLE)',
+        'tester': 'Mac10.8 Tests (ANGLE)',
+      },
+      'mac_angle_dbg_ng': {
+        'mastername': 'chromium.angle',
+        'buildername': 'Mac Builder (dbg) (ANGLE)',
+        'tester': 'Mac10.8 Tests (dbg) (ANGLE)',
+      },
       'win_angle_rel_ng': {
         'mastername': 'chromium.angle',
         'buildername': 'Win Builder (ANGLE)',
         'tester': 'Win7 Tests (ANGLE)',
+      },
+      'win_angle_dbg_ng': {
+        'mastername': 'chromium.angle',
+        'buildername': 'Win Builder (dbg) (ANGLE)',
+        'tester': 'Win7 Tests (dbg) (ANGLE)',
+      },
+      'win_angle_x64_rel_ng': {
+        'mastername': 'chromium.angle',
+        'buildername': 'Win x64 Builder (ANGLE)',
+        'tester': 'Win7 Tests x64 (ANGLE)',
+      },
+      'win_angle_x64_dbg_ng': {
+        'mastername': 'chromium.angle',
+        'buildername': 'Win x64 Builder (dbg) (ANGLE)',
+        'tester': 'Win7 Tests x64 (dbg) (ANGLE)',
       },
     },
   },
@@ -478,7 +513,68 @@ BUILDERS = freeze({
 # in a custom step, which can then be mocked in the GenTests.
 CHROMIUM_GPU_DIMENSION_SETS = freeze({
   'tryserver.chromium.angle': {
+    'linux_angle_rel_ng': [
+      {
+        'gpu': '10de:104a',  # NVIDIA GeForce GT 610
+        'os': 'Linux',
+      },
+    ],
+    'linux_angle_dbg_ng': [
+      {
+        'gpu': '10de:104a',  # NVIDIA GeForce GT 610
+        'os': 'Linux',
+      },
+    ],
+    'mac_angle_rel_ng': [
+      {
+        'gpu': '8086:0116',  # Intel HD Graphics 3000
+        'hidpi': '0',
+        'os': 'Mac-10.8',
+      }, {
+        'gpu': '10de:0fe9',  # NVIDIA GeForce GT 750M
+        'hidpi': '1',
+        'os': 'Mac-10.9',
+      },
+    ],
+    'mac_angle_dbg_ng': [
+      {
+        'gpu': '8086:0116',  # Intel HD Graphics 3000
+        'hidpi': '0',
+        'os': 'Mac-10.8',
+      }, {
+        'gpu': '10de:0fe9',  # NVIDIA GeForce GT 750M
+        'hidpi': '1',
+        'os': 'Mac-10.9',
+      },
+    ],
     'win_angle_rel_ng': [
+      {
+        'gpu': '10de:104a',  # NVIDIA GeForce GT 610
+        'os': 'Windows',
+      }, {
+        'gpu': '1002:6779',  # AMD Radeon HD 6450
+        'os': 'Windows',
+      },
+    ],
+    'win_angle_dbg_ng': [
+      {
+        'gpu': '10de:104a',  # NVIDIA GeForce GT 610
+        'os': 'Windows',
+      }, {
+        'gpu': '1002:6779',  # AMD Radeon HD 6450
+        'os': 'Windows',
+      },
+    ],
+    'win_angle_x64_rel_ng': [
+      {
+        'gpu': '10de:104a',  # NVIDIA GeForce GT 610
+        'os': 'Windows',
+      }, {
+        'gpu': '1002:6779',  # AMD Radeon HD 6450
+        'os': 'Windows',
+      },
+    ],
+    'win_angle_x64_dbg_ng': [
       {
         'gpu': '10de:104a',  # NVIDIA GeForce GT 610
         'os': 'Windows',

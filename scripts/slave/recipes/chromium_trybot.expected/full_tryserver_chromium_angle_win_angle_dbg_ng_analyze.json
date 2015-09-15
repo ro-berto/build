@@ -14,9 +14,9 @@
       "-u",
       "[BUILD]\\scripts\\slave\\bot_update.py",
       "--master",
-      "chromium.angle",
+      "tryserver.chromium.angle",
       "--builder",
-      "Win Builder (ANGLE)",
+      "win_angle_dbg_ng",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -25,6 +25,12 @@
       "src/third_party/angle",
       "--revision_mapping_file",
       "{\"src\": \"got_chromium_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/WebKit\": \"got_webkit_revision\", \"src/third_party/angle\": \"got_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
+      "--issue",
+      "12853011",
+      "--patchset",
+      "1",
+      "--rietveld_server",
+      "https://codereview.chromium.org",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -99,9 +105,9 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
     },
-    "name": "gclient runhooks"
+    "name": "gclient runhooks (with patch)"
   },
   {
     "cmd": [
@@ -115,18 +121,7 @@
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.angle.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win7 Tests (ANGLE)\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -139,11 +134,11 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Release",
+      "Debug",
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
-      "{\"buildername\": \"Win Builder (ANGLE)\", \"buildnumber\": 571, \"mastername\": \"chromium.angle\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"buildername\": \"win_angle_dbg_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.angle\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -154,115 +149,67 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
+      "[DEPOT_TOOLS]\\git.bat",
+      "diff",
+      "--cached",
+      "--name-only"
     ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "cleanup_temp"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[isolate]\\resources\\find_isolated_tests.py",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
-      "--clean-isolated-files"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clean isolated files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]\\src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]\\goma",
-      "--",
-      "browser_tests",
-      "browser_tests_run",
-      "crash_service"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "compile"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[isolate]\\resources\\remove_build_metadata.py",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
-      "--src-dir",
-      "[SLAVE_BUILD]\\src"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "remove_build_metadata"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[isolate]\\resources\\isolate.py",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--verbose",
-      "[SLAVE_BUILD]\\src\\out\\Release\\browser_tests.isolated.gen.json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "isolate tests",
+    "cwd": "[SLAVE_BUILD]\\src",
+    "name": "git diff to analyze patch",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@files@foo.cc@@@",
+      "@@@STEP_LOG_END@files@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]\\src\\testing\\buildbot\\trybot_analyze_config.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "read filter exclusion spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: 'testing\\\\buildbot\\\\trybot_analyze_config.json'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"ios\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\zip_build.py",
-      "--target",
-      "Release",
-      "--build-url",
-      "gs://chromium-fyi-archive/chromium.angle/Win Builder (ANGLE)",
-      "--build_revision",
-      "fac9503c46405f77757b9a728eb85b8d7bc6080c",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win Builder (ANGLE)\", \"buildnumber\": 571, \"mastername\": \"chromium.angle\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win Builder (ANGLE)\", \"buildnumber\": 571, \"mastername\": \"chromium.angle\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "[SLAVE_BUILD]\\src\\build\\gyp_chromium",
+      "--analyzer",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"angle_end2end_tests_run\", \"angle_unittests_run\", \"chrome\", \"content_gl_tests_run\", \"crash_service\", \"gl_tests_run\", \"telemetry_gpu_test_run\"]}",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "package build"
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger",
-    "trigger_specs": [
-      {
-        "builder_name": "Win7 Tests (ANGLE)"
-      }
-    ],
+    "env": {
+      "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
+    },
+    "name": "analyze",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win7 Tests (ANGLE)@@@"
+      "@@@STEP_TEXT@No compile necessary@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"targets\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   }
 ]
