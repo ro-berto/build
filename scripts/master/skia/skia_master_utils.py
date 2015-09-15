@@ -197,9 +197,6 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       project='buildbot', repository=global_constants.INFRA_REPO)
   skia_master_only_change_filter = change_filter.ChangeFilter(
       project='skia', repository=ActiveMaster.repo_url, branch=MASTER_BRANCH)
-  def trigger_name(parent_builder):
-    """Given a parent builder name, return a triggerable scheduler name."""
-    return 'triggers_%s' % parent_builder
 
   c['schedulers'] = []
 
@@ -268,11 +265,8 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
   annotator = annotator_factory.AnnotatorFactory(ActiveMaster)
 
   for builder_dict in builder_dicts:
-    triggers = ([trigger_name(builder_dict['name'])]
-                if builder_dict['name'] in triggered_builders else None)
     factory = annotator.BaseFactory(
         builder_dict['recipe'],
-        triggers=triggers,
         timeout=2400)
     factory.properties.update(builder_dict['properties'], 'BuildFactory')
     builder_dict['factory'] = factory
