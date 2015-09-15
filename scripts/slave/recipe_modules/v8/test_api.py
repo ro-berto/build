@@ -284,6 +284,13 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       ]
     })
 
+  def example_one_buildbot_change(self):
+    return self.m.json.output({
+      'changes': [
+        {'revision': 'a1'},
+      ]
+    })
+
   def example_bisection_range(self):
     # Git returns changes in the order newest -> oldest.
     return self.m.raw_io.stream_output('a3\na2\na1', stream='stdout')

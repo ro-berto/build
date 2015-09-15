@@ -280,3 +280,18 @@ def GenTests(api):
         'Bisect a0.Retry', api.v8.bisect_failures_example()) +
     api.time.step(120)
   )
+
+  # Disable bisection due to less than two changes.
+  yield (
+    api.test('full_%s_%s_bisect_one_change' % (
+        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
+    api.properties.generic(mastername=mastername,
+                           buildername=buildername,
+                           branch='master') +
+    api.platform(bot_config['testing']['platform'],
+                 v8_config_kwargs.get('TARGET_BITS', 64)) +
+    api.override_step_data('Mjsunit', api.v8.bisect_failures_example()) +
+    api.override_step_data(
+        'Bisect.Fetch changes', api.v8.example_one_buildbot_change()) +
+    api.time.step(120)
+  )

@@ -530,7 +530,10 @@ class V8Api(recipe_api.RecipeApi):
 
     with self.m.step.nest('Bisect'):
       # Setup bisection range ("from" exclusive).
-      from_change, to_change = self.get_change_range()
+      from_change, to_change, nchanges = self.get_change_range()
+      if nchanges <= 1:
+        self.m.step('disabled - less than two changes', cmd=None)
+        return
       assert from_change
       assert to_change
 
@@ -1196,9 +1199,10 @@ class V8Api(recipe_api.RecipeApi):
         ],
         step_test_data=lambda: self.test_api.example_buildbot_changes(),
     )
-    assert step_result.json.output['changes']
-    first_change = step_result.json.output['changes'][0]['revision']
-    last_change = step_result.json.output['changes'][-1]['revision']
+    changes = step_result.json.output['changes']
+    assert changes
+    first_change = changes[0]['revision']
+    last_change = changes[-1]['revision']
 
     self.m.git(
         'log', '%s~1..%s' % (first_change, last_change),
@@ -1213,7 +1217,11 @@ class V8Api(recipe_api.RecipeApi):
         stdout=self.m.raw_io.output(),
         step_test_data=lambda: self.test_api.example_latest_previous_hash()
     )
-    return step_result.stdout.strip(), str(last_change)
+    return (
+        step_result.stdout.strip(),
+        str(last_change),
+        len(changes),
+    )
 
   def get_available_build_archives(self, bisect_range):
     assert self.bot_type == 'tester'
