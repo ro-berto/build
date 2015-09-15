@@ -218,11 +218,13 @@ def main(argv):
   else:
     recipe_runner = os.path.join(SCRIPT_PATH, 'recipes.py')
 
-  os.execvp(sys.executable,
-      [ sys.executable, '-u', recipe_runner,
-        'run',
-        '--properties=%s' % json.dumps(properties),
-        properties['recipe']])
+  cmd = [
+      sys.executable, '-u', recipe_runner,
+      'run',
+      '--workdir=%s' % os.getcwd(),
+      '--properties=%s' % json.dumps(properties),
+      properties['recipe'] ]
+  os.execvp(sys.executable, cmd)
 
 
 def shell_main(argv):
