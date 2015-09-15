@@ -30,7 +30,7 @@ class _AnnotatedCallable(object):
 # BuildBot builder 'collapseRequests' callable that always returns True.
 # (See http://docs.buildbot.net/latest/manual/customization.html)
 AlwaysCollapseFunc = _AnnotatedCallable(
-    lambda _builder, _req1, _req2: True,
+    lambda _req1, _req2: True,
     '<Always Collapse>')
 
 
