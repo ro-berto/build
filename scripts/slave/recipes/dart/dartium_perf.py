@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 import json
 
-from infra.libs.infra_types import freeze
+from recipe_engine.types import freeze
 
 DEPS = [
   'chromium',

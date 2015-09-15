@@ -5,7 +5,7 @@
 # Contains the bulk of the V8 builder configurations so they can be reused
 # from multiple recipes.
 
-from infra.libs.infra_types import freeze
+from recipe_engine.types import freeze
 
 BUILDERS = {
 ####### Waterfall: client.v8

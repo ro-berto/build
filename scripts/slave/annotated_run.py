@@ -19,9 +19,14 @@ sys.path.append(os.path.join(BUILD_ROOT, 'third_party'))
 from common import annotator
 from common import chromium_utils
 from common import master_cfg_utils
-from slave import recipe_universe
 
-from recipe_engine import main as recipe_main
+SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
+BUILD_LIMITED_ROOT = os.path.join(
+    os.path.dirname(BUILD_ROOT), 'build_internal', 'scripts', 'slave')
+
+PACKAGE_CFG = os.path.join(
+    os.path.dirname(os.path.dirname(SCRIPT_PATH)),
+    'infra', 'config', 'recipes.cfg')
 
 @contextlib.contextmanager
 def namedTempFile():
@@ -204,10 +209,19 @@ def main(argv):
   properties = get_recipe_properties(
       opts.factory_properties, opts.build_properties,
       opts.master_overrides_slave)
-  stream = annotator.StructuredAnnotationStream()
-  ret = recipe_main.run_steps(properties, stream,
-                              universe=recipe_universe.get_universe())
-  return ret.status_code
+
+  # Find out if the recipe we intend to run is in build_internal's recipes. If
+  # so, use recipes.py from there, otherwise use the one from build.
+  recipe_file = properties['recipe'].replace('/', os.path.sep) + '.py'
+  if os.path.exists(os.path.join(BUILD_LIMITED_ROOT, 'recipes', recipe_file)):
+    recipe_runner = os.path.join(BUILD_LIMITED_ROOT, 'recipes.py')
+  else:
+    recipe_runner = os.path.join(SCRIPT_PATH, 'recipes.py')
+
+  os.execvp(sys.executable,
+      [ sys.executable, '-u', recipe_runner,
+        'run', properties['recipe'],
+        '--properties=%s' % json.dumps(properties) ])
 
 
 def shell_main(argv):
@@ -215,6 +229,7 @@ def shell_main(argv):
     return subprocess.call([sys.executable] + argv)
   else:
     return main(argv)
+
 
 if __name__ == '__main__':
   sys.exit(shell_main(sys.argv))

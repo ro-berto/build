@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from infra.libs.infra_types import freeze, thaw
+from recipe_engine.types import freeze
 
 DEPS = [
     'adb',
@@ -103,7 +103,7 @@ def RunSteps(api):
   buildername = api.properties['buildername']
   # TODO(akuegel): Move the configs in builders.py in chromium_tests to this
   # recipe, and get rid of duplications.
-  builder = thaw(BUILDERS[mastername][buildername])
+  builder = dict(BUILDERS[mastername][buildername])
   builder_config = builder.get('recipe_config', 'base_config')
   kwargs = {
     'REPO_NAME':'src',

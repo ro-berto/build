@@ -93,7 +93,7 @@ import urllib2
 import binary_size_utils
 import elf_symbolizer
 
-from infra.libs.infra_types import freeze
+from recipe_engine.types import freeze
 
 # Skia addition
 from common.skia import global_constants
