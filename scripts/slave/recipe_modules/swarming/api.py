@@ -13,6 +13,19 @@ from recipe_engine import recipe_api
 MINIMAL_SWARMING_VERSION = (0, 4, 10)
 
 
+def parse_time(value):
+  """Converts serialized time from the API to datetime.datetime."""
+  # When microseconds are 0, the '.123456' suffix is elided. This means the
+  # serialized format is not consistent, which confuses the hell out of python.
+  # TODO(maruel): Remove third format once we enforce version >=0.8.2.
+  for fmt in ('%Y-%m-%dT%H:%M:%S.%f', '%Y-%m-%dT%H:%M:%S', '%Y-%m-%d %H:%M:%S'):
+    try:
+      return datetime.datetime.strptime(value, fmt)
+    except ValueError:  # pragma: no cover
+      pass
+  raise ValueError('Failed to parse %s' % value)  # pragma: no cover
+
+
 class ReadOnlyDict(dict):
   def __setitem__(self, key, value):
     raise TypeError('ReadOnlyDict is immutable')
@@ -479,11 +492,11 @@ class SwarmingApi(recipe_api.RecipeApi):
   @staticmethod
   def _display_pending(summary_json, step_presentation):
     """Shows max pending time in seconds across all shards if it exceeds 10s."""
-    def t(d):
-      return datetime.datetime.strptime(d, '%Y-%m-%d %H:%M:%S')
     pending_times = [
-        (t(shard['started_ts']) - t(shard['created_ts'])).total_seconds()
-        for shard in summary_json.get('shards', []) if shard.get('started_ts')]
+      (parse_time(shard['started_ts']) -
+        parse_time(shard['created_ts'])).total_seconds()
+      for shard in summary_json.get('shards', []) if shard.get('started_ts')
+    ]
     max_pending = max(pending_times) if pending_times else 0
 
     # Only display annotation when pending more than 10 seconds to reduce noise.
@@ -706,8 +719,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         {
           'abandoned_ts': None,
           'bot_id': 'vm30',
-          'completed_ts': '2014-09-25 01:42:00',
-          'created_ts': '2014-09-25 01:41:00',
+          'completed_ts': '2014-09-25T01:42:00.123',
+          'created_ts': '2014-09-25T01:41:00.123',
           'durations': [5.7, 31.5],
           'exit_codes': [0, 0],
           'failure': False,
@@ -722,7 +735,7 @@ class SwarmingApi(recipe_api.RecipeApi):
             'Heart beat succeeded on win32.\n',
             'Foo',
           ],
-          'started_ts': '2014-09-25 01:42:11',
+          'started_ts': '2014-09-25T01:42:11.123',
           'state': 112,
           'try_number': 1,
           'user': 'unknown',
