@@ -678,7 +678,7 @@ class AMPTest(Test):
   def test_type_args(self, api):
     raise NotImplementedError() # pragma: no cover
 
-  def run(self, api, suffix):  # pylint: disable=R0201
+  def run(self, api, suffix):
     # If we were unable to successfully trigger the AMP job, run locally;
     # otherwise return no results as results will be collected in post_run.
     if not self._trigger_successful and self._fallback_to_local:
@@ -764,7 +764,7 @@ class AMPGTestTest(AMPTest):
 
   #override
   def run_test_locally(self, api, suffix):
-    self._local_test.run(api, suffix)
+    return self._local_test.run(api, suffix)
 
 
 class AMPInstrumentationTest(AMPTest):
@@ -798,7 +798,7 @@ class AMPInstrumentationTest(AMPTest):
   def run_test_locally(self, api, suffix):
     isolate_file_path = (api.path['checkout'].join(self._android_isolate_path)
                          if self._android_isolate_path else None)
-    AndroidInstrumentationTest(
+    return AndroidInstrumentationTest(
         name=self.name,
         compile_target=self._compile_target,
         adb_install_apk=self._apk_under_test,
