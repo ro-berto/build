@@ -20,6 +20,7 @@ import socket
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 import urllib2
 import urlparse
@@ -356,6 +357,30 @@ RETRY = object()
 OK = object()
 FAIL = object()
 
+
+class PsPrinter(object):
+  def __init__(self, interval=300):
+    self.interval = interval
+    self.active = sys.platform.startswith('linux2')
+    self.thread = None
+
+  @staticmethod
+  def print_pstree():
+    """Debugging function used to print "ps auxwwf" for stuck processes."""
+    subprocess.call(['ps', 'auxwwf'])
+
+  def poke(self):
+    if self.active:
+      self.cancel()
+      self.thread = threading.Timer(self.interval, self.print_pstree)
+      self.thread.start()
+
+  def cancel(self):
+    if self.active and self.thread is not None:
+      self.thread.cancel()
+      self.thread = None
+
+
 def call(*args, **kwargs):  # pragma: no cover
   """Interactive subprocess call."""
   kwargs['stdout'] = subprocess.PIPE
@@ -380,15 +405,18 @@ def call(*args, **kwargs):  # pragma: no cover
       for k, v in sorted(new_env.items()):
         print '%s: %s' % (k, v)
     print '===Running %s%s===' % (' '.join(args), attempt_msg)
+    print 'In directory: %s' % cwd
     start_time = time.time()
     proc = subprocess.Popen(args, **kwargs)
     if stdin_data:
       proc.stdin.write(stdin_data)
       proc.stdin.close()
+    psprinter = PsPrinter()
     # This is here because passing 'sys.stdout' into stdout for proc will
     # produce out of order output.
     hanging_cr = False
     while True:
+      psprinter.poke()
       buf = proc.stdout.read(BUF_SIZE)
       if not buf:
         break
@@ -403,6 +431,7 @@ def call(*args, **kwargs):  # pragma: no cover
     if hanging_cr:
       sys.stdout.write('\n')
       out.write('\n')
+    psprinter.cancel()
 
     code = proc.wait()
     elapsed_time = ((time.time() - start_time) / 60.0)
