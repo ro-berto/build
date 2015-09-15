@@ -95,23 +95,29 @@ def RunSteps(api):
       verbose=True,
       env={'SWARMING_PROFILE': '1'})
 
-  # Make swarming tasks that run isolated tests.
-  tasks = [
-    api.swarming.gtest_task(
-        test,
-        isolated_hash,
-        shards=2,
-        test_launcher_summary_output=api.test_utils.gtest_results(
-            add_json_log=False))
-    for test, isolated_hash in sorted(api.isolate.isolated_tests.iteritems())
-  ]
-
-  for task in tasks:
-    if task.title.endswith('_apk'):  # pragma: no cover
+  if api.properties.get('platform') == 'android':
+    tasks = [
+      api.swarming.task(
+          test,
+          isolated_hash)
+      for test, isolated_hash in sorted(api.isolate.isolated_tests.iteritems())
+    ]
+    for task in tasks:
       task.dimensions['os'] = 'Android'
       task.dimensions['android_devices'] = '1'
       del task.dimensions['cpu']
       del task.dimensions['gpu']
+  else:
+    # Make swarming tasks that run isolated tests.
+    tasks = [
+      api.swarming.gtest_task(
+          test,
+          isolated_hash,
+          shards=2,
+          test_launcher_summary_output=api.test_utils.gtest_results(
+              add_json_log=False))
+      for test, isolated_hash in sorted(api.isolate.isolated_tests.iteritems())
+    ]
 
   for task in tasks:
     api.swarming.trigger_task(task)
@@ -121,27 +127,28 @@ def RunSteps(api):
     for task in tasks:
       api.swarming.collect_task(task)
 
-      # TODO(estaab): Move this into the swarming recipe_module behind a flag
-      # after testing on staging.
-      step_result = api.step.active_result
-      gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
-      if gtest_results and gtest_results.raw:
-        # This is a potentially large json file (on the order of 10s of MiB) but
-        # swarming/api.py is already parsing it to get failed shards so we reuse
-        # it here.
-        parsed_gtest_data = gtest_results.raw
-        chrome_revision_cp = api.bot_update.properties.get(
-            'got_revision_cp', 'x@{#0}')
-        chrome_revision = str(api.commit_position.parse_revision(
-            chrome_revision_cp))
-        webkit_revision = api.bot_update.properties.get(
-            'got_webkit_revision', '0')
-        api.test_results.upload(
-            api.json.input(parsed_gtest_data),
-            chrome_revision=chrome_revision,
-            webkit_revision=webkit_revision,
-            test_type=task.title,
-            test_results_server='test-results-test.appspot.com')
+      if not api.properties.get('platform') == 'android':
+        # TODO(estaab): Move this into the swarming recipe_module behind a flag
+        # after testing on staging.
+        step_result = api.step.active_result
+        gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
+        if gtest_results and gtest_results.raw:
+          # This is a potentially large json file (on the order of 10s of MiB)
+          # but swarming/api.py is already parsing it to get failed shards so we
+          # reuse it here.
+          parsed_gtest_data = gtest_results.raw
+          chrome_revision_cp = api.bot_update.properties.get(
+              'got_revision_cp', 'x@{#0}')
+          chrome_revision = str(api.commit_position.parse_revision(
+              chrome_revision_cp))
+          webkit_revision = api.bot_update.properties.get(
+              'got_webkit_revision', '0')
+          api.test_results.upload(
+              api.json.input(parsed_gtest_data),
+              chrome_revision=chrome_revision,
+              webkit_revision=webkit_revision,
+              test_type=task.title,
+              test_results_server='test-results-test.appspot.com')
 
 
 def GenTests(api):
