@@ -53,7 +53,8 @@ def RunSteps(api):
   # We are building simplest Chromium flavor possible.
   if api.properties.get('platform') == 'android':
     api.chromium.set_config(
-        'android', BUILD_CONFIG=api.properties.get('configuration', 'Release'))
+        'android', BUILD_CONFIG=api.properties.get('configuration', 'Release'),
+        TARGET_ARCH='arm', TARGET_BITS=32)
   else:
     api.chromium.set_config(
         'chromium', BUILD_CONFIG=api.properties.get('configuration', 'Release'))
