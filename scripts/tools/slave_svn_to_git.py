@@ -45,13 +45,18 @@ is_win = sys.platform.startswith('win')
 PREVENT_REBOOT_FILE_CONTENT = 'slave_svn_to_git'
 
 
+def log(line):
+  sys.stdout.write('%s%s' % (line, os.linesep))
+  sys.stdout.flush()
+
+
 def check_call(cmd, cwd=None, env=None):
-  print 'Running %s%s' % (cmd, ' in %s' % cwd if cwd else '')
+  log('Running %s%s' % (cmd, ' in %s' % cwd if cwd else ''))
   subprocess.check_call(cmd, cwd=cwd, shell=is_win, env=env)
 
 
 def check_output(cmd, cwd=None, env=None):
-  print 'Running %s%s' % (cmd, ' in %s' % cwd if cwd else '')
+  log('Running %s%s' % (cmd, ' in %s' % cwd if cwd else ''))
   return subprocess.check_output(cmd, cwd=cwd, shell=is_win, env=env)
 
 
@@ -105,14 +110,14 @@ def main():
     with open(prevent_reboot_path, 'r') as prevent_reboot_file:
       prevent_reboot_content = prevent_reboot_file.read()
     if prevent_reboot_content == PREVENT_REBOOT_FILE_CONTENT:
-      print "Removing no_reboot left from previous run"
+      log('Removing no_reboot left from previous run')
       os.unlink(prevent_reboot_path)
 
   # Report state before doing anything else, so we can keep track of the state
   # of this host even if something later in this script fails.
   cur_host = socket.gethostname()
   if not report_and_need_conversion(b_dir, cur_host) and not options.manual:
-    print 'Host %s is not pending SVN-to-Git conversion' % cur_host
+    log('Host %s is not pending SVN-to-Git conversion' % cur_host)
     return 0
 
   # Set up credentials for the download_from_google_storage hook.
@@ -131,7 +136,7 @@ def main():
   gclient_path = os.path.join(b_dir, '.gclient')
   gclient_path_svn = os.path.join(b_dir, '.gclient.svn')
   if not os.path.isfile(gclient_path) and os.path.isfile(gclient_path_svn):
-    print 'Copying %s to %s' % (gclient_path_svn, gclient_path)
+    log('Copying %s to %s' % (gclient_path_svn, gclient_path))
     shutil.copy(gclient_path_svn, gclient_path)
   assert os.path.isfile(gclient_path), 'Did not find old .gclient config'
 
@@ -142,7 +147,7 @@ def main():
     solutions = exec_env['solutions']
   assert len(solutions) == 1, 'Number of solutions in .gclient is not 1'
   if not solutions[0]['url'].startswith('svn:'):
-    print 'Non-SVN URL in .gclient: %s' % solutions[0]['url']
+    log('Non-SVN URL in .gclient: %s' % solutions[0]['url'])
     return 0
   sol_name = solutions[0]['name']
   assert sol_name in GCLIENT_CONFIGS, 'Unknown type of checkout: ' % sol_name
@@ -186,7 +191,7 @@ def main():
     for relpath in sorted(repos):
       # Only process directories that have .svn dir in them.
       if not os.path.isdir(os.path.join(b_dir, relpath, '.svn')):
-        print '%s subdir does not have .svn directory' % relpath
+        log('%s subdir does not have .svn directory' % relpath)
         del repos[relpath]
         continue
       # Make sure Git directory exists.
@@ -194,32 +199,32 @@ def main():
 
     # Move SVN .gclient away so that no one can run gclient sync while
     # conversion is in progress.
-    print 'Moving %s to %s' % (gclient_path, gclient_path_svn)
+    log('Moving %s to %s' % (gclient_path, gclient_path_svn))
     shutil.move(gclient_path, gclient_path_svn)
 
     # Rename all .svn directories into .svn.backup. We use set because .svn dirs
     # may be found several times as some repos are subdirs of other repos.
     svn_dirs = set()
     count = 0
-    print 'Searching for .svn folders'
+    log('Searching for .svn folders')
     for relpath in sorted(repos):
       for root, dirs, _files in os.walk(os.path.join(b_dir, relpath)):
         count += 1
         if count % 100 == 0:
-          print 'Processed %d directories' % count
+          log('Processed %d directories' % count)
         if '.svn' in dirs:
           svn_dirs.add(os.path.join(relpath, root, '.svn'))
           dirs.remove('.svn')
     for rel_svn_dir in svn_dirs:
       svn_dir = os.path.join(b_dir, rel_svn_dir)
-      print 'Moving %s to %s.backup' % (svn_dir, svn_dir)
+      log('Moving %s to %s.backup' % (svn_dir, svn_dir))
       shutil.move(svn_dir, '%s.backup' % svn_dir)
 
     # Move Git directories from temp dir to the checkout.
     for relpath, repospec in sorted(repos.iteritems()):
       src_git = os.path.join(tmpdir, relpath, '.git')
       dest_git = os.path.join(b_dir, relpath, '.git')
-      print 'Moving %s to %s' % (src_git, dest_git)
+      log('Moving %s to %s' % (src_git, dest_git))
       shutil.move(src_git, dest_git)
 
     # Revert any local modifications after the conversion to Git.
@@ -251,11 +256,11 @@ def main():
 
 
 if __name__ == '__main__':
-  print 'Running slave_svn_to_git on %s UTC' % datetime.datetime.utcnow()
+  log('Running slave_svn_to_git on %s UTC' % datetime.datetime.utcnow())
   try:
     retcode = main()
   except Exception as e:
     traceback.print_exc(e)
     retcode = 1
-  print 'Return code: %d' % retcode
+  log('Return code: %d' % retcode)
   sys.exit(retcode)
