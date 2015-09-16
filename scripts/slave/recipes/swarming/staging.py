@@ -105,7 +105,10 @@ def RunSteps(api):
     ]
     for task in tasks:
       task.dimensions['os'] = 'Android'
-      task.dimensions['android_devices'] = '1'
+      # TODO(stip): Do not specify android_devices for now. os:Android certifies
+      # there's at least one Android devices available, which is "good enough"
+      # for now. Standard bots advertize "5" and "6".
+      #task.dimensions['android_devices'] = '1'
       del task.dimensions['cpu']
       del task.dimensions['gpu']
   else:
