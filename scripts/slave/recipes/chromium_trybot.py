@@ -4,7 +4,7 @@
 
 import collections
 
-from recipe_engine.types import freeze
+from infra.libs.infra_types import freeze
 
 DEPS = [
   'amp',
@@ -12,10 +12,10 @@ DEPS = [
   'chromium',
   'chromium_android',
   'chromium_tests',
-  'file',
   'gclient',
   'gpu',
   'isolate',
+  'itertools',
   'json',
   'path',
   'platform',
@@ -808,13 +808,6 @@ def _RunStepsInternal(api):
 
 
 def RunSteps(api):
-  # build/tests/masters_recipes_tests.py needs to manipulate the BUILDERS
-  # dict, so we provide an API to dump it here.
-  if api.properties.get('dump_builders'):  # pragma: no cover
-    api.file.copy('Dump BUILDERS dict',
-        api.json.input(BUILDERS), api.properties['dump_builders'])
-    return
-
   with api.tryserver.set_failure_hash():
     return _RunStepsInternal(api)
 

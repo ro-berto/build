@@ -16,7 +16,7 @@ To be tested using a command-line like:
 Places resulting output in build/slave/fake_slave.
 """
 
-from recipe_engine.types import freeze
+from infra.libs.infra_types import freeze
 
 # Recipe module dependencies.
 DEPS = [

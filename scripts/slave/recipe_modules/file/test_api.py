@@ -31,6 +31,32 @@ BUILD = os.path.join(_ROOT, 'build')
 BUILD_INTERNAL = os.path.join(_ROOT, 'build_internal')
 
 class FileTestApi(recipe_test_api.RecipeTestApi):
+  def read_in_build(self, relpath):
+    """Read a file in chrome/trunk/tools/build.
+
+    Args:
+      relpath: A path inside chrome/trunk/tools/build.
+    """
+    # Prevent a user from using .. to escape the build repository.
+    assert '..' not in os.sep.split(relpath), (
+      'You can\'t use .. in read_in_build.'
+    )
+    with open(os.path.join(BUILD, relpath)) as f:
+      return f.read()
+
+  def read_in_build_internal(self, relpath): # pragma: no cover
+    """Read a file in chrome-internal/trunk/tools/build.
+
+    Args:
+      relpath: A path inside chrome-internal/trunk/tools/build.
+    """
+    # Prevent a user from using .. to escape the build_internal repository.
+    assert '..' not in os.sep.split(relpath), (
+      'You can\'t use .. in read_in_build.'
+    )
+    with open(os.path.join(BUILD_INTERNAL, relpath)) as f:
+      return f.read()
+
   def listdir(self, files):
     def listdir_callback():
       return self.m.json.output(files)

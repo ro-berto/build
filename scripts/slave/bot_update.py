@@ -42,24 +42,8 @@ THIS_DIR = path.dirname(path.abspath(__file__))
 SCRIPTS_DIR = path.dirname(THIS_DIR)
 BUILD_DIR = path.dirname(SCRIPTS_DIR)
 ROOT_DIR = path.dirname(BUILD_DIR)
+BUILD_INTERNAL_DIR = path.join(ROOT_DIR, 'build_internal')
 DEPOT_TOOLS_DIR = path.join(ROOT_DIR, 'depot_tools')
-
-# TODO(luqui): This is a horrible hack to identify build_internal when build
-# is a recipe dependency.  bot_update should not be depending on internal,
-# rather the arrow should go the other way (or just be destroyed).
-def check_build_internal(d):
-  d = path.abspath(d)
-  if path.basename(d) == 'build_internal' and path.isdir(d):
-    return d
-  else:
-    return None
-
-BUILD_INTERNAL_DIR = (
-    check_build_internal(path.join(ROOT_DIR, 'build_internal')) or
-    check_build_internal(path.join(ROOT_DIR,      # .recipe_deps
-                                   path.pardir,   # slave
-                                   path.pardir,   # scripts
-                                   path.pardir))) # build_internal
 
 
 CHROMIUM_GIT_HOST = 'https://chromium.googlesource.com'
@@ -203,7 +187,7 @@ cache_dir = r%(cache_dir)s
 
 
 internal_data = {}
-if BUILD_INTERNAL_DIR:
+if os.path.isdir(BUILD_INTERNAL_DIR):
   local_vars = {}
   try:
     execfile(os.path.join(
@@ -332,12 +316,7 @@ if sys.platform.startswith('win'):
 
 # Find the patch tool.
 if sys.platform.startswith('win'):
-  if not BUILD_INTERNAL_DIR:
-    print 'Warning: could not find patch tool because there is no '
-    print 'build_internal present.'
-    PATCH_TOOL = None
-  else:
-    PATCH_TOOL = path.join(BUILD_INTERNAL_DIR, 'tools', 'patch.EXE')
+  PATCH_TOOL = path.join(BUILD_INTERNAL_DIR, 'tools', 'patch.EXE')
 else:
   PATCH_TOOL = '/usr/bin/patch'
 
