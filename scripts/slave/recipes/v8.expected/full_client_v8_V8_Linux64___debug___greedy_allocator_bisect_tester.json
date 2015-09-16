@@ -365,7 +365,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/tools/runit.py",
       "[BUILD]/scripts/tools/pycurl.py",
       "http://c.org/p/cr/json/builders/V8%20Linux64%20-%20debug%20-%20greedy%20allocator/builds/571/source_stamp",
       "--outfile",

@@ -400,7 +400,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/tools/runit.py",
       "[BUILD]/scripts/tools/pycurl.py",
       "http://c.org/p/cr/json/builders/V8%20Linux%20-%20predictable/builds/571/source_stamp",
       "--outfile",

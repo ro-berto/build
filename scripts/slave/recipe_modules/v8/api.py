@@ -1190,9 +1190,8 @@ class V8Api(recipe_api.RecipeApi):
     )
     step_result = self.m.python(
         'Fetch changes',
-        self.m.path['build'].join('scripts', 'tools', 'runit.py'),
+        self.m.path['build'].join('scripts', 'tools', 'pycurl.py'),
         [
-          self.m.path['build'].join('scripts', 'tools', 'pycurl.py'),
           url,
           '--outfile',
           self.m.json.output(),
