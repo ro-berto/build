@@ -49,10 +49,6 @@ class TriggeringService(object):
       self, source_build, bucket_name, builder_name, properties, changes=None):
     """Schedules a build on buildbucket."""
     info = source_build.getProperties().getProperty(common.INFO_PROPERTY) or {}
-    try:
-      info = common.parse_info_property(info)
-    except ValueError:
-      info = {}
     build_def = info.get(common.BUILD_PROPERTY) or {}
     bucket_name = bucket_name or build_def.get('bucket')
     if not bucket_name:

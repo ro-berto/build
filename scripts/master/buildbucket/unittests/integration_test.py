@@ -176,7 +176,7 @@ class IntegratorTest(unittest.TestCase):
   def assert_added_build_request(
       self, build_id, builder_name, ssid, properties=None, buildset=None):
     properties = (properties or {}).copy()
-    properties['buildbucket'] = ANY
+    properties['buildbucket'] =  {'build': ANY}
     properties = {
         k: (v, 'buildbucket') for k, v in properties.iteritems()
     }
@@ -362,12 +362,12 @@ class IntegratorTest(unittest.TestCase):
     build.id = '123321'
     build.getNumber.return_value = 42
     build.isFinished.return_value = False
-    info = json.dumps({
+    info = {
        'build': {
             'id': build.id,
             'lease_key': LEASE_KEY,
         },
-    })
+    }
     build.properties.getProperty.return_value = info
     properties = {
         'a': ('b', 'ValueSource')

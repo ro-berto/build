@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 import datetime
-import json
 import logging
 
 from twisted.python import log as twistedLog
@@ -63,14 +62,3 @@ def timestamp_to_datetime(value):
     raise ValueError(
         'Expecting a number, got %s instead' % type(value).__name__)
   return EPOCH + datetime.timedelta(microseconds=value)
-
-
-def parse_info_property(value):
-  """Parses the buildbot build property containing buildbucket INFO."""
-  # Be compatible with existing builds that still store a dict.
-  if isinstance(value, dict):
-    return value
-  parsed = json.loads(value)
-  if not isinstance(parsed, dict):
-    raise ValueError('%s property must be a dict' % INFO_PROPERTY)
-  return parsed

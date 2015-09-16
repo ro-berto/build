@@ -6,7 +6,6 @@
 """changes.ChangeStore unit tests"""
 
 import datetime
-import json
 import unittest
 
 import test_env  # pylint: disable=W0611
@@ -70,9 +69,9 @@ class ChangeStoreTest(unittest.TestCase):
     cache.get.return_value = None
     result = run_deferred(self.store.get_change(self.buildbucket_change))
 
-    info = json.dumps({
+    info = {
         common.BUILDBUCKET_CHANGE_ID_PROPERTY: '1',
-    }, sort_keys=True)
+    }
     self.buildbot.add_change_to_db.assert_called_once_with(
         author=self.buildbucket_change['author']['email'],
         files=[],
@@ -100,7 +99,7 @@ class ChangeStoreTest(unittest.TestCase):
         'message': 'Hello world',
     }))
 
-    expected_info = json.dumps({'change_id': None})
+    expected_info = {'change_id': None}
     self.buildbot.add_change_to_db.assert_called_once_with(
         author='johndoe@chromium.org',
         files=[],
