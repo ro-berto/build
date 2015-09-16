@@ -146,17 +146,17 @@
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"linux_baremetal\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--annotate=gtest",
-      "--test-type=iSACFixtest",
-      "--step-name=iSACFixtest",
+      "--test-type=isac_fix_test",
+      "--step-name=isac_fix_test",
       "--builder-name=linux_baremetal",
       "--slave-name=slavename",
-      "iSACFixtest",
+      "isac_fix_test",
       "32000",
       "[SLAVE_BUILD]/src/resources/speech_and_misc_wb.pcm",
       "isac_speech_and_misc_wb.pcm"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "iSACFixtest"
+    "name": "isac_fix_test"
   },
   {
     "cmd": [

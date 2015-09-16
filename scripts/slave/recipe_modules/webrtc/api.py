@@ -206,7 +206,7 @@ class WebRTCApi(recipe_api.RecipeApi):
               revision=self.perf_revision,
               perf_test=True)
           self.add_test(
-              'iSACFixtest',
+              'isac_fix_test',
               args=['32000', f('resources', 'speech_and_misc_wb.pcm'),
                     'isac_speech_and_misc_wb.pcm'],
               revision=self.perf_revision,

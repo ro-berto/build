@@ -146,23 +146,23 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=iSACFixtest",
+      "--perf-dashboard-id=isac_fix_test",
       "--perf-id=webrtc-linux-large-tests",
       "--perf-config",
       "{'a_default_rev': 'r_webrtc_rev'}",
-      "--test-type=iSACFixtest",
-      "--step-name=iSACFixtest",
+      "--test-type=isac_fix_test",
+      "--step-name=isac_fix_test",
       "--builder-name=Linux64 Release [large tests]",
       "--slave-name=slavename",
       "--build-number=1337",
       "--revision=170242",
-      "iSACFixtest",
+      "isac_fix_test",
       "32000",
       "[SLAVE_BUILD]/src/resources/speech_and_misc_wb.pcm",
       "isac_speech_and_misc_wb.pcm"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "iSACFixtest"
+    "name": "isac_fix_test"
   },
   {
     "cmd": [
