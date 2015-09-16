@@ -20,8 +20,15 @@ import subprocess
 import sys
 import time
 
-# Common name of sensor found in nexus devices to measure cpu (core0) temp.
-_CPU_TEMP_SENSOR = 'tsens_tz_sensor0'
+# Various names of sensors used to measure cpu temp
+_CPU_TEMP_SENSORS = [
+  # most nexus devices
+  'tsens_tz_sensor0',
+  # android one
+  'mtktscpu',
+  # nexus 9
+  'CPU-therm',
+]
 
 # TODO(bpastene): change the following if infra.git becomes a checked
 # out repo on slaves instead of a cipd managed package.
@@ -35,8 +42,8 @@ def get_device_args(adb_path, slave_name, device):
   cpu_temp = None
   # Search for the file that the _CPU_TEMP_SENSOR dumps to and cat it.
   cmd = [adb_path, '-s', device, 'shell',
-         'grep -l "%s" /sys/class/thermal/thermal_zone*/type'
-           % (_CPU_TEMP_SENSOR)]
+         'grep -lE "%s" /sys/class/thermal/thermal_zone*/type'
+           % ('|'.join(_CPU_TEMP_SENSORS))]
   try:
     cpu_temp_files = subprocess.check_output(cmd)
     if (len(cpu_temp_files.splitlines()) == 1):
@@ -44,6 +51,11 @@ def get_device_args(adb_path, slave_name, device):
         cmd = [adb_path, '-s', device, 'shell',
                'cat %s' % (cpu_temp_file)]
         file_contents = subprocess.check_output(cmd)
+        # Most devices report cpu temp in tenths of a degree (C), but a few
+        # can report it in thousandths of a degree. If this is in thousandths,
+        # chop off the trailing two digits to convert to tenths
+        if (len(file_contents) == 5):
+          file_contents = file_contents[:3]
         cpu_temp = int(file_contents)
   except (subprocess.CalledProcessError, TypeError, ValueError):
     cpu_temp = None

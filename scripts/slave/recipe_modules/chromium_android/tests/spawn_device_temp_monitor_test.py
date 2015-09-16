@@ -39,7 +39,7 @@ class MainFuncTest(auto_stub.TestCase):
     # Collect calls to 'subprocess.Popen', which calls send_ts_mon_values.py.
     self.send_ts_mon_call = []
     def mocked_ts_mon_calls(args):
-      self.send_ts_mon_call = args
+      self.send_ts_mon_call.extend(args)
     self.mock(
         spawn_device_temp_monitor.subprocess,
         'Popen',
@@ -60,24 +60,38 @@ class MainFuncTest(auto_stub.TestCase):
     # simulate a responsive device.
     adb_calls = []
     def mocked_adb_calls(args):
-      adb_calls.append(args)
-      if args[4].startswith('grep'):
-        return "some_thermal_file_name"
-      elif args[4].startswith('cat'):
-        return "123"
-      elif args[4].startswith('dumpsys'):
-        return "temperature: 456"
+      if (args[2] == 'device_serial_1'):
+        adb_calls.append(args)
+        if args[4].startswith('grep'):
+          return "some_thermal_file_name"
+        elif args[4].startswith('cat'):
+          return "123"
+        elif args[4].startswith('dumpsys'):
+          return "temperature: 456"
+        else:
+          self.fail('Unexpected adb command: %s' % (' '.join(args)))
+      elif (args[2] == 'device_serial_2'):
+        adb_calls.append(args)
+        if args[4].startswith('grep'):
+          return "some_thermal_file_name"
+        elif args[4].startswith('cat'):
+          return "56789"
+        elif args[4].startswith('dumpsys'):
+          return "temperature: 987"
+        else:
+          self.fail('Unexpected adb command: %s' % (' '.join(args)))
       else:
-        self.fail('Unexpected adb command: %s' % (' '.join(args)))
+        self.fail('Unexpected device serial: %s' % (' '.join(args)))
 
     self.mock(
         spawn_device_temp_monitor.subprocess,
         'check_output',
         mocked_adb_calls)
     try:
+      self.send_ts_mon_call = []
       spawn_device_temp_monitor.main(
           '/some/adb/path',
-          '["device_serial_1"]',
+          '["device_serial_1", "device_serial_2"]',
           'some_slave_name')
     except SimulatedSigterm:
       pass
@@ -90,15 +104,25 @@ class MainFuncTest(auto_stub.TestCase):
         '"value": 123, "device_id": "device_serial_1"}',
         '--float',
         '{"slave": "some_slave_name", "name": "dev/battery/temperature", '
-        '"value": 456, "device_id": "device_serial_1"}']
+        '"value": 456, "device_id": "device_serial_1"}',
+        spawn_device_temp_monitor._RUN_PY,
+        'infra.tools.send_ts_mon_values',
+        '--float',
+        '{"slave": "some_slave_name", "name": "dev/cpu/temperature", '
+        '"value": 567, "device_id": "device_serial_2"}',
+        '--float',
+        '{"slave": "some_slave_name", "name": "dev/battery/temperature", '
+        '"value": 987, "device_id": "device_serial_2"}'
+    ]
     self.assertEquals(expected_cmd, self.send_ts_mon_call)
+
   
   def test_main_unresponsive_device(self):
     # Collect calls to 'subprocess.check_output', which calls adb, and
     # simulate an unresponsive device.
     adb_calls = []
     def mocked_adb_calls(args):
-      adb_calls.append(args)
+      adb_calls.extend(args)
       raise subprocess.CalledProcessError
 
     self.mock(
@@ -106,6 +130,7 @@ class MainFuncTest(auto_stub.TestCase):
         'check_output',
         mocked_adb_calls)
     try:
+      self.send_ts_mon_call = []
       spawn_device_temp_monitor.main(
           '/some/adb/path',
           '["device_serial_1"]',
