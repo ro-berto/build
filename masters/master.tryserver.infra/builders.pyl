@@ -72,11 +72,7 @@
     },
     "Luci-go Presubmit": {
       "category": "Luci-go",
-      "recipe": "run_presubmit",
-      "properties": {
-        "repo_name": "luci_go",
-        "runhooks": True,
-      },
+      "recipe": "infra/luci_go",
       "scheduler": None,
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "presubmit_lucigo",
