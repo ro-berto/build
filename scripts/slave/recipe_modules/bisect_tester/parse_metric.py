@@ -18,10 +18,13 @@ def parse_chartjson_metric(results, metric):  # pragma: no cover
     trace_name = 'summary'
   try:
     values = results['charts'][chart_name][trace_name]['values']
-    return bool(len(values)), values, results
-  except KeyError:
-    # e.g. metric not found
-    return False, [], results
+    if len(values):
+      avg_value = [sum(values)/len(values)]
+      return True, avg_value, results
+  except KeyError:  # e.g. metric not found
+    pass
+  return False, [], results
+
 
 # The following has largely been copied from bisect_perf_regression.py
 def parse_metric(out, err, metric):  # pragma: no cover
