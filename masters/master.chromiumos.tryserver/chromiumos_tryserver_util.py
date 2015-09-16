@@ -152,15 +152,15 @@ class NextSlaveAndBuild(object):
     """
     return self.testing_slave_pool.is_testing_slave(slave.slavename)
 
-  def FilterSlaves(self, chromeos_config, slaves):
-    """Filters |slaves| to only contain valid slaves for |chromeos_config|.
+  def FilterSlaves(self, cbb_config, slaves):
+    """Filters |slaves| to only contain valid slaves for |cbb_config|.
 
     Args:
-      chromeos_config (ChromiteTarget): The config to filter for.
+      cbb_config (ChromiteTarget): The config to filter for.
       slaves: List of BuildSlave objects to filter to filter.
     """
-    if (not chromeos_config or chromeos_config.HasVmTests() or
-        chromeos_config.HasHwTests()):
+    if (not cbb_config or cbb_config.HasVmTests() or
+        cbb_config.HasHwTests()):
       slaves = [s for s in slaves if not builder_config.IsGCESlave(s.getName())]
     return slaves
 
@@ -217,10 +217,10 @@ class NextSlaveAndBuild(object):
           -int(builder_config.IsGCESlave(s.slave.slavename)))
 
       # Iterate through slaves and choose the appropriate one.
-      chromeos_config_name = br.properties.getProperty('chromeos_config', None)
-      chromeos_config = configs.get(chromeos_config_name)
+      cbb_config_name = br.properties.getProperty('cbb_config', None)
+      cbb_config = configs.get(cbb_config_name)
       builder = br.master.status.getBuilder(br.buildername)
-      slaves = self.FilterSlaves(chromeos_config, builder.getSlaves())
+      slaves = self.FilterSlaves(cbb_config, builder.getSlaves())
       for s in normal_slaves:
         for builder_slave in slaves:
           if s.slave.slavename == builder_slave.getName():

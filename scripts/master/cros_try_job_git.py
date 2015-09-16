@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import base64
 import json
 import os
 import re
@@ -25,20 +26,13 @@ from twisted.internet import defer, reactor, utils
 from twisted.mail.smtp import SMTPSenderFactory
 from twisted.python import log
 
+from common.twisted_util.response import StringResponse
+from master import gitiles_poller
 from master.try_job_base import BadJobfile
 
 
 class InvalidEtcBuild(BadJobfile):
   pass
-
-
-def get_file_contents(poller, branch, file_path):
-  """Returns a Deferred to returns the file's content."""
-  return utils.getProcessOutput(
-      poller.gitbin,
-      ['show', 'origin/%s:%s' % (branch, file_path)],
-      path=poller.workdir,
-      )
 
 
 def translate_v1_to_v2(parsed_job):
@@ -75,6 +69,10 @@ class CrOSTryJobGit(TryBase):
   # - The build name doesn't begin with a flag ('--')
   # - The build name doesn't contain spaces (to spill into extra args).
   ETC_TARGET_RE = re.compile(r'^[a-zA-Z][\w-]+\w$')
+
+  # Template path URL component to retrieve the Base64 contents of a file from
+  # Gitiles.
+  _GITILES_PATH_TMPL = '%(repo)s/+/%(revision)s/%(path)s?format=text'
 
   @classmethod
   def updateJobDesc(cls, parsed_job):
@@ -199,11 +197,9 @@ class CrOSTryJobGit(TryBase):
       buildroot = '/b/cbuild/external_master'
     props.setProperty('buildroot', buildroot, self._PROPERTY_SOURCE)
 
-    props.setProperty('extra_args', options.get('extra_args', []),
-                      self._PROPERTY_SOURCE)
     props.setProperty('slaves_request', options.get('slaves_request', []),
                       self._PROPERTY_SOURCE)
-    props.setProperty('chromeos_config', config, self._PROPERTY_SOURCE)
+    props.setProperty('cbb_config', config, self._PROPERTY_SOURCE)
 
     return props
 
@@ -251,31 +247,25 @@ see<br>this message please contact chromeos-build@google.com.<br>
                                        StringIO(m.as_string()), result)
     reactor.connectTCP(self.smtp_host, 25, sender_factory)
 
-  @defer.deferredGenerator
+  @defer.inlineCallbacks
   def gotChange(self, change, important):
     """Process the received data and send the queue buildset."""
-    # Implicitly skips over non-files like directories.
-    if len(change.files) != 1:
-      # We only accept changes with 1 diff file.
-      raise BadJobfile(
-          'Try job with too many files %s' % (','.join(change.files)))
-
     # Find poller that this change came from.
     for poller in self.pollers:
-      if poller.repourl == change.repository:
+      if not isinstance(poller, gitiles_poller.GitilesPoller):
+        continue
+      if poller.repo_url == change.repository:
         break
     else:
       raise BadJobfile(
           'Received tryjob from unsupported repository %s' % change.repository)
 
     # pylint: disable=W0631
-    wfd = defer.waitForDeferred(
-        get_file_contents(poller, change.branch, change.files[0]))
-    yield wfd
+    file_contents = yield self.loadGitilesChangeFile(poller, change)
 
-    parsed = None
+    parsed = {}
     try:
-      parsed = self.load_job(wfd.getResult())
+      parsed = self.load_job(file_contents)
       self.validate_job(parsed)
       self.updateJobDesc(parsed)
     except BadJobfile as e:
@@ -289,11 +279,27 @@ see<br>this message please contact chromeos-build@google.com.<br>
       raise
 
     # The sourcestamp/buildsets created will be merge-able.
-    d = self.master.db.sourcestamps.addSourceStamp(
+    ssid = yield self.master.db.sourcestamps.addSourceStamp(
         branch=change.branch,
         revision=change.revision,
         project=change.project,
         repository=change.repository,
         changeids=[change.number])
-    d.addCallback(self.create_buildset, parsed)
-    d.addErrback(log.err, "Failed to queue a try job!")
+    yield self.create_buildset(ssid, parsed)
+
+  @defer.inlineCallbacks
+  def loadGitilesChangeFile(self, poller, change):
+    if len(change.files) != 1:
+      # We only accept changes with 1 diff file.
+      raise BadJobfile(
+          'Try job with too many files %s' % (','.join(change.files)))
+
+    # Load the contents of the modified file.
+    path = self._GITILES_PATH_TMPL % {
+        'repo': poller.repo_path,
+        'revision': change.revision,
+        'path': change.files[0],
+    }
+    contents_b64 = yield poller.agent.request('GET', path, retry=5,
+                                              protocol=StringResponse.Get)
+    defer.returnValue(base64.b64decode(contents_b64))

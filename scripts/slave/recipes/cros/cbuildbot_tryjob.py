@@ -13,10 +13,7 @@ DEPS = [
 # Map master name to 'chromite' configuration name.
 _MASTER_CONFIG_MAP = {
     'chromiumos.tryserver': {
-      'master_config': 'external',
-      'variants': {
-        'etc': ['chromeos_tryserver_etc'],
-      },
+      'master_config': 'chromiumos_tryserver',
     },
 }
 
@@ -38,7 +35,14 @@ _TRYJOB_DATA = """
 
 def RunSteps(api):
   # The 'cbuildbot' config name to build is the name of the builder.
-  cbb_config_name = api.properties.get('buildername')
+  #
+  # TODO(dnj): After we fully switch to BuildBucket scheduling, load the config
+  #            name from the BuildBucket job instead of `cbb_config` build
+  #            property. We can't do this yet b/c the job description can
+  #            specify multiple configs in one tryjob, so there's no way for us
+  #            to know which one we are.
+  cbb_config_name = api.properties.get('cbb_config')
+  assert cbb_config_name, "No configuration name specified."
 
   cbb = cros_chromite.Get()
   cbb_config = cbb.get(cbb_config_name)
@@ -49,14 +53,40 @@ def RunSteps(api):
       _MASTER_CONFIG_MAP)
   api.chromite.c.cbb.config = cbb_config_name
 
-  # Determine our build directory name.
-  namebase = cbb_config_name
-  if cbb_config:
-    namebase = 'internal' if cbb_config.get('internal') else 'external'
-  api.chromite.c.cbb.builddir = '%s_master' % (namebase,)
+  repository = api.properties.get('repository')
+  revision = api.properties.get('revision')
+  assert repository, "A repository must be specified."
+  assert revision, "A revision must be specified."
+  assert api.chromite.check_repository('tryjob', repository), (
+      "Refusing to query unknown tryjob repository: %s" % (repository,))
+
+  # Add parameters specified in the tryjob description.
+  tryjob_args = api.chromite.load_try_job(repository, revision)
+
+  # Determine our build directory name based on whether this build is internal
+  # or external.
+  #
+  # We have two checkout options: internal and external. By default we will
+  # infer which to use based on the Chromite config. However, the pinned
+  # Chromite config may not be up to date. If the value cannot be inferred, we
+  # will "quarantine" the build by running it in a separate "etc_master"
+  # build root and instructing `cbuildbot` to clobber beforehand.
+  #
+  # TODO: As the configuration owner, Chromite should be the entity to make the
+  # internal/external buildroot decision. A future iteration should add flags
+  # to Chromite to inform it of the internal/external build roots on the slave
+  # and defer to it to decide which to use based on the config that it is
+  # executing.
+  if not api.chromite.c.cbb.builddir:
+    if cbb_config:
+      namebase = 'internal' if cbb_config.get('internal') else 'external'
+      api.chromite.c.cbb.builddir = '%s_master' % (namebase,)
+    else:
+      api.chromite.c.cbb.builddir = 'etc_master'
+      api.chromite.c.cbb.clobber = True
 
   # Run our 'cbuildbot'.
-  api.chromite.run_cbuildbot(tryjob=True)
+  api.chromite.run_cbuildbot(args=tryjob_args)
 
 
 def GenTests(api):
@@ -65,10 +95,11 @@ def GenTests(api):
       api.test('basic')
       + api.properties(
           mastername='chromiumos.tryserver',
-          buildername='x86-generic-full',
+          buildername='full',
           slavename='test',
           repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
           revision=api.gitiles.make_hash('test'),
+          cbb_config='x86-generic-full',
       )
       + api.step_data(
           'Fetch tryjob commit',
@@ -86,16 +117,16 @@ def GenTests(api):
       )
   )
 
-  # Test an 'etc' job (no Chromite config).
+  # Test a config that is not registered in Chromite.
   yield (
-      api.test('etc')
+      api.test('unknown_config')
       + api.properties(
           mastername='chromiumos.tryserver',
           buildername='etc',
           slavename='test',
-          cbb_variant='etc',
           repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
           revision=api.gitiles.make_hash('test'),
+          cbb_config='xxx-fakeboard-fakebuild',
       )
       + api.step_data(
           'Fetch tryjob commit',
@@ -118,10 +149,11 @@ def GenTests(api):
       api.test('basic_no_files_in_commit')
       + api.properties(
           mastername='chromiumos.tryserver',
-          buildername='x86-generic-full',
+          buildername='full',
           slavename='test',
           repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
           revision=api.gitiles.make_hash('test'),
+          cbb_config='x86-generic-full',
       )
       + api.step_data(
           'Fetch tryjob commit',

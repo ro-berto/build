@@ -59,7 +59,19 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Fetch tryjob descriptor (user/user.12345)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@extra_args: [u'--timeout', u'14400', u'--remote-trybot', u'--remote-version=4']<br/>name: 12345<br/>email: testauthor@fake.chromium.org@@@"
+      "@@@STEP_LOG_LINE@tryjob.json@@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@{@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@  \"name\": \"12345\",@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@  \"email\": \"testauthor@fake.chromium.org\",@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@  \"extra_args\": [@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@    \"--timeout\",@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@    \"14400\",@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@    \"--remote-trybot\",@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@    \"--remote-version=4\"@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@  ]@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@}@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@@@@",
+      "@@@STEP_LOG_END@tryjob.json@@@"
     ]
   },
   {
@@ -70,7 +82,7 @@
       "--master",
       "chromiumos.tryserver",
       "--builder",
-      "x86-generic-full",
+      "full",
       "--slave",
       "test",
       "--spec",
@@ -101,13 +113,20 @@
     ]
   },
   {
+    "cmd": [
+      "git",
+      "checkout",
+      "master"
+    ],
+    "cwd": "[SLAVE_BUILD]/chromite",
+    "name": "checkout chromite branch [master]"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "[SLAVE_BUILD]/chromite/bin/cbuildbot",
       "--buildroot",
       "[ROOT]/cbuild/external_master",
-      "--branch",
-      "master",
       "--timeout",
       "14400",
       "--remote-trybot",

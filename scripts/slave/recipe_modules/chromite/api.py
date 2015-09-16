@@ -83,12 +83,10 @@ class ChromiteApi(recipe_api.RecipeApi):
         step_name=str('Fetch tryjob descriptor (%s)' % (desc_path,)),
         attempts=self._GITILES_ATTEMPTS)
     result = self.m.step.active_result
+    result.presentation.logs['tryjob.json'] = [desc_json]
 
     # Parse the commit description from the file (JSON).
     desc = self.m.json.loads(desc_json)
-    result.presentation.step_text += '<br/>'.join(
-        '%s: %s' % (k, cgi.escape(str(v)))
-        for k, v in desc.iteritems())
     return desc.get('extra_args', ())
 
   def load_manifest_config(self, repository, revision):
@@ -240,7 +238,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     if 'config_repo' in properties:
       self.c.cbb.config_repo = self.m.properties['config_repo']
 
-  def run_cbuildbot(self, tryjob=False):
+  def run_cbuildbot(self, args=[]):
     """Runs a 'cbuildbot' checkout-and-build workflow.
 
     This workflow uses the registered configuration dictionary to make master-
@@ -259,8 +257,8 @@ class ChromiteApi(recipe_api.RecipeApi):
     - Executes the 'cbuildbot' command.
 
     Args:
-      tryjob (bool): If True, load a tryjob description from the source
-          repository and augment the cbuildbot command-line with it.
+      args (list): If True, use this argument list as the base instead of the
+          default, which is '--buildbot'.
     Returns: (Step) the 'cbuildbot' execution step.
     """
     # Assert correct configuration.
@@ -271,14 +269,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     # repository and revision to proceed.
     repository = self.m.properties.get('repository')
     revision = self.m.properties.get('revision')
-    tryjob_args = []
     if repository and revision:
-      if tryjob:
-        assert self.check_repository('tryjob', repository), (
-            "Refusing to query unknown tryjob repository: %s" % (repository,))
-        # If we are a tryjob, add parameters specified in the description.
-        tryjob_args = self.load_try_job(repository, revision)
-
       # Pull more information from the commit if it came from certain known
       # repositories.
       if (self.c.use_chrome_version and
@@ -296,7 +287,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     cbb_args = [
         '--buildroot', buildroot,
     ]
-    if not tryjob:
+    if not args:
       cbb_args.append('--buildbot')
     if self.c.chromite_branch and not self.c.cbb.disable_bootstrap:
       cbb_args.extend(['--branch', self.c.chromite_branch])
@@ -317,8 +308,8 @@ class ChromiteApi(recipe_api.RecipeApi):
     if self.c.cbb.build_id:
       cbb_args.extend(['--master-build-id', self.c.cbb.build_id])
 
-    # Add tryjob args, if there are any.
-    cbb_args.extend(tryjob_args)
+    # Add custom args, if there are any.
+    cbb_args.extend(args)
 
     # Checkout Chromite.
     self.m.bot_update.ensure_checkout(

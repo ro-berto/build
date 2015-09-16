@@ -30,6 +30,8 @@ class _ChromiteRecipeFactoryFunc(object):
 
   # The default Chromite recipe timeout.
   _CHROMITE_TIMEOUT = 9000
+  # The default maximum build time.
+  _DEFAULT_MAX_TIME = 16 * 60 * 60
 
   @classmethod
   def __call__(cls, factory_obj, recipe, *args, **kwargs):
@@ -48,10 +50,10 @@ class _ChromiteRecipeFactoryFunc(object):
     # Set the 'cbb_debug' property if we're not running in a production master.
     if kwargs.pop('debug', False):
       factory_properties['cbb_debug'] = True
+    kwargs.setdefault('max_time', cls._DEFAULT_MAX_TIME)
     return factory_obj.BaseFactory(recipe, *args, **kwargs)
 
-
-# Callable instance of '_ChromiteFactoryFunc'.
+# Callable instance of '_ChromiteRecipeFactoryFunc'.
 ChromiteRecipeFactory = _ChromiteRecipeFactoryFunc()
 
 
@@ -219,7 +221,6 @@ class CbuildbotFactory(ChromiteFactory):
       script: name of the cbuildbot command.  Default cbuildbot.
       buildroot: buildroot to set. Default is /b/cbuild.
       dry_run: Don't push anything as we're running a test run.
-      trybot: Whether this is creating builders for the trybot waterfall.
       chrome_root: The place to put or use the chrome source.
       pass_revision: to pass the chrome revision desired into the build.
       legacy_chromite: If set, ask chromite to use an older cbuildbot directory.
@@ -232,7 +233,6 @@ class CbuildbotFactory(ChromiteFactory):
                script='cbuildbot',
                buildroot='/b/cbuild',
                dry_run=False,
-               trybot=False,
                chrome_root=None,
                pass_revision=None,
                legacy_chromite=False,
@@ -242,7 +242,6 @@ class CbuildbotFactory(ChromiteFactory):
         use_chromeos_factory=not pass_revision, **kwargs)
 
     self.script = script
-    self.trybot = trybot
     self.chrome_root = chrome_root
     self.pass_revision = pass_revision
     self.legacy_chromite = legacy_chromite
@@ -259,12 +258,14 @@ class CbuildbotFactory(ChromiteFactory):
 
 
   def compute_buildbot_params(self):
-    cmd = [WithProperties('--buildnumber=%(buildnumber)s'),
-           ConditionalProperty(
-               'buildroot',
-               WithProperties('--buildroot=%(buildroot)s'),
-               '--buildroot=%s' % self.buildroot)
-          ]
+    cmd = [
+        WithProperties('--buildnumber=%(buildnumber)s'),
+       ConditionalProperty(
+           'buildroot',
+           WithProperties('--buildroot=%(buildroot)s'),
+           '--buildroot=%s' % self.buildroot),
+       '--buildbot',
+    ]
 
     # Add '--master-build-id' flag when build ID property is present
     cmd.append(
@@ -274,11 +275,6 @@ class CbuildbotFactory(ChromiteFactory):
             [], # Will be flattened to nothing.
         )
     )
-
-    if self.trybot:
-      cmd.append(Property('extra_args'))
-    else:
-      cmd += ['--buildbot']
 
     if self.dry_run:
       cmd += ['--debug']

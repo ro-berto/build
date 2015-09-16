@@ -59,7 +59,19 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Fetch tryjob descriptor (user/user.12345)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@extra_args: [u'--timeout', u'14400', u'--remote-trybot', u'--remote-version=4']<br/>name: 12345<br/>email: testauthor@fake.chromium.org@@@"
+      "@@@STEP_LOG_LINE@tryjob.json@@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@{@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@  \"name\": \"12345\",@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@  \"email\": \"testauthor@fake.chromium.org\",@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@  \"extra_args\": [@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@    \"--timeout\",@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@    \"14400\",@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@    \"--remote-trybot\",@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@    \"--remote-version=4\"@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@  ]@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@}@@@",
+      "@@@STEP_LOG_LINE@tryjob.json@@@@",
+      "@@@STEP_LOG_END@tryjob.json@@@"
     ]
   },
   {
@@ -101,20 +113,27 @@
     ]
   },
   {
+    "cmd": [
+      "git",
+      "checkout",
+      "master"
+    ],
+    "cwd": "[SLAVE_BUILD]/chromite",
+    "name": "checkout chromite branch [master]"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "[SLAVE_BUILD]/chromite/bin/cbuildbot",
       "--buildroot",
       "[ROOT]/cbuild/etc_master",
-      "--branch",
-      "master",
       "--clobber",
       "--timeout",
       "14400",
       "--remote-trybot",
       "--remote-version=4",
-      "etc"
+      "xxx-fakeboard-fakebuild"
     ],
-    "name": "cbuildbot [etc]"
+    "name": "cbuildbot [xxx-fakeboard-fakebuild]"
   }
 ]

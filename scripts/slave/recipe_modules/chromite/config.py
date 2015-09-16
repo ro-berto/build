@@ -98,6 +98,7 @@ def base(c):
     'factory-nyan-5772.B',
   ))
 
+
   # If running on a testing slave, enable "--debug" so Chromite doesn't cause
   # actual production effects.
   if 'TESTING_MASTER_HOST' in os.environ:  # pragma: no cover
@@ -106,8 +107,10 @@ def base(c):
 
 @config_ctx(includes=['base'])
 def external(c):
-  c.repositories['tryjob'].append(
-      'https://chromium.googlesource.com/chromiumos/tryjobs')
+  c.repositories['tryjob'].extend([
+      'https://chromium.googlesource.com/chromiumos/tryjobs',
+      'https://chrome-internal.googlesource.com/chromeos/tryjobs',
+      ])
   c.repositories['chromium'].append(
       'https://chromium.googlesource.com/chromium/src')
   c.repositories['cros_manifest'].append(
@@ -128,13 +131,12 @@ def master_chromiumos(c):
 def chromiumos_paladin(c):
   c.read_cros_manifest = True
 
-@config_ctx()
-def chromeos_tryserver_etc(c):
-  c.cbb.clobber = True
+@config_ctx(group='master', includes=['external'])
+def chromiumos_tryserver(c):
+  c.cbb.disable_bootstrap = True
 
 @config_ctx()
 def chromiumos_coverage_test(c):
   c.use_chrome_version = True
   c.read_cros_manifest = True
   c.cbb.chrome_rev = 'stable'
-  c.cbb.disable_bootstrap = True
