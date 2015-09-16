@@ -291,7 +291,6 @@ SPEC['builders'].update({
   },
   'WebKit Mac10.9 (retina)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['chromium_mac_sdk_10_6'],
     'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
