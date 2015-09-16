@@ -218,13 +218,16 @@ def main(argv):
   else:
     recipe_runner = os.path.join(SCRIPT_PATH, 'recipes.py')
 
-  cmd = [
-      sys.executable, '-u', recipe_runner,
-      'run',
-      '--workdir=%s' % os.getcwd(),
-      '--properties=%s' % json.dumps(properties),
-      properties['recipe'] ]
-  os.execvp(sys.executable, cmd)
+  with namedTempFile() as props_file:
+    with open(props_file, 'w') as fh:
+      fh.write(json.dumps(properties))
+    cmd = [
+        sys.executable, '-u', recipe_runner,
+        'run',
+        '--workdir=%s' % os.getcwd(),
+        '--properties-file=%s' % props_file,
+        properties['recipe'] ]
+    return subprocess.call(cmd)
 
 
 def shell_main(argv):
