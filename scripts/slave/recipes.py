@@ -75,9 +75,14 @@ def get_unique(things):
 
 
 def main():
+  if sys.platform.startswith(('win', 'cygwin')):
+    git = 'git.bat'
+  else:
+    git = 'git'
+
   # Find the repository and config file to operate on.
   git_dir = os.path.dirname(
-    subprocess.check_output(['git', 'rev-parse', '--git-dir'],
+    subprocess.check_output([git, 'rev-parse', '--git-dir'],
     cwd=os.path.dirname(__file__)).strip())
   recipes_cfg_path = os.path.join(os.path.dirname(__file__), RECIPES_CFG)
 
@@ -101,15 +106,15 @@ def main():
     if not os.path.exists(deps_path):
       os.makedirs(deps_path)
     if not os.path.exists(engine_path):
-      subprocess.check_call(['git', 'clone', engine_url, engine_path])
+      subprocess.check_call([git, 'clone', engine_url, engine_path])
 
     needs_fetch = subprocess.call(
-        ['git', 'rev-parse', '--verify', '%s^{commit}' % engine_revision],
+        [git, 'rev-parse', '--verify', '%s^{commit}' % engine_revision],
         cwd=engine_path, stdout=open(os.devnull, 'w'))
     if needs_fetch:
-      subprocess.check_call(['git', 'fetch'], cwd=engine_path)
+      subprocess.check_call([git, 'fetch'], cwd=engine_path)
     subprocess.check_call(
-        ['git', 'checkout', '--quiet', engine_revision], cwd=engine_path)
+        [git, 'checkout', '--quiet', engine_revision], cwd=engine_path)
 
   try:
     ensure_engine()
