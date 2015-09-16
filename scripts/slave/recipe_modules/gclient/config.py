@@ -562,3 +562,12 @@ def infradata_master_manager(c):
 @config_ctx()
 def with_branch_heads(c):
   c.with_branch_heads = True
+
+@config_ctx()
+def custom_tabs_client(c):
+  soln = c.solutions.add()
+  soln.name = 'custom_tabs_client'
+  # TODO(pasko): test custom-tabs-client within a full chromium checkout.
+  soln.url = ('https://chromium.googlesource.com/external/github.com/'
+              'GoogleChrome/custom-tabs-client.git')
+  c.got_revision_mapping['custom_tabs_client'] = 'got_revision'
