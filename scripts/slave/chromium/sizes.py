@@ -383,8 +383,9 @@ def main_win(options, args):
 
   print 'RESULT chrome.dll: chrome.dll= %s bytes' % get_size(chrome_dll)
 
-  fmt = 'RESULT chrome_child.dll: chrome_child.dll= %s bytes'
-  print fmt % get_size(chrome_child_dll)
+  if os.path.exists(chrome_child_dll):
+    fmt = 'RESULT chrome_child.dll: chrome_child.dll= %s bytes'
+    print fmt % get_size(chrome_child_dll)
 
   print 'RESULT chrome.exe: chrome.exe= %s bytes' % get_size(chrome_exe)
 
