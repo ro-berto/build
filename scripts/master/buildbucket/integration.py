@@ -130,6 +130,8 @@ class BuildBucketIntegrator(object):
         # Not a buildbucket build request.
         continue
       build = info.get('build', {})
+      if isinstance(build, basestring):
+        build = json.loads(build)
       build_id = build.get('id')
       lease_key = build.get('lease_key')
       if not (build_id and lease_key):
