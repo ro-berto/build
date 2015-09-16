@@ -49,46 +49,6 @@ class ChromiteApi(recipe_api.RecipeApi):
         return True
     return False
 
-  def load_try_job(self, repository, revision):
-    """Loads try job arguments from the try job repository.
-
-    Loading a tryjob descriptor works as follows:
-    - Identify the tryjob commit.
-    - Identify the tryjob descriptor file checked into that commit.
-    - Load the tryjob descriptor file and parse as JSON.
-
-    Args:
-      repository (str): The URL of the try job change repository.
-      revision (str): The try job change revision.
-    Returns (iterable): The extra arguments specified by the tryjob.
-    """
-    # Load the job description from Gitiles.
-    commit_log = self.m.gitiles.commit_log(
-        repository, revision, step_name='Fetch tryjob commit',
-        attempts=self._GITILES_ATTEMPTS)
-
-    # Get the list of different files.
-    desc_path = None
-    for diff in commit_log.get('tree_diff', ()):
-      if diff.get('type') == 'add':
-        desc_path = diff.get('new_path')
-        if desc_path:
-          break
-    else:
-      raise self.m.step.StepFailure('Could not find tryjob description.')
-
-    # Load the tryjob description file.
-    desc_json = self.m.gitiles.download_file(
-        repository, desc_path, branch=revision,
-        step_name=str('Fetch tryjob descriptor (%s)' % (desc_path,)),
-        attempts=self._GITILES_ATTEMPTS)
-    result = self.m.step.active_result
-    result.presentation.logs['tryjob.json'] = [desc_json]
-
-    # Parse the commit description from the file (JSON).
-    desc = self.m.json.loads(desc_json)
-    return desc.get('extra_args', ())
-
   def load_manifest_config(self, repository, revision):
     """Loads manifest-specified parameters from the manifest commit.
 

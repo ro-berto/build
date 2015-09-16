@@ -30,5 +30,19 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "step4"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/tools/pycurl.py",
+      "fake://foo/bar",
+      "--outfile",
+      "/path/to/tmp/",
+      "--attempts",
+      "5"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "fetch fake://foo/bar"
   }
 ]

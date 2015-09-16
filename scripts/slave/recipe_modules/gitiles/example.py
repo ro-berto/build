@@ -41,7 +41,10 @@ def GenTests(api):
     )
     + api.step_data(
       'commit log: %s' % (api.gitiles.make_hash('commit')),
-      api.gitiles.make_commit_test_data('commit', 'C')
+      api.gitiles.make_commit_test_data('commit', 'C', new_files=[
+          'foo/bar',
+          'baz/qux',
+      ])
     )
     + api.step_data(
       'Gitiles fetch OWNERS',

@@ -16,6 +16,7 @@ def RunSteps(api):
            ['/bin/echo', api.url.join('//foo/', '//bar//', '//baz//')])
   api.step('step4',
            ['/bin/echo', api.url.join('//foo/bar//', '//baz//')])
+  api.url.fetch('fake://foo/bar', attempts=5)
 
 def GenTests(api):
   yield api.test('basic')

@@ -201,6 +201,12 @@ class CrOSTryJobGit(TryBase):
                       self._PROPERTY_SOURCE)
     props.setProperty('cbb_config', config, self._PROPERTY_SOURCE)
 
+    extra_args = options.get('extra_args')
+    if extra_args:
+      extra_args = json.dumps(extra_args)
+      props.setProperty('cbb_extra_args', extra_args,
+                        self._PROPERTY_SOURCE)
+
     return props
 
   def create_buildset(self, ssid, parsed_job):

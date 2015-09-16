@@ -7,6 +7,7 @@ from common import cros_chromite
 DEPS = [
   'chromite',
   'gitiles',
+  'json',
   'properties',
 ]
 
@@ -61,7 +62,9 @@ def RunSteps(api):
       "Refusing to query unknown tryjob repository: %s" % (repository,))
 
   # Add parameters specified in the tryjob description.
-  tryjob_args = api.chromite.load_try_job(repository, revision)
+  tryjob_args = api.properties.get('cbb_extra_args', [])
+  if tryjob_args:
+    tryjob_args = api.json.loads(tryjob_args)
 
   # Determine our build directory name based on whether this build is internal
   # or external.
@@ -100,20 +103,8 @@ def GenTests(api):
           repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
           revision=api.gitiles.make_hash('test'),
           cbb_config='x86-generic-full',
-      )
-      + api.step_data(
-          'Fetch tryjob commit',
-          api.gitiles.make_commit_test_data(
-              'test',
-              '\n'.join([
-                  'Commit message!',
-              ]),
-              new_files=['user/user.12345'],
-          ),
-      )
-      + api.step_data(
-          'Fetch tryjob descriptor (user/user.12345)',
-          api.gitiles.make_encoded_file(_TRYJOB_DATA)
+          cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
+                         '"--remote-version=4"]',
       )
   )
 
@@ -127,41 +118,7 @@ def GenTests(api):
           repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
           revision=api.gitiles.make_hash('test'),
           cbb_config='xxx-fakeboard-fakebuild',
-      )
-      + api.step_data(
-          'Fetch tryjob commit',
-          api.gitiles.make_commit_test_data(
-              'test',
-              '\n'.join([
-                  'Commit message!',
-              ]),
-              new_files=['user/user.12345'],
-          ),
-      )
-      + api.step_data(
-          'Fetch tryjob descriptor (user/user.12345)',
-          api.gitiles.make_encoded_file(_TRYJOB_DATA)
-      )
-  )
-
-  # Test an invalid CrOS tryjob (no files in commit).
-  yield (
-      api.test('basic_no_files_in_commit')
-      + api.properties(
-          mastername='chromiumos.tryserver',
-          buildername='full',
-          slavename='test',
-          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
-          revision=api.gitiles.make_hash('test'),
-          cbb_config='x86-generic-full',
-      )
-      + api.step_data(
-          'Fetch tryjob commit',
-          api.gitiles.make_commit_test_data(
-              'test',
-              '\n'.join([
-                  'Commit message!',
-              ]),
-          ),
+          cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
+                         '"--remote-version=4"]',
       )
   )
