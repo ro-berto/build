@@ -125,11 +125,11 @@ def main():
     else:
       raise
 
-  args = ([sys.argv[0]] + ['--package', recipes_cfg_path,
-                           '--bootstrap-script', __file__] + sys.argv[1:])
-  os.execvp(
-      os.path.join(engine_path, engine_subpath, 'recipes.py'),
-      args)
+  args = ['--package', recipes_cfg_path,
+          '--bootstrap-script', __file__] + sys.argv[1:]
+  return subprocess.call([
+      sys.executable, '-u',
+      os.path.join(engine_path, engine_subpath, 'recipes.py')] + args)
 
 if __name__ == '__main__':
-  main()
+  sys.exit(main())
