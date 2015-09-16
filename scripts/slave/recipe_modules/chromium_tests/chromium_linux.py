@@ -70,14 +70,13 @@ SPEC = {
     },
     'Linux GN Clobber': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_PLATFORM': 'linux',
         'TARGET_BITS': 64,
       },
-      'force_clobber': True,
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,

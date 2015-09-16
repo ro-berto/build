@@ -196,6 +196,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--clobber",
       "--",
       "browser_tests",
       "browser_tests_run"
