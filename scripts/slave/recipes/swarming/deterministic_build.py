@@ -10,8 +10,8 @@ TODO(sebmarchand): This recipe has been moved to the recipe's root directory.
 Remove this copy once all the master have been updated.
 """
 
-from infra.libs.infra_types import freeze
 from recipe_engine.recipe_api import Property
+from recipe_engine.types import freeze
 
 DEPS = [
   'bot_update',

@@ -4,7 +4,7 @@
 
 """Launches Legion tests."""
 
-from infra.libs.infra_types import freeze
+from recipe_engine.types import freeze
 
 DEPS = [
     'bot_update',
