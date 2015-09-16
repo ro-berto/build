@@ -171,7 +171,6 @@
       "-u",
       "[SLAVE_BUILD]/src/tools/mb/mb.py",
       "gen",
-      "-v",
       "-m",
       "client.skia",
       "-b",
