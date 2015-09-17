@@ -8,7 +8,7 @@ import math
 import re
 import urllib
 
-from infra.libs.infra_types import freeze
+from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 from . import bisection
 from . import builders

@@ -10,7 +10,6 @@ DEPS = [
   'gclient',
   'goma',
   'isolate',
-  'itertools',
   'json',
   'path',
   'platform',

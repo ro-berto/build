@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import itertools
 import re
 
 from recipe_engine import recipe_api
@@ -259,7 +260,7 @@ class GitApi(recipe_api.RecipeApi):
         sha = rev_parse_step.stdout.strip()
         rev_parse_step.presentation.properties['got_revision'] = sha
 
-    clean_args = list(self.m.itertools.chain(
+    clean_args = list(itertools.chain(
         *[('-e', path) for path in keep_paths or []]))
 
     self('clean', '-f', '-d', '-x', *clean_args,

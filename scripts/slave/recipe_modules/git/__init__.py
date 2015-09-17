@@ -1,5 +1,4 @@
 DEPS = [
-  'itertools',
   'path',
   'platform',
   'properties',

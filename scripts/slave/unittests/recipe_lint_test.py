@@ -6,11 +6,6 @@
 import os
 import sys
 
-import test_env  # pylint: disable=W0403,W0611
-
-from recipe_engine import lint_test
-from slave import recipe_universe
-
 MODULES_WHITELIST = [
   # TODO(luqui): Move skia modules into recipe resources
   r'common\.skia\..*',
@@ -20,5 +15,12 @@ MODULES_WHITELIST = [
   r'common\.cros_chromite',
 ]
 
-if __name__ == '__main__':
-  lint_test.main(recipe_universe.get_universe(), whitelist=MODULES_WHITELIST)
+RECIPES_PY = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
+    'recipes.py')
+
+args = [sys.argv[0], 'lint']
+for pattern in MODULES_WHITELIST:
+  args.extend(['-w', pattern])
+os.execvp(RECIPES_PY, args)
+

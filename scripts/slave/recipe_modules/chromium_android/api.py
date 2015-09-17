@@ -8,7 +8,7 @@ import os
 import re
 import urllib
 
-from infra.libs.infra_types import freeze
+from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 
 

@@ -4,7 +4,7 @@
 
 """Common steps for recipes that sync/build Cronet sources."""
 
-from infra.libs.infra_types import freeze
+from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 
 INSTRUMENTATION_TESTS = freeze([
