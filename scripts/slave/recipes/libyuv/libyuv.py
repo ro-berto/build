@@ -6,7 +6,7 @@
 Recipe for building and running tests for Libyuv stand-alone.
 """
 
-from infra.libs.infra_types import freeze
+from recipe_engine.types import freeze
 
 DEPS = [
   'bot_update',

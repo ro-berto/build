@@ -7,7 +7,7 @@ Recipe for running AndroidWebViewShell instrumentation layout tests using
 system WebView.
 """
 
-from infra.libs.infra_types import freeze
+from recipe_engine.types import freeze
 
 DEPS = [
   'adb',

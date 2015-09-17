@@ -6,7 +6,7 @@
 Isolating a test is required in order to run it using this recipe.
 """
 
-from infra.libs.infra_types import freeze
+from recipe_engine.types import freeze
 
 DEPS = [
     'chromium',

@@ -13,7 +13,7 @@ import struct
 import sys
 import time
 
-from infra.libs.infra_types import freeze
+from recipe_engine.types import freeze
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
