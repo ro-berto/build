@@ -4,10 +4,9 @@
 
 import contextlib
 import copy
-import itertools
 import json
 
-from recipe_engine.types import freeze
+from infra.libs.infra_types import freeze, thaw
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
@@ -154,23 +153,21 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def get_master_dict_with_dynamic_tests(
       self, mastername, buildername, test_spec, scripts_compile_targets):
-    # We manually thaw the path to the elements we are modifying, since the
-    # builders are frozen.
-    master_dict = dict(self.builders[mastername])
-    builders = master_dict['builders'] = dict(master_dict['builders'])
-    bot_config = builders[buildername]
-    for loop_buildername in builders:
-      builder_dict = builders[loop_buildername] = (
-          dict(builders[loop_buildername]))
-      builders[loop_buildername]['tests'] = (
-          self.generate_tests_from_test_spec(
-              self.m, test_spec, builder_dict, loop_buildername, mastername,
-              # TODO(phajdan.jr): Get enable_swarming value from builder_dict.
-              # Above should remove the need to get bot_config and buildername
-              # in this method.
-              bot_config.get('enable_swarming', False),
-              scripts_compile_targets, builder_dict.get('test_generators', [])
-          ))
+    # Make an independent copy so that we don't overwrite global state
+    # with updates made dynamically based on the test specs.
+    master_dict = thaw(self.builders.get(mastername, {}))
+    bot_config = master_dict.get('builders', {}).get(buildername)
+
+    for loop_buildername, builder_dict in master_dict.get(
+        'builders', {}).iteritems():
+      builder_dict['tests'] = self.generate_tests_from_test_spec(
+          self.m, test_spec, builder_dict,
+          loop_buildername, mastername,
+          # TODO(phajdan.jr): Get enable_swarming value from builder_dict.
+          # Above should remove the need to get bot_config and buildername
+          # in this method.
+          bot_config.get('enable_swarming', False),
+          scripts_compile_targets, builder_dict.get('test_generators', []))
 
     return freeze(master_dict)
 
@@ -202,11 +199,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def generate_tests_from_test_spec(self, api, test_spec, builder_dict,
       buildername, mastername, enable_swarming, scripts_compile_targets,
       generators):
-    tests = builder_dict.get('tests', ())
+    tests = builder_dict.get('tests', [])
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
     for generator in generators:
       tests = (
-          tuple(generator(api, mastername, buildername, test_spec,
+          list(generator(api, mastername, buildername, test_spec,
                          enable_swarming=enable_swarming,
                          scripts_compile_targets=scripts_compile_targets)) +
           tests)
@@ -554,7 +551,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                       bot_update_step):
     def deapply_patch_fn(failing_tests):
       self.deapply_patch(bot_update_step)
-      compile_targets = list(itertools.chain(
+      compile_targets = list(self.m.itertools.chain(
           *[t.compile_targets(api) for t in failing_tests]))
       if compile_targets:
         # Remove duplicate targets.

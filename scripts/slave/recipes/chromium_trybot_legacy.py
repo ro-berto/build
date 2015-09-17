@@ -2,9 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import itertools
-
-from recipe_engine.types import freeze
+from infra.libs.infra_types import freeze
 
 DEPS = [
   'bot_update',
@@ -14,6 +12,7 @@ DEPS = [
   'gclient',
   'gpu',
   'isolate',
+  'itertools',
   'json',
   'path',
   'platform',
@@ -396,7 +395,7 @@ def _RunStepsInternal(api):
     if bot_config.get('use_isolate'):
       api.isolate.clean_isolated_files(api.chromium.output_dir)
 
-    compile_targets.extend(itertools.chain(
+    compile_targets.extend(api.itertools.chain(
         *[t.compile_targets(api) for t in tests]))
     # Remove duplicate targets.
     compile_targets = sorted(set(compile_targets))
@@ -428,7 +427,7 @@ def _RunStepsInternal(api):
 
   def deapply_patch_fn(failing_tests):
     api.chromium_tests.deapply_patch(bot_update_step)
-    compile_targets = sorted(list(set(itertools.chain(
+    compile_targets = sorted(list(set(api.itertools.chain(
         *[t.compile_targets(api) for t in failing_tests]))))
     if compile_targets:
       api.chromium.compile(

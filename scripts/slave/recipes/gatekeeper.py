@@ -19,11 +19,25 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  # It is okay to use os here because we are reading the file immediately
+  # on the simulating machine.
+  import os
+
   yield (
     api.test('basic')
     + api.step_data(
       'reading gatekeeper_trees.json',
       api.gatekeeper.fake_test_data(),
+    )
+  )
+
+  yield (
+    api.test('real')
+    + api.step_data(
+      'reading gatekeeper_trees.json',
+      api.gatekeeper.read_real_config(
+        os.path.join('scripts', 'slave', 'gatekeeper_trees.json')
+      ),
     )
   )
 

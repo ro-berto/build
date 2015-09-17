@@ -13,6 +13,16 @@ import tempfile
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'scripts', 'slave', 'recipes'))
+sys.path.insert(
+    0, os.path.join(BASE_DIR, 'scripts', 'slave', 'recipe_modules'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'third_party'))
+
+import chromium_trybot
+from chromium_tests.builders import BUILDERS
+
+
 MAIN_WATERFALL_MASTERS = [
     'master.chromium.chrome',
     'master.chromium.chromiumos',
@@ -92,23 +102,6 @@ UNUSED_MAIN_WATERFALL_BUILDERS = {
 }
 
 
-def getBuilders(recipe_name):
-  """Asks the given recipe to dump its BUILDERS dictionary.
-
-  This must be implemented by the recipe in question.
-  """
-  (fh, builders_file) = tempfile.mkstemp('.json')
-  os.close(fh)
-  try:
-    subprocess.check_call([
-        os.path.join(BASE_DIR, 'scripts', 'slave', 'recipes.py'),
-        'run', recipe_name, 'dump_builders=%s' % builders_file])
-    with open(builders_file) as fh:
-      return json.load(fh)
-  finally:
-    os.remove(builders_file)
-
-
 def getMasterConfig(master):
   with tempfile.NamedTemporaryFile() as f:
     subprocess.check_call([
@@ -138,9 +131,6 @@ def main(argv):
 
   exit_code = 0
 
-  chromium_trybot_BUILDERS = getBuilders('chromium_trybot')
-  chromium_BUILDERS = getBuilders('chromium')
-
   for master in MAIN_WATERFALL_MASTERS:
     builders = getBuildersAndRecipes(master)
     all_builders.update((master, b) for b in builders)
@@ -154,7 +144,7 @@ def main(argv):
     # are not using chromium recipe. This might make it harder to experiment
     # with switching bots over to chromium recipe though, so it may be better
     # to just wait until the switch is done.
-    recipe_side_builders = chromium_BUILDERS.get(
+    recipe_side_builders = BUILDERS.get(
         master.replace('master.', ''), {}).get('builders')
     if recipe_side_builders is not None:
       bogus_builders = set(recipe_side_builders.keys()).difference(
@@ -177,7 +167,7 @@ def main(argv):
 
   for master in TRYSERVER_MASTERS:
     builders = getBuildersAndRecipes(master)
-    recipe_side_builders = chromium_trybot_BUILDERS[
+    recipe_side_builders = chromium_trybot.BUILDERS[
         master.replace('master.', '')]['builders']
 
     bogus_builders = set(recipe_side_builders.keys()).difference(

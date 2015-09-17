@@ -9,7 +9,6 @@ DEPS = [
   'chromium',
   'chromium_android',
   'chromium_tests',
-  'file',
   'isolate',
   'json',
   'path',
@@ -22,24 +21,8 @@ DEPS = [
   'test_utils',
 ]
 
-from recipe_engine import config_types
-
-def ignore_undumpable(obj):  # pragma: no cover
-  try:
-    return config_types.json_fixup(obj)
-  except TypeError:
-    return None
-
 
 def RunSteps(api):
-  # build/tests/masters_recipes_tests.py needs to manipulate the BUILDERS
-  # dict, so we provide an API to dump it here.
-  if api.properties.get('dump_builders'):  # pragma: no cover
-    api.file.write(
-        'Dump BUILDERS dict', api.properties['dump_builders'],
-        api.json.dumps(api.chromium_tests.builders, default=ignore_undumpable))
-    return
-
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
 
