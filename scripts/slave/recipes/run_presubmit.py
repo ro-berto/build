@@ -78,7 +78,7 @@ def _RunStepsInternal(api):
     presubmit_args.extend(['--rietveld_email', ''])  # activate anonymous mode
 
   env = {}
-  if repo_name in ['build', 'build_internal', 'build_limited_scripts_slave']:
+  if repo_name in ['build', 'build_internal', 'build_internal_scripts_slave']:
     # This should overwrite the existing pythonpath which includes references to
     # the local build checkout (but the presubmit scripts should only pick up
     # the scripts from presubmit_build checkout).
@@ -97,7 +97,7 @@ def GenTests(api):
   # TODO(machenbach): This uses the same tryserver for all repos, which doesn't
   # reflect reality (cosmetical problem only).
   for repo_name in ['blink', 'chromium', 'v8', 'nacl', 'naclports', 'gyp',
-                    'build', 'build_internal', 'build_limited_scripts_slave',
+                    'build', 'build_internal', 'build_internal_scripts_slave',
                     'depot_tools', 'skia', 'chrome_golo', 'webrtc', 'catapult']:
     yield (
       api.test(repo_name) +

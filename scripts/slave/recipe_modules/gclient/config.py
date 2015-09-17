@@ -406,13 +406,13 @@ def build_internal(c):
   c.got_revision_mapping['build'] = 'got_build_revision'
 
 @config_ctx(config_vars={'GIT_MODE': True})
-def build_limited_scripts_slave(c):
+def build_internal_scripts_slave(c):
   if not c.GIT_MODE:  # pragma: no cover
-    raise BadConf('build_limited_scripts_slave only supports git')
+    raise BadConf('build_internal_scripts_slave only supports git')
   s = c.solutions.add()
-  s.name = 'build_limited/scripts/slave'
+  s.name = 'build_internal/scripts/slave'
   s.url = 'https://chrome-internal.googlesource.com/chrome/tools/build_limited/scripts/slave.git'
-  c.got_revision_mapping['build_limited/scripts/slave'] = 'got_revision'
+  c.got_revision_mapping['build_internal/scripts/slave'] = 'got_revision'
   # We do not use 'includes' here, because we want build_internal to be the
   # first solution in the list as run_presubmit computes upstream revision
   # from the first solution.
