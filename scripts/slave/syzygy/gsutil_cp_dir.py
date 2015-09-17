@@ -16,13 +16,15 @@ _GSUTIL = os.path.abspath(os.path.join(
     os.path.dirname(__file__), '../gsutil.bat'))
 
 
-def MassCopy(src_path, dst_uri, jobs):
+def MassCopy(src_path, dst_uri, jobs, private_acl):
   """Copy a directory to Google Storage in parallel.
 
   Args:
     src_path: path to copy.
     dst_uri: gs://... type uri.
     jobs: maximum concurrent copies.
+    private_acl: Indicates if the acl of the uploaded files should be switch to
+        private.
 
   Returns:
     Error code for system.
@@ -32,6 +34,10 @@ def MassCopy(src_path, dst_uri, jobs):
 
   # Remove a trailing '/' from the dst_uri if one is included.
   dst_uri = dst_uri.rstrip('/')
+
+  file_acl = 'public-read'
+  if private_acl:
+    file_acl = 'private'
 
   # Get the list of objects.
   if os.path.isfile(src_path):
@@ -58,7 +64,7 @@ def MassCopy(src_path, dst_uri, jobs):
         # Construct the destination URL.
         dst = '%s%s' % (dst_uri, ot)
 
-        cmd = [_GSUTIL, 'cp', '-t', '-a', 'public-read', o, dst]
+        cmd = [_GSUTIL, 'cp', '-t', '-a', file_acl, o, dst]
         p = subprocess.Popen(cmd, shell=True)
         running.append(p)
       running = [p for p in running if p.poll() is None]
@@ -80,6 +86,8 @@ def main(argv):
                     help='maximum copies to run in parallel')
   parser.add_option('--message', action='append', default=[], dest='message',
                     help='message to print')
+  parser.add_option('--private', action='store_true', default=False,
+                    help='Indicate if the uploaded files should be private.')
   (options, args) = parser.parse_args(argv)
   if len(args) != 2:
     parser.print_help()
@@ -88,7 +96,8 @@ def main(argv):
   for m in options.message:
     print m
 
-  return MassCopy(src_path=args[0], dst_uri=args[1], jobs=options.jobs)
+  return MassCopy(src_path=args[0], dst_uri=args[1], jobs=options.jobs,
+      private_acl=options.private)
 
 
 if __name__ == '__main__':
