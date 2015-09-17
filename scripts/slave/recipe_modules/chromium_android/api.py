@@ -672,8 +672,10 @@ class AndroidApi(recipe_api.RecipeApi):
     else:
       kwargs = {}
     self.provision_devices(**kwargs)
+    self.spawn_device_temp_monitor()
 
   def common_tests_final_steps(self, logcat_gs_bucket=None):
+    self.shutdown_device_temp_monitor()
     self.logcat_dump(gs_bucket=logcat_gs_bucket)
     self.stack_tool_steps()
     self.test_report()

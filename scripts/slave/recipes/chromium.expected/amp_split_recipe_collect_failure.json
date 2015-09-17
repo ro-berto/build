@@ -350,6 +350,24 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "RECIPE_MODULE[chromium_android]/resources/spawn_device_temp_monitor.py",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[\"07a00ca4\"]",
+      "build1-a1"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "spawn_device_temp_monitor"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
@@ -2048,6 +2066,19 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "shutdown_device_temp_monitor"
   },
   {
     "cmd": [

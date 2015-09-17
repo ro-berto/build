@@ -284,6 +284,24 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "RECIPE_MODULE[chromium_android]/resources/spawn_device_temp_monitor.py",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[\"07a00ca4\"]",
+      "TestSlavename"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "spawn_device_temp_monitor"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "ChromePublic.apk",
       "-v",
@@ -361,6 +379,19 @@
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec.results@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "shutdown_device_temp_monitor"
   },
   {
     "cmd": [

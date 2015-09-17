@@ -245,6 +245,24 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "RECIPE_MODULE[chromium_android]/resources/spawn_device_temp_monitor.py",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[\"07a00ca4\"]",
+      "slavename"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "spawn_device_temp_monitor"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
       "gtest",
       "-s",
