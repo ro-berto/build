@@ -204,11 +204,27 @@ def update_scripts():
     return True
 
 
+def clean_old_recipe_engine():
+  """Clean stale pycs from the old location of recipe_engine.
+
+  This function should only be needed for a little while after the recipe
+  packages rollout (2015-09-16).
+  """
+  for (dirpath, _, filenames) in os.walk(
+      os.path.join(BUILD_ROOT, 'third_party', 'recipe_engine')):
+    for filename in filenames:
+      if filename.endswith('.pyc'):
+        path = os.path.join(dirpath, filename)
+        os.remove(path)
+
+
 def main(argv):
   opts, _ = get_args(argv)
   properties = get_recipe_properties(
       opts.factory_properties, opts.build_properties,
       opts.master_overrides_slave)
+
+  clean_old_recipe_engine()
 
   # Find out if the recipe we intend to run is in build_internal's recipes. If
   # so, use recipes.py from there, otherwise use the one from build.
