@@ -29,6 +29,21 @@ DEPS = [
 BUILDERS = freeze({
   'tryserver.v8': {
     'builders': {
+      'v8_linux_layout_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'compile_only': False,
+        'v8_blink_flavor': True,
+        'root_override': 'src/v8',
+        'set_custom_revs': {
+          'src/v8': 'bleeding_edge:%(revision)s',
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'v8_linux_layout_dbg': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
