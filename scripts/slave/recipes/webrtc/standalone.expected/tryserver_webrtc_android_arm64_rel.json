@@ -245,7 +245,8 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release"
+      "--release",
+      "--isolate_file_path=webrtc/modules/audio_coding/neteq/audio_decoder_unittests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -264,7 +265,8 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release"
+      "--release",
+      "--isolate_file_path=webrtc/common_audio/common_audio_unittests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -283,7 +285,8 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release"
+      "--release",
+      "--isolate_file_path=webrtc/common_video/common_video_unittests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -302,7 +305,8 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release"
+      "--release",
+      "--isolate_file_path=webrtc/modules/modules_tests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -321,7 +325,8 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release"
+      "--release",
+      "--isolate_file_path=webrts/modules/modules_unittests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -340,7 +345,8 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release"
+      "--release",
+      "--isolate_file_path=webrtc/system_wrappers/system_wrappers_unittests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -359,7 +365,8 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release"
+      "--release",
+      "--isolate_file_path=webrtc/test/test_support_unittests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -378,7 +385,8 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release"
+      "--release",
+      "--isolate_file_path=webrtc/tools/tools_unittests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -397,7 +405,8 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release"
+      "--release",
+      "--isolate_file_path=webrtc/video_engine/video_engine_core_unittests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -416,7 +425,8 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release"
+      "--release",
+      "--isolate_file_path=webrtc/video_engine_tests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -435,7 +445,8 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release"
+      "--release",
+      "--isolate_file_path=webrtc/video_engine/video_envine_unittests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -454,7 +465,8 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release"
+      "--release",
+      "--isolate_file_path=webrtc/webrtc_perf_tests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

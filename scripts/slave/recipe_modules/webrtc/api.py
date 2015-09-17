@@ -34,23 +34,30 @@ class WebRTCApi(recipe_api.RecipeApi):
   )
 
   # Android APK tests.
-  ANDROID_APK_TESTS = (
-    'audio_decoder_unittests',
-    'common_audio_unittests',
-    'common_video_unittests',
-    'modules_tests',
-    'modules_unittests',
-    'system_wrappers_unittests',
-    'test_support_unittests',
-    'tools_unittests',
-    'video_engine_core_unittests',
-    'video_engine_tests',
-    'voice_engine_unittests',
-  )
+  ANDROID_APK_TESTS = freeze({
+    'audio_decoder_unittests':
+        'webrtc/modules/audio_coding/neteq/audio_decoder_unittests.isolate',
+    'common_audio_unittests':
+        'webrtc/common_audio/common_audio_unittests.isolate',
+    'common_video_unittests':
+        'webrtc/common_video/common_video_unittests.isolate',
+    'modules_tests': 'webrtc/modules/modules_tests.isolate',
+    'modules_unittests': 'webrts/modules/modules_unittests.isolate',
+    'system_wrappers_unittests':
+        'webrtc/system_wrappers/system_wrappers_unittests.isolate',
+    'test_support_unittests': 'webrtc/test/test_support_unittests.isolate',
+    'tools_unittests': 'webrtc/tools/tools_unittests.isolate',
+    'video_engine_core_unittests':
+        'webrtc/video_engine/video_engine_core_unittests.isolate',
+    'video_engine_tests':
+        'webrtc/video_engine_tests.isolate',
+    'voice_engine_unittests':
+        'webrtc/video_engine/video_envine_unittests.isolate',
+  })
 
-  ANDROID_APK_PERF_TESTS = (
-    'webrtc_perf_tests',
-  )
+  ANDROID_APK_PERF_TESTS = freeze({
+    'webrtc_perf_tests': 'webrtc/webrtc_perf_tests.isolate'
+  })
 
   # Instrumentation tests may target a separate APK to be tested. In that case,
   # specify the APK name (without the .apk extension) as key in the dict below.
@@ -229,10 +236,13 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.add_test('content_unittests')
       elif self.c.TEST_SUITE == 'android':
         self.m.chromium_android.common_tests_setup_steps()
-        for test in self.ANDROID_APK_TESTS:
-          self.m.chromium_android.run_test_suite(test)
-        for test in self.ANDROID_APK_PERF_TESTS:
-          self._add_android_perf_test(test)
+        for test, isolate_file_path in sorted(
+            self.ANDROID_APK_TESTS.iteritems()):
+          self.m.chromium_android.run_test_suite(
+              test, isolate_file_path=isolate_file_path)
+        for test, isolate_file_path in sorted(
+            self.ANDROID_APK_PERF_TESTS.iteritems()):
+          self._add_android_perf_test(test, isolate_file_path)
         for test, apk_under_test in self.ANDROID_INSTRUMENTATION_TESTS.items():
           if apk_under_test:
             self._adb_install_apk(apk_under_test)
@@ -330,7 +340,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     return self.m.step('install ' + apk_name, install_cmd, infra_step=True,
                        env=env)
 
-  def _add_android_perf_test(self, test):
+  def _add_android_perf_test(self, test, isolate_file_path):
     """Adds a test to run on Android devices.
 
     Basically just wrap what happens in chromium_android.run_test_suite to run
@@ -340,9 +350,11 @@ class WebRTCApi(recipe_api.RecipeApi):
     """
     if not self.c.PERF_ID or self.m.chromium.c.BUILD_CONFIG == 'Debug':
       # Run as a normal test for trybots and Debug, without perf data scraping.
-      self.m.chromium_android.run_test_suite(test)
+      self.m.chromium_android.run_test_suite(
+          test, isolate_file_path=isolate_file_path)
     else:
-      args = ['gtest', '-s', test, '--verbose', '--release']
+      args = ['gtest', '-s', test, '--verbose', '--release',
+              '--isolate-file-path', isolate_file_path]
       self.add_test(name=test, test=self.m.chromium_android.c.test_runner,
                     args=args, revision=self.perf_revision, perf_test=True,
                     perf_dashboard_id=test)
