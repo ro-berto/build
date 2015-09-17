@@ -65,7 +65,7 @@ class MainFuncTest(auto_stub.TestCase):
         if args[4].startswith('grep'):
           return "some_thermal_file_name"
         elif args[4].startswith('cat'):
-          return "123"
+          return "12"
         elif args[4].startswith('dumpsys'):
           return "temperature: 456"
         else:
@@ -101,7 +101,7 @@ class MainFuncTest(auto_stub.TestCase):
         'infra.tools.send_ts_mon_values',
         '--float',
         '{"slave": "some_slave_name", "name": "dev/cpu/temperature", '
-        '"value": 123, "device_id": "device_serial_1"}',
+        '"value": 12, "device_id": "device_serial_1"}',
         '--float',
         '{"slave": "some_slave_name", "name": "dev/battery/temperature", '
         '"value": 456, "device_id": "device_serial_1"}',
@@ -109,7 +109,7 @@ class MainFuncTest(auto_stub.TestCase):
         'infra.tools.send_ts_mon_values',
         '--float',
         '{"slave": "some_slave_name", "name": "dev/cpu/temperature", '
-        '"value": 567, "device_id": "device_serial_2"}',
+        '"value": 56, "device_id": "device_serial_2"}',
         '--float',
         '{"slave": "some_slave_name", "name": "dev/battery/temperature", '
         '"value": 987, "device_id": "device_serial_2"}'

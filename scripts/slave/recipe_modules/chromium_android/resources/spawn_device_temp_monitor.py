@@ -50,12 +50,12 @@ def get_device_args(adb_path, slave_name, device):
         cpu_temp_file = re.sub('type$', 'temp', cpu_temp_files.strip())
         cmd = [adb_path, '-s', device, 'shell',
                'cat %s' % (cpu_temp_file)]
-        file_contents = subprocess.check_output(cmd)
-        # Most devices report cpu temp in tenths of a degree (C), but a few
+        file_contents = subprocess.check_output(cmd).strip()
+        # Most devices report cpu temp in degrees (C), but a few
         # can report it in thousandths of a degree. If this is in thousandths,
-        # chop off the trailing two digits to convert to tenths
+        # chop off the trailing three digits to convert to degrees
         if (len(file_contents) == 5):
-          file_contents = file_contents[:3]
+          file_contents = file_contents[:2]
         cpu_temp = int(file_contents)
   except (subprocess.CalledProcessError, TypeError, ValueError):
     cpu_temp = None
