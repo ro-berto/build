@@ -412,7 +412,7 @@ class Bisector(object):
     candidate_range = [revision for revision in
                        self.revisions[self.lkgr.list_index + 1:
                                       self.fkbr.list_index]
-                       if not revision.tested]
+                       if not revision.tested and not revision.failed]
     if len(candidate_range) <= max_revisions:
       return candidate_range
     step = len(candidate_range)/(max_revisions + 1)
@@ -497,24 +497,23 @@ class Bisector(object):
   def wait_for_any(self, revision_list):
     """Waits for any of the revisions in the list to finish its job(s)."""
     while True:
-      if not revision_list or not any(
-          r.in_progress or r.tested for r in revision_list):  # pragma: no cover
-        break
+      if not revision_list or any(r.status == revision_state.RevisionState.NEW
+                                  for r in revision_list):  # pragma: no cover
+        # We want to avoid waiting forever for revisions that are not started,
+        # or for an empty list. Hence we fail fast.
+        assert False
 
       finished_revision = self.sleep_until_next_revision_ready(revision_list)
 
-      if finished_revision:
-        finished_revision.update_status()
-        if not finished_revision.in_progress:
-          return finished_revision
-        continue  # pragma: no cover
+      # On recipe simulation, sleep_until_next_revision_ready will by default
+      # return nothing.
+      revisions = [finished_revision] if finished_revision else revision_list
+      for revision in revisions:
+        if revision:
+          revision.update_status()
+          if not revision.in_progress:
+            return revision
 
-      # If the waiting step didn't specify which revision finished, we check all
-      # of them.
-      for revision in revision_list:
-        revision.update_status()
-        if not revision.in_progress:
-          return revision
 
   def abort_unnecessary_jobs(self):
     """Checks if any of the pending evaluations is no longer necessary.

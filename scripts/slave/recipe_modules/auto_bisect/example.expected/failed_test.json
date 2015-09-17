@@ -545,37 +545,8 @@
     "stdout": "/path/to/tmp/"
   },
   {
-    "cmd": [
-      "git",
-      "fetch",
-      "origin",
-      "--tags"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "git fetch tags",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "git",
-      "cat-file",
-      "blob",
-      "dcdcdc0ff1122212323134879ddceeb1240b0988:DEPS"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "git cat-file dcdcdc0ff1122212323134879ddceeb1240b0988:DEPS",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "git",
-      "log",
-      "--format=%aNS3P4R4T0R%aES3P4R4T0R%sS3P4R4T0R%cDS3P4R4T0R%b",
-      "-1",
-      "dcdcdc0ff1122212323134879ddceeb1240b0988"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Reading culprit cl information.",
-    "stdout": "/path/to/tmp/"
+    "name": "$final_result",
+    "reason": "Expected revisions to check.",
+    "status_code": 1
   }
 ]
