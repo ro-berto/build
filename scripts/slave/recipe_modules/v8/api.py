@@ -1043,10 +1043,10 @@ class V8Api(recipe_api.RecipeApi):
           self.m.json.output(add_json_log=False),
         ])
 
-      full_args.append(json_file)
-
       if extra_flags:
         full_args.append('--extra-flags="%s"' % ' '.join(extra_flags))
+
+      full_args.append(json_file)
 
       def step_test_data():
         test_data = self.test_api.perf_json(

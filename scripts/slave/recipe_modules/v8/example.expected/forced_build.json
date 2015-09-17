@@ -53,8 +53,8 @@
       "--buildbot",
       "--json-test-results",
       "/path/to/tmp/json",
-      "example1.json",
-      "--extra-flags=\"--flag1 --flag2\""
+      "--extra-flags=\"--flag1 --flag2\"",
+      "example1.json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Example1",
@@ -83,8 +83,8 @@
       "--buildbot",
       "--json-test-results",
       "/path/to/tmp/json",
-      "example2.json",
-      "--extra-flags=\"--flag1 --flag2\""
+      "--extra-flags=\"--flag1 --flag2\"",
+      "example2.json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Example2",
