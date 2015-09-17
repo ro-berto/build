@@ -9,6 +9,25 @@ import time
 from . import parse_metric
 
 
+class Metric(object):  # pragma: no cover
+  OLD_STYLE_DELIMITER = '-'
+  NEW_STYLE_DELIMITER = '@@'
+
+  def __init__(self, metric_string):
+    self._metric_string = metric_string
+    self._parts = self._metric_string.split('/')
+
+  def ChartJsonFormat(self, delimiter=NEW_STYLE_DELIMITER):
+    if len(self._parts) == 3:  # foo/bar/baz -> bar@@foo/baz
+      chart_name, interaction_record_name, trace_name = self._parts
+
+      chart_name_with_interaction_record = (
+          interaction_record_name + delimiter + chart_name)
+      return [chart_name_with_interaction_record, trace_name]
+    else:
+      return self._parts
+
+
 def _set_output_dir(command, output_dir):  # pragma: no cover
   placeholder = "OUTPUTDIRGOESHERE"
   new_arg = '--output-dir=' + output_dir
@@ -74,8 +93,8 @@ def run_perf_test(api, test_config, **kwargs):
     elif metric:  # pragma: no cover
       if use_chartjson:
         step_result = api.m.json.read('Reading chartjson results', results_path)
-        valid_value, value, result = parse_metric.parse_chartjson_metric(
-            step_result.json.output, metric.split('/'))
+        valid_value, value, result = _get_chart_json_metric(
+            step_result.json.output, Metric(metric))
       else:
         valid_value, value = parse_metric.parse_metric(
             out, err, metric.split('/'))
@@ -87,6 +106,18 @@ def run_perf_test(api, test_config, **kwargs):
     retcodes.append(retcode)
 
   return values, output_for_all_runs, retcodes
+
+
+def _get_chart_json_metric(results, metric):  # pragma: no cover
+  valid_value, value, result = parse_metric.parse_chartjson_metric(
+      results, metric.ChartJsonFormat())
+
+  if valid_value:
+    return valid_value, value, result
+  # TODO(eakuefner): Get rid of this fallback when bisect uses ToT Telemetry.
+  else:
+    return parse_metric.parse_chartjson_metric(
+        results, metric.ChartJsonFormat(Metric.OLD_STYLE_DELIMITER))
 
 
 def truncate_and_aggregate(api, values, truncate_percent):
