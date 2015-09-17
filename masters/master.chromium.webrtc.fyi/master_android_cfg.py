@@ -33,6 +33,7 @@ def Update(c):
       'slavebuilddir': 'android_arm64',
     },
     {'name': 'Android Tests (dbg) (L Nexus5)'},
+    {'name': 'Android Tests (dbg) (L Nexus6)'},
     {'name': 'Android Tests (dbg) (L Nexus7.2)'},
     {'name': 'Android Tests (dbg) (L Nexus9)'},
     {

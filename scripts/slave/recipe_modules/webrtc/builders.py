@@ -357,6 +357,22 @@ BUILDERS = freeze({
         'parent_buildername': 'Android Builder (dbg)',
         'testing': {'platform': 'linux'},
       },
+      'Android Tests (dbg) (L Nexus6)': {
+        'recipe_config': 'chromium_webrtc_tot_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus6',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'android_dbg_archive_fyi',
+        'parent_buildername': 'Android Builder (dbg)',
+        'testing': {'platform': 'linux'},
+      },
       'Android Tests (dbg) (L Nexus7.2)': {
         'recipe_config': 'chromium_webrtc_tot_android',
         'chromium_config_kwargs': {
@@ -961,6 +977,19 @@ BUILDERS = freeze({
           'Android Tests (Samsung S5)(dbg)',
         ],
       },
+      'Android32 Tests (L Nexus6)(dbg)': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android Builder (dbg)',
+        'build_gs_archive': 'fyi_android_apk_dbg_archive',
+        'testing': {'platform': 'linux'},
+      },
       'Android Tests (Samsung S3)(dbg)': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
@@ -1360,6 +1389,17 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
+      'android_n6': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
