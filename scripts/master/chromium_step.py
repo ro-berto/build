@@ -1204,6 +1204,9 @@ class AnnotationObserver(buildstep.LogLineObserver):
           build.getProperties().getProperty(buildbucket.common.INFO_PROPERTY))
       trigger_via_buildbucket = bucket or build_is_from_buildbucket
 
+      properties = self.getPropertiesForTriggeredBuild(build.getProperties(),
+                                                       properties)
+
       if trigger_via_buildbucket:
         d = self.triggerBuildsViaBuildBucket(
             bucket, builder_names, properties, changes)
@@ -1363,9 +1366,6 @@ class AnnotationObserver(buildstep.LogLineObserver):
         # because that would wipe changes and therefore the blamelist.
         pass
       ssid = yield source_stamp.getSourceStampId(master)
-
-    properties = self.getPropertiesForTriggeredBuild(current_properties,
-                                                     properties)
 
     bsid, brids = yield master.addBuildset(
         ssid=ssid,
