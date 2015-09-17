@@ -34,7 +34,7 @@ def _BaseSpec(bot_type, chromium_apply_config, disable_tests,
 def _BuildSpec(platform, target_bits):
   spec = _BaseSpec(
       bot_type='builder',
-      chromium_apply_config=['chromium_perf', 'goma_hermetic_fallback'],
+      chromium_apply_config=['mb', 'chromium_perf', 'goma_hermetic_fallback'],
       disable_tests=True,
       gclient_config='chromium',
       platform=platform,
