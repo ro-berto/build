@@ -13,8 +13,6 @@ import struct
 import sys
 import time
 
-from recipe_engine.types import freeze
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -24,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # PNaCl general bug: https://crbug.com/429358
 #
 # TODO(sebmarchand): Remove this once all the files are deterministic.
-WHITELIST = freeze({
+WHITELIST = {
   # https://crbug.com/383340
   'android': {
     'd8',
@@ -489,7 +487,7 @@ WHITELIST = freeze({
     'webkit_unit_tests.exe',
     'wtf_unittests.exe',
   },
-})
+}
 
 def get_files_to_compare(build_dir, recursive=False):
   """Get the list of files to compare."""
