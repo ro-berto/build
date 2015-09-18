@@ -295,7 +295,8 @@
       "RECIPE_MODULE[chromium_android]/resources/spawn_device_temp_monitor.py",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "[\"07a00ca4\"]",
-      "TestSlavename"
+      "tryserver.chromium.perf",
+      "android_nexus9_perf_bisect"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "spawn_device_temp_monitor"

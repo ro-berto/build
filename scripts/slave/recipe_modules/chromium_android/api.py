@@ -261,7 +261,8 @@ class AndroidApi(recipe_api.RecipeApi):
         '--', self.resource('spawn_device_temp_monitor.py'),
         self.m.adb.adb_path(),
         json.dumps(self._devices),
-        self.m.properties['slavename']
+        self.m.properties['mastername'],
+        self.m.properties['buildername']
     ]
     self.m.python('spawn_device_temp_monitor', script, args, infra_step=True)
 
