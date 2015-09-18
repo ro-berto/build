@@ -16,15 +16,15 @@ _GSUTIL = os.path.abspath(os.path.join(
     os.path.dirname(__file__), '../gsutil.bat'))
 
 
-def MassCopy(src_path, dst_uri, jobs, private_acl):
+def MassCopy(src_path, dst_uri, jobs, public_read):
   """Copy a directory to Google Storage in parallel.
 
   Args:
     src_path: path to copy.
     dst_uri: gs://... type uri.
     jobs: maximum concurrent copies.
-    private_acl: Indicates if the acl of the uploaded files should be switch to
-        private.
+    public_read: indicates if the uploaded files should have the
+        \'public-read\' ACL.
 
   Returns:
     Error code for system.
@@ -34,10 +34,6 @@ def MassCopy(src_path, dst_uri, jobs, private_acl):
 
   # Remove a trailing '/' from the dst_uri if one is included.
   dst_uri = dst_uri.rstrip('/')
-
-  file_acl = 'public-read'
-  if private_acl:
-    file_acl = 'private'
 
   # Get the list of objects.
   if os.path.isfile(src_path):
@@ -64,7 +60,10 @@ def MassCopy(src_path, dst_uri, jobs, private_acl):
         # Construct the destination URL.
         dst = '%s%s' % (dst_uri, ot)
 
-        cmd = [_GSUTIL, 'cp', '-t', '-a', file_acl, o, dst]
+        cmd = [_GSUTIL, 'cp', '-t']
+        if public_read:
+          cmd.extend(['-a', 'public-read'])
+        cmd.extend([o, dst])
         p = subprocess.Popen(cmd, shell=True)
         running.append(p)
       running = [p for p in running if p.poll() is None]
@@ -86,8 +85,9 @@ def main(argv):
                     help='maximum copies to run in parallel')
   parser.add_option('--message', action='append', default=[], dest='message',
                     help='message to print')
-  parser.add_option('--private', action='store_true', default=False,
-                    help='Indicate if the uploaded files should be private.')
+  parser.add_option('--public-read', action='store_true', default=False,
+                    help='indicates if the uploaded files should have the '
+                    '\'public-read\' ACL.')
   (options, args) = parser.parse_args(argv)
   if len(args) != 2:
     parser.print_help()
@@ -97,7 +97,7 @@ def main(argv):
     print m
 
   return MassCopy(src_path=args[0], dst_uri=args[1], jobs=options.jobs,
-      private_acl=options.private)
+      public_read=options.public_read)
 
 
 if __name__ == '__main__':

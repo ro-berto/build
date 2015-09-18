@@ -265,6 +265,7 @@
       "python",
       "-u",
       "[BUILD]\\scripts\\slave\\syzygy\\gsutil_cp_dir.py",
+      "--public-read",
       "[SLAVE_BUILD]\\src\\out\\Release\\archive",
       "gs://syzygy-archive/test/builds/official/170242"
     ],

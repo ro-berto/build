@@ -266,6 +266,7 @@
       "python",
       "-u",
       "[BUILD]\\scripts\\slave\\syzygy\\gsutil_cp_dir.py",
+      "--public-read",
       "[SLAVE_BUILD]\\src\\out\\Coverage\\cov",
       "gs://syzygy-archive/test/builds/coverage/170242"
     ],
