@@ -368,14 +368,16 @@ def generate_script(api, mastername, buildername, test_spec,
 
 
 class DynamicPerfTests(Test):
-  def __init__(self, platform, target_bits, perf_id, shard_index,
-               num_host_shards, num_device_shards):
+  def __init__(self, perf_id, platform, target_bits, max_battery_temp=None,
+               num_device_shards=1, num_host_shards=1, shard_index=0):
+    self._perf_id = perf_id
     self._platform = platform
     self._target_bits = target_bits
-    self._perf_id = perf_id
-    self._shard_index = shard_index
+
+    self._max_battery_temp = max_battery_temp
     self._num_host_shards = num_host_shards
     self._num_device_shards = num_device_shards
+    self._shard_index = shard_index
 
   @staticmethod
   def _browser_name(platform, target_bits):
@@ -399,8 +401,8 @@ class DynamicPerfTests(Test):
 
   def _test_list(self, api):
     if self._platform == 'android':
-      api.adb.list_devices(step_test_data=api.adb.test_api.two_devices)
-      device = api.adb.devices[0]
+      # Must have already called device_status_check().
+      device = api.chromium_android.devices[0]
     else:
       device = None
 
@@ -419,7 +421,9 @@ class DynamicPerfTests(Test):
   def _run_sharded(self, api, tests):
     api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=tests),
-      perf_id=self._perf_id)
+      perf_id=self._perf_id,
+      chartjson_file=True,
+      max_battery_temp=self._max_battery_temp)
 
   def _run_serially(self, api, tests):
     failure = None

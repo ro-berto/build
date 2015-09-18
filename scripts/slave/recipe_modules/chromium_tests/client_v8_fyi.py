@@ -139,9 +139,7 @@ SPEC = {
         'chromium_builder_perf',
       ],
       'tests': [
-        steps.DynamicPerfTests(
-            'linux', 64,
-            'chromium-rel-linux-v8', 0, 1, 1),
+        steps.DynamicPerfTests('chromium-rel-linux-v8', 'linux', 64),
       ],
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {
@@ -169,9 +167,7 @@ SPEC = {
         'chromium_builder_perf',
       ],
       'tests': [
-        steps.DynamicPerfTests(
-            'win', 32,
-            'chromium-rel-win7-dual-v8', 0, 1, 1),
+        steps.DynamicPerfTests('chromium-rel-win7-dual-v8', 'win', 32),
       ],
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {
@@ -198,9 +194,7 @@ SPEC = {
         'chromium_builder_perf',
       ],
       'tests': [
-        steps.DynamicPerfTests(
-            'mac', 64,
-            'chromium-rel-mac9-v8', 0, 1, 1),
+        steps.DynamicPerfTests('chromium-rel-mac9-v8', 'mac', 64),
       ],
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {

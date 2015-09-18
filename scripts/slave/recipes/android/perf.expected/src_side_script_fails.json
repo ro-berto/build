@@ -314,6 +314,33 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/testing/scripts/host_info.py",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "--properties",
+      "{\"buildername\": \"Android Nexus5 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-nexus5\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"slavename\", \"target_platform\": \"android\"}",
+      "run",
+      "--output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "host_info",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/tools/perf/run_benchmark",
       "list",
       "--browser",
@@ -358,33 +385,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"version\": 2@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/testing/scripts/host_info.py",
-      "--build-config-fs",
-      "Release",
-      "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
-      "--properties",
-      "{\"buildername\": \"Android Nexus5 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-nexus5\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"slavename\", \"target_platform\": \"android\"}",
-      "run",
-      "--output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "host_info",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_FAILURE@@@"
     ]
   },
   {

@@ -161,10 +161,6 @@ def RunSteps(api):
   test_runner = api.chromium_tests.create_test_runner(
       api, builder.get('tests', []))
 
-  perf_tests = api.chromium.list_perf_tests(
-      browser='android-chromium',
-      num_shards=builder['num_device_shards'],
-      device=api.chromium_android.devices[0]).json.output
   try:
     failures = []
     if test_runner:
@@ -173,11 +169,11 @@ def RunSteps(api):
       except api.step.StepFailure as f:
         failures.append(f)
 
-    api.chromium_android.run_sharded_perf_tests(
-      config=api.json.input(data=perf_tests),
-      perf_id=builder['perf_id'],
-      chartjson_file=True,
-      max_battery_temp=builder.get('max_battery_temp'))
+    dynamic_perf_tests = api.chromium_tests.steps.DynamicPerfTests(
+        builder['perf_id'], 'android', None,
+        max_battery_temp=builder.get('max_battery_temp'),
+        num_device_shards=builder['num_device_shards'])
+    dynamic_perf_tests.run(api, None)
 
     if failures:
       raise api.step.StepFailure('src-side perf tests failed %s' % failures)

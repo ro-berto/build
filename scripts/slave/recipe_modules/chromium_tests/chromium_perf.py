@@ -51,7 +51,7 @@ def _BuildSpec(platform, target_bits):
   return spec
 
 
-def _TestSpec(parent_builder, perf_id, platform, target_bits,
+def _TestSpec(parent_builder, perf_id, platform, target_bits, max_battery_temp,
               shard_index, num_host_shards, num_device_shards):
   spec = _BaseSpec(
       bot_type='tester',
@@ -65,8 +65,8 @@ def _TestSpec(parent_builder, perf_id, platform, target_bits,
   spec['perf-id'] = perf_id
   spec['results-url'] = 'https://chromeperf.appspot.com'
   spec['tests'] = [
-    steps.DynamicPerfTests(platform, target_bits, perf_id, shard_index,
-                           num_host_shards, num_device_shards),
+    steps.DynamicPerfTests(perf_id, platform, target_bits, max_battery_temp,
+                           num_device_shards, num_host_shards, shard_index),
   ]
 
   if platform == 'android':
@@ -85,16 +85,16 @@ def _AddBuildSpec(name, platform, target_bits=64):
 
 
 def _AddTestSpec(name, parent_builder, perf_id, platform, target_bits=64,
-                 num_host_shards=1, num_device_shards=1):
+                 max_battery_temp=350, num_host_shards=1, num_device_shards=1):
   if num_host_shards > 1:
     for shard_index in xrange(num_host_shards):
       builder_name = '%s (%d)' % (name, shard_index + 1)
       SPEC['builders'][builder_name] = _TestSpec(
-          parent_builder, perf_id, platform, target_bits,
+          parent_builder, perf_id, platform, target_bits, max_battery_temp,
           shard_index, num_host_shards, num_device_shards)
   else:
     SPEC['builders'][name] = _TestSpec(
-        parent_builder, perf_id, platform, target_bits,
+        parent_builder, perf_id, platform, target_bits, max_battery_temp,
         0, num_host_shards, num_device_shards)
 
 

@@ -7,6 +7,3 @@ from recipe_engine import recipe_test_api
 class AdbTestApi(recipe_test_api.RecipeTestApi):
   def device_list(self):
     return self.m.json.output(["014E1F310401C009"])
-
-  def two_devices(self):
-    return self.m.json.output(["014E1F310401C009", "014E1F310401C010"])
