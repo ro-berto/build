@@ -32,7 +32,7 @@ def Update(c):
       'name': 'Android Builder ARM64 (dbg)',
       'slavebuilddir': 'android_arm64',
     },
-    {'name': 'Android Tests (dbg) (J Nexus5)'},
+    {'name': 'Android Tests (dbg) (J Nexus4)'},
     {'name': 'Android Tests (dbg) (K Nexus5)'},
     {'name': 'Android Tests (dbg) (L Nexus5)'},
     {'name': 'Android Tests (dbg) (L Nexus6)'},

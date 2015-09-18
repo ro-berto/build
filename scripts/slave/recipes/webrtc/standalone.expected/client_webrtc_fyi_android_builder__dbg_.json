@@ -143,6 +143,14 @@
     "name": "trigger",
     "trigger_specs": [
       {
+        "builder_name": "Android32 Tests (L Nexus6)(dbg)",
+        "properties": {
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+        }
+      },
+      {
         "builder_name": "Android Tests (Samsung S3)(dbg)",
         "properties": {
           "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
@@ -168,7 +176,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android Tests (Samsung S3)(dbg)<br />Android Tests (Samsung S4)(dbg)<br />Android Tests (Samsung S5)(dbg)@@@"
+      "@@@STEP_TEXT@Android Tests (Samsung S3)(dbg)<br />Android Tests (Samsung S4)(dbg)<br />Android Tests (Samsung S5)(dbg)<br />Android32 Tests (L Nexus6)(dbg)@@@"
     ]
   }
 ]

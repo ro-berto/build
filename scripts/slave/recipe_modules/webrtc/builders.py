@@ -319,7 +319,10 @@ BUILDERS = freeze({
         'build_gs_archive': 'android_dbg_archive_fyi',
         'testing': {'platform': 'linux'},
         'triggers': [
+          'Android Tests (dbg) (J Nexus4)',
+          'Android Tests (dbg) (K Nexus5)'
           'Android Tests (dbg) (L Nexus5)',
+          'Android Tests (dbg) (L Nexus6)',
           'Android Tests (dbg) (L Nexus7.2)',
         ],
       },
@@ -341,7 +344,7 @@ BUILDERS = freeze({
           'Android Tests (dbg) (L Nexus9)',
         ],
       },
-      'Android Tests (dbg) (J Nexus5)': {
+      'Android Tests (dbg) (J Nexus4)': {
         'recipe_config': 'chromium_webrtc_tot_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -350,7 +353,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 32,
         },
         'webrtc_config_kwargs': {
-          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus5-j',
+          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus4-j',
         },
         'bot_type': 'tester',
         'build_gs_archive': 'android_dbg_archive_fyi',
@@ -1004,6 +1007,7 @@ BUILDERS = freeze({
         'build_gs_archive': 'fyi_android_apk_dbg_archive',
         'testing': {'platform': 'linux'},
         'triggers': [
+          'Android32 Tests (L Nexus6)(dbg)',
           'Android Tests (Samsung S3)(dbg)',
           'Android Tests (Samsung S4)(dbg)',
           'Android Tests (Samsung S5)(dbg)',

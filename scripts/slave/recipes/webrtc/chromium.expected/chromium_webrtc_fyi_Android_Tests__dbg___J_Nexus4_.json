@@ -7,7 +7,7 @@
       "--master",
       "chromium.webrtc.fyi",
       "--builder",
-      "Android Tests (dbg) (J Nexus5)",
+      "Android Tests (dbg) (J Nexus4)",
       "--slave",
       "TestSlavename",
       "--spec",
