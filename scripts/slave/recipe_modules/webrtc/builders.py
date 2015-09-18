@@ -341,6 +341,38 @@ BUILDERS = freeze({
           'Android Tests (dbg) (L Nexus9)',
         ],
       },
+      'Android Tests (dbg) (J Nexus5)': {
+        'recipe_config': 'chromium_webrtc_tot_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus5-j',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'android_dbg_archive_fyi',
+        'parent_buildername': 'Android Builder (dbg)',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Tests (dbg) (K Nexus5)': {
+        'recipe_config': 'chromium_webrtc_tot_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus5-k',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'android_dbg_archive_fyi',
+        'parent_buildername': 'Android Builder (dbg)',
+        'testing': {'platform': 'linux'},
+      },
       'Android Tests (dbg) (L Nexus5)': {
         'recipe_config': 'chromium_webrtc_tot_android',
         'chromium_config_kwargs': {
