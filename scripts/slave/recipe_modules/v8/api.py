@@ -1044,7 +1044,7 @@ class V8Api(recipe_api.RecipeApi):
         ])
 
       if extra_flags:
-        full_args.append('--extra-flags="%s"' % ' '.join(extra_flags))
+        full_args.extend(['--extra-flags', ' '.join(extra_flags)])
 
       full_args.append(json_file)
 
