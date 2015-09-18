@@ -231,7 +231,7 @@ def _RunStepsInternal(api):
   bot_update_step = api.bot_update.ensure_checkout(
       force=True, patch_root=bot_config.get('root_override'))
 
-  # because the 'gn' config is applied, we skip running gyp in the
+  # because the 'mb' config is applied, we skip running gyp in the
   # the runhooks step.
   api.chromium.runhooks()
 

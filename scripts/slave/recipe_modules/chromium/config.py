@@ -200,30 +200,6 @@ def mb(c):
   c.project_generator.tool = 'mb'
 
 @config_ctx()
-def gn_for_uploads(c):
-
-  # This config is used to do the official builds of GN itself (which are
-  # uploaded into Google Cloud Storage). It overrides any previously
-  # configured settings for GYP and GN. However, we still expect api.run_gn()
-  # to set is_debug and cpu_arch correctly.
-
-  c.project_generator.tool = 'gn'
-
-  if c.TARGET_PLATFORM == 'linux':
-    # These are needed to make sure runhooks pulls in the right sysroots.
-    c.gyp_env.GYP_DEFINES['branding'] = 'Chrome'
-    c.gyp_env.GYP_DEFINES['buildtype'] = 'Official'
-    c.gn_args.append('is_chrome_branded=true')
-    c.gn_args.append('is_official_build=true')
-    c.gn_args.append('symbol_level=0')
-  elif c.TARGET_PLATFORM == 'mac':
-    c.gn_args.append('symbol_level=0')
-  elif c.TARGET_PLATFORM == 'win':
-    # This sets the right optimization levels (turns on WPO, LTCG, etc.)
-    c.gn_args.append('is_official_build=true')
-    c.gn_args.append('symbol_level=2')
-
-@config_ctx()
 def win_analyze(c):
   c.gyp_env.GYP_DEFINES['win_analyze'] = '1'
   c.gyp_env.GYP_DEFINES['fastbuild'] = '2'

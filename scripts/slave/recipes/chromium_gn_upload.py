@@ -58,17 +58,15 @@ BUILDERS = freeze({
 
 
 def RunSteps(api):
-  _, bot_config = api.chromium.configure_bot(BUILDERS, ['gn_for_uploads'])
+  mastername = api.m.properties['mastername']
+  buildername, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
 
   api.bot_update.ensure_checkout(
       force=True, patch_root=bot_config.get('root_override'))
 
-  # We need to explicitly pass in the GYP_DEFINES in an environment
-  # since we do not normally set it when GN is the project generator.
-  # (and the GYP_DEFINES need to be set to pull the right sysroots on Linux).
-  api.chromium.runhooks(env=api.chromium.c.gyp_env.as_jsonish())
+  api.chromium.runhooks()
 
-  api.chromium.run_gn()
+  api.chromium.run_mb(mastername, buildername)
 
   api.chromium.compile(targets=['gn', 'gn_unittests'], force_clobber=True)
 

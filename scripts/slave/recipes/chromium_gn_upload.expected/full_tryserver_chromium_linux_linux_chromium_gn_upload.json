@@ -78,7 +78,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -86,14 +86,20 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
       "gen",
-      "//out/Release",
-      "--args=is_chrome_branded=true is_official_build=true symbol_level=0 is_debug=false target_cpu=\"x64\""
+      "-m",
+      "tryserver.chromium.linux",
+      "-b",
+      "linux_chromium_gn_upload",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gn"
+    "name": "generate_build_files"
   },
   {
     "cmd": [

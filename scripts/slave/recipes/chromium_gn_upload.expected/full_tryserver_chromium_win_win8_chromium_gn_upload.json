@@ -86,14 +86,20 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gn.py",
-      "--root=[SLAVE_BUILD]\\src",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
       "gen",
-      "//out/Release",
-      "--args=is_official_build=true symbol_level=2 is_debug=false target_cpu=\"x86\" host_cpu=\"x86\""
+      "-m",
+      "tryserver.chromium.win",
+      "-b",
+      "win8_chromium_gn_upload",
+      "--config-file",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]\\goma",
+      "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gn"
+    "name": "generate_build_files"
   },
   {
     "cmd": [
