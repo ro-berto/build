@@ -77,6 +77,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',

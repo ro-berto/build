@@ -47,6 +47,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Linux Debug Builder',
       'testing': {
@@ -90,6 +91,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Linux ASAN Builder',
       'testing': {

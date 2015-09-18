@@ -43,6 +43,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Linux Builder',
       'testing': {
@@ -62,6 +63,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'enable_swarming': True,
       'testing': {
@@ -80,6 +82,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'enable_swarming': True,
       'testing': {
@@ -121,6 +124,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Linux Builder (dbg)(32)',
       'testing': {
@@ -156,6 +160,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'enable_swarming': True,
       'testing': {
@@ -174,6 +179,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Linux Builder (dbg)',
       'testing': {
@@ -196,6 +202,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -247,6 +254,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -341,6 +349,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -451,6 +460,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -506,6 +516,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',

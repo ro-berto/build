@@ -42,6 +42,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder',
@@ -64,6 +65,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder',
@@ -86,6 +88,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder',
@@ -108,6 +111,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder',
@@ -126,6 +130,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'enable_swarming': True,
       'testing': {
@@ -161,6 +166,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder (dbg)',
@@ -183,6 +189,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'enable_swarming': True,
       'testing': {

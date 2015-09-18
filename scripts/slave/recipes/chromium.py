@@ -137,7 +137,7 @@ def GenTests(api):
         test += api.properties(revision='22135')
 
       if bot_config.get('enable_swarming'):
-        if bot_type in 'tester':
+        if bot_type == 'tester':
           test += api.properties(swarm_hashes={
             'browser_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           })
@@ -187,6 +187,44 @@ def GenTests(api):
         'gtest_tests': [
           {'test': 'browser_tests',
            'swarming': {'can_use_on_swarming_builders': True}},
+        ],
+      },
+    }))
+  )
+
+  yield (
+    api.test('build_dynamic_isolated_script_test') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Builder') +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux Tests': {
+        'isolated_scripts': [
+          {
+            'isolate_name': 'telemetry_gpu_unittests',
+            'name': 'telemetry_gpu_unittests'
+          },
+        ],
+      },
+    }))
+  )
+
+  yield (
+    api.test('dynamic_isolated_script_test') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.properties(swarm_hashes={
+      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux Tests': {
+        'isolated_scripts': [
+          {
+            'isolate_name': 'telemetry_gpu_unittests',
+            'name': 'telemetry_gpu_unittests'
+          },
         ],
       },
     }))

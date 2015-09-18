@@ -22,6 +22,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'mac',
@@ -42,6 +43,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       # TODO(phajdan.jr): Automatically add _run targets when used.
       'compile_targets': [
@@ -66,6 +68,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -85,6 +88,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -104,6 +108,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -123,6 +128,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -211,6 +217,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'bot_type': 'builder_tester',
       'testing': {
@@ -230,6 +237,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'mac',
@@ -254,6 +262,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -279,6 +288,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'win',
@@ -299,6 +309,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -351,6 +362,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -1082,6 +1094,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTLinux',
@@ -1151,6 +1164,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTLinuxASan',
@@ -1245,6 +1259,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTMac',
@@ -1311,6 +1326,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'bot_type': 'tester',
       'parent_buildername': 'ClangToTMacASan',
@@ -1560,6 +1576,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Win Builder (ANGLE)',
       'testing': {
@@ -1636,6 +1653,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -1718,6 +1736,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -1751,6 +1770,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -1767,6 +1787,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'win',
@@ -1806,6 +1827,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',

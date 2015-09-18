@@ -36,6 +36,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Linux Builder (ANGLE)',
       'testing': {
@@ -70,6 +71,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Linux Builder (dbg) (ANGLE)',
       'testing': {
@@ -104,6 +106,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder (ANGLE)',
@@ -141,6 +144,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder (dbg) (ANGLE)',
@@ -179,6 +183,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Win Builder (ANGLE)',
       'testing': {
@@ -213,6 +218,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Win Builder (dbg) (ANGLE)',
       'testing': {
@@ -247,6 +253,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Win x64 Builder (ANGLE)',
       'testing': {
@@ -281,6 +288,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Win x64 Builder (dbg) (ANGLE)',
       'testing': {

@@ -36,6 +36,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Chromium Linux MSan Builder',
       'testing': {'platform': 'linux'},
@@ -69,6 +70,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Chromium Linux ChromeOS MSan Builder',
       'testing': {'platform': 'linux'},
@@ -99,6 +101,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Chromium Linux TSan Builder',
       'testing': {

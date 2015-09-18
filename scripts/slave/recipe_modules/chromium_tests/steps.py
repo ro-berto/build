@@ -818,6 +818,117 @@ class AMPInstrumentationTest(AMPTest):
         isolate_file_path=isolate_file_path).run(api, suffix)
 
 
+class IsolatedScriptTest(Test):
+  def __init__(self, name, args=None, target_name=None, **runtest_kwargs):
+    """Constructs an instance of IsolatedScriptTest.
+
+    An IsolatedScriptTest knows how to invoke an isolate which obeys a certain
+    contract. The isolate's main target must be a wrapper script which must
+    interpret certain command line arguments as follows:
+
+      --isolated-script-test-output [FILENAME]
+
+    The wrapper script must write the simplified json output that the recipes
+    consume (similar to GTestTest and ScriptTest) into |FILENAME|.
+
+    The contract may be expanded later to support functionality like sharding
+    and retries of specific failed tests. Currently the examples of such wrapper
+    scripts live in src/testing/scripts/ in the Chromium workspace.
+
+    Args:
+      name: Displayed name of the test. May be modified by suffixes.
+      args: Arguments to be passed to the test.
+      target_name: Actual name of the test. Defaults to name.
+      runtest_kwargs: Additional keyword args forwarded to the runtest.
+    """
+    super(IsolatedScriptTest, self).__init__()
+    self._name = name
+    self._args = args or []
+    self._target_name = target_name
+    self._runtest_kwargs = runtest_kwargs
+
+  @property
+  def name(self):
+    return self._name
+
+  @property
+  def target_name(self):
+    return self._target_name or self._name
+
+  @property
+  def isolate_target(self):
+    return self.target_name
+
+  @property
+  def uses_swarming(self):
+    return True
+
+  def compile_targets(self, _):
+    return [self.target_name]
+
+  # TODO(nednguyen, kbr): figure out what to do with Android.
+  # (crbug.com/533480)
+  def run(self, api, suffix):
+    # Copy the list because run can be invoked multiple times and we modify
+    # the local copy.
+    args = self._args[:]
+
+    kwargs = {}
+    # TODO(nednguyen, kbr): define contract with the wrapper script to rerun
+    # a subset of the tests. (crbug.com/533481)
+    json_results_file = api.json.output()
+    step_test_data = lambda: api.json.test_api.output(
+        {'valid': True, 'failures': []})
+    kwargs['name'] = self._step_name(suffix)
+    kwargs['args'] = args
+    kwargs['args'].extend(
+        ['--isolated-script-test-output', json_results_file])
+    kwargs['step_test_data'] = step_test_data
+    kwargs['xvfb'] = True
+    kwargs['test_type'] = self.name
+    kwargs.update(self._runtest_kwargs)
+
+    try:
+      # TODO(nednguyen, kbr):
+      #  Replace runtest usage here with a better alternative.
+      # (crbug.com/533479)
+      # Figure out whether we need to get revision and webkit_revision, and
+      # if so, where to get them from. (crbug.com/533141)
+      api.isolate.runtest(self.target_name, None, None, **kwargs)
+    finally:
+      self._test_runs[suffix] = api.step.active_result
+      if self.has_valid_results(api, suffix):
+        self._test_runs[suffix].presentation.step_text += (
+            api.test_utils.format_step_text([
+              ['failures:', self.failures(api, suffix)]
+            ]))
+
+    return self._test_runs[suffix]
+
+  def has_valid_results(self, api, suffix):
+    try:
+      # Make sure the JSON includes all necessary data.
+      self.failures(api, suffix)
+
+      return self._test_runs[suffix].json.output['valid']
+    except Exception:  # pragma: no cover
+      return False
+
+  def failures(self, api, suffix):
+    return self._test_runs[suffix].json.output['failures']
+
+
+def generate_isolated_script(api, mastername, buildername, test_spec,
+                             enable_swarming=False,
+                             scripts_compile_targets=None):
+  for spec in test_spec.get(buildername, {}).get(
+      'isolated_scripts', []):
+    yield IsolatedScriptTest(
+        str(spec['name']),
+        args=spec.get('args', []),
+        target_name=spec['isolate_name'])
+
+
 class GTestTest(Test):
   def __init__(self, name, args=None, target_name=None, enable_swarming=False,
                swarming_shards=1, swarming_dimensions=None, swarming_tags=None,

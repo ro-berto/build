@@ -98,6 +98,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Linux ChromiumOS Builder',
       'testing': {
@@ -116,6 +117,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'enable_swarming': True,
       'testing': {
@@ -201,6 +203,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Linux ChromiumOS Ozone Builder',
       'testing': {
@@ -257,6 +260,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
       'testing': {
@@ -275,6 +279,7 @@ SPEC = {
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'enable_swarming': True,
       'testing': {
