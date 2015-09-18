@@ -133,6 +133,13 @@ _AddTestSpec(
     num_host_shards=5)
 
 _AddTestSpec(
+    name='Win 10 Perf',
+    parent_builder='Win x64 Builder',
+    perf_id='chromium-rel-win10',
+    platform='win',
+    num_host_shards=5)
+
+_AddTestSpec(
     name='Win 8 Perf',
     parent_builder='Win x64 Builder',
     perf_id='chromium-rel-win8-dual',
@@ -202,6 +209,13 @@ _AddTestSpec(
     name='Mac 10.9 Perf',
     parent_builder='Mac Builder',
     perf_id='chromium-rel-mac9',
+    platform='mac',
+    num_host_shards=5)
+
+_AddTestSpec(
+    name='Mac Retina Perf',
+    parent_builder='Mac Builder',
+    perf_id='chromium-rel-mac-retina',
     platform='mac',
     num_host_shards=5)
 
