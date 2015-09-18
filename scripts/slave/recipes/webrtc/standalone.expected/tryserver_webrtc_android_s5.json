@@ -339,7 +339,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--isolate_file_path=webrts/modules/modules_unittests.isolate"
+      "--isolate_file_path=webrtc/modules/modules_unittests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -453,7 +453,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--isolate_file_path=webrtc/video_engine/video_envine_unittests.isolate"
+      "--isolate_file_path=webrtc/voice_engine/voice_engine_unittests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
