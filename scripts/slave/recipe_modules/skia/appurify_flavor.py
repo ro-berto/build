@@ -31,14 +31,39 @@ class AppurifyFlavorUtils(default_flavor.DefaultFlavorUtils):
                          'SKIA_ANDROID_VERBOSE_SETUP': 1}
 
   def step(self, name, cmd, env=None, **kwargs):
-    # Extract the json file name from the command; ignore the rest.
-    json_file = None
+
+    env = dict(self._default_env)
+    ccache = self._skia_api.ccache()
+    if ccache:
+      env['ANDROID_MAKE_CCACHE'] = ccache
+
+    # Clean out any previous builds.
+    self.create_clean_host_dir(self.apk_dir)
+
+    # Write the nanobench flags to a file inside the APK.
+
+    # Chomp 'nanobench' from the command.
+    cmd = cmd[1:]
+
+    # Find-and-replace the output JSON file to ensure that it ends up in the
+    # right place.
+    device_json_file = '/sdcard/skia_results/visualbench.json'
+    host_json_file = None
     for i, arg in enumerate(cmd):
       if str(arg) == '--outResultsFile':
         break
-
     if len(cmd) > i + 1:
-      json_file = cmd[i + 1]
+      host_json_file = cmd[i + 1]
+      cmd[i + 1] = device_json_file
+
+    self.create_clean_host_dir(self.assets_dir)
+    self._skia_api._writefile(self.assets_dir.join('nanobench_flags.txt'),
+                              ' '.join([str(c) for c in cmd]))
+
+    target = 'VisualBenchTest_APK'
+    cmd = [self.android_bin.join('android_ninja'), target, '-d', self.device]
+    self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
+                       env=env, cwd=self._skia_api.m.path['checkout'])
 
     main_apk = self.apk_dir.join('visualbench-arm-release.apk')
     test_apk = self.apk_dir.join(
@@ -62,7 +87,7 @@ class AppurifyFlavorUtils(default_flavor.DefaultFlavorUtils):
     result = self._skia_api.run(self._skia_api.m.step, name=name, cmd=cmd,
                                 env=env, **kwargs)
 
-    if json_file:
+    if host_json_file:
       # Unzip the results.
       cmd = ['unzip', '-o', self._skia_api.tmp_dir.join('results.zip'),
              '-d', self._skia_api.tmp_dir]
@@ -74,26 +99,11 @@ class AppurifyFlavorUtils(default_flavor.DefaultFlavorUtils):
           self._skia_api.tmp_dir.join(
               'appurify_results', 'artifacts_directory',
               'sdcard-skia_results', 'visualbench.json'),
-          self._skia_api.perf_data_dir.join(json_file))
+          self._skia_api.perf_data_dir.join(host_json_file))
     return result
 
   def compile(self, target):
     """Build the given target."""
-    env = dict(self._default_env)
-    ccache = self._skia_api.ccache()
-    if ccache:
-      env['ANDROID_MAKE_CCACHE'] = ccache
-
-    # Clean out any previous builds.
-    self.create_clean_host_dir(self.apk_dir)
-
-    # Write the nanobench flags to a file inside the APK.
-    args = list(self._skia_api.nanobench_flags)
-    args.extend(['--outResultsFile', '/sdcard/skia_results/visualbench.json'])
-    self.create_clean_host_dir(self.assets_dir)
-    self._skia_api._writefile(self.assets_dir.join('nanobench_flags.txt'),
-                              ' '.join(args))
-
-    cmd = [self.android_bin.join('android_ninja'), target, '-d', self.device]
-    self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
-                       env=env, cwd=self._skia_api.m.path['checkout'])
+    # No-op. We compile when we actually want to run, since we need to package
+    # other items into the APK.
+    pass
