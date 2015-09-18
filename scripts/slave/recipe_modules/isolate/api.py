@@ -199,7 +199,7 @@ class IsolateApi(recipe_api.RecipeApi):
     """
     assert test in self.isolated_tests, (test, self.isolated_tests)
     full_args = [
-      '-H',
+      '--isolated',
       self.isolated_tests[test],
       '-I',
       self._isolate_server,

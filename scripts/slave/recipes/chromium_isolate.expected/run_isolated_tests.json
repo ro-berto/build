@@ -83,7 +83,7 @@
       "--revision=123",
       "--webkit-revision=321",
       "[SLAVE_BUILD]/swarming.client/run_isolated.py",
-      "-H",
+      "--isolated",
       "23f4ed98b3616e695602920b8d6c679091e8d8ce",
       "-I",
       "https://isolateserver.appspot.com",

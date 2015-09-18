@@ -124,7 +124,7 @@
       "--webkit-revision=10000",
       "--master-class-name=ChromiumGPUTesting",
       "[SLAVE_BUILD]/swarming.client/run_isolated.py",
-      "-H",
+      "--isolated",
       "[dummy hash for angle_deqp_gles2_tests]",
       "-I",
       "https://isolateserver.appspot.com",
