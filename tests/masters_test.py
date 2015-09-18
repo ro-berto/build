@@ -280,6 +280,7 @@ def main(argv):
       'master.tryserver.chromium.win': 'TryServerChromiumWin',
       'master.tryserver.chromium.perf': 'ChromiumPerfTryServer',
       'master.tryserver.client.catapult': 'CatapultTryserver',
+      'master.tryserver.client.custom_tabs_client': 'CustomTabsClientTryserver',
       'master.tryserver.client.mojo': 'MojoTryServer',
       'master.tryserver.blink': 'BlinkTryServer',
       'master.tryserver.infra': 'InfraTryServer',

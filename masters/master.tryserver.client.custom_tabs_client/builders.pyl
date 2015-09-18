@@ -1,0 +1,37 @@
+{
+  # Custom-tabs-client master configuration. To regenerate remaining files in
+  # this directory after making changes to this file, run:
+  #     ../../scripts/tools/buildbot-tool gen .
+  "master_base_class": "Master4a",
+  "master_classname": "CustomTabsClientTryserver",
+  "master_port": 20400,
+  "master_port_alt": 40400,
+  "master_type": "tryserver",
+  "slave_port": 30400,
+  "buildbucket_bucket": "master.tryserver.client.custom_tabs_client",
+  "service_account_file": "service-account-chromium-tryserver.json",
+  "templates": ["templates", "../master.chromium/templates"],
+
+  "builders": {
+    "Custom Tabs Linux Tryserver": {
+      "recipe": "custom_tabs_client",
+      "scheduler": None,
+      "slave_pools": ["linux_slave_pool"],
+      "slavebuilddir": "custom_tabs_client",
+    },
+  },
+
+  "schedulers": {},
+
+  "slave_pools": {
+    "linux_slave_pool": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      # The slave name is going to be revealed in crbug.com/532110.
+      "slaves": ["unknown"],
+    },
+  },
+}
