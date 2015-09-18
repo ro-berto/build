@@ -512,9 +512,7 @@
       "-s",
       "webrtc_perf_tests",
       "--verbose",
-      "--release",
-      "--isolate-file-path",
-      "webrtc/webrtc_perf_tests.isolate"
+      "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webrtc_perf_tests"

@@ -241,7 +241,9 @@ class WebRTCApi(recipe_api.RecipeApi):
               test, isolate_file_path=isolate_file_path)
         for test, isolate_file_path in sorted(
             self.ANDROID_APK_PERF_TESTS.iteritems()):
-          self._add_android_perf_test(test, isolate_file_path)
+          # TODO(kjellander): Pass isolate_file_path when crbug.com/533301 is
+          # resolved.
+          self._add_android_perf_test(test)
         for test, apk_under_test in self.ANDROID_INSTRUMENTATION_TESTS.items():
           if apk_under_test:
             self._adb_install_apk(apk_under_test)
@@ -339,7 +341,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     return self.m.step('install ' + apk_name, install_cmd, infra_step=True,
                        env=env)
 
-  def _add_android_perf_test(self, test, isolate_file_path):
+  def _add_android_perf_test(self, test):
     """Adds a test to run on Android devices.
 
     Basically just wrap what happens in chromium_android.run_test_suite to run
@@ -349,11 +351,9 @@ class WebRTCApi(recipe_api.RecipeApi):
     """
     if not self.c.PERF_ID or self.m.chromium.c.BUILD_CONFIG == 'Debug':
       # Run as a normal test for trybots and Debug, without perf data scraping.
-      self.m.chromium_android.run_test_suite(
-          test, isolate_file_path=isolate_file_path)
+      self.m.chromium_android.run_test_suite(test)
     else:
-      args = ['gtest', '-s', test, '--verbose', '--release',
-              '--isolate-file-path', isolate_file_path]
+      args = ['gtest', '-s', test, '--verbose', '--release']
       self.add_test(name=test, test=self.m.chromium_android.c.test_runner,
                     args=args, revision=self.perf_revision, perf_test=True,
                     perf_dashboard_id=test)

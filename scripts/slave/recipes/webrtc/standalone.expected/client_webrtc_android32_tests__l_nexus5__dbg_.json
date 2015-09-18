@@ -478,8 +478,7 @@
       "webrtc_perf_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "--isolate_file_path=webrtc/webrtc_perf_tests.isolate"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
