@@ -188,7 +188,19 @@
         }
       },
       {
-        "builder_name": "Android Tests (dbg) (K Nexus5)Android Tests (dbg) (L Nexus5)",
+        "builder_name": "Android Tests (dbg) (K Nexus5)",
+        "properties": {
+          "parent_got_libjingle_revision": "8e938c8836c7ed23d7fbcddf1dcc2abcb13667d7",
+          "parent_got_libjingle_revision_cp": "refs/heads/master@{#134440}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
+          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+        }
+      },
+      {
+        "builder_name": "Android Tests (dbg) (L Nexus5)",
         "properties": {
           "parent_got_libjingle_revision": "8e938c8836c7ed23d7fbcddf1dcc2abcb13667d7",
           "parent_got_libjingle_revision_cp": "refs/heads/master@{#134440}",
@@ -225,7 +237,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android Tests (dbg) (J Nexus4)<br />Android Tests (dbg) (K Nexus5)Android Tests (dbg) (L Nexus5)<br />Android Tests (dbg) (L Nexus6)<br />Android Tests (dbg) (L Nexus7.2)@@@"
+      "@@@STEP_TEXT@Android Tests (dbg) (J Nexus4)<br />Android Tests (dbg) (K Nexus5)<br />Android Tests (dbg) (L Nexus5)<br />Android Tests (dbg) (L Nexus6)<br />Android Tests (dbg) (L Nexus7.2)@@@"
     ]
   }
 ]

@@ -320,7 +320,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
         'triggers': [
           'Android Tests (dbg) (J Nexus4)',
-          'Android Tests (dbg) (K Nexus5)'
+          'Android Tests (dbg) (K Nexus5)',
           'Android Tests (dbg) (L Nexus5)',
           'Android Tests (dbg) (L Nexus6)',
           'Android Tests (dbg) (L Nexus7.2)',
