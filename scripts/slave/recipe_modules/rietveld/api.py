@@ -34,6 +34,7 @@ class RietveldApi(recipe_api.RecipeApi):
       'blink': ['third_party', 'WebKit'],
       'v8': ['v8'],
       'luci-py': ['luci'],
+      'recipes-py': ['recipes-py'],
     }
 
     # Make sure to update common projects (above) with extra projects (and not

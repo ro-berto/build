@@ -532,6 +532,15 @@ def luci_py(c):
   del m['infra']
   m['infra/luci'] = 'got_revision'
 
+@config_ctx(includes=['infra'])
+def recipes_py(c):
+  c.revisions['infra'] = 'origin/master'
+  c.revisions['infra/recipes-py'] = (
+      gclient_api.RevisionFallbackChain('origin/master'))
+  m = c.got_revision_mapping
+  del m['infra']
+  m['infra/recipes-py'] = 'got_revision'
+
 @config_ctx()
 def chrome_from_buildspec(c):  # pragma: no cover
   soln = c.solutions.add()

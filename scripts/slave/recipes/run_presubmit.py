@@ -144,3 +144,15 @@ def GenTests(api):
     api.step_data('presubmit', api.json.output([['infra_presubmit',
                                                  ['compile']]]))
   )
+
+  yield (
+    api.test('recipes-py') +
+    api.properties.tryserver(
+        mastername='tryserver.infra',
+        buildername='infra_presubmit',
+        repo_name='recipes_py',
+        patch_project='recipes-py',
+        runhooks=True) +
+    api.step_data('presubmit', api.json.output([['infra_presubmit',
+                                                 ['compile']]]))
+  )

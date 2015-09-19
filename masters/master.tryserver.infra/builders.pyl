@@ -112,6 +112,17 @@
       "slave_pools": ["win64_slave_pool"],
       "slavebuilddir": "luci-go",
     },
+    "Recipes-py Presubmit": {
+      "category": "Recipes-py",
+      "recipe": "run_presubmit",
+      "properties": {
+        "repo_name": "recipes_py",
+        "runhooks": True,
+      },
+      "scheduler": None,
+      "slave_pools": ["trusty64_slave_pool"],
+      "slavebuilddir": "presubmit_recipespy",
+    },
   },
 
   "schedulers": {},
