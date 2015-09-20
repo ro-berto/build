@@ -62,15 +62,13 @@ def RunSteps(api):
     webrtc.extract_build()
 
   if webrtc.should_test:
-    if api.chromium.c.TARGET_PLATFORM == 'android':
-      api.chromium_android.common_tests_setup_steps()
-      api.chromium_android.run_test_suite(
-          'content_browsertests',
-          gtest_filter='WebRtc*')
-      api.chromium_android.common_tests_final_steps()
-    else:
-      with api.chromium_tests.wrap_chromium_tests(
-          api.properties.get('mastername')):
+    with api.chromium_tests.wrap_chromium_tests(
+        api.properties.get('mastername')):
+      if api.chromium.c.TARGET_PLATFORM == 'android':
+        api.chromium_android.run_test_suite(
+            'content_browsertests',
+            gtest_filter='WebRtc*')
+      else:
         webrtc.runtests()
 
   webrtc.maybe_trigger()
@@ -152,3 +150,6 @@ def GenTests(api):
   # Testers gets got_revision value from builder passed as parent_got_revision.
   yield generate_builder(mastername, 'Win7 Tester',
                          suffix='_periodic_triggered')
+  yield generate_builder(mastername, 'Android Tests (dbg) (L Nexus9)',
+                         failing_test='content_browsertests',
+                         suffix='_failing_test')
