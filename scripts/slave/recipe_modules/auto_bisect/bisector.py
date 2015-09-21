@@ -367,6 +367,13 @@ class Bisector(object):
           self.dummy_initial_confidence)
 
     else:  # pragma: no cover
+      if len(self.good_rev.values) < 5 or len(self.bad_rev.values) < 5:
+        # If there are too few values, the confidence score is not a good way to
+        # determine whether the regression is reproducible.
+        # TODO(robertocn): Investigate a straightforward approach to deal with
+        # these cases. Such as the mean of one group lying within the range of
+        # the other.
+        return True
       self.initial_confidence = (
           self.api.m.math_utils.confidence_score(
               self.good_rev.values,
