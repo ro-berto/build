@@ -1,8 +1,13 @@
-# Copyright 2014 The Chromium Authors. All rights reserved.
+# Copyright 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import collections
+
 from . import steps
+
+
+_builders = collections.defaultdict(dict)
 
 
 SPEC = {
@@ -82,10 +87,13 @@ def _TestSpec(parent_builder, perf_id, platform, target_bits, max_battery_temp,
 
 def _AddBuildSpec(name, platform, target_bits=64):
   SPEC['builders'][name] = _BuildSpec(platform, target_bits)
+  assert target_bits not in _builders[platform]
+  _builders[platform][target_bits] = name
 
 
-def _AddTestSpec(name, parent_builder, perf_id, platform, target_bits=64,
+def _AddTestSpec(name, perf_id, platform, target_bits=64,
                  max_battery_temp=350, num_host_shards=1, num_device_shards=1):
+  parent_builder = _builders[platform][target_bits]
   if num_host_shards > 1:
     for shard_index in xrange(num_host_shards):
       builder_name = '%s (%d)' % (name, shard_index + 1)
@@ -98,162 +106,53 @@ def _AddTestSpec(name, parent_builder, perf_id, platform, target_bits=64,
         0, num_host_shards, num_device_shards)
 
 
-_AddBuildSpec(
-    name='Linux Builder',
-    platform='linux')
-
-_AddBuildSpec(
-    name='Win Builder',
-    platform='win',
-    target_bits=32)
-
-_AddBuildSpec(
-    name='Win x64 Builder',
-    platform='win')
-
-_AddBuildSpec(
-    name='Mac Builder',
-    platform='mac')
-
-_AddBuildSpec(
-    name='Android Builder',
-    platform='android',
-    target_bits=32)
-
-_AddBuildSpec(
-    name='Android arm64 Builder',
-    platform='android')
+_AddBuildSpec('Android Builder', 'android', target_bits=32)
+_AddBuildSpec('Android arm64 Builder', 'android')
+_AddBuildSpec('Win Builder', 'win', target_bits=32)
+_AddBuildSpec('Win x64 Builder', 'win')
+_AddBuildSpec('Mac Builder', 'mac')
+_AddBuildSpec('Linux Builder', 'linux')
 
 
-_AddTestSpec(
-    name='Linux Perf',
-    parent_builder='Linux Builder',
-    perf_id='linux-release',
-    platform='linux',
-    num_host_shards=5)
+_AddTestSpec('Android Nexus5 Perf', 'android-nexus5', 'android',
+             target_bits=32, num_device_shards=8)
+_AddTestSpec('Android Nexus6 Perf', 'android-nexus6', 'android',
+             target_bits=32, num_device_shards=8)
+_AddTestSpec('Android Nexus7v2 Perf', 'android-nexus7v2', 'android',
+             target_bits=32, num_device_shards=8)
+_AddTestSpec('Android Nexus9 Perf', 'android-nexus9', 'android',
+             num_device_shards=8)
+_AddTestSpec('Android One Perf', 'android-one', 'android',
+             target_bits=32, num_device_shards=8)
 
-_AddTestSpec(
-    name='Win 10 Perf',
-    parent_builder='Win x64 Builder',
-    perf_id='chromium-rel-win10',
-    platform='win',
-    num_host_shards=5)
 
-_AddTestSpec(
-    name='Win 8 Perf',
-    parent_builder='Win x64 Builder',
-    perf_id='chromium-rel-win8-dual',
-    platform='win',
-    num_host_shards=5)
+_AddTestSpec('Win 10 Perf', 'chromium-rel-win10', 'win',
+             num_host_shards=5)
+_AddTestSpec('Win 8 Perf', 'chromium-rel-win8-dual', 'win',
+             num_host_shards=5)
+_AddTestSpec('Win 7 Perf', 'chromium-rel-win7-dual', 'win',
+             target_bits=32, num_host_shards=5)
+_AddTestSpec('Win 7 x64 Perf', 'chromium-rel-win7-x64-dual', 'win',
+             num_host_shards=5)
+_AddTestSpec('Win 7 ATI GPU Perf', 'chromium-rel-win7-gpu-ati', 'win',
+             num_host_shards=5)
+_AddTestSpec('Win 7 Intel GPU Perf', 'chromium-rel-win7-gpu-intel', 'win',
+             num_host_shards=5)
+_AddTestSpec('Win 7 Nvidia GPU Perf', 'chromium-rel-win7-gpu-nvidia', 'win',
+             num_host_shards=5)
+_AddTestSpec('Win 7 Low-End Perf', 'chromium-rel-win7-single', 'win',
+             target_bits=32, num_host_shards=2)
+_AddTestSpec('Win XP Perf', 'chromium-rel-xp-dual', 'win',
+             target_bits=32, num_host_shards=5)
 
-_AddTestSpec(
-    name='Win 7 Perf',
-    parent_builder='Win Builder',
-    perf_id='chromium-rel-win7-dual',
-    platform='win',
-    target_bits=32,
-    num_host_shards=5)
 
-_AddTestSpec(
-    name='Win 7 x64 Perf',
-    parent_builder='Win x64 Builder',
-    perf_id='chromium-rel-win7-x64-dual',
-    platform='win',
-    num_host_shards=5)
+_AddTestSpec('Mac 10.10 Perf', 'chromium-rel-mac10', 'mac',
+             num_host_shards=5)
+_AddTestSpec('Mac 10.9 Perf', 'chromium-rel-mac9', 'mac',
+             num_host_shards=5)
+_AddTestSpec('Mac Retina Perf', 'chromium-rel-mac-retina', 'mac',
+             num_host_shards=5)
 
-_AddTestSpec(
-    name='Win 7 ATI GPU Perf',
-    parent_builder='Win x64 Builder',
-    perf_id='chromium-rel-win7-gpu-ati',
-    platform='win',
-    num_host_shards=5)
 
-_AddTestSpec(
-    name='Win 7 Intel GPU Perf',
-    parent_builder='Win x64 Builder',
-    perf_id='chromium-rel-win7-gpu-intel',
-    platform='win',
-    num_host_shards=5)
-
-_AddTestSpec(
-    name='Win 7 Nvidia GPU Perf',
-    parent_builder='Win x64 Builder',
-    perf_id='chromium-rel-win7-gpu-nvidia',
-    platform='win',
-    num_host_shards=5)
-
-_AddTestSpec(
-    name='Win 7 Low-End Perf',
-    parent_builder='Win Builder',
-    perf_id='chromium-rel-win7-single',
-    platform='win',
-    target_bits=32,
-    num_host_shards=2)
-
-_AddTestSpec(
-    name='Win XP Perf',
-    parent_builder='Win Builder',
-    perf_id='chromium-rel-xp-dual',
-    platform='win',
-    target_bits=32,
-    num_host_shards=5)
-
-_AddTestSpec(
-    name='Mac 10.10 Perf',
-    parent_builder='Mac Builder',
-    perf_id='chromium-rel-mac10',
-    platform='mac',
-    num_host_shards=5)
-
-_AddTestSpec(
-    name='Mac 10.9 Perf',
-    parent_builder='Mac Builder',
-    perf_id='chromium-rel-mac9',
-    platform='mac',
-    num_host_shards=5)
-
-_AddTestSpec(
-    name='Mac Retina Perf',
-    parent_builder='Mac Builder',
-    perf_id='chromium-rel-mac-retina',
-    platform='mac',
-    num_host_shards=5)
-
-_AddTestSpec(
-    name='Android Nexus5 Perf',
-    parent_builder='Android Builder',
-    perf_id='android-nexus5',
-    platform='android',
-    target_bits=32,
-    num_device_shards=8)
-
-_AddTestSpec(
-    name='Android Nexus6 Perf',
-    parent_builder='Android Builder',
-    perf_id='android-nexus6',
-    platform='android',
-    target_bits=32,
-    num_device_shards=8)
-
-_AddTestSpec(
-    name='Android Nexus7v2 Perf',
-    parent_builder='Android Builder',
-    perf_id='android-nexus7v2',
-    platform='android',
-    target_bits=32,
-    num_device_shards=8)
-
-_AddTestSpec(
-    name='Android Nexus9 Perf',
-    parent_builder='Android arm64 Builder',
-    perf_id='android-nexus9',
-    platform='android',
-    num_device_shards=8)
-
-_AddTestSpec(
-    name='Android One Perf',
-    parent_builder='Android Builder',
-    perf_id='android-one',
-    platform='android',
-    target_bits=32,
-    num_device_shards=8)
+_AddTestSpec('Linux Perf', 'linux-release', 'linux',
+             num_host_shards=5)
