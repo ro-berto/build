@@ -653,6 +653,11 @@ def all_compile_targets(api, tests):
                     for x in test.compile_targets(api)))
 
 
+def is_source_file(api, filepath):
+  """Returns true iff the file is a source file."""
+  _, ext = api.path.splitext(filepath)
+  return ext in ['.c', '.cc', '.cpp', '.h', '.java', '.mm']
+
 def _RunStepsInternal(api):
   def get_bot_config(mastername, buildername):
     master_dict = BUILDERS.get(mastername, {})
@@ -767,40 +772,46 @@ def _RunStepsInternal(api):
     compile_targets = sorted(set(compile_targets + matching_exes))
 
   # Blink tests have to bypass "analyze", see below.
-  if not requires_compile and not add_blink_tests:
-    return
+  if requires_compile or add_blink_tests:
+    tests = tests_in_compile_targets(api, matching_exes, tests)
+    tests_including_triggered = tests_in_compile_targets(
+        api, matching_exes, tests_including_triggered)
 
-  tests = tests_in_compile_targets(api, matching_exes, tests)
-  tests_including_triggered = tests_in_compile_targets(
-      api, matching_exes, tests_including_triggered)
+    # Blink tests are tricky at this moment. We'd like to use "analyze" for
+    # everything else. However, there are blink changes that only add or modify
+    # layout test files (html etc). This is not recognized by "analyze" as
+    # compile dependency. However, the blink tests should still be executed.
+    if add_blink_tests:
+      blink_tests = [
+          api.chromium_tests.steps.ScriptTest(
+              'webkit_lint', 'webkit_lint.py', collections.defaultdict(list)),
+          api.chromium_tests.steps.ScriptTest(
+              'webkit_python_tests', 'webkit_python_tests.py',
+              collections.defaultdict(list)),
+          api.chromium_tests.steps.BlinkTest(),
+      ]
+      tests.extend(blink_tests)
+      tests_including_triggered.extend(blink_tests)
+      for test in blink_tests:
+        compile_targets.extend(test.compile_targets(api))
+      compile_targets = sorted(set(compile_targets))
 
-  # Blink tests are tricky at this moment. We'd like to use "analyze" for
-  # everything else. However, there are blink changes that only add or modify
-  # layout test files (html etc). This is not recognized by "analyze" as
-  # compile dependency. However, the blink tests should still be executed.
-  if add_blink_tests:
-    blink_tests = [
-        api.chromium_tests.steps.ScriptTest(
-            'webkit_lint', 'webkit_lint.py', collections.defaultdict(list)),
-        api.chromium_tests.steps.ScriptTest(
-            'webkit_python_tests', 'webkit_python_tests.py',
-            collections.defaultdict(list)),
-        api.chromium_tests.steps.BlinkTest(),
-    ]
-    tests.extend(blink_tests)
-    tests_including_triggered.extend(blink_tests)
-    for test in blink_tests:
-      compile_targets.extend(test.compile_targets(api))
-    compile_targets = sorted(set(compile_targets))
-
-  api.chromium_tests.compile_specific_targets(
-      bot_config['mastername'],
-      bot_config['buildername'],
-      bot_update_step,
-      master_dict,
-      compile_targets,
-      tests_including_triggered,
-      override_bot_type='builder_tester')
+    api.chromium_tests.compile_specific_targets(
+        bot_config['mastername'],
+        bot_config['buildername'],
+        bot_update_step,
+        master_dict,
+        compile_targets,
+        tests_including_triggered,
+        override_bot_type='builder_tester')
+  else:
+    # Even though the patch doesn't compile on this platform, we'd still like
+    # to run tests not depending on compiled targets (that's obviously not
+    # covered by the 'analyze' step) if any source files change.
+    if any([is_source_file(api, f) for f in affected_files]):
+      tests = [t for t in tests if not t.compile_targets(api)]
+    else:
+      return
 
   if not tests:
     return
@@ -1434,6 +1445,23 @@ def GenTests(api):
     ) +
     api.platform.name('win') +
     api.override_step_data('analyze', api.gpu.analyze_builds_nothing)
+  )
+
+  # Tests that we run nothing if analyze said we didn't have to run anything
+  # and there were no source file changes.
+  yield (
+    api.test('analyze_runs_nothing_with_no_source_file_changes') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.win',
+      buildername='win_chromium_rel_ng',
+      swarm_hashes={}
+    ) +
+    api.platform.name('win') +
+    api.override_step_data('analyze', api.gpu.analyze_builds_nothing) +
+    api.override_step_data(
+        'git diff to analyze patch',
+        api.raw_io.stream_output('README.md\nfoo/bar/baz.py')
+    )
   )
 
   yield (

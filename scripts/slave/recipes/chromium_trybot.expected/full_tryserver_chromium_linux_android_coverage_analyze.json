@@ -185,5 +185,379 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[SLAVE_BUILD]/src/out/logcat"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "spawn_logcat_monitor"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/android/authorize_adb_devices.py",
+      "--verbose",
+      "--adb-path",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "authorize_adb_devices"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "device_status_check",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Online devices: 1@@@",
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"battery\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"AC powered\": \"false\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"USB powered\": \"true\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Wireless powered\": \"false\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"health\": \"2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"level\": \"100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"present\": \"true\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"scale\": \"100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"status\": \"5\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"technology\": \"Li-ion\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"temperature\": \"249\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"voltage\": \"4286\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"build\": \"LRX21O\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"build_detail\": \"google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"imei_slice\": \"Unknown\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"serial\": \"07a00ca4\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"type\": \"flo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"wifi_ip\": \"\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@{@@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@  \"battery\": {@@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@    \"AC powered\": \"false\", @@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@    \"USB powered\": \"true\", @@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@    \"Wireless powered\": \"false\", @@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@    \"health\": \"2\", @@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@    \"level\": \"100\", @@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@    \"present\": \"true\", @@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@    \"scale\": \"100\", @@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@    \"status\": \"5\", @@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@    \"technology\": \"Li-ion\", @@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@    \"temperature\": \"249\", @@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@    \"voltage\": \"4286\"@@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@  }, @@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@  \"build\": \"LRX21O\", @@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@  \"build_detail\": \"google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys\", @@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@  \"imei_slice\": \"Unknown\", @@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@  \"serial\": \"07a00ca4\", @@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@  \"type\": \"flo\", @@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@  \"wifi_ip\": \"\"@@@",
+      "@@@STEP_LOG_LINE@flo LRX21O 07a00ca4@}@@@",
+      "@@@STEP_LOG_END@flo LRX21O 07a00ca4@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/provision_devices.py",
+      "-t",
+      "Debug",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--output-device-blacklist",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "provision_devices"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--action",
+      "restart",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid",
+      "--",
+      "RECIPE_MODULE[chromium_android]/resources/spawn_device_temp_monitor.py",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[\"07a00ca4\"]",
+      "tryserver.chromium.linux",
+      "android_coverage"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "spawn_device_temp_monitor"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/generate_emma_html.py",
+      "--coverage-dir",
+      "[SLAVE_BUILD]/src/out/Debug/coverage",
+      "--metadata-dir",
+      "[SLAVE_BUILD]/src/out/Debug",
+      "--cleanup",
+      "--output",
+      "[SLAVE_BUILD]/src/out/Debug/coverage/coverage_html/index.html"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Generate coverage report"
+  },
+  {
+    "cmd": [
+      "git",
+      "diff",
+      "--staged",
+      "--name-only",
+      "--diff-filter",
+      "A"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "Finding changed files matching diff filter: A",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "fake/file1.java",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Finding lines changed in added file fake/file1.java"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "fake/file2.java;",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Finding lines changed in added file fake/file2.java;"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "fake/file3.java",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Finding lines changed in added file fake/file3.java"
+  },
+  {
+    "cmd": [
+      "git",
+      "diff",
+      "--staged",
+      "--name-only",
+      "--diff-filter",
+      "M"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "Finding changed files matching diff filter: M",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
+      "blame",
+      "-l",
+      "-s",
+      "fake/file1.java"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "Finding lines changed in modified file fake/file1.java",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
+      "blame",
+      "-l",
+      "-s",
+      "fake/file2.java;"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "Finding lines changed in modified file fake/file2.java;",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
+      "blame",
+      "-l",
+      "-s",
+      "fake/file3.java"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "Finding lines changed in modified file fake/file3.java",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\"fake/file1.java\": [], \"fake/file2.java;\": [], \"fake/file3.java\": []}",
+      "[TMP_BASE]/coverage_tmp_1/file_changes.json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Saving changed lines for revision."
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "build/android/emma_coverage_stats.py",
+      "-v",
+      "--out",
+      "/path/to/tmp/json",
+      "--emma-dir",
+      "[SLAVE_BUILD]/src/out/Debug/coverage/coverage_html",
+      "--lines-for-coverage",
+      "[TMP_BASE]/coverage_tmp_1/file_changes.json"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "Incremental coverage report",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"files\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sample file 1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"absolute\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"covered\": 70, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"total\": 100@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"incremental\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"covered\": 30, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"total\": 50@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sample file 2\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"absolute\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"covered\": 50, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"total\": 100@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"incremental\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"covered\": 50, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"total\": 50@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"incremental\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"covered\": 80, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"total\": 100@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@moreInfoURL@\"http://c.org/p/cr/builders/android_coverage/builds/571/steps/Incremental%20coverage%20report/logs/json.output\"@@@",
+      "@@@SET_BUILD_PROPERTY@summary@\"Test coverage for this patch: 80/100 lines (80%).\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--action",
+      "stop",
+      "--pid-file-path",
+      "/tmp/device_monitor.pid"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "shutdown_device_temp_monitor"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "[SLAVE_BUILD]/src/out/Debug/full_log",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[SLAVE_BUILD]/src/out/logcat"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "logcat_dump"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[SLAVE_BUILD]/src/out/Debug/full_log"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "stack_tool_with_logcat_dump"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "stack_tool_for_tombstones"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
+      "[SLAVE_BUILD]/src/out/Debug/test_logs/*.log"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "test_report",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import glob, os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@for report in glob.glob(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  with open(report, 'r') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    for l in f.readlines():@@@",
+      "@@@STEP_LOG_LINE@python.inline@      print l@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   }
 ]
