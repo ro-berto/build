@@ -1228,9 +1228,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
         'parent_buildnumber': current_properties.getProperty('buildnumber'),
     }
     props.update(new_properties)
-    # Specify property sources.
-    return dict((k, (v, 'ParentBuild'))
-            for k, v in props.iteritems())
+    return props
 
   @defer.inlineCallbacks
   def insertSourceStamp(self, master, changes_spec):
@@ -1370,7 +1368,8 @@ class AnnotationObserver(buildstep.LogLineObserver):
     bsid, brids = yield master.addBuildset(
         ssid=ssid,
         reason='Triggered by %s' % build.builder.name,
-        properties=properties,
+        # Specify property source.
+        properties={k: (v, 'ParentBuild') for k, v in properties.iteritems()},
         builderNames=builder_names)
     log.msg('Triggered a buildset %s with builders %s' % (bsid, builder_names))
     defer.returnValue((bsid, brids))
