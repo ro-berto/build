@@ -330,6 +330,31 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[test_results]\\resources\\upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "chromium.fyi",
+      "--builder-name",
+      "CrWinClang(dbg) tester",
+      "--build-number",
+      "571",
+      "--test-type",
+      "browser_tests",
+      "--test-results-server",
+      "test-results-test.appspot.com",
+      "--webkit-revision",
+      "5e2293dffc3cd07d37fbedea3b500f0eb650614d",
+      "--chrome-revision",
+      "170242"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [browser_tests]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]\\scripts\\slave\\process_dumps.py",
       "--target",
       "Debug"

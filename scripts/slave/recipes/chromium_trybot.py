@@ -12,6 +12,7 @@ DEPS = [
   'chromium',
   'chromium_android',
   'chromium_tests',
+  'commit_position',
   'file',
   'gclient',
   'gpu',
@@ -24,6 +25,7 @@ DEPS = [
   'raw_io',
   'step',
   'swarming',
+  'test_results',
   'test_utils',
   'tryserver',
 ]

@@ -6,9 +6,11 @@ DEPS = [
   'adb',
   'amp',
   'bisect_tester',
+  'bot_update',
   'chromium',
   'chromium_android',
   'chromium_tests',
+  'commit_position',
   'file',
   'isolate',
   'json',
@@ -19,6 +21,7 @@ DEPS = [
   'raw_io',
   'step',
   'swarming',
+  'test_results',
   'test_utils',
 ]
 

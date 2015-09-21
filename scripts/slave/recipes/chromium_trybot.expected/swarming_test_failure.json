@@ -1764,6 +1764,31 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"FAILURE\"}]}]}",
+      "--master-name",
+      "tryserver.chromium.linux",
+      "--builder-name",
+      "linux_chromium_rel_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "gl_tests (with patch)",
+      "--test-results-server",
+      "test-results-test.appspot.com",
+      "--webkit-revision",
+      "5e2293dffc3cd07d37fbedea3b500f0eb650614d",
+      "--chrome-revision",
+      "170242"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [gl_tests (with patch)]"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -2404,6 +2429,31 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gl_tests (without patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "tryserver.chromium.linux",
+      "--builder-name",
+      "linux_chromium_rel_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "gl_tests (without patch)",
+      "--test-results-server",
+      "test-results-test.appspot.com",
+      "--webkit-revision",
+      "5e2293dffc3cd07d37fbedea3b500f0eb650614d",
+      "--chrome-revision",
+      "170242"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [gl_tests (without patch)]"
   },
   {
     "cmd": [
