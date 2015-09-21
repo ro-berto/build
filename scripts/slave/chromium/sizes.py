@@ -12,17 +12,38 @@
 """
 
 import errno
+import platform
 import optparse
 import os
 import re
 import stat
 import subprocess
 import sys
+import tempfile
 
 from slave import build_directory
 
 def get_size(filename):
   return os.stat(filename)[stat.ST_SIZE]
+
+
+def get_linux_stripped_size(filename):
+  EU_STRIP_NAME = 'eu-strip'
+  # Assumes |filename| is in out/Release
+  # build/linux/bin/eu-strip'
+  src_dir = os.path.dirname(os.path.dirname(os.path.dirname(filename)))
+  eu_strip_path = os.path.join(src_dir, 'build', 'linux', 'bin', EU_STRIP_NAME)
+  if (platform.architecture()[0] == '64bit' or
+      not os.path.exists(eu_strip_path)):
+    eu_strip_path = EU_STRIP_NAME
+
+  with tempfile.NamedTemporaryFile() as stripped_file:
+    strip_cmd = [eu_strip_path, '-o', stripped_file.name, filename]
+    result = 0
+    result, _ = run_process(result, strip_cmd)
+    if result != 0:
+      return (result, 0)
+    return (result, get_size(stripped_file.name))
 
 
 def run_process(result, command):
@@ -183,6 +204,11 @@ def check_linux_binary(target_dir, binary_name, options):
 
   sizes.append((binary_name, binary_name, 'size',
                 get_size(binary_file), 'bytes'))
+
+
+  result, stripped_size = get_linux_stripped_size(binary_file)
+  sizes.append((binary_name + '-stripped', 'stripped', 'stripped',
+                stripped_size, 'bytes'))
 
   result, stdout = run_process(result, ['size', binary_file])
   text, data, bss = re.search(r'(\d+)\s+(\d+)\s+(\d+)', stdout).groups()
