@@ -30,9 +30,31 @@ def RunSteps(api):
     env = {'GYP_DEFINES': 'target_arch=ia32'}
   api.gclient.runhooks(env=env)
 
+  # On Windows, we need to test:
+  # a) x64 OS, x64 handler, x64 client
+  # b) x64 OS, x64 handler, x86 client
+  # c) x64 OS, x86 handler, x86 client
+  # d) x86 OS, x86 handler, x86 client
+  #
+  # c) is tested on the _x86_wow64 bots.
+  #
+  # d) is untested pending http://crbug.com/531663.
+  #
+  # a) and b) are tested on the _x64 bots. Crashpad's gclient takes care of
+  # generating Debug == x86 and Debug_x64 == x64 when target_arch==x64 (the
+  # default). So, we just need to make sure to build both the suffixed and
+  # unsuffixed trees, and then make sure to run the tests from the _x64 tree.
   dirname = 'Debug' if '_dbg' in buildername else 'Release'
   path = api.path['checkout'].join('out', dirname)
   api.step('compile with ninja', ['ninja', '-C', path])
+
+  if '_x64' in buildername:
+    # Note that we modify the dirname on x64 because we want to handle variants
+    # a) and b) above.
+    dirname += '_x64'
+    path = api.path['checkout'].join('out', dirname)
+    api.step('compile with ninja', ['ninja', '-C', path])
+
   api.python('run tests',
              api.path['checkout'].join('build', 'run_tests.py'),
              args=[dirname])
@@ -42,10 +64,11 @@ def GenTests(api):
   tests = [
       'crashpad_mac_dbg',
       'crashpad_mac_rel',
-      'crashpad_win_dbg',
-      'crashpad_win_rel',
-      'crashpad_win_x86_dbg',
-      'crashpad_win_x86_rel',
+      'crashpad_win_x64_dbg',
+      'crashpad_win_x64_rel',
+      'crashpad_win_x86_wow64_dbg',
+      'crashpad_win_x86_wow64_rel',
+      # TODO(scottmg): Add native x86 bots.
   ]
   for t in tests:
     yield(api.test(t) + api.properties.generic(buildername=t))

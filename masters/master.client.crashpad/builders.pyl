@@ -15,7 +15,6 @@
       "properties": {
         "config": "Debug",
       },
-      "slavebuilddir": "chromium_mac_dbg",
     },
     "crashpad_mac_rel": {
       "recipe": "crashpad/continuous",
@@ -26,7 +25,6 @@
       "properties": {
         "config": "Release",
       },
-      "slavebuilddir": "chromium_mac_rel",
     },
     "crashpad_win_dbg": {
       "recipe": "crashpad/continuous",
@@ -37,7 +35,6 @@
       "properties": {
         "config": "Debug",
       },
-      "slavebuilddir": "chromium_win_dbg",
     },
     "crashpad_win_rel": {
       "recipe": "crashpad/continuous",
@@ -48,9 +45,8 @@
       "properties": {
         "config": "Release",
       },
-      "slavebuilddir": "chromium_win_rel",
     },
-    "crashpad_win_x86_dbg": {
+    "crashpad_win_x86_wow64_dbg": {
       "recipe": "crashpad/continuous",
       "scheduler": "crashpad_commits",
       "slave_pools": ["win7"],
@@ -59,9 +55,8 @@
       "properties": {
         "config": "Debug",
       },
-      "slavebuilddir": "chromium_win_x86_dbg",
     },
-    "crashpad_win_x86_rel": {
+    "crashpad_win_x86_wow64_rel": {
       "recipe": "crashpad/continuous",
       "scheduler": "crashpad_commits",
       "slave_pools": ["win7"],
@@ -70,7 +65,6 @@
       "properties": {
         "config": "Release",
       },
-      "slavebuilddir": "chromium_win_x86_rel",
     },
   },
 

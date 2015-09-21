@@ -51,17 +51,26 @@
     "cmd": [
       "ninja",
       "-C",
-      "[SLAVE_BUILD]/crashpad/out/Release"
+      "[SLAVE_BUILD]/crashpad/out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile with ninja"
   },
   {
     "cmd": [
+      "ninja",
+      "-C",
+      "[SLAVE_BUILD]/crashpad/out/Debug_x64"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "compile with ninja (2)"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[SLAVE_BUILD]/crashpad/build/run_tests.py",
-      "Release"
+      "Debug_x64"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "run tests"
