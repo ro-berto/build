@@ -67,6 +67,10 @@ class Test(object):
     """Returns true if the test uses swarming."""
     return False
 
+  @property
+  def uses_local_devices(self):
+    return False # pragma: no cover
+
   def _step_name(self, suffix):
     """Helper to uniformly combine tests's name with a suffix."""
     if not suffix:
@@ -236,6 +240,10 @@ class LocalGTestTest(Test):
     return self._target_name or self._name
 
   @property
+  def uses_local_devices(self):
+    return True # pragma: no cover
+
+  @property
   def isolate_target(self):
     return self.target_name  # pragma: no cover
 
@@ -394,6 +402,10 @@ class DynamicPerfTests(Test):
   @property
   def name(self):
     return 'dynamic_perf_tests'
+
+  @property
+  def uses_local_devices(self):
+    return True
 
   def run(self, api, suffix):
     tests = self._test_list(api)
@@ -691,6 +703,10 @@ class AMPTest(Test):
   def name(self):
     return self._name
 
+  @property
+  def uses_local_devices(self):
+    return self._fallback_to_local
+
   def amp_arguments(self, api):
     return api.amp.amp_arguments(
         api_address=AMPTest.AMP_INSTANCE_ADDRESS,
@@ -979,6 +995,10 @@ class GTestTest(Test):
     return self._test.name
 
   @property
+  def uses_local_devices(self):
+    return True
+
+  @property
   def isolate_target(self):
     return self._test.isolate_target
 
@@ -1154,6 +1174,10 @@ class BisectTest(Test):  # pylint: disable=W0232
   def abort_on_failure(self):
     return True  # pragma: no cover
 
+  @property
+  def uses_local_devices(self):
+    return True
+
   @staticmethod
   def compile_targets(_):  # pragma: no cover
     return ['chrome'] # Bisect always uses a separate bot for building.
@@ -1327,6 +1351,10 @@ class AndroidTest(Test):
   def name(self):
     return self._name
 
+  @property
+  def uses_local_devices(self):
+    return True
+
   def _get_failing_tests(self, step_result):
     """Parses test results and returns a list of failed tests.
 
@@ -1455,6 +1483,10 @@ class BlinkTest(Test):
   @staticmethod
   def compile_targets(api):
     return ['blink_tests']
+
+  @property
+  def uses_local_devices(self):
+    return True
 
   def run(self, api, suffix):
     results_dir = api.path['slave_build'].join('layout-test-results')
@@ -1596,6 +1628,10 @@ class DiagnoseGomaTest(Test):
 
 class IncrementalCoverageTest(Test):
   name = 'incremental_coverage'
+
+  @property
+  def uses_local_devices(self):
+    return True
 
   def has_valid_results(self, api, suffix):
     return True

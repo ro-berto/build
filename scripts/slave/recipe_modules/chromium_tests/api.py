@@ -512,8 +512,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                    else self.m.properties['mastername']))
 
   @contextlib.contextmanager
-  def wrap_chromium_tests(self, mastername):
-    if self.m.chromium.c.TARGET_PLATFORM == 'android':
+  def wrap_chromium_tests(self, mastername, tests=None):
+    # Some recipes use this wrapper to setup devices and have their own way
+    # to run tests. If platform is Android and tests is None, run device steps.
+    require_device_steps = (
+        self.m.chromium.c.TARGET_PLATFORM == 'android' and
+        (tests is None or any([t.uses_local_devices for t in tests]))
+    )
+    if require_device_steps:
       #TODO(prasadv): Remove this hack and implement specific functions
       # at the point of call.
       self.m.chromium_android.common_tests_setup_steps(
@@ -529,7 +535,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if self.m.platform.is_win:
         self.m.chromium.process_dumps()
 
-      if self.m.chromium.c.TARGET_PLATFORM == 'android':
+      if require_device_steps:
         # TODO(phajdan.jr): Configure logcat GS bucket in cleaner way.
         logcat_gs_bucket = None
         if mastername == 'chromium.linux':
@@ -569,7 +575,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.isolate.isolate_tests(self.m.chromium.output_dir,
                                        verbose=True)
 
-    with self.wrap_chromium_tests(mastername):
+    with self.wrap_chromium_tests(mastername, tests):
       return self.m.test_utils.determine_new_failures(api, tests,
                                                       deapply_patch_fn)
 

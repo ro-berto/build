@@ -284,7 +284,7 @@ def _RunStepsInternal(api):
       api.chromium_tests.configure_swarming('chromium', precommit=False,
                                             mastername=mastername)
       test_runner = api.chromium_tests.create_test_runner(api, tests)
-      with api.chromium_tests.wrap_chromium_tests(mastername):
+      with api.chromium_tests.wrap_chromium_tests(mastername, tests):
         test_runner()
 
 
