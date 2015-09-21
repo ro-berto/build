@@ -58,7 +58,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "gomadir='[BUILD]/goma' target_arch=x64 use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=x32 v8_use_snapshot=false"
+      "GYP_DEFINES": "gomadir='[BUILD]/goma' target_arch=x64 use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=x32 v8_use_snapshot=false",
+      "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
   },
@@ -81,7 +82,7 @@
       "--src-dir",
       "[SLAVE_BUILD]/v8",
       "--build-tool",
-      "make",
+      "ninja",
       "--compiler",
       "goma",
       "--goma-dir",

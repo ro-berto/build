@@ -13,7 +13,7 @@ BUILDERS = {
     'builders': {
 ####### Category: Linux
       'V8 Linux - builder': {
-        'chromium_apply_config': ['v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -33,7 +33,7 @@ BUILDERS = {
         ],
       },
       'V8 Linux - debug builder': {
-        'chromium_apply_config': ['v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -58,7 +58,7 @@ BUILDERS = {
         ],
       },
       'V8 Linux - nosnap builder': {
-        'chromium_apply_config': ['no_snapshot', 'v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -71,7 +71,7 @@ BUILDERS = {
         ],
       },
       'V8 Linux - nosnap debug builder': {
-        'chromium_apply_config': ['no_snapshot', 'v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -164,7 +164,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - shared': {
-        'chromium_apply_config': ['shared_library', 'verify_heap', 'v8_goma'],
+        'chromium_apply_config': [
+          'clang', 'v8_ninja', 'goma', 'shared_library', 'verify_heap'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -320,7 +321,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - interpreted regexp': {
-        'chromium_apply_config': ['interpreted_regexp', 'v8_goma'],
+        'chromium_apply_config': [
+          'clang', 'v8_ninja', 'goma', 'interpreted_regexp'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -331,7 +333,7 @@ BUILDERS = {
       },
       'V8 Linux - noi18n - debug': {
         'v8_apply_config': ['no_i18n'],
-        'chromium_apply_config': ['no_i18n', 'v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'no_i18n'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -368,7 +370,7 @@ BUILDERS = {
       },
 ####### Category: Linux64
       'V8 Linux64 - builder': {
-        'chromium_apply_config': ['v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -382,7 +384,7 @@ BUILDERS = {
         ],
       },
       'V8 Linux64 - debug builder': {
-        'chromium_apply_config': ['v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -398,7 +400,8 @@ BUILDERS = {
         ],
       },
       'V8 Linux64 - custom snapshot - debug builder': {
-        'chromium_apply_config': ['embed_script_mjsunit', 'v8_goma'],
+        'chromium_apply_config': [
+          'clang', 'v8_ninja', 'goma', 'embed_script_mjsunit'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1368,7 +1371,7 @@ BUILDERS = {
       },
 ####### Category: FYI
       'V8 Linux - vtunejit': {
-        'chromium_apply_config': ['vtunejit', 'v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'vtunejit'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1378,7 +1381,8 @@ BUILDERS = {
       },
       'V8 Linux - x32 - nosnap - debug builder': {
         'v8_apply_config': ['no_snapshot'],
-        'chromium_apply_config': ['no_snapshot', 'v8_goma', 'x32'],
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'no_snapshot', 'x32'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1392,7 +1396,8 @@ BUILDERS = {
       },
       'V8 Linux - x32 - nosnap - debug': {
         'v8_apply_config': ['no_snapshot'],
-        'chromium_apply_config': ['no_snapshot', 'v8_goma', 'x32'],
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'no_snapshot', 'x32'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1405,7 +1410,8 @@ BUILDERS = {
       },
       'V8 Linux - x87 - nosnap - debug builder': {
         'v8_apply_config': ['no_snapshot'],
-        'chromium_apply_config': ['no_snapshot', 'v8_goma', 'x87'],
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'no_snapshot',  'x87'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1419,7 +1425,8 @@ BUILDERS = {
       },
       'V8 Linux - x87 - nosnap - debug': {
         'v8_apply_config': ['no_snapshot'],
-        'chromium_apply_config': ['no_snapshot', 'v8_goma', 'x87'],
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'no_snapshot', 'x87'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1462,7 +1469,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - full debug': {
-        'chromium_apply_config': ['no_optimized_debug', 'v8_goma'],
+        'chromium_apply_config': [
+          'clang', 'v8_ninja', 'goma', 'no_optimized_debug'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1472,7 +1480,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Random Deopt Fuzzer - debug': {
-        'chromium_apply_config': ['v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_apply_config': ['deopt_fuzz_random'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
