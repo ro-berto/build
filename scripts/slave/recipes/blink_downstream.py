@@ -83,10 +83,11 @@ def RunSteps(api):
   master_dict = BUILDERS.get(mastername, {})
   bot_config = master_dict.get('builders', {}).get(buildername)
 
-  # Sync chromium and blink to HEAD.
+  # Sync chromium to HEAD.
+  api.gclient.set_config('chromium')
+  api.gclient.c.revisions['src'] = 'HEAD'
   api.chromium.set_config('blink',
                           **bot_config.get('chromium_config_kwargs', {}))
-  api.gclient.set_config('blink_internal')
 
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
@@ -112,8 +113,6 @@ def RunSteps(api):
     bot_update_json = step_result.json.output
     api.gclient.c.revisions['src'] = str(
         bot_update_json['properties']['got_cr_revision'])
-    api.gclient.c.revisions['src/third_party/WebKit'] = str(
-        bot_update_json['properties']['got_webkit_revision'])
     # Reset component revision to the pinned revision from chromium's DEPS
     # for comparison.
     del api.gclient.c.revisions[bot_config['component']['path']]
