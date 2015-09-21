@@ -1008,51 +1008,9 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
         'triggers': [
           'Android32 Tests (L Nexus6)(dbg)',
-          'Android Tests (Samsung S3)(dbg)',
-          'Android Tests (Samsung S4)(dbg)',
-          'Android Tests (Samsung S5)(dbg)',
         ],
       },
       'Android32 Tests (L Nexus6)(dbg)': {
-        'recipe_config': 'webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'Android Builder (dbg)',
-        'build_gs_archive': 'fyi_android_apk_dbg_archive',
-        'testing': {'platform': 'linux'},
-      },
-      'Android Tests (Samsung S3)(dbg)': {
-        'recipe_config': 'webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'Android Builder (dbg)',
-        'build_gs_archive': 'fyi_android_apk_dbg_archive',
-        'testing': {'platform': 'linux'},
-      },
-      'Android Tests (Samsung S4)(dbg)': {
-        'recipe_config': 'webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'Android Builder (dbg)',
-        'build_gs_archive': 'fyi_android_apk_dbg_archive',
-        'testing': {'platform': 'linux'},
-      },
-      'Android Tests (Samsung S5)(dbg)': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -1430,39 +1388,6 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'android_n6': {
-        'recipe_config': 'webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
-      'android_s3': {
-        'recipe_config': 'webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
-      'android_s4': {
-        'recipe_config': 'webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
-      'android_s5': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',

@@ -21,9 +21,6 @@ def Update(c):
   specs = [
     {'name': 'Android Builder (dbg)'},
     {'name': 'Android32 Tests (L Nexus6)(dbg)'},
-    {'name': 'Android Tests (Samsung S3)(dbg)'},
-    {'name': 'Android Tests (Samsung S4)(dbg)'},
-    {'name': 'Android Tests (Samsung S5)(dbg)'},
   ]
 
   c['builders'].extend([
