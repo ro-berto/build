@@ -74,6 +74,7 @@ def RunSteps(api):
   try:
     api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=perf_tests),
+      chartjson_file=True,
       perf_id=BUILDER['perf_id'])
   finally:
     api.chromium_android.logcat_dump()

@@ -339,7 +339,8 @@
       "--steps",
       "{\"steps\": {\"blink_perf.all.exact\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"blink_perf.all.release\": {\"cmd\": \"/usr/bin/python /path/to/run_benmark --a=1 -v --b=2\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.all\"}, \"blink_perf.dom\": {\"cmd\": \"/path/to/run_benchmark -v --upload-results blink_perf.dom\", \"device_affinity\": 0, \"perf_dashboard_id\": \"blink_perf.dom\"}, \"dromaeo.cssqueryjquery\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1}, \"dromaeo.cssqueryjquery.release\": {\"cmd\": \"/path/to/run_benmark\", \"device_affinity\": 1, \"perf_dashboard_id\": \"dromaeo.cssqueryjquery\"}}, \"version\": 2}",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--collect-chartjson-data"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
@@ -396,6 +397,8 @@
       "--perf-id=android-webview",
       "--test-type=page_cycler.foo",
       "--step-name=page_cycler.foo",
+      "--chartjson-file",
+      "/path/to/tmp/json",
       "--builder-name=TestBuilder",
       "--slave-name=TestSlavename",
       "--build-number=571",
@@ -414,7 +417,9 @@
     },
     "name": "page_cycler.foo",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@"
+      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@",
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -436,6 +441,8 @@
       "--perf-id=android-webview",
       "--test-type=perf_test.foo",
       "--step-name=perf_test.foo",
+      "--chartjson-file",
+      "/path/to/tmp/json",
       "--builder-name=TestBuilder",
       "--slave-name=TestSlavename",
       "--build-number=571",
@@ -454,7 +461,9 @@
     },
     "name": "perf_test.foo",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@"
+      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@",
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
