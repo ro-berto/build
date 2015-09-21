@@ -18,7 +18,7 @@ class ChromiumPerfTryServer(Master.Master4):
   base_app_url = 'https://chromium-status.appspot.com'
   tree_status_url = base_app_url + '/status'
   store_revisions_url = base_app_url + '/revisions'
-  svn_url = 'svn://svn-mirror.golo.chromium.org/chrome-try/try-perf'
+  svn_url = 'svn://svn.golo.chromium.org/chrome-try/try-perf'
   last_good_url = base_app_url + '/lkgr'
   service_account_file = 'service-account-chromium-tryserver.json'
   buildbucket_bucket = 'master.tryserver.chromium.perf'
