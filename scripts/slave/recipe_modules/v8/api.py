@@ -1235,6 +1235,8 @@ class V8Api(recipe_api.RecipeApi):
     step_result = self.m.gsutil(
         args,
         name='check builds',
+        # Allow failures, as the tool will formally fail for any absent file.
+        ok_ret='any',
         stdout=self.m.raw_io.output(),
         step_test_data=lambda: self.test_api.example_available_builds(),
     )
