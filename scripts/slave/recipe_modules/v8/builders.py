@@ -756,7 +756,7 @@ BUILDERS = {
       },
 ####### Category: Arm
       'V8 Arm - builder': {
-        'chromium_apply_config': ['v8_ninja', 'arm_hard_float'],
+        'chromium_apply_config': ['arm_hard_float'],
         'v8_apply_config': ['arm_hard_float'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -771,7 +771,7 @@ BUILDERS = {
         ],
       },
       'V8 Arm - debug builder': {
-        'chromium_apply_config': ['v8_ninja', 'arm_hard_float'],
+        'chromium_apply_config': ['arm_hard_float'],
         'v8_apply_config': ['arm_hard_float'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -832,6 +832,19 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
+      'V8 Arm - debug': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Arm - debug builder',
+        'build_gs_archive': 'arm_dbg_archive',
+        'tests': ['unittests', 'v8testing', 'webkit', 'optimize_for_size',
+                  'simdjs_small'],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Arm - debug - 1': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -864,7 +877,7 @@ BUILDERS = {
       },
 ####### Category: MIPS
       'V8 Mips - builder': {
-        'chromium_apply_config': ['v8_ninja', 'no_snapshot', 'no_i18n'],
+        'chromium_apply_config': ['no_snapshot', 'no_i18n'],
         'v8_apply_config': ['mips_cross_compile', 'no_snapshot', 'no_i18n'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',

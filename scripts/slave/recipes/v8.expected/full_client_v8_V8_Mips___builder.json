@@ -89,7 +89,6 @@
       "CXX": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
-      "GYP_GENERATORS": "ninja",
       "LINK": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
       "RANLIB": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
     },
@@ -114,7 +113,7 @@
       "--src-dir",
       "[SLAVE_BUILD]/v8",
       "--build-tool",
-      "ninja",
+      "make",
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",

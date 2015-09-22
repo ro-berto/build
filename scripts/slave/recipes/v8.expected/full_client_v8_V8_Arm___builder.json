@@ -61,7 +61,6 @@
       "CXX": "/usr/bin/arm-linux-gnueabihf-g++",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "arm_float_abi=hard target_arch=arm v8_target_arch=arm",
-      "GYP_GENERATORS": "ninja",
       "LINK": "/usr/bin/arm-linux-gnueabihf-g++"
     },
     "name": "gclient runhooks"
@@ -85,7 +84,7 @@
       "--src-dir",
       "[SLAVE_BUILD]/v8",
       "--build-tool",
-      "ninja",
+      "make",
       "--crosstool",
       "/usr/bin/arm-linux-gnueabihf",
       "--arch",
