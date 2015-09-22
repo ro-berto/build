@@ -100,7 +100,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/dashboard/bin/run_tests"
+      "[SLAVE_BUILD]/catapult/dashboard/bin/run_py_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
