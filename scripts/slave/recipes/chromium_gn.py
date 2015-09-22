@@ -21,39 +21,6 @@ DEPS = [
 
 
 BUILDERS = freeze({
-  'chromium.webkit': {
-    'builders': {
-      'Linux GN': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-        'gclient_apply_config': ['blink'],
-      },
-      'Linux GN (dbg)': {
-        'chromium_apply_config': ['gn_component_build'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-        'gclient_apply_config': ['blink'],
-      },
-    },
-  },
-  'tryserver.blink': {
-    'builders': {
-      'linux_chromium_gn_rel': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-        'gclient_apply_config': ['blink'],
-      },
-    },
-  },
   'tryserver.v8': {
     'builders': {
       'v8_linux_chromium_gn_rel': {
@@ -333,28 +300,28 @@ def GenTests(api):
     api.test('compile_failure') +
     api.platform.name('linux') +
     api.properties.tryserver(
-        buildername='linux_chromium_gn_rel',
-        mastername='tryserver.blink') +
+        buildername='v8_linux_chromium_gn_rel',
+        mastername='tryserver.v8') +
     api.step_data('compile', retcode=1) +
-    overrides['tryserver.blink']['linux_chromium_gn_rel']
+    overrides['tryserver.v8']['v8_linux_chromium_gn_rel']
   )
 
   yield (
     api.test('use_v8_patch_on_chromium_gn_trybot') +
     api.platform.name('linux') +
     api.properties.tryserver(
-        buildername='linux_chromium_gn_rel',
-        mastername='tryserver.blink',
+        buildername='v8_linux_chromium_gn_rel',
+        mastername='tryserver.v8',
         patch_project='v8') +
-    overrides['tryserver.blink']['linux_chromium_gn_rel']
+    overrides['tryserver.v8']['v8_linux_chromium_gn_rel']
   )
 
   yield (
     api.test('no_tests_run') +
     api.platform.name('linux') +
     api.properties.tryserver(
-        buildername='linux_chromium_gn_rel',
-        mastername='tryserver.blink') +
+        buildername='v8_linux_chromium_gn_rel',
+        mastername='tryserver.v8') +
     api.override_step_data(
         'read test spec',
         api.json.output({'linux_chromium_gn_rel': {
