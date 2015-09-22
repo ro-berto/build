@@ -25,7 +25,7 @@ def FYIStep():
     pass
 
 BUILDERS = freeze({
-  'chromium.fyi': {
+  'chromium.android': {
     'Android x64 Builder (dbg)': {
       'recipe_config': 'x64_builder',
       'check_licenses': FYIStep,
@@ -36,8 +36,6 @@ BUILDERS = freeze({
       'check_licenses': FYIStep,
       'gclient_apply_config': ['android', 'chrome_internal'],
     },
-  },
-  'chromium.android': {
     'Android MIPS Builder (dbg)': {
       'recipe_config': 'mipsel_builder',
       'check_licenses': FYIStep,
@@ -229,7 +227,7 @@ def GenTests(api):
              (api.step_data(step, retcode=1) for step in steps))
     )
 
-  yield step_failure(mastername='chromium.fyi',
+  yield step_failure(mastername='chromium.android',
                      buildername='Android x64 Builder (dbg)',
                      steps=['check licenses'])
 
