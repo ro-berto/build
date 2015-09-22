@@ -7,7 +7,7 @@
       "--master",
       "tryserver.webrtc",
       "--builder",
-      "android",
+      "android_dbg",
       "--slave",
       "slavename",
       "--spec",
@@ -248,7 +248,7 @@
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "[\"07a00ca4\"]",
       "tryserver.webrtc",
-      "android"
+      "android_dbg"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "spawn_device_temp_monitor"

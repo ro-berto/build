@@ -7,7 +7,7 @@
       "--master",
       "tryserver.webrtc",
       "--builder",
-      "android_gn",
+      "android_gn_dbg",
       "--slave",
       "slavename",
       "--spec",

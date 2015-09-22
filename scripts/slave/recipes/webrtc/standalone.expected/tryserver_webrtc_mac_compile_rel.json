@@ -7,7 +7,7 @@
       "--master",
       "tryserver.webrtc",
       "--builder",
-      "mac_x64_gn",
+      "mac_compile_rel",
       "--slave",
       "slavename",
       "--spec",
@@ -75,23 +75,9 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' mac_sdk=10.9 target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' mac_sdk=10.9 target_arch=ia32 use_goma=1"
     },
     "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gn.py",
-      "--root=[SLAVE_BUILD]/src",
-      "gen",
-      "//out/Debug",
-      "--args=is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[BUILD]/goma\" build_with_chromium=false"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gn"
   },
   {
     "allow_subannotations": true,
@@ -119,7 +105,7 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Debug",
+      "Release",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",
@@ -131,7 +117,7 @@
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
-      "all"
+      "All"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"

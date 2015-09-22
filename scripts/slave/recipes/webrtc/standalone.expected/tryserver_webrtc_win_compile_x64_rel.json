@@ -3,15 +3,15 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/bot_update.py",
+      "[BUILD]\\scripts\\slave\\bot_update.py",
       "--master",
       "tryserver.webrtc",
       "--builder",
-      "ios_arm64",
+      "win_compile_x64_rel",
       "--slave",
       "slavename",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]\ntarget_os = ['ios', 'mac']",
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]",
       "--root",
       "src",
       "--revision_mapping_file",
@@ -51,8 +51,8 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[webrtc]/resources/cleanup_files.py",
-      "[SLAVE_BUILD]/src/out"
+      "RECIPE_MODULE[webrtc]\\resources\\cleanup_files.py",
+      "[SLAVE_BUILD]\\src\\out"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "clean test output files"
@@ -61,7 +61,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/cleanup_temp.py"
+      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
@@ -70,52 +70,30 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
+      "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=ios build_with_libjingle=1 chromium_ios_signing=0 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' key_id='' mac_sdk=10.9 target_arch=arm64 use_goma=1",
-      "GYP_GENERATORS": "ninja"
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
+      "[BUILD]\\scripts\\slave\\compile.py",
       "--target",
-      "Debug-iphoneos",
+      "Release_x64",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]\\src",
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[BUILD]\\goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",

@@ -7,7 +7,7 @@
       "--master",
       "tryserver.webrtc",
       "--builder",
-      "linux_gn",
+      "mac_x64_gn_dbg",
       "--slave",
       "slavename",
       "--spec",
@@ -76,7 +76,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "clang=1 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' mac_sdk=10.9 target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -94,6 +94,26 @@
     "name": "gn"
   },
   {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/clang_revision.py",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "clang_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -105,7 +125,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma",
+      "goma-clang",
       "--goma-dir",
       "[BUILD]/goma",
       "--goma-fail-fast",

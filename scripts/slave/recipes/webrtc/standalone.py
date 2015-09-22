@@ -127,5 +127,5 @@ def GenTests(api):
 
   # Legacy trybot (SVN-based).
   mastername = 'tryserver.webrtc'
-  yield generate_builder(mastername, 'linux', revision='12345',
+  yield generate_builder(mastername, 'linux_dbg', revision='12345',
                          legacy_trybot=True, suffix='_legacy_svn_patch')
