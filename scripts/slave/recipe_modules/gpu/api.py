@@ -17,7 +17,7 @@ SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN = freeze([
   'gles2_conform_test',
 ])
 
-SIMPLE_FYI_ONLY_TESTS = freeze([
+SIMPLE_WIN_AND_LINUX_ONLY_FYI_ONLY_TESTS = freeze([
   'angle_end2end_tests',
 ])
 
@@ -338,7 +338,11 @@ class GpuApi(recipe_api.RecipeApi):
     if self.is_fyi_waterfall or self.is_angle_trybot:
       # Run the same open source tests on the FYI waterfall and the ANGLE
       # trybots.
-      basic_tests += SIMPLE_FYI_ONLY_TESTS
+      if self.m.platform.is_win or self.m.platform.is_linux:
+        # TODO(kbr): run these tests on the trybots as soon as there
+        # is capacity to do so, and on all platforms as soon as ANGLE
+        # does.
+        basic_tests += SIMPLE_WIN_AND_LINUX_ONLY_FYI_ONLY_TESTS
 
     #TODO(martiniss) convert loop
     for test in basic_tests:
