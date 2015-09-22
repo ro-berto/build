@@ -32,13 +32,13 @@ endif
 
 notify:
 	@if (hostname -f | grep -q '^master.*\.chromium\.org'); then \
-		echo ; \
-		echo -e "\033[1;31m***"; \
-		echo "Are you manually restarting a master? This master is most likely"; \
-		echo "being managed by master manager. Check out 'Issuing a restart' at"; \
-		echo -e "\033[1;34mgo/master-manager\033[1;31m for more details."; \
-		echo -e "***\033[0m"; \
-		echo ; \
+		/bin/echo ; \
+		/bin/echo -e "\033[1;31m***"; \
+		/bin/echo "Are you manually restarting a master? This master is most likely"; \
+		/bin/echo "being managed by master manager. Check out 'Issuing a restart' at"; \
+		/bin/echo -e "\033[1;34mgo/master-manager\033[1;31m for more details."; \
+		/bin/echo -e "***\033[0m"; \
+		/bin/echo ; \
 	fi
 
 ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
