@@ -28,6 +28,7 @@ CURRENT_DIR = $(shell pwd)
 printstep:
 ifndef NO_REVISION_AUDIT
 	@echo "**  `python -c 'import datetime; print datetime.datetime.utcnow().isoformat() + "Z"'`	make $(MAKECMDGOALS)" >> actions.log
+	@pstree --show-parents $$$$ --ascii --arguments --show-pids >> actions.log
 endif
 
 notify:
