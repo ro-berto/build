@@ -126,11 +126,13 @@ class GitilesPoller(PollingChangeSource):
 
   git_svn_id_re = re.compile(r'^git-svn-id: (.*)@([0-9]+) [0-9a-fA-F\-]*$')
   re_pattern_type = type(re.compile(''))
+  default_cursor_file = '.gitiles_poller_cursor'
 
   def __init__(
       self, repo_url, branches=None, pollInterval=30, category=None,
       project=None, revlinktmpl=None, agent=None, svn_mode=False,
-      svn_branch=None, change_filter=None, comparator=None):
+      svn_branch=None, change_filter=None, comparator=None,
+      cursor_file=None):
     """Args:
 
     repo_url: URL of the gitiles service to be polled.
@@ -150,6 +152,9 @@ class GitilesPoller(PollingChangeSource):
         a static string.
     comparator: A GitilesRevisionComparator object, or None.  This is used to
         share a single comparator between multiple pollers.
+    cursor_file: Load/save the latest polled revisions for each
+        repository/branch to this file. If None, no state will be preserved,
+        and polling will begin at branch HEAD at the time of master start.
     """
     u = urlparse(repo_url)
     self.repo_url = repo_url
@@ -185,6 +190,7 @@ class GitilesPoller(PollingChangeSource):
     self.dry_run = os.environ.get('POLLER_DRY_RUN')
     self.change_filter = change_filter
     self.comparator = comparator or GitilesRevisionComparator()
+    self.cursor_file = cursor_file
 
   @defer.inlineCallbacks
   def startService(self):
@@ -194,12 +200,66 @@ class GitilesPoller(PollingChangeSource):
 
     # Get the head commit for each branch being polled.
     branches = yield self._get_branches()
+    self.branch_heads.update({branch: None for branch in branches.iterkeys()})
+    self._merge_cursor_file()
+
+    # Update any branch heads thatwere not present in the cursor file.
     for branch, branch_head in branches.iteritems():
-      log.msg('GitilesPoller: Initial revision for branch %s is %s' % (
-          branch, branch_head))
-      self.branch_heads[branch] = branch_head
+      # Load latest revision for our branch if it wasn't in the cursor file.
+      if not self.branch_heads[branch]:
+        log.msg('GitilesPoller: Initial revision for branch %s is %s' % (
+            branch, branch_head))
+        self.branch_heads[branch] = branch_head
+      elif branch_head != self.branch_heads[branch]:
+        log.msg('GitilesPoller: Cursor revision for branch %s is %s with HEAD '
+                '%s' % (branch, self.branch_heads[branch], branch_head))
+      else:
+        log.msg('GitilesPoller: Cursor revision for branch %s is HEAD at %s' % (
+                branch, branch_head))
+    self._save_cursor_file()
 
     PollingChangeSource.startService(self)
+
+  def _load_cursor_file(self):
+    """Loads the contents of the cursor file for this poller's repository set.
+
+    Note that multiple GitilesPoller instances running on the same master
+    instance can share the same cursor file, since loading is synchronous and
+    we're in a single-threaded Twisted environment.
+
+    Upon successful loading, the contents of the cursor file will be integrated
+    into |branch_heads|.
+    """
+    if not self.cursor_file:
+      return None
+
+    try:
+      with open(self.cursor_file, 'r') as fd:
+        try:
+          return json.load(fd)
+        except ValueError as e:
+          log.err('GitilesPoller: failed to load cursor file [%s]: %s' % (
+                  self.cursor_file, e))
+    except IOError:
+      log.msg('GitilesPoller: no cursor file at [%s]' % (self.cursor_file,))
+    return None
+
+  def _merge_cursor_file(self):
+    cursor = self._load_cursor_file()
+    if not cursor:
+      return
+    for branch, head in cursor.get(self.repo_url, {}).iteritems():
+      if branch in self.branch_heads:
+        self.branch_heads[branch] = head
+
+  def _save_cursor_file(self):
+    if not self.cursor_file:
+      return
+
+    cursor = self._load_cursor_file() or {}
+    cursor[self.repo_url] = self.branch_heads
+    with open(self.cursor_file, 'w') as fd:
+      json.dump(cursor, fd, sort_keys=True)
 
   @defer.inlineCallbacks
   def _get_branches(self):
@@ -220,7 +280,8 @@ class GitilesPoller(PollingChangeSource):
     refs_json_results = yield defer.DeferredList(refs_json_requests)
     for ref_result in refs_json_results:
       if not ref_result[0]:
-        log.msg('GitilesPoller: failed to fetch ref with result %s' % ref_result[1])
+        log.msg('GitilesPoller: failed to fetch ref with result %s' % (
+                ref_result[1],))
       elif ref_result[1]:
         refs_json.update(ref_result[1])
 
@@ -238,7 +299,8 @@ class GitilesPoller(PollingChangeSource):
         # for now we don't delete any branches, just warn
         # TODO(tandrii) http://crbug.com/443561
         # deleted_branches.append(branch)
-        log.msg("GitilesPoller: branch %s to be deleted; result: %s" % (branch, result))
+        log.msg("GitilesPoller: branch %s to be deleted; result: %s" % (
+                branch, result))
     for branch in deleted_branches:
       log.msg('GitilesPoller: Deleting branch head for %s' % (branch,))
       del self.branch_heads[branch]
@@ -379,6 +441,7 @@ class GitilesPoller(PollingChangeSource):
         log.err(msg)
     if not all_commits:
       log.msg('GitilesPoller: No new commits.')
+    self._save_cursor_file()
 
   def describe(self):
     status = self.__class__.__name__
@@ -395,7 +458,7 @@ class GitilesStatus(base.HtmlResource):
     self.poller = poller
     super(GitilesStatus, self).__init__()
 
-  def content(self, request, ctx):
+  def content(self, _request, _ctx):
     data = {
         'branch_heads': self.poller.branch_heads,
     }
