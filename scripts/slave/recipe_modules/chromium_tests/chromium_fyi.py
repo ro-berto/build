@@ -1191,7 +1191,6 @@ SPEC = {
       'bot_type': 'builder',
       'android_config': 'clang_asan_tot_release_builder',
       'testing': { 'platform': 'linux', },
-      'use_isolate': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
