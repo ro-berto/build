@@ -22,8 +22,6 @@ from master.factory import annotator_factory
 from master.gitiles_poller import GitilesPoller
 from master.skia import status_json
 from master.skia import skia_notifier
-from master.status_push import TryServerHttpStatusPush
-from master.try_job_rietveld import TryJobRietveld
 
 import collections
 import config
@@ -43,12 +41,9 @@ INFRA_PERCOMMIT_SCHEDULER_NAME = 'infra_percommit'
 MASTER_BRANCH = 'master'
 POLLING_BRANCH = re.compile('refs/heads/(?!infra/config).+')
 SLAVE_WORKDIR = 'workdir'
-TRY_SCHEDULER_NAME = 'try_job_rietveld_skia'
-TRY_SCHEDULER_PROJECT = 'skia'
 
 SCHEDULERS = [
   MASTER_ONLY_SCHEDULER_NAME,
-  TRY_SCHEDULER_NAME,
   PERIODIC_15MINS_SCHEDULER_NAME,
   NIGHTLY_SCHEDULER_NAME,
   WEEKLY_SCHEDULER_NAME,
@@ -161,8 +156,6 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       if is_trybot:
         parent_builder = builder_name_schema.TrybotName(parent_builder)
       triggered_builders[parent_builder].append(builder_name)
-    elif is_trybot:
-      builders_by_scheduler[TRY_SCHEDULER_NAME].append(builder_name)
     else:
       scheduler = builder.get('scheduler', BUILDBUCKET_SCHEDULER_NAME)
       # Setting the scheduler to BUILDBUCKET_SCHEDULER_NAME indicates that
@@ -185,7 +178,7 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
   # Verify that all parent builders exist.
   all_nontriggered_builders = set(
       builders_by_scheduler[BUILDBUCKET_SCHEDULER_NAME]
-  ).union(set(builders_by_scheduler[TRY_SCHEDULER_NAME]))
+  )
   trigger_parents = set(triggered_builders.keys())
   nonexistent_parents = trigger_parents - all_nontriggered_builders
   if nonexistent_parents:
@@ -249,17 +242,6 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
 
   # Don't add triggerable schedulers for triggered_builders; triggers are now
   # handled on the slave-side through buildbucket.
-
-  pools = BuildersPools(TRY_SCHEDULER_NAME)
-  pools[TRY_SCHEDULER_NAME].extend(builders_by_scheduler[TRY_SCHEDULER_NAME])
-  if ActiveMaster.code_review_site:
-    c['schedulers'].append(TryJobRietveld(
-          name=TRY_SCHEDULER_NAME,
-          code_review_sites={TRY_SCHEDULER_PROJECT:
-                                 ActiveMaster.code_review_site},
-          pools=pools,
-          project=TRY_SCHEDULER_PROJECT,
-          filter_master=True))
 
   # Create the BuildFactorys.
   annotator = annotator_factory.AnnotatorFactory(ActiveMaster)
@@ -355,11 +337,6 @@ def SetupMaster(ActiveMaster):
         mode='all',
         relayhost=config.Master.smtp,
         lookup=master_utils.UsersAreEmails()))
-
-    # Rietveld status push.
-    if ActiveMaster.code_review_site:
-      c['status'].append(
-          TryServerHttpStatusPush(serverUrl=ActiveMaster.code_review_site))
 
   c['mergeRequests'] = CanMergeBuildRequests
   return c
