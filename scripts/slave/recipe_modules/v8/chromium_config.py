@@ -164,13 +164,6 @@ def simulate_ppc(c):
     c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'ppc'
 
 
-@CONFIG_CTX(group='compiler', includes=['v8', 'make', 'goma'])
-def v8_goma(c):
-  # This configuration connects the compiler group constraint with chromium's
-  # goma config.
-  pass
-
-
 @CONFIG_CTX(includes=['v8'])
 def vector_stores(c):
   c.gyp_env.GYP_DEFINES['v8_vector_stores'] = 1

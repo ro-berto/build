@@ -1191,7 +1191,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux gcc 4.8': {
-        'chromium_apply_config': ['no_clang'],
+        'chromium_apply_config': ['make', 'no_clang'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1503,7 +1503,7 @@ BUILDERS = {
   'tryserver.v8': {
     'builders': {
       'v8_linux_rel': {
-        'chromium_apply_config': ['v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1522,7 +1522,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_avx2_dbg': {
-        'chromium_apply_config': ['v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1537,7 +1537,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nodcheck_rel': {
-        'chromium_apply_config': ['no_dcheck', 'v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'no_dcheck'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1548,7 +1548,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_dbg': {
-        'chromium_apply_config': ['v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1559,7 +1559,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_greedy_allocator_dbg': {
-        'chromium_apply_config': ['v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_apply_config': ['greedy_allocator', 'turbo_variant'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -1571,7 +1571,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_rel': {
-        'chromium_apply_config': ['no_snapshot', 'v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1581,7 +1581,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_dbg': {
-        'chromium_apply_config': ['no_snapshot', 'v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1600,7 +1600,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_rel': {
-        'chromium_apply_config': ['v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1618,7 +1618,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_avx2_rel': {
-        'chromium_apply_config': ['v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1633,7 +1633,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_avx2_dbg': {
-        'chromium_apply_config': ['v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1648,7 +1648,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_greedy_allocator_dbg': {
-        'chromium_apply_config': ['v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_apply_config': ['greedy_allocator', 'turbo_variant'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -1873,7 +1873,7 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_linux_arm_rel': {
-        'chromium_apply_config': ['simulate_arm', 'v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1883,7 +1883,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm_dbg': {
-        'chromium_apply_config': ['simulate_arm', 'v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1893,7 +1893,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_rel': {
-        'chromium_apply_config': ['simulate_arm', 'v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1903,7 +1903,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_dbg': {
-        'chromium_apply_config': ['simulate_arm', 'v8_goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1930,7 +1930,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_mipsel_compile_rel': {
-        'chromium_apply_config': ['simulate_mipsel', 'v8_goma', 'no_dcheck'],
+        'chromium_apply_config': [
+          'clang', 'v8_ninja', 'goma', 'simulate_mipsel', 'no_dcheck'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1939,7 +1940,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_mips64el_compile_rel': {
-        'chromium_apply_config': ['simulate_mipsel', 'v8_goma', 'no_dcheck'],
+        'chromium_apply_config': [
+          'clang', 'v8_ninja', 'goma', 'simulate_mipsel', 'no_dcheck'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1954,6 +1956,7 @@ BUILDERS = {
     'builders': {
       'linux-v8-dr': {
         'gclient_apply_config': ['dynamorio'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1977,7 +1980,7 @@ def AddBranchBuilder(build_config, arch, bits, presubmit=False,
   if presubmit:
     tests = ['presubmit'] + tests
   return {
-    'chromium_apply_config': ['v8_goma'],
+    'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
     'v8_config_kwargs': {
       'BUILD_CONFIG': build_config,
       'TARGET_ARCH': arch,
@@ -2038,7 +2041,8 @@ BUILDERS['client.dart.fyi'] = {'builders': {
 
 dart_linux_release = (
   BUILDERS['client.dart.fyi']['builders']['v8-linux-release'])
-dart_linux_release['chromium_apply_config'].extend(['v8_goma'])
+dart_linux_release['chromium_apply_config'].extend(
+    ['clang', 'v8_ninja', 'goma'])
 
 dart_mac_release = BUILDERS['client.dart.fyi']['builders']['v8-mac-release']
 dart_mac_release['chromium_apply_config'].extend(['v8_ninja', 'clang', 'goma'])
