@@ -7,7 +7,7 @@
       "--master",
       "tryserver.webrtc",
       "--builder",
-      "win_x64_gn",
+      "win_x64_gn_dbg",
       "--slave",
       "slavename",
       "--spec",
