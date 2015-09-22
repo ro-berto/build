@@ -30,8 +30,7 @@
         "os": "linux",
         "version": "trusty",
       },
-      # The slave name is going to be revealed in crbug.com/532110.
-      "slaves": ["unknown"],
+      "slaves": ["slave903-c4"],
     },
   },
 }
