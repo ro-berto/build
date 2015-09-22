@@ -90,6 +90,18 @@
       "slave_pools": ["mips_builder"],
       "category": "2Builders",
     },
+    "Android x64 Builder (dbg)": {
+      "recipe": "android/builder",
+      "scheduler": "android_commits",
+      "slave_pools": ["x64_compile"],
+      "category": "2Builders",
+    },
+    "Android x86 Builder (dbg)": {
+      "recipe": "android/builder",
+      "scheduler": "android_commits",
+      "slave_pools": ["x86_compile"],
+      "category": "2Builders",
+    },
   },
 
   "schedulers": {
@@ -171,6 +183,22 @@
         "bits": "64",
       },
       "slaves": ["build29-a1"],
+    },
+    "x64_compile": {
+      "slave_data": {
+        "os": "linux",
+        "version": "precise",
+        "bits": 64,
+      },
+      "slaves": ["slave35-c1"],
+    },
+    "x86_compile": {
+      "slave_data": {
+        "os": "linux",
+        "version": "precise",
+        "bits": 64,
+      },
+      "slaves": ["slave36-c1"],
     },
   }
 }
