@@ -59,7 +59,8 @@ BUILDERS = freeze({
 
 def RunSteps(api):
   mastername = api.m.properties['mastername']
-  buildername, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
+  buildername, bot_config = api.chromium.configure_bot(BUILDERS,
+                                                       ['gn_for_uploads', 'mb'])
 
   api.bot_update.ensure_checkout(
       force=True, patch_root=bot_config.get('root_override'))

@@ -200,6 +200,17 @@ def mb(c):
   c.project_generator.tool = 'mb'
 
 @config_ctx()
+def gn_for_uploads(c):
+  # This config is used to do the official builds of GN itself (which
+  # are uploaded into Google Cloud Storage). While most of the configuration
+  # of the build is done repo-side via MB, we need to set a few GYP_DEFINES
+  # so that `gclient runhooks` will do the right thing.
+
+  if c.TARGET_PLATFORM == 'linux':
+    c.gyp_env.GYP_DEFINES['branding'] = 'Chrome'
+    c.gyp_env.GYP_DEFINES['buildtype'] = 'Official'
+
+@config_ctx()
 def win_analyze(c):
   c.gyp_env.GYP_DEFINES['win_analyze'] = '1'
   c.gyp_env.GYP_DEFINES['fastbuild'] = '2'
