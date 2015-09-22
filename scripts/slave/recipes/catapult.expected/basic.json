@@ -82,7 +82,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/bin/run_py_tests"
+      "[SLAVE_BUILD]/catapult/catapult_build/bin/run_py_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Build Python Tests"

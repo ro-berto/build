@@ -49,7 +49,7 @@ def RunSteps(api):
   }
 
   api.python('Build Python Tests',
-             api.path['checkout'].join('bin', 'run_py_tests'))
+             api.path['checkout'].join('catapult_build', 'bin', 'run_py_tests'))
   api.python('Util Tests',
              api.path['checkout'].join('base', 'util', 'run_tests.py'))
   api.python('Dashboard Tests',
