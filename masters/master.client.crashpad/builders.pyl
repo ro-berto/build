@@ -26,7 +26,7 @@
         "config": "Release",
       },
     },
-    "crashpad_win_dbg": {
+    "crashpad_win_x64_dbg": {
       "recipe": "crashpad/continuous",
       "scheduler": "crashpad_commits",
       "slave_pools": ["win7"],
@@ -36,7 +36,7 @@
         "config": "Debug",
       },
     },
-    "crashpad_win_rel": {
+    "crashpad_win_x64_rel": {
       "recipe": "crashpad/continuous",
       "scheduler": "crashpad_commits",
       "slave_pools": ["win7"],
