@@ -48,7 +48,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/example_gtest_suite.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save example_gtest_suite data"
+    "name": "[trigger] save example_gtest_suite"
   },
   {
     "cmd": [
@@ -112,7 +112,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/example_instrumentation_suite.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save example_instrumentation_suite data"
+    "name": "[trigger] save example_instrumentation_suite"
   },
   {
     "cmd": [
@@ -172,7 +172,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/example_uirobot_suite.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save example_uirobot_suite data"
+    "name": "[trigger] save example_uirobot_suite"
   },
   {
     "cmd": [
@@ -183,7 +183,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load example_gtest_suite data",
+    "name": "[collect] load example_gtest_suite",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -290,7 +290,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load example_instrumentation_suite data",
+    "name": "[collect] load example_instrumentation_suite",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -399,7 +399,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load example_uirobot_suite data",
+    "name": "[collect] load example_uirobot_suite",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",

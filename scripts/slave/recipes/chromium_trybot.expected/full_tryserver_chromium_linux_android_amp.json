@@ -429,7 +429,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] android_webview_unittests",
+    "name": "[trigger] android_webview_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -453,7 +453,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/android_webview_unittests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save android_webview_unittests data"
+    "name": "[trigger] save android_webview_unittests (with patch)"
   },
   {
     "cmd": [
@@ -490,7 +490,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] base_unittests",
+    "name": "[trigger] base_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -514,7 +514,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save base_unittests data"
+    "name": "[trigger] save base_unittests (with patch)"
   },
   {
     "cmd": [
@@ -551,7 +551,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] components_unittests",
+    "name": "[trigger] components_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -575,7 +575,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/components_unittests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save components_unittests data"
+    "name": "[trigger] save components_unittests (with patch)"
   },
   {
     "cmd": [
@@ -610,7 +610,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] events_unittests",
+    "name": "[trigger] events_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -634,7 +634,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/events_unittests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save events_unittests data"
+    "name": "[trigger] save events_unittests (with patch)"
   },
   {
     "cmd": [
@@ -669,7 +669,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] gl_tests",
+    "name": "[trigger] gl_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -693,7 +693,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/gl_tests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save gl_tests data"
+    "name": "[trigger] save gl_tests (with patch)"
   },
   {
     "cmd": [
@@ -728,7 +728,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] ipc_tests",
+    "name": "[trigger] ipc_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -752,7 +752,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/ipc_tests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save ipc_tests data"
+    "name": "[trigger] save ipc_tests (with patch)"
   },
   {
     "cmd": [
@@ -789,7 +789,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] sql_unittests",
+    "name": "[trigger] sql_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -813,7 +813,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/sql_unittests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save sql_unittests data"
+    "name": "[trigger] save sql_unittests (with patch)"
   },
   {
     "cmd": [
@@ -850,7 +850,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] sync_unit_tests",
+    "name": "[trigger] sync_unit_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -874,7 +874,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/sync_unit_tests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save sync_unit_tests data"
+    "name": "[trigger] save sync_unit_tests (with patch)"
   },
   {
     "cmd": [
@@ -909,7 +909,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] ui_android_unittests",
+    "name": "[trigger] ui_android_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -933,7 +933,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/ui_android_unittests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save ui_android_unittests data"
+    "name": "[trigger] save ui_android_unittests (with patch)"
   },
   {
     "cmd": [
@@ -968,7 +968,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] ui_touch_selection_unittests",
+    "name": "[trigger] ui_touch_selection_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -992,7 +992,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/ui_touch_selection_unittests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save ui_touch_selection_unittests data"
+    "name": "[trigger] save ui_touch_selection_unittests (with patch)"
   },
   {
     "cmd": [
@@ -1448,7 +1448,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load android_webview_unittests data",
+    "name": "[collect] load android_webview_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1499,7 +1499,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] android_webview_unittests",
+    "name": "[collect] android_webview_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
@@ -1513,7 +1513,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load base_unittests data",
+    "name": "[collect] load base_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1566,7 +1566,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] base_unittests",
+    "name": "[collect] base_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
@@ -1580,7 +1580,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load components_unittests data",
+    "name": "[collect] load components_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1633,7 +1633,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] components_unittests",
+    "name": "[collect] components_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
@@ -1647,7 +1647,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load events_unittests data",
+    "name": "[collect] load events_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1698,7 +1698,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] events_unittests",
+    "name": "[collect] events_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
@@ -1712,7 +1712,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load gl_tests data",
+    "name": "[collect] load gl_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1763,7 +1763,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] gl_tests",
+    "name": "[collect] gl_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
@@ -1777,7 +1777,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load ipc_tests data",
+    "name": "[collect] load ipc_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1828,7 +1828,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] ipc_tests",
+    "name": "[collect] ipc_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
@@ -1842,7 +1842,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load sql_unittests data",
+    "name": "[collect] load sql_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1895,7 +1895,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] sql_unittests",
+    "name": "[collect] sql_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
@@ -1909,7 +1909,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load sync_unit_tests data",
+    "name": "[collect] load sync_unit_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1962,7 +1962,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] sync_unit_tests",
+    "name": "[collect] sync_unit_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
@@ -1976,7 +1976,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load ui_android_unittests data",
+    "name": "[collect] load ui_android_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -2027,7 +2027,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] ui_android_unittests",
+    "name": "[collect] ui_android_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
@@ -2041,7 +2041,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load ui_touch_selection_unittests data",
+    "name": "[collect] load ui_touch_selection_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -2092,7 +2092,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] ui_touch_selection_unittests",
+    "name": "[collect] ui_touch_selection_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]

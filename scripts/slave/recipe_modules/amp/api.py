@@ -40,7 +40,9 @@ class AmpApi(recipe_api.RecipeApi):
         'appurify_results', 'logcat.txt')
 
   def trigger_test_suite(
-      self, suite, test_type, test_type_args, amp_args, verbose=True):
+      self, suite, test_type, test_type_args, amp_args, step_name=None,
+      verbose=True):
+    step_name = step_name or suite
     args = ([test_type] + test_type_args + amp_args
         + ['--trigger', self.m.json.output()])
     if verbose:
@@ -58,7 +60,7 @@ class AmpApi(recipe_api.RecipeApi):
       },
     })
     step_result = self.m.chromium_android.test_runner(
-        '[trigger] %s' % suite,
+        '[trigger] %s' % step_name,
         args=args,
         step_test_data=step_test_data)
     trigger_data = step_result.json.output
@@ -73,18 +75,19 @@ class AmpApi(recipe_api.RecipeApi):
       step_result.presentation.step_text = 'unable to find device info'
 
     self.m.file.write(
-        '[trigger] save %s data' % suite,
+        '[trigger] save %s' % step_name,
         self._get_trigger_file_for_suite(suite),
         self.m.json.dumps(trigger_data))
 
   def collect_test_suite(
-      self, suite, test_type, test_type_args, amp_args, verbose=True,
-      json_results_file=None, **kwargs):
+      self, suite, test_type, test_type_args, amp_args, step_name=None,
+      verbose=True, json_results_file=None, **kwargs):
+    step_name = step_name or suite
     args = ([test_type] + test_type_args + amp_args
         + ['--collect', self._get_trigger_file_for_suite(suite)]
         + ['--results-path', self._get_results_zip_path(suite)])
     trigger_data = self.m.json.read(
-        '[collect] load %s data' % suite,
+        '[collect] load %s' % step_name,
         self._get_trigger_file_for_suite(suite),
         step_test_data=lambda: self.m.json.test_api.output({
           'env': {
@@ -113,7 +116,7 @@ class AmpApi(recipe_api.RecipeApi):
       args += ['--release']
     try:
       step_result = self.m.chromium_android.test_runner(
-          '[collect] %s' % suite,
+          '[collect] %s' % step_name,
           args=args, **kwargs)
     except self.m.step.StepFailure as f:
       step_result = f.result

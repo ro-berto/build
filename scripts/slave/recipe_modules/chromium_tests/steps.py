@@ -721,13 +721,14 @@ class AMPTest(Test):
     isolate_file_path = (api.path['checkout'].join(self._android_isolate_path)
                          if self._android_isolate_path else None)
     try:
-      self.trigger_test(api)
+      self.trigger_test(api, suffix)
       self._trigger_successful = True
     except api.step.StepFailure:
       self._trigger_successful = False
 
-  def trigger_test(self, api):
+  def trigger_test(self, api, suffix):
     api.amp.trigger_test_suite(
+        step_name=self._step_name(suffix),
         suite=self.name,
         test_type=self.test_type(),
         test_type_args=self.test_type_args(api),
@@ -765,6 +766,7 @@ class AMPTest(Test):
 
     try:
       api.amp.collect_test_suite(
+          step_name=self._step_name(suffix),
           suite=self.name, test_type=self.test_type(),
           test_type_args=self.test_type_args(api),
           amp_args=self.amp_arguments(api),

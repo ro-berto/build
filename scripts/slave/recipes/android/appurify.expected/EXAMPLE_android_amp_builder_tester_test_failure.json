@@ -202,7 +202,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/android_webview_unittests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save android_webview_unittests data"
+    "name": "[trigger] save android_webview_unittests"
   },
   {
     "cmd": [
@@ -265,7 +265,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save base_unittests data"
+    "name": "[trigger] save base_unittests"
   },
   {
     "cmd": [
@@ -326,7 +326,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/cc_unittests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save cc_unittests data"
+    "name": "[trigger] save cc_unittests"
   },
   {
     "cmd": [
@@ -440,7 +440,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/events_unittests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save events_unittests data"
+    "name": "[trigger] save events_unittests"
   },
   {
     "cmd": [
@@ -501,7 +501,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/gl_tests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save gl_tests data"
+    "name": "[trigger] save gl_tests"
   },
   {
     "cmd": [
@@ -562,7 +562,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/ipc_tests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save ipc_tests data"
+    "name": "[trigger] save ipc_tests"
   },
   {
     "cmd": [
@@ -623,7 +623,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/skia_unittests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save skia_unittests data"
+    "name": "[trigger] save skia_unittests"
   },
   {
     "cmd": [
@@ -686,7 +686,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/sql_unittests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save sql_unittests data"
+    "name": "[trigger] save sql_unittests"
   },
   {
     "cmd": [
@@ -749,7 +749,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/sync_unit_tests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save sync_unit_tests data"
+    "name": "[trigger] save sync_unit_tests"
   },
   {
     "cmd": [
@@ -810,7 +810,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/ui_android_unittests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save ui_android_unittests data"
+    "name": "[trigger] save ui_android_unittests"
   },
   {
     "cmd": [
@@ -871,7 +871,7 @@
       "[TMP_BASE]/amp_trigger_tmp_1/ui_touch_selection_unittests.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save ui_touch_selection_unittests data"
+    "name": "[trigger] save ui_touch_selection_unittests"
   },
   {
     "cmd": [
@@ -931,7 +931,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load android_webview_unittests data",
+    "name": "[collect] load android_webview_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1047,7 +1047,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load base_unittests data",
+    "name": "[collect] load base_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1114,7 +1114,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load cc_unittests data",
+    "name": "[collect] load cc_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1181,7 +1181,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load events_unittests data",
+    "name": "[collect] load events_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1246,7 +1246,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load gl_tests data",
+    "name": "[collect] load gl_tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1311,7 +1311,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load ipc_tests data",
+    "name": "[collect] load ipc_tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1376,7 +1376,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load skia_unittests data",
+    "name": "[collect] load skia_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1441,7 +1441,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load sql_unittests data",
+    "name": "[collect] load sql_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1506,7 +1506,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load sync_unit_tests data",
+    "name": "[collect] load sync_unit_tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1571,7 +1571,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load ui_android_unittests data",
+    "name": "[collect] load ui_android_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -1636,7 +1636,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load ui_touch_selection_unittests data",
+    "name": "[collect] load ui_touch_selection_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",

@@ -993,8 +993,30 @@ def GenTests(api):
           mastername='tryserver.chromium.linux') +
     api.platform.name('linux') +
     suppress_analyze() +
-    api.override_step_data('[collect] load android_webview_unittests data',
+    api.override_step_data('[collect] base_unittests (with patch)',
+                           canned_test(passing=False), retcode=1)
+  )
+
+  yield (
+    api.test('amp_test_local_fallback') +
+    props(buildername='android_amp',
+          mastername='tryserver.chromium.linux') +
+    api.platform.name('linux') +
+    suppress_analyze() +
+    api.override_step_data('[trigger] base_unittests (with patch)',
                            retcode=1)
+  )
+
+  yield (
+    api.test('amp_test_local_fallback_failure') +
+    props(buildername='android_amp',
+          mastername='tryserver.chromium.linux') +
+    api.platform.name('linux') +
+    suppress_analyze() +
+    api.override_step_data('[trigger] base_unittests (with patch)',
+                           retcode=1) +
+    api.override_step_data('base_unittests (with patch)',
+                           canned_test(passing=False), retcode=1)
   )
 
   yield (

@@ -186,7 +186,7 @@ def GenTests(api):
   yield (
       api.test('bad_device_data_for_collect') +
       api.properties.generic(buildername='split_example') +
-      api.override_step_data('[collect] load example_gtest_suite data',
+      api.override_step_data('[collect] load example_gtest_suite',
                              api.json.output({})))
 
   yield (
