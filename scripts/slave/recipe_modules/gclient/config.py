@@ -131,7 +131,6 @@ def chromium_bare(c):
   m['src/native_client'] = 'got_nacl_revision'
   m['src/tools/swarming_client'] = 'got_swarming_client_revision'
   m['src/v8'] = 'got_v8_revision'
-  m['src/third_party/WebKit'] = 'got_webkit_revision'
   m['src/third_party/webrtc'] = 'got_webrtc_revision'
 
   p = c.parent_got_revision_mapping
@@ -139,7 +138,6 @@ def chromium_bare(c):
   p['parent_got_nacl_revision'] = 'nacl_revision'
   p['parent_got_swarming_client_revision'] = 'swarming_revision'
   p['parent_got_v8_revision'] = 'v8_revision'
-  p['parent_got_webkit_revision'] = 'webkit_revision'
   p['parent_got_webrtc_revision'] = 'webrtc_revision'
 
   # Patch project revisions are applied whenever patch_project is set. E.g. if

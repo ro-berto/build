@@ -149,7 +149,7 @@ def _RunStepsInternal(api):
       "import sys; sys.exit(1)")
     raise exception
 
-  def deapply_patch_fn(_failing_steps):
+  def deapply_patch_fn(_failing_steps):  # pragma: no cover
     properties = bot_update_step.json.output['properties']
     # Use the got_cr_revision property if available. In component-driven
     # builds it will hold the chromium revision (while got_revision will

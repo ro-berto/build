@@ -25,8 +25,6 @@ def _RunStepsInternal(api):
   force_checkout = api.properties.get('force_checkout', False)
 
   api.gclient.set_config(repo_name)
-  if api.properties.get('patch_project') == 'blink':
-    api.gclient.apply_config('blink', optional=True)
 
   bot_update_step = api.bot_update.ensure_checkout(
       force=force_checkout, patch_project_roots={'v8': []},
@@ -96,7 +94,7 @@ def RunSteps(api):
 def GenTests(api):
   # TODO(machenbach): This uses the same tryserver for all repos, which doesn't
   # reflect reality (cosmetical problem only).
-  for repo_name in ['blink', 'chromium', 'v8', 'nacl', 'naclports', 'gyp',
+  for repo_name in ['chromium', 'v8', 'nacl', 'naclports', 'gyp',
                     'build', 'build_internal', 'build_internal_scripts_slave',
                     'depot_tools', 'skia', 'chrome_golo', 'webrtc', 'catapult']:
     yield (
