@@ -121,7 +121,7 @@
       "--build-number=776",
       "--run-python-script",
       "--revision=160000",
-      "--webkit-revision=10000",
+      "--webkit-revision=160000",
       "--master-class-name=ChromiumGPUTesting",
       "[SLAVE_BUILD]/swarming.client/run_isolated.py",
       "--isolated",

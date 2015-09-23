@@ -145,22 +145,10 @@ class GpuApi(recipe_api.RecipeApi):
     # the command line as a workaround.
     return self._bot_update.presentation.properties['got_revision']
 
+  # TODO(phajdan.jr): Remove and update callers.
   def get_webkit_revision(self):
     """Returns the webkit revision of the current build."""
-    # In all cases on the waterfall, the tester is triggered from a
-    # builder which sends down parent_got_webkit_revision. The only
-    # situation where this doesn't happen is when running the
-    # build_and_test recipe locally for testing purposes.
-    wk_rev = self.m.properties.get('parent_got_webkit_revision')
-    if wk_rev:
-      return wk_rev
-    # Fall back to querying the workspace as a last resort. This should
-    # only be necessary on combined builder/testers, which isn't a
-    # configuration which actually exists on any waterfall any more. If the
-    # build_and_test recipe is being run locally and the checkout is being
-    # skipped, then the 'parent_got_webkit_revision' property can be
-    # specified on the command line as a workaround.
-    return self._bot_update.presentation.properties['got_webkit_revision']
+    return self.get_build_revision()
 
   @property
   def _master_class_name_for_testing(self):
