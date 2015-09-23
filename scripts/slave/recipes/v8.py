@@ -295,3 +295,19 @@ def GenTests(api):
         'Bisect.Fetch changes', api.v8.example_one_buildbot_change()) +
     api.time.step(120)
   )
+
+  buildername = 'V8 GC Stress - 3'
+  bot_config = api.v8.BUILDERS[mastername]['builders'][buildername]
+  yield (
+    api.test('full_%s_%s_bisect_no_shards' % (
+        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
+    api.properties.generic(mastername=mastername,
+                           buildername=buildername,
+                           branch='master',
+                           parent_buildername=bot_config.get(
+                               'parent_buildername')) +
+    api.platform(bot_config['testing']['platform'],
+                 v8_config_kwargs.get('TARGET_BITS', 64)) +
+    api.override_step_data('Mjsunit', api.v8.bisect_failures_example()) +
+    api.time.step(120)
+  )

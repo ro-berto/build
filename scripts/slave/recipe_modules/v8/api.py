@@ -498,6 +498,9 @@ class V8Api(recipe_api.RecipeApi):
     # Don't retry failures during bisection.
     self.rerun_failures_count = 0
 
+    # Suppress using shards to be able to rerun single tests.
+    self.c.testing.may_shard = False
+
     # Only rebuild the target of the test to retry. Works only with ninja.
     targets = None
     if 'ninja' in self.m.chromium.c.gyp_env.GYP_GENERATORS:
@@ -810,7 +813,7 @@ class V8Api(recipe_api.RecipeApi):
         '%s -reset_every_nth_pending 0 --' % drrun,
       ]
 
-    if self.c.testing.SHARD_COUNT > 1:
+    if self.c.testing.may_shard and self.c.testing.SHARD_COUNT > 1:
       full_args += [
         '--shard-count=%d' % self.c.testing.SHARD_COUNT,
         '--shard-run=%d' % self.c.testing.SHARD_RUN,

@@ -28,6 +28,7 @@ def BaseConfig(**_kwargs):
     testing = ConfigGroup(
       add_flaky_step = Single(bool, required=False),
       test_args = List(basestring),
+      may_shard = Single(bool, empty_val=True, required=False),
 
       SHARD_COUNT = Static(shard_count),
       SHARD_RUN = Static(shard_run),
