@@ -95,7 +95,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Android Nexus5 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-nexus5\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"slavename\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Android Nexus5 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"slavename\": \"slavename\", \"target_platform\": \"android\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -317,7 +317,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Android Nexus5 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-nexus5\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"slavename\", \"target_platform\": \"android\"}",
+      "{\"buildername\": \"Android Nexus5 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"slavename\": \"slavename\", \"target_platform\": \"android\"}",
       "run",
       "--output",
       "/path/to/tmp/json"
@@ -345,7 +345,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--num-shards",
-      "8",
+      "14",
       "--device",
       "07a00ca4"
     ],

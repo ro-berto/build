@@ -28,7 +28,8 @@ BUILDERS = freeze({
       'bucket': 'chrome-perf',
       'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
                            api.properties['parent_revision']),
-      'num_device_shards': 8,
+      'num_device_shards': 7,
+      'num_host_shards': 2,
       'test_spec_file': 'chromium.perf.json',
       'max_battery_temp': 350,
     },
@@ -37,7 +38,8 @@ BUILDERS = freeze({
       'bucket': 'chrome-perf',
       'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
                            api.properties['parent_revision']),
-      'num_device_shards': 8,
+      'num_device_shards': 7,
+      'num_host_shards': 2,
       'test_spec_file': 'chromium.perf.json',
       'max_battery_temp': 350,
     },
@@ -65,7 +67,8 @@ BUILDERS = freeze({
       'bucket': 'chrome-perf',
       'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
                            api.properties['parent_revision']),
-      'num_device_shards': 8,
+      'num_device_shards': 7,
+      'num_host_shards': 2,
       'test_spec_file': 'chromium.perf.json',
       'max_battery_temp': 350,
     }
@@ -172,7 +175,8 @@ def RunSteps(api):
     dynamic_perf_tests = api.chromium_tests.steps.DynamicPerfTests(
         builder['perf_id'], 'android', None,
         max_battery_temp=builder.get('max_battery_temp'),
-        num_device_shards=builder['num_device_shards'])
+        num_device_shards=builder['num_device_shards'],
+        num_host_shards=builder.get('num_host_shards', 1))
     dynamic_perf_tests.run(api, None)
 
     if failures:

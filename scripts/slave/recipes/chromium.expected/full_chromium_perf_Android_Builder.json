@@ -134,11 +134,11 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Android Nexus5 Perf"
+        "builder_name": "Android Nexus5 Perf (1)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus5 Perf@@@"
+      "@@@STEP_TEXT@Android Nexus5 Perf (1)@@@"
     ]
   },
   {
@@ -147,17 +147,43 @@
     "name": "trigger (2)",
     "trigger_specs": [
       {
-        "builder_name": "Android Nexus6 Perf"
+        "builder_name": "Android Nexus5 Perf (2)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus6 Perf@@@"
+      "@@@STEP_TEXT@Android Nexus5 Perf (2)@@@"
     ]
   },
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
     "name": "trigger (3)",
+    "trigger_specs": [
+      {
+        "builder_name": "Android Nexus6 Perf (1)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Nexus6 Perf (1)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (4)",
+    "trigger_specs": [
+      {
+        "builder_name": "Android Nexus6 Perf (2)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Nexus6 Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (5)",
     "trigger_specs": [
       {
         "builder_name": "Android Nexus7v2 Perf"
@@ -170,14 +196,27 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (4)",
+    "name": "trigger (6)",
     "trigger_specs": [
       {
-        "builder_name": "Android One Perf"
+        "builder_name": "Android One Perf (1)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android One Perf@@@"
+      "@@@STEP_TEXT@Android One Perf (1)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (7)",
+    "trigger_specs": [
+      {
+        "builder_name": "Android One Perf (2)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android One Perf (2)@@@"
     ]
   }
 ]
