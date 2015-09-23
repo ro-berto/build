@@ -743,9 +743,12 @@ class AMPTest(Test):
     # If we were unable to successfully trigger the AMP job, run locally;
     # otherwise return no results as results will be collected in post_run.
     if not self._trigger_successful and self._fallback_to_local:
-      step_result = self.run_test_locally(api, suffix)
-      valid, failures = self.validate_task_results(api, step_result)
-      self._step_results[suffix] = {'valid': valid, 'failures': failures}
+      try:
+        self.run_test_locally(api, suffix)
+      finally:
+        step_result = api.step.active_result
+        valid, failures = self.validate_task_results(api, step_result)
+        self._step_results[suffix] = {'valid': valid, 'failures': failures}
     else:
       self._step_results[suffix] = {'valid': False, 'failures': []}
 
