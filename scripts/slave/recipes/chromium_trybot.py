@@ -684,8 +684,10 @@ def _RunStepsInternal(api):
   if enable_gpu_tests:
     api.chromium.apply_config('archive_gpu_tests')
 
-  if api.properties.get('patch_project') == 'blink':
-    api.gclient.apply_config('blink')
+  if api.properties.get('patch_project') == 'blink':  # pragma: no cover
+    raise Exception('CLs which use blink project are not supported. '
+                    'Please re-create the CL using fresh checkout after '
+                    'the blink merge.')
 
   bot_update_step, master_dict, test_spec = \
       api.chromium_tests.prepare_checkout(
@@ -1158,7 +1160,7 @@ def GenTests(api):
   yield (
     api.test('dont_analyze_for_non_src_project') +
     props(buildername='linux_chromium_rel_ng') +
-    props(patch_project='blink') +
+    props(patch_project='v8') +
     api.platform.name('linux') +
     api.override_step_data('read test spec', api.json.output({}))
   )
@@ -1465,6 +1467,21 @@ def GenTests(api):
   )
 
   yield (
+    api.test('analyze_webkit') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.win',
+      buildername='win_chromium_rel_ng',
+      swarm_hashes={}
+    ) +
+    api.platform.name('win') +
+    api.override_step_data(
+        'git diff to analyze patch',
+        api.raw_io.stream_output(
+            'third_party/WebKit/Source/core/dom/Element.cpp\n')
+    )
+  )
+
+  yield (
     api.test('swarming_paths') +
     api.properties.tryserver(
       mastername='tryserver.chromium.linux',
@@ -1472,17 +1489,6 @@ def GenTests(api):
       path_config='swarming',
     ) +
     api.platform.name('linux')
-  )
-
-  yield (
-    api.test('webkit_tests_fail_compile_without_patch_fail') +
-    props(buildername='linux_chromium_rel_ng') +
-    props(patch_project='blink') +
-    api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({})) +
-    api.override_step_data('webkit_tests (with patch)',
-                           api.test_utils.canned_test_output(False)) +
-    api.override_step_data('compile (without patch)', retcode=1)
   )
 
   # This tests that if the first fails, but the second pass succeeds
