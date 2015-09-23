@@ -105,9 +105,6 @@ class StagerBase(object):
 
     self._chromium_revision = chromium_utils.GetBuildSortKey(options)[1]
 
-    self._webkit_revision = chromium_utils.GetBuildSortKey(options,
-                                                           project='webkit')[1]
-
     self._v8_revision = chromium_utils.GetBuildSortKey(options, project='v8')[1]
     self._v8_revision_git = chromium_utils.GetGitCommit(options, project='v8')
 
@@ -120,7 +117,6 @@ class StagerBase(object):
 
     # Will be initialized in GetLastBuildRevision.
     self.last_chromium_revision = None
-    self.last_webkit_revision = None
     self.last_v8_revision = None
 
     self._files_file = os.path.join(self._tool_dir,
@@ -252,7 +248,6 @@ class StagerBase(object):
     """Save chromium/webkit/v8's revision in a specified file. we will write a
     human readable format to save the revision information. The contents will be
     {"chromium_revision":chromium_revision,
-     "webkit_revision":webkit_revision,
      "v8_revision":v8_revision}
     It is also in json format.
     """
@@ -262,7 +257,6 @@ class StagerBase(object):
         self.revisions_path,
         simplejson.dumps({
             'chromium_revision': self._chromium_revision,
-            'webkit_revision': self._webkit_revision,
             'v8_revision': self._v8_revision,
             'v8_revision_git': self._v8_revision_git,
         })
@@ -290,11 +284,9 @@ class StagerBase(object):
         revisions_dict = simplejson.loads(line)
         if revisions_dict:
           self.last_chromium_revision = revisions_dict['chromium_revision']
-          self.last_webkit_revision = revisions_dict['webkit_revision']
           self.last_v8_revision = revisions_dict['v8_revision']
       except (IOError, KeyError, ValueError), e:
         self.last_chromium_revision = None
-        self.last_webkit_revision = None
         self.last_v8_revision = None
         print e
       fp.close()
