@@ -237,6 +237,9 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.m.chromium_android.common_tests_setup_steps()
         for test, isolate_file_path in sorted(
             self.ANDROID_APK_TESTS.iteritems()):
+          # Use absolute path here to avoid the Chromium hardcoded fallback in
+          # src/build/android/pylib/base/base_setup.py.
+          isolate_file_path = self.m.path['checkout'].join(isolate_file_path)
           self.m.chromium_android.run_test_suite(
               test, isolate_file_path=isolate_file_path)
         for test, isolate_file_path in sorted(
