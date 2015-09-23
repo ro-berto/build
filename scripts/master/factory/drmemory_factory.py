@@ -835,7 +835,7 @@ def CreateLinuxChromeFactory():
       # crbug.com/308273: this test is flaky
       cmd += ['--gtest_filter=-TraceEventTestFixture.TraceContinuousSampling']
     elif test == 'content_shell':
-      cmd += ['-dump-render-tree',
+      cmd += ['--run-layout-test',
               'file:///home/chrome-bot/bb.html']
     # We used to md5 the output, but that's too brittle.  Just dump it to stdout
     # so humans can verify it.  The return code will tell us if we crash.
