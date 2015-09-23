@@ -7,6 +7,7 @@ import json
 DEPS = [
     'auto_bisect',
     'chromium_tests',
+    'json',
     'path',
     'properties',
     'raw_io',
@@ -37,6 +38,9 @@ def RunSteps(api):
   bisector.good_rev.start_job()
   bisector.bad_rev.start_job()
   bisector.wait_for_all([bisector.good_rev, bisector.bad_rev])
+
+  if bisector.good_rev.failed or bisector.bad_rev.failed:
+    return
 
   assert bisector.check_improvement_direction()
   assert bisector.check_initial_confidence()
@@ -70,23 +74,50 @@ def RunSteps(api):
     api.auto_bisect.run_bisect_script('dummy_extra_src', '/dummy/path/')
 
 def GenTests(api):
-  wait_for_any_output = (
-      'Build finished: gs://chrome-perf/bisect-results/'
-      'a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results')
+  dummy_gs_location = ('gs://chrome-perf/bisect-results/'
+                       'a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results')
+  wait_for_any_output = {
+      'completed': [
+          {
+              'type': 'gs',
+              'location': dummy_gs_location
+          }
+      ]
+  }
+
   basic_data = _get_basic_test_data()
   basic_test = _make_test(api, basic_data, 'basic')
   basic_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
-      stdout=api.raw_io.output(wait_for_any_output))
+      stdout=api.json.output(wait_for_any_output))
 
   yield basic_test
+
+  failed_build_test_data = _get_ref_range_only_test_data()
+  failed_build_test = _make_test(
+      api, failed_build_test_data, 'failed_build_test')
+  failed_build_test_step_data = {
+      'failed':
+          [{
+              'builder': 'linux_perf_tester',
+              'job_name': 'a6298e4afedbf2cd461755ea6f45b0ad64222222-test',
+              'master': 'tryserver.chromium.perf',
+              'type': 'buildbot',
+              'job_url': 'http://tempuri.org/log',
+          }],
+  }
+  failed_build_test += api.step_data(
+      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      stdout=api.json.output(failed_build_test_step_data), retcode=1)
+
+  yield failed_build_test
 
   basic_data = _get_basic_test_data()
   windows_test = _make_test(
       api, basic_data, 'windows_bisector', platform='windows')
   windows_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
-      stdout=api.raw_io.output(wait_for_any_output))
+      stdout=api.json.output(wait_for_any_output))
 
   yield windows_test
 
@@ -95,7 +126,7 @@ def GenTests(api):
       api, basic_data, 'windows_x64_bisector', platform='win_x64')
   winx64_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
-      stdout=api.raw_io.output(wait_for_any_output))
+      stdout=api.json.output(wait_for_any_output))
 
   yield winx64_test
 
@@ -103,7 +134,7 @@ def GenTests(api):
   mac_test = _make_test(api, basic_data, 'mac_bisector', platform='mac')
   mac_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
-      stdout=api.raw_io.output(wait_for_any_output))
+      stdout=api.json.output(wait_for_any_output))
 
   yield mac_test
 
@@ -112,7 +143,7 @@ def GenTests(api):
       api, basic_data, 'android_bisector', platform='android')
   android_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
-      stdout=api.raw_io.output(wait_for_any_output))
+      stdout=api.json.output(wait_for_any_output))
 
   yield android_test
 
@@ -121,7 +152,7 @@ def GenTests(api):
       api, basic_data, 'android_arm64_bisector', platform='android_arm64')
   android_arm64_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
-      stdout=api.raw_io.output(wait_for_any_output))
+      stdout=api.json.output(wait_for_any_output))
 
   yield android_arm64_test
 
@@ -166,12 +197,35 @@ def GenTests(api):
   bisect_script_test = _make_test(api, basic_data, 'basic_bisect_script')
   bisect_script_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
-      stdout=api.raw_io.output(wait_for_any_output))
+      stdout=api.json.output(wait_for_any_output))
 
   bisect_script_test += api.properties(mastername='tryserver.chromium.perf',
                                        buildername='linux_perf_bisect',
                                        slavename='dummyslave')
   yield bisect_script_test
+
+
+def _get_ref_range_only_test_data():
+  return [
+      {
+          'refrange': True,
+          'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
+          'commit_pos': '314015',
+      },
+      {
+          'refrange': True,
+          'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
+          'commit_pos': '314017',
+          'test_results': {
+              'results':{
+                  'mean': 15,
+                  'std_err': 1,
+                  'values': [14, 15, 16],
+              },
+              'retcodes': [0],
+          }
+      },
+  ]
 
 
 def _get_basic_test_data():
@@ -366,7 +420,7 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
   """Generator that produces step patches for fake results."""
   commit_pos = revision_data['commit_pos']
   commit_hash = revision_data['hash']
-  test_results = revision_data['test_results']
+  test_results = revision_data.get('test_results')
 
   if 'refrange' in revision_data:
     parent_step = 'Resolving reference range.'
@@ -381,9 +435,9 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
   yield api.step_data(step_name, stdout=api.raw_io.output(commit_pos_str))
 
   if include_build_steps:
-    step_name = 'gsutil Get test results for build ' + commit_hash
-    yield api.step_data(step_name, stdout=api.raw_io.output(json.dumps(
-        test_results)))
+    if test_results:
+      step_name = 'gsutil Get test results for build ' + commit_hash
+      yield api.step_data(step_name, stdout=api.json.output(test_results))
 
     if revision_data.get('DEPS', False):
       step_name = 'git cat-file %s:DEPS' % commit_hash

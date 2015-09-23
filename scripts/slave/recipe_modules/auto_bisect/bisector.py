@@ -460,46 +460,77 @@ class Bisector(object):
     A revision is considered to make progress when a build file is uploaded to
     the appropriate bucket, or when buildbot test job is complete.
     """
-    gsutil_path = self.api.m.gsutil.get_gsutil_path()
-    name = 'Waiting for revision ' + revision_list[0].revision_string
-    if len(revision_list) > 1:
-      name += ' and %d other revision(s).' % (len(revision_list) - 1)
-    script = self.api.resource('wait_for_any.py')
-    args_list = [gsutil_path]
-    url_mapping = {r.get_next_url(): r for r in revision_list}
-    bb_locator_mapping = {r.get_buildbot_locator(): r for r in revision_list}
-    bb_locator_list = bb_locator_mapping.keys()
-    url_list = url_mapping.keys()
-    args_list += [url for url in url_list if url and url is not None]
-    args_list += [entry for entry in bb_locator_list
-                  if entry and entry is not None]
-    args_list.append(
-        '--timeout=%d' % (
-            self.get_build_timeout_minutes() * 60))
+    api = self.api
+
+    revision_mapping = {}
+    gs_jobs = []
+    buildbot_jobs = []
+
+    for revision in revision_list:
+      url = revision.get_next_url()
+      buildbot_job = revision.get_buildbot_locator()
+      if url:
+        gs_jobs.append({'type': 'gs', 'location': url})
+        revision_mapping[url] = revision
+      if buildbot_job:
+        buildbot_jobs.append(buildbot_job)
+        revision_mapping[buildbot_job['job_name']] = revision
+
+    jobs_config = {'jobs': buildbot_jobs + gs_jobs}
+
+    script = api.resource('wait_for_any.py')
+    args_list = [api.m.gsutil.get_gsutil_path()] if gs_jobs else []
+
     try:
-      step_result = self.api.m.python(
-          str(name),
+      step_name = 'Waiting for revision ' + revision_list[0].revision_string
+      if len(revision_list) > 1:
+        step_name += ' and %d other revision(s).' % (len(revision_list) - 1)
+      step_result = api.m.python(
+          str(step_name),
           script,
           args_list,
-          stdout=self.api.m.raw_io.output())
-    except self.api.m.step.StepFailure:  # pragma: no cover
-      # StepFailure is interpreted as a timeout.
-      for revision in revision_list:
-        revision.status = revision_state.RevisionState.FAILED
+          stdout=api.m.json.output(),
+          stdin=api.m.json.input(jobs_config),
+          ok_ret={0,1})
+    except api.m.step.StepFailure as sf:  # pragma: no cover
+      if sf.retcode == 2:  # 6 days and no builds finished.
+        for revision in revision_list:
+          revision.status = revision_state.RevisionState.FAILED
+        return None  # All builds are failed, no point in returning one.
+      else:  # Something else went wrong.
+        raise
+
+    step_results = api.m.step.active_result.stdout
+    build_failed = api.m.step.active_result.retcode
+
+    if build_failed:  # Explicitly making the step red
+      api.m.step.active_result.presentation.status = api.m.step.FAILURE
+
+    if not step_results:  # For most recipe_simulation_test cases.
       return None
-    step_output = step_result.stdout or 'Build finished: Unknown'
-    for line in step_output.splitlines():
-      if line.startswith('Build finished: '):
-        finished_url = line[len('Build finished: '):].strip()
-        return url_mapping.get(finished_url)
-      if line.startswith('Failed build url: '):  # pragma: no cover
-        url = line[len('Failed build url: '):].strip()
-        step_result.presentation.links['Failed build'] = url
-      if line.startswith('Build failed: '):  # pragma: no cover
-        failed_build_locator = line[len('Build failed: '):].strip()
-        failed_build = bb_locator_mapping.get(failed_build_locator)
-        failed_build.status = revision_state.RevisionState.FAILED
-        return failed_build
+
+    failed_jobs = step_results.get('failed', [])
+    completed_jobs = step_results.get('completed', [])
+    assert failed_jobs or completed_jobs
+    # Marked all failed builds as failed
+    for job in failed_jobs:
+      last_failed_revision = revision_mapping[str(job.get(
+          'location', job.get('job_name')))]
+      if 'job_url' in job:
+        url = job['job_url']
+        api.m.step.active_result.presentation.links['Failed build'] = url
+      last_failed_revision.status = revision_state.RevisionState.FAILED
+
+    # Return a completed job if availavle
+    for job in completed_jobs:
+      if 'job_url' in job:  # pragma: no cover
+        url = job['job_url']
+        api.m.step.active_result.presentation.links['Completed build'] = url
+      return revision_mapping[str(job.get(
+          'location', job.get('job_name')))]
+
+    # Or return any of the failed revisions
+    return last_failed_revision
 
   def wait_for_any(self, revision_list):
     """Waits for any of the revisions in the list to finish its job(s)."""
@@ -565,11 +596,6 @@ class Bisector(object):
     else:  # pragma: no cover
       # Reasonable fallback
       return 'linux_perf_tester'
-
-  def get_build_timeout_minutes(self):
-    if 'win' in self.get_perf_tester_name():
-      return 4 * 60
-    return 2 * 60
 
   def get_builder_bot_for_this_platform(self):
     # TODO(prasadv): We should refactor these codes to remove hard coded values.

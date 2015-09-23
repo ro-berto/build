@@ -114,37 +114,6 @@
   },
   {
     "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "dcdcdc0ff1122212323134879ddceeb1240b0988"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Expanding revision range.resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "log",
-      "--format=hash:%H",
-      "--grep",
-      "Cr-Commit-Position: refs/heads/master@{#314016}",
-      "-1",
-      "origin/master"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Expanding revision range.resolving commit_pos 314016",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
@@ -323,42 +292,21 @@
     "stdin": "{\"jobs\": [{\"builder\": \"linux_perf_tester\", \"job_name\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222-test\", \"master\": \"tryserver.chromium.perf\", \"type\": \"buildbot\"}, {\"builder\": \"linux_perf_tester\", \"job_name\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test\", \"master\": \"tryserver.chromium.perf\", \"type\": \"buildbot\"}, {\"location\": \"gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results\", \"type\": \"gs\"}, {\"location\": \"gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results\", \"type\": \"gs\"}]}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failed\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"builder\": \"linux_perf_tester\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"job_name\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222-test\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"job_url\": \"http://tempuri.org/log\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"master\": \"tryserver.chromium.perf\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"type\": \"buildbot\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@Failed build@http://tempuri.org/log@@@",
+      "@@@STEP_FAILURE@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "----",
-      "ls",
-      "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil ls (5)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "----",
-      "cat",
-      "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil Get test results for build a6298e4afedbf2cd461755ea6f45b0ad64222222",
-    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
@@ -390,7 +338,7 @@
       "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil ls (6)"
+    "name": "gsutil ls (5)"
   },
   {
     "cmd": [
@@ -408,207 +356,5 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil Get test results for build 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil ls (7)"
-  },
-  {
-    "cmd": [
-      "git",
-      "-c",
-      "user.email=FAKE_PERF_PUMPKIN@chromium.org",
-      "try",
-      "--bot",
-      "linux_perf_bisect_builder",
-      "--revision",
-      "dcdcdc0ff1122212323134879ddceeb1240b0988",
-      "--name",
-      "dcdcdc0ff1122212323134879ddceeb1240b0988-build",
-      "--svn_repo",
-      "svn://svn.chromium.org/chrome-try/try-perf",
-      "--diff",
-      "/dev/null"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Requesting build for dcdcdc0ff1122212323134879ddceeb1240b0988 via git try."
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
-      "[DEPOT_TOOLS]/gsutil.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision dcdcdc0ff1122212323134879ddceeb1240b0988",
-    "stdin": "{\"jobs\": [{\"builder\": \"linux_perf_bisect_builder\", \"job_name\": \"dcdcdc0ff1122212323134879ddceeb1240b0988-build\", \"master\": \"tryserver.chromium.perf\", \"type\": \"buildbot\"}, {\"location\": \"gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip\", \"type\": \"gs\"}]}",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "----",
-      "ls",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil ls (8)"
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Triggering test job for dcdcdc0ff1122212323134879ddceeb1240b0988",
-    "trigger_specs": [
-      {
-        "builder_name": "linux_perf_tester",
-        "properties": {
-          "bisect_config": {
-            "command": "src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases",
-            "max_time_minutes": "5",
-            "metric": "mean_input_event_latency/mean_input_event_latency",
-            "repeat_count": "2",
-            "test_type": "perf",
-            "truncate_percent": "0"
-          },
-          "job_name": "dcdcdc0ff1122212323134879ddceeb1240b0988-test",
-          "parent_build_archive_url": "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
-          "parent_got_revision": "dcdcdc0ff1122212323134879ddceeb1240b0988",
-          "revision": "dcdcdc0ff1122212323134879ddceeb1240b0988"
-        }
-      }
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
-      "[DEPOT_TOOLS]/gsutil.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision dcdcdc0ff1122212323134879ddceeb1240b0988 (2)",
-    "stdin": "{\"jobs\": [{\"builder\": \"linux_perf_tester\", \"job_name\": \"dcdcdc0ff1122212323134879ddceeb1240b0988-test\", \"master\": \"tryserver.chromium.perf\", \"type\": \"buildbot\"}, {\"location\": \"gs://chrome-perf/bisect-results/dcdcdc0ff1122212323134879ddceeb1240b0988-test.results\", \"type\": \"gs\"}]}",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "----",
-      "ls",
-      "gs://chrome-perf/bisect-results/dcdcdc0ff1122212323134879ddceeb1240b0988-test.results"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil ls (9)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
-      "----",
-      "cat",
-      "gs://chrome-perf/bisect-results/dcdcdc0ff1122212323134879ddceeb1240b0988-test.results"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil Get test results for build dcdcdc0ff1122212323134879ddceeb1240b0988",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "git",
-      "show",
-      "--name-only",
-      "--pretty=format:",
-      "dcdcdc0ff1122212323134879ddceeb1240b0988"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Checking DEPS for dcdcdc0ff1122212323134879ddceeb1240b0988",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "git",
-      "fetch",
-      "origin",
-      "--tags"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "git fetch tags",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "git",
-      "cat-file",
-      "blob",
-      "a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "git cat-file a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "git",
-      "fetch",
-      "origin",
-      "--tags"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "git fetch tags (2)",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "git",
-      "cat-file",
-      "blob",
-      "dcdcdc0ff1122212323134879ddceeb1240b0988:DEPS"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "git cat-file dcdcdc0ff1122212323134879ddceeb1240b0988:DEPS",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "name": "$final_result",
-    "reason": "Expected revisions to check.",
-    "status_code": 1
   }
 ]

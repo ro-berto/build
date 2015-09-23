@@ -57,19 +57,19 @@ class PerfRevisionState(revision_state.RevisionState):
     api = self.bisector.api
     bot_name = self.bisector.get_builder_bot_for_this_platform()
     if self.bisector.dummy_builds:
-      self.build_job_name = self.commit_hash + '-build'
+      self.job_name = self.commit_hash + '-build'
     else:  # pragma: no cover
-      self.build_job_name = uuid.uuid4().hex
+      self.job_name = uuid.uuid4().hex
     if self.needs_patch:
       self.patch_file = self._write_deps_patch_file(
-          self.build_job_name)
+          self.job_name)
     else:
       self.patch_file = '/dev/null'
     try_cmd = [
         'try',
         '--bot', bot_name,
         '--revision', self.commit_hash,
-        '--name', self.build_job_name,
+        '--name', self.job_name,
         '--svn_repo', api.SVN_REPO_URL,
         '--diff', self.patch_file,
     ]
@@ -109,12 +109,12 @@ class PerfRevisionState(revision_state.RevisionState):
   def _do_test(self):
     """Posts a request to buildbot to download and perf-test this build."""
     if self.bisector.dummy_builds:
-      self.test_job_name = self.commit_hash + '-test'
+      self.job_name = self.commit_hash + '-test'
     elif 'CACHE_TEST_RESULTS' in os.environ:  # pragma: no cover
-      self.test_job_name = test_results_cache.make_id(
+      self.job_name = test_results_cache.make_id(
           self.revision_string, self._get_bisect_config_for_tester())
     else:  # pragma: no cover
-      self.test_job_name = uuid.uuid4().hex
+      self.job_name = uuid.uuid4().hex
     api = self.bisector.api
     perf_test_properties = {
         'builder_name': self.bisector.get_perf_tester_name(),
@@ -123,15 +123,15 @@ class PerfRevisionState(revision_state.RevisionState):
             'parent_got_revision': self.commit_hash,
             'parent_build_archive_url': self.build_url,
             'bisect_config': self._get_bisect_config_for_tester(),
-            'job_name': self.test_job_name,
+            'job_name': self.job_name,
         },
     }
     if 'CACHE_TEST_RESULTS' in os.environ and test_results_cache.has_results(
-        self.test_job_name):  # pragma: no cover
+        self.job_name):  # pragma: no cover
       return
     step_name = 'Triggering test job for ' + str(self.revision_string)
     self.test_results_url = (self.bisector.api.GS_RESULTS_URL +
-                             self.test_job_name + '.results')
+                             self.job_name + '.results')
     api.m.trigger(perf_test_properties, name=step_name)
 
   def get_next_url(self):
@@ -141,17 +141,21 @@ class PerfRevisionState(revision_state.RevisionState):
       return self.test_results_url
 
   def get_buildbot_locator(self):
+    if self.status not in (PerfRevisionState.BUILDING,
+                           PerfRevisionState.TESTING):  # pragma: no cover
+      return None
+    # TODO(robertocn): Remove hardcoded master.
+    master = 'tryserver.chromium.perf'
     if self.status == PerfRevisionState.BUILDING:
-      # TODO(robertocn): Remove hardcoded master.
-      master = 'tryserver.chromium.perf'
-      bot_name = self.bisector.get_builder_bot_for_this_platform()
-      job_name = self.build_job_name
-      return 'bb:%s:%s:%s' % (master, bot_name, job_name)
+      builder = self.bisector.get_builder_bot_for_this_platform()
     if self.status == PerfRevisionState.TESTING:
-      master = 'tryserver.chromium.perf'
-      bot_name = self.bisector.get_perf_tester_name()
-      job_name = self.test_job_name
-      return 'bb:%s:%s:%s' % (master, bot_name, job_name)
+      builder = self.bisector.get_perf_tester_name()
+    return {
+        'type': 'buildbot',
+        'master': master,
+        'builder': builder,
+        'job_name': self.job_name,
+    }
 
   def _get_test_results(self):
     """Tries to get the results of a test job from cloud storage."""

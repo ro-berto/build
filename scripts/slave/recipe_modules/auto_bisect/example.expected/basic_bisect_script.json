@@ -220,16 +220,16 @@
       "python",
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
-      "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip",
-      "bb:tryserver.chromium.perf:linux_perf_bisect_builder:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-build",
-      "bb:tryserver.chromium.perf:linux_perf_bisect_builder:a6298e4afedbf2cd461755ea6f45b0ad64222222-build",
-      "--timeout=7200"
+      "[DEPOT_TOOLS]/gsutil.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision 314015 and 1 other revision(s).",
-    "stdout": "/path/to/tmp/"
+    "stdin": "{\"jobs\": [{\"builder\": \"linux_perf_bisect_builder\", \"job_name\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222-build\", \"master\": \"tryserver.chromium.perf\", \"type\": \"buildbot\"}, {\"builder\": \"linux_perf_bisect_builder\", \"job_name\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-build\", \"master\": \"tryserver.chromium.perf\", \"type\": \"buildbot\"}, {\"location\": \"gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip\", \"type\": \"gs\"}, {\"location\": \"gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip\", \"type\": \"gs\"}]}",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [
@@ -316,16 +316,23 @@
       "python",
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results",
-      "gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results",
-      "bb:tryserver.chromium.perf:linux_perf_tester:a6298e4afedbf2cd461755ea6f45b0ad64222222-test",
-      "bb:tryserver.chromium.perf:linux_perf_tester:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test",
-      "--timeout=7200"
+      "[DEPOT_TOOLS]/gsutil.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision 314015 and 1 other revision(s). (2)",
-    "stdout": "/path/to/tmp/"
+    "stdin": "{\"jobs\": [{\"builder\": \"linux_perf_tester\", \"job_name\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222-test\", \"master\": \"tryserver.chromium.perf\", \"type\": \"buildbot\"}, {\"builder\": \"linux_perf_tester\", \"job_name\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test\", \"master\": \"tryserver.chromium.perf\", \"type\": \"buildbot\"}, {\"location\": \"gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results\", \"type\": \"gs\"}, {\"location\": \"gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results\", \"type\": \"gs\"}]}",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"completed\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"location\": \"gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"type\": \"gs\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -365,14 +372,16 @@
       "python",
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results",
-      "bb:tryserver.chromium.perf:linux_perf_tester:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test",
-      "--timeout=7200"
+      "[DEPOT_TOOLS]/gsutil.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision 314017",
-    "stdout": "/path/to/tmp/"
+    "stdin": "{\"jobs\": [{\"builder\": \"linux_perf_tester\", \"job_name\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test\", \"master\": \"tryserver.chromium.perf\", \"type\": \"buildbot\"}, {\"location\": \"gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results\", \"type\": \"gs\"}]}",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [
@@ -448,14 +457,16 @@
       "python",
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip",
-      "bb:tryserver.chromium.perf:linux_perf_bisect_builder:dcdcdc0ff1122212323134879ddceeb1240b0988-build",
-      "--timeout=7200"
+      "[DEPOT_TOOLS]/gsutil.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision dcdcdc0ff1122212323134879ddceeb1240b0988",
-    "stdout": "/path/to/tmp/"
+    "stdin": "{\"jobs\": [{\"builder\": \"linux_perf_bisect_builder\", \"job_name\": \"dcdcdc0ff1122212323134879ddceeb1240b0988-build\", \"master\": \"tryserver.chromium.perf\", \"type\": \"buildbot\"}, {\"location\": \"gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip\", \"type\": \"gs\"}]}",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [
@@ -502,14 +513,16 @@
       "python",
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "gs://chrome-perf/bisect-results/dcdcdc0ff1122212323134879ddceeb1240b0988-test.results",
-      "bb:tryserver.chromium.perf:linux_perf_tester:dcdcdc0ff1122212323134879ddceeb1240b0988-test",
-      "--timeout=7200"
+      "[DEPOT_TOOLS]/gsutil.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for revision dcdcdc0ff1122212323134879ddceeb1240b0988 (2)",
-    "stdout": "/path/to/tmp/"
+    "stdin": "{\"jobs\": [{\"builder\": \"linux_perf_tester\", \"job_name\": \"dcdcdc0ff1122212323134879ddceeb1240b0988-test\", \"master\": \"tryserver.chromium.perf\", \"type\": \"buildbot\"}, {\"location\": \"gs://chrome-perf/bisect-results/dcdcdc0ff1122212323134879ddceeb1240b0988-test.results\", \"type\": \"gs\"}]}",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [

@@ -71,8 +71,7 @@ class RevisionState(object):
     self.next_revision = None
     self.previous_revision = None
     self.revision_string = revision_string
-    self.build_job_name = None
-    self.test_job_name = None
+    self.job_name = None
     self.patch_file = None
     self.deps_revision = None
     if not self.revision_string:
