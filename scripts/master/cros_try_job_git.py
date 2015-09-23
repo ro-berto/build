@@ -7,6 +7,7 @@ import json
 import os
 import re
 import shutil
+import zlib
 
 from StringIO import StringIO
 
@@ -203,7 +204,11 @@ class CrOSTryJobGit(TryBase):
 
     extra_args = options.get('extra_args')
     if extra_args:
-      extra_args = json.dumps(extra_args)
+      # This field can be quite large, and exceed BuildBot property limits.
+      # Compress it, Base64 encode it, and prefix it with "z:" so the consumer
+      # knows its size.
+      extra_args = 'z:' + base64.b64encode(zlib.compress(json.dumps(
+        extra_args)))
       props.setProperty('cbb_extra_args', extra_args,
                         self._PROPERTY_SOURCE)
 

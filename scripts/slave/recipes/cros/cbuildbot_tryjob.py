@@ -2,6 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import base64
+import zlib
+
 from common import cros_chromite
 
 DEPS = [
@@ -17,22 +20,6 @@ _MASTER_CONFIG_MAP = {
       'master_config': 'chromiumos_tryserver',
     },
 }
-
-
-# Testing: Tryjob data file JSON.
-_TRYJOB_DATA = """
-{
-  "name": "12345",
-  "email": "testauthor@fake.chromium.org",
-  "extra_args": [
-    "--timeout",
-    "14400",
-    "--remote-trybot",
-    "--remote-version=4"
-  ]
-}
-"""
-
 
 def RunSteps(api):
   # The 'cbuildbot' config name to build is the name of the builder.
@@ -64,6 +51,8 @@ def RunSteps(api):
   # Add parameters specified in the tryjob description.
   tryjob_args = api.properties.get('cbb_extra_args', [])
   if tryjob_args:
+    if tryjob_args.startswith('z:'):
+      tryjob_args = zlib.decompress(base64.b64decode(tryjob_args[2:]))
     tryjob_args = api.json.loads(tryjob_args)
 
   # Determine our build directory name based on whether this build is internal
@@ -105,6 +94,22 @@ def GenTests(api):
           cbb_config='x86-generic-full',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
                          '"--remote-version=4"]',
+      )
+  )
+
+  # Test a CrOS tryjob with compressed "cbb_extra_args".
+  yield (
+      api.test('basic_compressed')
+      + api.properties(
+          mastername='chromiumos.tryserver',
+          buildername='full',
+          slavename='test',
+          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
+          revision=api.gitiles.make_hash('test'),
+          cbb_config='x86-generic-full',
+          cbb_extra_args=(
+            'z:eJyLVtLVLcnMTc0vLVHSUVAyNDExMAAxdHWLUnPzS1J1S4oqk/JLUITKUouKM'
+            '/PzbE2UYgFJaBNI'),
       )
   )
 
