@@ -38,6 +38,7 @@ def Update(c):
       'recipe': 'chromium_gn',
       'slavebuilddir': 'win_gn',
     },
+    {'name': 'Win10 Tester'},
   ]
 
   c['builders'].extend([

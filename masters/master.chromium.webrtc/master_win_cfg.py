@@ -20,6 +20,7 @@ def Update(c):
     {'name': 'WinXP Tester'},
     {'name': 'Win7 Tester'},
     {'name': 'Win8 Tester'},
+    {'name': 'Win10 Tester'},
   ]
 
   c['builders'].extend([
