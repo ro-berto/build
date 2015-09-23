@@ -141,8 +141,37 @@ class AutoBisectApi(recipe_api.RecipeApi):
     bot_config = master_dict.get('builders', {}).get(buildername)
     api.bisect_tester.upload_job_url()
     if api.chromium.c.TARGET_PLATFORM == 'android':
+      # The best way to ensure the old build directory is not used is to
+      # remove it.
+      build_dir = self.m.chromium.c.build_dir.join(
+          self.m.chromium.c.build_config_fs)
+      self.m.file.rmtree('build directory', build_dir)
+   
+      # crbug.com/535218, the way android builders on tryserver.chromium.perf
+      # are archived is different from builders on chromium.per. In order to
+      # support both forms of archives we added this temporary hack until
+      # builders are fixed.
+      zip_dir = self.m.path.join(self.m.path['checkout'], 'full-build-linux')
+      if self.m.path.exists(zip_dir):  # pragma: no cover
+        self.m.file.rmtree('full-build-linux directory', zip_dir)
+
       api.chromium_android.download_build(bucket=bot_config['bucket'],
           path=bot_config['path'](api))
+
+      # crbug.com/535218, the way android builders on tryserver.chromium.perf
+      # are archived is different from builders on chromium.per. In order to
+      # support both forms of archives we added this temporary hack until
+      # builders are fixed.
+      if self.m.path.exists(zip_dir):  # pragma: no cover
+        self.m.python.inline(
+            'moving full-build-linux to out/Release ',
+            """
+            import shutil
+            import sys
+            shutil.move(sys.argv[1], sys.argv[2])
+            """,
+            args=[zip_dir, build_dir],
+          )
     else:
       api.chromium_tests.tests_for_builder(
           mastername,
