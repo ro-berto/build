@@ -713,7 +713,7 @@ def _RunStepsInternal(api):
   if enable_gpu_tests:
     tests.extend(api.gpu.create_tests(
         bot_update_step.presentation.properties['got_revision'],
-        bot_update_step.presentation.properties['got_webkit_revision'],
+        bot_update_step.presentation.properties['got_revision'],
         enable_swarming=True,
         swarming_dimension_sets=CHROMIUM_GPU_DIMENSION_SETS[master][builder]))
 
