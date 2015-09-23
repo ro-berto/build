@@ -219,7 +219,7 @@ SPEC['builders'].update({
   },
   'WebKit Mac10.6': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['chromium_mac_sdk_10_10'],
+    'chromium_apply_config': ['chromium_mac_sdk_10_6'],
     'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
@@ -243,7 +243,7 @@ SPEC['builders'].update({
   },
   'WebKit Mac10.7': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['chromium_mac_sdk_10_10'],
+    'chromium_apply_config': ['chromium_mac_sdk_10_6'],
     'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
@@ -267,7 +267,7 @@ SPEC['builders'].update({
   },
   'WebKit Mac10.8': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['chromium_mac_sdk_10_10'],
+    'chromium_apply_config': ['chromium_mac_sdk_10_6'],
     'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
@@ -315,7 +315,7 @@ SPEC['builders'].update({
   },
   'WebKit Mac10.9': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['chromium_mac_sdk_10_10'],
+    'chromium_apply_config': ['chromium_mac_sdk_10_6'],
     'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
@@ -377,7 +377,7 @@ SPEC['builders'].update({
   },
   'WebKit Mac10.6 (dbg)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['chromium_mac_sdk_10_10'],
+    'chromium_apply_config': ['chromium_mac_sdk_10_6'],
     'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
@@ -401,7 +401,7 @@ SPEC['builders'].update({
   },
   'WebKit Mac10.7 (dbg)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['chromium_mac_sdk_10_10'],
+    'chromium_apply_config': ['chromium_mac_sdk_10_6'],
     'gclient_config': 'chromium',
     'gclient_apply_config': ['blink_or_chromium'],
     'chromium_config_kwargs': {
