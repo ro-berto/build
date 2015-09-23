@@ -97,7 +97,7 @@ SPEC = {
     },
     'Mac10.8 Tests (ANGLE)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop', 'chromium_mac_sdk_10_6'],
+      'chromium_apply_config': ['ninja_confirm_noop', 'chromium_mac_sdk_10_10'],
       'gclient_config': 'chromium_angle',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -135,7 +135,7 @@ SPEC = {
     },
     'Mac10.8 Tests (dbg) (ANGLE)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop', 'chromium_mac_sdk_10_6'],
+      'chromium_apply_config': ['ninja_confirm_noop', 'chromium_mac_sdk_10_10'],
       'gclient_config': 'chromium_angle',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
