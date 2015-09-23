@@ -572,38 +572,11 @@
           "chromium_tree_closer"
         ],
         "builders": {
-          "Win32 Debug": { "categories": [ "webrtc_windows"] },
-          "Win32 Release": { "categories": [ "webrtc_windows"] },
-          "Win64 Debug": { "categories": [ "webrtc_windows"] },
-          "Win64 Release": { "categories": [ "webrtc_windows"] },
-          "Win64 Debug (GN)": { "categories": [ "webrtc_windows"] },
-          "Win64 Release (GN)": { "categories": [ "webrtc_windows"] },
-          "Mac32 Debug": { "categories": [ "webrtc_compile"] },
-          "Mac32 Release": { "categories": [ "webrtc_compile"] },
-          "Mac64 Debug": { "categories": [ "webrtc_compile"] },
-          "Mac64 Release": { "categories": [ "webrtc_compile"] },
-          "Mac64 Debug (GN)": { "categories": [ "webrtc_compile"] },
-          "Mac64 Release (GN)": { "categories": [ "webrtc_compile"] },
-          "Mac Asan": { "categories": [ "webrtc_compile"] },
-          "iOS ARM64 Debug": { "categories": [ "webrtc_compile"] },
-          "iOS ARM64 Release": { "categories": [ "webrtc_compile"] },
-          "iOS Debug": { "categories": [ "webrtc_compile"] },
-          "iOS Release": { "categories": [ "webrtc_compile"] },
-          "Linux32 Debug": { "categories": [ "webrtc_compile"] },
-          "Linux32 Release": { "categories": [ "webrtc_compile"] },
-          "Linux64 Debug": { "categories": [ "webrtc_compile"] },
-          "Linux64 Release": { "categories": [ "webrtc_compile"] },
-          "Linux64 Debug (GN)": { "categories": [ "webrtc_compile"] },
-          "Linux64 Release (GN)": { "categories": [ "webrtc_compile"] },
-          "Linux Asan": { "categories": [ "webrtc_compile"] },
-          "Linux Tsan v2": { "categories": [ "webrtc_compile"] },
-          "Android Builder": { "categories": [ "webrtc_compile"] },
-          "Android Builder (dbg)": { "categories": [ "webrtc_compile"] },
-          "Android Clang (dbg)": { "categories": [ "webrtc_compile"] },
-          "Android ARM64 Builder (dbg)": { "categories": [ "webrtc_compile"] },
-          "Android GN": { "categories": [ "webrtc_compile"] },
-          "Android GN (dbg)": { "categories": [ "webrtc_compile"] }
-        }
+          "*": { "categories": [ "webrtc_compile"] }
+        },
+        "excluded_builders": [
+          "Android*Tests*"
+        ]
       }
     ],
     "https://build.chromium.org/p/chromium.fyi": [
@@ -877,18 +850,13 @@
       "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)"
     },
     "webrtc_compile": {
-      "closing_optional": [
-        "compile",
-        "gn"
-      ]
-    },
-    "webrtc_windows": {
       "forgiving_optional": [
         "svnkill",
         "taskkill"
       ],
       "closing_optional": [
-        "compile"
+        "compile",
+        "gn"
       ]
     }
   }
