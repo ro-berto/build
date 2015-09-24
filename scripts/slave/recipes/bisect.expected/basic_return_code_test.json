@@ -608,7 +608,19 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
+    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@Partial Results@---partial bisect results start here---@@@",
+      "@@@STEP_LOG_LINE@Partial Results@@@@",
+      "@@@STEP_LOG_LINE@Partial Results@===== TESTED REVISIONS =====@@@",
+      "@@@STEP_LOG_LINE@Partial Results@commit_pos revision_string                              mean_value std_err good_or_bad? tested? culprit? @@@",
+      "@@@STEP_LOG_LINE@Partial Results@306475     306475                                       0          0       good         tested  False    @@@",
+      "@@@STEP_LOG_LINE@Partial Results@306478     src@a6298e4afedbf2cd461755ea6f45b0ad64222222 1          0       bad          tested  False    @@@",
+      "@@@STEP_LOG_LINE@Partial Results@@@@",
+      "@@@STEP_LOG_LINE@Partial Results@@@@",
+      "@@@STEP_LOG_LINE@Partial Results@----End of partial results----@@@",
+      "@@@STEP_LOG_END@Partial Results@@@"
+    ]
   },
   {
     "cmd": [
@@ -799,7 +811,20 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144"
+    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@Partial Results@---partial bisect results start here---@@@",
+      "@@@STEP_LOG_LINE@Partial Results@@@@",
+      "@@@STEP_LOG_LINE@Partial Results@===== TESTED REVISIONS =====@@@",
+      "@@@STEP_LOG_LINE@Partial Results@commit_pos revision_string                              mean_value std_err good_or_bad? tested? culprit? @@@",
+      "@@@STEP_LOG_LINE@Partial Results@306475     306475                                       0          0       good         tested  False    @@@",
+      "@@@STEP_LOG_LINE@Partial Results@306477     00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111     1          0       bad          tested  False    @@@",
+      "@@@STEP_LOG_LINE@Partial Results@306478     src@a6298e4afedbf2cd461755ea6f45b0ad64222222 1          0       bad          tested  False    @@@",
+      "@@@STEP_LOG_LINE@Partial Results@@@@",
+      "@@@STEP_LOG_LINE@Partial Results@@@@",
+      "@@@STEP_LOG_LINE@Partial Results@----End of partial results----@@@",
+      "@@@STEP_LOG_END@Partial Results@@@"
+    ]
   },
   {
     "cmd": [

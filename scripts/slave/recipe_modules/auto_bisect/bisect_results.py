@@ -84,9 +84,9 @@ _REQUIRED_RESULTS_CONFIDENCE = 99.0
 
 class BisectResults(object):
 
-  def __init__(self, bisector):
+  def __init__(self, bisector, partial=False):
     """Create a new results object from a finished bisect job."""
-    if not bisector.bisect_over:
+    if not bisector.bisect_over and not partial:
       raise ValueError(
           'Invalid parameter, the bisect must be over by the time the '
           'BisectResults constructor is called')  # pragma: no cover
@@ -97,6 +97,7 @@ class BisectResults(object):
     self.culprit_author = None
     self.culprit_subject = None
     self.culprit_date = None
+    self.partial = partial
     self._gather_results()
 
   def as_string(self):
@@ -106,6 +107,8 @@ class BisectResults(object):
     # Unconditionally include this string at the top of the results since it is
     # used by the dashboard to separate the bisect results from other buildbot
     # output.
+    if self.partial:
+       return '---partial bisect results start here---\n'
     header = '---bisect results start here---\n'
     if not self.abort_reason:
       header += _RESULTS_BANNER % {
@@ -125,7 +128,7 @@ class BisectResults(object):
           'good_revision': self.good_revision,
           'bad_revision': self.bad_revision
       }
-    if self.warnings:
+    if self.warnings and not self.partial:
       header += _WARNINGS_TEMPLATE % {'warnings': '\n * '.join(self.warnings)}
     return header
 
@@ -143,6 +146,8 @@ class BisectResults(object):
     return body.encode('ascii','replace')
 
   def _make_footer(self):
+    if self.partial:
+      return '----End of partial results----'
     return _RESULTS_THANKYOU
 
   def _gather_results(self):
@@ -176,7 +181,9 @@ class BisectResults(object):
     elif bisector.failed_direction:
       self.abort_reason = _DIRECTION_OF_IMPROVEMENT_ABORT_REASON
 
-    if bisector.failed:
+    if self.partial:
+      self.status = 'Partial Results only.'
+    elif bisector.failed:
       self.status = 'Negative: Failed to bisect.'
     elif self.results_confidence > _REQUIRED_RESULTS_CONFIDENCE:
       self.status = 'Positive: A suspected commit was found.'

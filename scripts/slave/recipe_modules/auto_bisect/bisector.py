@@ -401,6 +401,9 @@ class Bisector(object):
     self.results_confidence = self.api.m.math_utils.confidence_score(
         self.lkgr.values, self.fkbr.values)
 
+  def partial_results(self):
+    return bisect_results.BisectResults(self, partial=True).as_string()
+
   def print_result(self):
     results = bisect_results.BisectResults(self).as_string()
     self.api.m.step('Results', ['cat'],

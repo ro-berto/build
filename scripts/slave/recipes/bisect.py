@@ -377,6 +377,9 @@ def _bisect_main_loop(bisector):
       break
     with bisector.api.m.step.nest(str('Working on revision ' +
                                   revisions_to_check[0].revision_string)):
+      nest_step_result = bisector.api.m.step.active_result
+      partial_results = bisector.partial_results().splitlines()
+      nest_step_result.presentation.logs['Partial Results'] = partial_results
       for r in revisions_to_check:
         r.start_job()
       _wait_for_revisions(bisector, revisions_to_check)
