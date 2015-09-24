@@ -175,6 +175,7 @@
       "[BUILD]/goma",
       "--",
       "android_webview_test_apk",
+      "android_webview_unittests_apk",
       "base_junit_tests",
       "base_unittests_apk",
       "breakpad_unittests_deps",

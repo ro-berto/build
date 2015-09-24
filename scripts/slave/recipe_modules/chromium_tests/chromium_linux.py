@@ -400,6 +400,7 @@ SPEC = {
         steps.AndroidInstrumentationTest(
             'ChromeSyncShellTest', 'chrome_sync_shell_test_apk',
             adb_install_apk='ChromeSyncShell.apk'),
+        steps.GTestTest('android_webview_unittests'),
         steps.GTestTest(
             'base_unittests',
             android_isolate_path='base/base_unittests.isolate'),
@@ -411,7 +412,7 @@ SPEC = {
         steps.GTestTest(
             'components_browsertests',
             android_isolate_path='components/components_browsertests.isolate'),
-        steps.AMPGTestTest(
+        steps.GTestTest(
             'components_unittests',
             android_isolate_path='components/components_unittests.isolate'),
         steps.GTestTest(
