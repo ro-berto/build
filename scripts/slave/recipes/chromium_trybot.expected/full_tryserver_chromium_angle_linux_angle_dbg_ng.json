@@ -1643,6 +1643,31 @@
     "name": "content_gl_tests on NVIDIA GPU on Linux (with patch) on Linux"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "tryserver.chromium.angle",
+      "--builder-name",
+      "linux_angle_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "content_gl_tests on NVIDIA GPU on Linux (with patch) on Linux",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--webkit-revision",
+      "0",
+      "--chrome-revision",
+      "297276"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [content_gl_tests on NVIDIA GPU on Linux (with patch) on Linux]"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -1666,6 +1691,31 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gl_tests on NVIDIA GPU on Linux (with patch) on Linux"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "tryserver.chromium.angle",
+      "--builder-name",
+      "linux_angle_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "gl_tests on NVIDIA GPU on Linux (with patch) on Linux",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--webkit-revision",
+      "0",
+      "--chrome-revision",
+      "297276"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [gl_tests on NVIDIA GPU on Linux (with patch) on Linux]"
   },
   {
     "allow_subannotations": true,
@@ -1693,6 +1743,31 @@
     "name": "angle_unittests on NVIDIA GPU on Linux (with patch) on Linux"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "tryserver.chromium.angle",
+      "--builder-name",
+      "linux_angle_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "angle_unittests on NVIDIA GPU on Linux (with patch) on Linux",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--webkit-revision",
+      "0",
+      "--chrome-revision",
+      "297276"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [angle_unittests on NVIDIA GPU on Linux (with patch) on Linux]"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -1716,6 +1791,31 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "angle_end2end_tests on NVIDIA GPU on Linux (with patch) on Linux"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "tryserver.chromium.angle",
+      "--builder-name",
+      "linux_angle_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "angle_end2end_tests on NVIDIA GPU on Linux (with patch) on Linux",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--webkit-revision",
+      "0",
+      "--chrome-revision",
+      "297276"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [angle_end2end_tests on NVIDIA GPU on Linux (with patch) on Linux]"
   },
   {
     "cmd": [

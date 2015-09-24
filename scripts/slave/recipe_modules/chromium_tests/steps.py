@@ -348,9 +348,6 @@ def generate_gtest(api, mastername, buildername, test_spec,
     return [canonicalize_test(t) for t in
             test_spec.get(buildername, {}).get('gtest_tests', [])]
 
-  # TODO(estaab): Enable tryserver test results uploading after ensuring
-  # test-results.appspot.com can handle the load by 2015-09-25.
-  swarming_upload_test_results = 'tryserver' not in mastername
   for test in get_tests(api):
     args = test.get('args', [])
     if test['shard_index'] != 0 or test['total_shards'] != 1:
@@ -365,8 +362,7 @@ def generate_gtest(api, mastername, buildername, test_spec,
         swarming_shards = swarming_spec.get('shards', 1)
     yield GTestTest(str(test['test']), args=args, flakiness_dash=True,
                     enable_swarming=use_swarming,
-                    swarming_shards=swarming_shards,
-                    swarming_upload_test_results=swarming_upload_test_results)
+                    swarming_shards=swarming_shards)
 
 
 def generate_script(api, mastername, buildername, test_spec,
@@ -610,7 +606,7 @@ class SwarmingTest(Test):
 class SwarmingGTestTest(SwarmingTest):
   def __init__(self, name, args=None, target_name=None, shards=1,
                dimensions=None, tags=None, extra_suffix=None,
-               upload_test_results=False):
+               upload_test_results=True):
     super(SwarmingGTestTest, self).__init__(name, dimensions, tags, target_name,
                                             extra_suffix)
     self._args = args or []
@@ -681,7 +677,7 @@ class SwarmingGTestTest(SwarmingTest):
               chrome_revision=chrome_revision,
               webkit_revision=webkit_revision,
               test_type=step_result.step['name'],
-              test_results_server='test-results-test.appspot.com')
+              test_results_server='test-results.appspot.com')
 
 
 class AMPTest(Test):
@@ -985,13 +981,12 @@ def generate_isolated_script(api, mastername, buildername, test_spec,
 class GTestTest(Test):
   def __init__(self, name, args=None, target_name=None, enable_swarming=False,
                swarming_shards=1, swarming_dimensions=None, swarming_tags=None,
-               swarming_extra_suffix=None, swarming_upload_test_results=False,
-               **runtest_kwargs):
+               swarming_extra_suffix=None, **runtest_kwargs):
     super(GTestTest, self).__init__()
     if enable_swarming:
       self._test = SwarmingGTestTest(
           name, args, target_name, swarming_shards, swarming_dimensions,
-          swarming_tags, swarming_extra_suffix, swarming_upload_test_results)
+          swarming_tags, swarming_extra_suffix)
     else:
       self._test = LocalGTestTest(name, args, target_name, **runtest_kwargs)
 

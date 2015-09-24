@@ -319,7 +319,7 @@
       "--test-type",
       "browser_tests on Mac-10.6",
       "--test-results-server",
-      "test-results-test.appspot.com",
+      "test-results.appspot.com",
       "--webkit-revision",
       "0",
       "--chrome-revision",

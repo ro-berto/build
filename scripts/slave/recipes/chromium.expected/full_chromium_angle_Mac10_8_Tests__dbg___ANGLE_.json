@@ -324,7 +324,7 @@
       "--test-type",
       "browser_tests",
       "--test-results-server",
-      "test-results-test.appspot.com",
+      "test-results.appspot.com",
       "--webkit-revision",
       "0",
       "--chrome-revision",
