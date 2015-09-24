@@ -87,19 +87,31 @@
     "Android MIPS Builder (dbg)": {
       "recipe": "android/builder",
       "scheduler": "android_commits",
-      "slave_pools": ["mips_builder"],
+      "slave_pools": ["builders"],
       "category": "2Builders",
     },
     "Android x64 Builder (dbg)": {
       "recipe": "android/builder",
       "scheduler": "android_commits",
-      "slave_pools": ["x64_compile"],
+      "slave_pools": ["builders"],
       "category": "2Builders",
     },
     "Android x86 Builder (dbg)": {
       "recipe": "android/builder",
       "scheduler": "android_commits",
-      "slave_pools": ["x86_compile"],
+      "slave_pools": ["builders"],
+      "category": "2Builders",
+    },
+    "Android arm Builder (dbg)": {
+      "recipe": "chromium",
+      "scheduler": "android_commits",
+      "slave_pools": ["builders"],
+      "category": "2Builders",
+    },
+    "Android arm64 Builder (dbg)": {
+      "recipe": "chromium",
+      "scheduler": "android_commits",
+      "slave_pools": ["builders"],
       "category": "2Builders",
     },
   },
@@ -112,13 +124,19 @@
   },
 
   "slave_pools": {
-    "mips_builder": {
+    "builders": {
       "slave_data": {
         "os": "linux",
         "version": "precise",
         "bits": 64,
       },
-      "slaves": ["vm971-m1"],
+      "slaves": [
+          "slave35-c1",
+          "slave36-c1",
+          "slave37-c1",
+          "slave38-c1",
+          "slave39-c1",
+        ],
     },
     "remoting": {
       "slave_data": {
@@ -183,22 +201,6 @@
         "bits": "64",
       },
       "slaves": ["build29-a1"],
-    },
-    "x64_compile": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": ["slave35-c1"],
-    },
-    "x86_compile": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": ["slave36-c1"],
     },
   }
 }
