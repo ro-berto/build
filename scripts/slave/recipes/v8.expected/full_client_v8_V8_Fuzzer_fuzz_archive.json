@@ -19,7 +19,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@54321",
+      "v8@HEAD",
       "--no_shallow",
       "--output_manifest"
     ],
@@ -117,6 +117,35 @@
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Fuzz",
-    "stdout": "/path/to/tmp/"
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "----",
+      "cp",
+      "[SLAVE_BUILD]/v8/bar",
+      "gs://chromium-v8/fuzzer-archives/bar"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/fuzzer-archives/bar@@@"
+    ]
+  },
+  {
+    "name": "$final_result",
+    "reason": "Step('Fuzz') failed with return_code 1",
+    "status_code": 1
   }
 ]

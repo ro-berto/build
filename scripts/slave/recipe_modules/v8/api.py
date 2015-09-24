@@ -600,15 +600,30 @@ class V8Api(recipe_api.RecipeApi):
 
   def fuzz(self):
     assert self.m.chromium.c.HOST_PLATFORM == 'linux'
-    self.m.step(
-      'Fuzz',
-      ['bash',
-       self.m.path['checkout'].join('tools', 'fuzz-harness.sh'),
-       self.m.path.join(self.m.path.basename(self.m.chromium.c.build_dir),
-                        self.m.chromium.c.build_config_fs,
-                        'd8')],
-      cwd=self.m.path['checkout'],
-    )
+    try:
+      self.m.step(
+        'Fuzz',
+        ['bash',
+         self.m.path['checkout'].join('tools', 'fuzz-harness.sh'),
+         self.m.path.join(self.m.path.basename(self.m.chromium.c.build_dir),
+                          self.m.chromium.c.build_config_fs,
+                          'd8')],
+        cwd=self.m.path['checkout'],
+        stdout=self.m.raw_io.output(),
+      )
+    except self.m.step.StepFailure as e:
+      # Check if the fuzzer left a fuzz archive and upload to GS.
+      match = re.search(r'^Creating archive (.*)$', e.result.stdout, re.M)
+      if match:
+        self.m.gsutil.upload(
+            self.m.path['checkout'].join(match.group(1)),
+            'chromium-v8',
+            self.m.path.join('fuzzer-archives', match.group(1)),
+        )
+      else:  # pragma: no cover
+        self.m.step('No fuzzer archive found.', cmd=None)
+      raise e
+
 
   def gc_mole(self, *archs):
     # TODO(machenbach): Make gcmole work with absolute paths. Currently, a
