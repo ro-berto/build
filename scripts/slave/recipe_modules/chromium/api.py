@@ -682,28 +682,28 @@ class ChromiumApi(recipe_api.RecipeApi):
       step_test_data=lambda: self.m.json.test_api.output({
         "steps": {
           "blink_perf.all.release": {
-            "cmd": "/usr/bin/python /path/to/run_benmark --a=1 -v --b=2",
+            "cmd": "/usr/bin/python /path/to/run_benchmark --a=1 -v --b=2",
             "perf_dashboard_id": "blink_perf.all",
             "device_affinity": 0
           },
           "blink_perf.all.exact": {
-            "cmd": "/usr/bin/python /path/to/run_benmark --a=1 -v --b=2",
+            "cmd": "/usr/bin/python /path/to/run_benchmark --a=1 -v --b=2",
             "perf_dashboard_id": "blink_perf.all",
-            "device_affinity": 0
+            "device_affinity": 1 % num_shards
           },
           "blink_perf.dom": {
             "cmd": "/path/to/run_benchmark -v --upload-results blink_perf.dom",
             "perf_dashboard_id": "blink_perf.dom",
-            "device_affinity": 0
+            "device_affinity": 1 % num_shards
           },
           "dromaeo.cssqueryjquery.release": {
-            "cmd": "/path/to/run_benmark",
+            "cmd": "/path/to/run_benchmark",
             "perf_dashboard_id": "dromaeo.cssqueryjquery",
-            "device_affinity": 1
+            "device_affinity": 11 % num_shards
           },
           "dromaeo.cssqueryjquery": {
-            "cmd": "/path/to/run_benmark",
-            "device_affinity": 1
+            "cmd": "/path/to/run_benchmark",
+            "device_affinity": 13 % num_shards
           },
         },
         "version": 2,

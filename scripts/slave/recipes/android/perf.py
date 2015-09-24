@@ -23,23 +23,47 @@ REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
 BUILDERS = freeze({
   'chromium.perf': {
-    'Android Nexus5 Perf': {
+    'Android Nexus5 Perf (1)': {
       'perf_id': 'android-nexus5',
       'bucket': 'chrome-perf',
       'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
                            api.properties['parent_revision']),
       'num_device_shards': 7,
       'num_host_shards': 2,
+      'shard_index': 0,
       'test_spec_file': 'chromium.perf.json',
       'max_battery_temp': 350,
     },
-    'Android Nexus6 Perf': {
+    'Android Nexus5 Perf (2)': {
+      'perf_id': 'android-nexus5',
+      'bucket': 'chrome-perf',
+      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
+                           api.properties['parent_revision']),
+      'num_device_shards': 7,
+      'num_host_shards': 2,
+      'shard_index': 1,
+      'test_spec_file': 'chromium.perf.json',
+      'max_battery_temp': 350,
+    },
+    'Android Nexus6 Perf (1)': {
       'perf_id': 'android-nexus6',
       'bucket': 'chrome-perf',
       'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
                            api.properties['parent_revision']),
       'num_device_shards': 7,
       'num_host_shards': 2,
+      'shard_index': 0,
+      'test_spec_file': 'chromium.perf.json',
+      'max_battery_temp': 350,
+    },
+    'Android Nexus6 Perf (2)': {
+      'perf_id': 'android-nexus6',
+      'bucket': 'chrome-perf',
+      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
+                           api.properties['parent_revision']),
+      'num_device_shards': 7,
+      'num_host_shards': 2,
+      'shard_index': 1,
       'test_spec_file': 'chromium.perf.json',
       'max_battery_temp': 350,
     },
@@ -62,16 +86,28 @@ BUILDERS = freeze({
       'test_spec_file': 'chromium.perf.json',
       'max_battery_temp': 350,
     },
-    'Android One Perf': {
+    'Android One Perf (1)': {
       'perf_id': 'android-one',
       'bucket': 'chrome-perf',
       'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
                            api.properties['parent_revision']),
       'num_device_shards': 7,
       'num_host_shards': 2,
+      'shard_index': 0,
       'test_spec_file': 'chromium.perf.json',
       'max_battery_temp': 350,
-    }
+    },
+    'Android One Perf (2)': {
+      'perf_id': 'android-one',
+      'bucket': 'chrome-perf',
+      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
+                           api.properties['parent_revision']),
+      'num_device_shards': 7,
+      'num_host_shards': 2,
+      'shard_index': 1,
+      'test_spec_file': 'chromium.perf.json',
+      'max_battery_temp': 350,
+    },
   },
   'chromium.perf.fyi': {
     'android_nexus5_oilpan_perf': {
@@ -82,7 +118,7 @@ BUILDERS = freeze({
               api.properties['parent_buildername'],
               api.properties['parent_revision'])),
       'num_device_shards': 1,
-    }
+    },
   },
   'client.v8.fyi': {
     'Android Nexus4 Perf': {
@@ -176,7 +212,8 @@ def RunSteps(api):
         builder['perf_id'], 'android', None,
         max_battery_temp=builder.get('max_battery_temp'),
         num_device_shards=builder['num_device_shards'],
-        num_host_shards=builder.get('num_host_shards', 1))
+        num_host_shards=builder.get('num_host_shards', 1),
+        shard_index=builder.get('shard_index', 0))
     dynamic_perf_tests.run(api, None)
 
     if failures:
@@ -209,7 +246,7 @@ def GenTests(api):
           repo_name='src',
               repo_url=REPO_URL,
               mastername='chromium.perf',
-              buildername='Android Nexus5 Perf',
+              buildername='Android Nexus5 Perf (1)',
               parent_buildername='parent_buildername',
               parent_buildnumber='1729',
               parent_revision='deadbeef',
@@ -222,7 +259,7 @@ def GenTests(api):
           repo_name='src',
           repo_url=REPO_URL,
           mastername='chromium.perf',
-          buildername='Android Nexus5 Perf',
+          buildername='Android Nexus5 Perf (1)',
           parent_buildername='parent_buildername',
           parent_buildnumber='1729',
           parent_revision='deadbeef',
@@ -237,7 +274,7 @@ def GenTests(api):
           repo_name='src',
           repo_url=REPO_URL,
           mastername='chromium.perf',
-          buildername='Android Nexus5 Perf',
+          buildername='Android Nexus5 Perf (1)',
           parent_buildername='parent_buildername',
           parent_buildnumber='1729',
           parent_revision='deadbeef',
@@ -247,7 +284,7 @@ def GenTests(api):
       api.override_step_data(
         'read test spec',
         api.json.output({
-            "Android Nexus5 Perf": {
+            "Android Nexus5 Perf (1)": {
               "scripts": [
                 {
                   "name": "host_info",

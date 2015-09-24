@@ -7,7 +7,7 @@
       "--master",
       "chromium.perf",
       "--builder",
-      "Android Nexus5 Perf",
+      "Android Nexus5 Perf (1)",
       "--slave",
       "slavename",
       "--spec",
@@ -86,7 +86,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Android Nexus5 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"slavename\": \"slavename\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Android Nexus5 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-nexus5\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"slavename\", \"target_platform\": \"android\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
