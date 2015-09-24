@@ -125,8 +125,6 @@ class MainFuncTest(auto_stub.TestCase):
         '{"builder": "some_builder_name", "master": "some_master_name", '
         '"name": "dev/battery/charge", '
         '"value": 96, "device_id": "device_serial_1"}',
-        spawn_device_temp_monitor._RUN_PY,
-        'infra.tools.send_ts_mon_values',
         '--float',
         '{"builder": "some_builder_name", '
         '"master": "some_master_name", "name": "dev/cpu/temperature", '
