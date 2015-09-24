@@ -1912,3 +1912,26 @@ def GetSlaveNamesForBuilder(builders, builder_name):
   for pool_name in pool_names:
     slaves.extend(builders['slave_pools'][pool_name]['slaves'])
   return slaves
+
+def IsClangWinBuild(build_dir, target):
+  """Check if a ninja build has been build with Clang on Windows.
+
+  This checks the build.ninja file from the build directory to see which
+  compiler has been used for a build.
+  """
+  # TODO(sebmarchand): Make this works for gn builds, currently only the gyp one
+  #     is supported.
+  if not IsWindows():
+    return False
+  build_file = os.path.join(build_dir, target, 'build.ninja')
+  if not os.path.isfile(build_file):
+    return False
+  # Matches e.g. "cl_x86 = path/to/clang-cl.exe"
+  clang_cl_re = re.compile(
+      r'^cl_x\d\d\s+\=\s+(?P<compiler_path>[^ ]+)\s.*$',
+      re.VERBOSE)
+  for line in open(build_file):
+    m = clang_cl_re.match(line)
+    if m:
+      return 'clang' in m.group('compiler_path')
+  return False
