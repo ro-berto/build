@@ -426,7 +426,7 @@ class Bisector(object):
     if len(candidate_range) <= max_revisions:
       return candidate_range
     step = len(candidate_range)/(max_revisions + 1)
-    return candidate_range[::step][-max_revisions:]
+    return candidate_range[step::step][:max_revisions]
 
   def check_bisect_finished(self, revision):
     """Checks if this revision completes the bisection process.
