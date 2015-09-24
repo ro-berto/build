@@ -132,7 +132,7 @@ class GitilesPoller(PollingChangeSource):
       self, repo_url, branches=None, pollInterval=30, category=None,
       project=None, revlinktmpl=None, agent=None, svn_mode=False,
       svn_branch=None, change_filter=None, comparator=None,
-      cursor_file=None):
+      cursor_file=default_cursor_file):
     """Args:
 
     repo_url: URL of the gitiles service to be polled.
