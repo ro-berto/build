@@ -6,6 +6,7 @@
 """Upload DM output PNG files and JSON summary to Google Storage."""
 
 import datetime
+import json
 import os
 import shutil
 import sys
@@ -37,6 +38,16 @@ def main(dm_dir, git_hash, builder_name, build_number, try_issue, import_path):
   tmp = tempfile.mkdtemp()
   shutil.move(os.path.join(dm_dir, 'dm.json'),
               os.path.join(tmp,    'dm.json'))
+
+  # Make sure the JSON file parses correctly.
+  json_file_name = os.path.join(tmp, 'dm.json')
+  with open(json_file_name) as jsonFile:
+    try:
+      json.load(jsonFile)
+    except ValueError:
+      json_content = open(json_file_name).read()
+      print >> sys.stderr, "Invalid JSON: \n\n%s\n" % json_content
+      raise
 
   # Only images are left in dm_dir.  Upload any new ones.
   gs = gs_utils.GSUtils()
