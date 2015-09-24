@@ -1621,12 +1621,30 @@
       "3.25",
       "----",
       "ls",
-      "gs://chromium-v8/v8-linux-rel/full-build-linux_a1.zip",
-      "gs://chromium-v8/v8-linux-rel/full-build-linux_a2.zip",
-      "gs://chromium-v8/v8-linux-rel/full-build-linux_a3.zip"
+      "gs://chromium-v8/v8-linux-rel/full-build-linux_a1.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Bisect.gsutil check builds",
+    "name": "Bisect.gsutil check build a1",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "----",
+      "ls",
+      "gs://chromium-v8/v8-linux-rel/full-build-linux_a2.zip"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Bisect.gsutil check build a2",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

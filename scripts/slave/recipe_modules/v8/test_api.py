@@ -298,10 +298,14 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
   def example_latest_previous_hash(self):
     return self.m.raw_io.stream_output('a0', stream='stdout')
 
-  def example_available_builds(self):
+  def example_available_builds(self, revision):
+    # When 'gsutil ls' is called, it will only find builds for a1 or a3.
+    available_builds = {
+      'a1': 'gs://chromium-v8/v8-linux64-dbg/full-build-linux_a1.zip',
+      'a3': 'gs://chromium-v8/v8-linux64-dbg/full-build-linux_a3.zip',
+    }
     return self.m.raw_io.stream_output(
-        'gs://chromium-v8/v8-linux64-dbg/full-build-linux_a1.zip\n'
-        'gs://chromium-v8/v8-linux64-dbg/full-build-linux_a3.zip',
+        available_builds.get(revision, ''),
         stream='stdout',
     )
 

@@ -549,12 +549,11 @@ class V8Api(recipe_api.RecipeApi):
         step_test_data=lambda: self.test_api.example_bisection_range()
       )
       bisect_range = list(reversed(step_result.stdout.strip().splitlines()))
-
+      
       if self.bot_type == 'tester':
         # Filter the bisect range to the revisions for which builds are
         # available.
-        available_bisect_range = self.get_available_build_archives(
-            bisect_range)
+        available_bisect_range = self.get_available_range(bisect_range)
       else:
         available_bisect_range = bisect_range
 
@@ -569,6 +568,9 @@ class V8Api(recipe_api.RecipeApi):
           'Bisection disabled - recurring failure', '# Empty program')
       step_result.presentation.status = self.m.step.WARNING
       return
+
+    # Log available revisions to ease debugging.
+    self.log_available_range(available_bisect_range)
 
     culprit = bisection.keyed_bisect(available_bisect_range, is_bad)
     culprit_range = self.calc_missing_values_in_sequence(
@@ -1225,25 +1227,32 @@ class V8Api(recipe_api.RecipeApi):
         len(changes),
     )
 
-  def get_available_build_archives(self, bisect_range):
+  def get_available_range(self, bisect_range):
     assert self.bot_type == 'tester'
     archive_name_pattern = '%s/full-build-%s_%%s.zip' % (
         self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
         self.m.archive.legacy_platform_name(),
     )
-    # TODO: Split into multiple calls for too many files to avoid problems on
-    # windows.
+    # TODO(machenbach): Maybe parallelize this in a wrapper script.
     args = ['ls']
-    args.extend(map(lambda s: archive_name_pattern % s, bisect_range))
-    step_result = self.m.gsutil(
-        args,
-        name='check builds',
-        # Allow failures, as the tool will formally fail for any absent file.
-        ok_ret='any',
-        stdout=self.m.raw_io.output(),
-        step_test_data=lambda: self.test_api.example_available_builds(),
-    )
-    return [r for r in bisect_range if r in step_result.stdout.strip()]
+    available_range = []
+    # Check all builds except the last as we already know it is "bad".
+    for r in bisect_range[:-1]:
+      step_result = self.m.gsutil(
+          args + [archive_name_pattern % r],
+          name='check build %s' % r[:8],
+          # Allow failures, as the tool will formally fail for any absent file.
+          ok_ret='any',
+          stdout=self.m.raw_io.output(),
+          step_test_data=lambda: self.test_api.example_available_builds(r),
+      )
+      if r in step_result.stdout.strip():
+        available_range.append(r)
+
+    # Always keep the latest revision in the range. The latest build is
+    # assumed to be "bad" and won't be tested again.
+    available_range.append(bisect_range[-1])
+    return available_range
 
   def calc_missing_values_in_sequence(
         self, sequence, subsequence, value):
@@ -1266,6 +1275,11 @@ class V8Api(recipe_api.RecipeApi):
       previous = subsequence[index_on_subsequence - 1]
       from_index = sequence.index(previous) + 1
     return sequence[from_index:to_index]
+
+  def log_available_range(self, available_bisect_range):
+    step_result = self.m.step('Available range', cmd=None)
+    for revision in available_bisect_range:
+      step_result.presentation.links[revision[:8]] = COMMIT_TEMPLATE % revision
 
   def report_culprits(self, culprit_range):
     assert culprit_range
