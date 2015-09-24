@@ -23,6 +23,8 @@ SPEC = {
         chromium_perf.SPEC['builders']['Win Builder'],
     'win_xp_perf_bisect':
         chromium_perf.SPEC['builders']['Win Builder'],
+    'winx64_10_perf_bisect':
+        chromium_perf.SPEC['builders']['Win x64 Builder'],
     'winx64_bisect_builder':
         chromium_perf.SPEC['builders']['Win x64 Builder'],
     'win_x64_perf_bisect':
@@ -31,11 +33,15 @@ SPEC = {
         chromium_perf.SPEC['builders']['Win x64 Builder'],
     'winx64nvidia_perf_bisect':
         chromium_perf.SPEC['builders']['Win x64 Builder'],
+    'winx64intel_perf_bisect':
+        chromium_perf.SPEC['builders']['Win x64 Builder'],
     'mac_perf_bisect_builder':
         chromium_perf.SPEC['builders']['Mac Builder'],
     'mac_10_9_perf_bisect':
         chromium_perf.SPEC['builders']['Mac Builder'],
     'mac_10_10_perf_bisect':
+        chromium_perf.SPEC['builders']['Mac Builder'],
+    'mac_retina_perf_bisect':
         chromium_perf.SPEC['builders']['Mac Builder'],
     'linux_perf_tester':{
       'chromium_config': 'chromium_official',
