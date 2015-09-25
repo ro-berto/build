@@ -186,6 +186,13 @@ def update_scripts():
       gclient_name += '.bat'
     gclient_path = os.path.join(BUILD_ROOT, '..', 'depot_tools', gclient_name)
     gclient_cmd = [gclient_path, 'sync', '--force', '--verbose']
+    try:
+      fd, output_json = tempfile.mkstemp()
+      os.close(fd)
+      gclient_cmd += ['--output-json', output_json]
+    except Exception:
+      # Super paranoia try block.
+      output_json = None
     cmd_dict = {
         'name': 'update_scripts',
         'cmd': gclient_cmd,
@@ -195,6 +202,32 @@ def update_scripts():
     if subprocess.call(gclient_cmd, cwd=BUILD_ROOT) != 0:
       s.step_text('gclient sync failed!')
       s.step_warnings()
+    elif output_json:
+      try:
+        with open(output_json, 'r') as f:
+          gclient_json = json.load(f)
+        for line in json.dumps(
+            gclient_json, sort_keys=True,
+            indent=4, separators=(',', ': ')).splitlines():
+          s.step_log_line('gclient_json', line)
+        s.step_log_end('gclient_json')
+        revision = gclient_json['solutions']['build/']['revision']
+        scm = gclient_json['solutions']['build/']['scm']
+        s.step_text('%s - %s' % (scm, revision))
+        s.set_build_property('build_scm', json.dumps(scm))
+        s.set_build_property('build_revision', json.dumps(revision))
+      except Exception as e:
+        s.step_text('Unable to process gclient JSON %s' % repr(e))
+        s.step_warnings()
+      finally:
+        try:
+          os.remove(output_json)
+        except Exception as e:
+          print >> sys.stderr, "LEAKED:", output_json, e
+    else:
+      s.step_text('Unable to get SCM data')
+      s.step_warnings()
+
     os.environ['RUN_SLAVE_UPDATED_SCRIPTS'] = '1'
 
     # After running update scripts, set PYTHONIOENCODING=UTF-8 for the real
