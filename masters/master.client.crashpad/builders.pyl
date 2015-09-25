@@ -66,6 +66,26 @@
         "config": "Release",
       },
     },
+    "crashpad_win_x86_dbg": {
+      "recipe": "crashpad/continuous",
+      "scheduler": "crashpad_commits",
+      "slave_pools": ["winxp"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Debug",
+      },
+    },
+    "crashpad_win_x86_rel": {
+      "recipe": "crashpad/continuous",
+      "scheduler": "crashpad_commits",
+      "slave_pools": ["winxp"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Release",
+      },
+    },
   },
 
   "schedulers": {
@@ -91,6 +111,14 @@
         "version": "win7",
       },
       "slaves": ["vm254-m3"],
+    },
+    "winxp": {
+      "slave_data": {
+        "bits": 32,
+        "os":  "win",
+        "version": "winxp",
+      },
+      "slaves": ["vm5-m3"],
     },
   },
 }

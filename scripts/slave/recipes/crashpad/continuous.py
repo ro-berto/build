@@ -38,7 +38,7 @@ def RunSteps(api):
   #
   # c) is tested on the _x86_wow64 bots.
   #
-  # d) is untested pending http://crbug.com/531663.
+  # d) is tested on the _x86 bots.
   #
   # a) and b) are tested on the _x64 bots. Crashpad's gclient takes care of
   # generating Debug == x86 and Debug_x64 == x64 when target_arch==x64 (the
@@ -66,9 +66,10 @@ def GenTests(api):
       'crashpad_mac_rel',
       'crashpad_win_x64_dbg',
       'crashpad_win_x64_rel',
+      'crashpad_win_x86_dbg',
+      'crashpad_win_x86_rel',
       'crashpad_win_x86_wow64_dbg',
       'crashpad_win_x86_wow64_rel',
-      # TODO(scottmg): Add native x86 bots.
   ]
   for t in tests:
     yield(api.test(t) + api.properties.generic(buildername=t))
