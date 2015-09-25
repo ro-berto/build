@@ -324,6 +324,7 @@ class FactoryCommands(object):
 
     self._kill_tool = self.PathJoin(self._script_dir, 'kill_processes.py')
     self._runhooks_tool = self.PathJoin(self._script_dir, 'runhooks_wrapper.py')
+    self._mb_tool = self.PathJoin(repository_root, 'tools', 'mb', 'mb.py')
     self._compile_tool = self.PathJoin(self._script_dir, 'compile.py')
     self._test_tool = self.PathJoin(self._script_dir, 'runtest.py')
     self._zip_tool = self.PathJoin(self._script_dir, 'zip_build.py')
@@ -1051,6 +1052,27 @@ class FactoryCommands(object):
         haltOnFailure=True,
         name='runhooks',
         description='gclient hooks',
+        env=env,
+        locks=[self.slave_exclusive_lock],
+        timeout=timeout,
+        command=cmd)
+
+  def AddGenerateBuildFilesStep(self, env=None, timeout=None, options=None,
+                                config_file_path=None, target=None):
+    if not config_file_path:
+      config_file_path = self.PathJoin(self._repository_root,
+                                       'tools', 'mb', 'mb_config.pyl')
+    cmd = [self._python, self._mb_tool, 'gen',
+           '-m', WithProperties('%(mastername)s'),
+           '-b', WithProperties('%(buildername)s'),
+           '--config-file', config_file_path,
+           '//out/%s' % target]
+
+    self._factory.addStep(
+        shell.ShellCommand,
+        haltOnFailure=True,
+        name='generate_build_files',
+        description='generate build files',
         env=env,
         locks=[self.slave_exclusive_lock],
         timeout=timeout,

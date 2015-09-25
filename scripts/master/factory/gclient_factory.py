@@ -157,7 +157,8 @@ class GClientFactory(object):
   def BaseFactory(self, gclient_spec=None, official_release=False,
                   factory_properties=None, build_properties=None,
                   delay_compile_step=False, sudo_for_remove=False,
-                  gclient_deps=None, slave_type=None, options=None):
+                  gclient_deps=None, slave_type=None, options=None,
+                  target=None):
     if gclient_spec is None:
       gclient_spec = self.BuildGClientSpec()
     factory_properties = factory_properties or {}
@@ -202,6 +203,11 @@ class GClientFactory(object):
                                      blink_config=blink_config)
 
 
+    use_mb = factory_properties.get('use_mb')
+
+    if use_mb:
+      env.update({'GYP_CHROMIUM_NO_ACTION': '1'})
+
     # svn timeout is 2 min; we allow 5
     timeout = factory_properties.get('gclient_timeout')
     if official_release or factory_properties.get('nuke_and_pave'):
@@ -217,6 +223,11 @@ class GClientFactory(object):
                            slave_type, sudo_for_remove,
                            gclient_deps=gclient_deps, options=options,
                            blink_config=blink_config)
+
+    if use_mb:
+      factory_cmd_obj.AddGenerateBuildFilesStep(env=env, timeout=timeout,
+                                                options=options, target=target)
+
     return factory
 
   def BuildFactory(self, target='Release', clobber=False, tests=None, mode=None,
