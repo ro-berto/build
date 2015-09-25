@@ -1003,6 +1003,17 @@ BUILDERS = freeze({
   },
   'client.webrtc.fyi': {
     'builders':  {
+      'Win32 Release (swarming)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
+        'use_isolate': True,
+        'enable_swarming': True,
+      },
       'Mac64 Debug (parallel)': {
         'recipe_config': 'webrtc_parallel',
         'chromium_config_kwargs': {
@@ -1020,6 +1031,17 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
+      },
+      'Mac64 Release (swarming)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+        'use_isolate': True,
+        'enable_swarming': True,
       },
       'Mac Asan (parallel)': {
         'recipe_config': 'webrtc_parallel_clang',
@@ -1040,6 +1062,17 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+      },
+      'Linux64 Release (swarming)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
       },
       'Android Builder (dbg)': {
         'recipe_config': 'webrtc_android',

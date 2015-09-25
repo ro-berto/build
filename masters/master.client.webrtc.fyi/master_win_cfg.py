@@ -14,10 +14,15 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
+                                'Win32 Release (swarming)',
                             ]),
   ])
 
   specs = [
+    {
+      'name': 'Win32 Release (swarming)',
+      'slavebuilddir': 'win_swarming',
+    },
   ]
 
   c['builders'].extend([

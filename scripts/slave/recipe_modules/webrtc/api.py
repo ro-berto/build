@@ -158,6 +158,16 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver:
       self.m.chromium.apply_config('trybot_flavor')
 
+    self.use_isolate = self.bot_config.get('use_isolate')
+    if self.use_isolate:
+      self.m.isolate.set_isolate_environment(self.m.chromium.c)
+
+    if self.bot_config.get('enable_swarming'):
+      self.m.chromium_tests.configure_swarming(
+          'webrtc',
+          precommit=self.m.tryserver.is_tryserver,
+          mastername=mastername)
+
   def checkout(self, **kwargs):
     update_step = self.m.bot_update.ensure_checkout(**kwargs)
     assert update_step.json.output['did_run']
@@ -177,6 +187,9 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.webrtc_revision = revs.get('got_webrtc_revision')
     self.webrtc_revision_cp = revs.get('got_webrtc_revision_cp')
 
+    if self.bot_config.get('enable_swarming'):
+      self.m.swarming.check_client_version()
+
   def compile(self):
     compile_targets = self.recipe_config.get('compile_targets', [])
     self.m.chromium.compile(targets=compile_targets)
@@ -187,6 +200,10 @@ class WebRTCApi(recipe_api.RecipeApi):
     Args:
       test_suite: The name of the test suite.
     """
+    if self.use_isolate:
+      self.m.isolate.remove_build_metadata()
+      self.m.isolate.isolate_tests(self.m.chromium.output_dir,
+                                   targets=self.NORMAL_TESTS)
     with self.m.step.defer_results():
       if self.c.TEST_SUITE in ('webrtc', 'webrtc_parallel'):
         parallel = self.c.TEST_SUITE.endswith('_parallel')
@@ -198,7 +215,7 @@ class WebRTCApi(recipe_api.RecipeApi):
                                   'Contents', 'MacOS',
                                   'libjingle_peerconnection_objc_test')
           self.add_test(test, name='libjingle_peerconnection_objc_test',
-                        parallel=parallel)
+                        parallel=parallel, disable_swarming=True)
       elif self.c.TEST_SUITE == 'webrtc_baremetal':
         # Add baremetal tests, which are different depending on the platform.
         if self.m.platform.is_win or self.m.platform.is_mac:
@@ -281,7 +298,8 @@ class WebRTCApi(recipe_api.RecipeApi):
         perf_test='xp' not in self.c.PERF_ID)
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,
-               perf_test=False, perf_dashboard_id=None, parallel=False):
+               perf_test=False, perf_dashboard_id=None, parallel=False,
+               disable_swarming=False):
     """Helper function to invoke chromium.runtest().
 
     Notice that the name parameter should be the same as the test executable in
@@ -317,10 +335,21 @@ class WebRTCApi(recipe_api.RecipeApi):
         annotate = None  # The parallel script doesn't output gtest format.
         flakiness_dash = False
 
-      self.m.chromium.runtest(
-          test=test, args=args, name=name, annotate=annotate, xvfb=True,
-          flakiness_dash=flakiness_dash, python_mode=python_mode,
-          test_type=test_type, env=env)
+      runtest_kwargs = {
+          'annotate': annotate,
+          'xvfb': True,
+          'flakiness_dash': flakiness_dash,
+          'python_mode': python_mode,
+          'test_type': test_type,
+          'env': env,
+      }
+      if self.use_isolate and not disable_swarming:
+        self.m.isolate.runtest(test=test, revision=revision,
+                               webkit_revision=None, args=args, name=name,
+                               **runtest_kwargs)
+      else:
+        self.m.chromium.runtest(test=test, args=args, name=name,
+                                **runtest_kwargs)
 
   def _adb_install_apk(self, apk_name):
     """Installs an APK on an Android device.
@@ -431,6 +460,8 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.chromium_android.clean_local_files()
     else:
       self.m.chromium.cleanup_temp()
+    if self.use_isolate:
+      self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
 
   def clean_test_output(self):
     """Remove all test output in out/, since we have tests leaking files."""

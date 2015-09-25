@@ -14,6 +14,7 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
+                                'Linux64 Release (swarming)',
                                 'Linux Tsan v2 (parallel)',
       ]),
   ])
@@ -22,6 +23,10 @@ def Update(c):
     {
       'name': 'Linux Tsan v2 (parallel)',
       'slavebuilddir': 'linux_tsan2',
+    },
+    {
+      'name': 'Linux64 Release (swarming)',
+      'slavebuilddir': 'linux_swarming',
     },
   ]
 
