@@ -250,8 +250,7 @@ class Bisector(object):
       results.append(self.revision_class(None, self,
                                          base_revision=base_revision,
                                          deps_revision=revision,
-                                         dependency_depot_name=depot_name,
-                                         depot=depot))
+                                         dependency_depot_name=depot_name))
     results.reverse()
     return results
 

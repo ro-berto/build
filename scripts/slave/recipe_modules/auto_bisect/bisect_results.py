@@ -197,7 +197,7 @@ class BisectResults(object):
     if culprit:
       self.culprit_cl_hash = (culprit.deps_revision or
                               culprit.commit_hash)
-      if culprit.depot != 'chromium':
+      if culprit.depot_name != 'chromium':  # pragma: no cover
         repo_path = api.m.path['slave_build'].join(culprit.depot['src'])
       else:
         repo_path = None
@@ -211,28 +211,28 @@ class BisectResults(object):
   def _compose_revisions_table(self):
     def revision_row(r):
       result = [
-        r.commit_pos or '',
-        r.revision_string,
+        r.depot_name,
+        r.deps_revision or 'r' + str(r.commit_pos),
         r.mean_value if r.mean_value is not None else 'N/A',
         r.std_err if r.std_err is not None else 'N/A',
         'good' if r.good else 'bad' if r.bad else 'unknown',
-        'tested' if r.tested else 'aborted',
-        str(self._bisector.culprit == r),
+        '<-' if self._bisector.culprit == r else '',
       ]
       return map(str, result)
-    revisions = [[
-        'commit_pos',
-        'revision_string',
-        'mean_value',
-        'std_err',
-        'good_or_bad?',
-        'tested?',
-        'culprit?',
+
+    headers_row = [[
+        'Depot',
+        'Revision',
+        'Mean Value',
+        'Std. Err.',
+        'Good?',
+        '',
     ]]
-    revisions += [revision_row(r)
-                  for r in self._bisector.revisions
-                  if r.tested or r.aborted]
-    return _REVISION_TABLE_TEMPLATE % {'table': _pretty_table(revisions)}
+    revision_rows = [revision_row(r)
+                     for r in self._bisector.revisions
+                     if r.tested or r.aborted]
+    all_rows = headers_row + revision_rows
+    return _REVISION_TABLE_TEMPLATE % {'table': _pretty_table(all_rows)}
 
 
 def _pretty_table(data):
@@ -249,12 +249,17 @@ def _pretty_table(data):
   """
   result = ''
   column_widths = [0] * len(data[0])
-  for line in data:
+  for row in data:
     column_widths = [max(longest_len, len(prop)) for
-                     longest_len, prop in zip(column_widths, line)]
-  for line in data:
-    for prop, width in zip(line, column_widths):
+                     longest_len, prop in zip(column_widths, row)]
+  for row in data:
+    is_culprit_row = row[-1] == '<-'
+    if is_culprit_row:
+      result += '\n'
+    for prop, width in zip(row, column_widths):
       result += prop.ljust(width + 1)
     result += '\n'
+    if is_culprit_row:
+      result += '\n'
   return result
 

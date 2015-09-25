@@ -32,8 +32,8 @@ class RevisionState(object):
               # revisions.
   ) = xrange(7)
 
-  def __init__(self, revision_string, bisector, depot='chromium',
-               dependency_depot_name=None,base_revision=None,
+  def __init__(self, revision_string, bisector,
+               dependency_depot_name=None, base_revision=None,
                deps_revision=None):
     """Creates a new instance to track the state of a revision.
 
@@ -49,10 +49,8 @@ class RevisionState(object):
       revision_string (str): A git hash or a commit position in the chromium
         repository. If None, all kwargs must be given.
       bisector (Bisector): The object performing the bisection.
-      depot (dict): One of the entries in depot_config.DEPOT_DEPS_NAME that
-        specifies which dependency to do the DEPS change on. It is expected to
-        contain the 'chromium' string instead of None when not bisecting any
-        dependencies.
+      depot_name (str): The name of the depot as specified in DEPS. Must be a
+        key in depot_config.DEPOT_DEPS_NAME .
       base_revision (RevisionState): The revision state to patch with the deps
         change.
       depot_revision: The commit hash of the dependency repo to put in place of
@@ -74,15 +72,16 @@ class RevisionState(object):
     self.job_name = None
     self.patch_file = None
     self.deps_revision = None
+    self.depot_name = dependency_depot_name or 'chromium'
+    self.depot = depot_config.DEPOT_DEPS_NAME[self.depot_name]
     if not self.revision_string:
       assert base_revision
       assert base_revision.deps_file_contents
-      assert depot != 'chromium'
-      assert deps_revision
+      assert self.depot
+      assert self.depot_name != 'chromium'
       self.needs_patch = True
-      self.depot = depot
       self.revision_string = (base_revision.revision_string + ',' +
-                              dependency_depot_name)
+                              self.depot_name)
       self.revision_string += '@' + deps_revision
       self.deps_patch, self.deps_file_contents = self.bisector.make_deps_patch(
           base_revision, base_revision.deps_file_contents,
@@ -96,7 +95,6 @@ class RevisionState(object):
       self.deps_revision = deps_revision
     else:
       self.needs_patch = False
-      self.depot = depot
       self.commit_hash, self.commit_pos = self._commit_from_rev_string()
     self.build_url = self.bisector.get_platform_gs_prefix() + self._gs_suffix()
 
@@ -205,7 +203,8 @@ class RevisionState(object):
         # bisector, but the os the tester would be running on.
         continue
 
-      if depot_data.get('recurse') and self.depot in depot_data.get('from'):
+      if (depot_data.get('recurse') and
+          self.depot_name in depot_data.get('from')):
         depot_data_src = depot_data.get('src') or depot_data.get('src_old')
         src_dir = deps_data.get(depot_data_src)
         if src_dir:
