@@ -111,11 +111,6 @@
             "categories": [
               "chromium_gnumbd_closer"
             ]
-          },
-          "cq-stats-uploader": {
-            "categories": [
-              "infra_tree_closer"
-            ]
           }
         }
       }
