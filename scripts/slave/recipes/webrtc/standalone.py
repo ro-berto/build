@@ -26,6 +26,7 @@ def RunSteps(api):
   webrtc.checkout()
   webrtc.cleanup()
   api.chromium.runhooks()
+  webrtc.check_swarming_version()
 
   if webrtc.should_build:
     if api.chromium.c.project_generator.tool == 'gn':

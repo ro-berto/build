@@ -187,6 +187,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.webrtc_revision = revs.get('got_webrtc_revision')
     self.webrtc_revision_cp = revs.get('got_webrtc_revision_cp')
 
+  def check_swarming_version(self):
     if self.bot_config.get('enable_swarming'):
       self.m.swarming.check_client_version()
 
