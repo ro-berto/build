@@ -36,7 +36,7 @@ class WebRTCApi(recipe_api.RecipeApi):
   # Android APK tests.
   ANDROID_APK_TESTS = freeze({
     'audio_decoder_unittests':
-        'webrtc/modules/audio_coding/neteq/audio_decoder_unittests.isolate',
+        'webrtc/modules/audio_decoder_unittests.isolate',
     'common_audio_unittests':
         'webrtc/common_audio/common_audio_unittests.isolate',
     'common_video_unittests':

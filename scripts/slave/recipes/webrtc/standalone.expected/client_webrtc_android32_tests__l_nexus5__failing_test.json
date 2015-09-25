@@ -272,7 +272,7 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/modules/audio_coding/neteq/audio_decoder_unittests.isolate"
+      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/modules/audio_decoder_unittests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
