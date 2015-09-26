@@ -75,16 +75,6 @@ TEST_CONFIGS = freeze({
     'tests': ['test262'],
     'test_args': ['--download-data'],
   },
-  'test262_es6': {
-    'name': 'Test262-es6 - no variants',
-    'tests': ['test262-es6'],
-    'test_args': ['--no-variants', '--download-data'],
-  },
-  'test262_es6_variants': {
-    'name': 'Test262-es6',
-    'tests': ['test262-es6'],
-    'test_args': ['--download-data'],
-  },
   'unittests': {
     'name': 'Unittests',
     'tests': ['unittests'],

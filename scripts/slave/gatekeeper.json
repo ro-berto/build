@@ -831,8 +831,6 @@
         "SimdJs - small",
         "Test262",
         "Test262 - no variants",
-        "Test262-es6",
-        "Test262-es6 - no variants",
         "Mozilla",
         "GCMole arm",
         "GCMole arm64",
