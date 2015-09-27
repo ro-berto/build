@@ -274,16 +274,10 @@
     "stdout": "/path/to/tmp/"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "# Empty program"
-    ],
+    "cmd": [],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for commit timed out",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@# Empty program@@@",
-      "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

@@ -481,8 +481,8 @@ class V8Api(recipe_api.RecipeApi):
     # Only bisect if the fastest failure is significantly faster than the
     # ongoing build's total.
     if failure.duration * BISECT_DURATION_FACTOR > self.test_duration_sec:
-      step_result = self.m.python.inline(
-          'Bisection disabled - test too slow', '# Empty program')
+      step_result = self.m.step(
+          'Bisection disabled - test too slow', cmd=None)
       return
 
     # Don't retry failures during bisection.
@@ -554,8 +554,8 @@ class V8Api(recipe_api.RecipeApi):
       # one or two builds and check if the failure happened in revision
       # from_change. Otherwise, the cost of calling is_bad is as much as one
       # bisect step.
-      step_result = self.m.python.inline(
-          'Bisection disabled - recurring failure', '# Empty program')
+      step_result = self.m.step(
+          'Bisection disabled - recurring failure', cmd=None)
       step_result.presentation.status = self.m.step.WARNING
       return
 
@@ -904,7 +904,7 @@ class V8Api(recipe_api.RecipeApi):
     if flake_log and flakes:
       # Emit a separate step to show flakes from the previous step
       # to not close the tree.
-      step_result = self.m.python.inline(name + ' (flakes)', '# Empty program')
+      step_result = self.m.step(name + ' (flakes)', cmd=None)
       step_result.presentation.status = self.m.step.WARNING
       self._update_failure_presentation(
             flake_log, flakes, step_result.presentation)
@@ -1293,6 +1293,6 @@ class V8Api(recipe_api.RecipeApi):
     else:
       text = 'Suspecting %s' % culprit_range[0][:8]
 
-    step_result = self.m.python.inline(text, '# Empty program')
+    step_result = self.m.step(text, cmd=None)
     for culprit in culprit_range:
       step_result.presentation.links[culprit[:8]] = COMMIT_TEMPLATE % culprit

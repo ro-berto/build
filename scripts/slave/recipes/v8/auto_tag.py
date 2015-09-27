@@ -184,7 +184,7 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
   )
 
   if api.properties.get('dry_run'):
-    api.python.inline('Dry-run commit', '# Empty program')
+    api.step('Dry-run commit', cmd=None)
     return
 
   api.git(
@@ -206,8 +206,8 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
       # This is racy. Someone other than this script might
       # commit another version change right before the fetch (rarely).
       # In this case, we time out and leave this commit untagged.
-      step_result = api.python.inline(
-          'Waiting for commit timed out', '# Empty program')
+      step_result = api.step(
+          'Waiting for commit timed out', cmd=None)
       step_result.presentation.status = api.step.FAILURE
       break
     api.python.inline(
@@ -248,10 +248,10 @@ def RunSteps(api):
     IncrementVersion(
         api, local_branch_ref, latest_version, latest_version_file)
   elif not latest_version == previous_version.with_incremented_patch():
-    step_result = api.python.inline(
+    step_result = api.step(
         'Incorrect patch levels between %s and %s' % (
               previous_version, latest_version),
-        '# Empty program',
+        cmd=None,
     )
     step_result.presentation.status = api.step.WARNING
 
@@ -266,7 +266,7 @@ def RunSteps(api):
   if tag != str(head_version):
     # Tag latest version.
     if api.properties.get('dry_run'):
-      api.python.inline('Dry-run tag %s' % head_version, '# Empty program')
+      api.step('Dry-run tag %s' % head_version, cmd=None)
     else:
       api.git(
           'tag', str(head_version), head,
@@ -283,7 +283,7 @@ def RunSteps(api):
   # ref command will create it.
   if head != current_lkgr:
     if api.properties.get('dry_run'):
-      api.python.inline('Dry-run lkgr update %s' % head, '# Empty program')
+      api.step('Dry-run lkgr update %s' % head, cmd=None)
     else:
       PushRef(api, repo, lkgr_ref, head)
   else:

@@ -149,17 +149,11 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "# Empty program"
-    ],
+    "cmd": [],
     "cwd": "[SLAVE_BUILD]",
     "name": "Unittests (flakes)",
     "~followup_annotations": [
       "@@@STEP_TEXT@failures: 2<br/>@@@",
-      "@@@STEP_LOG_LINE@python.inline@# Empty program@@@",
-      "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_LOG_LINE@test-name@Test: suite-name/dir/test-name (flaky in a repeated run)@@@",
       "@@@STEP_LOG_LINE@test-name@Flags: @@@",
       "@@@STEP_LOG_LINE@test-name@Command: d8 test.js@@@",
@@ -257,17 +251,11 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "# Empty program"
-    ],
+    "cmd": [],
     "cwd": "[SLAVE_BUILD]",
     "name": "Check (flakes)",
     "~followup_annotations": [
       "@@@STEP_TEXT@failures: 2<br/>@@@",
-      "@@@STEP_LOG_LINE@python.inline@# Empty program@@@",
-      "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_LOG_LINE@test-name@Test: suite-name/dir/test-name (flaky in a repeated run)@@@",
       "@@@STEP_LOG_LINE@test-name@Flags: @@@",
       "@@@STEP_LOG_LINE@test-name@Command: d8 test.js@@@",
@@ -365,17 +353,11 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "# Empty program"
-    ],
+    "cmd": [],
     "cwd": "[SLAVE_BUILD]",
     "name": "Check - flaky (flakes)",
     "~followup_annotations": [
       "@@@STEP_TEXT@failures: 2<br/>@@@",
-      "@@@STEP_LOG_LINE@python.inline@# Empty program@@@",
-      "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_LOG_LINE@test-name@Test: suite-name/dir/test-name (flaky in a repeated run)@@@",
       "@@@STEP_LOG_LINE@test-name@Flags: @@@",
       "@@@STEP_LOG_LINE@test-name@Command: d8 test.js@@@",
