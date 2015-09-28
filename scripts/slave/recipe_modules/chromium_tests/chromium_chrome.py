@@ -31,6 +31,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
+      'compile_targets': [
+        'linux_packages_all'
+      ],
       'testing': {
         'platform': 'linux',
       },
@@ -43,6 +46,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'compile_targets': [
+        'linux_packages_all'
+      ],
       'testing': {
         'platform': 'linux',
       },
@@ -55,6 +61,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'compile_targets': [
+        'chrome',
+      ],
       'testing': {
         'platform': 'mac',
       },

@@ -218,6 +218,9 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'arm64_builder',
+      'compile_targets': [
+        'chromium_builder_tests'
+      ],
       'testing': {
         'platform': 'linux',
       },

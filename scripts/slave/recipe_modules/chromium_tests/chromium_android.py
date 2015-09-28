@@ -19,6 +19,9 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'main_builder',
+      'compile_targets': [
+        'chromium_builder_tests'
+      ],
       'bot_type': 'builder',
       'testing': {
         'platform': 'linux',
@@ -35,6 +38,9 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'main_builder',
+      'compile_targets': [
+        'chromium_builder_tests'
+      ],
       'bot_type': 'builder',
       'testing': {
         'platform': 'linux',

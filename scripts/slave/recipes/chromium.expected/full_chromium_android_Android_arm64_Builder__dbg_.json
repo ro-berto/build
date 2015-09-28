@@ -161,19 +161,44 @@
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(1)"
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--",
+      "chromium_builder_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Misconfigured bot: no compile targets@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "compile"
   },
   {
-    "name": "$final_result",
-    "reason": "Step('compile') failed with return_code 1",
-    "status_code": 1
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/zip_build.py",
+      "--target",
+      "Debug",
+      "--build-url",
+      "gs://chromium-android-archive/chromium.android/Android arm64 Builder (dbg)",
+      "--build_revision",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android arm64 Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android arm64 Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "package build"
   }
 ]
