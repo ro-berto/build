@@ -13,7 +13,7 @@ import random
 import tempfile
 import unittest
 
-import test_env  # pylint: disable=W0611
+import test_env  # pylint: disable=W0611,W0403
 
 from common import chromium_utils
 from master import chromium_step

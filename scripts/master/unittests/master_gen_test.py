@@ -11,7 +11,7 @@ import unittest
 
 
 # This adjusts sys.path, so it must be imported before the other modules.
-import test_env
+import test_env  # pylint: disable=W0403
 
 from master import master_gen
 

@@ -8,7 +8,7 @@
 
 import unittest
 
-import test_env  # pylint: disable=W0611
+import test_env  # pylint: disable=W0611,W0403
 
 from buildbot.process.properties import Properties
 from master import master_utils

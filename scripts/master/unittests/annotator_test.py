@@ -9,7 +9,7 @@ import os
 import time
 import unittest
 
-import test_env  # pylint: disable=W0611
+import test_env  # pylint: disable=W0611,W0403
 
 from buildbot.status import builder
 import mock

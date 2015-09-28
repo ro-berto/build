@@ -9,7 +9,7 @@ from contextlib import contextmanager
 import httplib
 import unittest
 
-import test_env  # pylint: disable=W0611
+import test_env  # pylint: disable=W0611,W0403
 
 from master.deferred_resource import DeferredResource
 from mock import Mock, call

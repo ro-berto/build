@@ -8,7 +8,7 @@
 import re
 import unittest
 
-import test_env  # pylint: disable=W0611
+import test_env  # pylint: disable=W0611,W0403
 
 import buildbot.changes.filter
 from master import chromeos_manifest_scheduler

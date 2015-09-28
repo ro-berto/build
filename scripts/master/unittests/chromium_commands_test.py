@@ -8,7 +8,7 @@
 import unittest
 
 import json
-import test_env  # pylint: disable=W0611
+import test_env  # pylint: disable=W0611,W0403
 
 from master.factory.chromium_commands import ChromiumCommands
 from master.factory.commands import FactoryCommands

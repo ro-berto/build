@@ -7,7 +7,7 @@
 
 import unittest
 
-import test_env  # pylint: disable=W0611
+import test_env  # pylint: disable=W0611,W0403
 
 from master import try_job_base
 
