@@ -160,6 +160,9 @@ def goma_setup(options, env):
   if options.goma_store_local_run_output:
     env['GOMA_STORE_LOCAL_RUN_OUTPUT'] = options.goma_store_local_run_output
 
+  if options.goma_dump_stats_file:
+    env['GOMA_DUMP_STATS_FILE'] = options.goma_dump_stats_file
+
   # goma is requested.
   goma_key = os.path.join(options.goma_dir, 'goma.key')
   if os.path.exists(goma_key):
@@ -1302,6 +1305,8 @@ def real_main():
                            help='Store local run output to goma servers.')
   option_parser.add_option('--goma-fail-fast', action='store_true')
   option_parser.add_option('--goma-disable-local-fallback', action='store_true')
+  option_parser.add_option('--goma-dump-stats-file', action='store',
+                           help='Specify a file to dump serialized GomaStats.')
   option_parser.add_option('--verbose', action='store_true')
   option_parser.add_option('--ninja-ensure-up-to-date', action='store_true',
                            help='Checks the output of the ninja builder to '
