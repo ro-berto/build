@@ -67,7 +67,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "cfi_vptr=1 clang=1 component=static_library target_arch=x64",
-      "GYP_LINK_CONCURRENCY": "2"
+      "GYP_LINK_CONCURRENCY": "8"
     },
     "name": "gclient runhooks"
   },

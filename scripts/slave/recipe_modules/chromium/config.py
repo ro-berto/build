@@ -471,7 +471,7 @@ def lto(c):
 @config_ctx(includes=['lto'])
 def cfi_vptr(c):
   c.gyp_env.GYP_DEFINES['cfi_vptr'] = 1
-  c.gyp_env.GYP_LINK_CONCURRENCY = 2
+  c.gyp_env.GYP_LINK_CONCURRENCY = 8
 
 @config_ctx()
 def trybot_flavor(c):
