@@ -355,7 +355,7 @@ class DartUtils(object):
     },
     'gclient_transitive': True,
     'no_gclient_branch': True,
-    'gclient_timeout': 1200,
+    'gclient_timeout': 3600,
     'annotated_script': 'dart_buildbot_run.py',
   }
   win_rel_factory_properties_ninja = {
@@ -365,7 +365,7 @@ class DartUtils(object):
     },
     'gclient_transitive': True,
     'no_gclient_branch': True,
-    'gclient_timeout': 1200,
+    'gclient_timeout': 3600,
     'annotated_script': 'dart_buildbot_run.py',
   }
 
