@@ -447,9 +447,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                              isolated_targets=isolated_targets,
                              name='generate_build_files%s' % name_suffix)
 
-    if not compile_targets:
-      self.m.python.failing_step(
-          'compile', 'Misconfigured bot: no compile targets')
     self.m.chromium.compile(compile_targets, name='compile%s' % name_suffix)
 
   def tests_for_builder(self, mastername, buildername, update_step, master_dict,
