@@ -172,3 +172,7 @@ def webview_perf(c):
 @CONFIG_CTX(includes=['main_builder'])
 def cast_builder(c):
   c.gyp_env.GYP_DEFINES['chromecast'] = 1
+
+@CONFIG_CTX()
+def errorprone(c):
+  c.gyp_env.GYP_DEFINES['enable_errorprone'] = 1

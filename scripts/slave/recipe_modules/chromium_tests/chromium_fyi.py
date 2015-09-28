@@ -1594,6 +1594,7 @@ SPEC = {
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
+      'chromium_apply_config': ['errorprone'],
       'android_config': 'main_builder',
       'bot_type': 'builder',
       'compile_targets': [
