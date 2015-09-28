@@ -261,7 +261,12 @@
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "maps_pixel_test"
+    "name": "maps_pixel_test",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 255",
+      "@@@STEP_TEXT@<br/>failures:<br/>maps_pixel_test (entire test suite)<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -753,5 +758,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "tab_capture_end2end_tests"
+  },
+  {
+    "name": "$final_result",
+    "reason": "1 tests failed: ['maps_pixel_test']",
+    "status_code": 1
   }
 ]

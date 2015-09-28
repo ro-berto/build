@@ -1366,6 +1366,25 @@ def GenTests(api):
   )
 
   yield (
+    api.test('telemetry_gpu_harness_failure') +
+    props(
+      mastername='tryserver.chromium.linux',
+      buildername='linux_chromium_rel_ng',
+    ) +
+    api.platform.name('linux') +
+    api.override_step_data(
+        'maps_pixel_test on NVIDIA GPU on Linux (with patch) on Linux',
+        api.test_utils.canned_telemetry_gpu_output(
+            passing=False, is_win=False, swarming=True,
+            empty_per_page_values=True),
+        retcode=255) +
+    api.override_step_data('analyze',
+                           api.json.output({'status': 'Found dependency',
+                                            'targets': gpu_targets,
+                                            'build_targets': gpu_targets}))
+  )
+
+  yield (
     api.test('telemetry_gpu_swarming_error') +
     props(
       mastername='tryserver.chromium.mac',

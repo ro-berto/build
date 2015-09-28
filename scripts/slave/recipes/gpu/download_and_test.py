@@ -84,7 +84,20 @@ def GenTests(api):
     props('linux', 'Release') +
     api.platform.name('linux') +
     api.step_data('content_gl_tests', retcode=1) +
-    api.step_data('maps_pixel_test', retcode=1)
+    api.step_data('maps_pixel_test',
+        api.test_utils.canned_telemetry_gpu_output(
+            passing=False, is_win=False, swarming=False))
+  )
+
+  yield (
+    api.test('telemetry_gpu_test_harness_failure') +
+    props('linux', 'Release') +
+    api.platform.name('linux') +
+    api.step_data('maps_pixel_test',
+        api.test_utils.canned_telemetry_gpu_output(
+            passing=False, is_win=False, swarming=False,
+            empty_per_page_values=True),
+        retcode=255)
   )
 
   win_fyi_hashes = api.gpu.dummy_win_fyi_swarm_hashes

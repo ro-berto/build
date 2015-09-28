@@ -326,10 +326,7 @@
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "maps_pixel_test",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "maps_pixel_test"
   },
   {
     "allow_subannotations": true,
@@ -386,10 +383,7 @@
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "pixel_test",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "pixel_test"
   },
   {
     "allow_subannotations": true,
@@ -437,10 +431,7 @@
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "webgl_conformance_tests",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "webgl_conformance_tests"
   },
   {
     "allow_subannotations": true,
@@ -488,10 +479,7 @@
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "context_lost_tests",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "context_lost_tests"
   },
   {
     "allow_subannotations": true,
@@ -539,10 +527,7 @@
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "memory_test",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "memory_test"
   },
   {
     "allow_subannotations": true,
@@ -590,10 +575,7 @@
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "trace_test",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "trace_test"
   },
   {
     "allow_subannotations": true,
@@ -641,10 +623,7 @@
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "screenshot_sync_tests",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "screenshot_sync_tests"
   },
   {
     "allow_subannotations": true,
@@ -692,10 +671,7 @@
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "hardware_accelerated_feature_tests",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "hardware_accelerated_feature_tests"
   },
   {
     "allow_subannotations": true,
@@ -743,10 +719,7 @@
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "gpu_process_launch_tests",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "gpu_process_launch_tests"
   },
   {
     "allow_subannotations": true,
@@ -798,10 +771,7 @@
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "gpu_rasterization_tests",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "gpu_rasterization_tests"
   },
   {
     "allow_subannotations": true,

@@ -245,10 +245,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "maps_pixel_test",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "maps_pixel_test"
   },
   {
     "allow_subannotations": true,
@@ -302,10 +299,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "pixel_test",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "pixel_test"
   },
   {
     "allow_subannotations": true,
@@ -350,10 +344,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "webgl_conformance_tests",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "webgl_conformance_tests"
   },
   {
     "allow_subannotations": true,
@@ -398,10 +389,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "context_lost_tests",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "context_lost_tests"
   },
   {
     "allow_subannotations": true,
@@ -446,10 +434,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "memory_test",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "memory_test"
   },
   {
     "allow_subannotations": true,
@@ -494,10 +479,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trace_test",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "trace_test"
   },
   {
     "allow_subannotations": true,
@@ -542,10 +524,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "screenshot_sync_tests",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "screenshot_sync_tests"
   },
   {
     "allow_subannotations": true,
@@ -590,10 +569,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "hardware_accelerated_feature_tests",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "hardware_accelerated_feature_tests"
   },
   {
     "allow_subannotations": true,
@@ -638,10 +614,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gpu_process_launch_tests",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "gpu_process_launch_tests"
   },
   {
     "allow_subannotations": true,
@@ -690,10 +663,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gpu_rasterization_tests",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Test1<br/>@@@"
-    ]
+    "name": "gpu_rasterization_tests"
   },
   {
     "allow_subannotations": true,

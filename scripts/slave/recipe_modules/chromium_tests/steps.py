@@ -1245,7 +1245,7 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
     kwargs['args'].extend(['--output-format', 'json',
                            '--output-dir', api.raw_io.output_dir()])
     step_test_data=lambda: api.test_utils.test_api.canned_telemetry_gpu_output(
-        passing=False, is_win=api.platform.is_win)
+        passing=True, is_win=api.platform.is_win)
     try:
       api.isolate.run_telemetry_test(
           'telemetry_gpu_test',
@@ -1262,10 +1262,13 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
 
       try:
         res = api.json.loads(step_result.raw_io.output_dir['results.json'])
-        self._failures[suffix] = [res['pages'][str(value['page_id'])]['name']
-                                  for value in res['per_page_values']
-                                  if value['type'] == 'failure']
+        failures = [res['pages'][str(value['page_id'])]['name']
+                   for value in res['per_page_values']
+                   if value['type'] == 'failure']
+        if not failures and step_result.retcode != 0:
+          failures = ['%s (entire test suite)' % self.name]
 
+        self._failures[suffix] = failures
         self._valid[suffix] = True
       except (ValueError, KeyError, AttributeError):  # pragma: no cover
         self._valid[suffix] = False
@@ -1321,6 +1324,8 @@ class SwarmingTelemetryGPUTest(SwarmingTest):
       failures = [results['pages'][str(value['page_id'])]['name']
                   for value in results['per_page_values']
                   if value['type'] == 'failure']
+      if not failures and step_result.retcode != 0:
+        failures = ['%s (entire test suite)' % self.name]
 
       valid = True
     except (ValueError, KeyError) as e:  # pragma: no cover

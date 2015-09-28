@@ -112,16 +112,23 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     ret.retcode = retcode
     return ret
 
-  def canned_telemetry_gpu_output(self, passing, is_win, swarming=False):
+  def canned_telemetry_gpu_output(self, passing, is_win, swarming=False,
+                                  empty_per_page_values=False):
     """Produces a 'json test results' compatible object for telemetry tests."""
-    jsonish_results = {
-      'per_page_values': [{'type': 'success' if passing else 'failure',
-                           'page_id': 0},
-                          {'type': 'success',
-                           'page_id': 1}],
-      'pages': {'0': {'name': 'Test.Test1'},
-                '1': {'name': 'Test.Test2'}},
-    }
+    if empty_per_page_values:
+      jsonish_results = {
+          'per_page_values': [],
+          'pages': { },
+      }
+    else:
+      jsonish_results = {
+        'per_page_values': [{'type': 'success' if passing else 'failure',
+                             'page_id': 0},
+                            {'type': 'success',
+                             'page_id': 1}],
+        'pages': {'0': {'name': 'Test.Test1'},
+                  '1': {'name': 'Test.Test2'}},
+      }
 
     jsonish_summary = {
       'shards': [
