@@ -122,8 +122,22 @@
     "name": "cleanup_temp"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(1)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "compile",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@Misconfigured bot: no compile targets@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
     "name": "$final_result",
-    "reason": "Misconfigured bot: no compile targets",
+    "reason": "Step('compile') failed with return_code 1",
     "status_code": 1
   }
 ]
