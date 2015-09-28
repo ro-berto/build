@@ -85,6 +85,16 @@ def report_and_need_conversion(b_dir, cur_host):
     return False
 
 
+def report_broken_slave(cur_host, error_type):
+  try:
+    url = ('https://svn-to-git-tracking.appspot.com/api/reportBrokenSlave?'
+           'host=%s&error_type=%s' % (urllib2.quote(cur_host),
+                                      urllib2.quote(error_type)))
+    urllib2.urlopen(url)
+  except Exception as e:
+    log('Failed to report %s for host %s: %s.' % (error_type, cur_host, e))
+
+
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('-m', '--manual', action='store_true', default=False,
@@ -104,18 +114,34 @@ def main():
     b_dir = '/b'
   assert b_dir is not None and os.path.isdir(b_dir), 'Did not find b dir'
 
-  # Remove noreboot file left from previous run.
-  prevent_reboot_path = os.path.join(os.path.expanduser('~'), 'no_reboot')
-  if os.path.isfile(prevent_reboot_path):
-    with open(prevent_reboot_path, 'r') as prevent_reboot_file:
-      prevent_reboot_content = prevent_reboot_file.read()
-    if prevent_reboot_content == PREVENT_REBOOT_FILE_CONTENT:
-      log('Removing no_reboot left from previous run')
-      os.unlink(prevent_reboot_path)
+  home_dir = os.path.realpath(os.path.expanduser('~'))
+  cur_host = socket.gethostname()
+
+  # Report slaves with ~/no_reboot created by this script.
+  if os.path.isfile(os.path.join(home_dir, 'no_reboot')):
+    with open(os.path.join(home_dir, 'no_reboot')) as no_reboot_file:
+      if no_reboot_file.read() == 'slave_svn_to_git':
+        report_broken_slave(cur_host, 'no_reboot')
+
+  # Report slaves without /b/.gclient.
+  if not os.path.isfile(os.path.join(b_dir, '.gclient')):
+    report_broken_slave(cur_host, 'gclient_missing')
+
+  # Report slaves with /b/slave_svn_to_git* folders.
+  if any(f.startswith('slave_svn_to_git') for f in os.listdir(b_dir)):
+    report_broken_slave(cur_host, 'slave_svn_to_git_dir_present')
+
+  # Report slaves without /b/build/site_config/.bot_password.
+  if not os.path.isfile(os.path.join(b_dir, 'build', 'site_config',
+                                     '.bot_password')):
+    report_broken_slave(cur_host, 'bot_password_missing')
+
+  # Report slaves without /b/build/site_config/.boto.
+  if not os.path.isfile(os.path.join(b_dir, 'build', 'site_config', '.boto')):
+    report_broken_slave(cur_host, 'boto_missing')
 
   # Report state before doing anything else, so we can keep track of the state
   # of this host even if something later in this script fails.
-  cur_host = socket.gethostname()
   if not report_and_need_conversion(b_dir, cur_host) and not options.manual:
     log('Host %s is not pending SVN-to-Git conversion' % cur_host)
     return 0
@@ -228,7 +254,6 @@ def main():
       shutil.move(src_git, dest_git)
 
     # Revert any local modifications after the conversion to Git.
-    home_dir = os.path.realpath(os.path.expanduser('~'))
     for relpath in sorted(repos):
       abspath = os.path.join(b_dir, relpath)
       diff = check_output(['git', 'diff'], cwd=abspath)
