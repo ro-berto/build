@@ -165,22 +165,175 @@
     "name": "clean isolated files"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(1)"
+      "[BUILD]\\scripts\\slave\\clang_revision.py",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src",
+      "--output-json",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile",
+    "env": {
+      "LLVM_FORCE_HEAD_REVISION": "YES"
+    },
+    "name": "clang_revision",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Misconfigured bot: no compile targets@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
-    "name": "$final_result",
-    "reason": "Step('compile') failed with return_code 1",
-    "status_code": 1
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\compile.py",
+      "--target",
+      "Debug_x64",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "clang",
+      "--",
+      "all",
+      "browser_tests",
+      "browser_tests_run",
+      "chrome",
+      "crash_service"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "LLVM_FORCE_HEAD_REVISION": "YES"
+    },
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[isolate]\\resources\\remove_build_metadata.py",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Debug_x64",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "remove_build_metadata"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[isolate]\\resources\\isolate.py",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "[SLAVE_BUILD]\\src\\out\\Debug_x64\\browser_tests.isolated.gen.json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\zip_build.py",
+      "--target",
+      "Debug_x64",
+      "--build-url",
+      "gs://chromium-fyi-archive/chromium.fyi/ClangToTWin64(dbg)",
+      "--build_revision",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ClangToTWin64(dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ClangToTWin64(dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "package build"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "ClangToTWin64(dbg) tester"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@ClangToTWin64(dbg) tester@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
+      "--target",
+      "Debug_x64"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "start_crash_service"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Debug_x64",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ClangToTWin64(dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ClangToTWin64(dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=graphing",
+      "--test-type=sizes",
+      "--builder-name=ClangToTWin64(dbg)",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "--run-python-script",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=sizes",
+      "--perf-id=ClangToTWin64(dbg)",
+      "--perf-config={'r_clang_rev': '123456'}",
+      "[BUILD]\\scripts\\slave\\chromium\\sizes.py",
+      "--target",
+      "Debug_x64",
+      "--platform",
+      "win"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "sizes"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\process_dumps.py",
+      "--target",
+      "Debug_x64"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "process_dumps"
   }
 ]

@@ -125,19 +125,20 @@
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(1)"
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Release-iphoneos",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--",
+      "all"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Misconfigured bot: no compile targets@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "name": "$final_result",
-    "reason": "Step('compile') failed with return_code 1",
-    "status_code": 1
+    "env": {
+      "LLVM_FORCE_HEAD_REVISION": "YES"
+    },
+    "name": "compile"
   }
 ]
