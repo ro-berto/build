@@ -5,6 +5,7 @@
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 from . import builders
+from . import steps
 
 
 class WebRTCApi(recipe_api.RecipeApi):
@@ -205,98 +206,20 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.isolate.remove_build_metadata()
       self.m.isolate.isolate_tests(self.m.chromium.output_dir,
                                    targets=self.NORMAL_TESTS)
+
     with self.m.step.defer_results():
-      if self.c.TEST_SUITE in ('webrtc', 'webrtc_parallel'):
-        parallel = self.c.TEST_SUITE.endswith('_parallel')
-        for test in self.NORMAL_TESTS:
-          self.add_test(test, parallel=parallel)
+      tests = steps.generate_tests(self, self.c.TEST_SUITE)
+      if tests:
+        if self.m.chromium.c.TARGET_PLATFORM == 'android':
+          self.m.chromium_android.common_tests_setup_steps()
+        for test in tests:
+          test.run(self, suffix='')
+        if self.m.chromium.c.TARGET_PLATFORM == 'android':
+          self.m.chromium_android.logcat_dump()
+          # Disable stack tools steps until crbug.com/411685 is fixed.
+          #self.m.chromium_android.stack_tool_steps()
+          self.m.chromium_android.test_report()
 
-        if self.m.platform.is_mac and self.m.chromium.c.TARGET_BITS == 64:
-          test = self.m.path.join('libjingle_peerconnection_objc_test.app',
-                                  'Contents', 'MacOS',
-                                  'libjingle_peerconnection_objc_test')
-          self.add_test(test, name='libjingle_peerconnection_objc_test',
-                        parallel=parallel, disable_swarming=True)
-      elif self.c.TEST_SUITE == 'webrtc_baremetal':
-        # Add baremetal tests, which are different depending on the platform.
-        if self.m.platform.is_win or self.m.platform.is_mac:
-          self.add_test('audio_device_tests')
-        elif self.m.platform.is_linux:
-          f = self.m.path['checkout'].join
-          self.add_test(
-              'audioproc',
-              args=['-aecm', '-ns', '-agc', '--fixed_digital', '--perf', '-pb',
-                    f('resources', 'audioproc.aecdump')],
-              revision=self.perf_revision,
-              perf_test=True)
-          self.add_test(
-              'isac_fix_test',
-              args=['32000', f('resources', 'speech_and_misc_wb.pcm'),
-                    'isac_speech_and_misc_wb.pcm'],
-              revision=self.perf_revision,
-              perf_test=True)
-          self.virtual_webcam_check()
-          self.add_test(
-              'libjingle_peerconnection_java_unittest',
-              env={'LD_PRELOAD': '/usr/lib/x86_64-linux-gnu/libpulse.so.0'})
-
-        self.add_test('voe_auto_test', args=['--automated'])
-        self.virtual_webcam_check()
-        self.add_test('video_capture_tests')
-        self.add_test('webrtc_perf_tests', revision=self.perf_revision,
-                      perf_test=True)
-      elif self.c.TEST_SUITE == 'chromium':
-        # Add WebRTC-specific browser tests that don't run in the main Chromium
-        # waterfalls (marked as MANUAL_) since they rely on special setup and/or
-        # physical audio/video devices.
-        self._add_webrtc_browser_tests()
-        self.add_test('content_unittests')
-      elif self.c.TEST_SUITE == 'android':
-        self.m.chromium_android.common_tests_setup_steps()
-        for test, isolate_file_path in sorted(
-            self.ANDROID_APK_TESTS.iteritems()):
-          # Use absolute path here to avoid the Chromium hardcoded fallback in
-          # src/build/android/pylib/base/base_setup.py.
-          isolate_file_path = self.m.path['checkout'].join(isolate_file_path)
-          self.m.chromium_android.run_test_suite(
-              test, isolate_file_path=isolate_file_path)
-        for test, isolate_file_path in sorted(
-            self.ANDROID_APK_PERF_TESTS.iteritems()):
-          # TODO(kjellander): Pass isolate_file_path when crbug.com/533301 is
-          # resolved.
-          self._add_android_perf_test(test)
-        for test, apk_under_test in self.ANDROID_INSTRUMENTATION_TESTS.items():
-          if apk_under_test:
-            self._adb_install_apk(apk_under_test)
-          self.m.chromium_android.run_instrumentation_suite(test_apk=test,
-                                                            verbose=True)
-        self.m.chromium_android.logcat_dump()
-        # Disable stack tools steps until crbug.com/411685 is fixed.
-        #self.m.chromium_android.stack_tool_steps()
-        self.m.chromium_android.test_report()
-
-  def _add_webrtc_browser_tests(self):
-    self.add_test(test='content_browsertests',
-                  args=['--gtest_filter=WebRtc*', '--run-manual',
-                        '--test-launcher-print-test-stdio=always',
-                        '--test-launcher-bot-mode'],
-        revision=self.perf_revision,
-        perf_test=True)
-    self.add_test(
-        test='browser_tests',
-        # These tests needs --test-launcher-jobs=1 since some of them are
-        # not able to run in parallel (due to the usage of the
-        # peerconnection server).
-        # TODO(phoglund): increasing timeout for the HD video quality test.
-        # The original timeout was 300000. See http://crbug.com/476865.
-        args = ['--gtest_filter=%s' % self.BROWSER_TESTS_GTEST_FILTER,
-                '--run-manual', '--ui-test-action-max-timeout=350000',
-                '--test-launcher-jobs=1',
-                '--test-launcher-bot-mode',
-                '--test-launcher-print-test-stdio=always'],
-        revision=self.perf_revision,
-        # The WinXP tester doesn't run the audio quality perf test.
-        perf_test='xp' not in self.c.PERF_ID)
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,
                perf_test=False, perf_dashboard_id=None, parallel=False,
@@ -373,23 +296,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     env = { 'CHECKOUT_SOURCE_ROOT': self.m.path['checkout']}
     return self.m.step('install ' + apk_name, install_cmd, infra_step=True,
                        env=env)
-
-  def _add_android_perf_test(self, test):
-    """Adds a test to run on Android devices.
-
-    Basically just wrap what happens in chromium_android.run_test_suite to run
-    inside runtest.py so we can scrape perf data. This way we can get perf data
-    from the gtest binaries since the way of running perf tests with telemetry
-    is entirely different.
-    """
-    if not self.c.PERF_ID or self.m.chromium.c.BUILD_CONFIG == 'Debug':
-      # Run as a normal test for trybots and Debug, without perf data scraping.
-      self.m.chromium_android.run_test_suite(test)
-    else:
-      args = ['gtest', '-s', test, '--verbose', '--release']
-      self.add_test(name=test, test=self.m.chromium_android.c.test_runner,
-                    args=args, revision=self.perf_revision, perf_test=True,
-                    perf_dashboard_id=test)
 
   def sizes(self):
     # TODO(kjellander): Move this into a function of the chromium recipe
