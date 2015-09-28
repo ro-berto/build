@@ -421,12 +421,6 @@ def build_internal_scripts_slave(c):
 def perf(c):
   s = c.solutions[0]
   s.custom_vars['llvm_url'] = 'svn://svn-mirror.golo.chromium.org/llvm-project'
-  # These repos are large and the perf bots don't need them.
-  s.custom_deps.update({
-    'src/chrome/test/data/pdf_private': None,
-    'src/third_party/WebKit/LayoutTests': None,
-    'src/tools/valgrind': None,
-  })
   s.managed = False
   needed_components_internal = [
     "src/data/page_cycler",
