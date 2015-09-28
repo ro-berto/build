@@ -16,6 +16,7 @@ from master.buildbucket.common import log
 from twisted.internet import defer, reactor
 from twisted.internet.defer import inlineCallbacks, returnValue
 
+from . import common
 
 # buildbucket API-related constants.
 # time enough to schedule and start a build.
@@ -129,9 +130,11 @@ class BuildBucketIntegrator(object):
       if not info:
         # Not a buildbucket build request.
         continue
+      try:
+        info = common.parse_info_property(info)
+      except ValueError:
+        continue
       build = info.get('build', {})
-      if isinstance(build, basestring):
-        build = json.loads(build)
       build_id = build.get('id')
       lease_key = build.get('lease_key')
       if not (build_id and lease_key):
@@ -287,9 +290,9 @@ class BuildBucketIntegrator(object):
     properties = (properties or {}).copy()
     if self.build_properties_hook:
       self.build_properties_hook(properties, build.copy())
-    properties[common.INFO_PROPERTY] = {
+    properties[common.INFO_PROPERTY] = json.dumps({
         common.BUILD_PROPERTY: self._strip_build_def(build),
-    }
+    }, sort_keys=True)
     properties_with_source = {
         k:(v, PROPERTY_SOURCE) for k, v in properties.iteritems()
     }
@@ -418,6 +421,10 @@ class BuildBucketIntegrator(object):
     """Returns buildbucket build def a buildbot build."""
     info = build.properties.getProperty(common.INFO_PROPERTY)
     if info is None:
+      return None
+    try:
+      info = common.parse_info_property(info)
+    except ValueError:
       return None
     return info.get(common.BUILD_PROPERTY)
 
