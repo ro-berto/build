@@ -128,6 +128,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     self.m.python.failing_step(test.name, 'TEST RESULTS WERE INVALID')
 
   def _summarize_retried_test(self, caller_api, test):
+    """Summarizes test results and exits with a failing status if there were new
+    failures."""
     if not test.has_valid_results(caller_api, 'without patch'):
       self._invalid_test_results(test)
 
@@ -140,48 +142,20 @@ class TestUtilsApi(recipe_api.RecipeApi):
       'new_failures': sorted(new_failures),
     })
 
+    step_text = self.format_step_text([
+        ['failures:', new_failures],
+        ['ignored:', ignored_failures]
+    ])
     try:
-      self.m.python.inline(
-        test.name,
-        r"""
-        import sys, json
-        failures = json.load(open(sys.argv[1], 'rb'))
-
-        success = True
-
-        if failures['new']:
-          success = False
-          print 'New failures:'
-          for f in failures['new']:
-            print f
-
-        if failures['ignored']:
-          print 'Ignored failures:'
-          for f in failures['ignored']:
-            print f
-
-        sys.exit(0 if success else 1)
-        """,
-        args=[
-          self.m.json.input({
-            'new': list(new_failures),
-            'ignored': list(ignored_failures),
-          })
-        ],
-      )
-    finally:
-      p = self.m.step.active_result.presentation
-
-      p.step_text += self.format_step_text([
-          ['failures:', new_failures],
-          ['ignored:', ignored_failures]
-      ])
-
       if new_failures:
-        p.status = self.m.step.FAILURE
+        self.m.python.failing_step(test.name, step_text)
+      else:
+        self.m.python.succeeding_step(test.name, step_text)
+    finally:
+      if new_failures:
         self.m.tryserver.set_test_failure_tryjob_result()
       elif ignored_failures:
-        p.status = self.m.step.WARNING
+        self.m.step.active_result.presentation.status = self.m.step.WARNING
 
   @recipe_util.returns_placeholder
   def test_results(self, add_json_log=True):

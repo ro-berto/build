@@ -2502,32 +2502,12 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for f in failures['new']:\n    print f\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for f in failures['ignored']:\n    print f\n\nsys.exit(0 if success else 1)\n",
-      "{\"ignored\": [\"TestB\"], \"new\": []}"
+      "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "AndroidWebViewTest",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
-      "@@@STEP_LOG_LINE@python.inline@failures = json.load(open(sys.argv[1], 'rb'))@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@success = True@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  success = False@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'New failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Ignored failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2535,32 +2515,12 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for f in failures['new']:\n    print f\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for f in failures['ignored']:\n    print f\n\nsys.exit(0 if success else 1)\n",
-      "{\"ignored\": [\"TestB\"], \"new\": []}"
+      "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "ContentShellTest",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
-      "@@@STEP_LOG_LINE@python.inline@failures = json.load(open(sys.argv[1], 'rb'))@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@success = True@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  success = False@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'New failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Ignored failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2568,32 +2528,12 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for f in failures['new']:\n    print f\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for f in failures['ignored']:\n    print f\n\nsys.exit(0 if success else 1)\n",
-      "{\"ignored\": [\"TestB\"], \"new\": []}"
+      "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "ChromePublicTest",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
-      "@@@STEP_LOG_LINE@python.inline@failures = json.load(open(sys.argv[1], 'rb'))@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@success = True@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  success = False@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'New failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Ignored failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2601,32 +2541,12 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for f in failures['new']:\n    print f\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for f in failures['ignored']:\n    print f\n\nsys.exit(0 if success else 1)\n",
-      "{\"ignored\": [\"TestB\"], \"new\": []}"
+      "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "ChromeSyncShellTest",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
-      "@@@STEP_LOG_LINE@python.inline@failures = json.load(open(sys.argv[1], 'rb'))@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@success = True@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  success = False@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'New failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Ignored failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2634,32 +2554,13 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for f in failures['new']:\n    print f\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for f in failures['ignored']:\n    print f\n\nsys.exit(0 if success else 1)\n",
-      "{\"ignored\": [], \"new\": [\"Test.Two\"]}"
+      "import sys; sys.exit(1)"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "base_unittests",
     "~followup_annotations": [
+      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
-      "@@@STEP_LOG_LINE@python.inline@failures = json.load(open(sys.argv[1], 'rb'))@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@success = True@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  success = False@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'New failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Ignored failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@"
     ]
@@ -2668,32 +2569,12 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for f in failures['new']:\n    print f\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for f in failures['ignored']:\n    print f\n\nsys.exit(0 if success else 1)\n",
-      "{\"ignored\": [\"TestB\"], \"new\": []}"
+      "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "junit_unit_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
-      "@@@STEP_LOG_LINE@python.inline@failures = json.load(open(sys.argv[1], 'rb'))@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@success = True@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  success = False@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'New failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Ignored failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2701,32 +2582,12 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for f in failures['new']:\n    print f\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for f in failures['ignored']:\n    print f\n\nsys.exit(0 if success else 1)\n",
-      "{\"ignored\": [\"TestB\"], \"new\": []}"
+      "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "chrome_junit_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
-      "@@@STEP_LOG_LINE@python.inline@failures = json.load(open(sys.argv[1], 'rb'))@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@success = True@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  success = False@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'New failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Ignored failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2734,32 +2595,12 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for f in failures['new']:\n    print f\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for f in failures['ignored']:\n    print f\n\nsys.exit(0 if success else 1)\n",
-      "{\"ignored\": [\"TestB\"], \"new\": []}"
+      "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "content_junit_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
-      "@@@STEP_LOG_LINE@python.inline@failures = json.load(open(sys.argv[1], 'rb'))@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@success = True@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  success = False@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'New failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Ignored failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for f in failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2833,7 +2674,13 @@
       "@@@STEP_LOG_LINE@python.inline@    for l in f.readlines():@@@",
       "@@@STEP_LOG_LINE@python.inline@      print l@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"01e67cd697806ea33f239ac8c503b9ca0c020466\"@@@"
     ]
+  },
+  {
+    "name": "$final_result",
+    "reason": "1 out of 8 aggregated steps failed. Failures: Step('base_unittests') failed with return_code 1",
+    "status_code": 1
   }
 ]
