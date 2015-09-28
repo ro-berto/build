@@ -159,82 +159,8 @@
     "name": "tree truth steps"
   },
   {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "LLVM_FORCE_HEAD_REVISION": "YES",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Debug",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "clang",
-      "--"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "LLVM_FORCE_HEAD_REVISION": "YES",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "compile"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/zip_build.py",
-      "--target",
-      "Debug",
-      "--build-url",
-      "gs://chromium-fyi-archive/chromium.fyi/ClangToTAndroidASan",
-      "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ClangToTAndroidASan\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"ClangToTAndroidASan\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "package build"
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger",
-    "trigger_specs": [
-      {
-        "builder_name": "ClangToTAndroidASan tester"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@ClangToTAndroidASan tester@@@"
-    ]
+    "name": "$final_result",
+    "reason": "Misconfigured bot: no compile targets",
+    "status_code": 1
   }
 ]

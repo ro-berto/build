@@ -102,63 +102,8 @@
     "name": "generate_build_files"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--mode",
-      "official",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--goma-hermetic",
-      "fallback",
-      "--"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "compile"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/zip_build.py",
-      "--target",
-      "Release",
-      "--build-url",
-      "gs://chrome-perf/Android arm64 Builder",
-      "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android arm64 Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android arm64 Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "package build"
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger",
-    "trigger_specs": [
-      {
-        "builder_name": "Android Nexus9 Perf"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus9 Perf@@@"
-    ]
+    "name": "$final_result",
+    "reason": "Misconfigured bot: no compile targets",
+    "status_code": 1
   }
 ]

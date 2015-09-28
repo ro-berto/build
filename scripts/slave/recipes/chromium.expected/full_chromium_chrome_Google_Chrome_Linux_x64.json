@@ -118,26 +118,8 @@
     "name": "cleanup_temp"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--mode",
-      "official",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--clobber",
-      "--"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "compile"
+    "name": "$final_result",
+    "reason": "Misconfigured bot: no compile targets",
+    "status_code": 1
   }
 ]

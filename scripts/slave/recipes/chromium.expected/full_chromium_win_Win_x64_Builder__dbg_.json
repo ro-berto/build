@@ -142,46 +142,8 @@
     "name": "cleanup_temp"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
-      "--target",
-      "Debug_x64",
-      "--src-dir",
-      "[SLAVE_BUILD]\\src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-dir",
-      "[BUILD]\\goma",
-      "--ninja-ensure-up-to-date",
-      "--",
-      "All",
-      "chromium_builder_tests"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "compile"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\zip_build.py",
-      "--target",
-      "Debug_x64",
-      "--build-url",
-      "gs://chromium-win-archive/chromium.win/Win x64 Builder (dbg)",
-      "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win x64 Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win x64 Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "package build"
+    "name": "$final_result",
+    "reason": "Misconfigured bot: no compile targets",
+    "status_code": 1
   }
 ]

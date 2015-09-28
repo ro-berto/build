@@ -122,23 +122,8 @@
     "name": "cleanup_temp"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Release-iphoneos",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--",
-      "All"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "LLVM_FORCE_HEAD_REVISION": "YES"
-    },
-    "name": "compile"
+    "name": "$final_result",
+    "reason": "Misconfigured bot: no compile targets",
+    "status_code": 1
   }
 ]
