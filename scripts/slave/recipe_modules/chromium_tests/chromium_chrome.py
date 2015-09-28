@@ -6,7 +6,7 @@ SPEC = {
   'builders': {
     'Google Chrome ChromeOS': {
       'chromium_config': 'chromium_official',
-      'chromium_apply_config': ['chromeos'],
+      'chromium_apply_config': ['mb', 'chromeos'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
@@ -25,6 +25,7 @@ SPEC = {
     },
     'Google Chrome Linux': {
       'chromium_config': 'chromium_official',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
@@ -40,6 +41,7 @@ SPEC = {
     },
     'Google Chrome Linux x64': {
       'chromium_config': 'chromium_official',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
@@ -55,6 +57,7 @@ SPEC = {
     },
     'Google Chrome Mac': {
       'chromium_config': 'chromium_official',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
@@ -70,6 +73,7 @@ SPEC = {
     },
     'Google Chrome Win': {
       'chromium_config': 'chromium_official',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
