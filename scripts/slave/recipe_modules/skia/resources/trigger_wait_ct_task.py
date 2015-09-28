@@ -14,7 +14,7 @@ import sys
 import time
 
 
-CTFE_HOST = "http://ct.skia.org"
+CTFE_HOST = "https://ct.skia.org"
 CTFE_QUEUE = CTFE_HOST + '/queue/'
 CHROMIUM_PERF_TASK_POST_URI = CTFE_HOST + "/_/webhook_add_chromium_perf_task"
 GET_CHROMIUM_PERF_RUN_STATUS_URI = CTFE_HOST + "/get_chromium_perf_run_status"
@@ -63,7 +63,7 @@ def _GetWebhookSaltFromMetadata():
       raise CtTrybotException(
           'Return code from %s was %s' % (GCE_WEBHOOK_SALT_METADATA_URI,
                                           resp.status_code))
-  return resp.text
+  return base64.standard_b64decode(resp.text)
 
 
 def _TriggerTask(options):
