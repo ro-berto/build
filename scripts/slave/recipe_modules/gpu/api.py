@@ -17,10 +17,6 @@ SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN = freeze([
   'gles2_conform_test',
 ])
 
-SIMPLE_WIN_AND_LINUX_ONLY_FYI_ONLY_TESTS = freeze([
-  'angle_end2end_tests',
-])
-
 DEQP_TESTS_TO_RUN = freeze([
   'angle_deqp_gles2_tests'
 ])
@@ -196,7 +192,7 @@ class GpuApi(recipe_api.RecipeApi):
     is_tryserver = self.m.tryserver.is_tryserver
     isolates = common.GPU_ISOLATES
     if self.is_fyi_waterfall:
-      isolates += common.FYI_ONLY_GPU_ISOLATES
+      isolates += common.FYI_GPU_ISOLATES
       if self.m.platform.is_win or self.m.platform.is_linux:
         # TODO(kbr): run these tests on the trybots as soon as there is
         # capacity to do so, and on all platforms as soon as ANGLE does.
@@ -319,18 +315,14 @@ class GpuApi(recipe_api.RecipeApi):
     # Copy the test list to avoid mutating it.
     basic_tests = list(SIMPLE_TESTS_TO_RUN)
     if self.is_fyi_waterfall:
+      basic_tests += common.FYI_GPU_ISOLATES
       # Only run tests on the tree closers and on the CQ which are
       # available in the open-source repository.
       basic_tests += SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN
 
-    if self.is_fyi_waterfall or self.is_angle_trybot:
-      # Run the same open source tests on the FYI waterfall and the ANGLE
-      # trybots.
-      if self.m.platform.is_win or self.m.platform.is_linux:
-        # TODO(kbr): run these tests on the trybots as soon as there
-        # is capacity to do so, and on all platforms as soon as ANGLE
-        # does.
-        basic_tests += SIMPLE_WIN_AND_LINUX_ONLY_FYI_ONLY_TESTS
+    # Avoid running tests not using ANGLE on the ANGLE trybots
+    if self.is_angle_trybot:
+      basic_tests += common.ANGLE_TRYBOTS_GPU_ISOLATES
 
     #TODO(martiniss) convert loop
     for test in basic_tests:
@@ -481,16 +473,6 @@ class GpuApi(recipe_api.RecipeApi):
     if self.is_fyi_waterfall:
       tests.append(self._create_gtest(
           'gpu_unittests', chrome_revision, webkit_revision, enable_swarming,
-          swarming_dimensions))
-
-    # Run the content and audio unittests on the FYI bots
-    # TODO(jmadill): Run them on all GPU bots once stable
-    if self.is_fyi_waterfall:
-      tests.append(self._create_gtest(
-          'content_unittests', chrome_revision, webkit_revision,
-          enable_swarming, swarming_dimensions))
-      tests.append(self._create_gtest(
-          'audio_unittests', chrome_revision, webkit_revision, enable_swarming,
           swarming_dimensions))
 
     # Remove empty entries as some tests may be skipped.
