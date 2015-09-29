@@ -31,13 +31,6 @@ BUILDERS = freeze({
         'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
                               api.properties['parent_got_revision']),
       },
-      'android_nexus4_perf_bisect': {
-        'recipe_config': 'perf',
-        'gclient_apply_config': ['android', 'perf'],
-        'bucket': 'chrome-perf',
-        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                              api.properties['parent_got_revision']),
-      },
       'android_nexus5_perf_bisect': {
         'recipe_config': 'perf',
         'gclient_apply_config': ['android', 'perf'],
