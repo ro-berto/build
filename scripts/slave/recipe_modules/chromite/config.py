@@ -5,7 +5,6 @@
 import os
 import types
 
-from common import cros_chromite
 from recipe_engine.config import config_item_context, ConfigGroup
 from recipe_engine.config import Dict, Single, Set
 

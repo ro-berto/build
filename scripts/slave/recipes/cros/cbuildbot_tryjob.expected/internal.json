@@ -7,7 +7,7 @@
       "--master",
       "chromiumos.tryserver",
       "--builder",
-      "full",
+      "paladin",
       "--slave",
       "test",
       "--spec",
@@ -49,17 +49,38 @@
     "name": "checkout chromite branch [master]"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/chromite/cbuildbot/config_dump.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "read chromite config",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@config@{@@@",
+      "@@@STEP_LOG_LINE@config@  \"internal-paladin\": {@@@",
+      "@@@STEP_LOG_LINE@config@    \"_template\": \"paladin\", @@@",
+      "@@@STEP_LOG_LINE@config@    \"internal\": true, @@@",
+      "@@@STEP_LOG_LINE@config@    \"type\": \"paladin\"@@@",
+      "@@@STEP_LOG_LINE@config@  }@@@",
+      "@@@STEP_LOG_LINE@config@}@@@",
+      "@@@STEP_LOG_END@config@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "[SLAVE_BUILD]/chromite/bin/cbuildbot",
       "--buildroot",
-      "[ROOT]/cbuild/external_master",
+      "[ROOT]/cbuild/internal_master",
       "--timeout",
       "14400",
       "--remote-trybot",
       "--remote-version=4",
-      "x86-generic-full"
+      "internal-paladin"
     ],
-    "name": "cbuildbot [x86-generic-full]"
+    "name": "cbuildbot [internal-paladin]"
   }
 ]

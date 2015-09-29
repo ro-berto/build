@@ -5,7 +5,6 @@
 import base64
 import zlib
 
-from common import cros_chromite
 
 DEPS = [
   'chromite',
@@ -21,6 +20,45 @@ _MASTER_CONFIG_MAP = {
     },
 }
 
+
+# Testing: Tryjob data file JSON.
+_TRYJOB_DATA = """
+{
+  "name": "12345",
+  "email": "testauthor@fake.chromium.org",
+  "extra_args": [
+    "--timeout",
+    "14400",
+    "--remote-trybot",
+    "--remote-version=4"
+  ]
+}
+"""
+
+# JSON string containing sufficient Chromite configuration layout for our test
+# configs.
+_CHROMITE_CONFIG = {
+  '_default': {
+    'type': 'undefined',
+  },
+  '_templates': {
+    'full': {
+      'type': 'full',
+    },
+    'paladin': {
+      'type': 'paladin',
+    },
+  },
+  'x86-generic-full': {
+    '_template': 'full',
+  },
+  'internal-paladin': {
+    '_template': 'paladin',
+    'internal': True,
+  },
+}
+
+
 def RunSteps(api):
   # The 'cbuildbot' config name to build is the name of the builder.
   #
@@ -31,9 +69,6 @@ def RunSteps(api):
   #            to know which one we are.
   cbb_config_name = api.properties.get('cbb_config')
   assert cbb_config_name, "No configuration name specified."
-
-  cbb = cros_chromite.Get()
-  cbb_config = cbb.get(cbb_config_name)
 
   # Apply our generic configuration.
   api.chromite.configure(
@@ -47,6 +82,10 @@ def RunSteps(api):
   assert revision, "A revision must be specified."
   assert api.chromite.check_repository('tryjob', repository), (
       "Refusing to query unknown tryjob repository: %s" % (repository,))
+
+  # Load the Chromite configuration for our target.
+  api.chromite.checkout_chromite()
+  cbb_config = api.chromite.load_config(cbb_config_name)
 
   # Add parameters specified in the tryjob description.
   tryjob_args = api.properties.get('cbb_extra_args', [])
@@ -78,13 +117,13 @@ def RunSteps(api):
       api.chromite.c.cbb.clobber = True
 
   # Run our 'cbuildbot'.
-  api.chromite.run_cbuildbot(args=tryjob_args)
+  api.chromite.run(args=tryjob_args)
 
 
 def GenTests(api):
   # Test a CrOS tryjob.
   yield (
-      api.test('basic')
+      api.test('external')
       + api.properties(
           mastername='chromiumos.tryserver',
           buildername='full',
@@ -95,6 +134,22 @@ def GenTests(api):
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
                          '"--remote-version=4"]',
       )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
+  )
+
+  yield (
+      api.test('internal')
+      + api.properties(
+          mastername='chromiumos.tryserver',
+          buildername='paladin',
+          slavename='test',
+          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
+          revision=api.gitiles.make_hash('test'),
+          cbb_config='internal-paladin',
+          cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
+                         '"--remote-version=4"]',
+      )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
 
   # Test a CrOS tryjob with compressed "cbb_extra_args".
@@ -111,6 +166,7 @@ def GenTests(api):
             'z:eJyLVtLVLcnMTc0vLVHSUVAyNDExMAAxdHWLUnPzS1J1S4oqk/JLUITKUouKM'
             '/PzbE2UYgFJaBNI'),
       )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
 
   # Test a config that is not registered in Chromite.
@@ -126,4 +182,5 @@ def GenTests(api):
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
                          '"--remote-version=4"]',
       )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )

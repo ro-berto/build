@@ -8,17 +8,57 @@ import re
 from recipe_engine import recipe_api
 
 
+class Config(object):
+  _NONE = object()
+
+  def __init__(self, name, *layers):
+    self.name = name
+    self.layers = layers
+
+  def get(self, key, d=None):
+    for l in self.layers:
+      v = l.get(key, self._NONE)
+      if v is not self._NONE:
+        return v
+    return d
+
+  def __getitem__(self, key):
+    v = self.get(key, self._NONE)
+    if v is not self._NONE:
+      return v
+    raise KeyError('Invalid configuration key: %s' % (key,))
+
+  def dict(self):
+    d = {}
+    for l in reversed(self.layers):
+      d.update(l)
+    return d
+
+
 class ChromiteApi(recipe_api.RecipeApi):
   chromite_url = 'https://chromium.googlesource.com/chromiumos/chromite.git'
   manifest_url = 'https://chromium.googlesource.com/chromiumos/manifest.git'
   repo_url = 'https://chromium.googlesource.com/external/repo.git'
-  chromite_subpath = 'chromite'
+
+  _chromite_subpath = 'chromite'
 
   # The number of Gitiles attempts to make before giving up.
   _GITILES_ATTEMPTS = 10
 
   _MANIFEST_CMD_RE = re.compile(r'Automatic:\s+Start\s+([^\s]+)\s+([^\s]+)')
   _BUILD_ID_RE = re.compile(r'CrOS-Build-Id: (.+)')
+
+  _cached_config = None
+
+  @property
+  def chromite_path(self):
+    v = self.m.path.c.dynamic_paths.get('chromite')
+    if v:
+      return v
+    return self.m.path['slave_build'].join(self._chromite_subpath)
+
+  def _set_chromite_path(self, path):
+    self.m.path.c.dynamic_paths['chromite'] = path
 
   def get_config_defaults(self):
     defaults = {
@@ -30,6 +70,37 @@ class ChromiteApi(recipe_api.RecipeApi):
     if 'buildnumber' in self.m.properties:
       defaults['CBB_BUILD_NUMBER'] = int(self.m.properties['buildnumber'])
     return defaults
+
+  def _load_config_dump(self):
+    if not self._cached_config:
+      config_path = self.m.path.join(self.chromite_path,
+                                     'cbuildbot', 'config_dump.json')
+      step_result = self.m.json.read('read chromite config', config_path,
+                                     add_json_log=False)
+      self._cached_config = step_result.json.output
+    return self._cached_config
+
+  def load_config(self, name):
+    c = self._load_config_dump()
+    conf = c.get(name)
+    if conf is None:
+      return None
+
+    layers = [conf]
+    template = conf.get('_template')
+    if template:
+      layers.append(c['_templates'][template])
+    default = c.get('_default')
+    if default:
+      layers.append(default)
+
+    config = Config(name, *layers)
+
+    presentation_dict = {name: config.dict()}
+    self.m.step.active_result.presentation.logs['config'] = [
+      self.m.json.dumps(presentation_dict, indent=2),
+    ]
+    return config
 
   def check_repository(self, repo_type_key, value):
     """Scans through registered repositories for a specified value.
@@ -90,11 +161,6 @@ class ChromiteApi(recipe_api.RecipeApi):
       loaded.insert(0, '')
       result.presentation.step_text += '<br/>'.join(loaded)
 
-  @property
-  def default_chromite_path(self):
-    """Returns: (Path) The default Chromite checkout path."""
-    return self.m.path['slave_build'].join(self.chromite_subpath)
-
   def gclient_config(self):
     """Generate a 'gclient' configuration to check out Chromite.
 
@@ -122,34 +188,28 @@ class ChromiteApi(recipe_api.RecipeApi):
     """
     return self.c.chromite_branch in self.c.old_chromite_branches
 
-  def cbuildbot(self, name, config, args=None, chromite_path=None, **kwargs):
+  def cbuildbot(self, name, config, args=None, **kwargs):
     """Runs the cbuildbot command defined by the arguments.
 
     Args:
       name: (str) The name of the command step.
       config: (str) The name of the 'cbuildbot' configuration to invoke.
       args: (list) If not None, addition arguments to pass to 'cbuildbot'.
-      chromite_path: (str) The path to the Chromite checkout; if None, the
-          'default_chromite_path' will be used.
 
     Returns: (Step) The step that was run.
     """
-    chromite_path = chromite_path or self.default_chromite_path
     args = (args or [])[:]
     args.append(config)
 
     bindir = 'bin'
     if self.using_old_chromite_layout:
       bindir = 'buildbot'
-    cmd = [self.m.path.join(chromite_path, bindir, 'cbuildbot')] + args
+    cmd = [self.chromite_path.join(bindir, 'cbuildbot')] + args
     return self.m.step(name, cmd, allow_subannotations=True, **kwargs)
 
-  def cros_sdk(self, name, cmd, args=None, environ=None, chromite_path=None,
-                 **kwargs):
+  def cros_sdk(self, name, cmd, args=None, environ=None, **kwargs):
     """Return a step to run a command inside the cros_sdk."""
-    chromite_path = chromite_path or self.default_chromite_path
-
-    chroot_cmd = self.m.path.join(chromite_path, 'bin', 'cros_sdk')
+    chroot_cmd = self.chromite_path.join('bin', 'cros_sdk')
 
     arg_list = (args or [])[:]
     for t in sorted((environ or {}).items()):
@@ -199,7 +259,31 @@ class ChromiteApi(recipe_api.RecipeApi):
       self.c.cbb.config_repo = self.m.properties['config_repo']
 
   def run_cbuildbot(self, args=[]):
-    """Runs a 'cbuildbot' checkout-and-build workflow.
+    self.checkout_chromite()
+    self.run(args=args)
+
+  def checkout_chromite(self):
+    """Checks out the configured Chromite branch.
+    """
+    self.m.bot_update.ensure_checkout(
+        gclient_config=self.gclient_config(),
+        update_presentation=False,
+        force=True)
+
+    if self.c.chromite_branch and self.c.cbb.disable_bootstrap:
+      # Chromite auto-detects which branch to build for based on its current
+      # checkout. "bot_update" checks out remote branches, but Chromite requires
+      # a local branch.
+      #
+      # Normally we'd bootstrap, but if we're disabling bootstrapping, we have
+      # to checkout the local branch to let Chromite know which branch to build.
+      self.m.git('checkout', self.c.chromite_branch,
+          name=str('checkout chromite branch [%s]' % (self.c.chromite_branch)))
+    self._set_chromite_path(self.m.path['checkout'])
+    return self.chromite_path
+
+  def run(self, args=[]):
+    """Runs the configured 'cbuildbot' build.
 
     This workflow uses the registered configuration dictionary to make master-
     and builder-specific changes to the standard workflow.
@@ -271,24 +355,8 @@ class ChromiteApi(recipe_api.RecipeApi):
     # Add custom args, if there are any.
     cbb_args.extend(args)
 
-    # Checkout Chromite.
-    self.m.bot_update.ensure_checkout(
-        gclient_config=self.gclient_config(),
-        update_presentation=False,
-        force=True)
-    if self.c.chromite_branch and self.c.cbb.disable_bootstrap:
-      # Chromite auto-detects which branch to build for based on its current
-      # checkout. "bot_update" checks out remote branches, but Chromite requires
-      # a local branch.
-      #
-      # Normally we'd bootstrap, but if we're disabling bootstrapping, we have
-      # to checkout the local branch to let Chromite know which branch to build.
-      self.m.git('checkout', self.c.chromite_branch,
-          name=str('checkout chromite branch [%s]' % (self.c.chromite_branch)))
-
     # Run cbuildbot.
     return self.cbuildbot(str('cbuildbot [%s]' % (self.c.cbb.config,)),
                           self.c.cbb.config,
                           args=cbb_args,
-                          chromite_path=self.m.path['checkout'],
                           cwd=self.m.path['slave_root'])

@@ -49,6 +49,17 @@
     "name": "checkout chromite branch [master]"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/chromite/cbuildbot/config_dump.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "read chromite config"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "[SLAVE_BUILD]/chromite/bin/cbuildbot",
