@@ -692,6 +692,7 @@ class AMPTest(Test):
     self._device_os = device_os
     self._device_oem = device_oem
     self._fallback_to_local = fallback_to_local
+    self._test_run_id = None
     self._trigger_successful = None
     self._step_results = {}
 
@@ -723,7 +724,7 @@ class AMPTest(Test):
       self._trigger_successful = False
 
   def trigger_test(self, api, suffix):
-    api.amp.trigger_test_suite(
+    self.test_run_id = api.amp.trigger_test_suite(
         step_name=self._step_name(suffix),
         suite=self.name,
         test_type=self.test_type(),
@@ -763,6 +764,7 @@ class AMPTest(Test):
     try:
       api.amp.collect_test_suite(
           step_name=self._step_name(suffix),
+          test_run_id=self.test_run_id,
           suite=self.name, test_type=self.test_type(),
           test_type_args=self.test_type_args(api),
           amp_args=self.amp_arguments(api),

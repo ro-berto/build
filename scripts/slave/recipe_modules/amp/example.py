@@ -94,7 +94,7 @@ def RunSteps(api, buildername):
   builder = BUILDERS[buildername]
   api.path['checkout'] = api.path['slave_build'].join('src')
 
-  api.amp.trigger_test_suite(
+  gtest_test_id = api.amp.trigger_test_suite(
       'example_gtest_suite', 'gtest',
       api.amp.gtest_arguments('example_gtest_suite'),
       api.amp.amp_arguments(
@@ -108,7 +108,7 @@ def RunSteps(api, buildername):
           api_protocol=builder.get('api_protocol', None),
           network_config=builder.get('network_config', None)))
 
-  api.amp.trigger_test_suite(
+  instrumentation_test_id = api.amp.trigger_test_suite(
       'example_instrumentation_suite', 'instrumentation',
       api.amp.instrumentation_test_arguments(
           apk_under_test='ApkUnderTest.apk',
@@ -125,8 +125,8 @@ def RunSteps(api, buildername):
           api_port=builder.get('api_port', None),
           api_protocol=builder.get('api_protocol', None),
           network_config=builder.get('network_config', None)))
-
-  api.amp.trigger_test_suite(
+ 
+  uirobot_test_id = api.amp.trigger_test_suite(
       'example_uirobot_suite', 'uirobot',
       api.amp.uirobot_arguments(app_under_test='Example.apk'),
       api.amp.amp_arguments(
@@ -145,31 +145,38 @@ def RunSteps(api, buildername):
       api.amp.gtest_arguments('example_gtest_suite'),
       api.amp.amp_arguments(api_address=builder.get('api_address', None),
                             api_port=builder.get('api_port', None),
-                            api_protocol=builder.get('api_protocol', None)))
+                            api_protocol=builder.get('api_protocol', None)),
+      test_run_id=gtest_test_id)
 
-  api.amp.upload_logcat_to_gs(AMP_RESULTS_BUCKET, 'example_gtest_suite')
+  api.amp.upload_logcat_to_gs(
+      AMP_RESULTS_BUCKET, 'example_gtest_suite', test_run_id=gtest_test_id)
 
   api.amp.collect_test_suite(
-      'example_instrumentation_suite', 'instrumentation',
+      'example_instrumentation_suite',
+      'instrumentation',
       api.amp.instrumentation_test_arguments(
           apk_under_test='ApkUnderTest.apk',
           test_apk='TestApk.apk'),
       api.amp.amp_arguments(
           api_address=builder.get('api_address', None),
           api_port=builder.get('api_port', None),
-          api_protocol=builder.get('api_protocol', None)))
+          api_protocol=builder.get('api_protocol', None)),
+      test_run_id=instrumentation_test_id)
 
   api.amp.upload_logcat_to_gs(
-      AMP_RESULTS_BUCKET, 'example_instrumentation_suite')
+      AMP_RESULTS_BUCKET, 'example_instrumentation_suite',
+      test_run_id=instrumentation_test_id)
 
   api.amp.collect_test_suite(
       'example_uirobot_suite', 'uirobot',
       api.amp.uirobot_arguments(),
       api.amp.amp_arguments(api_address=builder.get('api_address', None),
                             api_port=builder.get('api_port', None),
-                            api_protocol=builder.get('api_protocol', None)))
+                            api_protocol=builder.get('api_protocol', None)),
+      test_run_id=uirobot_test_id)
 
-  api.amp.upload_logcat_to_gs(AMP_RESULTS_BUCKET, 'example_uirobot_suite')
+  api.amp.upload_logcat_to_gs(
+      AMP_RESULTS_BUCKET, 'example_uirobot_suite', test_run_id=uirobot_test_id)
 
 def GenTests(api):
   for buildername in BUILDERS:

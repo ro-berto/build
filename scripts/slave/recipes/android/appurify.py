@@ -192,7 +192,7 @@ def RunSteps(api, mastername, buildername):
   output_dir = api.chromium.output_dir
 
   with api.step.defer_results():
-    trigger_successful = {}
+    successful_trigger_ids = {}
 
     amp_arguments = api.amp.amp_arguments(
         api_address=AMP_INSTANCE_ADDRESS,
@@ -216,8 +216,8 @@ def RunSteps(api, mastername, buildername):
               test_apk=output_dir.join('apks', i['test_apk']),
               isolate_file_path=isolate_file_path),
           amp_arguments)
-      trigger_successful[suite] = deferred_trigger_result.is_ok
-
+      if deferred_trigger_result.is_ok:
+        successful_trigger_ids[suite] = deferred_trigger_result.get_result()
     for suite, isolate_file in native_unittests:
       isolate_file_path = (
           api.path['checkout'].join(*isolate_file) if isolate_file else None)
@@ -225,8 +225,8 @@ def RunSteps(api, mastername, buildername):
           suite, 'gtest',
           api.amp.gtest_arguments(suite, isolate_file_path=isolate_file_path),
           amp_arguments)
-      trigger_successful[suite] = deferred_trigger_result.is_ok
-
+      if deferred_trigger_result.is_ok:
+        successful_trigger_ids[suite] = deferred_trigger_result.get_result()
     for suite in java_unittests:
       api.chromium_android.run_java_unit_test_suite(suite)
 
@@ -235,23 +235,27 @@ def RunSteps(api, mastername, buildername):
 
     for suite, isolate_file in native_unittests:
       # Skip collection if test was not triggered successfully.
-      if not trigger_successful[suite]:
+      if not successful_trigger_ids.get(suite):
         continue
+
       deferred_step_result = api.amp.collect_test_suite(
           suite, 'gtest',
           api.amp.gtest_arguments(suite),
-          amp_arguments)
+          amp_arguments,
+          test_run_id=successful_trigger_ids[suite])
       if not deferred_step_result.is_ok:
         # We only want to upload the logcat if there was a test failure.
         step_failure = deferred_step_result.get_error()
         if step_failure.result.presentation.status == api.step.FAILURE:
-          api.amp.upload_logcat_to_gs(AMP_RESULTS_BUCKET, suite)
+          api.amp.upload_logcat_to_gs(
+              AMP_RESULTS_BUCKET, suite,
+              successful_trigger_ids[suite])
 
     for i in instrumentation_tests:
       suite = i.get('gyp_target')
 
       # Skip collection if test was not triggered successfully.
-      if not trigger_successful[suite]:
+      if not successful_trigger_ids.get(suite):
         continue
 
       deferred_step_result = api.amp.collect_test_suite(
@@ -259,12 +263,15 @@ def RunSteps(api, mastername, buildername):
           api.amp.instrumentation_test_arguments(
               apk_under_test=output_dir.join('apks', i['apk_under_test']),
               test_apk=output_dir.join('apks', i['test_apk'])),
-          amp_arguments)
+          amp_arguments,
+          test_run_id=successful_trigger_ids[suite])
       if not deferred_step_result.is_ok:
         # We only want to upload the logcat if there was a test failure.
         step_failure = deferred_step_result.get_error()
         if step_failure.result.presentation.status == api.step.FAILURE:
-          api.amp.upload_logcat_to_gs(AMP_RESULTS_BUCKET, suite)
+          api.amp.upload_logcat_to_gs(
+              AMP_RESULTS_BUCKET, suite,
+              successful_trigger_ids[suite])
 
     api.chromium_android.test_report()
 

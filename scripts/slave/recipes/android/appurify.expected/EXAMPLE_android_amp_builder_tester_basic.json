@@ -188,6 +188,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -198,8 +201,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/android_webview_unittests.json"
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save android_webview_unittests"
@@ -251,6 +254,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -261,8 +267,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json"
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save base_unittests"
@@ -312,6 +318,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -322,8 +331,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/cc_unittests.json"
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save cc_unittests"
@@ -375,6 +384,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -385,8 +397,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/components_unittests.json"
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save components_unittests"
@@ -436,6 +448,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -446,8 +461,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/events_unittests.json"
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save events_unittests"
@@ -497,6 +512,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -507,8 +525,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/gl_tests.json"
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save gl_tests"
@@ -558,6 +576,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -568,8 +589,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/ipc_tests.json"
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save ipc_tests"
@@ -619,6 +640,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -629,8 +653,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/skia_unittests.json"
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save skia_unittests"
@@ -682,6 +706,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -692,8 +719,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/sql_unittests.json"
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save sql_unittests"
@@ -745,6 +772,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -755,8 +785,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/sync_unit_tests.json"
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save sync_unit_tests"
@@ -806,6 +836,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -816,8 +849,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/ui_android_unittests.json"
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save ui_android_unittests"
@@ -867,6 +900,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -877,8 +913,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/ui_touch_selection_unittests.json"
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save ui_touch_selection_unittests"
@@ -937,7 +973,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/android_webview_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -985,9 +1021,9 @@
       "--remote-device-os",
       "4.4.3",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/android_webview_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/android_webview_unittests/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose",
       "--release"
     ],
@@ -1002,7 +1038,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1050,9 +1086,9 @@
       "--remote-device-os",
       "4.4.3",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/base_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/base_unittests/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose",
       "--release"
     ],
@@ -1067,7 +1103,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/cc_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1115,9 +1151,9 @@
       "--remote-device-os",
       "4.4.3",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/cc_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/cc_unittests/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose",
       "--release"
     ],
@@ -1132,7 +1168,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/components_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1180,9 +1216,9 @@
       "--remote-device-os",
       "4.4.3",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/components_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/components_unittests/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose",
       "--release"
     ],
@@ -1197,7 +1233,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/events_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1245,9 +1281,9 @@
       "--remote-device-os",
       "4.4.3",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/events_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/events_unittests/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose",
       "--release"
     ],
@@ -1262,7 +1298,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/gl_tests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1310,9 +1346,9 @@
       "--remote-device-os",
       "4.4.3",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/gl_tests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/gl_tests/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose",
       "--release"
     ],
@@ -1327,7 +1363,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/ipc_tests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1375,9 +1411,9 @@
       "--remote-device-os",
       "4.4.3",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/ipc_tests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/ipc_tests/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose",
       "--release"
     ],
@@ -1392,7 +1428,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/skia_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1440,9 +1476,9 @@
       "--remote-device-os",
       "4.4.3",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/skia_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/skia_unittests/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose",
       "--release"
     ],
@@ -1457,7 +1493,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/sql_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1505,9 +1541,9 @@
       "--remote-device-os",
       "4.4.3",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/sql_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/sql_unittests/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose",
       "--release"
     ],
@@ -1522,7 +1558,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/sync_unit_tests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1570,9 +1606,9 @@
       "--remote-device-os",
       "4.4.3",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/sync_unit_tests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/sync_unit_tests/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose",
       "--release"
     ],
@@ -1587,7 +1623,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/ui_android_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1635,9 +1671,9 @@
       "--remote-device-os",
       "4.4.3",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/ui_android_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/ui_android_unittests/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose",
       "--release"
     ],
@@ -1652,7 +1688,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/ui_touch_selection_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1700,9 +1736,9 @@
       "--remote-device-os",
       "4.4.3",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/ui_touch_selection_unittests.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/ui_touch_selection_unittests/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose",
       "--release"
     ],

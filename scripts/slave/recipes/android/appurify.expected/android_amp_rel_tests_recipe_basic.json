@@ -268,6 +268,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -278,8 +281,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/chrome_public_test_apk.json"
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save chrome_public_test_apk"
@@ -338,7 +341,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/chrome_public_test_apk.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -388,9 +391,9 @@
       "--remote-device-os",
       "4.4.3",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/chrome_public_test_apk.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/chrome_public_test_apk/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose",
       "--release"
     ],

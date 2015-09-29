@@ -41,6 +41,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -51,8 +54,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/example_gtest_suite.json"
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save example_gtest_suite"
@@ -105,6 +108,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -115,8 +121,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/example_instrumentation_suite.json"
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save example_instrumentation_suite"
@@ -165,6 +171,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -175,8 +184,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/example_uirobot_suite.json"
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] save example_uirobot_suite"
@@ -186,7 +195,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/example_gtest_suite.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -228,9 +237,9 @@
       "--device-type",
       "Android",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/example_gtest_suite.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/example_gtest_suite/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -244,16 +253,44 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/example_gtest_suite.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] load example_gtest_suite data",
     "~followup_annotations": [
-      "@@@STEP_TEXT@unable to find test run id@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_EXCEPTION@@@"
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[zip]/resources/unzip.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "[upload logcat] unzip results for example_gtest_suite",
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "----",
+      "cp",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_example_gtest_suite_T35TRUN1D.txt"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil [upload logcat] example_gtest_suite",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_gtest_suite_T35TRUN1D.txt@@@"
     ]
   },
   {
@@ -261,7 +298,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/example_instrumentation_suite.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -305,9 +342,9 @@
       "--device-type",
       "Android",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/example_instrumentation_suite.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/example_instrumentation_suite/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -321,7 +358,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/example_instrumentation_suite.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -343,7 +380,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for example_instrumentation_suite",
-    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/example_instrumentation_suite/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/example_instrumentation_suite/results.zip\"}"
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
   },
   {
     "cmd": [
@@ -356,13 +393,13 @@
       "3.25",
       "----",
       "cp",
-      "[TMP_BASE]/amp_results_tmp_2/example_instrumentation_suite/unzipped_results/appurify_results/logcat.txt",
-      "gs://chrome-amp-results/logcats/logcat_example_instrumentation_suite_12345abcde.txt"
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_example_instrumentation_suite_T35TRUN1D.txt"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil [upload logcat] example_instrumentation_suite",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_instrumentation_suite_12345abcde.txt@@@"
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_instrumentation_suite_T35TRUN1D.txt@@@"
     ]
   },
   {
@@ -370,7 +407,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/example_uirobot_suite.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -412,9 +449,9 @@
       "--device-type",
       "Android",
       "--collect",
-      "[TMP_BASE]/amp_trigger_tmp_1/example_uirobot_suite.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "--results-path",
-      "[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/results.zip",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -428,7 +465,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/amp_trigger_tmp_1/example_uirobot_suite.json",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -450,7 +487,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for example_uirobot_suite",
-    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/results.zip\"}"
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
   },
   {
     "cmd": [
@@ -463,13 +500,13 @@
       "3.25",
       "----",
       "cp",
-      "[TMP_BASE]/amp_results_tmp_2/example_uirobot_suite/unzipped_results/appurify_results/logcat.txt",
-      "gs://chrome-amp-results/logcats/logcat_example_uirobot_suite_12345abcde.txt"
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results/appurify_results/logcat.txt",
+      "gs://chrome-amp-results/logcats/logcat_example_uirobot_suite_T35TRUN1D.txt"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil [upload logcat] example_uirobot_suite",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_uirobot_suite_12345abcde.txt@@@"
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_example_uirobot_suite_T35TRUN1D.txt@@@"
     ]
   }
 ]
