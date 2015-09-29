@@ -29,7 +29,7 @@ def RunSteps(api):
   # Generate and upload documentation.
   api.python('generate', go_env, ['go', 'run', 'doc.go', '-out', output],
              cwd=util)
-  api.gsutil(['-m', 'cp', '-r', '-a', 'public-read', output,
+  api.gsutil(['-m', 'cp', '-a', 'public-read', api.path.join(output, '**'),
               'gs://chromium-boringssl-docs/'])
 
 

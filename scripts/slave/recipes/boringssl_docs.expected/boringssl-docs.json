@@ -73,10 +73,9 @@
       "----",
       "-m",
       "cp",
-      "-r",
       "-a",
       "public-read",
-      "[TMP_BASE]/boringssl-docs_tmp_1",
+      "[TMP_BASE]/boringssl-docs_tmp_1/**",
       "gs://chromium-boringssl-docs/"
     ],
     "cwd": "[SLAVE_BUILD]",
