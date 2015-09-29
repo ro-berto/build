@@ -213,11 +213,25 @@ class IsolateApi(recipe_api.RecipeApi):
       full_args.extend(args)
     return full_args
 
+  def run_isolated(self, name, isolate_hash, args=None):
+    """Runs an isolated test."""
+    cmd = [
+        '--isolated', isolate_hash,
+        '-I', self.isolate_server,
+        '--verbose',
+    ]
+    if args:
+      cmd.append('--')
+      cmd.extend(args)
+    self.m.python(name, self._run_isolated_path, cmd)
+
   def runtest(self, test, revision, webkit_revision, args=None, name=None,
               **runtest_kwargs):
     """Runs a test which has previously been isolated to the server.
 
     Uses runtest_args_list, above, and delegates to api.chromium.runtest.
+
+    DEPRECATED - run_isolated above is strongly recommended for all new callers.
     """
     self.m.chromium.runtest(
         self._run_isolated_path,

@@ -94,5 +94,21 @@
       "@@@STEP_WARNINGS@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes@{}@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/swarming.client/run_isolated.py",
+      "--isolated",
+      "7b28d637ab6bb2516584c21e1098736682457f11",
+      "-I",
+      "https://isolateserver-dev.appspot.com",
+      "--verbose",
+      "--",
+      "--foo"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "base_unittests"
   }
 ]
