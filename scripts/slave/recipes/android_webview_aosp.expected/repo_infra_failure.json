@@ -19,7 +19,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@204787"
+      "src@204787",
+      "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

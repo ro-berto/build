@@ -25,7 +25,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "gyp@HEAD"
+      "gyp@HEAD",
+      "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
@@ -33,6 +34,12 @@
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gyp\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/gyp.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"6719c46a0a0a18abfb6c3dbce45c7ccd772b243d\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"gyp\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",

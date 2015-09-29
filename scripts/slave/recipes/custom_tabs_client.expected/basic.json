@@ -20,7 +20,8 @@
       "/path/to/tmp/json",
       "--revision",
       "custom_tabs_client@HEAD",
-      "--force"
+      "--force",
+      "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
@@ -28,6 +29,12 @@
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"custom_tabs_client\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/custom_tabs_client.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"8b458125af3d8685f8213dcc81b6e70f14cd60c7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"custom_tabs_client\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",

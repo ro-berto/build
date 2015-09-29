@@ -25,7 +25,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "chrome_golo@HEAD"
+      "chrome_golo@HEAD",
+      "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
@@ -33,6 +34,12 @@
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chrome_golo\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/chrome_golo.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"d2571c8b2d27c5e5a14fd061581e46e802f1566a\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"chrome_golo\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",

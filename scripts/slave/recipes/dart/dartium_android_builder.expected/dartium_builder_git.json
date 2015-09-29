@@ -43,7 +43,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src/dart@478695f60c28b5b8a951ce1d4fd60f53d80b21fb"
+      "src/dart@478695f60c28b5b8a951ce1d4fd60f53d80b21fb",
+      "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

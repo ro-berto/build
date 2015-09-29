@@ -43,7 +43,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "dartium.deps@34567"
+      "dartium.deps@34567",
+      "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

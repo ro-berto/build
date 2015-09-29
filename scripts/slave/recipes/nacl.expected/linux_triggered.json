@@ -20,7 +20,8 @@
       "/path/to/tmp/json",
       "--revision",
       "native_client@abcd",
-      "--force"
+      "--force",
+      "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",
@@ -28,6 +29,12 @@
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"native_client\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/native_client.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"a95eb4c044a154d692a53fdfa564ee8de7aeea5b\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"native_client\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",

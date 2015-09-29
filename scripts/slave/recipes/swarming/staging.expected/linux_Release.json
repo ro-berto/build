@@ -30,7 +30,8 @@
       "--revision",
       "src@204787",
       "--revision",
-      "src/tools/swarming_client@HEAD"
+      "src/tools/swarming_client@HEAD",
+      "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "bot_update",

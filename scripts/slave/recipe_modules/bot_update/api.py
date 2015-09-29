@@ -69,7 +69,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
                       force=False, patch_root=None, no_shallow=False,
                       with_branch_heads=False, refs=None,
                       patch_project_roots=None, patch_oauth2=False,
-                      output_manifest=False, clobber=False, **kwargs):
+                      output_manifest=True, clobber=False, **kwargs):
     refs = refs or []
     # We can re-use the gclient spec from the gclient module, since all the
     # data bot_update needs is already configured into the gclient spec.
