@@ -57,7 +57,9 @@ def Update(c):
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory('webrtc/standalone'),
+        # TODO(sergiyb): Remove the timeout below after all bots have synched
+        # past Blink merge commit.
+        'factory': m_annotator.BaseFactory('webrtc/standalone', timeout=3600),
         'notify_on_missing': True,
         'category': spec.get('category', 'compile|testers|windows'),
         'slavebuilddir': spec.get('slavebuilddir', 'win'),
