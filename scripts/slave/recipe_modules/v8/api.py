@@ -122,14 +122,10 @@ class V8Test(BaseTest):
     assert failure_dict.get('variant')
     assert failure_dict.get('random_seed')
 
-    # Filter variant manipulation and data downloading from test arguments.
-    # We'll specify exactly the variant which failed. Downloading is not
-    # necessary as this is a rerun and all test data is already downloaded
-    # in the original run.
-    orig_args = list(filter(
-        lambda x: x not in ['--no-variants', '--download-data'],
-        TEST_CONFIGS[self.name].get('test_args', []),
-    ))
+    # Filter variant manipulation and from test arguments.
+    # We'll specify exactly the variant which failed.
+    orig_args = [x for x in TEST_CONFIGS[self.name].get('test_args', [])
+                 if x != '--no-variants']
     new_args = [
       '--variants', failure_dict['variant'],
       '--random-seed', failure_dict['random_seed'],
