@@ -157,7 +157,8 @@ def RunSteps(api, buildername):
     if config.get('perf_config'):
       api.chromium_android.run_sharded_perf_tests(
           config='fake_config.json',
-          flaky_config='flake_fakes.json')
+          flaky_config='flake_fakes.json',
+          upload_archives_to_bucket='archives-bucket')
   except api.step.StepFailure as f:
     failure = f
 

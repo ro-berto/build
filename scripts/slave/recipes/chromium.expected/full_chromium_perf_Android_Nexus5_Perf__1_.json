@@ -381,6 +381,8 @@
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"device_affinity\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"end_time\": 1443438432.949711, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"has_archive\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"test\": \"perf_test.foo\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",

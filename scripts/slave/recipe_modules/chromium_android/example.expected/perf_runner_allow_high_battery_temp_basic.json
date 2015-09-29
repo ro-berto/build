@@ -517,6 +517,8 @@
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"device_affinity\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"end_time\": 1443438432.949711, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"has_archive\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"test\": \"perf_test.foo\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
@@ -594,7 +596,9 @@
       "perf_test.foo",
       "--verbose",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--get-output-dir-archive",
+      "[TMP_BASE]/perf_archives_tmp_1/output_dir.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -603,6 +607,26 @@
     "name": "perf_test.foo",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "----",
+      "cp",
+      "[TMP_BASE]/perf_archives_tmp_1/output_dir.zip",
+      "gs://archives-bucket/perf_runner_allow_high_battery_temp/perf_test.foo/20150928T110712_build_571.zip"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload perf_test.foo output dir archive",
+    "~followup_annotations": [
+      "@@@STEP_LINK@output_dir.zip@https://storage.cloud.google.com/archives-bucket/perf_runner_allow_high_battery_temp/perf_test.foo/20150928T110712_build_571.zip@@@"
     ]
   },
   {

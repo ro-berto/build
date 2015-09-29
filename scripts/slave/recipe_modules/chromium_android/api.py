@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import contextlib
+import datetime
 import json
 import os
 import re
@@ -10,6 +11,10 @@ import urllib
 
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
+
+
+def _TimestampToIsoFormat(timestamp):
+  return datetime.datetime.utcfromtimestamp(timestamp).strftime('%Y%m%dT%H%M%S')
 
 
 class AndroidApi(recipe_api.RecipeApi):
@@ -478,6 +483,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def run_sharded_perf_tests(self, config, flaky_config=None, perf_id=None,
                              test_type_transform=lambda x: x,
                              chartjson_file=False, max_battery_temp=None,
+                             upload_archives_to_bucket=None,
                              **kwargs):
     """Run the perf tests from the given config file.
 
@@ -499,7 +505,8 @@ class AndroidApi(recipe_api.RecipeApi):
          'perf', '--steps', config, '--output-json-list', self.m.json.output(),
          '--blacklist-file', self.blacklist_file],
         step_test_data=lambda: self.m.json.test_api.output([
-            {'test': 'perf_test.foo', 'device_affinity': 0},
+            {'test': 'perf_test.foo', 'device_affinity': 0,
+             'end_time': 1443438432.949711, 'has_archive': True},
             {'test': 'page_cycler.foo', 'device_affinity': 0}]),
         env=self.m.chromium.get_env()
     )
@@ -517,11 +524,19 @@ class AndroidApi(recipe_api.RecipeApi):
       test_type = test_type_transform(test_name)
       annotate = self.m.chromium.get_annotate_by_test_name(test_name)
 
+      if upload_archives_to_bucket and test_data.get('has_archive'):
+        archive = self.m.path.mkdtemp('perf_archives').join('output_dir.zip')
+      else:
+        archive = None
+      print_step_cmd = ['perf', '--print-step', test_name, '--verbose',
+                        '--blacklist-file', self.blacklist_file]
+      if archive:
+        print_step_cmd.extend(['--get-output-dir-archive', archive])
+
       try:
         self.m.chromium.runtest(
           self.c.test_runner,
-          ['perf', '--print-step', test_name, '--verbose',
-           '--blacklist-file', self.blacklist_file],
+          print_step_cmd,
           name=test_name,
           perf_dashboard_id=test_type,
           test_type=test_type,
@@ -538,6 +553,19 @@ class AndroidApi(recipe_api.RecipeApi):
           step_result.presentation.step_text += (
               self.m.test_utils.format_step_text(
                   [['Device Affinity: %s' % test_data['device_affinity']]]))
+
+      if archive:
+        dest = '{builder}/{test}/{timestamp}_build_{buildno}.zip'.format(
+          builder=self.m.properties['buildername'],
+          test=test_name,
+          timestamp=_TimestampToIsoFormat(test_data['end_time']),
+          buildno=self.m.properties['buildnumber'])
+        self.m.gsutil.upload(
+          name='upload %s output dir archive' % test_name,
+          source=archive,
+          bucket=upload_archives_to_bucket,
+          dest=dest,
+          link_name='output_dir.zip')
 
     if failures:
       raise self.m.step.StepFailure('sharded perf tests failed %s' % failures)
