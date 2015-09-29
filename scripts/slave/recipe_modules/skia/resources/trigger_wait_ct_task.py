@@ -24,7 +24,7 @@ GCE_WEBHOOK_SALT_METADATA_URI = (
     "webhook_request_salt")
 
 
-POLLING_FREQUENCY_SECS = 60  # 1 minute.
+POLLING_FREQUENCY_SECS = 30  # 30 seconds.
 TRYBOT_DEADLINE_SECS = 24 * 60 * 60  # 24 hours.
 
 
@@ -128,9 +128,11 @@ def TriggerAndWait(options):
 
     status = ret["status"]
     if status == "Completed":
+      results = ret["resultsLink"]
       print
-      print ('Your run was successfully completed. Please check your email for '
-             'results of the run.')
+      print 'Your run was successfully completed.'
+      if results:
+        print '@@@STEP_LINK@%s@%s@@@' % ('CT Perf Results', results)
       print
       return 0
     elif status == "Completed with failures":
