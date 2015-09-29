@@ -206,6 +206,7 @@ class GClientFactory(object):
     use_mb = factory_properties.get('use_mb')
 
     if use_mb:
+      # Don't run GYP as part of gclient runhooks.
       env.update({'GYP_CHROMIUM_NO_ACTION': '1'})
 
     # svn timeout is 2 min; we allow 5
@@ -225,7 +226,15 @@ class GClientFactory(object):
                            blink_config=blink_config)
 
     if use_mb:
-      factory_cmd_obj.AddGenerateBuildFilesStep(env=env, timeout=timeout,
+      # To be safe, we reset env back to its non-MB state and then make sure
+      # MB is passed an env w/ no GYP flags set at all.
+      del env['GYP_CHROMIUM_NO_ACTION']
+      mb_env = env.copy()
+      if 'GYP_DEFINES' in mb_env:
+        del mb_env['GYP_DEFINES']
+      if 'GYP_CROSSCOMPILE' in mb_env:
+        del mb_env['GYP_CROSSCOMPILE']
+      factory_cmd_obj.AddGenerateBuildFilesStep(env=mb_env, timeout=timeout,
                                                 options=options, target=target)
 
     return factory
