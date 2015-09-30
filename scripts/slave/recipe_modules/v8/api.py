@@ -52,6 +52,7 @@ TEST_CONFIGS = freeze({
   'optimize_for_size': {
     'name': 'OptimizeForSize',
     'tests': ['optimize_for_size'],
+    'suite_mapping': ['mjsunit', 'cctest', 'webkit'],
     'add_flaky_step': True,
     'test_args': ['--no-variants', '--extra-flags=--optimize-for-size'],
   },
@@ -82,6 +83,7 @@ TEST_CONFIGS = freeze({
   'v8testing': {
     'name': 'Check',
     'tests': ['default'],
+    'suite_mapping': ['mjsunit', 'cctest', 'message', 'preparser'],
     'add_flaky_step': True,
   },
   'webkit': {
@@ -790,8 +792,30 @@ class V8Api(recipe_api.RecipeApi):
       # Number of failures.
       presentation.step_text += ('failures: %d<br/>' % len(failures))
 
+  @property
+  def test_filter(self):
+    return [f for f in self.m.properties.get('testfilter', [])
+            if f != 'defaulttests']
+
+  def _applied_test_filter(self, test):
+    """Returns: the list of test filters that match a test configuration."""
+    # V8 test filters always include the full suite name, followed
+    # by more specific paths and possibly ending with a glob, e.g.:
+    # 'mjsunit/regression/prefix*'.
+    return [f for f in self.test_filter
+              for t in test.get('suite_mapping', test['tests'])
+              if f.startswith(t)]
+
   def _runtest(self, name, test, flaky_tests=None, failure_factory=None,
                **kwargs):
+    # Skip test configuration if filters are used and no filter matches.
+    applied_test_filter = self._applied_test_filter(test)
+    if self.test_filter and not applied_test_filter:
+      self.m.step(name + ' - skipped', cmd=None)
+      # TODO(machenbach): Return also the number of tests that ran and throw an
+      # error if the overall number of tests from all steps was zero.
+      return TestResults.empty()
+
     env = {}
     full_args = [
       '--progress=verbose',
@@ -800,7 +824,14 @@ class V8Api(recipe_api.RecipeApi):
       '--outdir', self.m.path.split(self.m.chromium.c.build_dir)[-1],
       '--buildbot',
       '--timeout=200',
-    ] + list(test['tests'])
+    ]
+
+    # Either run tests as specified by the filter (trybots only) or as
+    # specified by the test configuration.
+    if applied_test_filter:
+      full_args += applied_test_filter
+    else:
+      full_args += list(test['tests'])
 
     # Add test-specific test arguments.
     full_args += test.get('test_args', [])
@@ -881,6 +912,10 @@ class V8Api(recipe_api.RecipeApi):
       **kwargs
     )
 
+    # Log used test filters.
+    if applied_test_filter:
+      step_result.presentation.logs['test filter'] = applied_test_filter
+
     # The output is expected to be a list of architecture dicts that
     # each contain a results list. On buildbot, there is only one
     # architecture.
@@ -942,6 +977,12 @@ class V8Api(recipe_api.RecipeApi):
           failure_factory=failure_factory,
           **kwargs
       )
+
+  def verify_cq_integrity(self):
+    # TODO(machenbach): Remove this as soon as crbug.com/487822 is resolved.
+    if self.test_filter:
+      result = self.m.step('CQ integrity - used testfilter', cmd=None)
+      result.presentation.status = self.m.step.FAILURE
 
   @staticmethod
   def mean(values):

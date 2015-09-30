@@ -57,6 +57,7 @@ def RunSteps(api):
       raise api.step.StepFailure('Failures or flakes in build.')
 
   v8.maybe_trigger()
+  v8.verify_cq_integrity()
 
 
 def _sanitize_nonalpha(text):
@@ -121,6 +122,27 @@ def GenTests(api):
                              revision='20123') +
     api.platform('linux', 32) +
     api.step_data('bot_update', retcode=1)
+  )
+
+  # Test usage of test filters. They're used when the buildbucket
+  # job gets a property 'testfilter', which is expected to be a json list of
+  # test-filter strings.
+  mastername = 'tryserver.v8'
+  buildername = 'v8_linux_rel'
+  bot_config = api.v8.BUILDERS[mastername]['builders'][buildername]
+  yield (
+    api.test('full_%s_%s_test_filter' % (
+        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
+    api.properties.generic(
+        mastername=mastername,
+        buildername=buildername,
+        branch='master',
+        revision='12345',
+        patch_url='svn://svn-mirror.golo.chromium.org/patch',
+        testfilter=['mjsunit/regression/*', 'test262/foo', 'test262/bar'],
+    ) +
+    api.platform(bot_config['testing']['platform'],
+                 v8_config_kwargs.get('TARGET_BITS', 64))
   )
 
   mastername = 'client.v8'
