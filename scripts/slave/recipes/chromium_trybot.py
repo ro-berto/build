@@ -766,6 +766,13 @@ def _RunStepsInternal(api):
     # trying to isolate affected targets may fail.
     tests = []
     tests_including_triggered = []
+
+    # TODO(sergiyb): This is a hotfix that should be removed if we implement a
+    # proper long-term fix. It is currently needed to ensure that we compile
+    # matching_exes also when a bot is running analyze in compile-only mode and
+    # stay consistent with corresponding waterfall bots. Please see
+    # http://crbug.com/529798 for more context.
+    compile_targets = sorted(set(compile_targets + matching_exes))
   else:
     # Note that compile_targets doesn't necessarily include matching_exes,
     # and for correctness we need to add them. Otherwise it's possible we'd
@@ -1450,6 +1457,7 @@ def GenTests(api):
           patch_project='v8') +
     api.platform.name('win')
   )
+
 
   # Tests that we only run the angle_unittests isolate if that's all
   # that analyze said to rebuild.
