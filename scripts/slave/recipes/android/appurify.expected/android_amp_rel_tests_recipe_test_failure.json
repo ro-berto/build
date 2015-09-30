@@ -444,8 +444,6 @@
       "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
       "----",
       "cp",
       "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results/appurify_results/logcat.txt",

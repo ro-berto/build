@@ -1617,8 +1617,6 @@
       "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
       "----",
       "ls",
       "gs://chromium-v8/v8-linux-rel/full-build-linux_a1.zip"
@@ -1637,8 +1635,6 @@
       "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
       "----",
       "ls",
       "gs://chromium-v8/v8-linux-rel/full-build-linux_a2.zip"

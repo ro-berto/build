@@ -173,8 +173,6 @@
       "python",
       "-u",
       "[DEPOT_TOOLS]\\gsutil.py",
-      "--force-version",
-      "3.25",
       "--",
       "-h",
       "x-goog-meta-Cr-Commit-Position:refs/heads/master@{#170242}",

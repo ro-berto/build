@@ -59,8 +59,6 @@
       "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "3.25",
       "----",
       "cp",
       "[SLAVE_BUILD]/git_clone_bundler/bundles/4c11f7d238ab3a5109562560694c3722.bundle",
