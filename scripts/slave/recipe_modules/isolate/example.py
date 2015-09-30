@@ -40,13 +40,6 @@ def RunSteps(api):
   if expected_targets is not None:
     api.isolate.isolate_tests(api.path['build'], expected_targets)
 
-  # Code coverage for 'run_isolated'.
-  # TODO(phajdan.jr): Remove once used by other recipes.
-  api.isolate.run_isolated(
-      'base_unittests',
-      '7b28d637ab6bb2516584c21e1098736682457f11',
-      args=['--foo'])
-
 
 def GenTests(api):
   def make_test(name, expected_targets, discovered_targets):

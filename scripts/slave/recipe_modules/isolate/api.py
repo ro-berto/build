@@ -213,7 +213,7 @@ class IsolateApi(recipe_api.RecipeApi):
       full_args.extend(args)
     return full_args
 
-  def run_isolated(self, name, isolate_hash, args=None):
+  def run_isolated(self, name, isolate_hash, args=None, **kwargs):
     """Runs an isolated test."""
     cmd = [
         '--isolated', isolate_hash,
@@ -223,7 +223,7 @@ class IsolateApi(recipe_api.RecipeApi):
     if args:
       cmd.append('--')
       cmd.extend(args)
-    self.m.python(name, self._run_isolated_path, cmd)
+    self.m.python(name, self._run_isolated_path, cmd, **kwargs)
 
   def runtest(self, test, revision, webkit_revision, args=None, name=None,
               **runtest_kwargs):

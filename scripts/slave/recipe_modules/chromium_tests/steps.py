@@ -924,28 +924,22 @@ class IsolatedScriptTest(Test):
     # the local copy.
     args = self._args[:]
 
-    kwargs = {}
     # TODO(nednguyen, kbr): define contract with the wrapper script to rerun
     # a subset of the tests. (crbug.com/533481)
+
     json_results_file = api.json.output()
+    args.extend(
+        ['--isolated-script-test-output', json_results_file])
+
     step_test_data = lambda: api.json.test_api.output(
         {'valid': True, 'failures': []})
-    kwargs['name'] = self._step_name(suffix)
-    kwargs['args'] = args
-    kwargs['args'].extend(
-        ['--isolated-script-test-output', json_results_file])
-    kwargs['step_test_data'] = step_test_data
-    kwargs['xvfb'] = True
-    kwargs['test_type'] = self.name
-    kwargs.update(self._runtest_kwargs)
 
     try:
-      # TODO(nednguyen, kbr):
-      #  Replace runtest usage here with a better alternative.
-      # (crbug.com/533479)
-      # Figure out whether we need to get revision and webkit_revision, and
-      # if so, where to get them from. (crbug.com/533141)
-      api.isolate.runtest(self.target_name, None, None, **kwargs)
+      api.isolate.run_isolated(
+          self.name,
+          api.isolate.isolated_tests[self.target_name],
+          args,
+          step_test_data=step_test_data)
     finally:
       self._test_runs[suffix] = api.step.active_result
       if self.has_valid_results(api, suffix):
