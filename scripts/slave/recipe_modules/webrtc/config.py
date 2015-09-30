@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 from recipe_engine.config import config_item_context, ConfigGroup
-from recipe_engine.config import Static
+from recipe_engine.config import Single, Static
 
 
 def BaseConfig(PERF_ID=None, PERF_CONFIG=None, TEST_SUITE=None, **_kwargs):
@@ -11,6 +11,8 @@ def BaseConfig(PERF_ID=None, PERF_CONFIG=None, TEST_SUITE=None, **_kwargs):
     PERF_ID = Static(PERF_ID),
     PERF_CONFIG = Static(PERF_CONFIG),
     TEST_SUITE = Static(TEST_SUITE),
+
+    use_isolate = Single(bool, False),
   )
 
 config_ctx = config_item_context(BaseConfig)

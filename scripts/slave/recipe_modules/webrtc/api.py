@@ -159,8 +159,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver:
       self.m.chromium.apply_config('trybot_flavor')
 
-    self.use_isolate = self.bot_config.get('use_isolate')
-    if self.use_isolate:
+    self.c.use_isolate = self.bot_config.get('use_isolate')
+    if self.c.use_isolate:
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
 
     if self.bot_config.get('enable_swarming'):
@@ -202,7 +202,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     Args:
       test_suite: The name of the test suite.
     """
-    if self.use_isolate:
+    if self.c.use_isolate:
       self.m.isolate.remove_build_metadata()
       self.m.isolate.isolate_tests(self.m.chromium.output_dir,
                                    targets=self.NORMAL_TESTS)
@@ -267,7 +267,7 @@ class WebRTCApi(recipe_api.RecipeApi):
           'test_type': test_type,
           'env': env,
       }
-      if self.use_isolate and not disable_swarming:
+      if self.c.use_isolate and not disable_swarming:
         self.m.isolate.runtest(test=test, revision=revision,
                                webkit_revision=None, args=args, name=name,
                                **runtest_kwargs)
@@ -367,7 +367,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.chromium_android.clean_local_files()
     else:
       self.m.chromium.cleanup_temp()
-    if self.use_isolate:
+    if self.c.use_isolate:
       self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
 
   def clean_test_output(self):
