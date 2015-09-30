@@ -387,6 +387,66 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "base_unittests",
+      "--isolate-file-path",
+      "[SLAVE_BUILD]/src/base/base_unittests.isolate",
+      "--enable-platform-mode",
+      "-e",
+      "remote_device",
+      "--api-key-file",
+      "[BUILD]/site_config/.amp_api_key",
+      "--api-secret-file",
+      "[BUILD]/site_config/.amp_api_secret",
+      "--api-address",
+      "172.22.21.180",
+      "--api-port",
+      "80",
+      "--api-protocol",
+      "http",
+      "--device-type",
+      "Android",
+      "--trigger",
+      "/path/to/tmp/json",
+      "--verbose",
+      "--release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "[trigger] base_unittests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "[trigger] save base_unittests"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "AndroidWebView.apk",
       "-v",
@@ -564,29 +624,6 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "android_webview_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "base_unittests",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/base/base_unittests.isolate",
-      "--flakiness-dashboard-server=test-results.appspot.com",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "base_unittests"
   },
   {
     "cmd": [
@@ -1191,6 +1228,69 @@
     "name": "net_junit_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "[collect] load base_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "base_unittests",
+      "--isolate-file-path",
+      "[SLAVE_BUILD]/src/base/base_unittests.isolate",
+      "--enable-platform-mode",
+      "-e",
+      "remote_device",
+      "--api-key-file",
+      "[BUILD]/site_config/.amp_api_key",
+      "--api-secret-file",
+      "[BUILD]/site_config/.amp_api_secret",
+      "--api-address",
+      "172.22.21.180",
+      "--api-port",
+      "80",
+      "--api-protocol",
+      "http",
+      "--device-type",
+      "Android",
+      "--collect",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json",
+      "--results-path",
+      "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip",
+      "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "[collect] base_unittests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
     ]
   },
   {
