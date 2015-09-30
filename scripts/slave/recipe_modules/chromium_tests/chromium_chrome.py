@@ -2,6 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from . import steps
+
+RESULTS_URL = 'https://chromeperf.appspot.com'
+
 SPEC = {
   'builders': {
     'Google Chrome ChromeOS': {
@@ -38,6 +42,9 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'tests': {
+        steps.SizesStep(RESULTS_URL, 'Google Chrome Linux')
+      },
     },
     'Google Chrome Linux x64': {
       'chromium_config': 'chromium_official',
@@ -53,6 +60,9 @@ SPEC = {
       ],
       'testing': {
         'platform': 'linux',
+      },
+      'tests': {
+        steps.SizesStep(RESULTS_URL, 'Google Chrome Linux x64')
       },
     },
     'Google Chrome Mac': {
@@ -70,6 +80,9 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
+      'tests': {
+        steps.SizesStep(RESULTS_URL, 'Google Chrome Mac')
+      },
     },
     'Google Chrome Win': {
       'chromium_config': 'chromium_official',
@@ -85,6 +98,9 @@ SPEC = {
       ],
       'testing': {
         'platform': 'win',
+      },
+      'tests': {
+        steps.SizesStep(RESULTS_URL, 'Google Chrome Win')
       },
     },
   },
