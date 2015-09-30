@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from recipe_engine.types import freeze
+from recipe_engine.recipe_api import Property
 
 DEPS = [
   'cronet',
@@ -125,8 +126,13 @@ BUILDERS = freeze({
   },
 })
 
-def RunSteps(api):
-  buildername = api.properties['buildername']
+
+PROPERTIES = {
+  'buildername': Property(),
+}
+
+
+def RunSteps(api, buildername):
   builder_config = BUILDERS.get(buildername, {})
   recipe_config = builder_config['recipe_config']
   kwargs = builder_config.get('kwargs', {})
