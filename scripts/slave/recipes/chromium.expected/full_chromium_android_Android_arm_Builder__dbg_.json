@@ -196,7 +196,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "chromium_builder_tests"
+      "android_builder_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

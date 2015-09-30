@@ -219,7 +219,7 @@ SPEC = {
       },
       'android_config': 'arm64_builder',
       'compile_targets': [
-        'chromium_builder_tests'
+        'android_builder_tests'
       ],
       'testing': {
         'platform': 'linux',
@@ -482,7 +482,7 @@ SPEC = {
       'android_config': 'clang_builder',
       'bot_type': 'builder_tester',
       'compile_targets': [
-        'chromium_builder_tests',
+        'android_builder_tests',
       ],
       'testing': {
         'platform': 'linux',

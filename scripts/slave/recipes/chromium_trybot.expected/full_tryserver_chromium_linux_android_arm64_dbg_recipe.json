@@ -258,7 +258,7 @@
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
-      "chromium_builder_tests"
+      "android_builder_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
