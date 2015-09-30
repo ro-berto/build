@@ -2,25 +2,24 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine import recipe_api
-
 import base64
+
+from recipe_engine import recipe_api
 
 
 class Gitiles(recipe_api.RecipeApi):
   """Module for polling a git repository using the Gitiles web interface."""
 
-  def _fetch(self, url, step_name, attempts=None):
+  def _fetch(self, url, step_name, attempts=None, add_json_log=True):
     args = [
-      '--json-file', self.m.json.output(),
+      '--json-file', self.m.json.output(add_json_log=add_json_log),
       '--url', url,
     ]
     if attempts:
       args.extend(['--attempts', attempts])
-    step_result = self.m.python(step_name,
+    a = self.m.python(step_name,
       self.resource('gerrit_client.py'), args)
-
-    return step_result
+    return a
 
   def refs(self, url, step_name='refs', attempts=None):
     """Returns a list of refs in the remote repository."""
@@ -77,7 +76,8 @@ class Gitiles(recipe_api.RecipeApi):
     step_result = self._fetch(commit_url, step_name, attempts=attempts)
     return step_result.json.output
 
-  def download_file(self, repository_url, file_path, branch='master', **kwargs):
+  def download_file(self, repository_url, file_path, branch='master',
+                    step_name=None, attempts=None):
     """Downloads raw file content from a Gitiles repository.
 
     Args:
@@ -88,8 +88,12 @@ class Gitiles(recipe_api.RecipeApi):
     Returns:
       Raw file content.
     """
-    kwargs.setdefault('step_name', 'Gitiles fetch %s' % file_path)
-    full_url = '%s/+/%s/%s?format=text' % (repository_url.rstrip('/'), branch,
-                                           file_path.lstrip('/'))
-    b64_data = self.m.url.fetch(full_url, **kwargs)
-    return base64.b64decode(b64_data)
+    fetch_url = self.m.url.join(repository_url, '+/%s/%s?format=text' % (
+        branch, file_path,))
+    step_result = self._fetch(
+        fetch_url,
+        step_name or 'fetch %s:%s' % (branch, file_path,),
+        attempts=attempts,
+        add_json_log=False,
+        )
+    return base64.b64decode(step_result.json.output['value'])

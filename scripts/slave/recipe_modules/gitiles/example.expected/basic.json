@@ -209,12 +209,13 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/tools/pycurl.py",
-      "https://chromium.googlesource.com/chromium/src/+/master/OWNERS?format=text",
-      "--outfile",
-      "/path/to/tmp/"
+      "RECIPE_MODULE[gitiles]/resources/gerrit_client.py",
+      "--json-file",
+      "/path/to/tmp/json",
+      "--url",
+      "https://chromium.googlesource.com/chromium/src/+/master/OWNERS?format=text"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Gitiles fetch OWNERS"
+    "name": "fetch master:OWNERS"
   }
 ]

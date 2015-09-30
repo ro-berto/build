@@ -72,4 +72,6 @@ class GitilesTestApi(recipe_test_api.RecipeTestApi):
     return hashlib.sha1(':'.join(bases)).hexdigest()
 
   def make_encoded_file(self, data):
-    return self.m.raw_io.output(base64.b64encode(data))
+    return self.m.json.output({
+      'value': base64.b64encode(data),
+    })

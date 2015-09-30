@@ -13,7 +13,9 @@ def RunSteps(api):
   for ref in api.gitiles.refs(url):
     api.gitiles.log(url, ref)
   api.gitiles.commit_log(url, api.properties['commit_log_hash'])
-  api.gitiles.download_file(url, 'OWNERS')
+
+  data = api.gitiles.download_file(url, 'OWNERS')
+  assert data == 'foobar'
 
 
 def GenTests(api):
@@ -47,7 +49,7 @@ def GenTests(api):
       ])
     )
     + api.step_data(
-      'Gitiles fetch OWNERS',
+      'fetch master:OWNERS',
       api.gitiles.make_encoded_file('foobar')
     )
   )

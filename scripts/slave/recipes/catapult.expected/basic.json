@@ -63,10 +63,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/tools/pycurl.py",
-      "https://chromium.googlesource.com/infra/infra/+/f849aad85ac3589c931197bff861faf0e2ef0ece/bootstrap/get_appengine.py?format=text",
-      "--outfile",
-      "/path/to/tmp/"
+      "RECIPE_MODULE[gitiles]/resources/gerrit_client.py",
+      "--json-file",
+      "/path/to/tmp/json",
+      "--url",
+      "https://chromium.googlesource.com/infra/infra/+/f849aad85ac3589c931197bff861faf0e2ef0ece/bootstrap/get_appengine.py?format=text"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Fetch SDK downloader"
