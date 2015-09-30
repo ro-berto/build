@@ -544,42 +544,13 @@ class SimulatorTestRunner(TestRunner):
     if not self.gs_bucket:
       return False
 
-    # There are two directory structures depending on the version of Xcode.
-    # Both directory structures have an Applications directory containing app
-    # ID directories for each app installed on the simulator. However, these
-    # app IDs are unpredictable, so we have to check inside each app ID
-    # directory for certain indicators that it is the desired app ID directory,
-    # and then upload the Documents directory inside that app ID directory.
-    # Refer to FindTestDocumentsDirectory for information on these indicators.
+    apps_dir = ''
 
-    xcode5_apps_dir = ''
-    xcode6_apps_dir = ''
-
-    # Xcode 5:
-    # [homedir]/Library/Application Support/iPhone Simulator/[version] contains
-    # the Applications directory on Xcode 5.
-
-    # On 64-bit simulators, the [version] directory is actually [version]-64.
-    if '64-bit' in self.platform:
-      version_dir = '%s-64' % self.version
-    else:
-      version_dir = self.version
-
-    xcode5_apps_dir = os.path.join(
-      self.homedir,
-      'Library',
-      'Application Support',
-      'iPhone Simulator',
-      version_dir,
-      'Applications',
-    )
-
-    # Xcode 6:
     # [homedir]/Library/Developers/CoreSimulator/Devices contains UDID
     # directories for each simulated platform started with this home directory.
     # We'd expect just one such directory since we generate a unique home
     # directory for each SimulatorTestRunner instance. Inside the device
-    # UDID directory is where we find the Applications directory on Xcode 6.
+    # UDID directory is where we find the Applications directory.
     udid_dir = os.path.join(
       self.homedir,
       'Library',
@@ -592,7 +563,7 @@ class SimulatorTestRunner(TestRunner):
       udids = os.listdir(udid_dir)
 
       if len(udids) == 1:
-        xcode6_apps_dir = os.path.join(
+        apps_dir = os.path.join(
           udid_dir,
           udids[0],
           'data',
@@ -600,17 +571,15 @@ class SimulatorTestRunner(TestRunner):
 
         if self.version.startswith('7'):
           # On iOS 7 the Applications directory is found right here.
-          xcode6_apps_dir = os.path.join(xcode6_apps_dir, 'Applications')
-        elif self.version.startswith('8'):
-          # On iOS 8 the Application (singular) directory is a little deeper.
-          xcode6_apps_dir = os.path.join(
-            xcode6_apps_dir,
+          apps_dir = os.path.join(apps_dir, 'Applications')
+        else:
+          # On iOS 8+ the Application (singular) directory is a little deeper.
+          apps_dir = os.path.join(
+            apps_dir,
             'Containers',
             'Data',
             'Application',
           )
-        else:
-          self.Print('Unexpected iOS version: %s.' % self.version)
       else:
         self.Print(
           'Unexpected number of simulated device UDIDs in %s.' % udid_dir
@@ -618,14 +587,9 @@ class SimulatorTestRunner(TestRunner):
 
     docs_dir = None
 
-    # Since most bots are on Xcode 5 as of Aug 2014, try it first.
-    if os.path.exists(xcode5_apps_dir):
-      self.Print('Found Xcode 5 Applications directory.')
-      docs_dir = self.FindTestDocumentsDirectory(xcode5_apps_dir)
-
-    elif os.path.exists(xcode6_apps_dir):
-      self.Print('Found Xcode 6 Applications directory.')
-      docs_dir = self.FindTestDocumentsDirectory(xcode6_apps_dir)
+    if os.path.exists(apps_dir):
+      self.Print('Found Applications directory.')
+      docs_dir = self.FindTestDocumentsDirectory(apps_dir)
 
     if docs_dir is not None and os.path.exists(docs_dir):
       subprocess.check_call([
