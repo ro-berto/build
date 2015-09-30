@@ -124,6 +124,7 @@ def RunSteps(api, buildername):
   go_env = bot_utils.join('go', 'env.py')
   build_dir = api.path['checkout'].join('build')
   api.file.makedirs('mkdir', build_dir)
+  runner_dir = api.path['checkout'].join('ssl', 'test', 'runner')
 
   # If building with MSVC, all commands must run with an environment wrapper.
   # This is necessary both to find the toolchain and the runtime dlls. Rather
@@ -143,12 +144,6 @@ def RunSteps(api, buildername):
              cwd=build_dir)
   api.python('ninja', go_env, msvc_prefix + ['ninja', '-C', build_dir])
 
-  # Build the runner.
-  runner_dir = api.path['checkout'].join('ssl', 'test', 'runner')
-  runner = build_dir.join('runner' + _GetHostExeSuffix(api.platform))
-  api.python('build runner.go', go_env, ['go', 'build', '-o', runner],
-             cwd=runner_dir)
-
   with api.step.defer_results():
     env = _GetTargetEnv(buildername, bot_utils)
 
@@ -162,10 +157,10 @@ def RunSteps(api, buildername):
     _LogFailingTests(api, deferred)
 
     # Run the SSL tests.
-    deferred = api.step('ssl tests',
-                        msvc_prefix + [runner, '-pipe', '-json-output',
-                                       api.test_utils.test_results()],
-                        cwd=runner_dir, env=env)
+    deferred = api.python('ssl tests', go_env,
+                          msvc_prefix + ['go', 'test', '-pipe', '-json-output',
+                                         api.test_utils.test_results()],
+                          cwd=runner_dir, env=env)
     _LogFailingTests(api, deferred)
 
 

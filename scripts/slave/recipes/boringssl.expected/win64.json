@@ -109,19 +109,6 @@
       "python",
       "-u",
       "[SLAVE_BUILD]\\boringssl\\util\\bot\\go\\env.py",
-      "go",
-      "build",
-      "-o",
-      "[SLAVE_BUILD]\\boringssl\\build\\runner.exe"
-    ],
-    "cwd": "[SLAVE_BUILD]\\boringssl\\ssl\\test\\runner",
-    "name": "build runner.go"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\boringssl\\util\\bot\\go\\env.py",
       "python",
       "[SLAVE_BUILD]\\boringssl\\util\\bot\\vs_env.py",
       "x64",
@@ -179,9 +166,13 @@
   {
     "cmd": [
       "python",
+      "-u",
+      "[SLAVE_BUILD]\\boringssl\\util\\bot\\go\\env.py",
+      "python",
       "[SLAVE_BUILD]\\boringssl\\util\\bot\\vs_env.py",
       "x64",
-      "[SLAVE_BUILD]\\boringssl\\build\\runner.exe",
+      "go",
+      "test",
       "-pipe",
       "-json-output",
       "/path/to/tmp/json"
