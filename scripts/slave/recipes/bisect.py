@@ -14,6 +14,7 @@ DEPS = [
     'raw_io',
     'step',
     'halt',
+    'json',
 ]
 
 AVAILABLE_BOTS = 1  # Change this for n-secting instead of bi-.
@@ -290,11 +291,12 @@ def _get_revision_range_step_data(api, range_data):
   max_rev = range_data[0]['hash']
   # Simulating the output of git log (reverse order from max_rev until and
   # excluding min_rev).
-  simulated_git_log_output  = '\n'.join(
-      [d['hash'] for d in range_data[:-1]])
+  simulated_git_log_output  = [[d['hash'], d['commit_pos']]
+                               for d in range_data[:-1]]
   step_name = ('Expanding revision range.for revisions %s:%s' %
                (min_rev, max_rev))
-  result = api.step_data(step_name, stdout=api.raw_io.output(
+
+  result = api.step_data(step_name, stdout=api.json.output(
       simulated_git_log_output))
   return result
 
@@ -307,22 +309,19 @@ def _get_step_data_for_revision(api, revision_data, broken_cp=None,
 
   if 'refrange' in revision_data:
     parent_step = 'Resolving reference range.'
-  else:
-    parent_step = 'Expanding revision range.'
-
-  step_name = parent_step + 'resolving commit_pos ' + commit_pos
-  if commit_pos == broken_cp:
-    yield api.step_data(step_name, stdout=api.raw_io.output(''))
-  else:
-    yield api.step_data(step_name, stdout=api.raw_io.output('hash:' +
+    step_name = parent_step + 'resolving commit_pos ' + commit_pos
+    if commit_pos == broken_cp:
+      yield api.step_data(step_name, stdout=api.raw_io.output(''))
+    else:
+      yield api.step_data(step_name, stdout=api.raw_io.output('hash:' +
                                                             commit_hash))
 
-  step_name = parent_step + 'resolving hash ' + commit_hash
-  if commit_hash == broken_hash:
-    yield api.step_data(step_name, stdout=api.raw_io.output('UnCastable'))
-  else:
-    commit_pos_str = 'refs/heads/master@{#%s}' % commit_pos
-    yield api.step_data(step_name, stdout=api.raw_io.output(commit_pos_str))
+    step_name = parent_step + 'resolving hash ' + commit_hash
+    if commit_hash == broken_hash:
+      yield api.step_data(step_name, stdout=api.raw_io.output('UnCastable'))
+    else:
+      commit_pos_str = 'refs/heads/master@{#%s}' % commit_pos
+      yield api.step_data(step_name, stdout=api.raw_io.output(commit_pos_str))
 
   if not skip_results:
     step_name = 'gsutil Get test results for build ' + commit_hash

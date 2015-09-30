@@ -195,78 +195,32 @@
   },
   {
     "cmd": [
-      "git",
-      "log",
-      "--format=%H",
-      "e28dc0d49c331def2a3bbf3ddd0096eb51551155...a6298e4afedbf2cd461755ea6f45b0ad64222222"
+      "python",
+      "-u",
+      "RECIPE_MODULE[auto_bisect]/resources/resolve_range.py",
+      "e28dc0d49c331def2a3bbf3ddd0096eb51551155",
+      "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "Expanding revision range.for revisions e28dc0d49c331def2a3bbf3ddd0096eb51551155:a6298e4afedbf2cd461755ea6f45b0ad64222222",
-    "stdout": "/path/to/tmp/",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "fc6dfc7ff5b1073408499478969261b826441144"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "Expanding revision range.resolving hash fc6dfc7ff5b1073408499478969261b826441144",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "log",
-      "--format=hash:%H",
-      "--grep",
-      "Cr-Commit-Position: refs/heads/master@{#306476}",
-      "-1",
-      "origin/master"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "Expanding revision range.resolving commit_pos 306476",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "Expanding revision range.resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "log",
-      "--format=hash:%H",
-      "--grep",
-      "Cr-Commit-Position: refs/heads/master@{#306477}",
-      "-1",
-      "origin/master"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "Expanding revision range.resolving commit_pos 306477",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"306478\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"306477\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fc6dfc7ff5b1073408499478969261b826441144\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"306476\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

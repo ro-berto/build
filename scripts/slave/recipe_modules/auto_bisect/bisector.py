@@ -224,14 +224,15 @@ class Bisector(object):
     return patch_text, patched_contents
 
   def _get_rev_range(self, min_rev, max_rev):
+    script = self.api.resource('resolve_range.py')
     depot_path = self.api.m.path['slave_build'].join('src')
     step_name = ('for revisions %s:%s' %
                  (min_rev, max_rev))
-    step_result = self.api.m.git('log', '--format=%H', min_rev + '...' +
-                                 max_rev, stdout=self.api.m.raw_io.output(),
-                                 cwd=depot_path, name=step_name)
+    step_result = self.api.m.python(step_name, script, [min_rev,  max_rev],
+                                 stdout=self.api.m.json.output(),
+                                 cwd=depot_path)
     # We skip the first revision in the list as it is max_rev
-    new_revisions = step_result.stdout.splitlines()[1:][::-1]
+    new_revisions = step_result.stdout[1:][::-1]
     return new_revisions
 
   def _get_rev_range_for_depot(self, depot_name, min_rev, max_rev,
@@ -263,7 +264,8 @@ class Bisector(object):
     with self.api.m.step.nest('Expanding revision range'):
       rev_list = self._get_rev_range(self.good_rev.commit_hash,
                                      self.bad_rev.commit_hash)
-      intermediate_revs = [self.revision_class(str(x), self) for x in rev_list]
+      intermediate_revs = [self.revision_class(str(x), self, cp=y)
+                           for x, y in rev_list]
       self.revisions = [self.good_rev] + intermediate_revs + [self.bad_rev]
       self._update_revision_list_indexes()
 

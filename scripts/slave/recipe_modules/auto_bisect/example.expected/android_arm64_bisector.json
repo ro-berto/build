@@ -100,47 +100,28 @@
   },
   {
     "cmd": [
-      "git",
-      "log",
-      "--format=%H",
-      "a6298e4afedbf2cd461755ea6f45b0ad64222222...00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
+      "python",
+      "-u",
+      "RECIPE_MODULE[auto_bisect]/resources/resolve_range.py",
+      "a6298e4afedbf2cd461755ea6f45b0ad64222222",
+      "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "Expanding revision range.for revisions a6298e4afedbf2cd461755ea6f45b0ad64222222:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
-    "stdout": "/path/to/tmp/",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "dcdcdc0ff1122212323134879ddceeb1240b0988"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Expanding revision range.resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "log",
-      "--format=hash:%H",
-      "--grep",
-      "Cr-Commit-Position: refs/heads/master@{#314016}",
-      "-1",
-      "origin/master"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Expanding revision range.resolving commit_pos 314016",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"314015\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dcdcdc0ff1122212323134879ddceeb1240b0988\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"314016\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

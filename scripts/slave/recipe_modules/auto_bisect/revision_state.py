@@ -33,8 +33,8 @@ class RevisionState(object):
   ) = xrange(7)
 
   def __init__(self, revision_string, bisector,
-               dependency_depot_name=None, base_revision=None,
-               deps_revision=None):
+               dependency_depot_name=None,base_revision=None,
+               deps_revision=None, cp=None):
     """Creates a new instance to track the state of a revision.
 
     There are two use cases for this constructor:
@@ -55,6 +55,7 @@ class RevisionState(object):
         change.
       depot_revision: The commit hash of the dependency repo to put in place of
         the one set for the base_revision.
+      cp: A pre-resolved commit position.
     """
     #  TODO(robertocn): Evaluate if the logic of this constructor should be
     #    split into separate methods.
@@ -95,7 +96,16 @@ class RevisionState(object):
       self.deps_revision = deps_revision
     else:
       self.needs_patch = False
-      self.commit_hash, self.commit_pos = self._commit_from_rev_string()
+      if cp is not None:
+        # If cp is given, assume revision_string IS the commit_hash.
+        self.commit_hash = revision_string
+        if cp:
+          self.commit_pos = cp
+        else: # pragma: no cover
+          # If there is no commit position, use an abbreviated hash instead.
+          self.commit_pos = self.commit_hash[:8]
+      else:
+        self.commit_hash, self.commit_pos = self._commit_from_rev_string()
     self.build_url = self.bisector.get_platform_gs_prefix() + self._gs_suffix()
 
   @property
