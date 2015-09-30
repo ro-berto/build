@@ -40,6 +40,7 @@ def _CreateTaskJSON(options):
   task_params["platform"] = "Linux"
   task_params["page_sets"] = "10k"
   task_params["repeat_runs"] = "3"
+  task_params["run_in_parallel"] = str(options.parallel)
   task_params["benchmark_args"] = "--output-format=csv-pivot-table"
   task_params["browser_args_nopatch"] = (
       "--disable-setuid-sandbox --enable-threaded-compositing "
@@ -162,6 +163,9 @@ if '__main__' == __name__:
   option_parser.add_option(
       '', '--benchmark',
       help='The CT benchmark to run on the patch.')
+  option_parser.add_option(
+      '', '--parallel', default=False, action='store true',
+      help='Whether to run this benchmark in parallel.')
   option_parser.add_option(
       '', '--local', default=False, action='store_true',
       help='Uses a dummy metadata salt if this flag is true else it tries to '

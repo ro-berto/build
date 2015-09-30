@@ -47,6 +47,8 @@ def RunSteps(api):
         '--requester', api.properties.get('requester'),
         '--benchmark', benchmark,
         ]
+  if 'Parallel' in buildername:
+    cmd.append('--parallel')
   api.step('Cluster Telemetry %s run' % benchmark, cmd=cmd)
 
 
@@ -57,7 +59,7 @@ def GenTests(api):
   requester = 'superman@krypton'
 
   # Test required params not specified.
-  buildername = 'CT-Perf-10k-Linux-Repaint-Trybot'
+  buildername = 'CT-Perf-10k-Linux-Repaint-Serial-Trybot'
   yield (
     api.test(buildername + '_missing-params') +
     api.properties(buildername=buildername) +
@@ -65,7 +67,7 @@ def GenTests(api):
   )
 
   # Test unsupported benchmark.
-  buildername = 'CT-Perf-10k-Linux-unsupported_benchmark-Trybot'
+  buildername = 'CT-Perf-10k-Linux-unsupported_benchmark-Serial-Trybot'
   yield (
     api.test(buildername) +
     api.properties(buildername=buildername,
@@ -78,7 +80,7 @@ def GenTests(api):
   )
 
   # Test normal repaint flow.
-  buildername = 'CT-Perf-10k-Linux-Repaint-Trybot'
+  buildername = 'CT-Perf-10k-Linux-Repaint-Serial-Trybot'
   yield (
     api.test(buildername) +
     api.properties(buildername=buildername,
@@ -89,8 +91,8 @@ def GenTests(api):
                   )
   )
 
-  # Test normal rasterize_and_record_micro flow.
-  buildername = 'CT-Perf-10k-Linux-RR-Trybot'
+  # Test serial and parallel rasterize_and_record_micro flows.
+  buildername = 'CT-Perf-10k-Linux-RR-Parallel-Trybot'
   yield (
     api.test(buildername) +
     api.properties(buildername=buildername,
@@ -100,3 +102,14 @@ def GenTests(api):
                    requester=requester,
                   )
   )
+  buildername = 'CT-Perf-10k-Linux-RR-Serial-Trybot'
+  yield (
+    api.test(buildername) +
+    api.properties(buildername=buildername,
+                   rietveld=rietveld,
+                   issue=issue,
+                   patchset=patchset,
+                   requester=requester,
+                  )
+  )
+
