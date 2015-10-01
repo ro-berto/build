@@ -59,7 +59,8 @@ SPEC = {
       'compile_targets': [
         'remoting_apk',
       ],
-      'bot_type': 'builder_tester',
+      'parent_buildername': 'Android arm Builder (dbg)',
+      'bot_type': 'tester',
       'android_config': 'main_builder',
       'root_devices': True,
       'tests': [
@@ -82,9 +83,9 @@ SPEC = {
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
-      'bot_type': 'builder_tester',
+      'parent_buildername': 'Android arm Builder (dbg)',
+      'bot_type': 'tester',
       'android_config': 'main_builder',
-      'root_devices': True,
       'enable_swarming': False,
       'tests': [
         steps.AMPInstrumentationTest(

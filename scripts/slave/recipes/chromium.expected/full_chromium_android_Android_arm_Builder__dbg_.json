@@ -196,7 +196,10 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "android_builder_tests"
+      "android_builder_tests",
+      "android_webview_test_apk",
+      "remoting_test_apk",
+      "remoting_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -223,5 +226,31 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Android Remoting Tests"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Remoting Tests@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (2)",
+    "trigger_specs": [
+      {
+        "builder_name": "Android WebView (amp)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android WebView (amp)@@@"
+    ]
   }
 ]
