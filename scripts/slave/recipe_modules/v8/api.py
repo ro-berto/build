@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import argparse
 import collections
 import datetime
 import math
@@ -32,6 +33,9 @@ BISECT_DURATION_FACTOR = 5
 
 MIPS_TOOLCHAIN = 'mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2'
 MIPS_DIR = 'mips-2013.11'
+
+TEST_RUNNER_PARSER = argparse.ArgumentParser()
+TEST_RUNNER_PARSER.add_argument('--extra-flags')
 
 TEST_CONFIGS = freeze({
   'benchmarks': {
@@ -457,6 +461,12 @@ class V8Api(recipe_api.RecipeApi):
     return V8_NON_STANDARD_TESTS.get(test, V8Test)(test, self.m, self)
 
   def runtests(self):
+    if self.extra_flags:
+      result = self.m.step('Customized run with extra flags', cmd=None)
+      result.presentation.step_text += ' '.join(self.extra_flags)
+      assert all(re.match(r'[\w\-]*', x) for x in self.extra_flags), (
+          'no special characters allowed in extra flags')
+
     start_time_sec = self.m.time.time()
     test_results = TestResults.empty()
     for t in self.bot_config.get('tests', []):
@@ -793,6 +803,32 @@ class V8Api(recipe_api.RecipeApi):
       presentation.step_text += ('failures: %d<br/>' % len(failures))
 
   @property
+  def extra_flags(self):
+    extra_flags = self.m.properties.get('extra_flags', '')
+    if isinstance(extra_flags, basestring):
+      extra_flags = extra_flags.split()
+    assert isinstance(extra_flags, list) or isinstance(extra_flags, tuple)
+    return list(extra_flags)
+
+  def _with_extra_flags(self, args):
+    """Returns: the arguments with additional extra flags inserted.
+
+    Extends a possibly existing extra flags option.
+    """
+    if not self.extra_flags:
+      return args
+
+    options, args = TEST_RUNNER_PARSER.parse_known_args(args)
+
+    if options.extra_flags:
+      new_flags = [options.extra_flags] + self.extra_flags
+    else:
+      new_flags = self.extra_flags
+
+    args.extend(['--extra-flags', ' '.join(new_flags)])
+    return args
+
+  @property
   def test_filter(self):
     return [f for f in self.m.properties.get('testfilter', [])
             if f != 'defaulttests']
@@ -838,6 +874,8 @@ class V8Api(recipe_api.RecipeApi):
 
     # Add builder-specific test arguments.
     full_args += self.c.testing.test_args
+
+    full_args = self._with_extra_flags(full_args)
 
     if self.run_dynamorio:
       drrun = self.m.path['slave_build'].join(
@@ -982,6 +1020,9 @@ class V8Api(recipe_api.RecipeApi):
     # TODO(machenbach): Remove this as soon as crbug.com/487822 is resolved.
     if self.test_filter:
       result = self.m.step('CQ integrity - used testfilter', cmd=None)
+      result.presentation.status = self.m.step.FAILURE
+    if self.extra_flags:
+      result = self.m.step('CQ integrity - used extra flags', cmd=None)
       result.presentation.status = self.m.step.FAILURE
 
   @staticmethod

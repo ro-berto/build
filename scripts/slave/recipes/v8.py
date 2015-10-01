@@ -140,6 +140,26 @@ def GenTests(api):
         revision='12345',
         patch_url='svn://svn-mirror.golo.chromium.org/patch',
         testfilter=['mjsunit/regression/*', 'test262/foo', 'test262/bar'],
+        extra_flags='--trace_gc --turbo_stats',
+    ) +
+    api.platform(bot_config['testing']['platform'],
+                 v8_config_kwargs.get('TARGET_BITS', 64))
+  )
+
+  # Test using extra flags with a bot that already uses some extra flags as
+  # positional argument.
+  buildername = 'v8_linux_greedy_allocator_dbg'
+  bot_config = api.v8.BUILDERS[mastername]['builders'][buildername]
+  yield (
+    api.test('full_%s_%s_positional_extra_flags' % (
+        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
+    api.properties.generic(
+        mastername=mastername,
+        buildername=buildername,
+        branch='master',
+        revision='12345',
+        patch_url='svn://svn-mirror.golo.chromium.org/patch',
+        extra_flags=['--trace_gc', '--turbo_stats'],
     ) +
     api.platform(bot_config['testing']['platform'],
                  v8_config_kwargs.get('TARGET_BITS', 64))
