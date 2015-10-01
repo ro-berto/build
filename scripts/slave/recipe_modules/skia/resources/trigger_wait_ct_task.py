@@ -164,7 +164,7 @@ if '__main__' == __name__:
       '', '--benchmark',
       help='The CT benchmark to run on the patch.')
   option_parser.add_option(
-      '', '--parallel', default=False, action='store true',
+      '', '--parallel', default=False, action='store_true',
       help='Whether to run this benchmark in parallel.')
   option_parser.add_option(
       '', '--local', default=False, action='store_true',
