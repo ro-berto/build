@@ -437,7 +437,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     test_args.extend([test,
                       '--show-stdout',
                       '--output-format=gtest',
-                      '--browser=%s' % self.c.BUILD_CONFIG.lower()])
+                      '--browser=%s' % self.c.build_config_fs.lower()])
     if args:
       test_args.extend(args)
 

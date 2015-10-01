@@ -1297,7 +1297,7 @@ class SwarmingTelemetryGPUTest(SwarmingTest):
 
   def create_task(self, api, suffix, isolated_hash):
     # For local tests args are added inside api.chromium.run_telemetry_test.
-    browser_config = api.chromium.c.BUILD_CONFIG.lower()
+    browser_config = api.chromium.c.build_config_fs.lower()
     args = [self._telemetry_target_name, '--show-stdout',
             '--browser=%s' % browser_config] + self._args
 
