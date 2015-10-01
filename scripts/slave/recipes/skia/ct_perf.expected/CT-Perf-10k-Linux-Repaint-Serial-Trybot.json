@@ -1,5 +1,6 @@
 [
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "RECIPE_MODULE[skia]/resources/trigger_wait_ct_task.py",

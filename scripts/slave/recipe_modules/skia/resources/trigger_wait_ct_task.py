@@ -170,6 +170,8 @@ def TriggerAndWait(options):
       print 'Your run was successfully completed.'
       if results:
         print 'The output of your run is available here: %s' % results
+        print
+        print '@@@STEP_LINK@%s@%s@@@' % ('CT Perf Results', results)
       print
       return 0
     elif status == "Completed with failures":

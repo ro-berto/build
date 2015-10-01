@@ -49,7 +49,8 @@ def RunSteps(api):
         ]
   if 'Parallel' in buildername:
     cmd.append('--parallel')
-  api.step('Cluster Telemetry %s run' % benchmark, cmd=cmd)
+  api.step('Cluster Telemetry %s run' % benchmark, cmd=cmd,
+           allow_subannotations=True)
 
 
 def GenTests(api):
