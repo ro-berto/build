@@ -8,6 +8,7 @@
 import base64
 import hashlib
 import json
+import math
 import optparse
 import requests
 import sys
@@ -23,6 +24,8 @@ GCE_WEBHOOK_SALT_METADATA_URI = (
     "http://metadata/computeMetadata/v1/project/attributes/"
     "webhook_request_salt")
 
+CTFE_CONNECTION_RETRIES = 5
+CONNECTION_WAIT_BASE = 5
 
 POLLING_FREQUENCY_SECS = 30  # 30 seconds.
 TRYBOT_DEADLINE_SECS = 24 * 60 * 60  # 24 hours.
@@ -30,6 +33,38 @@ TRYBOT_DEADLINE_SECS = 24 * 60 * 60  # 24 hours.
 
 class CtTrybotException(Exception):
   pass
+
+
+def retry():
+  """A retry decorator with exponential backoff."""
+  def decorator(func):
+    def wrapper(*args, **kwargs):
+      tries = CTFE_CONNECTION_RETRIES
+      delay = CONNECTION_WAIT_BASE
+      while tries > 0:
+        try:
+          ret = func(*args, **kwargs)
+          return ret
+        except:
+          print >> sys.stderr, 'Failed to connect to CTFE.'
+          tries -= 1
+          if tries == 0:
+            raise
+          print 'Retry in %d seconds.' % delay
+          time.sleep(delay)
+          delay *= 2
+    return wrapper
+  return decorator
+
+
+@retry()
+def _AddTaskToCTFE(task, headers):
+  return requests.post(CHROMIUM_PERF_TASK_POST_URI, task, headers=headers)
+
+
+@retry()
+def _GetTaskStatusFromCTFE(get_url):
+  return requests.get(get_url)
 
 
 def _CreateTaskJSON(options):
@@ -79,7 +114,7 @@ def _TriggerTask(options):
       "Content-type": "application/x-www-form-urlencoded",
       "Accept": "application/json",
       "X-Webhook-Auth-Hash": encoded}
-  resp = requests.post(CHROMIUM_PERF_TASK_POST_URI, task, headers=headers)
+  resp = _AddTaskToCTFE(task, headers)
 
   if resp.status_code != 200:
     raise CtTrybotException(
@@ -114,7 +149,8 @@ def TriggerAndWait(options):
 
     # Get the status of the task the trybot added.
     get_url = '%s?task_id=%s' % (GET_CHROMIUM_PERF_RUN_STATUS_URI, task_id)
-    resp = requests.get(get_url)
+    resp = _GetTaskStatusFromCTFE(get_url)
+
     if resp.status_code != 200:
       raise CtTrybotException(
           'Return code from %s was %s' % (GET_CHROMIUM_PERF_RUN_STATUS_URI,
