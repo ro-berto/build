@@ -259,6 +259,7 @@ def main(argv):
       'master.client.nacl.sdk': 'NativeClientSDK',
       'master.client.nacl.sdk.addin': 'NativeClientSDKAddIn',
       'master.client.nacl.toolchain': 'NativeClientToolchain',
+      'master.client.ndk': 'NDK',
       'master.client.pdfium': 'Pdfium',
       'master.client.sfntly': 'Sfntly',
       'master.client.skia': 'Skia',

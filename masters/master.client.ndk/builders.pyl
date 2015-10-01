@@ -1,0 +1,88 @@
+{
+  "master_base_class": "Master3",
+  "master_classname": "NDK",
+  "master_port": 20301,
+  "master_port_alt": 40301,
+  "slave_port": 30301,
+  "templates": ["templates", "../master.chromium/templates"],
+
+  "builders": {
+    "darwin": {
+      "recipe": "ndk/ndk_buildbot",
+      "scheduler": "hourly",
+      "slave_pools": ["darwin"],
+      "properties": {
+        "cbb_config": "darwin",
+      },
+    },
+
+    "linux": {
+      "recipe": "ndk/ndk_buildbot",
+      "scheduler": "hourly",
+      "slave_pools": ["linux"],
+      "properties": {
+        "cbb_config": "linux",
+      },
+    },
+
+    "win32": {
+      "recipe": "ndk/ndk_buildbot",
+      "scheduler": "hourly",
+      "slave_pools": ["linux"],
+      "properties": {
+        "cbb_config": "win32",
+      },
+    },
+
+    "win64": {
+      "recipe": "ndk/ndk_buildbot",
+      "scheduler": "hourly",
+      "slave_pools": ["linux"],
+      "properties": {
+        "cbb_config": "win64",
+      },
+    },
+  },
+
+  "schedulers": {
+    # There is no repo poller available from builders.pyl yet.
+    "hourly": {
+      "type": "cron",
+      "hour": "*",
+      "minute": 0,
+    },
+  },
+
+  "slave_pools": {
+    "darwin": {
+      "slave_data": {
+        "bits": 64,
+        "os": "mac",
+        "version": "10.10",
+      },
+      "slaves": [
+        'build4-m3',
+        'build11-m3',
+        'build12-m3',
+        'build13-m3',
+        'build14-m3',
+        'build15-m3',
+      ],
+    },
+    "linux": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": [
+        "slave15-c3",
+        "slave16-c3",
+        "slave17-c3",
+        "slave18-c3",
+        "slave19-c3",
+        "slave20-c3",
+      ],
+    },
+  },
+}
