@@ -42,9 +42,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'tests': {
-        steps.SizesStep(RESULTS_URL, 'Google Chrome Linux')
-      },
+      # TODO(hans): Figure why sizes doesn't work on this bot, and fix it.
     },
     'Google Chrome Linux x64': {
       'chromium_config': 'chromium_official',

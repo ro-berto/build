@@ -179,41 +179,9 @@
       "[BUILD]/goma",
       "--clobber",
       "--",
-      "chrome",
       "linux_packages_all"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Google Chrome Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.chrome\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Google Chrome Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.chrome\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=graphing",
-      "--test-type=sizes",
-      "--builder-name=Google Chrome Linux",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--run-python-script",
-      "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=sizes",
-      "--perf-id=Google Chrome Linux",
-      "[BUILD]/scripts/slave/chromium/sizes.py",
-      "--target",
-      "Release",
-      "--platform",
-      "linux"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "sizes"
   }
 ]
