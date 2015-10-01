@@ -100,8 +100,11 @@ class DartCommands(commands.FactoryCommands):
                           workdir=workdir,
                           command=cmd)
 
-  def AddKillStep(self, step_name='Kill leftover process'):
-    cmd = 'python ' + self._tools_dir + '/task_kill.py --kill_browsers=True'
+  def AddKillStep(self, step_name='Kill leftover process',
+                  task_kill_location=None):
+    task_kill = task_kill_location or self._tools_dir + '/task_kill.py'
+    cmd = 'python ' + task_kill + ' --kill_browsers=True'
+
     self._factory.addStep(shell.ShellCommand,
                           name='Taskkill',
                           description=step_name,

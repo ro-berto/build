@@ -14,7 +14,7 @@ from master.factory import gclient_factory
 from master.factory.dart import dart_commands
 
 class FletchFactory(gclient_factory.GClientFactory):
-  def __init__(self, build_dir='dart', target_platform='posix'):
+  def __init__(self, build_dir='fletch', target_platform='posix'):
     self.target_platform = target_platform
     self._build_dir = build_dir
     deps_url = 'https://github.com/dart-lang/fletch.git'
@@ -49,9 +49,12 @@ class FletchFactory(gclient_factory.GClientFactory):
                                               self._build_dir,
                                               self.target_platform,
                                               env=env)
-    dart_cmd_obj.AddKillStep(step_name="Taskkill before running")
+    task_kill = 'third_party/dart/tools/task_kill.py'
+    dart_cmd_obj.AddKillStep(step_name='Taskkill before running',
+                             task_kill_location=task_kill)
     dart_cmd_obj.AddAnnotatedSteps(python_script)
-    dart_cmd_obj.AddKillStep(step_name="Taskkill after running")
+    dart_cmd_obj.AddKillStep(step_name='Taskkill after running',
+                             task_kill_location=task_kill)
 
     if trigger_schedulers:
       dart_cmd_obj.AddTrigger(trigger.Trigger(
