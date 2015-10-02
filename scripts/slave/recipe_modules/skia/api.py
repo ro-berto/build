@@ -514,7 +514,7 @@ class SkiaApi(recipe_api.RecipeApi):
     if self.upload_dm_results:
       # Copy images and JSON to host machine if needed.
       self.flavor.copy_directory_contents_to_host(self.device_dirs.dm_dir,
-                                                host_dm_dir)
+                                                  host_dm_dir)
       # Upload them to Google Storage.
       self.run(self.m.python,
                'Upload DM Results',
