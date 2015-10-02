@@ -134,7 +134,6 @@ PROJECT_CONFIGS = {
     'extra_emails_fn': lambda: [_get_skia_sheriff()],
     'path_to_project': os.path.join('third_party', 'skia'),
     'include_commit_log': True,
-    'dry_run': True,
   },
 }
 
@@ -191,7 +190,6 @@ class AutoRoller(object):
     self._get_extra_emails = project_config.get('extra_emails_fn', lambda: [])
     self._cq_extra_trybots = project_config.get('cq_extra_trybots', [])
     self._include_commit_log = project_config.get('include_commit_log', False)
-    self._cq_dry_run = project_config.get('dry_run', False)
 
     self._chromium_git_dir = self._path_from_chromium_root('.git')
     self._project_git_dir = self._path_from_chromium_root(
@@ -292,8 +290,6 @@ class AutoRoller(object):
 
       upload_cmd = ['git', 'cl', 'upload', '--bypass-hooks',
                     '--use-commit-queue', '-f']
-      if self._cq_dry_run:
-        upload_cmd.append('--cq-dry-run')
       if self._cq_extra_trybots:
         commit_msg += ('\n' + CQ_INCLUDE_TRYBOTS +
                        ','.join(self._cq_extra_trybots))
