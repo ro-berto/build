@@ -113,6 +113,8 @@ class MainFuncTest(auto_stub.TestCase):
     # Should build args to send_ts_mon_values correctly.
     expected_cmd = [spawn_device_temp_monitor._RUN_PY,
         'infra.tools.send_ts_mon_values',
+        '--ts-mon-device-role',
+        'temperature_monitor',
         '--float',
         '{"builder": "some_builder_name", "master": "some_master_name", '
         '"name": "dev/cpu/temperature", '
@@ -170,13 +172,12 @@ class MainFuncTest(auto_stub.TestCase):
       pass
 
     # Should build args to send_ts_mon_values without any metrics.
-    self.assertEquals(2, len(send_ts_mon_call))
-    self.assertEquals(
-        spawn_device_temp_monitor._RUN_PY,
-        send_ts_mon_call[0])
-    self.assertEquals(
+    expected_cmd = [spawn_device_temp_monitor._RUN_PY,
         'infra.tools.send_ts_mon_values',
-        send_ts_mon_call[1])
+        '--ts-mon-device-role',
+        'temperature_monitor',
+    ]
+    self.assertEquals(expected_cmd, send_ts_mon_call)
 
   def test_main_hung_device(self):
     # Collect calls to 'subprocess.Popen' and
@@ -232,6 +233,8 @@ class MainFuncTest(auto_stub.TestCase):
 
     expected_cmd = [spawn_device_temp_monitor._RUN_PY,
         'infra.tools.send_ts_mon_values',
+        '--ts-mon-device-role',
+        'temperature_monitor',
         '--float',
         '{"builder": "some_builder_name", "master": "some_master_name", '
         '"name": "dev/cpu/temperature", '

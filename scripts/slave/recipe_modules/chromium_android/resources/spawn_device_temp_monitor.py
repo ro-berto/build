@@ -157,7 +157,8 @@ def main(argv):
       upload_cmd_args += get_device_args(args.adb_path, args.master_name,
                                          args.builder_name, device)
 
-    cmd = [_RUN_PY, 'infra.tools.send_ts_mon_values'] + upload_cmd_args
+    cmd = [_RUN_PY, 'infra.tools.send_ts_mon_values', '--ts-mon-device-role',
+           'temperature_monitor'] + upload_cmd_args
     try:
       subprocess.Popen(cmd)
     except OSError:
