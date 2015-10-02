@@ -40,6 +40,8 @@ categories_steps = {
 }
 
 exclusions = {
+  'V8 Linux - debug - greedy allocator': [],
+  'V8 Linux64 - debug - greedy allocator': [],
   'V8 Linux64 - cfi': [],
   'V8 Linux - ppc - sim': [],
   'V8 Linux - ppc64 - sim': [],
