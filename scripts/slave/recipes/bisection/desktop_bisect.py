@@ -67,7 +67,7 @@ results-without_patch
   yield (api.test('basic_perf_tryjob')
   + api.properties.tryserver(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_tester')
+      buildername='linux_perf_bisect')
   + api.override_step_data(
       'git diff to analyze patch',
       api.raw_io.stream_output('tools/run-perf-test.cfg'))
@@ -86,7 +86,7 @@ results-without_patch
   yield (api.test('basic_perf_tryjob_with_metric')
   +api.properties.tryserver(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_tester')
+      buildername='linux_perf_bisect')
   + api.override_step_data(
       'git diff to analyze patch',
       api.raw_io.stream_output('tools/run-perf-test.cfg'))
@@ -102,7 +102,7 @@ results-without_patch
   yield (api.test('perf_tryjob_failed_test')
   +api.properties.tryserver(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_tester')
+      buildername='linux_perf_bisect')
   + api.override_step_data(
       'git diff to analyze patch',
       api.raw_io.stream_output('tools/run-perf-test.cfg'))
@@ -118,7 +118,7 @@ results-without_patch
   yield (api.test('basic_perf_tryjob_with_revisions')
   +api.properties.tryserver(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_tester')
+      buildername='linux_perf_bisect')
   + api.override_step_data(
       'git diff to analyze patch',
       api.raw_io.stream_output('tools/run-perf-test.cfg'))
@@ -147,7 +147,7 @@ results-without_patch
   yield (api.test('perf_tryjob_config_error')
   + api.properties.tryserver(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_tester')
+      buildername='linux_perf_bisect')
   + api.properties(requester='abcdxyz@chromium.org')
   + api.override_step_data(
       'git diff to analyze patch',
@@ -160,7 +160,7 @@ results-without_patch
   yield (api.test('perf_cq_run_benchmark')
   + api.properties.tryserver(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_tester')
+      buildername='linux_perf_bisect')
   + api.properties(requester='commit-bot@chromium.org')
   + api.override_step_data(
       'git diff to analyze patch',
@@ -170,7 +170,7 @@ results-without_patch
   yield (api.test('perf_cq_no_changes')
   + api.properties.tryserver(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_tester')
+      buildername='linux_perf_bisect')
   + api.properties(requester='commit-bot@chromium.org')
   + api.override_step_data(
       'git diff to analyze patch',
@@ -180,7 +180,7 @@ results-without_patch
   yield (api.test('perf_cq_no_benchmark_to_run')
   + api.properties.tryserver(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_tester')
+      buildername='linux_perf_bisect')
   + api.properties(requester='commit-bot@chromium.org')
   + api.override_step_data(
       'git diff to analyze patch',
@@ -205,7 +205,7 @@ results-without_patch
   yield (api.test('basic_linux_bisect_tester_recipe')
   + api.properties.tryserver(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_tester')
+      buildername='linux_perf_bisect')
   + api.step_data('saving url to temp file',
                   stdout=api.raw_io.output('/tmp/dummy1'))
   + api.step_data('saving json to temp file',
@@ -235,7 +235,7 @@ results-without_patch
   yield (api.test('basic_linux_bisect_tester_recipe_ret_code')
   + api.properties.tryserver(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_tester')
+      buildername='linux_perf_bisect')
   + api.step_data('saving url to temp file',
                   stdout=api.raw_io.output('/tmp/dummy1'))
   + api.step_data('saving json to temp file',

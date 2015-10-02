@@ -180,10 +180,11 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     if 'With Patch' in name:
       self.m.chromium_tests.transient_check(
           update_step,
-          lambda transform_name: self.m.chromium.compile(
-              compile_targets, name=transform_name('compile')))
+          lambda transform_name: self.m.chromium_tests.run_mb_and_compile(
+              compile_targets, None, name_suffix=transform_name('')))
     else:
-      self.m.chromium.compile(compile_targets, 'compile %s' % name)
+      self.m.chromium_tests.run_mb_and_compile(
+          compile_targets, None, name_suffix=' %s' % name)
 
   def _run_test(self, cfg, **kwargs):
     """Runs test from config and return results."""
