@@ -208,7 +208,7 @@ Date:   Wed Apr 2 14:00:14 2014 -0400
         ['git', 'log', '-n1', '--format=%B', 'HEAD'],
         cwd='.').AndReturn(issue['description'])
     auto_roll.subprocess2.check_call(['git', 'cl', 'upload', '--bypass-hooks',
-                                      '--use-commit-queue', '-f',
+                                      '-f', '--use-commit-queue',
                                       '-m', message],
                                      cwd='.')
     auto_roll.subprocess2.check_call(['git', 'checkout', 'origin/master', '-f'],
