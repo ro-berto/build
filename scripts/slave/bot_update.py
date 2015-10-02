@@ -1580,6 +1580,7 @@ def checkout(options, git_slns, specs, buildspec, master,
                 did_run=True,
                 root=first_sln,
                 log_lines=[('patch error', e.output),],
+                patch_apply_return_code=e.code,
                 patch_root=options.patch_root,
                 patch_failure=True,
                 step_text='%s PATCH FAILED' % step_text)
@@ -1680,12 +1681,17 @@ def main():
   except Inactive:
     # Not active, should count as passing.
     pass
-  except PatchFailed:
+  except PatchFailed as e:
     emit_flag(options.flag_file)
     # Return a specific non-zero exit code for patch failure (because it is
     # a failure), but make it different than other failures to distinguish
     # between infra failures (independent from patch author), and patch
-    # failures (that patch author can fix).
+    # failures (that patch author can fix). However, PatchFailure due to
+    # download patch failure is still an infra problem.
+    if e.code == 3:
+      # Patch download problem.
+      return 87
+    # Genuine patch problem.
     return 88
   except Exception:
     # Unexpected failure.

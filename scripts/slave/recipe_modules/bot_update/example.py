@@ -83,8 +83,17 @@ def GenTests(api):
       issue=12345,
       patchset=654321,
       patch_url='http://src.chromium.org/foo/bar',
-      fail_patch=True,
+      fail_patch='apply',
   ) + api.step_data('bot_update', retcode=88)
+  yield api.test('tryjob_fail_patch_download') + api.properties(
+      mastername='tryserver.chromium.linux',
+      buildername='linux_rel',
+      slavename='totallyaslave-c4',
+      issue=12345,
+      patchset=654321,
+      patch_url='http://src.chromium.org/foo/bar',
+      fail_patch='download'
+  ) + api.step_data('bot_update', retcode=87)
   yield api.test('forced') + api.properties(
       mastername='experimental',
       buildername='Experimental Builder',

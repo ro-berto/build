@@ -208,8 +208,11 @@ class BotUpdateApi(recipe_api.RecipeApi):
 
     # Ah hah! Now that everything is in place, lets run bot_update!
     try:
-      # 88 is the 'patch failure' return code.
-      self(name, cmd, step_test_data=step_test_data, ok_ret=(0, 88), **kwargs)
+      # 87 and 88 are the 'patch failure' codes for patch download and patch
+      # apply, respectively. We don't actually use the error codes, and instead
+      # rely on emitted json to determine cause of failure.
+      self(name, cmd, step_test_data=step_test_data,
+           ok_ret=(0, 87, 88), **kwargs)
     finally:
       step_result = self.m.step.active_result
       self._properties = step_result.json.output.get('properties', {})
@@ -232,12 +235,25 @@ class BotUpdateApi(recipe_api.RecipeApi):
       # the checkout.
       # If there is a patch failure, emit another step that said things failed.
       if step_result.json.output.get('patch_failure'):
-        # TODO(phajdan.jr): Differentiate between failure to download the patch
-        # and failure to apply it. The first is an infra failure, the latter
-        # a definite patch failure.
-        self.m.tryserver.set_patch_failure_tryjob_result()
-        self.m.python.failing_step(
-            'Patch failure', 'Check the bot_update step for details')
+        return_code = step_result.json.output.get('patch_apply_return_code')
+        if return_code == 3:
+          # This is download failure, hence an infra failure.
+          # Sadly, python.failing_step doesn't support kwargs.
+          self.m.python.inline(
+              'Patch failure',
+              ('import sys;'
+               'print "Patch download failed. See bot_update step for details";'
+               'sys.exit(1)'),
+              infra_step=True,
+              step_test_data=lambda: self.m.raw_io.test_api.output(
+                'Patch download failed. See bot_update step for details',
+                retcode=1)
+              )
+        else:
+          # This is actual patch failure.
+          self.m.tryserver.set_patch_failure_tryjob_result()
+          self.m.python.failing_step(
+              'Patch failure', 'Check the bot_update step for details')
 
       # bot_update actually just sets root to be the folder name of the
       # first solution.

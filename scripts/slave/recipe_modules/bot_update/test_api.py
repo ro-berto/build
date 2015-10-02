@@ -72,6 +72,9 @@ class BotUpdateTestApi(recipe_test_api.RecipeTestApi):
       if fail_patch:
         output['log_lines'] = [('patch error', 'Patch failed to apply'),]
         output['patch_failure'] = True
+        output['patch_apply_return_code'] = 1
+        if fail_patch == 'download':
+          output['patch_apply_return_code'] = 3
     return self.m.json.output(output)
 
   @staticmethod

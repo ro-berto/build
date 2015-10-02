@@ -35,7 +35,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"Patch failed to apply\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_apply_return_code\": 1, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_apply_return_code\": 3, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {}, @@@",
@@ -44,27 +44,27 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@patch error@Patch failed to apply@@@",
-      "@@@STEP_LOG_END@patch error@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"PATCH_FAILURE\"@@@"
+      "@@@STEP_LOG_END@patch error@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(1)"
+      "import sys;print \"Patch download failed. See bot_update step for details\";sys.exit(1)"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Patch failure",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Check the bot_update step for details@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_LINE@python.inline@import sys;print \"Patch download failed. See bot_update step for details\";sys.exit(1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {
     "name": "$final_result",
-    "reason": "Step('Patch failure') failed with return_code 1",
+    "reason": "Infra Failure: Step('Patch failure') returned 1",
     "status_code": 1
   }
 ]
