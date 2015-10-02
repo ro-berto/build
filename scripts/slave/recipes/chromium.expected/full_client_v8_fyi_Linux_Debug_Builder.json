@@ -91,6 +91,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=shared_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
@@ -146,6 +147,25 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "client.v8.fyi",
+      "-b",
+      "Linux Debug Builder",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Debug",
@@ -157,6 +177,7 @@
       "goma",
       "--goma-dir",
       "[BUILD]/goma",
+      "--ninja-ensure-up-to-date",
       "--",
       "All",
       "chromium_builder_tests"
