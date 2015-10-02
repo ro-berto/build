@@ -81,7 +81,16 @@ def RunSteps(api):
 
   targets = ['chromium_swarm_tests']
   if api.properties.get('platform') == 'android':
-    targets = ['ui_android_unittests_apk_run']
+    targets = [
+        'android_webview_test_apk_run',
+        'android_webview_unittests_apk_run',
+        'base_unittests_apk_run',
+        'breakpad_unittests_apk_run',
+        'device_unittests_apk_run',
+        'gl_tests_apk_run',
+        'gpu_unittests_apk_run',
+        'ui_android_unittests_apk_run',
+    ]
 
   # Build all supported tests.
   api.chromium.runhooks()
