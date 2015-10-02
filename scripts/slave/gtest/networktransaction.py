@@ -13,12 +13,11 @@ class NetworkTimeout(Exception):
 
 class NetworkTransaction(object):
   def __init__(self, initial_backoff_seconds=10, grown_factor=1.5,
-               timeout_seconds=(10 * 60), convert_404_to_None=False):
+               timeout_seconds=(10 * 60)):
     self._initial_backoff_seconds = initial_backoff_seconds
     self._backoff_seconds = initial_backoff_seconds
     self._grown_factor = grown_factor
     self._timeout_seconds = timeout_seconds
-    self._convert_404_to_None = convert_404_to_None
     self._total_sleep = 0
 
   def run(self, request):
@@ -28,8 +27,9 @@ class NetworkTransaction(object):
       try:
         return request()
       except urllib2.HTTPError, e:
-        if self._convert_404_to_None and e.code == 404:
-          return None
+        # Don't retry if we aren't getting a 5xx response.
+        if e.code / 100 != 5:
+          raise
         self._check_for_timeout()
         logging.warn("Received HTTP status %s loading \"%s\".  "
                     "Retrying in %s seconds...",
