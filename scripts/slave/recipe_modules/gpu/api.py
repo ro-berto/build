@@ -323,6 +323,8 @@ class GpuApi(recipe_api.RecipeApi):
     # Avoid running tests not using ANGLE on the ANGLE trybots
     if self.is_angle_trybot:
       basic_tests += common.ANGLE_TRYBOTS_GPU_ISOLATES
+      if self.m.chromium.is_release_build and self.m.platform.is_win:
+        basic_tests += common.WIN_ONLY_RELEASE_ONLY_ANGLE_TRYBOTS_GPU_ISOLATES
 
     #TODO(martiniss) convert loop
     for test in basic_tests:

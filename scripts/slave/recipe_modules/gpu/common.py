@@ -28,6 +28,13 @@ ANGLE_TRYBOTS_GPU_ISOLATES = (
   'angle_end2end_tests',
 )
 
+# Slower tests that we should only run on Release configurations
+# for the ANGLE try bots.
+# TODO(jmadill): Also run on Linux and Mac bots.
+WIN_ONLY_RELEASE_ONLY_ANGLE_TRYBOTS_GPU_ISOLATES = (
+  'angle_deqp_gles2_tests',
+)
+
 FYI_GPU_ISOLATES = (
   FYI_ONLY_GPU_ISOLATES +
   ANGLE_TRYBOTS_GPU_ISOLATES
