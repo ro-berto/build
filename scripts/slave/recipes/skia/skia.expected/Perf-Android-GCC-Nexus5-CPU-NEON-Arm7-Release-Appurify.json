@@ -161,6 +161,38 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "3.25",
+      "----",
+      "cat",
+      "gs://chromium-skia-gm/skimage/input/TIMESTAMP_LAST_UPLOAD_COMPLETED"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
+      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto"
+    },
+    "name": "gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/tmp/SKIMAGE_VERSION",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Get downloaded SKIMAGE_VERSION"
+  },
+  {
+    "cmd": [
       "git",
       "show",
       "HEAD",
@@ -274,7 +306,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "--undefok -i /sdcard/resources --skps /sdcard/skps --nogpu --dummy-flags --outResultsFile /sdcard/skia_results/nanobench_164710_1408633190.json --properties gitHash 164710 build_number 5 --key arch Arm7 compiler GCC cpu_or_gpu CPU cpu_or_gpu_value NEON extra_config Appurify model Nexus5 os Android",
+      "--undefok -i /sdcard/resources --skps /sdcard/skps --images /sdcard/images --nogpu --dummy-flags --outResultsFile /sdcard/skia_results/nanobench_164710_1408633190.json --properties gitHash 164710 build_number 5 --key arch Arm7 compiler GCC cpu_or_gpu CPU cpu_or_gpu_value NEON extra_config Appurify model Nexus5 os Android",
       "[SLAVE_BUILD]/skia/platform_tools/android/apps/visualbench/src/main/assets/nanobench_flags.txt"
     ],
     "cwd": "[SLAVE_BUILD]",

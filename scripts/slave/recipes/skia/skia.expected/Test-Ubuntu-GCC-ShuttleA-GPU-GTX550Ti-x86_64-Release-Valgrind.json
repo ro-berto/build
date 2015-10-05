@@ -395,6 +395,8 @@
       "[SLAVE_BUILD]/skia/resources",
       "--skps",
       "[SLAVE_BUILD]/playback/skps",
+      "--images",
+      "[SLAVE_BUILD]/images",
       "--nocpu",
       "--dummy-flags"
     ],
@@ -421,6 +423,8 @@
       "[SLAVE_BUILD]/skia/resources",
       "--skps",
       "[SLAVE_BUILD]/playback/skps",
+      "--images",
+      "[SLAVE_BUILD]/images",
       "--nocpu",
       "--dummy-flags",
       "--abandonGpuContext",

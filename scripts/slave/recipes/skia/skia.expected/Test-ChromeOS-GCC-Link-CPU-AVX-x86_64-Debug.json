@@ -749,6 +749,8 @@
       "/usr/local/skiabot/skia_resources",
       "--skps",
       "/usr/local/skiabot/skia_skp/skps",
+      "--images",
+      "/usr/local/skiabot/skia_images",
       "--nogpu",
       "--dummy-flags"
     ],

@@ -75,16 +75,16 @@ def GenTests(api):
             stdout=api.raw_io.output('/storage/emulated/legacy')) +
         api.step_data(
             'read SKP_VERSION',
+            stdout=api.raw_io.output('42')) +
+        api.step_data(
+            'read SKIMAGE_VERSION',
             stdout=api.raw_io.output('42'))
     )
     if 'Test' in builder:
       test_data += (
         api.step_data(
             'exists skia_dm',
-            stdout=api.raw_io.output('')) +
-        api.step_data(
-            'read SKIMAGE_VERSION',
-            stdout=api.raw_io.output('42'))
+            stdout=api.raw_io.output(''))
       )
 
     if 'Perf' in builder:
@@ -108,7 +108,7 @@ def GenTests(api):
               api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
           )
         )
-        if 'Test' in builder:
+        if 'Test' in builder or 'Perf' in builder:
           test += api.step_data('gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED',
                                 stdout=api.raw_io.output('42'))
         if 'Android' in builder and not 'Appurify' in builder:
@@ -120,9 +120,8 @@ def GenTests(api):
         if 'ChromeOS' in builder:
           test += api.step_data('read SKP_VERSION',
                                 stdout=api.raw_io.output('42'))
-          if 'Test' in builder:
-            test += api.step_data('read SKIMAGE_VERSION',
-                                  stdout=api.raw_io.output('42'))
+          test += api.step_data('read SKIMAGE_VERSION',
+                                stdout=api.raw_io.output('42'))
         if 'Trybot' in builder:
           test += api.properties(issue=500,
                                  patchset=1,

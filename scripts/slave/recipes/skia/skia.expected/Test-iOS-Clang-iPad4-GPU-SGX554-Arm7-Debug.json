@@ -657,6 +657,8 @@
       "skiabot/skia_resources",
       "--skps",
       "skiabot/skia_skp/skps",
+      "--images",
+      "skiabot/skia_images",
       "--nocpu",
       "--dummy-flags"
     ],

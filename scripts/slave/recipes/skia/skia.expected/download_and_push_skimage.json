@@ -908,6 +908,8 @@
       "/storage/emulated/legacy/skiabot/skia_resources",
       "--skps",
       "/storage/emulated/legacy/skiabot/skia_skp/skps",
+      "--images",
+      "/storage/emulated/legacy/skiabot/skia_images",
       "--nocpu",
       "--dummy-flags"
     ],

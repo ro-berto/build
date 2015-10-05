@@ -552,6 +552,7 @@ class SkiaApi(recipe_api.RecipeApi):
 
     self._run_once(self.install)
     self._run_once(self.download_and_copy_skps)
+    self._run_once(self.download_and_copy_images)
     if self.upload_perf_results:
       self.flavor.create_clean_device_dir(self.device_dirs.perf_data_dir)
 
@@ -559,8 +560,9 @@ class SkiaApi(recipe_api.RecipeApi):
     args = [
         'nanobench',
         '--undefok',   # This helps branches that may not know new flags.
-        '-i', self.device_dirs.resource_dir,
-        '--skps', self.device_dirs.skp_dir
+        '-i',       self.device_dirs.resource_dir,
+        '--skps',   self.device_dirs.skp_dir,
+        '--images', self.device_dirs.images_dir,
     ]
 
     skip_flag = None
