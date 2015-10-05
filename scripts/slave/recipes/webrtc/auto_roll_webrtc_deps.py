@@ -21,7 +21,7 @@ def RunSteps(api):
 
   # Enforce a clean state.
   api.git(
-      'checkout', '-f', 'origin/master',
+      'checkout', '-f', 'master',
       cwd=api.path['checkout'],
   )
   api.git(

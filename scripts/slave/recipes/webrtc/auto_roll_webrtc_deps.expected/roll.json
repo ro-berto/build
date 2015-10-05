@@ -64,7 +64,7 @@
       "git",
       "checkout",
       "-f",
-      "origin/master"
+      "master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "git checkout"
