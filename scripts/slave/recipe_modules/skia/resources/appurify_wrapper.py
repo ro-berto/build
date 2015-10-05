@@ -88,7 +88,8 @@ def write_to_zip_file(zip_file, path, arc_path):
     zip_file.write(path, arc_path, zipfile.ZIP_DEFLATED)
 
 
-def package_tests(zip_file, robotium_cfg_file, test_apk, skp_dir=None):
+def package_tests(zip_file, robotium_cfg_file, test_apk, skp_dir=None,
+                  resource_dir=None):
   """Package all tests into a zip file."""
   sdcard_files = []
   with zipfile.ZipFile(zip_file, 'w') as zip_file:
@@ -99,6 +100,12 @@ def package_tests(zip_file, robotium_cfg_file, test_apk, skp_dir=None):
       write_to_zip_file(zip_file, skp_dir, skps_prefix)
       sdcard_files.extend(
         ['/'.join((skps_prefix, f)) for f in os.listdir(skp_dir)])
+
+    if resource_dir:
+      resources_prefix = 'resources'
+      write_to_zip_file(zip_file, resource_dir, resources_prefix)
+      sdcard_files.extend(
+        ['/'.join((resources_prefix, f)) for f in os.listdir(resource_dir)])
 
   robotium_cfg = '''[robotium]
 dumpsys=1
@@ -111,11 +118,13 @@ sdcard_files=%s
     f.write(robotium_cfg)
 
 
-def run_on_appurify(apk, test_apk, device, result_dir, skp_dir=None):
+def run_on_appurify(apk, test_apk, device, result_dir, skp_dir=None,
+                    resource_dir=None):
   """Test the APK on Appurify."""
   with tempfile.NamedTemporaryFile(suffix='.zip') as test_src:
     with tempfile.NamedTemporaryFile(suffix='.cfg') as config_src:
-      package_tests(test_src.name, config_src.name, test_apk, skp_dir)
+      package_tests(test_src.name, config_src.name, test_apk, skp_dir,
+                    resource_dir)
       args = [
           '--app-src', apk,
           '--test-src', test_src.name,
@@ -134,9 +143,10 @@ def main():
   parser.add_argument('--device', required=True)
   parser.add_argument('--result-dir', required=True)
   parser.add_argument('--skp-dir')
+  parser.add_argument('--resource-dir')
   args = parser.parse_args()
   run_on_appurify(args.apk, args.test_apk, args.device, args.result_dir,
-                  args.skp_dir)
+                  args.skp_dir, args.resource_dir)
 
 
 if __name__ == '__main__':

@@ -312,7 +312,9 @@
       "--result-dir",
       "[SLAVE_BUILD]/tmp",
       "--skp-dir",
-      "[SLAVE_BUILD]/playback/skps"
+      "[SLAVE_BUILD]/playback/skps",
+      "--resource-dir",
+      "[SLAVE_BUILD]/skia/resources"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -376,7 +378,7 @@
       "[SLAVE_BUILD]/perfdata/Perf-Android-GCC-Nexus5-CPU-NEON-Arm7-Release-Appurify/data"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree rmtree",
+    "name": "rmtree data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
