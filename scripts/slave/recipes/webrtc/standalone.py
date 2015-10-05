@@ -21,8 +21,7 @@ DEPS = [
 
 def RunSteps(api):
   webrtc = api.webrtc
-  webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS,
-                          webrtc.WEBRTC_REVISION_PERF_CONFIG)
+  webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS)
 
   webrtc.checkout()
   webrtc.cleanup()

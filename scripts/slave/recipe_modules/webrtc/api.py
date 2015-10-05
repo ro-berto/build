@@ -70,20 +70,27 @@ class WebRTCApi(recipe_api.RecipeApi):
   # TODO(kjellander): Convert to use the auto-generated URLs once we've setup a
   # separate bucket per master.
   GS_ARCHIVES = freeze({
+    'android_dbg_archive': 'gs://chromium-webrtc/android_chromium_dbg',
+    'android_dbg_archive_fyi': ('gs://chromium-webrtc/'
+                                'android_chromium_trunk_dbg'),
+    'android_dbg_archive_arm64_fyi': ('gs://chromium-webrtc/'
+                                      'android_chromium_trunk_arm64_dbg'),
     'android_apk_dbg_archive': 'gs://chromium-webrtc/android_dbg',
     'android_apk_arm64_rel_archive': 'gs://chromium-webrtc/android_arm64_rel',
     'android_apk_rel_archive': 'gs://chromium-webrtc/android_rel',
+    'win_rel_archive': 'gs://chromium-webrtc/Win Builder',
+    'win_rel_archive_fyi': 'gs://chromium-webrtc/win_rel-fyi',
+    'mac_rel_archive': 'gs://chromium-webrtc/Mac Builder',
+    'mac_rel_archive_fyi': 'gs://chromium-webrtc/mac_rel-fyi',
+    'linux_rel_archive': 'gs://chromium-webrtc/Linux Builder',
     'fyi_android_apk_dbg_archive': 'gs://chromium-webrtc/fyi_android_dbg',
+    'fyi_linux_asan_archive': 'gs://chromium-webrtc/Linux ASan Builder',
+    'fyi_linux_chromium_rel_archive': 'gs://chromium-webrtc/Linux Chromium FYI',
+
   })
 
   BROWSER_TESTS_GTEST_FILTER = 'WebRtc*:Webrtc*:TabCapture*:*MediaStream*'
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
-
-  # Configuration to make the WebRTC revision be the main revision for perf
-  # dashboard results.
-  # TODO(kjellander): Investigate if this is needed for client.webrtc bots
-  # anymore (probably just for Chromium checkouts).
-  WEBRTC_REVISION_PERF_CONFIG = '{\'a_default_rev\': \'r_webrtc_rev\'}'
 
   @property
   def should_build(self):
@@ -94,6 +101,10 @@ class WebRTCApi(recipe_api.RecipeApi):
     return self.bot_type in ('tester', 'builder_tester')
 
   @property
+  def should_run_hooks(self):
+    return not self.bot_config.get('disable_runhooks')
+
+  @property
   def should_upload_build(self):
     return self.bot_type == 'builder'
 
@@ -101,10 +112,14 @@ class WebRTCApi(recipe_api.RecipeApi):
   def should_download_build(self):
     return self.bot_type == 'tester'
 
-  def apply_bot_config(self, builders, recipe_configs, perf_config=None):
+  def apply_bot_config(self, builders, recipe_configs, perf_config=None,
+                       git_hashes_as_perf_revisions=False):
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
+    self.git_hashes_as_perf_revisions = git_hashes_as_perf_revisions
     master_dict = builders.get(mastername, {})
+    master_settings = master_dict.get('settings', {})
+    perf_config = master_settings.get('PERF_CONFIG')
 
     self.bot_config = master_dict.get('builders', {}).get(buildername)
     assert self.bot_config, ('Unrecognized builder name "%r" for master "%r".' %
@@ -132,6 +147,8 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     # Support applying configs both at the bot and the recipe config level.
     for c in self.bot_config.get('chromium_apply_config', []):
+      self.m.chromium.apply_config(c)
+    for c in self.recipe_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
 
     for c in self.bot_config.get('gclient_apply_config', []):
@@ -162,6 +179,14 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.revision_cp = revs['got_revision_cp']
     self.revision_number = str(self.m.commit_position.parse_revision(
         self.revision_cp))
+    self.perf_revision = (self.revision if self.git_hashes_as_perf_revisions
+                          else self.revision_number)
+
+    # Check for properties specific to our Chromium builds.
+    self.libjingle_revision = revs.get('got_libjingle_revision')
+    self.libjingle_revision_cp = revs.get('got_libjingle_revision_cp')
+    self.webrtc_revision = revs.get('got_webrtc_revision')
+    self.webrtc_revision_cp = revs.get('got_webrtc_revision_cp')
 
   def check_swarming_version(self):
     if self.bot_config.get('enable_swarming'):
@@ -197,8 +222,8 @@ class WebRTCApi(recipe_api.RecipeApi):
 
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,
-               perf_test=False, perf_id=None, perf_dashboard_id=None,
-               parallel=False, disable_swarming=False):
+               perf_test=False, perf_dashboard_id=None, parallel=False,
+               disable_swarming=False):
     """Helper function to invoke chromium.runtest().
 
     Notice that the name parameter should be the same as the test executable in
@@ -207,18 +232,17 @@ class WebRTCApi(recipe_api.RecipeApi):
     name = name or test
     args = args or []
     env = env or {}
-    perf_id = perf_id or self.c.PERF_ID
-    if perf_test and perf_id:
+    if perf_test and self.c.PERF_ID:
       perf_dashboard_id = perf_dashboard_id or test
-      assert self.revision_number, (
+      assert self.perf_revision, (
           'A revision number must be specified for perf tests as they upload '
           'data to the perf dashboard.')
       self.m.chromium.runtest(
           test=test, args=args, name=name,
           results_url=self.DASHBOARD_UPLOAD_URL, annotate='graphing',
           xvfb=True, perf_dashboard_id=perf_dashboard_id,
-          test_type=perf_dashboard_id, env=env, revision=self.revision_number,
-          perf_id=perf_id, perf_config=self.c.PERF_CONFIG)
+          test_type=perf_dashboard_id, env=env, revision=self.perf_revision,
+          perf_id=self.c.PERF_ID, perf_config=self.c.PERF_CONFIG)
     else:
       annotate = 'gtest'
       python_mode = False
@@ -273,6 +297,24 @@ class WebRTCApi(recipe_api.RecipeApi):
     return self.m.step('install ' + apk_name, install_cmd, infra_step=True,
                        env=env)
 
+  def sizes(self):
+    # TODO(kjellander): Move this into a function of the chromium recipe
+    # module instead.
+    assert self.c.PERF_ID, ('You must specify PERF_ID for the builder that '
+                            'runs the sizes step.')
+    sizes_script = self.m.path['build'].join('scripts', 'slave', 'chromium',
+                                             'sizes.py')
+    args = ['--target', self.m.chromium.c.BUILD_CONFIG,
+            '--platform', self.m.chromium.c.TARGET_PLATFORM]
+    test_name = 'sizes'
+    self.add_test(
+        test=sizes_script,
+        name=test_name,
+        perf_dashboard_id=test_name,
+        args=args,
+        revision=self.perf_revision,
+        perf_test=True)
+
   def maybe_trigger(self):
     triggers = self.bot_config.get('triggers')
     if triggers:
@@ -281,6 +323,13 @@ class WebRTCApi(recipe_api.RecipeApi):
         'parent_got_revision': self.revision,
         'parent_got_revision_cp': self.revision_cp,
       }
+      if self.webrtc_revision:
+        properties.update({
+          'parent_got_libjingle_revision': self.libjingle_revision,
+          'parent_got_libjingle_revision_cp': self.libjingle_revision_cp,
+          'parent_got_webrtc_revision': self.webrtc_revision,
+          'parent_got_webrtc_revision_cp': self.webrtc_revision_cp,
+        })
       self.m.trigger(*[{
         'builder_name': builder_name,
         'properties': properties,

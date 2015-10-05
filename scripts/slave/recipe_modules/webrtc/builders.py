@@ -60,12 +60,435 @@ RECIPE_CONFIGS = freeze({
     'chromium_config': 'webrtc_ios',
     'gclient_config': 'webrtc_ios',
   },
+  'chromium_webrtc': {
+    'chromium_config': 'chromium',
+    'chromium_apply_config': ['dcheck', 'blink_logging_on'],
+    'gclient_config': 'chromium_webrtc',
+    'compile_targets': ['chromium_builder_webrtc'],
+    'test_suite': 'chromium',
+  },
+  'chromium_webrtc_tot': {
+    'chromium_config': 'chromium',
+    'chromium_apply_config': ['dcheck', 'blink_logging_on'],
+    'gclient_config': 'chromium_webrtc_tot',
+    'compile_targets': ['chromium_builder_webrtc'],
+    'test_suite': 'chromium',
+  },
+  # Temporary config to try out the complicated FYI builders pre-Git switch
+  # (runs a tiny compile target and no test to save time and resources).
+  'chromium_webrtc_tot_git_switch_testing': {
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium_webrtc_tot',
+    'compile_targets': ['gtest'],
+  },
+  'chromium_webrtc_android': {
+    'chromium_config': 'android',
+    'chromium_android_config': 'base_config',
+    'gclient_config': 'chromium_webrtc',
+    'gclient_apply_config': ['android'],
+    'compile_targets': ['android_builder_chromium_webrtc'],
+    'test_suite': 'chromium',
+  },
+  'chromium_webrtc_tot_android': {
+    'chromium_config': 'android',
+    'chromium_android_config': 'base_config',
+    'gclient_config': 'chromium_webrtc_tot',
+    'gclient_apply_config': ['android'],
+    'compile_targets': ['android_builder_chromium_webrtc'],
+    'test_suite': 'chromium',
+  },
 })
 
+WEBRTC_REVISION_PERF_CONFIG = '{\'a_default_rev\': \'r_webrtc_rev\'}'
+
 BUILDERS = freeze({
+  'chromium.webrtc': {
+    'builders': {
+      'Win Builder': {
+        'recipe_config': 'chromium_webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'win_rel_archive',
+        'testing': {'platform': 'win'},
+        'triggers': [
+          'WinXP Tester',
+          'Win7 Tester',
+          'Win8 Tester',
+          'Win10 Tester',
+        ],
+      },
+      'WinXP Tester': {
+        'recipe_config': 'chromium_webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-rel-xp',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'win_rel_archive',
+        'disable_runhooks': True,
+        'parent_buildername': 'Win Builder',
+        'testing': {'platform': 'win'},
+      },
+      'Win7 Tester': {
+        'recipe_config': 'chromium_webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-rel-7',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'win_rel_archive',
+        # TODO(kjellander): Disable the hooks on as soon we've moved away
+        # from downloading test resources in that step.
+        'disable_runhooks': False,
+        'parent_buildername': 'Win Builder',
+        'testing': {'platform': 'win'},
+      },
+      'Win8 Tester': {
+        'recipe_config': 'chromium_webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-rel-win8',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'win_rel_archive',
+        # TODO(kjellander): Disable the hooks on as soon we've moved away
+        # from downloading test resources in that step.
+        'disable_runhooks': False,
+        'parent_buildername': 'Win Builder',
+        'testing': {'platform': 'win'},
+      },
+      'Win10 Tester': {
+        'recipe_config': 'chromium_webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-rel-win10',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'win_rel_archive',
+        # TODO(kjellander): Disable the hooks on as soon we've moved away
+        # from downloading test resources in that step.
+        'disable_runhooks': False,
+        'parent_buildername': 'Win Builder',
+        'testing': {'platform': 'win'},
+      },
+      'Mac Builder': {
+        'recipe_config': 'chromium_webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'mac_rel_archive',
+        'testing': {'platform': 'mac'},
+        'triggers': ['Mac Tester'],
+      },
+      'Mac Tester': {
+        'recipe_config': 'chromium_webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-rel-mac',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'mac_rel_archive',
+        'parent_buildername': 'Mac Builder',
+        'testing': {'platform': 'mac'},
+      },
+      'Linux Builder': {
+        'recipe_config': 'chromium_webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'linux_rel_archive',
+        'testing': {'platform': 'linux'},
+        'triggers': ['Linux Tester'],
+      },
+      'Linux Tester': {
+        'recipe_config': 'chromium_webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-rel-linux',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'linux_rel_archive',
+        'parent_buildername': 'Linux Builder',
+        'testing': {'platform': 'linux'},
+      },
+    },
+  },
   'chromium.webrtc.fyi': {
+    'settings': {
+      'PERF_CONFIG': WEBRTC_REVISION_PERF_CONFIG,
+    },
+    'builders': {
+      'Win Builder': {
+        'recipe_config': 'chromium_webrtc_tot',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-rel-win',
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'win_rel_archive_fyi',
+        'testing': {'platform': 'win'},
+        'triggers': [
+          'WinXP Tester',
+          'Win7 Tester',
+          'Win10 Tester',
+        ],
+      },
+      'WinXP Tester': {
+        'recipe_config': 'chromium_webrtc_tot',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-rel-winxp',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'win_rel_archive_fyi',
+        'disable_runhooks': True,
+        'parent_buildername': 'Win Builder',
+        'testing': {'platform': 'win'},
+      },
+      'Win7 Tester': {
+        'recipe_config': 'chromium_webrtc_tot',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-rel-win7',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'win_rel_archive_fyi',
+        # TODO(kjellander): Disable the hooks on Win7 as soon we've moved away
+        # from downloading test resources in that step.
+        'disable_runhooks': False,
+        'parent_buildername': 'Win Builder',
+        'testing': {'platform': 'win'},
+      },
+      'Win10 Tester': {
+        'recipe_config': 'chromium_webrtc_tot',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-rel-win10',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'win_rel_archive_fyi',
+        # TODO(kjellander): Disable the hooks on Win7 as soon we've moved away
+        # from downloading test resources in that step.
+        'disable_runhooks': False,
+        'parent_buildername': 'Win Builder',
+        'testing': {'platform': 'win'},
+      },
+      'Mac Builder': {
+        'recipe_config': 'chromium_webrtc_tot',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-rel-mac',
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'mac_rel_archive_fyi',
+        'testing': {'platform': 'mac'},
+        'triggers': ['Mac Tester'],
+      },
+      'Mac Tester': {
+        'recipe_config': 'chromium_webrtc_tot',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-rel-mac',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'mac_rel_archive_fyi',
+        'parent_buildername': 'Mac Builder',
+        'testing': {'platform': 'mac'},
+      },
+      'Linux': {
+        'recipe_config': 'chromium_webrtc_tot',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-rel-linux',
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Builder (dbg)': {
+        'recipe_config': 'chromium_webrtc_tot_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android',
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'android_dbg_archive_fyi',
+        'testing': {'platform': 'linux'},
+        'triggers': [
+          'Android Tests (dbg) (J Nexus4)',
+          'Android Tests (dbg) (K Nexus5)',
+          'Android Tests (dbg) (L Nexus5)',
+          'Android Tests (dbg) (L Nexus6)',
+          'Android Tests (dbg) (L Nexus7.2)',
+        ],
+      },
+      'Android Builder ARM64 (dbg)': {
+        'recipe_config': 'chromium_webrtc_tot_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-arm64',
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'android_dbg_archive_arm64_fyi',
+        'testing': {'platform': 'linux'},
+        'triggers': [
+          'Android Tests (dbg) (L Nexus9)',
+        ],
+      },
+      'Android Tests (dbg) (J Nexus4)': {
+        'recipe_config': 'chromium_webrtc_tot_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus4-j',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'android_dbg_archive_fyi',
+        'parent_buildername': 'Android Builder (dbg)',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Tests (dbg) (K Nexus5)': {
+        'recipe_config': 'chromium_webrtc_tot_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus5-k',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'android_dbg_archive_fyi',
+        'parent_buildername': 'Android Builder (dbg)',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Tests (dbg) (L Nexus5)': {
+        'recipe_config': 'chromium_webrtc_tot_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus5',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'android_dbg_archive_fyi',
+        'parent_buildername': 'Android Builder (dbg)',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Tests (dbg) (L Nexus6)': {
+        'recipe_config': 'chromium_webrtc_tot_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus6',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'android_dbg_archive_fyi',
+        'parent_buildername': 'Android Builder (dbg)',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Tests (dbg) (L Nexus7.2)': {
+        'recipe_config': 'chromium_webrtc_tot_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus72',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'android_dbg_archive_fyi',
+        'parent_buildername': 'Android Builder (dbg)',
+        'testing': {'platform': 'linux'},
+      },
+      'Android Tests (dbg) (L Nexus9)': {
+        'recipe_config': 'chromium_webrtc_tot_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'android_dbg_archive_arm64_fyi',
+        'parent_buildername': 'Android Builder ARM64 (dbg)',
+        'testing': {'platform': 'linux'},
+      },
+    },
   },
   'client.webrtc': {
+    'settings': {
+      'PERF_CONFIG': WEBRTC_REVISION_PERF_CONFIG,
+    },
     'builders': {
       'Win32 Debug': {
         'recipe_config': 'webrtc_parallel',

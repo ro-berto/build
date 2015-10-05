@@ -12,15 +12,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\kill_processes.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "taskkill (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[BUILD]\\scripts\\slave\\bot_update.py",
       "--master",
       "chromium.webrtc.fyi",
@@ -122,52 +113,11 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
-      "runhooks"
+      "RECIPE_MODULE[webrtc]\\resources\\cleanup_files.py",
+      "[SLAVE_BUILD]\\src\\out"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_DEFINES": "blink_logging_always_on=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
-    },
-    "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.webrtc.fyi.json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "read test spec",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.webrtc.fyi.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
-      "--output",
-      "/path/to/tmp/json",
-      "--",
-      "--build-config-fs",
-      "Release",
-      "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
-      "--properties",
-      "{\"buildername\": \"Win Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"perf-id\": \"chromium-webrtc-trunk-tot-rel-win\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "get compile targets for scripts",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "clean test output files"
   },
   {
     "cmd": [
@@ -177,6 +127,19 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]\\gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GYP_DEFINES": "blink_logging_always_on=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
+    },
+    "name": "gclient runhooks"
   },
   {
     "cmd": [
@@ -194,11 +157,44 @@
       "--goma-dir",
       "[BUILD]\\goma",
       "--",
-      "chromium_builder_webrtc",
-      "crash_service"
+      "chromium_builder_webrtc"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"got_libjingle_revision\": \"1161aa63\", \"got_revision\": \"c321321\", \"got_webrtc_revision\": \"deadbeef\", \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"got_libjingle_revision\": \"1161aa63\", \"got_revision\": \"c321321\", \"got_webrtc_revision\": \"deadbeef\", \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=sizes",
+      "--perf-id=chromium-webrtc-trunk-tot-rel-win",
+      "--perf-config",
+      "{'a_default_rev': 'r_webrtc_rev'}",
+      "--test-type=sizes",
+      "--step-name=sizes",
+      "--builder-name=Win Builder",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "[BUILD]\\scripts\\slave\\chromium\\sizes.py",
+      "--target",
+      "Release",
+      "--platform",
+      "win"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "sizes"
   },
   {
     "allow_subannotations": true,
@@ -209,7 +205,7 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chromium-webrtc/chromium.webrtc.fyi/Win Builder",
+      "gs://chromium-webrtc/win_rel-fyi",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
@@ -226,69 +222,44 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Win10 Tester"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win10 Tester@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (2)",
-    "trigger_specs": [
+        "builder_name": "WinXP Tester",
+        "properties": {
+          "parent_got_libjingle_revision": "8e938c8836c7ed23d7fbcddf1dcc2abcb13667d7",
+          "parent_got_libjingle_revision_cp": "refs/heads/master@{#134440}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
+          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+        }
+      },
       {
-        "builder_name": "Win7 Tester"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win7 Tester@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (3)",
-    "trigger_specs": [
+        "builder_name": "Win7 Tester",
+        "properties": {
+          "parent_got_libjingle_revision": "8e938c8836c7ed23d7fbcddf1dcc2abcb13667d7",
+          "parent_got_libjingle_revision_cp": "refs/heads/master@{#134440}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
+          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+        }
+      },
       {
-        "builder_name": "WinXP Tester"
+        "builder_name": "Win10 Tester",
+        "properties": {
+          "parent_got_libjingle_revision": "8e938c8836c7ed23d7fbcddf1dcc2abcb13667d7",
+          "parent_got_libjingle_revision_cp": "refs/heads/master@{#134440}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
+          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+        }
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@WinXP Tester@@@"
+      "@@@STEP_TEXT@Win10 Tester<br />Win7 Tester<br />WinXP Tester@@@"
     ]
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Release",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"got_libjingle_revision\": \"1161aa63\", \"got_revision\": \"c321321\", \"got_webrtc_revision\": \"deadbeef\", \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"got_libjingle_revision\": \"1161aa63\", \"got_revision\": \"c321321\", \"got_webrtc_revision\": \"deadbeef\", \"mastername\": \"chromium.webrtc.fyi\", \"parent_buildername\": null, \"recipe\": \"webrtc/chromium\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=graphing",
-      "--test-type=sizes",
-      "--builder-name=Win Builder",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--run-python-script",
-      "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=sizes",
-      "--perf-id=chromium-webrtc-trunk-tot-rel-win",
-      "--perf-config={'a_default_rev': 'r_webrtc_rev'}",
-      "[BUILD]\\scripts\\slave\\chromium\\sizes.py",
-      "--target",
-      "Release",
-      "--platform",
-      "win"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "sizes"
   }
 ]

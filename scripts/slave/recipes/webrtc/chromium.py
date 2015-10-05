@@ -19,25 +19,19 @@ DEPS = [
   'platform',
   'properties',
   'python',
-  'step',
-  'test_utils',
   'webrtc',
 ]
 
 
 def RunSteps(api):
-  mastername = api.properties.get('mastername')
-  buildername = api.properties.get('buildername')
   webrtc = api.webrtc
+  webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS,
+                          git_hashes_as_perf_revisions=True)
 
   if api.platform.is_win:
     api.chromium.taskkill()
 
-  # TODO(kjellander): Continue refactoring so we can use the generic chromium
-  # recipe instead, if possible.
-  api.chromium_tests.configure_build(mastername, buildername)
-
-  if mastername == 'chromium.webrtc.fyi':
+  if api.properties.get('mastername') == 'chromium.webrtc.fyi':
     # Sync HEAD revisions for Chromium, WebRTC and Libjingle.
     # This is used for some bots to provide data about which revisions are green
     # to roll into Chromium.
@@ -51,30 +45,33 @@ def RunSteps(api):
     for path, revision in revs.iteritems():
       api.gclient.c.revisions[path] = revision
 
-  update_step, master_dict, test_spec = \
-      api.chromium_tests.prepare_checkout(mastername, buildername)
+  webrtc.checkout()
+  webrtc.cleanup()
+  if webrtc.should_run_hooks:
+    api.chromium.runhooks()
 
-  api.chromium_tests.compile(mastername, buildername, update_step, master_dict,
-                             test_spec)
+  if webrtc.should_build:
+    webrtc.compile()
+    if (api.properties.get('mastername') == 'chromium.webrtc.fyi' and
+        api.chromium.c.TARGET_PLATFORM != 'android'):
+      webrtc.sizes()
 
-  # TODO(kjellander): Figure out a cleaner way to handle the sizes step;
-  # possibly build it into chromium_tests.prepare_checkout or the test spec.
-  bot_config = master_dict.get('builders', {}).get(buildername)
-  if (bot_config['bot_type'] in ('builder', 'builder_tester') and
-      mastername == 'chromium.webrtc.fyi' and
-      api.chromium.c.TARGET_PLATFORM != 'android'):
-    api.chromium.sizes(results_url=webrtc.DASHBOARD_UPLOAD_URL,
-                       perf_id=bot_config.get('perf-id'),
-                       perf_config=webrtc.WEBRTC_REVISION_PERF_CONFIG)
+  if webrtc.should_upload_build:
+    webrtc.package_build()
+  if webrtc.should_download_build:
+    webrtc.extract_build()
 
-  tests = api.chromium_tests.tests_for_builder(
-      mastername, buildername, update_step, master_dict)
+  if webrtc.should_test:
+    with api.chromium_tests.wrap_chromium_tests(
+        api.properties.get('mastername')):
+      if api.chromium.c.TARGET_PLATFORM == 'android':
+        api.chromium_android.run_test_suite(
+            'content_browsertests',
+            gtest_filter='WebRtc*')
+      else:
+        webrtc.runtests()
 
-  if not tests:
-    return
-  test_runner = api.chromium_tests.create_test_runner(api, tests)
-  with api.chromium_tests.wrap_chromium_tests(mastername, tests):
-    test_runner()
+  webrtc.maybe_trigger()
 
 
 def _sanitize_nonalpha(text):
@@ -82,7 +79,7 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  builders = api.chromium_tests.builders
+  builders = api.webrtc.BUILDERS
   CR_REV = 'c321321'
   LIBJINGLE_REV = '1161aa63'
   WEBRTC_REV = 'deadbeef'
@@ -120,49 +117,6 @@ def GenTests(api):
       test += api.properties(got_revision=CR_REV,
                              got_libjingle_revision=LIBJINGLE_REV,
                              got_webrtc_revision=WEBRTC_REV)
-    if bot_type in ('builder_tester', 'tester'):
-      # TODO(kjellander): Reduce this JSON for better readability. It's kept
-      # like this to make the initial review easier.
-      if (bot_config['chromium_config_kwargs'].get('TARGET_PLATFORM')
-          != 'android'):
-        test += api.override_step_data('read test spec', api.json.output({
-          buildername: {
-            'gtest_tests': [
-              {
-                'swarming': {
-                  'can_use_on_swarming_builders': False
-                },
-                'test': 'content_unittests'
-              }
-            ],
-            'scripts': [
-              {
-                'args': [
-                  'browser_tests',
-                  '--gtest_filter=WebRtc*:Webrtc*:TabCapture*:*MediaStream*',
-                  '--run-manual',
-                  '--ui-test-action-max-timeout=350000',
-                  '--test-launcher-jobs=1',
-                  '--test-launcher-bot-mode',
-                  '--test-launcher-print-test-stdio=always'
-                ],
-                'name': 'browser_tests',
-                'script': 'gtest_perf_test.py'
-              },
-              {
-                'args': [
-                  'content_browsertests',
-                  '--gtest_filter=WebRtc*',
-                  '--run-manual',
-                  '--test-launcher-print-test-stdio=always',
-                  '--test-launcher-bot-mode'
-                ],
-                'name': 'content_browsertests',
-                'script': 'gtest_perf_test.py'
-              }
-            ]
-          }
-        }))
     if failing_test:
       test += api.step_data(failing_test, retcode=1)
 
@@ -185,8 +139,7 @@ def GenTests(api):
 
   buildername = 'Linux Tester'
   yield generate_builder(mastername, buildername, suffix='_forced_invalid')
-  yield generate_builder(mastername, buildername,
-                         failing_test='content_browsertests',
+  yield generate_builder(mastername, buildername, failing_test='browser_tests',
                          suffix='_failing_test')
 
   # Periodic scheduler triggered builds also don't contain revision.

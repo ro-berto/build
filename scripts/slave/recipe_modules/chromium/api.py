@@ -353,8 +353,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       **kwargs
     )
 
-  def sizes(self, results_url=None, perf_id=None, platform=None,
-            perf_config=None, **kwargs):
+  def sizes(self, results_url=None, perf_id=None, platform=None, **kwargs):
     """Return a sizes.py invocation.
     This uses runtests.py to upload the results to the perf dashboard."""
     sizes_script = self.m.path['build'].join('scripts', 'slave', 'chromium',
@@ -380,8 +379,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       run_tests_args.extend(['--results-url=%s' % results_url,
                              '--perf-dashboard-id=sizes',
                              '--perf-id=%s' % perf_id])
-      if perf_config:
-        run_tests_args.append('--perf-config=%s' % perf_config)
 
       # If we have a clang revision, add that to the perf data point.
       # TODO(hans): We want this for all perf data, not just sizes.
