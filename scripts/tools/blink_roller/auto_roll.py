@@ -134,7 +134,7 @@ PROJECT_CONFIGS = {
     'extra_emails_fn': lambda: [_get_skia_sheriff()],
     'path_to_project': os.path.join('third_party', 'skia'),
     'include_commit_log': True,
-    'dry_run': True,
+    # 'dry_run': True,
   },
 }
 
