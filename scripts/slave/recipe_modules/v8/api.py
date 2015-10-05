@@ -47,6 +47,7 @@ TEST_CONFIGS = freeze({
     'name': 'Mjsunit',
     'tests': ['mjsunit'],
     'add_flaky_step': True,
+    'can_use_on_swarming_builders': True,
   },
   'mozilla': {
     'name': 'Mozilla',
@@ -83,12 +84,14 @@ TEST_CONFIGS = freeze({
   'unittests': {
     'name': 'Unittests',
     'tests': ['unittests'],
+    'can_use_on_swarming_builders': True,
   },
   'v8testing': {
     'name': 'Check',
     'tests': ['default'],
     'suite_mapping': ['mjsunit', 'cctest', 'message', 'preparser'],
     'add_flaky_step': True,
+    'can_use_on_swarming_builders': True,
   },
   'webkit': {
     'name': 'Webkit',
@@ -244,6 +247,8 @@ class V8Api(recipe_api.RecipeApi):
     'linux_nosnap_dbg_archive': 'gs://chromium-v8/v8-linux-nosnap-dbg',
     'linux_x32_nosnap_dbg_archive': 'gs://chromium-v8/v8-linux-x32-nosnap-dbg',
     'linux_x87_nosnap_dbg_archive': 'gs://chromium-v8/v8-linux-x87-nosnap-dbg',
+    'linux_swarming_staging_archive':
+        'gs://chromium-v8/v8-linux-swarming-staging',
     'linux64_rel_archive': 'gs://chromium-v8/v8-linux64-rel',
     'linux64_dbg_archive': 'gs://chromium-v8/v8-linux64-dbg',
     'linux64_custom_snapshot_dbg_archive':
@@ -337,6 +342,11 @@ class V8Api(recipe_api.RecipeApi):
 
     return update_step
 
+  def set_up_swarming(self):
+    if self.bot_config.get('enable_swarming'):
+      self.m.isolate.set_isolate_environment(self.m.chromium.c)
+      self.m.swarming.check_client_version()
+
   def runhooks(self, **kwargs):
     env = {}
     if self.c.gyp_env.AR:
@@ -395,8 +405,28 @@ class V8Api(recipe_api.RecipeApi):
   def perf_tests(self):
     return self.bot_config.get('perf', [])
 
+  def isolate_tests(self):
+    if self.bot_config.get('enable_swarming'):
+      buildername = self.m.properties['buildername']
+      tests_to_isolate = []
+      for _, master_config in self.BUILDERS.iteritems():
+        for _, bot_config in master_config['builders'].iteritems():
+          if bot_config.get('parent_buildername') == buildername:
+            for test in bot_config.get('tests', []):
+              config = TEST_CONFIGS.get(test)
+              if config and config.get('can_use_on_swarming_builders'):
+                tests_to_isolate.extend(config['tests'])
+      if tests_to_isolate:
+        self.m.isolate.isolate_tests(
+            self.m.chromium.output_dir,
+            targets=sorted(list(set(tests_to_isolate))),
+            verbose=True,
+            set_swarm_hashes=False,
+        )
+
   def compile(self, **kwargs):
     self.m.chromium.compile(**kwargs)
+    self.isolate_tests()
 
   # TODO(machenbach): This should move to a dynamorio module as soon as one
   # exists.

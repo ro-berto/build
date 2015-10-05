@@ -28,6 +28,7 @@ def RunSteps(api):
     api.chromium.taskkill()
 
   update_step = v8.checkout()
+  v8.set_up_swarming()
 
   if v8.c.mips_cross_compile:
     v8.setup_mips_toolchain()
