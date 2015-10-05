@@ -90,12 +90,27 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "--version"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.4.10@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+      "GYP_CHROMIUM_NO_ACTION": "1",
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks (with patch)"
   },
@@ -104,13 +119,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -125,6 +140,7 @@
       "--",
       "--build-config-fs",
       "Release",
+      "--use-src-side-runtest-py",
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
@@ -182,15 +198,18 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/gyp_chromium",
-      "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"chromium_builder_tests\"]}",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "analyze",
+      "-m",
+      "tryserver.chromium.linux",
+      "-b",
+      "linux_chromium_clobber_rel_ng",
+      "-v",
+      "//out/Release",
+      "{\"files\": [\"foo.cc\"], \"targets\": []}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
-    },
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -207,12 +226,8 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"net_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromium_builder_tests\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"original_exes\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromium_builder_tests\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"original_compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"original_exes\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"net_unittests\"@@@",
@@ -235,6 +250,25 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "tryserver.chromium.linux",
+      "-b",
+      "linux_chromium_clobber_rel_ng",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Release",
@@ -248,7 +282,6 @@
       "[BUILD]/goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
-      "--ninja-ensure-up-to-date",
       "--clobber",
       "--",
       "base_unittests",

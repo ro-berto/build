@@ -288,8 +288,8 @@ BUILDERS = freeze({
         'analyze_mode': 'compile',
       },
       'linux_chromium_clobber_rel_ng': {
-        'mastername': 'chromium.fyi',
-        'buildername': 'Linux Builder (clobber)',
+        'mastername': 'chromium.linux',
+        'buildername': 'Linux GN Clobber',
         'analyze_mode': 'compile',
       },
       'linux_chromium_chromeos_dbg_ng': {
