@@ -127,6 +127,7 @@
       "--step-name=audioproc",
       "--builder-name=linux_baremetal",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "audioproc",
       "-aecm",
       "-ns",
@@ -157,6 +158,7 @@
       "--step-name=isac_fix_test",
       "--builder-name=linux_baremetal",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "isac_fix_test",
       "32000",
       "[SLAVE_BUILD]/src/resources/speech_and_misc_wb.pcm",
@@ -192,6 +194,7 @@
       "--step-name=libjingle_peerconnection_java_unittest",
       "--builder-name=linux_baremetal",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "libjingle_peerconnection_java_unittest"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -218,6 +221,7 @@
       "--step-name=voe_auto_test",
       "--builder-name=linux_baremetal",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "voe_auto_test",
       "--automated"
     ],
@@ -251,6 +255,7 @@
       "--step-name=video_capture_tests",
       "--builder-name=linux_baremetal",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "video_capture_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -274,6 +279,7 @@
       "--step-name=webrtc_perf_tests",
       "--builder-name=linux_baremetal",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "webrtc_perf_tests"
     ],
     "cwd": "[SLAVE_BUILD]",

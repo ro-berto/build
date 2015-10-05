@@ -208,7 +208,7 @@ class WebRTCApi(recipe_api.RecipeApi):
                                    targets=self.NORMAL_TESTS)
 
     with self.m.step.defer_results():
-      tests = steps.generate_tests(self, self.c.TEST_SUITE)
+      tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision)
       if tests:
         if self.m.chromium.c.TARGET_PLATFORM == 'android':
           self.m.chromium_android.common_tests_setup_steps()
@@ -269,11 +269,11 @@ class WebRTCApi(recipe_api.RecipeApi):
       }
       if self.c.use_isolate and not disable_swarming:
         self.m.isolate.runtest(test=test, revision=revision,
-                               webkit_revision=None, args=args, name=name,
+                               webkit_revision='deadbeef', args=args, name=name,
                                **runtest_kwargs)
       else:
         self.m.chromium.runtest(test=test, args=args, name=name,
-                                **runtest_kwargs)
+                                revision=revision, **runtest_kwargs)
 
   def _adb_install_apk(self, apk_name):
     """Installs an APK on an Android device.

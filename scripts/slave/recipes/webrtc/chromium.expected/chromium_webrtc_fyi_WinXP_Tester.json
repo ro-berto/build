@@ -231,6 +231,7 @@
       "--builder-name=WinXP Tester",
       "--slave-name=TestSlavename",
       "--build-number=571",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "browser_tests.exe",
       "--gtest_filter=WebRtc*:Webrtc*:TabCapture*:*MediaStream*",
       "--run-manual",
@@ -263,6 +264,7 @@
       "--builder-name=WinXP Tester",
       "--slave-name=TestSlavename",
       "--build-number=571",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "content_unittests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",

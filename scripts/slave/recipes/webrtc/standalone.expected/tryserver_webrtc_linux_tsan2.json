@@ -147,6 +147,7 @@
       "--step-name=audio_decoder_unittests",
       "--builder-name=linux_tsan2",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "audio_decoder_unittests"
     ],
@@ -171,6 +172,7 @@
       "--step-name=common_audio_unittests",
       "--builder-name=linux_tsan2",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "common_audio_unittests"
     ],
@@ -195,6 +197,7 @@
       "--step-name=common_video_unittests",
       "--builder-name=linux_tsan2",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "common_video_unittests"
     ],
@@ -219,6 +222,7 @@
       "--step-name=libjingle_media_unittest",
       "--builder-name=linux_tsan2",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "libjingle_media_unittest"
     ],
@@ -243,6 +247,7 @@
       "--step-name=libjingle_p2p_unittest",
       "--builder-name=linux_tsan2",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "libjingle_p2p_unittest"
     ],
@@ -267,6 +272,7 @@
       "--step-name=libjingle_peerconnection_unittest",
       "--builder-name=linux_tsan2",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "libjingle_peerconnection_unittest"
     ],
@@ -291,6 +297,7 @@
       "--step-name=modules_tests",
       "--builder-name=linux_tsan2",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "modules_tests"
     ],
@@ -315,6 +322,7 @@
       "--step-name=modules_unittests",
       "--builder-name=linux_tsan2",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "modules_unittests"
     ],
@@ -339,6 +347,7 @@
       "--step-name=rtc_unittests",
       "--builder-name=linux_tsan2",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "rtc_unittests"
     ],
@@ -363,6 +372,7 @@
       "--step-name=system_wrappers_unittests",
       "--builder-name=linux_tsan2",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "system_wrappers_unittests"
     ],
@@ -387,6 +397,7 @@
       "--step-name=test_support_unittests",
       "--builder-name=linux_tsan2",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "test_support_unittests"
     ],
@@ -411,6 +422,7 @@
       "--step-name=tools_unittests",
       "--builder-name=linux_tsan2",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "tools_unittests"
     ],
@@ -435,6 +447,7 @@
       "--step-name=video_engine_core_unittests",
       "--builder-name=linux_tsan2",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "video_engine_core_unittests"
     ],
@@ -459,6 +472,7 @@
       "--step-name=video_engine_tests",
       "--builder-name=linux_tsan2",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "video_engine_tests"
     ],
@@ -483,6 +497,7 @@
       "--step-name=voice_engine_unittests",
       "--builder-name=linux_tsan2",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "voice_engine_unittests"
     ],

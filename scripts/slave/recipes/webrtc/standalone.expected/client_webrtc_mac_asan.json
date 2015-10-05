@@ -142,6 +142,7 @@
       "--builder-name=Mac Asan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
       "audio_decoder_unittests"
     ],
@@ -169,6 +170,7 @@
       "--builder-name=Mac Asan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
       "common_audio_unittests"
     ],
@@ -196,6 +198,7 @@
       "--builder-name=Mac Asan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
       "common_video_unittests"
     ],
@@ -223,6 +226,7 @@
       "--builder-name=Mac Asan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
       "libjingle_media_unittest"
     ],
@@ -250,6 +254,7 @@
       "--builder-name=Mac Asan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
       "libjingle_p2p_unittest"
     ],
@@ -277,6 +282,7 @@
       "--builder-name=Mac Asan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
       "libjingle_peerconnection_unittest"
     ],
@@ -304,6 +310,7 @@
       "--builder-name=Mac Asan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
       "modules_tests"
     ],
@@ -331,6 +338,7 @@
       "--builder-name=Mac Asan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
       "modules_unittests"
     ],
@@ -358,6 +366,7 @@
       "--builder-name=Mac Asan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
       "rtc_unittests"
     ],
@@ -385,6 +394,7 @@
       "--builder-name=Mac Asan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
       "system_wrappers_unittests"
     ],
@@ -412,6 +422,7 @@
       "--builder-name=Mac Asan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
       "test_support_unittests"
     ],
@@ -439,6 +450,7 @@
       "--builder-name=Mac Asan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
       "tools_unittests"
     ],
@@ -466,6 +478,7 @@
       "--builder-name=Mac Asan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
       "video_engine_core_unittests"
     ],
@@ -493,6 +506,7 @@
       "--builder-name=Mac Asan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
       "video_engine_tests"
     ],
@@ -520,6 +534,7 @@
       "--builder-name=Mac Asan",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-asan",
       "voice_engine_unittests"
     ],

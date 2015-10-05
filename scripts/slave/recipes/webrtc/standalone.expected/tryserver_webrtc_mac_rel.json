@@ -146,6 +146,7 @@
       "--step-name=audio_decoder_unittests",
       "--builder-name=mac_rel",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "audio_decoder_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -168,6 +169,7 @@
       "--step-name=common_audio_unittests",
       "--builder-name=mac_rel",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "common_audio_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -190,6 +192,7 @@
       "--step-name=common_video_unittests",
       "--builder-name=mac_rel",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "common_video_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -212,6 +215,7 @@
       "--step-name=libjingle_media_unittest",
       "--builder-name=mac_rel",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "libjingle_media_unittest"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -234,6 +238,7 @@
       "--step-name=libjingle_p2p_unittest",
       "--builder-name=mac_rel",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "libjingle_p2p_unittest"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -256,6 +261,7 @@
       "--step-name=libjingle_peerconnection_unittest",
       "--builder-name=mac_rel",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "libjingle_peerconnection_unittest"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -278,6 +284,7 @@
       "--step-name=modules_tests",
       "--builder-name=mac_rel",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "modules_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -300,6 +307,7 @@
       "--step-name=modules_unittests",
       "--builder-name=mac_rel",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "modules_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -322,6 +330,7 @@
       "--step-name=rtc_unittests",
       "--builder-name=mac_rel",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "rtc_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -344,6 +353,7 @@
       "--step-name=system_wrappers_unittests",
       "--builder-name=mac_rel",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "system_wrappers_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -366,6 +376,7 @@
       "--step-name=test_support_unittests",
       "--builder-name=mac_rel",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "test_support_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -388,6 +399,7 @@
       "--step-name=tools_unittests",
       "--builder-name=mac_rel",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "tools_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -410,6 +422,7 @@
       "--step-name=video_engine_core_unittests",
       "--builder-name=mac_rel",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "video_engine_core_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -432,6 +445,7 @@
       "--step-name=video_engine_tests",
       "--builder-name=mac_rel",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "video_engine_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -454,6 +468,7 @@
       "--step-name=voice_engine_unittests",
       "--builder-name=mac_rel",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "voice_engine_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",

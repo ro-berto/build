@@ -143,6 +143,7 @@
       "--builder-name=Linux Tsan v2",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "audio_decoder_unittests"
     ],
@@ -171,6 +172,7 @@
       "--builder-name=Linux Tsan v2",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "common_audio_unittests"
     ],
@@ -199,6 +201,7 @@
       "--builder-name=Linux Tsan v2",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "common_video_unittests"
     ],
@@ -227,6 +230,7 @@
       "--builder-name=Linux Tsan v2",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "libjingle_media_unittest"
     ],
@@ -255,6 +259,7 @@
       "--builder-name=Linux Tsan v2",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "libjingle_p2p_unittest"
     ],
@@ -283,6 +288,7 @@
       "--builder-name=Linux Tsan v2",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "libjingle_peerconnection_unittest"
     ],
@@ -311,6 +317,7 @@
       "--builder-name=Linux Tsan v2",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "modules_tests"
     ],
@@ -339,6 +346,7 @@
       "--builder-name=Linux Tsan v2",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "modules_unittests"
     ],
@@ -367,6 +375,7 @@
       "--builder-name=Linux Tsan v2",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "rtc_unittests"
     ],
@@ -395,6 +404,7 @@
       "--builder-name=Linux Tsan v2",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "system_wrappers_unittests"
     ],
@@ -423,6 +433,7 @@
       "--builder-name=Linux Tsan v2",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "test_support_unittests"
     ],
@@ -451,6 +462,7 @@
       "--builder-name=Linux Tsan v2",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "tools_unittests"
     ],
@@ -479,6 +491,7 @@
       "--builder-name=Linux Tsan v2",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "video_engine_core_unittests"
     ],
@@ -507,6 +520,7 @@
       "--builder-name=Linux Tsan v2",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "video_engine_tests"
     ],
@@ -535,6 +549,7 @@
       "--builder-name=Linux Tsan v2",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--enable-tsan",
       "voice_engine_unittests"
     ],

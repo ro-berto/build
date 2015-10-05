@@ -146,6 +146,7 @@
       "--step-name=audio_device_tests",
       "--builder-name=mac_baremetal",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "audio_device_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -168,6 +169,7 @@
       "--step-name=voe_auto_test",
       "--builder-name=mac_baremetal",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "voe_auto_test",
       "--automated"
     ],
@@ -200,6 +202,7 @@
       "--step-name=video_capture_tests",
       "--builder-name=mac_baremetal",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "video_capture_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -222,6 +225,7 @@
       "--step-name=webrtc_perf_tests",
       "--builder-name=mac_baremetal",
       "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "webrtc_perf_tests"
     ],
     "cwd": "[SLAVE_BUILD]",

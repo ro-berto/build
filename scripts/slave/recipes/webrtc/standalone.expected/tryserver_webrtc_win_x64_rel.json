@@ -125,6 +125,7 @@
       "--builder-name=win_x64_rel",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release_x64\\audio_decoder_unittests",
       "--"
@@ -148,6 +149,7 @@
       "--builder-name=win_x64_rel",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release_x64\\common_audio_unittests",
       "--"
@@ -171,6 +173,7 @@
       "--builder-name=win_x64_rel",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release_x64\\common_video_unittests",
       "--"
@@ -194,6 +197,7 @@
       "--builder-name=win_x64_rel",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release_x64\\libjingle_media_unittest",
       "--"
@@ -217,6 +221,7 @@
       "--builder-name=win_x64_rel",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release_x64\\libjingle_p2p_unittest",
       "--"
@@ -240,6 +245,7 @@
       "--builder-name=win_x64_rel",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release_x64\\libjingle_peerconnection_unittest",
       "--"
@@ -263,6 +269,7 @@
       "--builder-name=win_x64_rel",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release_x64\\modules_tests",
       "--"
@@ -286,6 +293,7 @@
       "--builder-name=win_x64_rel",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release_x64\\modules_unittests",
       "--"
@@ -309,6 +317,7 @@
       "--builder-name=win_x64_rel",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release_x64\\rtc_unittests",
       "--"
@@ -332,6 +341,7 @@
       "--builder-name=win_x64_rel",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release_x64\\system_wrappers_unittests",
       "--"
@@ -355,6 +365,7 @@
       "--builder-name=win_x64_rel",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release_x64\\test_support_unittests",
       "--"
@@ -378,6 +389,7 @@
       "--builder-name=win_x64_rel",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release_x64\\tools_unittests",
       "--"
@@ -401,6 +413,7 @@
       "--builder-name=win_x64_rel",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release_x64\\video_engine_core_unittests",
       "--"
@@ -424,6 +437,7 @@
       "--builder-name=win_x64_rel",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release_x64\\video_engine_tests",
       "--"
@@ -447,6 +461,7 @@
       "--builder-name=win_x64_rel",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release_x64\\voice_engine_unittests",
       "--"

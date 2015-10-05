@@ -118,6 +118,7 @@
       "--slave-name=slavename",
       "--build-number=1337",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release\\audio_decoder_unittests",
       "--"
@@ -142,6 +143,7 @@
       "--slave-name=slavename",
       "--build-number=1337",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release\\common_audio_unittests",
       "--"
@@ -166,6 +168,7 @@
       "--slave-name=slavename",
       "--build-number=1337",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release\\common_video_unittests",
       "--"
@@ -190,6 +193,7 @@
       "--slave-name=slavename",
       "--build-number=1337",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release\\libjingle_media_unittest",
       "--"
@@ -214,6 +218,7 @@
       "--slave-name=slavename",
       "--build-number=1337",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release\\libjingle_p2p_unittest",
       "--"
@@ -238,6 +243,7 @@
       "--slave-name=slavename",
       "--build-number=1337",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release\\libjingle_peerconnection_unittest",
       "--"
@@ -262,6 +268,7 @@
       "--slave-name=slavename",
       "--build-number=1337",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release\\modules_tests",
       "--"
@@ -286,6 +293,7 @@
       "--slave-name=slavename",
       "--build-number=1337",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release\\modules_unittests",
       "--"
@@ -310,6 +318,7 @@
       "--slave-name=slavename",
       "--build-number=1337",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release\\rtc_unittests",
       "--"
@@ -334,6 +343,7 @@
       "--slave-name=slavename",
       "--build-number=1337",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release\\system_wrappers_unittests",
       "--"
@@ -358,6 +368,7 @@
       "--slave-name=slavename",
       "--build-number=1337",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release\\test_support_unittests",
       "--"
@@ -382,6 +393,7 @@
       "--slave-name=slavename",
       "--build-number=1337",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release\\tools_unittests",
       "--"
@@ -406,6 +418,7 @@
       "--slave-name=slavename",
       "--build-number=1337",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release\\video_engine_core_unittests",
       "--"
@@ -430,6 +443,7 @@
       "--slave-name=slavename",
       "--build-number=1337",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release\\video_engine_tests",
       "--"
@@ -454,6 +468,7 @@
       "--slave-name=slavename",
       "--build-number=1337",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[SLAVE_BUILD]\\src\\out\\Release\\voice_engine_unittests",
       "--"

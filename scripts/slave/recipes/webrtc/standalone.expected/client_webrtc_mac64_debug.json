@@ -142,6 +142,7 @@
       "--builder-name=Mac64 Debug",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "audio_decoder_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -168,6 +169,7 @@
       "--builder-name=Mac64 Debug",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "common_audio_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -194,6 +196,7 @@
       "--builder-name=Mac64 Debug",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "common_video_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -220,6 +223,7 @@
       "--builder-name=Mac64 Debug",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "libjingle_media_unittest"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -246,6 +250,7 @@
       "--builder-name=Mac64 Debug",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "libjingle_p2p_unittest"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -272,6 +277,7 @@
       "--builder-name=Mac64 Debug",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "libjingle_peerconnection_unittest"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -298,6 +304,7 @@
       "--builder-name=Mac64 Debug",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "modules_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -324,6 +331,7 @@
       "--builder-name=Mac64 Debug",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "modules_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -350,6 +358,7 @@
       "--builder-name=Mac64 Debug",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "rtc_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -376,6 +385,7 @@
       "--builder-name=Mac64 Debug",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "system_wrappers_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -402,6 +412,7 @@
       "--builder-name=Mac64 Debug",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "test_support_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -428,6 +439,7 @@
       "--builder-name=Mac64 Debug",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "tools_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -454,6 +466,7 @@
       "--builder-name=Mac64 Debug",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "video_engine_core_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -480,6 +493,7 @@
       "--builder-name=Mac64 Debug",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "video_engine_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -506,6 +520,7 @@
       "--builder-name=Mac64 Debug",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "voice_engine_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -532,6 +547,7 @@
       "--builder-name=Mac64 Debug",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "libjingle_peerconnection_objc_test.app/Contents/MacOS/libjingle_peerconnection_objc_test"
     ],
     "cwd": "[SLAVE_BUILD]",

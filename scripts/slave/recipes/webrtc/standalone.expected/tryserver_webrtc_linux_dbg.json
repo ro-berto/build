@@ -126,6 +126,7 @@
       "--builder-name=linux_dbg",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Debug/audio_decoder_unittests",
       "--"
@@ -150,6 +151,7 @@
       "--builder-name=linux_dbg",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Debug/common_audio_unittests",
       "--"
@@ -174,6 +176,7 @@
       "--builder-name=linux_dbg",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Debug/common_video_unittests",
       "--"
@@ -198,6 +201,7 @@
       "--builder-name=linux_dbg",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Debug/libjingle_media_unittest",
       "--"
@@ -222,6 +226,7 @@
       "--builder-name=linux_dbg",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Debug/libjingle_p2p_unittest",
       "--"
@@ -246,6 +251,7 @@
       "--builder-name=linux_dbg",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Debug/libjingle_peerconnection_unittest",
       "--"
@@ -270,6 +276,7 @@
       "--builder-name=linux_dbg",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Debug/modules_tests",
       "--"
@@ -294,6 +301,7 @@
       "--builder-name=linux_dbg",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Debug/modules_unittests",
       "--"
@@ -318,6 +326,7 @@
       "--builder-name=linux_dbg",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Debug/rtc_unittests",
       "--"
@@ -342,6 +351,7 @@
       "--builder-name=linux_dbg",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Debug/system_wrappers_unittests",
       "--"
@@ -366,6 +376,7 @@
       "--builder-name=linux_dbg",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Debug/test_support_unittests",
       "--"
@@ -390,6 +401,7 @@
       "--builder-name=linux_dbg",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Debug/tools_unittests",
       "--"
@@ -414,6 +426,7 @@
       "--builder-name=linux_dbg",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Debug/video_engine_core_unittests",
       "--"
@@ -438,6 +451,7 @@
       "--builder-name=linux_dbg",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Debug/video_engine_tests",
       "--"
@@ -462,6 +476,7 @@
       "--builder-name=linux_dbg",
       "--slave-name=slavename",
       "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
       "[SLAVE_BUILD]/src/out/Debug/voice_engine_unittests",
       "--"

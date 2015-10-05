@@ -122,6 +122,7 @@
       "--builder-name=Win32 Release [large tests]",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "audio_device_tests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -148,6 +149,7 @@
       "--builder-name=Win32 Release [large tests]",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "voe_auto_test.exe",
       "--automated"
     ],
@@ -184,6 +186,7 @@
       "--builder-name=Win32 Release [large tests]",
       "--slave-name=slavename",
       "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "video_capture_tests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
