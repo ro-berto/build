@@ -68,6 +68,9 @@ SUPPRESSIONS = {
         'Win8 Release (NVIDIA)',
         'Win7 Release (ATI)',
     ],
+    'master.chromium.linux': [
+        'Linux GN Clobber',
+    ],
     'master.chromium.mac': [
         'Mac10.9 Tests',
         'iOS_Device',
