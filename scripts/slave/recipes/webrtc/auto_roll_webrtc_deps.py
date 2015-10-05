@@ -16,6 +16,7 @@ DEPS = [
 
 def RunSteps(api):
   api.gclient.set_config('webrtc')
+  api.gclient.runhooks()
   api.bot_update.ensure_checkout(force=True)
 
   # Enforce a clean state.
