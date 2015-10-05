@@ -524,7 +524,9 @@
       "-s",
       "webrtc_perf_tests",
       "--verbose",
-      "--release"
+      "--release",
+      "--isolate-file-path",
+      "[SLAVE_BUILD]/src/webrtc/webrtc_perf_tests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webrtc_perf_tests"

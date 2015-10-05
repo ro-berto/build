@@ -73,9 +73,8 @@ def generate_tests(api, test_suite):
       tests.append(AndroidTest(test, isolate_path=isolate_file_path))
     for test, isolate_file_path in sorted(
         api.ANDROID_APK_PERF_TESTS.iteritems()):
-      # TODO(kjellander): Pass isolate_file_path when crbug.com/533301 is
-      # resolved.
-      tests.append(AndroidPerfTest(test, perf_id=api.c.PERF_ID))
+      tests.append(AndroidPerfTest(test, isolate_path=isolate_file_path,
+                                   perf_id=api.c.PERF_ID))
     for test, apk_under_test in api.ANDROID_INSTRUMENTATION_TESTS.items():
       tests.append(AndroidInstrumentationTest(test, apk_under_test))
 
@@ -131,7 +130,7 @@ class AndroidTest(object):
     # src/build/android/pylib/base/base_setup.py.
     isolate_path = api.m.path['checkout'].join(self.isolate_path)
     api.m.chromium_android.run_test_suite(self.name,
-                                           isolate_file_path=isolate_path)
+                                          isolate_file_path=isolate_path)
 
 
 class AndroidInstrumentationTest(object):
@@ -155,16 +154,23 @@ class AndroidPerfTest(object):
     from the gtest binaries since the way of running perf tests with telemetry
     is entirely different.
     """
-  def __init__(self, name, perf_id=None):
+  def __init__(self, name, isolate_path, perf_id=None):
     self.name = name
+    self.isolate_path = isolate_path
     self.perf_id = perf_id
 
   def run(self, api, suffix):
+    # Use absolute path here to avoid the Chromium hardcoded fallback in
+    # src/build/android/pylib/base/base_setup.py.
+    isolate_path = api.m.path['checkout'].join(self.isolate_path)
+
     if not self.perf_id or api.m.chromium.c.BUILD_CONFIG == 'Debug':
       # Run as a normal test for trybots and Debug, without perf data scraping.
-      api.m.chromium_android.run_test_suite(self.name)
+      api.m.chromium_android.run_test_suite(self.name,
+                                            isolate_file_path=isolate_path)
     else:
-      args = ['gtest', '-s', self.name, '--verbose', '--release']
+      args = ['gtest', '-s', self.name, '--verbose', '--release',
+              '--isolate-file-path', isolate_path]
       api.add_test(name=self.name, test=api.m.chromium_android.c.test_runner,
                    args=args,
                    perf_test=True,
