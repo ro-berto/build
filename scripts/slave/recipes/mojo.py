@@ -66,6 +66,13 @@ def _BuildSteps(api, buildername, is_debug, is_official):
              env=env)
 
 def _DeviceCheckStep(api):
+  clobber = api.properties.get('clobber', False)
+  if clobber:
+    api.python(
+        'provision_device',
+        api.path['checkout'].join('build', 'android', 'provision_devices.py'),
+        infra_step=True)
+
   args = ['--json-output', api.json.output(), '--restart-usb']
   try:
     result = api.python(
@@ -235,6 +242,11 @@ def GenTests(api):
     yield test
   yield(api.test('mojo_linux_try') +
       api.properties.tryserver(buildername="Mojo Linux Try"))
+  yield(api.test('mojo_android_builder_tests_dbg_clobber') +
+      api.properties.tryserver(buildername="Mojo Android Builder Tests (dbg)",
+                               clobber=True) +
+      api.step_data("provision_device", api.json.output([])) +
+      api.step_data("device_status_check", retcode=1))
   yield(api.test('mojo_android_builder_tests_dbg_fail_device_check') +
       api.properties.tryserver(buildername="Mojo Android Builder Tests (dbg)") +
       api.step_data("device_status_check", retcode=1))
