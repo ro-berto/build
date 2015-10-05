@@ -100,11 +100,52 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[webrtc]/resources/cleanup_files.py",
-      "[SLAVE_BUILD]/src/out"
+      "[DEPOT_TOOLS]/gclient.py",
+      "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "clean test output files"
+    "env": {
+      "GYP_DEFINES": "blink_logging_always_on=1 component=static_library dcheck_always_on=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.webrtc.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "read test spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.webrtc.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
+      "--output",
+      "/path/to/tmp/json",
+      "--",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "--properties",
+      "{\"buildername\": \"Linux Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "get compile targets for scripts",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -114,19 +155,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gclient.py",
-      "runhooks"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_DEFINES": "blink_logging_always_on=1 component=static_library dcheck_always_on=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
-    },
-    "name": "gclient runhooks"
   },
   {
     "cmd": [
@@ -158,7 +186,7 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chromium-webrtc/Linux Builder",
+      "gs://chromium-webrtc/chromium.webrtc/Linux Builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
@@ -175,16 +203,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Linux Tester",
-        "properties": {
-          "parent_got_libjingle_revision": "8e938c8836c7ed23d7fbcddf1dcc2abcb13667d7",
-          "parent_got_libjingle_revision_cp": "refs/heads/master@{#134440}",
-          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-          "parent_got_revision_cp": "refs/heads/master@{#170242}",
-          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
-          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
-          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
-        }
+        "builder_name": "Linux Tester"
       }
     ],
     "~followup_annotations": [

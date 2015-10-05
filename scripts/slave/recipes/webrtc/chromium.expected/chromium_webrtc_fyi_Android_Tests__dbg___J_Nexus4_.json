@@ -104,11 +104,63 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[webrtc]/resources/cleanup_files.py",
-      "[SLAVE_BUILD]/src/out"
+      "[DEPOT_TOOLS]/gclient.py",
+      "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "clean test output files"
+    "env": {
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.webrtc.fyi.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "read test spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.webrtc.fyi.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
+      "--output",
+      "/path/to/tmp/json",
+      "--",
+      "--build-config-fs",
+      "Debug",
+      "--paths",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "--properties",
+      "{\"buildername\": \"Android Tests (dbg) (J Nexus4)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"perf-id\": \"chromium-webrtc-trunk-tot-dbg-android-nexus4-j\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "get compile targets for scripts",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/cleanup_temp.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "cleanup_temp"
   },
   {
     "cmd": [
@@ -139,19 +191,14 @@
     ]
   },
   {
+    "allow_subannotations": false,
     "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gclient.py",
-      "runhooks"
+      "[SLAVE_BUILD]/src/build/tree_truth.sh",
+      "[SLAVE_BUILD]/src",
+      "src"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "gclient runhooks"
+    "name": "tree truth steps"
   },
   {
     "cmd": [
@@ -180,9 +227,9 @@
       "--target",
       "Debug",
       "--build-url",
-      "gs://chromium-webrtc/android_chromium_trunk_dbg",
+      "gs://chromium-webrtc/chromium.webrtc.fyi/Android Builder (dbg)/full-build-linux.zip",
       "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "c321321",
       "--master-name",
       "chromium.webrtc.fyi",
       "--build-number",
@@ -190,6 +237,46 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "extract build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[adb]/resources/list_devices.py",
+      "['[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "List adb devices",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C009\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport subprocess\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  print 'Attempting to root device %s ...' % (device)\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n  print 'Finished rooting device %s' % (device)\n",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "014E1F310401C009"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Root devices",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import subprocess@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@for device in sys.argv[2:]:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  print 'Attempting to root device %s ...' % (device)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  subprocess.check_call([adb_path, '-s', device, 'root'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@  print 'Finished rooting device %s' % (device)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "cmd": [
@@ -327,10 +414,14 @@
       "gtest",
       "-s",
       "content_browsertests",
+      "--gtest_filter=WebRtc*",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--gtest_filter=WebRtc*"
+      "--isolate_file_path=[SLAVE_BUILD]/src/content/content_browsertests.isolate",
+      "--flakiness-dashboard-server=test-results.appspot.com",
+      "--json-results-file",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
