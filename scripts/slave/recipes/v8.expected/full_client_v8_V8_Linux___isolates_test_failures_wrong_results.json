@@ -123,14 +123,16 @@
       "out",
       "--buildbot",
       "--timeout=200",
-      "unittests",
+      "default",
       "--isolates",
+      "--flaky-tests",
+      "skip",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Unittests"
+    "name": "Check"
   },
   {
     "name": "$final_result",

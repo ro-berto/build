@@ -125,11 +125,6 @@
     ]
   },
   {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Unittests - skipped"
-  },
-  {
     "cmd": [
       "python",
       "-u",
