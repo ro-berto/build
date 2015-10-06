@@ -54,10 +54,10 @@ PINS = collections.OrderedDict((
   # keep one branch around for stability, since internal waterfall updates are
   # not atomic. Therefore, we should prune all but the FOUR newest release
   # branches.
+  ('release-R47-7520.B', 'd047e007037383c04c4453beca4f69b82ea74188'),
   ('release-R46-7390.B', '33959980025b477366d0792a4e14bfd7c0f0810c'),
   ('release-R45-7262.B', 'd06f185c5383e4ffe884ca30e55df060b96b0c59'),
   ('release-R44-7077.B', '6b12acdd58a3a506f58fb32bd0b78cbfe72506a3'),
-  ('release-R43-6946.B', '504196e05c2d8cb5448646a5f036431ec2ee5da1'),
 ))
 
 
