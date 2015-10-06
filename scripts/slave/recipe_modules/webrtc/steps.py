@@ -129,6 +129,10 @@ class WebCamTest(WebRTCTest):
 
 
 class AndroidTest(object):
+  # WebRTC tests need a longer timeout to avoid getting killed by the Chromium
+  # Android test framework.
+  _SHARD_TIMEOUT = 15 * 60
+
   def __init__(self, name, isolate_path):
     self._name = name
     self._isolate_path = isolate_path
@@ -138,7 +142,8 @@ class AndroidTest(object):
     # src/build/android/pylib/base/base_setup.py.
     isolate_path = api.m.path['checkout'].join(self._isolate_path)
     api.m.chromium_android.run_test_suite(self._name,
-                                          isolate_file_path=isolate_path)
+                                          isolate_file_path=isolate_path,
+                                          shard_timeout=self._SHARD_TIMEOUT)
 
 
 class AndroidInstrumentationTest(object):
@@ -162,6 +167,8 @@ class AndroidPerfTest(object):
     from the gtest binaries since the way of running perf tests with telemetry
     is entirely different.
   """
+  # WebRTC tests need a longer timeout to avoid getting killed by the Chromium
+  # Android test framework.
   _SHARD_TIMEOUT = 30 * 60
 
   def __init__(self, name, revision, isolate_path, perf_id=None):

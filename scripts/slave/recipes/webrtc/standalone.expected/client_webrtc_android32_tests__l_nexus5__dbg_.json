@@ -278,7 +278,9 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/modules/audio_decoder_unittests.isolate"
+      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/modules/audio_decoder_unittests.isolate",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -297,7 +299,9 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/common_audio/common_audio_unittests.isolate"
+      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/common_audio/common_audio_unittests.isolate",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -316,7 +320,9 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/common_video/common_video_unittests.isolate"
+      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/common_video/common_video_unittests.isolate",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -335,7 +341,9 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/modules/modules_tests.isolate"
+      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/modules/modules_tests.isolate",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -354,7 +362,9 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/modules/modules_unittests.isolate"
+      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/modules/modules_unittests.isolate",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -373,7 +383,9 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/system_wrappers/system_wrappers_unittests.isolate"
+      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/system_wrappers/system_wrappers_unittests.isolate",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -392,7 +404,9 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/test/test_support_unittests.isolate"
+      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/test/test_support_unittests.isolate",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -411,7 +425,9 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/tools/tools_unittests.isolate"
+      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/tools/tools_unittests.isolate",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -430,7 +446,9 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/video_engine/video_engine_core_unittests.isolate"
+      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/video_engine/video_engine_core_unittests.isolate",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -449,7 +467,9 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/video_engine_tests.isolate"
+      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/video_engine_tests.isolate",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -468,7 +488,9 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/voice_engine/voice_engine_unittests.isolate"
+      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/voice_engine/voice_engine_unittests.isolate",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
