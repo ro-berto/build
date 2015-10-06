@@ -39,5 +39,6 @@ def Extend(pythonpath, cwd):
       ('oauth2client',),
       ('uritemplate',),
       ('google_api_python_client',),
+      ('site-packages',),
   )]
   return pythonpath.Append(*build_path)
