@@ -1107,8 +1107,10 @@ def apply_gerrit_ref(gerrit_repo, gerrit_ref, root):
   gerrit_repo = gerrit_repo or 'origin'
   assert gerrit_ref
   try:
+    base_rev = git('rev-parse', 'HEAD', cwd=root).strip()
     git('retry', 'fetch', gerrit_repo, gerrit_ref, cwd=root, tries=1)
-    git('reset', '--soft', 'FETCH_HEAD', cwd=root)
+    git('checkout', 'FETCH_HEAD', cwd=root)
+    git('reset', '--soft', base_rev, cwd=root)
   except SubprocessFailed as e:
     raise PatchFailed(e.message, e.code, e.output)
 
