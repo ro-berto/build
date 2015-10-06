@@ -215,10 +215,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         for test in tests:
           test.run(self, suffix='')
         if self.m.chromium.c.TARGET_PLATFORM == 'android':
-          self.m.chromium_android.logcat_dump()
-          # Disable stack tools steps until crbug.com/411685 is fixed.
-          #self.m.chromium_android.stack_tool_steps()
-          self.m.chromium_android.test_report()
+          self.m.chromium_android.common_tests_final_steps()
 
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,
