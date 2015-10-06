@@ -161,7 +161,9 @@ class AndroidPerfTest(object):
     inside runtest.py so we can scrape perf data. This way we can get perf data
     from the gtest binaries since the way of running perf tests with telemetry
     is entirely different.
-    """
+  """
+  _SHARD_TIMEOUT = 30 * 60
+
   def __init__(self, name, revision, isolate_path, perf_id=None):
     self._name = name
     self._revision = revision
@@ -175,11 +177,13 @@ class AndroidPerfTest(object):
 
     if not self._perf_id or api.m.chromium.c.BUILD_CONFIG == 'Debug':
       # Run as a normal test for trybots and Debug, without perf data scraping.
-      api.m.chromium_android.run_test_suite(self._name,
-                                            isolate_file_path=isolate_path)
+      api.m.chromium_android.run_test_suite(
+          self._name, isolate_file_path=isolate_path,
+          shard_timeout=self._SHARD_TIMEOUT)
     else:
       args = ['gtest', '-s', self._name, '--verbose', '--release',
-              '--isolate-file-path', isolate_path]
+              '--isolate-file-path', isolate_path,
+              '-t', str(self._SHARD_TIMEOUT)]
       api.add_test(name=self._name,
                    test=api.m.chromium_android.c.test_runner,
                    args=args,

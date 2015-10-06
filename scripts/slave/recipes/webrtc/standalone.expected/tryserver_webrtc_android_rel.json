@@ -492,7 +492,9 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/webrtc_perf_tests.isolate"
+      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/webrtc_perf_tests.isolate",
+      "-t",
+      "1800"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

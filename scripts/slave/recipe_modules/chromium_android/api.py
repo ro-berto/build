@@ -727,8 +727,8 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def run_test_suite(self, suite, verbose=True, isolate_file_path=None,
                      gtest_filter=None, tool=None, flakiness_dashboard=None,
-                     name=None, json_results_file=None, args=None,
-                     **kwargs):
+                     name=None, json_results_file=None, shard_timeout=None,
+                     args=None, **kwargs):
     args = args or []
     args.extend(['--blacklist-file', self.blacklist_file])
     if verbose:
@@ -746,6 +746,8 @@ class AndroidApi(recipe_api.RecipeApi):
           flakiness_dashboard)
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
+    if shard_timeout:
+      args.extend(['-t', str(shard_timeout)])
 
     self.test_runner(
         name or str(suite),
