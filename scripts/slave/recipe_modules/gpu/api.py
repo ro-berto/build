@@ -399,7 +399,8 @@ class GpuApi(recipe_api.RecipeApi):
     # Run extra WebGL conformance tests in Windows FYI GPU bots with
     # ANGLE OpenGL/D3D9.
     # This ensures the ANGLE OpenGL/D3D9 gets some testing
-    if self.is_fyi_waterfall and self.m.platform.is_win:
+    if ((self.is_fyi_waterfall or self.is_angle_trybot) and
+        self.m.platform.is_win):
       tests.append(self._create_telemetry_test(
           D3D9_TEST_NAME_MAPPING['webgl_conformance'], chrome_revision,
           webkit_revision, enable_swarming, swarming_dimensions,
