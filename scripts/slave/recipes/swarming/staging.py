@@ -87,8 +87,12 @@ def RunSteps(api):
         'base_unittests_apk_run',
         'breakpad_unittests_apk_run',
         'device_unittests_apk_run',
+        'events_unittests_apk_run',
         'gl_tests_apk_run',
         'gpu_unittests_apk_run',
+        'media_unittests_apk_run',
+        'sql_unittests_apk_run',
+        'sync_unit_tests_apk_run',
         'ui_android_unittests_apk_run',
     ]
 
