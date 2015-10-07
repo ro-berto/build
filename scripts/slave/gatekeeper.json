@@ -290,10 +290,6 @@
     ],
     "https://build.chromium.org/p/chromium.perf": [
       {
-        "tree_notify": [
-          "stip@chromium.org"
-        ],
-
         "sheriff_classes": ["sheriff_perf"],
 
         "forgive_all": "true",
@@ -311,10 +307,6 @@
     ],
     "https://build.chromium.org/p/chromium.webkit": [
       {
-        "tree_notify": [
-          "stip@chromium.org"
-        ],
-
         "sheriff_classes": ["sheriff_webkit"],
 
         "forgive_all": "true",
@@ -411,7 +403,6 @@
     "https://build.chromium.org/p/client.libvpx": [
       {
         "tree_notify": [
-          "stip@chromium.org",
           "vpx-eng@google.com"
         ],
 
