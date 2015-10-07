@@ -114,12 +114,66 @@ class BaseTest(object):
 
 
 class V8Test(BaseTest):
-  def run(self, test_config=None, **kwargs):
-    return self.v8.runtest(
-        test_config or TEST_CONFIGS[self.name],
-        failure_factory=Failure.factory_func(self.name),
-        **kwargs
+  def run(self, test=None, **kwargs):
+    test = test or TEST_CONFIGS[self.name]
+    failure_factory=Failure.factory_func(self.name)
+
+    # Skip test configuration if filters are used and no filter matches.
+    applied_test_filter = self.v8._applied_test_filter(test)
+    if self.v8.test_filter and not applied_test_filter:
+      self.api.step(test['name'] + ' - skipped', cmd=None)
+      # TODO(machenbach): Return also the number of tests that ran and throw an
+      # error if the overall number of tests from all steps was zero.
+      return TestResults.empty()
+
+    def step_test_data():
+      return self.v8.test_api.output_json(
+          self.v8._test_data.get('test_failures', False),
+          self.v8._test_data.get('wrong_results', False),
+          self.v8._test_data.get('flakes', False))
+
+    full_args, env = self.v8._setup_test_runner(test, applied_test_filter)
+    step_result = self.api.python(
+      test['name'],
+      self.api.path['checkout'].join('tools', 'run-tests.py'),
+      full_args,
+      cwd=self.api.path['checkout'],
+      env=env,
+      # The outcome is controlled by the json test result of the step.
+      ok_ret='any',
+      step_test_data=step_test_data,
+      **kwargs
     )
+
+    # Log used test filters.
+    if applied_test_filter:
+      step_result.presentation.logs['test filter'] = applied_test_filter
+
+    # The output is expected to be a list of architecture dicts that
+    # each contain a results list. On buildbot, there is only one
+    # architecture.
+    assert len(step_result.json.output) == 1
+    self.v8._update_durations(
+        step_result.json.output[0], step_result.presentation)
+    failure_log, failures, flake_log, flakes = (
+        self.v8._get_failure_logs(step_result.json.output[0], failure_factory))
+    self.v8._update_failure_presentation(
+        failure_log, failures, step_result.presentation)
+
+    if failure_log and failures:
+      # Mark the test step as failure only if there were real failures (i.e.
+      # non-flakes) present.
+      step_result.presentation.status = self.api.step.FAILURE
+
+    if flake_log and flakes:
+      # Emit a separate step to show flakes from the previous step
+      # to not close the tree.
+      step_result = self.api.step(test['name'] + ' (flakes)', cmd=None)
+      step_result.presentation.status = self.api.step.WARNING
+      self.v8._update_failure_presentation(
+            flake_log, flakes, step_result.presentation)
+
+    return TestResults(failures, flakes, [])
 
   def rerun(self, failure_dict, **kwargs):
     # Make sure bisection is only activated on builders that give enough
@@ -140,7 +194,7 @@ class V8Test(BaseTest):
       'tests': [failure_dict['name']],
       'test_args' : orig_args + new_args,
     }
-    return self.run(test_config=rerun_config, **kwargs)
+    return self.run(test=rerun_config, **kwargs)
 
   def gclient_apply_config(self):
     for c in TEST_CONFIGS[self.name].get('gclient_apply_config', []):
@@ -942,66 +996,6 @@ class V8Api(recipe_api.RecipeApi):
       self.m.json.output(add_json_log=False),
     ]
     return full_args, env
-
-  def runtest(self, test, failure_factory=None, suffix='', **kwargs):
-    name = test['name'] + suffix
-
-    # Skip test configuration if filters are used and no filter matches.
-    applied_test_filter = self._applied_test_filter(test)
-    if self.test_filter and not applied_test_filter:
-      self.m.step(name + ' - skipped', cmd=None)
-      # TODO(machenbach): Return also the number of tests that ran and throw an
-      # error if the overall number of tests from all steps was zero.
-      return TestResults.empty()
-
-    def step_test_data():
-      return self.test_api.output_json(
-          self._test_data.get('test_failures', False),
-          self._test_data.get('wrong_results', False),
-          self._test_data.get('flakes', False))
-
-    full_args, env = self._setup_test_runner(test, applied_test_filter)
-    step_result = self.m.python(
-      name,
-      self.m.path['checkout'].join('tools', 'run-tests.py'),
-      full_args,
-      cwd=self.m.path['checkout'],
-      env=env,
-      # The outcome is controlled by the json test result of the step.
-      ok_ret='any',
-      step_test_data=step_test_data,
-      **kwargs
-    )
-
-    # Log used test filters.
-    if applied_test_filter:
-      step_result.presentation.logs['test filter'] = applied_test_filter
-
-    # The output is expected to be a list of architecture dicts that
-    # each contain a results list. On buildbot, there is only one
-    # architecture.
-    assert len(step_result.json.output) == 1
-    self._update_durations(
-        step_result.json.output[0], step_result.presentation)
-    failure_log, failures, flake_log, flakes = (
-        self._get_failure_logs(step_result.json.output[0], failure_factory))
-    self._update_failure_presentation(
-        failure_log, failures, step_result.presentation)
-
-    if failure_log and failures:
-      # Mark the test step as failure only if there were real failures (i.e.
-      # non-flakes) present.
-      step_result.presentation.status = self.m.step.FAILURE
-
-    if flake_log and flakes:
-      # Emit a separate step to show flakes from the previous step
-      # to not close the tree.
-      step_result = self.m.step(name + ' (flakes)', cmd=None)
-      step_result.presentation.status = self.m.step.WARNING
-      self._update_failure_presentation(
-            flake_log, flakes, step_result.presentation)
-
-    return TestResults(failures, flakes, [])
 
   def verify_cq_integrity(self):
     # TODO(machenbach): Remove this as soon as crbug.com/487822 is resolved.
