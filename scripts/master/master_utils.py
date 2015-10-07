@@ -38,7 +38,7 @@ CQ_SERVICE_ACCOUNT = (
 # Sanity timeout for CQ builders - they are expected to finish under one hour
 # anyway. The timeout is deliberately larger than that so that we only
 # kill really crazy long builds that also gum up resources.
-CQ_MAX_TIME = 3*60*60
+CQ_MAX_TIME = 2*60*60
 
 
 def HackMaxTime(maxTime=8*60*60):
