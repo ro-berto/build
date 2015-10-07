@@ -15,6 +15,7 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
+                                'Linux32 ARM',
                                 'Linux64 Release (swarming)',
                                 'Linux Tsan v2 (parallel)',
       ]),
@@ -28,6 +29,10 @@ def Update(c):
   ])
 
   specs = [
+    {
+      'name': 'Linux32 ARM',
+      'slavebuilddir': 'linux_arm',
+    },
     {
       'name': 'Linux Tsan v2 (parallel)',
       'slavebuilddir': 'linux_tsan2',

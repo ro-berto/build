@@ -1074,6 +1074,16 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
       },
+      'Linux32 ARM': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
       'Android Builder (dbg)': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
