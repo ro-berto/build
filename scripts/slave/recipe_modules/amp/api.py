@@ -190,7 +190,7 @@ class AmpApi(recipe_api.RecipeApi):
 
   def instrumentation_test_arguments(
       self, apk_under_test, test_apk, isolate_file_path=None,
-      annotation=None):
+      additional_apks=None, annotation=None):
     """Generate command-line arguments for running instrumentation tests.
 
     Args:
@@ -212,6 +212,9 @@ class AmpApi(recipe_api.RecipeApi):
       instrumentation_test_args += ['--isolate-file-path', isolate_file_path]
     if annotation:
       instrumentation_test_args += ['--annotation', annotation]
+    if additional_apks:
+      for apk in additional_apks:
+        instrumentation_test_args += ['--additional-apk', apk]
     return instrumentation_test_args
 
   def uirobot_arguments(self, app_under_test=None, minutes=5):

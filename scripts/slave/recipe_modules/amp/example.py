@@ -113,6 +113,7 @@ def RunSteps(api, buildername):
       api.amp.instrumentation_test_arguments(
           apk_under_test='ApkUnderTest.apk',
           test_apk='TestApk.apk',
+          additional_apks=['ExtraApk1.apk', 'ExtraApk2.apk'],
           isolate_file_path='isolate_file.isolate',
           annotation='SmallTest'),
       api.amp.amp_arguments(
