@@ -119,7 +119,27 @@
       "{\n  \"bad_revision\": \"src@a6298e4afedbf2cd461755ea6f45b0ad64222222\", \n  \"bug_id\": \"425582\", \n  \"builder_host\": \"master4.golo.chromium.org\", \n  \"builder_port\": \"8341\", \n  \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \n  \"dummy_builds\": true, \n  \"dummy_initial_confidence\": \"95\", \n  \"good_revision\": \"XXX\", \n  \"gs_bucket\": \"chrome-perf\", \n  \"max_time_minutes\": \"5\", \n  \"metric\": \"warm_times/page_load_time\", \n  \"poll_sleep\": 0, \n  \"repeat_count\": \"2\", \n  \"test_type\": \"perf\", \n  \"truncate_percent\": \"25\"\n}"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "config"
+    "name": "config",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@Bisect job configuration@{@@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"bad_revision\": \"src@a6298e4afedbf2cd461755ea6f45b0ad64222222\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"bug_id\": \"425582\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"builder_host\": \"master4.golo.chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"builder_port\": \"8341\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"dummy_builds\": true, @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"dummy_initial_confidence\": \"95\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"good_revision\": \"XXX\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"gs_bucket\": \"chrome-perf\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"max_time_minutes\": \"5\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"metric\": \"warm_times/page_load_time\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"poll_sleep\": 0, @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"repeat_count\": \"2\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"test_type\": \"perf\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"truncate_percent\": \"25\"@@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@}@@@",
+      "@@@STEP_LOG_END@Bisect job configuration@@@"
+    ]
   },
   {
     "cmd": [],

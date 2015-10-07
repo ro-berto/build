@@ -91,8 +91,10 @@ class Bisector(object):
         bisect_config[k] = fix_windows_backslashes(v)
     # We sort the keys to prevent problems with orders changing when
     # recipe_simulation_test compares against expectation files.
-    api.m.step('config', ['echo', json.dumps(bisect_config, indent=2,
-                                             sort_keys=True)])
+    config_string = json.dumps(bisect_config, indent=2, sort_keys=True)
+    result = api.m.step('config', ['echo', config_string])
+    config_lines = config_string.splitlines()
+    result.presentation.logs['Bisect job configuration'] = config_lines
 
   @property
   def api(self):
