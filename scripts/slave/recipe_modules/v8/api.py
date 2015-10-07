@@ -863,15 +863,7 @@ class V8Api(recipe_api.RecipeApi):
               for t in test.get('suite_mapping', test['tests'])
               if f.startswith(t)]
 
-  def _runtest(self, name, test, failure_factory=None, **kwargs):
-    # Skip test configuration if filters are used and no filter matches.
-    applied_test_filter = self._applied_test_filter(test)
-    if self.test_filter and not applied_test_filter:
-      self.m.step(name + ' - skipped', cmd=None)
-      # TODO(machenbach): Return also the number of tests that ran and throw an
-      # error if the overall number of tests from all steps was zero.
-      return TestResults.empty()
-
+  def _setup_test_runner(self, test, applied_test_filter):
     env = {}
     full_args = [
       '--progress=verbose',
@@ -949,12 +941,26 @@ class V8Api(recipe_api.RecipeApi):
       '--json-test-results',
       self.m.json.output(add_json_log=False),
     ]
+    return full_args, env
+
+  def runtest(self, test, failure_factory=None, suffix='', **kwargs):
+    name = test['name'] + suffix
+
+    # Skip test configuration if filters are used and no filter matches.
+    applied_test_filter = self._applied_test_filter(test)
+    if self.test_filter and not applied_test_filter:
+      self.m.step(name + ' - skipped', cmd=None)
+      # TODO(machenbach): Return also the number of tests that ran and throw an
+      # error if the overall number of tests from all steps was zero.
+      return TestResults.empty()
+
     def step_test_data():
       return self.test_api.output_json(
           self._test_data.get('test_failures', False),
           self._test_data.get('wrong_results', False),
           self._test_data.get('flakes', False))
 
+    full_args, env = self._setup_test_runner(test, applied_test_filter)
     step_result = self.m.python(
       name,
       self.m.path['checkout'].join('tools', 'run-tests.py'),
@@ -996,14 +1002,6 @@ class V8Api(recipe_api.RecipeApi):
             flake_log, flakes, step_result.presentation)
 
     return TestResults(failures, flakes, [])
-
-  def runtest(self, test, failure_factory=None, suffix='', **kwargs):
-    return self._runtest(
-        test['name'] + suffix,
-        test,
-        failure_factory=failure_factory,
-        **kwargs
-    )
 
   def verify_cq_integrity(self):
     # TODO(machenbach): Remove this as soon as crbug.com/487822 is resolved.
