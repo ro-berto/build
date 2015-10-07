@@ -131,7 +131,6 @@
       "--buildbot",
       "--timeout=200",
       "default",
-      "--flaky-tests=skip",
       "--msan",
       "--rerun-failures-count=2",
       "--json-test-results",

@@ -125,8 +125,6 @@
       "--timeout=200",
       "default",
       "--isolates",
-      "--flaky-tests",
-      "skip",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"

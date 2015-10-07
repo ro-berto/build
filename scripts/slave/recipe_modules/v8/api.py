@@ -46,7 +46,6 @@ TEST_CONFIGS = freeze({
   'mjsunit': {
     'name': 'Mjsunit',
     'tests': ['mjsunit'],
-    'add_flaky_step': True,
     'can_use_on_swarming_builders': True,
   },
   'mozilla': {
@@ -58,7 +57,6 @@ TEST_CONFIGS = freeze({
     'name': 'OptimizeForSize',
     'tests': ['optimize_for_size'],
     'suite_mapping': ['mjsunit', 'cctest', 'webkit'],
-    'add_flaky_step': True,
     'test_args': ['--no-variants', '--extra-flags=--optimize-for-size'],
   },
   'simdjs_small': {
@@ -90,13 +88,11 @@ TEST_CONFIGS = freeze({
     'name': 'Check',
     'tests': ['default'],
     'suite_mapping': ['mjsunit', 'cctest', 'message', 'preparser'],
-    'add_flaky_step': True,
     'can_use_on_swarming_builders': True,
   },
   'webkit': {
     'name': 'Webkit',
     'tests': ['webkit'],
-    'add_flaky_step': True,
   },
 })
 
@@ -307,7 +303,6 @@ class V8Api(recipe_api.RecipeApi):
 
   def init_tryserver(self):
     self.m.chromium.apply_config('trybot_flavor')
-    self.apply_config('trybot_flavor')
 
   def checkout(self, revision=None, **kwargs):
     # Set revision for bot_update.
@@ -536,11 +531,7 @@ class V8Api(recipe_api.RecipeApi):
 
     test = self.create_test(failure.test_config)
     def test_func(revision):
-      return test.rerun(
-          failure_dict=failure.failure_dict,
-          # Don't differentiate between flaky and non-flaky tests. 
-          add_flaky_step_override=False,
-      )
+      return test.rerun(failure_dict=failure.failure_dict)
 
     def is_bad(revision):
       with self.m.step.nest('Bisect ' + revision[:8]):
@@ -872,8 +863,7 @@ class V8Api(recipe_api.RecipeApi):
               for t in test.get('suite_mapping', test['tests'])
               if f.startswith(t)]
 
-  def _runtest(self, name, test, flaky_tests=None, failure_factory=None,
-               **kwargs):
+  def _runtest(self, name, test, failure_factory=None, **kwargs):
     # Skip test configuration if filters are used and no filter matches.
     applied_test_filter = self._applied_test_filter(test)
     if self.test_filter and not applied_test_filter:
@@ -920,9 +910,6 @@ class V8Api(recipe_api.RecipeApi):
         '--shard-count=%d' % self.c.testing.SHARD_COUNT,
         '--shard-run=%d' % self.c.testing.SHARD_RUN,
       ]
-
-    if flaky_tests:
-      full_args += ['--flaky-tests', flaky_tests]
 
     llvm_symbolizer_path = self.m.path['checkout'].join(
         'third_party', 'llvm-build', 'Release+Asserts', 'bin',
@@ -1010,41 +997,13 @@ class V8Api(recipe_api.RecipeApi):
 
     return TestResults(failures, flakes, [])
 
-  def runtest(self, test, failure_factory=None, add_flaky_step_override=None,
-              suffix='', **kwargs):
-    # Get the flaky-step configuration default per test.
-    add_flaky_step = test.get('add_flaky_step', False)
-
-    # Overwrite the flaky-step configuration on a per builder basis as some
-    # types of builders (e.g. branch, try) don't have any flaky steps.
-    if self.c.testing.add_flaky_step is not None:
-      add_flaky_step = self.c.testing.add_flaky_step
-    if add_flaky_step_override is not None:
-      add_flaky_step = add_flaky_step_override
-    if add_flaky_step:
-      return (
-          self._runtest(
-              test['name'] + suffix,
-              test,
-              flaky_tests='skip',
-              failure_factory=failure_factory,
-              **kwargs
-          ) +
-          self._runtest(
-              test['name'] + ' - flaky' + suffix,
-              test,
-              flaky_tests='run',
-              failure_factory=failure_factory,
-              **kwargs
-          )
-      )
-    else:
-      return self._runtest(
-          test['name'] + suffix,
-          test,
-          failure_factory=failure_factory,
-          **kwargs
-      )
+  def runtest(self, test, failure_factory=None, suffix='', **kwargs):
+    return self._runtest(
+        test['name'] + suffix,
+        test,
+        failure_factory=failure_factory,
+        **kwargs
+    )
 
   def verify_cq_integrity(self):
     # TODO(machenbach): Remove this as soon as crbug.com/487822 is resolved.

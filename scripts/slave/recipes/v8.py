@@ -194,18 +194,6 @@ def GenTests(api):
       TestFailures(wrong_results=True, flakes=False) +
       api.expect_exception('AssertionError')
   )
-  yield (
-    api.test('full_%s_%s_flaky_test_failures' % (
-        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
-    api.properties.generic(mastername=mastername,
-                           buildername=buildername,
-                           branch='master',
-                           parent_buildername=bot_config.get(
-                               'parent_buildername')) +
-    api.platform(bot_config['testing']['platform'],
-                 v8_config_kwargs.get('TARGET_BITS', 64)) +
-    api.override_step_data('Check - flaky', api.v8.one_failure())
-  )
 
   yield (
     api.test('full_%s_%s_empty_json' % (
@@ -217,7 +205,7 @@ def GenTests(api):
                                'parent_buildername')) +
     api.platform(bot_config['testing']['platform'],
                  v8_config_kwargs.get('TARGET_BITS', 64)) +
-    api.override_step_data('Check - flaky', api.json.output([])) +
+    api.override_step_data('Check', api.json.output([])) +
     api.expect_exception('AssertionError')
   )
 

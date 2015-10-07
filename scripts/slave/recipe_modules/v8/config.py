@@ -26,7 +26,6 @@ def BaseConfig(**_kwargs):
     # Test configuration that is the equal for all tests of a builder. It
     # might be refined later in the test runner for distinct tests.
     testing = ConfigGroup(
-      add_flaky_step = Single(bool, required=False),
       test_args = List(basestring),
       may_shard = Single(bool, empty_val=True, required=False),
 
@@ -140,12 +139,6 @@ def novfp3(c):
 @config_ctx()
 def predictable(c):
   c.testing.test_args.append('--predictable')
-
-
-@config_ctx()
-def trybot_flavor(c):
-  c.testing.add_flaky_step = False
-  c.testing.test_args.append('--flaky-tests=skip')
 
 
 @config_ctx()

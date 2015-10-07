@@ -131,7 +131,6 @@
       "--buildbot",
       "--timeout=200",
       "default",
-      "--flaky-tests=skip",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -171,7 +170,6 @@
       "--timeout=200",
       "benchmarks",
       "--download-data",
-      "--flaky-tests=skip",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -211,7 +209,6 @@
       "--timeout=200",
       "simdjs/shell_test_runner",
       "--download-data",
-      "--flaky-tests=skip",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
