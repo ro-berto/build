@@ -317,28 +317,51 @@ class AndroidApi(recipe_api.RecipeApi):
           'device_status_check',
           [self.m.path['checkout'].join('build', 'android', 'buildbot',
                                 'bb_device_status_check.py')] + args,
-          step_test_data=lambda: self.m.json.test_api.output([{
-              "battery": {
-                  "status": "5",
-                  "scale": "100",
-                  "temperature": "249",
-                  "level": "100",
-                  "AC powered": "false",
-                  "health": "2",
-                  "voltage": "4286",
-                  "Wireless powered": "false",
-                  "USB powered": "true",
-                  "technology": "Li-ion",
-                  "present": "true"
-              },
-              "wifi_ip": "",
-              "imei_slice": "Unknown",
-              "build": "LRX21O",
-              "build_detail":
-                  "google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys",
-              "serial": "07a00ca4",
-              "type": "flo"
-          }]),
+          step_test_data=lambda: self.m.json.test_api.output([
+              {
+                "battery": {
+                    "status": "5",
+                    "scale": "100",
+                    "temperature": "249",
+                    "level": "100",
+                    "AC powered": "false",
+                    "health": "2",
+                    "voltage": "4286",
+                    "Wireless powered": "false",
+                    "USB powered": "true",
+                    "technology": "Li-ion",
+                    "present": "true"
+                },
+                "wifi_ip": "",
+                "imei_slice": "Unknown",
+                "build": "LRX21O",
+                "build_detail":
+                    "google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys",
+                "serial": "07a00ca4",
+                "type": "flo",
+                "adb_status": "device",
+                "blacklisted": False,
+                "usb_status": True,
+            },
+            {
+              "adb_status": "offline", 
+              "blacklisted": True, 
+              "serial": "03e0363a003c6ad4", 
+              "usb_status": False,
+            },
+            {
+              "adb_status": "unauthorized", 
+              "blacklisted": True, 
+              "serial": "03e0363a003c6ad5", 
+              "usb_status": True,
+            },
+            {
+              "adb_status": "device", 
+              "blacklisted": True, 
+              "serial": "03e0363a003c6ad6", 
+              "usb_status": True,
+            }
+          ]),
           env=self.m.chromium.get_env(),
           infra_step=True,
           **kwargs)
@@ -346,12 +369,17 @@ class AndroidApi(recipe_api.RecipeApi):
       offline_device_index = 1
       for d in result.json.output:
         try:
-          self._devices.append(d['serial'])
-          key = '%s %s %s' % (d['type'], d['build'], d['serial'])
+          if not d['usb_status']:
+            key = '%s: missing' % d['serial']
+          elif d['adb_status'] != 'device':
+            key = '%s: adb status %s' % (d['serial'], d['adb_status'])
+          elif d['blacklisted']:
+            key = '%s: blacklisted' % d['serial']
+          else:
+            key = '%s %s %s' % (d['type'], d['build'], d['serial'])
+            self._devices.append(d['serial'])
         except KeyError:
-          # We expect device_status_check to return an empty dict for
-          # offline devices.
-          key = 'offline device %d' % offline_device_index
+          key = 'unknown device %d' % offline_device_index
           offline_device_index += 1
         result.presentation.logs[key] = self.m.json.dumps(
             d, indent=2).splitlines()
