@@ -994,6 +994,20 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Debug Info",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@Debug Info@Last known good rev values: [68, 70, 72]@@@",
+      "@@@STEP_LOG_LINE@Debug Info@First known bad rev values: [14, 15, 16]@@@",
+      "@@@STEP_LOG_LINE@Debug Info@t-statistic (indicates \"difference\" between samples): 42.60281680828159@@@",
+      "@@@STEP_LOG_LINE@Debug Info@degrees of freedom (indicates sample size): 2.9411764705882346@@@",
+      "@@@STEP_LOG_LINE@Debug Info@p-value (indicates likelihood of null hypothesis): 0.001@@@",
+      "@@@STEP_LOG_LINE@Debug Info@\"Confidence\" (100 * (1 - p)): 99.9@@@",
+      "@@@STEP_LOG_END@Debug Info@@@"
+    ]
+  },
+  {
     "cmd": [
       "git",
       "log",

@@ -42,6 +42,7 @@ def RunSteps(api):
       bisector.bisect_over = True
   else:  # pragma: no cover
     bisector.bisect_over = True
+  bisector.print_result_debug_info()
   bisector.print_result()
 
 

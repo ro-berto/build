@@ -162,7 +162,7 @@ class Bisector(object):
       git_object_b (str): Another tree-ish git object identifier.
       src_alias (str): Label to replace the tree-ish identifier on
         the resulting diff patch. (git_object_a)
-      dst_alias (str): Same as above for (git_object_b) 
+      dst_alias (str): Same as above for (git_object_b)
       cwd (recipe_config_types.Path): Path to the checkout whose repo contains
         the objects to be compared.
       deps_rev (str): Deps revision to identify the patch generating step.
@@ -401,11 +401,41 @@ class Bisector(object):
              self.required_initial_confidence, actual_confidence))
 
   def _compute_results_confidence(self):
+    # If this changes, remember to also update `_results_debug_message` below.
     self.results_confidence = self.api.m.math_utils.confidence_score(
         self.lkgr.values, self.fkbr.values)
 
+  def _results_debug_message(self):
+    if not (self.lkgr and self.fkbr and
+            self.lkgr.values and self.fkbr.values):
+      lines = [
+          'bisector.lkgr: %r' % self.lkgr,
+          'bisector.fkbr: %r' % self.fkbr,
+      ]
+      return '\n'.join(lines)
+
+    t, df, p = self.api.m.math_utils.welchs_t_test(
+        self.lkgr.values, self.fkbr.values)
+    lines = [
+        'Last known good rev values: %r' % self.lkgr.values,
+        'First known bad rev values: %r' % self.fkbr.values,
+        't-statistic (indicates "difference" between samples): %r' % t,
+        'degrees of freedom (indicates sample size): %r' % df,
+        'p-value (indicates likelihood of null hypothesis): %r' % p,
+        '"Confidence" (100 * (1 - p)): %r' % (100 * (1 - p))
+    ]
+    return '\n'.join(lines)
+
   def partial_results(self):
     return bisect_results.BisectResults(self, partial=True).as_string()
+
+  def print_result_debug_info(self):
+    """Prints extra debug info at the end of the bisect process."""
+    lines = self._results_debug_message().splitlines()
+    # If we emit a null step then add a log to it, the log should be kept
+    # longer than 7 days (which is often needed to debug some issues).
+    self.api.m.step('Debug Info', [])
+    self.api.m.step.active_result.presentation.logs['Debug Info'] = lines
 
   def print_result(self):
     results = bisect_results.BisectResults(self).as_string()

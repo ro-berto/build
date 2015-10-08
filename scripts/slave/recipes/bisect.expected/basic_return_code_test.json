@@ -994,6 +994,16 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Debug Info",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: PerfRevisionState(values=[], mean_value=0, std_err=0)@@@",
+      "@@@STEP_LOG_LINE@Debug Info@bisector.fkbr: PerfRevisionState(values=[], mean_value=1, std_err=0)@@@",
+      "@@@STEP_LOG_END@Debug Info@@@"
+    ]
+  },
+  {
     "cmd": [
       "git",
       "log",

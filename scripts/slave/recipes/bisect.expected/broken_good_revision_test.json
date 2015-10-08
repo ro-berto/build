@@ -602,6 +602,16 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Debug Info",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: None@@@",
+      "@@@STEP_LOG_LINE@Debug Info@bisector.fkbr: None@@@",
+      "@@@STEP_LOG_END@Debug Info@@@"
+    ]
+  },
+  {
     "cmd": [
       "cat"
     ],

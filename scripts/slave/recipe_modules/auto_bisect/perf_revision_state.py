@@ -187,3 +187,7 @@ class PerfRevisionState(revision_state.RevisionState):
     if distance_to_good < distance_to_bad:
       return True
     return False
+
+  def __repr__(self):
+    return ('PerfRevisionState(values=%r, mean_value=%r, std_err=%r)' %
+            (self.values, self.mean_value, self.std_err))
