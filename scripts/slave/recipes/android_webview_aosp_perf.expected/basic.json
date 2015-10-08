@@ -141,7 +141,7 @@
       "[BUILD]/goma",
       "--",
       "system_webview_apk",
-      "android_webview_shell_apk",
+      "system_webview_shell_apk",
       "android_tools"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -313,7 +313,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "AndroidWebViewShell.apk",
+      "SystemWebViewShell.apk",
       "-v",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
@@ -323,7 +323,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "install AndroidWebViewShell.apk"
+    "name": "install SystemWebViewShell.apk"
   },
   {
     "cmd": [

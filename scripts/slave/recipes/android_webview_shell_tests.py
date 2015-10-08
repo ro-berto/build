@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 """
-Recipe for running AndroidWebViewShell instrumentation layout tests using
+Recipe for running SystemWebViewShell instrumentation layout tests using
 system WebView.
 """
 
@@ -26,17 +26,19 @@ REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
 WEBVIEW_APK = 'SystemWebView.apk'
 
+WEBVIEW_SHELL_APK = 'SystemWebViewShell.apk'
+
 INSTRUMENTATION_TESTS = freeze([
   {
-    'test': 'AndroidWebViewShell',
-    'gyp_target': 'android_webview_shell_apk',
+    'test': 'SystemWebViewShellLayoutTest',
+    'gyp_target': 'system_webview_shell_layout_test_apk',
     'kwargs': {
       'install_apk': {
-        'package': 'org.chromium.webview_shell',
-        'apk': 'AndroidWebViewShell.apk'
+        'package': 'org.chromium.webview_shell.test',
+        'apk': 'SystemWebViewShellLayoutTest.apk'
       },
       'isolate_file_path':
-        'android_webview/android_webview_shell_test_apk.isolate',
+        'android_webview/system_webview_shell_test_apk.isolate',
     },
   },
 ])
@@ -58,9 +60,11 @@ def RunSteps(api):
   # Gyp the chromium checkout.
   api.chromium.runhooks()
 
-  # Build the WebView apk, WebView shell and Android testing tools.
+  # Build the WebView apk, WebView shell, WebView shell layout test apk
+  # and Android testing tools.
   api.chromium.compile(targets=['system_webview_apk',
-                                'android_webview_shell_apk',
+                                'system_webview_shell_apk',
+                                'system_webview_shell_layout_test_apk',
                                 'android_tools'])
 
   api.chromium_android.spawn_logcat_monitor()
@@ -71,6 +75,9 @@ def RunSteps(api):
 
   # Install system WebView.
   api.chromium_android.adb_install_apk(WEBVIEW_APK)
+
+  # Install system WebView shell
+  api.chromium_android.adb_install_apk(WEBVIEW_SHELL_APK)
 
   api.adb.list_devices()
 
