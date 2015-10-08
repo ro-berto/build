@@ -35,6 +35,10 @@ GL_TEST_NAME_MAPPING = freeze({
   'webgl_conformance': 'webgl_conformance_gl'
 })
 
+DONT_USE_GPU_IN_TESTS = freeze([
+  'content_unittests',
+])
+
 class GpuApi(recipe_api.RecipeApi):
   def setup(self):
     """Call this once before any of the other APIs in this module."""
@@ -320,7 +324,7 @@ class GpuApi(recipe_api.RecipeApi):
       # available in the open-source repository.
       basic_tests += SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN
 
-    # Avoid running tests not using ANGLE on the ANGLE trybots
+    # Run the ANGLE tests on the ANGLE trybots
     if self.is_angle_trybot:
       basic_tests += common.ANGLE_TRYBOTS_GPU_ISOLATES
       if self.m.chromium.is_release_build and self.m.platform.is_win:
@@ -328,9 +332,10 @@ class GpuApi(recipe_api.RecipeApi):
 
     #TODO(martiniss) convert loop
     for test in basic_tests:
+      args = [''] if test in DONT_USE_GPU_IN_TESTS else ['--use-gpu-in-tests']
       tests.append(self._create_gtest(test, chrome_revision, webkit_revision,
                                       enable_swarming, swarming_dimensions,
-                                      args=['--use-gpu-in-tests']))
+                                      args=args))
 
     # Run closed source tests with ANGLE-D3D9 and ANGLE-GL
     if self.is_fyi_waterfall and self.m.platform.is_win:

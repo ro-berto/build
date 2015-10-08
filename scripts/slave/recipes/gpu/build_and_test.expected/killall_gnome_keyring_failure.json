@@ -381,7 +381,7 @@
       "-I",
       "https://isolateserver.appspot.com",
       "--",
-      "--use-gpu-in-tests"
+      ""
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "content_unittests"
