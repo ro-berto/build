@@ -108,13 +108,14 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/dashboard/bin/run_py_tests"
+      "[SLAVE_BUILD]/catapult/dashboard/bin/run_py_tests",
+      "--no-install-hooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PYTHONPATH": "%(PYTHONPATH)s:[SLAVE_BUILD]/google_appengine"
     },
-    "name": "Dashboard Tests"
+    "name": "Dashboard Python Tests"
   },
   {
     "cmd": [
@@ -136,6 +137,16 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Tracing Dev Server Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/third_party/py_vulcanize/bin/run_py_tests",
+      "--no-install-hooks"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Py-vulcanize Tests"
   },
   {
     "cmd": [
