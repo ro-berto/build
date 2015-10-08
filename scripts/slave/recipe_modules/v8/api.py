@@ -300,8 +300,35 @@ class V8Api(recipe_api.RecipeApi):
 
     start_time_sec = self.m.time.time()
     test_results = testing.TestResults.empty()
-    for t in self.bot_config.get('tests', []):
-      test_results += self.create_test(t).run()
+    tests = [self.create_test(t) for t in self.bot_config.get('tests', [])]
+    swarming_tests = [t for t in tests if t.uses_swarming]
+    non_swarming_tests = [t for t in tests if not t.uses_swarming]
+    failed_tests = []
+
+    # Make sure swarming triggers come first.
+    # TODO(machenbach): Port this for rerun for bisection.
+    for t in swarming_tests + non_swarming_tests:
+      try:
+        t.pre_run()
+      except self.m.step.InfraFailure:  # pragma: no cover
+        raise
+      except self.m.step.StepFailure:  # pragma: no cover
+        failed_tests.append(t)
+
+    # Make sure non-swarming tests are run before swarming results are
+    # collected.
+    for t in non_swarming_tests + swarming_tests:
+      try:
+        test_results += t.run()
+      except self.m.step.InfraFailure:  # pragma: no cover
+        raise
+      except self.m.step.StepFailure:  # pragma: no cover
+        failed_tests.append(t)
+
+    if failed_tests:
+      failed_tests_names = [t.name for t in failed_tests]
+      raise self.m.step.StepFailure(
+          '%d tests failed: %r' % (len(failed_tests), failed_tests_names))
     self.test_duration_sec = self.m.time.time() - start_time_sec
     return test_results
 

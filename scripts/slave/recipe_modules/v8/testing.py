@@ -71,6 +71,14 @@ class BaseTest(object):
     self.api = api
     self.v8 = v8
 
+  @property
+  def uses_swarming(self):
+    """Returns true if the test uses swarming."""
+    return False
+
+  def pre_run(self, **kwargs):  # pragma: no cover
+    pass
+
   def run(self, **kwargs):  # pragma: no cover
     raise NotImplementedError()
 

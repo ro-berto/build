@@ -130,7 +130,7 @@
   },
   {
     "name": "$final_result",
-    "reason": "Failed leak check",
+    "reason": "1 tests failed: ['simpleleak']",
     "status_code": 1
   }
 ]
