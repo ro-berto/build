@@ -18,9 +18,6 @@ def Update(_config, active_master, c):
           'Linux Builder',
           'Linux Builder (dbg)(32)',
           'Linux Builder (dbg)',
-          'Linux GN',
-          'Linux GN Clobber',
-          'Linux GN (dbg)',
           'Cast Linux',
       ]),
   ])
@@ -31,9 +28,6 @@ def Update(_config, active_master, c):
     {'name': 'Linux Tests (dbg)(1)(32)'},
     {'name': 'Linux Builder (dbg)'},
     {'name': 'Linux Tests (dbg)(1)'},
-    {'name': 'Linux GN'},
-    {'name': 'Linux GN Clobber'},
-    {'name': 'Linux GN (dbg)'},
     {'name': 'Cast Linux'},
   ]
 

@@ -51,44 +51,6 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'Linux GN': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'linux',
-        'TARGET_BITS': 64,
-      },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
-      'enable_swarming': True,
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Linux GN Clobber': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'clobber'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'linux',
-        'TARGET_BITS': 64,
-      },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
-      'enable_swarming': True,
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'Linux Builder (dbg)(32)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
@@ -147,25 +109,6 @@ SPEC = {
       },
       'enable_swarming': True,
       'use_isolate': True,
-    },
-    'Linux GN (dbg)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_PLATFORM': 'linux',
-        'TARGET_BITS': 64,
-      },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
-      'enable_swarming': True,
-      'testing': {
-        'platform': 'linux',
-      },
     },
     'Linux Tests (dbg)(1)': {
       'chromium_config': 'chromium',

@@ -259,14 +259,6 @@ BUILDERS = freeze({
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS GN',
       },
-      'linux_chromium_gn_dbg': {
-        'mastername': 'chromium.linux',
-        'buildername': 'Linux GN (dbg)',
-      },
-      'linux_chromium_gn_rel': {
-        'mastername': 'chromium.linux',
-        'buildername': 'Linux GN',
-      },
       'linux_chromium_rel_ng': {
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder',
