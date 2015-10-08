@@ -70,7 +70,6 @@ def GenTests(api):
   # period to reflect the real branches used by the gitiles poller.
   STABLE_BRANCH = '4.2'
   BETA_BRANCH = '4.3'
-  ROLL_BRANCH = '4.4.42'
 
   def get_test_branch_name(mastername, buildername):
     if mastername == 'client.dart.fyi':
@@ -79,8 +78,6 @@ def GenTests(api):
       return STABLE_BRANCH
     if re.search(r'beta branch', buildername):
       return BETA_BRANCH
-    if re.search(r'roll branch', buildername):
-      return ROLL_BRANCH
     return 'master'
 
   for mastername, master_config in api.v8.BUILDERS.iteritems():
@@ -118,8 +115,8 @@ def GenTests(api):
   yield (
     api.test('branch_sync_failure') +
     api.properties.tryserver(mastername='client.v8.branches',
-                             buildername='V8 Linux - roll branch',
-                             branch=ROLL_BRANCH,
+                             buildername='V8 Linux - beta branch',
+                             branch=BETA_BRANCH,
                              revision='20123') +
     api.platform('linux', 32) +
     api.step_data('bot_update', retcode=1)

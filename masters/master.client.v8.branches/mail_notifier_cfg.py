@@ -38,15 +38,6 @@ def Update(config, active_master, c):
     V8Notifier(
         config,
         active_master,
-        categories_steps={'roll': V8_STEPS},
-        extraRecipients=[
-          'machenbach@chromium.org',
-          'hablich@chromium.org',
-        ],
-    ),
-    V8Notifier(
-        config,
-        active_master,
         categories_steps={'mips': V8_STEPS},
         extraRecipients=[
           'akos.palfi@imgtec.com',

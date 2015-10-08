@@ -19,7 +19,6 @@ COMMIT_TEMPLATE = 'https://chromium.googlesource.com/v8/v8/+/%s'
 
 # Regular expressions for v8 branch names.
 RELEASE_BRANCH_RE = re.compile(r'^\d+\.\d+$')
-ROLL_BRANCH_RE = re.compile(r'^\d+\.\d+\.\d+$')
 
 # With more than 23 letters, labels are to big for buildbot's popup boxes.
 MAX_LABEL_SIZE = 23
@@ -368,8 +367,6 @@ class V8Api(recipe_api.RecipeApi):
     if RELEASE_BRANCH_RE.match(branch):
       revision = 'refs/branch-heads/%s:%s' % (branch, revision)
       needs_branch_heads = True
-    elif ROLL_BRANCH_RE.match(branch):
-      revision = 'refs/heads/%s:%s' % (branch, revision)
 
     solution.revision = revision
     update_step = self.m.bot_update.ensure_checkout(
