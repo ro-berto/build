@@ -56,6 +56,13 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'webrtc',
     'gclient_apply_config': ['android'],
   },
+  'webrtc_android_asan': {
+    'chromium_config': 'android_asan',
+    'chromium_android_config': 'webrtc',
+    'gclient_config': 'webrtc',
+    'gclient_apply_config': ['android'],
+    'test_suite': 'android',
+  },
   'webrtc_ios': {
     'chromium_config': 'webrtc_ios',
     'gclient_config': 'webrtc_ios',
@@ -1082,6 +1089,17 @@ BUILDERS = freeze({
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
+      'Android32 ASan (L Nexus6)': {
+        'recipe_config': 'webrtc_android_asan',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'Android Builder (dbg)': {

@@ -703,6 +703,13 @@ def android(c):
 def android_clang(c):
   pass
 
+@config_ctx(includes=['android_common', 'ninja', 'shared_library', 'clang',
+                      'goma', 'asan'])
+def android_asan(c):
+  # ASan for Android needs shared_library, so it needs it own config.
+  # See https://www.chromium.org/developers/testing/addresssanitizer.
+  pass
+
 @config_ctx()
 def android_common(c):
   gyp_defs = c.gyp_env.GYP_DEFINES

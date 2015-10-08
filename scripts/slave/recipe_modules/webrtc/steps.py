@@ -128,6 +128,12 @@ class WebCamTest(WebRTCTest):
     super(WebCamTest, self).run(api, suffix)
 
 
+def get_android_tool(api):
+    if api.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
+      return 'asan'
+    return None
+
+
 class AndroidTest(object):
   # WebRTC tests need a longer timeout to avoid getting killed by the Chromium
   # Android test framework.
@@ -143,6 +149,7 @@ class AndroidTest(object):
     isolate_path = api.m.path['checkout'].join(self._isolate_path)
     api.m.chromium_android.run_test_suite(self._name,
                                           isolate_file_path=isolate_path,
+                                          tool=get_android_tool(api),
                                           shard_timeout=self._SHARD_TIMEOUT)
 
 
@@ -156,6 +163,7 @@ class AndroidInstrumentationTest(object):
     if self._apk_under_test:
       api._adb_install_apk(self._apk_under_test)
     api.m.chromium_android.run_instrumentation_suite(test_apk=self._name,
+                                                     tool=get_android_tool(api),
                                                      verbose=True)
 
 
@@ -185,12 +193,15 @@ class AndroidPerfTest(object):
     if not self._perf_id or api.m.chromium.c.BUILD_CONFIG == 'Debug':
       # Run as a normal test for trybots and Debug, without perf data scraping.
       api.m.chromium_android.run_test_suite(
-          self._name, isolate_file_path=isolate_path,
+          self._name,
+          isolate_file_path=isolate_path,
+          tool=get_android_tool(api),
           shard_timeout=self._SHARD_TIMEOUT)
     else:
       args = ['gtest', '-s', self._name, '--verbose', '--release',
               '--isolate-file-path', isolate_path,
               '-t', str(self._SHARD_TIMEOUT)]
+      tool = get_android_tool(api)
       api.add_test(name=self._name,
                    test=api.m.chromium_android.c.test_runner,
                    args=args,

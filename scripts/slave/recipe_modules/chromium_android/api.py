@@ -261,7 +261,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def spawn_device_temp_monitor(self):
     script = self.m.path['build'].join('scripts', 'slave', 'daemonizer.py')
     args = [
-        '--action', 'restart', 
+        '--action', 'restart',
         '--pid-file-path', '/tmp/device_monitor.pid',
         '--', self.resource('spawn_device_temp_monitor.py'),
         self.m.adb.adb_path(),
@@ -274,7 +274,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def shutdown_device_temp_monitor(self):
     script = self.m.path['build'].join('scripts', 'slave', 'daemonizer.py')
     args = [
-        '--action', 'stop', 
+        '--action', 'stop',
         '--pid-file-path', '/tmp/device_monitor.pid',
     ]
     self.m.python('shutdown_device_temp_monitor', script, args, infra_step=True)
@@ -344,21 +344,21 @@ class AndroidApi(recipe_api.RecipeApi):
                 "usb_status": True,
             },
             {
-              "adb_status": "offline", 
-              "blacklisted": True, 
-              "serial": "03e0363a003c6ad4", 
+              "adb_status": "offline",
+              "blacklisted": True,
+              "serial": "03e0363a003c6ad4",
               "usb_status": False,
             },
             {
-              "adb_status": "unauthorized", 
-              "blacklisted": True, 
-              "serial": "03e0363a003c6ad5", 
+              "adb_status": "unauthorized",
+              "blacklisted": True,
+              "serial": "03e0363a003c6ad5",
               "usb_status": True,
             },
             {
-              "adb_status": "device", 
-              "blacklisted": True, 
-              "serial": "03e0363a003c6ad6", 
+              "adb_status": "device",
+              "blacklisted": True,
+              "serial": "03e0363a003c6ad6",
               "usb_status": True,
             }
           ]),
@@ -463,6 +463,19 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       install_cmd.append('--release')
     return self.m.step('install ' + apk, install_cmd,
+                       infra_step=True,
+                       env=self.m.chromium.get_env())
+
+  def asan_device_setup(self):
+    install_cmd = [
+        self.m.path['checkout'].join('tools', 'android', 'asan', 'third_party',
+                                     'asan_device_setup.sh'),
+        '--lib',
+        os.path.join('third_party', 'llvm-build', 'Release+Asserts', 'lib',
+                     'clang', '*', 'lib', 'linux',
+                     'libclang_rt.asan-arm-android.so')
+    ]
+    return self.m.step('asan_device_setup.sh', install_cmd,
                        infra_step=True,
                        env=self.m.chromium.get_env())
 
@@ -602,7 +615,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                 isolate_file_path=None,
                                 flakiness_dashboard=None,
                                 annotation=None, except_annotation=None,
-                                screenshot=False, verbose=False,
+                                screenshot=False, verbose=False, tool=None,
                                 apk_package=None, host_driven_root=None,
                                 official_build=False, install_apk=None,
                                 json_results_file=None, suffix=None, **kwargs):
@@ -612,6 +625,8 @@ class AndroidApi(recipe_api.RecipeApi):
     args = ['--test-apk', test_apk, '--blacklist-file', self.blacklist_file]
     if isolate_file_path:
       args.extend(['--isolate-file-path', isolate_file_path])
+    if tool:
+      args.append('--tool=%s' % tool)
     if flakiness_dashboard:
       args.extend(['--flakiness-dashboard-server', flakiness_dashboard])
     if annotation:
