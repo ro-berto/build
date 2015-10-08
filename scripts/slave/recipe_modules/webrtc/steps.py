@@ -17,7 +17,7 @@ def generate_tests(api, test_suite, revision):
       tests.append(WebRTCTest(name='libjingle_peerconnection_objc_test',
                               revision=revision,
                               custom_executable=executable, parallel=parallel,
-                              disable_swarming=True))
+                              enable_swarming=False))
   elif test_suite == 'webrtc_baremetal':
     # Add baremetal tests, which are different depending on the platform.
     if api.m.platform.is_win or api.m.platform.is_mac:
@@ -91,21 +91,21 @@ def generate_tests(api, test_suite, revision):
 class WebRTCTest(object):
   """A normal WebRTC desktop test."""
   def __init__(self, name, revision, parallel=False, perf_test=False,
-               custom_executable=None, disable_swarming=False,
+               custom_executable=None, enable_swarming=True,
                **runtest_kwargs):
     self._name = name
     self._revision = revision
     self._parallel = parallel
     self._custom_executable = custom_executable
     self._perf_test = perf_test
-    self._disable_swarming = disable_swarming
+    self._enable_swarming = enable_swarming
     self._runtest_kwargs = runtest_kwargs
 
   def run(self, api, suffix):
     self._runtest_kwargs['test'] = self._custom_executable or self._name
     api.add_test(name=self._name, revision=self._revision,
                  parallel=self._parallel, perf_test=self._perf_test,
-                 disable_swarming=self._disable_swarming,
+                 enable_swarming=self._enable_swarming,
                  **self._runtest_kwargs)
 
 

@@ -220,7 +220,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,
                perf_test=False, perf_dashboard_id=None, parallel=False,
-               disable_swarming=False):
+               enable_swarming=True):
     """Helper function to invoke chromium.runtest().
 
     Notice that the name parameter should be the same as the test executable in
@@ -264,7 +264,7 @@ class WebRTCApi(recipe_api.RecipeApi):
           'test_type': test_type,
           'env': env,
       }
-      if self.c.use_isolate and not disable_swarming:
+      if self.c.use_isolate and enable_swarming:
         self.m.isolate.runtest(test=test, revision=revision,
                                webkit_revision='deadbeef', args=args, name=name,
                                **runtest_kwargs)
