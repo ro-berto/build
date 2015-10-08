@@ -93,12 +93,27 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Reading MB config",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@Builder NOT MB-ready@MB is not enabled for this builder at this revision.@@@",
+      "@@@STEP_LOG_END@Builder NOT MB-ready@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "branding=Chrome buildtype=Official chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
     },
     "name": "gclient runhooks"
@@ -111,25 +126,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
-      "gen",
-      "-m",
-      "tryserver.chromium.perf",
-      "-b",
-      "win_perf_bisect_builder",
-      "--config-file",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
-      "--goma-dir",
-      "[BUILD]\\goma",
-      "//out/Release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "generate_build_files"
   },
   {
     "cmd": [

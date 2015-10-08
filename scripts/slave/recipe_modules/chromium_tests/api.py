@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import ast
 import contextlib
 import copy
 import itertools
@@ -13,6 +14,9 @@ from recipe_engine import util as recipe_util
 
 from . import builders
 from . import steps
+
+
+MB_CONFIG_FILENAME = ['tools', 'mb', 'mb_config.pyl']
 
 
 class ChromiumTestsApi(recipe_api.RecipeApi):
@@ -128,7 +132,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def runhooks(self, mastername, buildername, update_step):
     bot_config = self.get_bot_config(mastername, buildername)
-
     # TODO(phajdan.jr): See if disable_runhooks is still used, try to remove.
     if not bot_config.get('disable_runhooks'):
       if self.m.tryserver.is_tryserver:
@@ -178,6 +181,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot_config = self.get_bot_config(mastername, buildername)
 
     update_step = self.ensure_checkout(mastername, buildername)
+    # TODO(robertocn): Remove this hack by the end of Q1/2016.
+    if (mastername == 'tryserver.chromium.perf'
+        and bot_config.get('bot_type') == 'builder'
+        and buildername.endswith('builder')):
+      force_legacy_compile = self.should_force_legacy_compiling(
+          mastername, buildername)
+      if force_legacy_compile:
+        self.m.chromium.c.project_generator.tool = 'gyp'
 
     self.set_up_swarming(mastername, buildername)
     self.runhooks(mastername, buildername, update_step)
@@ -768,3 +779,36 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             '--',
         ] + self.get_common_args_for_scripts(),
         step_test_data=lambda: self.m.json.test_api.output({}))
+
+  def should_force_legacy_compiling(self, master, builder):
+    """Determines if a given chromium revision needs to be built with gyp.
+
+    This is done by checking the contents of tools/mb/mb_config.pyl at the rev.
+
+    Args:
+      master (str): The master name used as a key on mb_config.pyl
+      builder (str): The builder name used as a key on mb_config.pyl
+
+    Returns:
+      True if the revision occurred before the changeover from GYP to MP.
+    """
+    try:
+      config_pyl = self.m.file.read(
+          'Reading MB config',
+          self.m.path['checkout'].join(*MB_CONFIG_FILENAME),
+          test_data=('{\'masters\': {'
+                     '\'tryserver.chromium.perf\': {'
+                     '\'linux_perf_bisect_builder\':'
+                     '\'gyp_something_something\'}}}'))
+      config = ast.literal_eval(config_pyl or '{}')
+      _ = config['masters'][master][builder]
+      result_text = 'MB is enabled for this builder at this revision.'
+      log_name = 'Builder MB-ready'
+      self.m.step.active_result.presentation.logs[log_name] = [result_text]
+      return False
+    except (self.m.step.StepFailure, KeyError):
+      result_text = 'MB is not enabled for this builder at this revision.'
+      log_name = 'Builder NOT MB-ready'
+      self.m.step.active_result.presentation.logs[log_name] = [result_text]
+      self.m.step.active_result.presentation.status = self.m.step.WARNING
+      return True

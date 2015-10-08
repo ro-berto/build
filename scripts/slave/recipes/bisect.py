@@ -57,28 +57,28 @@ def GenTests(api):
   return_code_test = api.test('basic_return_code_test')
   basic_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisect_builder')
+      buildername='linux_perf_bisector')
   broken_bad_rev_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisect_builder')
+      buildername='linux_perf_bisector')
   broken_good_rev_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisect_builder')
+      buildername='linux_perf_bisector')
   broken_cp_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisect_builder')
+      buildername='linux_perf_bisector')
   broken_hash_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisect_builder')
+      buildername='linux_perf_bisector')
   invalid_config_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisect_builder')
+      buildername='linux_perf_bisector')
   encoded_config_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisect_builder')
+      buildername='linux_perf_bisector')
   return_code_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisect_builder')
+      buildername='linux_perf_bisector')
 
   bisect_config = {
       'test_type': 'perf',
