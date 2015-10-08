@@ -13,6 +13,7 @@ from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 from . import bisection
 from . import builders
+from . import testing
 
 
 COMMIT_TEMPLATE = 'https://chromium.googlesource.com/v8/v8/+/%s'
@@ -35,250 +36,6 @@ MIPS_DIR = 'mips-2013.11'
 
 TEST_RUNNER_PARSER = argparse.ArgumentParser()
 TEST_RUNNER_PARSER.add_argument('--extra-flags')
-
-TEST_CONFIGS = freeze({
-  'benchmarks': {
-    'name': 'Benchmarks',
-    'tests': ['benchmarks'],
-    'test_args': ['--download-data'],
-  },
-  'mjsunit': {
-    'name': 'Mjsunit',
-    'tests': ['mjsunit'],
-    'can_use_on_swarming_builders': True,
-  },
-  'mozilla': {
-    'name': 'Mozilla',
-    'tests': ['mozilla'],
-    'gclient_apply_config': ['mozilla_tests'],
-  },
-  'optimize_for_size': {
-    'name': 'OptimizeForSize',
-    'tests': ['optimize_for_size'],
-    'suite_mapping': ['mjsunit', 'cctest', 'webkit'],
-    'test_args': ['--no-variants', '--extra-flags=--optimize-for-size'],
-  },
-  'simdjs_small': {
-    'name': 'SimdJs - small',
-    'tests': ['simdjs/shell_test_runner'],
-    'test_args': ['--download-data'],
-  },
-  'simdjs': {
-    'name': 'SimdJs - all',
-    'tests': ['simdjs'],
-    'test_args': ['--download-data'],
-  },
-  'test262': {
-    'name': 'Test262 - no variants',
-    'tests': ['test262'],
-    'test_args': ['--no-variants', '--download-data'],
-  },
-  'test262_variants': {
-    'name': 'Test262',
-    'tests': ['test262'],
-    'test_args': ['--download-data'],
-  },
-  'unittests': {
-    'name': 'Unittests',
-    'tests': ['unittests'],
-    'can_use_on_swarming_builders': True,
-  },
-  'v8testing': {
-    'name': 'Check',
-    'tests': ['default'],
-    'suite_mapping': ['mjsunit', 'cctest', 'message', 'preparser'],
-    'can_use_on_swarming_builders': True,
-  },
-  'webkit': {
-    'name': 'Webkit',
-    'tests': ['webkit'],
-  },
-})
-
-
-class BaseTest(object):
-  def __init__(self, name, api, v8):
-    self.name = name
-    self.api = api
-    self.v8 = v8
-
-  def run(self, **kwargs):  # pragma: no cover
-    raise NotImplementedError()
-
-  def rerun(self, failure_dict, **kwargs):  # pragma: no cover
-    raise NotImplementedError()
-
-  def gclient_apply_config(self):
-    pass
-
-
-class V8Test(BaseTest):
-  def run(self, test=None, **kwargs):
-    test = test or TEST_CONFIGS[self.name]
-    failure_factory=Failure.factory_func(self.name)
-
-    # Skip test configuration if filters are used and no filter matches.
-    applied_test_filter = self.v8._applied_test_filter(test)
-    if self.v8.test_filter and not applied_test_filter:
-      self.api.step(test['name'] + ' - skipped', cmd=None)
-      # TODO(machenbach): Return also the number of tests that ran and throw an
-      # error if the overall number of tests from all steps was zero.
-      return TestResults.empty()
-
-    def step_test_data():
-      return self.v8.test_api.output_json(
-          self.v8._test_data.get('test_failures', False),
-          self.v8._test_data.get('wrong_results', False),
-          self.v8._test_data.get('flakes', False))
-
-    full_args, env = self.v8._setup_test_runner(test, applied_test_filter)
-    step_result = self.api.python(
-      test['name'],
-      self.api.path['checkout'].join('tools', 'run-tests.py'),
-      full_args,
-      cwd=self.api.path['checkout'],
-      env=env,
-      # The outcome is controlled by the json test result of the step.
-      ok_ret='any',
-      step_test_data=step_test_data,
-      **kwargs
-    )
-
-    # Log used test filters.
-    if applied_test_filter:
-      step_result.presentation.logs['test filter'] = applied_test_filter
-
-    # The output is expected to be a list of architecture dicts that
-    # each contain a results list. On buildbot, there is only one
-    # architecture.
-    assert len(step_result.json.output) == 1
-    self.v8._update_durations(
-        step_result.json.output[0], step_result.presentation)
-    failure_log, failures, flake_log, flakes = (
-        self.v8._get_failure_logs(step_result.json.output[0], failure_factory))
-    self.v8._update_failure_presentation(
-        failure_log, failures, step_result.presentation)
-
-    if failure_log and failures:
-      # Mark the test step as failure only if there were real failures (i.e.
-      # non-flakes) present.
-      step_result.presentation.status = self.api.step.FAILURE
-
-    if flake_log and flakes:
-      # Emit a separate step to show flakes from the previous step
-      # to not close the tree.
-      step_result = self.api.step(test['name'] + ' (flakes)', cmd=None)
-      step_result.presentation.status = self.api.step.WARNING
-      self.v8._update_failure_presentation(
-            flake_log, flakes, step_result.presentation)
-
-    return TestResults(failures, flakes, [])
-
-  def rerun(self, failure_dict, **kwargs):
-    # Make sure bisection is only activated on builders that give enough
-    # information to retry.
-    assert failure_dict.get('variant')
-    assert failure_dict.get('random_seed')
-
-    # Filter variant manipulation and from test arguments.
-    # We'll specify exactly the variant which failed.
-    orig_args = [x for x in TEST_CONFIGS[self.name].get('test_args', [])
-                 if x != '--no-variants']
-    new_args = [
-      '--variants', failure_dict['variant'],
-      '--random-seed', failure_dict['random_seed'],
-    ]
-    rerun_config = {
-      'name': 'Retry',
-      'tests': [failure_dict['name']],
-      'test_args' : orig_args + new_args,
-    }
-    return self.run(test=rerun_config, **kwargs)
-
-  def gclient_apply_config(self):
-    for c in TEST_CONFIGS[self.name].get('gclient_apply_config', []):
-      self.api.gclient.apply_config(c)
-
-
-class V8Presubmit(BaseTest):
-  def run(self, **kwargs):
-    self.v8.presubmit()
-    return TestResults.empty()
-
-
-class V8CheckInitializers(BaseTest):
-  def run(self, **kwargs):
-    self.v8.check_initializers()
-    return TestResults.empty()
-
-
-class V8Fuzzer(BaseTest):
-  def run(self, **kwargs):
-    self.v8.fuzz()
-    return TestResults.empty()
-
-
-class V8DeoptFuzzer(BaseTest):
-  def run(self, **kwargs):
-    self.v8.deopt_fuzz()
-    return TestResults.empty()
-
-
-class V8GCMole(BaseTest):
-  def run(self, **kwargs):
-    self.v8.gc_mole('ia32', 'x64', 'arm', 'arm64')
-    return TestResults.empty()
-
-
-class V8SimpleLeakCheck(BaseTest):
-  def run(self, **kwargs):
-    self.v8.simple_leak_check()
-    return TestResults.empty()
-
-
-V8_NON_STANDARD_TESTS = freeze({
-  'deopt': V8DeoptFuzzer,
-  'fuzz': V8Fuzzer,
-  'gcmole': V8GCMole,
-  'presubmit': V8Presubmit,
-  'simpleleak': V8SimpleLeakCheck,
-  'v8initializers': V8CheckInitializers,
-})
-
-
-class Failure(object):
-  def __init__(self, test_config, failure_dict, duration):
-    self.test_config = test_config
-    self.failure_dict = failure_dict
-    self.duration = duration
-
-  @staticmethod
-  def factory_func(test_config):
-    def create(failure_dict, duration):
-      return Failure(test_config, failure_dict, duration)
-    return create
-
-
-class TestResults(object):
-  def __init__(self, failures, flakes, infra_failures):
-    self.failures = failures
-    self.flakes = flakes
-    self.infra_failures = infra_failures
-
-  @staticmethod
-  def empty():
-    return TestResults([], [], [])
-
-  @property
-  def is_negative(self):
-    return bool(self.failures or self.flakes or self.infra_failures)
-
-  def __add__(self, other):
-    return TestResults(
-        self.failures + other.failures,
-        self.flakes + other.flakes,
-        self.infra_failures + other.infra_failures,
-    )
 
 
 class V8Api(recipe_api.RecipeApi):
@@ -459,7 +216,7 @@ class V8Api(recipe_api.RecipeApi):
         for _, bot_config in master_config['builders'].iteritems():
           if bot_config.get('parent_buildername') == buildername:
             for test in bot_config.get('tests', []):
-              config = TEST_CONFIGS.get(test)
+              config = testing.TEST_CONFIGS.get(test)
               if config and config.get('can_use_on_swarming_builders'):
                 tests_to_isolate.extend(config['tests'])
       if tests_to_isolate:
@@ -527,14 +284,12 @@ class V8Api(recipe_api.RecipeApi):
           archive,
           src_dir='v8')
 
-  # TODO(machenbach): Pass api already in constructor to avoid redundant api
-  # parameter passing later.
   def create_test(self, test):
     """Wrapper that allows to shortcut common tests with their names.
 
     Returns: A runnable test instance.
     """
-    return V8_NON_STANDARD_TESTS.get(test, V8Test)(test, self.m, self)
+    return testing.create_test(test, self.m, self)
 
   def runtests(self):
     if self.extra_flags:
@@ -544,7 +299,7 @@ class V8Api(recipe_api.RecipeApi):
           'no special characters allowed in extra flags')
 
     start_time_sec = self.m.time.time()
-    test_results = TestResults.empty()
+    test_results = testing.TestResults.empty()
     for t in self.bot_config.get('tests', []):
       test_results += self.create_test(t).run()
     self.test_duration_sec = self.m.time.time() - start_time_sec
@@ -649,108 +404,6 @@ class V8Api(recipe_api.RecipeApi):
         culprit,
     )
     self.report_culprits(culprit_range)
-
-  def presubmit(self):
-    self.m.python(
-      'Presubmit',
-      self.m.path['checkout'].join('tools', 'presubmit.py'),
-      cwd=self.m.path['checkout'],
-    )
-
-  def check_initializers(self):
-    self.m.step(
-      'Static-Initializers',
-      ['bash',
-       self.m.path['checkout'].join('tools', 'check-static-initializers.sh'),
-       self.m.path.join(self.m.path.basename(self.m.chromium.c.build_dir),
-                        self.m.chromium.c.build_config_fs,
-                        'd8')],
-      cwd=self.m.path['checkout'],
-    )
-
-  def fuzz(self):
-    assert self.m.chromium.c.HOST_PLATFORM == 'linux'
-    try:
-      self.m.step(
-        'Fuzz',
-        ['bash',
-         self.m.path['checkout'].join('tools', 'fuzz-harness.sh'),
-         self.m.path.join(self.m.path.basename(self.m.chromium.c.build_dir),
-                          self.m.chromium.c.build_config_fs,
-                          'd8')],
-        cwd=self.m.path['checkout'],
-        stdout=self.m.raw_io.output(),
-      )
-    except self.m.step.StepFailure as e:
-      # Check if the fuzzer left a fuzz archive and upload to GS.
-      match = re.search(r'^Creating archive (.*)$', e.result.stdout, re.M)
-      if match:
-        self.m.gsutil.upload(
-            self.m.path['checkout'].join(match.group(1)),
-            'chromium-v8',
-            self.m.path.join('fuzzer-archives', match.group(1)),
-        )
-      else:  # pragma: no cover
-        self.m.step('No fuzzer archive found.', cmd=None)
-      raise e
-
-
-  def gc_mole(self, *archs):
-    # TODO(machenbach): Make gcmole work with absolute paths. Currently, a
-    # particular clang version is installed on one slave in '/b'.
-    env = {
-      'CLANG_BIN': (
-        self.m.path.join('..', '..', '..', '..', '..', 'gcmole', 'bin')
-      ),
-      'CLANG_PLUGINS': (
-        self.m.path.join('..', '..', '..', '..', '..', 'gcmole')
-      ),
-    }
-    for arch in archs:
-      self.m.step(
-        'GCMole %s' % arch,
-        ['lua', self.m.path.join('tools', 'gcmole', 'gcmole.lua'), arch],
-        cwd=self.m.path['checkout'],
-        env=env,
-      )
-
-  def simple_leak_check(self):
-    # TODO(machenbach): Add task kill step for windows.
-    relative_d8_path = self.m.path.join(
-        self.m.path.basename(self.m.chromium.c.build_dir),
-        self.m.chromium.c.build_config_fs,
-        'd8')
-    step_result = self.m.step(
-      'Simple Leak Check',
-      ['valgrind', '--leak-check=full', '--show-reachable=yes',
-       '--num-callers=20', relative_d8_path, '-e', '"print(1+2)"'],
-      cwd=self.m.path['checkout'],
-      stderr=self.m.raw_io.output(),
-      step_test_data=lambda: self.m.raw_io.test_api.stream_output(
-          'tons of leaks', stream='stderr')
-    )
-    step_result.presentation.logs['stderr'] = step_result.stderr.splitlines()
-    if not 'no leaks are possible' in (step_result.stderr):
-      step_result.presentation.status = self.m.step.FAILURE
-      raise self.m.step.StepFailure('Failed leak check')
-
-  def deopt_fuzz(self):
-    full_args = [
-      '--mode', self.m.chromium.c.build_config_fs,
-      '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
-      '--progress', 'verbose',
-      '--buildbot',
-    ]
-
-    # Add builder-specific test arguments.
-    full_args += self.c.testing.test_args
-
-    self.m.python(
-      'Deopt Fuzz',
-      self.m.path['checkout'].join('tools', 'run-deopt-fuzzer.py'),
-      full_args,
-      cwd=self.m.path['checkout'],
-    )
 
   @staticmethod
   def format_duration(duration_in_seconds):
