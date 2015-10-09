@@ -55,12 +55,14 @@ class AmpApi(recipe_api.RecipeApi):
   def _ensure_keys_downloaded(self):
     local_api_key_file = self._get_api_key_file() 
     if not self.m.path.exists(local_api_key_file):
-      self.m.gsutil.download_url(url=self.c.api_key_file_url,
+      self.m.gsutil.download_url(name='download amp api key',
+                                 url=self.c.api_key_file_url,
                                  dest=local_api_key_file)
 
     local_api_secret_file = self._get_api_secret_file()
     if not self.m.path.exists(local_api_secret_file):
-      self.m.gsutil.download_url(url=self.c.api_secret_file_url,
+      self.m.gsutil.download_url(name='download amp api secret',
+                                 url=self.c.api_secret_file_url,
                                  dest=local_api_secret_file)
 
   def trigger_test_suite(

@@ -442,7 +442,7 @@
       "[BUILD]/site_config/.amp_main_pool_key"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download"
+    "name": "gsutil download amp api key"
   },
   {
     "cmd": [
@@ -457,7 +457,7 @@
       "[BUILD]/site_config/.amp_main_pool_secret"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download (2)"
+    "name": "gsutil download amp api secret"
   },
   {
     "cmd": [

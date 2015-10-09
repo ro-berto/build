@@ -225,11 +225,11 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "gs://chrome-amp-keys/webview_pool/api_key",
-      "[BUILD]/site_config/.amp_webview_pool_key"
+      "gs://chrome-amp-keys/main_pool/api_key",
+      "[BUILD]/site_config/.amp_main_pool_key"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download"
+    "name": "gsutil download amp api key"
   },
   {
     "cmd": [
@@ -240,11 +240,11 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "gs://chrome-amp-keys/webview_pool/api_secret",
-      "[BUILD]/site_config/.amp_webview_pool_secret"
+      "gs://chrome-amp-keys/main_pool/api_secret",
+      "[BUILD]/site_config/.amp_main_pool_secret"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download (2)"
+    "name": "gsutil download amp api secret"
   },
   {
     "cmd": [
@@ -262,9 +262,9 @@
       "-e",
       "remote_device",
       "--api-key-file",
-      "[BUILD]/site_config/.amp_webview_pool_key",
+      "[BUILD]/site_config/.amp_main_pool_key",
       "--api-secret-file",
-      "[BUILD]/site_config/.amp_webview_pool_secret",
+      "[BUILD]/site_config/.amp_main_pool_secret",
       "--api-address",
       "172.22.21.180",
       "--api-port",
@@ -328,9 +328,9 @@
       "-e",
       "remote_device",
       "--api-key-file",
-      "[BUILD]/site_config/.amp_webview_pool_key",
+      "[BUILD]/site_config/.amp_main_pool_key",
       "--api-secret-file",
-      "[BUILD]/site_config/.amp_webview_pool_secret",
+      "[BUILD]/site_config/.amp_main_pool_secret",
       "--api-address",
       "172.22.21.180",
       "--api-port",
@@ -396,9 +396,9 @@
       "-e",
       "remote_device",
       "--api-key-file",
-      "[BUILD]/site_config/.amp_webview_pool_key",
+      "[BUILD]/site_config/.amp_main_pool_key",
       "--api-secret-file",
-      "[BUILD]/site_config/.amp_webview_pool_secret",
+      "[BUILD]/site_config/.amp_main_pool_secret",
       "--api-address",
       "172.22.21.180",
       "--api-port",
@@ -487,9 +487,9 @@
       "-e",
       "remote_device",
       "--api-key-file",
-      "[BUILD]/site_config/.amp_webview_pool_key",
+      "[BUILD]/site_config/.amp_main_pool_key",
       "--api-secret-file",
-      "[BUILD]/site_config/.amp_webview_pool_secret",
+      "[BUILD]/site_config/.amp_main_pool_secret",
       "--api-address",
       "172.22.21.180",
       "--api-port",
@@ -556,9 +556,9 @@
       "-e",
       "remote_device",
       "--api-key-file",
-      "[BUILD]/site_config/.amp_webview_pool_key",
+      "[BUILD]/site_config/.amp_main_pool_key",
       "--api-secret-file",
-      "[BUILD]/site_config/.amp_webview_pool_secret",
+      "[BUILD]/site_config/.amp_main_pool_secret",
       "--api-address",
       "172.22.21.180",
       "--api-port",
@@ -627,9 +627,9 @@
       "-e",
       "remote_device",
       "--api-key-file",
-      "[BUILD]/site_config/.amp_webview_pool_key",
+      "[BUILD]/site_config/.amp_main_pool_key",
       "--api-secret-file",
-      "[BUILD]/site_config/.amp_webview_pool_secret",
+      "[BUILD]/site_config/.amp_main_pool_secret",
       "--api-address",
       "172.22.21.180",
       "--api-port",
