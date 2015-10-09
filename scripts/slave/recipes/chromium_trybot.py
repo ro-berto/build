@@ -746,8 +746,7 @@ def _RunStepsInternal(api):
           affected_files,
           targets_for_analyze,
           compile_targets,
-          'trybot_analyze_config.json',
-          legacy_postprocess=False)
+          'trybot_analyze_config.json')
   if bot_config.get('analyze_mode') == 'compile':
     # Do not pass tests to compile_specific_targets below. It assumes
     # all of these targets would be compiled (matching_exes), but that's
