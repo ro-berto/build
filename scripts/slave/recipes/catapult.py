@@ -52,9 +52,8 @@ def RunSteps(api):
              api.path['checkout'].join('catapult_build', 'bin', 'run_py_tests'))
   api.python('Util Tests',
              api.path['checkout'].join('base', 'util', 'run_tests.py'))
-  api.python('Dashboard Python Tests',
+  api.python('Dashboard Tests',
              api.path['checkout'].join('dashboard', 'bin', 'run_py_tests'),
-             ['--no-install-hooks'],
              env=modified_env)
   api.python('Tracing Python Tests',
              api.path['checkout'].join('tracing', 'bin', 'run_py_tests'),
@@ -63,10 +62,6 @@ def RunSteps(api):
              api.path['checkout'].join(
                  'tracing', 'bin', 'run_dev_server_tests'),
              ['--no-install-hooks', '--no-use-local-chrome'])
-  api.python('Py-vulcanize Tests',
-             api.path['checkout'].join(
-                 'third_party', 'py_vulcanize', 'bin', 'run_py_tests'),
-             ['--no-install-hooks'])
   api.python('Perf Insights Dev Server Tests',
              api.path['checkout'].join(
                  'perf_insights', 'bin', 'run_dev_server_tests'),
