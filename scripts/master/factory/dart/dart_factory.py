@@ -546,13 +546,15 @@ class DartUtils(object):
 
 
   @staticmethod
-  def get_git_poller(repo, project, revlink, branch=None, master=None):
+  def get_git_poller(repo, project, revlink, branch=None, master=None,
+                     interval=None):
     project = '%s-%s' % (project, branch) if branch else project
     branch = branch or 'master'
     master = master or 'main'
+    interval = interval or 40
     workdir = '/tmp/git_workdir_%s_%s_%s' % (project, branch, master)
     return gitpoller.GitPoller(repourl=repo,
-                               pollinterval=20,
+                               pollinterval=interval,
                                project=project,
                                branch=branch,
                                workdir=workdir,
@@ -570,10 +572,11 @@ class DartUtils(object):
     return 'https://github.com/%s/%s.git' % (project, name)
 
   @staticmethod
-  def get_github_poller(project, name, branch=None, master=None):
+  def get_github_poller(project, name, branch=None, master=None, interval=None):
     repository = 'https://github.com/%s/%s.git' % (project, name)
     revlink = ('https://github.com/' + project + '/' + name + '/commit/%s')
-    return DartUtils.get_git_poller(repository, name, revlink, branch, master)
+    return DartUtils.get_git_poller(repository, name, revlink, branch, master,
+                                    interval=interval)
 
   @staticmethod
   def get_github_mirror_poller(project, name, branch=None, master=None):
