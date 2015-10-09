@@ -26,7 +26,7 @@ import sys
 from test_runner import SimulatorTestRunner, TestRunnerError
 
 
-def main(args):
+def main(args, test_args):
   summary = {}
   test_runner = None
 
@@ -38,6 +38,7 @@ def main(args):
       args.version,
       xcode_version=args.xcode_version,
       gs_bucket=args.bucket,
+      test_args=test_args,
     )
 
     return 0 if test_runner.Launch() else 1
@@ -115,4 +116,4 @@ if __name__ == '__main__':
     type=str,
   )
 
-  sys.exit(main(parser.parse_args()))
+  sys.exit(main(*parser.parse_known_args()))

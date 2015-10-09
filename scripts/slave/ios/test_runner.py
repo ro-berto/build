@@ -87,7 +87,8 @@ class TestRunner(object):
     perf_builder_name=None,
     perf_master_name=None,
     perf_revision=None,
-    perf_x_value=None
+    perf_x_value=None,
+    test_args=None,
   ):
     """Initializes a new instance of the TestRunner class.
 
@@ -104,6 +105,7 @@ class TestRunner(object):
       perf_revision: Revision to indicate to the perf dashboard.
       perf_x_value: Value to use on the x axis for all data uploaded to the
       perf dashboard.
+      test_args: Arguments to pass when launching the test.
 
     Raises:
       AppNotFoundError: If the specified app cannot be found.
@@ -131,6 +133,7 @@ class TestRunner(object):
     self.perf_build_number = perf_build_number
     self.perf_builder_name = perf_builder_name
     self.perf_x_value = perf_x_value
+    self.test_args = test_args or []
 
     self.summary = {
       'links': collections.OrderedDict(),
@@ -407,7 +410,8 @@ class SimulatorTestRunner(TestRunner):
     perf_builder_name=None,
     perf_master_name=None,
     perf_revision=None,
-    perf_x_value=None
+    perf_x_value=None,
+    test_args=None,
   ):
     """Initializes an instance of the SimulatorTestRunner class.
 
@@ -429,6 +433,7 @@ class SimulatorTestRunner(TestRunner):
       perf_revision: Revision to indicate to the perf dashboard.
       perf_x_value: Value to use on the x axis for all data uploaded to the
       perf dashboard.
+      test_args: Arguments to pass when launching the test.
 
     Raises:
       SimulatorNotFoundError: If the given iossim path cannot be found.
@@ -442,7 +447,8 @@ class SimulatorTestRunner(TestRunner):
       perf_builder_name=perf_builder_name,
       perf_master_name=perf_master_name,
       perf_revision=perf_revision,
-      perf_x_value=perf_x_value
+      perf_x_value=perf_x_value,
+      test_args=test_args,
     )
 
     if not os.path.exists(iossim_path):
@@ -670,6 +676,7 @@ class SimulatorTestRunner(TestRunner):
       args.append('--gtest_filter=%s' % gtest_filter)
 
     cmd.append(self.app_path)
+    cmd.extend(self.test_args)
     cmd.extend(args)
     return cmd
 
