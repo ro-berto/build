@@ -17,10 +17,16 @@ import urllib2
 
 # Default package repository URL.
 CIPD_BACKEND_URL = 'https://chrome-infra-packages.appspot.com'
+
+# ./cipd resolve \
+#     infra/tools/cipd/ \
+#     -version=git_revision:b5ececbd33984d968138f30f5cdee49574828328
 CLIENT_VERSIONS = {
-  'linux-386': '22d3a1cb4608d36ce02b32032ad8b2ce78809a91',
-  'linux-amd64': '899e62ec9ea3bf6fdef9e13d1af30d45dd31b445',
-  'mac-amd64': '107a9f99a6e4f9192f3b981a9c1acae4c7995073',
+  'linux-386': 'a4e3ba1a926b614a93001f34cf46ab6aec726c1d',
+  'linux-amd64': 'bcca10926e0f0c060a8f57cdb3cd228f9e83c395',
+  'mac-amd64': 'c7218f9e18aab4a13736f2e85cd2aeff2ea0324d',
+  'windows-386': 'c9cf5d35297a967b6e56e9f87f7b4f5bb3f521b4',
+  'windows-amd64': 'c4165da82db2cc587000aaaa355244f3e40bbc50',
 }
 
 
