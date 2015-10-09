@@ -104,6 +104,11 @@ def GenTests(api):
 
       if bot_config.get('parent_buildername'):
         test += api.properties(parent_got_revision='54321')
+        # Add isolated-tests property from parent builder.
+        parent = master_config['builders'][bot_config['parent_buildername']]
+        isolated_tests = parent['testing'].get('isolated_tests')
+        if isolated_tests:
+          test += api.properties(isolated_tests=isolated_tests)
 
       if mastername.startswith('tryserver'):
         test += (api.properties(

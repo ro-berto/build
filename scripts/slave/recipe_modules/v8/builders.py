@@ -41,7 +41,10 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'linux_swarming_staging_archive',
         'enable_swarming': True,
-        'testing': {'platform': 'linux'},
+        'testing': {
+          'platform': 'linux',
+          'isolated_tests': {'default': '[dummy hash for default]'},
+        },
         'triggers': [
           'V8 Linux - swarming staging',
         ],

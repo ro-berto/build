@@ -922,6 +922,9 @@ class V8Api(recipe_api.RecipeApi):
         'parent_got_revision': self.revision,
         'parent_got_revision_cp': self.revision_cp,
       }
+      isolated_tests = self.m.isolate.isolated_tests
+      if isolated_tests:
+        properties['isolated_tests'] = isolated_tests
       properties.update(**additional_properties)
       self.m.trigger(*[{
         'builder_name': builder_name,
