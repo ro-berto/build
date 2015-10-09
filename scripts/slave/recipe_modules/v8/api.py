@@ -301,6 +301,12 @@ class V8Api(recipe_api.RecipeApi):
     start_time_sec = self.m.time.time()
     test_results = testing.TestResults.empty()
     tests = [self.create_test(t) for t in self.bot_config.get('tests', [])]
+
+    # Apply test filter.
+    # TODO(machenbach): Track also the number of tests that ran and throw an
+    # error if the overall number of tests from all steps was zero.
+    tests = [t for t in tests if t.apply_filter()]
+
     swarming_tests = [t for t in tests if t.uses_swarming]
     non_swarming_tests = [t for t in tests if not t.uses_swarming]
     failed_tests = []

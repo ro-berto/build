@@ -125,6 +125,21 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Webkit - skipped"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Mozilla - skipped"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "SimdJs - all - skipped"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -212,11 +227,6 @@
     ]
   },
   {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Webkit - skipped"
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -262,16 +272,6 @@
       "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
       "@@@STEP_LOG_END@durations@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Mozilla - skipped"
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "SimdJs - all - skipped"
   },
   {
     "cmd": [],

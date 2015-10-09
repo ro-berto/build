@@ -76,6 +76,10 @@ class BaseTest(object):
     """Returns true if the test uses swarming."""
     return False
 
+  def apply_filter(self):
+    # Run all tests by default.
+    return True
+
   def pre_run(self, **kwargs):  # pragma: no cover
     pass
 
@@ -90,17 +94,17 @@ class BaseTest(object):
 
 
 class V8Test(BaseTest):
+  def apply_filter(self):
+    self.applied_test_filter = self.v8._applied_test_filter(
+        TEST_CONFIGS[self.name])
+    if self.v8.test_filter and not self.applied_test_filter:
+      self.api.step(TEST_CONFIGS[self.name]['name'] + ' - skipped', cmd=None)
+      return False
+    return True
+
   def run(self, test=None, **kwargs):
     test = test or TEST_CONFIGS[self.name]
     failure_factory=Failure.factory_func(self.name)
-
-    # Skip test configuration if filters are used and no filter matches.
-    applied_test_filter = self.v8._applied_test_filter(test)
-    if self.v8.test_filter and not applied_test_filter:
-      self.api.step(test['name'] + ' - skipped', cmd=None)
-      # TODO(machenbach): Return also the number of tests that ran and throw an
-      # error if the overall number of tests from all steps was zero.
-      return TestResults.empty()
 
     def step_test_data():
       return self.v8.test_api.output_json(
@@ -108,7 +112,7 @@ class V8Test(BaseTest):
           self.v8._test_data.get('wrong_results', False),
           self.v8._test_data.get('flakes', False))
 
-    full_args, env = self.v8._setup_test_runner(test, applied_test_filter)
+    full_args, env = self.v8._setup_test_runner(test, self.applied_test_filter)
     step_result = self.api.python(
       test['name'],
       self.api.path['checkout'].join('tools', 'run-tests.py'),
@@ -122,8 +126,8 @@ class V8Test(BaseTest):
     )
 
     # Log used test filters.
-    if applied_test_filter:
-      step_result.presentation.logs['test filter'] = applied_test_filter
+    if self.applied_test_filter:
+      step_result.presentation.logs['test filter'] = self.applied_test_filter
 
     # The output is expected to be a list of architecture dicts that
     # each contain a results list. On buildbot, there is only one
@@ -170,6 +174,8 @@ class V8Test(BaseTest):
       'tests': [failure_dict['name']],
       'test_args' : orig_args + new_args,
     }
+    # Switch off test filters on rerun.
+    self.applied_test_filter = None
     return self.run(test=rerun_config, **kwargs)
 
   def gclient_apply_config(self):
