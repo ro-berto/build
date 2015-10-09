@@ -90,6 +90,7 @@ PROPERTIES = {
 
 def RunSteps(api, buildername):
   api.amp.setup()
+  api.amp.set_config('main_pool')
 
   builder = BUILDERS[buildername]
   api.path['checkout'] = api.path['slave_build'].join('src')

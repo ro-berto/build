@@ -42,6 +42,27 @@ class AmpApi(recipe_api.RecipeApi):
     return self._get_results_unzipped_path(test_run_id).join(
         'appurify_results', 'logcat.txt')
 
+  def _get_api_key_file(self):
+    local_api_key_file = self.m.path['build'].join(
+        'site_config', '.amp_%s_key' % self.c.pool)
+    return local_api_key_file
+
+  def _get_api_secret_file(self):
+    local_api_secret_file = self.m.path['build'].join(
+        'site_config', '.amp_%s_secret' % self.c.pool)
+    return local_api_secret_file
+
+  def _ensure_keys_downloaded(self):
+    local_api_key_file = self._get_api_key_file() 
+    if not self.m.path.exists(local_api_key_file):
+      self.m.gsutil.download_url(url=self.c.api_key_file_url,
+                                 dest=local_api_key_file)
+
+    local_api_secret_file = self._get_api_secret_file()
+    if not self.m.path.exists(local_api_secret_file):
+      self.m.gsutil.download_url(url=self.c.api_secret_file_url,
+                                 dest=local_api_secret_file)
+
   def trigger_test_suite(
       self, suite, test_type, test_type_args, amp_args, step_name=None,
       verbose=True):
@@ -65,6 +86,7 @@ class AmpApi(recipe_api.RecipeApi):
         'test_run_id': 'T35TRUN1D',
       },
     })
+    self._ensure_keys_downloaded()
     step_result = self.m.chromium_android.test_runner(
         '[trigger] %s' % step_name,
         args=args,
@@ -267,14 +289,13 @@ class AmpApi(recipe_api.RecipeApi):
     assert api_protocol, 'api_protocol not specified'
     assert not (device_minimum_os and device_os), (
         'cannot specify both device_minimum_os and device_os')
-
     amp_args = [
         '--enable-platform-mode',
         '-e', 'remote_device',
         '--api-key-file',
-        self.m.path['build'].join('site_config', '.amp_api_key'),
+        self._get_api_key_file(),
         '--api-secret-file',
-        self.m.path['build'].join('site_config', '.amp_api_secret'),
+        self._get_api_secret_file(),
         '--api-address', api_address,
         '--api-port', api_port,
         '--api-protocol', api_protocol,

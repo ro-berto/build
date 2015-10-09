@@ -240,6 +240,36 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "gs://chrome-amp-keys/commit_queue_pool/api_key",
+      "[BUILD]/site_config/.amp_commit_queue_pool_key"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil download"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "gs://chrome-amp-keys/commit_queue_pool/api_secret",
+      "[BUILD]/site_config/.amp_commit_queue_pool_secret"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil download (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--apk-under-test",
@@ -252,9 +282,9 @@
       "-e",
       "remote_device",
       "--api-key-file",
-      "[BUILD]/site_config/.amp_api_key",
+      "[BUILD]/site_config/.amp_commit_queue_pool_key",
       "--api-secret-file",
-      "[BUILD]/site_config/.amp_api_secret",
+      "[BUILD]/site_config/.amp_commit_queue_pool_secret",
       "--api-address",
       "172.22.21.180",
       "--api-port",

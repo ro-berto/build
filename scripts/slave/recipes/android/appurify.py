@@ -63,6 +63,7 @@ BUILDERS = freeze({
   'tryserver.chromium.linux': {
     'android_amp_rel_tests_recipe': {
       'config': 'main_builder',
+      'amp_config': 'commit_queue_pool',
       'target': 'Release',
       'build': True,
       'try': True,
@@ -77,6 +78,7 @@ BUILDERS = freeze({
   'chromium.fyi': {
     'Android Tests (amp)(dbg)': {
       'config': 'main_builder',
+      'amp_config': 'main_pool',
       'target': 'Debug',
       'build': False,
       'device_minimum_os': '4.0',
@@ -88,6 +90,7 @@ BUILDERS = freeze({
   'chromium.linux': {
     'EXAMPLE_android_amp_builder_tester': {
       'config': 'main_builder',
+      'amp_config': 'main_pool',
       'target': 'Release',
       'build': True,
       'device_name': ['Nexus 5'],
@@ -117,7 +120,6 @@ PROPERTIES = {
 
 def RunSteps(api, mastername, buildername):
   api.amp.setup()
-
   builder = BUILDERS[mastername][buildername]
   api.chromium_android.configure_from_properties(
       builder['config'],
@@ -126,6 +128,7 @@ def RunSteps(api, mastername, buildername):
       INTERNAL=False,
       BUILD_CONFIG=builder['target'])
 
+  api.amp.set_config(builder.get('amp_config', 'main_pool'))
   api.gclient.set_config('chromium')
   api.gclient.apply_config('android')
   api.gclient.apply_config('chrome_internal')
