@@ -604,7 +604,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - builder',
         'build_gs_archive': 'win32_rel_archive',
-        'tests': ['v8testing', 'webkit', 'mozilla'],
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - 2': {
@@ -617,7 +617,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - builder',
         'build_gs_archive': 'win32_rel_archive',
-        'tests': ['v8testing', 'webkit', 'mozilla'],
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - nosnap - shared': {
@@ -646,7 +646,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - debug builder',
         'build_gs_archive': 'win32_dbg_archive',
-        'tests': ['v8testing', 'webkit', 'mozilla'],
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - debug - 2': {
@@ -659,7 +659,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - debug builder',
         'build_gs_archive': 'win32_dbg_archive',
-        'tests': ['v8testing', 'webkit', 'mozilla'],
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - debug - 3': {
@@ -672,7 +672,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - debug builder',
         'build_gs_archive': 'win32_dbg_archive',
-        'tests': ['v8testing', 'webkit', 'mozilla'],
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
       'V8 Win64': {
@@ -683,7 +683,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         # FIXME(machenbach): Add back simdjs_small once download is fixed.
-        'tests': ['v8testing', 'webkit', 'mozilla'],
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
       'V8 Win64 - debug': {
@@ -694,7 +694,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         # FIXME(machenbach): Add back simdjs_small once download is fixed.
-        'tests': ['v8testing', 'webkit', 'mozilla'],
+        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
         'testing': {'platform': 'win'},
       },
 ####### Category: Mac
