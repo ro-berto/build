@@ -514,6 +514,8 @@ class CTest(Test):
     Test.__init__(self, **kwargs)
 
   def createSummary(self, log):
+    build_errors = False
+    build_count = 0
     passed_count = 0
     failure_count = 0
     flaky_count = 0
@@ -536,6 +538,12 @@ class CTest(Test):
           continue  # Blank line
         if re.match('^\t', line):
           continue  # Test failure lines start with tabs
+        if 'configure errors' in line:
+          build_errors = True
+        if 'build errors' in line:
+          build_errors = True
+        if 'build successful' in line:
+          build_count += 1
         if 'build successful; no tests for this build' in line:
           continue  # Successful build with no tests
         if 'Error in read script' in line:
@@ -573,7 +581,10 @@ class CTest(Test):
                         failed=failure_count - flaky_count,
                         warnings=flaky_count)
 
-    if failure_count > 0:
+    # Check build_count>0 to guard against total failure up front
+    if build_errors or build_count == 0:
+      self.__result = FAILURE
+    elif failure_count > 0:
       if failure_count > flaky_count:
         self.__result = FAILURE
       else:
