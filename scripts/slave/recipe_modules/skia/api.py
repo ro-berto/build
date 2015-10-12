@@ -384,17 +384,26 @@ class SkiaApi(recipe_api.RecipeApi):
       self._checked_for_ccache = True
       if not self.m.platform.is_win:
         result = self.run(
-            self.m.step,
+            self.m.python.inline,
             name='has ccache?',
-            cmd=['which', 'ccache'],
-            stdout=self.m.raw_io.output(),
+            program='''import json
+import subprocess
+import sys
+
+ccache = None
+try:
+  ccache = subprocess.check_output(['which', 'ccache'])
+except:
+  pass
+print json.dumps({'ccache': ccache})
+''',
+            stdout=self.m.json.output(),
             infra_step=True,
             abort_on_failure=False,
             fail_build_on_failure=False)
-        if result:
-          ccache = result.stdout.rstrip()
-          if ccache:
-            self._ccache = ccache
+        if result and result.stdout and result.stdout.get('ccache'):
+          self._ccache = result.stdout['ccache']
+
     return self._ccache
 
   def json_from_file(self, filename, test_data):

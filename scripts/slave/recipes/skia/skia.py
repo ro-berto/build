@@ -111,8 +111,10 @@ def GenTests(api):
         if 'Test' in builder or 'Perf' in builder:
           test += api.step_data('gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED',
                                 stdout=api.raw_io.output('42'))
-        if 'Android' in builder and not 'Appurify' in builder:
-          test += api.step_data('has ccache?', retcode=1)
+        if 'Android' in builder:
+          ccache = '/usr/bin/ccache' if 'Appurify' in builder else None
+          test += api.step_data('has ccache?',
+                                stdout=api.json.output({'ccache':ccache}))
         if ('Android' in builder and
             ('Test' in builder or 'Perf' in builder) and
             not 'Appurify' in builder):
@@ -128,9 +130,6 @@ def GenTests(api):
                                  rietveld='https://codereview.chromium.org')
         if 'Win' in builder:
           test += api.platform('win', 64)
-        if 'Appurify' in builder:
-          test += api.step_data('has ccache?', retcode=0,
-                                stdout=api.raw_io.output('/usr/bin/ccache'))
 
         yield test
 
@@ -151,8 +150,9 @@ def GenTests(api):
     api.properties(buildername='Build-Ubuntu-GCC-Arm7-Debug-Android',
                    mastername='client.skia.compile',
                    slavename='skiabot-linux-compile-000') +
-    api.step_data('has ccache?', retcode=0,
-                  stdout=api.raw_io.output('/usr/bin/ccache'))
+    api.step_data(
+                'has ccache?',
+                stdout=api.json.output({'ccache':'/usr/bin/ccache'}))
   )
 
   builder = 'Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug'
@@ -165,7 +165,9 @@ def GenTests(api):
                    slavename=slave,
                    buildnumber=6,
                    revision='abc123') +
-    api.step_data('has ccache?', retcode=1) +
+    api.step_data(
+                'has ccache?',
+                stdout=api.json.output({'ccache':None})) +
     AndroidTestData(builder) +
     api.step_data('read SKP_VERSION',
                   stdout=api.raw_io.output('42')) +
@@ -188,7 +190,9 @@ def GenTests(api):
                    buildnumber=6,
                    revision='abc123',
                    test_downloaded_skp_version='2') +
-    api.step_data('has ccache?', retcode=1) +
+    api.step_data(
+                'has ccache?',
+                stdout=api.json.output({'ccache':None})) +
     AndroidTestData(builder) +
     api.step_data('read SKP_VERSION',
                   stdout=api.raw_io.output('2')) +
@@ -212,7 +216,9 @@ def GenTests(api):
                    slavename=slave,
                    buildnumber=6,
                    revision='abc123') +
-    api.step_data('has ccache?', retcode=1) +
+    api.step_data(
+                'has ccache?',
+                stdout=api.json.output({'ccache':None})) +
     AndroidTestData(builder) +
     api.step_data('read SKP_VERSION',
                   retcode=1) +
@@ -237,7 +243,9 @@ def GenTests(api):
                    buildnumber=6,
                    revision='abc123',
                    test_downloaded_skimage_version='2') +
-    api.step_data('has ccache?', retcode=1) +
+    api.step_data(
+                'has ccache?',
+                stdout=api.json.output({'ccache':None})) +
     AndroidTestData(builder) +
     api.step_data('read SKP_VERSION',
                   stdout=api.raw_io.output('42')) +
@@ -261,7 +269,9 @@ def GenTests(api):
                    slavename=slave,
                    buildnumber=6,
                    revision='abc123') +
-    api.step_data('has ccache?', retcode=1) +
+    api.step_data(
+                'has ccache?',
+                stdout=api.json.output({'ccache':None})) +
     AndroidTestData(builder) +
     api.step_data('read SKP_VERSION',
                   stdout=api.raw_io.output('42')) +
