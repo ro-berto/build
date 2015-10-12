@@ -136,9 +136,21 @@ class ScriptTest(Test):  # pylint: disable=W0232
     return self._name
 
   def compile_targets(self, api):
-    substitutions = {'name': self._name}
-    return [string.Template(s).safe_substitute(substitutions)
-            for s in self._all_compile_targets[self._script]]
+    try:
+      substitutions = {'name': self._name}
+
+      return [string.Template(s).safe_substitute(substitutions)
+              for s in self._all_compile_targets[self._script]]
+    except KeyError:
+      # Not all scripts will have test data inside recipes,
+      # so return a default value.
+      # TODO(phajdan.jr): Revisit this when all script tests
+      # lists move src-side. We should be able to provide
+      # test data then.
+      if api.chromium._test_data.enabled:
+        return []
+
+      raise  # pragma: no cover
 
   def run(self, api, suffix):
     name = self.name
