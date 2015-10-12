@@ -32,8 +32,84 @@ from master import gitiles_poller
 from master.try_job_base import BadJobfile
 
 
-class InvalidEtcBuild(BadJobfile):
-  pass
+class CbuildbotConfigs(object):
+
+  # Valid 'etc' builder targets. Specifically, this ensures:
+  # - The build name doesn't begin with a flag ('--')
+  # - The build name doesn't contain spaces (to spill into extra args).
+  _ETC_TARGET_RE = re.compile(r'^[a-zA-Z][\w-]+\w$')
+
+  def __init__(self, configs, etc_builder=None):
+    """Holds base state of the master's try job related configuration.
+
+    configs (dict): A dictionary of all known CrOS configs. This will be as
+        up-to-date as the Chromite pin.
+    etc_builder (str): If not None, the name of the etc builder.
+    """
+    self.configs = configs
+    self.etc_builder = etc_builder
+
+  def AddBuildBucketHooks(self, c):
+    """Build mutation hook called via BuildBucket when scheduling builds.
+
+    The cbuildbot config is specified in the `cbb_config` property. The
+    callback transforms that property to an actual waterfall builder name by
+    mapping it based on its config.
+
+    If an 'etc' builder is configured and the config name is unknown, it will be
+    mapped to the 'etc' builder if possible.
+
+    A tryserver BuildBucket build takes the form:
+    - Empty `builder_name` parameter. If one is supplied, it will be ignored.
+    - BuildBot changes can be added by including one or more BuildBucket
+      `changes` parameters: [{'author': {'email': 'author@google.com'}}].
+    - `cbb_config` property must be set to the build's cbuildbot config target.
+    - `extra_args` property (optional) may be a JSON list of additional
+      parameters to pass to the tryjob.
+    - `slaves_request` property (optional) may be a JSON list of slaves on which
+      this build may run.
+    - Additional BuildBot properties may be added.
+
+    NOTE: Internally, all of these parameters are converted to BuildBot
+    properties and referenced as such in other areas of code. The Git poller
+    also constructs the same property set, so code paths converge.
+    """
+    def params_hook(params, _build):
+      # Map `cbb_config` to a builder name.
+      properties = params.get('properties', {})
+      config_name = properties.get('cbb_config')
+      if not config_name:
+        raise ValueError('Missing required `cbb_config` property.')
+      params['builder_name'] = self.GetBuilderForConfig(config_name)
+
+      # Validate other fields.
+      if not isinstance(properties.get('extra_args', []), list):
+        raise ValueError('`extra_args` property is not a list.')
+      if not isinstance(properties.get('slaves_request', []), list):
+        raise ValueError('`slaves_request` is not a list.')
+
+      # Add mandatory properties to build.
+      params['properties'] = properties
+    c['buildbucket_params_hook'] = params_hook
+
+  def GetBuilderForConfig(self, config_name):
+    config = self.configs.get(config_name)
+    if config:
+      return config['_template'] or config_name
+    self.ValidateEtcBuild(config_name)
+    return self.etc_builder
+
+  def ValidateEtcBuild(self, config_name):
+    """Tests whether a specified build config_name is candidate for etc build.
+
+    Raises a ValueError if an etc build cannot be dispatched.
+    """
+    if not self.etc_builder:
+      raise ValueError('etc builder is not configured.')
+    if not config_name:
+      raise ValueError('Empty config name')
+    if not self._ETC_TARGET_RE.match(config_name):
+      raise ValueError('invalid etc config name (%s).' % (config_name,))
 
 
 def translate_v1_to_v2(parsed_job):
@@ -56,7 +132,9 @@ def translate_v2_to_v3(parsed_job):
 class CrOSTryJobGit(TryBase):
   """Poll a Git server to grab patches to try."""
 
+  # Name of property source for generated properties.
   _PROPERTY_SOURCE = 'Try Job'
+
   # The version of tryjob that the master is expecting.
   _TRYJOB_FORMAT_VERSION = 3
 
@@ -65,11 +143,6 @@ class CrOSTryJobGit(TryBase):
       1 : translate_v1_to_v2,
       2 : translate_v2_to_v3,
   }
-
-  # Valid 'etc' builder targets. Specifically, this ensures:
-  # - The build name doesn't begin with a flag ('--')
-  # - The build name doesn't contain spaces (to spill into extra args).
-  ETC_TARGET_RE = re.compile(r'^[a-zA-Z][\w-]+\w$')
 
   # Template path URL component to retrieve the Base64 contents of a file from
   # Gitiles.
@@ -87,8 +160,7 @@ class CrOSTryJobGit(TryBase):
                              % str(translation_func))
 
   def __init__(self, name, pollers, smtp_host, from_addr, reply_to,
-               email_footer, cbuildbot_configs, etc_builder=None,
-               properties=None):
+               email_footer, cbuildbot_configs, properties=None):
     """Initialize the class.
 
     Arguments:
@@ -98,10 +170,9 @@ class CrOSTryJobGit(TryBase):
       from_addr: The email address to display as being sent from.
       reply_to: The email address to put in the 'Reply-To' email header field.
       email_footer: The footer to append to any emails sent out.
-      cbuildbot_configs: (list) A list of supported 'cbuildbot' configs. Any
+      cbuildbot_configs: (CbuildbotConfigs) A configuration set instance. Any
           'bot' request outside of this list will go to an 'etc' builder, if
           available.
-      etc_builder: If not None, the name of the 'etc' builder.
       properties: See TryBase.__init__()
     """
     TryBase.__init__(self, name, [], properties or {})
@@ -110,23 +181,11 @@ class CrOSTryJobGit(TryBase):
     self.from_addr = from_addr
     self.reply_to = reply_to
     self.email_footer = email_footer
-    self.cbuildbot_configs = cbuildbot_configs
-    self.etc_builder = etc_builder
+    self.cbb = cbuildbot_configs
 
   def startService(self):
     TryBase.startService(self)
     self.startConsumingChanges()
-
-  def stopService(self):
-    def rm_temp_dir(result):
-      for poller in self.pollers:
-        if os.path.isdir(poller.workdir):
-          shutil.rmtree(poller.workdir)
-
-    d = TryBase.stopService(self)
-    d.addCallback(rm_temp_dir)
-    d.addErrback(log.err)
-    return d
 
   @staticmethod
   def load_job(data):
@@ -134,16 +193,6 @@ class CrOSTryJobGit(TryBase):
       return json.loads(data)
     except ValueError as e:
       raise BadJobfile("Failed to parse job JSON: %s" % (e.message,))
-
-  @classmethod
-  def validate_etc_build(cls, name):
-    """Tests whether a specified 'etc' build name is allower to be executed."""
-    if not name:
-      raise InvalidEtcBuild("Empty build name")
-
-    # It must match our target expression.
-    if not cls.ETC_TARGET_RE.match(name):
-      raise InvalidEtcBuild("Does not match valid name pattern")
 
   def validate_job(self, parsed_job):
     # A list of field description tuples of the format:
@@ -168,15 +217,14 @@ class CrOSTryJobGit(TryBase):
 
     # If we're an 'etc' job, we must have bots defined to execute.
     for bot in parsed_job['bot']:
-      if bot in self.cbuildbot_configs:
+      if bot in self.cbb.configs:
         continue
       if self.etc_builder:
         # Assert that this is a valid 'etc' build.
         try:
-          self.validate_etc_build(bot)
-        except InvalidEtcBuild as e:
-          error_msgs.append("Invalid 'etc' build name (%s): %s" % (
-              bot, e.message))
+          self.cbb.ValidateEtcBuild(bot)
+        except ValueError as e:
+          error_msgs.append("Invalid 'etc' build (%s): %s" % (bot, e.message))
       else:
         error_msgs.append("Unknown bot config '%s' with no 'etc' builder" % (
             bot,))
@@ -187,16 +235,6 @@ class CrOSTryJobGit(TryBase):
   def get_props(self, config, options):
     """Overriding base class method."""
     props = Properties()
-
-    # Calculate the buildroot for builds.
-    config_dict = self.cbuildbot_configs.get(config)
-    if config_dict is None:
-      buildroot = '/b/cbuild/etc_master'
-    elif config_dict['internal']:
-      buildroot = '/b/cbuild/internal_master'
-    else:
-      buildroot = '/b/cbuild/external_master'
-    props.setProperty('buildroot', buildroot, self._PROPERTY_SOURCE)
 
     props.setProperty('slaves_request', options.get('slaves_request', []),
                       self._PROPERTY_SOURCE)
@@ -211,7 +249,6 @@ class CrOSTryJobGit(TryBase):
         extra_args)))
       props.setProperty('cbb_extra_args', extra_args,
                         self._PROPERTY_SOURCE)
-
     return props
 
   def create_buildset(self, ssid, parsed_job):
@@ -219,11 +256,7 @@ class CrOSTryJobGit(TryBase):
     dlist = []
     buildset_name = '%s:%s' % (parsed_job['user'], parsed_job['name'])
     for bot in parsed_job['bot']:
-      config = self.cbuildbot_configs.get(bot)
-      if config:
-        builder_name = config['_template'] or bot
-      else:
-        builder_name = self.etc_builder
+      builder_name = self.cbuildbot_conifgs.GetBuilderForConfig(bot)
       log.msg("Creating '%s' try job(s) %s for %s" % (builder_name, ssid, bot))
       dlist.append(self.addBuildsetForSourceStamp(ssid=ssid,
               reason=buildset_name,

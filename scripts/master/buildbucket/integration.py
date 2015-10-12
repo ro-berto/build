@@ -53,12 +53,19 @@ class BuildBucketIntegrator(object):
   # _ensure_leases_loaded().
 
   def __init__(
-      self, buckets, build_properties_hook=None, max_lease_count=None,
+      self, buckets, build_params_hook=None, max_lease_count=None,
       heartbeat_interval=None):
     """Creates a BuildBucketIntegrator.
 
     Args:
       buckets (list of str): poll only builds in any of |buckets|.
+      build_params_hook (func): If not None, a callable with arguments
+        (params, build) that can modify the supplied parameters during
+        validation.
+
+        If a ValueError is raised, the build will be marked as an
+        INVALID_BUILD_DEFINITION failure and the error message will be
+        propagated to the BuildBucket status.
       max_lease_count (int): maximum number of builds that can be leased at a
         time. Defaults to the number of connected slaves.
       heartbeat_interval (datetime.timedelta): frequency of build heartbeats.
@@ -69,7 +76,7 @@ class BuildBucketIntegrator(object):
     if max_lease_count is not None:
       assert max_lease_count >= 1
     self.buckets = buckets[:]
-    self.build_properties_hook = build_properties_hook
+    self.build_params_hook = build_params_hook
     self.buildbot = None
     self.buildbucket_service = None
     self._find_change_cache = None
@@ -132,7 +139,8 @@ class BuildBucketIntegrator(object):
         continue
       try:
         info = common.parse_info_property(info)
-      except ValueError:
+      except ValueError as e:
+        self.log('invalid buildbucket property: %s' % e, level=logging.ERROR)
         continue
       build = info.get('build', {})
       build_id = build.get('id')
@@ -192,7 +200,15 @@ class BuildBucketIntegrator(object):
       raise ValueError('Author email is not specified')
 
   def _validate_build(self, build):
-    """Raises ValueError in build dict is invalid."""
+    """Validates the supplied build dictionary.
+
+    Returns (dict): The validated parameters dictionary extracted from the
+        build's `parameters_json` field. If a `build_params_hook` is
+        configured, the returned parameters may differ from those specified
+        in the build.
+
+    Raises ValueError if the build dict is invalid.
+    """
     if not build:
       raise ValueError('build is not specified')
     if build.get('id') is None:
@@ -208,28 +224,36 @@ class BuildBucketIntegrator(object):
       raise ValueError(
           'Could not parse parameters_json: %s.\nJSON: %s' %
           (ex, parameters_json))
+    assert isinstance(params, dict)
 
-    builder_name = params.get('builder_name')
-    if not builder_name:
-      raise ValueError('builder_name parameter is not set')
-    builder = self.buildbot.get_builders().get(builder_name)
-    if builder is None:
-      raise ValueError('Builder %s not found' % builder_name)
+    def validate_inner(params):
+      builder_name = params.get('builder_name')
+      if not builder_name:
+        raise ValueError('builder_name parameter is not set')
+      builder = self.buildbot.get_builders().get(builder_name)
+      if builder is None:
+        raise ValueError('Builder %s not found' % builder_name)
 
-    properties = params.get('properties')
-    if properties is not None and not isinstance(properties, dict):
-      raise ValueError('properties parameter is not a JSON object')
+      properties = params.get('properties')
+      if properties is not None and not isinstance(properties, dict):
+        raise ValueError('properties parameter is not a JSON object')
 
-    changes = params.get('changes')
-    if changes is not None:
-      if not isinstance(changes, list):
-        raise ValueError('changes parameter is not a list')
-      for change in changes:
-        try:
-          self._validate_change(change)
-        except ValueError as ex:
-            raise ValueError(
-                'A change is invalid: %s\nChange:%s' % (ex, change))
+      changes = params.get('changes')
+      if changes is not None:
+        if not isinstance(changes, list):
+          raise ValueError('changes parameter is not a list')
+        for change in changes:
+          try:
+            self._validate_change(change)
+          except ValueError as ex:
+              raise ValueError(
+                  'A change is invalid: %s\nChange:%s' % (ex, change))
+
+    validate_inner(params)
+    if callable(self.build_params_hook):
+      self.build_params_hook(params, build.copy())
+      validate_inner(params)
+    return params
 
   def _check_error(self, res):
     """If |res| contains an error, logs it and returns True.
@@ -288,8 +312,6 @@ class BuildBucketIntegrator(object):
     """Schedules a build and returns (bsid, brid) tuple as Deferred."""
     assert self._leases is not None
     properties = (properties or {}).copy()
-    if self.build_properties_hook:
-      self.build_properties_hook(properties, build.copy())
     properties[common.INFO_PROPERTY] = json.dumps({
         common.BUILD_PROPERTY: self._strip_build_def(build),
     }, sort_keys=True)
@@ -337,7 +359,7 @@ class BuildBucketIntegrator(object):
     build['lease_key'] = lease_key
 
     try:
-      self._validate_build(build)
+      params = self._validate_build(build)
     except ValueError as ex:
       self.log('Definition of build %s is invalid: %s.' % (build_id, ex))
       self.buildbucket_service.api.fail(
@@ -353,7 +375,6 @@ class BuildBucketIntegrator(object):
           })
       return
 
-    params = json.loads(build['parameters_json'])
     builder_name = params['builder_name']
     self.log('Scheduling build %s (%s)...' % (build_id, builder_name))
 

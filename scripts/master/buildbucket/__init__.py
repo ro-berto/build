@@ -33,7 +33,7 @@ NO_LEASE_LIMIT = sys.maxint
 
 
 def setup(
-    config, active_master, buckets, build_properties_hook=None,
+    config, active_master, buckets, build_params_hook=None,
     poll_interval=10, buildbucket_hostname=None, max_lease_count=None,
     verbose=None, dry_run=None):
   """Configures a master to lease, schedule and update builds on buildbucket.
@@ -44,10 +44,15 @@ def setup(
     config (dict): master configuration dict.
     active_master (config.Master.Base): master site config.
     buckets (list of str): a list of buckets to poll.
-    build_properties_hook: function (properties, build) that can modify
-      properties before creating a buildset.
-        properties: dict name->value
+    build_params_hook: callable with arguments (params, build) that can modify
+      parameters (and properties via parameters['properties']) before creating
+      a buildset during validation.
+        params: dict name->value
         build: dict describing a buildbucket build.
+
+      If a ValueError is raised, the build will be marked as an
+      INVALID_BUILD_DEFINITION failure and the error message will be propagated
+      to the BuildBucket status.
     poll_interval (int): frequency of polling, in seconds. Defaults to 10.
     buildbucket_hostname (str): if not None, override the default buildbucket
       service url.
@@ -71,7 +76,7 @@ def setup(
     dry_run = 'POLLER_DRY_RUN' in os.environ
 
   integrator = BuildBucketIntegrator(
-      buckets, build_properties_hook=build_properties_hook,
+      buckets, build_params_hook=build_params_hook,
       max_lease_count=max_lease_count)
 
   buildbucket_service_factory = functools.partial(

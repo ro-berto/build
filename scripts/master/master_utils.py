@@ -445,7 +445,12 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
 
 
 def SetupBuildbucket(c, active_master):
-  def properties_hook(properties, build):
+  def params_hook(params, build):
+    config_hook = c.get('buildbucket_params_hook')
+    if callable(config_hook):
+      config_hook(params, build)
+
+    properties = params.setdefault('properties', {})
     properties.pop('requester', None)  # Ignore externally set requester.
     if build['created_by']:
       identity_type, name = build['created_by'].split(':', 1)
@@ -462,7 +467,7 @@ def SetupBuildbucket(c, active_master):
       c,
       active_master,
       buckets=[active_master.buildbucket_bucket],
-      build_properties_hook=properties_hook,
+      build_params_hook=params_hook,
       max_lease_count=buildbucket.NO_LEASE_LIMIT,
   )
 

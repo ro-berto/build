@@ -115,11 +115,13 @@ class IntegratorTest(unittest.TestCase):
     self.changes.get_source_stamp.return_value = self.ssid
 
   @contextlib.contextmanager
-  def create_integrator(self, buildbot=None, max_lease_count=None):
+  def create_integrator(self, buildbot=None, max_lease_count=None,
+                        build_params_hook=None):
     self.buildbucket = fake_buildbucket()
     self.buildbot = buildbot or fake_buildbot()
     self.integrator = integration.BuildBucketIntegrator(
         self.buckets, max_lease_count=max_lease_count,
+        build_params_hook=build_params_hook,
         heartbeat_interval=datetime.timedelta(microseconds=1))
     def log(msg, level=logging.INFO):
       logging.log(level, msg)
@@ -262,6 +264,67 @@ class IntegratorTest(unittest.TestCase):
       self.assert_leased('1')
       self.assert_added_build_request(
           '1', 'Release', self.ssid, properties={'a': 'b'})
+
+  def test_build_with_properties_hook(self):
+    def hook(params, build):
+      build['bucket'] = 'INVALID'
+      params['builder_name'] = 'Debug'
+      params['properties']['foo'] = 'bar'
+
+    build = {
+        'id': '1',
+        'bucket': BUCKET,
+        'parameters_json': json.dumps({
+              'builder_name': 'Release',
+              'properties': {
+                  'a': 'b',
+              }
+        }),
+    }
+
+    with self.create_integrator(build_params_hook=hook):
+      self.buildbucket.api.peek.return_value = {
+          'builds': [build],
+      }
+
+      run_deferred(self.integrator.poll_builds())
+
+      self.assert_leased('1')
+      self.assert_added_build_request(
+          '1', 'Debug', self.ssid, properties={'a': 'b', 'foo': 'bar'})
+
+    # Modifications to 'build' in the hook should not be persisted.
+    self.assertEqual(build['bucket'], BUCKET)
+
+  def test_build_with_hook_fails_if_valueerror(self):
+    def hook(params, build):
+      raise ValueError("Test Failure.")
+
+    with self.create_integrator(build_params_hook=hook):
+      self.buildbucket.api.peek.return_value = {
+          'builds': [{
+              'id': '1',
+              'bucket': BUCKET,
+              'parameters_json': json.dumps({
+                  'builder_name': 'Release',
+              }),
+          }],
+      }
+
+      run_deferred(self.integrator.poll_builds())
+
+      self.buildbucket.api.fail.assert_called_once_with(
+          id='1',
+          body={
+              'lease_key': LEASE_KEY,
+              'failure_reason': 'INVALID_BUILD_DEFINITION',
+              'result_details_json': json.dumps({
+                  'error': {
+                      'message': 'Test Failure.',
+                  },
+              }),
+          }
+      )
 
   def test_all_scheduled(self):
     with self.create_integrator():

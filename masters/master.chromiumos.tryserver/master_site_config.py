@@ -21,3 +21,5 @@ class ChromiumOSTryServer(Master.ChromiumOSBase):
   # Select tree status urls and codereview location.
   base_app_url = 'https://chromiumos-status.appspot.com'
   tree_status_url = base_app_url + '/status'
+  buildbucket_bucket = 'master.chromiumos.tryserver'
+  service_account_file = 'service-account-chromeos.json'
