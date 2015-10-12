@@ -58,12 +58,14 @@ class AmpApi(recipe_api.RecipeApi):
       self.m.gsutil.download_url(name='download amp api key',
                                  url=self.c.api_key_file_url,
                                  dest=local_api_key_file)
+      self.m.path.mock_add_paths(local_api_key_file)
 
     local_api_secret_file = self._get_api_secret_file()
     if not self.m.path.exists(local_api_secret_file):
       self.m.gsutil.download_url(name='download amp api secret',
                                  url=self.c.api_secret_file_url,
                                  dest=local_api_secret_file)
+      self.m.path.mock_add_paths(local_api_secret_file)
 
   def trigger_test_suite(
       self, suite, test_type, test_type_args, amp_args, step_name=None,

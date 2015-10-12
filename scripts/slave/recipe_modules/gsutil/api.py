@@ -76,9 +76,7 @@ class GSUtilApi(recipe_api.RecipeApi):
     full_source = 'gs://%s/%s' % (bucket, source)
     cmd = ['cp'] + args + [full_source, dest]
     name = kwargs.pop('name', 'download')
-    result = self(cmd, name, **kwargs)
-    self.m.path.mock_add_paths(dest)
-    return result
+    return self(cmd, name, **kwargs)
 
   def download_url(self, url, dest, args=None, **kwargs):
     args = args or []
@@ -86,7 +84,6 @@ class GSUtilApi(recipe_api.RecipeApi):
     cmd = ['cp'] + args + [url, dest]
     name = kwargs.pop('name', 'download')
     self(cmd, name, **kwargs)
-    self.m.path.mock_add_paths(dest)
 
   def cat(self, url, args=None, **kwargs):
     args = args or []
