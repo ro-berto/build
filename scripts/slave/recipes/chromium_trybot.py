@@ -50,10 +50,12 @@ BUILDERS = freeze({
       'linux_blink_compile_dbg': {
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux (dbg)',
+        'analyze_mode': 'compile',
       },
       'linux_blink_compile_rel': {
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux',
+        'analyze_mode': 'compile',
       },
       'linux_blink_oilpan_dbg': {
         'mastername': 'chromium.webkit',
@@ -66,6 +68,7 @@ BUILDERS = freeze({
       'linux_blink_oilpan_compile_rel': {
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux Oilpan',
+        'analyze_mode': 'compile',
       },
       'mac_blink_dbg': {
         'mastername': 'chromium.webkit',
@@ -78,10 +81,12 @@ BUILDERS = freeze({
       'mac_blink_compile_dbg': {
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.6 (dbg)',
+        'analyze_mode': 'compile',
       },
       'mac_blink_compile_rel': {
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.9',
+        'analyze_mode': 'compile',
       },
       'mac_blink_oilpan_dbg': {
         'mastername': 'chromium.webkit',
@@ -94,6 +99,7 @@ BUILDERS = freeze({
       'mac_blink_oilpan_compile_rel': {
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac Oilpan',
+        'analyze_mode': 'compile',
       },
       'win_blink_dbg': {
         'mastername': 'chromium.webkit',
@@ -106,10 +112,12 @@ BUILDERS = freeze({
       'win_blink_compile_dbg': {
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win7 (dbg)',
+        'analyze_mode': 'compile',
       },
       'win_blink_compile_rel': {
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win7',
+        'analyze_mode': 'compile',
       },
       'win_blink_oilpan_dbg': {
         'mastername': 'chromium.webkit',
@@ -122,6 +130,7 @@ BUILDERS = freeze({
       'win_blink_oilpan_compile_rel': {
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win Oilpan',
+        'analyze_mode': 'compile',
       },
     },
   },
@@ -178,30 +187,37 @@ BUILDERS = freeze({
       'android_arm64_dbg_recipe': {
         'mastername': 'chromium.linux',
         'buildername': 'Android Arm64 Builder (dbg)',
+        'analyze_mode': 'compile',
       },
       'android_clang_dbg_recipe': {
         'mastername': 'chromium.linux',
         'buildername': 'Android Clang Builder (dbg)',
+        'analyze_mode': 'compile',
       },
       'android_chromium_gn_compile_dbg': {
         'mastername': 'chromium.linux',
         'buildername': 'Android GN (dbg)',
+        'analyze_mode': 'compile',
       },
       'android_chromium_gn_compile_rel': {
         'mastername': 'chromium.linux',
         'buildername': 'Android GN',
+        'analyze_mode': 'compile',
       },
       'android_compile_dbg': {
         'mastername': 'chromium.linux',
         'buildername': 'Android Builder (dbg)',
+        'analyze_mode': 'compile',
       },
       'android_compile_rel': {
         'mastername': 'chromium.linux',
         'buildername': 'Android Builder',
+        'analyze_mode': 'compile',
       },
       'android_x86_dbg_recipe': {
         'mastername': 'chromium.linux',
         'buildername': 'Android x86 Builder (dbg)',
+        'analyze_mode': 'compile',
       },
       'android_coverage': {
         'mastername': 'chromium.fyi',
@@ -256,14 +272,17 @@ BUILDERS = freeze({
       'linux_chromium_compile_dbg_ng': {
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder (dbg)',
+        'analyze_mode': 'compile',
       },
       'linux_chromium_compile_rel_ng': {
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder',
+        'analyze_mode': 'compile',
       },
       'linux_chromium_clobber_rel_ng': {
         'mastername': 'chromium.fyi',
         'buildername': 'Linux Builder (clobber)',
+        'analyze_mode': 'compile',
       },
       'linux_chromium_chromeos_dbg_ng': {
         'mastername': 'chromium.chromiumos',
@@ -273,6 +292,7 @@ BUILDERS = freeze({
       'linux_chromium_chromeos_compile_dbg_ng': {
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS Builder (dbg)',
+        'analyze_mode': 'compile',
       },
       'linux_chromium_chromeos_rel_ng': {
         'mastername': 'chromium.chromiumos',
@@ -287,18 +307,22 @@ BUILDERS = freeze({
       'chromeos_x86-generic_chromium_compile_only_ng': {
         'mastername': 'chromium.chromiumos',
         'buildername': 'ChromiumOS x86-generic Compile',
+        'analyze_mode': 'compile',
       },
       'chromeos_amd64-generic_chromium_compile_only_ng': {
         'mastername': 'chromium.chromiumos',
         'buildername': 'ChromiumOS amd64-generic Compile',
+        'analyze_mode': 'compile',
       },
       'chromeos_daisy_chromium_compile_only_ng': {
         'mastername': 'chromium.chromiumos',
         'buildername': 'ChromiumOS daisy Compile',
+        'analyze_mode': 'compile',
       },
       'linux_chromium_chromeos_compile_rel_ng': {
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS Builder',
+        'analyze_mode': 'compile',
       },
       'linux_chromium_chromeos_msan_rel_ng': {
         'mastername': 'chromium.memory.fyi',
@@ -317,6 +341,7 @@ BUILDERS = freeze({
       'linux_chromium_compile_dbg_32_ng': {
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder (dbg)(32)',
+        'analyze_mode': 'compile',
       },
       'linux_chromium_msan_rel_ng': {
         'mastername': 'chromium.memory.fyi',
@@ -375,10 +400,12 @@ BUILDERS = freeze({
       'mac_chromium_compile_dbg_ng': {
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder (dbg)',
+        'analyze_mode': 'compile',
       },
       'mac_chromium_compile_rel_ng': {
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder',
+        'analyze_mode': 'compile',
       },
       'mac_chromium_asan_rel_ng': {
         'mastername': 'chromium.memory',
@@ -425,14 +452,17 @@ BUILDERS = freeze({
       'win_chromium_compile_dbg_ng': {
         'mastername': 'chromium.win',
         'buildername': 'Win Builder (dbg)',
+        'analyze_mode': 'compile',
       },
       'win_chromium_compile_dbg_ng_exp': {
         'mastername': 'chromium.win',
         'buildername': 'Win Builder (dbg)',
+        'analyze_mode': 'compile',
       },
       'win_chromium_compile_rel_ng': {
         'mastername': 'chromium.win',
         'buildername': 'Win Builder',
+        'analyze_mode': 'compile',
       },
       'win_chromium_x64_rel_ng': {
         'mastername': 'chromium.win',
@@ -717,11 +747,29 @@ def _RunStepsInternal(api):
           targets_for_analyze,
           compile_targets,
           'trybot_analyze_config.json')
-  # Note that compile_targets doesn't necessarily include matching_exes,
-  # and for correctness we need to add them. Otherwise it's possible we'd
-  # only build say foo_unittests but not foo_unittests_run and fail when
-  # trying to isolate the tests. Also see above comment.
-  compile_targets = sorted(set(compile_targets + matching_exes))
+  if bot_config.get('analyze_mode') == 'compile':
+    # Do not pass tests to compile_specific_targets below. It assumes
+    # all of these targets would be compiled (matching_exes), but that's
+    # explicitly what we're not doing here. One example of how this may
+    # break is only foo_unittests being in returned compile_targets,
+    # while matching_exes containing both foo_unittests and foo_unittests_run.
+    # Then if we proceed with tests passed to compile_specific_targets,
+    # trying to isolate affected targets may fail.
+    tests = []
+    tests_including_triggered = []
+
+    # TODO(sergiyb): This is a hotfix that should be removed if we implement a
+    # proper long-term fix. It is currently needed to ensure that we compile
+    # matching_exes also when a bot is running analyze in compile-only mode and
+    # stay consistent with corresponding waterfall bots. Please see
+    # http://crbug.com/529798 for more context.
+    compile_targets = sorted(set(compile_targets + matching_exes))
+  else:
+    # Note that compile_targets doesn't necessarily include matching_exes,
+    # and for correctness we need to add them. Otherwise it's possible we'd
+    # only build say foo_unittests but not foo_unittests_run and fail when
+    # trying to isolate the tests. Also see above comment.
+    compile_targets = sorted(set(compile_targets + matching_exes))
 
   # Blink tests have to bypass "analyze", see below.
   if requires_compile or add_blink_tests:
@@ -840,6 +888,9 @@ def GenTests(api):
   # Additional tests for blink trybots.
   blink_trybots = BUILDERS['tryserver.blink']['builders'].iteritems()
   for buildername, bot_config in blink_trybots:
+    if bot_config.get('analyze_mode') == 'compile':
+      continue
+
     for pass_first in (True, False):
       test_name = 'full_%s_%s_%s' % (_sanitize_nonalpha('tryserver.blink'),
                                      _sanitize_nonalpha(buildername),
