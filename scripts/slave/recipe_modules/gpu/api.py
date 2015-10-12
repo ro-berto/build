@@ -10,7 +10,8 @@ import common
 SIMPLE_TESTS_TO_RUN = freeze([
   'content_gl_tests',
   'gl_tests',
-  'angle_unittests'
+  'angle_unittests',
+  'gl_unittests'
 ])
 
 SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN = freeze([

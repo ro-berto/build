@@ -208,7 +208,7 @@
       "-u",
       "[SLAVE_BUILD]\\src\\build\\gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"third_party/WebKit/Source/core/dom/Element.cpp\"], \"targets\": [\"angle_unittests_run\", \"blink_heap_unittests\", \"blink_platform_unittests\", \"chrome\", \"chromium_builder_tests\", \"content_gl_tests_run\", \"crash_service\", \"gl_tests_run\", \"mini_installer\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\", \"webkit_unit_tests\", \"wtf_unittests\"]}",
+      "{\"files\": [\"third_party/WebKit/Source/core/dom/Element.cpp\"], \"targets\": [\"angle_unittests_run\", \"blink_heap_unittests\", \"blink_platform_unittests\", \"chrome\", \"chromium_builder_tests\", \"content_gl_tests_run\", \"crash_service\", \"gl_tests_run\", \"gl_unittests_run\", \"mini_installer\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\", \"webkit_unit_tests\", \"wtf_unittests\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",

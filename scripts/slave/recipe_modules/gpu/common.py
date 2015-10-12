@@ -6,6 +6,7 @@ GPU_ISOLATES = (
   'angle_unittests',
   'content_gl_tests',
   'gl_tests',
+  'gl_unittests',
   'gles2_conform_test',
   'gpu_unittests',
   'tab_capture_end2end_tests',

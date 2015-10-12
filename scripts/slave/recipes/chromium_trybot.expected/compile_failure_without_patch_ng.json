@@ -251,7 +251,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--swarming-targets-file",
-      "content_gl_tests\ngl_tests\nangle_unittests\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntab_capture_end2end_tests\n",
+      "content_gl_tests\ngl_tests\nangle_unittests\ngl_unittests\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntab_capture_end2end_tests\n",
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -281,6 +281,7 @@
       "chromium_swarm_tests",
       "content_gl_tests_run",
       "gl_tests_run",
+      "gl_unittests_run",
       "tab_capture_end2end_tests_run",
       "telemetry_gpu_test_run"
     ],
@@ -402,7 +403,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--swarming-targets-file",
-      "content_gl_tests\ngl_tests\nangle_unittests\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntab_capture_end2end_tests\n",
+      "content_gl_tests\ngl_tests\nangle_unittests\ngl_unittests\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntab_capture_end2end_tests\n",
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -432,6 +433,7 @@
       "chromium_swarm_tests",
       "content_gl_tests_run",
       "gl_tests_run",
+      "gl_unittests_run",
       "tab_capture_end2end_tests_run",
       "telemetry_gpu_test_run"
     ],
