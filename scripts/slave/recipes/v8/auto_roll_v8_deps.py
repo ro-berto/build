@@ -30,6 +30,10 @@ V8_DEPS_DIFFS = freeze({
   'tools/gyp': 'build/gyp',
 })
 
+# Skip these dependencies (list without solution name prefix).
+BLACKLIST = [
+  'test/test262/data',
+]
 
 def GetDEPS(api, name, repo):
   # Make a fake spec. Gclient is not nice to us when having two solutions
@@ -125,6 +129,8 @@ def RunSteps(api):
 
   # Iterate over all v8 deps.
   for name in sorted(v8_deps.keys()):
+    if name in BLACKLIST:
+      continue
     def SplitValue(solution_name, value):
       assert '@' in value, (
           'Found %s value %s without pinned revision.' % (solution_name, name))
@@ -189,6 +195,7 @@ def GenTests(api):
     'v8/a/dep: repo2@deadbeef\n'
     'v8/odd/dep: odd@odd\n'
     'v8/another/dep: repo3@deadbeef\n'
+    'v8/test/test262/data: repo4@ignore\n'
   )
   cr_deps_info = (
     'src: repo3@cr_rev\n'
