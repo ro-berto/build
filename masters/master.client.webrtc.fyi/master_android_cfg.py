@@ -15,11 +15,13 @@ def Update(c):
                             treeStableTimer=0,
                             builderNames=[
           'Android Builder (dbg)',
+          'Android32 ASan (L Nexus6)',
       ]),
   ])
 
   specs = [
     {'name': 'Android Builder (dbg)'},
+    {'name': 'Android32 ASan (L Nexus6)'},
     {'name': 'Android32 Tests (L Nexus6)(dbg)'},
   ]
 
