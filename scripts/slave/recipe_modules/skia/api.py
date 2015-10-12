@@ -392,7 +392,7 @@ import sys
 
 ccache = None
 try:
-  ccache = subprocess.check_output(['which', 'ccache'])
+  ccache = subprocess.check_output(['which', 'ccache']).rstrip()
 except:
   pass
 print json.dumps({'ccache': ccache})
