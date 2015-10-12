@@ -127,9 +127,9 @@
       "default",
       "--no-snap",
       "--noi18n",
+      "--rerun-failures-count=2",
       "--shard-count=2",
       "--shard-run=1",
-      "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -170,9 +170,9 @@
       "--download-data",
       "--no-snap",
       "--noi18n",
+      "--rerun-failures-count=2",
       "--shard-count=2",
       "--shard-run=1",
-      "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
     ],

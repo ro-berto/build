@@ -133,9 +133,9 @@
       "--buildbot",
       "--timeout=200",
       "default",
+      "--rerun-failures-count=2",
       "--shard-count=2",
       "--shard-run=1",
-      "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -173,9 +173,9 @@
       "--buildbot",
       "--timeout=200",
       "webkit",
+      "--rerun-failures-count=2",
       "--shard-count=2",
       "--shard-run=1",
-      "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -215,9 +215,9 @@
       "test262",
       "--no-variants",
       "--download-data",
+      "--rerun-failures-count=2",
       "--shard-count=2",
       "--shard-run=1",
-      "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -255,9 +255,9 @@
       "--buildbot",
       "--timeout=200",
       "mozilla",
+      "--rerun-failures-count=2",
       "--shard-count=2",
       "--shard-run=1",
-      "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
     ],

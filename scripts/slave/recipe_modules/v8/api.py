@@ -634,12 +634,6 @@ class V8Api(recipe_api.RecipeApi):
         '%s -reset_every_nth_pending 0 --' % drrun,
       ]
 
-    if self.c.testing.may_shard and self.c.testing.SHARD_COUNT > 1:
-      full_args += [
-        '--shard-count=%d' % self.c.testing.SHARD_COUNT,
-        '--shard-run=%d' % self.c.testing.SHARD_RUN,
-      ]
-
     llvm_symbolizer_path = self.m.path['checkout'].join(
         'third_party', 'llvm-build', 'Release+Asserts', 'bin',
         'llvm-symbolizer')
@@ -675,8 +669,6 @@ class V8Api(recipe_api.RecipeApi):
 
     full_args += [
       '--rerun-failures-count=%d' % self.rerun_failures_count,
-      '--json-test-results',
-      self.m.json.output(add_json_log=False),
     ]
     return full_args, env
 

@@ -125,9 +125,9 @@
       "--buildbot",
       "--timeout=200",
       "default",
+      "--rerun-failures-count=2",
       "--shard-count=2",
       "--shard-run=1",
-      "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -165,9 +165,9 @@
       "--buildbot",
       "--timeout=200",
       "webkit",
+      "--rerun-failures-count=2",
       "--shard-count=2",
       "--shard-run=1",
-      "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -207,9 +207,9 @@
       "optimize_for_size",
       "--no-variants",
       "--extra-flags=--optimize-for-size",
+      "--rerun-failures-count=2",
       "--shard-count=2",
       "--shard-run=1",
-      "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -248,9 +248,9 @@
       "--timeout=200",
       "simdjs/shell_test_runner",
       "--download-data",
+      "--rerun-failures-count=2",
       "--shard-count=2",
       "--shard-run=1",
-      "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
     ],

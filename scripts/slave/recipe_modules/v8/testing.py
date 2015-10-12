@@ -113,6 +113,15 @@ class V8Test(BaseTest):
           self.v8._test_data.get('flakes', False))
 
     full_args, env = self.v8._setup_test_runner(test, self.applied_test_filter)
+    if self.v8.c.testing.may_shard and self.v8.c.testing.SHARD_COUNT > 1:
+      full_args += [
+        '--shard-count=%d' % self.v8.c.testing.SHARD_COUNT,
+        '--shard-run=%d' % self.v8.c.testing.SHARD_RUN,
+      ]
+    full_args += [
+      '--json-test-results',
+      self.api.json.output(add_json_log=False),
+    ]
     step_result = self.api.python(
       test['name'],
       self.api.path['checkout'].join('tools', 'run-tests.py'),
