@@ -241,6 +241,11 @@ BUILDERS = freeze({
         'buildername': 'Android Builder',
         'tester': 'Android Tests',
       },
+      'linux_arm_compile': {
+        'mastername': 'chromium.fyi',
+        'buildername': 'Linux ARM',
+        'analyze_mode': 'compile',
+      },
       'linux_chromium_dbg_32_ng': {
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder (dbg)(32)',
