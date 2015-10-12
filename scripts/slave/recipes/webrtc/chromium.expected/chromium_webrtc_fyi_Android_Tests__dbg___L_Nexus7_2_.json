@@ -375,7 +375,9 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--gtest_filter=WebRtc*"
+      "--gtest_filter=WebRtc*",
+      "-t",
+      "1800"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

@@ -67,7 +67,8 @@ def RunSteps(api):
       if api.chromium.c.TARGET_PLATFORM == 'android':
         api.chromium_android.run_test_suite(
             'content_browsertests',
-            gtest_filter='WebRtc*')
+            gtest_filter='WebRtc*',
+            shard_timeout=30*60)
       else:
         webrtc.runtests()
 
