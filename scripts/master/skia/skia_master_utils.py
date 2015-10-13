@@ -321,7 +321,8 @@ def SetupMaster(ActiveMaster):
   with status_json.JsonStatusHelper() as json_helper:
     json_helper.putChild('trybots', status_json.TryBuildersJsonResource)
 
-  if ActiveMaster.is_production_host:
+  if (ActiveMaster.is_production_host and
+      ActiveMaster.project_name != 'SkiaInternal'):
     # Build result emails.
     c['status'].append(status_logger.StatusEventLogger())
     c['status'].append(skia_notifier.SkiaMailNotifier(
