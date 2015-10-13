@@ -9,9 +9,9 @@ def parse_chartjson_metric(results, metric):  # pragma: no cover
     metric: A pair of strings indicating chart and trace names.
 
   Returns:
-    A triad (valid_values, values, all_results) where valid_values is a boolean,
-    values is a list of floating point numbers, and all_results is a dictionary
-    containing all the results originally in results_str.
+    A triple (valid_values, values, all_results) where valid_values is a
+    boolean, values is a list of floating point numbers, and all_results is a
+    dictionary containing all the results originally in results_str.
   """
   def escape_chars(original_string):
     return re.sub( r'[\:|=/#&,]' , '_', original_string)
@@ -31,8 +31,8 @@ def parse_chartjson_metric(results, metric):  # pragma: no cover
     if (results['charts'][chart_name][trace_name]['type'] ==
         'list_of_scalar_values'):
       values = results['charts'][chart_name][trace_name]['values']
-      if len(values):
-        avg_value = [sum(values)/len(values)]
+      if values:
+        avg_value = [sum(values) / len(values)]
         return True, avg_value, results
   except KeyError:  # e.g. metric not found
     pass
