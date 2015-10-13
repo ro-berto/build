@@ -414,6 +414,10 @@ class Bisector(object):
           'bisector.lkgr: %r' % self.lkgr,
           'bisector.fkbr: %r' % self.fkbr,
       ]
+      for revision in self.revisions:
+        if revision.values:
+          commit = revision.commit_hash
+          lines.append('Values for %s: %r' % (commit, revision.values))
       return '\n'.join(lines)
 
     t, df, p = self.api.m.math_utils.welchs_t_test(
