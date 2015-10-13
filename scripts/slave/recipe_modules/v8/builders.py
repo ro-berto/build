@@ -1646,6 +1646,16 @@ BUILDERS = {
         'tests': ['v8testing', 'benchmarks'],
         'testing': {'platform': 'linux'},
       },
+      'v8_linux_gc_stress_dbg': {
+        'v8_apply_config': ['gc_stress'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['mjsunit', 'webkit'],
+        'testing': {'platform': 'linux'},
+      },
       'v8_linux64_asan_rel': {
         'chromium_apply_config': [
           'v8_ninja',
@@ -1844,6 +1854,17 @@ BUILDERS = {
         'tests': ['v8testing', 'webkit', 'simdjs_small'],
         'testing': {'platform': 'mac'},
       },
+      'v8_mac_gc_stress_dbg': {
+        'chromium_apply_config': ['v8_ninja', 'clang', 'goma'],
+        'v8_apply_config': ['gc_stress'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['mjsunit', 'webkit'],
+        'testing': {'platform': 'mac'},
+      },
       'v8_mac64_asan_rel': {
         'chromium_apply_config': [
           'v8_ninja',
@@ -1898,6 +1919,17 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': ['v8testing', 'webkit', 'simdjs_small'],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux_arm64_gc_stress_dbg': {
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
+        'v8_apply_config': ['gc_stress'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': ['mjsunit', 'webkit'],
         'testing': {'platform': 'linux'},
       },
       'v8_android_arm_compile_rel': {
