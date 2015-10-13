@@ -13,14 +13,27 @@ def parse_chartjson_metric(results, metric):  # pragma: no cover
     values is a list of floating point numbers, and all_results is a dictionary
     containing all the results originally in results_str.
   """
+  def escape_chars(original_string):
+    return re.sub( r'[\:|=/#&,]' , '_', original_string)
+
   chart_name, trace_name = metric
   if trace_name == chart_name:
     trace_name = 'summary'
   try:
-    values = results['charts'][chart_name][trace_name]['values']
-    if len(values):
-      avg_value = [sum(values)/len(values)]
-      return True, avg_value, results
+    for chart in results['charts']:
+      if escape_chars(chart) == chart_name:
+        chart_name = chart  # Unescaping
+        break
+    for trace in results['charts'][chart_name]:
+      if escape_chars(trace) == trace_name:
+        trace_name = trace  # Unescaping
+        break
+    if (results['charts'][chart_name][trace_name]['type'] ==
+        'list_of_scalar_values'):
+      values = results['charts'][chart_name][trace_name]['values']
+      if len(values):
+        avg_value = [sum(values)/len(values)]
+        return True, avg_value, results
   except KeyError:  # e.g. metric not found
     pass
   return False, [], results
