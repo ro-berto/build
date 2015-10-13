@@ -78,6 +78,12 @@
       "slave_pools": ["webview_amp"],
       "category": "1Webview",
     },
+    "Android One": {
+      "recipe": "chromium",
+      "scheduler": None,
+      "slave_pools": ["android-one"],
+      "category": "3Testers",
+    },
     "Android Remoting Tests": {
       "recipe": "chromium",
       "scheduler": None,
@@ -129,6 +135,14 @@
   },
 
   "slave_pools": {
+    "android-one": {
+      "slave_data": {
+        "os": "linux",
+        "version": "precise",
+        "bits": 64,
+      },
+      "slaves": ["build19-b1"],
+    },
     "builders": {
       "slave_data": {
         "os": "linux",
