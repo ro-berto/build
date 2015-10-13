@@ -29,10 +29,6 @@ RECIPE_CONFIGS = freeze({
     'chromium_config': 'libyuv_clang',
     'gclient_config': 'libyuv',
   },
-  'libyuv_asan': {
-    'chromium_config': 'libyuv_asan',
-    'gclient_config': 'libyuv',
-  },
   'libyuv_android': {
     'chromium_config': 'libyuv_android',
     'gclient_config': 'libyuv_android',
@@ -191,7 +187,8 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'Mac Asan': {
-        'recipe_config': 'libyuv_asan',
+        'recipe_config': 'libyuv_clang',
+        'chromium_apply_config': ['asan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -289,7 +286,8 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Linux Asan': {
-        'recipe_config': 'libyuv_asan',
+        'recipe_config': 'libyuv_clang',
+        'chromium_apply_config': ['asan', 'lsan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -430,7 +428,8 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'mac_asan': {
-        'recipe_config': 'libyuv_asan',
+        'recipe_config': 'libyuv_clang',
+        'chromium_apply_config': ['asan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -512,7 +511,8 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'linux_asan': {
-        'recipe_config': 'libyuv_asan',
+        'recipe_config': 'libyuv_clang',
+        'chromium_apply_config': ['asan', 'lsan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
