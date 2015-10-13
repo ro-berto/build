@@ -1,4 +1,32 @@
+import math
 import re
+
+
+def _geom_mean_and_std_dev_from_histogram(histogram):  # pragma: no cover
+  # Copied from: https://code.google.com/p/chromium/codesearch#chromium/build/scripts/common/chromium_utils.py&l=222
+  # TODO(robertocn): Remove this code duplication from common.chromium_utils
+  if not 'buckets' in histogram:
+    return 0.0, 0.0
+  count = 0
+  sum_of_logs = 0
+  for bucket in histogram['buckets']:
+    if 'high' in bucket:
+      bucket['mean'] = (bucket['low'] + bucket['high']) / 2.0
+    else:
+      bucket['mean'] = bucket['low']
+    if bucket['mean'] > 0:
+      sum_of_logs += math.log(bucket['mean']) * bucket['count']
+      count += bucket['count']
+
+  if count == 0:
+    return 0.0, 0.0
+
+  sum_of_squares = 0
+  geom_mean = math.exp(sum_of_logs / count)
+  for bucket in histogram['buckets']:
+    if bucket['mean'] > 0:
+      sum_of_squares += (bucket['mean'] - geom_mean) ** 2 * bucket['count']
+  return geom_mean, math.sqrt(sum_of_squares / count)
 
 
 def parse_chartjson_metric(results, metric):  # pragma: no cover
@@ -34,6 +62,9 @@ def parse_chartjson_metric(results, metric):  # pragma: no cover
       if values:
         avg_value = [sum(values) / len(values)]
         return True, avg_value, results
+    if results['charts'][chart_name][trace_name]['type'] == 'histogram':
+      return True, [_geom_mean_and_std_dev_from_histogram(
+          results['charts'][chart_name][trace_name])[0]], results
   except KeyError:  # e.g. metric not found
     pass
   return False, [], results
