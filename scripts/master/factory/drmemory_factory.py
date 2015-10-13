@@ -329,9 +329,11 @@ class DrCommands(object):
     self.AddDrMemorySource()
     # There is no git equivalent of svnversion, so we do not set dr_revision.
     self.AddTools()
+    # We always run the long suite on the bots, rather than splitting into
+    # short and "nightly", as it's not all that long.
     cmd = ['ctest', '--timeout', '60', '-VV', '-S',
            WithProperties('../drmemory/tests/runsuite.cmake,' +
-                          'drmemory_only;build=%(buildnumber)s')]
+                          'drmemory_only;long;build=%(buildnumber)s')]
     self.AddToolStep(CTest,
                      command=cmd,
                      name='Dr. Memory ctest',
