@@ -471,9 +471,9 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.path['checkout'].join('tools', 'android', 'asan', 'third_party',
                                      'asan_device_setup.sh'),
         '--lib',
-        os.path.join('third_party', 'llvm-build', 'Release+Asserts', 'lib',
-                     'clang', '*', 'lib', 'linux',
-                     'libclang_rt.asan-arm-android.so')
+        self.m.path['checkout'].join(
+            'third_party', 'llvm-build', 'Release+Asserts', 'lib', 'clang', '*',
+            'lib', 'linux', 'libclang_rt.asan-arm-android.so')
     ]
     return self.m.step('asan_device_setup.sh', install_cmd,
                        infra_step=True,
