@@ -40,11 +40,6 @@ SPEC = {
       'GYP_DEFINES': {
         'test_isolation_mode': 'archive',
       },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       # TODO(phajdan.jr): Automatically add _run targets when used.
       'compile_targets': [
         'browser_tests_run',
