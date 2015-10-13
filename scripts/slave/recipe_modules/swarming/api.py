@@ -505,7 +505,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
   def _default_collect_step(self, task, **kwargs):
     """Produces a step that collects a result of an arbitrary task."""
-    args = self._get_collect_cmd_args(task)
+    args = self.get_collect_cmd_args(task)
     args.extend(['--task-summary-json', self.m.json.output()])
     if task.task_output_dir:
       args.extend(['--task-output-dir', task.task_output_dir])
@@ -557,7 +557,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     # Arguments for actual 'collect' command.
     args.append('--')
-    args.extend(self._get_collect_cmd_args(task))
+    args.extend(self.get_collect_cmd_args(task))
 
     # Always wait for all tasks to finish even if some of them failed. Allow
     # collect_gtest_task.py to emit all necessary annotations itself.
@@ -596,7 +596,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       step_test_data = self.m.test_utils.test_api.canned_telemetry_gpu_output(
           passing=True, is_win=self.m.platform.is_win, swarming=True)
 
-    args=self._get_collect_cmd_args(task)
+    args=self.get_collect_cmd_args(task)
     args.extend(['--task-output-dir', self.m.raw_io.output_dir()])
 
     try:
@@ -670,7 +670,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     return ''.join((prefix, task.title, suffix))
 
-  def _get_collect_cmd_args(self, task):
+  def get_collect_cmd_args(self, task):
     """SwarmingTask -> argument list for 'swarming.py' command."""
     args = [
       'collect',

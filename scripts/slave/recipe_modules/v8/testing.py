@@ -30,6 +30,7 @@ TEST_CONFIGS = freeze({
   'simdjs_small': {
     'name': 'SimdJs - small',
     'tests': ['simdjs/shell_test_runner'],
+    'isolate_target': 'simdjs',
     'test_args': ['--download-data'],
   },
   'simdjs': {
@@ -195,6 +196,118 @@ class V8Test(BaseTest):
   def gclient_apply_config(self):
     for c in TEST_CONFIGS[self.name].get('gclient_apply_config', []):
       self.api.gclient.apply_config(c)
+
+
+class V8SwarmingTest(V8Test):
+  @property
+  def uses_swarming(self):
+    """Returns true if the test uses swarming."""
+    return True
+
+  def _get_isolated_hash(self, test):
+    isolated = test.get('isolated_target')
+    if not isolated:
+      # Normally we run only one test and the isolate name is the same as the
+      # test name.
+      assert len(test['tests']) == 1
+      isolated = test['tests'][0]
+
+    # Get isolated hash from builder.
+    # TODO(machenbach): Add logic for builder_tester.
+    isolated_hash = self.api.properties.get('isolated_tests', {}).get(isolated)
+
+    # TODO(machenbach): Maybe this is too hard. Implement a more forgiving
+    # solution.
+    assert isolated_hash
+    return isolated_hash
+
+  def _v8_collect_step(self, task, **kwargs):
+    """Produces a step that collects and processes a result of a v8 task."""
+    # Placeholder for the merged json output.
+    json_output = self.api.json.output(add_json_log=False)
+
+    # Shim script's own arguments.
+    args = [
+      '--swarming-client-dir', self.api.swarming_client.path,
+      '--temp-root-dir', self.api.path['tmp_base'],
+      '--merged-test-output', json_output,
+    ]
+
+    # Arguments for actual 'collect' command.
+    args.append('--')
+    args.extend(self.api.swarming.get_collect_cmd_args(task))
+
+    return self.api.python(
+        name=self.test['name'],
+        script=self.v8.resource('collect_v8_task.py'),
+        args=args,
+        allow_subannotations=True,
+        step_test_data=kwargs.pop('step_test_data', None),
+        **kwargs)
+
+  def pre_run(self, **kwargs):
+    # Set up arguments for test runner.
+    self.test = TEST_CONFIGS[self.name]
+    extra_args, _ = self.v8._setup_test_runner(
+        self.test, self.applied_test_filter)
+
+    # Let json results be stored in swarming's output folder. The collect
+    # step will copy the folder's contents back to the client.
+    extra_args += [
+      '--json-test-results',
+      '${ISOLATED_OUTDIR}/output.json',
+    ]
+
+    # Initialize number of shards as specified via builder configuration.
+    # TODO(machenbach): This specifies shards per tester. Implement shards
+    # per test.
+    shards = 1
+    if self.v8.c.testing.may_shard and self.v8.c.testing.SHARD_COUNT > 1:
+      shards = self.v8.c.testing.SHARD_COUNT
+
+    # Initialize swarming task with custom data-collection step for v8
+    # test-runner output.
+    self.task = self.api.swarming.task(
+        title=self.test['name'],
+        isolated_hash=self._get_isolated_hash(self.test),
+        shards=shards,
+        extra_args=extra_args,
+    )
+    self.task.collect_step = lambda task, **kw: (
+        self._v8_collect_step(task, **kw))
+
+    # Add custom dimensions.
+    if self.v8.bot_config.get('swarming_dimensions'):
+      self.task.dimensions.update(self.v8.bot_config['swarming_dimensions'])
+
+    # Set default value.
+    if 'os' not in self.task.dimensions:  # pragma: no cover
+      # TODO(machenbach): Remove pragma as soon as there's a builder without
+      # default value.
+      self.task.dimensions['os'] = self.api.swarming.prefered_os_dimension(
+          self.api.platform.name)
+
+    self.api.swarming.trigger_task(self.task)
+
+  def run(self, **kwargs):
+    # TODO(machenbach): Soften this when softening 'assert isolated_hash'
+    # above.
+    assert self.task
+    try:
+      # Collect swarming results. Use the same test simulation data for the
+      # swarming collect step like for local testing.
+      result = self.api.swarming.collect_task(
+        self.task,
+        step_test_data=lambda: self.v8.test_api.output_json(),
+      )
+    finally:
+      # Note: Exceptions from post_run might hide a pending exception from the
+      # try block.
+      return self.post_run(self.test)
+
+  def rerun(self, failure_dict, **kwargs):  # pragma: no cover
+    # TODO(machenbach): Implement rerun with swarming.
+    return TestResults.empty()
 
 
 class V8Presubmit(BaseTest):
@@ -365,6 +478,14 @@ class TestResults(object):
     )
 
 
-def create_test(test, v8_api, api):
-  return V8_NON_STANDARD_TESTS.get(test, V8Test)(test, v8_api, api)
+def create_test(test, api, v8_api):
+  test_cls = V8_NON_STANDARD_TESTS.get(test)
+  if not test_cls:
+    # TODO(machenbach): Implement swarming for non-standard tests.
+    if (v8_api.bot_config.get('enable_swarming') and
+        TEST_CONFIGS[test].get('can_use_on_swarming_builders')):
+      test_cls = V8SwarmingTest
+    else:
+      test_cls = V8Test
+  return test_cls(test, api, v8_api)
 

@@ -135,6 +135,7 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
+          'SHARD_COUNT': 2,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - swarming staging builder',
@@ -143,6 +144,10 @@ BUILDERS = {
           'v8testing',
         ],
         'testing': {'platform': 'linux'},
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Ubuntu-12.04',
+        },
       },
       'V8 Linux - debug': {
         'v8_config_kwargs': {

@@ -17,6 +17,7 @@ DEPS = [
   'raw_io',
   'step',
   'swarming',
+  'swarming_client',
   'test_utils',
   'time',
   'trigger',

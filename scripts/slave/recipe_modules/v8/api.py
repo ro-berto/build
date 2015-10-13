@@ -149,6 +149,9 @@ class V8Api(recipe_api.RecipeApi):
     if self.bot_config.get('enable_swarming'):
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
       self.m.swarming.check_client_version()
+      for key, value in self.bot_config.get(
+          'swarming_dimensions', {}).iteritems():
+        self.m.swarming.set_default_dimension(key, value)
 
   def runhooks(self, **kwargs):
     env = {}
