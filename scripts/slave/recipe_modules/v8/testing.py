@@ -104,7 +104,6 @@ class V8Test(BaseTest):
 
   def run(self, test=None, **kwargs):
     test = test or TEST_CONFIGS[self.name]
-    failure_factory=Failure.factory_func(self.name)
 
     def step_test_data():
       return self.v8.test_api.output_json(
@@ -122,7 +121,7 @@ class V8Test(BaseTest):
       '--json-test-results',
       self.api.json.output(add_json_log=False),
     ]
-    step_result = self.api.python(
+    self.api.python(
       test['name'],
       self.api.path['checkout'].join('tools', 'run-tests.py'),
       full_args,
@@ -133,6 +132,12 @@ class V8Test(BaseTest):
       step_test_data=step_test_data,
       **kwargs
     )
+    return self.post_run(test)
+
+  def post_run(self, test):
+    # The active step was either a local test run or the swarming collect step.
+    step_result = self.api.step.active_result
+    json_output = step_result.json.output
 
     # Log used test filters.
     if self.applied_test_filter:
@@ -141,11 +146,11 @@ class V8Test(BaseTest):
     # The output is expected to be a list of architecture dicts that
     # each contain a results list. On buildbot, there is only one
     # architecture.
-    assert len(step_result.json.output) == 1
-    self.v8._update_durations(
-        step_result.json.output[0], step_result.presentation)
+    assert len(json_output) == 1
+    self.v8._update_durations(json_output[0], step_result.presentation)
+    failure_factory=Failure.factory_func(self.name)
     failure_log, failures, flake_log, flakes = (
-        self.v8._get_failure_logs(step_result.json.output[0], failure_factory))
+        self.v8._get_failure_logs(json_output[0], failure_factory))
     self.v8._update_failure_presentation(
         failure_log, failures, step_result.presentation)
 
