@@ -259,6 +259,9 @@ def main(argv):
               args.filter_by_blamelist not in blamelist):
             continue
 
+          if not properties.get('issue') or not properties.get('patchset'):
+            continue
+
           builds.append(build)
           all_builds.append(build)
           cl_ids.add('%s:%s' % (properties['issue'], properties['patchset']))
