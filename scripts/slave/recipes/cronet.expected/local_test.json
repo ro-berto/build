@@ -397,7 +397,9 @@
       "net_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "-t",
+      "180"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

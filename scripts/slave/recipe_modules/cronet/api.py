@@ -101,7 +101,7 @@ class CronetApi(recipe_api.RecipeApi):
     droid.common_tests_setup_steps()
     with self.m.step.defer_results():
       for suite in UNIT_TESTS:
-        droid.run_test_suite(suite)
+        droid.run_test_suite(suite, shard_timeout=180)
       for suite in INSTRUMENTATION_TESTS:
         droid.run_instrumentation_suite(
             suite['test'], verbose=True,
