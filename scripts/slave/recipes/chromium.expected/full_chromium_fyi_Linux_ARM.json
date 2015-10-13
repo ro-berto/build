@@ -157,7 +157,8 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "all"
+      "All",
+      "chromium_builder_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"

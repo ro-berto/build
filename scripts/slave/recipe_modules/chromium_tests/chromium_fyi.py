@@ -63,13 +63,13 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-        'all',
-      ],
       'use_isolate': True,
       'testing': {
         'platform': 'linux',
       },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
     },
     'Linux Trusty': {
       'chromium_config': 'chromium',
