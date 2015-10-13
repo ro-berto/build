@@ -141,16 +141,21 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
       return [string.Template(s).safe_substitute(substitutions)
               for s in self._all_compile_targets[self._script]]
-    except KeyError:
-      # Not all scripts will have test data inside recipes,
-      # so return a default value.
+    except KeyError:  # pragma: no cover
+      # There are internal recipes that appear to configure
+      # test script steps, but ones that don't have data.
+      # We get around this by returning a default value for that case.
+      # But the recipes should be updated to not do this.
+      # We mark this as pragma: no cover since the public recipes
+      # will not exercise this block.
+      #
       # TODO(phajdan.jr): Revisit this when all script tests
       # lists move src-side. We should be able to provide
       # test data then.
       if api.chromium._test_data.enabled:
         return []
 
-      raise  # pragma: no cover
+      raise
 
   def run(self, api, suffix):
     name = self.name
