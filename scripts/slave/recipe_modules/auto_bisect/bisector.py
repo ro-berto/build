@@ -71,8 +71,10 @@ class Bisector(object):
       self.revisions = []
       self.bad_rev = revision_class(bisect_config['bad_revision'], self)
       self.bad_rev.bad = True
+      self.fkbr = self.bad_rev
       self.good_rev = revision_class(bisect_config['good_revision'], self)
       self.good_rev.good = True
+      self.lkgr = self.good_rev
     if init_revisions:
       self._expand_revision_range()
 

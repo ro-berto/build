@@ -657,8 +657,8 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Debug Info",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: None@@@",
-      "@@@STEP_LOG_LINE@Debug Info@bisector.fkbr: None@@@",
+      "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: PerfRevisionState(values=[70, 70, 80, 90, 90], mean_value=80, std_err=10)@@@",
+      "@@@STEP_LOG_LINE@Debug Info@bisector.fkbr: PerfRevisionState(values=[], mean_value=None, std_err=None)@@@",
       "@@@STEP_LOG_END@Debug Info@@@"
     ]
   },
