@@ -3237,8 +3237,6 @@
       "content_gl_tests on Intel GPU on Mac (with patch)",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "170242"
     ],
@@ -3287,8 +3285,6 @@
       "gl_tests on Intel GPU on Mac (with patch)",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "170242"
     ],
@@ -3337,8 +3333,6 @@
       "angle_unittests on Intel GPU on Mac (with patch)",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "170242"
     ],
@@ -3387,8 +3381,6 @@
       "gl_unittests on Intel GPU on Mac (with patch)",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "170242"
     ],
@@ -3697,8 +3689,6 @@
       "tab_capture_end2end_tests on Intel GPU on Mac (with patch)",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "170242"
     ],
@@ -3747,8 +3737,6 @@
       "content_gl_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "170242"
     ],
@@ -3797,8 +3785,6 @@
       "gl_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "170242"
     ],
@@ -3847,8 +3833,6 @@
       "angle_unittests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "170242"
     ],
@@ -3897,8 +3881,6 @@
       "gl_unittests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "170242"
     ],
@@ -4207,8 +4189,6 @@
       "tab_capture_end2end_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "170242"
     ],

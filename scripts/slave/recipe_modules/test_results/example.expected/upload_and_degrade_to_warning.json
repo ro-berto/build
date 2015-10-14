@@ -16,8 +16,6 @@
       "example-test-type",
       "--test-results-server",
       "localhost",
-      "--webkit-revision",
-      "1",
       "--chrome-revision",
       "2"
     ],

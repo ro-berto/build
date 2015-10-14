@@ -13,4 +13,4 @@ Example usage:
       --test-type=layout-tests --input-gtest-json=/tmp/gtest_input.json
       --master-name=chromium.webkit --build-number=2257
       --builder-name='WebKit Win7 (dbg)'
-      --webkit-revision=200870 --chrome-revision=344402
+      --chrome-revision=344402

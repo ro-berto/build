@@ -158,12 +158,9 @@ def RunSteps(api):
               'got_revision_cp', 'x@{#0}')
           chrome_revision = str(api.commit_position.parse_revision(
               chrome_revision_cp))
-          webkit_revision = api.bot_update.properties.get(
-              'got_webkit_revision', '0')
           api.test_results.upload(
               api.json.input(parsed_gtest_data),
               chrome_revision=chrome_revision,
-              webkit_revision=webkit_revision,
               test_type=task.title,
               test_results_server='test-results-test.appspot.com')
 

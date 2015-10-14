@@ -581,8 +581,6 @@
       "angle_unittests on NVIDIA GPU on Windows (with patch) on Windows",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "170242"
     ],
@@ -631,8 +629,6 @@
       "angle_unittests on ATI GPU on Windows (with patch) on Windows",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "170242"
     ],

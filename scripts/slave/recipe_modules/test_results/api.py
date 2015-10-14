@@ -9,9 +9,8 @@ class TestResultsApi(recipe_api.RecipeApi):
   """Recipe module to upload gtest json results to test-results server."""
 
   # TODO(estaab): Make test_results_server a configuration value.
-  def upload(self, gtest_results_file, test_type,
-             webkit_revision, chrome_revision, test_results_server,
-             downgrade_error_to_warning=True):
+  def upload(self, gtest_results_file, test_type, chrome_revision,
+             test_results_server, downgrade_error_to_warning=True):
     """Upload gtest results json to test-results.
 
     Args:
@@ -34,7 +33,6 @@ class TestResultsApi(recipe_api.RecipeApi):
                 '--build-number', self.m.properties['buildnumber'],
                 '--test-type', test_type,
                 '--test-results-server', test_results_server,
-                '--webkit-revision', webkit_revision,
                 '--chrome-revision', chrome_revision])
     finally:
       step_result = self.m.step.active_result

@@ -3533,8 +3533,6 @@
       "content_gl_tests on NVIDIA GPU on Windows (with patch) on Windows",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "297276"
     ],
@@ -3583,8 +3581,6 @@
       "gl_tests on NVIDIA GPU on Windows (with patch) on Windows",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "297276"
     ],
@@ -3633,8 +3629,6 @@
       "angle_unittests on NVIDIA GPU on Windows (with patch) on Windows",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "297276"
     ],
@@ -3683,8 +3677,6 @@
       "gl_unittests on NVIDIA GPU on Windows (with patch) on Windows",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "297276"
     ],
@@ -3733,8 +3725,6 @@
       "angle_end2end_tests on NVIDIA GPU on Windows (with patch) on Windows",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "297276"
     ],
@@ -4095,8 +4085,6 @@
       "content_gl_tests on ATI GPU on Windows (with patch) on Windows",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "297276"
     ],
@@ -4145,8 +4133,6 @@
       "gl_tests on ATI GPU on Windows (with patch) on Windows",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "297276"
     ],
@@ -4195,8 +4181,6 @@
       "angle_unittests on ATI GPU on Windows (with patch) on Windows",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "297276"
     ],
@@ -4245,8 +4229,6 @@
       "gl_unittests on ATI GPU on Windows (with patch) on Windows",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "297276"
     ],
@@ -4295,8 +4277,6 @@
       "angle_end2end_tests on ATI GPU on Windows (with patch) on Windows",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "297276"
     ],

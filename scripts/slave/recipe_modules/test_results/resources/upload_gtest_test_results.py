@@ -50,8 +50,7 @@ def get_results_map_from_json(results_json):
 
 
 def generate_json_results(test_results_map, builder_name, build_number,
-                          results_directory, webkit_revision, chrome_revision,
-                          master_name):
+                          results_directory, chrome_revision, master_name):
   """Generates JSON results files from the given test_results_map.
 
   Args:
@@ -63,11 +62,11 @@ def generate_json_results(test_results_map, builder_name, build_number,
   print('Generating json: '
         'builder_name:%s, build_number:%s, '
         'results_directory:%s, '
-        'webkit_revision:%s, chrome_revision:%s '
+        'chrome_revision:%s '
         'master_name:%s' %
         (builder_name, build_number,
          results_directory,
-         webkit_revision, chrome_revision,
+         chrome_revision,
          master_name))
 
   # TODO(estaab): This doesn't need to be an object. Make it a simple function.
@@ -75,9 +74,7 @@ def generate_json_results(test_results_map, builder_name, build_number,
       builder_name, build_number,
       results_directory,
       test_results_map,
-      # TODO(estaab): Remove once blink merge happens.
-      svn_revisions=(('blink', webkit_revision),
-                     ('chromium', chrome_revision)),
+      svn_revisions=[('chromium', chrome_revision)],
       master_name=master_name)
   generator.generate_json_output()
   generator.generate_times_ms_file()
@@ -107,9 +104,6 @@ def main():
                                 'Both test-results-server and master-name '
                                 'need to be specified to upload the results '
                                 'to the server.')
-  option_parser.add_option('--webkit-revision', default='0',
-                           help='The WebKit revision being tested. If not '
-                                'given, defaults to 0.')
   option_parser.add_option('--chrome-revision', default='0',
                            help='The Chromium revision being tested. If not '
                                 'given, defaults to 0.')
@@ -135,8 +129,7 @@ def main():
 
   generate_json_results(results_map, options.builder_name,
                         options.build_number, options.results_directory,
-                        options.webkit_revision, options.chrome_revision,
-                        options.master_name)
+                        options.chrome_revision, options.master_name)
 
   # Upload to a test results server if specified.
   if options.test_results_server and options.master_name:

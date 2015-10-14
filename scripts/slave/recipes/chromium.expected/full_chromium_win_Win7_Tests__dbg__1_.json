@@ -363,8 +363,6 @@
       "browser_tests",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "170242"
     ],

@@ -23,7 +23,6 @@ def RunSteps(api):
   api.test_results.upload(
       api.json.input(gtest_results),
       chrome_revision=2,
-      webkit_revision=1,
       test_type='example-test-type',
       test_results_server='localhost',
       downgrade_error_to_warning=api.properties.get('warning'))

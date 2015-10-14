@@ -430,8 +430,6 @@
       "dummy_target_1",
       "--test-results-server",
       "test-results-test.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "0"
     ],
@@ -481,8 +479,6 @@
       "dummy_target_2",
       "--test-results-server",
       "test-results-test.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "0"
     ],

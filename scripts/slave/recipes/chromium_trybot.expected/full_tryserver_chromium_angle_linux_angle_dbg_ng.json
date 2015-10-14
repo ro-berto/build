@@ -1776,8 +1776,6 @@
       "content_gl_tests on NVIDIA GPU on Linux (with patch) on Linux",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "297276"
     ],
@@ -1826,8 +1824,6 @@
       "gl_tests on NVIDIA GPU on Linux (with patch) on Linux",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "297276"
     ],
@@ -1876,8 +1872,6 @@
       "angle_unittests on NVIDIA GPU on Linux (with patch) on Linux",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "297276"
     ],
@@ -1926,8 +1920,6 @@
       "gl_unittests on NVIDIA GPU on Linux (with patch) on Linux",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "297276"
     ],
@@ -1976,8 +1968,6 @@
       "angle_end2end_tests on NVIDIA GPU on Linux (with patch) on Linux",
       "--test-results-server",
       "test-results.appspot.com",
-      "--webkit-revision",
-      "0",
       "--chrome-revision",
       "297276"
     ],
