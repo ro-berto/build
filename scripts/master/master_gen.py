@@ -100,7 +100,8 @@ def _ComputeBuilders(builders, m_annotator):
     # We will automatically merge all build requests for any
     # builder that can be scheduled; this is normally the behavior
     # we want for repo-triggered builders and cron-triggered builders.
-    merge_requests = bool(scheduler_name)
+    # You can override this behavior by setting the mergeRequests field though.
+    merge_requests = builder_data.get('mergeRequests', bool(scheduler_name))
 
     slavebuilddir = builder_data.get('slavebuilddir',
                                      util.safeTranslate(builder_name))
