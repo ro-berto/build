@@ -389,7 +389,7 @@ def _is_benchmark_match(benchmark, affected_benchmarks):
   # which benchmark to run on CQ. Right now it just compares the file name
   # with the benchmark name, which isn't necessarily correct. crbug.com/510925.
   for b in affected_benchmarks:
-    if benchmark.startswith(b) and not benchmark.endswith('reference'):
+    if benchmark.startswith(b):
       return True
   return False
 
