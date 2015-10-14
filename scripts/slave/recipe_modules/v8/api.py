@@ -219,7 +219,7 @@ class V8Api(recipe_api.RecipeApi):
         for _, bot_config in master_config['builders'].iteritems():
           if bot_config.get('parent_buildername') == buildername:
             for test in bot_config.get('tests', []):
-              config = testing.TEST_CONFIGS.get(test)
+              config = testing.TEST_CONFIGS.get(test.name)
               if config and config.get('can_use_on_swarming_builders'):
                 tests_to_isolate.extend(config['tests'])
       if tests_to_isolate:
@@ -371,7 +371,7 @@ class V8Api(recipe_api.RecipeApi):
     if 'ninja' in self.m.chromium.c.gyp_env.GYP_GENERATORS:
       targets = [failure.failure_dict.get('target_name', 'All')]
 
-    test = self.create_test(failure.test_config)
+    test = self.create_test(failure.test_step_config)
     def test_func(revision):
       return test.rerun(failure_dict=failure.failure_dict)
 

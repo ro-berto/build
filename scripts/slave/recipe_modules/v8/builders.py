@@ -7,6 +7,33 @@
 
 from recipe_engine.types import freeze
 
+
+class TestStepConfig(object):
+  """Per-step test configuration."""
+  def __init__(self, name):
+    self.name = name
+
+
+# Top-level test configs for convenience.
+Benchmarks = TestStepConfig('benchmarks')
+Deopt = TestStepConfig('deopt')
+Fuzz = TestStepConfig('fuzz')
+GCMole = TestStepConfig('gcmole')
+Mjsunit = TestStepConfig('mjsunit')
+Mozilla = TestStepConfig('mozilla')
+OptimizeForSize = TestStepConfig('optimize_for_size')
+Presubmit = TestStepConfig('presubmit')
+SimdJs = TestStepConfig('simdjs')
+SimdJsSmall = TestStepConfig('simdjs_small')
+SimpleLeak = TestStepConfig('simpleleak')
+Test262 = TestStepConfig('test262')
+Test262Variants = TestStepConfig('test262_variants')
+Unittests = TestStepConfig('unittests')
+V8Initializers = TestStepConfig('v8initializers')
+V8Testing = TestStepConfig('v8testing')
+Webkit = TestStepConfig('webkit')
+
+
 BUILDERS = {
 ####### Waterfall: client.v8
   'client.v8': {
@@ -111,7 +138,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
-        'tests': ['presubmit'],
+        'tests': [Presubmit],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux': {
@@ -123,14 +150,14 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'tests': [
-          'v8initializers',
-          'v8testing',
-          'optimize_for_size',
-          'webkit',
-          'benchmarks',
-          'simdjs',
-          'test262_variants',
-          'mozilla',
+          V8Initializers,
+          V8Testing,
+          OptimizeForSize,
+          Webkit,
+          Benchmarks,
+          SimdJs,
+          Test262Variants,
+          Mozilla,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -144,7 +171,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - swarming staging builder',
         'build_gs_archive': 'linux_swarming_staging_archive',
         'tests': [
-          'v8testing', 'test262',
+          V8Testing, Test262,
         ],
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
@@ -160,7 +187,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': ['v8testing', 'benchmarks', 'mozilla', 'simdjs'],
+        'tests': [V8Testing, Benchmarks, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - avx2': {
@@ -171,7 +198,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': ['v8testing', 'benchmarks', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Benchmarks, Mozilla, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - test262 - debug': {
@@ -182,7 +209,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': ['test262_variants'],
+        'tests': [Test262Variants],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - shared': {
@@ -193,7 +220,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'test262', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Test262, Mozilla, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosnap': {
@@ -206,10 +233,10 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - nosnap builder',
         'build_gs_archive': 'linux_nosnap_rel_archive',
         'tests': [
-          'v8testing',
-          'simdjs',
-          'test262',
-          'mozilla',
+          V8Testing,
+          SimdJs,
+          Test262,
+          Mozilla,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -224,7 +251,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - nosnap debug builder',
         'build_gs_archive': 'linux_nosnap_dbg_archive',
-        'tests': ['v8testing', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Mozilla, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosnap - debug - 2': {
@@ -238,7 +265,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - nosnap debug builder',
         'build_gs_archive': 'linux_nosnap_dbg_archive',
-        'tests': ['v8testing', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Mozilla, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - isolates': {
@@ -250,7 +277,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosse3': {
@@ -262,7 +289,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
-        'tests': ['v8testing', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Mozilla, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosse4': {
@@ -274,7 +301,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
-        'tests': ['v8testing', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Mozilla, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - deadcode': {
@@ -286,7 +313,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
-        'tests': ['v8testing', 'test262', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Test262, Mozilla, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - isolates': {
@@ -298,7 +325,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - nosse3': {
@@ -310,7 +337,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': ['v8testing', 'test262', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Test262, Mozilla, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - nosse4': {
@@ -322,7 +349,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': ['v8testing', 'test262', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Test262, Mozilla, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - gcmole': {
@@ -333,7 +360,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
-        'tests': ['gcmole'],
+        'tests': [GCMole],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - interpreted regexp': {
@@ -344,7 +371,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - noi18n - debug': {
@@ -355,7 +382,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'mozilla', 'test262', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, Mozilla, Test262, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - code serializer': {
@@ -367,8 +394,8 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': ['mjsunit', 'webkit', 'mozilla', 'test262', 'benchmarks',
-                  'simdjs_small'],
+        'tests': [Mjsunit, Webkit, Mozilla, Test262, Benchmarks,
+                  SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - greedy allocator': {
@@ -380,7 +407,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': ['v8testing', 'benchmarks', 'simdjs_small'],
+        'tests': [V8Testing, Benchmarks, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
 ####### Category: Linux64
@@ -438,13 +465,13 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux64 - builder',
         'build_gs_archive': 'linux64_rel_archive',
         'tests': [
-          'v8initializers',
-          'v8testing',
-          'optimize_for_size',
-          'webkit',
-          'test262',
-          'mozilla',
-          'simdjs',
+          V8Initializers,
+          V8Testing,
+          OptimizeForSize,
+          Webkit,
+          Test262,
+          Mozilla,
+          SimdJs,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -457,11 +484,11 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux64 - builder',
         'build_gs_archive': 'linux64_rel_archive',
         'tests': [
-          'v8testing',
-          'webkit',
-          'benchmarks',
-          'mozilla',
-          'simdjs_small',
+          V8Testing,
+          Webkit,
+          Benchmarks,
+          Mozilla,
+          SimdJsSmall,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -474,11 +501,11 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux64 - debug builder',
         'build_gs_archive': 'linux64_dbg_archive',
         'tests': [
-          'v8testing',
-          'webkit',
-          'test262',
-          'mozilla',
-          'simdjs',
+          V8Testing,
+          Webkit,
+          Test262,
+          Mozilla,
+          SimdJs,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -491,11 +518,11 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux64 - debug builder',
         'build_gs_archive': 'linux64_dbg_archive',
         'tests': [
-          'v8testing',
-          'webkit',
-          'benchmarks',
-          'mozilla',
-          'simdjs_small',
+          V8Testing,
+          Webkit,
+          Benchmarks,
+          Mozilla,
+          SimdJsSmall,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -508,7 +535,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - custom snapshot - debug': {
@@ -520,7 +547,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - custom snapshot - debug builder',
         'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
-        'tests': ['mjsunit'],
+        'tests': [Mjsunit],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - debug - greedy allocator': {
@@ -533,7 +560,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - debug builder',
         'build_gs_archive': 'linux64_dbg_archive',
-        'tests': ['v8testing', 'benchmarks', 'simdjs_small'],
+        'tests': [V8Testing, Benchmarks, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - debug - vector stores': {
@@ -547,13 +574,13 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [
-          'v8testing',
-          'optimize_for_size',
-          'webkit',
-          'benchmarks',
-          'test262',
-          'mozilla',
-          'simdjs',
+          V8Testing,
+          OptimizeForSize,
+          Webkit,
+          Benchmarks,
+          Test262,
+          Mozilla,
+          SimdJs,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -565,13 +592,13 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [
-          'v8testing',
-          'optimize_for_size',
-          'webkit',
-          'benchmarks',
-          'test262',
-          'mozilla',
-          'simdjs',
+          V8Testing,
+          OptimizeForSize,
+          Webkit,
+          Benchmarks,
+          Test262,
+          Mozilla,
+          SimdJs,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -615,7 +642,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - builder',
         'build_gs_archive': 'win32_rel_archive',
-        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'tests': [V8Testing, Webkit, Test262, Mozilla],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - 2': {
@@ -628,7 +655,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - builder',
         'build_gs_archive': 'win32_rel_archive',
-        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'tests': [V8Testing, Webkit, Test262, Mozilla],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - nosnap - shared': {
@@ -644,7 +671,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - debug - 1': {
@@ -657,7 +684,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - debug builder',
         'build_gs_archive': 'win32_dbg_archive',
-        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'tests': [V8Testing, Webkit, Test262, Mozilla],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - debug - 2': {
@@ -670,7 +697,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - debug builder',
         'build_gs_archive': 'win32_dbg_archive',
-        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'tests': [V8Testing, Webkit, Test262, Mozilla],
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - debug - 3': {
@@ -683,7 +710,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - debug builder',
         'build_gs_archive': 'win32_dbg_archive',
-        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'tests': [V8Testing, Webkit, Test262, Mozilla],
         'testing': {'platform': 'win'},
       },
       'V8 Win64': {
@@ -694,7 +721,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         # FIXME(machenbach): Add back simdjs_small once download is fixed.
-        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'tests': [V8Testing, Webkit, Test262, Mozilla],
         'testing': {'platform': 'win'},
       },
       'V8 Win64 - debug': {
@@ -705,7 +732,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         # FIXME(machenbach): Add back simdjs_small once download is fixed.
-        'tests': ['v8testing', 'webkit', 'test262', 'mozilla'],
+        'tests': [V8Testing, Webkit, Test262, Mozilla],
         'testing': {'platform': 'win'},
       },
 ####### Category: Mac
@@ -716,7 +743,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'test262', 'mozilla', 'simdjs'],
+        'tests': [V8Testing, Webkit, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'mac'},
       },
       'V8 Mac - debug': {
@@ -726,7 +753,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'test262', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, Test262, Mozilla, SimdJsSmall],
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64': {
@@ -736,7 +763,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'test262', 'mozilla', 'simdjs'],
+        'tests': [V8Testing, Webkit, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64 - debug': {
@@ -746,7 +773,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'test262', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, Test262, Mozilla, SimdJsSmall],
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64 - xcode': {
@@ -827,11 +854,11 @@ BUILDERS = {
         'parent_buildername': 'V8 Arm - builder',
         'build_gs_archive': 'arm_rel_archive',
         'tests': [
-          'v8testing',
-          'webkit',
-          'benchmarks',
-          'optimize_for_size',
-          'simdjs',
+          V8Testing,
+          Webkit,
+          Benchmarks,
+          OptimizeForSize,
+          SimdJs,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -844,7 +871,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Arm - debug builder',
         'build_gs_archive': 'arm_dbg_archive',
-        'tests': ['v8testing', 'webkit', 'optimize_for_size', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, OptimizeForSize, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Arm - debug - 1': {
@@ -858,7 +885,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Arm - debug builder',
         'build_gs_archive': 'arm_dbg_archive',
-        'tests': ['v8testing', 'webkit', 'optimize_for_size', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, OptimizeForSize, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Arm - debug - 2': {
@@ -872,7 +899,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Arm - debug builder',
         'build_gs_archive': 'arm_dbg_archive',
-        'tests': ['v8testing', 'webkit', 'optimize_for_size', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, OptimizeForSize, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
 ####### Category: MIPS
@@ -904,7 +931,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Mips - builder',
         'build_gs_archive': 'mips_rel_archive',
-        'tests': ['v8testing', 'simdjs_small'],
+        'tests': [V8Testing, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Mips - big endian - nosnap - 2': {
@@ -919,7 +946,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Mips - builder',
         'build_gs_archive': 'mips_rel_archive',
-        'tests': ['v8testing', 'simdjs_small'],
+        'tests': [V8Testing, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
 ####### Category: Simulators
@@ -931,11 +958,11 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [
-          'v8testing',
-          'webkit',
-          'test262',
-          'mozilla',
-          'simdjs',
+          V8Testing,
+          Webkit,
+          Test262,
+          Mozilla,
+          SimdJs,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -946,7 +973,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'test262', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, Test262, Mozilla, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - novfp3': {
@@ -959,7 +986,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'test262', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Test262, Mozilla, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - debug - novfp3': {
@@ -971,7 +998,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'test262', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Test262, Mozilla, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim': {
@@ -982,11 +1009,11 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [
-          'v8testing',
-          'webkit',
-          'test262',
-          'mozilla',
-          'simdjs',
+          V8Testing,
+          Webkit,
+          Test262,
+          Mozilla,
+          SimdJs,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -997,7 +1024,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, Mozilla, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - nosnap - debug - 1': {
@@ -1011,7 +1038,7 @@ BUILDERS = {
           'SHARD_RUN': 1,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'test262', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, Test262, Mozilla, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - nosnap - debug - 2': {
@@ -1025,7 +1052,7 @@ BUILDERS = {
           'SHARD_RUN': 2,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'test262', 'mozilla', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, Test262, Mozilla, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - gc stress': {
@@ -1037,7 +1064,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['mjsunit', 'webkit'],
+        'tests': [Mjsunit, Webkit],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - mipsel - sim - builder': {
@@ -1074,7 +1101,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - mipsel - sim - builder',
         'build_gs_archive': 'mipsel_sim_rel_archive',
-        'tests': ['v8testing', 'test262', 'simdjs'],
+        'tests': [V8Testing, Test262, SimdJs],
         'testing': {'platform': 'linux'},
       },
 ####### Category: Misc
@@ -1087,7 +1114,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - debug builder',
         'build_gs_archive': 'linux64_dbg_archive',
-        'tests': ['fuzz'],
+        'tests': [Fuzz],
         'testing': {'platform': 'linux'},
       },
       'V8 Deopt Fuzzer': {
@@ -1099,7 +1126,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
-        'tests': ['deopt'],
+        'tests': [Deopt],
         'testing': {'platform': 'linux'},
       },
       'V8 GC Stress - 1': {
@@ -1113,7 +1140,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': ['mjsunit', 'webkit'],
+        'tests': [Mjsunit, Webkit],
         'testing': {'platform': 'linux'},
       },
       'V8 GC Stress - 2': {
@@ -1127,7 +1154,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': ['mjsunit', 'webkit'],
+        'tests': [Mjsunit, Webkit],
         'testing': {'platform': 'linux'},
       },
       'V8 GC Stress - 3': {
@@ -1141,7 +1168,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': ['mjsunit', 'webkit'],
+        'tests': [Mjsunit, Webkit],
         'testing': {'platform': 'linux'},
       },
       'V8 Mac GC Stress': {
@@ -1152,7 +1179,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['mjsunit', 'webkit'],
+        'tests': [Mjsunit, Webkit],
         'testing': {'platform': 'mac'},
       },
       'V8 Arm GC Stress': {
@@ -1165,7 +1192,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Arm - debug builder',
         'build_gs_archive': 'arm_dbg_archive',
-        'tests': ['mjsunit', 'webkit'],
+        'tests': [Mjsunit, Webkit],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 GC Stress - custom snapshot': {
@@ -1177,7 +1204,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - custom snapshot - debug builder',
         'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
-        'tests': ['mjsunit'],
+        'tests': [Mjsunit],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux gcc 4.8': {
@@ -1187,7 +1214,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 ASAN': {
@@ -1197,7 +1224,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux64 ASAN no inline - release builder',
@@ -1324,7 +1351,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - MSAN': {
@@ -1342,7 +1369,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - memcheck': {
@@ -1353,7 +1380,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': ['simpleleak'],
+        'tests': [SimpleLeak],
         'testing': {'platform': 'linux'},
       },
       'V8 Mac64 ASAN': {
@@ -1363,7 +1390,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'mac'},
       },
 ####### Category: FYI
@@ -1402,7 +1429,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - x32 - nosnap - debug builder',
         'build_gs_archive': 'linux_x32_nosnap_dbg_archive',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - x87 - nosnap - debug builder': {
@@ -1431,7 +1458,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - x87 - nosnap - debug builder',
         'build_gs_archive': 'linux_x87_nosnap_dbg_archive',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - predictable': {
@@ -1442,7 +1469,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['mjsunit', 'webkit', 'benchmarks', 'mozilla'],
+        'tests': [Mjsunit, Webkit, Benchmarks, Mozilla],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - ppc - sim': {
@@ -1452,7 +1479,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - ppc64 - sim': {
@@ -1462,7 +1489,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - full debug': {
@@ -1473,7 +1500,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Random Deopt Fuzzer - debug': {
@@ -1484,7 +1511,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['deopt'],
+        'tests': [Deopt],
         'testing': {'platform': 'linux'},
       },
     },
@@ -1500,12 +1527,12 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [
-          'v8testing',
-          'optimize_for_size',
-          'webkit',
-          'test262',
-          'mozilla',
-          'simdjs',
+          V8Testing,
+          OptimizeForSize,
+          Webkit,
+          Test262,
+          Mozilla,
+          SimdJs,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1517,9 +1544,9 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [
-          'v8testing',
-          'webkit',
-          'simdjs_small',
+          V8Testing,
+          Webkit,
+          SimdJsSmall,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1530,7 +1557,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'benchmarks', 'simdjs_small'],
+        'tests': [V8Testing, Benchmarks, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_dbg': {
@@ -1540,7 +1567,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_greedy_allocator_dbg': {
@@ -1551,7 +1578,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'benchmarks', 'simdjs_small'],
+        'tests': [V8Testing, Benchmarks, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_rel': {
@@ -1561,7 +1588,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_dbg': {
@@ -1571,7 +1598,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_gcc_compile_rel': {
@@ -1590,7 +1617,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_rel': {
@@ -1601,12 +1628,12 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [
-          'v8initializers',
-          'v8testing',
-          'optimize_for_size',
-          'webkit',
-          'test262',
-          'simdjs',
+          V8Initializers,
+          V8Testing,
+          OptimizeForSize,
+          Webkit,
+          Test262,
+          SimdJs,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1618,9 +1645,9 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [
-          'v8testing',
-          'webkit',
-          'simdjs_small',
+          V8Testing,
+          Webkit,
+          SimdJsSmall,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1632,9 +1659,9 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [
-          'v8testing',
-          'webkit',
-          'simdjs_small',
+          V8Testing,
+          Webkit,
+          SimdJsSmall,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1646,7 +1673,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'benchmarks'],
+        'tests': [V8Testing, Benchmarks],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_gc_stress_dbg': {
@@ -1656,7 +1683,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['mjsunit', 'webkit'],
+        'tests': [Mjsunit, Webkit],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_asan_rel': {
@@ -1672,7 +1699,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_msan_rel': {
@@ -1691,7 +1718,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_tsan_rel': {
@@ -1707,7 +1734,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'v8_win_rel': {
@@ -1717,7 +1744,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit'],
+        'tests': [V8Testing, Webkit],
         'testing': {'platform': 'win'},
       },
       'v8_win_dbg': {
@@ -1727,7 +1754,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit'],
+        'tests': [V8Testing, Webkit],
         'testing': {'platform': 'win'},
       },
       'v8_win_compile_dbg': {
@@ -1768,7 +1795,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'win'},
       },
       'v8_win64_compile_rel': {
@@ -1788,7 +1815,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         # FIXME(machenbach): Add back simdjs_small once download is fixed.
-        'tests': ['v8testing', 'webkit'],
+        'tests': [V8Testing, Webkit],
         'testing': {'platform': 'win'},
       },
       'v8_win64_ninja_rel': {
@@ -1803,7 +1830,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'win'},
       },
       'v8_win64_dbg': {
@@ -1814,7 +1841,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         # FIXME(machenbach): Add back simdjs_small once download is fixed.
-        'tests': ['v8testing', 'webkit'],
+        'tests': [V8Testing, Webkit],
         'testing': {'platform': 'win'},
       },
       'v8_mac_rel': {
@@ -1824,7 +1851,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, SimdJsSmall],
         'testing': {'platform': 'mac'},
       },
       'v8_mac_dbg': {
@@ -1834,7 +1861,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, SimdJsSmall],
         'testing': {'platform': 'mac'},
       },
       'v8_mac64_rel': {
@@ -1844,7 +1871,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, SimdJsSmall],
         'testing': {'platform': 'mac'},
       },
       'v8_mac64_dbg': {
@@ -1854,7 +1881,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, SimdJsSmall],
         'testing': {'platform': 'mac'},
       },
       'v8_mac_gc_stress_dbg': {
@@ -1865,7 +1892,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['mjsunit', 'webkit'],
+        'tests': [Mjsunit, Webkit],
         'testing': {'platform': 'mac'},
       },
       'v8_mac64_asan_rel': {
@@ -1881,7 +1908,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'mac'},
       },
       'v8_linux_arm_rel': {
@@ -1891,7 +1918,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm_dbg': {
@@ -1901,7 +1928,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_rel': {
@@ -1911,7 +1938,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_dbg': {
@@ -1921,7 +1948,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing', 'webkit', 'simdjs_small'],
+        'tests': [V8Testing, Webkit, SimdJsSmall],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_gc_stress_dbg': {
@@ -1932,7 +1959,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['mjsunit', 'webkit'],
+        'tests': [Mjsunit, Webkit],
         'testing': {'platform': 'linux'},
       },
       'v8_android_arm_compile_rel': {
@@ -1985,7 +2012,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': ['v8testing'],
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
     },
@@ -1998,11 +2025,11 @@ BRANCH_BUILDERS = {}
 def AddBranchBuilder(build_config, arch, bits, presubmit=False,
                      unittests_only=False):
   if unittests_only:
-    tests = ['unittests']
+    tests = [Unittests]
   else:
-    tests = ['v8testing', 'webkit', 'test262', 'mozilla']
+    tests = [V8Testing, Webkit, Test262, Mozilla]
   if presubmit:
-    tests = ['presubmit'] + tests
+    tests = [Presubmit] + tests
   return {
     'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
     'v8_config_kwargs': {

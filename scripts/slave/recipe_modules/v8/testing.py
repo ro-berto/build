@@ -69,8 +69,9 @@ TEST_CONFIGS = freeze({
 
 
 class BaseTest(object):
-  def __init__(self, name, api, v8):
-    self.name = name
+  def __init__(self, test_step_config, api, v8):
+    self.test_step_config = test_step_config
+    self.name = test_step_config.name
     self.api = api
     self.v8 = v8
 
@@ -151,7 +152,7 @@ class V8Test(BaseTest):
     # architecture.
     assert len(json_output) == 1
     self.v8._update_durations(json_output[0], step_result.presentation)
-    failure_factory=Failure.factory_func(self.name)
+    failure_factory=Failure.factory_func(self.test_step_config)
     failure_log, failures, flake_log, flakes = (
         self.v8._get_failure_logs(json_output[0], failure_factory))
     self.v8._update_failure_presentation(
@@ -446,15 +447,15 @@ V8_NON_STANDARD_TESTS = freeze({
 
 
 class Failure(object):
-  def __init__(self, test_config, failure_dict, duration):
-    self.test_config = test_config
+  def __init__(self, test_step_config, failure_dict, duration):
+    self.test_step_config = test_step_config
     self.failure_dict = failure_dict
     self.duration = duration
 
   @staticmethod
-  def factory_func(test_config):
+  def factory_func(test_step_config):
     def create(failure_dict, duration):
-      return Failure(test_config, failure_dict, duration)
+      return Failure(test_step_config, failure_dict, duration)
     return create
 
 
@@ -480,14 +481,15 @@ class TestResults(object):
     )
 
 
-def create_test(test, api, v8_api):
-  test_cls = V8_NON_STANDARD_TESTS.get(test)
+def create_test(test_step_config, api, v8_api):
+  test_cls = V8_NON_STANDARD_TESTS.get(test_step_config.name)
   if not test_cls:
     # TODO(machenbach): Implement swarming for non-standard tests.
     if (v8_api.bot_config.get('enable_swarming') and
-        TEST_CONFIGS[test].get('can_use_on_swarming_builders')):
+        TEST_CONFIGS[test_step_config.name].get(
+            'can_use_on_swarming_builders')):
       test_cls = V8SwarmingTest
     else:
       test_cls = V8Test
-  return test_cls(test, api, v8_api)
+  return test_cls(test_step_config, api, v8_api)
 
