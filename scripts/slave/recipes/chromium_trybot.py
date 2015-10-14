@@ -214,11 +214,6 @@ BUILDERS = freeze({
         'buildername': 'Android Builder',
         'analyze_mode': 'compile',
       },
-      'android_x86_dbg_recipe': {
-        'mastername': 'chromium.linux',
-        'buildername': 'Android x86 Builder (dbg)',
-        'analyze_mode': 'compile',
-      },
       'android_coverage': {
         'mastername': 'chromium.fyi',
         'buildername': 'Android Coverage (dbg)'
@@ -338,10 +333,6 @@ BUILDERS = freeze({
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS Ozone Builder',
         'tester': 'Linux ChromiumOS Ozone Tests (1)',
-      },
-      'linux_chromium_chromeos_ozone_dbg_ng': {
-        'mastername': 'chromium.chromiumos',
-        'buildername': 'Linux ChromiumOS Ozone Builder (dbg)',
       },
       'linux_chromium_compile_dbg_32_ng': {
         'mastername': 'chromium.linux',

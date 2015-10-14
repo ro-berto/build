@@ -432,22 +432,6 @@ SPEC = {
       },
     },
 
-    'Android x86 Builder (dbg)': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'x86_builder',
-      'bot_type': 'builder',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Cast Linux': {
       'chromium_config': 'cast_linux',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
