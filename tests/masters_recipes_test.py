@@ -155,10 +155,6 @@ def main(argv):
     chromium_recipe_builders[master] = [b for b in builders
                                         if builders[b] == 'chromium']
 
-    # TODO(phajdan.jr): Also consider it an error if configured builders
-    # are not using chromium recipe. This might make it harder to experiment
-    # with switching bots over to chromium recipe though, so it may be better
-    # to just wait until the switch is done.
     recipe_side_builders = chromium_BUILDERS.get(
         master.replace('master.', ''), {}).get('builders')
     if recipe_side_builders is not None:
@@ -169,6 +165,15 @@ def main(argv):
         print 'The following builders from chromium recipe'
         print 'do not exist in master config for %s:' % master
         print '\n'.join('\t%s' % b for b in sorted(bogus_builders))
+
+      other_recipe_builders = set(recipe_side_builders.keys()).difference(
+          set(chromium_recipe_builders[master]))
+      if other_recipe_builders:
+        exit_code = 1
+        print 'The following builders from chromium recipe'
+        print 'are configured to run a different recipe on the master'
+        print '(%s):' % master
+        print '\n'.join('\t%s' % b for b in sorted(other_recipe_builders))
 
 
   for master in TRYSERVER_MASTERS:
