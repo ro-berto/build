@@ -287,6 +287,7 @@ def GenTests(api):
   return_code_test += _get_revision_range_step_data(api, return_code_test_data)
   yield return_code_test
 
+
 def _get_revision_range_step_data(api, range_data):
   min_rev = range_data[-1]['hash']
   max_rev = range_data[0]['hash']
@@ -300,6 +301,7 @@ def _get_revision_range_step_data(api, range_data):
   result = api.step_data(step_name, stdout=api.json.output(
       simulated_git_log_output))
   return result
+
 
 def _get_step_data_for_revision(api, revision_data, broken_cp=None,
                                 broken_hash=None, skip_results=False):
@@ -396,8 +398,14 @@ def _wait_for_revisions(bisector, revisions_to_check):
   """
   while revisions_to_check:
     completed_revision = bisector.wait_for_any(revisions_to_check)
-    revisions_to_check.remove(completed_revision)
-    if not(completed_revision.aborted or completed_revision.failed):
+    if completed_revision in revisions_to_check:
+      revisions_to_check.remove(completed_revision)
+    else:
+      bisector.api.m.step.active_result.presentation.status = (
+          bisector.api.m.step.WARNING)  # pragma: no cover
+      bisector.api.m.step.active_result.presentation.logs['WARNING'] = (
+          ['Tried to remove revision not in list'])  # pragma: no cover
+    if not (completed_revision.aborted or completed_revision.failed):
       if bisector.check_bisect_finished(completed_revision):
         bisector.bisect_over = True
       bisector.abort_unnecessary_jobs()
