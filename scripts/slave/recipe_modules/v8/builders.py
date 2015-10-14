@@ -43,7 +43,10 @@ BUILDERS = {
         'enable_swarming': True,
         'testing': {
           'platform': 'linux',
-          'isolated_tests': {'default': '[dummy hash for default]'},
+          'isolated_tests': {
+            'default': '[dummy hash for default]',
+            'test262': '[dummy hash for test262]',
+          },
         },
         'triggers': [
           'V8 Linux - swarming staging',
@@ -141,7 +144,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - swarming staging builder',
         'build_gs_archive': 'linux_swarming_staging_archive',
         'tests': [
-          'v8testing',
+          'v8testing', 'test262',
         ],
         'testing': {'platform': 'linux'},
         'enable_swarming': True,

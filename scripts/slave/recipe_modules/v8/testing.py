@@ -42,11 +42,13 @@ TEST_CONFIGS = freeze({
     'name': 'Test262 - no variants',
     'tests': ['test262'],
     'test_args': ['--no-variants', '--download-data'],
+    'can_use_on_swarming_builders': True,
   },
   'test262_variants': {
     'name': 'Test262',
     'tests': ['test262'],
     'test_args': ['--download-data'],
+    'can_use_on_swarming_builders': True,
   },
   'unittests': {
     'name': 'Unittests',

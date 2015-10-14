@@ -138,13 +138,15 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/v8/out/Release/default.isolated.gen.json"
+      "[SLAVE_BUILD]/v8/out/Release/default.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Release/test262.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"default\": \"[dummy hash for default]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"default\": \"[dummy hash for default]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -178,7 +180,8 @@
         "builder_name": "V8 Linux - swarming staging",
         "properties": {
           "isolated_tests": {
-            "default": "[dummy hash for default]"
+            "default": "[dummy hash for default]",
+            "test262": "[dummy hash for test262]"
           },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
