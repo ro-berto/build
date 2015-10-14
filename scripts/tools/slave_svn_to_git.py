@@ -116,6 +116,7 @@ def main():
 
   home_dir = os.path.realpath(os.path.expanduser('~'))
   cur_host = socket.gethostname()
+  is_cros_slave = cur_host.startswith('cros')
 
   # Report slaves with ~/no_reboot created by this script.
   if os.path.isfile(os.path.join(home_dir, 'no_reboot')):
@@ -174,7 +175,11 @@ def main():
   assert len(solutions) == 1, 'Number of solutions in .gclient is not 1'
   if not solutions[0]['url'].startswith('svn:'):
     log('Non-SVN URL in .gclient: %s' % solutions[0]['url'])
-    return 0
+    if is_cros_slave and solutions[0]['deps_file'] == 'DEPS':
+      log('Exempting unconverted CrOS slave from SVN URL requirement: %s' % (
+          cur_host,))
+    else:
+      return 0
   sol_name = solutions[0]['name']
   assert sol_name in GCLIENT_CONFIGS, 'Unknown type of checkout: ' % sol_name
   gclient_config = GCLIENT_CONFIGS[sol_name]
@@ -270,6 +275,28 @@ def main():
     # Remove the temporary directory.
     if not options.leak_tmp_dir:
       shutil.rmtree(tmpdir)
+
+  # Refresh gclient checkout.
+  if is_cros_slave:
+    # Make sure our current root URL matches the one in the .gclient file.
+    #
+    # On CrOS slaves, internal.DEPS is checked out as:
+    # https://...../internal.DEPS
+    #
+    # The URL used for standard slaves (and the .gclient file that we drop) is:
+    # https://...../internal.DEPS.git
+    #
+    # Because CrOS slaves use a Git checkout for internal.DEPS, the initial
+    # repository is exempted from converstion. This will convert it to the
+    # standard slave checkout so we're all uniform.
+    with open(gclient_path) as gclient_file:
+      exec_env = {}
+      exec gclient_file in exec_env
+      solutions = exec_env['solutions']
+
+    root_repo_path = os.path.join(b_dir, solutions[0]['name'])
+    check_call(['git', 'remote', 'set-url', 'origin', solutions[0]['url']],
+               cwd=root_repo_path)
 
   # Run gclient sync again.
   check_call(['gclient', 'sync'], cwd=b_dir, env=env)
