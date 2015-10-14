@@ -71,7 +71,7 @@ def CommonChecks(input_api, output_api):
       ['python', 'scripts/slave/unittests/test_env.py'])
 
   whitelist = [r'.+_test\.py$']
-  blacklist = [r'bot_update_test.py$']
+  blacklist = [r'bot_update_test.py$', r'masters_test.py$']
   tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
       input_api, output_api, 'tests', whitelist=whitelist,
       blacklist=blacklist))
@@ -141,6 +141,11 @@ def ConditionalChecks(input_api, output_api):
   return input_api.RunTests(input_api.canned_checks.GetUnitTests(
       input_api, output_api, tests_to_run))
 
+def CommitChecks(input_api, output_api):
+  """Tests that are only run on commit."""
+  tests_to_run = ['tests/masters_test.py']
+  return input_api.RunTests(input_api.canned_checks.GetUnitTests(
+      input_api, output_api, tests_to_run))
 
 def BuildInternalCheck(output, input_api, output_api):
   if output:
@@ -162,5 +167,6 @@ def CheckChangeOnUpload(input_api, output_api):
 def CheckChangeOnCommit(input_api, output_api):
   output = CommonChecks(input_api, output_api)
   output.extend(ConditionalChecks(input_api, output_api))
+  output.extend(CommitChecks(input_api, output_api))
   output.extend(BuildInternalCheck(output, input_api, output_api))
   return output
