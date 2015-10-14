@@ -3,6 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import argparse
 import json
 import os
 import subprocess
@@ -106,6 +107,12 @@ def getBuilders(recipe_name):
     os.remove(builders_file)
 
 
+def getCQBuilders(cq_config):
+  # This relies on 'commit_queue' tool from depot_tools.
+  output = subprocess.check_output(['commit_queue', 'builders', cq_config])
+  return json.loads(output)
+
+
 def getMasterConfig(master):
   with tempfile.NamedTemporaryFile() as f:
     subprocess.check_call([
@@ -129,6 +136,11 @@ def mutualDifference(a, b):
 
 
 def main(argv):
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--cq-config', help='Path to CQ config')
+  parser.add_argument('--verbose', action='store_true')
+  args = parser.parse_args()
+
   chromium_recipe_builders = {}
   covered_builders = set()
   all_builders = set()
@@ -137,6 +149,8 @@ def main(argv):
 
   chromium_trybot_BUILDERS = getBuilders('chromium_trybot')
   chromium_BUILDERS = getBuilders('chromium')
+
+  cq_builders = getCQBuilders(args.cq_config) if args.cq_config else None
 
   for master in MAIN_WATERFALL_MASTERS:
     builders = getBuildersAndRecipes(master)
@@ -173,9 +187,10 @@ def main(argv):
 
 
   for master in TRYSERVER_MASTERS:
+    short_master = master.replace('master.', '')
     builders = getBuildersAndRecipes(master)
     recipe_side_builders = chromium_trybot_BUILDERS[
-        master.replace('master.', '')]['builders']
+        short_master]['builders']
 
     bogus_builders = set(recipe_side_builders.keys()).difference(
         set(builders.keys()))
@@ -193,6 +208,9 @@ def main(argv):
 
       bot_config = recipe_side_builders.get(builder)
       if not bot_config:
+        continue
+
+      if args.cq_config and builder not in cq_builders.get(short_master, {}):
         continue
 
       # TODO(phajdan.jr): Make it an error if any builders referenced here
