@@ -80,42 +80,41 @@ def GenTests(api):
       return BETA_BRANCH
     return 'master'
 
-  for mastername, master_config in api.v8.BUILDERS.iteritems():
-    for buildername, bot_config in master_config['builders'].iteritems():
-      bot_type = bot_config.get('bot_type', 'builder_tester')
+  for mastername, builders, buildername, bot_config in api.v8.iter_builders():
+    bot_type = bot_config.get('bot_type', 'builder_tester')
 
-      if bot_type in ['builder', 'builder_tester']:
-        assert bot_config['testing'].get('parent_buildername') is None
+    if bot_type in ['builder', 'builder_tester']:
+      assert bot_config['testing'].get('parent_buildername') is None
 
-      branch = get_test_branch_name(mastername, buildername)
-      v8_config_kwargs = bot_config.get('v8_config_kwargs', {})
-      test = (
-        api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
-                                 _sanitize_nonalpha(buildername))) +
-        api.properties.generic(mastername=mastername,
-                               buildername=buildername,
-                               branch=branch,
-                               parent_buildername=bot_config.get(
-                                   'parent_buildername'),
-                               revision='20123') +
-        api.platform(bot_config['testing']['platform'],
-                     v8_config_kwargs.get('TARGET_BITS', 64))
-      )
+    branch = get_test_branch_name(mastername, buildername)
+    v8_config_kwargs = bot_config.get('v8_config_kwargs', {})
+    test = (
+      api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
+                               _sanitize_nonalpha(buildername))) +
+      api.properties.generic(mastername=mastername,
+                             buildername=buildername,
+                             branch=branch,
+                             parent_buildername=bot_config.get(
+                                 'parent_buildername'),
+                             revision='20123') +
+      api.platform(bot_config['testing']['platform'],
+                   v8_config_kwargs.get('TARGET_BITS', 64))
+    )
 
-      if bot_config.get('parent_buildername'):
-        test += api.properties(parent_got_revision='54321')
-        # Add isolated-tests property from parent builder.
-        parent = master_config['builders'][bot_config['parent_buildername']]
-        isolated_tests = parent['testing'].get('isolated_tests')
-        if isolated_tests:
-          test += api.properties(isolated_tests=isolated_tests)
+    if bot_config.get('parent_buildername'):
+      test += api.properties(parent_got_revision='54321')
+      # Add isolated-tests property from parent builder.
+      parent = builders[bot_config['parent_buildername']]
+      isolated_tests = parent['testing'].get('isolated_tests')
+      if isolated_tests:
+        test += api.properties(isolated_tests=isolated_tests)
 
-      if mastername.startswith('tryserver'):
-        test += (api.properties(
-            revision='12345',
-            patch_url='svn://svn-mirror.golo.chromium.org/patch'))
+    if mastername.startswith('tryserver'):
+      test += (api.properties(
+          revision='12345',
+          patch_url='svn://svn-mirror.golo.chromium.org/patch'))
 
-      yield test
+    yield test
 
   yield (
     api.test('branch_sync_failure') +

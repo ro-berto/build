@@ -9,6 +9,7 @@ import math
 import re
 import urllib
 
+from builders import iter_builders
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 from . import bisection
@@ -215,13 +216,12 @@ class V8Api(recipe_api.RecipeApi):
     if self.bot_config.get('enable_swarming'):
       buildername = self.m.properties['buildername']
       tests_to_isolate = []
-      for _, master_config in self.BUILDERS.iteritems():
-        for _, bot_config in master_config['builders'].iteritems():
-          if bot_config.get('parent_buildername') == buildername:
-            for test in bot_config.get('tests', []):
-              config = testing.TEST_CONFIGS.get(test.name)
-              if config and config.get('can_use_on_swarming_builders'):
-                tests_to_isolate.extend(config['tests'])
+      for _, _, _, bot_config in iter_builders():
+        if bot_config.get('parent_buildername') == buildername:
+          for test in bot_config.get('tests', []):
+            config = testing.TEST_CONFIGS.get(test.name)
+            if config and config.get('can_use_on_swarming_builders'):
+              tests_to_isolate.extend(config['tests'])
       if tests_to_isolate:
         self.m.isolate.isolate_tests(
             self.m.chromium.output_dir,

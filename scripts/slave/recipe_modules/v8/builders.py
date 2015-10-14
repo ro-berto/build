@@ -2104,3 +2104,9 @@ dart_win_release['chromium_apply_config'].extend(['v8_ninja', 'msvs2013'])
 
 BUILDERS = freeze(BUILDERS)
 BRANCH_BUILDERS = freeze(BRANCH_BUILDERS)
+
+def iter_builders():
+  for mastername, master_config in BUILDERS.iteritems():
+    builders = master_config['builders']
+    for buildername, bot_config in builders.iteritems():
+      yield mastername, builders, buildername, bot_config

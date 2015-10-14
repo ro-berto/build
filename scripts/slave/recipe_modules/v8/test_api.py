@@ -24,6 +24,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     },
   ]
 
+  def iter_builders(self):
+    return builders.iter_builders()
+
   def output_json(self, has_failures=False, wrong_results=False, flakes=False):
     if not has_failures:
       return self.m.json.output([{
