@@ -5,6 +5,7 @@
 import re
 from recipe_engine.types import freeze
 
+
 TEST_CONFIGS = freeze({
   'benchmarks': {
     'name': 'Benchmarks',
@@ -261,12 +262,12 @@ class V8SwarmingTest(V8Test):
       '${ISOLATED_OUTDIR}/output.json',
     ]
 
-    # Initialize number of shards as specified via builder configuration.
-    # TODO(machenbach): This specifies shards per tester. Implement shards
-    # per test.
+    # Initialize number of shards, either per test or per builder.
     shards = 1
-    if self.v8.c.testing.may_shard and self.v8.c.testing.SHARD_COUNT > 1:
-      shards = self.v8.c.testing.SHARD_COUNT
+    if self.v8.c.testing.may_shard:
+      shards = self.test_step_config.shards
+      if self.v8.c.testing.SHARD_COUNT > 1:  # pragma: no cover
+        shards = self.v8.c.testing.SHARD_COUNT
 
     # Initialize swarming task with custom data-collection step for v8
     # test-runner output.

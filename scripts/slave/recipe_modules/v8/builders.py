@@ -10,8 +10,9 @@ from recipe_engine.types import freeze
 
 class TestStepConfig(object):
   """Per-step test configuration."""
-  def __init__(self, name):
+  def __init__(self, name, shards=1):
     self.name = name
+    self.shards = shards
 
 
 # Top-level test configs for convenience.
@@ -27,6 +28,7 @@ SimdJs = TestStepConfig('simdjs')
 SimdJsSmall = TestStepConfig('simdjs_small')
 SimpleLeak = TestStepConfig('simpleleak')
 Test262 = TestStepConfig('test262')
+Test262_2 = TestStepConfig('test262', shards=2)
 Test262Variants = TestStepConfig('test262_variants')
 Unittests = TestStepConfig('unittests')
 V8Initializers = TestStepConfig('v8initializers')
@@ -165,13 +167,12 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
-          'SHARD_COUNT': 2,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - swarming staging builder',
         'build_gs_archive': 'linux_swarming_staging_archive',
         'tests': [
-          V8Testing, Test262,
+          V8Testing, Test262_2,
         ],
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
