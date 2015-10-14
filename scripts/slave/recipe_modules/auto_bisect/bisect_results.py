@@ -79,7 +79,7 @@ _DIRECTION_OF_IMPROVEMENT_ABORT_REASON = (
   'expected direction of improvement. Thus, likely represent an improvement '
   'and not a regression.')
 
-_REQUIRED_RESULTS_CONFIDENCE = 99.0
+_REQUIRED_RESULTS_CONFIDENCE = 95.0
 
 
 class BisectResults(object):
