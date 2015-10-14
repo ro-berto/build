@@ -10,7 +10,7 @@ from recipe_engine import recipe_api
 class CommitPositionApi(recipe_api.RecipeApi):
   """Recipe module providing commit position parsing and manipulation."""
   RE_COMMIT_POSITION = re.compile('(?P<branch>.+)@{#(?P<revision>\d+)}')
-  COMMIT_POS_STR = 'Cr-Commit-Position: refs/heads/master@{#%d}'
+  COMMIT_POS_STR = '^Cr-Commit-Position: refs/heads/master@{#%d}'
 
   @classmethod
   def parse(cls, value):

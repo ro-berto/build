@@ -363,7 +363,7 @@
       "log",
       "--format=hash:%H",
       "--grep",
-      "Cr-Commit-Position: refs/heads/master@{#306476}",
+      "^Cr-Commit-Position: refs/heads/master@{#306476}",
       "-1",
       "origin/master"
     ],
@@ -377,7 +377,7 @@
       "log",
       "--format=hash:%H",
       "--grep",
-      "Cr-Commit-Position: refs/heads/master@{#306475}",
+      "^Cr-Commit-Position: refs/heads/master@{#306475}",
       "-1",
       "origin/master"
     ],
