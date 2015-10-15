@@ -269,13 +269,12 @@ def goma_teardown(options, env):
     # Show goma stats so that we can investigate goma when
     # something weird happens.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stat'], env=env)
-    # Always stop the proxy for now to allow in-place update.
-    chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
-    UploadGomaCompilerProxyInfo()
-
     if options.goma_jsonstatus:
       chromium_utils.RunCommand(
           goma_ctl_cmd + ['jsonstatus', options.goma_jsonstatus], env=env)
+    # Always stop the proxy for now to allow in-place update.
+    chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
+    UploadGomaCompilerProxyInfo()
 
 
 def UploadNinjaLog(options, command, exit_status):
