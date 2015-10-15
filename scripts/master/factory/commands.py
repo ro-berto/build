@@ -70,6 +70,7 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
       'parent_got_swarming_client_revision':
           WithProperties('%(got_swarming_client_revision:-)s'),
       'parent_got_clang_revision': WithProperties('%(got_clang_revision:-)s'),
+      'parent_got_angle_revision': WithProperties('%(got_angle_revision:-)s'),
       'parent_revision': WithProperties('%(revision:-)s'),
       'parent_scheduler': WithProperties('%(scheduler:-)s'),
       'parent_slavename': WithProperties('%(slavename:-)s'),
