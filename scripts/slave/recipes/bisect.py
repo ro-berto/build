@@ -118,60 +118,60 @@ def GenTests(api):
   # with step_data instances.
   def test_data():
     return [
-      {
-          'refrange': True,
-          'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
-          'commit_pos': '306478',
-          'test_results': {
-              'results':{
-                  'mean': 20,
-                  'std_err': 1,
-                  'values': [19, 20, 21],
-               },
-              'retcodes':[0],
-          },
-          'cl_info': 'S3P4R4T0R'.join(['DummyAuthor', 'dummy@nowhere.com',
-                                       'Some random CL', '01/01/2015',
-                                       'A long description for a CL.\n'
-                                       'Containing multiple lines'])
-      },
-      {
-          'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
-          'commit_pos': '306477',
-          'test_results': {
-              'results': {
-                  'mean': 15,
-                  'std_err': 1,
-                  'values': [14, 15, 16],
-              },
-              'retcodes':[0],
-          }
-      },
-      {
-          'hash': 'fc6dfc7ff5b1073408499478969261b826441144',
-          'commit_pos': '306476',
-          'test_results': {
-              'results': {
-                  'mean': 70,
-                  'std_err': 2,
-                  'values': [68, 70, 72],
-              },
-              'retcodes':[0],
-          }
-      },
-      {
-          'refrange': True,
-          'hash': 'e28dc0d49c331def2a3bbf3ddd0096eb51551155',
-          'commit_pos': '306475',
-          'test_results': {
-              'results': {
-                  'mean': 80,
-                  'std_err': 10,
-                  'values': [70, 70, 80, 90, 90],
-              },
-              'retcodes':[0],
-          }
-      },
+        {
+            'refrange': True,
+            'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
+            'commit_pos': '306478',
+            'test_results': {
+                'results': {
+                    'mean': 20,
+                    'std_err': 1,
+                    'values': [19, 20, 21],
+                },
+                'retcodes':[0],
+            },
+            'cl_info': 'S3P4R4T0R'.join(['DummyAuthor', 'dummy@nowhere.com',
+                                         'Some random CL', '01/01/2015',
+                                         'A long description for a CL.\n'
+                                         'Containing multiple lines'])
+        },
+        {
+            'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
+            'commit_pos': '306477',
+            'test_results': {
+                'results': {
+                    'mean': 15,
+                    'std_err': 1,
+                    'values': [14, 15, 16],
+                },
+                'retcodes':[0],
+            }
+        },
+        {
+            'hash': 'fc6dfc7ff5b1073408499478969261b826441144',
+            'commit_pos': '306476',
+            'test_results': {
+                'results': {
+                    'mean': 70,
+                    'std_err': 2,
+                    'values': [68, 70, 72],
+                },
+                'retcodes':[0],
+            }
+        },
+        {
+            'refrange': True,
+            'hash': 'e28dc0d49c331def2a3bbf3ddd0096eb51551155',
+            'commit_pos': '306475',
+            'test_results': {
+                'results': {
+                    'mean': 80,
+                    'std_err': 10,
+                    'values': [70, 70, 80, 90, 90],
+                },
+                'retcodes':[0],
+            }
+        },
     ]
 
   basic_test_data = test_data()
@@ -224,60 +224,60 @@ def GenTests(api):
 
   def return_code_test_data():
     return [
-      {
-          'refrange': True,
-          'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
-          'commit_pos': '306478',
-          'test_results': {
-              'results':{
-                  'mean': 1,
-                  'std_err': 0,
-                  'values': [],
-               },
-              'retcodes':[1],
-          },
-          'cl_info': 'S3P4R4T0R'.join(['DummyAuthor', 'dummy@nowhere.com',
+        {
+            'refrange': True,
+            'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
+            'commit_pos': '306478',
+            'test_results': {
+                'results': {
+                    'mean': 1,
+                    'std_err': 0,
+                    'values': [],
+                },
+                'retcodes':[1],
+            },
+            'cl_info': 'S3P4R4T0R'.join(['DummyAuthor', 'dummy@nowhere.com',
                                        'Some random CL', '01/01/2015',
                                        'A long description for a CL.\n'
                                        'Containing multiple lines'])
-      },
-      {
-          'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
-          'commit_pos': '306477',
-          'test_results': {
-              'results':{
-                  'mean': 1,
-                  'std_err': 0,
-                  'values': [],
-               },
-              'retcodes':[1],
-          }
-      },
-      {
-          'hash': 'fc6dfc7ff5b1073408499478969261b826441144',
-          'commit_pos': '306476',
-          'test_results': {
-              'results':{
-                  'mean': 1,
-                  'std_err': 0,
-                  'values': [],
-               },
-              'retcodes':[1],
-          }
-      },
-      {
-          'refrange': True,
-          'hash': 'e28dc0d49c331def2a3bbf3ddd0096eb51551155',
-          'commit_pos': '306475',
-          'test_results': {
-              'results':{
-                  'mean': 0,
-                  'std_err': 0,
-                  'values': [],
-               },
-              'retcodes':[0],
-          }
-      },
+        },
+        {
+            'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
+            'commit_pos': '306477',
+            'test_results': {
+                'results': {
+                    'mean': 1,
+                    'std_err': 0,
+                    'values': [],
+                },
+                'retcodes':[1],
+            }
+        },
+        {
+            'hash': 'fc6dfc7ff5b1073408499478969261b826441144',
+            'commit_pos': '306476',
+            'test_results': {
+                'results': {
+                    'mean': 1,
+                    'std_err': 0,
+                    'values': [],
+                },
+                'retcodes':[1],
+            }
+        },
+        {
+            'refrange': True,
+            'hash': 'e28dc0d49c331def2a3bbf3ddd0096eb51551155',
+            'commit_pos': '306475',
+            'test_results': {
+                'results': {
+                    'mean': 0,
+                    'std_err': 0,
+                    'values': [],
+                },
+                'retcodes':[0],
+            }
+        },
     ]
 
   bisect_config_ret_code = bisect_config.copy()
@@ -296,7 +296,7 @@ def _get_revision_range_step_data(api, range_data):
   max_rev = range_data[0]['hash']
   # Simulating the output of git log (reverse order from max_rev until and
   # excluding min_rev).
-  simulated_git_log_output  = [[d['hash'], d['commit_pos']]
+  simulated_git_log_output = [[d['hash'], d['commit_pos']]
                                for d in range_data[:-1]]
   step_name = ('Expanding revision range.for revisions %s:%s' %
                (min_rev, max_rev))

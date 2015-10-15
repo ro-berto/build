@@ -73,6 +73,7 @@ def RunSteps(api):
     api.chromium_tests.prepare_checkout(mastername, buildername)
     api.auto_bisect.run_bisect_script('dummy_extra_src', '/dummy/path/')
 
+
 def GenTests(api):
   dummy_gs_location = ('gs://chrome-perf/bisect-results/'
                        'a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results')
@@ -98,13 +99,15 @@ def GenTests(api):
       api, failed_build_test_data, 'failed_build_test')
   failed_build_test_step_data = {
       'failed':
-          [{
+      [
+          {
               'builder': 'linux_perf_tester',
               'job_name': 'a6298e4afedbf2cd461755ea6f45b0ad64222222-test',
               'master': 'tryserver.chromium.perf',
               'type': 'buildbot',
               'job_url': 'http://tempuri.org/log',
-          }],
+          }
+      ],
   }
   failed_build_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
@@ -189,9 +192,8 @@ def GenTests(api):
   yield _make_test(api, missing_dep_data, 'missing_deps_entry')
 
   bad_deps_syntax_data = _get_basic_test_data()
-  bad_deps_syntax_data[1]['DEPS']='raise RuntimeError("")'
+  bad_deps_syntax_data[1]['DEPS'] = 'raise RuntimeError("")'
   yield _make_test(api, bad_deps_syntax_data, 'bad_deps_syntax')
-
 
   basic__data = _get_basic_test_data()
   bisect_script_test = _make_test(api, basic_data, 'basic_bisect_script')
@@ -217,7 +219,7 @@ def _get_ref_range_only_test_data():
           'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
           'commit_pos': '314017',
           'test_results': {
-              'results':{
+              'results': {
                   'mean': 15,
                   'std_err': 1,
                   'values': [14, 15, 16],
@@ -235,7 +237,7 @@ def _get_basic_test_data():
           'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
           'commit_pos': '314015',
           'test_results': {
-              'results':{
+              'results': {
                   'mean': 20,
                   'std_err': 1,
                   'values': [19, 20, 21],
@@ -258,7 +260,7 @@ def _get_basic_test_data():
           'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
           'commit_pos': '314016',
           'test_results': {
-              'results':{
+              'results': {
                   'mean': 15,
                   'std_err': 1,
                   'values': [14, 15, 16],
@@ -276,7 +278,7 @@ def _get_basic_test_data():
           'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
           'commit_pos': '314017',
           'test_results': {
-              'results':{
+              'results': {
                   'mean': 15,
                   'std_err': 1,
                   'values': [14, 15, 16],
@@ -294,7 +296,7 @@ def _get_reversed_basic_test_data():
           'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
           'commit_pos': '314015',
           'test_results': {
-              'results':{
+              'results': {
                   'mean': 20,
                   'std_err': 1,
                   'values': [19, 20, 21],
@@ -310,7 +312,7 @@ def _get_reversed_basic_test_data():
           'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
           'commit_pos': '314016',
           'test_results': {
-              'results':{
+              'results': {
                   'mean': 20,
                   'std_err': 1,
                   'values': [19, 20, 21],
@@ -330,7 +332,7 @@ def _get_reversed_basic_test_data():
           'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
           'commit_pos': '314017',
           'test_results': {
-              'results':{
+              'results': {
                   'mean': 15,
                   'std_err': 1,
                   'values': [14, 15, 16],
@@ -347,7 +349,7 @@ def _get_reversed_basic_test_data():
 
 
 def _make_test(api, test_data, test_name, platform='linux'):
-  basic_test =  api.test(test_name)
+  basic_test = api.test(test_name)
   basic_test += _get_revision_range_step_data(api, test_data)
   for revision_data in test_data:
     for step_data in _get_step_data_for_revision(api, revision_data):
@@ -355,9 +357,9 @@ def _make_test(api, test_data, test_name, platform='linux'):
   if 'win_x64' in platform:
     basic_test += api.properties(bisect_config=_get_config({
         'command': ('src/tools/perf/run_benchmark -v --browser=release_x64'
-            ' smoothness.tough_scrolling_cases'),
+                    ' smoothness.tough_scrolling_cases'),
         'recipe_tester_name': 'chromium_rel_win7_x64'}))
-  elif 'win' in platform:    
+  elif 'win' in platform:
     basic_test += api.properties(bisect_config=_get_config(
         {'recipe_tester_name': 'chromium_rel_win7'}))
   elif 'mac' in platform:
@@ -366,12 +368,12 @@ def _make_test(api, test_data, test_name, platform='linux'):
   elif 'android_arm64' in platform:
     basic_test += api.properties(bisect_config=_get_config({
         'command': ('src/tools/perf/run_benchmark -v --browser=android-chromium'
-            ' smoothness.tough_scrolling_cases'),
+                    ' smoothness.tough_scrolling_cases'),
         'recipe_tester_name': 'android-nexus9'}))
   elif 'android' in platform:
     basic_test += api.properties(bisect_config=_get_config({
         'command': ('src/tools/perf/run_benchmark -v --browser=android-chromium'
-            ' smoothness.tough_scrolling_cases'),
+                    ' smoothness.tough_scrolling_cases'),
         'recipe_tester_name': 'android-nexus7'}))
   else:
     basic_test += api.properties(bisect_config=_get_config())
@@ -383,8 +385,8 @@ def _get_revision_range_step_data(api, range_data):
   max_rev = range_data[-1]['hash']
   # Simulating the output of git log (reverse order from max_rev until and
   # excluding min_rev).
-  simulated_git_log_output  = [[d['hash'], d['commit_pos']]
-                               for d in range_data[:-1]]
+  simulated_git_log_output = [[d['hash'], d['commit_pos']]
+                              for d in range_data[:-1]]
   step_name = ('Expanding revision range.for revisions %s:%s' %
                (min_rev, max_rev))
   result = api.step_data(step_name, stdout=api.json.output(
@@ -394,10 +396,10 @@ def _get_revision_range_step_data(api, range_data):
 
 def _get_config(params={}):
   example_config = {
-      'test_type':'perf',
-      'command':
-          ('src/tools/perf/run_benchmark -v --browser=release smoothness.'
-           'tough_scrolling_cases'),
+      'test_type': 'perf',
+      'command': (
+          'src/tools/perf/run_benchmark -v --browser=release smoothness.'
+          'tough_scrolling_cases'),
       'good_revision': '314015',
       'bad_revision': '314017',
       'metric': 'mean_input_event_latency/mean_input_event_latency',
@@ -425,7 +427,7 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
     parent_step = 'Resolving reference range.'
     step_name = parent_step + 'resolving commit_pos ' + commit_pos
     yield api.step_data(step_name, stdout=api.raw_io.output('hash:' +
-                                                          commit_hash))
+                                                            commit_hash))
 
     step_name = parent_step + 'resolving hash ' + commit_hash
     commit_pos_str = 'refs/heads/master@{#%s}' % commit_pos
@@ -468,4 +470,3 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
       step_name = 'Reading culprit cl information.'
       stdout = api.raw_io.output(revision_data['cl_info'])
       yield api.step_data(step_name, stdout=stdout)
-

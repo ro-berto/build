@@ -16,6 +16,7 @@ if 'CACHE_TEST_RESULTS' in os.environ:  # pragma: no cover
 class PerfRevisionState(revision_state.RevisionState):
 
   """Contains the state and results for one revision in a perf bisect job."""
+
   def __init__(self, *args, **kwargs):
     super(PerfRevisionState, self).__init__(*args, **kwargs)
     self.values = []
@@ -82,8 +83,8 @@ class PerfRevisionState(revision_state.RevisionState):
               'user.email': 'FAKE_PERF_PUMPKIN@chromium.org',
           })
     finally:
-      if (self.patch_file != '/dev/null' and not 'TESTING_SLAVENAME' in
-          os.environ):
+      if (self.patch_file != '/dev/null' and
+          'TESTING_SLAVENAME' not in os.environ):
         try:
           api.m.step('cleaning up patch', ['rm', self.patch_file])
         except api.m.step.StepFailure:  # pragma: no cover

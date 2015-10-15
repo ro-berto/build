@@ -232,9 +232,9 @@ class Bisector(object):
     depot_path = self.api.m.path['slave_build'].join('src')
     step_name = ('for revisions %s:%s' %
                  (min_rev, max_rev))
-    step_result = self.api.m.python(step_name, script, [min_rev,  max_rev],
-                                 stdout=self.api.m.json.output(),
-                                 cwd=depot_path)
+    step_result = self.api.m.python(step_name, script, [min_rev, max_rev],
+                                    stdout=self.api.m.json.output(),
+                                    cwd=depot_path)
     # We skip the first revision in the list as it is max_rev
     new_revisions = step_result.stdout[1:][::-1]
     return new_revisions
@@ -315,7 +315,6 @@ class Bisector(object):
         self.warnings.append(warning_text)
     return False
 
-
   def _update_revision_list_indexes(self):
     """Sets list_index, next and previous properties for each revision."""
     for i, rev in enumerate(self.revisions):
@@ -339,8 +338,7 @@ class Bisector(object):
       return True
     good = self.good_rev.mean_value
     bad = self.bad_rev.mean_value
-    if ((bad > good and direction > 0) or
-        (bad < good and direction < 0)):
+    if (bad > good and direction > 0) or (bad < good and direction < 0):
       self._set_failed_direction_results()
       return False
     return True
@@ -464,7 +462,7 @@ class Bisector(object):
                        if not revision.tested and not revision.failed]
     if len(candidate_range) <= max_revisions:
       return candidate_range
-    step = len(candidate_range)/(max_revisions + 1)
+    step = len(candidate_range) / (max_revisions + 1)
     return candidate_range[step::step][:max_revisions]
 
   def check_reach_adjacent_revision(self, revision):
@@ -547,7 +545,7 @@ class Bisector(object):
           args_list,
           stdout=api.m.json.output(),
           stdin=api.m.json.input(jobs_config),
-          ok_ret={0,1})
+          ok_ret={0, 1})
     except api.m.step.StepFailure as sf:  # pragma: no cover
       if sf.retcode == 2:  # 6 days and no builds finished.
         for revision in revision_list:
@@ -608,7 +606,6 @@ class Bisector(object):
           if not revision.in_progress:
             return revision
 
-
   def abort_unnecessary_jobs(self):
     """Checks if any of the pending evaluations is no longer necessary.
 
@@ -654,7 +651,8 @@ class Bisector(object):
       return 'linux_perf_tester'
 
   def get_builder_bot_for_this_platform(self):
-    # TODO(prasadv): We should refactor these codes to remove hard coded values.
+    # TODO(prasadv): We should refactor these codes to remove hard coded
+    # values.
     bot_name = self.get_perf_tester_name()
     if 'win' in bot_name:
       if any(b in bot_name for b in ['x64', 'gpu']):
@@ -672,7 +670,8 @@ class Bisector(object):
     return 'linux_perf_bisect_builder'
 
   def get_platform_gs_prefix(self):
-    # TODO(prasadv): We should refactor these codes to remove hard coded values.
+    # TODO(prasadv): We should refactor these codes to remove hard coded
+    # values.
     bot_name = self.get_perf_tester_name()
     if 'win' in bot_name:
       if any(b in bot_name for b in ['x64', 'gpu']):

@@ -164,7 +164,8 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
     with mock.patch(
         'bisector_test.MockRevisionClass.update_status',
         mock_update_status):
-      bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
+      bisector = Bisector(
+          self.dummy_api, self.bisect_config, MockRevisionClass)
       for r in bisector.revisions:
         r.in_progress = True
       bisector.wait_for_all(bisector.revisions)
@@ -176,7 +177,8 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
     MockRevisionClass.update_status = None
     with mock.patch(
         'bisector_test.MockRevisionClass.update_status'):
-      bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
+      bisector = Bisector(
+          self.dummy_api, self.bisect_config, MockRevisionClass)
       for r in bisector.revisions:
         r.tested = False
         r.in_progress = True
@@ -186,6 +188,7 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
 
 
 class BisectorAbortTest(unittest.TestCase):  # pragma: no cover
+
   def setUp(self):
     self.bisect_config = {
         'test_type': 'perf',

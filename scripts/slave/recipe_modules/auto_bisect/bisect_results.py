@@ -70,13 +70,13 @@ The following warnings were raised by the bisect job:
 """
 
 _FAILED_INITIAL_CONFIDENCE_ABORT_REASON = (
-  'The metric values for the initial "good" and "bad" revisions '
-  'do not represent a clear regression.')
+    'The metric values for the initial "good" and "bad" revisions '
+    'do not represent a clear regression.')
 
 _DIRECTION_OF_IMPROVEMENT_ABORT_REASON = (
-  'The metric values for the initial "good" and "bad" revisions match the '
-  'expected direction of improvement. Thus, likely represent an improvement '
-  'and not a regression.')
+    'The metric values for the initial "good" and "bad" revisions match the '
+    'expected direction of improvement. Thus, likely represent an improvement '
+    'and not a regression.')
 
 _REQUIRED_RESULTS_CONFIDENCE = 95.0
 
@@ -119,7 +119,7 @@ class BisectResults(object):
           'retest': 'Not Implemented.'
       }
     else:
-      header +=  _ABORT_REASON_TEMPLATE % {
+      header += _ABORT_REASON_TEMPLATE % {
           'abort_reason': self.abort_reason,
           'bug_id': self.bug_id,
           'command': self.command,
@@ -142,7 +142,7 @@ class BisectResults(object):
           'cl': self.culprit_cl_hash
       }
     body += self._compose_revisions_table()
-    return body.encode('ascii','replace')
+    return body.encode('ascii', 'replace')
 
   def _make_footer(self):
     if self.partial:
@@ -210,12 +210,12 @@ class BisectResults(object):
   def _compose_revisions_table(self):
     def revision_row(r):
       result = [
-        r.depot_name,
-        r.deps_revision or 'r' + str(r.commit_pos),
-        r.mean_value if r.mean_value is not None else 'N/A',
-        r.std_err if r.std_err is not None else 'N/A',
-        'good' if r.good else 'bad' if r.bad else 'unknown',
-        '<-' if self._bisector.culprit == r else '',
+          r.depot_name,
+          r.deps_revision or 'r' + str(r.commit_pos),
+          r.mean_value if r.mean_value is not None else 'N/A',
+          r.std_err if r.std_err is not None else 'N/A',
+          'good' if r.good else 'bad' if r.bad else 'unknown',
+          '<-' if self._bisector.culprit == r else '',
       ]
       return map(str, result)
 
@@ -261,4 +261,3 @@ def _pretty_table(data):
     if is_culprit_row:
       result += '\n'
   return result
-

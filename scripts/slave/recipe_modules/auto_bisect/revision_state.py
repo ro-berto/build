@@ -20,20 +20,21 @@ from . import depot_config
 class RevisionState(object):
   """Abstracts the state of a single revision on a bisect job."""
 
-  # Possible statuses for the revision state to be in:
-  (NEW,  # A revision_state object that has just been initialized.
-   BUILDING,  # Requested a build for this revision, waiting for it.
-   TESTING,  # A test job for this revision was triggered, waiting for it.
-   TESTED,  # The test job completed with non-failing results.
-   FAILED,  # Either the build or the test jobs failed or timed out.
-   ABORTED,  # The build or test job was aborted. (For use in multi-secting).
-   SKIPPED,  # A revision that was not built or tested for a special reason,
-              # such as those ranges that we know are broken, or when nudging
-              # revisions.
+  # Possible values for the status attribute of RevisionState:
+  (
+      NEW,  # A revision_state object that has just been initialized.
+      BUILDING,  # Requested a build for this revision, waiting for it.
+      TESTING,  # A test job for this revision was triggered, waiting for it.
+      TESTED,  # The test job completed with non-failing results.
+      FAILED,  # Either the build or the test jobs failed or timed out.
+      ABORTED,  # The build or test job was aborted. (For use in multi-secting).
+      SKIPPED,  # A revision that was not built or tested for a special reason,
+                # such as those ranges that we know are broken, or when nudging
+                # revisions.
   ) = xrange(7)
 
   def __init__(self, revision_string, bisector,
-               dependency_depot_name=None,base_revision=None,
+               dependency_depot_name=None, base_revision=None,
                deps_revision=None, cp=None):
     """Creates a new instance to track the state of a revision.
 
@@ -101,7 +102,7 @@ class RevisionState(object):
         self.commit_hash = revision_string
         if cp:
           self.commit_pos = cp
-        else: # pragma: no cover
+        else:  # pragma: no cover
           # If there is no commit position, use an abbreviated hash instead.
           self.commit_pos = self.commit_hash[:8]
       else:
@@ -110,7 +111,7 @@ class RevisionState(object):
 
   @property
   def tested(self):
-    return self.status in  [RevisionState.TESTED]
+    return self.status in [RevisionState.TESTED]
 
   @property
   def in_progress(self):
@@ -166,22 +167,22 @@ class RevisionState(object):
   def deps_change(self):
     """Uses `git show` to see if a given commit contains a DEPS change."""
     api = self.bisector.api
-    name = 'Checking DEPS for '+self.commit_hash
-    step_result = api.m.git('show', '--name-only', '--pretty=format:',
-               self.commit_hash, stdout=api.m.raw_io.output(), name=name)
+    name = 'Checking DEPS for ' + self.commit_hash
+    step_result = api.m.git(
+        'show', '--name-only', '--pretty=format:',
+        self.commit_hash, stdout=api.m.raw_io.output(), name=name)
     if self.bisector.dummy_builds and not self.commit_hash.startswith('dcdc'):
       return False
     if 'DEPS' in step_result.stdout.splitlines():  # pragma: no cover
       return True
     return False  # pragma: no cover
 
-
   def _gen_deps_local_scope(self):
     """Defines the Var and From functions in a dict for calling exec.
 
     This is needed for executing the DEPS file.
     """
-    deps_data =  {
+    deps_data = {
         'Var': lambda _: deps_data['vars'][_],
         'From': lambda *args: None,
     }
@@ -224,7 +225,7 @@ class RevisionState(object):
           else:
             warning_text = ('Could not parse revision for %s while bisecting '
                             '%s' % (depot_name, self.depot))
-            if not warning_text in self.bisector.warnings:
+            if warning_text not in self.bisector.warnings:
               self.bisector.warnings.append(warning_text)
         else:
           results[depot_name] = None
@@ -283,7 +284,7 @@ class RevisionState(object):
     pieces = self.revision_string.split(',')
     if (pieces[0].startswith('chromium@') or
         pieces[0].startswith('src@') or
-        not '@' in pieces[0]):
+        '@' not in pieces[0]):
       hash_or_pos = pieces[0].split('@')[-1]
       if self._check_if_hash(hash_or_pos):
         commit_pos = self._get_pos_from_hash(hash_or_pos)

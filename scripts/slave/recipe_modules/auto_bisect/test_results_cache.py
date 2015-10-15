@@ -16,17 +16,21 @@ import sys
 
 result_set_file = '/tmp/bisect/test_results_cache'
 
+
 def make_id(*params):  # pragma: no cover
   id_string = json.dumps(params)
   return hashlib.sha1(id_string).hexdigest()
 
+
 def has_results(name):  # pragma: no cover
   return name in _get_result_set()
+
 
 def save_results(name, value):  # pragma: no cover
   rs = _get_result_set()
   rs[name] = value
   _write_result_set(rs)
+
 
 def _get_result_set():  # pragma: no cover
   if os.path.isfile(result_set_file):
@@ -36,6 +40,7 @@ def _get_result_set():  # pragma: no cover
   else:
     return {}
 
+
 def _write_result_set(result_set):  # pragma: no cover
   _dir = os.path.dirname(result_set_file)
   if not os.path.exists(_dir):
@@ -43,6 +48,7 @@ def _write_result_set(result_set):  # pragma: no cover
   with open(result_set_file, 'w') as of:
     contents = json.dumps(result_set)
     of.write(contents)
+
 
 def main():  # pragma: no cover
   some_id = make_id('dummy_string')

@@ -38,7 +38,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
 
   def create_bisector(self, bisect_config_dict, dummy_mode=False):
     """Passes the api and the config dictionary to the Bisector constructor.
-  
+
     For details about the keys in the bisect config dictionary go to:
     http://chromium.org/developers/speed-infra/perf-try-bots-bisect-bots/config
 
@@ -127,8 +127,8 @@ class AutoBisectApi(recipe_api.RecipeApi):
       args += ['--path_to_goma', self.m.path['build'].join('goma')]
     args += [
         '--build-properties',
-         self.m.json.dumps(dict(self.m.properties.legacy())),
-      ]
+        self.m.json.dumps(dict(self.m.properties.legacy())),
+    ]
     self.m.chromium.runtest(
         self.m.path['checkout'].join('tools', 'run-bisect-perf-regression.py'),
         ['-w', self.m.path['slave_build']] + args,
@@ -146,7 +146,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
       build_dir = self.m.chromium.c.build_dir.join(
           self.m.chromium.c.build_config_fs)
       self.m.file.rmtree('build directory', build_dir)
-   
+
       # crbug.com/535218, the way android builders on tryserver.chromium.perf
       # are archived is different from builders on chromium.per. In order to
       # support both forms of archives we added this temporary hack until
@@ -156,7 +156,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
         self.m.file.rmtree('full-build-linux directory', zip_dir)
 
       api.chromium_android.download_build(bucket=bot_config['bucket'],
-          path=bot_config['path'](api))
+                                          path=bot_config['path'](api))
 
       # crbug.com/535218, the way android builders on tryserver.chromium.perf
       # are archived is different from builders on chromium.per. In order to
@@ -171,7 +171,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
             shutil.move(sys.argv[1], sys.argv[2])
             """,
             args=[zip_dir, build_dir],
-          )
+        )
     else:
       api.chromium_tests.tests_for_builder(
           mastername,
