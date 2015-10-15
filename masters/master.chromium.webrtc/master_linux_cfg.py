@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from buildbot.changes.filter import ChangeFilter
 from buildbot.schedulers.basic import SingleBranchScheduler
 
 from master.factory import annotator_factory
@@ -11,7 +12,8 @@ m_annotator = annotator_factory.AnnotatorFactory()
 def Update(c):
   c['schedulers'].extend([
       SingleBranchScheduler(name='linux_rel_scheduler',
-                            branch='master',
+                            change_filter=ChangeFilter(project='chromium',
+                                                       branch='master'),
                             treeStableTimer=60,
                             builderNames=['Linux Builder']),
   ])

@@ -7,10 +7,12 @@ from master import gitiles_poller
 
 def Update(config, c):
   chromium_src_poller = gitiles_poller.GitilesPoller(
-      config.Master.git_server_url + '/chromium/src')
+      config.Master.git_server_url + '/chromium/src',
+      project='chromium')
   c['change_source'].append(chromium_src_poller)
 
   samples_poller = gitiles_poller.GitilesPoller(
       config.Master.git_server_url + '/external/webrtc-samples',
+      project='webrtc-samples',
       comparator=chromium_src_poller.comparator)
   c['change_source'].append(samples_poller)

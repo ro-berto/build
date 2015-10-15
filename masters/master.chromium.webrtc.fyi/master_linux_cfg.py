@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from buildbot.changes.filter import ChangeFilter
 from buildbot.scheduler import Periodic
 from buildbot.schedulers.basic import SingleBranchScheduler
 
@@ -17,7 +18,8 @@ def Update(c):
   ]
   c['schedulers'].extend([
       SingleBranchScheduler(name='linux_webrtc_scheduler',
-                            branch='master',
+                            change_filter=ChangeFilter(project='webrtc',
+                                                       branch='master'),
                             treeStableTimer=0,
                             builderNames=buildernames_list),
       Periodic(name='linux_periodic_scheduler',
