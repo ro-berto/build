@@ -89,7 +89,6 @@ def GenTests(api):
       'metric': 'warm_times/page_load_time',
       'repeat_count': '2',
       'max_time_minutes': '5',
-      'truncate_percent': '25',
       'bug_id': '425582',
       'gs_bucket': 'chrome-perf',
       'builder_host': 'master4.golo.chromium.org',

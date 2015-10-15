@@ -25,7 +25,6 @@ class BisectTesterApi(recipe_api.RecipeApi):
         'metric': bisect_config.get('metric'),
         'repeat_count': int(bisect_config.get('repeat_count', 20)),
         'max_time_minutes': float(bisect_config.get('max_time_minutes', 25)),
-        'truncate_percent': float(bisect_config.get('truncate_percent', 25)),
         'test_type': bisect_config.get('test_type', 'perf')
     }
 
@@ -44,9 +43,7 @@ class BisectTesterApi(recipe_api.RecipeApi):
           'std_dev': 0.0,
           'values': results,
       }
-    else:
-      return perf_test.truncate_and_aggregate(self, results,
-                                              cfg['truncate_percent'])
+    return perf_test.aggregate(self, results)
 
   def upload_results(self, output, results, retcodes):
     """Puts the results as a JSON file in a GS bucket."""

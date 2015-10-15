@@ -673,8 +673,8 @@
       "Relative Change: 0.00000%",
       "Standard Error: +- 0.18047 delta",
       "Revision Mean          Std.Error      ",
-      "Patch    5.81766666667 0.127614436662 ",
-      "No Patch 5.81766666667 0.127614436662 ",
+      "Patch    5.80533333333 0.127614436662 ",
+      "No Patch 5.80533333333 0.127614436662 ",
       "@@@",
       "@@@STEP_LINK@HTML Results@http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch@@@"
     ]

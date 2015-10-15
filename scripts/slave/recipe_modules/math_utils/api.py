@@ -12,56 +12,11 @@ from recipe_engine import recipe_api
 class MathUtilsApi(recipe_api.RecipeApi):
 
   @staticmethod
-  def truncated_mean(data_set, truncate_fraction):
-    """Calculates the truncated mean of a set of values.
-
-    Note that this isn't just the mean of the set of values with the highest
-    and lowest values discarded; the non-discarded values are also weighted
-    differently depending how many values are discarded.
-
-    Args:
-      data_set: Non-empty list of values.
-      truncate_fraction: How much of the upper and lower portions of the data
-          set to discard, expressed as a value in [0, 0.5).
-
-    Returns:
-      The truncated mean as a float.
-
-    Raises:
-      TypeError: The data set was empty after discarding values.
-    """
-    if truncate_fraction >= 0.5:
-      raise ValueError('Trying to truncate %d percent of the list.' %
-                       (200 * truncate_fraction))
-    if len(data_set) > 2:
-      data_set = sorted(data_set)
-
-      discard_num_float = len(data_set) * truncate_fraction
-      discard_num_int = int(math.floor(discard_num_float))
-      kept_weight = len(data_set) - discard_num_float * 2
-
-      data_set = data_set[discard_num_int:len(data_set)-discard_num_int]
-
-      weight_left = 1.0 - (discard_num_float - discard_num_int)
-
-      if weight_left < 1:
-        # If the % to discard leaves a fractional portion, need to weight those
-        # values.
-        unweighted_vals = data_set[1:len(data_set)-1]
-        weighted_vals = [data_set[0], data_set[len(data_set)-1]]
-        weighted_vals = [w * weight_left for w in weighted_vals]
-        data_set = weighted_vals + unweighted_vals
-    else:
-      kept_weight = len(data_set)
-
-    _truncated_mean = reduce(lambda x, y: float(x) + float(y),
-                             data_set) / kept_weight
-    return _truncated_mean
-
-  @staticmethod
   def mean(values):
     """Calculates the arithmetic mean of a list of values."""
-    return MathUtilsApi.truncated_mean(values, 0.0)
+    if not values:
+      raise ValueError('Trying to take the mean of an empty list.')
+    return float(sum(values)) / len(values)
 
   @staticmethod
   def variance(values):

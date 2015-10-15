@@ -403,7 +403,6 @@ def _get_config(params={}):
       'metric': 'mean_input_event_latency/mean_input_event_latency',
       'repeat_count': '2',
       'max_time_minutes': '5',
-      'truncate_percent': '0',
       'bug_id': '',
       'gs_bucket': 'chrome-perf',
       'builder_host': 'master4.golo.chromium.org',
