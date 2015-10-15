@@ -32,6 +32,8 @@ V8_DEPS_DIFFS = freeze({
 
 # Skip these dependencies (list without solution name prefix).
 BLACKLIST = [
+  'test/mozilla/data',
+  'test/simdjs/data',
   'test/test262/data',
 ]
 
