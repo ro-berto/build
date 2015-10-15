@@ -83,12 +83,14 @@
       "scheduler": None,
       "slave_pools": ["android-one"],
       "category": "3Testers",
+      "mergeRequests": True,
     },
     "Android Remoting Tests": {
       "recipe": "chromium",
       "scheduler": None,
       "slave_pools": ["remoting"],
       "category": "3Testers",
+      "mergeRequests": True,
     },
     "Android MIPS Builder (dbg)": {
       "recipe": "android/builder",
