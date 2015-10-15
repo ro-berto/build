@@ -5,9 +5,8 @@
 import json
 import re
 
-# The perf dashboard looks for a string like "Estimated Confidence: 95%"
-# to decide whether or not to cc the author(s). If you change this, please
-# update the perf dashboard as well.
+# Note: The Perf Dashboard specifically for the string "Status: Positive" when
+# deciding whether to CC authors on the bug.
 _RESULTS_BANNER = """
 ===== BISECT JOB RESULTS =====
 Status: %(status)s
@@ -15,7 +14,7 @@ Status: %(status)s
 Test Command: %(command)s
 Test Metric: %(metric)s
 Relative Change: %(change)s
-Estimated Confidence: %(confidence).02f%%
+Score: %(confidence).02f
 Retested CL with revert: %(retest)s
 
 """
