@@ -1019,6 +1019,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Check bisect finished on revision fc6dfc7ff5b1073408499478969261b826441144"
+  },
+  {
     "cmd": [
       "git",
       "show",
@@ -1027,7 +1032,7 @@
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.Checking DEPS for 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+    "name": "Check bisect finished on revision fc6dfc7ff5b1073408499478969261b826441144.Checking DEPS for 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

@@ -467,12 +467,26 @@ class Bisector(object):
     step = len(candidate_range)/(max_revisions + 1)
     return candidate_range[step::step][:max_revisions]
 
+  def check_reach_adjacent_revision(self, revision):
+    """Checks if this revision reaches its adjacent revision.
+
+    Reaching the adjacent revision means one revision considered 'good'
+    immediately preceding a revision considered 'bad'.
+    """
+    if (revision.bad and revision.previous_revision and
+        revision.previous_revision.good):
+      return True
+    if (revision.good and revision.next_revision and
+        revision.next_revision.bad):
+      return True
+    return False
+
   def check_bisect_finished(self, revision):
     """Checks if this revision completes the bisection process.
 
     In this case 'finished' refers to finding one revision considered 'good'
     immediately preceding a revision considered 'bad' where the 'bad' revision
-    does not contain a deps change.
+    does not contain a DEPS change.
     """
     if (revision.bad and revision.previous_revision and
         revision.previous_revision.good):  # pragma: no cover
