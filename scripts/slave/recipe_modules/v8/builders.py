@@ -28,8 +28,8 @@ SimdJs = TestStepConfig('simdjs')
 SimdJsSmall = TestStepConfig('simdjs_small')
 SimpleLeak = TestStepConfig('simpleleak')
 Test262 = TestStepConfig('test262')
-Test262_2 = TestStepConfig('test262', shards=2)
 Test262Variants = TestStepConfig('test262_variants')
+Test262Variants_2 = TestStepConfig('test262_variants', shards=2)
 Unittests = TestStepConfig('unittests')
 V8Initializers = TestStepConfig('v8initializers')
 V8Testing = TestStepConfig('v8testing')
@@ -74,7 +74,9 @@ BUILDERS = {
           'platform': 'linux',
           'isolated_tests': {
             'default': '[dummy hash for default]',
+            'optimize_for_size': '[dummy hash for optimize_for_size]',
             'test262': '[dummy hash for test262]',
+            'webkit': '[dummy hash for webkit]',
           },
         },
         'triggers': [
@@ -172,7 +174,13 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - swarming staging builder',
         'build_gs_archive': 'linux_swarming_staging_archive',
         'tests': [
-          V8Testing, Test262_2,
+          V8Initializers,
+          V8Testing,
+          OptimizeForSize,
+          Webkit,
+          Benchmarks,
+          SimdJs,
+          Test262Variants_2,
         ],
         'testing': {'platform': 'linux'},
         'enable_swarming': True,

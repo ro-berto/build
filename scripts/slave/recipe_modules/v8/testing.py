@@ -27,6 +27,7 @@ TEST_CONFIGS = freeze({
     'tests': ['optimize_for_size'],
     'suite_mapping': ['mjsunit', 'cctest', 'webkit'],
     'test_args': ['--no-variants', '--extra-flags=--optimize-for-size'],
+    'can_use_on_swarming_builders': True,
   },
   'simdjs_small': {
     'name': 'SimdJs - small',
@@ -65,6 +66,7 @@ TEST_CONFIGS = freeze({
   'webkit': {
     'name': 'Webkit',
     'tests': ['webkit'],
+    'can_use_on_swarming_builders': True,
   },
 })
 
