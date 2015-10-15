@@ -729,8 +729,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        # FIXME(machenbach): Add back simdjs_small once download is fixed.
-        'tests': [V8Testing, Webkit, Test262, Mozilla],
+        'tests': [V8Testing, Webkit, SimdJsSmall, Test262, Mozilla],
         'testing': {'platform': 'win'},
       },
       'V8 Win64 - debug': {
@@ -740,8 +739,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        # FIXME(machenbach): Add back simdjs_small once download is fixed.
-        'tests': [V8Testing, Webkit, Test262, Mozilla],
+        'tests': [V8Testing, Webkit, SimdJsSmall, Test262, Mozilla],
         'testing': {'platform': 'win'},
       },
 ####### Category: Mac
@@ -1823,8 +1821,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        # FIXME(machenbach): Add back simdjs_small once download is fixed.
-        'tests': [V8Testing, Webkit],
+        'tests': [V8Testing, Webkit, SimdJsSmall],
         'testing': {'platform': 'win'},
       },
       'v8_win64_ninja_rel': {
@@ -1849,8 +1846,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        # FIXME(machenbach): Add back simdjs_small once download is fixed.
-        'tests': [V8Testing, Webkit],
+        'tests': [V8Testing, Webkit, SimdJsSmall],
         'testing': {'platform': 'win'},
       },
       'v8_mac_rel': {
