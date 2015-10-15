@@ -218,9 +218,12 @@ class V8SwarmingTest(V8Test):
       assert len(test['tests']) == 1
       isolated = test['tests'][0]
 
-    # Get isolated hash from builder.
-    # TODO(machenbach): Add logic for builder_tester.
-    isolated_hash = self.api.properties.get('isolated_tests', {}).get(isolated)
+    if self.v8.bot_type == 'tester':
+      # Get isolated hash from builder.
+      isolated_tests = self.api.properties.get('isolated_tests', {})
+      isolated_hash = isolated_tests.get(isolated)
+    else:
+      isolated_hash = self.api.isolate.isolated_tests.get(isolated)
 
     # TODO(machenbach): Maybe this is too hard. Implement a more forgiving
     # solution.

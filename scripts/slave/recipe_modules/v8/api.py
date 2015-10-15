@@ -216,12 +216,20 @@ class V8Api(recipe_api.RecipeApi):
     if self.bot_config.get('enable_swarming'):
       buildername = self.m.properties['buildername']
       tests_to_isolate = []
+      def add_tests_to_isolate(tests):
+        for test in tests:
+          config = testing.TEST_CONFIGS.get(test.name)
+          if config and config.get('can_use_on_swarming_builders'):
+            tests_to_isolate.extend(config['tests'])
+
+      # Find tests to isolate on builders.
       for _, _, _, bot_config in iter_builders():
         if bot_config.get('parent_buildername') == buildername:
-          for test in bot_config.get('tests', []):
-            config = testing.TEST_CONFIGS.get(test.name)
-            if config and config.get('can_use_on_swarming_builders'):
-              tests_to_isolate.extend(config['tests'])
+          add_tests_to_isolate(bot_config.get('tests', []))
+
+      # Find tests to isolate on builder_testers.
+      add_tests_to_isolate(self.bot_config.get('tests', []))
+
       if tests_to_isolate:
         self.m.isolate.isolate_tests(
             self.m.chromium.output_dir,

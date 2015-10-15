@@ -2008,6 +2008,20 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
+      'v8_swarming_staging': {
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'tests': [
+          V8Testing,
+          Test262Variants_2,
+        ],
+        'testing': {'platform': 'linux'},
+      },
     },
   },
 ####### Waterfall: client.dynamorio
