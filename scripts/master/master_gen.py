@@ -16,6 +16,7 @@ from common import chromium_utils
 
 from master import gitiles_poller
 from master import master_utils
+from master import repo_poller
 from master import slaves_list
 from master.factory import annotator_factory
 
@@ -138,7 +139,7 @@ def _ComputeSchedulers(builders):
     scheduler_type = scheduler_values['type']
     builder_names = scheduler_to_builders[scheduler_name]
 
-    if scheduler_type == 'git_poller':
+    if scheduler_type in ('git_poller', 'repo_poller'):
       schedulers.append(SingleBranchScheduler(
           name=scheduler_name,
           branch='master',
@@ -167,6 +168,20 @@ def _ComputeChangeSourceAndTagComparator(builders):
                         v in builders['schedulers'].values()
                         if v['type'] == 'git_poller')):
     change_source.append(gitiles_poller.GitilesPoller(url))
+
+  for scheduler_config in builders['schedulers'].values():
+    if scheduler_config['type'] != 'repo_poller':
+      continue
+
+    rev_link_template = scheduler_config.get('rev_link_template')
+    branch = scheduler_config.get('branch')
+    branches = [branch] if branch is not None else None
+    change_source.append(repo_poller.RepoPoller(
+        repo_url=scheduler_config['repo_url'],
+        manifest='manifest',
+        repo_branches=branches,
+        pollInterval=300,
+        revlinktmpl=rev_link_template))
 
   # We have to set the tag_comparator to something, but if we have multiple
   # repos, the tag_comparator will not work properly (it's meaningless).
