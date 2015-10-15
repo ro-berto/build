@@ -312,6 +312,8 @@
       "ninja",
       "--compiler",
       "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
       "--mode",
       "official",
       "--goma-dir",
@@ -324,7 +326,11 @@
       "chromium_builder_perf"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile bad49c331def2a3bbf3ddd0096eb51551155"
+    "name": "compile bad49c331def2a3bbf3ddd0096eb51551155",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [
@@ -488,6 +494,8 @@
       "ninja",
       "--compiler",
       "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
       "--mode",
       "official",
       "--goma-dir",
@@ -500,7 +508,11 @@
       "chromium_builder_perf"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile d49c331def2a3bbf3ddd0096eb51551155"
+    "name": "compile d49c331def2a3bbf3ddd0096eb51551155",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [

@@ -278,6 +278,8 @@
       "ninja",
       "--compiler",
       "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
       "--goma-fail-fast",
@@ -297,6 +299,8 @@
     "name": "compile (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -438,6 +442,8 @@
       "ninja",
       "--compiler",
       "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
       "--goma-fail-fast",
@@ -456,6 +462,8 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "compile (without patch)",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"COMPILE_FAILURE\"@@@",
       "@@@SET_BUILD_PROPERTY@failure_hash@\"4d6a903860330c798a14ca4fb8a3b9ea8c90b814\"@@@"
     ]

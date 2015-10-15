@@ -235,6 +235,8 @@
       "ninja",
       "--compiler",
       "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
       "--goma-fail-fast",
@@ -244,6 +246,10 @@
       "aura_builder"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile (with patch)"
+    "name": "compile (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   }
 ]

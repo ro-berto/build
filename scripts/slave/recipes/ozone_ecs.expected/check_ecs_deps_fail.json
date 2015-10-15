@@ -119,13 +119,19 @@
       "ninja",
       "--compiler",
       "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
       "--",
       "content_shell"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile content_shell"
+    "name": "compile content_shell",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [
@@ -153,6 +159,8 @@
       "ninja",
       "--compiler",
       "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
       "--",
@@ -182,7 +190,11 @@
       "url_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile tests"
+    "name": "compile tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [

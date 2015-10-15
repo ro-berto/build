@@ -181,6 +181,8 @@
       "ninja",
       "--compiler",
       "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
       "--mode",
       "official",
       "--goma-dir",
@@ -191,7 +193,11 @@
       "linux_packages_all"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile"
+    "name": "compile",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "allow_subannotations": true,

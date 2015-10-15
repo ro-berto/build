@@ -136,6 +136,8 @@
       "ninja",
       "--compiler",
       "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
       "--",
@@ -152,6 +154,8 @@
     "name": "compile",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

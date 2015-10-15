@@ -202,6 +202,8 @@
       "ninja",
       "--compiler",
       "goma-clang",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
       "--ninja-ensure-up-to-date",
@@ -209,6 +211,10 @@
       "cast_shell"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile"
+    "name": "compile",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   }
 ]

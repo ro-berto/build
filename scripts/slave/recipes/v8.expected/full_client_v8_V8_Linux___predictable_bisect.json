@@ -105,12 +105,18 @@
       "ninja",
       "--compiler",
       "goma-clang",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile"
+    "name": "compile",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [
@@ -485,6 +491,8 @@
       "ninja",
       "--compiler",
       "goma-clang",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
       "--",
@@ -493,7 +501,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a0.compile",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
   },
   {
@@ -655,6 +665,8 @@
       "ninja",
       "--compiler",
       "goma-clang",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
       "--",
@@ -663,7 +675,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a2.compile",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
   },
   {
@@ -851,6 +865,8 @@
       "ninja",
       "--compiler",
       "goma-clang",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
       "--",
@@ -859,7 +875,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Bisect a1.compile",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
   },
   {

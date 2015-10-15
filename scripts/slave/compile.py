@@ -273,6 +273,10 @@ def goma_teardown(options, env):
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
     UploadGomaCompilerProxyInfo()
 
+    if options.goma_jsonstatus:
+      chromium_utils.RunCommand(
+          goma_ctl_cmd + ['jsonstatus', options.goma_jsonstatus], env=env)
+
 
 def UploadNinjaLog(options, command, exit_status):
   """Upload .ninja_log to Google Cloud Storage (gs://chrome-goma-log),
@@ -1307,6 +1311,8 @@ def real_main():
   option_parser.add_option('--goma-disable-local-fallback', action='store_true')
   option_parser.add_option('--goma-dump-stats-file', action='store',
                            help='Specify a file to dump serialized GomaStats.')
+  option_parser.add_option('--goma-jsonstatus',
+                           help='Specify a file to dump goma_ctl jsonstatus.')
   option_parser.add_option('--verbose', action='store_true')
   option_parser.add_option('--ninja-ensure-up-to-date', action='store_true',
                            help='Checks the output of the ninja builder to '
