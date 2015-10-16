@@ -152,6 +152,8 @@ _AddTestSpec('Mac 10.9 Perf', 'chromium-rel-mac9', 'mac',
              num_host_shards=5)
 _AddTestSpec('Mac Retina Perf', 'chromium-rel-mac-retina', 'mac',
              num_host_shards=5)
+_AddTestSpec('Mac HDD Perf', 'chromium-rel-mac-hdd', 'mac',
+             num_host_shards=5)
 
 
 _AddTestSpec('Linux Perf', 'linux-release', 'linux',

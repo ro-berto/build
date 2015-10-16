@@ -337,6 +337,71 @@
     "name": "trigger (11)",
     "trigger_specs": [
       {
+        "builder_name": "Mac HDD Perf (1)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac HDD Perf (1)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (12)",
+    "trigger_specs": [
+      {
+        "builder_name": "Mac HDD Perf (2)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac HDD Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (13)",
+    "trigger_specs": [
+      {
+        "builder_name": "Mac HDD Perf (3)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac HDD Perf (3)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (14)",
+    "trigger_specs": [
+      {
+        "builder_name": "Mac HDD Perf (4)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac HDD Perf (4)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (15)",
+    "trigger_specs": [
+      {
+        "builder_name": "Mac HDD Perf (5)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Mac HDD Perf (5)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (16)",
+    "trigger_specs": [
+      {
         "builder_name": "Mac Retina Perf (1)"
       }
     ],
@@ -347,7 +412,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (12)",
+    "name": "trigger (17)",
     "trigger_specs": [
       {
         "builder_name": "Mac Retina Perf (2)"
@@ -360,7 +425,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (13)",
+    "name": "trigger (18)",
     "trigger_specs": [
       {
         "builder_name": "Mac Retina Perf (3)"
@@ -373,7 +438,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (14)",
+    "name": "trigger (19)",
     "trigger_specs": [
       {
         "builder_name": "Mac Retina Perf (4)"
@@ -386,7 +451,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (15)",
+    "name": "trigger (20)",
     "trigger_specs": [
       {
         "builder_name": "Mac Retina Perf (5)"
