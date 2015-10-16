@@ -130,7 +130,6 @@
       "--progress",
       "verbose",
       "--buildbot",
-      "--exhaustive-variants",
       "--coverage=0.4",
       "--coverage-lift=50",
       "--distribution-mode=random"

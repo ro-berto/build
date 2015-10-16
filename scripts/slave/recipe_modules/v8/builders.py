@@ -1128,7 +1128,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Deopt Fuzzer': {
-        'v8_apply_config': ['deopt_fuzz_normal'],
+        'v8_apply_config': ['deopt_fuzz_normal', 'no_exhaustive_variants'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1515,7 +1515,7 @@ BUILDERS = {
       },
       'V8 Random Deopt Fuzzer - debug': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
-        'v8_apply_config': ['deopt_fuzz_random'],
+        'v8_apply_config': ['deopt_fuzz_random', 'no_exhaustive_variants'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
