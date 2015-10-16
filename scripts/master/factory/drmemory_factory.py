@@ -291,8 +291,8 @@ class DrCommands(object):
     """Build and test all configurations in the DR nightly suite."""
     self.AddDynamoRIOSource()
     self.AddTools()
-    site_name = '%s.%s.BuildBot' % (OsFullName(self.target_platform),
-                                    self.os_version.capitalize())
+    site_name = 'X64.%s%s.VS2010.BuildBot' % (OsFullName(self.target_platform),
+                                              self.os_version.capitalize())
     suite_args = 'nightly;long;site=%s' % site_name
     self.AddDRSuite('nightly suite', suite_args)
     return self.factory
