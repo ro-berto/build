@@ -150,7 +150,8 @@ def _RunPerfTests(api, perf_test_info):
       annotate = api.chromium.get_annotate_by_test_name(test_name)
       cmd = test['cmd'].split()
       cmd.extend(
-          ['--extra-browser-args=--override-use-gl-with-osmesa-for-tests'])
+          ['--extra-browser-args=--override-use-gl-with-osmesa-for-tests '
+           '--enable-multiprocess'])
 
       api.chromium.runtest(
           cmd[1] if len(cmd) > 1 else cmd[0],

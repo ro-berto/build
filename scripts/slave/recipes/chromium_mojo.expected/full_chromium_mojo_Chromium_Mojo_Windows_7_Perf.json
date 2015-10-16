@@ -224,7 +224,7 @@
       "-v",
       "--upload-results",
       "blink_perf.dom",
-      "--extra-browser-args=--override-use-gl-with-osmesa-for-tests"
+      "--extra-browser-args=--override-use-gl-with-osmesa-for-tests --enable-multiprocess"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "blink_perf.dom",
