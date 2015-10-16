@@ -137,6 +137,7 @@
       "--buildbot",
       "--timeout=200",
       "default",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -176,6 +177,7 @@
       "--timeout=200",
       "benchmarks",
       "--download-data",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -215,6 +217,7 @@
       "--timeout=200",
       "simdjs/shell_test_runner",
       "--download-data",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"

@@ -121,6 +121,7 @@
       "--progress",
       "verbose",
       "--buildbot",
+      "--exhaustive-variants",
       "--coverage=0.4",
       "--distribution-mode=smooth"
     ],

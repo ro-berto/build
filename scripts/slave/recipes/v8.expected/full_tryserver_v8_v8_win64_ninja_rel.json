@@ -129,6 +129,7 @@
       "--buildbot",
       "--timeout=200",
       "default",
+      "--exhaustive-variants",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
       "--json-test-results",

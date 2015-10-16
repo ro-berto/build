@@ -125,6 +125,7 @@
       "--buildbot",
       "--timeout=200",
       "default",
+      "--exhaustive-variants",
       "--no-snap",
       "--rerun-failures-count=2",
       "--json-test-results",

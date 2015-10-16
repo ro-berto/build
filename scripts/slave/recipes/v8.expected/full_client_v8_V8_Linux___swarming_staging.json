@@ -182,6 +182,7 @@
       "--buildbot",
       "--timeout=200",
       "default",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -264,6 +265,7 @@
       "optimize_for_size",
       "--no-variants",
       "--extra-flags=--optimize-for-size",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -344,6 +346,7 @@
       "--buildbot",
       "--timeout=200",
       "webkit",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -425,6 +428,7 @@
       "--timeout=200",
       "test262",
       "--download-data",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -477,6 +481,7 @@
       "--timeout=200",
       "benchmarks",
       "--download-data",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -516,6 +521,7 @@
       "--timeout=200",
       "simdjs",
       "--download-data",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"

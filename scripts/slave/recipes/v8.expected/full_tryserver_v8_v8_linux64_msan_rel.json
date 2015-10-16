@@ -137,6 +137,7 @@
       "--buildbot",
       "--timeout=200",
       "default",
+      "--exhaustive-variants",
       "--msan",
       "--rerun-failures-count=2",
       "--json-test-results",

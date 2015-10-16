@@ -125,6 +125,7 @@
       "--timeout=200",
       "test262",
       "--download-data",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"

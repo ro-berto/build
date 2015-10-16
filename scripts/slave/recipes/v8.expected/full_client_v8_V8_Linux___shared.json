@@ -133,6 +133,7 @@
       "--buildbot",
       "--timeout=200",
       "default",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -173,6 +174,7 @@
       "test262",
       "--no-variants",
       "--download-data",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -211,6 +213,7 @@
       "--buildbot",
       "--timeout=200",
       "mozilla",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -250,6 +253,7 @@
       "--timeout=200",
       "simdjs/shell_test_runner",
       "--download-data",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"

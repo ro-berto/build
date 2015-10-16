@@ -124,6 +124,7 @@
       "--buildbot",
       "--timeout=200",
       "mjsunit",
+      "--exhaustive-variants",
       "--gc-stress",
       "--no-harness",
       "--rerun-failures-count=2",

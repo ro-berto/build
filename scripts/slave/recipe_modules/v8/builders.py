@@ -384,7 +384,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - noi18n - debug': {
-        'v8_apply_config': ['no_i18n'],
+        'v8_apply_config': ['no_i18n', 'no_exhaustive_variants'],
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'no_i18n'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -870,6 +870,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Arm - debug': {
+        'v8_apply_config': ['no_exhaustive_variants'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
@@ -882,6 +883,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Arm - debug - 1': {
+        'v8_apply_config': ['no_exhaustive_variants'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
@@ -896,6 +898,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Arm - debug - 2': {
+        'v8_apply_config': ['no_exhaustive_variants'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
@@ -999,7 +1002,7 @@ BUILDERS = {
       'V8 Linux - arm - sim - debug - novfp3': {
         'chromium_apply_config': [
           'clang', 'v8_ninja', 'goma', 'simulate_arm', 'novfp3'],
-        'v8_apply_config': ['novfp3'],
+        'v8_apply_config': ['novfp3', 'no_exhaustive_variants'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1694,6 +1697,9 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_asan_rel': {
+        # TODO(machenbach): Run with exhaustive variants as soon as bot runs
+        # on swarming.
+        'v8_apply_config': ['no_exhaustive_variants'],
         'chromium_apply_config': [
           'v8_ninja',
           'clang',
@@ -1917,6 +1923,9 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_linux_arm_rel': {
+        # TODO(machenbach): Run with exhaustive variants as soon as bot runs
+        # on swarming.
+        'v8_apply_config': ['no_exhaustive_variants'],
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -1937,6 +1946,9 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_rel': {
+        # TODO(machenbach): Run with exhaustive variants as soon as bot runs
+        # on swarming.
+        'v8_apply_config': ['no_exhaustive_variants'],
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',

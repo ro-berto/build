@@ -133,6 +133,7 @@
       "--buildbot",
       "--timeout=200",
       "default",
+      "--exhaustive-variants",
       "--asan",
       "--rerun-failures-count=2",
       "--json-test-results",
