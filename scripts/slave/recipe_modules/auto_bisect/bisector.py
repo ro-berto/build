@@ -71,9 +71,19 @@ class Bisector(object):
       self.revisions = []
       self.bad_rev = revision_class(bisect_config['bad_revision'], self)
       self.bad_rev.bad = True
+      self.bad_rev.read_deps()
+      api.m.step.active_result.presentation.logs['Debug Bad Revision DEPS'] = [
+          '%s: %s' % (key, value) for key, value in
+          self.bad_rev.deps.iteritems()]
+      self.bad_rev.deps = {}
       self.fkbr = self.bad_rev
       self.good_rev = revision_class(bisect_config['good_revision'], self)
       self.good_rev.good = True
+      self.good_rev.read_deps()
+      api.m.step.active_result.presentation.logs['Debug Good Revision DEPS'] = [
+          '%s: %s' % (key, value) for key, value in
+          self.good_rev.deps.iteritems()]
+      self.good_rev.deps = {}
       self.lkgr = self.good_rev
     if init_revisions:
       self._expand_revision_range()

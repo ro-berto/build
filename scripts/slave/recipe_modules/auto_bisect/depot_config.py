@@ -18,13 +18,6 @@ DEPOT_DEPS_NAME = {
         'viewvc': 'https://chromium.googlesource.com/chromium/src/+/',
         'deps_var': 'chromium_rev'
     },
-    'webkit': {
-        'src': 'src/third_party/WebKit',
-        'recurse': True,
-        'from': ['chromium'],
-        'viewvc': 'https://chromium.googlesource.com/chromium/blink/+/',
-        'deps_var': 'webkit_revision'
-    },
     'angle': {
         'src': 'src/third_party/angle',
         'src_old': 'src/third_party/angle_dx11',
@@ -42,16 +35,8 @@ DEPOT_DEPS_NAME = {
         'viewvc': 'https://chromium.googlesource.com/v8/v8.git/+/',
         'deps_var': 'v8_revision'
     },
-    'v8_bleeding_edge': {
-        'src': 'src/v8_bleeding_edge',
-        'recurse': True,
-        'svn': 'https://v8.googlecode.com/svn/branches/bleeding_edge',
-        'from': ['v8'],
-        'viewvc': 'https://chromium.googlesource.com/v8/v8.git/+/',
-        'deps_var': 'v8_revision'
-    },
     'skia/src': {
-        'src': 'src/third_party/skia/src',
+        'src': 'src/third_party/skia',
         'recurse': True,
         'from': ['chromium'],
         'viewvc': 'https://chromium.googlesource.com/skia/+/',

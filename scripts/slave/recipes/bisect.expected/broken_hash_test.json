@@ -224,6 +224,37 @@
   {
     "cmd": [
       "git",
+      "fetch",
+      "origin",
+      "--tags"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "Resolving reference range.git fetch tags",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "cat-file",
+      "blob",
+      "a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "Resolving reference range.git cat-file a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@v8: None@@@",
+      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@skia/src: None@@@",
+      "@@@STEP_LOG_END@Debug Bad Revision DEPS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
       "log",
       "--format=hash:%H",
       "--grep",
