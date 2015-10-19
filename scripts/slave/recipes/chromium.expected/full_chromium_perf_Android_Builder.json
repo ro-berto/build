@@ -191,6 +191,45 @@
     "name": "trigger",
     "trigger_specs": [
       {
+        "builder_name": "Android Galaxy S5 Perf (1)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Galaxy S5 Perf (1)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (2)",
+    "trigger_specs": [
+      {
+        "builder_name": "Android Galaxy S5 Perf (2)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Galaxy S5 Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (3)",
+    "trigger_specs": [
+      {
+        "builder_name": "Android Galaxy S5 Perf (3)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Galaxy S5 Perf (3)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (4)",
+    "trigger_specs": [
+      {
         "builder_name": "Android Nexus5 Perf (1)"
       }
     ],
@@ -201,7 +240,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (2)",
+    "name": "trigger (5)",
     "trigger_specs": [
       {
         "builder_name": "Android Nexus5 Perf (2)"
@@ -214,7 +253,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (3)",
+    "name": "trigger (6)",
     "trigger_specs": [
       {
         "builder_name": "Android Nexus6 Perf (1)"
@@ -227,7 +266,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (4)",
+    "name": "trigger (7)",
     "trigger_specs": [
       {
         "builder_name": "Android Nexus6 Perf (2)"
@@ -240,7 +279,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (5)",
+    "name": "trigger (8)",
     "trigger_specs": [
       {
         "builder_name": "Android Nexus7v2 Perf"
@@ -253,7 +292,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (6)",
+    "name": "trigger (9)",
     "trigger_specs": [
       {
         "builder_name": "Android One Perf (1)"
@@ -266,7 +305,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (7)",
+    "name": "trigger (10)",
     "trigger_specs": [
       {
         "builder_name": "Android One Perf (2)"

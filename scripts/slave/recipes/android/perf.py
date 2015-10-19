@@ -23,6 +23,39 @@ REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
 BUILDERS = freeze({
   'chromium.perf': {
+    'Android Galaxy S5 Perf (1)': {
+      'perf_id': 'android-galaxy-s5',
+      'bucket': 'chrome-perf',
+      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
+                           api.properties['parent_revision']),
+      'num_device_shards': 7,
+      'num_host_shards': 3,
+      'shard_index': 0,
+      'test_spec_file': 'chromium.perf.json',
+      'max_battery_temp': 350,
+    },
+    'Android Galaxy S5 Perf (2)': {
+      'perf_id': 'android-galaxy-s5',
+      'bucket': 'chrome-perf',
+      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
+                           api.properties['parent_revision']),
+      'num_device_shards': 7,
+      'num_host_shards': 3,
+      'shard_index': 1,
+      'test_spec_file': 'chromium.perf.json',
+      'max_battery_temp': 350,
+    },
+    'Android Galaxy S5 Perf (3)': {
+      'perf_id': 'android-galaxy-s5',
+      'bucket': 'chrome-perf',
+      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
+                           api.properties['parent_revision']),
+      'num_device_shards': 7,
+      'num_host_shards': 3,
+      'shard_index': 2,
+      'test_spec_file': 'chromium.perf.json',
+      'max_battery_temp': 350,
+    },
     'Android Nexus5 Perf (1)': {
       'perf_id': 'android-nexus5',
       'bucket': 'chrome-perf',
