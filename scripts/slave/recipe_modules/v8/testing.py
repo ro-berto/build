@@ -20,7 +20,6 @@ TEST_CONFIGS = freeze({
   'mozilla': {
     'name': 'Mozilla',
     'tests': ['mozilla'],
-    'gclient_apply_config': ['mozilla_tests'],
   },
   'optimize_for_size': {
     'name': 'OptimizeForSize',
@@ -95,9 +94,6 @@ class BaseTest(object):
 
   def rerun(self, failure_dict, **kwargs):  # pragma: no cover
     raise NotImplementedError()
-
-  def gclient_apply_config(self):
-    pass
 
 
 class V8Test(BaseTest):
@@ -198,10 +194,6 @@ class V8Test(BaseTest):
     # Switch off test filters on rerun.
     self.applied_test_filter = None
     return self.run(test=rerun_config, **kwargs)
-
-  def gclient_apply_config(self):
-    for c in TEST_CONFIGS[self.name].get('gclient_apply_config', []):
-      self.api.gclient.apply_config(c)
 
 
 class V8SwarmingTest(V8Test):

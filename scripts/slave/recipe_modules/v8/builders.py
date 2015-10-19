@@ -2061,7 +2061,7 @@ def AddBranchBuilder(build_config, arch, bits, presubmit=False,
     tests = [V8Testing, Webkit, Test262, Mozilla]
   if presubmit:
     tests = [Presubmit] + tests
-  return {
+  config = {
     'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
     'v8_config_kwargs': {
       'BUILD_CONFIG': build_config,
@@ -2072,6 +2072,9 @@ def AddBranchBuilder(build_config, arch, bits, presubmit=False,
     'tests': tests,
     'testing': {'platform': 'linux'},
   }
+  if not unittests_only:
+    config['gclient_apply_config'] = ['mozilla_tests']
+  return config
 
 for build_config, name_suffix in (('Release', ''), ('Debug', ' - debug')):
   for branch_name in ('stable branch', 'beta branch'):

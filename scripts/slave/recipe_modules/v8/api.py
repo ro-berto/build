@@ -96,9 +96,6 @@ class V8Api(recipe_api.RecipeApi):
       self.init_tryserver()
     for c in self.bot_config.get('v8_apply_config', []):
       self.apply_config(c)
-    # Test-specific configurations.
-    for t in self.bot_config.get('tests', []):
-      self.create_test(t).gclient_apply_config()
     # Initialize perf_dashboard api if any perf test should run.
     self.m.perf_dashboard.set_default_config()
 
