@@ -505,11 +505,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           bot_config.get('root_devices')):
         self.m.adb.root_devices()
 
-      if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
-          self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1):
-        self.m.chromium_android.asan_device_setup()
-
-
     # TODO(shinyak): bot_config.get('tests', []) sometimes return tuple.
     tests = list(bot_config.get('tests', []))
 
