@@ -177,6 +177,10 @@ def goma_setup(options, env):
     # goma started sucessfully.
     return True
 
+  if options.goma_jsonstatus:
+    chromium_utils.RunCommand(
+        goma_ctl_cmd + ['jsonstatus', options.goma_jsonstatus], env=env)
+
   # Upload compiler_proxy.INFO to investigate the reason of compiler_proxy
   # start-up failure.
   UploadGomaCompilerProxyInfo()
