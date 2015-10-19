@@ -73,8 +73,11 @@ BUILDERS = {
         'testing': {
           'platform': 'linux',
           'isolated_tests': {
+            'benchmarks': '[dummy hash for benchmarks]',
             'bot_default': '[dummy hash for bot_default]',
+            'mozilla': '[dummy hash for mozilla]',
             'optimize_for_size': '[dummy hash for optimize_for_size]',
+            'simdjs': '[dummy hash for simdjs]',
             'test262': '[dummy hash for test262]',
           },
         },
@@ -178,6 +181,7 @@ BUILDERS = {
           Benchmarks,
           SimdJs,
           Test262Variants_2,
+          Mozilla,
         ],
         'testing': {'platform': 'linux'},
         'enable_swarming': True,

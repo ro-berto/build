@@ -216,7 +216,7 @@ class V8Api(recipe_api.RecipeApi):
       def add_tests_to_isolate(tests):
         for test in tests:
           config = testing.TEST_CONFIGS.get(test.name)
-          if config and config.get('can_use_on_swarming_builders'):
+          if config:
             tests_to_isolate.extend(config['tests'])
 
       # Find tests to isolate on builders.

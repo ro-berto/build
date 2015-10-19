@@ -15,7 +15,6 @@ TEST_CONFIGS = freeze({
   'mjsunit': {
     'name': 'Mjsunit',
     'tests': ['mjsunit'],
-    'can_use_on_swarming_builders': True,
   },
   'mozilla': {
     'name': 'Mozilla',
@@ -26,7 +25,6 @@ TEST_CONFIGS = freeze({
     'tests': ['optimize_for_size'],
     'suite_mapping': ['mjsunit', 'cctest', 'webkit', 'intl'],
     'test_args': ['--no-variants', '--extra-flags=--optimize-for-size'],
-    'can_use_on_swarming_builders': True,
   },
   'simdjs_small': {
     'name': 'SimdJs - small',
@@ -43,30 +41,25 @@ TEST_CONFIGS = freeze({
     'name': 'Test262 - no variants',
     'tests': ['test262'],
     'test_args': ['--no-variants', '--download-data'],
-    'can_use_on_swarming_builders': True,
   },
   'test262_variants': {
     'name': 'Test262',
     'tests': ['test262'],
     'test_args': ['--download-data'],
-    'can_use_on_swarming_builders': True,
   },
   'unittests': {
     'name': 'Unittests',
     'tests': ['unittests'],
-    'can_use_on_swarming_builders': True,
   },
   'v8testing': {
     'name': 'Check',
     'tests': ['bot_default'],
     'suite_mapping': [
         'mjsunit', 'cctest', 'webkit', 'message', 'preparser', 'intl'],
-    'can_use_on_swarming_builders': True,
   },
   'webkit': {
     'name': 'Webkit',
     'tests': ['webkit'],
-    'can_use_on_swarming_builders': True,
   },
 })
 
@@ -484,9 +477,7 @@ def create_test(test_step_config, api, v8_api):
   test_cls = V8_NON_STANDARD_TESTS.get(test_step_config.name)
   if not test_cls:
     # TODO(machenbach): Implement swarming for non-standard tests.
-    if (v8_api.bot_config.get('enable_swarming') and
-        TEST_CONFIGS[test_step_config.name].get(
-            'can_use_on_swarming_builders')):
+    if v8_api.bot_config.get('enable_swarming'):
       test_cls = V8SwarmingTest
     else:
       test_cls = V8Test
