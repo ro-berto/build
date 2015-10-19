@@ -270,9 +270,6 @@ def goma_teardown(options, env):
       options.goma_dir):
     goma_ctl_cmd = [sys.executable,
                     os.path.join(options.goma_dir, 'goma_ctl.py')]
-    # Show goma stats so that we can investigate goma when
-    # something weird happens.
-    chromium_utils.RunCommand(goma_ctl_cmd + ['stat'], env=env)
     if options.goma_jsonstatus:
       chromium_utils.RunCommand(
           goma_ctl_cmd + ['jsonstatus', options.goma_jsonstatus], env=env)
