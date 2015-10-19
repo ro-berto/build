@@ -26,12 +26,6 @@ TEST_CONFIGS = freeze({
     'suite_mapping': ['mjsunit', 'cctest', 'webkit', 'intl'],
     'test_args': ['--no-variants', '--extra-flags=--optimize-for-size'],
   },
-  'simdjs_small': {
-    'name': 'SimdJs - small',
-    'tests': ['simdjs/shell_test_runner'],
-    'isolate_target': 'simdjs',
-    'test_args': ['--download-data'],
-  },
   'simdjs': {
     'name': 'SimdJs - all',
     'tests': ['simdjs'],

@@ -205,7 +205,7 @@
       "out",
       "--buildbot",
       "--timeout=200",
-      "simdjs/shell_test_runner",
+      "simdjs",
       "--download-data",
       "--exhaustive-variants",
       "--extra-flags",
@@ -215,7 +215,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "SimdJs - small",
+    "name": "SimdJs - all",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
