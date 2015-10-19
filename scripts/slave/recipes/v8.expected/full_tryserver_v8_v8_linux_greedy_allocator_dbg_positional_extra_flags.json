@@ -144,7 +144,7 @@
       "out",
       "--buildbot",
       "--timeout=200",
-      "default",
+      "bot_default",
       "--variants=turbofan",
       "--extra-flags",
       "--turbo-verify-allocation --turbo-greedy-regalloc --trace_gc --turbo_stats",

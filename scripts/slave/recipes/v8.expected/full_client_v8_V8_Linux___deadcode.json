@@ -123,7 +123,7 @@
       "out",
       "--buildbot",
       "--timeout=200",
-      "default",
+      "bot_default",
       "--exhaustive-variants",
       "--extra-flags=--dead-code-elimination",
       "--rerun-failures-count=2",

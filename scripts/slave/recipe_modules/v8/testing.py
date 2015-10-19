@@ -24,7 +24,7 @@ TEST_CONFIGS = freeze({
   'optimize_for_size': {
     'name': 'OptimizeForSize',
     'tests': ['optimize_for_size'],
-    'suite_mapping': ['mjsunit', 'cctest', 'webkit'],
+    'suite_mapping': ['mjsunit', 'cctest', 'webkit', 'intl'],
     'test_args': ['--no-variants', '--extra-flags=--optimize-for-size'],
     'can_use_on_swarming_builders': True,
   },
@@ -58,8 +58,9 @@ TEST_CONFIGS = freeze({
   },
   'v8testing': {
     'name': 'Check',
-    'tests': ['default'],
-    'suite_mapping': ['mjsunit', 'cctest', 'message', 'preparser'],
+    'tests': ['bot_default'],
+    'suite_mapping': [
+        'mjsunit', 'cctest', 'webkit', 'message', 'preparser', 'intl'],
     'can_use_on_swarming_builders': True,
   },
   'webkit': {

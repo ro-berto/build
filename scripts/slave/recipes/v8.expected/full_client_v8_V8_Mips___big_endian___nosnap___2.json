@@ -124,7 +124,7 @@
       "out",
       "--buildbot",
       "--timeout=200",
-      "default",
+      "bot_default",
       "--exhaustive-variants",
       "--no-snap",
       "--noi18n",

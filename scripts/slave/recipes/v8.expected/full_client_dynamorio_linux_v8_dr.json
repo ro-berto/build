@@ -172,7 +172,7 @@
       "out",
       "--buildbot",
       "--timeout=200",
-      "default",
+      "bot_default",
       "--exhaustive-variants",
       "--command_prefix",
       "[SLAVE_BUILD]/dynamorio/build/bin64/drrun -reset_every_nth_pending 0 --",

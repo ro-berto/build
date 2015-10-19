@@ -132,7 +132,7 @@
       "out",
       "--buildbot",
       "--timeout=200",
-      "default",
+      "bot_default",
       "--exhaustive-variants",
       "--tsan",
       "--rerun-failures-count=2",

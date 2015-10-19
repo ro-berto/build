@@ -133,11 +133,6 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Webkit - skipped"
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
     "name": "Mozilla - skipped"
   },
   {

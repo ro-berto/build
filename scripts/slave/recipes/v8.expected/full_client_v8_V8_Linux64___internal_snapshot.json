@@ -132,7 +132,7 @@
       "out",
       "--buildbot",
       "--timeout=200",
-      "default",
+      "bot_default",
       "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",

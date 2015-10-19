@@ -128,7 +128,7 @@
       "out",
       "--buildbot",
       "--timeout=200",
-      "default",
+      "bot_default",
       "--exhaustive-variants",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
