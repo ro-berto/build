@@ -657,6 +657,14 @@ class V8Api(recipe_api.RecipeApi):
         'external_symbolizer_path=%s' % llvm_symbolizer_path,
       ])
 
+    # Arguments and environment for cfi builds:
+    if self.m.chromium.c.gyp_env.GYP_DEFINES.get('cfi_vptr') == 1:
+      env['UBSAN_OPTIONS'] = ":".join([
+        'print_stacktrace=1',
+        'print_summary=1',
+        'symbolize=0',
+      ])
+
     # Arguments and environment for tsan builds:
     if self.m.chromium.c.gyp_env.GYP_DEFINES.get('tsan') == 1:
       full_args.append('--tsan')

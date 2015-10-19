@@ -58,7 +58,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "cfi_vptr=1 clang=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1 v8_target_arch=x64",
+      "GYP_DEFINES": "cfi_diag=1 cfi_vptr=1 clang=1 gomadir='[BUILD]/goma' release_extra_cflags='-O1 -fno-inline-functions -fno-inline -fno-omit-frame-pointer -fno-sanitize-recover=cfi' target_arch=x64 use_goma=1 v8_target_arch=x64",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
@@ -139,6 +139,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
+    "env": {
+      "UBSAN_OPTIONS": "print_stacktrace=1:print_summary=1:symbolize=0"
+    },
     "name": "Check",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -180,6 +183,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
+    "env": {
+      "UBSAN_OPTIONS": "print_stacktrace=1:print_summary=1:symbolize=0"
+    },
     "name": "OptimizeForSize",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -220,6 +226,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
+    "env": {
+      "UBSAN_OPTIONS": "print_stacktrace=1:print_summary=1:symbolize=0"
+    },
     "name": "Benchmarks",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -261,6 +270,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
+    "env": {
+      "UBSAN_OPTIONS": "print_stacktrace=1:print_summary=1:symbolize=0"
+    },
     "name": "Test262 - no variants",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -300,6 +312,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
+    "env": {
+      "UBSAN_OPTIONS": "print_stacktrace=1:print_summary=1:symbolize=0"
+    },
     "name": "Mozilla",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -340,6 +355,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
+    "env": {
+      "UBSAN_OPTIONS": "print_stacktrace=1:print_summary=1:symbolize=0"
+    },
     "name": "SimdJs - all",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
