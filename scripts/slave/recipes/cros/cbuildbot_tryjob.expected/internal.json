@@ -82,5 +82,10 @@
       "internal-paladin"
     ],
     "name": "cbuildbot [internal-paladin]"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

@@ -496,5 +496,10 @@
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

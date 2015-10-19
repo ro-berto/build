@@ -91,7 +91,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Step('Fetch manifest config failure') failed with return_code 1",
     "status_code": 1
   }

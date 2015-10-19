@@ -754,5 +754,10 @@
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
     "name": "gpu_rasterization_tests"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

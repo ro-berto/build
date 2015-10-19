@@ -330,7 +330,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Step('webkit_unit_tests') failed with return_code 1",
     "status_code": 1
   }

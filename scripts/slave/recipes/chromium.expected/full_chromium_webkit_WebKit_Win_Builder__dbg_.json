@@ -296,5 +296,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@WebKit Win7 (dbg)@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

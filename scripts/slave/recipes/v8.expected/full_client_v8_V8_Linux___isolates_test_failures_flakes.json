@@ -211,7 +211,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Failures or flakes in build.",
     "status_code": 1
   }

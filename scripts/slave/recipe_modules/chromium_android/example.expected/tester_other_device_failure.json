@@ -483,7 +483,7 @@
     "name": "stack_tool_for_asan"
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Infra Failure: Step('device_status_check') returned 2",
     "status_code": 2
   }

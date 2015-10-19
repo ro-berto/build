@@ -143,5 +143,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@V8 Win32 - 1<br />V8 Win32 - 2@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

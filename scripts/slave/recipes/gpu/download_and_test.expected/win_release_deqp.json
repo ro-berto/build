@@ -171,5 +171,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "angle_deqp_gles3_tests"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

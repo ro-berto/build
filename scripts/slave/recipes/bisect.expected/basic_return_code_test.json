@@ -1129,5 +1129,10 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Results",
     "stdin": "---bisect results start here---\n\n===== BISECT JOB RESULTS =====\nStatus: Negative: Completed, but no culprit was found with high confidence.\n\nTest Command: tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\nTest Metric: warm_times/page_load_time\nRelative Change: Zero to non-zero\nScore: 0.00\nRetested CL with revert: Not Implemented.\n\n\n===== SUSPECTED CL(s) =====\nSubject : Some random CL\nAuthor  : DummyAuthor, dummy@nowhere.com\nCommit description:\n  A long description for a CL.\nContaining multiple lines\nCommit  : fc6dfc7ff5b1073408499478969261b826441144\nDate    : 01/01/2015\n\n\n===== TESTED REVISIONS =====\nDepot    Revision Mean Value Std. Err. Good?    \nchromium r306475  0          0         good     \n\nchromium r306476  1          0         bad   <- \n\nchromium r306477  1          0         bad      \nchromium r306478  1          0         bad      \n\n\n\n| O O | Visit http://www.chromium.org/developers/speed-infra/perf-bug-faq\n|  X  | for more information addressing perf regression bugs. For feedback,\n| / \\ | file a bug with label Cr-Tests-AutoBisect.  Thank you!"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

@@ -94,5 +94,10 @@
       "@@@STEP_WARNINGS@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes@{}@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

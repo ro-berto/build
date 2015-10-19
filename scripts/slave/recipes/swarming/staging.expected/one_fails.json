@@ -496,7 +496,7 @@
     "name": "Upload to test-results [dummy_target_2]"
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "1 out of 4 aggregated steps failed. Failures: Step('dummy_target_1 on Ubuntu') failed with return_code 1",
     "status_code": 1
   }

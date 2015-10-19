@@ -20,7 +20,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Could not get disk info: 'capacity'",
     "status_code": 1
   }

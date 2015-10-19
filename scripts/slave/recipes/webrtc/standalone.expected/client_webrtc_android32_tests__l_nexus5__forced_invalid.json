@@ -102,7 +102,7 @@
     "name": "gclient runhooks"
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Testers cannot be forced without providing revision information.Please select a previous build and click [Rebuild] or force a buildfor a Builder instead (will trigger new runs for the testers).",
     "status_code": 1
   }

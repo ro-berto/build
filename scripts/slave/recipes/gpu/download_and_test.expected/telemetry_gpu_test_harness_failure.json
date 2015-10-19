@@ -798,7 +798,7 @@
     "name": "tab_capture_end2end_tests"
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "1 tests failed: ['maps_pixel_test']",
     "status_code": 1
   }

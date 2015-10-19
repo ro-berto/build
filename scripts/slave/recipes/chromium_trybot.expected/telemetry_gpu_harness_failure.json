@@ -2531,7 +2531,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "1 out of 1 aggregated steps failed. Failures: Step('maps_pixel_test on NVIDIA GPU on Linux') failed with return_code 1",
     "status_code": 1
   }

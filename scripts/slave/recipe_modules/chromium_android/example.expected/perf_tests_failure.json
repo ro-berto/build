@@ -824,7 +824,7 @@
     "name": "stack_tool_for_asan"
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "sharded perf tests failed [StepFailure(\"Step('perf_test.foo') failed with return_code 1\",)]",
     "status_code": 1
   }

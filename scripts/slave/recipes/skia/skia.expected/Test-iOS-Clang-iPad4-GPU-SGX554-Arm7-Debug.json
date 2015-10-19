@@ -700,5 +700,10 @@
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "wait for reboot"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

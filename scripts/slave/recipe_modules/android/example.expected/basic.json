@@ -164,5 +164,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile android"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

@@ -24,5 +24,10 @@
       "@@@STEP_LOG_LINE@stdout@0@@@",
       "@@@STEP_LOG_END@stdout@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

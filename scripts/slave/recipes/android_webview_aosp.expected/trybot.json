@@ -358,5 +358,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

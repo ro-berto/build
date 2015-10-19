@@ -666,7 +666,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "DEPS file does not contain entry for v8_revision",
     "status_code": 1
   }

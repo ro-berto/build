@@ -219,7 +219,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Could not parse commit position from git output: ",
     "status_code": 1
   }

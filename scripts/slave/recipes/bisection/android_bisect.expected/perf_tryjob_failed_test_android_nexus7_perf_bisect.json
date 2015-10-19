@@ -525,7 +525,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Patched version failed to run performance test.",
     "status_code": 1
   }

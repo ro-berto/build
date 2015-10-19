@@ -160,5 +160,10 @@
     ],
     "cwd": "[SLAVE_BUILD]/src/v8",
     "name": "roll deps"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

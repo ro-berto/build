@@ -298,7 +298,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Could not parse commit position from git output: UnCastable",
     "status_code": 1
   }

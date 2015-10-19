@@ -163,5 +163,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@V8 Linux64<br />V8 Linux64 - avx2@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

@@ -245,5 +245,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Linux Perf (5)@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

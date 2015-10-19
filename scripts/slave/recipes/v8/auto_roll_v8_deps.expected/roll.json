@@ -271,5 +271,10 @@
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "git cl"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

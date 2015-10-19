@@ -284,5 +284,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Linux ChromiumOS Tests (1)@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

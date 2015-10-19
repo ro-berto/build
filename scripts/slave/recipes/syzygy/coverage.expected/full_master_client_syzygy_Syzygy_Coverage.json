@@ -113,5 +113,10 @@
     "~followup_annotations": [
       "@@@STEP_LINK@coverage_report@https://syzygy-archive.commondatastorage.googleapis.com/builds/coverage/170242/index.html@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

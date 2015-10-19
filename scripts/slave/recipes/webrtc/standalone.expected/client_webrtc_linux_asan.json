@@ -546,5 +546,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "voice_engine_unittests"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

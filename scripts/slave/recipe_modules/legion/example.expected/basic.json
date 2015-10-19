@@ -137,5 +137,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Running test for Test Controller"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

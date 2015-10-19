@@ -393,5 +393,10 @@
       "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot"
     },
     "name": "Upload Nanobench Results"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

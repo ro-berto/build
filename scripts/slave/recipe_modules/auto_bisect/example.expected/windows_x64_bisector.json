@@ -777,5 +777,10 @@
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "Reading culprit cl information.",
     "stdout": "/path/to/tmp/"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

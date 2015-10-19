@@ -162,5 +162,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@V8 Mips - big endian - nosnap - 1<br />V8 Mips - big endian - nosnap - 2@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

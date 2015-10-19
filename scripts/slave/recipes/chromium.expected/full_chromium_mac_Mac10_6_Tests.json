@@ -356,5 +356,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Upload to test-results [browser_tests on Mac-10.6]"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

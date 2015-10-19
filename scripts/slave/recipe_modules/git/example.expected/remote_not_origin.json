@@ -141,5 +141,10 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "git bundle"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

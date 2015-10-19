@@ -306,5 +306,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Linux Tests (dbg) (ANGLE)@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

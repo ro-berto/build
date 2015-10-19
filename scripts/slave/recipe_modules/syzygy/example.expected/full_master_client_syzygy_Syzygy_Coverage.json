@@ -302,5 +302,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "smoke_test"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

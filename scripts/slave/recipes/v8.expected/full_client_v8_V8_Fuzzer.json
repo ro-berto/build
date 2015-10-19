@@ -118,5 +118,10 @@
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Fuzz",
     "stdout": "/path/to/tmp/"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

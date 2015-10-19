@@ -22,5 +22,10 @@
     "~followup_annotations": [
       "@@@STEP_LINK@Applied issue 1@http://review_tool.url/1@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

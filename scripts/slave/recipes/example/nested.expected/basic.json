@@ -60,5 +60,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "not_a_dinosaur"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

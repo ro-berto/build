@@ -311,5 +311,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@CrWinAsan tester@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

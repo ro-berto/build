@@ -259,7 +259,7 @@
     "name": "content_unittests"
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "1 tests failed: ['diagnose_goma']",
     "status_code": 1
   }

@@ -642,7 +642,7 @@
     "stdout": "/path/to/tmp/"
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Expected revisions to check.",
     "status_code": 1
   }

@@ -112,5 +112,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "libyuv_unittest"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

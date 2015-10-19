@@ -219,5 +219,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "upload_symbols"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

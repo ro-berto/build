@@ -171,5 +171,10 @@
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "compile"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

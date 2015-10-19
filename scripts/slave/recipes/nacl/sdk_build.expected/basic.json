@@ -120,5 +120,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "annotated_steps"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

@@ -44,5 +44,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "fetch fake://foo/bar"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

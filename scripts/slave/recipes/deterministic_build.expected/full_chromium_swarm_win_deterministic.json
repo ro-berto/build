@@ -338,5 +338,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compare_build_artifacts"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

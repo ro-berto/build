@@ -58,5 +58,10 @@
       "x86-generic-full"
     ],
     "name": "cbuildbot [x86-generic-full]"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

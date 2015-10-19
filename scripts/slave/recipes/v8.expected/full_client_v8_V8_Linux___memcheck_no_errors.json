@@ -126,5 +126,10 @@
       "@@@STEP_LOG_LINE@stderr@no leaks are possible@@@",
       "@@@STEP_LOG_END@stderr@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

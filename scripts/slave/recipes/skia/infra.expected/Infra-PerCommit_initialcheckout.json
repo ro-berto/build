@@ -181,5 +181,10 @@
       "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
     },
     "name": "run_unittests"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

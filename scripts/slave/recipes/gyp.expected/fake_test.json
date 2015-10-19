@@ -58,5 +58,10 @@
     ],
     "cwd": "[SLAVE_BUILD]/gyp",
     "name": "run tests"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

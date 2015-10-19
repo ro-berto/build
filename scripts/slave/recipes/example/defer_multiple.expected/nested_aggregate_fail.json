@@ -81,7 +81,7 @@
     "name": "clean up"
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "1 out of 9 aggregated steps failed. Failures: 1 out of 2 aggregated steps failed. Failures: Step('aggregated start') failed with return_code 1",
     "status_code": 1
   }

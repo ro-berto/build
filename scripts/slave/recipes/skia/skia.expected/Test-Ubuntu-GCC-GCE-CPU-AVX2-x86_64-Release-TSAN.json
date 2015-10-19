@@ -252,5 +252,10 @@
       "UBSAN_OPTIONS": "suppressions=[SLAVE_BUILD]/skia/tools/ubsan.supp"
     },
     "name": "dm"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

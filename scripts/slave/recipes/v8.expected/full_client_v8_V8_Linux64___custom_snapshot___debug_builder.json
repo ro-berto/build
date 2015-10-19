@@ -163,5 +163,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@V8 Linux64 - custom snapshot - debug<br />V8 Linux64 GC Stress - custom snapshot@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

@@ -241,5 +241,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "browser_tests"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

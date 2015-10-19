@@ -147,5 +147,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@V8 Arm - debug - 1<br />V8 Arm - debug - 2<br />V8 Arm GC Stress@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

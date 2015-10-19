@@ -21,5 +21,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Upload to test-results [example-test-type]"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

@@ -167,5 +167,10 @@
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Housekeeper-PerCommit"
     },
     "name": "generate and upload binary size data"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

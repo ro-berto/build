@@ -383,7 +383,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Uncaught Exception: Exception('Failed to parse the CTS output for the xml report file location',)",
     "status_code": -1
   }

@@ -55,5 +55,10 @@
       "ndk-linux-arm64-v8a"
     ],
     "name": "cbuildbot [ndk-linux-arm64-v8a]"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

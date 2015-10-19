@@ -179,5 +179,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@V8 Fuzzer<br />V8 Linux64 - debug<br />V8 Linux64 - debug - avx2<br />V8 Linux64 - debug - greedy allocator@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

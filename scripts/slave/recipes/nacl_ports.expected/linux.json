@@ -73,5 +73,10 @@
       "BUILDBOT_SLAVE_TYPE": "BuilderTester"
     },
     "name": "annotated steps"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

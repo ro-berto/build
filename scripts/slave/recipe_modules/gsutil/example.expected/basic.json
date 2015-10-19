@@ -133,5 +133,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Download GS file with polling"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

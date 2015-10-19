@@ -152,7 +152,7 @@
     "stdout": "/path/to/tmp/"
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Encountered 1 bundler failure(s)",
     "status_code": 1
   }

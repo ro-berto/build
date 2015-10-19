@@ -4157,5 +4157,10 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_EXCEPTION@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

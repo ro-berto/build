@@ -87,5 +87,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "job_runs_fine.py"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

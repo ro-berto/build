@@ -396,5 +396,10 @@
       "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

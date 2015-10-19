@@ -707,7 +707,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Git did not output a valid hash for the interned file.",
     "status_code": 1
   }

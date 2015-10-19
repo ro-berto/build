@@ -294,5 +294,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Win7 Tests (ANGLE)@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

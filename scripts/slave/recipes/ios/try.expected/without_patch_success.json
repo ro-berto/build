@@ -373,7 +373,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Step('compile (with patch)') failed with return_code 1",
     "status_code": 1
   }

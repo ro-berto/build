@@ -163,5 +163,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@V8 Linux - nosnap - debug - 1<br />V8 Linux - nosnap - debug - 2@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

@@ -517,7 +517,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "1 out of 6 aggregated steps failed. Failures: Step('[collect] content_shell_test_apk') failed with return_code 1",
     "status_code": 1
   }

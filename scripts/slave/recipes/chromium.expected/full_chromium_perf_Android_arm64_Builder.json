@@ -197,5 +197,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Android Nexus9 Perf@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

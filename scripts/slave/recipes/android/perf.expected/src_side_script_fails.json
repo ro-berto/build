@@ -680,7 +680,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "src-side perf tests failed [StepFailure(\"1 tests failed: ['host_info']\",)]",
     "status_code": 1
   }

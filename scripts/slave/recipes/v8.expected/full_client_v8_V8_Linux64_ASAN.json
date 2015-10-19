@@ -210,5 +210,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@V8 Linux ASAN arm - debug builder<br />V8 Linux ASAN mipsel - debug builder<br />V8 Linux64 ASAN - debug builder<br />V8 Linux64 ASAN arm64 - debug builder<br />V8 Linux64 ASAN no inline - release builder@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

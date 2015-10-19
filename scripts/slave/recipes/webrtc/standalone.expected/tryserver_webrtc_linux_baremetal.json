@@ -290,5 +290,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webrtc_perf_tests"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

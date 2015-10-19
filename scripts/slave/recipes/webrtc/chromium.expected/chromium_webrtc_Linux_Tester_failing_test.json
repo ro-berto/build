@@ -273,7 +273,7 @@
     "name": "content_unittests"
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "1 out of 3 aggregated steps failed. Failures: Step('browser_tests') failed with return_code 1",
     "status_code": 1
   }

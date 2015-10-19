@@ -421,5 +421,10 @@
       "@@@STEP_LOG_END@fake log@@@",
       "@@@STEP_LINK@fake URL text@fake URL@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

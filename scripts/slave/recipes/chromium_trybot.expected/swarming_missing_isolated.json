@@ -2253,5 +2253,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Upload to test-results [tab_capture_end2end_tests on NVIDIA GPU on Linux (with patch) on Linux]"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

@@ -263,5 +263,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@This test was skipped because it was not affected.@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

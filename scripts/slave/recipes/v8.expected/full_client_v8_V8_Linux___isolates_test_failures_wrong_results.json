@@ -134,7 +134,7 @@
     "name": "Check"
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Uncaught Exception: AssertionError()",
     "status_code": -1
   }

@@ -390,7 +390,7 @@
     "name": "nanobench"
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Failed build steps: dm",
     "status_code": 1
   }

@@ -161,5 +161,10 @@
       "@@@STEP_LOG_LINE@python.inline@    urllib.urlencode(params)))@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

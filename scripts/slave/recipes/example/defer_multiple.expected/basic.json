@@ -75,5 +75,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "clean up"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

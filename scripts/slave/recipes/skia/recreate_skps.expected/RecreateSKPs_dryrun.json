@@ -74,5 +74,10 @@
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "Recreate SKPs"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

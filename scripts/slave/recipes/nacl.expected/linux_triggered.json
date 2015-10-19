@@ -79,5 +79,10 @@
       "RUNTEST": "[BUILD]/scripts/slave/runtest.py"
     },
     "name": "annotated steps"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

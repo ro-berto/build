@@ -135,5 +135,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@V8 Linux - x87 - nosnap - debug@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

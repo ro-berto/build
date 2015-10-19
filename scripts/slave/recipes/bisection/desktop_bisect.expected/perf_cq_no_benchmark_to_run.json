@@ -239,5 +239,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@No matching Telemetry benchmark to run for the given patch, aborting the CQ try job.@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

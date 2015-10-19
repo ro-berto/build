@@ -162,5 +162,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Running Bisection"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

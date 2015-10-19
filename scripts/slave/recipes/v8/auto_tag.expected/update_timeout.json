@@ -336,5 +336,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "log"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

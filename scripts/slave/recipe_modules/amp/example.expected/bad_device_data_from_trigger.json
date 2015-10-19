@@ -72,7 +72,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "test_run_id not found in trigger_data json",
     "status_code": 1
   }

@@ -284,7 +284,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Could not parse commit hash from git log output",
     "status_code": 1
   }

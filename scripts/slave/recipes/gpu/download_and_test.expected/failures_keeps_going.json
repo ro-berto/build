@@ -797,7 +797,7 @@
     "name": "tab_capture_end2end_tests"
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "1 tests failed: ['content_gl_tests']",
     "status_code": 1
   }

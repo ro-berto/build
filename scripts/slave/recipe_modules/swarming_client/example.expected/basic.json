@@ -106,7 +106,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Expecting at least v20.0.0, got v0.4.4",
     "status_code": 1
   }

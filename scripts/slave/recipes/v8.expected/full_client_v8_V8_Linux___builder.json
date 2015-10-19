@@ -211,5 +211,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@V8 Deopt Fuzzer<br />V8 Linux<br />V8 Linux - deadcode<br />V8 Linux - gcmole<br />V8 Linux - isolates<br />V8 Linux - nosse3<br />V8 Linux - nosse4<br />V8 Linux - presubmit@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

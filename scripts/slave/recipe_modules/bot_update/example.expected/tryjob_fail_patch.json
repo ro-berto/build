@@ -63,7 +63,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Step('Patch failure') failed with return_code 1",
     "status_code": 1
   }

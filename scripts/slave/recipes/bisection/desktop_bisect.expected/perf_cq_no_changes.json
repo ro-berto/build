@@ -130,5 +130,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@There are no modifications to Telemetry benchmarks, aborting the try job.@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

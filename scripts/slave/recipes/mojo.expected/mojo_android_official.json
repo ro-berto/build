@@ -89,5 +89,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "upload shell and app binaries"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

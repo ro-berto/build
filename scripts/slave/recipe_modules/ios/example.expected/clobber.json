@@ -166,5 +166,10 @@
     ],
     "cwd": "[SLAVE_BUILD]/src/xcodebuild",
     "name": "compile"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

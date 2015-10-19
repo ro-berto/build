@@ -272,7 +272,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "1 tests failed: ['dynamic_perf_tests']",
     "status_code": 1
   }

@@ -19,5 +19,10 @@
     "~followup_annotations": [
       "@@@STEP_LINK@Applied issue 12853011@https://codereview.chromium.org/12853011@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

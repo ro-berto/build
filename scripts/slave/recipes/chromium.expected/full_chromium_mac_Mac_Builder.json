@@ -373,5 +373,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Mac10.9 Tests@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

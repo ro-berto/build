@@ -210,5 +210,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@V8 Linux - swarming staging@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

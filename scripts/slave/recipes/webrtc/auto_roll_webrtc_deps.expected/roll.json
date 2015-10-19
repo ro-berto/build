@@ -88,5 +88,10 @@
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "autoroll chromium_revision"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

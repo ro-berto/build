@@ -183,5 +183,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "zip_build"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

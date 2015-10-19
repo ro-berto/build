@@ -217,5 +217,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "fetch master:OWNERS"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

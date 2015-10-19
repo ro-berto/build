@@ -48,7 +48,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Error: ERROR",
     "status_code": 1
   }

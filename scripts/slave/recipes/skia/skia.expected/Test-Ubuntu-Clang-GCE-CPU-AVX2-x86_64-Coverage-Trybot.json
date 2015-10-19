@@ -471,5 +471,10 @@
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-infra/coverage-json-v1/trybot/2012/05/14/12/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/5/500/coverage_by_line_164710_1408633190.json@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

@@ -67,5 +67,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "chromium.perf success rates"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

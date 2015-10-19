@@ -167,5 +167,10 @@
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Build-Mac10.8-Clang-Arm7-Debug-Android"
     },
     "name": "build most"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

@@ -204,5 +204,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Linux Tester@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

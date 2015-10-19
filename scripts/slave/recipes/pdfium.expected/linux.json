@@ -98,5 +98,10 @@
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "name": "corpus tests"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

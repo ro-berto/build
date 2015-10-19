@@ -137,5 +137,10 @@
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Housekeeper-PerCommit"
     },
     "name": "build most"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

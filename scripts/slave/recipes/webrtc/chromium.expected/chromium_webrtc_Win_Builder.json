@@ -249,5 +249,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Win10 Tester<br />Win7 Tester<br />Win8 Tester<br />WinXP Tester@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

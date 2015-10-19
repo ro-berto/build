@@ -174,5 +174,10 @@
     "cwd": "[SLAVE_BUILD]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484/path/to/bar",
     "name": "lookup Git remote (src/bar)",
     "stdout": "/path/to/tmp/"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

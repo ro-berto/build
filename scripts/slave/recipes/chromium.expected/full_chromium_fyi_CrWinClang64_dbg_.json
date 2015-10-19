@@ -256,5 +256,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@CrWinClang64(dbg) tester@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

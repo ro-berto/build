@@ -188,5 +188,10 @@
     ],
     "cwd": "[SLAVE_BUILD]/src/out/Release-iphoneos",
     "name": "compile"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

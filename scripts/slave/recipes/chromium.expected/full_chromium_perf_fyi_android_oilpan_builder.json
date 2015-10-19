@@ -175,5 +175,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@android_nexus5_oilpan_perf@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

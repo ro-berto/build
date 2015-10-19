@@ -242,5 +242,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "base_unittests"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

@@ -18,5 +18,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@cross-compiler@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

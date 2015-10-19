@@ -15,7 +15,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Step('Recipe failed. Reason: Fake failure') failed with return_code 1",
     "status_code": 1
   }

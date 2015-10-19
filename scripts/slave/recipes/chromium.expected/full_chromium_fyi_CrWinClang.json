@@ -303,5 +303,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@CrWinClang tester@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

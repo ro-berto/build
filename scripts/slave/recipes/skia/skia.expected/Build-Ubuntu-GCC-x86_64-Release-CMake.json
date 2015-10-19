@@ -121,5 +121,10 @@
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Build-Ubuntu-GCC-x86_64-Release-CMake"
     },
     "name": "cmake_build"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

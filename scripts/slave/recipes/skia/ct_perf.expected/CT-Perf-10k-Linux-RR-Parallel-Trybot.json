@@ -16,5 +16,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Cluster Telemetry rasterize_and_record_micro run"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

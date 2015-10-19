@@ -172,5 +172,10 @@
       "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
       "@@@STEP_LOG_END@durations@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

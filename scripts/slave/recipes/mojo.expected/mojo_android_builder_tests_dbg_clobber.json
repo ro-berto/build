@@ -116,7 +116,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Infra Failure: Step('device_status_check') returned 1",
     "status_code": 1
   }

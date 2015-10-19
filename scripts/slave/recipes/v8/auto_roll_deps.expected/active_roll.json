@@ -39,5 +39,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Active rolls found.@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

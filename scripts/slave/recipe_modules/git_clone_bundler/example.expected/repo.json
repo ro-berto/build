@@ -180,5 +180,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@https://localhost/bar.git@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

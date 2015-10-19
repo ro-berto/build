@@ -366,5 +366,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Upload to test-results [browser_tests]"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

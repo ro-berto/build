@@ -345,7 +345,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Infra Failure: Step('provision_devices') returned 1",
     "status_code": 1
   }

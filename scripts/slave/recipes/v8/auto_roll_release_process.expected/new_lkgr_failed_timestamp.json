@@ -251,7 +251,7 @@
     "name": "log"
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Timestamp file was missing. Starting new candidate cycle.",
     "status_code": 1
   }

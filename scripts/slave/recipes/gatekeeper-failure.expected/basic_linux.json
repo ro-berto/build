@@ -5,5 +5,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "fail"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

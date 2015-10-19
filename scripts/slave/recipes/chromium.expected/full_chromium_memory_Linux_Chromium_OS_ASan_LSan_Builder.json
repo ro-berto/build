@@ -302,5 +302,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Linux Chromium OS ASan LSan Tests (1)@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

@@ -87,5 +87,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "run tests"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

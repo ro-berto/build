@@ -153,5 +153,10 @@
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "git push"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

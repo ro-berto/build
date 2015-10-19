@@ -126,5 +126,10 @@
     ],
     "cwd": "[SLAVE_BUILD]/v8",
     "name": "Deopt Fuzz"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

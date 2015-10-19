@@ -235,7 +235,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Infra Failure: Step('repo sync - retry') returned 1",
     "status_code": 1
   }

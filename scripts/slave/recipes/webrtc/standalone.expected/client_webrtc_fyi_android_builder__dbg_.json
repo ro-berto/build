@@ -167,5 +167,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Android32 Tests (L Nexus6)(dbg)@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

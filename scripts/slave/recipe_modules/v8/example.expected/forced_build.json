@@ -226,5 +226,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "first trace no patch"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

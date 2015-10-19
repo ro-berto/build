@@ -829,5 +829,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "tab_capture_end2end_tests"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

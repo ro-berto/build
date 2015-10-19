@@ -94,5 +94,10 @@
       "x86-generic-paladin"
     ],
     "name": "cbuildbot [x86-generic-paladin]"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

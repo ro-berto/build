@@ -342,5 +342,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@WebKit XP@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

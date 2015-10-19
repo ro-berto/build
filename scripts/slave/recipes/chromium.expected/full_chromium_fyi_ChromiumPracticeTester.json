@@ -245,5 +245,10 @@
       "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/ChromiumPracticeTester/571/layout-test-results/results.html@@@",
       "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/ChromiumPracticeTester/571/layout-test-results.zip@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

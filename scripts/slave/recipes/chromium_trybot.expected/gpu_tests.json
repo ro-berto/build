@@ -4357,5 +4357,10 @@
       "@@@STEP_TEXT@<br/>ignored:<br/>Test.Test1<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

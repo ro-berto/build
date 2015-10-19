@@ -526,5 +526,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "libjingle_peerconnection_objc_test"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

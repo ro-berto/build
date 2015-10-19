@@ -303,5 +303,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Mac ASan 64 Tests (1)@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

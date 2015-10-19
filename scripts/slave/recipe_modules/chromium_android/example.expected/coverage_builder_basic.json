@@ -741,5 +741,10 @@
     "~followup_annotations": [
       "@@@STEP_LINK@Coverage report@https://storage.cloud.google.com/chrome-code-coverage/java/coverage_builder/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

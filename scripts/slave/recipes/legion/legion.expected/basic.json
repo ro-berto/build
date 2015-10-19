@@ -305,5 +305,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Running test for http_test"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

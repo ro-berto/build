@@ -41,7 +41,7 @@
     ]
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Infra Failure: Step('bot_update') returned 1",
     "status_code": 1
   }

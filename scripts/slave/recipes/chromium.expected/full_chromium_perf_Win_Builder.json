@@ -346,5 +346,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Win XP Perf (5)@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

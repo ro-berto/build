@@ -280,5 +280,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Android Tests (dbg) (J Nexus4)<br />Android Tests (dbg) (K Nexus5)<br />Android Tests (dbg) (L Nexus5)<br />Android Tests (dbg) (L Nexus6)<br />Android Tests (dbg) (L Nexus7.2)@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

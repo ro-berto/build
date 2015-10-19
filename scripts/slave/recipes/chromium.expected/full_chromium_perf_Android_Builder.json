@@ -314,5 +314,10 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Android One Perf (2)@@@"
     ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
   }
 ]

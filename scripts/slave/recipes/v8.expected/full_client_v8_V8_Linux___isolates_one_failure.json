@@ -174,7 +174,7 @@
     "name": "Bisection disabled - test too slow"
   },
   {
-    "name": "$final_result",
+    "name": "$result",
     "reason": "Failures or flakes in build.",
     "status_code": 1
   }
