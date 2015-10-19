@@ -384,6 +384,7 @@ SPEC['builders'].update({
       'BUILD_CONFIG': 'Debug',
       'TARGET_BITS': 64,
     },
+    'GYP_DEFINES': { 'component': 'static_library' },
     'bot_type': 'tester',
     'parent_buildername': 'WebKit Mac Builder (dbg)',
     'test_generators': [
