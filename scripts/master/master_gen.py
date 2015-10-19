@@ -142,7 +142,7 @@ def _ComputeSchedulers(builders):
     if scheduler_type in ('git_poller', 'repo_poller'):
       schedulers.append(SingleBranchScheduler(
           name=scheduler_name,
-          branch='master',
+          branch=scheduler_values.get('branch', 'master'),
           treeStableTimer=60,
           builderNames=builder_names))
 
