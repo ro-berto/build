@@ -1,0 +1,10 @@
+[
+  {
+    "cmd": [
+      "echo",
+      "Placeholder Step"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Placeholder Step"
+  }
+]
