@@ -114,8 +114,6 @@ F('f_webkit_mac_dbg', m_annotator.BaseFactory(
 # Mac Dbg WebKit testers
 #
 
-B('WebKit Mac10.6 (dbg)', 'f_webkit_dbg_tests',
-  scheduler='s5_webkit_dbg_trigger')
 B('WebKit Mac10.7 (dbg)', 'f_webkit_dbg_tests',
     scheduler='s5_webkit_dbg_trigger')
 F('f_webkit_dbg_tests', m_annotator.BaseFactory('chromium'))
