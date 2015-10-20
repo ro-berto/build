@@ -1447,7 +1447,9 @@
       "--release",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "-t",
+      "300"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
