@@ -162,8 +162,6 @@ def GenTests(api):
   failed_data = _get_basic_test_data()
   failed_data[0].pop('DEPS')
   failed_data[1]['test_results']['results']['error'] = 'Dummy error.'
-  failed_data[1]['test_results']['results'].pop('mean')
-  failed_data[1]['test_results']['results'].pop('std_err')
   failed_data[1].pop('DEPS_change')
   failed_data[1].pop('DEPS')
   failed_data[1].pop('DEPS_interval')
@@ -220,8 +218,6 @@ def _get_ref_range_only_test_data():
           'commit_pos': '314017',
           'test_results': {
               'results': {
-                  'mean': 15,
-                  'std_err': 1,
                   'values': [14, 15, 16],
               },
               'retcodes': [0],
@@ -237,9 +233,7 @@ def _get_basic_test_data():
           'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
           'commit_pos': '314015',
           'test_results': {
-              'results': {
-                  'mean': 20,
-                  'std_err': 1,
+              'results':{
                   'values': [19, 20, 21],
               },
               'retcodes': [0],
@@ -261,8 +255,6 @@ def _get_basic_test_data():
           'commit_pos': '314016',
           'test_results': {
               'results': {
-                  'mean': 15,
-                  'std_err': 1,
                   'values': [14, 15, 16],
               },
               'retcodes': [0],
@@ -279,8 +271,6 @@ def _get_basic_test_data():
           'commit_pos': '314017',
           'test_results': {
               'results': {
-                  'mean': 15,
-                  'std_err': 1,
                   'values': [14, 15, 16],
               },
               'retcodes': [0],
@@ -297,8 +287,6 @@ def _get_reversed_basic_test_data():
           'commit_pos': '314015',
           'test_results': {
               'results': {
-                  'mean': 20,
-                  'std_err': 1,
                   'values': [19, 20, 21],
               },
               'retcodes': [0],
@@ -313,8 +301,6 @@ def _get_reversed_basic_test_data():
           'commit_pos': '314016',
           'test_results': {
               'results': {
-                  'mean': 20,
-                  'std_err': 1,
                   'values': [19, 20, 21],
               },
               'retcodes': [0],
@@ -333,8 +319,6 @@ def _get_reversed_basic_test_data():
           'commit_pos': '314017',
           'test_results': {
               'results': {
-                  'mean': 15,
-                  'std_err': 1,
                   'values': [14, 15, 16],
               },
               'retcodes': [0],

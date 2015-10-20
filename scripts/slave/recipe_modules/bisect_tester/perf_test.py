@@ -120,14 +120,6 @@ def _get_chart_json_metric(results, metric):  # pragma: no cover
         results, metric.ChartJsonFormat(Metric.OLD_STYLE_DELIMITER))
 
 
-def aggregate(api, values):
-  if not values:  # pragma: no cover
-    return {'error': 'No values to aggregate.'}
-  mean = api.m.math_utils.mean(values)
-  std_err = api.m.math_utils.standard_error(values)
-  return {'mean': mean, 'std_err': std_err, 'values': values}
-
-
 def _run_command(api, command, step_name):
   # TODO(robertocn): Reevaluate this approach when adding support for non-perf
   # tests and non-linux platforms.

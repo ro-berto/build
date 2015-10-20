@@ -665,7 +665,22 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Results",
     "~followup_annotations": [
-      "@@@STEP_LINK@HTML Results@http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch@@@"
+      "@@@STEP_TEXT@No values from test with patch, or none from test without patch.",
+      "Output with patch:",
+      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms",
+      "Avg dummy: 5.907711ms",
+      "Sd  dummy: 0.255921ms",
+      "RESULT telemetry_page_measurement_results: num_failed= 0 count",
+      "RESULT telemetry_page_measurement_results: num_errored= 0 count",
+      "View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch",
+      "Output without patch:",
+      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms",
+      "Avg dummy: 5.907711ms",
+      "Sd  dummy: 0.255921ms",
+      "RESULT telemetry_page_measurement_results: num_failed= 0 count",
+      "RESULT telemetry_page_measurement_results: num_errored= 0 count",
+      "View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch",
+      "@@@"
     ]
   },
   {

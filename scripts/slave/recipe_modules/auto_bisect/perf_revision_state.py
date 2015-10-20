@@ -21,23 +21,29 @@ class PerfRevisionState(revision_state.RevisionState):
     super(PerfRevisionState, self).__init__(*args, **kwargs)
     self.values = []
     self.mean_value = None
-    self.std_err = None
+    self.std_dev = None
     self._test_config = None
 
   def _read_test_results(self):
     """Gets the test results from GS and checks if the rev is good or bad."""
-    results = self._get_test_results()
+    test_results = self._get_test_results()
     # Results will contain the keys 'results' and 'output' where output is the
-    # stdout of the command, and 'results' is itself a dict with the keys:
-    # 'mean', 'values', 'std_err' unless the test failed, in which case
-    # 'results' will contain the 'error' key explaining the type of error.
-    results = results['results']
+    # stdout of the command, and 'results' is itself a dict with the key
+    # 'values' unless the test failed, in which case 'results' will contain
+    # the 'error' key explaining the type of error.
+    results = test_results['results']
     if results.get('error'):
       self.status = PerfRevisionState.FAILED
       return
-    self.mean_value = results['mean']
     self.values = results['values']
-    self.std_err = results['std_err']
+    if self.bisector.bisect_config.get('test_type') == 'return_code':
+      retcodes = test_results['retcodes']
+      overall_return_code = 0 if all(v == 0 for v in retcodes) else 1
+      self.mean_value = overall_return_code
+    elif self.values:
+      api = self.bisector.api
+      self.mean_value = api.m.math_utils.mean(self.values)
+      self.std_dev = api.m.math_utils.standard_deviation(self.values)
     # We cannot test the goodness of the initial rev range.
     if self.bisector.good_rev != self and self.bisector.bad_rev != self:
       if self._check_revision_good():
@@ -190,5 +196,5 @@ class PerfRevisionState(revision_state.RevisionState):
     return False
 
   def __repr__(self):
-    return ('PerfRevisionState(values=%r, mean_value=%r, std_err=%r)' %
-            (self.values, self.mean_value, self.std_err))
+    return ('PerfRevisionState(values=%r, mean_value=%r, std_dev=%r)' %
+            (self.values, self.mean_value, self.std_dev))

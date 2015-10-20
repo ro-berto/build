@@ -57,7 +57,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     """Runs performance try job with and without patch."""
     r = self._resolve_revisions_from_config(perf_cfg)
     test_cfg = self.m.bisect_tester.load_config_from_dict(perf_cfg)
-    
+
     # TODO(prasadv): This is tempory hack to prepend 'src' to test command,
     # until dashboard and trybot scripts are changed.
     _prepend_src_to_path_in_command(test_cfg)
@@ -279,12 +279,27 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     """Parses results and creates Results step."""
     output_with_patch = results_with_patch.get('output')
     output_without_patch = results_without_patch.get('output')
-    mean_with_patch = results_with_patch.get('results').get('mean')
-    mean_without_patch = results_without_patch.get('results').get('mean')
-    stderr_with_patch = results_with_patch.get('results').get('std_err')
-    stderr_without_patch = results_without_patch.get('results').get('std_err')
-    metric_with_patch = results_with_patch.get('results').get('values')
-    metric_without_patch = results_without_patch.get('results').get('values')
+    values_with_patch = results_with_patch.get('results').get('values')
+    values_without_patch = results_without_patch.get('results').get('values')
+
+    if not values_with_patch or not values_without_patch:
+      step_result = self.m.step('Results', [])
+      step_result.presentation.step_text = (
+          'No values from test with patch, or none from test without patch.\n'
+          'Output with patch:\n%s\n\nOutput without patch:\n%s' % (
+              output_with_patch, output_without_patch))
+      return
+
+    mean_with_patch = self.m.math_utils.mean(values_with_patch)
+    mean_without_patch = self.m.math_utils.mean(values_without_patch)
+
+    # TODO(qyearsley): Change this to print either std. dev. and sample
+    # size if that makes sense, or remove this computation altogether if
+    # values_with_patch and values_without_patch are expected to always
+    # contain only one value.
+    stderr_with_patch = self.m.math_utils.standard_error(values_with_patch)
+    stderr_without_patch = self.m.math_utils.standard_error(
+        values_without_patch)
 
     cloud_links_without_patch = _parse_cloud_links(output_without_patch)
     cloud_links_with_patch = _parse_cloud_links(output_with_patch)
@@ -298,11 +313,11 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     # Calculate the % difference in the means of the 2 runs.
     relative_change = None
     std_err = None
-    if mean_with_patch and metric_with_patch:
+    if mean_with_patch and values_with_patch:
       relative_change = self.m.math_utils.relative_change(
           mean_without_patch, mean_with_patch) * 100
       std_err = self.m.math_utils.pooled_standard_error(
-          [metric_with_patch, metric_without_patch])
+          [values_with_patch, values_without_patch])
 
     step_result = self.m.step('Results', [])
     if relative_change is not None and std_err is not None:
@@ -318,7 +333,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
           'std_err': std_err,
           'results': _pretty_table(data),
       }
-      step_result.presentation.step_text = (display_results)
+      step_result.presentation.step_text = display_results
 
     if results_link:
       step_result.presentation.links.update({'HTML Results': results_link})
@@ -328,7 +343,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
         step_result.presentation.links.update({
             '%s[%d]' % (
                 labels.get('profiler_link1'), i): profiler_with_patch[i]
-        })      
+        })
       for i in xrange(len(profiler_without_patch)):  # pragma: no cover
         step_result.presentation.links.update({
             '%s[%d]' % (

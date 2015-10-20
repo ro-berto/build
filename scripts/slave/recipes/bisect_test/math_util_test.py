@@ -25,10 +25,11 @@ def RunSteps(api):
   assert(math.isnan(api.math_utils.relative_change(0, 1)))
   assert(1 == api.math_utils.relative_change(1, 2))
   assert(0 == api.math_utils.variance([0]))
-  assert(1.33 <  api.math_utils.pooled_standard_error([sample_a, sample_b])
+  assert(1.33 < api.math_utils.pooled_standard_error([sample_a, sample_b])
          < 1.34)
   assert(0 == api.math_utils.pooled_standard_error([[0]]))
   assert(0 == api.math_utils.standard_error([1]))
+  assert(0.64 < api.math_utils.standard_error([2, 3, 4, 5]) < 0.65)
   assert(110 == api.math_utils.mean([10, 20, 300]))
   try:
     api.math_utils.mean([])

@@ -213,7 +213,8 @@ class BisectResults(object):
           r.depot_name,
           r.deps_revision or 'r' + str(r.commit_pos),
           r.mean_value if r.mean_value is not None else 'N/A',
-          r.std_err if r.std_err is not None else 'N/A',
+          r.std_dev if r.std_dev is not None else 'N/A',
+          len(r.values),
           'good' if r.good else 'bad' if r.bad else 'unknown',
           '<-' if self._bisector.culprit == r else '',
       ]
@@ -223,7 +224,8 @@ class BisectResults(object):
         'Depot',
         'Revision',
         'Mean Value',
-        'Std. Err.',
+        'Std. Dev.',
+        'Num Values',
         'Good?',
         '',
     ]]
