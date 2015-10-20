@@ -9,7 +9,7 @@
   "builders": {
     "darwin": {
       "recipe": "ndk/ndk_buildbot",
-      "scheduler": "hourly",
+      "scheduler": "repo",
       "slave_pools": ["darwin"],
       "properties": {
         "cbb_config": "darwin",
@@ -18,7 +18,7 @@
 
     "linux": {
       "recipe": "ndk/ndk_buildbot",
-      "scheduler": "hourly",
+      "scheduler": "repo",
       "slave_pools": ["linux"],
       "properties": {
         "cbb_config": "linux",
@@ -27,7 +27,7 @@
 
     "win32": {
       "recipe": "ndk/ndk_buildbot",
-      "scheduler": "hourly",
+      "scheduler": "repo",
       "slave_pools": ["linux"],
       "properties": {
         "cbb_config": "win32",
@@ -36,7 +36,7 @@
 
     "win64": {
       "recipe": "ndk/ndk_buildbot",
-      "scheduler": "hourly",
+      "scheduler": "repo",
       "slave_pools": ["linux"],
       "properties": {
         "cbb_config": "win64",
@@ -46,10 +46,11 @@
 
   "schedulers": {
     # There is no repo poller available from builders.pyl yet.
-    "hourly": {
-      "type": "cron",
-      "hour": "*",
-      "minute": 0,
+    "repo": {
+      "type": "repo_poller",
+      "repo_url": "https://android.googlesource.com/platform",
+      "branch": "master-ndk",
+      "rev_link_template": "https://android.googlesource.com/platform/%s/+/%s"
     },
   },
 
