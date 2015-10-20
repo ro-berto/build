@@ -1226,7 +1226,10 @@ SPEC = {
             'components_browsertests',
             android_isolate_path='components/components_browsertests.isolate'),
         steps.GTestTest('gfx_unittests'),
-        steps.AndroidInstrumentationTest('ChromePublicTest'),
+        steps.AndroidInstrumentationTest(
+            'ChromePublicTest', 'chrome_public_test_apk',
+            isolate_file_path='chrome/chrome_public_test_apk.isolate',
+            adb_install_apk='ChromePublic.apk'),
       ],
       'testing': {
         'platform': 'linux',
@@ -1632,7 +1635,10 @@ SPEC = {
             'components_browsertests',
             android_isolate_path='components/components_browsertests.isolate'),
         steps.GTestTest('gfx_unittests'),
-        steps.AndroidInstrumentationTest('ChromePublicTest'),
+        steps.AndroidInstrumentationTest(
+            'ChromePublicTest', 'chrome_public_test_apk',
+            isolate_file_path='chrome/chrome_public_test_apk.isolate',
+            adb_install_apk='ChromePublic.apk'),
       ],
       'testing': {
         'platform': 'linux',
@@ -1681,10 +1687,21 @@ SPEC = {
       'root_devices': True,
       'enable_swarming': False,
       'tests': [
-        steps.AndroidInstrumentationTest('AndroidWebViewTest'),
-        steps.AndroidInstrumentationTest('ContentShellTest'),
-        steps.AndroidInstrumentationTest('ChromePublicTest'),
-        steps.AndroidInstrumentationTest('ChromeSyncShellTest'),
+        steps.AndroidInstrumentationTest(
+            'AndroidWebViewTest', 'android_webview_test_apk',
+            isolate_file_path='android_webview/android_webview_test_apk.isolate',
+            adb_install_apk='AndroidWebView.apk'),
+        steps.AndroidInstrumentationTest(
+            'ContentShellTest', 'content_shell_test_apk',
+            isolate_file_path='content/content_shell_test_apk.isolate',
+            adb_install_apk='ContentShell.apk'),
+        steps.AndroidInstrumentationTest(
+            'ChromePublicTest', 'chrome_public_test_apk',
+            isolate_file_path='chrome/chrome_public_test_apk.isolate',
+            adb_install_apk='ChromePublic.apk'),
+        steps.AndroidInstrumentationTest(
+            'ChromeSyncShellTest', 'chrome_sync_shell_test_apk',
+            adb_install_apk='ChromeSyncShell.apk'),
         steps.AMPGTestTest('android_webview_unittests',
             device_name=['Nexus 5'], device_os=['4.4.2']),
         steps.AMPGTestTest('base_unittests',
@@ -1803,10 +1820,21 @@ SPEC = {
       'android_config': 'incremental_coverage_builder_tests',
       'root_devices': True,
       'tests': [
-        steps.AndroidInstrumentationTest('AndroidWebViewTest'),
-        steps.AndroidInstrumentationTest('ChromePublicTest'),
-        steps.AndroidInstrumentationTest('ContentShellTest'),
-        steps.AndroidInstrumentationTest('ChromeSyncShellTest'),
+        steps.AndroidInstrumentationTest(
+            'AndroidWebViewTest', 'android_webview_test_apk',
+            isolate_file_path='android_webview/android_webview_test_apk.isolate',
+            adb_install_apk='AndroidWebView.apk'),
+        steps.AndroidInstrumentationTest(
+            'ChromePublicTest', 'chrome_public_test_apk',
+            isolate_file_path='chrome/chrome_public_test_apk.isolate',
+            adb_install_apk='ChromePublic.apk'),
+        steps.AndroidInstrumentationTest(
+            'ContentShellTest', 'content_shell_test_apk',
+            isolate_file_path='content/content_shell_test_apk.isolate',
+            adb_install_apk='ContentShell.apk'),
+        steps.AndroidInstrumentationTest(
+            'ChromeSyncShellTest', 'chrome_sync_shell_test_apk',
+            adb_install_apk='ChromeSyncShell.apk'),
         steps.IncrementalCoverageTest(),
       ],
       'test_generators': [

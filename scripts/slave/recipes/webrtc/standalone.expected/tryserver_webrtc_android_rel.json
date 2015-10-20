@@ -579,16 +579,13 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "[SLAVE_BUILD]/src/out/Release/apks/AppRTCDemo.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
     },
-    "name": "install AppRTCDemo.apk"
+    "name": "install AppRTCDemo"
   },
   {
     "cmd": [
@@ -597,11 +594,9 @@
       "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/AppRTCDemoTest.apk",
+      "AppRTCDemoTest",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/AppRTCDemo.apk",
       "--verbose",
       "--release"
     ],
@@ -615,7 +610,7 @@
       "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/libjingle_peerconnection_android_unittest.apk",
+      "libjingle_peerconnection_android_unittest",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",

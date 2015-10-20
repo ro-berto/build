@@ -80,8 +80,8 @@ def generate_tests(api, test_suite, revision):
       tests.append(AndroidPerfTest(test, revision,
                                    isolate_path=isolate_file_path,
                                    perf_id=api.c.PERF_ID))
-    for test_name, test_config in api.ANDROID_INSTRUMENTATION_TESTS.iteritems():
-      tests.append(AndroidInstrumentationTest(test_name, test_config))
+    for test, apk_under_test in api.ANDROID_INSTRUMENTATION_TESTS.items():
+      tests.append(AndroidInstrumentationTest(test, apk_under_test))
 
   return tests
 
@@ -155,18 +155,16 @@ class AndroidTest(object):
 
 class AndroidInstrumentationTest(object):
   """Installs the APK on the device and runs the test."""
-  def __init__(self, name, test_config):
-    self._apk_under_test = test_config.get('apk_under_test')
+  def __init__(self, name, apk_under_test=None):
     self._name = name
-    self._test_apk = test_config.get('test_apk')
+    self._apk_under_test = apk_under_test
 
   def run(self, api, suffix):
-    api.m.chromium_android.run_instrumentation_suite(
-        name=self._name,
-        apk_under_test=api.m.chromium_android.apk_path(self._apk_under_test),
-        test_apk=api.m.chromium_android.apk_path(self._test_apk),
-        tool=get_android_tool(api),
-        verbose=True)
+    if self._apk_under_test:
+      api._adb_install_apk(self._apk_under_test)
+    api.m.chromium_android.run_instrumentation_suite(test_apk=self._name,
+                                                     tool=get_android_tool(api),
+                                                     verbose=True)
 
 
 class AndroidPerfTest(object):

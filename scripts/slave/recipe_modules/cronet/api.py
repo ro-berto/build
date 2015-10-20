@@ -11,14 +11,22 @@ INSTRUMENTATION_TESTS = freeze([
   {
     'test': 'CronetSampleTest',
     'gyp_target': 'cronet_sample_test_apk',
-    'apk_under_test': 'CronetSample.apk',
-    'test_apk': 'CronetSampleTest.apk',
+    'kwargs': {
+      'install_apk': {
+        'package': 'org.chromium.cronet_sample_apk',
+        'apk': 'CronetSample.apk'
+      },
+    },
   },
   {
     'test': 'CronetTestInstrumentation',
     'gyp_target': 'cronet_test_instrumentation_apk',
-    'apk_under_test': 'CronetTest.apk',
-    'test_apk': 'CronetTestInstrumentation.apk',
+    'kwargs': {
+      'install_apk': {
+        'package': 'org.chromium.net',
+        'apk': 'CronetTest.apk'
+      },
+    },
   },
 ])
 
@@ -96,10 +104,7 @@ class CronetApi(recipe_api.RecipeApi):
         droid.run_test_suite(suite, shard_timeout=180)
       for suite in INSTRUMENTATION_TESTS:
         droid.run_instrumentation_suite(
-            name=suite['test'],
-            apk_under_test=droid.apk_path(suite.get('apk_under_test')),
-            test_apk=droid.apk_path(suite.get('test_apk')),
-            verbose=True,
+            suite['test'], verbose=True,
             **suite.get('kwargs', {}))
       droid.common_tests_final_steps()
 

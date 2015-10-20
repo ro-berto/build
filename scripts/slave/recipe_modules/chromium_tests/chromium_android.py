@@ -62,10 +62,22 @@ SPEC = {
       'android_config': 'main_builder',
       'root_devices': True,
       'tests': [
-        steps.AndroidInstrumentationTest('AndroidWebViewTest'),
-        steps.AndroidInstrumentationTest('ChromePublicTest'),
-        steps.AndroidInstrumentationTest('ContentShellTest'),
-        steps.AndroidInstrumentationTest('ChromeSyncShellTest'),
+        steps.AndroidInstrumentationTest(
+            'AndroidWebViewTest', 'android_webview_test_apk',
+            isolate_file_path='android_webview/'
+                'android_webview_test_apk.isolate',
+            adb_install_apk='AndroidWebView.apk'),
+        steps.AndroidInstrumentationTest(
+            'ChromePublicTest', 'chrome_public_test_apk',
+            isolate_file_path='chrome/chrome_public_test_apk.isolate',
+            adb_install_apk='ChromePublic.apk'),
+        steps.AndroidInstrumentationTest(
+            'ContentShellTest', 'content_shell_test_apk',
+            isolate_file_path='content/content_shell_test_apk.isolate',
+            adb_install_apk='ContentShell.apk'),
+        steps.AndroidInstrumentationTest(
+            'ChromeSyncShellTest', 'chrome_sync_shell_test_apk',
+            adb_install_apk='ChromeSyncShell.apk'),
         steps.GTestTest('android_webview_unittests'),
         steps.GTestTest(
             'base_unittests',
@@ -148,7 +160,9 @@ SPEC = {
       'root_devices': True,
       'tests': [
         steps.GTestTest('remoting_unittests'),
-        steps.AndroidInstrumentationTest('ChromotingTest'),
+        steps.AndroidInstrumentationTest(
+            'ChromotingTest', 'remoting_test_apk',
+            adb_install_apk='Chromoting.apk'),
       ],
       'testing': {
         'platform': 'linux',

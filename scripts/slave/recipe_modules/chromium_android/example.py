@@ -163,9 +163,7 @@ def RunSteps(api, buildername):
     failure = f
 
   api.chromium_android.run_instrumentation_suite(
-      name='AndroidWebViewTest',
-      apk_under_test=api.chromium_android.apk_path('AndroidWebView.apk'),
-      test_apk=api.chromium_android.apk_path('AndroidWebViewTest.apk'),
+      test_apk='AndroidWebViewTest',
       isolate_file_path='android_webview/android_webview_test_apk.isolate',
       flakiness_dashboard='test-results.appspot.com',
       annotation='SmallTest',

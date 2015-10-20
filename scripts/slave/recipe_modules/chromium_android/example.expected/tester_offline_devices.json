@@ -489,31 +489,14 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebView.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install AndroidWebView.apk"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebViewTest.apk",
+      "AndroidWebViewTest",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebView.apk",
       "--isolate-file-path",
       "android_webview/android_webview_test_apk.isolate",
       "--flakiness-dashboard-server",

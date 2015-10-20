@@ -62,14 +62,8 @@ class WebRTCApi(recipe_api.RecipeApi):
   # Instrumentation tests may target a separate APK to be tested. In that case,
   # specify the APK name (without the .apk extension) as key in the dict below.
   ANDROID_INSTRUMENTATION_TESTS = {
-    'AppRTCDemoTest': {
-      'apk_under_test': 'AppRTCDemo.apk',
-      'test_apk': 'AppRTCDemoTest.apk',
-    },
-    'libjingle_peerconnection_android_unittest': {
-      'apk_under_test': None,
-      'test_apk': 'libjingle_peerconnection_android_unittest.apk',
-    },
+     'AppRTCDemoTest': 'AppRTCDemo',
+     'libjingle_peerconnection_android_unittest': None,
   }
 
   # Map of GS archive names to urls.
@@ -281,6 +275,28 @@ class WebRTCApi(recipe_api.RecipeApi):
       else:
         self.m.chromium.runtest(test=test, args=args, name=name,
                                 revision=revision, **runtest_kwargs)
+
+  def _adb_install_apk(self, apk_name):
+    """Installs an APK on an Android device.
+
+    We cannot use chromium_android.adb_install_apk since it will fail due to
+    the automatic path creation becomes invalid due to WebRTC's usage of
+    symlinks and the Chromium checkout in chromium/src combined with
+    assumptions in the Android test tool chain.
+    """
+    apk_path = str(self.m.chromium.c.build_dir.join(
+        self.m.chromium.c.build_config_fs, 'apks', '%s.apk' % apk_name))
+    install_cmd = [
+        self.m.path['checkout'].join('build',
+                                     'android',
+                                     'adb_install_apk.py'),
+        apk_path,
+    ]
+    if self.m.chromium.c.BUILD_CONFIG == 'Release':
+      install_cmd.append('--release')
+    env = { 'CHECKOUT_SOURCE_ROOT': self.m.path['checkout']}
+    return self.m.step('install ' + apk_name, install_cmd, infra_step=True,
+                       env=env)
 
   def sizes(self):
     # TODO(kjellander): Move this into a function of the chromium recipe
