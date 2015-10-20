@@ -130,16 +130,6 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.webkit.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"WebKit Mac10.6 (dbg)\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"WebKit Mac10.7 (dbg)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
@@ -308,19 +298,6 @@
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
     "name": "trigger",
-    "trigger_specs": [
-      {
-        "builder_name": "WebKit Mac10.6 (dbg)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@WebKit Mac10.6 (dbg)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (2)",
     "trigger_specs": [
       {
         "builder_name": "WebKit Mac10.7 (dbg)"

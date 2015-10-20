@@ -375,31 +375,6 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
-  'WebKit Mac10.6 (dbg)': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['chromium_mac_sdk_10_10'],
-    'gclient_config': 'chromium',
-    'gclient_apply_config': ['blink_or_chromium'],
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Debug',
-      'TARGET_BITS': 64,
-    },
-    'GYP_DEFINES': { 'component': 'static_library' },
-    'bot_type': 'tester',
-    'parent_buildername': 'WebKit Mac Builder (dbg)',
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
-    'tests': [
-      steps.BlinkTest(),
-    ],
-    'testing': {
-      'platform': 'mac',
-    },
-    'enable_swarming': True,
-    'use_isolate': True,
-  },
   'WebKit Mac10.7 (dbg)': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['chromium_mac_sdk_10_10'],

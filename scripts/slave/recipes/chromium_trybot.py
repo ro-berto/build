@@ -72,7 +72,7 @@ BUILDERS = freeze({
       },
       'mac_blink_dbg': {
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac10.6 (dbg)',
+        'buildername': 'WebKit Mac10.7 (dbg)',
       },
       'mac_blink_rel': {
         'mastername': 'chromium.webkit',
@@ -80,7 +80,7 @@ BUILDERS = freeze({
       },
       'mac_blink_compile_dbg': {
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac10.6 (dbg)',
+        'buildername': 'WebKit Mac10.7 (dbg)',
         'analyze_mode': 'compile',
       },
       'mac_blink_compile_rel': {
