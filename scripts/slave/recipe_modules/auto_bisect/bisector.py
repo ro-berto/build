@@ -502,6 +502,7 @@ class Bisector(object):
         more_revisions = self._expand_deps_revisions(revision)
         return not more_revisions
       self.culprit = revision
+      self._compute_results_confidence()
       return True
     if (revision.good and revision.next_revision and
         revision.next_revision.bad):
