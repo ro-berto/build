@@ -14,6 +14,7 @@ from recipe_engine import util as recipe_util
 
 from . import builders
 from . import steps
+from . import trybots
 
 
 MB_CONFIG_FILENAME = ['tools', 'mb', 'mb_config.pyl']
@@ -32,6 +33,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   @property
   def steps(self):
     return steps
+
+  @property
+  def trybots(self):
+    return trybots.TRYBOTS
 
   def add_builders(self, builders):
     """Adds builders to our builder map"""

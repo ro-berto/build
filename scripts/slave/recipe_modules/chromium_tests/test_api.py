@@ -5,12 +5,17 @@
 from recipe_engine import recipe_test_api
 
 from . import builders
+from . import trybots
 
 
 class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
   @property
   def builders(self):
     return builders.BUILDERS
+
+  @property
+  def trybots(self):
+    return trybots.TRYBOTS
 
   def platform(self, mastername, buildername):
     bot_config = builders.BUILDERS[mastername]['builders'][buildername]
