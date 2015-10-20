@@ -126,6 +126,9 @@ def GenTests(api):
     api.step_data('bot_update', retcode=1)
   )
 
+  # FIXME(machenbach): This cries for a refactoring! Get rid of local variables
+  # and extract the tests.
+
   # Test usage of test filters. They're used when the buildbucket
   # job gets a property 'testfilter', which is expected to be a json list of
   # test-filter strings.
@@ -329,6 +332,28 @@ def GenTests(api):
                            branch='master',
                            parent_buildername=bot_config.get(
                                'parent_buildername')) +
+    api.platform(bot_config['testing']['platform'],
+                 v8_config_kwargs.get('TARGET_BITS', 64)) +
+    api.override_step_data('Check', api.v8.bisect_failures_example()) +
+    api.time.step(120)
+  )
+
+  # Same as above with a swarming tester.
+  buildername = 'V8 Linux - swarming staging'
+  builders = api.v8.BUILDERS[mastername]['builders']
+  bot_config = builders[buildername]
+  parent_buildername = bot_config['parent_buildername']
+  parent_bot_config = builders[parent_buildername]
+  yield (
+    api.test('full_%s_%s_bisect_tester_swarming' % (
+        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
+    api.properties.generic(
+        mastername=mastername,
+        buildername=buildername,
+        branch='master',
+        swarm_hashes=parent_bot_config['testing'].get('swarm_hashes'),
+        parent_buildername=parent,
+    ) +
     api.platform(bot_config['testing']['platform'],
                  v8_config_kwargs.get('TARGET_BITS', 64)) +
     api.override_step_data('Check', api.v8.bisect_failures_example()) +

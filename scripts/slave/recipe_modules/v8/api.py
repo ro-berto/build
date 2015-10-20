@@ -99,11 +99,30 @@ class V8Api(recipe_api.RecipeApi):
     # Initialize perf_dashboard api if any perf test should run.
     self.m.perf_dashboard.set_default_config()
 
+    # FIXME(machenbach): Use a context object that stores the state for each
+    # test process. Otherwise it's easy to introduce bugs with multiple test
+    # processes and stale context data. E.g. during bisection these values
+    # change for tests on rerun.
+
     # Default failure retry.
     self.rerun_failures_count = 2
 
     # If tests are run, this value will be set to their total duration.
     self.test_duration_sec = 0
+
+    # Allow overriding the isolate hashes during bisection with the ones that
+    # correspond to the build of a bisect step.
+    self._isolated_tests_override = None
+
+  @property
+  def isolated_tests(self):
+    # During bisection, the isolated hashes will be updated with hashes that
+    # correspond to the bisect step.
+    # TODO(machenbach): Remove pragma as soon as rerun is implemented for
+    # swarming.
+    if self._isolated_tests_override is not None:  # pragma: no cover
+      return self._isolated_tests_override
+    return self.m.isolate.isolated_tests
 
   def set_bot_config(self, bot_config):
     """Set bot configuration for testing only."""
@@ -234,6 +253,8 @@ class V8Api(recipe_api.RecipeApi):
             verbose=True,
             set_swarm_hashes=False,
         )
+        if self.should_upload_build:
+          self.upload_isolated_json()
 
   def compile(self, **kwargs):
     self.m.chromium.compile(**kwargs)
@@ -268,6 +289,17 @@ class V8Api(recipe_api.RecipeApi):
           archive,
           src_dir='v8')
 
+  def upload_isolated_json(self):
+    archive = self.GS_ARCHIVES[self.bot_config['build_gs_archive']]
+    name = self.get_archive_name_pattern(use_swarming=True) % self.revision
+    self.m.gsutil.upload(
+        self.m.json.input(self.m.isolate.isolated_tests),
+        # The gsutil module wants bucket paths without gs:// prefix.
+        archive[len('gs://'):],
+        name,
+        args=['-a', 'public-read'],
+    )
+
   def maybe_create_clusterfuzz_archive(self, update_step):
     if self.bot_config.get('cf_archive_build', False):
       self.m.archive.clusterfuzz_archive(
@@ -291,6 +323,18 @@ class V8Api(recipe_api.RecipeApi):
           self.m.chromium.c.build_config_fs,
           archive,
           src_dir='v8')
+
+  def download_isolated_json(self):
+    archive = self.get_archive_url_pattern(use_swarming=True) % self.revision
+    self.m.gsutil.download_url(
+        archive,
+        self.m.json.output(),
+        name='download isolated json',
+        step_test_data=lambda: self.m.json.test_api.output(
+            {'bot_default': '[dummy hash for bisection]'}),
+    )
+    step_result = self.m.step.active_result
+    self._isolated_tests_override = step_result.json.output
 
   def create_test(self, test):
     """Wrapper that allows to shortcut common tests with their names.
@@ -389,7 +433,10 @@ class V8Api(recipe_api.RecipeApi):
           self.runhooks()
           self.compile(targets=targets)
         elif self.bot_type == 'tester':
-          self.download_build()
+          if test.uses_swarming:
+            self.download_isolated_json()
+          else:
+            self.download_build()
         else:  # pragma: no cover
           raise self.m.step.InfraFailure(
               'Bot type %s not supported.' % self.bot_type)
@@ -419,9 +466,11 @@ class V8Api(recipe_api.RecipeApi):
       bisect_range = list(reversed(step_result.stdout.strip().splitlines()))
       
       if self.bot_type == 'tester':
-        # Filter the bisect range to the revisions for which builds are
-        # available.
-        available_bisect_range = self.get_available_range(bisect_range)
+        # Filter the bisect range to the revisions for which isolate hashes or
+        # archived builds are available, depending on whether swarming is used
+        # or not.
+        available_bisect_range = self.get_available_range(
+            bisect_range, test.uses_swarming)
       else:
         available_bisect_range = bisect_range
 
@@ -996,19 +1045,32 @@ class V8Api(recipe_api.RecipeApi):
         len(changes),
     )
 
-  def get_available_range(self, bisect_range):
-    assert self.bot_type == 'tester'
-    archive_name_pattern = '%s/full-build-%s_%%s.zip' % (
-        self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
+  def get_archive_name_pattern(self, use_swarming):
+    # For tests run on swarming, only lookup the json file with the isolate
+    # hashes.
+    suffix = 'json' if use_swarming else 'zip'
+
+    return 'full-build-%s_%%s.%s' % (
         self.m.archive.legacy_platform_name(),
+        suffix,
     )
+
+  def get_archive_url_pattern(self, use_swarming):
+    return '%s/%s' % (
+        self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
+        self.get_archive_name_pattern(use_swarming),
+    )
+
+  def get_available_range(self, bisect_range, use_swarming=False):
+    assert self.bot_type == 'tester'
+    archive_url_pattern = self.get_archive_url_pattern(use_swarming)
     # TODO(machenbach): Maybe parallelize this in a wrapper script.
     args = ['ls']
     available_range = []
     # Check all builds except the last as we already know it is "bad".
     for r in bisect_range[:-1]:
       step_result = self.m.gsutil(
-          args + [archive_name_pattern % r],
+          args + [archive_url_pattern % r],
           name='check build %s' % r[:8],
           # Allow failures, as the tool will formally fail for any absent file.
           ok_ret='any',

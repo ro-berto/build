@@ -198,7 +198,7 @@ class V8SwarmingTest(V8Test):
       assert len(test['tests']) == 1
       isolated = test['tests'][0]
 
-    isolated_hash = self.api.isolate.isolated_tests.get(isolated)
+    isolated_hash = self.v8.isolated_tests.get(isolated)
 
     # TODO(machenbach): Maybe this is too hard. Implement a more forgiving
     # solution.
