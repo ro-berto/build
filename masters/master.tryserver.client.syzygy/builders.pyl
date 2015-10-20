@@ -1,9 +1,9 @@
 {
-  "master_base_class": "Master3",
+  "master_base_class": "Master4a",
   "master_classname": "SyzygyTryserver",
-  "master_port": 20305,
-  "master_port_alt": 40305,
-  "slave_port": 30305,
+  "master_port": 21404,
+  "master_port_alt": 41404,
+  "slave_port": 31404,
   "templates": ["templates", "../master.chromium/templates"],
   "service_account_file": "service-account-chromium-tryserver.json",
   "buildbucket_bucket": "master.tryserver.client.syzygy",

@@ -12,11 +12,11 @@
 
 from config_bootstrap import Master
 
-class SyzygyTryserver(Master.Master3):
+class SyzygyTryserver(Master.Master4a):
   project_name = 'SyzygyTryserver'
-  master_port = 20305
-  slave_port = 30305
-  master_port_alt = 40305
+  master_port = 21404
+  slave_port = 31404
+  master_port_alt = 41404
   buildbot_url = 'https://build.chromium.org/p/tryserver.client.syzygy/'
   buildbucket_bucket = 'master.tryserver.client.syzygy'
   service_account_file = 'service-account-chromium-tryserver.json'
