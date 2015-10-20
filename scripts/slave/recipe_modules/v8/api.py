@@ -360,7 +360,9 @@ class V8Api(recipe_api.RecipeApi):
 
     # Only bisect if the fastest failure is significantly faster than the
     # ongoing build's total.
-    if failure.duration * BISECT_DURATION_FACTOR > self.test_duration_sec:
+    duration_factor = self.m.properties.get(
+        'bisect_duration_factor', BISECT_DURATION_FACTOR)
+    if (failure.duration * duration_factor > self.test_duration_sec):
       step_result = self.m.step(
           'Bisection disabled - test too slow', cmd=None)
       return
