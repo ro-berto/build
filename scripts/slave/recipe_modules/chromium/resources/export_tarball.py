@@ -35,7 +35,6 @@ NONESSENTIAL_DIRS = (
     'o3d/documentation',
     'o3d/samples',
     'o3d/tests',
-    'ppapi/examples',
     'third_party/angle/samples/gles2_book',
     'third_party/findbugs',
     'third_party/hunspell_dictionaries',
