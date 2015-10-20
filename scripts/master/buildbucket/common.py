@@ -72,7 +72,7 @@ def parse_info_property(value):
     if isinstance(value, dict):
       # Due to a bug introduced in http://crrev.com/1328623003 (reverted), we
       # may have old builds that have 'build' value serialized as JSON.
-      if isinstance(value['build'], basestring):
+      if isinstance(value.get('build'), basestring):
         value['build'] = json.loads(value['build'])
       return value
     parsed = json.loads(value)
