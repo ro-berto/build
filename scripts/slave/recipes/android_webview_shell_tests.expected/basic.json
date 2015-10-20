@@ -379,7 +379,7 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "SystemWebViewShellLayoutTest",
+      "[SLAVE_BUILD]/src/out/Release/apks/SystemWebViewShellLayoutTest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--isolate-file-path",

@@ -453,6 +453,9 @@ class AndroidApi(recipe_api.RecipeApi):
         key = 'blacklisted %s' % d
         result.presentation.logs[key] = [d]
 
+  def apk_path(self, apk):
+    return self.m.chromium.output_dir.join('apks', apk) if apk else None
+
   def adb_install_apk(self, apk):
     install_cmd = [
         self.m.path['checkout'].join('build',
@@ -462,7 +465,7 @@ class AndroidApi(recipe_api.RecipeApi):
     ]
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       install_cmd.append('--release')
-    return self.m.step('install ' + apk, install_cmd,
+    return self.m.step('install ' + self.m.path.basename(apk), install_cmd,
                        infra_step=True,
                        env=self.m.chromium.get_env())
 
@@ -611,7 +614,10 @@ class AndroidApi(recipe_api.RecipeApi):
     if failures:
       raise self.m.step.StepFailure('sharded perf tests failed %s' % failures)
 
-  def run_instrumentation_suite(self, test_apk,
+  def run_instrumentation_suite(self,
+                                name,
+                                test_apk,
+                                apk_under_test=None,
                                 isolate_file_path=None,
                                 flakiness_dashboard=None,
                                 annotation=None, except_annotation=None,
@@ -621,8 +627,17 @@ class AndroidApi(recipe_api.RecipeApi):
                                 json_results_file=None, suffix=None, **kwargs):
     if install_apk:
       self.adb_install_apk(install_apk['apk'])
+    if apk_under_test:
+      # TODO(jbudorick): Remove this once the test runner handles installation
+      # of the APK under test.
+      self.adb_install_apk(apk_under_test)
 
-    args = ['--test-apk', test_apk, '--blacklist-file', self.blacklist_file]
+    args = [
+      '--test-apk', test_apk,
+      '--blacklist-file', self.blacklist_file,
+    ]
+    if apk_under_test:
+      args.extend(['--apk-under-test', apk_under_test])
     if isolate_file_path:
       args.extend(['--isolate-file-path', isolate_file_path])
     if tool:
@@ -652,7 +667,7 @@ class AndroidApi(recipe_api.RecipeApi):
       args.extend(['--json-results-file', json_results_file])
 
     return self.test_runner(
-        'Instrumentation test %s%s' % (annotation or test_apk,
+        'Instrumentation test %s%s' % (annotation or name,
                                        ' (%s)' % suffix if suffix else ''),
         args=['instrumentation'] + args,
         **kwargs)

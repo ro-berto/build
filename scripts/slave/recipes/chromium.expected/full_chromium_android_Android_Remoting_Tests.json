@@ -462,7 +462,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "Chromoting.apk",
+      "[SLAVE_BUILD]/src/out/Release/apks/Chromoting.apk",
       "-v",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
@@ -481,9 +481,11 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "ChromotingTest",
+      "[SLAVE_BUILD]/src/out/Release/apks/ChromotingTest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--apk-under-test",
+      "[SLAVE_BUILD]/src/out/Release/apks/Chromoting.apk",
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",
