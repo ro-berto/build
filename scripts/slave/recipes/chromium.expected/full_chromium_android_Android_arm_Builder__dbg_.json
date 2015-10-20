@@ -233,6 +233,7 @@
       "media_unittests_apk",
       "net_junit_tests",
       "net_unittests_apk",
+      "remoting_apk",
       "remoting_test_apk",
       "remoting_unittests_apk",
       "sandbox_linux_unittests_deps",

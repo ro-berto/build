@@ -20,7 +20,8 @@ SPEC = {
       },
       'android_config': 'main_builder',
       'compile_targets': [
-        'android_builder_tests'
+        'android_builder_tests',
+        'remoting_apk',
       ],
       'bot_type': 'builder',
       'testing': {
@@ -152,9 +153,6 @@ SPEC = {
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
-      'compile_targets': [
-        'remoting_apk',
-      ],
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder',
