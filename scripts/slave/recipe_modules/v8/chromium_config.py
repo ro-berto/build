@@ -87,7 +87,7 @@ def interpreted_regexp(c):
   c.gyp_env.GYP_DEFINES['v8_interpreted_regexp'] = 1
 
 
-@CONFIG_CTX(group='builder')
+@CONFIG_CTX(includes=['v8'], group='builder')
 def make(c):
   c.build_dir = Path('[CHECKOUT]', 'out')
   c.compile_py.build_tool = 'make'
@@ -101,11 +101,6 @@ def v8_ninja(c):
     # Windows requires 64-bit builds to be in <dir>_x64 with ninja. See
     # crbug.com/470681.
     c.build_config_fs = c.BUILD_CONFIG + '_x64'
-
-
-@CONFIG_CTX(includes=['v8'])
-def no_clang(c):
-  c.gyp_env.GYP_DEFINES['clang'] = 0
 
 
 @CONFIG_CTX(includes=['v8', 'dcheck'])

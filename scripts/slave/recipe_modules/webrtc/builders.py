@@ -17,6 +17,10 @@ RECIPE_CONFIGS = freeze({
     'chromium_config': 'webrtc_standalone',
     'gclient_config': 'webrtc',
   },
+  'webrtc_compile_gcc': {
+    'chromium_config': 'webrtc_gcc',
+    'gclient_config': 'webrtc',
+  },
   'webrtc_compile_android': {
     'chromium_config': 'android',
     'chromium_android_config': 'webrtc',
@@ -1082,11 +1086,20 @@ BUILDERS = freeze({
         'enable_swarming': True,
       },
       'Linux32 ARM': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_compile',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
+      'Linux64 GCC': {
+        'recipe_config': 'webrtc_compile_gcc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},

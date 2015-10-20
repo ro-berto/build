@@ -21,6 +21,9 @@ def webrtc_standalone(c):
                                         platform_ext={'win': '.bat',
                                                       'mac': '.sh',
                                                       'linux': '.sh'})
+@CONFIG_CTX(includes=['ninja', 'gcc', 'goma'])
+def webrtc_gcc(c):
+  _compiler_defaults(c)
 
 @CONFIG_CTX(includes=['chromium_clang', 'dcheck'])
 def webrtc_clang(c):

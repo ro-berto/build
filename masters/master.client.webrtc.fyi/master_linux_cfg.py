@@ -34,6 +34,10 @@ def Update(c):
       'slavebuilddir': 'linux_arm',
     },
     {
+      'name': 'Linux64 GCC',
+      'slavebuilddir': 'linux_gcc',
+    },
+    {
       'name': 'Linux Tsan v2 (parallel)',
       'slavebuilddir': 'linux_tsan2',
     },

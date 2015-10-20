@@ -283,6 +283,10 @@ def clang(c):
   _clang_common(c)
 
 @config_ctx(group='compiler')
+def gcc(c):
+  c.gyp_env.GYP_DEFINES['clang'] = 0
+
+@config_ctx(group='compiler')
 def default_compiler(c):
   if c.TARGET_PLATFORM in ('mac', 'ios'):
     _clang_common(c)

@@ -1209,7 +1209,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux gcc 4.8': {
-        'chromium_apply_config': ['make', 'no_clang'],
+        'chromium_apply_config': ['make', 'gcc'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1601,7 +1601,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_gcc_compile_rel': {
-        'chromium_apply_config': ['no_dcheck', 'no_clang'],
+        'chromium_apply_config': ['no_dcheck', 'gcc'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1610,7 +1610,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_gcc_rel': {
-        'chromium_apply_config': ['no_dcheck', 'no_clang'],
+        'chromium_apply_config': ['no_dcheck', 'gcc'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
