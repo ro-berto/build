@@ -868,7 +868,8 @@ class AMPInstrumentationTest(AMPTest):
     return AndroidInstrumentationTest(
         name=self.name,
         compile_target=self._compile_target,
-        adb_install_apk=self._apk_under_test,
+        apk_under_test=self._apk_under_test,
+        test_apk=self.name,
         isolate_file_path=isolate_file_path).run(api, suffix)
 
 
@@ -1341,14 +1342,12 @@ class SwarmingTelemetryGPUTest(SwarmingTest):
 
 
 class AndroidTest(Test):
-  def __init__(self, name, compile_target, adb_install_apk=None,
-               isolate_file_path=None):
+  def __init__(self, name, compile_target, isolate_file_path=None):
     super(AndroidTest, self).__init__()
 
     self._name = name
     self.compile_target = compile_target
 
-    self.adb_install_apk = adb_install_apk
     self.isolate_file_path = isolate_file_path
 
   @property
@@ -1395,8 +1394,6 @@ class AndroidTest(Test):
 
   def run(self, api, suffix):
     assert api.chromium.c.TARGET_PLATFORM == 'android'
-    if self.adb_install_apk:
-      api.chromium_android.adb_install_apk(self.adb_install_apk)
     try:
       json_results_file = api.json.output(add_json_log=False)
       self.run_tests(api, suffix, json_results_file)
@@ -1429,7 +1426,7 @@ class AndroidTest(Test):
 class AndroidJunitTest(AndroidTest):
   def __init__(self, name):
     super(AndroidJunitTest, self).__init__(name, compile_target=name,
-        adb_install_apk=None, isolate_file_path=None)
+        isolate_file_path=None)
 
   #override
   def run_tests(self, api, suffix, json_results_file):
@@ -1444,19 +1441,58 @@ class AndroidJunitTest(AndroidTest):
 
 
 class AndroidInstrumentationTest(AndroidTest):
-  def __init__(self, name, compile_target, adb_install_apk=None,
-               isolate_file_path=None,
+  _DEFAULT_SUITES = {
+    'AndroidWebViewTest': {
+      'compile_target': 'android_webview_test_apk',
+      'isolate_file_path': 'android_webview/android_webview_test_apk.isolate',
+      'apk_under_test': 'AndroidWebView.apk',
+      'test_apk': 'AndroidWebViewTest.apk',
+    },
+    'ChromePublicTest': {
+      'compile_target': 'chrome_public_test_apk',
+      'isolate_file_path': 'chrome/chrome_public_test_apk.isolate',
+      'apk_under_test': 'ChromePublic.apk',
+      'test_apk': 'ChromePublicTest.apk',
+    },
+    'ChromeSyncShellTest': {
+      'compile_target': 'chrome_sync_shell_test_apk',
+      'isolate_file_path': None,
+      'apk_under_test': 'ChromeSyncShell.apk',
+      'test_apk': 'ChromeSyncShellTest.apk',
+    },
+    'ChromotingTest': {
+      'compile_target': 'remoting_test_apk',
+      'isolate_file_path': None,
+      'apk_under_test': 'Chromoting.apk',
+      'test_apk': 'ChromotingTest.apk',
+    },
+    'ContentShellTest': {
+      'compile_target': 'content_shell_test_apk',
+      'isolate_file_path': 'content/content_shell_test_apk.isolate',
+      'apk_under_test': 'ContentShell.apk',
+      'test_apk': 'ContentShellTest.apk',
+    },
+  }
+
+  def __init__(self, name, compile_target=None, apk_under_test=None,
+               test_apk=None, isolate_file_path=None,
                flakiness_dashboard='test-results.appspot.com',
                annotation=None, except_annotation=None, screenshot=False,
                verbose=True, host_driven_root=None):
-    super(AndroidInstrumentationTest, self).__init__(name, compile_target,
-        adb_install_apk, isolate_file_path)
-    self._flakiness_dashboard = flakiness_dashboard
+    suite_defaults = AndroidInstrumentationTest._DEFAULT_SUITES.get(name, {})
+    super(AndroidInstrumentationTest, self).__init__(
+        name,
+        compile_target or suite_defaults.get('compile_target'),
+        isolate_file_path or suite_defaults.get('isolate_file_path'))
     self._annotation = annotation
+    self._apk_under_test = (
+        apk_under_test or suite_defaults.get('apk_under_test'))
     self._except_annotation = except_annotation
-    self._screenshot = screenshot
-    self._verbose = verbose
+    self._flakiness_dashboard = flakiness_dashboard
     self._host_driven_root = host_driven_root
+    self._screenshot = screenshot
+    self._test_apk = test_apk or suite_defaults.get('test_apk')
+    self._verbose = verbose
 
   #override
   def run_tests(self, api, suffix, json_results_file):
@@ -1465,7 +1501,10 @@ class AndroidInstrumentationTest(AndroidTest):
                              {'TestB': [{'status': 'FAILURE'}]}]
     }
     api.chromium_android.run_instrumentation_suite(
-        self.name, suffix=suffix,
+        self.name,
+        test_apk=api.chromium_android.apk_path(self._test_apk),
+        apk_under_test=api.chromium_android.apk_path(self._apk_under_test),
+        suffix=suffix,
         isolate_file_path=self.isolate_file_path,
         flakiness_dashboard=self._flakiness_dashboard,
         annotation=self._annotation, except_annotation=self._except_annotation,

@@ -515,7 +515,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "AndroidWebView",
+      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebView",
       "-v",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
@@ -534,9 +534,11 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "AndroidWebViewTest",
+      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebViewTest",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--apk-under-test",
+      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebView",
       "--isolate-file-path",
       "[SLAVE_BUILD]/src/android_webview/android_webview_test_apk.isolate",
       "--flakiness-dashboard-server",

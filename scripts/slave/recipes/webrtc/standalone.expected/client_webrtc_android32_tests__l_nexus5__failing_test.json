@@ -604,13 +604,16 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "[SLAVE_BUILD]/src/out/Release/apks/AppRTCDemo.apk",
+      "-v",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHECKOUT_SOURCE_ROOT": "[SLAVE_BUILD]/src"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "install AppRTCDemo"
+    "name": "install AppRTCDemo.apk"
   },
   {
     "cmd": [
@@ -619,9 +622,11 @@
       "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "AppRTCDemoTest",
+      "[SLAVE_BUILD]/src/out/Release/apks/AppRTCDemoTest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--apk-under-test",
+      "[SLAVE_BUILD]/src/out/Release/apks/AppRTCDemo.apk",
       "--verbose",
       "--release"
     ],
@@ -635,7 +640,7 @@
       "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "libjingle_peerconnection_android_unittest",
+      "[SLAVE_BUILD]/src/out/Release/apks/libjingle_peerconnection_android_unittest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
@@ -719,7 +724,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 out of 17 aggregated steps failed. Failures: Step('tools_unittests') failed with return_code 1",
+    "reason": "1 out of 16 aggregated steps failed. Failures: Step('tools_unittests') failed with return_code 1",
     "status_code": 1
   }
 ]

@@ -458,7 +458,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "AndroidWebView.apk",
+      "[SLAVE_BUILD]/src/out/Debug/apks/AndroidWebView.apk",
       "-v",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json"
@@ -476,9 +476,11 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "AndroidWebViewTest",
+      "[SLAVE_BUILD]/src/out/Debug/apks/AndroidWebViewTest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--apk-under-test",
+      "[SLAVE_BUILD]/src/out/Debug/apks/AndroidWebView.apk",
       "--isolate-file-path",
       "android_webview/android_webview_test_apk.isolate",
       "--flakiness-dashboard-server",
@@ -498,7 +500,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "ChromePublic.apk",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ChromePublic.apk",
       "-v",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json"
@@ -516,9 +518,11 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "ChromePublicTest",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ChromePublicTest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--apk-under-test",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ChromePublic.apk",
       "--isolate-file-path",
       "chrome/chrome_public_test_apk.isolate",
       "--flakiness-dashboard-server",
@@ -538,7 +542,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "ContentShell.apk",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ContentShell.apk",
       "-v",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json"
@@ -556,9 +560,11 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "ContentShellTest",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ContentShellTest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--apk-under-test",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ContentShell.apk",
       "--isolate-file-path",
       "content/content_shell_test_apk.isolate",
       "--flakiness-dashboard-server",
@@ -578,7 +584,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "ChromeSyncShell.apk",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ChromeSyncShell.apk",
       "-v",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json"
@@ -596,9 +602,11 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "ChromeSyncShellTest",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ChromeSyncShellTest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--apk-under-test",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ChromeSyncShell.apk",
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",
@@ -929,7 +937,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "AndroidWebView.apk",
+      "[SLAVE_BUILD]/src/out/Debug/apks/AndroidWebView.apk",
       "-v",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json"
@@ -947,9 +955,11 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "AndroidWebViewTest",
+      "[SLAVE_BUILD]/src/out/Debug/apks/AndroidWebViewTest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--apk-under-test",
+      "[SLAVE_BUILD]/src/out/Debug/apks/AndroidWebView.apk",
       "--isolate-file-path",
       "android_webview/android_webview_test_apk.isolate",
       "--flakiness-dashboard-server",
@@ -969,7 +979,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "ChromePublic.apk",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ChromePublic.apk",
       "-v",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json"
@@ -987,9 +997,11 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "ChromePublicTest",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ChromePublicTest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--apk-under-test",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ChromePublic.apk",
       "--isolate-file-path",
       "chrome/chrome_public_test_apk.isolate",
       "--flakiness-dashboard-server",
@@ -1009,7 +1021,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "ContentShell.apk",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ContentShell.apk",
       "-v",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json"
@@ -1027,9 +1039,11 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "ContentShellTest",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ContentShellTest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--apk-under-test",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ContentShell.apk",
       "--isolate-file-path",
       "content/content_shell_test_apk.isolate",
       "--flakiness-dashboard-server",
@@ -1049,7 +1063,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "ChromeSyncShell.apk",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ChromeSyncShell.apk",
       "-v",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json"
@@ -1067,9 +1081,11 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--test-apk",
-      "ChromeSyncShellTest",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ChromeSyncShellTest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--apk-under-test",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ChromeSyncShell.apk",
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",

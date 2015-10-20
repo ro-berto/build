@@ -32,6 +32,7 @@ INSTRUMENTATION_TESTS = freeze([
   {
     'test': 'SystemWebViewShellLayoutTest',
     'gyp_target': 'system_webview_shell_layout_test_apk',
+    'test_apk': 'SystemWebViewShellLayoutTest.apk',
     'kwargs': {
       'install_apk': {
         'package': 'org.chromium.webview_shell.test',
@@ -91,8 +92,10 @@ def RunSteps(api):
 def run_tests(api):
   droid = api.chromium_android
   for suite in INSTRUMENTATION_TESTS:
-    droid.run_instrumentation_suite(suite['test'], verbose=True,
-                                    **suite.get('kwargs', {}))
+    droid.run_instrumentation_suite(
+        suite['test'], test_apk=droid.apk_path(suite['test_apk']),
+        verbose=True,
+        **suite.get('kwargs', {}))
 
 def GenTests(api):
   yield api.test('basic') + api.properties.scheduled()
