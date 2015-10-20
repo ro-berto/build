@@ -342,6 +342,7 @@ class V8Fuzzer(BaseTest):
         stdout=self.api.raw_io.output(),
       )
     except self.api.step.StepFailure as e:
+      e.result.presentation.logs['stdout'] = e.result.stdout.splitlines()
       # Check if the fuzzer left a fuzz archive and upload to GS.
       match = re.search(r'^Creating archive (.*)$', e.result.stdout, re.M)
       if match:

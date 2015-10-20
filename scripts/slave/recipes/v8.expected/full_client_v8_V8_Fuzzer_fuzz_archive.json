@@ -120,6 +120,10 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_LINE@stdout@foo@@@",
+      "@@@STEP_LOG_LINE@stdout@Creating archive bar@@@",
+      "@@@STEP_LOG_LINE@stdout@baz@@@",
+      "@@@STEP_LOG_END@stdout@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
