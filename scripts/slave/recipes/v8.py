@@ -105,9 +105,9 @@ def GenTests(api):
       test += api.properties(parent_got_revision='54321')
       # Add isolated-tests property from parent builder.
       parent = builders[bot_config['parent_buildername']]
-      isolated_tests = parent['testing'].get('isolated_tests')
-      if isolated_tests:
-        test += api.properties(isolated_tests=isolated_tests)
+      swarm_hashes = parent['testing'].get('swarm_hashes')
+      if swarm_hashes:
+        test += api.properties(swarm_hashes=swarm_hashes)
 
     if mastername.startswith('tryserver'):
       test += (api.properties(

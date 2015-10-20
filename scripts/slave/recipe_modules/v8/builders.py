@@ -71,7 +71,7 @@ BUILDERS = {
         'enable_swarming': True,
         'testing': {
           'platform': 'linux',
-          'isolated_tests': {
+          'swarm_hashes': {
             'benchmarks': '[dummy hash for benchmarks]',
             'bot_default': '[dummy hash for bot_default]',
             'mozilla': '[dummy hash for mozilla]',
