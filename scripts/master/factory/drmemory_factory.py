@@ -25,6 +25,12 @@ dr_giturl = 'https://github.com/DynamoRIO/dynamorio.git'
 drm_giturl = 'https://github.com/DynamoRIO/drmemory.git'
 bot_tools_giturl = 'https://github.com/DynamoRIO/buildbot.git'
 
+# To reduce github traffic and to allow simpler multi-repo polling,
+# we use mirrors of the github repos:
+MIRROR_BASE = 'https://chromium.googlesource.com/external/github.com';
+dr_mirror_url = MIRROR_BASE + '/DynamoRIO/dynamorio.git';
+drm_mirror_url = MIRROR_BASE + '/DynamoRIO/drmemory.git';
+
 # TODO(rnk): Don't make assumptions about absolute path layout.  This won't work
 # on bare metal bots.  We can't use a relative path because we often configure
 # builds at different directory depths.
