@@ -946,22 +946,31 @@ class V8Api(recipe_api.RecipeApi):
       } for builder_name in triggers])
 
   def get_change_range(self):
-    url = '%sjson/builders/%s/builds/%s/source_stamp' % (
-        self.m.properties['buildbotURL'],
-        urllib.quote(self.m.properties['buildername']),
-        str(self.m.properties['buildnumber']),
-    )
-    step_result = self.m.python(
-        'Fetch changes',
-        self.m.path['build'].join('scripts', 'tools', 'pycurl.py'),
-        [
-          url,
-          '--outfile',
-          self.m.json.output(),
-        ],
-        step_test_data=lambda: self.test_api.example_buildbot_changes(),
-    )
-    changes = step_result.json.output['changes']
+    if self.m.properties.get('override_changes'):
+      # This can be used for manual testing or on a staging builder that
+      # simulates a change range.
+      changes = self.m.properties['override_changes']
+      step_result = self.m.step('Override changes', cmd=None)
+      step_result.presentation.logs['changes'] = self.m.json.dumps(
+        changes, indent=2).splitlines()
+    else:
+      url = '%sjson/builders/%s/builds/%s/source_stamp' % (
+          self.m.properties['buildbotURL'],
+          urllib.quote(self.m.properties['buildername']),
+          str(self.m.properties['buildnumber']),
+      )
+      step_result = self.m.python(
+          'Fetch changes',
+          self.m.path['build'].join('scripts', 'tools', 'pycurl.py'),
+          [
+            url,
+            '--outfile',
+            self.m.json.output(),
+          ],
+          step_test_data=lambda: self.test_api.example_buildbot_changes(),
+      )
+      changes = step_result.json.output['changes']
+
     assert changes
     first_change = changes[0]['revision']
     last_change = changes[-1]['revision']

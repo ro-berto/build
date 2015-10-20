@@ -280,6 +280,26 @@ def GenTests(api):
     api.time.step(120)
   )
 
+  # The same as above, but overriding changes.
+  yield (
+    api.test('full_%s_%s_bisect_override_changes' % (
+        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
+    api.properties.generic(mastername=mastername,
+                           buildername=buildername,
+                           branch='master',
+                           override_changes=[
+                             {'revision': 'a1'},
+                             {'revision': 'a2'},
+                             {'revision': 'a3'},
+                           ]) +
+    api.platform(bot_config['testing']['platform'],
+                 v8_config_kwargs.get('TARGET_BITS', 64)) +
+    api.override_step_data('Mjsunit', api.v8.bisect_failures_example()) +
+    api.override_step_data(
+        'Bisect a2.Retry', api.v8.bisect_failures_example()) +
+    api.time.step(120)
+  )
+
   # Disable bisection, because the failing test is too long compared to the
   # overall test time.
   yield (
