@@ -16,13 +16,10 @@ def _CheckoutSteps(api):
   # Checkout pdfium and its dependencies (specified in DEPS) using gclient
   api.gclient.set_config('pdfium')
   api.gclient.checkout()
+  api.gclient.runhooks()
 
 
 def _BuildSteps(api):
-  # Generate build files for Ninja
-  gyp_path = api.path['checkout'].join('build', 'gyp_pdfium.py')
-  api.python('gyp_pdfium', gyp_path, env={'GYP_GENERATORS': 'ninja'})
-
   # Build sample file using Ninja
   debug_path = api.path['checkout'].join('out', 'Debug')
   api.step('compile with ninja', ['ninja', '-C', debug_path])
@@ -63,3 +60,4 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test('win') + api.platform('win', 64)
   yield api.test('linux') + api.platform('linux', 64)
+  yield api.test('mac') + api.platform('mac', 64)

@@ -41,13 +41,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\pdfium\\build\\gyp_pdfium.py"
+      "[DEPOT_TOOLS]\\gclient.py",
+      "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_GENERATORS": "ninja"
-    },
-    "name": "gyp_pdfium"
+    "name": "gclient runhooks"
   },
   {
     "cmd": [
