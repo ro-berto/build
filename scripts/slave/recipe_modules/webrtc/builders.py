@@ -349,7 +349,7 @@ BUILDERS = freeze({
         'parent_buildername': 'Mac Builder',
         'testing': {'platform': 'mac'},
       },
-      'Linux': {
+      'Linux Builder': {
         'recipe_config': 'chromium_webrtc_tot',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -358,7 +358,23 @@ BUILDERS = freeze({
         'webrtc_config_kwargs': {
           'PERF_ID': 'chromium-webrtc-trunk-tot-rel-linux',
         },
-        'bot_type': 'builder_tester',
+        'bot_type': 'builder',
+        'build_gs_archive': 'linux_rel_archive_fyi',
+        'testing': {'platform': 'linux'},
+        'triggers': ['Linux Tester'],
+      },
+      'Linux Tester': {
+        'recipe_config': 'chromium_webrtc_tot',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'chromium-webrtc-trunk-tot-rel-linux',
+        },
+        'bot_type': 'tester',
+        'build_gs_archive': 'linux_rel_archive_fyi',
+        'parent_buildername': 'Linux Builder',
         'testing': {'platform': 'linux'},
       },
       'Android Builder (dbg)': {
