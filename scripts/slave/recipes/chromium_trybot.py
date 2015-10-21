@@ -562,6 +562,31 @@ def GenTests(api):
     api.override_step_data('compile (without patch)', retcode=1)
   )
 
+  yield (
+    api.test('compile_failure_infra') +
+    props() +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'Linux Tests': {
+          'gtest_tests': ['base_unittests'],
+        },
+      })
+    ) +
+    suppress_analyze() +
+    api.override_step_data(
+        'compile (with patch)',
+        api.json.output({
+          'notice': [
+            {
+              'infra_status': {
+                'ping_status_code': 408,
+              },
+            },
+          ],
+        }),
+        retcode=1)
+  )
+
   for step in ('bot_update', 'gclient runhooks (with patch)'):
     yield (
       api.test(_sanitize_nonalpha(step) + '_failure') +

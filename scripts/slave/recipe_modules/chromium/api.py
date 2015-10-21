@@ -221,12 +221,28 @@ class ChromiumApi(recipe_api.RecipeApi):
     env = self.get_env()
     env.update(kwargs.pop('env', {}))
 
-    self.m.python(name or 'compile',
-                  self.m.path['build'].join('scripts', 'slave',
-                                            'compile.py'),
-                  args,
-                  env=env,
-                  **kwargs)
+    try:
+      self.m.python(name or 'compile',
+                    self.m.path['build'].join('scripts', 'slave',
+                                              'compile.py'),
+                    args,
+                    env=env,
+                    **kwargs)
+    except self.m.step.StepFailure as e:
+      infra_failure = False
+
+      step_result = self.m.step.active_result
+      try:
+        if step_result.json.output['notice'][0]['infra_status'][
+            'ping_status_code'] != 200:
+          infra_failure = True
+      except Exception:  # pragma: no cover
+        pass
+
+      if infra_failure:
+        raise self.m.step.InfraFailure('Infra compile failure: %s' % e)
+
+      raise e
 
   @recipe_util.returns_placeholder
   def test_launcher_filter(self, tests):
