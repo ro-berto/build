@@ -123,11 +123,7 @@ class WebRTCTest(Test):
   def run(self, api, suffix):
     if self._enable_swarming:
       isolated_hash = api.m.isolate.isolated_tests[self._name]
-      self._swarming_task = api.m.swarming.gtest_task(
-          self._name,
-          isolated_hash,
-          test_launcher_summary_output=api.m.test_utils.gtest_results(
-              add_json_log=False))
+      self._swarming_task = api.m.swarming.task(self._name, isolated_hash)
       api.m.swarming.trigger_task(self._swarming_task)
     else:
       self._runtest_kwargs['test'] = self._custom_executable or self._name
