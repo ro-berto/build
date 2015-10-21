@@ -27,6 +27,30 @@ class Error(Exception):
   pass
 
 
+def gitiles_get(parsed_url, handler, attempts):
+  host = parsed_url.netloc
+  path = parsed_url.path
+  if parsed_url.query:
+    path += '?%s' % (parsed_url.query,)
+
+  retry_delay_seconds = 1
+  attempt = 1
+  while True:
+    try:
+      return handler(CreateHttpConn(host, path))
+    except Exception as e:
+      if attempt >= attempts:
+        raise
+      logging.exception('Failed to perform Gitiles operation: %s', e)
+
+    # Retry from previous loop.
+    logging.error('Sleeping %d seconds before retry (%d/%d)...',
+        retry_delay_seconds, attempt, attempts)
+    time.sleep(retry_delay_seconds)
+    retry_delay_seconds *= 2
+    attempt += 1
+
+
 def main(args):
   parsed_url = urlparse.urlparse(args.url)
   if not parsed_url.scheme.startswith('http'):
@@ -45,45 +69,29 @@ def main(args):
     # Default to JSON.
     f = 'json'
 
-  path = parsed_url.path
-  if qdict:
-    path = '%s?%s' % (path, urllib.urlencode(qdict, doseq=True))
-  if args.attempts < 1:
-    args.attempts = 1
-  retry_delay_seconds = 2
-  for i in xrange(args.attempts):
-    conn = CreateHttpConn(parsed_url.netloc, path)
-
-    if f == 'json':
-      result = ReadHttpJsonResponse(conn)
-    elif f == 'text':
-      # Text fetching will pack the text into structured JSON.
+  # Choose handler.
+  if f == 'json':
+    def handler(conn):
+      return ReadHttpJsonResponse(conn)
+  elif f == 'text':
+    # Text fetching will pack the text into structured JSON.
+    def handler(conn):
       result = ReadHttpResponse(conn).read()
-      if result:
-        # Wrap in a structured JSON for export to recipe module.
-        result = {
-          'value': result,
-        }
-      else:
-        result = None
-    else:
-      raise ValueError('Unnknown format: %s' % (f,))
+      if not result:
+        return None
+      # Wrap in a structured JSON for export to recipe module.
+      return {
+        'value': result,
+      }
+  else:
+    raise ValueError('Unknown format: %s' % (f,))
 
-    logging.info('Reading from %s (%d/%d)', 
-          conn.req_params['url'], (i+1), args.attempts)
-    if result is not None or (i+1) >= args.attempts:
-      if not args.quiet:
-        logging.info('Read from %s (%d/%d): %s',
-            conn.req_params['url'], (i+1), args.attempts, result)
-        break
-
-    logging.error("Request returned empty result; sleeping %d seconds",
-        retry_delay_seconds)
-    time.sleep(retry_delay_seconds)
-    retry_delay_seconds *= 2
-
+  result = gitiles_get(parsed_url, handler, args.attempts)
+  if not args.quiet:
+    logging.info('Read from %s: %s', parsed_url.geturl(), result)
   with open(args.json_file, 'w') as json_file:
     json.dump(result, json_file)
+  return 0
 
 
 if __name__ == '__main__':
@@ -91,29 +99,12 @@ if __name__ == '__main__':
   logging.getLogger().setLevel(logging.INFO)
 
   parser = argparse.ArgumentParser()
-  parser.add_argument(
-    '-j',
-    '--json-file',
-    required=True,
-    type=str,
-  )
-  parser.add_argument(
-    '-u',
-    '--url',
-    required=True,
-    type=str,
-  )
-  parser.add_argument(
-    '-a',
-    '--attempts',
-    type=int,
-    default=1,
-    help='The number of attempts make (with exponential backoff) before '
-         'failing.',
-  )
-  parser.add_argument(
-    '-q',
-    '--quiet',
-    action='store_true',
-    help='Suppress file contents logging output.')
+  parser.add_argument('-j', '--json-file', required=True)
+  parser.add_argument('-u', '--url', required=True)
+  parser.add_argument('-a', '--attempts', type=int, default=1,
+      help='The number of attempts make (with exponential backoff) before '
+           'failing.')
+  parser.add_argument('-q', '--quiet', action='store_true',
+      help='Suppress file contents logging output.')
+
   sys.exit(main(parser.parse_args()))
