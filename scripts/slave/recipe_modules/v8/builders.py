@@ -188,6 +188,24 @@ BUILDERS = {
           'os': 'Ubuntu-12.04',
         },
       },
+      'V8 Linux - swarming staging 2': {
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'tests': [
+          V8Testing,
+          OptimizeForSize,
+          Benchmarks,
+          SimdJs,
+          Test262Variants_2,
+          Mozilla,
+        ],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux - debug': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',

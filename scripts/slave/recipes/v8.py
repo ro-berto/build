@@ -317,6 +317,27 @@ def GenTests(api):
     api.time.step(7)
   )
 
+  # Bisect over range a1, a2, a3. Assume a2 is the culprit.
+  # Same as above with a swarming builder_tester.
+  buildername = 'V8 Linux - swarming staging 2'
+  builders = api.v8.BUILDERS[mastername]['builders']
+  bot_config = builders[buildername]
+  yield (
+    api.test('full_%s_%s_bisect_swarming' % (
+        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
+    api.properties.generic(
+        mastername=mastername,
+        buildername=buildername,
+        branch='master',
+    ) +
+    api.platform(bot_config['testing']['platform'],
+                 v8_config_kwargs.get('TARGET_BITS', 64)) +
+    api.override_step_data('Check', api.v8.bisect_failures_example()) +
+    api.override_step_data(
+        'Bisect a2.Retry', api.v8.bisect_failures_example()) +
+    api.time.step(120)
+  )
+
   # Bisect over range a1, a2, a3. Assume a3 is the culprit. This is a tester
   # and the build for a2 is not available. Steps:
   # Bisect a0 -> no failures.
