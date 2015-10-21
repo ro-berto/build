@@ -3,12 +3,13 @@
 # found in the LICENSE file.
 
 
-def generate_tests(api, test_suite, revision):
+def generate_tests(api, test_suite, revision, enable_swarming=False):
   tests = []
   if test_suite in ('webrtc', 'webrtc_parallel'):
     parallel = test_suite.endswith('_parallel')
     for test in api.NORMAL_TESTS:
-      tests.append(WebRTCTest(test, revision, parallel=parallel))
+      tests.append(WebRTCTest(test, revision, parallel=parallel,
+                              enable_swarming=enable_swarming))
 
     if api.m.platform.is_mac and api.m.chromium.c.TARGET_BITS == 64:
       executable = api.m.path.join('libjingle_peerconnection_objc_test.app',
@@ -88,25 +89,51 @@ def generate_tests(api, test_suite, revision):
 
 # TODO(kjellander): Continue refactoring an integrate the classes in the
 # chromium_tests recipe module instead (if possible).
-class WebRTCTest(object):
+class Test(object):
+  def __init__(self, name, enable_swarming=False):
+    self._name = name
+    self._enable_swarming = enable_swarming
+
+  @property
+  def name(self):  # pragma: no cover
+    return self._name
+
+  @property
+  def enable_swarming(self):
+    return self._enable_swarming
+
+
+class WebRTCTest(Test):
   """A normal WebRTC desktop test."""
   def __init__(self, name, revision, parallel=False, perf_test=False,
-               custom_executable=None, enable_swarming=True,
+               custom_executable=None, enable_swarming=False,
                **runtest_kwargs):
-    self._name = name
+    super(WebRTCTest, self).__init__(name, enable_swarming)
     self._revision = revision
     self._parallel = parallel
     self._custom_executable = custom_executable
     self._perf_test = perf_test
-    self._enable_swarming = enable_swarming
     self._runtest_kwargs = runtest_kwargs
+    self._swarming_task = None
+
+  @property
+  def swarming_task(self):
+    return self._swarming_task
 
   def run(self, api, suffix):
-    self._runtest_kwargs['test'] = self._custom_executable or self._name
-    api.add_test(name=self._name, revision=self._revision,
-                 parallel=self._parallel, perf_test=self._perf_test,
-                 enable_swarming=self._enable_swarming,
-                 **self._runtest_kwargs)
+    if self._enable_swarming:
+      isolated_hash = api.m.isolate.isolated_tests[self._name]
+      self._swarming_task = api.m.swarming.gtest_task(
+          self._name,
+          isolated_hash,
+          test_launcher_summary_output=api.m.test_utils.gtest_results(
+              add_json_log=False))
+      api.m.swarming.trigger_task(self._swarming_task)
+    else:
+      self._runtest_kwargs['test'] = self._custom_executable or self._name
+      api.add_test(name=self._name, revision=self._revision,
+                   parallel=self._parallel, perf_test=self._perf_test,
+                   **self._runtest_kwargs)
 
 
 class BaremetalTest(WebRTCTest):
@@ -134,13 +161,13 @@ def get_android_tool(api):
     return None
 
 
-class AndroidTest(object):
+class AndroidTest(Test):
   # WebRTC tests need a longer timeout to avoid getting killed by the Chromium
   # Android test framework.
   _SHARD_TIMEOUT = 15 * 60
 
   def __init__(self, name, isolate_path):
-    self._name = name
+    super(AndroidTest, self).__init__(name)
     self._isolate_path = isolate_path
 
   def run(self, api, suffix):
@@ -153,11 +180,11 @@ class AndroidTest(object):
                                           shard_timeout=self._SHARD_TIMEOUT)
 
 
-class AndroidInstrumentationTest(object):
+class AndroidInstrumentationTest(Test):
   """Installs the APK on the device and runs the test."""
   def __init__(self, name, test_config):
+    super(AndroidInstrumentationTest, self).__init__(name)
     self._apk_under_test = test_config.get('apk_under_test')
-    self._name = name
     self._test_apk = test_config.get('test_apk')
 
   def run(self, api, suffix):
@@ -169,7 +196,7 @@ class AndroidInstrumentationTest(object):
         verbose=True)
 
 
-class AndroidPerfTest(object):
+class AndroidPerfTest(Test):
   """A performance test to run on Android devices.
 
     Basically just wrap what happens in chromium_android.run_test_suite to run
@@ -182,7 +209,7 @@ class AndroidPerfTest(object):
   _SHARD_TIMEOUT = 30 * 60
 
   def __init__(self, name, revision, isolate_path, perf_id=None):
-    self._name = name
+    super(AndroidPerfTest, self).__init__(name)
     self._revision = revision
     self._isolate_path = isolate_path
     self._perf_id = perf_id

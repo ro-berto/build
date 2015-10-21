@@ -170,11 +170,16 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.c.use_isolate:
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
 
-    if self.bot_config.get('enable_swarming'):
+    self.c.enable_swarming = self.bot_config.get('enable_swarming')
+    if self.c.enable_swarming:
       self.m.chromium_tests.configure_swarming(
           'webrtc',
           precommit=self.m.tryserver.is_tryserver,
           mastername=mastername)
+      self.m.swarming.set_default_dimension(
+          'os',
+          self.m.swarming.prefered_os_dimension(
+              self.m.platform.name).split('-', 1)[0])
 
   def checkout(self, **kwargs):
     update_step = self.m.bot_update.ensure_checkout(**kwargs)
@@ -196,7 +201,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.webrtc_revision_cp = revs.get('got_webrtc_revision_cp')
 
   def check_swarming_version(self):
-    if self.bot_config.get('enable_swarming'):
+    if self.c.enable_swarming:
       self.m.swarming.check_client_version()
 
   def compile(self):
@@ -218,20 +223,27 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1):
       self.m.chromium_android.asan_device_setup()
 
+    tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision,
+                                 self.c.enable_swarming)
     with self.m.step.defer_results():
-      tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision)
       if tests:
         if self.m.chromium.c.TARGET_PLATFORM == 'android':
           self.m.chromium_android.common_tests_setup_steps()
+
         for test in tests:
           test.run(self, suffix='')
+
         if self.m.chromium.c.TARGET_PLATFORM == 'android':
           self.m.chromium_android.common_tests_final_steps()
 
+    with self.m.step.defer_results():
+      for test in tests:
+        if test.enable_swarming:
+          self.m.swarming.collect_task(test.swarming_task)
+
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,
-               perf_test=False, perf_dashboard_id=None, parallel=False,
-               enable_swarming=True):
+               perf_test=False, perf_dashboard_id=None, parallel=False):
     """Helper function to invoke chromium.runtest().
 
     Notice that the name parameter should be the same as the test executable in
@@ -267,21 +279,10 @@ class WebRTCApi(recipe_api.RecipeApi):
         annotate = None  # The parallel script doesn't output gtest format.
         flakiness_dash = False
 
-      runtest_kwargs = {
-          'annotate': annotate,
-          'xvfb': True,
-          'flakiness_dash': flakiness_dash,
-          'python_mode': python_mode,
-          'test_type': test_type,
-          'env': env,
-      }
-      if self.c.use_isolate and enable_swarming:
-        self.m.isolate.runtest(test=test, revision=revision,
-                               webkit_revision='deadbeef', args=args, name=name,
-                               **runtest_kwargs)
-      else:
-        self.m.chromium.runtest(test=test, args=args, name=name,
-                                revision=revision, **runtest_kwargs)
+      self.m.chromium.runtest(
+          test=test, args=args, name=name, annotate=annotate, xvfb=True,
+          flakiness_dash=flakiness_dash, python_mode=python_mode,
+          revision=revision, test_type=test_type, env=env)
 
   def sizes(self):
     # TODO(kjellander): Move this into a function of the chromium recipe
