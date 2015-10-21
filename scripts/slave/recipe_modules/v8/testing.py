@@ -74,10 +74,10 @@ class BaseTest(object):
     # Run all tests by default.
     return True
 
-  def pre_run(self, **kwargs):  # pragma: no cover
+  def pre_run(self, test=None, **kwargs):  # pragma: no cover
     pass
 
-  def run(self, **kwargs):  # pragma: no cover
+  def run(self, test=None, **kwargs):  # pragma: no cover
     raise NotImplementedError()
 
   def rerun(self, failure_dict, **kwargs):  # pragma: no cover
@@ -160,28 +160,44 @@ class V8Test(BaseTest):
 
     return TestResults(failures, flakes, [])
 
-  def rerun(self, failure_dict, **kwargs):
+  def _setup_rerun_config(self, failure_dict):
+    """Return: A test config that reproduces a specific failure."""
     # Make sure bisection is only activated on builders that give enough
     # information to retry.
     assert failure_dict.get('variant')
     assert failure_dict.get('random_seed')
 
+    orig_config = TEST_CONFIGS[self.name]
+
+    # If not specified, the isolated target is the same as the first test of
+    # the original list. We need to set it explicitly now, as the tests
+    # parameter changes on rerun, but the isolated target is still the same. 
+    isolated_target = orig_config.get(
+        'isolated_target', orig_config['tests'][0])
+
     # Filter variant manipulation and from test arguments.
     # We'll specify exactly the variant which failed.
-    orig_args = [x for x in TEST_CONFIGS[self.name].get('test_args', [])
+    orig_args = [x for x in orig_config.get('test_args', [])
                  if x != '--no-variants']
+
     new_args = [
       '--variants', failure_dict['variant'],
       '--random-seed', failure_dict['random_seed'],
     ]
+
     rerun_config = {
       'name': 'Retry',
+      'isolated_target': isolated_target,
       'tests': [failure_dict['name']],
       'test_args' : orig_args + new_args,
     }
+
     # Switch off test filters on rerun.
     self.applied_test_filter = None
-    return self.run(test=rerun_config, **kwargs)
+    return rerun_config
+
+  def rerun(self, failure_dict, **kwargs):
+    return self.run(test=self._setup_rerun_config(failure_dict), **kwargs)
 
 
 class V8SwarmingTest(V8Test):
@@ -229,9 +245,9 @@ class V8SwarmingTest(V8Test):
         step_test_data=kwargs.pop('step_test_data', None),
         **kwargs)
 
-  def pre_run(self, **kwargs):
+  def pre_run(self, test=None, **kwargs):
     # Set up arguments for test runner.
-    self.test = TEST_CONFIGS[self.name]
+    self.test = test or TEST_CONFIGS[self.name]
     extra_args, _ = self.v8._setup_test_runner(
         self.test, self.applied_test_filter)
 
@@ -289,9 +305,9 @@ class V8SwarmingTest(V8Test):
       # try block.
       return self.post_run(self.test)
 
-  def rerun(self, failure_dict, **kwargs):  # pragma: no cover
-    # TODO(machenbach): Implement rerun with swarming.
-    return TestResults.empty()
+  def rerun(self, failure_dict, **kwargs):
+    self.pre_run(test=self._setup_rerun_config(failure_dict), **kwargs)
+    return self.run(**kwargs)
 
 
 class V8Presubmit(BaseTest):
