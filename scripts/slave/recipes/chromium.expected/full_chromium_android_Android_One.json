@@ -955,9 +955,7 @@
       "--isolate_file_path=[SLAVE_BUILD]/src/net/net_unittests.isolate",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
-      "/path/to/tmp/json",
-      "-t",
-      "300"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

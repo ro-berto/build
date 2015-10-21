@@ -291,7 +291,6 @@ class LocalGTestTest(Test):
         kwargs['isolate_file_path'] = isolate_path
       kwargs['json_results_file'] = gtest_results_file
       kwargs['flakiness_dashboard'] = 'test-results.appspot.com'
-      kwargs.update(self._runtest_kwargs)
     else:
       kwargs['xvfb'] = True
       kwargs['test_type'] = self.name
