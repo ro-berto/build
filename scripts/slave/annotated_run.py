@@ -7,6 +7,7 @@ import contextlib
 import json
 import optparse
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -28,6 +29,7 @@ PACKAGE_CFG = os.path.join(
     os.path.dirname(os.path.dirname(SCRIPT_PATH)),
     'infra', 'config', 'recipes.cfg')
 
+
 @contextlib.contextmanager
 def namedTempFile():
   fd, name = tempfile.mkstemp()
@@ -39,6 +41,7 @@ def namedTempFile():
       os.remove(name)
     except OSError as e:
       print >> sys.stderr, "LEAK: %s: %s" % (name, e)
+
 
 def get_recipe_properties(factory_properties, build_properties,
                           master_overrides_slave):
@@ -251,6 +254,73 @@ def clean_old_recipe_engine():
         os.remove(path)
 
 
+@contextlib.contextmanager
+def build_data_directory():
+  """Context manager that creates a build-specific directory.
+
+  The directory is wiped when exiting.
+
+  Yields:
+    build_data (str or None): full path to a writeable directory. Return None if
+        no directory can be found or if it's not writeable.
+  """
+  prefix = 'build_data'
+
+  # TODO(pgervais): import that from infra_libs.logs instead
+  if sys.platform.startswith('win'):  # pragma: no cover
+    DEFAULT_LOG_DIRECTORIES = [
+      'E:\\chrome-infra-logs',
+      'C:\\chrome-infra-logs',
+    ]
+  else:
+    DEFAULT_LOG_DIRECTORIES = ['/var/log/chrome-infra']
+
+  build_data_dir = None
+  for candidate in DEFAULT_LOG_DIRECTORIES:
+    if os.path.isdir(candidate):
+      build_data_dir = os.path.join(candidate, prefix)
+      break
+
+  # Remove any leftovers and recreate the dir.
+  if build_data_dir:
+    print >> sys.stderr, "Creating directory"
+    # TODO(pgervais): use infra_libs.rmtree instead.
+    if os.path.exists(build_data_dir):
+      try:
+        shutil.rmtree(build_data_dir)
+      except Exception as exc:
+        # Catching everything: we don't want to break any builds for that reason
+        print >> sys.stderr, (
+          "FAILURE: path can't be deleted: %s.\n%s" % (build_data_dir, str(exc))
+        )
+    print >> sys.stderr, "Creating directory"
+
+    if not os.path.exists(build_data_dir):
+      try:
+        os.mkdir(build_data_dir)
+      except Exception as exc:
+        print >> sys.stderr, (
+          "FAILURE: directory can't be created: %s.\n%s" %
+          (build_data_dir, str(exc))
+        )
+        build_data_dir = None
+
+  # Under this line build_data_dir should point to an existing empty dir
+  # or be None.
+  yield build_data_dir
+
+  # Clean up after ourselves
+  if build_data_dir:
+    # TODO(pgervais): use infra_libs.rmtree instead.
+    try:
+      shutil.rmtree(build_data_dir)
+    except Exception as exc:
+      # Catching everything: we don't want to break any builds for that reason.
+      print >> sys.stderr, (
+        "FAILURE: path can't be deleted: %s.\n%s" % (build_data_dir, str(exc))
+      )
+
+
 def main(argv):
   opts, _ = get_args(argv)
   properties = get_recipe_properties(
@@ -267,17 +337,22 @@ def main(argv):
   else:
     recipe_runner = os.path.join(SCRIPT_PATH, 'recipes.py')
 
-  with namedTempFile() as props_file:
-    with open(props_file, 'w') as fh:
-      fh.write(json.dumps(properties))
-    cmd = [
-        sys.executable, '-u', recipe_runner,
-        'run',
-        '--workdir=%s' % os.getcwd(),
-        '--properties-file=%s' % props_file,
-        properties['recipe'] ]
-    return subprocess.call(cmd)
+  with build_data_directory() as build_data_dir:
+    if build_data_dir:
+      os.environ['BUILD_DATA_DIR'] = build_data_dir
+    with namedTempFile() as props_file:
+      with open(props_file, 'w') as fh:
+        fh.write(json.dumps(properties))
+      cmd = [
+          sys.executable, '-u', recipe_runner,
+          'run',
+          '--workdir=%s' % os.getcwd(),
+          '--properties-file=%s' % props_file,
+          properties['recipe'] ]
+      status = subprocess.call(cmd)
 
+    # TODO(pgervais): Send events from build_data_dir to the endpoint.
+  return status
 
 def shell_main(argv):
   if update_scripts():
