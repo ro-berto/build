@@ -132,10 +132,19 @@ def RunSteps(api):
     ]
     for task in tasks:
       task.dimensions['os'] = 'Android'
-      # TODO(stip): Do not specify android_devices for now. os:Android certifies
-      # there's at least one Android devices available, which is "good enough"
-      # for now. Standard bots advertize "5" and "6".
-      #task.dimensions['android_devices'] = '1'
+      slow_tests = [
+        'android_webview_test_apk_run',
+        'chrome_public_test_apk',
+        'chrome_sync_shell_test_apk',
+        'content_browsertests_apk',
+        'content_shell_test_apk_run',
+        'gl_tests_apk',
+        'net_unittests_apk',
+        'unit_tests_apk',
+      ]
+      if task.title in slow_tests:
+        # TODO(stip): Eventually scale based on size of test.
+        task.dimensions['android_devices'] = '6'
       del task.dimensions['cpu']
       del task.dimensions['gpu']
   else:
@@ -208,10 +217,10 @@ def GenTests(api):
     api.test('android') +
     api.platform.name('linux') +
     api.properties.scheduled() +
-    api.properties(configuration='Release', platform='android')
-    #api.override_step_data(
-    #    'dummy_target_1 on Android',
-    #    # TODO(maruel): It's not going to generate gtest output.
-    #    #api.test_utils.canned_gtest_output(True)
-    #)
+    api.properties(configuration='Release', platform='android') +
+    api.override_step_data(
+        'isolate tests',
+        api.isolate.output_json(targets=[
+            'dummy_target_1', 'dummy_target_2', 'chrome_public_test_apk'])
+    )
   )
