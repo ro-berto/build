@@ -43,6 +43,8 @@ SPEC = {
         chromium_perf.SPEC['builders']['Mac Builder'],
     'mac_retina_perf_bisect':
         chromium_perf.SPEC['builders']['Mac Builder'],
+    'mac_hdd_perf_bisect':
+        chromium_perf.SPEC['builders']['Mac Builder'],
     'linux_perf_tester':{
       'chromium_config': 'chromium_official',
       'gclient_config': 'chromium',
