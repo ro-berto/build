@@ -1708,7 +1708,9 @@ SPEC = {
         steps.AMPGTestTest('ipc_tests', device_name=['Nexus 5'],
                            device_os=['4.4.2']),
         steps.GTestTest('media_unittests'),
-        steps.GTestTest('net_unittests'),
+        steps.GTestTest('net_unittests',
+                        android_isolate_path='net/net_unittests.isolate',
+                        android_shard_timeout=300),
         steps.GTestTest(
             'sandbox_linux_unittests',
             override_compile_targets=['sandbox_linux_unittests_deps']),

@@ -98,7 +98,8 @@ SPEC = {
             android_isolate_path='media/media_unittests.isolate'),
         steps.GTestTest(
             'net_unittests',
-            android_isolate_path='net/net_unittests.isolate'),
+            android_isolate_path='net/net_unittests.isolate',
+            android_shard_timeout=300),
         steps.GTestTest(
             'sandbox_linux_unittests',
             override_compile_targets=['sandbox_linux_unittests_deps']),

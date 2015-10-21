@@ -210,7 +210,8 @@ class ScriptTest(Test):  # pylint: disable=W0232
 class LocalGTestTest(Test):
   def __init__(self, name, args=None, target_name=None, use_isolate=False,
                revision=None, webkit_revision=None, android_isolate_path=None,
-               override_compile_targets=None, **runtest_kwargs):
+               android_shard_timeout=None, override_compile_targets=None,
+               **runtest_kwargs):
     """Constructs an instance of LocalGTestTest.
 
     Args:
@@ -233,6 +234,7 @@ class LocalGTestTest(Test):
     self._revision = revision
     self._webkit_revision = webkit_revision
     self._android_isolate_path = android_isolate_path
+    self._android_shard_timeout = android_shard_timeout
     self._override_compile_targets = override_compile_targets
     self._runtest_kwargs = runtest_kwargs
 
@@ -291,6 +293,7 @@ class LocalGTestTest(Test):
         kwargs['isolate_file_path'] = isolate_path
       kwargs['json_results_file'] = gtest_results_file
       kwargs['flakiness_dashboard'] = 'test-results.appspot.com'
+      kwargs['shard_timeout'] = self._android_shard_timeout
     else:
       kwargs['xvfb'] = True
       kwargs['test_type'] = self.name
