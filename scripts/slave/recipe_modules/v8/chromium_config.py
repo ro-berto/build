@@ -51,8 +51,7 @@ def cfi(c):
   c.gyp_env.GYP_DEFINES['cfi_vptr'] = 1
   c.gyp_env.GYP_DEFINES['cfi_diag'] = 1
   c.gyp_env.GYP_DEFINES['release_extra_cflags'] = (
-      "-O1 -fno-inline-functions -fno-inline -fno-omit-frame-pointer "
-      "-fno-sanitize-recover=cfi"
+      "-O1 -fno-inline-functions -fno-inline"
   )
 
 
