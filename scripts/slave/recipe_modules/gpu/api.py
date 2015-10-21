@@ -552,7 +552,7 @@ class GpuApi(recipe_api.RecipeApi):
                              enable_swarming, swarming_dimensions,
                              args=None, target_name=None,
                              extra_browser_args=None):
-    test_args = ['-v', '--use-devtools-active-port']
+    test_args = ['-v']
     if args:
       test_args.extend(args)
     # --expose-gc allows the WebGL conformance tests to more reliably
