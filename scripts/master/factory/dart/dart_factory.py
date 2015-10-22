@@ -380,21 +380,21 @@ class DartUtils(object):
       'GYP_DEFINES': 'fastbuild=1 component=static_library',
     },
     'gclient_transitive': True,
-    'gclient_timeout': 1200,
+    'gclient_timeout': 3600,
     'no_gclient_branch': True,
     'annotated_script': 'dart_buildbot_run.py',
   }
   mac_factory_properties = {
     'gclient_transitive': True,
     'no_gclient_branch': True,
-    'gclient_timeout': 1200,
+    'gclient_timeout': 3600,
     'annotated_script': 'dart_buildbot_run.py',
   }
   linux_factory_properties = {
     'gclient_env': {
         'GYP_GENERATORS' : 'ninja',
     },
-    'gclient_timeout': 1200,
+    'gclient_timeout': 3600,
     'gclient_transitive': True,
     'no_gclient_branch': True,
     'annotated_script': 'dart_buildbot_run.py',
@@ -404,7 +404,7 @@ class DartUtils(object):
         'GYP_GENERATORS' : 'ninja',
         'GYP_DEFINES': 'target_arch=ia32',
     },
-    'gclient_timeout': 1200,
+    'gclient_timeout': 3600,
     'gclient_transitive': True,
     'no_gclient_branch': True,
     'annotated_script': 'dart_buildbot_run.py',
