@@ -74,7 +74,7 @@ BUILDERS = {
       'V8 Linux - swarming staging builder': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
+          'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
@@ -182,7 +182,7 @@ BUILDERS = {
       },
       'V8 Linux - swarming staging': {
         'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
+          'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
