@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import re
-
 DEPS = [
   'archive',
   'chromium',
@@ -61,134 +59,56 @@ def RunSteps(api):
   v8.verify_cq_integrity()
 
 
-def _sanitize_nonalpha(text):
-  return ''.join(c if c.isalnum() else '_' for c in text)
-
-
 def GenTests(api):
-  # Simulated branch names for testing. Optionally upgrade these in branch
-  # period to reflect the real branches used by the gitiles poller.
-  STABLE_BRANCH = '4.2'
-  BETA_BRANCH = '4.3'
-
-  def get_test_branch_name(mastername, buildername):
-    if mastername == 'client.dart.fyi':
-      return STABLE_BRANCH
-    if re.search(r'stable branch', buildername):
-      return STABLE_BRANCH
-    if re.search(r'beta branch', buildername):
-      return BETA_BRANCH
-    return 'master'
-
-  for mastername, builders, buildername, bot_config in api.v8.iter_builders():
-    bot_type = bot_config.get('bot_type', 'builder_tester')
-
-    if bot_type in ['builder', 'builder_tester']:
-      assert bot_config['testing'].get('parent_buildername') is None
-
-    branch = get_test_branch_name(mastername, buildername)
-    v8_config_kwargs = bot_config.get('v8_config_kwargs', {})
-    test = (
-      api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
-                               _sanitize_nonalpha(buildername))) +
-      api.properties.generic(mastername=mastername,
-                             buildername=buildername,
-                             branch=branch,
-                             parent_buildername=bot_config.get(
-                                 'parent_buildername'),
-                             revision='20123') +
-      api.platform(bot_config['testing']['platform'],
-                   v8_config_kwargs.get('TARGET_BITS', 64))
-    )
-
-    if bot_config.get('parent_buildername'):
-      test += api.properties(parent_got_revision='54321')
-      # Add isolated-tests property from parent builder.
-      parent = builders[bot_config['parent_buildername']]
-      swarm_hashes = parent['testing'].get('swarm_hashes')
-      if swarm_hashes:
-        test += api.properties(swarm_hashes=swarm_hashes)
-
-    if mastername.startswith('tryserver'):
-      test += (api.properties(
-          revision='12345',
-          patch_url='svn://svn-mirror.golo.chromium.org/patch'))
-
-    yield test
+  for mastername, _, buildername, _ in api.v8.iter_builders():
+    yield api.v8.test(mastername, buildername)
 
   yield (
-    api.test('branch_sync_failure') +
-    api.properties.tryserver(mastername='client.v8.branches',
-                             buildername='V8 Linux - beta branch',
-                             branch=BETA_BRANCH,
-                             revision='20123') +
-    api.platform('linux', 32) +
+    api.v8.test(
+        'client.v8.branches',
+        'V8 Linux - beta branch',
+        'branch_sync_failure',
+    ) +
     api.step_data('bot_update', retcode=1)
   )
-
-  # FIXME(machenbach): This cries for a refactoring! Get rid of local variables
-  # and extract the tests.
 
   # Test usage of test filters. They're used when the buildbucket
   # job gets a property 'testfilter', which is expected to be a json list of
   # test-filter strings.
-  mastername = 'tryserver.v8'
-  buildername = 'v8_linux_rel'
-  bot_config = api.v8.BUILDERS[mastername]['builders'][buildername]
   yield (
-    api.test('full_%s_%s_test_filter' % (
-        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
-    api.properties.generic(
-        mastername=mastername,
-        buildername=buildername,
-        branch='master',
-        revision='12345',
-        patch_url='svn://svn-mirror.golo.chromium.org/patch',
+    api.v8.test(
+        'tryserver.v8',
+        'v8_linux_rel',
+        'test_filter',
+    ) +
+    api.properties(
         testfilter=['mjsunit/regression/*', 'test262/foo', 'test262/bar'],
         extra_flags='--trace_gc --turbo_stats',
-    ) +
-    api.platform(bot_config['testing']['platform'],
-                 v8_config_kwargs.get('TARGET_BITS', 64))
+    )
   )
 
   # Test using extra flags with a bot that already uses some extra flags as
   # positional argument.
-  buildername = 'v8_linux_greedy_allocator_dbg'
-  bot_config = api.v8.BUILDERS[mastername]['builders'][buildername]
   yield (
-    api.test('full_%s_%s_positional_extra_flags' % (
-        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
-    api.properties.generic(
-        mastername=mastername,
-        buildername=buildername,
-        branch='master',
-        revision='12345',
-        patch_url='svn://svn-mirror.golo.chromium.org/patch',
-        extra_flags=['--trace_gc', '--turbo_stats'],
+    api.v8.test(
+        'tryserver.v8',
+        'v8_linux_greedy_allocator_dbg',
+        'positional_extra_flags',
     ) +
-    api.platform(bot_config['testing']['platform'],
-                 v8_config_kwargs.get('TARGET_BITS', 64))
+    api.properties(
+        extra_flags=['--trace_gc', '--turbo_stats'],
+    )
   )
 
-  mastername = 'client.v8'
-  buildername = 'V8 Linux - isolates'
-  bot_config = api.v8.BUILDERS[mastername]['builders'][buildername]
   def TestFailures(wrong_results, flakes):
     results_suffix = "_wrong_results" if wrong_results else ""
     flakes_suffix = "_flakes" if flakes else ""
     return (
-      api.test('full_%s_%s_test_failures%s%s' %
-          (_sanitize_nonalpha(mastername),
-          _sanitize_nonalpha(buildername),
-          results_suffix,
-          flakes_suffix)) +
-      api.properties.generic(mastername=mastername,
-                             buildername=buildername,
-                             branch='master',
-                             parent_buildername=bot_config.get(
-                                 'parent_buildername')) +
-      api.platform(bot_config['testing']['platform'],
-                   v8_config_kwargs.get('TARGET_BITS', 64)) +
+      api.v8.test(
+          'client.v8',
+          'V8 Linux - isolates',
+          'test_failures%s%s' % (results_suffix, flakes_suffix),
+      ) +
       api.v8(test_failures=True, wrong_results=wrong_results, flakes=flakes)
     )
 
@@ -200,65 +120,45 @@ def GenTests(api):
   )
 
   yield (
-    api.test('full_%s_%s_empty_json' % (
-        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
-    api.properties.generic(mastername=mastername,
-                           buildername=buildername,
-                           branch='master',
-                           parent_buildername=bot_config.get(
-                               'parent_buildername')) +
-    api.platform(bot_config['testing']['platform'],
-                 v8_config_kwargs.get('TARGET_BITS', 64)) +
+    api.v8.test(
+        'client.v8',
+        'V8 Linux - isolates',
+        'empty_json',
+    ) +
     api.override_step_data('Check', api.json.output([])) +
     api.expect_exception('AssertionError')
   )
 
   yield (
-    api.test('full_%s_%s_one_failure' %
-        (_sanitize_nonalpha(mastername),
-        _sanitize_nonalpha(buildername))) +
-    api.properties.generic(mastername=mastername,
-                           buildername=buildername,
-                           branch='master',
-                           parent_buildername=bot_config.get(
-                               'parent_buildername')) +
-    api.platform(bot_config['testing']['platform'],
-                 v8_config_kwargs.get('TARGET_BITS', 64)) +
+    api.v8.test(
+        'client.v8',
+        'V8 Linux - isolates',
+        'one_failure',
+    ) +
     api.override_step_data('Check', api.v8.one_failure())
   )
 
-  buildername = 'V8 Linux - memcheck'
   yield (
-    api.test('full_%s_%s_no_errors' % (
-        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
-    api.properties.generic(mastername=mastername,
-                           buildername=buildername,
-                           branch='master',
-                           parent_buildername=bot_config.get(
-                               'parent_buildername')) +
-    api.platform(bot_config['testing']['platform'],
-                 v8_config_kwargs.get('TARGET_BITS', 64)) +
-    api.override_step_data(
+    api.v8.test(
+        'client.v8',
+        'V8 Linux - memcheck',
+        'no_errors',
+    ) +
+    api.v8.stderr(
         'Simple Leak Check',
-        api.raw_io.stream_output('no leaks are possible', stream='stderr'),
+        'no leaks are possible',
     )
   )
 
-  buildername = 'V8 Fuzzer'
   yield (
-    api.test('full_%s_%s_fuzz_archive' % (
-        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
-    api.properties.generic(mastername=mastername,
-                           buildername=buildername,
-                           branch='master',
-                           parent_buildername=bot_config.get(
-                               'parent_buildername')) +
-    api.platform(bot_config['testing']['platform'],
-                 v8_config_kwargs.get('TARGET_BITS', 64)) +
-    api.override_step_data(
+    api.v8.test(
+        'client.v8',
+        'V8 Fuzzer',
+        'fuzz_archive',
+    ) +
+    api.v8.stdout(
         'Fuzz',
-        api.raw_io.stream_output(
-          'foo\nCreating archive bar\nbaz', stream='stdout'),
+        'foo\nCreating archive bar\nbaz',
         retcode=1,
     )
   )
@@ -268,73 +168,58 @@ def GenTests(api):
   # Bisect a2 -> failures.
   # Bisect a1 -> no failures.
   # Report culprit a2.
-  buildername = 'V8 Linux - predictable'
   yield (
-    api.test('full_%s_%s_bisect' % (
-        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
-    api.properties.generic(mastername=mastername,
-                           buildername=buildername,
-                           branch='master') +
-    api.platform(bot_config['testing']['platform'],
-                 v8_config_kwargs.get('TARGET_BITS', 64)) +
-    api.override_step_data('Mjsunit', api.v8.bisect_failures_example()) +
-    api.override_step_data(
-        'Bisect a2.Retry', api.v8.bisect_failures_example()) +
+    api.v8.test(
+        'client.v8',
+        'V8 Linux - predictable',
+        'bisect',
+    ) +
+    api.v8.fail('Mjsunit') +
+    api.v8.fail('Bisect a2.Retry') +
     api.time.step(120)
   )
 
   # The same as above, but overriding changes.
   yield (
-    api.test('full_%s_%s_bisect_override_changes' % (
-        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
-    api.properties.generic(mastername=mastername,
-                           buildername=buildername,
-                           branch='master',
-                           override_changes=[
-                             {'revision': 'a1'},
-                             {'revision': 'a2'},
-                             {'revision': 'a3'},
-                           ]) +
-    api.platform(bot_config['testing']['platform'],
-                 v8_config_kwargs.get('TARGET_BITS', 64)) +
-    api.override_step_data('Mjsunit', api.v8.bisect_failures_example()) +
-    api.override_step_data(
-        'Bisect a2.Retry', api.v8.bisect_failures_example()) +
+    api.v8.test(
+        'client.v8',
+        'V8 Linux - predictable',
+        'bisect_override_changes',
+    ) +
+    api.properties(
+        override_changes=[
+          {'revision': 'a1'},
+          {'revision': 'a2'},
+          {'revision': 'a3'},
+        ],
+    ) +
+    api.v8.fail('Mjsunit') +
+    api.v8.fail('Bisect a2.Retry') +
     api.time.step(120)
   )
 
   # Disable bisection, because the failing test is too long compared to the
   # overall test time.
   yield (
-    api.test('full_%s_%s_bisect_tests_too_long' % (
-        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
-    api.properties.generic(mastername=mastername,
-                           buildername=buildername,
-                           branch='master') +
-    api.platform(bot_config['testing']['platform'],
-                 v8_config_kwargs.get('TARGET_BITS', 64)) +
-    api.override_step_data('Mjsunit', api.v8.bisect_failures_example()) +
+    api.v8.test(
+        'client.v8',
+        'V8 Linux - predictable',
+        'bisect_tests_too_long',
+    ) +
+    api.v8.fail('Mjsunit') +
     api.time.step(7)
   )
 
   # Bisect over range a1, a2, a3. Assume a2 is the culprit.
   # Same as above with a swarming builder_tester.
-  buildername = 'V8 Linux - swarming staging 2'
-  builders = api.v8.BUILDERS[mastername]['builders']
-  bot_config = builders[buildername]
   yield (
-    api.test('full_%s_%s_bisect_swarming' % (
-        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
-    api.properties.generic(
-        mastername=mastername,
-        buildername=buildername,
-        branch='master',
+    api.v8.test(
+        'client.v8',
+        'V8 Linux - swarming staging 2',
+        'bisect_swarming',
     ) +
-    api.platform(bot_config['testing']['platform'],
-                 v8_config_kwargs.get('TARGET_BITS', 64)) +
-    api.override_step_data('Check', api.v8.bisect_failures_example()) +
-    api.override_step_data(
-        'Bisect a2.Retry', api.v8.bisect_failures_example()) +
+    api.v8.fail('Check') +
+    api.v8.fail('Bisect a2.Retry') +
     api.time.step(120)
   )
 
@@ -343,88 +228,59 @@ def GenTests(api):
   # Bisect a0 -> no failures.
   # Bisect a1 -> no failures.
   # Report a2 and a3 as possible culprits.
-  buildername = 'V8 Linux64 - debug - greedy allocator'
-  bot_config = api.v8.BUILDERS[mastername]['builders'][buildername]
   yield (
-    api.test('full_%s_%s_bisect_tester' % (
-        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
-    api.properties.generic(mastername=mastername,
-                           buildername=buildername,
-                           branch='master',
-                           parent_buildername=bot_config.get(
-                               'parent_buildername')) +
-    api.platform(bot_config['testing']['platform'],
-                 v8_config_kwargs.get('TARGET_BITS', 64)) +
-    api.override_step_data('Check', api.v8.bisect_failures_example()) +
+    api.v8.test(
+        'client.v8',
+        'V8 Linux64 - debug - greedy allocator',
+        'bisect_tester',
+    ) +
+    api.v8.fail('Check') +
     api.time.step(120)
   )
 
   # Same as above with a swarming tester.
-  buildername = 'V8 Linux'
-  builders = api.v8.BUILDERS[mastername]['builders']
-  bot_config = builders[buildername]
-  parent_buildername = bot_config['parent_buildername']
-  parent_bot_config = builders[parent_buildername]
   yield (
-    api.test('full_%s_%s_bisect_tester_swarming' % (
-        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
-    api.properties.generic(
-        mastername=mastername,
-        buildername=buildername,
-        branch='master',
-        swarm_hashes=parent_bot_config['testing'].get('swarm_hashes'),
-        parent_buildername=parent,
+    api.v8.test(
+        'client.v8',
+        'V8 Linux',
+        'bisect_tester_swarming',
     ) +
-    api.platform(bot_config['testing']['platform'],
-                 v8_config_kwargs.get('TARGET_BITS', 64)) +
-    api.override_step_data('Check', api.v8.bisect_failures_example()) +
+    api.v8.fail('Check') +
     api.time.step(120)
   )
 
   # Disable bisection due to a recurring failure. Steps:
   # Bisect a0 -> failures.
-  buildername = 'V8 Linux - predictable'
   yield (
-    api.test('full_%s_%s_bisect_recurring_failure' % (
-        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
-    api.properties.generic(mastername=mastername,
-                           buildername=buildername,
-                           branch='master') +
-    api.platform(bot_config['testing']['platform'],
-                 v8_config_kwargs.get('TARGET_BITS', 64)) +
-    api.override_step_data('Mjsunit', api.v8.bisect_failures_example()) +
-    api.override_step_data(
-        'Bisect a0.Retry', api.v8.bisect_failures_example()) +
+    api.v8.test(
+        'client.v8',
+        'V8 Linux - predictable',
+        'bisect_recurring_failure',
+    ) +
+    api.v8.fail('Mjsunit') +
+    api.v8.fail('Bisect a0.Retry') +
     api.time.step(120)
   )
 
   # Disable bisection due to less than two changes.
   yield (
-    api.test('full_%s_%s_bisect_one_change' % (
-        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
-    api.properties.generic(mastername=mastername,
-                           buildername=buildername,
-                           branch='master') +
-    api.platform(bot_config['testing']['platform'],
-                 v8_config_kwargs.get('TARGET_BITS', 64)) +
-    api.override_step_data('Mjsunit', api.v8.bisect_failures_example()) +
+    api.v8.test(
+        'client.v8',
+        'V8 Linux - predictable',
+        'bisect_one_change',
+    ) +
+    api.v8.fail('Mjsunit') +
     api.override_step_data(
         'Bisect.Fetch changes', api.v8.example_one_buildbot_change()) +
     api.time.step(120)
   )
 
-  buildername = 'V8 GC Stress - 3'
-  bot_config = api.v8.BUILDERS[mastername]['builders'][buildername]
   yield (
-    api.test('full_%s_%s_bisect_no_shards' % (
-        _sanitize_nonalpha(mastername), _sanitize_nonalpha(buildername))) +
-    api.properties.generic(mastername=mastername,
-                           buildername=buildername,
-                           branch='master',
-                           parent_buildername=bot_config.get(
-                               'parent_buildername')) +
-    api.platform(bot_config['testing']['platform'],
-                 v8_config_kwargs.get('TARGET_BITS', 64)) +
-    api.override_step_data('Mjsunit', api.v8.bisect_failures_example()) +
+    api.v8.test(
+        'client.v8',
+        'V8 GC Stress - 3',
+        'bisect_no_shards',
+    ) +
+    api.v8.fail('Mjsunit') +
     api.time.step(120)
   )

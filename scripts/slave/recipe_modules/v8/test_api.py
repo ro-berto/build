@@ -4,8 +4,20 @@
 
 # Exposes the builder and recipe configurations to GenTests in recipes.
 
+import re
+
 from recipe_engine import recipe_test_api
 from . import builders
+
+# Simulated branch names for testing. Optionally upgrade these in branch
+# period to reflect the real branches used by the gitiles poller.
+STABLE_BRANCH = '4.2'
+BETA_BRANCH = '4.3'
+
+
+def _sanitize_nonalpha(text):
+  return ''.join(c if c.isalnum() else '_' for c in text)
+
 
 class V8TestApi(recipe_test_api.RecipeTestApi):
   BUILDERS = builders.BUILDERS
@@ -191,7 +203,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'slowest_tests': V8TestApi.SLOWEST_TESTS,
     }])
 
-  def bisect_failures_example(self):
+  def failures_example(self):
     return self.m.json.output([{
       'arch': 'theArch',
       'mode': 'theMode',
@@ -310,6 +322,80 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     return self.m.raw_io.stream_output(
         available_builds.get(revision, ''),
         stream='stdout',
+    )
+
+  def _get_test_branch_name(self, mastername, buildername):
+    if mastername == 'client.dart.fyi':
+      return STABLE_BRANCH
+    if re.search(r'stable branch', buildername):
+      return STABLE_BRANCH
+    if re.search(r'beta branch', buildername):
+      return BETA_BRANCH
+    return 'master'
+
+  def test(self, mastername, buildername, suffix=''):
+    name = '_'.join(filter(bool, [
+      'full',
+      _sanitize_nonalpha(mastername),
+      _sanitize_nonalpha(buildername),
+      suffix,
+    ]))
+    builders_list = builders.BUILDERS[mastername]['builders']
+    bot_config = builders_list[buildername]
+    v8_config_kwargs = bot_config.get('v8_config_kwargs', {})
+    parent_buildername = bot_config.get('parent_buildername')
+    branch=self._get_test_branch_name(mastername, buildername)
+
+    if bot_config.get('bot_type') in ['builder', 'builder_tester']:
+      assert parent_buildername is None
+
+    test = (
+        recipe_test_api.RecipeTestApi.test(name) +
+        self.m.properties.generic(
+            mastername=mastername,
+            buildername=buildername,
+            branch=branch,
+            parent_buildername=parent_buildername,
+            revision='20123',
+        ) +
+        self.m.platform(
+            bot_config['testing']['platform'],
+            v8_config_kwargs.get('TARGET_BITS', 64),
+        )
+    )
+    if parent_buildername:
+      test += self.m.properties(parent_got_revision='54321')
+
+      # Add isolated-tests property from parent builder.
+      parent = builders_list[parent_buildername]
+      swarm_hashes = parent['testing'].get('swarm_hashes')
+      if swarm_hashes:
+        test += self.m.properties(swarm_hashes=swarm_hashes)
+
+    if mastername.startswith('tryserver'):
+      test += self.m.properties(
+          revision='12345',
+          patch_url='svn://svn-mirror.golo.chromium.org/patch',
+      )
+
+    return test
+
+  def fail(self, step_name):
+    return self.override_step_data(
+        step_name, self.failures_example())
+
+  def stdout(self, step_name, output, retcode=0):
+    return self.override_step_data(
+        step_name,
+        self.m.raw_io.stream_output(output, stream='stdout'),
+        retcode=retcode,
+    )
+
+  def stderr(self, step_name, output, retcode=0):
+    return self.override_step_data(
+        step_name,
+        self.m.raw_io.stream_output(output, stream='stderr'),
+        retcode=retcode,
     )
 
   @recipe_test_api.mod_test_data
