@@ -112,9 +112,9 @@ def CommonChecks(input_api, output_api):
 
   try:
     sys.path = infra_path + sys.path
-    import master_cfg_utils  # pylint: disable=F0401
+    import common.master_cfg_utils  # pylint: disable=F0401
     # Run the tests.
-    with master_cfg_utils.TemporaryMasterPasswords():
+    with common.master_cfg_utils.TemporaryMasterPasswords():
       output = input_api.RunTests(tests)
 
     output.extend(input_api.canned_checks.PanProjectChecks(

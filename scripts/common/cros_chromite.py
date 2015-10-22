@@ -21,6 +21,7 @@ import base64
 import collections
 import json
 import logging
+import os
 import sys
 
 try:
@@ -35,30 +36,23 @@ except ImportError:
   # is missing so bots don't show errors.
   requests = None
 
-from common import configcache
+# Add 'common' to our path.
+from common import configcache, env
 
 # The name of the branch associated with tip-of-tree.
 TOT_BRANCH = 'master'
 
 
-# A map of branch names to their pinned commits. These are maintained through
-# a DEPS hook in <build>/DEPS. In order to update a pinned revision:
-# - Update the value here.
+# Configure our pin locations. Because repository availability is dependent
+# on checkout layout, pin descriptors are conditional on their repository's
+# availability.
+#
+# These are maintained via a DEPS hook in <build>/DEPS. In order to update a
+# pinned revision:
+# - Update the value in the respective JSON file.
 # - Run "gclient runhooks --force".
-PINS = collections.OrderedDict((
-  (TOT_BRANCH, 'b2d341616f5043863449ad74d8e4fb06fe9a9b58'),
-
-  # Release waterfall branches.
-  #
-  # Note that the release waterfall instantiates only three releases. We will
-  # keep one branch around for stability, since internal waterfall updates are
-  # not atomic. Therefore, we should prune all but the FOUR newest release
-  # branches.
-  ('release-R47-7520.B', 'd047e007037383c04c4453beca4f69b82ea74188'),
-  ('release-R46-7390.B', '33959980025b477366d0792a4e14bfd7c0f0810c'),
-  ('release-R45-7262.B', 'd06f185c5383e4ffe884ca30e55df060b96b0c59'),
-  ('release-R44-7077.B', '6b12acdd58a3a506f58fb32bd0b78cbfe72506a3'),
-))
+PIN_JSON_PATH = os.path.join(env.Build, 'scripts', 'common',
+                             'cros_chromite_pins.json')
 
 
 class ChromiteError(RuntimeError):
@@ -351,7 +345,7 @@ class ChromiteConfig(collections.OrderedDict):
 class ChromitePinManager(object):
   """Manages Chromite pinning associations."""
 
-  def __init__(self, pinned, require=False):
+  def __init__(self, cache_name, pinned, require=False):
     """Instantiates a new ChromitePinManager.
 
     Args:
@@ -360,8 +354,26 @@ class ChromitePinManager(object):
       require: (bool) If False, a requested branch without a pinned match will
           return that branch name; otherwise, a ChromiteError will be returned.
     """
+    self._cache_name = cache_name
     self._pinned = pinned
     self._require = require
+
+  @property
+  def cache_name(self):
+    return self._cache_name
+
+  @classmethod
+  def LoadFromJSON(cls, cache_name, path, **kwargs):
+    """Returns: (ChromitePinManager) a ChromitePinManager instance.
+
+    Loads a ChromitePinManager configuration from a pin JSON file.
+    """
+    logging.debug('Loading default pins from: %s', path)
+    with open(path, 'r') as fd:
+      pins = json.load(fd)
+    if not isinstance(pins, dict):
+      raise TypeError('JSON pins are not a dictionary: %s' % (path,))
+    return cls(cache_name, pins, **kwargs)
 
   def iterpins(self):
     """Returns: an iterator over registered (pin, commit) tuples."""
@@ -383,6 +395,33 @@ class ChromitePinManager(object):
               branch,))
       value = branch
     return value
+
+  def Get(self, branch=None, allow_fetch=True):
+    """Returns: (ChromiteConfig) the Chromite configuration for a given branch.
+
+    Args:
+      branch: (str) The name of the branch to retrieve. If None, use
+          tip-of-tree.
+      allow_fetch: (bool) If True, allow a Get miss to fetch a new cache value.
+    """
+    cache_manager = _GetCacheManager(
+        self,
+        allow_fetch=allow_fetch)
+
+    try:
+      _UpdateCache(cache_manager, self)
+    except configcache.ReadOnlyError as e:
+      raise ChromiteError("Cannot update read-only config cache. Run "
+                          "`gclient runhooks --force`: %s" % (e,))
+
+    return ChromiteConfigManager(
+        cache_manager,
+        pinned=self,
+    ).GetConfig(branch)
+
+  def List(self):
+    """Returns: (list) a list of the configured Chromite pin branch names."""
+    return self._pinned.keys()
 
 
 class ChromiteConfigManager(object):
@@ -492,7 +531,13 @@ class ChromiteFetcher(object):
 
 
 # Default ChromitePinManager instance.
-DefaultChromitePinManager = ChromitePinManager(PINS)
+_DEFAULT_PIN_MANAGER = None
+def DefaultChromitePinManager():
+  global _DEFAULT_PIN_MANAGER
+  if not _DEFAULT_PIN_MANAGER:
+    _DEFAULT_PIN_MANAGER = ChromitePinManager.LoadFromJSON('chromite',
+                                                           PIN_JSON_PATH)
+  return _DEFAULT_PIN_MANAGER
 
 
 def Get(branch=None, allow_fetch=True):
@@ -502,20 +547,14 @@ def Get(branch=None, allow_fetch=True):
     branch: (str) The name of the branch to retrieve. If None, use tip-of-tree.
     allow_fetch: (bool) If True, allow a Get miss to fetch a new cache value.
   """
-  cache_manager = _GetCacheManager(
-      DefaultChromitePinManager,
+  return DefaultChromitePinManager().Get(
+      branch=branch,
       allow_fetch=allow_fetch)
 
-  try:
-    _UpdateCache(cache_manager, DefaultChromitePinManager)
-  except configcache.ReadOnlyError as e:
-    raise ChromiteError("Cannot update read-only config cache. Run "
-                        "`gclient runhooks --force`: %s" % (e,))
 
-  return ChromiteConfigManager(
-      cache_manager,
-      pinned=DefaultChromitePinManager,
-  ).GetConfig(branch)
+def List():
+  """Returns: (list) a list of the configured Chromite pin branch names."""
+  return DefaultChromitePinManager().List()
 
 
 def _UpdateCache(cache_manager, pin_manager, force=False):
@@ -553,14 +592,14 @@ def _GetCacheManager(pin_manager, allow_fetch=False, **kwargs):
     pin_manager: The ChromitePinManager to use.
   """
   return configcache.CacheManager(
-      'chromite',
+      pin_manager.cache_name,
       # TODO(dnj): Remove the 'requests' test (crbug.com/452258).
       fetcher=(ChromiteFetcher(pin_manager) if allow_fetch and requests
                                             else None),
       **kwargs)
 
 
-def main():
+def main(argv, pin_manager_gen):
   parser = argparse.ArgumentParser()
   parser.add_argument('-v', '--verbose', action='count', default=0,
       help='Increase process verbosity. This can be specified multiple times.')
@@ -568,7 +607,7 @@ def main():
       help='The base cache directory to download pinned configurations into.')
   parser.add_argument('-f', '--force', action='store_true',
       help='Forces an update, even if the cached already contains an artifact.')
-  args = parser.parse_args()
+  args = parser.parse_args(argv)
 
   # Handle verbosity.
   if args.verbose == 0:
@@ -579,7 +618,7 @@ def main():
     loglevel = logging.DEBUG
   logging.getLogger().setLevel(loglevel)
 
-  pm = DefaultChromitePinManager
+  pm = pin_manager_gen()
   cm = _GetCacheManager(pm, allow_fetch=True, cache_dir=args.cache_directory)
   updated = _UpdateCache(cm, pm, force=args.force)
   logging.info('Updated %d cache artifact(s).', len(updated))
@@ -591,7 +630,7 @@ def main():
 if __name__ == '__main__':
   logging.basicConfig()
   try:
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:], DefaultChromitePinManager))
   except Exception as e:
     logging.exception("Uncaught execption: %s", e)
   sys.exit(1)

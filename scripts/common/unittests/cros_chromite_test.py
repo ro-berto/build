@@ -3,7 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Unit test suite for common.cros_chromite."""
+"""Unit test suite for common.cros.chromite."""
 
 import test_env
 
@@ -182,15 +182,24 @@ class ChromiteConfigTestCase(unittest.TestCase):
 class ChromitePinManagerTestCase(unittest.TestCase):
 
   def testGetPinnedBranch_PinnedBranchReturnsPinnedValue(self):
-    pm = cros_chromite.ChromitePinManager(pinned={'a': 'b'}, require=True)
+    pm = cros_chromite.ChromitePinManager(
+        'test',
+        pinned={'a': 'b'},
+        require=True)
     self.assertEqual(pm.GetPinnedBranch('a'), 'b')
 
   def testGetPinnedBranch_UnpinnedBranchReturnsBranch(self):
-    pm = cros_chromite.ChromitePinManager(pinned={'a': 'b'}, require=False)
+    pm = cros_chromite.ChromitePinManager(
+        'test',
+        pinned={'a': 'b'},
+        require=False)
     self.assertEqual(pm.GetPinnedBranch('foo'), 'foo')
 
   def testGetPinnedBranch_UnpinnedBranchReturnsErrorWithRequiredPinning(self):
-    pm = cros_chromite.ChromitePinManager(pinned={'a': 'b'}, require=True)
+    pm = cros_chromite.ChromitePinManager(
+        'test',
+        pinned={'a': 'b'},
+        require=True)
     self.assertRaises(cros_chromite.ChromiteError,
         pm.GetPinnedBranch, 'foo')
 
@@ -205,13 +214,17 @@ class ChromiteConfigManagerTestCase(unittest.TestCase):
 
   def testGetConfig_ValidSucceeds(self):
     manager = cros_chromite.ChromiteConfigManager(self.cache,
-        cros_chromite.ChromitePinManager({'test': 'v1'}))
+        cros_chromite.ChromitePinManager(
+          'test',
+          {'test': 'v1'}))
     self.assertTrue(isinstance(manager.GetConfig('test'),
         cros_chromite.ChromiteConfig))
 
   def testGetConfig_InvalidJsonRaises(self):
     manager = cros_chromite.ChromiteConfigManager(self.cache,
-        cros_chromite.ChromitePinManager({'test': 'v_invalid'}))
+        cros_chromite.ChromitePinManager(
+          'test',
+          {'test': 'v_invalid'}))
     self.assertRaises(cros_chromite.ChromiteError, manager.GetConfig, 'test')
 
   def testGetConfig_MissingRaises(self):
@@ -223,7 +236,9 @@ class ChromiteFetcherTestCase(unittest.TestCase):
 
   def setUp(self):
     self.fetcher = cros_chromite.ChromiteFetcher(
-        cros_chromite.ChromitePinManager({'test': 'v1'})
+        cros_chromite.ChromitePinManager(
+          'test',
+          {'test': 'v1'})
     )
 
   @staticmethod

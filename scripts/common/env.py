@@ -46,6 +46,11 @@ __all__ = [
     ]
 
 
+# This is the path of the current "env" module. When "env" is run from
+# command-line, this path is automatically appended, and should be stripped out
+# of system path generation.
+_env_module_path = os.path.abspath(os.path.dirname(__file__))
+
 # Name of enviornment extension file to seek.
 ENV_EXTENSION_NAME = 'environment.cfg.py'
 
@@ -310,7 +315,9 @@ def GetSysPythonPath(hermetic=True):
   Args:
     hermetic (bool): If True, prune any non-system path.
   """
-  path = PythonPath.FromPaths(*sys.path)
+  sys_paths = [p for p in sys.path
+               if p != _env_module_path]
+  path = PythonPath.FromPaths(*sys_paths)
   if hermetic:
     path = path.GetHermetic()
   return path

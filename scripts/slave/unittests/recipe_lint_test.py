@@ -10,9 +10,6 @@ MODULES_WHITELIST = [
   # TODO(luqui): Move skia modules into recipe resources
   r'common\.skia\..*',
   r'slave\.skia\..*',
-
-  # TODO(luqui): Move cros modules into recipe resources
-  r'common\.cros_chromite',
 ]
 
 RECIPES_PY = os.path.join(

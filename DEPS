@@ -37,7 +37,7 @@ hooks = [
   },
   {
     "name": "cros_chromite",
-    "pattern": r".*/cros_chromite\.py",
+    "pattern": r".*/cros_chromite_pins\.json",
     "action": [
       "python", "build/scripts/tools/runit.py", "python",
           "build/scripts/common/cros_chromite.py", "-v",

@@ -6,8 +6,8 @@ import collections
 import logging
 import sys
 
-from common.slave_alloc import SlaveAllocator
 from common.cros_chromite import Get, ChromiteTarget
+from common.slave_alloc import SlaveAllocator
 from master.cros import builder_config
 
 
