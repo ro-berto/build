@@ -1260,14 +1260,16 @@ def ListMasters(cue='master.cfg', include_public=True, include_internal=True):
 
 
 def MasterPath(mastername, include_public=True, include_internal=True):
-  path = os.path.join(BUILD_DIR, 'masters', 'master.%s' % mastername)
-  path_internal = os.path.join(
-      BUILD_DIR, os.pardir, 'build_internal', 'masters',
-      'master.%s' % mastername)
-  if include_public and os.path.isdir(path):
-    return path
-  if include_internal and os.path.isdir(path_internal):
-    return path_internal
+  if not mastername.startswith('master.'):
+    mastername = 'master.' + mastername
+
+  for inc, base in (
+      (include_public, env.Build),
+      (include_internal, env.BuildInternal)):
+    if inc and base:
+      path = os.path.join(base, 'masters', mastername)
+      if os.path.isdir(path):
+        return path
   raise LookupError('Path for master %s not found' % mastername)
 
 
@@ -1373,7 +1375,7 @@ def ParsePythonCfg(cfg_filepath, fail_hard=False):
   if not os.path.exists(cfg_filepath):
     return None
 
-  # Execute 'slaves.sfg' in the master path environment.
+  # Execute 'slaves.cfg' in the master path environment.
   with MasterEnvironment(os.path.dirname(os.path.abspath(cfg_filepath))):
     try:
       local_vars = {}

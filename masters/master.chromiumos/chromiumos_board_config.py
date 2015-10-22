@@ -13,7 +13,7 @@ from master.cros import builder_config
 
 # Declare a slave allocator. We do this here so we can access the slaves
 # configured by 'slaves.cfg' in 'master.cfg'.
-slave_allocator = SlaveAllocator()
+slave_allocator = SlaveAllocator(list_unallocated=True)
 
 
 # Get the pinned Chromite configuration.

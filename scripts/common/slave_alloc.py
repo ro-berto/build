@@ -74,13 +74,28 @@ class SlaveAllocator(object):
   # The default path to load/save state to, if none is specified.
   DEFAULT_STATE_PATH = 'slave_pool.json'
 
-  def __init__(self):
-    """Initializes a new slave pool instance."""
+  def __init__(self, state_path=None, list_unallocated=False):
+    """Initializes a new slave pool instance.
+
+    Args:
+      state_path (str): The path (relative or absolute) of the allocation
+          save-state JSON file. If None, DEFAULT_STATE_PATH will be used.
+      list_unallocated (bool): Include an entry listing unallocated slaves.
+          This entry will be ignored for operations, but can be useful when
+          generating expectations.
+    """
+    self._state_path = state_path
+    self._list_unallocated = list_unallocated
+
     self._state = None
     self._pools = {}
     self._classes = {}
     self._membership = {}
     self._all_slaves = {}
+
+  @property
+  def state_path(self):
+    return self._state_path or self.DEFAULT_STATE_PATH
 
   def LoadStateDict(self, state_class_map=None):
     """Loads previous allocation state from a state dictionary.
@@ -111,37 +126,27 @@ class SlaveAllocator(object):
         class_map=class_map,
         unallocated=None)
 
-  def LoadState(self, path=None, enforce=True):
+  def LoadState(self, enforce=True):
     """Loads slave pools from the store, replacing the current in-memory set.
 
     Args:
-      path (str): If provided, the path to load from; otherwise,
-          DEFAULT_STATE_PATH will be used.
       enforce (bool): If True, raise an IOError if the state file does not
           exist or a ValueError if it could not be loaded.
     """
     state = {}
-    path = path or self.DEFAULT_STATE_PATH
-    if not os.path.exists(path):
+    if not os.path.exists(self.state_path):
       if enforce:
-        raise IOError("State path does not exist: %s" % (path,))
+        raise IOError("State path does not exist: %s" % (self.state_path,))
     try:
-      with open(path or self.DEFAULT_STATE_PATH, 'r') as fd:
+      with open(self.state_path, 'r') as fd:
         state = json.load(fd)
     except (IOError, ValueError):
       if enforce:
         raise
     self.LoadStateDict(state.get('class_map'))
 
-  def SaveState(self, path=None, list_unallocated=False):
-    """Saves the current slave pool set to the store path.
-
-    Args:
-      path (str): The path of the state file. If None, use DEFAULT_STATE_PATH.
-      list_unallocated (bool): Include an entry listing unallocated slaves.
-          This entry will be ignored for operations, but can be useful when
-          generating expectations.
-    """
+  def SaveState(self):
+    """Saves the current slave pool set to the store path."""
     state_dict = {}
     if self._state and self._state.class_map:
       class_map = state_dict['class_map'] = {}
@@ -150,10 +155,10 @@ class SlaveAllocator(object):
         subtype_dict = class_dict.setdefault(sc.subtype, [])
         subtype_dict.extend(slave_list)
 
-    if list_unallocated:
+    if self._list_unallocated:
       state_dict['unallocated'] = list(self._state.unallocated or ())
 
-    with open(path or self.DEFAULT_STATE_PATH, 'w') as fd:
+    with open(self.state_path, 'w') as fd:
       json.dump(state_dict, fd, sort_keys=True, indent=2)
 
   def AddPool(self, name, *slaves):
