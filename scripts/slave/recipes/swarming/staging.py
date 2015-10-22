@@ -59,7 +59,7 @@ def RunSteps(api):
     # Only one android bot, bump the expiration higher.
     # TODO(stip/maruel): add default_expiration property to api.swarming? Add
     # expiration to api.swarming.task()?
-    api.swarming._default_expiration = 3*60*60
+    api.swarming._default_expiration = 5*60*60
   else:
     api.chromium.set_config(
         'chromium', BUILD_CONFIG=api.properties.get('configuration', 'Release'))
