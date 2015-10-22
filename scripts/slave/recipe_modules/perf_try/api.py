@@ -47,7 +47,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     if perf_config:
       self._run_perf_job(perf_config, bot_update_step, master_dict)
     elif (not perf_config and
-      self.m.properties.get('requester') == 'commit-bot@chromium.org'):
+          self.m.properties.get('requester') == 'commit-bot@chromium.org'):
       self.run_cq_job(bot_update_step, master_dict, affected_files)
     else:
       self.m.halt('Could not load config file. Double check your changes to '
@@ -140,7 +140,8 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     for affected_file in files_in_patch:
       if (affected_file.startswith(PERF_BENCHMARKS_PATH) or
           affected_file.startswith(PERF_MEASUREMENTS_PATH)):
-        benchmark = self.m.path.basename(self.m.path.splitext(affected_file)[0])
+        benchmark = self.m.path.basename(
+            self.m.path.splitext(affected_file)[0])
         modified_benchmarks.append(benchmark)
     return modified_benchmarks
 
@@ -194,7 +195,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     overall_success = True
     if (not kwargs.get('allow_flakes', True) and
         cfg.get('test_type', 'perf') != 'return_code'):
-      overall_success = True if (all(v == 0 for v in retcodes)) else False
+      overall_success = all(v == 0 for v in retcodes)
     if not overall_success:  # pragma: no cover
       raise self.m.step.StepFailure(
           'Patched version failed to run performance test.')
@@ -440,9 +441,9 @@ def _pretty_table(data):
 def _prepend_src_to_path_in_command(test_cfg):
   command_to_run = []
   for v in test_cfg.get('command').split():
-    if v in  ['./tools/perf/run_benchmark',
-              'tools/perf/run_benchmark',
-              'tools\\perf\\run_benchmark']:
+    if v in ['./tools/perf/run_benchmark',
+             'tools/perf/run_benchmark',
+             'tools\\perf\\run_benchmark']:
       v = 'src/tools/perf/run_benchmark'
     command_to_run.append(v)
   test_cfg.update({'command': ' '.join(command_to_run)})
