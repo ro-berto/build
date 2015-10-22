@@ -51,7 +51,8 @@ def _is_telemetry_command(command):
 def run_perf_test(api, test_config, **kwargs):
   """Runs the command N times and parses a metric from the output."""
   # TODO(prasadv):  Consider extracting out the body of the for loop into
-  # a helper method, or extract the metric-extraction to make this more cleaner.
+  # a helper method, or extract the metric-extraction to make this more
+  # cleaner.
   limit = test_config['max_time_minutes'] * kwargs.get('time_multiplier', 1)
   values = []
   metric = test_config.get('metric')
@@ -92,7 +93,8 @@ def run_perf_test(api, test_config, **kwargs):
       values.append(0)
     elif metric:  # pragma: no cover
       if use_chartjson:
-        step_result = api.m.json.read('Reading chartjson results', results_path)
+        step_result = api.m.json.read(
+            'Reading chartjson results', results_path)
         valid_value, value, result = _get_chart_json_metric(
             step_result.json.output, Metric(metric))
       else:

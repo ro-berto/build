@@ -75,4 +75,5 @@ class BisectTesterApi(recipe_api.RecipeApi):
                                        stdout=self.m.raw_io.output(),
                                        stdin=self.m.raw_io.input(url))
     local_file = local_save_results.stdout.splitlines()[0].strip()
-    self.m.gsutil.upload(local_file, BUCKET, gs_filename, name=str(gs_filename))
+    self.m.gsutil.upload(
+        local_file, BUCKET, gs_filename, name=str(gs_filename))

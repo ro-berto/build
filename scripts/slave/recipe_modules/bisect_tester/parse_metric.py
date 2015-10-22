@@ -1,5 +1,6 @@
 import math
 import re
+from functools import reduce
 
 
 def _geom_mean_and_std_dev_from_histogram(histogram):  # pragma: no cover
@@ -42,7 +43,7 @@ def parse_chartjson_metric(results, metric):  # pragma: no cover
     dictionary containing all the results originally in results_str.
   """
   def escape_chars(original_string):
-    return re.sub( r'[\:|=/#&,]' , '_', original_string)
+    return re.sub(r'[\:|=/#&,]', '_', original_string)
 
   chart_name, trace_name = metric
   if trace_name == chart_name:
@@ -130,14 +131,13 @@ def _parse_result_values_from_output(metric, text):  # pragma: no cover
     single_result_match = single_result_re.search(current_line)
     multi_results_match = multi_results_re.search(current_line)
     mean_stddev_match = mean_stddev_re.search(current_line)
-    if (not single_result_match is None and
-        single_result_match.group('VALUE')):
+    if (single_result_match is not None and single_result_match.group('VALUE')):
       values_list += [single_result_match.group('VALUE')]
-    elif (not multi_results_match is None and
+    elif (multi_results_match is not None and
           multi_results_match.group('VALUES')):
       metric_values = multi_results_match.group('VALUES')
       values_list += metric_values.split(',')
-    elif (not mean_stddev_match is None and
+    elif (mean_stddev_match is not None and
           mean_stddev_match.group('MEAN')):
       values_list += [mean_stddev_match.group('MEAN')]
 
