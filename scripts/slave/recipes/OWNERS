@@ -17,6 +17,7 @@ per-file bisect.py=robertocn@chromium.org
 per-file bisect.py=prasadv@chromium.org
 per-file chromeproxy.py=bengr@chromium.org
 per-file chromeproxy.py=bustamante@chromium.org
+per-file chromeproxy.py=sclittle@chromium.org
 per-file chromium.py=set noparent
 per-file chromium.py=akuegel@chromium.org
 per-file chromium.py=phajdan.jr@chromium.org
