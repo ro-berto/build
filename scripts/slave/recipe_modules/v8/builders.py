@@ -48,7 +48,18 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux_rel_archive',
-        'testing': {'platform': 'linux'},
+        'enable_swarming': True,
+        'testing': {
+          'platform': 'linux',
+          'swarm_hashes': {
+            'benchmarks': '[dummy hash for benchmarks]',
+            'bot_default': '[dummy hash for bot_default]',
+            'mozilla': '[dummy hash for mozilla]',
+            'optimize_for_size': '[dummy hash for optimize_for_size]',
+            'simdjs': '[dummy hash for simdjs]',
+            'test262': '[dummy hash for test262]',
+          },
+        },
         'triggers': [
           'V8 Deopt Fuzzer',
           'V8 Linux',
@@ -160,10 +171,14 @@ BUILDERS = {
           OptimizeForSize,
           Benchmarks,
           SimdJs,
-          Test262Variants,
+          Test262Variants_2,
           Mozilla,
         ],
         'testing': {'platform': 'linux'},
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Ubuntu-12.04',
+        },
       },
       'V8 Linux - swarming staging': {
         'v8_config_kwargs': {

@@ -360,7 +360,7 @@ def GenTests(api):
   )
 
   # Same as above with a swarming tester.
-  buildername = 'V8 Linux - swarming staging'
+  buildername = 'V8 Linux'
   builders = api.v8.BUILDERS[mastername]['builders']
   bot_config = builders[buildername]
   parent_buildername = bot_config['parent_buildername']
