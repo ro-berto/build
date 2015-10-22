@@ -1294,6 +1294,17 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
+      'win_swarming': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
+        'use_isolate': True,
+        'enable_swarming': True,
+      },
       'mac_compile_dbg': {
         'recipe_config': 'webrtc_compile',
         'chromium_config_kwargs': {
@@ -1404,6 +1415,17 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
+      },
+      'mac_swarming': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+        'use_isolate': True,
+        'enable_swarming': True,
       },
       'ios_dbg': {
         'recipe_config': 'webrtc_ios',
@@ -1577,6 +1599,17 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+      },
+      'linux_swarming': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
       },
       'android_compile_dbg': {
         'recipe_config': 'webrtc_compile_android',
