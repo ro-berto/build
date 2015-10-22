@@ -31,7 +31,7 @@ def main():
 
   print '%s: Creating tar file %s...' % (time.strftime('%X'), filename)
   find_command = ['find'] + options.directories + [
-      '-type', 'f', '-size', '-4M',
+      '-type', 'f', '-size', '-10M',
       # The only files under src/out we want to package up are generated
       # sources.
       '(', '-regex', '^src/out/[^/]*/gen/.*', '-o',
