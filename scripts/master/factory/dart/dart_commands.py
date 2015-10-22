@@ -82,13 +82,12 @@ class DartCommands(commands.FactoryCommands):
   def AddCompileStep(self, options=None, timeout=1200):
     options = options or {}
     cmd = 'python ' + self._tools_dir + '/build.py --mode=%s' % \
-        (options['mode'])
+        (options['mode']) + ' --arch=%s' % (options['arch'])
     workdir = self._dart_build_dir
     name = options.get('name') or ''
     is_analyzer = 'analyzer' in name
     # On the vm bots we only build the runtime target
     if not is_analyzer:
-      cmd += ' --arch=%s' % (options['arch'])
       cmd += ' runtime'
 
     self._factory.addStep(shell.ShellCommand,
