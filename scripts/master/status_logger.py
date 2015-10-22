@@ -201,10 +201,10 @@ class StatusEventLogger(StatusReceiverMultiService):
       d['project_id'] = project_id
     self.ts_mon_logger.info(json.dumps(d))
 
-
   def send_build_event(self, timestamp_kind, timestamp, build_event_type,
                        bot_name, builder_name, build_number, build_scheduled_ts,
-                       step_name=None, step_number=None, result=None):
+                       step_name=None, step_number=None, result=None,
+                       extra_result_code=None):
     """Log a build/step event for event_mon."""
 
     if self.active and self._event_logging:
@@ -224,6 +224,8 @@ class StatusEventLogger(StatusReceiverMultiService):
         d['build-event-step-number'] = step_number
       if result:
         d['build-event-result'] = result.upper()
+      if extra_result_code:
+        d['build-event-extra-result-code'] = extra_result_code
 
       self.event_logger.info(json.dumps(d))
 
@@ -469,13 +471,17 @@ class StatusEventLogger(StatusReceiverMultiService):
     self.log('buildFinished', '%s, %d, %s, %r',
              builderName, build_number, bot, results)
     started, finished = build.getTimes()
-    # If property doesn't exist, this function returns None.
-    # Note: this is not true for build.GetProperty(), it raises KeyError.
-    project_id = build.getProperties().getProperty('patch_project')
+    properties = build.getProperties()
+    extra_result_code = properties.getProperty('extra_result_code')
     self.send_build_event(
         'END', finished * 1000, 'BUILD', bot, builderName, build_number,
         self._get_requested_at_millis(build),
-        result=buildbot.status.results.Results[results])
+        result=buildbot.status.results.Results[results],
+        extra_result_code=extra_result_code)
+
+    # If property doesn't exist, this function returns None.
+    # Note: this is not true for build.getProperty(), it raises KeyError.
+    project_id = properties.getProperty('patch_project')
     self.send_build_result(
         started, finished, builderName, bot,
         buildbot.status.results.Results[results],
