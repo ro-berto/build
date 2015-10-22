@@ -142,15 +142,18 @@ def estimate_swarming_capacity(swarming_py, builds):
       return subprocess.Popen([
           swarming_py, 'query',
           '-S', 'chromium-swarm.appspot.com',
-          'tasks?tag=master:%s&tag=buildername:%s&tag=buildnumber:%s' % (
+          'tasks/list?'
+          'tags=master:%s&tags=buildername:%s&tags=buildnumber:%s' % (
               urllib.quote(properties['mastername']),
               urllib.quote(properties['buildername']),
               urllib.quote(str(properties['buildnumber']))),
           '--json', tmp_filename]), None
     def collect_result(data, metadata):
+      # When there are no results swarming.py doesn't include 'items'.
+      # Task may not have 'duration' e.g. when its state is EXPIRED.
       result.extend({
-          'durations': item['durations'], 'id': item['id']}
-          for item in data['items'] if item)
+          'duration': item['duration'], 'id': item['task_id']}
+          for item in data.get('items', []) if item and item.get('duration'))
     launch_and_collect(builds, get_process, collect_result)
     return result
 
@@ -166,12 +169,14 @@ def estimate_swarming_capacity(swarming_py, builds):
           'task/%s/request' % id_and_durations['id'],
           '--json', tmp_filename]), id_and_durations
     def collect_result(data, id_and_durations):
+      dimensions = {e['key']: e['value']
+                    for e in data['properties']['dimensions']}
       result.append({
           'id': id_and_durations['id'],
-          'total_duration': sum(id_and_durations['durations']),
-          'dimensions': data['properties']['dimensions'],
+          'total_duration': id_and_durations['duration'],
+          'dimensions': dimensions,
           'created_ts': datetime.datetime.strptime(
-              data['created_ts'], '%Y-%m-%d %H:%M:%S'),
+              data['created_ts'], '%Y-%m-%dT%H:%M:%S.%f'),
       })
     launch_and_collect(ids_and_durations, get_process, collect_result)
     pools = {}
