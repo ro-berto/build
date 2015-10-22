@@ -1224,9 +1224,10 @@ SPEC = {
         steps.AndroidJunitTest('base_junit_tests'),
         steps.GTestTest(
             'components_browsertests',
-            android_isolate_path='components/components_browsertests.isolate'),
-        steps.GTestTest('gfx_unittests'),
-        steps.AndroidInstrumentationTest('ChromePublicTest'),
+            android_isolate_path='components/components_browsertests.isolate',
+            android_tool='asan'),
+        steps.GTestTest('gfx_unittests', android_tool='asan'),
+        steps.AndroidInstrumentationTest('ChromePublicTest', tool='asan'),
       ],
       'testing': {
         'platform': 'linux',

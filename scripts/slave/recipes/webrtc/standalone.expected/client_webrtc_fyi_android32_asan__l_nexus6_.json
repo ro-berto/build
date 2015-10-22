@@ -155,18 +155,6 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/tools/android/asan/third_party/asan_device_setup.sh",
-      "--lib",
-      "[SLAVE_BUILD]/src/third_party/llvm-build/Release+Asserts/lib/clang/3.8.0/lib/linux/libclang_rt.asan-arm-android.so"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "asan_device_setup.sh"
-  },
-  {
-    "cmd": [
       "[BUILD]/scripts/slave/daemonizer.py",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
@@ -318,6 +306,20 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "provision_devices"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/tools/android/asan/third_party/asan_device_setup.sh",
+      "--lib",
+      "[SLAVE_BUILD]/src/third_party/llvm-build/Release+Asserts/lib/clang/3.8.0/lib/linux/libclang_rt.asan-arm-android.so",
+      "--device",
+      "07a00ca4"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "asan_device_setup.sh 07a00ca4"
   },
   {
     "cmd": [

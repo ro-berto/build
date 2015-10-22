@@ -210,8 +210,8 @@ class ScriptTest(Test):  # pylint: disable=W0232
 class LocalGTestTest(Test):
   def __init__(self, name, args=None, target_name=None, use_isolate=False,
                revision=None, webkit_revision=None, android_isolate_path=None,
-               android_shard_timeout=None, override_compile_targets=None,
-               **runtest_kwargs):
+               android_shard_timeout=None, android_tool=None,
+               override_compile_targets=None, **runtest_kwargs):
     """Constructs an instance of LocalGTestTest.
 
     Args:
@@ -235,6 +235,7 @@ class LocalGTestTest(Test):
     self._webkit_revision = webkit_revision
     self._android_isolate_path = android_isolate_path
     self._android_shard_timeout = android_shard_timeout
+    self._android_tool = android_tool
     self._override_compile_targets = override_compile_targets
     self._runtest_kwargs = runtest_kwargs
 
@@ -294,6 +295,7 @@ class LocalGTestTest(Test):
       kwargs['json_results_file'] = gtest_results_file
       kwargs['flakiness_dashboard'] = 'test-results.appspot.com'
       kwargs['shard_timeout'] = self._android_shard_timeout
+      kwargs['tool'] = self._android_tool
     else:
       kwargs['xvfb'] = True
       kwargs['test_type'] = self.name
@@ -1480,7 +1482,7 @@ class AndroidInstrumentationTest(AndroidTest):
                test_apk=None, isolate_file_path=None,
                flakiness_dashboard='test-results.appspot.com',
                annotation=None, except_annotation=None, screenshot=False,
-               verbose=True, host_driven_root=None):
+               verbose=True, tool=None, host_driven_root=None):
     suite_defaults = AndroidInstrumentationTest._DEFAULT_SUITES.get(name, {})
     super(AndroidInstrumentationTest, self).__init__(
         name,
@@ -1494,6 +1496,7 @@ class AndroidInstrumentationTest(AndroidTest):
     self._host_driven_root = host_driven_root
     self._screenshot = screenshot
     self._test_apk = test_apk or suite_defaults.get('test_apk')
+    self._tool = tool
     self._verbose = verbose
 
   #override
@@ -1510,7 +1513,7 @@ class AndroidInstrumentationTest(AndroidTest):
         isolate_file_path=self.isolate_file_path,
         flakiness_dashboard=self._flakiness_dashboard,
         annotation=self._annotation, except_annotation=self._except_annotation,
-        screenshot=self._screenshot, verbose=self._verbose,
+        screenshot=self._screenshot, verbose=self._verbose, tool=self._tool,
         host_driven_root=self._host_driven_root,
         json_results_file=json_results_file,
         step_test_data=lambda: api.json.test_api.output(mock_test_results))

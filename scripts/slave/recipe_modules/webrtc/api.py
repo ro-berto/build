@@ -219,10 +219,6 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.isolate.isolate_tests(self.m.chromium.output_dir,
                                    targets=self.NORMAL_TESTS)
 
-    if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
-        self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1):
-      self.m.chromium_android.asan_device_setup()
-
     tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision,
                                  self.c.enable_swarming)
     with self.m.step.defer_results():

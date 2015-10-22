@@ -478,9 +478,11 @@ class AndroidApi(recipe_api.RecipeApi):
             'third_party', 'llvm-build', 'Release+Asserts', 'lib', 'clang',
             '3.8.0', 'lib', 'linux', 'libclang_rt.asan-arm-android.so')
     ]
-    return self.m.step('asan_device_setup.sh', install_cmd,
-                       infra_step=True,
-                       env=self.m.chromium.get_env())
+    for d in self.devices:
+      self.m.step('asan_device_setup.sh %s' % str(d),
+                  install_cmd + ['--device', d],
+                  infra_step=True,
+                  env=self.m.chromium.get_env())
 
   def monkey_test(self, **kwargs):
     args = [
@@ -759,6 +761,9 @@ class AndroidApi(recipe_api.RecipeApi):
     else:
       kwargs = {}
     self.provision_devices(**kwargs)
+    if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
+      self.asan_device_setup()
+
     self.spawn_device_temp_monitor()
 
   def common_tests_final_steps(self, logcat_gs_bucket=None):
@@ -806,7 +811,6 @@ class AndroidApi(recipe_api.RecipeApi):
       args.extend(['--json-results-file', json_results_file])
     if shard_timeout:
       args.extend(['-t', str(shard_timeout)])
-
     self.test_runner(
         name or str(suite),
         ['gtest', '-s', suite] + args,

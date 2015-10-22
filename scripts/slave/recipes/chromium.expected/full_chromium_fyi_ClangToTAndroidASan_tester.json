@@ -425,6 +425,21 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/src/tools/android/asan/third_party/asan_device_setup.sh",
+      "--lib",
+      "[SLAVE_BUILD]/src/third_party/llvm-build/Release+Asserts/lib/clang/3.8.0/lib/linux/libclang_rt.asan-arm-android.so",
+      "--device",
+      "07a00ca4"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "LLVM_FORCE_HEAD_REVISION": "YES",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "asan_device_setup.sh 07a00ca4"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[BUILD]/scripts/slave/daemonizer.py",
@@ -476,6 +491,7 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--isolate_file_path=[SLAVE_BUILD]/src/components/components_browsertests.isolate",
+      "--tool=asan",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -498,6 +514,7 @@
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
+      "--tool=asan",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -538,6 +555,7 @@
       "[SLAVE_BUILD]/src/out/Debug/apks/ChromePublic.apk",
       "--isolate-file-path",
       "chrome/chrome_public_test_apk.isolate",
+      "--tool=asan",
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",
