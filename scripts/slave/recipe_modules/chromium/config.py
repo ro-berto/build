@@ -557,6 +557,11 @@ def clang_tot_linux_asan(c):
   # Like chromium_linux_asan, without goma.
   pass
 
+@config_ctx(includes=['clang_tot_linux'])
+def clang_tot_linux_ubsan_vptr(c):
+  c.gyp_env.GYP_DEFINES['ubsan_vptr'] = 1
+  c.gyp_env.GYP_DEFINES['sanitizer_coverage'] = 3
+
 @config_ctx(includes=['clang_tot_mac', 'asan', 'chromium_sanitizer',
             'static_library'])
 def clang_tot_mac_asan(c):
