@@ -243,9 +243,12 @@ def _RunStepsInternal(api):
 
   # TODO(phajdan.jr): Remove special case for layout tests.
   add_blink_tests = False
-  if (any([f.startswith('third_party/WebKit') for f in affected_files]) and
-      buildername in CHROMIUM_BLINK_TESTS_BUILDERS):
-    add_blink_tests = True
+  if buildername in CHROMIUM_BLINK_TESTS_BUILDERS:
+    if any([f.startswith('third_party/WebKit') for f in affected_files]):
+      add_blink_tests = True
+    if any([f.startswith('v8') for f in affected_files]):
+      add_blink_tests = True
+
 
   # Add blink tests that work well with "analyze" here. The tricky ones
   # that bypass it (like the layout tests) are added later.
