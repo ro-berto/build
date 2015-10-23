@@ -114,12 +114,19 @@ class PGOApi(recipe_api.RecipeApi):
       self.m.path['checkout'] = self.m.path['slave_build'].join(
           bot_config.get('patch_root'))
 
-    # First step: compilation of the instrumented build.
-    self._compile_instrumented_image(bot_config)
+    try:
+      # First step: compilation of the instrumented build.
+      self._compile_instrumented_image(bot_config)
 
-    # Second step: profiling of the instrumented build.
-    self._run_pgo_benchmarks()
+      # Second step: profiling of the instrumented build.
+      self._run_pgo_benchmarks()
 
-    # Third step: Compilation of the optimized build, this will use the profile
-    #     data files produced by the previous step.
-    self._compile_optimized_image(bot_config)
+      # Third step: Compilation of the optimized build, this will use the
+      #     profile data files produced by the previous step.
+      self._compile_optimized_image(bot_config)
+    except self.m.step.StepFailure as e:
+      if bot_config.get('fail_silently'):
+        step_result = self.m.step.active_result
+        step_result.presentation.status = self.m.step.WARNING
+      else:
+        raise e

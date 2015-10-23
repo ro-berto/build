@@ -14,9 +14,9 @@
       "-u",
       "[BUILD]\\scripts\\slave\\bot_update.py",
       "--master",
-      "chromium.fyi",
+      "chromium_pgo.test",
       "--builder",
-      "Chromium Win PGO Builder",
+      "Test builder silent failure",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -438,11 +438,7 @@
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs2013_files\\VC\\bin;%(PATH)s",
       "PogoSafeMode": "1"
     },
-    "name": "Telemetry benchmark: sunspider",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_WARNINGS@@@"
-    ]
+    "name": "Telemetry benchmark: sunspider"
   },
   {
     "cmd": [
@@ -530,25 +526,11 @@
       "chrome"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Compile: Optimization phase."
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\zip_build.py",
-      "--target",
-      "Release",
-      "--build-url",
-      "gs://chromium-fyi-archive/win_pgo_builds",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Win PGO Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"recipe\": \"chromium_pgo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Win PGO Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"recipe\": \"chromium_pgo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "package build"
+    "name": "Compile: Optimization phase.",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_WARNINGS@@@"
+    ]
   },
   {
     "name": "$result",
