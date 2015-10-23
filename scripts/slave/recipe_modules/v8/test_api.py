@@ -8,6 +8,7 @@ import re
 
 from recipe_engine import recipe_test_api
 from . import builders
+from . import testing
 
 # Simulated branch names for testing. Optionally upgrade these in branch
 # period to reflect the real branches used by the gitiles poller.
@@ -333,6 +334,18 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       return BETA_BRANCH
     return 'master'
 
+  def _make_dummy_swarm_hashes(self, bot_config):
+    """Makes dummy isolate hashes for all tests of a bot.
+ 
+    The naming convention is test name == isolate target name.
+    """
+    return dict(
+        (test, '[dummy hash for %s]' % test)
+        for test_config in bot_config.get('tests', [])
+        for test in testing.TEST_CONFIGS.get(test_config.name, {}).get(
+            'tests', [])
+    )
+
   def test(self, mastername, buildername, suffix='', **kwargs):
     name = '_'.join(filter(bool, [
       'full',
@@ -366,12 +379,12 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     )
     if parent_buildername:
       test += self.m.properties(parent_got_revision='54321')
-
-      # Add isolated-tests property from parent builder.
-      parent = builders_list[parent_buildername]
-      swarm_hashes = parent['testing'].get('swarm_hashes')
-      if swarm_hashes:
-        test += self.m.properties(swarm_hashes=swarm_hashes)
+      if bot_config.get('enable_swarming'):
+        # Assume each tester is triggered with the required hashes for all
+        # tests.
+        test += self.m.properties(
+          swarm_hashes=self._make_dummy_swarm_hashes(bot_config),
+        )
 
     if mastername.startswith('tryserver'):
       test += self.m.properties(
