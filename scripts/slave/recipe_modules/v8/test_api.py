@@ -333,7 +333,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       return BETA_BRANCH
     return 'master'
 
-  def test(self, mastername, buildername, suffix=''):
+  def test(self, mastername, buildername, suffix='', **kwargs):
     name = '_'.join(filter(bool, [
       'full',
       _sanitize_nonalpha(mastername),
@@ -357,6 +357,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
             branch=branch,
             parent_buildername=parent_buildername,
             revision='20123',
+            **kwargs
         ) +
         self.m.platform(
             bot_config['testing']['platform'],

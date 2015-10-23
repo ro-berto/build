@@ -136,6 +136,15 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._verbose = value
 
   @property
+  def default_hard_timeout(self):
+    return self._default_hard_timeout
+
+  @default_hard_timeout.setter
+  def default_hard_timeout(self, value):
+    assert 30 <= value
+    self._default_hard_timeout = value
+
+  @property
   def default_idempotent(self):
     return self._default_idempotent
 
@@ -270,7 +279,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         user=self.default_user,
         expiration=self._default_expiration,
         io_timeout=self._default_io_timeout,
-        hard_timeout=self._default_hard_timeout,
+        hard_timeout=self.default_hard_timeout,
         idempotent=idempotent,
         extra_args=extra_args,
         collect_step=self._default_collect_step,

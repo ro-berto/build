@@ -170,6 +170,40 @@ class V8Api(recipe_api.RecipeApi):
           'swarming_dimensions', {}).iteritems():
         self.m.swarming.set_default_dimension(key, value)
 
+    self.m.swarming.set_default_dimension('pool', 'Chrome')
+    self.m.swarming.add_default_tag('project:v8')
+    self.m.swarming.default_hard_timeout = 45 * 60
+
+    # TODO(machenbach): Set this to True once we don't fail tryjobs on simple
+    # flakes anymore.
+    self.m.swarming.default_idempotent = False
+
+    if self.m.properties['mastername'] == 'tryserver.v8':
+      self.m.swarming.add_default_tag('purpose:pre-commit')
+      requester = self.m.properties.get('requester')
+      if requester == 'commit-bot@chromium.org':
+        self.m.swarming.default_priority = 30
+        self.m.swarming.add_default_tag('purpose:CQ')
+        blamelist = self.m.properties.get('blamelist')
+        if len(blamelist) == 1:
+          requester = blamelist[0]
+      else:
+        self.m.swarming.default_priority = 28
+        self.m.swarming.add_default_tag('purpose:ManualTS')
+      self.m.swarming.default_user = requester
+
+      patch_project = self.m.properties.get('patch_project')
+      if patch_project:
+        self.m.swarming.add_default_tag('patch_project:%s' % patch_project)
+    else:
+      if self.m.properties['mastername'] == 'client.v8':
+        self.m.swarming.default_priority = 25
+      else:
+        # This should be lower than the CQ.
+        self.m.swarming.default_priority = 35
+      self.m.swarming.add_default_tag('purpose:post-commit')
+      self.m.swarming.add_default_tag('purpose:CI')
+
   def runhooks(self, **kwargs):
     env = {}
     if self.c.gyp_env.AR:

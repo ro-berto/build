@@ -72,6 +72,20 @@ def GenTests(api):
     api.step_data('bot_update', retcode=1)
   )
 
+  # Simulate a tryjob triggered by the CQ for setting up different swarming
+  # default tags.
+  yield (
+    api.v8.test(
+        'tryserver.v8',
+        'v8_linux_rel',
+        'triggered_by_cq',
+        requester='commit-bot@chromium.org',
+        patch_project='v8',
+        blamelist='dude@chromium.org',
+        blamelist_real=['dude@chromium.org'],
+    )
+  )
+
   # Test usage of test filters. They're used when the buildbucket
   # job gets a property 'testfilter', which is expected to be a json list of
   # test-filter strings.
