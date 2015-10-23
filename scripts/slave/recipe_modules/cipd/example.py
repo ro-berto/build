@@ -12,34 +12,51 @@ DEPS = [
 ]
 
 def RunSteps(api):
-  # Prepare files.
-  temp = api.path.mkdtemp('cipd-example')
-
+  # First, you need a cipd client.
   api.cipd.install_client('install cipd')
+  api.cipd.install_client('install cipd', version='deadbeaf')
+  assert api.cipd.get_executable()
 
-  pkgs = {
-    'infra/monitoring/dispatcher/linux-amd64': {
-      'version': '7f751b2237df2fdf3c1405be00590fefffbaea2d',
-    },
+  packages = {
+    'infra/monitoring/dispatcher/%s' % api.cipd.platform_suffix():
+      '7f751b2237df2fdf3c1405be00590fefffbaea2d',
   }
+  cipd_root = api.path['slave_build'].join('packages')
+  # Some packages don't require credentials to be installed.
+  api.cipd.ensure_installed(cipd_root, packages)
+  # Others do, so provide creds first.
+  api.cipd.set_service_account_credentials('fake-credentials.json')
+  packages['private/package/%s' % api.cipd.platform_suffix()] = 'latest'
+  api.cipd.ensure_installed(cipd_root, packages)
 
-  api.cipd.ensure_installed(temp.join('bin'), pkgs)
-  api.cipd.ensure_installed(temp.join('bin'), pkgs, 'fake-credentials.json')
+  # The rest of commands expect credentials to be set.
 
-  api.cipd.platform_tag()
-
+  # Build & register new package version.
   api.cipd.build('fake-input-dir', 'fake-output-path', 'infra/fake-package')
+  api.cipd.register('fake-package-path',
+                    refs=['fake-ref-1', 'fake-ref-2'],
+                    tags={'fake_tag_1': 'fake_value_1',
+                          'fake_tag_2': 'fake_value_2'})
 
-  api.cipd.register('fake-package-path', 'fake-credentials.json',
-                    'fake-ref-1', 'fake-ref-2',
-                    fake_tag_1='fake_value_1', fake_tag_2='fake_value_2')
-
-  # Clean up.
-  api.file.rmtree('cleanup', temp)
+  # Set tag or ref of an already existing package.
+  api.cipd.set_tag('fake-package', version='latest',
+                   tags=['dead:beaf', 'more:value'])
+  api.cipd.set_ref('fake-package', version='latest', refs=['any', 'ref'])
 
 
 def GenTests(api):
-  yield api.test('basic')
-  yield api.test('mac64') + api.platform('mac', 64)
-  yield api.test('install-failed') + api.step_data('install cipd', retcode=1)
+  yield (
+    # This is very common dev workstation, but not all devs are on it.
+    api.test('basic') +
+    api.platform('linux', 64)
+  )
 
+  yield (
+    api.test('mac64') +
+    api.platform('mac', 64)
+  )
+
+  yield (
+    api.test('install-failed') +
+    api.step_data('install cipd', retcode=1)
+  )

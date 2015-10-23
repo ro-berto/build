@@ -8,60 +8,20 @@ class CIPDApi(recipe_api.RecipeApi):
   """CIPDApi provides support for CIPD."""
   def __init__(self, *args, **kwargs):
     super(CIPDApi, self).__init__(*args, **kwargs)
-    self.bin_path = None
+    self._cipd_executable = None
+    self._cipd_version = None
+    self._cipd_credentials = None
 
-  def install_client(self, step_name):
-    bin_path = self.m.path['slave_build'].join('cipd')
-    script_input = {
-      'platform': self.platform_tag(),
-      'bin_path': bin_path,
-    }
+  def set_service_account_credentials(self, path):
+    self._cipd_credentials = path
 
-    self.m.python(
-        name=step_name,
-        script=self.resource('bootstrap.py'),
-        stdin=self.m.json.input(script_input))
+  def platform_suffix(self):
+    """Use to get full package name that is platform indepdent.
 
-    self.bin_path = bin_path.join('cipd')
-    # TODO(seanmccullough): clean up older CIPD installations.
-
-  def build(self, input_dir, output_package, package_name):
-    self.m.step('build %s' % self.m.path.basename(package_name), [
-        self.bin_path,
-        'pkg-build',
-        '-in', input_dir,
-        '-json-output', self.m.json.output(),
-        '-name', package_name,
-        '-out', output_package,
-    ], step_test_data=lambda: self.m.json.test_api.output({
-        'result': {
-            'package': package_name,
-            'instance_id': 'fake-inst',
-        },
-    }))
-
-  def register(self, package_path, service_account_credentials, *refs, **tags):
-    package_name = self.m.path.basename(package_path)
-    cmd = [
-        self.bin_path,
-        'pkg-register',
-        '-json-output', self.m.json.output(),
-        '-service-account-json', service_account_credentials,
-    ]
-    for ref in refs:
-      cmd.extend(['-ref', ref])
-    for tag, value in tags.iteritems():
-      cmd.extend(['-tag', '%s:%s' % (tag, value)])
-    cmd.append(package_path)
-    self.m.step('register %s' % package_name, cmd,
-                step_test_data=lambda: self.m.json.test_api.output({
-                    'result': {
-                        'package': package_name,
-                        'instance_id': 'fake-inst',
-                },
-    }))
-
-  def platform_tag(self):
+    Example:
+      >>> 'my/package/%s' % api.cipd.platform_suffix()
+      'my/package/linux-amd64'
+    """
     return '%s-%s' % (
         self.m.platform.name.replace('win', 'windows'),
         {
@@ -70,16 +30,173 @@ class CIPDApi(recipe_api.RecipeApi):
         }[self.m.platform.bits],
     )
 
-  def ensure_installed(self, root, pkgs, service_account_credentials=None):
-    pkg_list = []
-    for pkg_name in sorted(pkgs):
-      pkg_spec = pkgs[pkg_name]
-      pkg_list.append('%s %s' % (pkg_name, pkg_spec['version']))
+  def install_client(self, step_name='install cipd', version=None):
+    """Ensures the client is installed.
 
-    list_data = self.m.raw_io.input('\n'.join(pkg_list))
+    If you specify version as a hash, make sure its correct platform.
+    """
+
+    # TODO(seanmccullough): clean up older CIPD installations.
+    step = self.m.python(
+        name=step_name,
+        script=self.resource('bootstrap.py'),
+        args=[
+          '--platform', self.platform_suffix(),
+          '--dest-directory', self.m.path['slave_build'].join('cipd'),
+          '--json-output', self.m.json.output(),
+        ] +
+        (['--version', version] if version else []),
+        step_test_data=lambda: self.m.json.test_api.output({
+          'executable': str(self.m.path['slave_build'].join('cipd', 'cipd')),
+          'instance_id': 'fake-inst',
+        }),
+    )
+    self._cipd_executable = step.json.output['executable']
+    self._cipd_instance_id = step.json.output['instance_id']
+
+    step.presentation.step_text = (
+        'cipd instance_id: %s' % self._cipd_instance_id)
+    return step
+
+  def get_executable(self):
+    return self._cipd_executable
+
+  def build(self, input_dir, output_package, package_name):
+    assert self._cipd_executable
+    return self.m.step(
+        'build %s' % self.m.path.basename(package_name),
+        [
+          self._cipd_executable,
+          'pkg-build',
+          '--in', input_dir,
+          '--name', package_name,
+          '--out', output_package,
+          '--json-output', self.m.json.output(),
+        ],
+        step_test_data=lambda: self.m.json.test_api.output({
+          'result': {
+              'package': package_name,
+              'instance_id': 'fake-inst',
+          },
+        })
+    )
+
+  def register(self, package_path, refs, tags):
+    assert self._cipd_executable
+    assert self._cipd_credentials
+
+    package_name = self.m.path.basename(package_path)
+    cmd = [
+      'pkg-register', package_path,
+      '--service-account-json', self._cipd_credentials,
+      '--json-output', self.m.json.output(),
+    ]
+    for ref in refs:
+      cmd.extend(['--ref', ref])
+    for tag, value in sorted(tags.items()):
+      cmd.extend(['--tag', '%s:%s' % (tag, value)])
+    return self.m.step(
+        'register %s' % package_name,
+        cmd,
+        step_test_data=lambda: self.m.json.test_api.output({
+          'result': {
+            'package': package_name,
+            'instance_id': 'fake-inst',
+          },
+        })
+    )
+
+  def ensure_installed(self, root, packages):
+    """Ensures that packages are installed in a given root dir.
+
+    packages must be a mapping from package name to its version, where
+      * name must be for right platform (see also ``platform_suffix``),
+      * version could be either instance_id, or ref, or unique tag.
+
+    If installing a package requires credentials, call
+    ``set_service_account_credentials`` before calling this function.
+    """
+    assert self._cipd_executable
+
+    package_list = ['%s %s' % (name, version)
+                    for name, version in sorted(packages.items())]
+    list_data = self.m.raw_io.input('\n'.join(package_list))
     bin_path = self.m.path['slave_build'].join('cipd')
-    cmd = [bin_path.join('cipd'), 'ensure',
-          '--root', root, '--list', list_data]
-    if service_account_credentials:
-      cmd.extend(['-service-account-json', service_account_credentials])
-    self.m.step('ensure_installed', cmd)
+    cmd = [
+      self._cipd_executable,
+      'ensure',
+      '--root', root,
+      '--list', list_data,
+      '--json-output', self.m.json.output(),
+    ]
+    if self._cipd_credentials:
+      cmd.extend(['--service-account-json', self._cipd_credentials])
+    return self.m.step(
+        'ensure_installed', cmd,
+        step_test_data=lambda: self.m.json.test_api.output({
+            'result': [
+              {
+                'package': 'infra/infra_libs/linux-amd64-ubuntu14_04',
+                'instance_id': '40-chars-long-actual-package-instance_id'
+              }
+            ]
+        })
+    )
+
+  def set_tag(self, package_name, version, tags):
+    assert self._cipd_executable
+    assert self._cipd_credentials
+    cmd = [
+      self._cipd_executable,
+      'set-tag', package_name,
+      '--version', version,
+      '--service-account-json', self._cipd_credentials,
+      '--json-output', self.m.json.output(),
+    ]
+    for t in tags:
+      cmd.extend(['--tag', t])
+
+    return self.m.step(
+      'cipd set-tag %s' % package_name,
+      cmd,
+      step_test_data=lambda: self.m.json.test_api.output({
+          'result': [
+            {
+              'package': package_name,
+              'pin': {
+                'package': package_name,
+                'instance_id': 'fake-instance-id'
+              }
+            }
+          ]
+      })
+    )
+
+  def set_ref(self, package_name, version, refs):
+    assert self._cipd_executable
+    assert self._cipd_credentials
+    cmd = [
+      self._cipd_executable,
+      'set-ref', package_name,
+      '--version', version,
+      '--service-account-json', self._cipd_credentials,
+      '--json-output', self.m.json.output(),
+    ]
+    for r in refs:
+      cmd.extend(['--ref', r])
+
+    return self.m.step(
+      'cipd set-ref %s' % package_name,
+      cmd,
+      step_test_data=lambda: self.m.json.test_api.output({
+          "result": [
+            {
+              "package": package_name,
+              "pin": {
+                "package": package_name,
+                "instance_id": "fake-instance-id"
+              }
+            }
+          ]
+      })
+    )

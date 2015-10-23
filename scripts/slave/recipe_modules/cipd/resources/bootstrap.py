@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import argparse
 import errno
 import hashlib
 import httplib
@@ -57,7 +58,7 @@ def install_cipd_client(path, package, version):
   # Already installed?
   installed_instance_id = (read_file(version_file) or '').strip()
   if installed_instance_id == instance_id and os.path.exists(bin_file):
-    return bin_file
+    return bin_file, instance_id
 
   # Resolve instance ID to an URL to fetch client binary from.
   client_info = call_cipd_api(
@@ -79,7 +80,7 @@ def install_cipd_client(path, package, version):
   write_file(bin_file, raw_client_bin)
   os.chmod(bin_file, 0755)
   write_file(version_file, instance_id + '\n')
-  return bin_file
+  return bin_file, instance_id
 
 
 def call_cipd_api(endpoint, query):
@@ -180,18 +181,27 @@ def dump_json(obj):
   return json.dumps(obj, indent=2, sort_keys=True, separators=(',',':'))
 
 
-def main():
-  data = json.load(sys.stdin)
-  package = "infra/tools/cipd/%s" % data['platform']
-  version = CLIENT_VERSIONS[data['platform']]
-  bin_path = data['bin_path']
+def main(args):
+  parser = argparse.ArgumentParser('bootstrap cipd')
+  parser.add_argument('--json-output', default=None)
+  parser.add_argument('--version', default=None)
+  parser.add_argument('--platform', required=True)
+  parser.add_argument('--dest-directory', required=True)
+  opts = parser.parse_args(args)
 
-  # return if this client version is already installed.
-  exe_path = os.path.join(bin_path, 'cipd')
+  package = "infra/tools/cipd/%s" % opts.platform
+  version = opts.version or CLIENT_VERSIONS[opts.platform]
+
   try:
-    if not os.path.isfile(exe_path):
-      out = install_cipd_client(bin_path, package, version)
-      assert out == exe_path
+    exe_path, instance_id = install_cipd_client(opts.dest_directory,
+                                                package, version)
+    result = {
+      'executable': exe_path,
+      'instance_id': instance_id
+    }
+    if opts.json_output:
+      with open(json_output_file, 'w') as f:
+        json.dump(result, f)
   except Exception as e:
     print ("Exception installing cipd: %s" % e)
     exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -201,4 +211,4 @@ def main():
   return 0
 
 if __name__ == '__main__':
-  sys.exit(main())
+  sys.exit(main(sys.argv[1:]))
