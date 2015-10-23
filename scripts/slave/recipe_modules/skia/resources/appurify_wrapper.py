@@ -113,6 +113,10 @@ dumpstate=1
 collect_artifacts=/sdcard/skia_results
 host_test=%s
 sdcard_files=%s
+
+[appurify]
+profiler=0
+videocapture=0
 ''' % (os.path.basename(test_apk), ','.join(sdcard_files))
   with open(robotium_cfg_file, 'w') as f:
     f.write(robotium_cfg)
