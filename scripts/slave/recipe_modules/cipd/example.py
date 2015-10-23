@@ -23,24 +23,27 @@ def RunSteps(api):
   }
   cipd_root = api.path['slave_build'].join('packages')
   # Some packages don't require credentials to be installed.
-  api.cipd.ensure_installed(cipd_root, packages)
+  api.cipd.ensure(cipd_root, packages)
   # Others do, so provide creds first.
   api.cipd.set_service_account_credentials('fake-credentials.json')
   packages['private/package/%s' % api.cipd.platform_suffix()] = 'latest'
-  api.cipd.ensure_installed(cipd_root, packages)
+  api.cipd.ensure(cipd_root, packages)
 
   # The rest of commands expect credentials to be set.
 
   # Build & register new package version.
-  api.cipd.build('fake-input-dir', 'fake-output-path', 'infra/fake-package')
-  api.cipd.register('fake-package-path',
+  api.cipd.build('fake-input-dir', 'fake-package-path', 'infra/fake-package')
+  api.cipd.build('fake-input-dir', 'fake-package-path', 'infra/fake-package',
+                 install_mode='copy')
+  api.cipd.register('infra/fake-package', 'fake-package-path',
                     refs=['fake-ref-1', 'fake-ref-2'],
                     tags={'fake_tag_1': 'fake_value_1',
                           'fake_tag_2': 'fake_value_2'})
 
   # Set tag or ref of an already existing package.
-  api.cipd.set_tag('fake-package', version='latest',
-                   tags=['dead:beaf', 'more:value'])
+  api.cipd.set_tag('fake-package',
+                   version='long/weird/ref/which/doesn/not/fit/into/40chars',
+                   tags={'dead': 'beaf', 'more': 'value'})
   api.cipd.set_ref('fake-package', version='latest', refs=['any', 'ref'])
 
 

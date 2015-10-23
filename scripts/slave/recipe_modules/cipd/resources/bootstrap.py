@@ -200,7 +200,7 @@ def main(args):
       'instance_id': instance_id
     }
     if opts.json_output:
-      with open(json_output_file, 'w') as f:
+      with open(opts.json_output, 'w') as f:
         json.dump(result, f)
   except Exception as e:
     print ("Exception installing cipd: %s" % e)

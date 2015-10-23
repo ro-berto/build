@@ -4,6 +4,19 @@
 
 from recipe_engine import recipe_api
 
+
+def _test_data_resolve_version(v):
+  if not v:
+    return '40-chars-fake-of-the-package-instance_id'
+  if len(v) == 40:
+    return v
+  # Truncate or pad to 40 chars.
+  prefix = 'resolved-instance_id-of-'
+  if len(v) + len(prefix) >= 40:
+    return '%s%s' % (prefix, v[:40-len(prefix)])
+  return '%s%s%s' % (prefix, v, '-' * (40 - len(prefix) - len(v)))
+
+
 class CIPDApi(recipe_api.RecipeApi):
   """CIPDApi provides support for CIPD."""
   def __init__(self, *args, **kwargs):
@@ -48,7 +61,7 @@ class CIPDApi(recipe_api.RecipeApi):
         (['--version', version] if version else []),
         step_test_data=lambda: self.m.json.test_api.output({
           'executable': str(self.m.path['slave_build'].join('cipd', 'cipd')),
-          'instance_id': 'fake-inst',
+          'instance_id': _test_data_resolve_version(version),
         }),
     )
     self._cipd_executable = step.json.output['executable']
@@ -61,8 +74,9 @@ class CIPDApi(recipe_api.RecipeApi):
   def get_executable(self):
     return self._cipd_executable
 
-  def build(self, input_dir, output_package, package_name):
+  def build(self, input_dir, output_package, package_name, install_mode=None):
     assert self._cipd_executable
+    assert not install_mode or install_mode in ['copy', 'symlink']
     return self.m.step(
         'build %s' % self.m.path.basename(package_name),
         [
@@ -72,21 +86,23 @@ class CIPDApi(recipe_api.RecipeApi):
           '--name', package_name,
           '--out', output_package,
           '--json-output', self.m.json.output(),
-        ],
+        ] + (
+          ['--install-mode', install_mode] if install_mode else []
+        ),
         step_test_data=lambda: self.m.json.test_api.output({
           'result': {
               'package': package_name,
-              'instance_id': 'fake-inst',
+              'instance_id': _test_data_resolve_version(None),
           },
         })
     )
 
-  def register(self, package_path, refs, tags):
+  def register(self, package_name, package_path, refs, tags):
     assert self._cipd_executable
     assert self._cipd_credentials
 
-    package_name = self.m.path.basename(package_path)
     cmd = [
+      self._cipd_executable,
       'pkg-register', package_path,
       '--service-account-json', self._cipd_credentials,
       '--json-output', self.m.json.output(),
@@ -101,12 +117,12 @@ class CIPDApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.m.json.test_api.output({
           'result': {
             'package': package_name,
-            'instance_id': 'fake-inst',
+            'instance_id': _test_data_resolve_version(None),
           },
         })
     )
 
-  def ensure_installed(self, root, packages):
+  def ensure(self, root, packages):
     """Ensures that packages are installed in a given root dir.
 
     packages must be a mapping from package name to its version, where
@@ -136,9 +152,9 @@ class CIPDApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.m.json.test_api.output({
             'result': [
               {
-                'package': 'infra/infra_libs/linux-amd64-ubuntu14_04',
-                'instance_id': '40-chars-long-actual-package-instance_id'
-              }
+                'package': name,
+                'instance_id': _test_data_resolve_version(version),
+              } for name, version in sorted(packages.items())
             ]
         })
     )
@@ -153,8 +169,8 @@ class CIPDApi(recipe_api.RecipeApi):
       '--service-account-json', self._cipd_credentials,
       '--json-output', self.m.json.output(),
     ]
-    for t in tags:
-      cmd.extend(['--tag', t])
+    for tag, value in sorted(tags.items()):
+      cmd.extend(['--tag', '%s:%s' % (tag, value)])
 
     return self.m.step(
       'cipd set-tag %s' % package_name,
@@ -165,7 +181,7 @@ class CIPDApi(recipe_api.RecipeApi):
               'package': package_name,
               'pin': {
                 'package': package_name,
-                'instance_id': 'fake-instance-id'
+                'instance_id': _test_data_resolve_version(version)
               }
             }
           ]
@@ -194,7 +210,7 @@ class CIPDApi(recipe_api.RecipeApi):
               "package": package_name,
               "pin": {
                 "package": package_name,
-                "instance_id": "fake-instance-id"
+                'instance_id': _test_data_resolve_version(version)
               }
             }
           ]

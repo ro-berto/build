@@ -14,10 +14,10 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "install cipd",
     "~followup_annotations": [
-      "@@@STEP_TEXT@cipd instance_id: fake-inst@@@",
+      "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"fake-inst\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -39,10 +39,10 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "install cipd (2)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@cipd instance_id: fake-inst@@@",
+      "@@@STEP_TEXT@cipd instance_id: resolved-instance_id-of-deadbeaf--------@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]/cipd/cipd\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"fake-inst\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"resolved-instance_id-of-deadbeaf--------\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -64,8 +64,8 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"40-chars-long-actual-package-instance_id\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/infra_libs/linux-amd64-ubuntu14_04\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"7f751b2237df2fdf3c1405be00590fefffbaea2d\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/monitoring/dispatcher/mac-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -91,8 +91,12 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"40-chars-long-actual-package-instance_id\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/infra_libs/linux-amd64-ubuntu14_04\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"7f751b2237df2fdf3c1405be00590fefffbaea2d\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/monitoring/dispatcher/mac-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"private/package/mac-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -108,7 +112,7 @@
       "--name",
       "infra/fake-package",
       "--out",
-      "fake-output-path",
+      "fake-package-path",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -117,7 +121,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"fake-inst\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/fake-package\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -126,6 +130,34 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/cipd/cipd",
+      "pkg-build",
+      "--in",
+      "fake-input-dir",
+      "--name",
+      "infra/fake-package",
+      "--out",
+      "fake-package-path",
+      "--json-output",
+      "/path/to/tmp/json",
+      "--install-mode",
+      "copy"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "build fake-package (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/fake-package\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/cipd/cipd",
       "pkg-register",
       "fake-package-path",
       "--service-account-json",
@@ -142,12 +174,12 @@
       "fake_tag_2:fake_value_2"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "register fake-package-path",
+    "name": "register infra/fake-package",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"fake-inst\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"package\": \"fake-package-path\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/fake-package\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -159,7 +191,7 @@
       "set-tag",
       "fake-package",
       "--version",
-      "latest",
+      "long/weird/ref/which/doesn/not/fit/into/40chars",
       "--service-account-json",
       "fake-credentials.json",
       "--json-output",
@@ -177,7 +209,7 @@
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"package\": \"fake-package\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"pin\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"fake-instance-id\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-long/weird/ref/w\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"package\": \"fake-package\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -210,7 +242,7 @@
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"package\": \"fake-package\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"pin\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"fake-instance-id\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"package\": \"fake-package\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
