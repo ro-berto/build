@@ -215,6 +215,10 @@ TRYBOTS = freeze({
         'buildername': 'Linux ARM',
         'analyze_mode': 'compile',
       },
+      'linux_blink_oilpan_rel': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux Oilpan',
+      },
       'linux_chromium_dbg_32_ng': {
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder (dbg)(32)',
