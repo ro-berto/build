@@ -154,24 +154,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cp",
-      "[SLAVE_BUILD]/src/out/Release/apks/Mandoline.apk",
-      "gs://mandoline/Mandoline.apk"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mandoline/Mandoline.apk@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[BUILD]/scripts/slave/android/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
@@ -655,6 +637,60 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "app_tests"
+  },
+  {
+    "cmd": [
+      "cat",
+      "[SLAVE_BUILD]/src/chrome/VERSION"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "get version",
+    "stdout": "/path/to/tmp/version",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Found version 37.0.2021.0@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "ls",
+      "gs://mandoline/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil ls gs://mandoline/",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@ls result stdout@@@@",
+      "@@@STEP_LOG_END@ls result stdout@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "upload_mandoline"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "[SLAVE_BUILD]/src/out/Release/apks/Mandoline.apk",
+      "gs://mandoline/37.0.2021.0/android/Mandoline.apk"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mandoline/37.0.2021.0/android/Mandoline.apk@@@"
+    ]
   },
   {
     "name": "$result",

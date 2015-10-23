@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import re
+
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 
@@ -10,7 +12,9 @@ DEPS = [
   'chromium',
   'chromium_android',
   'gsutil',
+  'raw_io',
   'path',
+  'platform',
   'properties',
   'python',
   'step',
@@ -103,10 +107,33 @@ def _GetBotConfig(api):
 
 
 @recipe_api.composite_step
-def _UploadMandolineAPKToGoogleStorage(api):
-  with api.step.defer_results():
-    apk = api.chromium.output_dir.join('apks', 'Mandoline.apk')
-    api.gsutil.upload(apk, 'mandoline', 'Mandoline.apk')
+def _UploadMandolineToGoogleStorage(api):
+  # Get the release version, which is updated daily for Chrome canary.
+  v = api.chromium.get_version()
+  version = '%s.%s.%s.%s' % (v['MAJOR'], v['MINOR'], v['BUILD'], v['PATCH'])
+  assert re.match('^\d+\.\d+\.\d+\.\d+$', version), 'Error: Bad version %r' % v
+  api.step.active_result.presentation.step_text = 'Found version %s' % version
+
+  # Check if the current version is already uploaded for the given platform.
+  bucket = 'mandoline'
+  url = 'gs://%s/%s' % (bucket, version)
+  result = api.gsutil.ls(bucket, '', stdout=api.raw_io.output())
+  result.presentation.logs['ls result stdout'] = [result.stdout or '']
+  if result.stdout and url in result.stdout:
+    result = api.gsutil.ls(bucket, version, stdout=api.raw_io.output())
+    result.presentation.logs['ls result stdout'] = [result.stdout or '']
+  url = '%s/%s' % (url, api.chromium.c.TARGET_PLATFORM)
+
+  api.step('upload_mandoline', None)
+  if result.stdout and url in result.stdout:
+    api.step.active_result.presentation.step_text = 'Skipping; already uploaded'
+    return
+
+  path = '%s/%s' % (version, api.chromium.c.TARGET_PLATFORM)
+  name = 'Mandoline.apk'
+  local_path = api.chromium.output_dir.join('apks', name)
+  remote_path = '%s/%s' % (path, name)
+  api.gsutil.upload(local_path, bucket, remote_path)
 
 
 @recipe_api.composite_step
@@ -182,7 +209,6 @@ def RunSteps(api):
   api.chromium.compile(targets=['mandoline:all'])
 
   if api.chromium.c.TARGET_PLATFORM == 'android':
-    _UploadMandolineAPKToGoogleStorage(api)
     api.chromium_android.detect_and_setup_devices()
 
   bot_config = _GetBotConfig(api)
@@ -190,8 +216,22 @@ def RunSteps(api):
     _RunPerfTests(api, bot_config['perf_test_info'])
   else:
     _RunUnitAndAppTests(api)
+    # TODO(msw): Upload binaries on Windows and Linux.
+    if api.chromium.c.TARGET_PLATFORM == 'android':
+      _UploadMandolineToGoogleStorage(api)
 
 
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
     yield test
+
+  # Ensure upload is skipped if version/platform binaries are already uploaded.
+  test = api.test('test_upload_skipped_for_existing_binaries')
+  test += api.platform.name('linux')
+  test += api.properties.generic(buildername='Chromium Mojo Android',
+                                 mastername='chromium.mojo')
+  # This relies on api.chromium.get_version's hard-coded step_test_data version.
+  test_ls = api.raw_io.output('gs://mandoline/37.0.2021.0/android/')
+  test += api.step_data('gsutil ls gs://mandoline/', stdout=test_ls)
+  test += api.step_data('gsutil ls gs://mandoline/37.0.2021.0', stdout=test_ls)
+  yield test
