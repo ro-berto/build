@@ -272,11 +272,11 @@
     "name": "trigger (6)",
     "trigger_specs": [
       {
-        "builder_name": "Mac 10.9 Perf (1)"
+        "builder_name": "Mac 10.11 Perf (1)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Mac 10.9 Perf (1)@@@"
+      "@@@STEP_TEXT@Mac 10.11 Perf (1)@@@"
     ]
   },
   {
@@ -285,11 +285,11 @@
     "name": "trigger (7)",
     "trigger_specs": [
       {
-        "builder_name": "Mac 10.9 Perf (2)"
+        "builder_name": "Mac 10.11 Perf (2)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Mac 10.9 Perf (2)@@@"
+      "@@@STEP_TEXT@Mac 10.11 Perf (2)@@@"
     ]
   },
   {
@@ -298,11 +298,11 @@
     "name": "trigger (8)",
     "trigger_specs": [
       {
-        "builder_name": "Mac 10.9 Perf (3)"
+        "builder_name": "Mac 10.11 Perf (3)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Mac 10.9 Perf (3)@@@"
+      "@@@STEP_TEXT@Mac 10.11 Perf (3)@@@"
     ]
   },
   {
@@ -311,11 +311,11 @@
     "name": "trigger (9)",
     "trigger_specs": [
       {
-        "builder_name": "Mac 10.9 Perf (4)"
+        "builder_name": "Mac 10.11 Perf (4)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Mac 10.9 Perf (4)@@@"
+      "@@@STEP_TEXT@Mac 10.11 Perf (4)@@@"
     ]
   },
   {
@@ -324,11 +324,11 @@
     "name": "trigger (10)",
     "trigger_specs": [
       {
-        "builder_name": "Mac 10.9 Perf (5)"
+        "builder_name": "Mac 10.11 Perf (5)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Mac 10.9 Perf (5)@@@"
+      "@@@STEP_TEXT@Mac 10.11 Perf (5)@@@"
     ]
   },
   {

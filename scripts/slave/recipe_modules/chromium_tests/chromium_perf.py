@@ -148,9 +148,9 @@ _AddTestSpec('Win XP Perf', 'chromium-rel-xp-dual', 'win',
              target_bits=32, num_host_shards=5)
 
 
-_AddTestSpec('Mac 10.10 Perf', 'chromium-rel-mac10', 'mac',
+_AddTestSpec('Mac 10.11 Perf', 'chromium-rel-mac11', 'mac',
              num_host_shards=5)
-_AddTestSpec('Mac 10.9 Perf', 'chromium-rel-mac9', 'mac',
+_AddTestSpec('Mac 10.10 Perf', 'chromium-rel-mac10', 'mac',
              num_host_shards=5)
 _AddTestSpec('Mac Retina Perf', 'chromium-rel-mac-retina', 'mac',
              num_host_shards=5)

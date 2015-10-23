@@ -7,7 +7,7 @@
       "--master",
       "chromium.perf",
       "--builder",
-      "Mac 10.9 Perf (5)",
+      "Mac 10.11 Perf (3)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -130,7 +130,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Mac 10.9 Perf (5)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"chromium-rel-mac9\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
+      "{\"buildername\": \"Mac 10.11 Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"chromium-rel-mac11\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
