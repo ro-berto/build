@@ -29,6 +29,7 @@ SimpleLeak = TestStepConfig('simpleleak')
 Test262 = TestStepConfig('test262')
 Test262Variants = TestStepConfig('test262_variants')
 Test262Variants_2 = TestStepConfig('test262_variants', shards=2)
+Test262Variants_3 = TestStepConfig('test262_variants', shards=3)
 Unittests = TestStepConfig('unittests')
 V8Initializers = TestStepConfig('v8initializers')
 V8Testing = TestStepConfig('v8testing')
@@ -87,6 +88,7 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux_dbg_archive',
+        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 GC Stress - 1',
@@ -213,7 +215,8 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': [V8Testing, Benchmarks, Mozilla, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing, Benchmarks, Test262Variants_3, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - avx2': {
@@ -227,6 +230,7 @@ BUILDERS = {
         'tests': [V8Testing, Benchmarks, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
+      # TODO(machenbach): Remove this builder.
       'V8 Linux - test262 - debug': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -366,6 +370,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
+        'enable_swarming': True,
         'tests': [V8Testing, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
@@ -378,6 +383,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
+        'enable_swarming': True,
         'tests': [V8Testing, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
@@ -423,8 +429,8 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': [Mjsunit, Mozilla, Test262, Benchmarks,
-                  SimdJs],
+        'enable_swarming': True,
+        'tests': [Mjsunit, Mozilla, Test262, Benchmarks, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - greedy allocator': {
@@ -436,6 +442,8 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
+        'enable_swarming': True,
+        # TODO(machenbach): Add test262 and mozilla tests.
         'tests': [V8Testing, Benchmarks, SimdJs],
         'testing': {'platform': 'linux'},
       },
