@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from master import master_config
+from master.factory import annotator_factory
 from master.factory import chromium_factory
 
 import master_site_config
@@ -24,6 +25,8 @@ def linux(): return chromium_factory.ChromiumFactory(
 def mac(): return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin')
 def linux_android(): return chromium_factory.ChromiumFactory(
     'src/out', 'linux2', nohooks_on_update=True, target_os='android')
+
+m_annotator = annotator_factory.AnnotatorFactory()
 
 defaults['category'] = '1clobber'
 
@@ -118,26 +121,7 @@ F('linux_clobber', linux().ChromiumFactory(
 
 B('Linux x64', 'linux64_clobber', 'compile|testers', 'chromium',
   notify_on_missing=True)
-F('linux64_clobber', linux().ChromiumFactory(
-    clobber=True,
-    tests=[
-      'sizes',
-    ],
-    options=['--compiler=goma', '--', 'all'],
-    factory_properties={
-      'archive_build': ActiveMaster.is_production_host,
-      'confirm_noop_compile': True,
-      'gs_bucket': 'gs://chromium-browser-snapshots',
-      'gs_acl': 'public-read',
-      'show_perf_results': True,
-      'generate_gtest_json': ActiveMaster.is_production_host,
-      'perf_id': 'chromium-rel-linux-64',
-      'expectations': True,
-      'gclient_env': {
-        'GYP_DEFINES':
-            'target_arch=x64 test_isolation_mode=noop linux_dump_symbols=0',
-      },
-    }))
+F('linux64_clobber', m_annotator.BaseFactory('chromium'))
 
 ################################################################################
 ## Android
