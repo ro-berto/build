@@ -148,22 +148,7 @@ def _parse_result_values_from_output(metric, text):  # pragma: no cover
       list_of_floats.append(float(v))
     except ValueError:
       pass
-  values_list = list_of_floats
-
-  # If the metric is times/t, we need to sum the timings in order to get
-  # similar regression results as the try-bots.
-  metrics_to_sum = [
-      ['times', 't'],
-      ['times', 'page_load_time'],
-      ['cold_times', 'page_load_time'],
-      ['warm_times', 'page_load_time'],
-  ]
-
-  if metric in metrics_to_sum:
-    if values_list:
-      values_list = [reduce(lambda x, y: float(x) + float(y), values_list)]
-
-  return values_list
+  return list_of_floats
 
 
 def _parse_histogram_values_from_output(metric, text):  # pragma: no cover
