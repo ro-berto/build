@@ -691,10 +691,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "upload_mandoline",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Skipping; already uploaded@@@"
-    ]
+    "name": "skipping mandoline upload: release already exits"
   },
   {
     "name": "$result",

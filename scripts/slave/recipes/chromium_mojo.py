@@ -11,6 +11,7 @@ DEPS = [
   'bot_update',
   'chromium',
   'chromium_android',
+  'file',
   'gsutil',
   'raw_io',
   'path',
@@ -124,16 +125,24 @@ def _UploadMandolineToGoogleStorage(api):
     result.presentation.logs['ls result stdout'] = [result.stdout or '']
   url = '%s/%s' % (url, api.chromium.c.TARGET_PLATFORM)
 
-  api.step('upload_mandoline', None)
   if result.stdout and url in result.stdout:
-    api.step.active_result.presentation.step_text = 'Skipping; already uploaded'
+    api.step('skipping mandoline upload: release already exits', None)
     return
 
-  path = '%s/%s' % (version, api.chromium.c.TARGET_PLATFORM)
-  name = 'Mandoline.apk'
-  local_path = api.chromium.output_dir.join('apks', name)
-  remote_path = '%s/%s' % (path, name)
-  api.gsutil.upload(local_path, bucket, remote_path)
+  # Read a limited FILES.cfg file-list format, uploading each applicable entry.
+  files = api.path['checkout'].join('mandoline', 'tools', 'data', 'FILES.cfg')
+  test_data = 'FILES=[{\'filepath\': \'foo\', \'platforms\': [\'linux\'],},]'
+  files_data = api.file.read('read FILES.cfg', files, test_data=test_data)
+  execution_globals = {}
+  exec(files_data, execution_globals)
+  gs_path = '%s/%s' % (version, api.chromium.c.TARGET_PLATFORM)
+  for file_dictionary in execution_globals['FILES']:
+    if api.chromium.c.TARGET_PLATFORM in file_dictionary['platforms']:
+      file_path = file_dictionary['filepath']
+      local_path = api.chromium.output_dir.join(file_path)
+      remote_path = '%s/%s' % (gs_path, file_path)
+      args = ['-r'] if file_dictionary.get('directory', False) else []
+      api.gsutil.upload(local_path, bucket, remote_path, args=args)
 
 
 @recipe_api.composite_step
@@ -216,9 +225,7 @@ def RunSteps(api):
     _RunPerfTests(api, bot_config['perf_test_info'])
   else:
     _RunUnitAndAppTests(api)
-    # TODO(msw): Upload binaries on Windows and Linux.
-    if api.chromium.c.TARGET_PLATFORM == 'android':
-      _UploadMandolineToGoogleStorage(api)
+    _UploadMandolineToGoogleStorage(api)
 
 
 def GenTests(api):

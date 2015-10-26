@@ -670,27 +670,15 @@
     ]
   },
   {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "upload_mandoline"
-  },
-  {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cp",
-      "[SLAVE_BUILD]/src/out/Release/apks/Mandoline.apk",
-      "gs://mandoline/37.0.2021.0/android/Mandoline.apk"
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/mandoline/tools/data/FILES.cfg",
+      "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mandoline/37.0.2021.0/android/Mandoline.apk@@@"
-    ]
+    "name": "read FILES.cfg"
   },
   {
     "name": "$result",
