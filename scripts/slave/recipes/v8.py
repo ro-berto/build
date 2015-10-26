@@ -288,13 +288,3 @@ def GenTests(api):
         'Bisect.Fetch changes', api.v8.example_one_buildbot_change()) +
     api.time.step(120)
   )
-
-  yield (
-    api.v8.test(
-        'client.v8',
-        'V8 GC Stress - 3',
-        'bisect_no_shards',
-    ) +
-    api.v8.fail('Mjsunit') +
-    api.time.step(120)
-  )
