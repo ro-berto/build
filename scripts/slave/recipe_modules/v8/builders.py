@@ -67,9 +67,9 @@ BUILDERS = {
         ],
       },
       'V8 Linux - swarming staging builder': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'no_snapshot'],
         'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
+          'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
@@ -166,20 +166,18 @@ BUILDERS = {
         },
       },
       'V8 Linux - swarming staging': {
+        'v8_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
+          'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - swarming staging builder',
         'build_gs_archive': 'linux_swarming_staging_archive',
         'tests': [
-          V8Initializers,
           V8Testing,
-          OptimizeForSize,
-          Benchmarks,
           SimdJs,
-          Test262Variants_2,
+          Test262,
           Mozilla,
         ],
         'testing': {'platform': 'linux'},
