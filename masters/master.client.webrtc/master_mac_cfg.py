@@ -50,7 +50,7 @@ def Update(c):
     {'name': 'iOS32 Release', 'slavebuilddir': 'mac32'},
     {'name': 'iOS64 Debug', 'slavebuilddir': 'mac64'},
     {'name': 'iOS64 Release', 'slavebuilddir': 'mac64'},
-    {'name': 'iOS32 Simulator Debug','slavebuilddir': 'mac64'},
+    {'name': 'iOS32 Simulator Debug','slavebuilddir': 'mac32'},
     {'name': 'iOS64 Simulator Debug', 'slavebuilddir': 'mac64'},
   ]
 

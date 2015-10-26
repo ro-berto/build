@@ -1089,6 +1089,72 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
       },
+      'iOS32 Debug (XCode 7)': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'iOS32 Release (XCode 7)': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'iOS64 Debug (XCode 7)': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'iOS64 Release (XCode 7)': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'iOS32 Simulator Debug (XCode 7)': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'TARGET_ARCH': 'intel',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'iOS64 Simulator Debug (XCode 7)': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'intel',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
       'Linux Tsan v2 (parallel)': {
         'recipe_config': 'webrtc_parallel_clang',
         'chromium_apply_config': ['tsan2'],

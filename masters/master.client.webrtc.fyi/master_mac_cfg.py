@@ -19,6 +19,12 @@ def Update(c):
                                 'Mac64 Release (XCode 7)',
                                 'Mac64 Release (swarming)',
                                 'Mac Asan (parallel)',
+                                'iOS32 Debug (XCode 7)',
+                                'iOS32 Release (XCode 7)',
+                                'iOS64 Debug (XCode 7)',
+                                'iOS64 Release (XCode 7)',
+                                'iOS32 Simulator Debug (XCode 7)',
+                                'iOS64 Simulator Debug (XCode 7)',
                             ]),
   ])
 
@@ -42,6 +48,30 @@ def Update(c):
     {
       'name': 'Mac Asan (parallel)',
       'slavebuilddir': 'mac_asan',
+    },
+    {
+      'name': 'iOS32 Debug (XCode 7)',
+      'slavebuilddir': 'mac32',
+    },
+    {
+      'name': 'iOS32 Release (XCode 7)',
+      'slavebuilddir': 'mac32',
+    },
+    {
+      'name': 'iOS64 Debug (XCode 7)',
+      'slavebuilddir': 'mac64',
+    },
+    {
+      'name': 'iOS64 Release (XCode 7)',
+      'slavebuilddir': 'mac64',
+    },
+    {
+      'name': 'iOS32 Simulator Debug (XCode 7)',
+      'slavebuilddir': 'mac32',
+    },
+    {
+      'name': 'iOS64 Simulator Debug (XCode 7)',
+      'slavebuilddir': 'mac64',
     },
   ]
 
