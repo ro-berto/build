@@ -16,6 +16,7 @@ def Update(c):
                             builderNames=[
                                 'Mac64 Debug (parallel)',
                                 'Mac64 Release (parallel)',
+                                'Mac64 Release (XCode 7)',
                                 'Mac64 Release (swarming)',
                                 'Mac Asan (parallel)',
                             ]),
@@ -28,6 +29,10 @@ def Update(c):
     },
     {
       'name': 'Mac64 Release (parallel)',
+      'slavebuilddir': 'mac64',
+    },
+    {
+      'name': 'Mac64 Release (XCode 7)',
       'slavebuilddir': 'mac64',
     },
     {
