@@ -498,17 +498,16 @@ class Bisector(object):
     """
     if (revision.bad and revision.previous_revision and
         revision.previous_revision.good):  # pragma: no cover
-      if revision.deps_change():
-        more_revisions = self._expand_deps_revisions(revision)
-        return not more_revisions
+      if revision.deps_change() and self._expand_deps_revisions(revision):
+        return False
       self.culprit = revision
       self._compute_results_confidence()
       return True
     if (revision.good and revision.next_revision and
         revision.next_revision.bad):
-      if revision.next_revision.deps_change():
-        more_revisions = self._expand_deps_revisions(revision.next_revision)
-        return not more_revisions
+      if (revision.next_revision.deps_change()
+          and self._expand_deps_revisions(revision.next_revision)):
+        return False
       self.culprit = revision.next_revision
       self._compute_results_confidence()
       return True
