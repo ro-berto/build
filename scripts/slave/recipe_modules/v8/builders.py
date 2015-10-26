@@ -112,6 +112,7 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux_nosnap_rel_archive',
+        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux - nosnap',
@@ -125,10 +126,10 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux_nosnap_dbg_archive',
+        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
-          'V8 Linux - nosnap - debug - 1',
-          'V8 Linux - nosnap - debug - 2',
+          'V8 Linux - nosnap - debug',
         ],
       },
       'V8 Linux - presubmit': {
@@ -247,6 +248,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - nosnap builder',
         'build_gs_archive': 'linux_nosnap_rel_archive',
+        'enable_swarming': True,
         'tests': [
           V8Testing,
           SimdJs,
@@ -255,7 +257,7 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - nosnap - debug - 1': {
+      'V8 Linux - nosnap - debug': {
         'v8_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -266,21 +268,8 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - nosnap debug builder',
         'build_gs_archive': 'linux_nosnap_dbg_archive',
-        'tests': [V8Testing, Mozilla, SimdJs],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux - nosnap - debug - 2': {
-        'v8_apply_config': ['no_snapshot'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-          'SHARD_COUNT': 2,
-          'SHARD_RUN': 2,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux - nosnap debug builder',
-        'build_gs_archive': 'linux_nosnap_dbg_archive',
-        'tests': [V8Testing, Mozilla, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - isolates': {
