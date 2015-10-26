@@ -21,6 +21,7 @@ Deopt = TestStepConfig('deopt')
 Fuzz = TestStepConfig('fuzz')
 GCMole = TestStepConfig('gcmole')
 Mjsunit = TestStepConfig('mjsunit')
+Mjsunit_3 = TestStepConfig('mjsunit', shards=3)
 Mozilla = TestStepConfig('mozilla')
 OptimizeForSize = TestStepConfig('optimize_for_size')
 Presubmit = TestStepConfig('presubmit')
@@ -33,6 +34,7 @@ Test262Variants_3 = TestStepConfig('test262_variants', shards=3)
 Unittests = TestStepConfig('unittests')
 V8Initializers = TestStepConfig('v8initializers')
 V8Testing = TestStepConfig('v8testing')
+V8Testing_2 = TestStepConfig('v8testing', shards=2)
 Webkit = TestStepConfig('webkit')
 
 
@@ -1561,6 +1563,7 @@ BUILDERS = {
           OptimizeForSize,
           Test262,
           Mozilla,
+          Benchmarks,
           SimdJs,
         ],
         'testing': {'platform': 'linux'},
@@ -1585,7 +1588,8 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, Benchmarks, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing, Test262, Mozilla, Benchmarks, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_dbg': {
@@ -1595,7 +1599,8 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262, Mozilla, Benchmarks, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_greedy_allocator_dbg': {
@@ -1606,7 +1611,9 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, Benchmarks, SimdJs],
+        'enable_swarming': True,
+        # TODO(machenbach): Add test262 and mozilla.
+        'tests': [V8Testing_2, Benchmarks, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_rel': {
@@ -1708,7 +1715,8 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [Mjsunit, Webkit],
+        'enable_swarming': True,
+        'tests': [Mjsunit_3, Webkit],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_asan_rel': {
