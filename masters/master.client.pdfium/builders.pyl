@@ -1,0 +1,71 @@
+{
+  "master_base_class": "Master3",
+  "master_classname": "Pdfium",
+  "master_port": 20310,
+  "master_port_alt": 40310,
+  "slave_port": 30310,
+  "templates": ["templates", "../master.chromium/templates"],
+
+  "builders": {
+    "linux": {
+      "recipe": "pdfium",
+      "scheduler": "pdfium_commits",
+      "slave_pools": ["linux_trusty"],
+    },
+    "mac": {
+      "recipe": "pdfium",
+      "scheduler": "pdfium_commits",
+      "slave_pools": ["mac"],
+    },
+    "windows": {
+      "recipe": "pdfium",
+      "scheduler": "pdfium_commits",
+      "slave_pools": ["windows"],
+    },
+  },
+
+  "schedulers": {
+    "pdfium_commits": {
+      "type": "git_poller",
+      "git_repo_url": "https://pdfium.googlesource.com/pdfium.git",
+    },
+  },
+
+  "slave_pools": {
+    "linux_trusty": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": [
+        "vm71-m3",
+        "vm123-m3",
+        "vm189-m3",
+        "vm191-m3",
+        "vm198-m3",
+        "vm202-m3",
+      ],
+    },
+    "mac": {
+      "slave_data": {
+        "bits": 64,
+        "os": "mac",
+        "version": "10.9",
+      },
+      "slaves": [
+        "vm635-m3",
+      ],
+    },
+    "windows": {
+      "slave_data": {
+        "bits": 64,
+        "os": "win",
+        "version": "win7",
+      },
+      "slaves": [
+        "vm144-m3",
+      ],
+    },
+  },
+}
