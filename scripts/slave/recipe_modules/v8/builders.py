@@ -262,8 +262,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
-          'SHARD_COUNT': 2,
-          'SHARD_RUN': 1,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - nosnap debug builder',
