@@ -16,15 +16,16 @@ def Update(c):
                             treeStableTimer=0,
                             builderNames=[
                                 'Linux32 ARM',
+                                'Linux64 GCC',
                                 'Linux64 Release (swarming)',
                                 'Linux Tsan v2 (parallel)',
       ]),
-      # Run WebRTC DEPS roller every EMEA morning at 4am, 12pm and 8pm.
+      # Run WebRTC DEPS roller at CET hours: 4am, 12pm and 8pm.
       Nightly(
           name='webrtc_deps',
           branch=None,
           builderNames=['Auto-roll - WebRTC DEPS'],
-          hour=[19,3,11],
+          hour=[19,3,11],  # Pacific timezone.
       ),
   ])
 
