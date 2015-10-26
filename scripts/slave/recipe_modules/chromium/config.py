@@ -326,6 +326,14 @@ def dcheck(c, invert=False):
 def fastbuild(c, invert=False):
   c.gyp_env.GYP_DEFINES['fastbuild'] = int(not invert)
 
+@config_ctx()
+def no_dump_symbols(c):
+  c.gyp_env.GYP_DEFINES['linux_dump_symbols'] = 0
+
+@config_ctx()
+def isolation_mode_noop(c):
+  c.gyp_env.GYP_DEFINES['test_isolation_mode'] = 'noop'
+
 @config_ctx(group='link_type')
 def shared_library(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'

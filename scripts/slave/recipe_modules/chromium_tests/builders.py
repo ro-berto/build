@@ -4,6 +4,7 @@
 
 from recipe_engine.types import freeze
 
+from . import chromium
 from . import chromium_android
 from . import chromium_angle
 from . import chromium_chrome
@@ -25,6 +26,7 @@ from . import tryserver_chromium_mac
 from . import tryserver_chromium_perf
 
 BUILDERS = freeze({
+  'chromium': chromium.SPEC,
   'chromium.android': chromium_android.SPEC,
   'chromium.angle': chromium_angle.SPEC,
   'chromium.chrome': chromium_chrome.SPEC,

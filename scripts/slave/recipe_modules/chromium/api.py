@@ -659,7 +659,8 @@ class ChromiumApi(recipe_api.RecipeApi):
                                 'win_apply_syzyasan.py'),
       args)
 
-  def archive_build(self, step_name, gs_bucket, gs_acl=None, **kwargs):
+  def archive_build(self, step_name, gs_bucket, gs_acl=None, mode=None,
+                    **kwargs):
     """Returns a step invoking archive_build.py to archive a Chromium build."""
 
     # archive_build.py insists on inspecting factory properties. For now just
@@ -679,6 +680,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += [
         '--build-properties', self.m.json.dumps(self.build_properties),
       ]
+    if mode:
+      args.extend(['--mode', mode])
     self.m.python(
       step_name,
       self.m.path['build'].join('scripts', 'slave', 'chromium',

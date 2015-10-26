@@ -453,6 +453,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             'builder_name': loop_buildername,
           })
 
+    if bot_config.get('archive_build'):
+      self.m.chromium.archive_build(
+          'archive_build',
+          bot_config['gs_bucket'],
+          bot_config.get('gs_acl'),
+          mode='dev'
+      )
+
   def run_mb_and_compile(self, compile_targets, isolated_targets, name_suffix):
     if self.m.chromium.c.project_generator.tool == 'mb':
       # We don't use the mastername and buildername passed in, because
