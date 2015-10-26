@@ -148,7 +148,6 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/v8/out/Release/benchmarks.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/mozilla.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/optimize_for_size.isolated.gen.json",
@@ -159,7 +158,6 @@
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"benchmarks\": \"[dummy hash for benchmarks]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", @@@",
@@ -181,11 +179,6 @@
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
     "name": "Mozilla - skipped"
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Benchmarks - skipped"
   },
   {
     "cmd": [],
