@@ -103,7 +103,6 @@ BUILDERS = {
           'V8 Linux - debug - nosse3',
           'V8 Linux - debug - nosse4',
           'V8 Linux - memcheck',
-          'V8 Linux - test262 - debug',
           'V8 Linux - debug - greedy allocator',
         ],
       },
@@ -230,18 +229,6 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'tests': [V8Testing, Benchmarks, Mozilla, SimdJs],
-        'testing': {'platform': 'linux'},
-      },
-      # TODO(machenbach): Remove this builder.
-      'V8 Linux - test262 - debug': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux - debug builder',
-        'build_gs_archive': 'linux_dbg_archive',
-        'tests': [Test262Variants],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - shared': {
