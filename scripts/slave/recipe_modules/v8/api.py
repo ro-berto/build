@@ -204,6 +204,10 @@ class V8Api(recipe_api.RecipeApi):
       self.m.swarming.add_default_tag('purpose:post-commit')
       self.m.swarming.add_default_tag('purpose:CI')
 
+    # Overwrite defaults with per-bot settings.
+    self.m.swarming.default_priority = self.bot_config.get(
+        'swarming_priority', self.m.swarming.default_priority)
+
   def runhooks(self, **kwargs):
     env = {}
     if self.c.gyp_env.AR:
