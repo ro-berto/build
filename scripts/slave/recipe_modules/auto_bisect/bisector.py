@@ -71,7 +71,7 @@ class Bisector(object):
       self.revisions = []
       self.bad_rev = revision_class(bisect_config['bad_revision'], self)
       self.bad_rev.bad = True
-      self.bad_rev.read_deps()
+      self.bad_rev.read_deps(self.get_perf_tester_name())
       api.m.step.active_result.presentation.logs['Debug Bad Revision DEPS'] = [
           '%s: %s' % (key, value) for key, value in
           self.bad_rev.deps.iteritems()]
@@ -79,7 +79,7 @@ class Bisector(object):
       self.fkbr = self.bad_rev
       self.good_rev = revision_class(bisect_config['good_revision'], self)
       self.good_rev.good = True
-      self.good_rev.read_deps()
+      self.good_rev.read_deps(self.get_perf_tester_name())
       api.m.step.active_result.presentation.logs['Debug Good Revision DEPS'] = [
           '%s: %s' % (key, value) for key, value in
           self.good_rev.deps.iteritems()]
@@ -300,8 +300,9 @@ class Bisector(object):
     try:
       min_revision = revision_to_expand.previous_revision
       max_revision = revision_to_expand
-      min_revision.read_deps()  # Parses DEPS file and sets the .deps property.
-      max_revision.read_deps()  # Ditto.
+      # Parses DEPS file and sets the .deps property.
+      min_revision.read_deps(self.get_perf_tester_name())
+      max_revision.read_deps(self.get_perf_tester_name())
       for depot_name in depot_config.DEPOT_DEPS_NAME.keys():
         if depot_name in min_revision.deps and depot_name in max_revision.deps:
           dep_revision_min = min_revision.deps[depot_name]

@@ -54,7 +54,8 @@ def RunSteps(api):
   revisions_to_check = bisector.get_revisions_to_eval(2)
   if revisions_to_check:
     revisions_to_check[0].start_job()
-    revisions_to_check[0].read_deps()  # Only added for coverage.
+    # Only added for coverage.
+    revisions_to_check[0].read_deps(bisector.get_perf_tester_name())
     api.auto_bisect.query_revision_info(revisions_to_check[0].commit_hash)
   else:
     raise api.step.StepFailure('Expected revisions to check.')

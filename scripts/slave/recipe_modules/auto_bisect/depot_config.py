@@ -23,7 +23,7 @@ DEPOT_DEPS_NAME = {
         'src_old': 'src/third_party/angle_dx11',
         'recurse': True,
         'from': ['chromium'],
-        'platform': 'nt',
+        'platform': 'win',
         'viewvc': 'https://chromium.googlesource.com/angle/angle/+/',
         'deps_var': 'angle_revision'
     },

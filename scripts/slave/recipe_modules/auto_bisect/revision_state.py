@@ -188,7 +188,7 @@ class RevisionState(object):
     }
     return deps_data
 
-  def read_deps(self):
+  def read_deps(self, recipe_tester_name):
     """Sets the dependencies for this revision from the contents of DEPS."""
     api = self.bisector.api
     if self.deps:
@@ -209,9 +209,7 @@ class RevisionState(object):
     results = {}
     for depot_name, depot_data in depot_config.DEPOT_DEPS_NAME.iteritems():
       if (depot_data.get('platform') and
-          depot_data.get('platform') != os.name):
-        # TODO(robertocn) we shouldn't be checking the os of the bot running the
-        # bisector, but the os the tester would be running on.
+          depot_data.get('platform') not in recipe_tester_name.lower()):
         continue
 
       if (depot_data.get('recurse') and
