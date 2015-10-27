@@ -1570,7 +1570,8 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing],
+        'enable_swarming': True,
+        'tests': [V8Testing_2],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_dbg': {
@@ -1580,7 +1581,8 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing],
+        'enable_swarming': True,
+        'tests': [V8Testing_2],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_gcc_compile_rel': {
@@ -1609,6 +1611,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'tests': [
           V8Initializers,
           V8Testing,
@@ -1652,6 +1655,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'tests': [V8Testing, Benchmarks],
         'testing': {'platform': 'linux'},
       },
