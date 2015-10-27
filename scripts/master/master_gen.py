@@ -164,10 +164,18 @@ def _ComputeChangeSourceAndTagComparator(builders):
   change_source = []
   tag_comparator = None
 
-  for url in sorted(set(v['git_repo_url'] for
-                        v in builders['schedulers'].values()
-                        if v['type'] == 'git_poller')):
-    change_source.append(gitiles_poller.GitilesPoller(url))
+  git_urls_to_branches = {}
+  for scheduler_config in builders['schedulers'].values():
+    if scheduler_config['type'] != 'git_poller':
+      continue
+
+    url = scheduler_config['git_repo_url']
+    branch = scheduler_config.get('branch', 'master')
+    git_urls_to_branches.setdefault(url, set()).add(branch)
+
+  for url, branches in git_urls_to_branches.iteritems():
+    change_source.append(
+        gitiles_poller.GitilesPoller(url, branches=list(branches)))
 
   for scheduler_config in builders['schedulers'].values():
     if scheduler_config['type'] != 'repo_poller':
