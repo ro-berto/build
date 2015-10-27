@@ -28,6 +28,7 @@ Presubmit = TestStepConfig('presubmit')
 SimdJs = TestStepConfig('simdjs')
 SimpleLeak = TestStepConfig('simpleleak')
 Test262 = TestStepConfig('test262')
+Test262_2 = TestStepConfig('test262', shards=2)
 Test262Variants = TestStepConfig('test262_variants')
 Test262Variants_2 = TestStepConfig('test262_variants', shards=2)
 Test262Variants_3 = TestStepConfig('test262_variants', shards=3)
@@ -35,6 +36,7 @@ Unittests = TestStepConfig('unittests')
 V8Initializers = TestStepConfig('v8initializers')
 V8Testing = TestStepConfig('v8testing')
 V8Testing_2 = TestStepConfig('v8testing', shards=2)
+V8Testing_4 = TestStepConfig('v8testing', shards=4)
 Webkit = TestStepConfig('webkit')
 
 
@@ -1039,32 +1041,17 @@ BUILDERS = {
         'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - arm64 - sim - nosnap - debug - 1': {
+      'V8 Linux - arm64 - sim - nosnap - debug': {
         'chromium_apply_config': [
           'clang', 'v8_ninja', 'goma', 'simulate_arm', 'no_snapshot'],
         'v8_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
-          'SHARD_COUNT': 2,
-          'SHARD_RUN': 1,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, Test262, Mozilla, SimdJs],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux - arm64 - sim - nosnap - debug - 2': {
-        'chromium_apply_config': [
-          'clang', 'v8_ninja', 'goma', 'simulate_arm', 'no_snapshot'],
-        'v8_apply_config': ['no_snapshot'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-          'SHARD_COUNT': 2,
-          'SHARD_RUN': 2,
-        },
-        'bot_type': 'builder_tester',
-        'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing_4, Test262_2, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - gc stress': {
