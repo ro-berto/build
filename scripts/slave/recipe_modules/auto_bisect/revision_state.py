@@ -311,6 +311,7 @@ class RevisionState(object):
     try:
       result = api.m.commit_position.chromium_commit_position_from_hash(sha)
     except api.m.step.StepFailure as sf:
+      self.bisector.surface_result('BAD_REV')
       api.m.halt('Failed to resolve commit position - ' + sf.reason)
       raise
     return result
@@ -320,6 +321,7 @@ class RevisionState(object):
     try:
       result = api.m.commit_position.chromium_hash_from_commit_position(pos)
     except api.m.step.StepFailure as sf:
+      self.bisector.surface_result('BAD_REV')
       api.m.halt('Failed to resolve commit position - ' + sf.reason)
       raise
     return result

@@ -171,7 +171,8 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Debug Good Revision DEPS@v8: None@@@",
       "@@@STEP_LOG_LINE@Debug Good Revision DEPS@skia/src: None@@@",
-      "@@@STEP_LOG_END@Debug Good Revision DEPS@@@"
+      "@@@STEP_LOG_END@Debug Good Revision DEPS@@@",
+      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"B4T_LO_FINAL_CONF\"]@@@"
     ]
   },
   {

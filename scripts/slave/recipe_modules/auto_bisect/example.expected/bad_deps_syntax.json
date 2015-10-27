@@ -639,7 +639,10 @@
     ],
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "git cat-file dcdcdc0ff1122212323134879ddceeb1240b0988:DEPS",
-    "stdout": "/path/to/tmp/"
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"B4T_BAD_REV\"]@@@"
+    ]
   },
   {
     "name": "$result",

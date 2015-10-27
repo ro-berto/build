@@ -184,7 +184,10 @@
     ],
     "cwd": "[TMP_BASE]/bogus_tmp_1",
     "name": "Reading culprit cl information.",
-    "stdout": "/path/to/tmp/"
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"B4T_LO_FINAL_CONF\"]@@@"
+    ]
   },
   {
     "cmd": [

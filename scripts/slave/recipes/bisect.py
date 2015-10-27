@@ -196,7 +196,7 @@ def GenTests(api):
   yield broken_cp_test
 
   doctored_data = test_data()
-  doctored_data[0]['test_results']['results']['error'] = "Dummy error."
+  doctored_data[0]['test_results']['results']['errors'] = ['Dummy error.']
   for revision_data in doctored_data:
     revision_data.pop('cl_info', None)
     skip_results = revision_data in doctored_data[1:-1]
@@ -207,7 +207,7 @@ def GenTests(api):
   yield broken_bad_rev_test
 
   doctored_data = test_data()
-  doctored_data[-1]['test_results']['results']['error'] = "Dummy error."
+  doctored_data[-1]['test_results']['results']['errors'] = ['Dummy error.']
   for revision_data in doctored_data:
     revision_data.pop('cl_info', None)
     skip_results = revision_data in doctored_data[1:-1]
@@ -355,9 +355,11 @@ def _gather_reference_range(api, bisector):
   bisector.bad_rev.start_job()
   bisector.wait_for_all([bisector.good_rev, bisector.bad_rev])
   if bisector.good_rev.failed:
+    bisector.surface_result('REF_RANGE_FAIL')
     api.halt('Testing the "good" revision failed')
     bisector.failed = True
   elif bisector.bad_rev.failed:
+    bisector.surface_result('REF_RANGE_FAIL')
     api.halt('Testing the "bad" revision failed')
     bisector.failed = True
     bisector.api.m.halt('Testing the "good" revision failed')

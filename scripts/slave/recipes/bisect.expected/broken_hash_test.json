@@ -280,7 +280,8 @@
     "name": "Resolving reference range.resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"B4T_BAD_REV\"]@@@"
     ]
   },
   {

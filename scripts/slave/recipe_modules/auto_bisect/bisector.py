@@ -20,6 +20,22 @@ new file mode 100644
 
 
 ZERO_TO_NON_ZERO = 'Zero to non-zero'
+VALID_RESULT_CODES = (
+    'TEST_TIMEOUT',  # Timed out waiting for the test job.
+    'BUILD_TIMEOUT',  # Timed out waiting for the build.
+    'TEST_FAILURE',  # The test failed to produce parseable results|chartjson.
+    'BUILD_FAILURE',  # The build could not be requested, or the job failed.
+    'BAD_REV',  # The revision range could not be expanded, or the commit
+                # positions could not be resolved into commit hashes.
+    'REF_RANGE_FAIL',  # Either of the initial 'good' or 'bad' revisions failed
+                       # to be tested or built. Used with *_FAILURE|*_TIMEOUT.
+    'BAD_CONFIG',  # There was a problem with the bisect_config dictionary
+                   # passed to the recipe. See output of the config step
+    'CULPRIT_FOUND',  # A Culprit CL was found with 'high' confidence.
+    'LO_INIT_CONF',  # Bisect aborted early for lack of confidence.
+    'MISSING_METRIC',  # The metric was not found in the test text/json output.
+    'LO_FINAL_CONF',  # The bisect completed without a culprit.
+)
 
 # When we look for the next revision to build, we search nearby revisions
 # looking for a revision that's already been archived. Since we don't want
@@ -42,6 +58,7 @@ class Bisector(object):
     self.bisect_config = bisect_config
     self.config_step()
     self.revision_class = revision_class
+    self.result_codes = set()
 
     # Test-only properties.
     # TODO: Replace these with proper mod_test_data
@@ -247,9 +264,13 @@ class Bisector(object):
     depot_path = self.api.m.path['slave_build'].join('src')
     step_name = ('for revisions %s:%s' %
                  (min_rev, max_rev))
-    step_result = self.api.m.python(step_name, script, [min_rev, max_rev],
-                                    stdout=self.api.m.json.output(),
-                                    cwd=depot_path)
+    try:
+      step_result = self.api.m.python(step_name, script, [min_rev, max_rev],
+                                      stdout=self.api.m.json.output(),
+                                      cwd=depot_path)
+    except self.api.m.step.StepFailure:  # pragma: no cover
+      self.surface_result('BAD_REV')
+      raise
     # We skip the first revision in the list as it is max_rev
     new_revisions = step_result.stdout[1:][::-1]
     return new_revisions
@@ -261,9 +282,14 @@ class Bisector(object):
     depot_path = self.api.m.path['slave_build'].join(depot['src'])
     step_name = ('Expanding revision range for revision %s on depot %s'
                  % (max_rev, depot_name))
-    step_result = self.api.m.git('log', '--format=%H', min_rev + '...' +
-                                 max_rev, stdout=self.api.m.raw_io.output(),
-                                 cwd=depot_path, name=step_name)
+
+    try:
+      step_result = self.api.m.git('log', '--format=%H', min_rev + '...' +
+                                   max_rev, stdout=self.api.m.raw_io.output(),
+                                   cwd=depot_path, name=step_name)
+    except self.api.m.step.StepFailure:  # pragma: no cover
+      self.surface_result('BAD_REV')
+      raise
     # We skip the first revision in the list as it is max_rev
     new_revisions = step_result.stdout.splitlines()[1:]
     for revision in new_revisions:
@@ -327,6 +353,7 @@ class Bisector(object):
     except RuntimeError:
       warning_text = ('Could not expand dependency revisions for ' +
                       revision_to_expand.revision_string)
+      self.surface_result('BAD_REV')
       if warning_text not in self.warnings:
         self.warnings.append(warning_text)
     return False
@@ -411,6 +438,7 @@ class Bisector(object):
       self, actual_confidence):  # pragma: no cover
     """Adds a warning about the lack of initial regression confidence."""
     self.failed_initial_confidence = True
+    self.surface_result('LO_INIT_CONF')
     self.warnings.append(
         ('Bisect failed to reproduce the regression with enough confidence. '
          'Needed {:.2f}%, got {:.2f}%.').format(
@@ -579,6 +607,11 @@ class Bisector(object):
       if sf.retcode == 2:  # 6 days and no builds finished.
         for revision in revision_list:
           revision.status = revision_state.RevisionState.FAILED
+        for revision in revision_list:
+          if revision.status == revision.TESTING:
+            self.surface_result('TEST_TIMEOUT')
+          if revision.status == revision.BUILDING:
+            self.surface_result('BUILD_TIMEOUT')
         return None  # All builds are failed, no point in returning one.
       else:  # Something else went wrong.
         raise
@@ -732,3 +765,14 @@ class Bisector(object):
     self.api.m.git('update-ref', 'refs/heads/master',
                    'refs/remotes/origin/master')
     self.api.m.git('checkout', 'master', cwd=self.api.m.path['checkout'])
+
+  def surface_result(self, result_string):
+    assert result_string in VALID_RESULT_CODES
+    prefix = 'B4T_'  # To avoid collision. Stands for bisect (abbr. `a la i18n).
+    result_code = prefix + result_string
+    assert len(result_code) <= 20
+    if result_code not in self.result_codes:
+      self.result_codes.add(result_code)
+      properties = self.api.m.step.active_result.presentation.properties
+      properties['extra_result_code'] = sorted(self.result_codes)
+

@@ -32,14 +32,14 @@ class BisectTesterApi(recipe_api.RecipeApi):
     """Exposes perf tests implementation."""
     return perf_test.run_perf_test(self, test_config, **kwargs)
 
-  def digest_run_results(self, results, retcodes, cfg):
+  def digest_run_results(self, run_results, retcodes, cfg):
     # TODO(qyearsley): Change this to not use cfg or retcodes and just
     # return values (or error) regardless of test_type.
-    if not results or not retcodes:
+    if not run_results or not retcodes:  # pragma: no cover
       return {'error': 'No values to aggregate.'}
     if cfg.get('test_type') == 'return_code':
       return {'values': retcodes}
-    return {'values': results}
+    return {'values': run_results['measured_values']}
 
   def upload_results(self, output, results, retcodes):
     """Puts the results as a JSON file in a GS bucket."""

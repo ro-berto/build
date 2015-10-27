@@ -688,7 +688,8 @@
     "name": "Gathering reference values.gsutil Get test results for build a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"B4T_REF_RANGE_FAIL\"]@@@"
     ]
   },
   {

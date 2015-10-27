@@ -54,7 +54,8 @@ def run_perf_test(api, test_config, **kwargs):
   # a helper method, or extract the metric-extraction to make this more
   # cleaner.
   limit = test_config['max_time_minutes'] * kwargs.get('time_multiplier', 1)
-  values = []
+  run_results = {'measured_values': [], 'errors': set()}
+  values = run_results['measured_values']
   metric = test_config.get('metric')
   retcodes = []
   output_for_all_runs = []
@@ -103,11 +104,18 @@ def run_perf_test(api, test_config, **kwargs):
       output_for_all_runs.append(out)
       if valid_value:
         values.extend(value)
+      else:
+        # This means the metric was not found in the output.
+        if not retcode:
+          # If all tests passed, but the metric was not found, this means that
+          # something changed on the test, or the given metric name was
+          # incorrect, we need to surface this on the bisector.
+          run_results['errors'].add('MISSING_METRIC')
     else:
       output_for_all_runs.append(out)
     retcodes.append(retcode)
 
-  return values, output_for_all_runs, retcodes
+  return run_results, output_for_all_runs, retcodes
 
 
 def _get_chart_json_metric(results, metric):  # pragma: no cover
@@ -120,7 +128,6 @@ def _get_chart_json_metric(results, metric):  # pragma: no cover
   else:
     return parse_metric.parse_chartjson_metric(
         results, metric.ChartJsonFormat(Metric.OLD_STYLE_DELIMITER))
-
 
 def _run_command(api, command, step_name):
   # TODO(robertocn): Reevaluate this approach when adding support for non-perf

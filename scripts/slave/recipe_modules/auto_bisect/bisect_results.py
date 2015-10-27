@@ -186,9 +186,11 @@ class BisectResults(object):
       self.status = 'Negative: Failed to bisect.'
     elif self.results_confidence > _REQUIRED_RESULTS_CONFIDENCE:
       self.status = 'Positive: A suspected commit was found.'
+      self._bisector.surface_result('CULPRIT_FOUND')
     else:
       self.status = ('Negative: Completed, but no culprit was found with '
                      'high confidence.')
+      self._bisector.surface_result('LO_FINAL_CONF')
 
   def _set_culprit_attributes(self, culprit):
     self.culprit_cl_hash = None

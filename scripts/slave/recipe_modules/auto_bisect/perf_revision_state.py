@@ -32,8 +32,10 @@ class PerfRevisionState(revision_state.RevisionState):
     # 'values' unless the test failed, in which case 'results' will contain
     # the 'error' key explaining the type of error.
     results = test_results['results']
-    if results.get('error'):
+    if results.get('errors'):
       self.status = PerfRevisionState.FAILED
+      if 'MISSING_METRIC' in results.get('errors'):  # pragma: no cover
+        self.bisector.surface_result('MISSING_METRIC')
       return
     self.values = results['values']
     if self.bisector.bisect_config.get('test_type') == 'return_code':
@@ -88,6 +90,9 @@ class PerfRevisionState(revision_state.RevisionState):
           % str(self.commit_hash), git_config_options={
               'user.email': 'FAKE_PERF_PUMPKIN@chromium.org',
           })
+    except:  # pragma: no cover
+      self.bisector.surface_result('BUILD_FAILURE')
+      raise
     finally:
       if (self.patch_file != '/dev/null' and
           'TESTING_SLAVENAME' not in os.environ):
@@ -173,6 +178,7 @@ class PerfRevisionState(revision_state.RevisionState):
       step_result = api.m.gsutil.cat(self.test_results_url, stdout=stdout,
                                      name=name)
     except api.m.step.StepFailure:  # pragma: no cover
+      self.bisector.surface_result('TEST_FAILURE')
       return None
     else:
       return json.loads(step_result.stdout)
