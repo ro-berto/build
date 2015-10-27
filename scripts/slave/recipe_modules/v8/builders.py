@@ -1800,7 +1800,6 @@ BUILDERS = {
           'default_compiler',
           'v8_ninja',
           'goma',
-          'msvs2013',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
