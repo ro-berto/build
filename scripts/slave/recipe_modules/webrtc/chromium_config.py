@@ -52,7 +52,6 @@ def webrtc_ios(c):
 @CONFIG_CTX(includes=['gn'])
 def webrtc_gn(c):
   c.compile_py.default_targets = ['all']
-  c.project_generator.args = ['build_with_chromium=false']
 
 def _compiler_defaults(c):
   c.compile_py.default_targets = ['All']
