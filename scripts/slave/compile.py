@@ -160,8 +160,9 @@ def goma_setup(options, env):
   if options.goma_store_local_run_output:
     env['GOMA_STORE_LOCAL_RUN_OUTPUT'] = options.goma_store_local_run_output
 
-  if options.goma_dump_stats_file:
-    env['GOMA_DUMP_STATS_FILE'] = options.goma_dump_stats_file
+  if options.build_data_dir:
+    env['GOMA_DUMP_STATS_FILE'] = os.path.join(options.build_data_dir,
+                                               'goma_stats_proto')
 
   # goma is requested.
   goma_key = os.path.join(options.goma_dir, 'goma.key')
@@ -276,6 +277,9 @@ def goma_teardown(options, env):
     # Always stop the proxy for now to allow in-place update.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
     UploadGomaCompilerProxyInfo()
+    # TODO(yyanagisawa): send_monitoring_event with GomaStats.
+    if env.get('GOMA_DUMP_STATS_FILE'):
+      os.remove(env['GOMA_DUMP_STATS_FILE'])
 
 
 def UploadNinjaLog(options, command, exit_status):
@@ -1274,6 +1278,8 @@ def real_main():
                            help='specify build tool (ib, vs, xcode)')
   option_parser.add_option('--build-args', action='append', default=[],
                            help='arguments to pass to the build tool')
+  option_parser.add_option('--build-data-dir', action='store',
+                           help='specify a build data directory.')
   option_parser.add_option('--compiler', default=None,
                            help='specify alternative compiler (e.g. clang)')
   if chromium_utils.IsWindows():
@@ -1309,8 +1315,6 @@ def real_main():
                            help='Store local run output to goma servers.')
   option_parser.add_option('--goma-fail-fast', action='store_true')
   option_parser.add_option('--goma-disable-local-fallback', action='store_true')
-  option_parser.add_option('--goma-dump-stats-file', action='store',
-                           help='Specify a file to dump serialized GomaStats.')
   option_parser.add_option('--goma-jsonstatus',
                            help='Specify a file to dump goma_ctl jsonstatus.')
   option_parser.add_option('--verbose', action='store_true')
