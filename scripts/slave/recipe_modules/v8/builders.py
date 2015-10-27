@@ -428,6 +428,7 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux64_rel_archive',
+        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux64',
@@ -443,6 +444,7 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'linux64_dbg_archive',
         'testing': {'platform': 'linux'},
+        'enable_swarming': True,
         'triggers': [
           'V8 Fuzzer',
           'V8 Linux64 - debug',
@@ -473,11 +475,12 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - builder',
         'build_gs_archive': 'linux64_rel_archive',
+        'enable_swarming': True,
         'tests': [
           V8Initializers,
           V8Testing,
           OptimizeForSize,
-          Test262,
+          Test262Variants_2,
           Mozilla,
           SimdJs,
         ],
@@ -507,9 +510,10 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - debug builder',
         'build_gs_archive': 'linux64_dbg_archive',
+        'enable_swarming': True,
         'tests': [
           V8Testing,
-          Test262,
+          Test262Variants_3,
           Mozilla,
           SimdJs,
         ],
@@ -565,6 +569,8 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - debug builder',
         'build_gs_archive': 'linux64_dbg_archive',
+        'enable_swarming': True,
+        # TODO(machenbach): Add test262 and mozilla tests.
         'tests': [V8Testing, Benchmarks, SimdJs],
         'testing': {'platform': 'linux'},
       },
