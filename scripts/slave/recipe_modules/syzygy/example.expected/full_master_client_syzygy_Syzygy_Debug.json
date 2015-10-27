@@ -12,45 +12,51 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
-      "config",
+      "[BUILD]\\scripts\\slave\\bot_update.py",
+      "--master",
+      "master.client.syzygy",
+      "--builder",
+      "Syzygy Debug",
+      "--slave",
+      "vm331-m3",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS.syzygy', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/google/syzygy.git/'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src-internal', 'url': 'svn://svn.chromium.org/chrome-internal/trunk/syzygy/internal.DEPS'}]"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gclient setup"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
-      "sync",
-      "--nohooks",
-      "--force",
-      "--verbose",
-      "--delete_unversioned_trees",
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS.syzygy', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/google/syzygy.git/'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src-internal', 'url': 'svn://svn.chromium.org/chrome-internal/trunk/syzygy/internal.DEPS'}]",
+      "--root",
+      "src",
+      "--revision_mapping_file",
+      "{\"src\": \"got_revision\"}",
+      "--output_json",
+      "/path/to/tmp/json",
       "--revision",
       "src@0e9f25b1098271be2b096fd1c095d6d907cf86f7",
-      "--output-json",
-      "/path/to/tmp/json"
+      "--force",
+      "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gclient sync",
+    "name": "bot_update",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src-internal/\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": 274229@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": 170242@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#170242}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@170242@https://chromium.googlesource.com/external/github.com/google/syzygy.git/+/170242@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision@170242@@@"
+      "@@@STEP_LINK@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9@https://chromium.googlesource.com/external/github.com/google/syzygy.git/+/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#170242}\"@@@"
     ]
   },
   {
@@ -237,12 +243,12 @@
       "-a",
       "public-read",
       "[SLAVE_BUILD]\\src\\build\\Debug\\metrics.csv",
-      "gs://syzygy-archive/builds/metrics/170242/debug.csv"
+      "gs://syzygy-archive/builds/metrics/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/debug.csv"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "archive_metrics",
     "~followup_annotations": [
-      "@@@STEP_LINK@archive@https://syzygy-archive.commondatastorage.googleapis.com/index.html?path=builds/metrics/170242/debug.csv/@@@"
+      "@@@STEP_LINK@archive@https://syzygy-archive.commondatastorage.googleapis.com/index.html?path=builds/metrics/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/debug.csv/@@@"
     ]
   },
   {
@@ -253,7 +259,7 @@
       "--output-dir",
       "[SLAVE_BUILD]\\src\\syzygy\\binaries",
       "--revision",
-      "170242",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--overwrite",
       "--verbose"
     ],
