@@ -14,7 +14,8 @@ class SyzygyApi(recipe_api.RecipeApi):
   _SYZYGY_ARCHIVE_URL = (
       'https://syzygy-archive.commondatastorage.googleapis.com')
   _SYZYGY_GS = 'gs://syzygy-archive'
-  _SYZYGY_GITHUB = 'https://github.com/google/syzygy/commit/'
+  _SYZYGY_GITHUB = ('https://chromium.googlesource.com/external/' +
+                    'github.com/google/syzygy.git/+/')
 
   # Fake unittests.gypi contents.
   _FAKE_UNITTESTS_GYPI_DATA = repr({

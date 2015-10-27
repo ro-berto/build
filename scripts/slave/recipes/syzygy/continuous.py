@@ -34,6 +34,10 @@ BUILDERS = freeze({
   'Syzygy Debug': ('syzygy_msvs', {'BUILD_CONFIG': 'Debug'}),
   'Syzygy Release': ('syzygy', {'BUILD_CONFIG': 'Release'}),
   'Syzygy Official': ('syzygy_official', {}),
+
+  # Trybots.
+  'win_rel_try': ('syzygy', {'BUILD_CONFIG': 'Release'}),
+  'win_dbg_try': ('syzygy', {'BUILD_CONFIG': 'Debug'}),
 })
 
 
