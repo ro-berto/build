@@ -1890,16 +1890,14 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_linux_arm_rel': {
-        # TODO(machenbach): Run with exhaustive variants as soon as bot runs
-        # on swarming.
-        'v8_apply_config': ['no_exhaustive_variants'],
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm_dbg': {
@@ -1909,20 +1907,19 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_rel': {
-        # TODO(machenbach): Run with exhaustive variants as soon as bot runs
-        # on swarming.
-        'v8_apply_config': ['no_exhaustive_variants'],
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_dbg': {
@@ -1932,7 +1929,8 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_gc_stress_dbg': {
@@ -1943,7 +1941,8 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [Mjsunit, Webkit],
+        'enable_swarming': True,
+        'tests': [Mjsunit_3, Webkit],
         'testing': {'platform': 'linux'},
       },
       'v8_android_arm_compile_rel': {
