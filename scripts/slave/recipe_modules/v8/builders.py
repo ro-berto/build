@@ -237,6 +237,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'tests': [V8Testing, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
