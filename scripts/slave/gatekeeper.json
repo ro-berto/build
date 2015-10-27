@@ -471,6 +471,7 @@
           "pdfium_all"
         ],
         "excluded_builders" : [
+          "*_xfa"
         ],
         "builders": {
           "*": {}

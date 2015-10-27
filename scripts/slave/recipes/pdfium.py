@@ -15,6 +15,9 @@ DEPS = [
 def _CheckoutSteps(api):
   # Checkout pdfium and its dependencies (specified in DEPS) using gclient
   api.gclient.set_config('pdfium')
+  branch = api.properties.get('branch')
+  if branch:
+    api.gclient.c.solutions[0].revision = 'origin/' + branch
   api.gclient.checkout()
   api.gclient.runhooks()
 
@@ -61,3 +64,10 @@ def GenTests(api):
   yield api.test('win') + api.platform('win', 64)
   yield api.test('linux') + api.platform('linux', 64)
   yield api.test('mac') + api.platform('mac', 64)
+
+  yield (api.test('win_xfa') + api.platform('win', 64) +
+         api.properties(branch='xfa'))
+  yield (api.test('linux_xfa') + api.platform('linux', 64) +
+         api.properties(branch='xfa'))
+  yield (api.test('mac_xfa') + api.platform('mac', 64) +
+         api.properties(branch='xfa'))
