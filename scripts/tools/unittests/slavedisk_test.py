@@ -33,8 +33,7 @@ class MockDf():
 
 def MockPrint(s=""):
   global OUTPUT
-  OUTPUT += s
-  OUTPUT += "\n"
+  OUTPUT += s + "\n"
 
 def MockStat(f):
   return STATS[f]
@@ -81,7 +80,7 @@ class SlaveDiskTest(auto_stub.TestCase):
     COMMUNICATE = MockCommunicate(100)
     FILES = ['foo']
     STATS = dict(foo=MockStatbuf(0))
-    rv = slavedisk.main(stat=MockStat, print=MockPrint)
+    rv = slavedisk.main(stat=MockStat, Print=MockPrint)
 
     self.assertEqual(rv, 0)
     self.assertIn("rm -rf /b/build/slave/foo # 30 days old", OUTPUT)
@@ -94,10 +93,22 @@ class SlaveDiskTest(auto_stub.TestCase):
     COMMUNICATE = MockCommunicate(50)
     FILES = ['foo']
     STATS = dict(foo=MockStatbuf(0))
-    rv = slavedisk.main(stat=MockStat, print=MockPrint)
+    rv = slavedisk.main(stat=MockStat, Print=MockPrint)
 
     self.assertEqual(rv, 0)
     self.assertNotIn("rm -rf /b/build/slave/foo # 30 days old", OUTPUT)
+
+  def test_not_full_force(self):
+    global COMMUNICATE
+    global FILES
+    global STATS
+    COMMUNICATE = MockCommunicate(50)
+    FILES = ['foo']
+    STATS = dict(foo=MockStatbuf(0))
+    rv = slavedisk.main(force=True, stat=MockStat, Print=MockPrint)
+
+    self.assertEqual(rv, 0)
+    self.assertIn("rm -rf /b/build/slave/foo # 30 days old", OUTPUT)
 
   def test_filematching(self):
     """Test the code that matches build directories."""
@@ -108,7 +119,7 @@ class SlaveDiskTest(auto_stub.TestCase):
     FILES = ['invalid@name', 'not_a_dir', 'too_young']
     STATS = dict(not_a_dir=MockStatbuf(0, 0),
                  too_young=MockStatbuf(86400 * 30 - 1))
-    rv = slavedisk.main(stat=MockStat, print=MockPrint)
+    rv = slavedisk.main(stat=MockStat, Print=MockPrint)
 
     # None of the three files should be eligible for deletion;
     # the first has a bad name, the second isn't a directory,

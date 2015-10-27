@@ -5,7 +5,7 @@
 
 from __future__ import print_function
 
-import glob
+import argparse
 import os
 import re
 import subprocess
@@ -23,8 +23,9 @@ RE_SLAVE = re.compile(r"^[a-z_]+$")  # Matches the slave subdirectory names,
 
 
 # Need to provide a hook for overriding stat() and print() because neither can
-# be mocked in the usual way. Therefore, pylint: disable=redefined-builtin
-def main(stat=os.stat, print=print):
+# be mocked in the usual way.
+def main(force=False, stat=os.stat, Print=print):
+  """force(bool): if True, analysis is performed for any disk utilization."""
   now = time.time()
 
   # Change to the right build directory for the platform.
@@ -45,11 +46,12 @@ def main(stat=os.stat, print=print):
 
   percent_full = int(percent_full.rstrip("%"))
 
-  if percent_full < FULLNESS_LIMIT:
-    print("The disk is only %d%% full." % percent_full)
-    return 0
-  else:
-    print("The disk is %d%% full, and that's bad." % percent_full)
+  if not force:
+    if percent_full < FULLNESS_LIMIT:
+      Print("The disk is only %d%% full." % percent_full)
+      return 0
+    else:
+      Print("The disk is %d%% full, and that's bad." % percent_full)
 
   eligible = {}
   max_len = 0
@@ -71,26 +73,31 @@ def main(stat=os.stat, print=print):
       max_len = len(f)
 
   if eligible:
-    print("You should delete the following:")
-    print()
+    Print("You should delete the following:")
+    Print()
   else:
-    print("But there's nothing to delete!")
+    Print("But there's nothing to delete.")
     return 1
 
-  for slave, age in sorted(eligible.items(), key=lambda x: (-x[1],x[0])):
+  for slave, age in sorted(eligible.items(), key=lambda x: (-x[1], x[0])):
     days_old = age / 86400
     pad_len = max_len - len(slave)
     slave += " " * pad_len
-    print("rm -rf %s/%s # %d days old" % (DIR, slave, days_old))
+    Print("rm -rf %s/%s # %d days old" % (DIR, slave, days_old))
 
-  print()
-  print()
-  print("Or, if you want to check their filesizes first:")
-  print()
-  print("cd %s && du -sh %s" % (DIR, " ".join(sorted(eligible))))
+  Print()
+  Print()
+  Print("Or, if you want to check their filesizes first:")
+  Print()
+  Print("cd %s && du -sh %s" % (DIR, " ".join(sorted(eligible))))
 
   return 0
 
 
 if __name__ == '__main__':
-  sys.exit(main())
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--force', default=False, action="store_true",
+                      help="Force analysis even if the disk is not close "
+                      "to full.")
+  args = parser.parse_args()
+  sys.exit(main(force=args.force))
