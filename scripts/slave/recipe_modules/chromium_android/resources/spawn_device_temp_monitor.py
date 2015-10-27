@@ -3,11 +3,11 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Launches a daemon to monitor android device temperaures.
+"""Launches a daemon to monitor android device temperatures & status.
 
 This script will repeatedly poll the given devices for their
-temperatures every 60 seconds via adb and uploads them for monitoring
-through infra's ts_mon.
+temperatures & status every 60 seconds via adb and uploads them for
+monitoring through infra's ts_mon.
 """
 
 import argparse
@@ -129,14 +129,49 @@ def get_device_args(adb_path, master_name, builder_name, device):
   return cpu_temp_args + bat_temp_args + bat_charge_args
 
 
+def scan_blacklist_file(blacklist_file, master_name,
+                        builder_name, devices):
+  """Scans the blacklist file for device statuses."""
+  with open(blacklist_file, 'r') as f:
+    bad_devices = json.load(f)
+
+  args = []
+  # Collect the status for 'bad' devices
+  for bad_device in bad_devices:
+    try:
+      status = bad_devices[bad_device].get('reason', 'unknown')
+    except TypeError:
+      status = 'unknown'
+    bad_device_dict = {'name': 'dev/status',
+                       'value': status,
+                       'device_id': bad_device,
+                       'master': master_name,
+                       'builder': builder_name}
+    args += ['--string', json.dumps(bad_device_dict)]
+
+  # Collect the status for 'good' devices
+  for good_device in devices:
+    # If a device isn't blacklisted, then its status is 'good'
+    if good_device not in bad_devices:
+      good_device_dict = {'name': 'dev/status',
+                          'value': 'good',
+                          'device_id': good_device,
+                          'master': master_name,
+                          'builder': builder_name}
+      args += ['--string', json.dumps(good_device_dict)]
+
+  return args
+
+
 def main(argv):
   """Launches the device temperature monitor.
 
-  Polls the devices for their battery and cpu temperatures
-  every 60 seconds and uploads them for monitoring through infra's
-  ts_mon. Fully qualified, the metric names would be
+  Polls the devices for their battery and cpu temperatures and scans the
+  blacklist file every 60 seconds and uploads the data for monitoring
+  through infra's ts_mon. Fully qualified, the metric names would be
   /chrome/infra/dev/(cpu|battery)/temperature &
-  /chrome/infra/dev/battrery/charge
+  /chrome/infra/dev/battrery/charge &
+  /chrome/infra/dev/status
   """
 
   parser = argparse.ArgumentParser(
@@ -146,6 +181,7 @@ def main(argv):
                       help='Json list of device serials to poll.')
   parser.add_argument('master_name', help='Name of the buildbot master.')
   parser.add_argument('builder_name', help='Name of the buildbot builder.')
+  parser.add_argument('--blacklist-file', help='Path to device blacklist file.')
   args = parser.parse_args(argv)
 
   signal.signal(signal.SIGALRM, alarm_handler)
@@ -156,6 +192,11 @@ def main(argv):
     for device in devices:
       upload_cmd_args += get_device_args(args.adb_path, args.master_name,
                                          args.builder_name, device)
+
+    if args.blacklist_file:
+      upload_cmd_args += scan_blacklist_file(args.blacklist_file,
+                                             args.master_name,
+                                             args.builder_name, devices)
 
     cmd = [_RUN_PY, 'infra.tools.send_ts_mon_values', '--ts-mon-device-role',
            'temperature_monitor'] + upload_cmd_args

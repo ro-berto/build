@@ -242,5 +242,62 @@ class MainFuncTest(auto_stub.TestCase):
     ]
     self.assertEquals(expected_cmd, send_ts_mon_call)
 
+  def test_blacklist_file_scan(self):
+    # Collect calls to 'subprocess.Popen'
+    def mocked_popen_calls(args, **kwargs):
+      if (args[0] == spawn_device_temp_monitor._RUN_PY):
+        # ts_mon was called, so collect args and return
+        send_ts_mon_call.extend(args)
+        return None
+      elif (args[0] == '/some/adb/path'):
+        # adb was called, have it return nothing cause we're just testing
+        # the blacklist scanning
+        return mocked_Popen(stdout='', stderr=None)
+      else:
+        self.fail('Unexpected Popen call: %s' % (' '.join(args)))
+
+    self.mock(
+        spawn_device_temp_monitor.subprocess,
+        'Popen',
+        mocked_popen_calls)
+
+    # Mock open and feed it a dummy blacklist file
+    bl_file_contents = ('{"bad_serial1": {"timestamp": 1445554107.38759, '
+                        '"reason": "oom"}, "bad_serial2": {"timestamp": '
+                        '1445554107.387428, "reason": "no_juice"}}')
+    m = mock.mock_open(read_data=bl_file_contents)
+    with mock.patch('__builtin__.open', m, create=True):
+      try:
+        send_ts_mon_call = []
+        spawn_device_temp_monitor.main([
+            '/some/adb/path',
+            '["good_serial1", "bad_serial1"]',
+            'some_master_name',
+            'some_builder_name',
+            '--blacklist-file',
+            '/some/blacklist/file/path'])
+      except SimulatedSigterm:
+        pass
+
+    expected_cmd = [spawn_device_temp_monitor._RUN_PY,
+        'infra.tools.send_ts_mon_values',
+        '--ts-mon-device-role',
+        'temperature_monitor',
+        '--string',
+        '{"builder": "some_builder_name", "master": "some_master_name", '
+        '"name": "dev/status", '
+        '"value": "good", "device_id": "good_serial1"}',
+        '--string',
+        '{"builder": "some_builder_name", "master": "some_master_name", '
+        '"name": "dev/status", '
+        '"value": "oom", "device_id": "bad_serial1"}',
+        '--string',
+        '{"builder": "some_builder_name", "master": "some_master_name", '
+        '"name": "dev/status", '
+        '"value": "no_juice", "device_id": "bad_serial2"}',
+    ]
+    self.assertItemsEqual(expected_cmd, send_ts_mon_call)
+
+
 if __name__ == '__main__':
   unittest.main()
