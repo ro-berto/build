@@ -191,18 +191,15 @@ BUILDERS = {
       },
       'V8 Linux - swarming staging 2': {
         'chromium_apply_config': [
-          'clang', 'v8_ninja', 'goma', 'shared_library', 'verify_heap'],
+          'v8_ninja', 'clang', 'asan', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
           V8Testing,
-          SimdJs,
-          Test262,
-          Mozilla,
         ],
         'testing': {'platform': 'linux'},
       },
