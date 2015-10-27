@@ -29,6 +29,12 @@ PACKAGE_CFG = os.path.join(
     os.path.dirname(os.path.dirname(SCRIPT_PATH)),
     'infra', 'config', 'recipes.cfg')
 
+if sys.platform == 'win32':
+  # TODO(pgervais): add windows support
+  # QQ: Where is infra/run.py on windows machines?
+  RUN_CMD = None
+else:
+  RUN_CMD = os.path.join('/', 'opt', 'infra-python', 'run.py')
 
 @contextlib.contextmanager
 def namedTempFile():
@@ -338,8 +344,32 @@ def main(argv):
     recipe_runner = os.path.join(SCRIPT_PATH, 'recipes.py')
 
   with build_data_directory() as build_data_dir:
+    # Create a LogRequestLite proto containing this build's information.
     if build_data_dir:
-      os.environ['BUILD_DATA_DIR'] = build_data_dir
+      properties['build_data_dir'] = build_data_dir
+
+      if isinstance(RUN_CMD, basestring) and os.path.exists(RUN_CMD):
+        subprocess.call(
+          [RUN_CMD, 'infra.tools.send_monitoring_event',
+           '--event-mon-output-file',
+               os.path.join(build_data_dir, 'log_request_proto'),
+           '--event-mon-run-type', 'file',
+           '--event-mon-service-name',
+               'buildbot/master/master.%s' % properties.get('mastername'),
+           '--build-event-build-name', properties.get('buildername'),
+           '--build-event-build-number', str(properties.get('buildnumber', 0)),
+           '--build-event-build-scheduling-time',
+               1000*int(properties.get('requestedAt', 0)),
+           '--build-event-type', 'BUILD',
+           '--event-mon-timestamp-kind', 'POINT',
+           # And use only defaults for credentials.
+         ])
+      else:
+        print >> sys.stderr, (
+          'WARNING: Unable to find run.py at %s, no events will be sent.'
+          % str(RUN_CMD)
+        )
+
     with namedTempFile() as props_file:
       with open(props_file, 'w') as fh:
         fh.write(json.dumps(properties))
