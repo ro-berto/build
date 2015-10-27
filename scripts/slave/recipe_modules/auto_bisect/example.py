@@ -44,14 +44,14 @@ def RunSteps(api):
 
   assert bisector.check_improvement_direction()
   assert bisector.check_initial_confidence()
-  revisions_to_check = bisector.get_revisions_to_eval(1)
+  revisions_to_check = bisector.get_revision_to_eval()
   assert len(revisions_to_check) == 1
   revisions_to_check[0].start_job()
   bisector.wait_for_any(revisions_to_check)
   bisector.check_bisect_finished(revisions_to_check[0])
 
   # Evaluate inserted DEPS-modified revisions
-  revisions_to_check = bisector.get_revisions_to_eval(2)
+  revisions_to_check = bisector.get_revision_to_eval()
   if revisions_to_check:
     revisions_to_check[0].start_job()
     # Only added for coverage.

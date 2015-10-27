@@ -17,9 +17,6 @@ DEPS = [
     'json',
 ]
 
-AVAILABLE_BOTS = 1  # Change this for n-secting instead of bi-.
-
-
 def RunSteps(api):
   _ensure_checkout(api)
   # HORRIBLE hack to get buildbot web ui to let us pass stuff as properties
@@ -375,7 +372,10 @@ def _bisect_main_loop(bisector):
   then it starts them in parallel and waits for them to finish.
   """
   while not bisector.bisect_over:
-    revisions_to_check = bisector.get_revisions_to_eval(AVAILABLE_BOTS)
+    # TODO(simonhatch): Refactor this since get_revision_to_eval() returns a
+    # a single revision now.
+    # crbug.com/546695
+    revisions_to_check = bisector.get_revision_to_eval()
     # TODO: Add a test case to remove this pragma
     if not revisions_to_check:  # pragma: no cover
       bisector.bisect_over = True

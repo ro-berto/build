@@ -21,6 +21,11 @@ new file mode 100644
 
 ZERO_TO_NON_ZERO = 'Zero to non-zero'
 
+# When we look for the next revision to build, we search nearby revisions
+# looking for a revision that's already been archived. Since we don't want
+# to move *too* far from the original revision, we'll cap the search at 25%.
+DEFAULT_SEARCH_RANGE_PERCENTAGE = 0.25
+
 
 class Bisector(object):
   """This class abstracts an ongoing bisect (or n-sect) job."""
@@ -457,24 +462,34 @@ class Bisector(object):
     self.api.m.step('Results', ['cat'],
                     stdin=self.api.m.raw_io.input(data=results))
 
-  def get_revisions_to_eval(self, max_revisions):
-    """Gets N evenly distributed RevisionState objects in the candidate range.
-
-    Args:
-      max_revisions: Max number of revisions to return.
+  def get_revision_to_eval(self):
+    """Gets the next RevistionState object in the candidate range.
 
     Returns:
-       At most `max_revisions` Revision objects in a list.
+       The next Revision object in a list.
     """
     self._update_candidate_range()
     candidate_range = [revision for revision in
                        self.revisions[self.lkgr.list_index + 1:
                                       self.fkbr.list_index]
                        if not revision.tested and not revision.failed]
-    if len(candidate_range) <= max_revisions:
+    if len(candidate_range) <= 1:
       return candidate_range
-    step = len(candidate_range) / (max_revisions + 1)
-    return candidate_range[step::step][:max_revisions]
+
+    default_revision = candidate_range[len(candidate_range) / 2]
+
+    with self.api.m.step.nest(
+        'Wiggling revision ' + str(default_revision.revision_string)):
+      # We'll search up to 25% of the range (in either direction) to try and
+      #find a nearby commit that's already been built.
+      max_wiggle = int(len(candidate_range) * DEFAULT_SEARCH_RANGE_PERCENTAGE)
+      for _ in xrange(max_wiggle): # pragma: no cover
+        index = len(candidate_range) / 2
+        if candidate_range[index]._is_build_archived():
+          return [candidate_range[index]]
+        del candidate_range[index]
+
+      return [default_revision]
 
   def check_reach_adjacent_revision(self, revision):
     """Checks if this revision reaches its adjacent revision.
@@ -516,6 +531,9 @@ class Bisector(object):
 
   def wait_for_all(self, revision_list):
     """Waits for all revisions in list to finish."""
+    # TODO(simonhatch): Simplify these (and callers) since
+    # get_revision_to_eval() no longer returns multiple revisions.
+    # crbug.com/546695
     while any([r.in_progress for r in revision_list]):
       revision_list.remove(self.wait_for_any(revision_list))
 
@@ -599,6 +617,9 @@ class Bisector(object):
 
   def wait_for_any(self, revision_list):
     """Waits for any of the revisions in the list to finish its job(s)."""
+    # TODO(simonhatch): Simplify these (and callers) since
+    # get_revision_to_eval() no longer returns multiple revisions.
+    # crbug.com/546695
     while True:
       if not revision_list or any(r.status == revision_state.RevisionState.NEW
                                   for r in revision_list):  # pragma: no cover

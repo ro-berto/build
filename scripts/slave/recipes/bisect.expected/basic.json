@@ -694,6 +694,11 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
+    "name": "Wiggling revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
     "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Partial Results@---partial bisect results start here---@@@",
