@@ -965,8 +965,9 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'tests': [
-          V8Testing,
+          V8Testing_2,
           Test262,
           Mozilla,
           SimdJs,
@@ -980,7 +981,8 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - novfp3': {
@@ -993,7 +995,8 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - debug - novfp3': {
@@ -1005,7 +1008,8 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim': {
@@ -1015,8 +1019,9 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'tests': [
-          V8Testing,
+          V8Testing_2,
           Test262,
           Mozilla,
           SimdJs,
@@ -1030,7 +1035,8 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, Mozilla, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - nosnap - debug - 1': {
@@ -1070,7 +1076,8 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [Mjsunit, Webkit],
+        'enable_swarming': True,
+        'tests': [Mjsunit_3, Webkit],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - mipsel - sim - builder': {
