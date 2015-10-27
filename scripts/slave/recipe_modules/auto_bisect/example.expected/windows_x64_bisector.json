@@ -108,8 +108,8 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@v8: None@@@",
+      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@skia: None@@@",
       "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@angle: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@skia/src: None@@@",
       "@@@STEP_LOG_END@Debug Bad Revision DEPS@@@"
     ]
   },
@@ -171,8 +171,8 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Debug Good Revision DEPS@v8: None@@@",
+      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@skia: None@@@",
       "@@@STEP_LOG_LINE@Debug Good Revision DEPS@angle: None@@@",
-      "@@@STEP_LOG_LINE@Debug Good Revision DEPS@skia/src: None@@@",
       "@@@STEP_LOG_END@Debug Good Revision DEPS@@@"
     ]
   },
