@@ -36,6 +36,7 @@ Unittests = TestStepConfig('unittests')
 V8Initializers = TestStepConfig('v8initializers')
 V8Testing = TestStepConfig('v8testing')
 V8Testing_2 = TestStepConfig('v8testing', shards=2)
+V8Testing_3 = TestStepConfig('v8testing', shards=3)
 V8Testing_4 = TestStepConfig('v8testing', shards=4)
 Webkit = TestStepConfig('webkit')
 
@@ -1902,7 +1903,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
+        'tests': [V8Testing_3, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm_dbg': {
@@ -1913,7 +1914,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
+        'tests': [V8Testing_3, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_rel': {
@@ -1924,7 +1925,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
+        'tests': [V8Testing_3, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_dbg': {
@@ -1935,7 +1936,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
+        'tests': [V8Testing_3, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_gc_stress_dbg': {
