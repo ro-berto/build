@@ -14,7 +14,7 @@ Status: %(status)s
 Test Command: %(command)s
 Test Metric: %(metric)s
 Relative Change: %(change)s
-Score: %(confidence).02f
+Score: %(score)s
 Retested CL with revert: %(retest)s
 
 """
@@ -90,6 +90,7 @@ class BisectResults(object):
           'Invalid parameter, the bisect must be over by the time the '
           'BisectResults constructor is called')  # pragma: no cover
     self._bisector = bisector
+    self.results_confidence = None
     self.abort_reason = None
     self.culprit_cl_hash = None
     self.commit_info = None
@@ -115,7 +116,7 @@ class BisectResults(object):
           'command': self.command,
           'metric': self.metric,
           'change': self.relative_change,
-          'confidence': self.results_confidence or 0,
+          'score': self.results_confidence,
           'retest': 'Not Implemented.'
       }
     else:
@@ -163,17 +164,20 @@ class BisectResults(object):
     self.bug_id = config.get('bug_id')
     self.good_revision = bisector.good_rev.commit_hash
     self.bad_revision = bisector.bad_rev.commit_hash
-    self.results_confidence = bisector.results_confidence
+
     self.is_telemetry = ('tools/perf/run_' in self.command or
                          'tools\\perf\\run_' in self.command)
-    self.culprit_cl_hash = None
 
     if self.is_telemetry:
       self.telemetry_command = re.sub(r'--browser=[^\s]+',
                                       '--browser=<bot-name>',
                                       self.command)
 
-    self._set_culprit_attributes(bisector.culprit)
+    self.culprit_cl_hash = None
+    if bisector.culprit:
+      self._set_culprit_attributes(bisector.culprit)
+      self.results_confidence = bisector.api.m.math_utils.confidence_score(
+          bisector.lkgr.values, bisector.fkbr.values)
 
     if bisector.failed_initial_confidence:
       self.abort_reason = _FAILED_INITIAL_CONFIDENCE_ABORT_REASON

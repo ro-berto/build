@@ -78,7 +78,6 @@ class Bisector(object):
 
     # Status flags
     self.initial_confidence = None
-    self.results_confidence = None
     self.failed_initial_confidence = False
     self.failed = False
     self.failed_direction = False
@@ -444,11 +443,6 @@ class Bisector(object):
          'Needed {:.2f}%, got {:.2f}%.').format(
              self.required_initial_confidence, actual_confidence))
 
-  def _compute_results_confidence(self):
-    # If this changes, remember to also update `_results_debug_message` below.
-    self.results_confidence = self.api.m.math_utils.confidence_score(
-        self.lkgr.values, self.fkbr.values)
-
   def _results_debug_message(self):
     if not (self.lkgr and self.fkbr and
             self.lkgr.values and self.fkbr.values):
@@ -545,7 +539,6 @@ class Bisector(object):
       if revision.deps_change() and self._expand_deps_revisions(revision):
         return False
       self.culprit = revision
-      self._compute_results_confidence()
       return True
     if (revision.good and revision.next_revision and
         revision.next_revision.bad):
@@ -553,7 +546,6 @@ class Bisector(object):
           and self._expand_deps_revisions(revision.next_revision)):
         return False
       self.culprit = revision.next_revision
-      self._compute_results_confidence()
       return True
     return False
 
