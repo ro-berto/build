@@ -1110,8 +1110,14 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Debug Info",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: PerfRevisionState(values=[], mean_value=0, std_dev=None)@@@",
-      "@@@STEP_LOG_LINE@Debug Info@bisector.fkbr: PerfRevisionState(values=[], mean_value=1, std_dev=None)@@@",
+      "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: PerfRevisionState(cp=306475, values=[], mean_value=0, std_dev=None)@@@",
+      "@@@STEP_LOG_LINE@Debug Info@bisector.fkbr: PerfRevisionState(cp=306476, values=[], mean_value=1, std_dev=None)@@@",
+      "@@@STEP_LOG_LINE@Debug Info@@@@",
+      "@@@STEP_LOG_LINE@Debug Info@Revision Values @@@",
+      "@@@STEP_LOG_LINE@Debug Info@306475   []     @@@",
+      "@@@STEP_LOG_LINE@Debug Info@306476   []     @@@",
+      "@@@STEP_LOG_LINE@Debug Info@306477   []     @@@",
+      "@@@STEP_LOG_LINE@Debug Info@306478   []     @@@",
       "@@@STEP_LOG_END@Debug Info@@@"
     ]
   },

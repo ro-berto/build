@@ -239,10 +239,10 @@ class BisectResults(object):
                      for r in self._bisector.revisions
                      if r.tested or r.aborted]
     all_rows = headers_row + revision_rows
-    return _REVISION_TABLE_TEMPLATE % {'table': _pretty_table(all_rows)}
+    return _REVISION_TABLE_TEMPLATE % {'table': pretty_table(all_rows)}
 
 
-def _pretty_table(data):
+def pretty_table(data):
   """Arrange a matrix of strings into an ascii table.
 
   This function was ripped off directly from somewhere in skia. It is

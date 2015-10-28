@@ -202,5 +202,5 @@ class PerfRevisionState(revision_state.RevisionState):
     return False
 
   def __repr__(self):
-    return ('PerfRevisionState(values=%r, mean_value=%r, std_dev=%r)' %
-            (self.values, self.mean_value, self.std_dev))
+    return ('PerfRevisionState(cp=%s, values=%r, mean_value=%r, std_dev=%r)' %
+            (self.commit_pos, self.values, self.mean_value, self.std_dev))

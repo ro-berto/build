@@ -444,27 +444,30 @@ class Bisector(object):
              self.required_initial_confidence, actual_confidence))
 
   def _results_debug_message(self):
-    if not (self.lkgr and self.fkbr and
-            self.lkgr.values and self.fkbr.values):
-      lines = [
-          'bisector.lkgr: %r' % self.lkgr,
-          'bisector.fkbr: %r' % self.fkbr,
-      ]
-      for revision in self.revisions:
-        if revision.values:
-          commit = revision.commit_hash
-          lines.append('Values for %s: %r' % (commit, revision.values))
-      return '\n'.join(lines)
+    result = 'bisector.lkgr: %r\n' % self.lkgr
+    result += 'bisector.fkbr: %r\n\n' % self.fkbr
+    result += self._revision_value_table()
+    if (self.lkgr and self.lkgr.values and self.fkbr and self.fkbr.values):
+      result += '\n' + self._t_test_results()
+    return result
 
+  def _revision_value_table(self):
+    """Returns a string table showing revisions and their values."""
+    header = [['Revision', 'Values']]
+    rows = [[str(r.commit_pos), str(r.values)] for r in self.revisions]
+    return bisect_results.pretty_table(header + rows)
+
+  def _t_test_results(self):
+    """Returns a string showing t-test results for lkgr and fkbr."""
     t, df, p = self.api.m.math_utils.welchs_t_test(
         self.lkgr.values, self.fkbr.values)
     lines = [
-        'Last known good rev values: %r' % self.lkgr.values,
-        'First known bad rev values: %r' % self.fkbr.values,
-        't-statistic (indicates "difference" between samples): %r' % t,
-        'degrees of freedom (indicates sample size): %r' % df,
-        'p-value (indicates likelihood of null hypothesis): %r' % p,
-        '"Confidence" (100 * (1 - p)): %r' % (100 * (1 - p))
+        'LKGR values: %r' % self.lkgr.values,
+        'FKBR values: %r' % self.fkbr.values,
+        't-statistic: %r' % t,
+        'deg. of freedom:  %r' % df,
+        'p-value: %r' % p,
+        'Confidence score: %r' % (100 * (1 - p))
     ]
     return '\n'.join(lines)
 
