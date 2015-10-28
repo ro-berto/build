@@ -54,10 +54,12 @@ def _RunTests(api):
                                                     'run_corpus_tests.py'))
   api.python('corpus tests', corpus_tests_path, cwd=api.path['checkout'])
 
+
 def RunSteps(api):
   _CheckoutSteps(api)
   _BuildSteps(api)
-  _RunTests(api)
+  with api.step.defer_results():
+    _RunTests(api)
 
 
 def GenTests(api):
