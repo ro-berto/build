@@ -52,6 +52,15 @@
         "branch": "xfa",
       },
     },
+    "drm_win_xfa": {
+      "recipe": "pdfium",
+      "scheduler": "pdfium_xfa_commits",
+      "slave_pools": ["drmemory_win"],
+      "category": "1xfa",
+      "properties": {
+        "branch": "xfa",
+      },
+    },
   },
 
   "schedulers": {
@@ -100,6 +109,16 @@
       },
       "slaves": [
         "vm144-m3",
+      ],
+    },
+    "drmemory_win": {
+      "slave_data": {
+        "bits": 64,
+        "os": "win",
+        "version": "win7",
+      },
+      "slaves": [
+        "vm270-m3",
       ],
     },
   },
