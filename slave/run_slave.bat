@@ -10,4 +10,4 @@ cd /d %~dp0
 :: Running it once will make sure svn and python were downloaded.
 call gclient.bat > nul
 :: run_slave.py will overwrite the PATH and PYTHONPATH environment variables.
-python %~dp0\run_slave.py --no_save -y buildbot.tac %*
+python %~dp0\run_slave.py --no_save -y buildbot.tac --logfile=twistd.log %*
