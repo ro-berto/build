@@ -225,8 +225,7 @@
       "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
-      "--",
-      "android_builder_tests"
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

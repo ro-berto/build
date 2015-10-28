@@ -81,9 +81,6 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'main_builder',
-      'compile_targets': [
-        'android_builder_tests',
-      ],
       'bot_type': 'builder',
       'testing': {
         'platform': 'linux',
