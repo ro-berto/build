@@ -7,7 +7,7 @@
       "--master",
       "chromium.android",
       "--builder",
-      "Android Aura Builder (dbg)",
+      "Android Aura Tester (dbg)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -19,7 +19,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
+      "src@1111111",
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -97,7 +97,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -133,7 +132,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Android Aura Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Android Aura Tester (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -193,82 +192,37 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
-      "gen",
-      "-m",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/src/out/Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rmtree build directory",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/extract_build.py",
+      "--target",
+      "Debug",
+      "--build-archive-url",
+      "gs://test-domain/test-archive.zip",
+      "--master-name",
       "chromium.android",
-      "-b",
-      "Android Aura Builder (dbg)",
-      "--config-file",
-      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "//out/Debug"
+      "--build-number",
+      "571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "generate_build_files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Debug",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-jsonstatus",
-      "/path/to/tmp/json",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "compile",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/zip_build.py",
-      "--target",
-      "Debug",
-      "--build-url",
-      "gs://chromium-android-archive/chromium.android/Android Aura Builder (dbg)",
-      "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Aura Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Aura Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "package build"
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger",
-    "trigger_specs": [
-      {
-        "builder_name": "Android Aura Tester (dbg)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Aura Tester (dbg)@@@"
-    ]
+    "name": "extract build"
   },
   {
     "name": "$result",

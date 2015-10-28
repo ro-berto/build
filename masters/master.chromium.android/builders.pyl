@@ -92,6 +92,13 @@
       "category": "3Testers",
       "mergeRequests": True,
     },
+    "Android Aura Tester (dbg)": {
+      "recipe": "chromium",
+      "scheduler": None,
+      "slave_pools": ["aura_testers"],
+      "category": "3Testers",
+      "mergeRequests": True,
+    },
     "Android MIPS Builder (dbg)": {
       "recipe": "android/builder",
       "scheduler": "android_commits",
@@ -182,6 +189,16 @@
       "slaves": [
           "slave41-c1",
           "slave46-c1",
+        ],
+    },
+    "aura_testers": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": 64,
+      },
+      "slaves": [
+          "build29-b1",
         ],
     },
     "remoting": {
