@@ -202,6 +202,9 @@ BUILDERS = {
           V8Testing,
         ],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+        },
       },
       'V8 Linux - debug': {
         'v8_config_kwargs': {
