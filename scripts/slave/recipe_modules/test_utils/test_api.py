@@ -147,3 +147,30 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     }
     return self.m.raw_io.output_dir(files_dict)
 
+  def canned_isolated_script_output(self, passing, is_win, swarming=False,
+                                    swarming_internal_failure=False,
+                                    isolated_script_passing=True, valid=True):
+    """Produces a test results' compatible json for isolated script tests. """
+    jsonish_results = {}
+    jsonish_results['valid'] = valid
+    if isolated_script_passing:
+      jsonish_results['failures'] = []
+    else:
+      jsonish_results['failures'] = ['test1.Test1', 'test2.Test2']
+
+    jsonish_summary = {
+      'shards': [
+        {
+          'failure': not passing,
+          'internal_failure': swarming_internal_failure
+        }
+      ]
+    }
+
+    swarming_path = '0\\output.json' if is_win else '0/output.json'
+    results_path = swarming_path if swarming else 'output.json'
+    files_dict = {
+      results_path: json.dumps(jsonish_results),
+      'summary.json': json.dumps(jsonish_summary)
+    }
+    return self.m.raw_io.output_dir(files_dict)

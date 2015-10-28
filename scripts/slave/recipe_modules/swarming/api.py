@@ -346,6 +346,35 @@ class SwarmingApi(recipe_api.RecipeApi):
     task.collect_step = self._telemetry_gpu_collect_step
     return task
 
+  def isolated_script_task(self, title, isolated_hash, extra_args=None,
+                           idempotent=False, **kwargs):
+    """Returns a new SwarmingTask to run an isolated script test on Swarming.
+
+    Swarming recipe module knows how collect JSON file with test execution
+    summary produced by isolated script tests launcher. Since isolated script
+    tests do not support sharding, no merging of the results is performed.
+    Parsed JSON summary is returned from the collect step.
+
+    For meaning of the rest of the arguments see 'task' method.
+    """
+    extra_args = list(extra_args or [])
+
+    # Ensure --isolated-script-test-output is not already passed. We are going
+    # to overwrite it.
+    bad_args = any(
+        x.startswith('--isolated-script-test-output=') for x in extra_args)
+    if bad_args:  # pragma: no cover
+      raise ValueError('--isolated-script-test-output should not be used.')
+
+    # Append it. output.json name is expected by collect_gtest_task.py.
+    extra_args.append(
+        '--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json')
+
+    task = self.task(title, isolated_hash, extra_args=extra_args,
+                     idempotent=idempotent, **kwargs)
+    task.collect_step = self._isolated_script_collect_step
+    return task
+
   def check_client_version(self, step_test_data=None):
     """Yields steps to verify compatibility with swarming_client version."""
     return self.m.swarming_client.ensure_script_version(
@@ -654,6 +683,50 @@ class SwarmingApi(recipe_api.RecipeApi):
         self.m.step.active_result.presentation.logs['no_results_exc'] = [str(e)]
         self.m.step.active_result.telemetry_results = None
 
+  def _isolated_script_collect_step(self, task, **kwargs):
+    step_test_data = kwargs.pop('step_test_data', None)
+    if not step_test_data:
+      step_test_data = self.m.test_utils.test_api.canned_isolated_script_output(
+          passing=True, is_win=self.m.platform.is_win, swarming=True)
+
+    args=self.get_collect_cmd_args(task)
+    args.extend(['--task-output-dir', self.m.raw_io.output_dir()])
+
+    try:
+      self.m.python(
+          name=self._get_step_name('', task),
+          script=self.m.swarming_client.path.join('swarming.py'),
+          args=args, step_test_data=lambda: step_test_data,
+          **kwargs)
+    finally:
+      # Regardless of the outcome of the test (pass or fail), we try to parse
+      # the results. If any error occurs while parsing results, then we set them
+      # to None, which caller should treat as invalid results.
+      # Note that try-except block below will not mask the
+      # recipe_api.StepFailure exception from the collect step above. Instead
+      # it is being allowed to propagate after the results have been parsed.
+      try:
+        step_result = self.m.step.active_result
+        outdir_json = self.m.json.dumps(step_result.raw_io.output_dir, indent=2)
+        step_result.presentation.logs['outdir_json'] = outdir_json.splitlines()
+
+        # Check if it's an internal failure.
+        summary = self.m.json.loads(
+            step_result.raw_io.output_dir['summary.json'])
+        if any(shard['internal_failure'] for shard in summary['shards']):
+          raise recipe_api.InfraFailure('Internal swarming failure.')
+
+        # TODO(nednguyen, kbr): Combine isolated script results from multiple
+        # shards rather than assuming that there is always just one shard.
+        assert len(summary['shards']) == 1
+        results_raw = step_result.raw_io.output_dir[
+            self.m.path.join('0', 'output.json')]
+        step_result.isolated_script_results = self.m.json.loads(results_raw)
+
+        self._display_pending(summary, step_result.presentation)
+      except Exception as e:
+        self.m.step.active_result.presentation.logs['no_results_exc'] = [str(e)]
+        self.m.step.active_result.isolated_script_results = None
 
   def _get_step_name(self, prefix, task):
     """SwarmingTask -> name of a step of a waterfall.

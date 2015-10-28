@@ -877,11 +877,11 @@ class AMPInstrumentationTest(AMPTest):
         isolate_file_path=isolate_file_path).run(api, suffix)
 
 
-class IsolatedScriptTest(Test):
+class LocalIsolatedScriptTest(Test):
   def __init__(self, name, args=None, target_name=None, **runtest_kwargs):
-    """Constructs an instance of IsolatedScriptTest.
+    """Constructs an instance of LocalIsolatedScriptTest.
 
-    An IsolatedScriptTest knows how to invoke an isolate which obeys a certain
+    An LocalIsolatedScriptTest knows how to invoke an isolate which obeys a certain
     contract. The isolate's main target must be a wrapper script which must
     interpret certain command line arguments as follows:
 
@@ -900,7 +900,7 @@ class IsolatedScriptTest(Test):
       target_name: Actual name of the test. Defaults to name.
       runtest_kwargs: Additional keyword args forwarded to the runtest.
     """
-    super(IsolatedScriptTest, self).__init__()
+    super(LocalIsolatedScriptTest, self).__init__()
     self._name = name
     self._args = args or []
     self._target_name = target_name
@@ -971,15 +971,80 @@ class IsolatedScriptTest(Test):
     return self._test_runs[suffix].json.output['failures']
 
 
+class SwarmingIsolatedScriptTest(SwarmingTest):
+  def __init__(self, name, args=None, target_name=None, shards=1,
+               dimensions=None, tags=None, extra_suffix=None,
+               upload_test_results=True):
+    super(SwarmingIsolatedScriptTest, self).__init__(
+        name, dimensions, tags, target_name, extra_suffix)
+    self._args = args or []
+    self._shards = shards
+    self._upload_test_results = upload_test_results
+
+  @property
+  def target_name(self):
+    return self._target_name or self._name
+
+  def compile_targets(self, _):
+    return [self.target_name]
+
+  @property
+  def uses_swarming(self):
+    return True
+
+  def create_task(self, api, suffix, isolated_hash):
+    # For local tests args are added inside api.chromium.run_telemetry_test.
+    browser_config = api.chromium.c.build_config_fs.lower()
+    args = self._args[:]
+
+    # TODO(nednguyen): only rerun the tests that failed for the "without patch"
+    # suffix.
+
+    # For the time being, we assume all isolated_script_test are not idempotent
+    # TODO(nednguyen): make this configurable in isolated_scripts's spec.
+    return api.swarming.isolated_script_task(
+        title=self._step_name(suffix), isolated_hash=isolated_hash,
+        idempotent=False, extra_args=args)
+
+  def validate_task_results(self, api, step_result):
+    results = getattr(step_result, 'isolated_script_results', None) or {}
+
+    try:
+      failures = results['failures']
+      valid = results['valid']
+      if not failures and step_result.retcode != 0:
+        failures = ['%s (entire test suite)' % self.name]
+        valid = False
+    except (ValueError, KeyError) as e:
+      step_result.presentation.logs['invalid_results_exc'] = [str(e)]
+      valid = False
+      failures = None
+    if valid:
+      step_result.presentation.step_text += api.test_utils.format_step_text([
+        ['failures:', failures]
+      ])
+    return valid, failures
+
 def generate_isolated_script(api, mastername, buildername, test_spec,
                              enable_swarming=False,
                              scripts_compile_targets=None):
-  for spec in test_spec.get(buildername, {}).get(
-      'isolated_scripts', []):
-    yield IsolatedScriptTest(
-        str(spec['name']),
-        args=spec.get('args', []),
-        target_name=spec['isolate_name'])
+  for spec in test_spec.get(buildername, {}).get('isolated_scripts', []):
+    use_swarming = False
+    swarming_shards = 1
+    if enable_swarming:
+      swarming_spec = spec.get('swarming', {})
+      if swarming_spec.get('can_use_on_swarming_builders', False):
+        use_swarming = True
+        swarming_shards = swarming_spec.get('shards', 1)
+    name = str(spec['name'])
+    args = args=spec.get('args', [])
+    target_name = spec['isolate_name']
+    if use_swarming:
+      yield SwarmingIsolatedScriptTest(
+          name=name, args=args, target_name=target_name, shards=swarming_shards)
+    else:
+      yield LocalIsolatedScriptTest(
+          name=name, args=args, target_name=target_name)
 
 
 class GTestTest(Test):
