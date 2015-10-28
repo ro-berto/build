@@ -240,6 +240,7 @@ def main(argv):
       'master.chromiumos': 'ChromiumOS',
       'master.chromiumos.chromium': 'ChromiumOSChromium',
       'master.chromiumos.tryserver': 'ChromiumOSTryServer',
+      'master.goma': 'Goma',
       'master.client.art': 'ART',
       'master.client.boringssl': 'Boringssl',
       'master.client.catapult': 'Catapult',
