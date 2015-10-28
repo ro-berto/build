@@ -151,6 +151,7 @@
       "[SLAVE_BUILD]/src/tools/chrome_proxy/run_benchmark",
       "--use-live-sites",
       "--browser=release",
+      "--chrome-root=[SLAVE_BUILD]/src",
       "--extra-browser-args=\"--no-sandbox\"",
       "chrome_proxy_benchmark.smoke.smoke"
     ],

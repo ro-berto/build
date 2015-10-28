@@ -31,6 +31,7 @@ def RunSteps(api):
   api.step('Run Sample Smoke Test',
       [api.path['checkout'].join('tools', 'chrome_proxy', 'run_benchmark'),
        '--use-live-sites', '--browser=release',
+       '--chrome-root=%s' % api.path['checkout'],
        '--extra-browser-args="--no-sandbox"',
        'chrome_proxy_benchmark.smoke.smoke'])
 
