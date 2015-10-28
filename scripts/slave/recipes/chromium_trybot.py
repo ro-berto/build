@@ -150,6 +150,13 @@ CHROMIUM_BLINK_TESTS_BUILDERS = freeze([
 ])
 
 
+CHROMIUM_BLINK_TESTS_PATHS = freeze([
+  'third_party/WebKit',
+  'third_party/harfbuzz-ng',
+  'v8',
+])
+
+
 def tests_in_compile_targets(api, compile_targets, tests):
   """Returns the tests in |tests| that have at least one of their compile
   targets in |compile_targets|."""
@@ -244,11 +251,9 @@ def _RunStepsInternal(api):
   # TODO(phajdan.jr): Remove special case for layout tests.
   add_blink_tests = False
   if buildername in CHROMIUM_BLINK_TESTS_BUILDERS:
-    if any([f.startswith('third_party/WebKit') for f in affected_files]):
-      add_blink_tests = True
-    if any([f.startswith('v8') for f in affected_files]):
-      add_blink_tests = True
-
+    for path in CHROMIUM_BLINK_TESTS_PATHS:
+      if any([f.startswith(path) for f in affected_files]):
+        add_blink_tests = True
 
   # Add blink tests that work well with "analyze" here. The tricky ones
   # that bypass it (like the layout tests) are added later.
