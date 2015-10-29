@@ -262,7 +262,7 @@ class AmpApi(recipe_api.RecipeApi):
   def amp_arguments(
       self, device_type='Android', device_minimum_os=None, device_name=None,
       device_oem=None, device_os=None, device_timeout=None, api_address=None,
-      api_port=None, api_protocol=None, network_config=None):
+      api_port=None, api_protocol=None, network_config=None, test_timeout=None):
     """Generate command-line arguments for running tests on AMP.
 
     Args:
@@ -284,6 +284,7 @@ class AmpApi(recipe_api.RecipeApi):
         environment. See the availible network environment options at
         https://appurify.atlassian.net/wiki/display/APD/
           Run+Configurations+-+Test+and+Network
+      test_timeout: The timeout for the test runtime on AMP.
 
     Returns:
       A list of command-line arguments as strings.
@@ -322,6 +323,9 @@ class AmpApi(recipe_api.RecipeApi):
 
     if network_config:
       amp_args += ['--network-config', network_config]
+
+    if test_timeout:
+      amp_args += ['--test-timeout', test_timeout]
 
     return amp_args
 

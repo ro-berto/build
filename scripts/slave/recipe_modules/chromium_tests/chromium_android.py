@@ -235,23 +235,44 @@ SPEC = {
                 'android_webview/android_webview_test_apk.isolate',
             compile_target='android_webview_test_apk',
             device_name=['Nexus 7'], device_os=['4.4.2'],
-            fallback_to_local=False),
+            fallback_to_local=False,
+            test_timeout=3600),
         steps.AMPInstrumentationTest(
             test_apk='AndroidWebViewTest',
             apk_under_test='AndroidWebView',
             android_isolate_path=
                 'android_webview/android_webview_test_apk.isolate',
             compile_target='android_webview_test_apk',
-            device_oem=['Motorola', 'motorola'], device_os=['4.4.2'],
-            fallback_to_local=False),
+            device_name=['Samsung Galaxy S4'], device_os=['4.4.2'],
+            fallback_to_local=False,
+            test_timeout=3600),
         steps.AMPInstrumentationTest(
             test_apk='AndroidWebViewTest',
             apk_under_test='AndroidWebView',
             android_isolate_path=
                 'android_webview/android_webview_test_apk.isolate',
             compile_target='android_webview_test_apk',
-            device_oem=['Samsung', 'samsung'], device_os=['4.4.2'],
-            fallback_to_local=False),
+            device_name=['Samsung Galaxy Note 3'], device_os=['4.4.2'],
+            fallback_to_local=False,
+            test_timeout=3600),
+        steps.AMPInstrumentationTest(
+            test_apk='AndroidWebViewTest',
+            apk_under_test='AndroidWebView',
+            android_isolate_path=
+                'android_webview/android_webview_test_apk.isolate',
+            compile_target='android_webview_test_apk',
+            device_name=['Motorola Moto G'], device_os=['4.4.2'],
+            fallback_to_local=False,
+            test_timeout=3600),
+        steps.AMPInstrumentationTest(
+            test_apk='AndroidWebViewTest',
+            apk_under_test='AndroidWebView',
+            android_isolate_path=
+                'android_webview/android_webview_test_apk.isolate',
+            compile_target='android_webview_test_apk',
+            device_name=['HTC One M8'], device_os=['4.4.2'],
+            fallback_to_local=False,
+            test_timeout=3600),
       ],
       'test_generators': [
         steps.generate_gtest,

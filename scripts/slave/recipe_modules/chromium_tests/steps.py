@@ -693,13 +693,14 @@ class AMPTest(Test):
   AMP_INSTANCE_PROTOCOL = 'http'
   AMP_RESULTS_BUCKET = 'chrome-amp-results'
   def __init__(self, name, device_name=None, device_os=None, device_oem=None,
-               fallback_to_local=True):
+               fallback_to_local=True, test_timeout=None):
     self._name = name
     self._device_name = device_name
     self._device_os = device_os
     self._device_oem = device_oem
     self._fallback_to_local = fallback_to_local
     self._test_run_id = None
+    self._test_timeout = test_timeout
     self._trigger_successful = None
     self._step_results = {}
 
@@ -718,7 +719,8 @@ class AMPTest(Test):
         api_protocol=AMPTest.AMP_INSTANCE_PROTOCOL,
         device_name=self._device_name,
         device_oem=self._device_oem,
-        device_os=self._device_os)
+        device_os=self._device_os,
+        test_timeout=self._test_timeout)
 
   def pre_run(self, api, suffix):
     """Triggers an AMP test."""
@@ -809,10 +811,11 @@ class AMPTest(Test):
 class AMPGTestTest(AMPTest):
   def __init__(self, name, args=None, target_name=None, device_name=None,
                device_os=None, device_oem=None, android_isolate_path=None,
-               fallback_to_local=True, **runtest_kwargs):
+               fallback_to_local=True, test_timeout=None, **runtest_kwargs):
     super(AMPGTestTest, self).__init__(
         name=name, device_name=device_name, device_os=device_os,
-        device_oem=device_oem, fallback_to_local=fallback_to_local)
+        device_oem=device_oem, fallback_to_local=fallback_to_local,
+        test_timeout=test_timeout)
     self._args = args
     self._target_name = target_name
     self._android_isolate_path = android_isolate_path
@@ -841,10 +844,12 @@ class AMPGTestTest(AMPTest):
 class AMPInstrumentationTest(AMPTest):
   def __init__(self, test_apk, apk_under_test, compile_target=None,
                device_name=None, device_os=None, device_oem=None,
-               android_isolate_path=None, fallback_to_local=True):
+               android_isolate_path=None, fallback_to_local=True,
+               test_timeout=None):
     super(AMPInstrumentationTest, self).__init__(
         test_apk, device_name=device_name, device_os=device_os,
-        device_oem=device_oem, fallback_to_local=fallback_to_local)
+        device_oem=device_oem, fallback_to_local=fallback_to_local,
+        test_timeout=test_timeout)
     self._apk_under_test = apk_under_test
     self._compile_target = compile_target
     self._android_isolate_path = android_isolate_path
