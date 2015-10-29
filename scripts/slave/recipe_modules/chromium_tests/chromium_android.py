@@ -243,7 +243,7 @@ SPEC = {
             android_isolate_path=
                 'android_webview/android_webview_test_apk.isolate',
             compile_target='android_webview_test_apk',
-            device_name=['Samsung Galaxy S4'], device_os=['4.4.2'],
+            device_name=['Galaxy S4'], device_os=['4.4.2'],
             fallback_to_local=False,
             test_timeout=3600),
         steps.AMPInstrumentationTest(
@@ -252,7 +252,7 @@ SPEC = {
             android_isolate_path=
                 'android_webview/android_webview_test_apk.isolate',
             compile_target='android_webview_test_apk',
-            device_name=['Samsung Galaxy Note 3'], device_os=['4.4.2'],
+            device_name=['Galaxy Note 3'], device_os=['4.4.2'],
             fallback_to_local=False,
             test_timeout=3600),
         steps.AMPInstrumentationTest(
@@ -261,7 +261,7 @@ SPEC = {
             android_isolate_path=
                 'android_webview/android_webview_test_apk.isolate',
             compile_target='android_webview_test_apk',
-            device_name=['Motorola Moto G'], device_os=['4.4.2'],
+            device_name=['Moto G'], device_os=['4.4.2'],
             fallback_to_local=False,
             test_timeout=3600),
         steps.AMPInstrumentationTest(
@@ -270,7 +270,7 @@ SPEC = {
             android_isolate_path=
                 'android_webview/android_webview_test_apk.isolate',
             compile_target='android_webview_test_apk',
-            device_name=['HTC One M8'], device_os=['4.4.2'],
+            device_name=['One M8'], device_os=['4.4.2'],
             fallback_to_local=False,
             test_timeout=3600),
       ],
