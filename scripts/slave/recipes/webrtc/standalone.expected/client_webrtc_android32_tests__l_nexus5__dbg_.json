@@ -307,7 +307,9 @@
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "[\"07a00ca4\"]",
       "client.webrtc",
-      "Android32 Tests (L Nexus5)(dbg)"
+      "Android32 Tests (L Nexus5)(dbg)",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "spawn_device_temp_monitor"

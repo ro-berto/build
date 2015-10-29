@@ -267,7 +267,8 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.adb.adb_path(),
         json.dumps(self._devices),
         self.m.properties['mastername'],
-        self.m.properties['buildername']
+        self.m.properties['buildername'],
+        '--blacklist-file', self.blacklist_file
     ]
     self.m.python('spawn_device_temp_monitor', script, args, infra_step=True)
 
