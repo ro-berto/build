@@ -576,9 +576,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
     bot_update_json = bot_update_step.json.output
-    # TODO(sergiyb): We should not rely on first solution to always be checked
-    # out into 'src', but instead read it from gclient config.
-    self.m.gclient.c.revisions['src'] = str(
+    # We only override first solution here to make sure that we correctly revert
+    # changes to DEPS file, which is particularly important for auto-rolls.
+    first_solution_name = self.m.gclient.c.solutions[0].name
+    self.m.gclient.c.revisions[first_solution_name] = str(
         bot_update_json['properties']['got_revision'])
     self.m.bot_update.ensure_checkout(
         force=True, patch=False, update_presentation=False)
