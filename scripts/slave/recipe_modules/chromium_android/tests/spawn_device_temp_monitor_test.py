@@ -266,18 +266,19 @@ class MainFuncTest(auto_stub.TestCase):
                         '"reason": "oom"}, "bad_serial2": {"timestamp": '
                         '1445554107.387428, "reason": "no_juice"}}')
     m = mock.mock_open(read_data=bl_file_contents)
-    with mock.patch('__builtin__.open', m, create=True):
-      try:
-        send_ts_mon_call = []
-        spawn_device_temp_monitor.main([
-            '/some/adb/path',
-            '["good_serial1", "bad_serial1"]',
-            'some_master_name',
-            'some_builder_name',
-            '--blacklist-file',
-            '/some/blacklist/file/path'])
-      except SimulatedSigterm:
-        pass
+    with mock.patch('os.path.exists', return_value=True):
+      with mock.patch('__builtin__.open', m, create=True):
+        try:
+          send_ts_mon_call = []
+          spawn_device_temp_monitor.main([
+              '/some/adb/path',
+              '["good_serial1", "bad_serial1"]',
+              'some_master_name',
+              'some_builder_name',
+              '--blacklist-file',
+              '/some/blacklist/file/path'])
+        except SimulatedSigterm:
+          pass
 
     expected_cmd = [spawn_device_temp_monitor._RUN_PY,
         'infra.tools.send_ts_mon_values',

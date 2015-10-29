@@ -132,8 +132,11 @@ def get_device_args(adb_path, master_name, builder_name, device):
 def scan_blacklist_file(blacklist_file, master_name,
                         builder_name, devices):
   """Scans the blacklist file for device statuses."""
-  with open(blacklist_file, 'r') as f:
-    bad_devices = json.load(f)
+  if os.path.exists(blacklist_file):
+    with open(blacklist_file, 'r') as f:
+      bad_devices = json.load(f)
+  else:
+    bad_devices = []
 
   args = []
   # Collect the status for 'bad' devices
