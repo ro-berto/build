@@ -8,7 +8,6 @@
       '../../../environment.cfg.py',
       '../../../third_party/infra/',
       '../../../third_party/mock-1.0.1/',
-      '../../../third_party/recipe_engine/',
       '../../common/',
       '../__init__.py',
       '../bot_update.py',
