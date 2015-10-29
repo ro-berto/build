@@ -89,13 +89,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     return output
 
   def get_version(self):
-    self._version = self.m.step(
+    self._version = self.m.file.read(
         'get version',
-        ['cat', self.m.path['checkout'].join('chrome', 'VERSION')],
-        stdout=self.m.raw_io.output('version'),
-        step_test_data=(
-            lambda: self.m.raw_io.test_api.stream_output(
-                "MAJOR=37\nMINOR=0\nBUILD=2021\nPATCH=0\n"))).stdout
+        self.m.path['checkout'].join('chrome', 'VERSION'),
+        test_data=("MAJOR=37\nMINOR=0\nBUILD=2021\nPATCH=0\n"))
     return self.version
 
   def set_build_properties(self, props):

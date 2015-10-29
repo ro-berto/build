@@ -477,12 +477,14 @@
   },
   {
     "cmd": [
-      "cat",
-      "[SLAVE_BUILD]/src/chrome/VERSION"
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/chrome/VERSION",
+      "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get version",
-    "stdout": "/path/to/tmp/version",
     "~followup_annotations": [
       "@@@STEP_TEXT@Found version 37.0.2021.0@@@"
     ]
