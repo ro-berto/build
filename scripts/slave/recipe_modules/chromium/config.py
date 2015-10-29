@@ -48,6 +48,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       xcode_project = Single(Path, required=False),
       solution = Single(Path, required=False),
       ninja_confirm_noop = Single(bool, empty_val=False, required=False),
+      set_build_data_dir = Single(bool, empty_val=False, required=False),
     ),
     runtest_py = ConfigGroup(
       src_side = Single(bool),
@@ -255,6 +256,7 @@ def msvs2013(c):
 @config_ctx()
 def goma_canary(c):
   c.compile_py.goma_hermetic = 'error'
+  c.compile_py.set_build_data_dir = True
 
 @config_ctx()
 def goma_staging(c):

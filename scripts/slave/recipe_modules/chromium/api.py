@@ -170,6 +170,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     ]
     if self.c.compile_py.build_tool:
       args += ['--build-tool', self.c.compile_py.build_tool]
+    if (self.c.compile_py.set_build_data_dir and
+        self.m.properties.get('build_data_dir')):
+      args += ['--build-data-dir', self.m.properties.get('build_data_dir')]
     if self.c.compile_py.cross_tool:
       args += ['--crosstool', self.c.compile_py.cross_tool]
     if self.c.compile_py.compiler:

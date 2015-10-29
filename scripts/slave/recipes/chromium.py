@@ -358,7 +358,8 @@ def GenTests(api):
   yield (
     api.test('goma_with_diagnose_goma_failure') +
     api.properties.generic(mastername='chromium.fyi',
-                           buildername='CrWinGoma') +
+                           buildername='CrWinGoma',
+                           build_data_dir='E:\\chrome-infra-logs') +
     api.step_data('diagnose_goma', retcode=1)
   )
 
