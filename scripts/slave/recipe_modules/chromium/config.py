@@ -68,6 +68,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       PATH = List(Path),
       ADB_VENDOR_KEYS = Single(Path, required=False),
       LLVM_FORCE_HEAD_REVISION = Single(basestring, required=False),
+      GOMA_STUBBY_PROXY_IP_ADDRESS = Single(basestring, required=False),
     ),
     project_generator = ConfigGroup(
       tool = Single(basestring, empty_val='gyp'),
@@ -254,6 +255,10 @@ def msvs2013(c):
 @config_ctx()
 def goma_canary(c):
   c.compile_py.goma_hermetic = 'error'
+
+@config_ctx()
+def goma_staging(c):
+  c.env.GOMA_STUBBY_PROXY_IP_ADDRESS = 'sandbox.google.com'
 
 @config_ctx()
 def goma_hermetic_fallback(c):

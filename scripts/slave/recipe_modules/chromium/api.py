@@ -61,6 +61,9 @@ class ChromiumApi(recipe_api.RecipeApi):
       ret['ADB_VENDOR_KEYS'] = self.c.env.ADB_VENDOR_KEYS
     if self.c.env.LLVM_FORCE_HEAD_REVISION:
       ret['LLVM_FORCE_HEAD_REVISION'] = self.c.env.LLVM_FORCE_HEAD_REVISION
+    if self.c.env.GOMA_STUBBY_PROXY_IP_ADDRESS:
+      ret['GOMA_STUBBY_PROXY_IP_ADDRESS'] = \
+        self.c.env.GOMA_STUBBY_PROXY_IP_ADDRESS
     return ret
 
   @property

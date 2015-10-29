@@ -21,6 +21,7 @@ from . import chromium_webkit
 from . import chromium_win
 from . import client_skia
 from . import client_v8_fyi
+from . import goma
 from . import tryserver_chromium_linux
 from . import tryserver_chromium_mac
 from . import tryserver_chromium_perf
@@ -43,6 +44,7 @@ BUILDERS = freeze({
   'chromium.win': chromium_win.SPEC,
   'client.skia': client_skia.SPEC,
   'client.v8.fyi': client_v8_fyi.SPEC,
+  'goma': goma.SPEC,
   'tryserver.chromium.linux': tryserver_chromium_linux.SPEC,
   'tryserver.chromium.mac': tryserver_chromium_mac.SPEC,
   'tryserver.chromium.perf': tryserver_chromium_perf.SPEC,

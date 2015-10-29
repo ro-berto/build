@@ -521,7 +521,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # TODO(shinyak): bot_config.get('tests', []) sometimes return tuple.
     tests = list(bot_config.get('tests', []))
 
-    if bot_config.get('goma_canary'):
+    if bot_config.get('goma_canary') or bot_config.get('goma_staging'):
       tests.insert(0, steps.DiagnoseGomaTest())
 
     if bot_type in ('tester', 'builder_tester'):

@@ -263,6 +263,7 @@ ENABLED_MASTERS = [
     'client.v8.fyi',
     'client.webrtc',
     'client.webrtc.fyi',
+    'goma',
     'tryserver.blink',
     'tryserver.client.catapult',
     'tryserver.client.mojo',
