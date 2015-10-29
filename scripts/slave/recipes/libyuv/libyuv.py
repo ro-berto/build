@@ -154,6 +154,38 @@ BUILDERS = freeze({
         },
         'testing': {'platform': 'win'},
       },
+      'Win32 Debug (Clang)': {
+        'recipe_config': 'libyuv_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'testing': {'platform': 'win'},
+      },
+      'Win32 Release (Clang)': {
+        'recipe_config': 'libyuv_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'testing': {'platform': 'win'},
+      },
+      'Win64 Debug (Clang)': {
+        'recipe_config': 'libyuv_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'win'},
+      },
+      'Win64 Release (Clang)': {
+        'recipe_config': 'libyuv_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'win'},
+      },
       'Mac32 Debug': {
         'recipe_config': 'libyuv',
         'chromium_config_kwargs': {
