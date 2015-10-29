@@ -225,9 +225,7 @@ def RunSteps(api):
     _RunPerfTests(api, bot_config['perf_test_info'])
   else:
     _RunUnitAndAppTests(api)
-    # TODO(msw): Fix 'get version' failures on Windows: http://crbug.com/548026
-    if api.chromium.c.TARGET_PLATFORM != 'win':
-      _UploadMandolineToGoogleStorage(api)
+    _UploadMandolineToGoogleStorage(api)
 
 
 def GenTests(api):
