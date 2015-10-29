@@ -567,7 +567,7 @@ class SwarmingApi(recipe_api.RecipeApi):
             if url:
               links['shard #%d' % index] = url
         if self.show_isolated_out_in_collect_step:
-          for index, shard in enumerate(json_data['shards']):
+          for index, shard in enumerate(json_data.get('shards') or []):
             isolated_out = shard.get('isolated_out')
             if isolated_out:
               link_name = 'shard #%d isolated out' % index
