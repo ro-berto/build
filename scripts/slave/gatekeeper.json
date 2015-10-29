@@ -815,7 +815,6 @@
         "gn",
         "gclient runhooks",
         "runhooks",
-        "webkit_unit_tests",
         "Presubmit",
         "Static-Initializers",
         "Check",
