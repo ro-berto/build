@@ -195,7 +195,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"android_builder_tests\"]}",
+      "{\"files\": [\"foo.cc\"], \"targets\": [\"android_builder_tests\", \"system_webview_apk\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",

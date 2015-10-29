@@ -181,6 +181,7 @@ SPEC = {
       'bot_type': 'builder',
       'compile_targets': [
         'cronet_test_instrumentation_apk',
+        'system_webview_apk',
       ],
       'testing': {
         'platform': 'linux',
@@ -302,6 +303,9 @@ SPEC = {
       },
       'android_config': 'main_builder',
       'bot_type': 'builder',
+      'compile_targets': [
+        'system_webview_apk',
+      ],
       'testing': {
         'platform': 'linux',
       },
@@ -404,6 +408,7 @@ SPEC = {
       'bot_type': 'builder_tester',
       'compile_targets': [
         'android_builder_tests',
+        'system_webview_apk',
       ],
       'testing': {
         'platform': 'linux',

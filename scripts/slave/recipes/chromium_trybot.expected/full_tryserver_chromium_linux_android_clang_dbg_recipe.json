@@ -291,7 +291,8 @@
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
-      "android_builder_tests"
+      "android_builder_tests",
+      "system_webview_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

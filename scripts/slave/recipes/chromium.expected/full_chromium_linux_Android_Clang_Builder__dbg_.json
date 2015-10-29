@@ -230,7 +230,8 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "android_builder_tests"
+      "android_builder_tests",
+      "system_webview_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
