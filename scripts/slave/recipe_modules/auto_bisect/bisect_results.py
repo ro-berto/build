@@ -214,12 +214,14 @@ class BisectResults(object):
       self.culprit_date = culprit_info['date']
 
   def _compose_revisions_table(self):
+    test_type = self._bisector.bisect_config.get('test_type')
+    is_return_code = test_type == 'return_code'
     def revision_row(r):
       result = [
           r.depot_name,
           r.deps_revision or 'r' + str(r.commit_pos),
-          r.mean_value if r.mean_value is not None else 'N/A',
-          r.std_dev if r.std_dev is not None else 'N/A',
+          _format_number(r.mean_value),
+          _format_number(r.std_dev),
           len(r.values),
           'good' if r.good else 'bad' if r.bad else 'unknown',
           '<-' if self._bisector.culprit == r else '',
@@ -240,6 +242,14 @@ class BisectResults(object):
                      if r.tested or r.aborted]
     all_rows = headers_row + revision_rows
     return _REVISION_TABLE_TEMPLATE % {'table': pretty_table(all_rows)}
+
+
+def _format_number(x):
+  if x is None:
+    return 'N/A'
+  if isinstance(x, int):
+    return str(x)
+  return str(round(x, 6))
 
 
 def pretty_table(data):
