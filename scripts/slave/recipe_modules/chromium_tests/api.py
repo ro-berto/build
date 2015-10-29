@@ -577,10 +577,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium.taskkill()
     bot_update_json = bot_update_step.json.output
     # We only override first solution here to make sure that we correctly revert
-    # changes to DEPS file, which is particularly important for auto-rolls.
+    # changes to DEPS file, which is particularly important for auto-rolls. It
+    # is also imporant that we do not assume that corresponding revision is
+    # stored in the 'got_revision' as some gclient configs change the default
+    # mapping for their own purposes.
     first_solution_name = self.m.gclient.c.solutions[0].name
+    rev_property = self.m.gclient.c.got_revision_mapping[first_solution_name]
     self.m.gclient.c.revisions[first_solution_name] = str(
-        bot_update_json['properties']['got_revision'])
+        bot_update_json['properties'][rev_property])
     self.m.bot_update.ensure_checkout(
         force=True, patch=False, update_presentation=False)
     self.m.chromium.runhooks(name='runhooks (without patch)')
