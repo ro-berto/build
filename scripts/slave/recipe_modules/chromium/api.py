@@ -236,8 +236,9 @@ class ChromiumApi(recipe_api.RecipeApi):
 
       step_result = self.m.step.active_result
       try:
-        if step_result.json.output['notice'][0]['infra_status'][
-            'ping_status_code'] != 200:
+        if (not step_result.json.output['notice'][0].get('infra_status') or
+            step_result.json.output['notice'][0]['infra_status'][
+                'ping_status_code'] != 200):
           infra_failure = True
       except Exception:  # pragma: no cover
         pass
