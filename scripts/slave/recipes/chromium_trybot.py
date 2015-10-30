@@ -1107,6 +1107,17 @@ def GenTests(api):
         api.test_utils.canned_test_output(passing=True, minimal=True))
   )
 
+  yield (
+    api.test('blink_compile_without_patch_fails') +
+    props(mastername='tryserver.blink',
+          buildername='linux_blink_rel') +
+    suppress_analyze() +
+    api.platform.name('linux') +
+    api.override_step_data('webkit_tests (with patch)',
+        api.test_utils.canned_test_output(passing=False)) +
+    api.override_step_data('compile (without patch)', retcode=1)
+  )
+
   # This tests what happens if something goes horribly wrong in
   # run-webkit-tests and we return an internal error; the step should
   # be considered a hard failure and we shouldn't try to compare the

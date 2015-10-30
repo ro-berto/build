@@ -268,10 +268,6 @@ def v8_bleeding_edge_git(c):
   c.solutions[0].custom_vars['v8_branch'] = 'branches/bleeding_edge'
   c.revisions['src/v8'] = 'HEAD'
 
-@config_ctx(includes=['blink', 'v8_bleeding_edge_git'])
-def v8_blink_flavor(c):
-  del c.revisions['src/third_party/WebKit']
-
 @config_ctx()
 def v8_canary(c):
   c.revisions['src/v8'] = 'origin/canary'
@@ -299,18 +295,6 @@ def oilpan(c):  # pragma: no cover
   }
   del c.got_revision_mapping['src']
   c.got_revision_mapping['src/third_party/WebKit/Source'] = 'got_revision'
-
-@config_ctx(includes=['blink', 'chrome_internal'])
-def blink_internal(c):
-  # Add back the webkit data dependencies
-  needed_components_internal = [
-    "src/webkit/data/bmp_decoder",
-    "src/webkit/data/ico_decoder",
-    "src/webkit/data/test_shell/plugins",
-    "src/webkit/data/xbm_decoder",
-  ]
-  for key in needed_components_internal:
-    del c.solutions[1].custom_deps[key]
 
 @config_ctx(includes=['oilpan', 'chrome_internal'])
 def oilpan_internal(c):  # pragma: no cover
