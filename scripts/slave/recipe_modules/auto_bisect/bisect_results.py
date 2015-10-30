@@ -214,8 +214,6 @@ class BisectResults(object):
       self.culprit_date = culprit_info['date']
 
   def _compose_revisions_table(self):
-    test_type = self._bisector.bisect_config.get('test_type')
-    is_return_code = test_type == 'return_code'
     def revision_row(r):
       result = [
           r.depot_name,
@@ -228,10 +226,11 @@ class BisectResults(object):
       ]
       return map(str, result)
 
+    is_return_code = self._bisector.is_return_code_mode()
     headers_row = [[
         'Depot',
         'Revision',
-        'Mean Value',
+        'Mean Value' if not is_return_code else 'Exit Code',
         'Std. Dev.',
         'Num Values',
         'Good?',

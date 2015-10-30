@@ -761,6 +761,10 @@ class Bisector(object):
                    'refs/remotes/origin/master')
     self.api.m.git('checkout', 'master', cwd=self.api.m.path['checkout'])
 
+  def is_return_code_mode(self):
+    """Checks whether this is a bisect on the test's exit code."""
+    return self.bisect_config.get('test_type') == 'return_code'
+
   def surface_result(self, result_string):
     assert result_string in VALID_RESULT_CODES
     prefix = 'B4T_'  # To avoid collision. Stands for bisect (abbr. `a la i18n).

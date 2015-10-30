@@ -38,7 +38,7 @@ class PerfRevisionState(revision_state.RevisionState):
         self.bisector.surface_result('MISSING_METRIC')
       return
     self.values = results['values']
-    if self.bisector.bisect_config.get('test_type') == 'return_code':
+    if self.bisector.is_return_code_mode():
       retcodes = test_results['retcodes']
       overall_return_code = 0 if all(v == 0 for v in retcodes) else 1
       self.mean_value = overall_return_code
