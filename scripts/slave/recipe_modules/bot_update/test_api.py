@@ -6,15 +6,15 @@ import hashlib
 import os
 import struct
 import sys
+from recipe_engine import recipe_test_api
 
-sys.path.append(
+sys.path.insert(0,
   os.path.dirname( # scripts
     os.path.dirname( # slave
       os.path.dirname( # recipe_modules
         os.path.dirname(__file__))))) # bot_update
 
 from slave import bot_update
-from recipe_engine import recipe_test_api
 
 
 class BotUpdateTestApi(recipe_test_api.RecipeTestApi):
