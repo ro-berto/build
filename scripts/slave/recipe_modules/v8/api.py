@@ -731,45 +731,13 @@ class V8Api(recipe_api.RecipeApi):
         '%s -reset_every_nth_pending 0 --' % drrun,
       ]
 
-    symbolizer = 'external_symbolizer_path=%s' % (
-        self.m.path['checkout'].join(
-            'third_party', 'llvm-build', 'Release+Asserts', 'bin',
-            'llvm-symbolizer')
-    )
-
     # Indicate whether DCHECKs were enabled.
     if self.m.chromium.c.gyp_env.GYP_DEFINES.get('dcheck_always_on') == 1:
       full_args.append('--dcheck-always-on')
 
-    # Arguments and environment for asan builds:
-    if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan') == 1:
-      full_args.append('--asan')
-      env['ASAN_OPTIONS'] = symbolizer
-
-    # Arguments and environment for cfi builds:
-    if self.m.chromium.c.gyp_env.GYP_DEFINES.get('cfi_vptr') == 1:
-      env['UBSAN_OPTIONS'] = ":".join([
-        'print_stacktrace=1',
-        'print_summary=1',
-        'symbolize=1',
-        symbolizer,
-      ])
-
-    # Arguments and environment for tsan builds:
-    if self.m.chromium.c.gyp_env.GYP_DEFINES.get('tsan') == 1:
-      full_args.append('--tsan')
-      env['TSAN_OPTIONS'] = " ".join([
-        symbolizer,
-        'exit_code=0',
-        'report_thread_leaks=0',
-        'history_size=7',
-        'report_destroy_locked=0',
-      ])
-
-    # Arguments and environment for msan builds:
-    if self.m.chromium.c.gyp_env.GYP_DEFINES.get('msan') == 1:
-      full_args.append('--msan')
-      env['MSAN_OPTIONS'] = symbolizer
+    for gyp_flag in ['asan', 'cfi_vptr', 'tsan', 'msan']:
+      if self.m.chromium.c.gyp_env.GYP_DEFINES.get(gyp_flag) == 1:
+        full_args.append('--%s' % gyp_flag.replace('_', '-'))
 
     full_args += [
       '--rerun-failures-count=%d' % self.rerun_failures_count,
