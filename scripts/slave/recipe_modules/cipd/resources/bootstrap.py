@@ -168,11 +168,15 @@ def read_file(path):
 
 def write_file(path, data):
   """Puts a file on disk, atomically."""
-  assert sys.platform in ('linux2', 'darwin')
   ensure_directory(os.path.dirname(path))
   fd, temp_file = tempfile.mkstemp(dir=os.path.dirname(path))
   with os.fdopen(fd, 'w') as f:
     f.write(data)
+  if not sys.platform in ('linux2', 'darwin'):
+    # On windows we should remove destination file first.
+    os.remove(path)
+    # At this point we may crash, and it's OK, as next time we'll just
+    # re-install CIPD from scratch.
   os.rename(temp_file, path)
 
 
