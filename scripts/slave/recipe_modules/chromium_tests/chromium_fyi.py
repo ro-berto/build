@@ -48,6 +48,7 @@ SPEC = {
         'platform': 'linux',
       },
       'use_isolate': True,
+      'enable_swarming': True,
     },
     'Linux ARM': {
       'chromium_config': 'chromium',
