@@ -98,8 +98,15 @@ SPEC = {
       'parent_buildername': 'Android Aura Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder',
+      'tests': [
+        steps.GTestTest(
+            'base_unittests',
+            android_isolate_path='base/base_unittests.isolate'),
+      ],
       'test_generators': [
         steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
       ],
       'testing': {
         'platform': 'linux',

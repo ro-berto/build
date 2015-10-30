@@ -225,7 +225,8 @@
       "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
-      "--"
+      "--",
+      "base_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
