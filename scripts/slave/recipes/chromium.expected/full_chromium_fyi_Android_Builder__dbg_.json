@@ -230,6 +230,8 @@
       "junit_unit_tests",
       "media_unittests_apk",
       "net_unittests_apk",
+      "remoting_test_apk",
+      "remoting_unittests_apk",
       "sandbox_linux_unittests_deps",
       "sql_unittests_apk",
       "sync_unit_tests_apk",
@@ -287,6 +289,19 @@
     "name": "trigger (2)",
     "trigger_specs": [
       {
+        "builder_name": "Android Remoting Tests"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Remoting Tests@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (3)",
+    "trigger_specs": [
+      {
         "builder_name": "Android Tests (L Nexus5)(dbg)"
       }
     ],
@@ -297,7 +312,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (3)",
+    "name": "trigger (4)",
     "trigger_specs": [
       {
         "builder_name": "Android Tests (amp instrumentation test split)"
@@ -310,7 +325,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (4)",
+    "name": "trigger (5)",
     "trigger_specs": [
       {
         "builder_name": "Android Tests (amp split)"
@@ -323,7 +338,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (5)",
+    "name": "trigger (6)",
     "trigger_specs": [
       {
         "builder_name": "Android Tests (trial)(dbg)"

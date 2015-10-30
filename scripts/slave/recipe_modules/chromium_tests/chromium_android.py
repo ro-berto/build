@@ -198,28 +198,6 @@ SPEC = {
       },
     },
 
-    'Android Remoting Tests': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'parent_buildername': 'Android arm Builder (dbg)',
-      'bot_type': 'tester',
-      'android_config': 'main_builder',
-      'root_devices': True,
-      'tests': [
-        steps.GTestTest('remoting_unittests'),
-        steps.AndroidInstrumentationTest('ChromotingTest'),
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Android WebView (amp)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',

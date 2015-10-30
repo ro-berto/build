@@ -1838,6 +1838,33 @@ SPEC = {
       },
     },
 
+    'Android Remoting Tests': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'compile_targets': [
+          'remoting_apk',
+      ],
+      'parent_buildername': 'Android Builder (dbg)',
+      'bot_type': 'tester',
+      'android_config': 'main_builder',
+      'root_devices': True,
+      'enable_swarming': False,
+      'tests': [
+        steps.GTestTest('remoting_unittests'),
+        steps.AndroidInstrumentationTest('ChromotingTest'),
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
+
     'Chromium Win 10': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',

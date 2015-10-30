@@ -85,13 +85,6 @@
       "category": "3Testers",
       "mergeRequests": True,
     },
-    "Android Remoting Tests": {
-      "recipe": "chromium",
-      "scheduler": None,
-      "slave_pools": ["remoting"],
-      "category": "3Testers",
-      "mergeRequests": True,
-    },
     "Android Aura Tester (dbg)": {
       "recipe": "chromium",
       "scheduler": None,
@@ -200,14 +193,6 @@
       "slaves": [
           "build29-b1",
         ],
-    },
-    "remoting": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": ["build123-a1"],
     },
     "webview_amp": {
       "slave_data": {
