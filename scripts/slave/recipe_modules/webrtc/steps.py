@@ -19,6 +19,9 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
                               revision=revision,
                               custom_executable=executable, parallel=parallel,
                               enable_swarming=False))
+    tests.append(WebRTCTest('webrtc_nonparallel_tests', revision,
+                            parallel=False,
+                            enable_swarming=False))
   elif test_suite == 'webrtc_baremetal':
     # Add baremetal tests, which are different depending on the platform.
     if api.m.platform.is_win or api.m.platform.is_mac:

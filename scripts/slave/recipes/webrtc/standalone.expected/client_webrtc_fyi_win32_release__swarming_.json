@@ -1338,6 +1338,33 @@
     ]
   },
   {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release (swarming)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release (swarming)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
+      "--test-type=webrtc_nonparallel_tests",
+      "--step-name=webrtc_nonparallel_tests",
+      "--generate-json-file",
+      "-o",
+      "gtest-results/webrtc_nonparallel_tests.exe",
+      "--builder-name=Win32 Release (swarming)",
+      "--slave-name=slavename",
+      "--build-number=1337",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "webrtc_nonparallel_tests.exe"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "webrtc_nonparallel_tests"
+  },
+  {
     "cmd": [
       "python",
       "-u",

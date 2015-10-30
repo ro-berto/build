@@ -1346,6 +1346,30 @@
     ]
   },
   {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"linux_swarming\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"linux_swarming\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--annotate=gtest",
+      "--test-type=webrtc_nonparallel_tests",
+      "--step-name=webrtc_nonparallel_tests",
+      "--builder-name=linux_swarming",
+      "--slave-name=slavename",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "webrtc_nonparallel_tests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "webrtc_nonparallel_tests"
+  },
+  {
     "cmd": [
       "python",
       "-u",

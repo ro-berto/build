@@ -53,6 +53,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     'video_engine_tests': 'webrtc/video_engine_tests.isolate',
     'voice_engine_unittests':
         'webrtc/voice_engine/voice_engine_unittests.isolate',
+    'webrtc_nonparallel_tests': 'webrtc/webrtc_nonparallel_tests.isolate',
   })
 
   ANDROID_APK_PERF_TESTS = freeze({
