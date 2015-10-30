@@ -23,7 +23,8 @@ def syzygy(c):
   # Configure the src-internal checkout.
   s = c.solutions.add()
   s.name = 'src-internal'
-  s.url = 'svn://svn.chromium.org/chrome-internal/trunk/syzygy/internal.DEPS'
+  s.url = ('https://chrome-internal.googlesource.com/chrome/syzygy/' +
+           'internal.DEPS.git')
   s.managed = False
 
 @CONFIG_CTX(includes=['syzygy'])
