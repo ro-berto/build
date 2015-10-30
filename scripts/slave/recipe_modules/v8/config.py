@@ -76,6 +76,11 @@ def deopt_fuzz_random(c):
 
 
 @config_ctx()
+def enable_armv8(c):
+  c.testing.test_args.extend(['--extra-flags', '--enable-armv8'])
+
+
+@config_ctx()
 def gc_stress(c):
   c.testing.test_args.append('--gc-stress')
 

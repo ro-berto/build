@@ -989,6 +989,31 @@ BUILDERS = {
         'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux - arm - armv8-a - sim': {
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
+        'v8_apply_config': ['enable_armv8'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
+        'testing': {'platform': 'linux'},
+      },
+      # TODO(machenbach): Turn arm sim into builders/testers.
+      'V8 Linux - arm - armv8-a - sim - debug': {
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
+        'v8_apply_config': ['enable_armv8'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux - arm - sim - novfp3': {
         # TODO(machenbach): Can these configs be reduced to one?
         'chromium_apply_config': [
@@ -1908,6 +1933,30 @@ BUILDERS = {
       },
       'v8_linux_arm_dbg': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'tests': [V8Testing_3, Test262, Mozilla, SimdJs],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux_arm_armv8a_rel': {
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
+        'v8_apply_config': ['enable_armv8'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'tests': [V8Testing_3, Test262, Mozilla, SimdJs],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux_arm_armv8a_dbg': {
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
+        'v8_apply_config': ['enable_armv8'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
