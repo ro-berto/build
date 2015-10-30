@@ -12,11 +12,11 @@
 
 from config_bootstrap import Master
 
-class Goma(Master.Master1):
-  project_name = 'Goma'
+class ChromiumGoma(Master.Master1):
+  project_name = 'ChromiumGoma'
   master_port = 20102
   slave_port = 30102
   master_port_alt = 40102
-  buildbot_url = 'https://build.chromium.org/p/goma/'
+  buildbot_url = 'https://build.chromium.org/p/chromium.goma/'
   buildbucket_bucket = None
   service_account_file = None

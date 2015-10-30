@@ -10,6 +10,7 @@ from . import chromium_angle
 from . import chromium_chrome
 from . import chromium_chromiumos
 from . import chromium_fyi
+from . import chromium_goma
 from . import chromium_linux
 from . import chromium_lkgr
 from . import chromium_mac
@@ -21,7 +22,6 @@ from . import chromium_webkit
 from . import chromium_win
 from . import client_skia
 from . import client_v8_fyi
-from . import goma
 from . import tryserver_chromium_linux
 from . import tryserver_chromium_mac
 from . import tryserver_chromium_perf
@@ -33,6 +33,7 @@ BUILDERS = freeze({
   'chromium.chrome': chromium_chrome.SPEC,
   'chromium.chromiumos': chromium_chromiumos.SPEC,
   'chromium.fyi': chromium_fyi.SPEC,
+  'chromium.goma': chromium_goma.SPEC,
   'chromium.linux': chromium_linux.SPEC,
   'chromium.lkgr': chromium_lkgr.SPEC,
   'chromium.mac': chromium_mac.SPEC,
@@ -44,7 +45,6 @@ BUILDERS = freeze({
   'chromium.win': chromium_win.SPEC,
   'client.skia': client_skia.SPEC,
   'client.v8.fyi': client_v8_fyi.SPEC,
-  'goma': goma.SPEC,
   'tryserver.chromium.linux': tryserver_chromium_linux.SPEC,
   'tryserver.chromium.mac': tryserver_chromium_mac.SPEC,
   'tryserver.chromium.perf': tryserver_chromium_perf.SPEC,

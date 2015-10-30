@@ -5,7 +5,7 @@
 
 
 BUILDBOT_PATH = $(BUILDBOT8_PATH)
-MASTERPATH := master.goma
+MASTERPATH := master.chromium.goma
 include ../master-common.mk
 
 # -*- makefile -*-
