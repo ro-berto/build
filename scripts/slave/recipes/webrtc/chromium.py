@@ -52,10 +52,6 @@ def RunSteps(api):
 
   if webrtc.should_build:
     webrtc.compile()
-    if (api.properties.get('mastername') == 'chromium.webrtc.fyi' and
-        api.chromium.c.TARGET_PLATFORM != 'android'):
-      webrtc.sizes()
-
   if webrtc.should_upload_build:
     webrtc.package_build()
   if webrtc.should_download_build:

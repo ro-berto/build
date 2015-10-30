@@ -280,24 +280,6 @@ class WebRTCApi(recipe_api.RecipeApi):
           flakiness_dash=flakiness_dash, python_mode=python_mode,
           revision=revision, test_type=test_type, env=env)
 
-  def sizes(self):
-    # TODO(kjellander): Move this into a function of the chromium recipe
-    # module instead.
-    assert self.c.PERF_ID, ('You must specify PERF_ID for the builder that '
-                            'runs the sizes step.')
-    sizes_script = self.m.path['build'].join('scripts', 'slave', 'chromium',
-                                             'sizes.py')
-    args = ['--target', self.m.chromium.c.BUILD_CONFIG,
-            '--platform', self.m.chromium.c.TARGET_PLATFORM]
-    test_name = 'sizes'
-    self.add_test(
-        test=sizes_script,
-        name=test_name,
-        perf_dashboard_id=test_name,
-        args=args,
-        revision=self.perf_revision,
-        perf_test=True)
-
   def maybe_trigger(self):
     triggers = self.bot_config.get('triggers')
     if triggers:
