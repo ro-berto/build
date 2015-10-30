@@ -173,8 +173,9 @@ def write_file(path, data):
   with os.fdopen(fd, 'w') as f:
     f.write(data)
   if not sys.platform in ('linux2', 'darwin'):
-    # On windows we should remove destination file first.
-    os.remove(path)
+    # On windows we should remove destination file if it exists.
+    if os.path.exists(path):
+      os.remove(path)
     # At this point we may crash, and it's OK, as next time we'll just
     # re-install CIPD from scratch.
   os.rename(temp_file, path)
