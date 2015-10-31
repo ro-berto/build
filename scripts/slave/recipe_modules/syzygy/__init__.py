@@ -1,5 +1,4 @@
 DEPS = [
-  'bot_update',
   'chromium',
   'file',
   'gclient',
