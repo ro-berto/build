@@ -1,0 +1,68 @@
+{
+  "master_base_class": "Master1",
+  "master_port": 20103,
+  "master_port_alt": 40103,
+  "slave_port": 30103,
+  "templates": ["templates", "../master.chromium/templates"],
+
+  "builders": {
+    "v8-linux-end-to-end": {
+      "category": "continuous",
+      "recipe": "v8/infra_end_to_end",
+      "scheduler": "build",
+      "slave_pools": ["trusty_64"],
+    },
+    "cipd-test-end-to-end_mac": {
+      "category": "continuous",
+      "recipe": "infra/cipd_test",
+      "scheduler": "build",
+      "slave_pools": ["mac10.10"],
+    },
+    "cipd-test-end-to-end_trusty64": {
+      "category": "continuous",
+      "recipe": "infra/cipd_test",
+      "scheduler": "build",
+      "slave_pools": ["trusty_64"],
+    },
+    "cipd-test-end-to-end_win64": {
+      "category": "continuous",
+      "recipe": "infra/cipd_test",
+      "scheduler": "build",
+      "slave_pools": ["win7_64"],
+    },
+  },
+
+  "schedulers": {
+    "build": {
+      "type": "git_poller",
+      "git_repo_url": "https://chromium.googlesource.com/chromium/tools/build",
+    },
+  },
+
+  "slave_pools": {
+    "trusty_64": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "linux",
+        "version": "trusty",
+      },
+      "slaves": ["TODO: http://crbug.com/549164"],
+    },
+    "mac10.10": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "mac",
+        "version": "10.10",
+      },
+      "slaves": ["vm19-m1"],
+    },
+    "win7_64": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "win",
+        "version": "win7",
+      },
+      "slaves": ["vm20-m1"],
+    },
+  },
+}
