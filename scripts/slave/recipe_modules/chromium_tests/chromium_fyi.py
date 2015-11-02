@@ -13,7 +13,6 @@ SPEC = {
   'builders': {
     'Chromium Mac 10.10': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromium_mac_sdk_10_10'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -30,7 +29,6 @@ SPEC = {
     },
     'Chromium Mac 10.11': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromium_mac_sdk_10_10'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
