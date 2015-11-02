@@ -499,7 +499,9 @@ class DrCommands(object):
     else:
       testlog_dirs += ['xml:results']
     self.AddToolStep(ShellCommand,
-                     command=['7z', 'a', 'testlogs.7z'] + testlog_dirs,
+                     # We exclude WinTypes.pdb and msvc*.pdb to save space.
+                     command=(['7z', 'a', '-xr!*.pdb', 'testlogs.7z'] +
+                              testlog_dirs),
                      haltOnFailure=True,
                      name='Pack test results',
                      description='pack results')
