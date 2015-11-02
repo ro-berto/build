@@ -1153,7 +1153,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "gs://chromium-v8/v8-linux-rel/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json",
+      "gs://chromium-v8/v8-linux-rel/full-build-linux_a0.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1381,7 +1381,7 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "gs://chromium-v8/v8-linux-rel/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json",
+      "gs://chromium-v8/v8-linux-rel/full-build-linux_a1.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",

@@ -367,8 +367,8 @@ class V8Api(recipe_api.RecipeApi):
           archive,
           src_dir='v8')
 
-  def download_isolated_json(self):
-    archive = self.get_archive_url_pattern(use_swarming=True) % self.revision
+  def download_isolated_json(self, revision):
+    archive = self.get_archive_url_pattern(use_swarming=True) % revision
     self.m.gsutil.download_url(
         archive,
         self.m.json.output(),
@@ -386,7 +386,16 @@ class V8Api(recipe_api.RecipeApi):
     """
     return testing.create_test(test, self.m, self)
 
-  def runtests(self):
+  def create_tests(self):
+    return [self.create_test(t) for t in self.bot_config.get('tests', [])]
+
+  def is_pure_swarming_tester(self, tests):
+    return (self.bot_type == 'tester' and
+            self.bot_config.get('enable_swarming') and
+            self.bot_config.get('slim_swarming_tester') and
+            all(map(lambda x: x.uses_swarming, tests)))
+
+  def runtests(self, tests):
     if self.extra_flags:
       result = self.m.step('Customized run with extra flags', cmd=None)
       result.presentation.step_text += ' '.join(self.extra_flags)
@@ -395,7 +404,6 @@ class V8Api(recipe_api.RecipeApi):
 
     start_time_sec = self.m.time.time()
     test_results = testing.TestResults.empty()
-    tests = [self.create_test(t) for t in self.bot_config.get('tests', [])]
 
     # Apply test filter.
     # TODO(machenbach): Track also the number of tests that ran and throw an
@@ -471,13 +479,14 @@ class V8Api(recipe_api.RecipeApi):
 
     def is_bad(revision):
       with self.m.step.nest('Bisect ' + revision[:8]):
-        self.checkout(revision, update_presentation=False)
+        if not self.bot_config.get('slim_swarming_tester'):
+          self.checkout(revision, update_presentation=False)
         if self.bot_type == 'builder_tester':
           self.runhooks()
           self.compile(targets=targets)
         elif self.bot_type == 'tester':
           if test.uses_swarming:
-            self.download_isolated_json()
+            self.download_isolated_json(revision)
           else:
             self.download_build()
         else:  # pragma: no cover

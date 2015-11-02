@@ -186,6 +186,7 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
+        'slim_swarming_tester': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-12.04',
         },

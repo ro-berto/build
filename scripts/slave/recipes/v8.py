@@ -12,6 +12,7 @@ DEPS = [
   'properties',
   'raw_io',
   'step',
+  'swarming_client',
   'time',
   'tryserver',
   'v8',
@@ -22,46 +23,53 @@ def RunSteps(api):
   v8 = api.v8
   v8.apply_bot_config(v8.BUILDERS)
 
-  if api.platform.is_win:
-    api.chromium.taskkill()
+  additional_trigger_properties = {}
+  tests = v8.create_tests()
 
-  update_step = v8.checkout()
-  v8.set_up_swarming()
+  if v8.is_pure_swarming_tester(tests):
+    api.swarming_client.checkout()
+    v8.set_up_swarming()
+  else:
+    if api.platform.is_win:
+      api.chromium.taskkill()
 
-  if v8.c.mips_cross_compile:
-    v8.setup_mips_toolchain()
-  v8.runhooks()
-  api.chromium.cleanup_temp()
+    update_step = v8.checkout()
+    update_properties = update_step.json.output['properties']
 
-  if v8.should_build:
-    v8.compile()
+    if update_properties.get('got_swarming_client_revision'):
+      additional_trigger_properties['parent_got_swarming_client_revision'] = (
+          update_properties['got_swarming_client_revision'])
 
-  if v8.run_dynamorio:
-    v8.dr_compile()
+    v8.set_up_swarming()
 
-  if v8.should_upload_build:
-    v8.upload_build()
+    if v8.c.mips_cross_compile:
+      v8.setup_mips_toolchain()
+    v8.runhooks()
+    api.chromium.cleanup_temp()
 
-  v8.maybe_create_clusterfuzz_archive(update_step)
+    if v8.should_build:
+      v8.compile()
 
-  if v8.should_download_build:
-    v8.download_build()
+    if v8.run_dynamorio:
+      v8.dr_compile()
+
+    if v8.should_upload_build:
+      v8.upload_build()
+
+    v8.maybe_create_clusterfuzz_archive(update_step)
+
+    if v8.should_download_build:
+      v8.download_build()
 
   if v8.should_test:
-    test_results = v8.runtests()
+    test_results = v8.runtests(tests)
     v8.maybe_bisect(test_results)
 
     if test_results.is_negative:
       # Let the overall build fail for failures and flakes.
       raise api.step.StepFailure('Failures or flakes in build.')
 
-  update_properties = update_step.json.output['properties']
-  additional_properties = {}
-  if update_properties.get('got_swarming_client_revision'):
-    additional_properties['parent_got_swarming_client_revision'] = (
-        update_properties['got_swarming_client_revision'])
-
-  v8.maybe_trigger(**additional_properties)
+  v8.maybe_trigger(**additional_trigger_properties)
   v8.verify_cq_integrity()
 
 
@@ -264,6 +272,17 @@ def GenTests(api):
         'client.v8',
         'V8 Linux',
         'bisect_tester_swarming',
+    ) +
+    api.v8.fail('Check') +
+    api.time.step(120)
+  )
+
+  # Same as above with a slim swarming tester.
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Linux - swarming staging',
+        'slim_bisect_tester_swarming',
     ) +
     api.v8.fail('Check') +
     api.time.step(120)
