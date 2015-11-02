@@ -55,7 +55,13 @@ def RunSteps(api):
       # Let the overall build fail for failures and flakes.
       raise api.step.StepFailure('Failures or flakes in build.')
 
-  v8.maybe_trigger()
+  update_properties = update_step.json.output['properties']
+  additional_properties = {}
+  if update_properties.get('got_swarming_client_revision'):
+    additional_properties['parent_got_swarming_client_revision'] = (
+        update_properties['got_swarming_client_revision'])
+
+  v8.maybe_trigger(**additional_properties)
   v8.verify_cq_integrity()
 
 

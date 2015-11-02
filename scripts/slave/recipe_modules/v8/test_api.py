@@ -383,6 +383,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         # Assume each tester is triggered with the required hashes for all
         # tests.
         test += self.m.properties(
+          parent_got_swarming_client_revision='[dummy swarming client hash]',
           swarm_hashes=self._make_dummy_swarm_hashes(bot_config),
         )
 

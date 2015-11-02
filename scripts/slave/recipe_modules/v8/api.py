@@ -96,6 +96,11 @@ class V8Api(recipe_api.RecipeApi):
       self.init_tryserver()
     for c in self.bot_config.get('v8_apply_config', []):
       self.apply_config(c)
+
+    if self.bot_config.get('enable_swarming'):
+      self.m.gclient.c.got_revision_mapping['v8/tools/swarming_client'] = (
+          'got_swarming_client_revision')
+
     # Initialize perf_dashboard api if any perf test should run.
     self.m.perf_dashboard.set_default_config()
 
