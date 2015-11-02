@@ -1618,7 +1618,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_2],
+        'tests': [V8Testing_3],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_gcc_compile_rel': {
