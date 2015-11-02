@@ -1544,7 +1544,7 @@ BUILDERS = {
         'tests': [
           V8Testing,
           OptimizeForSize,
-          Test262,
+          Test262Variants_2,
           Mozilla,
           Benchmarks,
           SimdJs,
@@ -1572,7 +1572,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing, Test262, Mozilla, Benchmarks, SimdJs],
+        'tests': [V8Testing, Test262Variants_2, Mozilla, Benchmarks, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_dbg': {
@@ -1652,7 +1652,7 @@ BUILDERS = {
           V8Initializers,
           V8Testing,
           OptimizeForSize,
-          Test262,
+          Test262Variants_2,
           SimdJs,
         ],
         'testing': {'platform': 'linux'},
