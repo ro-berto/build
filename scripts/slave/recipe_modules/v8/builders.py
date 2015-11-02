@@ -1226,7 +1226,8 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing],
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262],
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux64 ASAN no inline - release builder',
@@ -1353,7 +1354,8 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing],
+        'enable_swarming': True,
+        'tests': [V8Testing, Test262_2],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - MSAN': {
@@ -1371,7 +1373,8 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing],
+        'enable_swarming': True,
+        'tests': [V8Testing, Test262_2],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - memcheck': {
@@ -1711,7 +1714,8 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing],
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262_2],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_msan_rel': {
@@ -1730,7 +1734,8 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing],
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262_2],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_tsan_rel': {
@@ -1746,7 +1751,8 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing],
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262_2],
         'testing': {'platform': 'linux'},
       },
       'v8_win_rel': {
