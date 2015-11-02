@@ -1070,6 +1070,43 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
       },
+      'Mac Asan (parallel)': {
+        'recipe_config': 'webrtc_parallel_clang',
+        'chromium_apply_config': ['asan'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+      },
+      'Mac32 Debug (XCode 7)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+      },
+      'Mac32 Release (XCode 7)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+      },
+      'Mac64 Debug (XCode 7)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+      },
       'Mac64 Release (XCode 7)': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -1079,12 +1116,32 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
       },
-      'Mac Asan (parallel)': {
-        'recipe_config': 'webrtc_parallel_clang',
-        'chromium_apply_config': ['asan'],
+      'Mac64 Debug (GN) (XCode 7)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'chromium_apply_config': ['webrtc_gn'],
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'Mac64 Release (GN) (XCode 7)': {
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
+        },
+        'chromium_apply_config': ['webrtc_gn'],
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'Mac Asan (XCode 7)': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['asan'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
