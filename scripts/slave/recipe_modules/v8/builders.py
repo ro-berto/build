@@ -82,7 +82,8 @@ BUILDERS = {
           'platform': 'linux',
         },
         'triggers': [
-          'V8 Linux - swarming staging',
+          'V8 Linux - swarming staging 1',
+          'V8 Linux - swarming staging 2',
         ],
       },
       'V8 Linux - debug builder': {
@@ -169,7 +170,7 @@ BUILDERS = {
           'os': 'Ubuntu-12.04',
         },
       },
-      'V8 Linux - swarming staging': {
+      'V8 Linux - swarming staging 1': {
         'chromium_apply_config': ['simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -180,9 +181,6 @@ BUILDERS = {
         'build_gs_archive': 'linux_swarming_staging_archive',
         'tests': [
           V8Testing_2,
-          SimdJs,
-          Test262Variants,
-          Mozilla,
         ],
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
@@ -192,6 +190,25 @@ BUILDERS = {
         },
       },
       'V8 Linux - swarming staging 2': {
+        'chromium_apply_config': ['simulate_arm'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - swarming staging builder',
+        'build_gs_archive': 'linux_swarming_staging_archive',
+        'tests': [
+          V8Testing_2,
+        ],
+        'testing': {'platform': 'linux'},
+        'enable_swarming': True,
+        'slim_swarming_tester': True,
+        'swarming_dimensions': {
+          'os': 'Ubuntu-12.04',
+        },
+      },
+      'V8 Linux - swarming staging 3': {
         'chromium_apply_config': [
           'v8_ninja', 'clang', 'asan', 'goma'],
         'v8_config_kwargs': {
