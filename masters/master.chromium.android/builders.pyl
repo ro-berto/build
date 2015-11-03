@@ -116,7 +116,7 @@
     "Android arm Builder (dbg)": {
       "recipe": "chromium",
       "scheduler": "android_commits",
-      "slave_pools": ["builders"],
+      "slave_pools": ["arm_builder"],
       "category": "2Builders",
       "slavebuilddir": "android_build",
     },
@@ -159,7 +159,7 @@
       },
       "slaves": ["build19-b1"],
     },
-    "builders": {
+    "arm_builder": {
       "slave_data": {
         "os": "linux",
         "version": "precise",
@@ -167,6 +167,15 @@
       },
       "slaves": [
           "slave35-c1",
+        ],
+    },
+    "builders": {
+      "slave_data": {
+        "os": "linux",
+        "version": "precise",
+        "bits": 64,
+      },
+      "slaves": [
           "slave36-c1",
           "slave37-c1",
           "slave38-c1",
