@@ -1752,6 +1752,26 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
+      'linux_ubsan': {
+        'recipe_config': 'webrtc_parallel_clang',
+        'chromium_apply_config': ['ubsan'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
+      'linux_ubsan_vptr': {
+        'recipe_config': 'webrtc_parallel_clang',
+        'chromium_apply_config': ['ubsan_vptr'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
       'linux_baremetal': {
         'recipe_config': 'webrtc_baremetal',
         'chromium_config_kwargs': {
