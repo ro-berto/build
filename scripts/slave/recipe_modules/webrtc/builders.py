@@ -37,16 +37,6 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'webrtc',
     'test_suite': 'webrtc',
   },
-  'webrtc_parallel': {
-    'chromium_config': 'webrtc_standalone',
-    'gclient_config': 'webrtc',
-    'test_suite': 'webrtc_parallel',
-  },
-  'webrtc_parallel_clang': {
-    'chromium_config': 'webrtc_clang',
-    'gclient_config': 'webrtc',
-    'test_suite': 'webrtc_parallel',
-  },
   'webrtc_android': {
     'chromium_config': 'android',
     'chromium_android_config': 'webrtc',
@@ -518,7 +508,7 @@ BUILDERS = freeze({
     },
     'builders': {
       'Win32 Debug': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -527,7 +517,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'Win32 Release': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -536,7 +526,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'Win64 Debug': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_apply_config': ['static_library'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -546,7 +536,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'Win64 Release': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -607,7 +597,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'Win SyzyASan': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_apply_config': ['syzyasan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -761,7 +751,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
       },
       'Linux32 Debug': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -770,7 +760,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Linux32 Release': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -779,7 +769,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Linux64 Debug': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -788,7 +778,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Linux64 Release': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -817,7 +807,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Linux Asan': {
-        'recipe_config': 'webrtc_parallel_clang',
+        'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['asan', 'lsan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -838,7 +828,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Linux MSan': {
-        'recipe_config': 'webrtc_parallel_clang',
+        'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
                                   'prebuilt_instrumented_libraries'],
         'chromium_config_kwargs': {
@@ -1041,24 +1031,6 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
       },
-      'Mac64 Debug (parallel)': {
-        'recipe_config': 'webrtc_parallel',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-      },
-      'Mac64 Release (parallel)': {
-        'recipe_config': 'webrtc_parallel',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-      },
       'Mac64 Release (swarming)': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -1069,16 +1041,6 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
         'use_isolate': True,
         'enable_swarming': True,
-      },
-      'Mac Asan (parallel)': {
-        'recipe_config': 'webrtc_parallel_clang',
-        'chromium_apply_config': ['asan'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
       },
       'Mac32 Debug (XCode 7)': {
         'recipe_config': 'webrtc',
@@ -1212,16 +1174,6 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
-      'Linux Tsan v2 (parallel)': {
-        'recipe_config': 'webrtc_parallel_clang',
-        'chromium_apply_config': ['tsan2'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
       'Linux64 Release (swarming)': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -1253,7 +1205,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Linux UBSan': {
-        'recipe_config': 'webrtc_parallel_clang',
+        'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['ubsan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -1263,7 +1215,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Linux UBSan vptr': {
-        'recipe_config': 'webrtc_parallel_clang',
+        'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['ubsan_vptr'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -1352,7 +1304,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'win_dbg': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1361,7 +1313,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'win_rel': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1370,7 +1322,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'win_x64_dbg': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1379,7 +1331,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'win_x64_rel': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1417,7 +1369,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'win_asan': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_apply_config': ['syzyasan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -1673,7 +1625,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'linux_dbg': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1682,7 +1634,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'linux_rel': {
-        'recipe_config': 'webrtc_parallel',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1711,7 +1663,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'linux_asan': {
-        'recipe_config': 'webrtc_parallel_clang',
+        'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['asan', 'lsan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -1732,7 +1684,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'linux_msan': {
-        'recipe_config': 'webrtc_parallel_clang',
+        'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
                                   'prebuilt_instrumented_libraries'],
         'chromium_config_kwargs': {
@@ -1753,7 +1705,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'linux_ubsan': {
-        'recipe_config': 'webrtc_parallel_clang',
+        'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['ubsan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -1763,7 +1715,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'linux_ubsan_vptr': {
-        'recipe_config': 'webrtc_parallel_clang',
+        'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['ubsan_vptr'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',

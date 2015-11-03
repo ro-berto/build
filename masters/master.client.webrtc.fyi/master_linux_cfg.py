@@ -18,7 +18,6 @@ def Update(c):
                                 'Linux32 ARM',
                                 'Linux64 GCC',
                                 'Linux64 Release (swarming)',
-                                'Linux Tsan v2 (parallel)',
                                 'Linux UBSan',
                                 'Linux UBSan vptr',
       ]),
@@ -39,10 +38,6 @@ def Update(c):
     {
       'name': 'Linux64 GCC',
       'slavebuilddir': 'linux_gcc',
-    },
-    {
-      'name': 'Linux Tsan v2 (parallel)',
-      'slavebuilddir': 'linux_tsan2',
     },
     {
       'name': 'Linux64 Release (swarming)',

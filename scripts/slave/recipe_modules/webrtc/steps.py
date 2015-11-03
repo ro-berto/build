@@ -5,11 +5,9 @@
 
 def generate_tests(api, test_suite, revision, enable_swarming=False):
   tests = []
-  if test_suite in ('webrtc', 'webrtc_parallel'):
-    parallel = test_suite.endswith('_parallel')
+  if test_suite == 'webrtc':
     for test in api.NORMAL_TESTS:
-      tests.append(WebRTCTest(test, revision, parallel=parallel,
-                              enable_swarming=enable_swarming))
+      tests.append(WebRTCTest(test, revision, enable_swarming=enable_swarming))
 
     if api.m.platform.is_mac and api.m.chromium.c.TARGET_BITS == 64:
       executable = api.m.path.join('libjingle_peerconnection_objc_test.app',
@@ -17,7 +15,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
                                    'libjingle_peerconnection_objc_test')
       tests.append(WebRTCTest(name='libjingle_peerconnection_objc_test',
                               revision=revision,
-                              custom_executable=executable, parallel=parallel,
+                              custom_executable=executable,
                               enable_swarming=False))
     tests.append(WebRTCTest('webrtc_nonparallel_tests', revision,
                             parallel=False,
@@ -54,13 +52,13 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     # waterfalls (marked as MANUAL_) since they rely on special setup and/or
     # physical audio/video devices.
     tests.extend([
-        WebRTCTest('content_browsertests',
+        ChromiumTest('content_browsertests',
                    revision,
                    args=['--gtest_filter=WebRtc*', '--run-manual',
                          '--test-launcher-print-test-stdio=always',
                          '--test-launcher-bot-mode'],
                    perf_test=True),
-        WebRTCTest('browser_tests',
+        ChromiumTest('browser_tests',
             revision,
             # These tests needs --test-launcher-jobs=1 since some of them are
             # not able to run in parallel (due to the usage of the
@@ -74,7 +72,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
                     '--test-launcher-print-test-stdio=always'],
             # The WinXP tester doesn't run the audio quality perf test.
             perf_test='xp' not in api.c.PERF_ID),
-        WebRTCTest('content_unittests', revision),
+        ChromiumTest('content_unittests', revision),
     ])
   elif test_suite == 'android':
     for test, isolate_file_path in sorted(api.ANDROID_APK_TESTS.iteritems()):
@@ -108,7 +106,7 @@ class Test(object):
 
 class WebRTCTest(Test):
   """A normal WebRTC desktop test."""
-  def __init__(self, name, revision, parallel=False, perf_test=False,
+  def __init__(self, name, revision, parallel=True, perf_test=False,
                custom_executable=None, enable_swarming=False,
                **runtest_kwargs):
     super(WebRTCTest, self).__init__(name, enable_swarming)
@@ -133,6 +131,18 @@ class WebRTCTest(Test):
       api.add_test(name=self._name, revision=self._revision,
                    parallel=self._parallel, perf_test=self._perf_test,
                    **self._runtest_kwargs)
+
+
+
+# This will removed as soon our Chromium recipe is retired and test specs are
+# used instead.
+class ChromiumTest(WebRTCTest):
+  """A Chromium desktop test."""
+  def __init__(self, name, revision, **runtest_kwargs):
+    # These tests don't use our gtest-parallel script, as Chromium tests have
+    # their own build-in parallel test execution.
+    super(ChromiumTest, self).__init__(name, revision, parallel=False,
+                                       **runtest_kwargs)
 
 
 class BaremetalTest(WebRTCTest):

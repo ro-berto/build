@@ -240,7 +240,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,
-               perf_test=False, perf_dashboard_id=None, parallel=False):
+               perf_test=False, perf_dashboard_id=None, parallel=True):
     """Helper function to invoke chromium.runtest().
 
     Notice that the name parameter should be the same as the test executable in
@@ -266,7 +266,10 @@ class WebRTCApi(recipe_api.RecipeApi):
       test_type = test
       flakiness_dash = (not self.m.tryserver.is_tryserver and
                         not self.m.chromium.c.runtests.memory_tool)
-      if parallel:
+
+      # Dr Memory and Memcheck memory tools uses special scripts that doesn't
+      # play well with the gtest-parallel script.
+      if parallel and not self.m.chromium.c.runtests.memory_tool:
         test_executable = self.m.chromium.c.build_dir.join(
           self.m.chromium.c.build_config_fs, test)
         args = [test_executable, '--'] + args
