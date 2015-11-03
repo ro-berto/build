@@ -118,8 +118,6 @@ class V8Test(BaseTest):
       full_args,
       cwd=self.api.path['checkout'],
       env=env,
-      # The outcome is controlled by the json test result of the step.
-      ok_ret='any',
       step_test_data=step_test_data,
       **kwargs
     )
