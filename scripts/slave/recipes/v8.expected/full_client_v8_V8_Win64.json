@@ -67,9 +67,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "target_arch=x64 v8_target_arch=x64",
-      "GYP_GENERATORS": "ninja",
-      "GYP_MSVS_VERSION": "2013"
+      "GYP_DEFINES": "chromium_win_pch=0 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 use_goma=1 v8_target_arch=x64",
+      "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
   },
@@ -93,12 +92,22 @@
       "[SLAVE_BUILD]\\v8",
       "--build-tool",
       "ninja",
+      "--compiler",
+      "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
+      "--goma-dir",
+      "[BUILD]\\goma",
       "--arch",
       "x64",
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile"
+    "name": "compile",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [
