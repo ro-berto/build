@@ -28,6 +28,12 @@ def RunSteps(api):
 
   if v8.is_pure_swarming_tester(tests):
     api.swarming_client.checkout()
+
+    # Simulate a v8 update on slim swarming testers. The revision
+    # property is mandatory.
+    api.step.active_result.presentation.properties['got_revision'] = (
+        api.properties['revision'])
+
     v8.set_up_swarming()
   else:
     if api.platform.is_win:

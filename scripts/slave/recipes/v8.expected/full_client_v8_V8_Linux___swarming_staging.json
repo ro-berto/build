@@ -62,7 +62,10 @@
       "--recursive"
     ],
     "cwd": "[SLAVE_BUILD]/swarming.client",
-    "name": "submodule update (swarming_client)"
+    "name": "submodule update (swarming_client)",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@got_revision@\"20123\"@@@"
+    ]
   },
   {
     "cmd": [
