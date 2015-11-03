@@ -29,10 +29,7 @@ CTS_FILE_NAME = "android-cts-5.1_r1-linux_x86-arm.zip"
 # WebView user agent is changed, and new CTS hasn't been published to reflect
 # that.
 EXPECTED_FAILURE = {
-    'android.webkit.cts.WebSettingsTest': ['testUserAgentString_default'],
-    'android.webkit.cts.WebViewClientTest':
-        ['testShouldOverrideUrlLoadingOnCreateWindow'] #crbug.com/548316
-}
+    'android.webkit.cts.WebSettingsTest': ['testUserAgentString_default']}
 
 WEBVIEW_APK = 'SystemWebView.apk'
 
