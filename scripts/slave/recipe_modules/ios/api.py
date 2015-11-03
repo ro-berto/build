@@ -123,6 +123,8 @@ class iOSApi(recipe_api.RecipeApi):
     self.__config['GYP_DEFINES']['component'] = 'static_library'
     self.__config['GYP_DEFINES']['OS'] = 'ios'
 
+    self.__config.setdefault('use_mb', False)
+
     # In order to simplify the code that uses the values of self.__config, here
     # we default to empty values of their respective types, so in other places
     # we can iterate over them without having to check if they are in the dict
@@ -214,6 +216,12 @@ class iOSApi(recipe_api.RecipeApi):
 
     suffix = ' (%s)' % suffix if suffix else ''
 
+    # MB and GN only work if we're doing ninja builds, so we will
+    # ignore the use_mb setting if compiler isn't set to ninja.
+    use_mb = self.__config['use_mb'] and self.compiler == 'ninja'
+    if use_mb:
+      self.m.chromium.c.project_generator.tool = 'mb'
+
     # Add the default GYP_DEFINES.
     gyp_defines = [
       '%s=%s' % (k, v) for k, v in self.__config['GYP_DEFINES'].iteritems()
@@ -252,10 +260,21 @@ class iOSApi(recipe_api.RecipeApi):
       )
       cmd = ['ninja', '-C', cwd]
 
+    if use_mb:
+      # if we're using MB to generate build files, make sure we don't
+      # invoke GYP directly. We still want the GYP_DEFINES set in the
+      # environment, though, so that other hooks can key off of them.
+      env['GYP_CHROMIUM_NO_ACTION'] = '1'
+
     step_result = self.m.gclient.runhooks(name='runhooks' + suffix, env=env)
     step_result.presentation.step_text = (
       '<br />GYP_DEFINES:<br />%s' % '<br />'.join(gyp_defines)
     )
+
+    if use_mb:
+      self.m.chromium.run_mb(self.m.properties['mastername'],
+                             self.m.properties['buildername'],
+                             name='generate_build_files' + suffix)
 
     if (self.compiler == 'ninja' and
         self.m.tryserver.is_tryserver and
@@ -269,7 +288,7 @@ class iOSApi(recipe_api.RecipeApi):
           tests,
           ['all'] + tests,  # https://crbug.com/463676.
           'trybot_analyze_config.json',
-          additional_names=['chromium', 'ios'],
+          additional_names=['chromium', 'ios']
         )
       )
 

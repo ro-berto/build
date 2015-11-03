@@ -110,6 +110,7 @@ def GenTests(api):
       'compiler': 'xcodebuild',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
+      'use_mb': False,
     })
   )
 
@@ -181,3 +182,35 @@ def GenTests(api):
     + api.step_data('compile (with patch)', retcode=1)
     + api.step_data('compile (without patch)', retcode=1)
   )
+
+  yield (
+    api.test('gn')
+    + api.platform('mac', 64)
+    + api.properties(patch_url='patch url')
+    + api.properties(
+      buildername='ios',
+      buildnumber='0',
+      issue=123456,
+      mastername='tryserver.fake',
+      patchset=1,
+      rietveld='fake://rietveld.url',
+      slavename='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': 'fake xcode version',
+      'GYP_DEFINES': {},
+      'compiler': 'ninja',
+      'configuration': 'Debug',
+      'sdk': 'iphonesimulator8.0',
+      'tests': [
+        {
+          'app': 'fake tests',
+          'device type': 'fake device',
+          'os': '8.1',
+        },
+      ],
+      'use_mb': True,
+    })
+  )
+
+
