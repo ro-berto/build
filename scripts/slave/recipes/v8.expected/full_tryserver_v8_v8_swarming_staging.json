@@ -3,7 +3,16 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/bot_update.py",
+      "[BUILD]\\scripts\\slave\\kill_processes.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "taskkill"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\bot_update.py",
       "--master",
       "tryserver.v8",
       "--builder",
@@ -63,7 +72,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]\\v8\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -77,12 +86,12 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
+      "[DEPOT_TOOLS]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "clang=1 dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "chromium_win_pch=0 dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
@@ -91,50 +100,32 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/cleanup_temp.py"
+      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/v8",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
+      "[BUILD]\\scripts\\slave\\compile.py",
       "--target",
-      "Release",
+      "Release_x64",
       "--src-dir",
-      "[SLAVE_BUILD]/v8",
+      "[SLAVE_BUILD]\\v8",
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[BUILD]\\goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
+      "--arch",
+      "x64",
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -148,16 +139,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "RECIPE_MODULE[isolate]\\resources\\isolate.py",
+      "[SLAVE_BUILD]\\v8\\tools\\swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/test262.isolated.gen.json"
+      "[SLAVE_BUILD]\\v8\\out\\Release_x64\\bot_default.isolated.gen.json",
+      "[SLAVE_BUILD]\\v8\\out\\Release_x64\\test262.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
@@ -173,7 +164,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]\\v8\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -184,7 +175,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Check/Ubuntu-12.04/[dummy has/v8_swarming_staging/571",
+      "Check/Windows-7-SP1/[dummy has/v8_swarming_staging/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -201,7 +192,7 @@
       "none",
       "--dimension",
       "os",
-      "Ubuntu-12.04",
+      "Windows-7-SP1",
       "--dimension",
       "pool",
       "Chrome",
@@ -216,7 +207,7 @@
       "--tag",
       "name:Check",
       "--tag",
-      "os:Ubuntu-12.04",
+      "os:Windows-7-SP1",
       "--tag",
       "project:v8",
       "--tag",
@@ -229,9 +220,9 @@
       "--",
       "--progress=verbose",
       "--mode",
-      "Release",
+      "Release_x64",
       "--arch",
-      "ia32",
+      "x64",
       "--outdir",
       "out",
       "--buildbot",
@@ -247,9 +238,9 @@
     "name": "[trigger] Check",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/v8_swarming_staging/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Windows-7-SP1/[dummy has/v8_swarming_staging/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check/Ubuntu-12.04/[dummy has/v8_swarming_staging/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Check/Windows-7-SP1/[dummy has/v8_swarming_staging/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -264,7 +255,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]\\v8\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -273,9 +264,9 @@
       "--priority",
       "28",
       "--shards",
-      "2",
+      "1",
       "--task-name",
-      "Test262/Ubuntu-12.04/[dummy has/v8_swarming_staging/571",
+      "Test262 - no variants/Windows-7-SP1/[dummy has/v8_swarming_staging/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -292,7 +283,7 @@
       "none",
       "--dimension",
       "os",
-      "Ubuntu-12.04",
+      "Windows-7-SP1",
       "--dimension",
       "pool",
       "Chrome",
@@ -305,9 +296,9 @@
       "--tag",
       "master:tryserver.v8",
       "--tag",
-      "name:Test262",
+      "name:Test262 - no variants",
       "--tag",
-      "os:Ubuntu-12.04",
+      "os:Windows-7-SP1",
       "--tag",
       "project:v8",
       "--tag",
@@ -315,19 +306,20 @@
       "--tag",
       "purpose:pre-commit",
       "--tag",
-      "stepname:Test262",
+      "stepname:Test262 - no variants",
       "[dummy hash for test262]",
       "--",
       "--progress=verbose",
       "--mode",
-      "Release",
+      "Release_x64",
       "--arch",
-      "ia32",
+      "x64",
       "--outdir",
       "out",
       "--buildbot",
       "--timeout=200",
       "test262",
+      "--no-variants",
       "--download-data",
       "--exhaustive-variants",
       "--dcheck-always-on",
@@ -336,26 +328,20 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Test262",
+    "name": "[trigger] Test262 - no variants",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262/Ubuntu-12.04/[dummy has/v8_swarming_staging/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - no variants/Windows-7-SP1/[dummy has/v8_swarming_staging/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test262/Ubuntu-12.04/[dummy has/v8_swarming_staging/571:2:0\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test262 - no variants/Windows-7-SP1/[dummy has/v8_swarming_staging/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test262/Ubuntu-12.04/[dummy has/v8_swarming_staging/571:2:1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -363,9 +349,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[v8]\\resources\\collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]\\v8\\tools\\swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -378,7 +364,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "Check/Ubuntu-12.04/[dummy has/v8_swarming_staging/571"
+      "Check/Windows-7-SP1/[dummy has/v8_swarming_staging/571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Check",
@@ -404,9 +390,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[v8]\\resources\\collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]\\v8\\tools\\swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -418,11 +404,11 @@
       "--decorate",
       "--print-status-updates",
       "--shards",
-      "2",
-      "Test262/Ubuntu-12.04/[dummy has/v8_swarming_staging/571"
+      "1",
+      "Test262 - no variants/Windows-7-SP1/[dummy has/v8_swarming_staging/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Test262",
+    "name": "Test262 - no variants",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
