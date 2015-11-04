@@ -2119,23 +2119,6 @@ BUILDERS = {
       },
     },
   },
-  'client.v8.fyi': {
-    'builders': {
-      'V8 Win32 - experiment': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'v8_ninja',
-          'goma',
-        ],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
-    },
-  },
 ####### Waterfall: client.dynamorio
   'client.dynamorio': {
     'builders': {
