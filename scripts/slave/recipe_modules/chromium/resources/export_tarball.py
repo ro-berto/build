@@ -112,6 +112,7 @@ class MyTarFile(tarfile.TarFile):
         if (name.startswith(dir_path) and
             os.path.isfile(name) and
             'gyp' not in name and
+            'gn' not in name and
             'isolate' not in name and
             'grd' not in name):
           self.__report_skipped(name)
