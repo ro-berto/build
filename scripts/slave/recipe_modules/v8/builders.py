@@ -2118,12 +2118,15 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
+          'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [V8Testing, Test262],
         'testing': {'platform': 'win'},
+        'swarming_dimensions': {
+          'os': 'Windows-XP-SP3',
+        },
       },
     },
   },
