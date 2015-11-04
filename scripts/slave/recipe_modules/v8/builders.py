@@ -288,7 +288,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - nosnap debug builder',
         'build_gs_archive': 'linux_nosnap_dbg_archive',
         'enable_swarming': True,
-        'tests': [V8Testing_2, Mozilla, SimdJs],
+        'tests': [V8Testing_3, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - isolates': {
