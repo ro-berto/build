@@ -277,9 +277,38 @@ def goma_teardown(options, env):
     # Always stop the proxy for now to allow in-place update.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
     UploadGomaCompilerProxyInfo()
-    # TODO(yyanagisawa): send_monitoring_event with GomaStats.
+
     if env.get('GOMA_DUMP_STATS_FILE'):
-      os.remove(env['GOMA_DUMP_STATS_FILE'])
+      # TODO(pgervais): remove this hacky partial-rollout system.
+      try:
+        if (not chromium_utils.IsWindows()
+            and socket.getfqdn().startswith('build10')):
+          send_monitoring_event_cmd = [
+            sys.executable,
+            '/opt/infra-python/run.py',
+            'infra.tools.send_monitoring_event',
+            '--event-mon-run-type', 'test',
+            '--build-event-type', 'STEP',
+            '--event-mon-timestamp-kind', 'POINT',
+            '--build-event-goma-stats-path', env['GOMA_DUMP_STATS_FILE'],
+            '--event-logrequest-path',
+            '%s/log_request_proto' % options.build_data_dir
+          ]
+          cmd_filter = chromium_utils.FilterCapture()
+          retcode = chromium_utils.RunCommand(
+            send_monitoring_event_cmd,
+            filter_obj=cmd_filter,
+            max_time=30)
+          if retcode:
+            print('Execution of send_monitoring_event failed with code %s'
+                  % retcode)
+            print '\n'.join(cmd_filter.text)
+      except Exception:  # safety net
+        pass
+      try:
+        os.remove(env['GOMA_DUMP_STATS_FILE'])
+      except OSError:  # file does not exist, for ex.
+        pass
 
 
 def UploadNinjaLog(options, command, exit_status):
