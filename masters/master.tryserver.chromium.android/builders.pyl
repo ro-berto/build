@@ -7,7 +7,7 @@
 
   "builders": {
     "Blink Trybot": {
-      "recipe": "chromium",
+      "recipe": "chromium_trybot",
       "scheduler": None,
       "slave_pools": ["blink"],
     },

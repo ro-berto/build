@@ -267,6 +267,7 @@ ENABLED_MASTERS = [
     'tryserver.blink',
     'tryserver.client.catapult',
     'tryserver.client.mojo',
+    'tryserver.chromium.android',
     'tryserver.chromium.angle',
     'tryserver.chromium.linux',
     'tryserver.chromium.mac',
