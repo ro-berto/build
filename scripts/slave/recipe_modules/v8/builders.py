@@ -1908,20 +1908,6 @@ BUILDERS = {
         'tests': [V8Testing, SimdJs],
         'testing': {'platform': 'win'},
       },
-      'v8_win64_ninja_rel': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'v8_ninja',
-          'goma',
-        ],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'tests': [V8Testing],
-        'testing': {'platform': 'win'},
-      },
       'v8_win64_dbg': {
         'chromium_apply_config': [
           'default_compiler',
