@@ -625,6 +625,7 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'win32_rel_archive',
+        'enable_swarming': True,
         'testing': {'platform': 'win'},
         'triggers': [
           'V8 Win32 - 1',
@@ -643,6 +644,7 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'win32_dbg_archive',
+        'enable_swarming': True,
         'testing': {'platform': 'win'},
         'triggers': [
           'V8 Win32 - debug - 1',
@@ -743,6 +745,10 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+        },
         'tests': [V8Testing, SimdJs, Test262, Mozilla],
         'testing': {'platform': 'win'},
       },
@@ -757,7 +763,11 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, SimdJs, Test262, Mozilla],
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+        },
+        'tests': [V8Testing_2, SimdJs, Test262, Mozilla],
         'testing': {'platform': 'win'},
       },
 ####### Category: Mac
@@ -1874,6 +1884,10 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+        },
         'testing': {'platform': 'win'},
       },
       'v8_win64_rel': {
@@ -1887,6 +1901,10 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+        },
         'tests': [V8Testing, SimdJs],
         'testing': {'platform': 'win'},
       },
@@ -1915,7 +1933,11 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, SimdJs],
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+        },
+        'tests': [V8Testing_2, SimdJs],
         'testing': {'platform': 'win'},
       },
       'v8_mac_rel': {
