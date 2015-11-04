@@ -542,11 +542,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def wrap_chromium_tests(self, mastername, tests=None):
     # Some recipes use this wrapper to setup devices and have their own way
     # to run tests. If platform is Android and tests is None, run device steps.
-    require_device_steps = (
-        self.m.chromium.c.TARGET_PLATFORM == 'android' and
-        (tests is None or any([t.uses_local_devices for t in tests]))
-    )
-    if require_device_steps:
+    require_device_steps = (tests is None or
+                            any([t.uses_local_devices for t in tests]))
+
+    if self.m.chromium.c.TARGET_PLATFORM == 'android' and require_device_steps:
       #TODO(prasadv): Remove this hack and implement specific functions
       # at the point of call.
       self.m.chromium_android.common_tests_setup_steps(
@@ -562,13 +561,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if self.m.platform.is_win:
         self.m.chromium.process_dumps()
 
-      if require_device_steps:
-        # TODO(phajdan.jr): Configure logcat GS bucket in cleaner way.
-        logcat_gs_bucket = None
-        if mastername in ('chromium.linux', 'tryserver.chromium.linux'):
-          logcat_gs_bucket = 'chromium-android'
-        self.m.chromium_android.common_tests_final_steps(
-            logcat_gs_bucket=logcat_gs_bucket)
+      if self.m.chromium.c.TARGET_PLATFORM == 'android':
+        if require_device_steps:
+          # TODO(phajdan.jr): Configure logcat GS bucket in cleaner way.
+          logcat_gs_bucket = None
+          if mastername in ('chromium.linux', 'tryserver.chromium.linux'):
+            logcat_gs_bucket = 'chromium-android'
+          self.m.chromium_android.common_tests_final_steps(
+              logcat_gs_bucket=logcat_gs_bucket)
+        else:
+          self.m.chromium_android.test_report()
 
   def deapply_patch(self, bot_update_step):
     assert self.m.tryserver.is_tryserver
