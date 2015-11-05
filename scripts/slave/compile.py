@@ -281,13 +281,12 @@ def goma_teardown(options, env):
     if env.get('GOMA_DUMP_STATS_FILE'):
       # TODO(pgervais): remove this hacky partial-rollout system.
       try:
-        if (not chromium_utils.IsWindows()
-            and socket.getfqdn().startswith('vm6')):
+        if not chromium_utils.IsWindows():
           send_monitoring_event_cmd = [
             sys.executable,
             '/opt/infra-python/run.py',
             'infra.tools.send_monitoring_event',
-            '--event-mon-run-type', 'test',
+            '--event-mon-run-type', 'prod',
             '--build-event-type', 'STEP',
             '--event-mon-timestamp-kind', 'POINT',
             '--build-event-goma-stats-path', env['GOMA_DUMP_STATS_FILE'],
