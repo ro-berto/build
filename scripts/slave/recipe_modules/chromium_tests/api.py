@@ -20,6 +20,13 @@ from . import trybots
 MB_CONFIG_FILENAME = ['tools', 'mb', 'mb_config.pyl']
 
 
+# Paths which affect recipe config and behavior in a way that survives
+# deapplying user's patch.
+RECIPE_CONFIG_PATHS = [
+    'testing/buildbot',
+]
+
+
 class ChromiumTestsApi(recipe_api.RecipeApi):
   def __init__(self, *args, **kwargs):
     super(ChromiumTestsApi, self).__init__(*args, **kwargs)
@@ -591,8 +598,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         force=True, patch=False, update_presentation=False)
     self.m.chromium.runhooks(name='runhooks (without patch)')
 
-  def run_tests_and_deapply_as_needed(self, mastername, api, tests,
-                                      bot_update_step):
+  def run_tests_on_tryserver(self, mastername, api, tests, bot_update_step,
+                             affected_files):
     def deapply_patch_fn(failing_tests):
       self.deapply_patch(bot_update_step)
       compile_targets = list(itertools.chain(
@@ -610,9 +617,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.isolate.isolate_tests(self.m.chromium.output_dir,
                                        verbose=True)
 
+    deapply_patch = True
+    for path in RECIPE_CONFIG_PATHS:
+      if any([f.startswith(path) for f in affected_files]):
+        deapply_patch = False
+        break
+
     with self.wrap_chromium_tests(mastername, tests):
-      return self.m.test_utils.determine_new_failures(api, tests,
-                                                      deapply_patch_fn)
+      if deapply_patch:
+        self.m.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
+      else:
+        failing_tests = self.m.test_utils.run_tests_with_patch(api, tests)
+        if failing_tests:
+          self.m.python.failing_step('test results', 'TESTS FAILED')
 
   def analyze(self, affected_files, exes, compile_targets, config_file_name,
               additional_names=None):

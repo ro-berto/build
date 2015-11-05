@@ -56,6 +56,58 @@ class TestUtilsApi(recipe_api.RecipeApi):
     return ''.join(step_text)
 
   # TODO(martinis) rewrite this. can be written better using 1.5 syntax.
+  # TODO(phajdan.jr): Deduplicate this and chromium_tests.create_test_runner.
+  def run_tests(self, caller_api, tests, suffix):
+    """
+    Utility function for running a list of tests.
+
+    Args:
+      caller_api - caller's recipe API; this is needed because self.m here
+                   is different than in the caller (different recipe modules
+                   get injected depending on caller's DEPS vs. this module's
+                   DEPS)
+      tests - iterable of objects implementing the Test interface above
+      suffix - custom suffix, e.g. "with patch", "without patch" indicating
+               context of the test run
+    """
+    #TODO(martiniss) convert loops
+    for t in tests:
+      try:
+        t.pre_run(caller_api, suffix)
+      # TODO(iannucci): Write a test.
+      except caller_api.step.InfraFailure:  # pragma: no cover
+        raise
+      except caller_api.step.StepFailure:  # pragma: no cover
+        pass
+    for t in tests:
+      try:
+        t.run(caller_api, suffix)
+      except caller_api.step.InfraFailure:  # pragma: no cover
+        raise
+      # TODO(iannucci): How should exceptions be accumulated/handled here?
+      except caller_api.step.StepFailure:
+        pass
+    for t in tests:
+      try:
+        t.post_run(caller_api, suffix)
+      # TODO(iannucci): Write a test.
+      except caller_api.step.InfraFailure:  # pragma: no cover
+        raise
+      except caller_api.step.StepFailure:  # pragma: no cover
+        pass
+
+  def run_tests_with_patch(self, caller_api, tests):
+    self.run_tests(caller_api, tests, 'with patch')
+
+    failing_tests = []
+    with self.m.step.defer_results():
+      for t in tests:
+        if not t.has_valid_results(caller_api, 'with patch'):
+          self._invalid_test_results(t)
+        elif t.failures(caller_api, 'with patch'):
+          failing_tests.append(t)
+    return failing_tests
+
   def determine_new_failures(self, caller_api, tests, deapply_patch_fn):
     """
     Utility function for running steps with a patch applied, and retrying
@@ -74,49 +126,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # Convert iterable to list, since it is enumerated multiple times.
     tests = list(tests)
 
-    failing_tests = []
-    #TODO(martiniss) convert loop
-    # TODO(phajdan.jr): Deduplicate this and chromium_tests.create_test_runner.
-    def run(prefix, tests):
-      for t in tests:
-        try:
-          t.pre_run(caller_api, prefix)
-        # TODO(iannucci): Write a test.
-        except caller_api.step.InfraFailure:  # pragma: no cover
-          raise
-        except caller_api.step.StepFailure:  # pragma: no cover
-          pass
-      for t in tests:
-        try:
-          t.run(caller_api, prefix)
-        except caller_api.step.InfraFailure:  # pragma: no cover
-          raise
-        # TODO(iannucci): How should exceptions be accumulated/handled here?
-        except caller_api.step.StepFailure:
-          pass
-      for t in tests:
-        try:
-          t.post_run(caller_api, prefix)
-        # TODO(iannucci): Write a test.
-        except caller_api.step.InfraFailure:  # pragma: no cover
-          raise
-        except caller_api.step.StepFailure:  # pragma: no cover
-          pass
-
-    run('with patch', tests)
-
-    with self.m.step.defer_results():
-      for t in tests:
-        if not t.has_valid_results(caller_api, 'with patch'):
-          self._invalid_test_results(t)
-        elif t.failures(caller_api, 'with patch'):
-          failing_tests.append(t)
+    failing_tests = self.run_tests_with_patch(caller_api, tests)
     if not failing_tests:
       return
 
     try:
       result = deapply_patch_fn(failing_tests)
-      run('without patch', failing_tests)
+      self.run_tests(caller_api, failing_tests, 'without patch')
       return result
     finally:
       with self.m.step.defer_results():

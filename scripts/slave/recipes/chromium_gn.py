@@ -245,8 +245,8 @@ def _RunStepsInternal(api):
 
   if tests:
     if api.tryserver.is_tryserver:
-      api.chromium_tests.run_tests_and_deapply_as_needed(
-          mastername, api, tests, bot_update_step)
+      api.chromium_tests.run_tests_on_tryserver(
+          mastername, api, tests, bot_update_step, affected_files)
     else:
       api.chromium_tests.configure_swarming('chromium', precommit=False,
                                             mastername=mastername)

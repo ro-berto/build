@@ -352,8 +352,8 @@ def _RunStepsInternal(api):
   if not tests:
     return
 
-  api.chromium_tests.run_tests_and_deapply_as_needed(mastername, api, tests,
-                                                     bot_update_step)
+  api.chromium_tests.run_tests_on_tryserver(
+      mastername, api, tests, bot_update_step, affected_files)
 
 
 def RunSteps(api):
@@ -679,6 +679,30 @@ def GenTests(api):
           extra_swarmed_tests=['base_unittests']) +
     api.platform.name('linux') +
     suppress_analyze()
+  )
+
+  yield (
+    api.test('recipe_config_changes_not_retried_without_patch') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.linux',
+      buildername='linux_chromium_chromeos_rel_ng',
+      swarm_hashes={}
+    ) +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'Linux ChromiumOS Tests (1)': {
+          'gtest_tests': ['base_unittests'],
+        },
+      })
+    ) +
+    suppress_analyze() +
+    api.override_step_data(
+        'git diff to analyze patch',
+        api.raw_io.stream_output(
+            'testing/buildbot/chromium.chromiumos.json\nfoo/bar/baz.py')
+    ) +
+    api.override_step_data('base_unittests (with patch)',
+                           canned_test(passing=False))
   )
 
   yield (
