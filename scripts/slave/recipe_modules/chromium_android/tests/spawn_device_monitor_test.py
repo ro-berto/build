@@ -17,7 +17,7 @@ THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 # For 'test_env'.
 sys.path.insert(
     0, os.path.abspath(os.path.join(THIS_DIR, '..', '..', '..', 'unittests')))
-# For 'spawn_device_temp_monitor.py'.
+# For 'spawn_device_monitor.py'.
 sys.path.insert(
     0, os.path.abspath(os.path.join(THIS_DIR, '..', 'resources')))
 
@@ -27,7 +27,7 @@ import mock
 
 # In depot_tools/
 from testing_support import auto_stub
-import spawn_device_temp_monitor
+import spawn_device_monitor
 
 
 class SimulatedSigterm(Exception):
@@ -55,14 +55,14 @@ class MainFuncTest(auto_stub.TestCase):
       self.assertEquals(60, duration)
       raise SimulatedSigterm('simulated sigterm')
     self.mock(
-        spawn_device_temp_monitor.time,
+        spawn_device_monitor.time,
         'sleep',
         mocked_sleep_call)
 
   def test_main_responsive_device(self):
     # Collect calls to 'subprocess.Popen' and simulate a responsive device.
     def mocked_popen_calls(args, **kwargs):
-      if (args[0] == spawn_device_temp_monitor._RUN_PY):
+      if (args[0] == spawn_device_monitor._RUN_PY):
         # ts_mon was called, so collect args and return
         send_ts_mon_call.extend(args)
         return None
@@ -96,13 +96,13 @@ class MainFuncTest(auto_stub.TestCase):
         self.fail('Unexpected Popen call: %s' % (' '.join(args)))
 
     self.mock(
-        spawn_device_temp_monitor.subprocess,
+        spawn_device_monitor.subprocess,
         'Popen',
         mocked_popen_calls)
     try:
       send_ts_mon_call = []
       adb_calls = []
-      spawn_device_temp_monitor.main([
+      spawn_device_monitor.main([
           '/some/adb/path',
           '["device_serial_1", "device_serial_2"]',
           'some_master_name',
@@ -111,7 +111,7 @@ class MainFuncTest(auto_stub.TestCase):
       pass
 
     # Should build args to send_ts_mon_values correctly.
-    expected_cmd = [spawn_device_temp_monitor._RUN_PY,
+    expected_cmd = [spawn_device_monitor._RUN_PY,
         'infra.tools.send_ts_mon_values',
         '--ts-mon-device-role',
         'temperature_monitor',
@@ -145,7 +145,7 @@ class MainFuncTest(auto_stub.TestCase):
   def test_main_dead_device(self):
     # Collect calls to 'subprocess.Popen' and simulate an unresponsive device.
     def mocked_popen_calls(args, **kwargs):
-      if (args[0] == spawn_device_temp_monitor._RUN_PY):
+      if (args[0] == spawn_device_monitor._RUN_PY):
         # ts_mon was called, so collect args and return
         send_ts_mon_call.extend(args)
         return None
@@ -157,13 +157,13 @@ class MainFuncTest(auto_stub.TestCase):
         self.fail('Unexpected Popen call: %s' % (' '.join(args)))
 
     self.mock(
-        spawn_device_temp_monitor.subprocess,
+        spawn_device_monitor.subprocess,
         'Popen',
         mocked_popen_calls)
     try:
       send_ts_mon_call = []
       adb_calls = []
-      spawn_device_temp_monitor.main([
+      spawn_device_monitor.main([
           '/some/adb/path',
           '["device_serial_1"]',
           'some_master_name',
@@ -172,7 +172,7 @@ class MainFuncTest(auto_stub.TestCase):
       pass
 
     # Should build args to send_ts_mon_values without any metrics.
-    expected_cmd = [spawn_device_temp_monitor._RUN_PY,
+    expected_cmd = [spawn_device_monitor._RUN_PY,
         'infra.tools.send_ts_mon_values',
         '--ts-mon-device-role',
         'temperature_monitor',
@@ -183,7 +183,7 @@ class MainFuncTest(auto_stub.TestCase):
     # Collect calls to 'subprocess.Popen' and
     # simulate a device that hangs on dumpsys.
     def mocked_popen_calls(args, **kwargs):
-      if (args[0] == spawn_device_temp_monitor._RUN_PY):
+      if (args[0] == spawn_device_monitor._RUN_PY):
         # ts_mon was called, so collect args and return
         send_ts_mon_call.extend(args)
         return None
@@ -198,7 +198,7 @@ class MainFuncTest(auto_stub.TestCase):
         elif args[4].startswith('dumpsys'):
           return mocked_Popen(
               stdout=None,
-              stderr=spawn_device_temp_monitor.AdbDeviceTimeout
+              stderr=spawn_device_monitor.AdbDeviceTimeout
           )
         else:
           self.fail('Unexpected adb command: %s' % (' '.join(args)))
@@ -206,7 +206,7 @@ class MainFuncTest(auto_stub.TestCase):
         self.fail('Unexpected Popen call: %s' % (' '.join(args)))
 
     self.mock(
-        spawn_device_temp_monitor.subprocess,
+        spawn_device_monitor.subprocess,
         'Popen',
         mocked_popen_calls)
 
@@ -215,14 +215,14 @@ class MainFuncTest(auto_stub.TestCase):
       pass
 
     self.mock(
-        spawn_device_temp_monitor.os,
+        spawn_device_monitor.os,
         'kill',
         mocked_kill)
 
     try:
       send_ts_mon_call = []
       adb_calls = []
-      spawn_device_temp_monitor.main([
+      spawn_device_monitor.main([
           '/some/adb/path',
           '["device_serial_1"]',
           'some_master_name',
@@ -231,7 +231,7 @@ class MainFuncTest(auto_stub.TestCase):
       pass
 
 
-    expected_cmd = [spawn_device_temp_monitor._RUN_PY,
+    expected_cmd = [spawn_device_monitor._RUN_PY,
         'infra.tools.send_ts_mon_values',
         '--ts-mon-device-role',
         'temperature_monitor',
@@ -245,7 +245,7 @@ class MainFuncTest(auto_stub.TestCase):
   def test_blacklist_file_scan(self):
     # Collect calls to 'subprocess.Popen'
     def mocked_popen_calls(args, **kwargs):
-      if (args[0] == spawn_device_temp_monitor._RUN_PY):
+      if (args[0] == spawn_device_monitor._RUN_PY):
         # ts_mon was called, so collect args and return
         send_ts_mon_call.extend(args)
         return None
@@ -257,7 +257,7 @@ class MainFuncTest(auto_stub.TestCase):
         self.fail('Unexpected Popen call: %s' % (' '.join(args)))
 
     self.mock(
-        spawn_device_temp_monitor.subprocess,
+        spawn_device_monitor.subprocess,
         'Popen',
         mocked_popen_calls)
 
@@ -270,7 +270,7 @@ class MainFuncTest(auto_stub.TestCase):
       with mock.patch('__builtin__.open', m, create=True):
         try:
           send_ts_mon_call = []
-          spawn_device_temp_monitor.main([
+          spawn_device_monitor.main([
               '/some/adb/path',
               '["good_serial1", "bad_serial1"]',
               'some_master_name',
@@ -280,7 +280,7 @@ class MainFuncTest(auto_stub.TestCase):
         except SimulatedSigterm:
           pass
 
-    expected_cmd = [spawn_device_temp_monitor._RUN_PY,
+    expected_cmd = [spawn_device_monitor._RUN_PY,
         'infra.tools.send_ts_mon_values',
         '--ts-mon-device-role',
         'temperature_monitor',

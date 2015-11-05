@@ -258,27 +258,27 @@ class AndroidApi(recipe_api.RecipeApi):
         env=self.m.chromium.get_env(),
         infra_step=True)
 
-  def spawn_device_temp_monitor(self):
+  def spawn_device_monitor(self):
     script = self.m.path['build'].join('scripts', 'slave', 'daemonizer.py')
     args = [
         '--action', 'restart',
         '--pid-file-path', '/tmp/device_monitor.pid',
-        '--', self.resource('spawn_device_temp_monitor.py'),
+        '--', self.resource('spawn_device_monitor.py'),
         self.m.adb.adb_path(),
         json.dumps(self._devices),
         self.m.properties['mastername'],
         self.m.properties['buildername'],
         '--blacklist-file', self.blacklist_file
     ]
-    self.m.python('spawn_device_temp_monitor', script, args, infra_step=True)
+    self.m.python('spawn_device_monitor', script, args, infra_step=True)
 
-  def shutdown_device_temp_monitor(self):
+  def shutdown_device_monitor(self):
     script = self.m.path['build'].join('scripts', 'slave', 'daemonizer.py')
     args = [
         '--action', 'stop',
         '--pid-file-path', '/tmp/device_monitor.pid',
     ]
-    self.m.python('shutdown_device_temp_monitor', script, args, infra_step=True)
+    self.m.python('shutdown_device_monitor', script, args, infra_step=True)
 
   def authorize_adb_devices(self):
     script = self.m.path['build'].join('scripts', 'slave', 'android',
@@ -765,10 +765,10 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
       self.asan_device_setup()
 
-    self.spawn_device_temp_monitor()
+    self.spawn_device_monitor()
 
   def common_tests_final_steps(self, logcat_gs_bucket=None):
-    self.shutdown_device_temp_monitor()
+    self.shutdown_device_monitor()
     self.logcat_dump(gs_bucket=logcat_gs_bucket)
     self.stack_tool_steps()
     self.test_report()
