@@ -266,6 +266,10 @@ TRYBOTS = freeze({
         'buildername': 'Linux Builder',
         'analyze_mode': 'compile',
       },
+      'linux_chromium_archive_rel_ng': {
+        'mastername': 'chromium',
+        'buildername': 'Linux x64',
+      },
       'linux_chromium_clobber_rel_ng': {
         'mastername': 'chromium.fyi',
         'buildername': 'Linux Builder (clobber)',

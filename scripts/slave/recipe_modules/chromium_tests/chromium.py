@@ -24,9 +24,14 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'tests': {
+      'tests': [
         steps.SizesStep(RESULTS_URL, 'chromium-rel-linux-64'),
-      },
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
       'archive_build': True,
       'gs_bucket': 'chromium-browser-snapshots',
       'gs_acl': 'public-read',

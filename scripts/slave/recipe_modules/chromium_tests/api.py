@@ -460,7 +460,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             'builder_name': loop_buildername,
           })
 
-    if bot_config.get('archive_build'):
+    if bot_config.get('archive_build') and not self.m.tryserver.is_tryserver:
       self.m.chromium.archive_build(
           'archive_build',
           bot_config['gs_bucket'],
