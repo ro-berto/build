@@ -1,10 +1,10 @@
 DEPS = [
-  "file",
-  "json",
-  "path",
-  "platform",
-  "properties",
-  "python",
-  "raw_io",
-  "step",
+  'file',
+  'json',
+  'path',
+  'platform',
+  'properties',
+  'python',
+  'raw_io',
+  'step',
 ]

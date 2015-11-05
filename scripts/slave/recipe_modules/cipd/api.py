@@ -205,14 +205,86 @@ class CIPDApi(recipe_api.RecipeApi):
       'cipd set-ref %s' % package_name,
       cmd,
       step_test_data=lambda: self.m.json.test_api.output({
-          "result": [
+          'result': [
             {
-              "package": package_name,
-              "pin": {
-                "package": package_name,
+              'package': package_name,
+              'pin': {
+                'package': package_name,
                 'instance_id': _test_data_resolve_version(version)
               }
             }
           ]
+      })
+    )
+
+  def search(self, package_name, tag):
+    assert self._cipd_executable
+    assert ':' in tag, 'tag must be in a form "k:v"'
+
+    cmd = [
+      self._cipd_executable,
+      'search', package_name,
+			'--tag', tag,
+      '--json-output', self.m.json.output(),
+    ]
+    if self._cipd_credentials:
+      cmd.extend(['--service-account-json', self._cipd_credentials])
+
+    return self.m.step(
+      'cipd search %s' % package_name,
+      cmd,
+      step_test_data=lambda: self.m.json.test_api.output({
+          'result': [
+						{
+							'package': package_name,
+              'instance_id': _test_data_resolve_version(None)
+						}
+          ]
+      })
+    )
+
+  def describe(self, package_name, version,
+               test_data_refs=None, test_data_tags=None):
+    assert self._cipd_executable
+
+    cmd = [
+      self._cipd_executable,
+      'describe', package_name,
+      '--version', version,
+      '--json-output', self.m.json.output(),
+    ]
+    if self._cipd_credentials:
+      cmd.extend(['--service-account-json', self._cipd_credentials])
+
+    return self.m.step(
+      'cipd describe %s' % package_name,
+      cmd,
+      step_test_data=lambda: self.m.json.test_api.output({
+          'result': {
+            'pin': {
+              'package': package_name,
+              'instance_id': _test_data_resolve_version(version),
+            },
+            'registered_by': 'user:44-blablbla@developer.gserviceaccount.com',
+            'registered_ts': 1446574210,
+            'refs': [
+              {
+                'ref': ref,
+                'modified_by': 'user:44-blablbla@developer.gserviceaccount.com',
+                'modified_ts': 1446574210
+              } for ref in (test_data_refs if test_data_refs else ['latest'])
+            ],
+            'tags': [
+              {
+                'tag': tag,
+                'registered_by': 'user:44-blablbla@developer.gserviceaccount.com',
+                'registered_ts': 1446574210
+              } for tag in (test_data_tags if test_data_tags else [
+                'buildbot_build:some.waterfall/builder/1234',
+                'git_repository:https://chromium.googlesource.com/some/repo',
+                'git_revision:397a2597cdc237f3026e6143b683be4b9ab60540',
+              ])
+            ]
+          }
       })
     )
