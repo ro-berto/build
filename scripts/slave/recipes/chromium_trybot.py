@@ -463,9 +463,6 @@ def GenTests(api):
     props(mastername='tryserver.chromium.win',
           buildername='win_chromium_rel_ng') +
     api.platform.name('win') +
-    api.override_step_data('read test spec', api.json.output({
-        'gtest_tests': ['blink_tests'],
-    })) +
     suppress_analyze() +
     api.override_step_data('process_dumps', retcode=1)
   )
@@ -661,23 +658,6 @@ def GenTests(api):
           blamelist_real=['joe@chromium.org'],
           extra_swarmed_tests=['base_unittests', 'browser_tests']) +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
-        'gtest_tests': [
-          {
-            'test': 'base_unittests',
-            'swarming': {'can_use_on_swarming_builders': True},
-          },
-          {
-            'test': 'browser_tests',
-            'swarming': {
-              'can_use_on_swarming_builders': True,
-              'shards': 5,
-              'platforms': ['linux'],
-            },
-          },
-        ],
-      })
-    ) +
     suppress_analyze()
   )
 
@@ -688,23 +668,6 @@ def GenTests(api):
     props(buildername='linux_chromium_rel_ng', requester='joe@chromium.org',
           extra_swarmed_tests=['base_unittests', 'browser_tests']) +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
-        'gtest_tests': [
-          {
-            'test': 'base_unittests',
-            'swarming': {'can_use_on_swarming_builders': True},
-          },
-          {
-            'test': 'browser_tests',
-            'swarming': {
-              'can_use_on_swarming_builders': True,
-              'shards': 5,
-              'platforms': ['linux'],
-            },
-          },
-        ],
-      })
-    ) +
     suppress_analyze()
   )
 
@@ -715,19 +678,6 @@ def GenTests(api):
           blamelist_real=['joe@chromium.org'],
           extra_swarmed_tests=['base_unittests']) +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
-        'gtest_tests': [
-          {
-            'test': 'base_unittests',
-            'swarming': {'can_use_on_swarming_builders': True},
-          },
-          {
-            'test': 'browser_tests',
-            'swarming': {'can_use_on_swarming_builders': True},
-          },
-        ],
-      })
-    ) +
     suppress_analyze()
   )
 
@@ -772,21 +722,6 @@ def GenTests(api):
     api.test('compile_because_of_analyze_with_filtered_tests_no_builder') +
     props(buildername='linux_chromium_rel_ng') +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
-        'gtest_tests': [
-          {
-            'test': 'base_unittests',
-            'swarming': {'can_use_on_swarming_builders': True},
-          },
-          {
-            'test': 'browser_tests',
-          },
-          {
-            'test': 'unittests',
-          },
-        ],
-      })
-    ) +
     api.override_step_data(
       'analyze',
       api.json.output({'status': 'Found dependency',
@@ -798,21 +733,6 @@ def GenTests(api):
     api.test('compile_because_of_analyze_with_filtered_tests') +
     props(buildername='linux_chromium_rel_ng') +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
-        'gtest_tests': [
-          {
-            'test': 'base_unittests',
-            'swarming': {'can_use_on_swarming_builders': True},
-          },
-          {
-            'test': 'browser_tests',
-          },
-          {
-            'test': 'unittests',
-          },
-        ],
-      })
-    ) +
     api.override_step_data(
       'analyze',
       api.json.output({'status': 'Found dependency',
@@ -825,21 +745,6 @@ def GenTests(api):
     api.test('compile_because_of_analyze_with_filtered_compile_targets') +
     props(buildername='linux_chromium_rel_ng') +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
-        'gtest_tests': [
-          {
-            'test': 'base_unittests',
-            'swarming': {'can_use_on_swarming_builders': True},
-          },
-          {
-            'test': 'browser_tests',
-          },
-          {
-            'test': 'unittests',
-          },
-        ],
-      })
-    ) +
     api.override_step_data(
       'analyze',
       api.json.output({'status': 'Found dependency',
