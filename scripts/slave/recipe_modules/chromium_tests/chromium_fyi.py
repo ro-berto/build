@@ -1684,7 +1684,7 @@ SPEC = {
       'android_config': 'main_builder',
       'bot_type': 'builder',
       'compile_targets': [
-        'chromedriver_webview_shell_apk',
+        'All',
       ],
       'testing': {
         'platform': 'linux',

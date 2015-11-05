@@ -206,7 +206,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "chromedriver_webview_shell_apk"
+      "All"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
