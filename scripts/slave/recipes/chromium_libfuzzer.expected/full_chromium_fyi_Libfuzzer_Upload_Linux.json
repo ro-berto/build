@@ -99,9 +99,21 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "tools/clang/scripts/update.sh",
+      "--force-local-build",
+      "--without-android"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "env": {
+      "LLVM_FORCE_HEAD_REVISION": "YES"
+    },
+    "name": "checkout llvm"
   },
   {
     "cmd": [
@@ -115,12 +127,32 @@
       "Libfuzzer Upload Linux",
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
-      "--goma-dir",
-      "[BUILD]/goma",
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "generate_build_files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gn.py",
+      "--root=[SLAVE_BUILD]/src",
+      "refs",
+      "[SLAVE_BUILD]/src/out/Release",
+      "--type=executable",
+      "--as=output",
+      "//testing/libfuzzer:libfuzzer_main"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "calculate targets",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@targets@target1@@@",
+      "@@@STEP_LOG_LINE@targets@target2@@@",
+      "@@@STEP_LOG_LINE@targets@target3@@@",
+      "@@@STEP_LOG_END@targets@@@"
+    ]
   },
   {
     "cmd": [
@@ -139,10 +171,10 @@
       "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
-      "--clobber",
       "--",
-      "gn",
-      "gn_unittests"
+      "target1",
+      "target2",
+      "target3"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile",
@@ -150,35 +182,6 @@
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/out/Release/gn",
-      "--version"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gn version"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Libfuzzer Upload Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"recipe\": \"chromium_libfuzzer\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Libfuzzer Upload Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"recipe\": \"chromium_libfuzzer\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--step-name=gn_unittests",
-      "--builder-name=Libfuzzer Upload Linux",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "gn_unittests"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gn_unittests"
   },
   {
     "name": "$result",

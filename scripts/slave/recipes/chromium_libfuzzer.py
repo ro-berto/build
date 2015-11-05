@@ -8,6 +8,7 @@ DEPS = [
   'bot_update',
   'chromium',
   'file',
+  'raw_io',
   'path',
   'platform',
   'properties',
@@ -20,6 +21,7 @@ BUILDERS = freeze({
   'chromium.fyi': {
     'builders': {
       'Libfuzzer Upload Linux': {
+        'chromium_apply_config': [ 'proprietary_codecs' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
@@ -40,17 +42,35 @@ def RunSteps(api):
 
   api.chromium.runhooks()
 
-  api.chromium.run_mb(mastername, buildername)
+  # checkout llvm
+  api.step('checkout llvm',
+           [api.path.sep.join(['tools', 'clang', 'scripts', 'update.sh']),
+            '--force-local-build',
+            '--without-android'],
+           cwd=api.path['checkout'],
+           env={'LLVM_FORCE_HEAD_REVISION': 'YES'})
 
-  api.chromium.compile(targets=['gn', 'gn_unittests'], force_clobber=True)
+  api.chromium.run_mb(mastername, buildername, use_goma=False)
 
-  path_to_binary = str(api.path['checkout'].join('out', 'Release', 'gn'))
+  step_result = api.python('calculate targets',
+          api.path['depot_tools'].join('gn.py'),
+          ['--root=%s' % str(api.path['checkout']),
+           'refs',
+           str(api.chromium.output_dir),
+           '--type=executable',
+           '--as=output',
+           '//testing/libfuzzer:libfuzzer_main',
+          ],
+          stdout=api.raw_io.output())
 
-  api.step('gn version', [path_to_binary, '--version'])
-
-  api.chromium.runtest('gn_unittests')
-
+  targets = step_result.stdout.split()
+  api.step.active_result.presentation.logs['targets'] = targets
+  api.chromium.compile(targets=targets)
 
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
-    yield test
+    yield (test +
+           api.step_data("calculate targets",
+               stdout=api.raw_io.output("target1 target2 target3"))
+           )
+
