@@ -33,7 +33,7 @@ def _RunTests(api):
                                                  'pdfium_unittests'))
   if api.platform.is_win:
     unittests_path += '.exe'
-  api.step('unittests', [unittests_path])
+  api.step('unittests', [unittests_path], cwd=api.path['checkout'])
 
   embeddertests_path = str(api.path['checkout'].join('out', 'Debug',
                                                      'pdfium_embeddertests'))

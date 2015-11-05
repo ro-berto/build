@@ -60,7 +60,7 @@
     "cmd": [
       "[SLAVE_BUILD]\\pdfium\\out\\Debug\\pdfium_unittests.exe"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[SLAVE_BUILD]\\pdfium",
     "name": "unittests"
   },
   {
