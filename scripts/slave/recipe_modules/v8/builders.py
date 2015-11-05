@@ -2126,6 +2126,7 @@ BUILDERS = {
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
           'os': 'Windows-XP-SP3',
+          'cpu': 'x86-32',
         },
       },
     },
