@@ -62,6 +62,34 @@ class Gitiles(recipe_api.RecipeApi):
     step_result.presentation.step_text = '<br />%d new commits' % len(commits)
     return commits
 
+  def log_with_props(self, url, ref, num='all', step_name=None, attempts=None):
+    """Returns the most recent commits under the given ref with properties.
+
+    Args:
+      url: URL of the remote repository.
+      ref: Name of the desired ref (see Gitiles.refs).
+      num: Number of commits to limit the results to. Defaults to all.
+      step_name: Custom name for this step. Will use the default if unspecified.
+
+    Returns:
+      A list of commits (as Gitiles dict structure) in reverse chronological
+      order.
+    """
+    step_name = step_name or 'log with properties: %s' % ref
+
+    step_result = self._fetch(
+      self.m.url.join(url, '+log/%s?format=json&n=%s' % (ref, num)),
+      step_name, attempts=attempts,
+    )
+
+    # The output is formatted as a JSON dict with a "log" key. The "log" key
+    # is a list of commit dicts, which contain information about the commit.
+    commits = step_result.json.output['log']
+
+    step_result.presentation.logs['log'] = [c['commit'] for c in commits]
+    step_result.presentation.step_text = '<br />%d new commits' % len(commits)
+    return commits
+
   def commit_log(self, url, commit, step_name=None, attempts=None):
     """Returns: (dict) the Gitiles commit log structure for a given commit.
 
