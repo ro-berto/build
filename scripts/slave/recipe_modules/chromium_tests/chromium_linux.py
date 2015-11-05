@@ -147,6 +147,22 @@ SPEC = {
         steps.generate_script,
         steps.generate_isolated_script,
       ],
+      'tests': [
+        steps.GTestTest(
+            'breakpad_unittests',
+            override_compile_targets=['breakpad_unittests_deps'],
+            android_isolate_path='breakpad/breakpad_unittests.isolate'),
+        steps.GTestTest(
+            'sandbox_linux_unittests',
+            override_compile_targets=['sandbox_linux_unittests_deps']),
+        steps.AndroidJunitTest('base_junit_tests'),
+        steps.AndroidJunitTest('chrome_junit_tests'),
+        steps.AndroidJunitTest('components_invalidation_impl_junit_tests'),
+        steps.AndroidJunitTest('components_policy_junit_tests'),
+        steps.AndroidJunitTest('content_junit_tests'),
+        steps.AndroidJunitTest('junit_unittests'),
+        steps.AndroidJunitTest('net_junit_tests'),
+      ],
       'testing': {
         'platform': 'linux',
       },
