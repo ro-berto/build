@@ -5,18 +5,6 @@
 from recipe_engine import recipe_api
 
 
-def _test_data_resolve_version(v):
-  if not v:
-    return '40-chars-fake-of-the-package-instance_id'
-  if len(v) == 40:
-    return v
-  # Truncate or pad to 40 chars.
-  prefix = 'resolved-instance_id-of-'
-  if len(v) + len(prefix) >= 40:
-    return '%s%s' % (prefix, v[:40-len(prefix)])
-  return '%s%s%s' % (prefix, v, '-' * (40 - len(prefix) - len(v)))
-
-
 class CIPDApi(recipe_api.RecipeApi):
   """CIPDApi provides support for CIPD."""
   def __init__(self, *args, **kwargs):
@@ -59,10 +47,7 @@ class CIPDApi(recipe_api.RecipeApi):
           '--json-output', self.m.json.output(),
         ] +
         (['--version', version] if version else []),
-        step_test_data=lambda: self.m.json.test_api.output({
-          'executable': str(self.m.path['slave_build'].join('cipd', 'cipd')),
-          'instance_id': _test_data_resolve_version(version),
-        }),
+        step_test_data=lambda: self.test_api.example_install_client(version)
     )
     self._cipd_executable = step.json.output['executable']
     self._cipd_instance_id = step.json.output['instance_id']
@@ -89,12 +74,7 @@ class CIPDApi(recipe_api.RecipeApi):
         ] + (
           ['--install-mode', install_mode] if install_mode else []
         ),
-        step_test_data=lambda: self.m.json.test_api.output({
-          'result': {
-              'package': package_name,
-              'instance_id': _test_data_resolve_version(None),
-          },
-        })
+        step_test_data=lambda: self.test_api.example_build(package_name)
     )
 
   def register(self, package_name, package_path, refs, tags):
@@ -114,12 +94,7 @@ class CIPDApi(recipe_api.RecipeApi):
     return self.m.step(
         'register %s' % package_name,
         cmd,
-        step_test_data=lambda: self.m.json.test_api.output({
-          'result': {
-            'package': package_name,
-            'instance_id': _test_data_resolve_version(None),
-          },
-        })
+        step_test_data=lambda: self.test_api.example_register(package_name)
     )
 
   def ensure(self, root, packages):
@@ -149,14 +124,7 @@ class CIPDApi(recipe_api.RecipeApi):
       cmd.extend(['--service-account-json', self._cipd_credentials])
     return self.m.step(
         'ensure_installed', cmd,
-        step_test_data=lambda: self.m.json.test_api.output({
-            'result': [
-              {
-                'package': name,
-                'instance_id': _test_data_resolve_version(version),
-              } for name, version in sorted(packages.items())
-            ]
-        })
+        step_test_data=lambda: self.test_api.example_ensure(packages)
     )
 
   def set_tag(self, package_name, version, tags):
@@ -175,17 +143,9 @@ class CIPDApi(recipe_api.RecipeApi):
     return self.m.step(
       'cipd set-tag %s' % package_name,
       cmd,
-      step_test_data=lambda: self.m.json.test_api.output({
-          'result': [
-            {
-              'package': package_name,
-              'pin': {
-                'package': package_name,
-                'instance_id': _test_data_resolve_version(version)
-              }
-            }
-          ]
-      })
+      step_test_data=lambda: self.test_api.example_set_tag(
+          package_name, version
+      )
     )
 
   def set_ref(self, package_name, version, refs):
@@ -204,17 +164,9 @@ class CIPDApi(recipe_api.RecipeApi):
     return self.m.step(
       'cipd set-ref %s' % package_name,
       cmd,
-      step_test_data=lambda: self.m.json.test_api.output({
-          'result': [
-            {
-              'package': package_name,
-              'pin': {
-                'package': package_name,
-                'instance_id': _test_data_resolve_version(version)
-              }
-            }
-          ]
-      })
+      step_test_data=lambda: self.test_api.example_set_ref(
+          package_name, version
+      )
     )
 
   def search(self, package_name, tag):
@@ -231,16 +183,9 @@ class CIPDApi(recipe_api.RecipeApi):
       cmd.extend(['--service-account-json', self._cipd_credentials])
 
     return self.m.step(
-      'cipd search %s' % package_name,
+      'cipd search %s %s' % (package_name, tag),
       cmd,
-      step_test_data=lambda: self.m.json.test_api.output({
-          'result': [
-						{
-							'package': package_name,
-              'instance_id': _test_data_resolve_version(None)
-						}
-          ]
-      })
+      step_test_data=lambda: self.test_api.example_search(package_name)
     )
 
   def describe(self, package_name, version,
@@ -259,32 +204,9 @@ class CIPDApi(recipe_api.RecipeApi):
     return self.m.step(
       'cipd describe %s' % package_name,
       cmd,
-      step_test_data=lambda: self.m.json.test_api.output({
-          'result': {
-            'pin': {
-              'package': package_name,
-              'instance_id': _test_data_resolve_version(version),
-            },
-            'registered_by': 'user:44-blablbla@developer.gserviceaccount.com',
-            'registered_ts': 1446574210,
-            'refs': [
-              {
-                'ref': ref,
-                'modified_by': 'user:44-blablbla@developer.gserviceaccount.com',
-                'modified_ts': 1446574210
-              } for ref in (test_data_refs if test_data_refs else ['latest'])
-            ],
-            'tags': [
-              {
-                'tag': tag,
-                'registered_by': 'user:44-blablbla@developer.gserviceaccount.com',
-                'registered_ts': 1446574210
-              } for tag in (test_data_tags if test_data_tags else [
-                'buildbot_build:some.waterfall/builder/1234',
-                'git_repository:https://chromium.googlesource.com/some/repo',
-                'git_revision:397a2597cdc237f3026e6143b683be4b9ab60540',
-              ])
-            ]
-          }
-      })
+      step_test_data=lambda: self.test_api.example_describe(
+          package_name, version,
+          test_data_refs=test_data_refs,
+          test_data_tags=test_data_tags
+      )
     )

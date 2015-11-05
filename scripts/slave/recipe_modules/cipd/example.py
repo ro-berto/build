@@ -17,7 +17,7 @@ def RunSteps(api):
   api.cipd.install_client('install cipd', version='deadbeaf')
   assert api.cipd.get_executable()
 
-  package_name = 'infra/monitoring/dispatcher/%s' % api.cipd.platform_suffix()
+  package_name = 'public/package/%s' % api.cipd.platform_suffix()
   package_instance_id = '7f751b2237df2fdf3c1405be00590fefffbaea2d'
   packages = {package_name: package_instance_id}
 
@@ -35,7 +35,9 @@ def RunSteps(api):
   api.cipd.ensure(cipd_root, packages)
   step = api.cipd.search(private_package_name, tag='key:value')
   api.cipd.describe(private_package_name,
-                    version=step.json.output['result'][0]['instance_id'])
+                    version=step.json.output['result'][0]['instance_id'],
+                    test_data_tags=['custom:tagged', 'key:value'],
+                    test_data_refs=['latest'])
 
   # The rest of commands expect credentials to be set.
 
@@ -52,7 +54,10 @@ def RunSteps(api):
   api.cipd.set_tag('fake-package',
                    version='long/weird/ref/which/doesn/not/fit/into/40chars',
                    tags={'dead': 'beaf', 'more': 'value'})
-  api.cipd.set_ref('fake-package', version='latest', refs=['any', 'ref'])
+  api.cipd.set_ref('fake-package', version='latest', refs=['any', 'some'])
+  # Search by the new tag.
+  api.cipd.search('fake-package/%s' % api.cipd.platform_suffix(),
+                  tag='dead:beaf')
 
 
 def GenTests(api):
@@ -70,4 +75,27 @@ def GenTests(api):
   yield (
     api.test('install-failed') +
     api.step_data('install cipd', retcode=1)
+  )
+
+  yield (
+    api.test('describe-failed') +
+    api.platform('linux', 64) +
+    api.override_step_data(
+      'cipd describe public/package/linux-amd64',
+      api.cipd.example_error(
+        'package "public/package/linux-amd64-ubuntu14_04" not registered',
+      )
+    )
+  )
+
+  yield (
+    api.test('describe-many-instances') +
+    api.platform('linux', 64) +
+    api.override_step_data(
+      'cipd search fake-package/linux-amd64 dead:beaf',
+      api.cipd.example_search(
+        'public/package/linux-amd64-ubuntu14_04',
+        instances=3
+      )
+    )
   )
