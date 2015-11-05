@@ -519,27 +519,40 @@ def GetGClientPath():
   return gclient_path
 
 
-def MaybeUpgradeSVNCheckoutToGit():
+def ExecuteSvn2GitScript(convert):
   """Executes SVN-to-Git conversion script.
 
-  The script may upgrade SVN checkout to Git if necessary and if the host is
+  The script will upgrade SVN checkout to Git if necessary and if the host is
   whitelisted. The output of the script is appended to ~/slave_svn_to_git.log.
+
+  Alternatively, if convert is False, script will post updates about the state
+  of the host to the tracking app every 10 minutes. This function will trigger a
+  separate process and return immediately leaving the script running in the
+  background.
+
+  Args:
+    convert: Whether to perform actual conversion (True) or just periodically
+        send host state to the tracking app (False)
   """
   try:
     upgrade_script = os.path.join(
         BUILD_DIR, 'scripts', 'tools', 'slave_svn_to_git.py')
-    log_file_path = os.path.join(os.path.expanduser('~'),
-                                 'slave_svn_to_git.log')
-    with open(log_file_path, 'a') as log_file:
-      upgrade_command = [sys.executable, upgrade_script]
-      subprocess.call(upgrade_command, stderr=subprocess.STDOUT,
-                      stdout=log_file)
+    upgrade_command = [sys.executable, upgrade_script]
+    if convert:
+      log_file_path = os.path.join(os.path.expanduser('~'),
+                                   'slave_svn_to_git.log')
+      with open(log_file_path, 'a') as log_file:
+        subprocess.call(upgrade_command, stderr=subprocess.STDOUT,
+                        stdout=log_file)
+    else:
+      upgrade_command += ['--send-repeated-updates-secs', '600']
+      subprocess.Popen(upgrade_command, stderr=subprocess.PIPE,
+                       stdout=subprocess.PIPE)
   except Exception as e:
     print 'Unexpected exception when running SVN-to-Git upgrade script: %s' % e
 
 
 if '__main__' == __name__:
-  MaybeUpgradeSVNCheckoutToGit()
   skip_sync_arg = '--no-gclient-sync'
   if skip_sync_arg not in sys.argv:
     UseBotoPath()
@@ -547,6 +560,12 @@ if '__main__' == __name__:
       print >> sys.stderr, (
           '(%s) `gclient sync` failed; proceeding anyway...' % sys.argv[0])
     os.execv(sys.executable, [sys.executable] + sys.argv + [skip_sync_arg])
+
+  # Attempt to upgrade the checkout from SVN-to-Git (no-op if already on Git).
+  ExecuteSvn2GitScript(True)
+
+  # Schedule regular checks reporting the state of the host to the tracking app.
+  ExecuteSvn2GitScript(False)
 
   # Remove skip_sync_arg from arg list.  Needed because twistd.
   sys.argv.remove(skip_sync_arg)

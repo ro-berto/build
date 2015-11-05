@@ -13,6 +13,7 @@ import socket
 import subprocess
 import sys
 import tempfile
+import time
 import traceback
 import urllib2
 
@@ -60,15 +61,15 @@ def check_output(cmd, cwd=None, env=None):
   return subprocess.check_output(cmd, cwd=cwd, shell=is_win, env=env)
 
 
-def report_and_need_conversion(b_dir, cur_host):
-  """Report host state to the tracking app.
+def report_checkout_state(b_dir, cur_host):
+  """Report host checkout state to the tracking app.
 
   Args:
     b_dir: Directory where checkout is located.
     cur_host: Name of the current host.
 
   Returns:
-    True if host should be converted, False otherwise.
+    True if the host checkout should be converted to Git.
   """
   if os.path.isdir(os.path.join(b_dir, 'build', '.svn')):
     state = 'SVN'
@@ -95,29 +96,17 @@ def report_broken_slave(cur_host, error_type):
     log('Failed to report %s for host %s: %s.' % (error_type, cur_host, e))
 
 
-def main():
-  parser = argparse.ArgumentParser()
-  parser.add_argument('-m', '--manual', action='store_true', default=False,
-                      help='Run in manual mode')
-  parser.add_argument('--leak-tmp-dir', action='store_true', default=False,
-                      help='Leaves temporary checkout dir on disk')
-  options = parser.parse_args()
+def report_host_state(home_dir, cur_host, b_dir):
+  """Reports host state to the tracking app.
 
-  # Find b directory.
-  b_dir = None
-  if is_win:
-    if os.path.exists('E:\\b'):
-      b_dir = 'E:\\b'
-    elif os.path.exists('C:\\b'):
-      b_dir = 'C:\\b'
-  elif os.path.exists('/b'):
-    b_dir = '/b'
-  assert b_dir is not None and os.path.isdir(b_dir), 'Did not find b dir'
+  Args:
+    home_dir: Absolute path to the home directory.
+    cur_host: Hostname of this host.
+    b_dir: Absolute path to the checkout directory.
 
-  home_dir = os.path.realpath(os.path.expanduser('~'))
-  cur_host = socket.gethostname()
-  is_cros_slave = cur_host.startswith('cros')
-
+  Returns:
+    Whether the host checkout should be converted to Git.
+  """
   # Report slaves with ~/no_reboot created by this script.
   if os.path.isfile(os.path.join(home_dir, 'no_reboot')):
     with open(os.path.join(home_dir, 'no_reboot')) as no_reboot_file:
@@ -141,9 +130,43 @@ def main():
   if not os.path.isfile(os.path.join(b_dir, 'build', 'site_config', '.boto')):
     report_broken_slave(cur_host, 'boto_missing')
 
-  # Report state before doing anything else, so we can keep track of the state
-  # of this host even if something later in this script fails.
-  if not report_and_need_conversion(b_dir, cur_host) and not options.manual:
+  return report_checkout_state(b_dir, cur_host)
+
+
+def main():
+  parser = argparse.ArgumentParser()
+  parser.add_argument('-m', '--manual', action='store_true', default=False,
+                      help='Run in manual mode')
+  parser.add_argument('-s', '--send-repeated-updates-secs', type=int,
+                      help='Instead of converting checkout, send regular '
+                           'updates with the host state to the tracking app. '
+                           'Value of this parameter is the delay between '
+                           'updates in seconds.')
+  parser.add_argument('--leak-tmp-dir', action='store_true', default=False,
+                      help='Leaves temporary checkout dir on disk')
+  options = parser.parse_args()
+
+  # Find b directory.
+  b_dir = None
+  if is_win:
+    if os.path.exists('E:\\b'):
+      b_dir = 'E:\\b'
+    elif os.path.exists('C:\\b'):
+      b_dir = 'C:\\b'
+  elif os.path.exists('/b'):
+    b_dir = '/b'
+  assert b_dir is not None and os.path.isdir(b_dir), 'Did not find b dir'
+
+  home_dir = os.path.realpath(os.path.expanduser('~'))
+  cur_host = socket.gethostname()
+
+  if options.send_repeated_updates_secs:
+    while True:
+      report_host_state(home_dir, cur_host, b_dir)
+      time.sleep(options.send_repeated_updates_secs)
+    return 0
+
+  if not report_host_state(home_dir, cur_host, b_dir) and not options.manual:
     log('Host %s is not pending SVN-to-Git conversion' % cur_host)
     return 0
 
@@ -168,6 +191,7 @@ def main():
   assert os.path.isfile(gclient_path), 'Did not find old .gclient config'
 
   # Detect type of checkout.
+  is_cros_slave = cur_host.startswith('cros')
   with open(gclient_path) as gclient_file:
     exec_env = {}
     exec gclient_file in exec_env
@@ -300,9 +324,6 @@ def main():
 
   # Run gclient sync again.
   check_call(['gclient', 'sync'], cwd=b_dir, env=env)
-
-  # Report state again, since we've converted to Git.
-  report_and_need_conversion(b_dir, cur_host)
 
   return 0
 
