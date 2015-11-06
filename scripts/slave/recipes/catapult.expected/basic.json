@@ -133,10 +133,23 @@
       "-u",
       "[SLAVE_BUILD]/catapult/tracing/bin/run_dev_server_tests",
       "--no-install-hooks",
-      "--no-use-local-chrome"
+      "--no-use-local-chrome",
+      "--channel=stable"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Tracing Dev Server Tests"
+    "name": "Tracing Dev Server Tests: Chrome Stable"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/tracing/bin/run_dev_server_tests",
+      "--no-install-hooks",
+      "--no-use-local-chrome",
+      "--channel=canary"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Tracing Dev Server Tests: Chrome Canary"
   },
   {
     "cmd": [
@@ -154,10 +167,23 @@
       "-u",
       "[SLAVE_BUILD]/catapult/perf_insights/bin/run_dev_server_tests",
       "--no-install-hooks",
-      "--no-use-local-chrome"
+      "--no-use-local-chrome",
+      "--channel=stable"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Perf Insights Dev Server Tests"
+    "name": "Perf Insights Dev Server Tests: Chrome Stable"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/perf_insights/bin/run_dev_server_tests",
+      "--no-install-hooks",
+      "--no-use-local-chrome",
+      "--channel=canary"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Perf Insights Dev Server Tests: Chrome Canary"
   },
   {
     "cmd": [
