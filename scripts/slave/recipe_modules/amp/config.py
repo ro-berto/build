@@ -28,6 +28,10 @@ def commit_queue_pool(c):
 def webview_pool(c):  # pragma: no cover
   SetDevicePoolConfigs(c, 'webview_pool')
 
+@config_ctx()
+def low_end_pool(c):  # pragma: no cover
+  SetDevicePoolConfigs(c, 'low_end_pool')
+
 def SetDevicePoolConfigs(c, pool_name):
   c.pool = pool_name
   c.api_key_file_url = '%s/%s/%s' % (GS_BASE_URL, pool_name, 'api_key')
