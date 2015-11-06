@@ -157,6 +157,12 @@ def find_xcode(target_version=None):
 
   xcode_info['current version'] = get_current_xcode_info()
 
+  if target_version and not xcode_info['found']:
+    # Flush buffers to ensure correct output ordering for buildbot.
+    sys.stdout.flush()
+    sys.stderr.write('Target Xcode version not found: %s\n' % target_version)
+    sys.stderr.flush()
+
   return xcode_info
 
 
@@ -166,7 +172,10 @@ def main(args):
   with open(args.json_file, 'w') as json_file:
     json.dump(xcode_info, json_file)
 
-  return 0 if xcode_info.get('found', True) else 1
+  if args.version and not xcode_info['found']:
+    return 1
+
+  return 0
 
 
 if __name__ == '__main__':
