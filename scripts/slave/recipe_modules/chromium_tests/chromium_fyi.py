@@ -1094,10 +1094,6 @@ SPEC = {
         # Enable debug info, as on official builders, to catch issues with
         # optimized debug info.
         'linux_dump_symbols': '1',
-
-        # Plugin flags often need to be changed when using a plugin newer than
-        # the latest Clang package, so disable plugins.
-        'clang_use_chrome_plugins': '0',
       },
       'bot_type': 'builder',
       'testing': {
@@ -1140,10 +1136,6 @@ SPEC = {
       },
       'GYP_DEFINES': {
         'werror': '',
-
-        # Plugin flags often need to be changed when using a plugin newer than
-        # the latest Clang package, so disable plugins.
-        'clang_use_chrome_plugins': '0',
       },
       'bot_type': 'builder',
       'testing': { 'platform': 'linux', },
@@ -1166,9 +1158,6 @@ SPEC = {
       'chromium_apply_config': ['lsan'],
       'GYP_DEFINES': {
         'werror': '',
-        # Plugin flags often need to be changed when using a plugin newer than
-        # the latest Clang package, so disable plugins.
-        'clang_use_chrome_plugins': '0',
       },
       'bot_type': 'builder',
       'testing': { 'platform': 'linux', },
@@ -1208,9 +1197,6 @@ SPEC = {
       },
       'GYP_DEFINES': {
         'werror': '',
-        # Plugin flags often need to be changed when using a plugin newer than
-        # the latest Clang package, so disable plugins.
-        'clang_use_chrome_plugins': '0',
       },
       'bot_type': 'builder',
       'testing': { 'platform': 'linux', },
@@ -1253,9 +1239,6 @@ SPEC = {
       'GYP_DEFINES': {
         'component': 'shared_library',
         'werror': '',
-        # Plugin flags often need to be changed when using a plugin newer than
-        # the latest Clang package, so disable plugins.
-        'clang_use_chrome_plugins': '0',
       },
       'bot_type': 'builder',
       'android_config': 'clang_asan_tot_release_builder',
@@ -1300,9 +1283,6 @@ SPEC = {
       'GYP_DEFINES': {
         'component': 'shared_library',
         'werror': '',
-        # Plugin flags often need to be changed when using a plugin newer than
-        # the latest Clang package, so disable plugins.
-        'clang_use_chrome_plugins': '0',
       },
       'bot_type': 'builder',
       'testing': { 'platform': 'mac', },
@@ -1343,9 +1323,6 @@ SPEC = {
       },
       'GYP_DEFINES': {
         'werror': '',
-        # Plugin flags often need to be changed when using a plugin newer than
-        # the latest Clang package, so disable plugins.
-        'clang_use_chrome_plugins': '0',
       },
       'bot_type': 'builder',
       'testing': { 'platform': 'mac', },
@@ -1367,9 +1344,6 @@ SPEC = {
       },
       'GYP_DEFINES': {
         'werror': '',
-        # Plugin flags often need to be changed when using a plugin newer than
-        # the latest Clang package, so disable plugins.
-        'clang_use_chrome_plugins': '0',
       },
       'bot_type': 'builder',
       'testing': { 'platform': 'mac', },
@@ -1412,9 +1386,6 @@ SPEC = {
       },
       'GYP_DEFINES': {
         'werror': '',
-        # Plugin flags often need to be changed when using a plugin newer than
-        # the latest Clang package, so disable plugins.
-        'clang_use_chrome_plugins': '0',
       },
       'testing': {
         'platform': 'mac',

@@ -516,6 +516,16 @@ def gn_component_build(c):
 def gn_minimal_symbols(c):
   c.gn_args.append('symbol_level=1')
 
+@config_ctx()
+def clang_tot(c):
+  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+  # Plugin flags often need to be changed when using a plugin newer than
+  # the latest Clang package, so disable plugins.
+  # TODO(pcc): Investigate whether this should be consistent between Windows and
+  # non-Windows.
+  if c.TARGET_PLATFORM != 'win':
+    c.gyp_env.GYP_DEFINES['clang_use_chrome_plugins'] = 0
+
 #### 'Full' configurations
 @config_ctx(includes=['ninja', 'default_compiler'])
 def chromium_no_goma(c):
@@ -530,17 +540,17 @@ def chromium(c):
 def chromium_win_clang(c):
   fastbuild(c, final=False)  # final=False so win_clang_asan can override it.
 
-@config_ctx(includes=['chromium_win_clang'])
+@config_ctx(includes=['chromium_win_clang', 'clang_tot'])
 def chromium_win_clang_tot(c):
-  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+  pass
 
 @config_ctx(includes=['chromium_win_clang', 'official'])
 def chromium_win_clang_official(c):
   pass
 
-@config_ctx(includes=['chromium_win_clang', 'official'])
+@config_ctx(includes=['chromium_win_clang', 'official', 'clang_tot'])
 def chromium_win_clang_official_tot(c):
-  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+  pass
 
 @config_ctx(includes=['chromium_win_clang', 'asan', 'static_library'])
 def chromium_win_clang_asan(c):
@@ -550,9 +560,9 @@ def chromium_win_clang_asan(c):
   c.gyp_env.GYP_DEFINES['enable_ipc_fuzzer'] = 1
   c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
 
-@config_ctx(includes=['chromium_win_clang_asan'])
+@config_ctx(includes=['chromium_win_clang_asan', 'clang_tot'])
 def chromium_win_clang_asan_tot(c):
-  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+  pass
 
 @config_ctx(includes=['chromium_win_clang_asan_tot', 'sanitizer_coverage'])
 def chromium_win_clang_asan_tot_coverage(c):
@@ -562,15 +572,12 @@ def chromium_win_clang_asan_tot_coverage(c):
 def chromium_win_clang_goma(c):
   pass
 
-@config_ctx(includes=['ninja', 'clang'])  # No goma.
+@config_ctx(includes=['ninja', 'clang', 'clang_tot'])  # No goma.
 def clang_tot_linux(c):
-  # Use ToT Clang.
-  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+  pass
 
-@config_ctx(includes=['ninja', 'clang'])  # No goma.
+@config_ctx(includes=['ninja', 'clang', 'clang_tot'])  # No goma.
 def clang_tot_mac(c):
-  # Use ToT Clang and fastbuild.
-  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
   c.gyp_env.GYP_DEFINES['fastbuild'] = 1
 
 @config_ctx()
@@ -594,11 +601,10 @@ def clang_tot_mac_asan(c):
   # Clear lsan configuration for mac.
   del c.gyp_env.GYP_DEFINES['lsan']
 
-@config_ctx(includes=['android_common', 'ninja', 'clang', 'asan'])
+@config_ctx(includes=['android_common', 'ninja', 'clang', 'asan', 'clang_tot'])
 def clang_tot_android_asan(c):
   # Like android_clang, minus goma, minus static_libarary, plus asan.
-  # Use ToT Clang.
-  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+  pass
 
 # GYP_DEFINES must not include 'asan' or 'clang', else the tester bot will try
 # to compile clang.
@@ -695,10 +701,9 @@ def chromium_ios_ninja(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['clang_xcode'] = 0
 
-@config_ctx(includes=['chromium_ios_ninja'])
+@config_ctx(includes=['chromium_ios_ninja', 'clang_tot'])
 def clang_tot_ios(c):
-  # Use ToT Clang.
-  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+  pass
 
 @config_ctx(includes=['chromium', 'official'])
 def chromium_official(c):
