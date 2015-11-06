@@ -256,7 +256,6 @@ def msvs2013(c):
 @config_ctx()
 def goma_canary(c):
   c.compile_py.goma_hermetic = 'error'
-  c.compile_py.set_build_data_dir = True
 
 @config_ctx()
 def goma_staging(c):
