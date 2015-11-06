@@ -470,14 +470,10 @@
         "categories": [
           "pdfium_all"
         ],
-        "excluded_builders" : [
-          "*_xfa"
-        ],
         "builders": {
           "*": {}
         },
         "tree_notify": [
-            "jam@chromiuim.org",
             "thestig@chromium.org",
             "tsepez@chromium.org"
         ]
