@@ -21,6 +21,7 @@ class DartCommands(commands.FactoryCommands):
     "flakylog": ".flaky.log",
     "debuglog": ".debug.log",
     "testoutcomelog": ".test-outcome.log",
+    "qemulog": ".qemu_log",
   }
 
   standard_flags = "--write-debug-log --write-test-outcome-log"
