@@ -123,6 +123,8 @@ class iOSApi(recipe_api.RecipeApi):
     self.__config['GYP_DEFINES']['component'] = 'static_library'
     self.__config['GYP_DEFINES']['OS'] = 'ios'
 
+    # TODO(crbug.com/552146): Once 'all' works, the default should be ['all'].
+    self.__config.setdefault('additional_compile_targets', ['All'])
     self.__config.setdefault('use_mb', False)
 
     # In order to simplify the code that uses the values of self.__config, here
@@ -280,13 +282,15 @@ class iOSApi(recipe_api.RecipeApi):
         self.m.tryserver.is_tryserver and
         'without patch' not in suffix):
       affected_files = self.m.tryserver.get_files_affected_by_patch()
-      tests = [test['app'] for test in self.__config['tests']]
+      # The same test may be configured to run on multiple simulators.
+      # Only specify each test once for the analyzer.
+      tests = list(set(test['app'] for test in self.__config['tests']))
 
       requires_compile, test_targets, compile_targets = (
         self.m.chromium_tests.analyze(
           affected_files,
           tests,
-          ['all'] + tests,  # https://crbug.com/463676.
+          self.__config['additional_compile_targets'] + tests,
           'trybot_analyze_config.json',
           additional_names=['chromium', 'ios']
         )
