@@ -203,7 +203,7 @@
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[BUILD]/goma",
-      "//out/None"
+      "//out/Debug-iphonesimulator"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "generate_build_files (with patch)"

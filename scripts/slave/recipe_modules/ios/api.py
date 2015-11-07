@@ -237,6 +237,8 @@ class iOSApi(recipe_api.RecipeApi):
     # Add extra env variables.
     env.update(self.__config['env'])
 
+    sub_path = ''
+
     if self.compiler == 'xcodebuild':
       env['GYP_GENERATORS'] = 'xcode'
       env['GYP_GENERATOR_FLAGS'] = 'xcode_project_version=3.2'
@@ -253,13 +255,12 @@ class iOSApi(recipe_api.RecipeApi):
     elif self.compiler == 'ninja':
       env['GYP_CROSSCOMPILE'] = '1'
       env['GYP_GENERATORS'] = 'ninja'
-      cwd = self.m.path['checkout'].join(
-        'out',
-        '%s-%s' % (self.configuration, {
+      sub_path = '%s-%s' % (self.configuration, {
           'simulator': 'iphonesimulator',
           'device': 'iphoneos',
         }[self.platform])
-      )
+
+      cwd = self.m.path['checkout'].join('out', sub_path)
       cmd = ['ninja', '-C', cwd]
 
     if use_mb:
@@ -276,7 +277,8 @@ class iOSApi(recipe_api.RecipeApi):
     if use_mb:
       self.m.chromium.run_mb(self.m.properties['mastername'],
                              self.m.properties['buildername'],
-                             name='generate_build_files' + suffix)
+                             name='generate_build_files' + suffix,
+                             build_dir='//out/' + sub_path)
 
     if (self.compiler == 'ninja' and
         self.m.tryserver.is_tryserver and
