@@ -154,6 +154,7 @@
       "--verbose",
       "[SLAVE_BUILD]/v8/out/Debug/benchmarks.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Debug/bot_default.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Debug/mjsunit.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Debug/mozilla.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Debug/simdjs.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Debug/test262.isolated.gen.json"
@@ -164,6 +165,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"benchmarks\": \"[dummy hash for benchmarks]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"simdjs\": \"[dummy hash for simdjs]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
@@ -182,7 +184,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"mozilla\": \"[dummy hash for mozilla]\", \"simdjs\": \"[dummy hash for simdjs]\", \"test262\": \"[dummy hash for test262]\"}",
+      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"simdjs\": \"[dummy hash for simdjs]\", \"test262\": \"[dummy hash for test262]\"}",
       "gs://chromium-v8/v8-linux64-dbg/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -226,6 +228,7 @@
           "swarm_hashes": {
             "benchmarks": "[dummy hash for benchmarks]",
             "bot_default": "[dummy hash for bot_default]",
+            "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
@@ -242,6 +245,7 @@
           "swarm_hashes": {
             "benchmarks": "[dummy hash for benchmarks]",
             "bot_default": "[dummy hash for bot_default]",
+            "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
@@ -258,6 +262,7 @@
           "swarm_hashes": {
             "benchmarks": "[dummy hash for benchmarks]",
             "bot_default": "[dummy hash for bot_default]",
+            "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
@@ -274,6 +279,7 @@
           "swarm_hashes": {
             "benchmarks": "[dummy hash for benchmarks]",
             "bot_default": "[dummy hash for bot_default]",
+            "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"

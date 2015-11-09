@@ -22,6 +22,7 @@ Fuzz = TestStepConfig('fuzz')
 GCMole = TestStepConfig('gcmole')
 Mjsunit = TestStepConfig('mjsunit')
 Mjsunit_3 = TestStepConfig('mjsunit', shards=3)
+MjsunitIgnition = TestStepConfig('mjsunit_ignition')
 Mozilla = TestStepConfig('mozilla')
 OptimizeForSize = TestStepConfig('optimize_for_size')
 Presubmit = TestStepConfig('presubmit')
@@ -29,6 +30,7 @@ SimdJs = TestStepConfig('simdjs')
 SimpleLeak = TestStepConfig('simpleleak')
 Test262 = TestStepConfig('test262')
 Test262_2 = TestStepConfig('test262', shards=2)
+Test262Ignition = TestStepConfig('test262_ignition')
 Test262Variants = TestStepConfig('test262_variants')
 Test262Variants_2 = TestStepConfig('test262_variants', shards=2)
 Test262Variants_3 = TestStepConfig('test262_variants', shards=3)
@@ -163,6 +165,8 @@ BUILDERS = {
           SimdJs,
           Test262Variants_2,
           Mozilla,
+          MjsunitIgnition,
+          Test262Ignition,
         ],
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
@@ -234,7 +238,15 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'enable_swarming': True,
-        'tests': [V8Testing, Benchmarks, Test262Variants_3, Mozilla, SimdJs],
+        'tests': [
+          V8Testing,
+          Benchmarks,
+          Test262Variants_3,
+          Mozilla,
+          SimdJs,
+          MjsunitIgnition,
+          Test262Ignition,
+        ],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - avx2': {
@@ -504,6 +516,8 @@ BUILDERS = {
           Test262Variants_2,
           Mozilla,
           SimdJs,
+          MjsunitIgnition,
+          Test262Ignition,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -537,6 +551,8 @@ BUILDERS = {
           Test262Variants_3,
           Mozilla,
           SimdJs,
+          MjsunitIgnition,
+          Test262Ignition,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -893,6 +909,8 @@ BUILDERS = {
           Benchmarks,
           OptimizeForSize,
           SimdJs,
+          MjsunitIgnition,
+          Test262Ignition,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -906,7 +924,13 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Arm - debug builder',
         'build_gs_archive': 'arm_dbg_archive',
-        'tests': [V8Testing, OptimizeForSize, SimdJs],
+        'tests': [
+          V8Testing,
+          OptimizeForSize,
+          SimdJs,
+          MjsunitIgnition,
+          Test262Ignition,
+        ],
         'testing': {'platform': 'linux'},
       },
       'V8 Arm - debug - 1': {
@@ -1000,6 +1024,8 @@ BUILDERS = {
           Test262,
           Mozilla,
           SimdJs,
+          MjsunitIgnition,
+          Test262Ignition,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1011,7 +1037,14 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
+        'tests': [
+          V8Testing_2,
+          Test262,
+          Mozilla,
+          SimdJs,
+          MjsunitIgnition,
+          Test262Ignition,
+        ],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - armv8-a - sim': {
@@ -1081,6 +1114,8 @@ BUILDERS = {
           Test262,
           Mozilla,
           SimdJs,
+          MjsunitIgnition,
+          Test262Ignition,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1092,7 +1127,14 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
+        'tests': [
+          V8Testing_2,
+          Test262,
+          Mozilla,
+          SimdJs,
+          MjsunitIgnition,
+          Test262Ignition,
+        ],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - nosnap - debug': {

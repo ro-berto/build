@@ -16,6 +16,11 @@ TEST_CONFIGS = freeze({
     'name': 'Mjsunit',
     'tests': ['mjsunit'],
   },
+  'mjsunit_ignition': {
+    'name': 'Mjsunit - ignition',
+    'tests': ['mjsunit'],
+    'test_args': ['--variants=ignition', '--ignition'],
+  },
   'mozilla': {
     'name': 'Mozilla',
     'tests': ['mozilla'],
@@ -35,6 +40,11 @@ TEST_CONFIGS = freeze({
     'name': 'Test262 - no variants',
     'tests': ['test262'],
     'test_args': ['--no-variants', '--download-data'],
+  },
+  'test262_ignition': {
+    'name': 'Test262 - ignition',
+    'tests': ['test262'],
+    'test_args': ['--variants=ignition', '--ignition'],
   },
   'test262_variants': {
     'name': 'Test262',
