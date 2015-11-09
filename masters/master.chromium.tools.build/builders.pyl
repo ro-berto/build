@@ -7,24 +7,28 @@
 
   "builders": {
     "v8-linux-end-to-end": {
+      "auto_reboot": False,
       "category": "continuous",
       "recipe": "v8/infra_end_to_end",
       "scheduler": "build",
       "slave_pools": ["trusty_64"],
     },
     "cipd-test-end-to-end_mac": {
+      "auto_reboot": False,
       "category": "continuous",
       "recipe": "infra/cipd_test",
       "scheduler": "build",
       "slave_pools": ["mac10.10"],
     },
     "cipd-test-end-to-end_trusty64": {
+      "auto_reboot": False,
       "category": "continuous",
       "recipe": "infra/cipd_test",
       "scheduler": "build",
       "slave_pools": ["trusty_64"],
     },
     "cipd-test-end-to-end_win64": {
+      "auto_reboot": False,
       "category": "continuous",
       "recipe": "infra/cipd_test",
       "scheduler": "build",
