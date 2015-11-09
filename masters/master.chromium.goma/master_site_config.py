@@ -14,9 +14,9 @@ from config_bootstrap import Master
 
 class ChromiumGoma(Master.Master1):
   project_name = 'ChromiumGoma'
-  master_port = 20102
-  slave_port = 30102
-  master_port_alt = 40102
+  master_port = 20104
+  slave_port = 30104
+  master_port_alt = 40104
   buildbot_url = 'https://build.chromium.org/p/chromium.goma/'
   buildbucket_bucket = None
   service_account_file = None
