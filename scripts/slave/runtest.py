@@ -81,7 +81,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LOG_PROCESSOR_CLASSES = {
     'gtest': gtest_utils.GTestLogParser,
     'graphing': performance_log_processor.GraphingLogProcessor,
-    'pagecycler': performance_log_processor.GraphingPageCyclerLogProcessor,
 }
 
 

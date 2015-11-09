@@ -639,7 +639,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"perf_runner_allow_low_battery\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"perf_runner_allow_low_battery\", \"buildnumber\": 571, \"internal\": true, \"mastername\": \"chromium.testing.master\", \"patch_url\": \"https://the.patch.url/the.patch\", \"recipe\": \"chromium_android:example\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"tehslave\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=pagecycler",
+      "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=page_cycler.foo",
       "--test-type=page_cycler.foo",

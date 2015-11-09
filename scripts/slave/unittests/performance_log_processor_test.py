@@ -358,22 +358,5 @@ class GraphingLogProcessorPerfTest(LogProcessorTest):
     self.assertEqual(WARNINGS, step.evaluateCommand('mycommand'))
 
 
-class GraphingPageCyclerLogProcessorPerfTest(LogProcessorTest):
-  """Unit tests for the GraphingPageCyclerLogProcessor class."""
-
-  def testPageCycler(self):
-    parser = self._ConstructDefaultProcessor(
-        performance_log_processor.GraphingPageCyclerLogProcessor)
-    self._ProcessLog(parser, 'page_cycler.log')
-
-    expected = 't: 2.32k'
-    self.assertEqual(expected, parser.PerformanceSummary()[0])
-
-    self.assertIn('12345_t.dat', parser.PerformanceLogs())
-    self.assertTrue(parser.PerformanceLogs()['12345_t.dat'])
-    expected = 'blog.chromium.org (441.00+/-0.00): 585.0 441.0\n'
-    self.assertEqual(expected, parser.PerformanceLogs()['12345_t.dat'][0])
-
-
 if __name__ == '__main__':
   unittest.main()
