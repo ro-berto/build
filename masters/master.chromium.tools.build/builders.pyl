@@ -46,7 +46,7 @@
         "os":  "linux",
         "version": "trusty",
       },
-      "slaves": ["TODO: http://crbug.com/549164"],
+      "slaves": ["vm100-m1"],
     },
     "mac10.10": {
       "slave_data": {
