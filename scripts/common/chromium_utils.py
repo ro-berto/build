@@ -1307,10 +1307,19 @@ def GetSlavesForHost():
 
 
 def GetActiveSubdir():
-  """Get current checkout's subdir, if checkout uses subdir layout."""
-  rootdir, subdir = os.path.split(os.path.dirname(BUILD_DIR))
-  if subdir != 'b' and os.path.basename(rootdir) == 'c':
-    return subdir
+  """Get current checkout's subdir, if checkout uses subdir layout.
+
+  Returns: With subdir layout, BUILD_DIR == 'any/build/nested/subdir/build',
+           returns 'subdir'. Otherwise, BUILD_DIR == 'any/build' with
+           'build/nested' not in any, returns None. People that have a regular
+           build checkout in build/nested/subdir gonna have a bad time.
+  """
+  basedir = os.path.dirname(BUILD_DIR)
+  subdir_rootdir = os.path.dirname(basedir)
+  rootdir = os.path.dirname(subdir_rootdir)
+  if (os.path.basename(rootdir) == 'build' and
+      os.path.basename(subdir_rootdir) == 'nested'):
+    return os.path.basename(basedir)
 
 
 def GetActiveSlavename():

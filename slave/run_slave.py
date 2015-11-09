@@ -221,40 +221,72 @@ def GetRoot():
 
 
 def SpawnSubdirBuildbotsIfNeeded():
-  """Creates /c directory structure and spawns other bots on host as needed."""
-  # 'make start' spawns subdirs bots only when run in /b.
-  # TODO(ilevy): Remove this restriction after run_slave.py refactor.
+  """Creates "nested/*" directory structure and spawns other bots on host as
+  needed.
+
+  Returns: Boolean indicating if subdir buildbots are used.
+  """
+  # Ensure this is not a subdir buildbot itself. Subdir buildbots within
+  # subdir buildbots are not supported.
   if chromium_utils.GetActiveSubdir():
-    return
+    return False
+
   print 'Spawning other slaves on this host as needed.'
   print 'Run make stopall to terminate.'
+
+  spawned_subdir_buildbots = False
   for slave in chromium_utils.GetSlavesForHost():
     subdir = slave.get('subdir')
     if not subdir:
       continue
-    botdir = os.path.join(GetRoot(), 'c', subdir)
+    spawned_subdir_buildbots = True
+    subdir_root = os.path.join(BUILD_DIR, 'nested')
+    if not os.path.exists(subdir_root):
+      print 'Creating %s' % subdir_root
+      os.mkdir(subdir_root)
+    botdir = os.path.join(subdir_root, subdir)
 
-    def GClientCall(command):
+    def GClientCall(command, fail_ok=False):
       # We just synced depot_tools, so disable gclient auto-sync.
       # pylint: disable=cell-var-from-loop
-      env = dict(os.environ, DEPOT_TOOLS_UPDATE='0')
-      subprocess.check_call([GetGClientPath()] + command, env=env, cwd=botdir)
+      env = EnvWithDepotTools(DEPOT_TOOLS_UPDATE='0')
+      try:
+        subprocess.check_call(
+            [GetGClientPath()] + command, env=env, cwd=botdir)
+      except Exception as e:
+        if fail_ok:
+          print >> sys.stderr, e
+          print >> sys.stderr, 'gclient failed; proceeding anyway...'
+        else:
+          raise
 
     gclient_solutions = chromium_utils.ParsePythonCfg(
         os.path.join(ROOT_DIR, '.gclient')).get('solutions', [])
     assert len(gclient_solutions) == 1
-    if subdir and not os.path.exists(botdir):
+    if not os.path.exists(botdir):
       print 'Creating %s' % botdir
       os.mkdir(botdir)
-      GClientCall(['config', gclient_solutions[0]['url']])
-      GClientCall(['sync'])
+
+    GClientCall(['config', gclient_solutions[0]['url'],
+                 '--deps-file', gclient_solutions[0]['deps_file']])
+
+    # Allow failures, e.g. some hooks occasionally fail. Otherwise we
+    # wouldn't copy the pw file and then never exercise this path again.
+    GClientCall(['sync'], fail_ok=True)
+    shutil.copyfile(
+        os.path.join(BUILD_DIR, 'site_config', '.bot_password'),
+        os.path.join(botdir, 'build', 'site_config', '.bot_password'))
+    if os.path.exists(GetBotoFilePath()):
       shutil.copyfile(
-          os.path.join(BUILD_DIR, 'site_config', '.bot_password'),
-          os.path.join(botdir, 'build', 'site_config', '.bot_password'))
+          GetBotoFilePath(),
+          GetBotoFilePath(build=os.path.join(botdir, 'build')),
+      )
+
     bot_slavedir = os.path.join(botdir, 'build', 'slave')
     if not os.path.exists(os.path.join(bot_slavedir, 'twistd.pid')):
       print 'Spawning slave in %s' % bot_slavedir
       subprocess.check_call(['make', 'start'], cwd=bot_slavedir)
+  return spawned_subdir_buildbots
 
 
 def GetThirdPartyVersions(master):
@@ -276,14 +308,16 @@ def error(msg):
   sys.exit(1)
 
 
+def GetBotoFilePath(build=BUILD_DIR):
+  return os.path.join(build, 'site_config', '.boto')
+
+
 def UseBotoPath():
   """Mutate the environment to reference the prefered gs credentials."""
-  # Get the path to the boto file containing the password.
-  boto_file = os.path.join(BUILD_DIR, 'site_config', '.boto')
   # If the boto file exists, make sure gsutil uses this boto file.
-  if os.path.exists(boto_file):
-    os.environ['AWS_CREDENTIAL_FILE'] = boto_file
-    os.environ['BOTO_CONFIG'] = boto_file
+  if os.path.exists(GetBotoFilePath()):
+    os.environ['AWS_CREDENTIAL_FILE'] = GetBotoFilePath()
+    os.environ['BOTO_CONFIG'] = GetBotoFilePath()
 
 
 def main():
@@ -298,9 +332,9 @@ def main():
   if not os.path.isfile(bot_password_file):
     error('You forgot to put the password at %s' % bot_password_file)
 
-  if (os.path.exists(os.path.join(GetRoot(), 'b')) and
-      os.path.exists(os.path.join(GetRoot(), 'c'))):
-    SpawnSubdirBuildbotsIfNeeded()
+  if SpawnSubdirBuildbotsIfNeeded():
+    # If subdir buildbots were used, don't spawn the root process.
+    return
 
   # Make sure the current python path is absolute.
   old_pythonpath = os.environ.get('PYTHONPATH', '')
@@ -507,6 +541,14 @@ def main():
           'slave manually to resume automatic reboots.' % prevent_reboot_file)
 
 
+def EnvWithDepotTools(**kwargs):
+  """Returns the current environment with depot_tools appended to the PATH."""
+  depot_tools_path = os.path.join(ROOT_DIR, 'depot_tools')
+  path = os.environ.get('PATH', '')
+  return dict(
+      os.environ, PATH=os.pathsep.join([path, depot_tools_path]), **kwargs)
+
+
 def GetGClientPath():
   """Returns path to local gclient executable."""
   gclient_path = os.path.join(ROOT_DIR, 'depot_tools', 'gclient')
@@ -556,7 +598,9 @@ if '__main__' == __name__:
   skip_sync_arg = '--no-gclient-sync'
   if skip_sync_arg not in sys.argv:
     UseBotoPath()
-    if subprocess.call([GetGClientPath(), 'sync', '--force']) != 0:
+    if subprocess.call(
+        [GetGClientPath(), 'sync', '--force'],
+        env=EnvWithDepotTools()) != 0:
       print >> sys.stderr, (
           '(%s) `gclient sync` failed; proceeding anyway...' % sys.argv[0])
     os.execv(sys.executable, [sys.executable] + sys.argv + [skip_sync_arg])

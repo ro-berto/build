@@ -47,7 +47,9 @@ else
 endif
 
 stopall:
-	for t in twistd.pid $(wildcard /c/*/build/slave/twistd.pid); do \
+	for t in twistd.pid \
+	         $(wildcard /c/*/build/slave/twistd.pid) \
+	         $(wildcard ../nested/*/build/slave/twistd.pid); do \
 	  if `test -f $$t`; then kill `cat $$t`; fi; \
 	done
 

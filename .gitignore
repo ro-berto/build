@@ -33,6 +33,7 @@ twistd.pid
 /masters/*/actions.log
 /masters/*/actions_parser.timestamp
 /masters/*/revinfo.log
+/nested
 /scripts/command_wrapper
 /scripts/common/.bot_password
 /scripts/gsd_generate_index

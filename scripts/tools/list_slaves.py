@@ -196,7 +196,8 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
         slaveos = s.get('os') or '?'
         pathsep = '\\' if s.get('os') == 'win' else '/'
         if 'subdir' in s:
-          d = pathsep + 'c' + pathsep + s['subdir']
+          d = (pathsep + 'b' + pathsep + 'build' + pathsep + 'nested' +
+               pathsep + s['subdir'])
         else:
           d = pathsep + 'b'
         builders = s.get('builder') or '?'
