@@ -115,6 +115,10 @@ TRYBOTS = freeze({
         'buildername': 'WebKit Android (Nexus4)',
         'analyze_mode': 'compile',
       },
+      'android_chromium_gn_rel': {
+        'mastername': 'chromium.linux',
+        'buildername': 'Android GN',
+      },
     },
   },
   'tryserver.chromium.angle': {

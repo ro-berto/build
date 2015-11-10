@@ -6,23 +6,31 @@
   "templates": ["templates", "../master.chromium/templates"],
 
   "builders": {
-    "Blink Trybot": {
+    "android_blink_rel": {
       "recipe": "chromium_trybot",
       "scheduler": None,
-      "slave_pools": ["blink"],
+      "slave_pools": ["slaves_with_devices"],
     },
+    "android_chromium_gn_rel": {
+      "recipe": "chromium_trybot",
+      "scheduler": None,
+      "slave_pools": ["slaves_with_devices"],
+    }
   },
 
   "schedulers": { },
 
   "slave_pools": {
-    "blink": {
+    "slaves_with_devices": {
       "slave_data": {
         "os": "linux",
         "version": "precise",
         "bits": 64,
       },
-      "slaves": ["build38-b4"],
+      "slaves": [
+        "build199-a4",
+        "build38-b4",
+      ],
     },
   }
 }
