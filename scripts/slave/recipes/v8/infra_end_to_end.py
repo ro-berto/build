@@ -91,7 +91,7 @@ def GenTests(api):
   yield (
       api.test('v8-auto-bisect-end-to-end-pass') +
       api.properties.generic(
-          mastername='chromium.infra',
+          mastername='chromium.tools.build',
           buildername='v8-linux-end-to-end',
       ) +
       api.override_step_data(
@@ -107,7 +107,7 @@ def GenTests(api):
   yield (
       api.test('v8-auto-bisect-end-to-end-fail') +
       api.properties.generic(
-          mastername='chromium.infra',
+          mastername='chromium.tools.build',
           buildername='v8-linux-end-to-end',
       ) +
       api.override_step_data(
