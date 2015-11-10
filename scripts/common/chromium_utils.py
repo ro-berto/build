@@ -1907,7 +1907,7 @@ def GetSlavesFromBuilders(builders):
     for slave in pool_data['slaves']:
       slaves.append({
           'hostname': slave,
-          'builder_name': builder_names,
+          'builder': builder_names,
           'master': builders['master_classname'],
           'os': slave_data['os'],
           'version': slave_data['version'],
