@@ -200,7 +200,7 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
                pathsep + s['subdir'])
         else:
           d = pathsep + 'b'
-        builders = s.get('builder') or s.get('builder_name') or '?'
+        builders = s.get('builder') or '?'
         if type(builders) is not list:
           builders = [builders]
         for b in sorted(builders):
