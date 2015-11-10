@@ -419,15 +419,18 @@ class BuildBucketIntegrator(object):
       start_cursor = peek_resp.get('next_cursor')
 
       builds = peek_resp.get('builds', [])
+      builds = filter(None, builds)
       self.log('got %d builds' % len(builds))
 
-      for build in builds:
-        if not build:
-          continue
-        yield self._try_schedule_build(build, ssid_cache)
-        if len(self._leases) >= self.get_max_lease_count():
+      while builds:
+        max_schedule = self.get_max_lease_count() - len(self._leases)
+        if max_schedule <= 0:
           self.log('Reached the maximum number of leases', level=logging.DEBUG)
-          break
+          return
+
+        to_schedule, builds = builds[:max_schedule], builds[max_schedule:]
+        yield [self._try_schedule_build(b, ssid_cache) for b in to_schedule]
+
       if not start_cursor:
         break
 
