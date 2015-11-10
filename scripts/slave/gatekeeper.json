@@ -752,7 +752,7 @@
       ],
       "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)",
       "tree_notify": [
-        "chrome-troopers+infra-continuous@google.com"
+        "tandrii+infra-continuous-self-appointed-gardener@google.com"
       ]
     },
     "chromium_gnumbd_closer": {
