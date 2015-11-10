@@ -97,6 +97,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   })
 
+  CONTENT_UNITTESTS_GTEST_FILTER = '*WebRtc*:*WebRTC*:*MediaStream'
   BROWSER_TESTS_GTEST_FILTER = 'WebRtc*:Webrtc*:TabCapture*:*MediaStream*'
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 

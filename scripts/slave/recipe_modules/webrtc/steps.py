@@ -72,7 +72,9 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
                     '--test-launcher-print-test-stdio=always'],
             # The WinXP tester doesn't run the audio quality perf test.
             perf_test='xp' not in api.c.PERF_ID),
-        ChromiumTest('content_unittests', revision),
+        ChromiumTest('content_unittests', revision,
+                     args = ['--gtest_filter=%s' %
+                             api.CONTENT_UNITTESTS_GTEST_FILTER]),
     ])
   elif test_suite == 'android':
     for test, isolate_file_path in sorted(api.ANDROID_APK_TESTS.iteritems()):

@@ -260,7 +260,8 @@
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "content_unittests"
+      "content_unittests",
+      "--gtest_filter=*WebRtc*:*WebRTC*:*MediaStream"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "content_unittests"
