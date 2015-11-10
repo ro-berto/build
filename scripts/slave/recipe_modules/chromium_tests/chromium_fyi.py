@@ -51,18 +51,9 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
-      'GYP_DEFINES': {
-        'test_isolation_mode': 'archive',
-      },
-      # TODO(phajdan.jr): Automatically add _run targets when used.
-      'compile_targets': [
-        'browser_tests_run',
-      ],
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
-      'enable_swarming': True,
     },
     'Linux ARM': {
       'chromium_config': 'chromium',
@@ -72,14 +63,20 @@ SPEC = {
         'TARGET_ARCH': 'arm',
         'TARGET_BITS': 32,
       },
-      'bot_type': 'builder',
-      'use_isolate': True,
+      'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',
       },
-      # Workaround so that recipes doesn't add random build targets to our
-      # compile line. We want to build everything.
-      'add_tests_as_compile_targets': False,
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'use_isolate': True,
+      'enable_swarming': True,
+      'swarming_dimensions': {
+        'cpu': 'armv7l-32',
+      },
     },
     'Linux Trusty': {
       'chromium_config': 'chromium',

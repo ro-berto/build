@@ -446,24 +446,6 @@ def GenTests(api):
   )
 
   yield (
-    api.test('arm') +
-    api.properties.generic(mastername='chromium.fyi',
-                           buildername='Linux ARM Cross-Compile') +
-    api.platform('linux', 64) +
-    api.override_step_data('read test spec', api.json.output({
-      'Linux ARM Cross-Compile': {
-        'compile_targets': ['browser_tests_run'],
-        'gtest_tests': [{
-          'test': 'browser_tests',
-          'args': ['--gtest-filter', '*NaCl*.*'],
-          'shard_index': 0,
-          'total_shards': 1,
-        }],
-      },
-    }))
-  )
-
-  yield (
     api.test('tsan') +
     api.properties.generic(mastername='chromium.memory.fyi',
                            buildername='Linux TSan Tests',

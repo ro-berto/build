@@ -319,8 +319,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     compile_targets = set(bot_config.get('compile_targets', []))
     tests_including_triggered = list(tests)
-    for _, builder_dict in master_dict.get(
-        'builders', {}).iteritems():
+    for _, builder_dict in master_dict.get('builders', {}).iteritems():
       if builder_dict.get('parent_buildername') == buildername:
         tests_including_triggered.extend(builder_dict.get('tests', []))
 
