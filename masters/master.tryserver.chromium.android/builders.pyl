@@ -5,6 +5,9 @@
   "slave_port": 31401,
   "templates": ["templates", "../master.chromium/templates"],
 
+  "service_account_file": "service-account-chromium-tryserver.json",
+  "buildbucket_bucket": "master.tryserver.chromium.android",
+
   "builders": {
     "android_blink_rel": {
       "recipe": "chromium_trybot",
