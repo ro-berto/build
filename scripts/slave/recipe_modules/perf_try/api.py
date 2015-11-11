@@ -283,12 +283,20 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     values_with_patch = results_with_patch.get('results').get('values')
     values_without_patch = results_without_patch.get('results').get('values')
 
+    cloud_links_without_patch = _parse_cloud_links(output_without_patch)
+    cloud_links_with_patch = _parse_cloud_links(output_with_patch)
+
+    results_link = (cloud_links_without_patch['html'][0]
+                    if cloud_links_without_patch['html'] else '')
+
     if not values_with_patch or not values_without_patch:
       step_result = self.m.step('Results', [])
       step_result.presentation.step_text = (
           'No values from test with patch, or none from test without patch.\n'
           'Output with patch:\n%s\n\nOutput without patch:\n%s' % (
               output_with_patch, output_without_patch))
+      if results_link:
+        step_result.presentation.links.update({'HTML Results': results_link})
       return
 
     mean_with_patch = self.m.math_utils.mean(values_with_patch)
@@ -301,12 +309,6 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     stderr_with_patch = self.m.math_utils.standard_error(values_with_patch)
     stderr_without_patch = self.m.math_utils.standard_error(
         values_without_patch)
-
-    cloud_links_without_patch = _parse_cloud_links(output_without_patch)
-    cloud_links_with_patch = _parse_cloud_links(output_with_patch)
-
-    results_link = (cloud_links_without_patch['html'][0]
-                    if cloud_links_without_patch['html'] else '')
 
     profiler_with_patch = cloud_links_with_patch['profiler']
     profiler_without_patch = cloud_links_without_patch['profiler']
