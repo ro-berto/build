@@ -96,6 +96,18 @@ def report_broken_slave(cur_host, error_type):
     log('Failed to report %s for host %s: %s.' % (error_type, cur_host, e))
 
 
+def get_svn2git_dirs(b_dir):
+  return [f for f in os.listdir(b_dir) if f.startswith('slave_svn_to_git')]
+
+
+def get_svn2git_noreboot_file(home_dir):
+  noreboot_file_path = os.path.join(home_dir, 'no_reboot')
+  if os.path.isfile(noreboot_file_path):
+    with open(noreboot_file_path) as no_reboot_file:
+      if no_reboot_file.read() == 'slave_svn_to_git':
+        return noreboot_file_path
+
+
 def report_host_state(home_dir, cur_host, b_dir):
   """Reports host state to the tracking app.
 
@@ -107,19 +119,28 @@ def report_host_state(home_dir, cur_host, b_dir):
   Returns:
     Whether the host checkout should be converted to Git.
   """
-  # Report slaves with ~/no_reboot created by this script.
-  if os.path.isfile(os.path.join(home_dir, 'no_reboot')):
-    with open(os.path.join(home_dir, 'no_reboot')) as no_reboot_file:
-      if no_reboot_file.read() == 'slave_svn_to_git':
-        report_broken_slave(cur_host, 'no_reboot')
+  # Report and fix slaves with ~/no_reboot created by this script.
+  if get_svn2git_noreboot_file(home_dir):
+    try:
+      os.remove(get_svn2git_noreboot_file(home_dir))
+    except Exception:
+      pass
+    if get_svn2git_noreboot_file(home_dir):
+      report_broken_slave(cur_host, 'no_reboot')
 
   # Report slaves without /b/.gclient.
   if not os.path.isfile(os.path.join(b_dir, '.gclient')):
     report_broken_slave(cur_host, 'gclient_missing')
 
-  # Report slaves with /b/slave_svn_to_git* folders.
-  if any(f.startswith('slave_svn_to_git') for f in os.listdir(b_dir)):
-    report_broken_slave(cur_host, 'slave_svn_to_git_dir_present')
+  # Report and fix slaves with /b/slave_svn_to_git* folders.
+  if get_svn2git_dirs(b_dir):
+    try:
+      for d in get_svn2git_dirs(b_dir):
+        shutil.rmtree(os.path.join(b_dir, d))
+    except Exception:
+      pass
+    if get_svn2git_dirs(b_dir):
+      report_broken_slave(cur_host, 'slave_svn_to_git_dir_present')
 
   # Report slaves without /b/build/site_config/.bot_password.
   if not os.path.isfile(os.path.join(b_dir, 'build', 'site_config',
