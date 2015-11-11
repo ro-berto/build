@@ -110,7 +110,7 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.android': {
     'builders': {
-      'Blink Trybot': {
+      'android_blink_rel': {
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Android (Nexus4)',
         'analyze_mode': 'compile',
