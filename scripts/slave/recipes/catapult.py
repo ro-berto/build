@@ -56,14 +56,6 @@ def RunSteps(api):
              api.path['checkout'].join('dashboard', 'bin', 'run_py_tests'),
              ['--no-install-hooks'],
              env=modified_env)
-  api.python('Dashboard Dev Server Tests Canary',
-             api.path['checkout'].join(
-                 'dashboard', 'bin', 'run_dev_server_tests'),
-             ['--no-install-hooks', '--channel=canary'])
-  api.python('Dashboard Dev Server Tests Stable',
-             api.path['checkout'].join(
-                 'dashboard', 'bin', 'run_dev_server_tests'),
-             ['--no-install-hooks', '--channel=stable'])
   api.python('Tracing Python Tests',
              api.path['checkout'].join('tracing', 'bin', 'run_py_tests'),
              ['--no-install-hooks'])
