@@ -31,6 +31,7 @@ _builders = [
 SPEC = {
   'settings': {
     'build_gs_bucket': 'chromium-skia-gm',
+    'src_side_runtest_py': True,
   },
   'builders': {},
 }
