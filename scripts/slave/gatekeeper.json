@@ -308,7 +308,17 @@
     "https://build.chromium.org/p/chromium.tools.build": [
       {
         "builders": {
-          "*": {
+          "cipd-test-end-to-end_mac": {
+            "closing_optional": [
+              "*"
+            ]
+          },
+          "cipd-test-end-to-end_trusty64": {
+            "closing_optional": [
+              "*"
+            ]
+          },
+          "cipd-test-end-to-end_win64": {
             "closing_optional": [
               "*"
             ]
