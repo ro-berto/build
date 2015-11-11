@@ -150,8 +150,10 @@ def RunSteps(api):
       if task.title in slow_tests:
         # TODO(stip): Eventually scale based on size of test.
         task.dimensions['android_devices'] = '6'
+
       del task.dimensions['cpu']
       del task.dimensions['gpu']
+      task.env = {'PYTHONUNBUFFERED': ''}
   else:
     # Make swarming tasks that run isolated tests.
     tasks = [
