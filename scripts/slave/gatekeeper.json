@@ -305,6 +305,21 @@
         }
       }
     ],
+    "https://build.chromium.org/p/chromium.tools.build": [
+      {
+        "builders": {
+          "*": {
+            "closing_optional": [
+              "*"
+            ]
+          }
+        },
+        "forgive_all": "true",
+        "tree_notify": [
+          "tandrii+build-recipes-end-to-end@google.com"
+        ]
+      }
+    ],
     "https://build.chromium.org/p/chromium.webkit": [
       {
         "sheriff_classes": ["sheriff_webkit"],

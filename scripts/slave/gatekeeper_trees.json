@@ -1,4 +1,10 @@
 {
+    "build": {
+        "build-db": "build_db.json",
+        "masters": [
+            "https://build.chromium.org/p/chromium.tools.build"
+        ]
+    },
     "chromium": {
         "build-db": "waterfall_build_db.json",
         "masters": [
