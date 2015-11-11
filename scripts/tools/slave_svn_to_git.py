@@ -127,8 +127,9 @@ def report_host_state(home_dir, cur_host, b_dir):
     report_broken_slave(cur_host, 'bot_password_missing')
 
   # Report slaves without /b/build/site_config/.boto.
-  if not os.path.isfile(os.path.join(b_dir, 'build', 'site_config', '.boto')):
-    report_broken_slave(cur_host, 'boto_missing')
+  if not re.match('^.*\d+-c\d+$', cur_host):  # GCE bots don't need .boto file.
+    if not os.path.isfile(os.path.join(b_dir, 'build', 'site_config', '.boto')):
+      report_broken_slave(cur_host, 'boto_missing')
 
   return report_checkout_state(b_dir, cur_host)
 
