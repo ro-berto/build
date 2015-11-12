@@ -145,19 +145,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       for key, value in bot_config.get('swarming_dimensions', {}).iteritems():
         self.m.swarming.set_default_dimension(key, value)
 
-  def runhooks(self, mastername, buildername, update_step):
-    bot_config = self.get_bot_config(mastername, buildername)
-    # TODO(phajdan.jr): See if disable_runhooks is still used, try to remove.
-    if not bot_config.get('disable_runhooks'):
-      if self.m.tryserver.is_tryserver:
-        try:
-          self.m.chromium.runhooks(name='runhooks (with patch)')
-        except self.m.step.StepFailure:
-          # As part of deapplying patch we call runhooks without the patch.
-          self.deapply_patch(update_step)
-          raise
-      else:
-        self.m.chromium.runhooks()
+  def runhooks(self, update_step):
+    if self.m.tryserver.is_tryserver:
+      try:
+        self.m.chromium.runhooks(name='runhooks (with patch)')
+      except self.m.step.StepFailure:
+        # As part of deapplying patch we call runhooks without the patch.
+        self.deapply_patch(update_step)
+        raise
+    else:
+      self.m.chromium.runhooks()
 
   def get_test_spec(self, mastername, buildername):
     bot_config = self.get_bot_config(mastername, buildername)
@@ -206,7 +203,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.chromium.c.project_generator.tool = 'gyp'
 
     self.set_up_swarming(mastername, buildername)
-    self.runhooks(mastername, buildername, update_step)
+    self.runhooks(update_step)
 
     test_spec = self.get_test_spec(mastername, buildername)
 
