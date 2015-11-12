@@ -574,7 +574,10 @@ class BuildBucketIntegrator(object):
     yield self._ensure_leases_loaded()
     if build_id not in self._leases:
       self._stop_build(build, 'Build started, but it is not among leases.')
-    if self._leases[build_id]['key'] != build_def['lease_key']:
+    lease = self._leases.get(build_id)
+    # A lease may be not present in the dict if the build was cancelled on
+    # buildbucket side.
+    if not lease or lease['key'] != build_def['lease_key']:
       self._stop_build(
           build, 'Build started, but it is lease key is not current.')
 
