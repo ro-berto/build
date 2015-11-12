@@ -8,6 +8,7 @@ import json
 import optparse
 import os
 import shutil
+import socket
 import subprocess
 import sys
 import tempfile
@@ -349,10 +350,15 @@ def main(argv):
     if build_data_dir:
       properties['build_data_dir'] = build_data_dir
 
+      hostname = socket.getfqdn()
+      if hostname:  # just in case getfqdn() returns None.
+        hostname = hostname.split('.')[0]
+      else:
+        hostname = None
+
       if RUN_CMD and os.path.exists(RUN_CMD):
         try:
-          subprocess.call(
-            [RUN_CMD, 'infra.tools.send_monitoring_event',
+          cmd = [RUN_CMD, 'infra.tools.send_monitoring_event',
              '--event-mon-output-file',
                  os.path.join(build_data_dir, 'log_request_proto'),
              '--event-mon-run-type', 'file',
@@ -368,7 +374,12 @@ def main(argv):
              '--build-event-type', 'BUILD',
              '--event-mon-timestamp-kind', 'POINT',
              # And use only defaults for credentials.
-           ])
+           ]
+          # Add this conditionally so that we get an error in
+          # send_monitoring_event log files in case it isn't present.
+          if hostname:
+            cmd += ['--build-event-hostname', hostname]
+          subprocess.call(cmd)
         except Exception:
           print >> sys.stderr, traceback.format_exc()
 
