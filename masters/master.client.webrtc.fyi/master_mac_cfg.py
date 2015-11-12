@@ -28,6 +28,8 @@ def Update(c):
                                 'iOS64 Release (XCode 7)',
                                 'iOS32 Simulator Debug (XCode 7)',
                                 'iOS64 Simulator Debug (XCode 7)',
+                                'iOS64 Debug (GN)',
+                                'iOS64 Release (GN)',
                             ]),
   ])
 
@@ -46,6 +48,8 @@ def Update(c):
     {'name': 'iOS64 Release (XCode 7)', 'slavebuilddir': 'mac64'},
     {'name': 'iOS32 Simulator Debug (XCode 7)', 'slavebuilddir': 'mac32'},
     {'name': 'iOS64 Simulator Debug (XCode 7)', 'slavebuilddir': 'mac64'},
+    {'name': 'iOS64 Debug (GN)', 'slavebuilddir': 'mac64_gn'},
+    {'name': 'iOS64 Release (GN)', 'slavebuilddir': 'mac64_gn'},
   ]
 
   c['builders'].extend([
