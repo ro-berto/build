@@ -61,18 +61,23 @@ class Bisector(object):
     self.result_codes = set()
 
     # Test-only properties.
-    # TODO: Replace these with proper mod_test_data
+    # TODO: Replace these with proper mod_test_data.
     self.dummy_initial_confidence = bisect_config.get(
         'dummy_initial_confidence')
     self.dummy_builds = bisect_config.get('dummy_builds', False)
 
-    # Loading configuration items
+    # Load configuration items.
     self.test_type = bisect_config.get('test_type', 'perf')
     self.improvement_direction = int(bisect_config.get(
         'improvement_direction', 0)) or None
-
-    self.required_initial_confidence = float(bisect_config.get(
-        'required_initial_confidence', 80))
+    # Required initial confidence might be explicitly set to None,
+    # which means that no initial confidence check should be done.
+    if ('required_initial_confidence' in bisect_config and
+        bisect_config['required_initial_confidence'] is None):
+      self.required_initial_confidence = None  # pragma: no cover
+    else:
+      self.required_initial_confidence = float(bisect_config.get(
+          'required_initial_confidence', 80))
 
     self.warnings = []
 
@@ -622,7 +627,9 @@ class Bisector(object):
 
     failed_jobs = step_results.get('failed', [])
     completed_jobs = step_results.get('completed', [])
+    last_failed_revision = None
     assert failed_jobs or completed_jobs
+
     # Marked all failed builds as failed
     for job in failed_jobs:
       last_failed_revision = revision_mapping[str(job.get(
@@ -632,7 +639,7 @@ class Bisector(object):
         api.m.step.active_result.presentation.links['Failed build'] = url
       last_failed_revision.status = revision_state.RevisionState.FAILED
 
-    # Return a completed job if availavle
+    # Return a completed job if available.
     for job in completed_jobs:
       if 'job_url' in job:  # pragma: no cover
         url = job['job_url']
@@ -640,7 +647,7 @@ class Bisector(object):
       return revision_mapping[str(job.get(
           'location', job.get('job_name')))]
 
-    # Or return any of the failed revisions
+    # Or return any of the failed revisions.
     return last_failed_revision
 
   def wait_for_any(self, revision_list):

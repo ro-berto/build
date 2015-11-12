@@ -10,33 +10,20 @@ import sys
 import unittest
 import logging
 
-SRC = os.path.join(os.path.dirname(__file__), os.path.pardir, os.path.pardir)
+
+def _fix_path():  # pragma: no cover
+  root_dir = os.path.abspath(os.path.join(
+      os.path.dirname(__file__), os.path.pardir,
+      os.path.pardir, os.path.pardir, os.path.pardir))
+  sys.path.insert(0, os.path.join(root_dir, 'third_party', 'mock-1.0.1'))
+  sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.path.pardir))
 
 
 def main():  # pragma: no cover
-  if 'full-log' in sys.argv:
-    # Configure logging to show line numbers and logging level
-    fmt = '%(module)s:%(lineno)d - %(levelname)s: %(message)s'
-    logging.basicConfig(level=logging.DEBUG, stream=sys.stdout, format=fmt)
-  elif 'no-log' in sys.argv:
-    # Only WARN and above are shown, to standard error. (This is the logging
-    # module default config, hence we do nothing here)
-    pass
-  else:
-    # Behave as before. Make logging.info mimic print behavior
-    fmt = '%(message)s'
-    logging.basicConfig(level=logging.INFO, stream=sys.stdout, format=fmt)
-
-  # Running the tests depends on having the below modules in PYTHONPATH.
-  sys.path.append(os.path.join(SRC, 'tools', 'telemetry'))
-  sys.path.append(os.path.join(SRC, 'third_party', 'pymock'))
-
+  _fix_path()
   suite = unittest.TestSuite()
-  loader = unittest.TestLoader()
-  script_dir = os.path.dirname(__file__)
-  suite.addTests(loader.discover(start_dir=script_dir, pattern='*_test.py'))
-
-  print 'Running unit tests in %s...' % os.path.abspath(script_dir)
+  suite.addTests(unittest.TestLoader().discover(
+      start_dir=os.path.dirname(__file__), pattern='*_test.py'))
   result = unittest.TextTestRunner(verbosity=1).run(suite)
   return 0 if result.wasSuccessful() else 1
 
