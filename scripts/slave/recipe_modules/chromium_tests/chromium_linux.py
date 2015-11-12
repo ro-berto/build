@@ -148,6 +148,8 @@ SPEC = {
         steps.generate_isolated_script,
       ],
       'tests': [
+        steps.AndroidInstrumentationTest('ChromePublicTest'),
+        steps.AndroidInstrumentationTest('ContentShellTest'),
         steps.GTestTest(
             'breakpad_unittests',
             override_compile_targets=['breakpad_unittests_deps'],
