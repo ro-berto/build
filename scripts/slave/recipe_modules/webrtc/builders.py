@@ -1174,6 +1174,30 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
+      'iOS64 Debug (GN)': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'chromium_apply_config': ['webrtc_gn'],
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'iOS64 Release (GN)': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'chromium_apply_config': ['webrtc_gn'],
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
       'Linux64 Release (swarming)': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -1603,6 +1627,30 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'intel',
           'TARGET_PLATFORM': 'ios',
         },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'ios64_gn_dbg': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'chromium_apply_config': ['webrtc_gn'],
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+      },
+      'ios64_gn_rel': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+          'TARGET_ARCH': 'arm',
+          'TARGET_PLATFORM': 'ios',
+        },
+        'chromium_apply_config': ['webrtc_gn'],
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },

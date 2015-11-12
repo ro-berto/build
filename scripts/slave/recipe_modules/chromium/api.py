@@ -556,6 +556,8 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     if self.c.TARGET_PLATFORM == 'android':
       gn_args.append('target_os="android"')
+    elif self.c.TARGET_PLATFORM == 'ios':
+      gn_args.append('target_os="ios"')
     elif self.c.TARGET_PLATFORM in ('linux', 'mac', 'win'):
       assert self.c.TARGET_BITS == 64
       gn_args.append('target_cpu="x64"')
