@@ -52,6 +52,16 @@ def RunSteps(api):
              api.path['checkout'].join('catapult_build', 'bin', 'run_py_tests'))
   api.python('Util Tests',
              api.path['checkout'].join('base', 'util', 'run_tests.py'))
+  api.python('Dashboard Dev Server Tests Canary',
+              api.path['checkout'].join(
+                  'dashboard', 'bin', 'run_dev_server_tests'),
+              ['--no-install-hooks', '--no-use-local-chrome',
+               '--channel=canary'])
+  api.python('Dashboard Dev Server Tests Stable',
+              api.path['checkout'].join(
+                  'dashboard', 'bin', 'run_dev_server_tests'),
+              ['--no-install-hooks', '--no-use-local-chrome',
+               '--channel=stable'])
   api.python('Dashboard Python Tests',
              api.path['checkout'].join('dashboard', 'bin', 'run_py_tests'),
              ['--no-install-hooks'],

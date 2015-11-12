@@ -108,6 +108,30 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/catapult/dashboard/bin/run_dev_server_tests",
+      "--no-install-hooks",
+      "--no-use-local-chrome",
+      "--channel=canary"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Dashboard Dev Server Tests Canary"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/dashboard/bin/run_dev_server_tests",
+      "--no-install-hooks",
+      "--no-use-local-chrome",
+      "--channel=stable"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Dashboard Dev Server Tests Stable"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/catapult/dashboard/bin/run_py_tests",
       "--no-install-hooks"
     ],
