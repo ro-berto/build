@@ -391,6 +391,8 @@ div.BuildWaterfall {
   color: #FFFFFF;
   background-color: #e98080;
   border-color: #A77272;
+  border-width: 3px;
+  border-style: solid;
 }
 
 .warnings {
