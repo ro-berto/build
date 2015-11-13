@@ -18,7 +18,7 @@
        "slave_pools": ["mac_10.11"],
        "category": "0builders",
      },
-     "Chromium Win Goma Staging": {
+     "CrWinGomaStaging": {
        "recipe": "chromium",
        "scheduler": "chromium_src_commits",
        "slave_pools": ["win_win8"],

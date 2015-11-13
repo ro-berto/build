@@ -36,7 +36,7 @@ SPEC = {
        'platform': 'mac',
      },
    },
-   'Chromium Win Goma Staging': {
+   'CrWinGomaStaging': {
      'chromium_config': 'chromium',
      'chromium_apply_config': ['goma_staging', 'clobber'],
      'gclient_config': 'chromium',
