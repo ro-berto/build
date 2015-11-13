@@ -78,7 +78,7 @@ def getAndCheckProperties(req):
         if not pname:
             break
         if not pname_validate.match(pname) \
-                or pval_validate.match(pvalue):
+                or not pval_validate.match(pvalue):
             log.msg("bad property name='%s', value='%s'" % (pname, pvalue))
             return None
         properties.setProperty(pname, pvalue, "Force Build Form")
