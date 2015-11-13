@@ -145,15 +145,6 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/download_gold_plugin.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "download LTO plugin"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",

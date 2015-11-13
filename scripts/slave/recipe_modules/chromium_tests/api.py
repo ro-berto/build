@@ -217,7 +217,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     master_dict = self.get_master_dict_with_dynamic_tests(
         mastername, buildername, test_spec, scripts_compile_targets)
 
-    if self.m.chromium.c.lto:
+    if self.m.chromium.c.lto and \
+        not self.m.chromium.c.env.LLVM_FORCE_HEAD_REVISION:
       self.m.chromium.download_lto_plugin()
 
     return update_step, master_dict, test_spec
