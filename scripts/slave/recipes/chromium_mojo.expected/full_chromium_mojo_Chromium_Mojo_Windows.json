@@ -320,14 +320,14 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Mojo Windows\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"recipe\": \"chromium_mojo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Mojo Windows\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"recipe\": \"chromium_mojo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--step-name=mojo_runner_unittests",
+      "--step-name=mojo_runner_host_unittests",
       "--builder-name=Chromium Mojo Windows",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "mojo_runner_unittests.exe"
+      "mojo_runner_host_unittests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "mojo_runner_unittests"
+    "name": "mojo_runner_host_unittests"
   },
   {
     "cmd": [

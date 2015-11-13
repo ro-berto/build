@@ -161,7 +161,7 @@ def _RunUnitAndAppTests(api):
     api.chromium.runtest('mojo_public_environment_unittests')
     api.chromium.runtest('mojo_public_system_unittests')
     api.chromium.runtest('mojo_public_utility_unittests')
-    api.chromium.runtest('mojo_runner_unittests')
+    api.chromium.runtest('mojo_runner_host_unittests')
     api.chromium.runtest('mojo_shell_unittests')
     api.chromium.runtest('mojo_surfaces_lib_unittests')
     api.chromium.runtest('mojo_system_unittests')
