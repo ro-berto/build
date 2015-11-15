@@ -51,56 +51,66 @@ def namedTempFile():
       print >> sys.stderr, "LEAK: %s: %s" % (name, e)
 
 
-def get_recipe_properties(factory_properties, build_properties,
-                          master_overrides_slave):
+def get_recipe_properties(build_properties, use_factory_properties_from_disk):
   """Constructs the recipe's properties from buildbot's properties.
 
   This retrieves the current factory properties from the master_config
-  in the slave's checkout (the factory properties handed to us from the
-  master might be out of date), and merges in the build properties.
+  in the slave's checkout (no factory properties are handed to us from the
+  master), and merges in the build properties.
 
   Using the values from the checkout allows us to do things like change
   the recipe and other factory properties for a builder without needing
   a master restart.
+
+  As the build properties doesn't include the factory properties, we would:
+  1. Load factory properties from checkout on the slave.
+  2. Override the factory properties with the build properties.
+  3. Set the factory-only properties as build properties using annotation so
+     that they will show up on the build page.
   """
-  master_properties = factory_properties.copy()
-  master_properties.update(build_properties)
+  if not use_factory_properties_from_disk:
+    return build_properties
 
-  mastername = master_properties.get('mastername')
-  buildername = master_properties.get('buildername')
-  slave_properties = {}
-  if mastername and buildername:
-    try:
-      slave_properties = get_factory_properties_from_disk(
+  stream = annotator.StructuredAnnotationStream()
+  with stream.step('setup_properties') as s:
+    factory_properties = {}
+
+    mastername = build_properties.get('mastername')
+    buildername = build_properties.get('buildername')
+    if mastername and buildername:
+      # Load factory properties from tip-of-tree checkout on the slave builder.
+      factory_properties = get_factory_properties_from_disk(
           mastername, buildername)
-    except LookupError as e:
-      if master_overrides_slave:
-        print 'WARNING in annotated_run.py (non-fatal): %s' % e
-      else:
-        raise e
 
-  properties = master_properties.copy()
-  conflicting_properties = {}
-  for name in slave_properties:
-    if master_properties.get(name) != slave_properties[name]:
-      conflicting_properties[name] = (master_properties.get(name),
-                                   slave_properties[name])
+    # Check conflicts between factory properties and build properties.
+    conflicting_properties = {}
+    for name, value in factory_properties.items():
+      if not build_properties.has_key(name) or build_properties[name] == value:
+        continue
+      conflicting_properties[name] = (value, build_properties[name])
 
-  if conflicting_properties:
-    print 'The following build properties differ between master and slave:'
-    for name, (master_value, slave_value) in conflicting_properties.items():
-      print ('  "%s": master: "%s", slave: "%s"' % (
-          name,
-          "<unset>" if (master_value is None) else master_value,
-          slave_value))
-    print ("Using the values from the %s." %
-           ("master" if master_overrides_slave else "slave"))
+    if conflicting_properties:
+      s.step_text(
+          '<br/>detected %d conflict[s] between factory and build properties'
+          % len(conflicting_properties))
+      print 'Conflicting factory and build properties:'
+      for name, (factory_value, build_value) in conflicting_properties.items():
+        print ('  "%s": factory: "%s", build: "%s"' % (
+            name,
+            '<unset>' if (factory_value is None) else factory_value,
+            '<unset>' if (build_value is None) else build_value))
+      print "Will use the values from build properties."
 
-  if not master_overrides_slave:
-    for name, (_, slave_value) in conflicting_properties.items():
-      properties[name] = slave_value
+    # Figure out the factory-only properties and set them as build properties so
+    # that they will show up on the build page.
+    for name, value in factory_properties.items():
+      if not build_properties.has_key(name):
+        s.set_build_property(name, json.dumps(value))
 
-  return properties
+    # Build properties override factory properties.
+    properties = factory_properties.copy()
+    properties.update(build_properties)
+    return properties
 
 
 def get_factory_properties_from_disk(mastername, buildername):
@@ -181,6 +191,9 @@ def get_args(argv):
   parser.add_option('--master-overrides-slave', action='store_true',
                     help='use the property values given on the command line '
                          'from the master, not the ones looked up on the slave')
+  parser.add_option('--use-factory-properties-from-disk',
+                    action='store_true', default=False,
+                    help='use factory properties loaded from disk on the slave')
   return parser.parse_args(argv)
 
 
@@ -331,9 +344,11 @@ def build_data_directory():
 
 def main(argv):
   opts, _ = get_args(argv)
+  # TODO(crbug.com/551165): remove flag "factory_properties".
+  use_factory_properties_from_disk = (opts.use_factory_properties_from_disk or
+                                      bool(opts.factory_properties))
   properties = get_recipe_properties(
-      opts.factory_properties, opts.build_properties,
-      opts.master_overrides_slave)
+      opts.build_properties, use_factory_properties_from_disk)
 
   clean_old_recipe_engine()
 
