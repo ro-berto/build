@@ -20,20 +20,15 @@ class BuildFactory(factory.BuildFactory):
   # Overide the Build class to active the property inheritance.
   buildClass = build.Build
 
-  def __init__(self, build_factory_properties=None, steps=None,
-               build_inherit_factory_properties=True):
+  def __init__(self, build_factory_properties=None, steps=None):
     factory.BuildFactory.__init__(self, steps)
     self.properties = properties.Properties()
     if build_factory_properties:
       self.properties.update(build_factory_properties, 'BuildFactory')
-    self._build_inherit_factory_properties = build_inherit_factory_properties
 
   def newBuild(self, request):
     """Creates a new buildClass instance and gives it our properties."""
-    if self._build_inherit_factory_properties:
-      b = self.buildClass(request, self.properties)
-    else:
-      b = self.buildClass(request, None)
+    b = self.buildClass(request, self.properties)
     b.useProgress = self.useProgress
     b.setStepFactories(self.steps)
     return b

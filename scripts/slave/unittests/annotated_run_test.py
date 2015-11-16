@@ -15,7 +15,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 class AnnotatedRunTest(unittest.TestCase):
   def test_example(self):
-    build_properties = {
+    properties = {
       'recipe': 'annotated_run_test',
       'true_prop': True,
       'num_prop': 123,
@@ -26,7 +26,7 @@ class AnnotatedRunTest(unittest.TestCase):
     script_path = os.path.join(BASE_DIR, 'annotated_run.py')
     exit_code = subprocess.call([
         'python', script_path,
-        '--build-properties=%s' % json.dumps(build_properties)])
+        '--factory-properties=%s' % json.dumps(properties)])
     self.assertEqual(exit_code, 0)
 
 if __name__ == '__main__':
