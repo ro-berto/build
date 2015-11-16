@@ -21,16 +21,14 @@ class AnnotatorCommands(commands.FactoryCommands):
     # Set self._script_dir and self._python, among other things.
     commands.FactoryCommands.__init__(self, factory)
 
-  def AddAnnotatedScript(self, factory_properties, timeout, max_time):
+  def AddAnnotatedScript(self, timeout, max_time):
     call_count = self._call_counts.setdefault('AddAnnotatedScript', 0)
     if call_count != 0:
       raise Exception("AnnotatorCommands.AddAnnotatedScript called twice.")
     self._call_counts['AddAnnotatedScript'] += 1
-    factory_properties = factory_properties or {}
     runner = self.PathJoin(self._script_dir, 'annotated_run.py')
-    cmd = [self._python, '-u', runner]
+    cmd = [self._python, '-u', runner, '--use-factory-properties-from-disk']
     cmd = self.AddB64GzBuildProperties(cmd)
-    cmd = self.AddB64GzFactoryProperties(factory_properties, cmd)
     self._factory.addStep(chromium_step.AnnotatedCommand,
                           name='steps',
                           description='running steps via annotated script',

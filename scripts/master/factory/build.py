@@ -19,4 +19,5 @@ class Build(base.Build):
   def setupProperties(self):
     """Adds BuildFactory inherited properties."""
     base.Build.setupProperties(self)
-    self.getProperties().updateFromProperties(self._factory_properties)
+    if self._factory_properties:
+      self.getProperties().updateFromProperties(self._factory_properties)

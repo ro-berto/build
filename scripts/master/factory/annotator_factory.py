@@ -49,12 +49,11 @@ class AnnotatorFactory(object):
     if recipe:
       factory_properties.update({'recipe': recipe})
     self._factory_properties = factory_properties
-    factory = BuildFactory()
+    factory = BuildFactory(build_inherit_factory_properties=False)
     factory.properties.update(self._factory_properties, 'AnnotatorFactory')
     cmd_obj = annotator_commands.AnnotatorCommands(
         factory, active_master=self.active_master)
-    cmd_obj.AddAnnotatedScript(
-      factory_properties, timeout=timeout, max_time=max_time)
+    cmd_obj.AddAnnotatedScript(timeout=timeout, max_time=max_time)
 
     for t in triggers or []:
       factory.addStep(commands.CreateTriggerStep(
