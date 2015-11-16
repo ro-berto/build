@@ -5,14 +5,16 @@
 from recipe_engine.types import freeze
 
 DEPS = [
+  'archive',
   'bot_update',
   'chromium',
   'file',
-  'raw_io',
+  'json',
   'path',
   'platform',
   'properties',
   'python',
+  'raw_io',
   'step',
 ]
 
@@ -27,6 +29,8 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'linux',
           'TARGET_BITS': 64,
         },
+        'upload_bucket': 'chromium-browser-libfuzzer',
+        'upload_directory': 'asan',
       },
     },
   },
@@ -37,7 +41,7 @@ def RunSteps(api):
   mastername = api.m.properties['mastername']
   buildername, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
 
-  api.bot_update.ensure_checkout(
+  checkout_results = api.bot_update.ensure_checkout(
       force=True, patch_root=bot_config.get('root_override'))
 
   api.chromium.runhooks()
@@ -67,10 +71,19 @@ def RunSteps(api):
   api.step.active_result.presentation.logs['targets'] = targets
   api.chromium.compile(targets=targets)
 
+  api.archive.clusterfuzz_archive(
+          api.path['slave_build'].join('src', 'out', 'Release'),
+          checkout_results.json.output['properties'],
+          bot_config['upload_bucket'],
+          'libfuzzer',
+          archive_subdir_suffix=bot_config['upload_directory'],
+          gs_acl='public-read')
+
+
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
     yield (test +
-           api.step_data("calculate targets",
-               stdout=api.raw_io.output("target1 target2 target3"))
+           api.step_data('calculate targets',
+               stdout=api.raw_io.output('target1 target2 target3'))
            )
 
