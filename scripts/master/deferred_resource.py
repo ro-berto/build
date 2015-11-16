@@ -295,7 +295,7 @@ class DeferredResource(object):
 
         if self.verbose:
           self._log_request(method_name, args, kwargs)
-        response = method(*args, **kwargs).execute(self._th_local.http)
+        response = method(*args, **kwargs).execute(http=self._th_local.http)
         if self.verbose:
           self.log('Reponse: %s' % response)
         return response
