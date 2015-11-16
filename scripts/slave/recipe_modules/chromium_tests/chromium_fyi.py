@@ -1388,24 +1388,6 @@ SPEC = {
       'testing': { 'platform': 'mac', },
       'enable_swarming': True,
     },
-    'ClangToTiOS': {
-      'chromium_config': 'clang_tot_ios',
-      'gclient_config': 'ios',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'ios',
-        'TARGET_BITS': 32,
-      },
-      'gclient_config_kwargs': {
-        'GIT_MODE': True,
-      },
-      'GYP_DEFINES': {
-        'werror': '',
-      },
-      'testing': {
-        'platform': 'mac',
-      }
-    },
     'ClangToTWin': {
       'chromium_config': 'chromium_win_clang_official_tot',
       'gclient_config': 'chromium',

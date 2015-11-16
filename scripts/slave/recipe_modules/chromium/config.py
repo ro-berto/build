@@ -681,30 +681,6 @@ def chromium_xcode(c):  # pragma: no cover
   c.compile_py.default_targets = ['All']
   c.compile_py.xcode_project = Path('[CHECKOUT]', 'build', 'all.xcodeproj')
 
-@config_ctx(includes=['static_library'])
-def ios(c):
-  gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['OS'] = c.TARGET_PLATFORM
-  gyp_defs['chromium_ios_signing'] = 0
-
-  # Do not pass target_arch explicitly, this is the current practice on iOS.
-  # TODO(phajdan.jr): Clean this up and pass target_arch explicitly.
-  del gyp_defs['target_arch']
-
-  c.gyp_env.GYP_GENERATOR_FLAGS['xcode_project_version'] = '3.2'
-
-@config_ctx(includes=['ios', 'ninja'])
-def chromium_ios_ninja(c):
-  c.build_config_fs += '-iphoneos'
-  c.compile_py.default_targets = ['All']
-
-  gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['clang_xcode'] = 0
-
-@config_ctx(includes=['chromium_ios_ninja', 'clang_tot'])
-def clang_tot_ios(c):
-  pass
-
 @config_ctx(includes=['chromium', 'official'])
 def chromium_official(c):
   # TODO(phajdan.jr): Unify compile targets used by official builders.
