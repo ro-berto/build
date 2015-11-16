@@ -256,7 +256,7 @@ class CrOSTryJobGit(TryBase):
     dlist = []
     buildset_name = '%s:%s' % (parsed_job['user'], parsed_job['name'])
     for bot in parsed_job['bot']:
-      builder_name = self.cbuildbot_conifgs.GetBuilderForConfig(bot)
+      builder_name = self.cbb.GetBuilderForConfig(bot)
       log.msg("Creating '%s' try job(s) %s for %s" % (builder_name, ssid, bot))
       dlist.append(self.addBuildsetForSourceStamp(ssid=ssid,
               reason=buildset_name,
@@ -293,6 +293,15 @@ see<br>this message please contact chromeos-build@google.com.<br>
 
   @defer.inlineCallbacks
   def gotChange(self, change, important):
+    try:
+      yield self._gotChangeImpl(change, important)
+    except Exception as e:
+      log.msg('Exception in try job scheduler: %s' % (e,))
+      import traceback
+      traceback.print_exc()
+
+  @defer.inlineCallbacks
+  def _gotChangeImpl(self, change, _important):
     """Process the received data and send the queue buildset."""
     # Find poller that this change came from.
     for poller in self.pollers:
@@ -315,11 +324,6 @@ see<br>this message please contact chromeos-build@google.com.<br>
     except BadJobfile as e:
       self.send_validation_fail_email(parsed.setdefault('name', ''),
                                       parsed['email'], str(e))
-      raise
-    except Exception as e:
-      print 'EXCEPTION:', e
-      import traceback
-      traceback.print_exc()
       raise
 
     # The sourcestamp/buildsets created will be merge-able.
