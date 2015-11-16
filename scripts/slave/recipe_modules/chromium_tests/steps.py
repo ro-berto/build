@@ -375,9 +375,11 @@ def generate_gtest(api, mastername, buildername, test_spec,
       if swarming_spec.get('can_use_on_swarming_builders'):
         use_swarming = True
         swarming_shards = swarming_spec.get('shards', 1)
+    override_compile_targets = test.get('override_compile_targets', None)
     yield GTestTest(str(test['test']), args=args, flakiness_dash=True,
                     enable_swarming=use_swarming,
-                    swarming_shards=swarming_shards)
+                    swarming_shards=swarming_shards,
+                    override_compile_targets=override_compile_targets)
 
 
 def generate_script(api, mastername, buildername, test_spec,
