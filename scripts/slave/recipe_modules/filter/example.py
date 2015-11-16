@@ -14,24 +14,25 @@ DEPS = [
 ]
 
 def RunSteps(api):
-  exes = api.m.properties.get('exes')
-  compile_targets = api.m.properties.get('compile_targets')
+  test_targets = api.m.properties.get('test_targets')
+  additional_compile_targets = api.m.properties.get(
+      'additional_compile_targets')
 
   api.path['checkout'] = api.path['slave_build']
   api.chromium.set_config('chromium')
   api.filter.does_patch_require_compile(
       affected_files=list(api.m.properties.get('affected_files', ['foo.cc'])),
-      exes=exes,
-      compile_targets=compile_targets,
+      test_targets=test_targets,
+      additional_compile_targets=additional_compile_targets,
       additional_names=['chromium'])
 
   assert (list(api.properties.get('example_changed_paths', ['foo.cc'])) == \
           api.filter.paths)
   assert (api.filter.result and api.properties['example_result']) or \
       (not api.filter.result and not api.properties['example_result'])
-  assert (list(api.properties.get('example_matching_exes', [])) ==
-          list(api.filter.matching_exes))
-  assert (list(api.properties.get('example_matching_compile_targets', [])) ==
+  assert (list(api.properties.get('example_test_targets', [])) ==
+          list(api.filter.test_targets))
+  assert (list(api.properties.get('example_compile_targets', [])) ==
           api.filter.compile_targets)
   api.step('hello', ['echo', 'Why hello, there.'])
 
@@ -85,8 +86,8 @@ def GenTests(api):
          api.override_step_data(
           'analyze',
           api.json.output({'status': 'Found dependency',
-                           'targets': [],
-                           'build_targets': []})))
+                           'test_targets': [],
+                           'compile_targets': []})))
 
   # Analyze returns matching tests while matching all.
   yield (api.test('analyzes_matches_all_exes') +
@@ -96,33 +97,34 @@ def GenTests(api):
           api.json.output({'status': 'Found dependency (all)'})))
 
   # Analyze matches all and returns matching tests.
-  yield (api.test('analyzes_matches_exes') +
+  yield (api.test('analyzes_matches_test_targets') +
          api.properties(
-           matching_exes=['foo', 'bar'],
-           example_matching_exes=['foo'],
+           test_targets=['foo', 'bar'],
+           example_test_targets=['foo', 'bar'],
+           example_compile_targets=['foo', 'bar'],
            example_result=1) +
          api.override_step_data(
           'analyze',
           api.json.output({'status': 'Found dependency',
-                           'targets': ['foo'],
-                           'build_targets': []})))
+                           'test_targets': ['foo', 'bar'],
+                           'compile_targets': ['foo', 'bar']})))
 
   # Analyze matches all and returns matching tests.
   yield (api.test('analyzes_matches_compile_targets') +
          api.properties(
-           example_matching_exes=['foo'],
-           example_matching_compile_targets=['bar'],
+           example_test_targets=['foo'],
+           example_compile_targets=['bar'],
            example_result=1) +
          api.override_step_data(
           'analyze',
           api.json.output({'status': 'Found dependency',
-                           'targets': ['foo'],
-                           'build_targets': ['bar']})))
+                           'test_targets': ['foo'],
+                           'compile_targets': ['bar']})))
 
   # Analyze with error condition.
   yield (api.test('analyzes_error') +
          api.properties(
-           matching_exes=[],
+           test_targets=[],
            example_result=1) +
          api.override_step_data(
           'analyze',
@@ -131,7 +133,7 @@ def GenTests(api):
   # Analyze with python returning bad status.
   yield (api.test('bad_retcode_fails') +
          api.properties(
-           matching_exes=[],
+           test_targets=[],
            example_result=1) +
          api.step_data(
           'analyze',
@@ -140,7 +142,7 @@ def GenTests(api):
   # invalid_targets creates a failure.
   yield (api.test('invalid_targets') +
          api.properties(
-           matching_exes=[],
+           test_targets=[],
            example_result=1) +
          api.override_step_data(
           'analyze',

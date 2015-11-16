@@ -281,7 +281,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"chrome/common/my_file.cc\"], \"targets\": [\"android_webview_apk\"]}",
+      "{\"additional_compile_targets\": [\"android_webview_apk\"], \"files\": [\"chrome/common/my_file.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -293,9 +293,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@No compile necessary@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"targets\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]

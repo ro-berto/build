@@ -335,7 +335,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"android_webview_apk\"]}",
+      "{\"additional_compile_targets\": [\"android_webview_apk\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -346,11 +346,11 @@
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"some_target\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"android_webview_apk\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",

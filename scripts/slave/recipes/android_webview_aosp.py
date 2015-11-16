@@ -74,9 +74,9 @@ def RunSteps(api):
   # Early out if we haven't changed any relevant code.
   api.filter.does_patch_require_compile(
       api.tryserver.get_files_affected_by_patch(),
-      exes=WEBVIEW_EXES,
+      additional_compile_targets=WEBVIEW_EXES,
       additional_names=['android_webview'])
-  needs_compile = not api.filter.result or not api.filter.matching_exes
+  needs_compile = not api.filter.result or not api.filter.compile_targets
   if api.tryserver.is_tryserver and needs_compile:
     return
 
@@ -114,8 +114,8 @@ def GenTests(api):
   dependant_change = analyze_config + api.override_step_data(
       'analyze',
       api.json.output({'status': 'Found dependency',
-                       'targets': ['android_webview_apk'],
-                       'build_targets': ['some_target']}))
+                       'test_targets': ['android_webview_apk'],
+                       'compile_targets': ['some_target']}))
 
   yield api.test('basic') + api.properties.scheduled() + dependant_change
 

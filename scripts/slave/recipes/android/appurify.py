@@ -159,25 +159,22 @@ def RunSteps(api, mastername, buildername):
 
       api.filter.does_patch_require_compile(
           api.tryserver.get_files_affected_by_patch(),
-          exes=test_names,
-          compile_targets=compile_targets,
+          test_targets=test_names,
+          additional_compile_targets=compile_targets,
           additional_names=['chromium'],
           config_file_name='trybot_analyze_config.json')
       if not api.filter.result:
         return
-      compile_targets = (
-          list(set(compile_targets) & set(api.filter.compile_targets))
-          if compile_targets
-          else api.filter.compile_targets)
+      compile_targets = api.filter.compile_targets
       native_unittests = [
           i for i in native_unittests
-          if i[0] in api.filter.matching_exes]
+          if i[0] in api.filter.test_targets]
       instrumentation_tests = [
           i for i in instrumentation_tests
-          if i['gyp_target'] in api.filter.matching_exes]
+          if i['gyp_target'] in api.filter.test_targets]
       java_unittests = [
           i for i in java_unittests
-          if i in api.filter.matching_exes]
+          if i in api.filter.test_targets]
 
     api.chromium_android.run_tree_truth()
     api.chromium.compile(targets=compile_targets)
@@ -299,11 +296,11 @@ def GenTests(api):
             'analyze',
             api.json.output({
                 'status': 'Found dependency',
-                'targets': [
+                'test_targets': [
                     'chrome_public_test_apk',
                     'base_unittests',
                     'junit_unit_tests'],
-                'build_targets': [
+                'compile_targets': [
                     'chrome_public_test_apk',
                     'base_unittests_apk',
                     'junit_unit_tests']}))
@@ -325,10 +322,10 @@ def GenTests(api):
               'analyze',
               api.json.output({
                   'status': 'Found dependency',
-                  'targets': [
+                  'test_targets': [
                       'chrome_public_test_apk',
                       'android_webview_unittests'],
-                  'build_targets': [
+                  'compile_targets': [
                       'chrome_public_test_apk',
                       'android_webview_unittests_apk']})) +
           api.step_data('[trigger] components_unittests', retcode=1) +
@@ -358,8 +355,8 @@ def GenTests(api):
         'analyze',
         api.json.output({
             'status': 'Found dependency',
-            'targets': ['content_shell_test_apk'],
-            'build_targets': ['content_shell_test_apk']})) +
+            'test_targets': ['content_shell_test_apk'],
+            'compile_targets': ['content_shell_test_apk']})) +
     api.step_data('[trigger] content_shell_test_apk', retcode=1))
 
   yield (
@@ -374,8 +371,8 @@ def GenTests(api):
         'analyze',
         api.json.output({
             'status': 'Found dependency',
-            'targets': ['content_shell_test_apk'],
-            'build_targets': ['content_shell_test_apk']})) +
+            'test_targets': ['content_shell_test_apk'],
+            'compile_targets': ['content_shell_test_apk']})) +
     api.step_data('[collect] content_shell_test_apk', retcode=1))
 
   yield (
@@ -397,5 +394,5 @@ def GenTests(api):
           'analyze',
           api.json.output({
               'status': 'Found dependency',
-              'targets': [],
-              'build_targets': ['base_unittests']})))
+              'test_targets': [],
+              'compile_targets': ['base_unittests']})))

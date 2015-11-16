@@ -11,8 +11,7 @@ class FilterApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(FilterApi, self).__init__(**kwargs)
     self._result = False
-    self._matches_exclusion = False
-    self._matching_exes = []
+    self._test_targets = []
     self._compile_targets = []
     self._paths = []
 
@@ -32,16 +31,10 @@ class FilterApi(recipe_api.RecipeApi):
     return self._result
 
   @property
-  def matches_exclusion(self):
-    """Returns true if the patch matches an exclusion, i.e. "analyze" should
-    not be used and all compile targets and tests should be used."""
-    return self._matches_exclusion
-
-  @property
-  def matching_exes(self):
-    """Returns the set of exes passed to does_patch_require_compile() that
-    are effected by the set of files that have changed."""
-    return self._matching_exes
+  def test_targets(self):
+    """Returns the set of targets passed to does_patch_require_compile() that
+    are affected by the set of files that have changed."""
+    return self._test_targets
 
   @property
   def compile_targets(self):
@@ -83,8 +76,8 @@ class FilterApi(recipe_api.RecipeApi):
 
   def does_patch_require_compile(self,
                                  affected_files,
-                                 exes=None,
-                                 compile_targets=None,
+                                 test_targets=None,
+                                 additional_compile_targets=None,
                                  additional_names=None,
                                  config_file_name='trybot_analyze_config.json',
                                  use_mb=False,
@@ -97,10 +90,11 @@ class FilterApi(recipe_api.RecipeApi):
     Args:
       affected_files: list of files affected by the current patch; paths
                       should only use forward slashes ("/") on all platforms
-      exes: the possible set of executables that are desired to run. When done
-      matching_exes() returns the set of exes that are effected by the files
-      that have changed.
-      compile_targets: proposed set of targets to compile.
+      test_targets: the possible set of executables that are desired to run.
+                    When done, test_targets() returns the subsetset of targets
+                    that are affected by the files that have changed.
+      additional_compile_targets: any targets to compile in addition to
+                                  the test_targets.
       additional_names: additional top level keys to look up exclusions in,
       see |config_file_name|.
       conconfig_file_name: the config file to look up exclusions in.
@@ -112,14 +106,15 @@ class FilterApi(recipe_api.RecipeApi):
       |exclusions| True is returned (by way of result()).
       """
     names = ['base']
-    if additional_names is not None:
+    if additional_names:
       names.extend(additional_names)
     exclusions = self._load_exclusions(names, config_file_name)
 
-    self._matching_exes = exes if exes is not None else []
-    self._compile_targets = compile_targets if compile_targets is not None \
-                                            else []
-
+    test_targets = test_targets or []
+    additional_compile_targets = additional_compile_targets or []
+    all_targets = sorted(set(test_targets) | set(additional_compile_targets))
+    self._test_targets = []
+    self._compile_targets = []
     self._paths = affected_files
 
     # Check the path of each file against the exclusion list. If found, no need
@@ -135,14 +130,21 @@ class FilterApi(recipe_api.RecipeApi):
         step_result.presentation.logs.setdefault('excluded_files', []).append(
             '%s (regex = \'%s\')' % (path, first_match))
         self._result = True
-        self._matches_exclusion = True
+        self._compile_targets = sorted(all_targets)
+        self._test_targets = sorted(test_targets)
         return
 
-    analyze_input = {'files': self.paths, 'targets': self._matching_exes}
+    analyze_input = {
+        'files': self.paths,
+        'test_targets': test_targets,
+        'additional_compile_targets': additional_compile_targets,
+    }
 
-    test_output = {'status': 'No dependency',
-                   'targets': [],
-                   'build_targets': []}
+    test_output = {
+        'status': 'No dependency',
+        'compile_targets': [],
+        'test_targets': [],
+    }
 
     kwargs.setdefault('env', {})
 
@@ -185,6 +187,10 @@ class FilterApi(recipe_api.RecipeApi):
             test_output),
           **kwargs)
 
+    # TODO(dpranke) crbug.com/552146: See if we can get rid of self._result and
+    # just rely on self._compile_targets being non-empty to indicate that we
+    # should do a compile.
+
     if 'error' in step_result.json.output:
       self._result = True
       step_result.presentation.step_text = 'Error: ' + \
@@ -197,9 +203,11 @@ class FilterApi(recipe_api.RecipeApi):
           'found: ' + ', '.join(step_result.json.output['invalid_targets']))
     elif step_result.json.output['status'] == 'Found dependency':
       self._result = True
-      self._matching_exes = step_result.json.output['targets']
-      self._compile_targets = step_result.json.output['build_targets']
+      self._compile_targets = step_result.json.output['compile_targets']
+      self._test_targets = step_result.json.output['test_targets']
     elif step_result.json.output['status'] == 'Found dependency (all)':
       self._result = True
+      self._compile_targets = all_targets
+      self._test_targets = test_targets
     else:
       step_result.presentation.step_text = 'No compile necessary'

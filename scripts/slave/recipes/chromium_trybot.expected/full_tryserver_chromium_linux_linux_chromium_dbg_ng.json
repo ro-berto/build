@@ -211,7 +211,74 @@
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
-      "@@@STEP_LOG_END@excluded_files@@@"
+      "@@@STEP_LOG_END@excluded_files@@@",
+      "@@@STEP_LOG_LINE@analyze_details@{@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": []@@@",
+      "@@@STEP_LOG_LINE@analyze_details@}@@@",
+      "@@@STEP_LOG_END@analyze_details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/cleanup_temp.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "tryserver.chromium.linux",
+      "-b",
+      "linux_chromium_dbg_ng",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--goma-fail-fast",
+      "--goma-disable-local-fallback",
+      "--ninja-ensure-up-to-date",
+      "--",
+      "All",
+      "chromium_builder_tests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "compile (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
   },
   {

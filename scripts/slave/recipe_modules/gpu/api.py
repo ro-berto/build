@@ -205,14 +205,13 @@ class GpuApi(recipe_api.RecipeApi):
     if is_tryserver:
       self.m.filter.does_patch_require_compile(
           self.m.tryserver.get_files_affected_by_patch(),
-          exes=targets,
-          compile_targets=targets,
+          test_targets=targets,
           additional_names=['chromium'],
           config_file_name='trybot_analyze_config.json')
       if not self.m.filter.result:
         # Early out if no work to do.
         return
-      targets = list(self.m.filter.matching_exes)
+      targets = list(self.m.filter.test_targets)
       # Re-sort the targets to keep test expectations stable.
       targets.sort()
       try:

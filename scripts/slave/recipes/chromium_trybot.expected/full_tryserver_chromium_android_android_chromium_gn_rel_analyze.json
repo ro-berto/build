@@ -202,7 +202,7 @@
       "android_chromium_gn_rel",
       "-v",
       "//out/Release",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"base_junit_tests\", \"breakpad_unittests_deps\", \"chrome_junit_tests\", \"chrome_public_test_apk\", \"components_invalidation_impl_junit_tests\", \"components_policy_junit_tests\", \"content_junit_tests\", \"content_shell_test_apk\", \"junit_unittests\", \"net_junit_tests\", \"sandbox_linux_unittests_deps\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"base_junit_tests\", \"breakpad_unittests_deps\", \"chrome_junit_tests\", \"chrome_public_test_apk\", \"components_invalidation_impl_junit_tests\", \"components_policy_junit_tests\", \"content_junit_tests\", \"content_shell_test_apk\", \"junit_unittests\", \"net_junit_tests\", \"sandbox_linux_unittests_deps\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -210,11 +210,31 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@No compile necessary@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"targets\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@analyze_details@{@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_junit_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"breakpad_unittests_deps\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_junit_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_public_test_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"components_invalidation_impl_junit_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"components_policy_junit_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"content_shell_test_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"junit_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"net_junit_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"sandbox_linux_unittests_deps\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
+      "@@@STEP_LOG_LINE@analyze_details@}@@@",
+      "@@@STEP_LOG_END@analyze_details@@@"
     ]
   },
   {

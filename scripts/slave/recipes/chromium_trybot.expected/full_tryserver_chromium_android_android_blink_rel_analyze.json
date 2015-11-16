@@ -196,7 +196,7 @@
       "-u",
       "[SLAVE_BUILD]/src/build/gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"blink_heap_unittests_apk\", \"blink_tests\", \"webkit_unit_tests_apk\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"blink_heap_unittests_apk\", \"blink_tests\", \"webkit_unit_tests_apk\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -208,11 +208,23 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@No compile necessary@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"targets\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@analyze_details@{@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_heap_unittests_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"webkit_unit_tests_apk\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
+      "@@@STEP_LOG_LINE@analyze_details@}@@@",
+      "@@@STEP_LOG_END@analyze_details@@@"
     ]
   },
   {

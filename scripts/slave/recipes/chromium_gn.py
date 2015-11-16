@@ -224,19 +224,19 @@ def _RunStepsInternal(api):
   if api.tryserver.is_tryserver:
     affected_files = api.tryserver.get_files_affected_by_patch()
 
-    test_compile_targets = all_compile_targets(api, tests)
+    test_targets = all_compile_targets(api, tests)
 
-    requires_compile, _, compile_targets = \
+    requires_compile, test_targets, compile_targets = \
         api.chromium_tests.analyze(
             affected_files,
-            test_compile_targets,
-            test_compile_targets + additional_compile_targets,
+            test_targets,
+            additional_compile_targets,
             'trybot_analyze_config.json')
     if requires_compile:
       api.chromium.run_mb(mastername, buildername, use_goma=True)
       api.chromium.compile(compile_targets,
                            force_clobber=force_clobber)
-    tests = tests_in_compile_targets(api, compile_targets, tests)
+    tests = tests_in_compile_targets(api, test_targets, tests)
   else:
     api.chromium.run_mb(mastername, buildername, use_goma=True)
     api.chromium.compile(all_compile_targets(api, tests) +
@@ -289,8 +289,8 @@ def GenTests(api):
             'analyze',
             api.json.output({
                 'status': 'Found dependency',
-                'targets': gtest_tests,
-                'build_targets': gtest_tests,
+                'test_targets': gtest_tests,
+                'compile_targets': gtest_tests,
             }))
 
   for test in api.chromium.gen_tests_for_builders(BUILDERS, overrides):
@@ -332,7 +332,7 @@ def GenTests(api):
         'analyze',
         api.json.output({
           'status': 'Found dependency',
-          'targets': ['net_unittests'],
-          'build_targets': ['net_unittests'],
+          'test_targets': ['net_unittests'],
+          'compile_targets': ['net_unittests'],
         }))
   )

@@ -44,31 +44,32 @@ class GpuTestApi(recipe_test_api.RecipeTestApi):
   @property
   def analyze_builds_nothing(self):
     return self.m.json.output({
-        'build_targets': [],
         'status': 'No dependencies',
-        'targets': [],
+        'compile_targets': [],
+        'test_targets': [],
         })
 
   @property
   def analyze_builds_angle_unittests(self):
     return self.m.json.output({
-        'build_targets': ['All', 'angle_unittests'],
         'status': 'Found dependency',
-        'targets': ['angle_unittests_run'],
+        'compile_targets': ['All', 'angle_unittests'],
+        'test_targets': ['angle_unittests_run'],
         })
 
   @property
   def analyze_builds_pixel_test(self):
     return self.m.json.output({
-        'build_targets': ['All'],
         'status': 'Found dependency',
-        'targets': ['telemetry_gpu_test_run'],
+        'compile_targets': ['All'],
+        'test_targets': ['telemetry_gpu_test_run'],
         })
 
   @property
   def analyze_builds_everything(self):
     return self.m.json.output({
-        'build_targets': sorted((
+        'status': 'Found dependency',
+        'compile_targets': sorted((
           # A few random targets from the Chrome build to try to
           # confuse the recipe
           'All', 'app_list_demo', 'app_list_unittests', 'app_shell',
@@ -76,6 +77,5 @@ class GpuTestApi(recipe_test_api.RecipeTestApi):
           # The names of our isolates (even though telemetry_gpu_test
           # won't actually be reported by analyze)
           common.GPU_ISOLATES ),
-        'status': 'Found dependency',
-        'targets': [u'%s_run' % test for test in common.GPU_ISOLATES],
+        'test_targets': [u'%s_run' % test for test in common.GPU_ISOLATES],
         })

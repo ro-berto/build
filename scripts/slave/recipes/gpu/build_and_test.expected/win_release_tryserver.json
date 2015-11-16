@@ -176,7 +176,7 @@
       "-u",
       "[SLAVE_BUILD]\\src\\build\\gyp_chromium",
       "--analyzer",
-      "{\"files\": [\"foo.cc\"], \"targets\": [\"angle_unittests_run\", \"content_gl_tests_run\", \"gl_tests_run\", \"gl_unittests_run\", \"gles2_conform_test_run\", \"gpu_unittests_run\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"angle_unittests_run\", \"content_gl_tests_run\", \"gl_tests_run\", \"gl_unittests_run\", \"gles2_conform_test_run\", \"gpu_unittests_run\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -186,7 +186,7 @@
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"All\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"angle_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"app_list_demo\", @@@",
@@ -202,7 +202,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_test\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"angle_unittests_run\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"content_gl_tests_run\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"gl_tests_run\", @@@",

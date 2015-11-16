@@ -274,44 +274,25 @@ def _RunStepsInternal(api):
           override_bot_type='builder_tester',
           override_tests=tests)
 
-  targets_for_analyze = sorted(set(
-      all_compile_targets(api, tests + tests_including_triggered) +
-      compile_targets))
-  requires_compile, matching_exes, compile_targets = \
-      api.chromium_tests.analyze(
-          affected_files,
-          targets_for_analyze,
-          compile_targets,
-          'trybot_analyze_config.json')
+  test_targets = sorted(set(
+      all_compile_targets(api, tests + tests_including_triggered)))
+  additional_compile_targets = sorted(set(compile_targets) -
+                                      set(test_targets))
+  requires_compile, test_targets, compile_targets = \
+      api.chromium_tests.analyze(affected_files,
+                                 test_targets,
+                                 additional_compile_targets,
+                                 'trybot_analyze_config.json')
+
   if bot_config.get('analyze_mode') == 'compile':
-    # Do not pass tests to compile_specific_targets below. It assumes
-    # all of these targets would be compiled (matching_exes), but that's
-    # explicitly what we're not doing here. One example of how this may
-    # break is only foo_unittests being in returned compile_targets,
-    # while matching_exes containing both foo_unittests and foo_unittests_run.
-    # Then if we proceed with tests passed to compile_specific_targets,
-    # trying to isolate affected targets may fail.
     tests = []
     tests_including_triggered = []
 
-    # TODO(sergiyb): This is a hotfix that should be removed if we implement a
-    # proper long-term fix. It is currently needed to ensure that we compile
-    # matching_exes also when a bot is running analyze in compile-only mode and
-    # stay consistent with corresponding waterfall bots. Please see
-    # http://crbug.com/529798 for more context.
-    compile_targets = sorted(set(compile_targets + matching_exes))
-  else:
-    # Note that compile_targets doesn't necessarily include matching_exes,
-    # and for correctness we need to add them. Otherwise it's possible we'd
-    # only build say foo_unittests but not foo_unittests_run and fail when
-    # trying to isolate the tests. Also see above comment.
-    compile_targets = sorted(set(compile_targets + matching_exes))
-
   # Blink tests have to bypass "analyze", see below.
   if requires_compile or add_blink_tests:
-    tests = tests_in_compile_targets(api, matching_exes, tests)
+    tests = tests_in_compile_targets(api, test_targets, tests)
     tests_including_triggered = tests_in_compile_targets(
-        api, matching_exes, tests_including_triggered)
+        api, test_targets, tests_including_triggered)
 
     # Blink tests are tricky at this moment. We'd like to use "analyze" for
     # everything else. However, there are blink changes that only add or modify
@@ -341,9 +322,10 @@ def _RunStepsInternal(api):
         tests_including_triggered,
         override_bot_type='builder_tester')
   else:
-    # Even though the patch doesn't compile on this platform, we'd still like
-    # to run tests not depending on compiled targets (that's obviously not
-    # covered by the 'analyze' step) if any source files change.
+    # Even though the patch doesn't require a compile on this platform,
+    # we'd still like to run tests not depending on
+    # compiled targets (that's obviously not covered by the
+    # 'analyze' step) if any source files change.
     if any([is_source_file(api, f) for f in affected_files]):
       tests = [t for t in tests if not t.compile_targets(api)]
     else:
@@ -452,8 +434,11 @@ def GenTests(api):
     api.platform.name('linux') +
     api.override_step_data(
       'analyze',
-      api.json.output({'status': 'Found dependency', 'targets': [],
-                       'build_targets': ['base_unittests', 'net_unittests']}))
+      api.json.output({
+          'status': 'Found dependency',
+          'test_targets': [],
+          'compile_targets': ['base_unittests', 'net_unittests']
+      }))
   )
 
   # Do not fail the build if process_dumps fails.
@@ -738,8 +723,9 @@ def GenTests(api):
     api.override_step_data('read test spec', api.json.output({})) +
     api.override_step_data(
       'analyze',
-      api.json.output({'status': 'Found dependency', 'targets': [],
-                       'build_targets': []}))
+      api.json.output({'status': 'Found dependency',
+                       'compile_targets': [],
+                       'test_targets': []}))
   )
 
   yield (
@@ -749,8 +735,8 @@ def GenTests(api):
     api.override_step_data(
       'analyze',
       api.json.output({'status': 'Found dependency',
-                       'targets': ['browser_tests', 'base_unittests'],
-                       'build_targets': ['browser_tests', 'base_unittests']}))
+                       'compile_targets': ['browser_tests', 'base_unittests'],
+                       'test_targets': ['browser_tests', 'base_unittests']}))
   )
 
   yield (
@@ -760,8 +746,8 @@ def GenTests(api):
     api.override_step_data(
       'analyze',
       api.json.output({'status': 'Found dependency',
-                       'targets': ['browser_tests', 'base_unittests'],
-                       'build_targets': ['browser_tests', 'base_unittests']}))
+                       'compile_targets': ['browser_tests', 'base_unittests'],
+                       'test_targets': ['browser_tests', 'base_unittests']}))
   )
 
   # Tests compile_target portion of analyze module.
@@ -772,9 +758,9 @@ def GenTests(api):
     api.override_step_data(
       'analyze',
       api.json.output({'status': 'Found dependency',
-                       'targets': ['browser_tests', 'base_unittests'],
-                       'build_targets': ['chrome', 'browser_tests',
-                                         'base_unittests']}))
+                       'test_targets': ['browser_tests', 'base_unittests'],
+                       'compile_targets': ['chrome', 'browser_tests',
+                                           'base_unittests']}))
   )
 
   # Tests compile_targets portion of analyze with a bot that doesn't include the
@@ -793,8 +779,8 @@ def GenTests(api):
     api.override_step_data(
       'analyze',
       api.json.output({'status': 'Found dependency',
-                       'targets': ['browser_tests', 'base_unittests'],
-                       'build_targets': ['base_unittests']}))
+                       'test_targets': ['browser_tests', 'base_unittests'],
+                       'compile_targets': ['base_unittests']}))
   )
 
   # Tests compile_targets portion of analyze with a bot that doesn't include the
@@ -835,8 +821,8 @@ def GenTests(api):
             passing=False, is_win=False, swarming=True)) +
     api.override_step_data('analyze',
                            api.json.output({'status': 'Found dependency',
-                                            'targets': gpu_targets,
-                                            'build_targets': gpu_targets}))
+                                            'compile_targets': gpu_targets,
+                                            'test_targets': gpu_targets}))
   )
 
   yield (
@@ -850,8 +836,8 @@ def GenTests(api):
                            api.raw_io.output_dir({'0/results.json': ''})) +
     api.override_step_data('analyze',
                            api.json.output({'status': 'Found dependency',
-                                            'targets': gpu_targets,
-                                            'build_targets': gpu_targets}))
+                                            'test_targets': gpu_targets,
+                                            'compile_targets': gpu_targets}))
   )
 
   yield (
@@ -869,8 +855,8 @@ def GenTests(api):
         retcode=255) +
     api.override_step_data('analyze',
                            api.json.output({'status': 'Found dependency',
-                                            'targets': gpu_targets,
-                                            'build_targets': gpu_targets}))
+                                            'test_targets': gpu_targets,
+                                            'compile_targets': gpu_targets}))
   )
 
   yield (
@@ -888,8 +874,8 @@ def GenTests(api):
         })) +
     api.override_step_data('analyze',
                            api.json.output({'status': 'Found dependency',
-                                            'targets': gpu_targets,
-                                            'build_targets': gpu_targets}))
+                                            'test_targets': gpu_targets,
+                                            'compile_targets': gpu_targets}))
   )
 
   yield (
@@ -907,8 +893,8 @@ def GenTests(api):
         })) +
     api.override_step_data('analyze',
                            api.json.output({'status': 'Found dependency',
-                                            'targets': gpu_targets,
-                                            'build_targets': gpu_targets}))
+                                            'test_targets': gpu_targets,
+                                            'compile_targets': gpu_targets}))
   )
 
   yield (
@@ -927,8 +913,8 @@ def GenTests(api):
     ) +
     api.override_step_data('analyze',
                            api.json.output({'status': 'Found dependency',
-                                            'targets': gpu_targets,
-                                            'build_targets': gpu_targets}))
+                                            'test_targets': gpu_targets,
+                                            'compile_targets': gpu_targets}))
   )
 
 

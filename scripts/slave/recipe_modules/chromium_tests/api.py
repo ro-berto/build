@@ -628,17 +628,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         if failing_tests:
           self.m.python.failing_step('test results', 'TESTS FAILED')
 
-  def analyze(self, affected_files, exes, compile_targets, config_file_name,
-              additional_names=None):
+  def analyze(self, affected_files, test_targets, additional_compile_targets,
+              config_file_name, additional_names=None):
     """Runs "analyze" step to determine targets affected by the patch.
 
     Returns a tuple of:
       - boolean, indicating whether patch requires compile
-      - list of matching exes (see filter recipe module)
+      - list of targets that are needed to run tests (see filter recipe module)
       - list of targets that need to be compiled (see filter recipe module)"""
-
-    original_exes = exes[:]
-    original_compile_targets = compile_targets[:]
 
     if additional_names is None:
       additional_names = ['chromium']
@@ -647,23 +644,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     build_output_dir = '//out/%s' % self.m.chromium.c.build_config_fs
     self.m.filter.does_patch_require_compile(
         affected_files,
-        exes=exes,
-        compile_targets=compile_targets,
+        test_targets=test_targets,
+        additional_compile_targets=additional_compile_targets,
         additional_names=additional_names,
         config_file_name=config_file_name,
         use_mb=use_mb,
         build_output_dir=build_output_dir,
         cros_board=self.m.chromium.c.TARGET_CROS_BOARD)
 
-    if self.m.filter.matches_exclusion:
-      requires_compile = bool(exes or compile_targets)
-      return requires_compile, exes, compile_targets
-
-    if not self.m.filter.result:
-      # Patch does not require compile.
-      return False, [], []
-
-    compile_targets = self.m.filter.compile_targets
+    compile_targets = self.m.filter.compile_targets[:]
 
     # Add crash_service to compile_targets. This is done after filtering compile
     # targets out because crash_service should always be there on windows.
@@ -674,22 +663,21 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     # Emit more detailed output useful for debugging.
     analyze_details = {
-        'original_exes': original_exes,
-        'original_compile_targets': original_compile_targets,
-        'compile_targets': compile_targets,
+        'test_targets': test_targets,
+        'additional_compile_targets': additional_compile_targets,
         'self.m.filter.compile_targets': self.m.filter.compile_targets,
-        'self.m.filter.matching_exes': self.m.filter.matching_exes,
+        'self.m.filter.test_targets': self.m.filter.test_targets,
+        'compile_targets': compile_targets,
     }
     with contextlib.closing(recipe_util.StringListIO()) as listio:
       json.dump(analyze_details, listio, indent=2, sort_keys=True)
     step_result = self.m.step.active_result
     step_result.presentation.logs['analyze_details'] = listio.lines
 
-    # Note: due to our custom logic above it's possible we end up with empty
-    # results. In this case we should not compile, because doing so would
-    # use default compile targets (i.e. compile too much).
-    requires_compile = bool(self.m.filter.matching_exes or compile_targets)
-    return requires_compile, self.m.filter.matching_exes, compile_targets
+    # TODO(dpranke): See if we can get rid of filter.result and just
+    # use compile_targets being non-empty as a sign that we need to do
+    # a compile.
+    return self.m.filter.result, self.m.filter.test_targets, compile_targets
 
   def configure_swarming(self, project_name, precommit, mastername=None):
     """Configures default swarming dimensions and tags.
