@@ -419,6 +419,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
+      'compile_targets': [
+        'all',
+      ],
       'bot_type': 'builder',
       'testing': {
         'platform': 'win',
@@ -453,6 +456,9 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
       },
+      'compile_targets': [
+        'all',
+      ],
       # Recipes builds Debug builds with component=shared_library by default.
       'bot_type': 'builder',
       'testing': {
@@ -488,6 +494,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
+      'compile_targets': [
+        'all',
+      ],
       'GYP_DEFINES': { 'component': 'shared_library' },
       'bot_type': 'builder',
       'testing': {
@@ -524,6 +533,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'compile_targets': [
+        'all',
+      ],
       'bot_type': 'builder',
       'testing': {
         'platform': 'win',
@@ -559,6 +571,9 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
+      'compile_targets': [
+        'all',
+      ],
       # Recipes builds Debug builds with component=shared_library by default.
       'bot_type': 'builder',
       'testing': {
@@ -596,6 +611,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'compile_targets': [
+        'all',
+      ],
       'GYP_DEFINES': { 'component': 'shared_library' },
       'bot_type': 'builder',
       'testing': {
@@ -631,6 +649,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
+      'compile_targets': [
+        'all',
+      ],
       'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
       'bot_type': 'builder',
       'testing': {
@@ -666,6 +687,9 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
       },
+      'compile_targets': [
+        'all',
+      ],
       'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
       'bot_type': 'builder',
       'testing': {
@@ -701,6 +725,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'compile_targets': [
+        'all',
+      ],
       'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
       'bot_type': 'builder',
       'testing': {
@@ -736,6 +763,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'compile_targets': [
+        'all',
+      ],
       'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
       'bot_type': 'builder',
       'testing': {
@@ -1110,6 +1140,9 @@ SPEC = {
         # optimized debug info.
         'linux_dump_symbols': '1',
       },
+      'compile_targets': [
+        'all',
+      ],
       'bot_type': 'builder',
       'testing': {
         'platform': 'linux',
@@ -1152,6 +1185,9 @@ SPEC = {
       'GYP_DEFINES': {
         'werror': '',
       },
+      'compile_targets': [
+        'all',
+      ],
       'bot_type': 'builder',
       'testing': { 'platform': 'linux', },
       'tests': {
@@ -1174,6 +1210,9 @@ SPEC = {
       'GYP_DEFINES': {
         'werror': '',
       },
+      'compile_targets': [
+        'all',
+      ],
       'bot_type': 'builder',
       'testing': { 'platform': 'linux', },
       'tests': {
@@ -1213,6 +1252,9 @@ SPEC = {
       'GYP_DEFINES': {
         'werror': '',
       },
+      'compile_targets': [
+        'all',
+      ],
       'bot_type': 'builder',
       'testing': { 'platform': 'linux', },
       'tests': {
@@ -1255,6 +1297,9 @@ SPEC = {
         'component': 'shared_library',
         'werror': '',
       },
+      'compile_targets': [
+        'all',
+      ],
       'bot_type': 'builder',
       'android_config': 'clang_asan_tot_release_builder',
       'testing': { 'platform': 'linux', },
@@ -1299,6 +1344,9 @@ SPEC = {
         'component': 'shared_library',
         'werror': '',
       },
+      'compile_targets': [
+        'all',
+      ],
       'bot_type': 'builder',
       'testing': { 'platform': 'mac', },
       'tests': {
@@ -1339,6 +1387,9 @@ SPEC = {
       'GYP_DEFINES': {
         'werror': '',
       },
+      'compile_targets': [
+        'all',
+      ],
       'bot_type': 'builder',
       'testing': { 'platform': 'mac', },
       'tests': {
@@ -1360,6 +1411,9 @@ SPEC = {
       'GYP_DEFINES': {
         'werror': '',
       },
+      'compile_targets': [
+        'all',
+      ],
       'bot_type': 'builder',
       'testing': { 'platform': 'mac', },
       'tests': {
@@ -1396,6 +1450,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
+      'compile_targets': [
+        'all',
+      ],
       'bot_type': 'builder',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin') },
@@ -1425,6 +1482,9 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
       },
+      'compile_targets': [
+        'all',
+      ],
       'bot_type': 'builder',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin(dbg)') },
@@ -1454,6 +1514,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
+      'compile_targets': [
+        'all',
+      ],
       'GYP_DEFINES': { 'component': 'shared_library' },
       'bot_type': 'builder',
       'testing': { 'platform': 'win', },
@@ -1485,6 +1548,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'compile_targets': [
+        'all',
+      ],
       'bot_type': 'builder',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin64') },
@@ -1514,6 +1580,9 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
+      'compile_targets': [
+        'all',
+      ],
       'bot_type': 'builder',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin64(dbg)') },
@@ -1543,6 +1612,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'compile_targets': [
+        'all',
+      ],
       'GYP_DEFINES': { 'component': 'shared_library' },
       'bot_type': 'builder',
       'testing': { 'platform': 'win', },

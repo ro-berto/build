@@ -226,7 +226,8 @@
       "ninja",
       "--compiler",
       "clang",
-      "--"
+      "--",
+      "all"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

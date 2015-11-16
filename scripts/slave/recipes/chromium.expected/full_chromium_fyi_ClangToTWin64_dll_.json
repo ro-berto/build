@@ -231,7 +231,9 @@
       "ninja",
       "--compiler",
       "clang",
-      "--"
+      "--",
+      "all",
+      "crash_service"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
