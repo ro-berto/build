@@ -33,6 +33,38 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
+  'Build-Mac10.9-Clang-Arm7-Debug-iOS': {
+    'build_targets': [
+      'most',
+    ],
+    'builder_cfg': {
+      'compiler': 'Clang',
+      'configuration': 'Debug',
+      'extra_config': 'iOS',
+      'is_trybot': False,
+      'os': 'Mac10.9',
+      'role': 'Build',
+      'target_arch': 'Arm7',
+    },
+    'configuration': 'Debug',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': False,
+    'do_test_steps': False,
+    'env': {
+      'CC': '/usr/bin/clang',
+      'CXX': '/usr/bin/clang++',
+      'GYP_DEFINES':
+          ('skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_a'
+           's_errors=1'),
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': False,
+  },
   'Build-Ubuntu-GCC-Arm7-Debug-Android': {
     'build_targets': [
       'most',
@@ -463,6 +495,7 @@ FAKE_SPECS = {
   'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind': {
     'build_targets': [
       'dm',
+      'nanobench',
     ],
     'builder_cfg': {
       'arch': 'x86_64',

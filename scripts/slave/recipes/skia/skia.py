@@ -47,6 +47,9 @@ TEST_BUILDERS = {
     'skiabot-mac-10_8-compile-001': [
       'Build-Mac10.8-Clang-Arm7-Debug-Android',
     ],
+    'vm692-m3': [
+      'Build-Mac10.9-Clang-Arm7-Debug-iOS',
+    ],
     'skiabot-linux-compile-000': [
       'Build-Ubuntu-GCC-Arm7-Debug-Android',
       'Build-Ubuntu-GCC-x86_64-Release-CMake',

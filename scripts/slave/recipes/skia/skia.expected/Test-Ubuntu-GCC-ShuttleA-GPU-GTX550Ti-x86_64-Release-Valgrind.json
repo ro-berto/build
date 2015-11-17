@@ -81,7 +81,8 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dm\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dm\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"nanobench\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"arch\": \"x86_64\", @@@",
@@ -144,6 +145,20 @@
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
     },
     "name": "build dm"
+  },
+  {
+    "cmd": [
+      "make",
+      "nanobench"
+    ],
+    "cwd": "[SLAVE_BUILD]/skia",
+    "env": {
+      "BUILDTYPE": "Release",
+      "CHROME_PATH": "/home/chrome-bot/src",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
+    },
+    "name": "build nanobench"
   },
   {
     "cmd": [
