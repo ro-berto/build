@@ -890,12 +890,13 @@ class AMPInstrumentationTest(AMPTest):
 
 
 class LocalIsolatedScriptTest(Test):
-  def __init__(self, name, args=None, target_name=None, **runtest_kwargs):
+  def __init__(self, name, args=None, target_name=None,
+               override_compile_targets=None, **runtest_kwargs):
     """Constructs an instance of LocalIsolatedScriptTest.
 
-    An LocalIsolatedScriptTest knows how to invoke an isolate which obeys a certain
-    contract. The isolate's main target must be a wrapper script which must
-    interpret certain command line arguments as follows:
+    An LocalIsolatedScriptTest knows how to invoke an isolate which obeys a
+    certain contract. The isolate's main target must be a wrapper script which
+    must interpret certain command line arguments as follows:
 
       --isolated-script-test-output [FILENAME]
 
@@ -911,12 +912,15 @@ class LocalIsolatedScriptTest(Test):
       args: Arguments to be passed to the test.
       target_name: Actual name of the test. Defaults to name.
       runtest_kwargs: Additional keyword args forwarded to the runtest.
+      override_compile_targets: The list of compile targets to use. If not
+        specified this is the same as target_name.
     """
     super(LocalIsolatedScriptTest, self).__init__()
     self._name = name
     self._args = args or []
     self._target_name = target_name
     self._runtest_kwargs = runtest_kwargs
+    self._override_compile_targets = override_compile_targets
 
   @property
   def name(self):
@@ -935,6 +939,8 @@ class LocalIsolatedScriptTest(Test):
     return True
 
   def compile_targets(self, _):
+    if self._override_compile_targets:
+      return self._override_compile_targets
     return [self.target_name]
 
   # TODO(nednguyen, kbr): figure out what to do with Android.
@@ -986,18 +992,21 @@ class LocalIsolatedScriptTest(Test):
 class SwarmingIsolatedScriptTest(SwarmingTest):
   def __init__(self, name, args=None, target_name=None, shards=1,
                dimensions=None, tags=None, extra_suffix=None,
-               upload_test_results=True):
+               upload_test_results=True, override_compile_targets=None):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name, dimensions, tags, target_name, extra_suffix)
     self._args = args or []
     self._shards = shards
     self._upload_test_results = upload_test_results
+    self._override_compile_targets = override_compile_targets
 
   @property
   def target_name(self):
     return self._target_name or self._name
 
   def compile_targets(self, _):
+    if self._override_compile_targets:
+      return self._override_compile_targets
     return [self.target_name]
 
   @property
@@ -1051,12 +1060,19 @@ def generate_isolated_script(api, mastername, buildername, test_spec,
     name = str(spec['name'])
     args = args=spec.get('args', [])
     target_name = spec['isolate_name']
+    # This features is only needed for the cases in which the *_run compile
+    # target is needed to generate isolate files that contains dynamically libs.
+    # TODO(nednguyen, kbr): Remove this once all the GYP builds are converted
+    # to GN.
+    override_compile_targets = spec.get('override_compile_targets', None)
     if use_swarming:
       yield SwarmingIsolatedScriptTest(
-          name=name, args=args, target_name=target_name, shards=swarming_shards)
+          name=name, args=args, target_name=target_name, shards=swarming_shards,
+          override_compile_targets=override_compile_targets)
     else:
       yield LocalIsolatedScriptTest(
-          name=name, args=args, target_name=target_name)
+          name=name, args=args, target_name=target_name,
+          override_compile_targets=override_compile_targets)
 
 
 class GTestTest(Test):

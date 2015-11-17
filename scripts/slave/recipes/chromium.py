@@ -204,7 +204,7 @@ def GenTests(api):
         'isolated_scripts': [
           {
             'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests'
+            'name': 'telemetry_gpu_unittests',
           },
         ],
       },
@@ -233,6 +233,24 @@ def GenTests(api):
   )
 
   yield (
+    api.test('build_dynamic_isolated_script_test_compile_target_overriden') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Builder') +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux Tests': {
+        'isolated_scripts': [
+          {
+            'isolate_name': 'telemetry_gpu_unittests',
+            'name': 'telemetry_gpu_unittests',
+            'override_compile_targets': ['abc', 'telemetry_gpu_unittests_run'],
+          },
+        ],
+      },
+    }))
+  )
+
+  yield (
     api.test('build_dynamic_swarmed_isolated_script_test') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Builder') +
@@ -244,6 +262,26 @@ def GenTests(api):
             'isolate_name': 'telemetry_gpu_unittests',
             'name': 'telemetry_gpu_unittests',
             'swarming': {'can_use_on_swarming_builders': True},
+          },
+        ],
+      },
+    }))
+  )
+
+  yield (
+    api.test(
+        'build_dynamic_swarmed_isolated_script_test_compile_target_overidden') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Builder') +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux Tests': {
+        'isolated_scripts': [
+          {
+            'isolate_name': 'telemetry_gpu_unittests',
+            'name': 'telemetry_gpu_unittests',
+            'swarming': {'can_use_on_swarming_builders': True},
+            'override_compile_targets': ['telemetry_gpu_unittests_run', 'a'],
           },
         ],
       },
