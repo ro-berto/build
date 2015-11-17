@@ -226,7 +226,6 @@ TRYBOTS = freeze({
       'linux_arm_compile': {
         'mastername': 'chromium.fyi',
         'buildername': 'Linux ARM',
-        'analyze_mode': 'compile',
       },
       'linux_blink_oilpan_rel': {
         'mastername': 'chromium.webkit',
