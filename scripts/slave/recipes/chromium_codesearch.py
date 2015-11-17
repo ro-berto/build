@@ -34,7 +34,6 @@ ADDITIONAL_REPOS = freeze({
       '%s/chromium/tools/chromium-shortener' % CHROMIUM_GIT_URL,
   'tools/command_wrapper/bin':\
       '%s/chromium/tools/command_wrapper/bin' % CHROMIUM_GIT_URL,
-  'tools/commit-queue': '%s/chromium/tools/commit-queue' % CHROMIUM_GIT_URL,
   'tools/depot_tools': '%s/chromium/tools/depot_tools' % CHROMIUM_GIT_URL,
   'tools/deps2git': '%s/chromium/tools/deps2git' % CHROMIUM_GIT_URL,
   'tools/gsd_generate_index':\
@@ -118,7 +117,7 @@ def RunSteps(api):
 
   # Checkout the repositories that are either directly needed or should be
   # included in the source archive.
-  gclient_config = api.gclient.make_config('chromium')
+  gclient_config = api.gclient.make_config('chromium', GIT_MODE=True)
   for name, url in ADDITIONAL_REPOS.iteritems():
     solution = gclient_config.solutions.add()
     solution.name = name
