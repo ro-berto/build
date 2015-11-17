@@ -16,7 +16,7 @@ class MathUtilsApi(recipe_api.RecipeApi):
     """Calculates the arithmetic mean of a list of values."""
     if not values:
       raise ValueError('Trying to take the mean of an empty list.')
-    return float(sum(values)) / len(values)
+    return float(math.fsum(values)) / len(values)
 
   @staticmethod
   def variance(values):
@@ -26,7 +26,7 @@ class MathUtilsApi(recipe_api.RecipeApi):
     mean = MathUtilsApi.mean(values)
     differences_from_mean = [float(x) - mean for x in values]
     squared_differences = [float(x * x) for x in differences_from_mean]
-    _variance = sum(squared_differences) / (len(values) - 1)
+    _variance = math.fsum(squared_differences) / (len(values) - 1)
     return _variance
 
   @staticmethod
@@ -175,9 +175,18 @@ class MathUtilsApi(recipe_api.RecipeApi):
     Returns:
       A t value, which may be negative or positive.
     """
-    # If variance of both segments is zero, return some large t-value.
     if v1 == 0 and v2 == 0:
-      return 1000.0
+      # The variance of both segments is zero.
+
+      # 64-bit floats have a machine epsilon of about 2.2e-16.
+      if abs(mean1 - mean2) < 1e-12:
+        # If they have the same mean, return 0. This implies that the p-value
+        # is 1 and we fail to reject the null hypothesis.
+        # (SciPy returns NaN in this scenario.)
+        return 0.0
+      else:
+        # The distributions are maximally different; return a large t-value.
+        return 1000.0
     return (mean1 - mean2) / (math.sqrt(v1 / n1 + v2 / n2))
 
   @staticmethod
