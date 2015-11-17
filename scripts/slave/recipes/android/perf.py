@@ -4,6 +4,7 @@
 
 from recipe_engine.types import freeze
 
+
 DEPS = [
     'adb',
     'bot_update',
@@ -19,129 +20,61 @@ DEPS = [
     'test_utils',
 ]
 
+
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
+
+def _ChromiumPerfTesters():
+  def _AddTestSpec(name, perf_id, num_device_shards=1, num_host_shards=1,
+                   target_bits=64):
+    for shard_index in xrange(num_host_shards):
+      builder_name = '%s (%d)' % (name, shard_index + 1)
+      testers[builder_name] = _TestSpec(
+          name, perf_id, num_device_shards, num_host_shards, shard_index,
+          target_bits)
+
+  def _TestSpec(name, perf_id, num_device_shards, num_host_shards, shard_index,
+                target_bits):
+    spec = {
+      'perf_id': perf_id,
+      'bucket': 'chrome-perf',
+      'num_device_shards': num_device_shards,
+      'num_host_shards': num_host_shards,
+      'shard_index': shard_index,
+      'test_spec_file': 'chromium.perf.json',
+      'max_battery_temp': 350,
+    }
+
+    if target_bits == 32:
+      builder_name = 'android_perf_rel'
+    elif target_bits == 64:
+      builder_name = 'android_perf_rel_arm64'
+      spec['recipe_config'] = 'tests_arm64'
+    spec['path'] = lambda api: '%s/full-build-linux_%s.zip' % (
+        builder_name, api.properties['parent_revision'])
+
+    return spec
+
+  testers = {}
+
+  _AddTestSpec('Android Galaxy S5 Perf', 'android-galaxy-s5',
+      num_device_shards=7, num_host_shards=3, target_bits=32)
+  _AddTestSpec('Android Nexus5 Perf', 'android-nexus5',
+      num_device_shards=7, num_host_shards=2, target_bits=32)
+  _AddTestSpec('Android Nexus6 Perf', 'android-nexus6',
+      num_device_shards=7, num_host_shards=2, target_bits=32)
+  _AddTestSpec('Android Nexus7v2 Perf', 'android-nexus7v2',
+      num_device_shards=7, num_host_shards=2, target_bits=32)
+  _AddTestSpec('Android Nexus9 Perf', 'android-nexus9',
+      num_device_shards=7, num_host_shards=2)
+  _AddTestSpec('Android One Perf', 'android-one',
+      num_device_shards=7, num_host_shards=2, target_bits=32)
+
+  return testers
+
+
 BUILDERS = freeze({
-  'chromium.perf': {
-    'Android Galaxy S5 Perf (1)': {
-      'perf_id': 'android-galaxy-s5',
-      'bucket': 'chrome-perf',
-      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                           api.properties['parent_revision']),
-      'num_device_shards': 7,
-      'num_host_shards': 3,
-      'shard_index': 0,
-      'test_spec_file': 'chromium.perf.json',
-      'max_battery_temp': 350,
-    },
-    'Android Galaxy S5 Perf (2)': {
-      'perf_id': 'android-galaxy-s5',
-      'bucket': 'chrome-perf',
-      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                           api.properties['parent_revision']),
-      'num_device_shards': 7,
-      'num_host_shards': 3,
-      'shard_index': 1,
-      'test_spec_file': 'chromium.perf.json',
-      'max_battery_temp': 350,
-    },
-    'Android Galaxy S5 Perf (3)': {
-      'perf_id': 'android-galaxy-s5',
-      'bucket': 'chrome-perf',
-      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                           api.properties['parent_revision']),
-      'num_device_shards': 7,
-      'num_host_shards': 3,
-      'shard_index': 2,
-      'test_spec_file': 'chromium.perf.json',
-      'max_battery_temp': 350,
-    },
-    'Android Nexus5 Perf (1)': {
-      'perf_id': 'android-nexus5',
-      'bucket': 'chrome-perf',
-      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                           api.properties['parent_revision']),
-      'num_device_shards': 7,
-      'num_host_shards': 2,
-      'shard_index': 0,
-      'test_spec_file': 'chromium.perf.json',
-      'max_battery_temp': 350,
-    },
-    'Android Nexus5 Perf (2)': {
-      'perf_id': 'android-nexus5',
-      'bucket': 'chrome-perf',
-      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                           api.properties['parent_revision']),
-      'num_device_shards': 7,
-      'num_host_shards': 2,
-      'shard_index': 1,
-      'test_spec_file': 'chromium.perf.json',
-      'max_battery_temp': 350,
-    },
-    'Android Nexus6 Perf (1)': {
-      'perf_id': 'android-nexus6',
-      'bucket': 'chrome-perf',
-      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                           api.properties['parent_revision']),
-      'num_device_shards': 7,
-      'num_host_shards': 2,
-      'shard_index': 0,
-      'test_spec_file': 'chromium.perf.json',
-      'max_battery_temp': 350,
-    },
-    'Android Nexus6 Perf (2)': {
-      'perf_id': 'android-nexus6',
-      'bucket': 'chrome-perf',
-      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                           api.properties['parent_revision']),
-      'num_device_shards': 7,
-      'num_host_shards': 2,
-      'shard_index': 1,
-      'test_spec_file': 'chromium.perf.json',
-      'max_battery_temp': 350,
-    },
-    'Android Nexus7v2 Perf': {
-      'perf_id': 'android-nexus7v2',
-      'bucket': 'chrome-perf',
-      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                           api.properties['parent_revision']),
-      'num_device_shards': 8,
-      'test_spec_file': 'chromium.perf.json',
-      'max_battery_temp': 350,
-    },
-    'Android Nexus9 Perf': {
-      'recipe_config': 'tests_arm64',
-      'perf_id': 'android-nexus9',
-      'bucket': 'chrome-perf',
-      'path': lambda api: ('android_perf_rel_arm64/full-build-linux_'
-                           '%s.zip' % api.properties['parent_revision']),
-      'num_device_shards': 8,
-      'test_spec_file': 'chromium.perf.json',
-      'max_battery_temp': 350,
-    },
-    'Android One Perf (1)': {
-      'perf_id': 'android-one',
-      'bucket': 'chrome-perf',
-      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                           api.properties['parent_revision']),
-      'num_device_shards': 7,
-      'num_host_shards': 2,
-      'shard_index': 0,
-      'test_spec_file': 'chromium.perf.json',
-      'max_battery_temp': 350,
-    },
-    'Android One Perf (2)': {
-      'perf_id': 'android-one',
-      'bucket': 'chrome-perf',
-      'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                           api.properties['parent_revision']),
-      'num_device_shards': 7,
-      'num_host_shards': 2,
-      'shard_index': 1,
-      'test_spec_file': 'chromium.perf.json',
-      'max_battery_temp': 350,
-    },
-  },
+  'chromium.perf': _ChromiumPerfTesters(),
   'chromium.perf.fyi': {
     'android_nexus5_oilpan_perf': {
       'perf_id': 'android-nexus5-oilpan',
@@ -169,6 +102,7 @@ BUILDERS = freeze({
     },
   },
 })
+
 
 def RunSteps(api):
   mastername = api.properties['mastername']
@@ -254,8 +188,10 @@ def RunSteps(api):
   finally:
     api.chromium_android.common_tests_final_steps()
 
+
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
+
 
 def GenTests(api):
   for mastername, builders in BUILDERS.iteritems():

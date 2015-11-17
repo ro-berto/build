@@ -582,6 +582,71 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (31)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win Zenbook Perf (1)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win Zenbook Perf (1)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (32)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win Zenbook Perf (2)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win Zenbook Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (33)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win Zenbook Perf (3)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win Zenbook Perf (3)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (34)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win Zenbook Perf (4)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win Zenbook Perf (4)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (35)",
+    "trigger_specs": [
+      {
+        "builder_name": "Win Zenbook Perf (5)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Win Zenbook Perf (5)@@@"
+    ]
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

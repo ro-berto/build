@@ -282,17 +282,30 @@
     "name": "trigger (8)",
     "trigger_specs": [
       {
-        "builder_name": "Android Nexus7v2 Perf"
+        "builder_name": "Android Nexus7v2 Perf (1)"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android Nexus7v2 Perf@@@"
+      "@@@STEP_TEXT@Android Nexus7v2 Perf (1)@@@"
     ]
   },
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
     "name": "trigger (9)",
+    "trigger_specs": [
+      {
+        "builder_name": "Android Nexus7v2 Perf (2)"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Nexus7v2 Perf (2)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (10)",
     "trigger_specs": [
       {
         "builder_name": "Android One Perf (1)"
@@ -305,7 +318,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (10)",
+    "name": "trigger (11)",
     "trigger_specs": [
       {
         "builder_name": "Android One Perf (2)"
