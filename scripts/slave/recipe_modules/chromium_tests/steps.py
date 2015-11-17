@@ -111,10 +111,6 @@ class SizesStep(Test):
   def name(self):
     return 'sizes'  # pragma: no cover
 
-  # TODO(phajdan.jr): Implement SizesStep.has_valid_results or remove.
-  def has_valid_results(self, api, suffix):
-    return False
-
 
 class ScriptTest(Test):  # pylint: disable=W0232
   """

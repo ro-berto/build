@@ -4,8 +4,6 @@
 
 from . import steps
 
-RESULTS_URL = 'https://chromeperf.appspot.com'
-
 SPEC = {
   'builders': {
     'Linux x64': {
@@ -24,9 +22,6 @@ SPEC = {
       },
       'compile_targets': [
         'all',
-      ],
-      'tests': [
-        steps.SizesStep(RESULTS_URL, 'chromium-rel-linux-64'),
       ],
       'test_generators': [
         steps.generate_gtest,
