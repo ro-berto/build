@@ -14,27 +14,18 @@ DEPS = [
     'step',
 ]
 
+"""This file is a recipe demonstrating the auto_bisect recipe module.
 
-# This file is just a recipe showing how one would use this module.
-#
-# The RunSteps and GenTests functions define the required interface for a
-# recipe.
-#
-# RunSteps is run by the recipe infrastructure and it defines the actual steps
-# required to execute the recipe.
-#
-# GenTests yields test cases to test the recipe using the recipe infrastructure
-# and it is run when executing recipe_simulation_test.py and by presubmit checks
-# by git cl. Note that coverage of a 100% of the statements in the recipe and
-# the recipe_modules themselves is required.
-#
-# More information is available in scripts/slave/README.recipes.md
+For more information about recipes, see: https://goo.gl/xKnjz6
+"""
+
+
 def RunSteps(api):
   fake_checkout_path = api.path.mkdtemp('fake_checkout')
   api.path['checkout'] = fake_checkout_path
   bisector = api.auto_bisect.create_bisector(api.properties['bisect_config'])
 
-  # Request builds/tests for initial range and wait
+  # Request builds and tests for initial range and wait.
   bisector.good_rev.start_job()
   bisector.bad_rev.start_job()
   bisector.wait_for_all([bisector.good_rev, bisector.bad_rev])
@@ -50,7 +41,7 @@ def RunSteps(api):
   bisector.wait_for_any(revisions_to_check)
   bisector.check_bisect_finished(revisions_to_check[0])
 
-  # Evaluate inserted DEPS-modified revisions
+  # Evaluate inserted DEPS-modified revisions.
   revisions_to_check = bisector.get_revision_to_eval()
   if revisions_to_check:
     revisions_to_check[0].start_job()
@@ -59,12 +50,12 @@ def RunSteps(api):
     api.auto_bisect.query_revision_info(revisions_to_check[0].commit_hash)
   else:
     raise api.step.StepFailure('Expected revisions to check.')
-  # TODO(robertocn): Add examples for the following operations
-  # Abort unnecesary jobs # Print results
+  # TODO(robertocn): Add examples for the following operations:
+  #  Abort unnecesary jobs
+  #  Print results (may be done in a unit test)
 
-  # Test runner for classic bisect script.
-  # Calls bisect script in recipe wrapper with extra_src and path_to_config,
-  # to override default behavior.
+  # Test runner for classic bisect script; calls bisect script in recipe
+  # wrapper with extra_src and path_to_config to override default behavior.
   if api.properties.get('mastername'):
     # TODO(akuegel): Load the config explicitly instead of relying on the
     # builders.py entries in chromium_tests.
@@ -87,17 +78,14 @@ def GenTests(api):
       ]
   }
 
-  basic_data = _get_basic_test_data()
-  basic_test = _make_test(api, basic_data, 'basic')
+  basic_test = _make_test(api, _get_basic_test_data(), 'basic')
   basic_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
       stdout=api.json.output(wait_for_any_output))
-
   yield basic_test
 
-  failed_build_test_data = _get_ref_range_only_test_data()
   failed_build_test = _make_test(
-      api, failed_build_test_data, 'failed_build_test')
+      api, _get_ref_range_only_test_data(), 'failed_build_test')
   failed_build_test_step_data = {
       'failed':
       [
@@ -113,51 +101,42 @@ def GenTests(api):
   failed_build_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
       stdout=api.json.output(failed_build_test_step_data), retcode=1)
-
   yield failed_build_test
 
-  basic_data = _get_basic_test_data()
   windows_test = _make_test(
-      api, basic_data, 'windows_bisector', platform='windows')
+      api, _get_basic_test_data(), 'windows_bisector', platform='windows')
   windows_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
       stdout=api.json.output(wait_for_any_output))
-
   yield windows_test
 
-  basic_data = _get_basic_test_data()
   winx64_test = _make_test(
-      api, basic_data, 'windows_x64_bisector', platform='win_x64')
+      api, _get_basic_test_data(), 'windows_x64_bisector', platform='win_x64')
   winx64_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
       stdout=api.json.output(wait_for_any_output))
-
   yield winx64_test
 
-  basic_data = _get_basic_test_data()
-  mac_test = _make_test(api, basic_data, 'mac_bisector', platform='mac')
+  mac_test = _make_test(
+      api, _get_basic_test_data(), 'mac_bisector', platform='mac')
   mac_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
       stdout=api.json.output(wait_for_any_output))
-
   yield mac_test
 
-  basic_data = _get_basic_test_data()
   android_test = _make_test(
-      api, basic_data, 'android_bisector', platform='android')
+      api, _get_basic_test_data(), 'android_bisector', platform='android')
   android_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
       stdout=api.json.output(wait_for_any_output))
-
   yield android_test
 
-  basic_data = _get_basic_test_data()
   android_arm64_test = _make_test(
-      api, basic_data, 'android_arm64_bisector', platform='android_arm64')
+      api, _get_basic_test_data(), 'android_arm64_bisector',
+      platform='android_arm64')
   android_arm64_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
       stdout=api.json.output(wait_for_any_output))
-
   yield android_arm64_test
 
   failed_data = _get_basic_test_data()
@@ -169,8 +148,7 @@ def GenTests(api):
   failed_data[0].pop('git_diff')
   yield _make_test(api, failed_data, 'failed_test')
 
-  reversed_basic_data = _get_reversed_basic_test_data()
-  yield _make_test(api, reversed_basic_data, 'reversed_basic')
+  yield _make_test(api, _get_reversed_basic_test_data(), 'reversed_basic')
 
   bad_git_hash_data = _get_basic_test_data()
   bad_git_hash_data[1]['interned_hashes'] = {'003': '12345', '002': 'Bad Hash'}
@@ -194,8 +172,8 @@ def GenTests(api):
   bad_deps_syntax_data[1]['DEPS'] = 'raise RuntimeError("")'
   yield _make_test(api, bad_deps_syntax_data, 'bad_deps_syntax')
 
-  basic__data = _get_basic_test_data()
-  bisect_script_test = _make_test(api, basic_data, 'basic_bisect_script')
+  bisect_script_test = _make_test(
+      api, _get_basic_test_data(), 'basic_bisect_script')
   bisect_script_test += api.step_data(
       'Waiting for revision 314015 and 1 other revision(s). (2)',
       stdout=api.json.output(wait_for_any_output))
@@ -379,7 +357,8 @@ def _get_revision_range_step_data(api, range_data):
   return result
 
 
-def _get_config(params={}):
+def _get_config(params=None):
+  """Returns a sample bisect config dict with some fields overridden."""
   example_config = {
       'test_type': 'perf',
       'command': (
@@ -398,7 +377,8 @@ def _get_config(params={}):
       'skip_gclient_ops': 'True',
       'recipe_tester_name': 'linux_perf_tester'
   }
-  example_config.update(params)
+  if params:
+    example_config.update(params)
   return example_config
 
 
@@ -411,8 +391,8 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
   if 'refrange' in revision_data:
     parent_step = 'Resolving reference range.'
     step_name = parent_step + 'resolving commit_pos ' + commit_pos
-    yield api.step_data(step_name, stdout=api.raw_io.output('hash:' +
-                                                            commit_hash))
+    yield api.step_data(step_name,
+                        stdout=api.raw_io.output('hash:' + commit_hash))
 
     step_name = parent_step + 'resolving hash ' + commit_hash
     commit_pos_str = 'refs/heads/master@{#%s}' % commit_pos
