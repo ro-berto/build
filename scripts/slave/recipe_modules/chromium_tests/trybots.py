@@ -171,6 +171,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'Android Tests (amp split)',
       },
+      'android_archive_rel_ng': {
+        'mastername': 'chromium',
+        'buildername': 'Android',
+      },
       'android_arm64_dbg_recipe': {
         'mastername': 'chromium.linux',
         'buildername': 'Android Arm64 Builder (dbg)',
@@ -363,6 +367,10 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.mac': {
     'builders': {
+      'mac_chromium_archive_rel_ng': {
+        'mastername': 'chromium',
+        'buildername': 'Mac',
+      },
       'mac_chromium_dbg_ng': {
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder (dbg)',
@@ -410,6 +418,10 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.win': {
     'builders': {
+      'win_chromium_archive_rel_ng': {
+        'mastername': 'chromium',
+        'buildername': 'Win',
+      },
       'win_chromium_dbg_ng': {
         'mastername': 'chromium.win',
         'buildername': 'Win Builder (dbg)',

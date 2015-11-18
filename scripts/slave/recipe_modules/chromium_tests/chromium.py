@@ -6,6 +6,62 @@ from . import steps
 
 SPEC = {
   'builders': {
+    'Win': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'clobber',
+        'isolation_mode_noop',
+        'ninja_confirm_noop',
+        'no_dump_symbols',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'compile_targets': [
+        'all',
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'archive_build': True,
+      'gs_bucket': 'chromium-browser-snapshots',
+      'gs_acl': 'public-read',
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'Mac': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'clobber',
+        'isolation_mode_noop',
+        'ninja_confirm_noop',
+        'no_dump_symbols',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [
+        'all',
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'archive_build': True,
+      'gs_bucket': 'chromium-browser-snapshots',
+      'gs_acl': 'public-read',
+      'testing': {
+        'platform': 'mac',
+      },
+    },
     'Linux': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
@@ -48,6 +104,37 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'compile_targets': [
+        'all',
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'archive_build': True,
+      'gs_bucket': 'chromium-browser-snapshots',
+      'gs_acl': 'public-read',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Android': {
+      'chromium_config': 'android',
+      'chromium_apply_config': [
+        'clobber',
+        'isolation_mode_noop',
+        'ninja_confirm_noop',
+        'no_dump_symbols',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'android',
+        'TARGET_ARCH': 'arm',
+      },
+      'android_config': 'main_builder',
       'compile_targets': [
         'all',
       ],
