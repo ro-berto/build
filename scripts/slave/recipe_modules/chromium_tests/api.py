@@ -326,7 +326,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         compile_targets.update(t.compile_targets(self.m))
 
     # Only add crash_service when we have explicit compile targets.
-    if self.m.platform.is_win and compile_targets:
+    if (self.m.platform.is_win and
+        compile_targets and
+        'all' not in compile_targets):
       compile_targets.add('crash_service')
 
     # Lastly, add any targets the checkout-side test spec told us to use.

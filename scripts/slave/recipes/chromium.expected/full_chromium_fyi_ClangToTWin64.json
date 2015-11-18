@@ -235,8 +235,7 @@
       "official",
       "--clobber",
       "--",
-      "all",
-      "crash_service"
+      "all"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

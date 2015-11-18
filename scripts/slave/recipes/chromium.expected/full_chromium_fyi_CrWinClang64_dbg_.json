@@ -220,8 +220,7 @@
       "--compiler",
       "clang",
       "--",
-      "all",
-      "crash_service"
+      "all"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
