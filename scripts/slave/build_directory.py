@@ -87,7 +87,7 @@ def RmtreeExceptNinjaOrGomaFiles(build_output_dir):
       # compile, so make sure not to delete those generated files, otherwise
       # compile will fail.
       if (f.endswith('.ninja') or f.endswith('.manifest') or
-          f == 'args.gn' or
+          f == 'args.gn' or f == 'mb_type' or f == 'runtime_deps' or
           f.startswith('msvc') or  # VS runtime DLLs.
           f.startswith('pgort') or  # VS PGO runtime DLL.
           f in ('gyp-mac-tool', 'gyp-win-tool',
