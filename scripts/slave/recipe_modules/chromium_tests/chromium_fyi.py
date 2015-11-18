@@ -42,19 +42,6 @@ SPEC = {
         'platform': 'mac',
       },
     },
-    'Linux ARM Cross-Compile': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_ARCH': 'arm',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'builder',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'Linux ARM': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
