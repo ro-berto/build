@@ -10,7 +10,6 @@ from recipe_engine import recipe_api
 class FilterApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(FilterApi, self).__init__(**kwargs)
-    self._result = False
     self._test_targets = []
     self._compile_targets = []
     self._paths = []
@@ -23,12 +22,6 @@ class FilterApi(recipe_api.RecipeApi):
       if match and match.end() == len(path):
         return regex.pattern
     return False
-
-  @property
-  def result(self):
-    """Returns the result from most recent call to
-    does_patch_require_compile."""
-    return self._result
 
   @property
   def test_targets(self):
@@ -84,8 +77,7 @@ class FilterApi(recipe_api.RecipeApi):
                                  build_output_dir=None,
                                  cros_board=None,
                                  **kwargs):
-    """Return true if the current patch requires a build (and exes to run).
-    Return value can be accessed by call to result().
+    """Check to see if the affected files require a compile or tests.
 
     Args:
       affected_files: list of files affected by the current patch; paths
@@ -96,15 +88,23 @@ class FilterApi(recipe_api.RecipeApi):
       additional_compile_targets: any targets to compile in addition to
                                   the test_targets.
       additional_names: additional top level keys to look up exclusions in,
-      see |config_file_name|.
+                        see |config_file_name|.
       conconfig_file_name: the config file to look up exclusions in.
-      Within the file we concatenate "base.exclusions" and
-      "|additional_names|.exclusions" (if |additional_names| is not none) to get
-      the full list of exclusions.
-      the exclusions should be list of python regular expressions (as strings).
-      If any of the files in the current patch match one of the values in
-      |exclusions| True is returned (by way of result()).
-      """
+
+    Within the file we concatenate "base.exclusions" and
+    "|additional_names|.exclusions" (if |additional_names| is not none) to
+    get the full list of exclusions.
+
+    The exclusions should be a list of Python regular expressions (as strings).
+
+    If any of the files in the current patch match one of the values in
+    we assume everything needs to be compiled and tested.
+
+    If an error occurs, an exception is raised. Otherwise, after the
+    call completes the results can be obtained from self.compile_targets()
+    and self.test_targets().
+    """
+
     names = ['base']
     if additional_names:
       names.extend(additional_names)
@@ -129,7 +129,6 @@ class FilterApi(recipe_api.RecipeApi):
             add_python_log=False)
         step_result.presentation.logs.setdefault('excluded_files', []).append(
             '%s (regex = \'%s\')' % (path, first_match))
-        self._result = True
         self._compile_targets = sorted(all_targets)
         self._test_targets = sorted(test_targets)
         return
@@ -187,27 +186,19 @@ class FilterApi(recipe_api.RecipeApi):
             test_output),
           **kwargs)
 
-    # TODO(dpranke) crbug.com/552146: See if we can get rid of self._result and
-    # just rely on self._compile_targets being non-empty to indicate that we
-    # should do a compile.
-
     if 'error' in step_result.json.output:
-      self._result = True
       step_result.presentation.step_text = 'Error: ' + \
           step_result.json.output['error']
       raise self.m.step.StepFailure(
           'Error: ' + step_result.json.output['error'])
-    elif 'invalid_targets' in step_result.json.output:
-      self._result = True
+
+    if 'invalid_targets' in step_result.json.output:
       raise self.m.step.StepFailure('Error, following targets were not ' + \
           'found: ' + ', '.join(step_result.json.output['invalid_targets']))
-    elif step_result.json.output['status'] == 'Found dependency':
-      self._result = True
+
+    if (step_result.json.output['status'] == 'Found dependency' or
+        step_result.json.output['status'] == 'Found dependency (all)'):
       self._compile_targets = step_result.json.output['compile_targets']
       self._test_targets = step_result.json.output['test_targets']
-    elif step_result.json.output['status'] == 'Found dependency (all)':
-      self._result = True
-      self._compile_targets = all_targets
-      self._test_targets = test_targets
     else:
       step_result.presentation.step_text = 'No compile necessary'

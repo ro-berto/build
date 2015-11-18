@@ -288,7 +288,7 @@ class iOSApi(recipe_api.RecipeApi):
       # Only specify each test once for the analyzer.
       tests = list(set(test['app'] for test in self.__config['tests']))
 
-      requires_compile, test_targets, compile_targets = (
+      test_targets, compile_targets = (
         self.m.chromium_tests.analyze(
           affected_files,
           tests,
@@ -304,7 +304,7 @@ class iOSApi(recipe_api.RecipeApi):
         if test['app'] not in test_targets:
           test['skip'] = True
 
-      if requires_compile: # pragma: no cover
+      if compile_targets: # pragma: no cover
         cmd.extend(compile_targets)
       else:
         return

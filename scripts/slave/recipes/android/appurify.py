@@ -163,9 +163,9 @@ def RunSteps(api, mastername, buildername):
           additional_compile_targets=compile_targets,
           additional_names=['chromium'],
           config_file_name='trybot_analyze_config.json')
-      if not api.filter.result:
-        return
       compile_targets = api.filter.compile_targets
+      if not compile_targets:
+        return
       native_unittests = [
           i for i in native_unittests
           if i[0] in api.filter.test_targets]

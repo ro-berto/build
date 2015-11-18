@@ -278,7 +278,7 @@ def _RunStepsInternal(api):
       all_compile_targets(api, tests + tests_including_triggered)))
   additional_compile_targets = sorted(set(compile_targets) -
                                       set(test_targets))
-  requires_compile, test_targets, compile_targets = \
+  test_targets, compile_targets = \
       api.chromium_tests.analyze(affected_files,
                                  test_targets,
                                  additional_compile_targets,
@@ -289,7 +289,7 @@ def _RunStepsInternal(api):
     tests_including_triggered = []
 
   # Blink tests have to bypass "analyze", see below.
-  if requires_compile or add_blink_tests:
+  if compile_targets or add_blink_tests:
     tests = tests_in_compile_targets(api, test_targets, tests)
     tests_including_triggered = tests_in_compile_targets(
         api, test_targets, tests_including_triggered)

@@ -76,8 +76,7 @@ def RunSteps(api):
       api.tryserver.get_files_affected_by_patch(),
       additional_compile_targets=WEBVIEW_EXES,
       additional_names=['android_webview'])
-  needs_compile = not api.filter.result or not api.filter.compile_targets
-  if api.tryserver.is_tryserver and needs_compile:
+  if api.tryserver.is_tryserver and not api.filter.compile_targets:
     return
 
   # If the Manifest has changed then we need to recompile everything.

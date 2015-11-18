@@ -635,7 +635,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """Runs "analyze" step to determine targets affected by the patch.
 
     Returns a tuple of:
-      - boolean, indicating whether patch requires compile
       - list of targets that are needed to run tests (see filter recipe module)
       - list of targets that need to be compiled (see filter recipe module)"""
 
@@ -676,10 +675,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     step_result = self.m.step.active_result
     step_result.presentation.logs['analyze_details'] = listio.lines
 
-    # TODO(dpranke): See if we can get rid of filter.result and just
-    # use compile_targets being non-empty as a sign that we need to do
-    # a compile.
-    return self.m.filter.result, self.m.filter.test_targets, compile_targets
+    return self.m.filter.test_targets, compile_targets
 
   def configure_swarming(self, project_name, precommit, mastername=None):
     """Configures default swarming dimensions and tags.

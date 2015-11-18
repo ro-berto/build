@@ -208,14 +208,14 @@ class GpuApi(recipe_api.RecipeApi):
           test_targets=targets,
           additional_names=['chromium'],
           config_file_name='trybot_analyze_config.json')
-      if not self.m.filter.result:
+      if not self.m.filter.compile_targets:
         # Early out if no work to do.
         return
-      targets = list(self.m.filter.test_targets)
+      compile_targets = list(self.m.filter.compile_targets)
       # Re-sort the targets to keep test expectations stable.
-      targets.sort()
+      compile_targets.sort()
       try:
-        self.m.chromium.compile(targets, name='compile (with patch)')
+        self.m.chromium.compile(compile_targets, name='compile (with patch)')
       except self.m.step.StepFailure:
         if self.m.platform.is_win:
           self.m.chromium.taskkill()
@@ -226,7 +226,7 @@ class GpuApi(recipe_api.RecipeApi):
                                           patch=False,
                                           update_presentation=False)
         self.m.chromium.runhooks()
-        self.m.chromium.compile(targets, name='compile (without patch)')
+        self.m.chromium.compile(compile_targets, name='compile (without patch)')
         raise
     else:
       self.m.chromium.compile(targets=targets, name='compile')

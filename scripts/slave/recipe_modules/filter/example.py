@@ -28,8 +28,6 @@ def RunSteps(api):
 
   assert (list(api.properties.get('example_changed_paths', ['foo.cc'])) == \
           api.filter.paths)
-  assert (api.filter.result and api.properties['example_result']) or \
-      (not api.filter.result and not api.properties['example_result'])
   assert (list(api.properties.get('example_test_targets', [])) ==
           list(api.filter.test_targets))
   assert (list(api.properties.get('example_compile_targets', [])) ==
@@ -42,8 +40,7 @@ def GenTests(api):
          api.properties(
            affected_files=['yy'],
            filter_exclusions=[],
-           example_changed_paths=['yy'],
-           example_result=None) +
+           example_changed_paths=['yy']) +
          api.override_step_data(
           'read filter exclusion spec',
           api.json.output({
@@ -52,7 +49,7 @@ def GenTests(api):
 
   # Matches exclusions
   yield (api.test('match_exclusion') +
-         api.properties(affected_files=['foo.cc'], example_result=1) +
+         api.properties(affected_files=['foo.cc']) +
          api.override_step_data(
           'read filter exclusion spec',
           api.json.output({
@@ -61,7 +58,7 @@ def GenTests(api):
 
   # Matches exclusions in additional_names key
   yield (api.test('match_additional_name_exclusion') +
-         api.properties(affected_files=['foo.cc'], example_result=1) +
+         api.properties(affected_files=['foo.cc']) +
          api.override_step_data(
           'read filter exclusion spec',
           api.json.output({
@@ -72,8 +69,7 @@ def GenTests(api):
   yield (api.test('doesnt_match_exclusion') +
          api.properties(
            affected_files=['bar.cc'],
-           example_changed_paths=['bar.cc'],
-           example_result=None) +
+           example_changed_paths=['bar.cc']) +
          api.override_step_data(
           'read filter exclusion spec',
           api.json.output({
@@ -82,7 +78,6 @@ def GenTests(api):
 
   # Analyze returns matching result.
   yield (api.test('analyzes_returns_true') +
-         api.properties(example_result=1) +
          api.override_step_data(
           'analyze',
           api.json.output({'status': 'Found dependency',
@@ -91,18 +86,18 @@ def GenTests(api):
 
   # Analyze returns matching tests while matching all.
   yield (api.test('analyzes_matches_all_exes') +
-         api.properties(example_result=1) +
          api.override_step_data(
           'analyze',
-          api.json.output({'status': 'Found dependency (all)'})))
+          api.json.output({'status': 'Found dependency (all)',
+                           'test_targets': [],
+                           'compile_targets': []})))
 
   # Analyze matches all and returns matching tests.
   yield (api.test('analyzes_matches_test_targets') +
          api.properties(
            test_targets=['foo', 'bar'],
            example_test_targets=['foo', 'bar'],
-           example_compile_targets=['foo', 'bar'],
-           example_result=1) +
+           example_compile_targets=['foo', 'bar']) +
          api.override_step_data(
           'analyze',
           api.json.output({'status': 'Found dependency',
@@ -113,8 +108,7 @@ def GenTests(api):
   yield (api.test('analyzes_matches_compile_targets') +
          api.properties(
            example_test_targets=['foo'],
-           example_compile_targets=['bar'],
-           example_result=1) +
+           example_compile_targets=['bar']) +
          api.override_step_data(
           'analyze',
           api.json.output({'status': 'Found dependency',
@@ -124,8 +118,7 @@ def GenTests(api):
   # Analyze with error condition.
   yield (api.test('analyzes_error') +
          api.properties(
-           test_targets=[],
-           example_result=1) +
+           test_targets=[]) +
          api.override_step_data(
           'analyze',
           api.json.output({'error': 'ERROR'})))
@@ -133,8 +126,7 @@ def GenTests(api):
   # Analyze with python returning bad status.
   yield (api.test('bad_retcode_fails') +
          api.properties(
-           test_targets=[],
-           example_result=1) +
+           test_targets=[]) +
          api.step_data(
           'analyze',
           retcode=-1))
