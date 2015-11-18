@@ -415,6 +415,7 @@ SPEC = {
 
     'Android Clang Builder (dbg)': {
       'chromium_config': 'android_clang',
+      'chromium_apply_config': ['errorprone'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
