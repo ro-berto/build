@@ -1675,7 +1675,7 @@
   },
   {
     "name": "$result",
-    "reason": "4 out of 25 aggregated steps failed. Failures: Step('[trigger] components_unittests') failed with return_code 1, Step('[collect] android_webview_unittests') failed with return_code 1, Step('[collect] base_unittests') failed with return_code 87, Step('[collect] cc_unittests') failed with return_code 88",
+    "reason": "4 out of 25 aggregated steps failed. Failures: Step('[trigger] components_unittests') failed with return_code 1, Step('[collect] android_webview_unittests') failed with return_code 1, Infra Failure: Step('[collect] base_unittests') returned 87, Warning: Step('[collect] cc_unittests') returned 88",
     "status_code": 1
   }
 ]

@@ -1025,12 +1025,16 @@ class AndroidApi(recipe_api.RecipeApi):
     try:
       yield
     except self.m.step.StepFailure as f:
-      if (f.result.retcode == EXIT_CODES['error']):
-        f.result.presentation.status = self.m.step.FAILURE
-      elif (f.result.retcode == EXIT_CODES['infra']):
-        f.result.presentation.status = self.m.step.EXCEPTION
+      if (f.result.retcode == EXIT_CODES['infra']):
+        i = self.m.step.InfraFailure(f.name or f.reason, result=f.result)
+        i.result.presentation.status = self.m.step.EXCEPTION
+        raise i
       elif (f.result.retcode == EXIT_CODES['warning']):
-        f.result.presentation.status = self.m.step.WARNING
+        w = self.m.step.StepWarning(f.name or f.reason, result=f.result)
+        w.result.presentation.status = self.m.step.WARNING
+        raise w
+      elif (f.result.retcode == EXIT_CODES['error']):
+        f.result.presentation.status = self.m.step.FAILURE
       raise
 
   def test_runner(self, step_name, args=None, **kwargs):
