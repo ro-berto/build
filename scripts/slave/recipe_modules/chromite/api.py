@@ -279,6 +279,8 @@ class ChromiteApi(recipe_api.RecipeApi):
       # to checkout the local branch to let Chromite know which branch to build.
       self.m.git('checkout', self.c.chromite_branch,
           name=str('checkout chromite branch [%s]' % (self.c.chromite_branch)))
+      self.m.git('pull',
+          name=str('sync chromite branch [%s]' % (self.c.chromite_branch)))
     self._set_chromite_path(self.m.path['checkout'])
     return self.chromite_path
 
