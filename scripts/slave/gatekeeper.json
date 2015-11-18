@@ -342,6 +342,7 @@
         "excluded_builders" : [
             "WebKit Linux (deps)",
             "WebKit Linux Oilpan (dbg)",
+            "WebKit Linux Oilpan",
             "WebKit Linux Oilpan Leak",
             "WebKit Linux Oilpan ASAN",
             "WebKit Mac Builder (deps)",
