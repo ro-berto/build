@@ -418,7 +418,7 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.win': {
     'builders': {
-      'win_chromium_archive_rel_ng': {
+      'win_archive': {
         'mastername': 'chromium',
         'buildername': 'Win',
       },
