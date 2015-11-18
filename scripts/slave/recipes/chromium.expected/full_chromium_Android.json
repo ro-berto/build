@@ -205,7 +205,6 @@
       "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
-      "--ninja-ensure-up-to-date",
       "--clobber",
       "--",
       "all"
