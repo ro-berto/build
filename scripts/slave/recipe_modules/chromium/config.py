@@ -433,13 +433,21 @@ def msan_full_origin_tracking(c):
   # Track the chain of stores leading from allocation site to use site.
   c.gyp_env.GYP_DEFINES['msan_track_origins'] = 2
 
-@config_ctx(deps=['compiler'])
+# This is currently needed to make tests return a non-zero exit code when an
+# UBSan failure happens.
+# TODO(kjellander,samsonov): Add tracking bug for fixing exit code upstream.
+@config_ctx()
+def ubsan_fail_on_errors(c):
+  c.gyp_env.GYP_DEFINES['release_extra_cflags'] = (
+      '-fno-sanitize-recover=undefined')
+
+@config_ctx(deps=['compiler'], includes=['ubsan_fail_on_errors'])
 def ubsan(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('ubsan requires clang')
   c.gyp_env.GYP_DEFINES['ubsan'] = 1
 
-@config_ctx(deps=['compiler'])
+@config_ctx(deps=['compiler'], includes=['ubsan_fail_on_errors'])
 def ubsan_vptr(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('ubsan_vptr requires clang')
