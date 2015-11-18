@@ -200,5 +200,14 @@ class FilterApi(recipe_api.RecipeApi):
         step_result.json.output['status'] == 'Found dependency (all)'):
       self._compile_targets = step_result.json.output['compile_targets']
       self._test_targets = step_result.json.output['test_targets']
+
+      # TODO(dpranke) crbug.com/557505 - we need to not prune meta
+      # targets that are part of 'test_targets', because otherwise
+      # we might not actually build all of the binaries needed for
+      # a given test, even if they aren't affected by the patch.
+      # Until the GYP code is updated, we will merge the returned
+      # test_targets into compile_targets to be safe.
+      self._compile_targets = sorted(set(self._compile_targets +
+                                         self._test_targets))
     else:
       step_result.presentation.step_text = 'No compile necessary'

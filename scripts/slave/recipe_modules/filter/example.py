@@ -97,7 +97,7 @@ def GenTests(api):
          api.properties(
            test_targets=['foo', 'bar'],
            example_test_targets=['foo', 'bar'],
-           example_compile_targets=['foo', 'bar']) +
+           example_compile_targets=['bar', 'foo']) +
          api.override_step_data(
           'analyze',
           api.json.output({'status': 'Found dependency',
@@ -108,7 +108,7 @@ def GenTests(api):
   yield (api.test('analyzes_matches_compile_targets') +
          api.properties(
            example_test_targets=['foo'],
-           example_compile_targets=['bar']) +
+           example_compile_targets=['bar', 'foo']) +
          api.override_step_data(
           'analyze',
           api.json.output({'status': 'Found dependency',

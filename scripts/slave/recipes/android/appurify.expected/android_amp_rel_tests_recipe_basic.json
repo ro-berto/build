@@ -242,8 +242,9 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "chrome_public_test_apk",
+      "base_unittests",
       "base_unittests_apk",
+      "chrome_public_test_apk",
       "junit_unit_tests"
     ],
     "cwd": "[SLAVE_BUILD]",

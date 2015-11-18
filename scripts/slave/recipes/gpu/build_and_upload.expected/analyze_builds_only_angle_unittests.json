@@ -219,7 +219,8 @@
       "--goma-disable-local-fallback",
       "--",
       "All",
-      "angle_unittests"
+      "angle_unittests",
+      "angle_unittests_run"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile (with patch)",

@@ -240,8 +240,9 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "chrome_public_test_apk",
-      "android_webview_unittests_apk"
+      "android_webview_unittests",
+      "android_webview_unittests_apk",
+      "chrome_public_test_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
