@@ -96,28 +96,7 @@ F('mac_clobber', mac().ChromiumFactory(
 
 B('Linux', 'linux_clobber', 'compile|testers', 'chromium',
   notify_on_missing=True)
-F('linux_clobber', linux().ChromiumFactory(
-    clobber=True,
-    tests=[
-      'check_licenses',
-      'check_perms',
-      'sizes',
-    ],
-    options=['--compiler=goma', '--', 'all'],
-    factory_properties={
-      'archive_build': ActiveMaster.is_production_host,
-      'confirm_noop_compile': True,
-      'gs_bucket': 'gs://chromium-browser-snapshots',
-      'gs_acl': 'public-read',
-      'show_perf_results': True,
-      'perf_id': 'chromium-rel-linux',
-      'expectations': True,
-      'generate_gtest_json': ActiveMaster.is_production_host,
-      'gclient_env': {
-        'GYP_DEFINES':
-            'target_arch=ia32 test_isolation_mode=noop linux_dump_symbols=0',
-      },
-    }))
+F('linux_clobber', m_annotator.BaseFactory('chromium'))
 
 B('Linux x64', 'linux64_clobber', 'compile|testers', 'chromium',
   notify_on_missing=True)
