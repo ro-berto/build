@@ -566,6 +566,17 @@ print json.dumps({'ccache': ccache})
       self.flavor.create_clean_device_dir(self.device_dirs.perf_data_dir)
 
     # Run nanobench.
+    properties = [
+      '--properties',
+      'gitHash',      self.got_revision,
+      'build_number', self.m.properties['buildnumber'],
+    ]
+    if self.is_trybot:
+      properties.extend([
+        'issue',    self.m.properties['issue'],
+        'patchset', self.m.properties['patchset'],
+      ])
+
     args = [
         'nanobench',
         '--undefok',   # This helps branches that may not know new flags.
@@ -589,11 +600,9 @@ print json.dumps({'ccache': ccache})
       json_path = self.flavor.device_path_join(
           self.device_dirs.perf_data_dir,
           'nanobench_%s_%s.json' % (self.got_revision, git_timestamp))
-      args.extend(['--outResultsFile', json_path,
-                   '--properties',
-                       'gitHash', self.got_revision,
-                       'build_number', self.m.properties['buildnumber'],
-                   ])
+      args.extend(['--outResultsFile', json_path])
+      args.extend(properties)
+
       keys_blacklist = ['configuration', 'role', 'is_trybot']
       args.append('--key')
       for k in sorted(self.builder_cfg.keys()):
