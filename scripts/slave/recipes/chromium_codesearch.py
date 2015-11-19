@@ -104,7 +104,8 @@ def GenerateCompilationDatabase(api, debug_path, targets, platform):
   gn_path = api.path['checkout'].join('buildtools', 'linux64', 'gn')
   args = LINUX_GN_ARGS if platform == 'linux' else CHROMEOS_GN_ARGS
   command = [gn_path, 'gen', debug_path, '--args=%s' % ' '.join(args)]
-  api.step('generate build files for %s' % platform, command)
+  api.step('generate build files for %s' % platform, command,
+           cwd=api.path['checkout'])
   command = ['ninja', '-C', debug_path] + list(targets)
   # Add the parameters for creating the compilation database.
   command += ['-t', 'compdb', 'cc', 'cxx', 'objc', 'objcxx']
