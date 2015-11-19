@@ -181,7 +181,8 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@files@third_party/WebKit/Source/core/dom/Element.cpp@@@",
-      "@@@STEP_LOG_END@files@@@"
+      "@@@STEP_LOG_END@files@@@",
+      "@@@SET_BUILD_PROPERTY@subproject_tag@\"blink\"@@@"
     ]
   },
   {

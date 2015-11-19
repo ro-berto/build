@@ -182,7 +182,8 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@files@README.md@@@",
       "@@@STEP_LOG_LINE@files@foo/bar/baz.py@@@",
-      "@@@STEP_LOG_END@files@@@"
+      "@@@STEP_LOG_END@files@@@",
+      "@@@SET_BUILD_PROPERTY@subproject_tag@\"chromium\"@@@"
     ]
   },
   {

@@ -255,6 +255,8 @@ def _RunStepsInternal(api):
       if any([f.startswith(path) for f in affected_files]):
         add_blink_tests = True
 
+  api.tryserver.set_subproject_tag('blink' if add_blink_tests else 'chromium')
+
   # Add blink tests that work well with "analyze" here. The tricky ones
   # that bypass it (like the layout tests) are added later.
   if add_blink_tests:

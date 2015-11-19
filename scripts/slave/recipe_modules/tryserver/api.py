@@ -170,6 +170,17 @@ class TryserverApi(recipe_api.RecipeApi):
     step_result.presentation.logs['files'] = paths
     return paths
 
+  def set_subproject_tag(self, subproject_tag):
+    """Adds a subproject tag to the build.
+
+    This can be used to distinguish between builds that execute different steps
+    depending on what was patched, e.g. blink vs. pure chromium patches.
+    """
+    assert self.is_tryserver
+
+    step_result = self.m.step.active_result
+    step_result.presentation.properties['subproject_tag'] = subproject_tag
+
   def _set_failure_type(self, failure_type):
     if not self.is_tryserver:
       return
