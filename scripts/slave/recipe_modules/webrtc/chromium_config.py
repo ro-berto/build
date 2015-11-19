@@ -43,9 +43,7 @@ def webrtc_ios(c):
     c.build_config_fs = c.BUILD_CONFIG + '-iphonesimulator'
 
   gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['build_with_libjingle'] = 1
   gyp_defs['chromium_ios_signing'] = 0
-  gyp_defs['key_id'] = ''
   gyp_defs['OS'] = c.TARGET_PLATFORM
   _compiler_defaults(c)
 
