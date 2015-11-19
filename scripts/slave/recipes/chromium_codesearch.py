@@ -41,19 +41,29 @@ ADDITIONAL_REPOS = freeze({
   'tools/perf': '%s/chromium/tools/perf' % CHROMIUM_GIT_URL,
 })
 
+LINUX_GN_ARGS = [
+  'is_clang=true',
+  'is_component_build=true',
+  'is_debug=true',
+  'gomadir="/b/build/goma"',
+  'symbol_level=1',
+  'target_cpu="x64"',
+  'use_goma=true',
+]
+
+CHROMEOS_GN_ARGS = LINUX_GN_ARGS + [
+  'target_os="chromeos"',
+  'use_ozone=true',
+]
+
 SPEC = freeze({
   # The builders have the following parameters:
-  # - chromium_config_kwargs: parameters for the config of the chromium module.
-  # - chromium_runhooks_kwargs: parameters for the runhooks step.
   # - compile_targets: the compile targets.
   # - environment: The environment of the bot (prod / staging).
   # - package_filename: The prefix of the name of the source archive.
   # - platform: The platform for which the code is compiled.
   'builders': {
     'Chromium Linux Codesearch': {
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-      },
       'compile_targets': [
         'all',
       ],
@@ -62,10 +72,6 @@ SPEC = freeze({
       'platform': 'linux',
     },
     'ChromiumOS Codesearch': {
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_PLATFORM': 'chromeos',
-      },
       'compile_targets': [
         'all',
       ],
@@ -74,9 +80,6 @@ SPEC = freeze({
       'platform': 'chromeos',
     },
     'Chromium Linux Codesearch Builder': {
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-      },
       'compile_targets': [
         'all',
       ],
@@ -85,10 +88,6 @@ SPEC = freeze({
       'platform': 'linux',
     },
     'ChromiumOS Codesearch Builder': {
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_PLATFORM': 'chromeos',
-      },
       'compile_targets': [
         'all',
       ],
@@ -100,7 +99,12 @@ SPEC = freeze({
 })
 
 def GenerateCompilationDatabase(api, debug_path, targets, platform):
-  api.chromium.runhooks(name='runhooks for %s' % platform)
+  # TODO(akuegel): If we ever build on Windows or Mac, this needs to be
+  # adjusted.
+  gn_path = api.path['checkout'].join('buildtools', 'linux64', 'gn')
+  args = LINUX_GN_ARGS if platform == 'linux' else CHROMEOS_GN_ARGS
+  command = [gn_path, 'gen', debug_path, '--args=%s' % ' '.join(args)]
+  api.step('generate build files for %s' % platform, command)
   command = ['ninja', '-C', debug_path] + list(targets)
   # Add the parameters for creating the compilation database.
   command += ['-t', 'compdb', 'cc', 'cxx', 'objc', 'objcxx']
@@ -134,9 +138,9 @@ def RunSteps(api):
 
   debug_path = api.path['checkout'].join('out', 'Debug')
   targets = bot_config.get('compile_targets', [])
+  api.chromium.set_config('codesearch', BUILD_CONFIG='Debug')
+  api.chromium.runhooks()
 
-  api.chromium.set_config('codesearch',
-                          **bot_config.get('chromium_config_kwargs',{}))
   result = GenerateCompilationDatabase(api, debug_path, targets, platform)
 
   api.chromium.compile(targets)
@@ -153,7 +157,6 @@ def RunSteps(api):
             debug_path.join('compile_commands.json')])
 
   if platform == 'chromeos':
-    api.chromium.set_config('codesearch', BUILD_CONFIG='Debug')
     result = GenerateCompilationDatabase(api, debug_path, targets, 'linux')
     api.python('Filter out duplicate compilation units',
                api.path['build'].join('scripts', 'slave', 'chromium',

@@ -118,7 +118,17 @@
     "env": {
       "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
-    "name": "gclient runhooks for linux"
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/buildtools/linux64/gn",
+      "gen",
+      "[SLAVE_BUILD]/src/out/Debug",
+      "--args=is_clang=true is_component_build=true is_debug=true gomadir=\"/b/build/goma\" symbol_level=1 target_cpu=\"x64\" use_goma=true"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate build files for linux"
   },
   {
     "cmd": [
