@@ -1,0 +1,35 @@
+{
+  "master_base_class": "Master3",
+  "master_classname": "WasmLlvm",
+  "master_port": 20305,
+  "master_port_alt": 40305,
+  "slave_port": 30305,
+  "templates": ["templates", "../master.chromium/templates"],
+
+  "builders": {
+    "linux": {
+      "category": "continuous",
+      "recipe": "wasm_llvm",
+      "scheduler": "llvm_commits",
+      "slave_pools": ["linux"],
+    },
+  },
+
+  "schedulers": {
+    "llvm_commits": {
+      "type": "git_poller",
+      "git_repo_url": "https://chromium.googlesource.com/chromiumos/third_party/llvm"
+    },
+  },
+
+  "slave_pools": {
+    "linux": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave92-c3", "slave93-c3"],
+    },
+  },
+}

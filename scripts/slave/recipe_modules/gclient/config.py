@@ -329,6 +329,15 @@ def naclports(c):
   m['src'] = 'got_revision'
 
 @config_ctx()
+def wasm_llvm(c):
+  s = c.solutions.add()
+  s.name = 'src'
+  s.url = ChromiumGitURL(
+      c, 'external', 'github.com', 'WebAssembly', 'experimental.git')
+  m = c.got_revision_mapping
+  m['src'] = 'got_revision'
+
+@config_ctx()
 def gyp(c):
   s = c.solutions.add()
   s.name = 'gyp'
