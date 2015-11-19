@@ -5,7 +5,8 @@
 ## I just want to....
 
 This section covers common tasks for chromium developers. If you want a more
-full background on the chromium recipes, go to the {#Background} section.
+full background on the chromium recipes, go to the [Background](#Background)
+section.
 
 ### Create a New Builder
 
@@ -13,8 +14,8 @@ We're going to walkthrough an example of wanting to add a builder to the
 `chromium.linux` master.
 
 *** note
-Make sure to read the {####Getting your builder on the main waterfall} section
-after reading this section.
+Make sure to read the [following](#Getting-your-builder-on-the-main-waterfall)
+section once you have read this section.
 ***
 
 1. Add the builder configs to the corresponding master file in the
@@ -23,18 +24,18 @@ after reading this section.
 1. Add the builder to [`src/testing/buildbot/chromium.linux.json`](https://chromium.googlesource.com/chromium/src/+/master/testing/buildbot/chromium.linux.json)
    .
 1. Add the new builder to the buildbot master config.
-  * If the builder is not using [`builders.pyl`](https://chromium.googlesource.com/infra/infra/+/master/doc/users/services/buildbot/builders.pyl.md)
+  1. If the builder is not using [`builders.pyl`](https://chromium.googlesource.com/infra/infra/+/master/doc/users/services/buildbot/builders.pyl.md)
      , then you need to declare the new builder in [`master.cfg`](https://chromium.googlesource.com/chromium/tools/build.git/+/master/masters/master.chromium.linux/master.cfg)
      , assign it a recipe name and a slave pool (`slaves.cfg`).
-  * If the builder is using `builders.pyl`, then look at the [docs](https://chromium.googlesource.com/infra/infra/+/master/doc/users/services/buildbot/builders.pyl.md)
+  2. If the builder is using `builders.pyl`, then look at the [docs](https://chromium.googlesource.com/infra/infra/+/master/doc/users/services/buildbot/builders.pyl.md)
      and modify the corresponding file.
-3. Request a master restart [here](https://chromium.googlesource.com/infra/infra/+/master/doc/users/contacting_troopers.md)
+1. Request a master restart [here](https://chromium.googlesource.com/infra/infra/+/master/doc/users/contacting_troopers.md)
    .
 
 You also need to think about provisioning hardware for the new slaves. File a
-ticket with the label `Infra-Labs` with information about the hardware you need,
-and someone on the labs team will take a look at it, and help you get the
-hardware you need.
+ticket with the label `Infra-Labs` (http://go/infrasys-bug is a good place to
+start) with information about the hardware you need, and someone on the labs
+team will take a look at it, and help you get the hardware you need.
 
 #### Getting your bot on the main waterfall
 
@@ -54,7 +55,7 @@ master (e.g. `chromium.linux`)
   )
 * Update master config (e.g. [`master.chromium.linux/master_cfg.py`](https://chromium.googlesource.com/chromium/tools/build.git/+/master/masters/master.chromium.linux/master.cfg)
   ).
-3. Request a master restart [here](https://chromium.googlesource.com/infra/infra/+/master/doc/users/contacting_troopers.md)
+* Request a master restart [here](https://chromium.googlesource.com/infra/infra/+/master/doc/users/contacting_troopers.md)
    .
 
 ### Create a New Trybot
@@ -77,8 +78,10 @@ configured as follows:
       },
       ...
 
-For example, suppose we want to add a builder name `new_fancy_android_device` to
-`tryserver.chromium.android`. We would do the following
+For example, suppose we want to add a builder named `new_fancy_android_device`
+to `tryserver.chromium.android`, which is a copy of the builder named
+`fancy_android_device` on the main `chromium.android` waterfall.
+We would do the following
 
 1. Add the builder configuration of
 
@@ -142,8 +145,8 @@ Add it to the JSON test spec. Example ([`src/testing/buildbot/chromium.linux.jso
       ]
     }
 
-Note that this relies on gtest generator in the bot config. For example, given
-the file [`scripts/slave/recipe_modules/chromium_tests/chromium_linux.py`](https://code.google.com/p/chromium/codesearch#chromium/build/scripts/slave/recipe_modules/chromium_tests/chromium_linux.py)
+Note that this relies on gtest generator in the bot configuration in the
+`chromium_tests` module. For example, given the file [`scripts/slave/recipe_modules/chromium_tests/chromium_linux.py`](https://code.google.com/p/chromium/codesearch#chromium/build/scripts/slave/recipe_modules/chromium_tests/chromium_linux.py)
 , you would need:
 
     'Linux Builder': {
@@ -161,7 +164,7 @@ they take effect and build still passes.
 ### Add a new non gtest-based test
 Generally, look at [steps.py](https://code.google.com/p/chromium/codesearch#chromium/build/scripts/slave/recipe_modules/chromium_tests/steps.py)
 , and either use an existing class there, or add a new one. For example, look at
-the `Android Tests (amp split)` [recipe](https://code.google.com/p/chromium/codesearch#chromium/build/scripts/slave/recipe_modules/chromium_tests/chromium_fyi.py)
+the Android Tests (amp split) [recipe](https://code.google.com/p/chromium/codesearch#chromium/build/scripts/slave/recipe_modules/chromium_tests/chromium_fyi.py)
 , which uses a special step to talk to an external service:
 
 ```
