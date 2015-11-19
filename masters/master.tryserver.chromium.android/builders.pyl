@@ -18,7 +18,12 @@
       "recipe": "chromium_trybot",
       "scheduler": None,
       "slave_pools": ["slaves_with_devices"],
-    }
+    },
+    "android_aura_tester": {
+      "recipe": "chromium_trybot",
+      "scheduler": None,
+      "slave_pools": ["slaves_with_devices"],
+    },
   },
 
   "schedulers": { },
