@@ -678,6 +678,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     }
     if gs_acl is not None:
       fake_factory_properties['gs_acl'] = gs_acl
+    if self.c.TARGET_PLATFORM == 'android':
+      fake_factory_properties['target_os'] = 'android'
 
     args = [
         '--target', self.c.BUILD_CONFIG,
