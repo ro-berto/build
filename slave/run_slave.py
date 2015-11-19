@@ -16,6 +16,7 @@ import time
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BUILD_DIR = os.path.dirname(SCRIPT_DIR)
 ROOT_DIR = os.path.dirname(BUILD_DIR)
+SUBDIR_ROOT = os.path.join(BUILD_DIR, 'nested')
 needs_reboot = False
 
 # Temporarily add scripts to the path.  We do so in a more consistent
@@ -220,9 +221,58 @@ def GetRoot():
   return '/'
 
 
+def _GetSubdirBuildbotPaths():
+  return [
+    os.path.join(SUBDIR_ROOT, slave['subdir'])
+    for slave in chromium_utils.GetSlavesForHost()
+    if slave.get('subdir')
+  ]
+
+
+def _CheckProcessExists(pid):
+  """Checks if a process exists. Posix only."""
+  # Assert this function isn't used with an unsupported OS.
+  assert os.name == 'posix', 'Only posix supported to check for pids.'
+  import errno
+  try:
+    os.kill(pid, 0)
+    return True
+  except OSError as e:
+    return e.errno == errno.EPERM
+
+
+def _CheckTwistdRuns(twistd_pid_file):
+  """Checks if the process specified in the pid file runs.
+  Removes the pid file if not.
+  """
+  with open(twistd_pid_file) as f:
+    pid = int(f.read().strip())
+  if not _CheckProcessExists(pid):
+    os.remove(twistd_pid_file)
+    return False
+  return True
+
+
+def _CheckSubdirBuildbotLiveliness():
+  """Blocks until any subdir buildbot process dies."""
+  while True:
+    time.sleep(60)
+    for botdir in _GetSubdirBuildbotPaths():
+      twistd_pid_file = os.path.join(botdir, 'build', 'slave', 'twistd.pid')
+      if not os.path.exists(twistd_pid_file):
+        print 'Missing %s for subdir buildbot' % twistd_pid_file
+        return
+      if not _CheckTwistdRuns(twistd_pid_file):
+        print 'Process %s is not running' % twistd_pid_file
+        return
+
+
 def SpawnSubdirBuildbotsIfNeeded():
   """Creates "nested/*" directory structure and spawns other bots on host as
   needed.
+
+  Blocks on liveliness of the subdir buildbot processes if script is called
+  with --nodaemon.
 
   Returns: Boolean indicating if subdir buildbots are used.
   """
@@ -231,20 +281,21 @@ def SpawnSubdirBuildbotsIfNeeded():
   if chromium_utils.GetActiveSubdir():
     return False
 
+  subdirs = _GetSubdirBuildbotPaths()
+  if not subdirs:
+    # No subdir buildbots required. Continue with the main buildbot process.
+    return False
+
+  # Checking the subdir twistd pids is implemented for posix only.
+  assert os.name == 'posix', 'Can only us subdir buildbots with posix.'
+
   print 'Spawning other slaves on this host as needed.'
   print 'Run make stopall to terminate.'
 
-  spawned_subdir_buildbots = False
-  for slave in chromium_utils.GetSlavesForHost():
-    subdir = slave.get('subdir')
-    if not subdir:
-      continue
-    spawned_subdir_buildbots = True
-    subdir_root = os.path.join(BUILD_DIR, 'nested')
-    if not os.path.exists(subdir_root):
-      print 'Creating %s' % subdir_root
-      os.mkdir(subdir_root)
-    botdir = os.path.join(subdir_root, subdir)
+  for botdir in subdirs:
+    if not os.path.exists(SUBDIR_ROOT):
+      print 'Creating %s' % SUBDIR_ROOT
+      os.mkdir(SUBDIR_ROOT)
 
     def GClientCall(command, fail_ok=False):
       # We just synced depot_tools, so disable gclient auto-sync.
@@ -283,10 +334,17 @@ def SpawnSubdirBuildbotsIfNeeded():
       )
 
     bot_slavedir = os.path.join(botdir, 'build', 'slave')
-    if not os.path.exists(os.path.join(bot_slavedir, 'twistd.pid')):
+    twistd_pid_file = os.path.join(bot_slavedir, 'twistd.pid')
+    if (not os.path.exists(twistd_pid_file) or
+        not _CheckTwistdRuns(twistd_pid_file)):
       print 'Spawning slave in %s' % bot_slavedir
       subprocess.check_call(['make', 'start'], cwd=bot_slavedir)
-  return spawned_subdir_buildbots
+
+  if '--nodaemon' in sys.argv:
+    # Block on liveliness of the subdir buildbots if called with --nodaemon.
+    _CheckSubdirBuildbotLiveliness()
+
+  return True
 
 
 def GetThirdPartyVersions(master):
