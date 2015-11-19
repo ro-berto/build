@@ -1340,6 +1340,26 @@ def EntryToSlaveName(entry):
   return name
 
 
+def EntryToSlavePool(entry):
+  """Extracts the canonical slave pool name from slaves config dict.
+
+  A pool is either specificed explicitly in the slave dict, or it is the first
+  builder name (alphabetically) associated with the slave.
+  """
+  pool = entry.get('pool')
+  if pool:
+    return pool
+
+  builders = entry.get('builder')
+  if not builders:
+    return None
+
+  if type(builders) not in (tuple, list):
+    builders = [builders]
+  builders = sorted(builders)
+  return builders[0]
+
+
 def GetActiveMaster(slavename=None, default=None):
   """Returns the name of the Active master serving the current host.
 

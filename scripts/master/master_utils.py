@@ -142,6 +142,9 @@ def VerifySetup(c, slaves, enforce_sane_slave_pools=True):
   if len(builders_slaves) != len(slaves_name):
     raise InvalidConfig('Same slave defined multiple times')
 
+  slaves_by_name = {chromium_utils.EntryToSlaveName(s): s
+                    for s in slaves.GetSlaves()}
+
   # Make sure slave pools are either equal or disjoint. This makes capacity
   # analysis and planning simpler, easier, and more reliable.
   if enforce_sane_slave_pools:
@@ -151,6 +154,17 @@ def VerifySetup(c, slaves, enforce_sane_slave_pools=True):
           raise InvalidConfig(
               'Builders %r and %r should have either equal or disjoint slave '
               'pools' % (b1, b2))
+
+      # Explicitly specified slave pools must be consistent.
+      b1_pool = None
+      for slave in b1_slaves:
+        pool = chromium_utils.EntryToSlavePool(slaves_by_name.get(slave, {}))
+        if b1_pool is None:
+          b1_pool = pool
+        if b1_pool != pool:
+          raise InvalidConfig(
+            'Slave %s for build %r belongs to pool %s, but expected %s' % (
+                slave, b1, pool, b1_pool))
 
   # Make sure each slave has their builder.
   builders_name = [b['name'] for b in c['builders']]
