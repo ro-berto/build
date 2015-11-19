@@ -29,7 +29,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     'system_wrappers_unittests',
     'test_support_unittests',
     'tools_unittests',
-    'video_engine_core_unittests',
     'video_engine_tests',
     'voice_engine_unittests',
   )
@@ -48,8 +47,6 @@ class WebRTCApi(recipe_api.RecipeApi):
         'webrtc/system_wrappers/system_wrappers_unittests.isolate',
     'test_support_unittests': 'webrtc/test/test_support_unittests.isolate',
     'tools_unittests': 'webrtc/tools/tools_unittests.isolate',
-    'video_engine_core_unittests':
-        'webrtc/video_engine/video_engine_core_unittests.isolate',
     'video_engine_tests': 'webrtc/video_engine_tests.isolate',
     'voice_engine_unittests':
         'webrtc/voice_engine/voice_engine_unittests.isolate',

@@ -488,27 +488,6 @@
       "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
       "gtest",
       "-s",
-      "video_engine_core_unittests",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/video_engine/video_engine_core_unittests.isolate",
-      "-t",
-      "900"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "video_engine_core_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "gtest",
-      "-s",
       "video_engine_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",

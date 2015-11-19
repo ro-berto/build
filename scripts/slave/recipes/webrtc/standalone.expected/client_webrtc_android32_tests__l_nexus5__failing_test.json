@@ -501,28 +501,6 @@
       "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
       "gtest",
       "-s",
-      "video_engine_core_unittests",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/video_engine/video_engine_core_unittests.isolate",
-      "-t",
-      "900"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "video_engine_core_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "gtest",
-      "-s",
       "video_engine_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
@@ -748,7 +726,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 out of 17 aggregated steps failed. Failures: Step('tools_unittests') failed with return_code 1",
+    "reason": "1 out of 16 aggregated steps failed. Failures: Step('tools_unittests') failed with return_code 1",
     "status_code": 1
   }
 ]
