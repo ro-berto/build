@@ -125,7 +125,7 @@
       "[SLAVE_BUILD]/src/buildtools/linux64/gn",
       "gen",
       "[SLAVE_BUILD]/src/out/Debug",
-      "--args=is_clang=true is_component_build=true is_debug=true gomadir=\"/b/build/goma\" symbol_level=1 target_cpu=\"x64\" use_goma=true target_os=\"chromeos\" use_ozone=true"
+      "--args=is_clang=true is_component_build=true is_debug=true goma_dir=\"/b/build/goma\" symbol_level=1 target_cpu=\"x64\" use_goma=true target_os=\"chromeos\" use_ozone=true"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "generate build files for chromeos"
@@ -208,7 +208,7 @@
       "[SLAVE_BUILD]/src/buildtools/linux64/gn",
       "gen",
       "[SLAVE_BUILD]/src/out/Debug",
-      "--args=is_clang=true is_component_build=true is_debug=true gomadir=\"/b/build/goma\" symbol_level=1 target_cpu=\"x64\" use_goma=true"
+      "--args=is_clang=true is_component_build=true is_debug=true goma_dir=\"/b/build/goma\" symbol_level=1 target_cpu=\"x64\" use_goma=true"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "generate build files for linux"
