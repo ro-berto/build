@@ -596,7 +596,7 @@ class Bisector(object):
       step_name = 'Waiting for revision ' + revision_list[0].revision_string
       if len(revision_list) > 1:
         step_name += ' and %d other revision(s).' % (len(revision_list) - 1)
-      step_result = api.m.python(
+      api.m.python(
           str(step_name),
           script,
           args_list,

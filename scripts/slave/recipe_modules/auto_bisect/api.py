@@ -49,12 +49,12 @@ class AutoBisectApi(recipe_api.RecipeApi):
         data when performing certain tests (such as results output).
     """
     self.override_poll_interval = bisect_config_dict.get('poll_sleep')
-    revision_class = self._get_revision_class(bisect_config_dict['test_type'])
+    revision_class = self._get_revision_class()
     return bisector.Bisector(self, bisect_config_dict, revision_class,
                              init_revisions=not dummy_mode)
 
-  def _get_revision_class(self, test_type):
-    """Gets the particular subclass of Revision needed for the test type."""
+  def _get_revision_class(self):
+    """Gets the particular subclass of Revision."""
     return perf_revision_state.PerfRevisionState
 
   def gsutil_file_exists(self, path):
@@ -193,8 +193,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
         api.chromium_android.adb_install_apk('ChromePublic.apk')
       test_runner()
 
-  def start_try_job(self, api, update_step=None, master_dict=None, extra_src='',
-                    path_to_config='', **kwargs):
+  def start_try_job(self, api, update_step=None, master_dict=None, **kwargs):
     if master_dict is None:  # pragma: no cover
       master_dict = {}
     affected_files = self.m.tryserver.get_files_affected_by_patch()
@@ -209,7 +208,9 @@ class AutoBisectApi(recipe_api.RecipeApi):
     try:
       # Run legacy bisect script if the patch contains bisect.cfg.
       if BISECT_CONFIG_FILE in affected_files:
-        self.run_bisect_script(extra_src='', path_to_config='', **kwargs)
+        kwargs['extra_src'] = ''
+        kwargs['path_to_config'] = ''
+        self.run_bisect_script(**kwargs)
       elif api.properties.get('bisect_config'):
         self.start_test_run_for_bisect(api, update_step, master_dict)
       else:

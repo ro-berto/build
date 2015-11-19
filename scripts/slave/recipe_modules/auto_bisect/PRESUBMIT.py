@@ -9,7 +9,7 @@ See http://dev.chromium.org/developers/how-tos/depottools/presubmit-scripts.
 
 def CommonChecks(input_api, output_api):  # pragma: no cover
   results = []
-  # TODO(qyearsley): Add pylint checks (input_api.canned_checks.RunPylint).
+  results.extend(input_api.canned_checks.RunPylint(input_api, output_api))
   results.extend(
       input_api.canned_checks.RunUnitTestsInDirectory(
           input_api, output_api,

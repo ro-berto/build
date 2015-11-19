@@ -95,6 +95,6 @@ def main(config):
 
 
 if __name__ == '__main__':
-  config = json.loads(sys.stdin.read())
-  print main(config)
+  input_config = json.loads(sys.stdin.read())
+  print main(input_config)
   sys.exit(0)
