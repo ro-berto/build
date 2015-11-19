@@ -267,7 +267,7 @@
       "--build-number=571",
       "--run-python-script",
       "[SLAVE_BUILD]/src/build/android/method_count.py",
-      "[SLAVE_BUILD]/src/out/Release/chrome_public_apk/classes.dex"
+      "[SLAVE_BUILD]/src/out/Release/chrome_public_apk/classes.dex.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "method_count"

@@ -127,7 +127,7 @@ def RunSteps(api, buildername):
 
   if config.get('java_method_count'):
     api.chromium_android.java_method_count(
-        api.chromium.output_dir.join('chrome_public_apk', 'classes.dex'))
+        api.chromium.output_dir.join('chrome_public_apk', 'classes.dex.zip'))
 
   api.adb.root_devices()
   api.chromium_android.spawn_logcat_monitor()
