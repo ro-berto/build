@@ -848,7 +848,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'arm_rel_archive',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Arm',
@@ -864,7 +863,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'arm_dbg_archive',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Arm - debug - 1',
