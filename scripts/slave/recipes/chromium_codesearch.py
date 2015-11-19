@@ -144,7 +144,13 @@ def RunSteps(api):
 
   result = GenerateCompilationDatabase(api, debug_path, targets, platform)
 
-  api.chromium.compile(targets)
+  try:
+    api.chromium.compile(targets)
+  except api.step.StepFailure as f: # pragma: no cover
+    # Even if compilation fails, the Grok indexer may still be able to extract
+    # (almost) all cross references. And the downside of failing on compile
+    # error is that Codesearch gets stale.
+    pass
 
   environment = bot_config.get('environment', 'prod')
   if environment == 'staging':
