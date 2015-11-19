@@ -435,7 +435,8 @@ def msan_full_origin_tracking(c):
 
 # This is currently needed to make tests return a non-zero exit code when an
 # UBSan failure happens.
-# TODO(kjellander,samsonov): Add tracking bug for fixing exit code upstream.
+# TODO(kjellander,samsonov): Remove when the upstream bug
+# (https://llvm.org/bugs/show_bug.cgi?id=25569) is fixed.
 @config_ctx()
 def ubsan_fail_on_errors(c):
   c.gyp_env.GYP_DEFINES['release_extra_cflags'] = (
