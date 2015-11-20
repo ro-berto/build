@@ -183,20 +183,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[auto_bisect]/resources/resolve_range.py",
+      "RECIPE_MODULE[auto_bisect]/resources/fetch_intervening_revisions.py",
       "a6298e4afedbf2cd461755ea6f45b0ad64222222",
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[SLAVE_BUILD]",
     "name": "Expanding revision range.for revisions a6298e4afedbf2cd461755ea6f45b0ad64222222:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"314015\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"dcdcdc0ff1122212323134879ddceeb1240b0988\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"314016\"@@@",

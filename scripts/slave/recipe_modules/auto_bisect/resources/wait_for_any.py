@@ -11,7 +11,9 @@ import subprocess
 import sys
 import time
 
-import check_buildbot
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.path.pardir))
+
+from resources import check_buildbot
 
 # Return codes.
 COMPLETED, FAILED, TIMED_OUT, BAD_ARGS = 0, 1, 2, 3

@@ -344,17 +344,13 @@ def _make_test(api, test_data, test_name, platform='linux'):
 
 
 def _get_revision_range_step_data(api, range_data):
+  """Adds canned output for fetch_intervening_revisions.py."""
   min_rev = range_data[0]['hash']
   max_rev = range_data[-1]['hash']
-  # Simulating the output of git log (reverse order from max_rev until and
-  # excluding min_rev).
-  simulated_git_log_output = [[d['hash'], d['commit_pos']]
-                              for d in range_data[:-1]]
+  output = [[r['hash'], r['commit_pos']] for r in range_data[1:-1]]
   step_name = ('Expanding revision range.for revisions %s:%s' %
                (min_rev, max_rev))
-  result = api.step_data(step_name, stdout=api.json.output(
-      simulated_git_log_output))
-  return result
+  return api.step_data(step_name, stdout=api.json.output(output))
 
 
 def _get_config(params=None):

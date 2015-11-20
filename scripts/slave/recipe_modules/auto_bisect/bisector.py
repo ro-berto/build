@@ -112,7 +112,7 @@ class Bisector(object):
       self.good_rev.deps = {}
       self.lkgr = self.good_rev
     if init_revisions:
-      self._expand_revision_range()
+      self._expand_chromium_revision_range()
 
   def config_step(self):
     """Yields a simple echo step that outputs the bisect config."""
@@ -263,60 +263,31 @@ class Bisector(object):
                                       deps_rev=new_commit_hash)
     return patch_text, patched_contents
 
-  def _get_rev_range(self, min_rev, max_rev):
-    script = self.api.resource('resolve_range.py')
-    depot_path = self.api.m.path['slave_build'].join('src')
-    step_name = ('for revisions %s:%s' %
-                 (min_rev, max_rev))
-    try:
-      step_result = self.api.m.python(step_name, script, [min_rev, max_rev],
-                                      stdout=self.api.m.json.output(),
-                                      cwd=depot_path)
-    except self.api.m.step.StepFailure:  # pragma: no cover
-      self.surface_result('BAD_REV')
-      raise
-    # We skip the first revision in the list as it is max_rev
-    new_revisions = step_result.stdout[1:][::-1]
-    return new_revisions
-
-  def _get_rev_range_for_depot(self, depot_name, min_rev, max_rev,
-                               base_revision):
-    results = []
-    depot = depot_config.DEPOT_DEPS_NAME[depot_name]
-    depot_path = self.api.m.path['slave_build'].join(depot['src'])
-    step_name = ('Expanding revision range for revision %s on depot %s'
-                 % (max_rev, depot_name))
-
-    try:
-      step_result = self.api.m.git('log', '--format=%H', min_rev + '...' +
-                                   max_rev, stdout=self.api.m.raw_io.output(),
-                                   cwd=depot_path, name=step_name)
-    except self.api.m.step.StepFailure:  # pragma: no cover
-      self.surface_result('BAD_REV')
-      raise
-    # We skip the first revision in the list as it is max_rev
-    new_revisions = step_result.stdout.splitlines()[1:]
-    for revision in new_revisions:
-      results.append(self.revision_class(None, self,
-                                         base_revision=base_revision,
-                                         deps_revision=revision,
-                                         dependency_depot_name=depot_name))
-    results.reverse()
-    return results
-
-  def _expand_revision_range(self):
+  def _expand_chromium_revision_range(self):
     """Populates the revisions attribute.
 
     After running this method, self.revisions should contain all the chromium
     revisions between the good and bad revisions.
     """
     with self.api.m.step.nest('Expanding revision range'):
-      rev_list = self._get_rev_range(self.good_rev.commit_hash,
-                                     self.bad_rev.commit_hash)
-      intermediate_revs = [self.revision_class(str(x), self, cp=y)
-                           for x, y in rev_list]
-      self.revisions = [self.good_rev] + intermediate_revs + [self.bad_rev]
+      rev_list = self._get_chromium_rev_range(
+          self.good_rev.commit_hash, self.bad_rev.commit_hash)
+      intervening_revs = [self.revision_class(str(x), self, cp=y)
+                          for x, y in rev_list]
+      self.revisions = [self.good_rev] + intervening_revs + [self.bad_rev]
       self._update_revision_list_indexes()
+
+  def _get_chromium_rev_range(self, min_rev, max_rev):
+    try:
+      step_result = self.api.m.python(
+          'for revisions %s:%s' % (min_rev, max_rev),
+          self.api.resource('fetch_intervening_revisions.py'),
+          [min_rev, max_rev],
+          stdout=self.api.m.json.output())
+      return step_result.stdout
+    except self.api.m.step.StepFailure:  # pragma: no cover
+      self.surface_result('BAD_REV')
+      raise
 
   def _expand_deps_revisions(self, revision_to_expand):
     """Populates the revisions attribute with additional deps revisions.
@@ -361,6 +332,32 @@ class Bisector(object):
       if warning_text not in self.warnings:
         self.warnings.append(warning_text)
     return False
+
+  def _get_rev_range_for_depot(self, depot_name, min_rev, max_rev,
+                               base_revision):
+    results = []
+    depot = depot_config.DEPOT_DEPS_NAME[depot_name]
+    depot_path = self.api.m.path['slave_build'].join(depot['src'])
+    step_name = ('Expanding revision range for revision %s on depot %s'
+                 % (max_rev, depot_name))
+
+    try:
+      step_result = self.api.m.git('log', '--format=%H', min_rev + '...' +
+                                   max_rev, stdout=self.api.m.raw_io.output(),
+                                   cwd=depot_path, name=step_name)
+    except self.api.m.step.StepFailure:  # pragma: no cover
+      self.surface_result('BAD_REV')
+      raise
+    # We skip the first revision in the list as it is max_rev
+    new_revisions = step_result.stdout.splitlines()[1:]
+    for revision in new_revisions:
+      results.append(self.revision_class(None, self,
+                                         base_revision=base_revision,
+                                         deps_revision=revision,
+                                         dependency_depot_name=depot_name))
+    results.reverse()
+    return results
+
 
   def _update_revision_list_indexes(self):
     """Sets list_index, next and previous properties for each revision."""
