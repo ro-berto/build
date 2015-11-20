@@ -143,7 +143,7 @@ def _ComputeSchedulers(builders):
       schedulers.append(SingleBranchScheduler(
           name=scheduler_name,
           branch=scheduler_values.get('branch', 'master'),
-          treeStableTimer=60,
+          treeStableTimer=scheduler_values.get('treeStableTimer', 60),
           builderNames=builder_names))
 
     elif scheduler_type == 'cron':
