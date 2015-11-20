@@ -15,6 +15,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 MAIN_WATERFALL_MASTERS = [
+    'master.chromium',
     'master.chromium.chrome',
     'master.chromium.chromiumos',
     'master.chromium.gpu',
