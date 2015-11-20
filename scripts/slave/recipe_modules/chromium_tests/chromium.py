@@ -104,9 +104,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'compile_targets': [
-        'all',
-      ],
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
