@@ -21,7 +21,6 @@ def RunSteps(api):
       'BUILDBOT_BUILDERNAME': api.properties['buildername'],
       'BUILDBOT_REVISION': api.properties['revision'],
       'BUILDBOT_GOT_REVISION': got_revision,
-      'BUILDBOT_SLAVE_TYPE': api.properties['slavetype'],
   }
   api.python('annotated steps',
              api.path['checkout'].join('buildbot', 'build.py'),
@@ -36,7 +35,6 @@ def GenTests(api):
     api.properties(
       mastername = 'client.wasm.llvm',
       buildername = 'linux',
-      revision = 'abcd',
       slavename = 'TestSlavename',
-      slavetype = 'BuilderTester'
+      revision = 'abcd',
     ))

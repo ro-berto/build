@@ -61,8 +61,7 @@
       "BUILDBOT_BUILDERNAME": "linux",
       "BUILDBOT_GOT_REVISION": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "BUILDBOT_MASTERNAME": "client.wasm.llvm",
-      "BUILDBOT_REVISION": "abcd",
-      "BUILDBOT_SLAVE_TYPE": "BuilderTester"
+      "BUILDBOT_REVISION": "abcd"
     },
     "name": "annotated steps"
   },
