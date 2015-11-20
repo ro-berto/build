@@ -580,9 +580,10 @@ class BuildBucketIntegrator(object):
     if not lease or lease['key'] != build_def['lease_key']:
       self._stop_build(
           build, 'Build started, but it is lease key is not current.')
+      return
 
-    assert not self._leases[build_id].get('build')
-    self._leases[build_id]['build'] = build
+    assert not lease.get('build')
+    lease['build'] = build
     resp = yield self._leased_build_call('start', build, {
         'url': self.buildbot.get_build_url(build),
     })
