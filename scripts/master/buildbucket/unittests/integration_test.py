@@ -517,25 +517,26 @@ class IntegratorTest(unittest.TestCase):
 
   def test_clean_completed_build_requests(self):
     with self.create_integrator():
-      def make_build_request(complete):
+      def make_build_request(complete, has_builds):
         result = Mock()
         result.is_failed.return_value = complete
+        result.has_builds.return_value = has_builds
         return result
       self.integrator._leases = {
           '1': {
               'lease_key': LEASE_KEY,
-              'build_request': make_build_request(True),
+              'build_request': make_build_request(True, False),
           },
           '2': {
               'lease_key': LEASE_KEY,
-              'build_request': make_build_request(False),
+              'build_request': make_build_request(False, False),
           },
           '3': {
               'lease_key': LEASE_KEY,
-              'build_request': make_build_request(True),
-              'build': Mock(),
+              'build_request': make_build_request(True, True),
           },
       }
+
 
       run_deferred(self.integrator.clean_completed_build_requests())
 

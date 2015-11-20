@@ -513,8 +513,9 @@ class BuildBucketIntegrator(object):
     for build_id, lease in self._leases.items():
       request = lease['build_request']
       # Buildbot does not distinguish failed and cancelled build requests,
-      # but a cancelled build request doesn't have a started build.
-      is_cancelled = (yield request.is_failed()) and not lease.get('build')
+      # but a cancelled build request doesn't have a build.
+      is_cancelled = (
+          (yield request.is_failed()) and not (yield request.has_builds()))
       if not is_cancelled:
         continue
 

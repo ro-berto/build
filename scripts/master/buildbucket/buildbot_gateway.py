@@ -61,6 +61,11 @@ class BuildRequestGateway(object):
         brdict.get('results') == build_results.FAILURE
     )
 
+  @inlineCallbacks
+  def has_builds(self):
+    builds = yield self.master.db.builds.getBuildForRequest(self.brid)
+    returnValue(bool(builds))
+
 
 class BuildbotGateway(object):
   """All buildbot APIs needed by BuildBucketIntegrator to function.
