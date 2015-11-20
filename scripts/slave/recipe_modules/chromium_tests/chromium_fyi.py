@@ -54,6 +54,8 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'archive_build': True,
+      'gs_bucket': 'chromium-fyi-archive',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
