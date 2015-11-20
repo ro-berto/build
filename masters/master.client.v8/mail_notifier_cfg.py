@@ -40,15 +40,12 @@ categories_steps = {
 }
 
 exclusions = {
-  'V8 Linux - arm - armv8-a - sim': [],
-  'V8 Linux - arm - armv8-a - sim - debug': [],
   'V8 Linux - swarming staging builder': [],
   'V8 Linux - swarming staging 1': [],
   'V8 Linux - swarming staging 2': [],
   'V8 Linux - swarming staging 3': [],
   'V8 Linux - debug - greedy allocator': [],
   'V8 Linux64 - debug - greedy allocator': [],
-  'V8 Linux64 - cfi': [],
   'V8 Linux - ppc - sim': [],
   'V8 Linux - ppc64 - sim': [],
   'V8 Linux - mipsel - sim': [],

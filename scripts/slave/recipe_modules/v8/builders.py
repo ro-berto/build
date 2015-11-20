@@ -612,23 +612,6 @@ BUILDERS = {
         'tests': [V8Testing, Benchmarks, SimdJs],
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux64 - cfi': {
-        'chromium_apply_config': ['v8_ninja', 'clang', 'goma', 'cfi'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'tests': [
-          V8Testing,
-          OptimizeForSize,
-          Benchmarks,
-          Test262,
-          Mozilla,
-          SimdJs,
-        ],
-        'testing': {'platform': 'linux'},
-      },
 ####### Category: Windows
       'V8 Win32 - builder': {
         'chromium_apply_config': [
@@ -1452,6 +1435,23 @@ BUILDERS = {
           'os': 'Ubuntu-14.04',
         },
         'tests': [V8Testing, Test262_2],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux64 - cfi': {
+        'chromium_apply_config': ['v8_ninja', 'clang', 'goma', 'cfi'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [
+          V8Testing,
+          OptimizeForSize,
+          Benchmarks,
+          Test262,
+          Mozilla,
+          SimdJs,
+        ],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - memcheck': {
