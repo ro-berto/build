@@ -527,6 +527,21 @@
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
+      "rm",
+      "-r",
+      "gs://mandoline/latest/linux"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil remove"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
       "cp",
       "[SLAVE_BUILD]/src/out/Release/foo",
       "gs://mandoline/37.0.2021.0/linux/foo"
@@ -535,6 +550,24 @@
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mandoline/37.0.2021.0/linux/foo@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "[SLAVE_BUILD]/src/out/Release/foo",
+      "gs://mandoline/latest/linux/foo"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mandoline/latest/linux/foo@@@"
     ]
   },
   {

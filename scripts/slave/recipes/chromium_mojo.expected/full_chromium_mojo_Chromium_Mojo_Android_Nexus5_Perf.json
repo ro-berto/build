@@ -683,6 +683,21 @@
     "name": "read FILES.cfg"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "rm",
+      "-r",
+      "gs://mandoline/latest/android"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil remove"
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

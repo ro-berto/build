@@ -130,18 +130,23 @@ def _UploadMandolineToGoogleStorage(api):
     return
 
   # Read a limited FILES.cfg file-list format, uploading each applicable entry.
+  # Also clobber and upload a copy of the files to the 'latest' build directory.
   files = api.path['checkout'].join('mandoline', 'tools', 'data', 'FILES.cfg')
   test_data = 'FILES=[{\'filepath\': \'foo\', \'platforms\': [\'linux\'],},]'
   files_data = api.file.read('read FILES.cfg', files, test_data=test_data)
   execution_globals = {}
   exec(files_data, execution_globals)
   gs_path = '%s/%s' % (version, api.chromium.c.TARGET_PLATFORM)
+  gs_latest_path = 'latest/%s' % api.chromium.c.TARGET_PLATFORM
+  api.gsutil.remove_url('gs://%s/%s' % (bucket, gs_latest_path), args=['-r'])
   for file_dictionary in execution_globals['FILES']:
     if api.chromium.c.TARGET_PLATFORM in file_dictionary['platforms']:
       file_path = file_dictionary['filepath']
       local_path = api.chromium.output_dir.join(file_path)
       remote_path = '%s/%s' % (gs_path, file_path)
       args = ['-r'] if file_dictionary.get('directory', False) else []
+      api.gsutil.upload(local_path, bucket, remote_path, args=args)
+      remote_path = '%s/%s' % (gs_latest_path, file_path)
       api.gsutil.upload(local_path, bucket, remote_path, args=args)
 
 
