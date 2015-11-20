@@ -136,16 +136,71 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._verbose = value
 
   @property
+  def default_expiration(self):
+    """Number of seconds that the server will wait to find a bot able to run the
+    task.
+
+    If not bot runs the task by this number of seconds, the task is canceled as
+    EXPIRED.
+
+    This value can be changed per individual task.
+    """
+    return self._default_expiration
+
+  @default_expiration.setter
+  def default_expiration(self, value):
+    assert 30 <= value <= 24*60*60, value
+    self._default_expiration = value
+
+  @property
   def default_hard_timeout(self):
+    """Number of seconds in which the task must complete.
+
+    If the task takes more than this amount of time, the process is assumed to
+    be hung. It forcibly killed via SIGTERM then SIGKILL after a grace period
+    (default: 30s). Then the task is marked as TIMED_OUT.
+
+    This value can be changed per individual task.
+    """
     return self._default_hard_timeout
 
   @default_hard_timeout.setter
   def default_hard_timeout(self, value):
-    assert 30 <= value
+    assert 30 <= value <= 6*60*60, value
     self._default_hard_timeout = value
 
   @property
+  def default_io_timeout(self):
+    """Number of seconds at which interval the task must write to stdout or
+    stderr.
+
+    If the task takes more than this amount of time between writes to stdout or
+    stderr, the process is assumed to be hung. It forcibly killed via SIGTERM
+    then SIGKILL after a grace period (default: 30s). Then the task is marked as
+    TIMED_OUT.
+
+    This value can be changed per individual task.
+    """
+    return self._default_io_timeout
+
+  @default_io_timeout.setter
+  def default_io_timeout(self, value):
+    assert 30 <= value <= 6*60*60, value
+    self._default_io_timeout = value
+
+  @property
   def default_idempotent(self):
+    """Bool to specify if task deduplication can be done.
+
+    When set, the server will search for another task that ran in the last days
+    that had the exact same properties. If it finds one, the task will not be
+    run at all, the previous results will be returned as-is.
+
+    For more infos, see:
+    https://github.com/luci/luci-py/blob/master/appengine/swarming/doc/User-Guide.md#task-idempotency
+
+    This value can be changed per individual task.
+    """
     return self._default_idempotent
 
   @default_idempotent.setter
@@ -155,6 +210,13 @@ class SwarmingApi(recipe_api.RecipeApi):
 
   @property
   def default_user(self):
+    """String to represent who triggered the task.
+
+    The user should be an email address when someone requested testing via
+    pre-commit or manual testing.
+
+    This value can be changed per individual task.
+    """
     return self._default_user
 
   @default_user.setter
@@ -166,13 +228,18 @@ class SwarmingApi(recipe_api.RecipeApi):
   def default_dimensions(self):
     """Returns a copy of the default Swarming dimensions to run task on.
 
+    The dimensions are what is used to filter which bots are able to run the
+    task successfully. This is particularly useful to discern between OS
+    versions, type of CPU, GPU card or VM, or preallocated pool.
+
     Example:
       {'cpu': 'x86-64', 'os': 'Windows-XP-SP3'}
+
+    This value can be changed per individual task.
     """
     return ReadOnlyDict(self._default_dimensions)
 
   def set_default_dimension(self, key, value):
-    """Sets Swarming OS dimension to run task on by default."""
     assert isinstance(key, basestring), key
     assert isinstance(value, basestring) or value is None, value
     if value is None:
@@ -182,28 +249,44 @@ class SwarmingApi(recipe_api.RecipeApi):
 
   @property
   def default_env(self):
-    """Returns a copy of the default environment variable to run tasks with."""
+    """Returns a copy of the default environment variable to run tasks with.
+
+    By default the environment variable is not modified. Additional environment
+    variables can be specified for each task.
+
+    This value can be changed per individual task.
+    """
     return ReadOnlyDict(self._default_env)
 
   def set_default_env(self, key, value):
-    """Sets an environment variable to run tasks with."""
     assert isinstance(key, basestring), key
     assert isinstance(value, basestring), value
     self._default_env[key] = value
 
   @property
   def default_priority(self):
-    """Swarming task priority for tasks triggered from the recipe."""
+    """Swarming task priority for tasks triggered from the recipe.
+
+    Priority ranges from 1 to 255. The lower the value, the most important the
+    task is and will preempty any task with a lower priority.
+
+    This value can be changed per individual task.
+    """
     return self._default_priority
 
   @default_priority.setter
   def default_priority(self, value):
-    """Sets swarming task priority for tasks triggered from the recipe."""
-    assert 0 <= value <= 255
+    assert 1 <= value <= 255
     self._default_priority = value
 
   def add_default_tag(self, tag):
-    """Adds a tag to the Swarming tasks triggered."""
+    """Adds a tag to the Swarming tasks triggered.
+
+    Tags are used for maintenance, they can be used to calculate the number of
+    tasks run for a day to calculate the cost of a type of type (CQ, ASAN, etc).
+
+    Tags can be added per individual task.
+    """
     assert ':' in tag, tag
     self._default_tags.add(tag)
 
@@ -277,8 +360,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         buildername=self.m.properties.get('buildername'),
         buildnumber=self.m.properties.get('buildnumber'),
         user=self.default_user,
-        expiration=self._default_expiration,
-        io_timeout=self._default_io_timeout,
+        expiration=self.default_expiration,
+        io_timeout=self.default_io_timeout,
         hard_timeout=self.default_hard_timeout,
         idempotent=idempotent,
         extra_args=extra_args,

@@ -35,6 +35,9 @@ def RunSteps(api, simulated_version,
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
   api.swarming.swarming_server = 'https://chromium-swarm-dev.appspot.com'
   api.swarming.add_default_tag('master:tryserver')
+  api.swarming.default_expiration = 60*60
+  api.swarming.default_hard_timeout = 60*60
+  api.swarming.default_io_timeout = 20*60
   api.swarming.default_idempotent = True
   api.swarming.default_priority = 30
   api.swarming.default_user = 'joe'
