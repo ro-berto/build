@@ -27,6 +27,23 @@ SPEC = {
         'platform': 'mac',
       },
     },
+    'Chromium Mac 10.10 MacViews': {
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'chromium_apply_config': ['chromium_mac_mac_views'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'testing': {
+        'platform': 'mac',
+      },
+    },
     'Chromium Mac 10.11': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',

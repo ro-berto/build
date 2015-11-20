@@ -648,6 +648,10 @@ def chromium_mac_asan(c):
   if c.gyp_env.GYP_DEFINES['target_arch'] == 'x64':
     c.gyp_env.GYP_DEFINES['host_arch'] = 'x64'
 
+@config_ctx(includes=['chromium'])
+def chromium_mac_mac_views(c):
+  c.gyp_env.GYP_DEFINES['mac_views_browser'] = '1'
+
 @config_ctx(includes=['ninja', 'clang', 'goma', 'msan', 'chromium_sanitizer'])
 def chromium_msan(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
