@@ -151,6 +151,10 @@ CHROMIUM_BLINK_TESTS_BUILDERS = freeze([
 
 
 CHROMIUM_BLINK_TESTS_PATHS = freeze([
+  # Service worker code is primarily tested in Blink layout tests.
+  'content/browser/service_worker',
+  'content/child/service_worker',
+  'content/renderer/service_worker',
   'third_party/WebKit',
   'third_party/harfbuzz-ng',
   'v8',
