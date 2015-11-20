@@ -82,7 +82,7 @@
     "env": {
       "CXX": "/usr/bin/arm-linux-gnueabihf-g++",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "arm_float_abi=hard target_arch=arm test_isolation_mode=prepare v8_target_arch=arm",
+      "GYP_DEFINES": "arm_float_abi=hard gomadir='[BUILD]/goma' target_arch=arm test_isolation_mode=prepare use_goma=1 v8_target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "LINK": "/usr/bin/arm-linux-gnueabihf-g++"
     },
@@ -110,12 +110,22 @@
       "ninja",
       "--crosstool",
       "/usr/bin/arm-linux-gnueabihf",
+      "--compiler",
+      "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
+      "--goma-dir",
+      "[BUILD]/goma",
       "--arch",
       "arm",
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile"
+    "name": "compile",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [
