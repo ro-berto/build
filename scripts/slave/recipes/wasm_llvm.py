@@ -14,13 +14,13 @@ DEPS = [
 def RunSteps(api):
   api.gclient.set_config('wasm_llvm')
   result = api.bot_update.ensure_checkout(force=True)
-  got_revision = result.presentation.properties['got_revision']
+  got_revision = result.presentation.properties['got_experimental_revision']
 
   env = {
       'BUILDBOT_MASTERNAME': api.properties['mastername'],
       'BUILDBOT_BUILDERNAME': api.properties['buildername'],
       'BUILDBOT_REVISION': api.properties['revision'],
-      'BUILDBOT_GOT_REVISION': got_revision,
+      'BUILDBOT_GOT_EXPERIMENTAL_REVISION': got_revision,
   }
   api.python('annotated steps',
              api.path['checkout'].join('buildbot', 'build.py'),

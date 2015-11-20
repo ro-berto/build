@@ -335,7 +335,7 @@ def wasm_llvm(c):
   s.url = ChromiumGitURL(
       c, 'external', 'github.com', 'WebAssembly', 'experimental.git')
   m = c.got_revision_mapping
-  m['src'] = 'got_revision'
+  m['src'] = 'got_experimental_revision'
   c.revisions['src'] = 'origin/master'
 
 @config_ctx()
