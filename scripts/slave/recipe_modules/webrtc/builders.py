@@ -44,15 +44,6 @@ RECIPE_CONFIGS = freeze({
     'gclient_apply_config': ['android'],
     'test_suite': 'android',
   },
-  # Tempoarary config to disable Goma: crbug.com/558255.
-  'webrtc_android_no_goma': {
-    'chromium_config': 'android_common',
-    'chromium_apply_config': ['ninja', 'static_library', 'default_compiler'],
-    'chromium_android_config': 'webrtc',
-    'gclient_config': 'webrtc',
-    'gclient_apply_config': ['android'],
-    'test_suite': 'android',
-  },
   'webrtc_android_clang': {
     'chromium_config': 'android_clang',
     'chromium_android_config': 'webrtc',
@@ -1716,7 +1707,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'android_rel': {
-        'recipe_config': 'webrtc_android_no_goma',
+        'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
