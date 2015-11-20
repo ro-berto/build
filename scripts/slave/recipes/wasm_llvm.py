@@ -13,15 +13,30 @@ DEPS = [
 
 def RunSteps(api):
   api.gclient.set_config('wasm_llvm')
-  api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True)
+  got_revision = result.presentation.properties['got_revision']
 
+  env = {
+      'BUILDBOT_MASTERNAME': api.properties['mastername'],
+      'BUILDBOT_BUILDERNAME': api.properties['buildername'],
+      'BUILDBOT_REVISION': api.properties['revision'],
+      'BUILDBOT_GOT_REVISION': got_revision,
+      'BUILDBOT_SLAVE_TYPE': api.properties['slavetype'],
+  }
   api.python('annotated steps',
              api.path['checkout'].join('buildbot', 'build.py'),
              allow_subannotations=True,
-             cwd=api.path['checkout'])
+             cwd=api.path['checkout'],
+             env = env)
 
 
 def GenTests(api):
-  yield(api.test('linux') +
-        api.properties.generic(mastername='client.wasm.llvm',
-                               buildername='linux'))
+  yield (
+    api.test('linux') +
+    api.properties(
+      mastername = 'client.wasm.llvm',
+      buildername = 'linux',
+      revision = 'abcd',
+      slavename = 'TestSlavename',
+      slavetype = 'BuilderTester'
+    ))

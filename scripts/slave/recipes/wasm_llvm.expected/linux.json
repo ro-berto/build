@@ -19,7 +19,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
+      "src@origin/master",
       "--force",
       "--output_manifest"
     ],
@@ -57,6 +57,13 @@
       "[SLAVE_BUILD]/src/buildbot/build.py"
     ],
     "cwd": "[SLAVE_BUILD]/src",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "linux",
+      "BUILDBOT_GOT_REVISION": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "BUILDBOT_MASTERNAME": "client.wasm.llvm",
+      "BUILDBOT_REVISION": "abcd",
+      "BUILDBOT_SLAVE_TYPE": "BuilderTester"
+    },
     "name": "annotated steps"
   },
   {

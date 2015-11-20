@@ -336,6 +336,7 @@ def wasm_llvm(c):
       c, 'external', 'github.com', 'WebAssembly', 'experimental.git')
   m = c.got_revision_mapping
   m['src'] = 'got_revision'
+  c.revisions['src'] = 'origin/master'
 
 @config_ctx()
 def gyp(c):
