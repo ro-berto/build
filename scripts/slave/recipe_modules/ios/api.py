@@ -51,6 +51,18 @@ class iOSApi(recipe_api.RecipeApi):
     return self.__config['configuration']
 
   @property
+  def using_gyp(self):
+    assert self.__config is not None
+    return not self.using_mb or self.__config.get('mb_type') == 'gyp'
+
+  @property
+  def using_mb(self):
+    assert self.__config is not None
+    # MB and GN only work if we're doing ninja builds, so we will
+    # ignore the mb_type setting if compiler isn't set to ninja.
+    return self.__config['mb_type'] is not None and self.compiler == 'ninja'
+
+  @property
   def platform(self):
     assert self.__config is not None
     if self.__config['sdk'].startswith('iphoneos'):
@@ -118,14 +130,15 @@ class iOSApi(recipe_api.RecipeApi):
       ):
         self.__config[key] = parent_config[key]
 
-    # We set some default GYP_DEFINES so developers don't have to set them
-    # manually on every bot. Add them in here.
-    self.__config['GYP_DEFINES']['component'] = 'static_library'
-    self.__config['GYP_DEFINES']['OS'] = 'ios'
+    # In the older dict-based bot configs we didn't set these values
+    # since they were the same on every bot. In the newer configs they
+    # are set anyway since MB needs them as well.
+    if isinstance(self.__config['GYP_DEFINES'], dict):
+      self.__config['GYP_DEFINES']['component'] = 'static_library'
+      self.__config['GYP_DEFINES']['OS'] = 'ios'
 
     # TODO(crbug.com/552146): Once 'all' works, the default should be ['all'].
     self.__config.setdefault('additional_compile_targets', ['All'])
-    self.__config.setdefault('use_mb', False)
 
     # In order to simplify the code that uses the values of self.__config, here
     # we default to empty values of their respective types, so in other places
@@ -134,6 +147,8 @@ class iOSApi(recipe_api.RecipeApi):
     self.__config['triggered bots'] = self.__config.get('triggered bots', {})
     self.__config['tests'] = self.__config.get('tests', [])
     self.__config['env'] = self.__config.get('env', {})
+
+    self.__config.setdefault('mb_type', None)
 
     # Elements of the "tests" list are dicts. There are two types of elements,
     # determined by the presence of one of these mutually exclusive keys:
@@ -208,8 +223,10 @@ class iOSApi(recipe_api.RecipeApi):
     ], step_test_data=lambda: self.m.json.test_api.output({}))
 
     cfg = self.m.chromium.make_config()
-    cfg.gyp_env.GYP_CROSSCOMPILE = 1
-    cfg.gyp_env.GYP_DEFINES = copy.deepcopy(self.__config['GYP_DEFINES'])
+
+    if self.using_gyp:
+      cfg.gyp_env.GYP_CROSSCOMPILE = 1
+      cfg.gyp_env.GYP_DEFINES = copy.deepcopy(self.__config['GYP_DEFINES'])
     self.m.chromium.c = cfg
 
   def build(self, suffix=None):
@@ -218,16 +235,16 @@ class iOSApi(recipe_api.RecipeApi):
 
     suffix = ' (%s)' % suffix if suffix else ''
 
-    # MB and GN only work if we're doing ninja builds, so we will
-    # ignore the use_mb setting if compiler isn't set to ninja.
-    use_mb = self.__config['use_mb'] and self.compiler == 'ninja'
-    if use_mb:
+    if self.using_mb:
       self.m.chromium.c.project_generator.tool = 'mb'
 
     # Add the default GYP_DEFINES.
-    gyp_defines = [
-      '%s=%s' % (k, v) for k, v in self.__config['GYP_DEFINES'].iteritems()
-    ]
+    if isinstance(self.__config['GYP_DEFINES'], dict):
+      gyp_defines = [
+        '%s=%s' % (k, v) for k, v in self.__config['GYP_DEFINES'].iteritems()
+      ]
+    else:
+      gyp_defines = self.__config['GYP_DEFINES']
 
     env = {
       'GYP_DEFINES': ' '.join(gyp_defines),
@@ -263,7 +280,7 @@ class iOSApi(recipe_api.RecipeApi):
       cwd = self.m.path['checkout'].join('out', sub_path)
       cmd = ['ninja', '-C', cwd]
 
-    if use_mb:
+    if self.using_mb:
       # if we're using MB to generate build files, make sure we don't
       # invoke GYP directly. We still want the GYP_DEFINES set in the
       # environment, though, so that other hooks can key off of them.
@@ -273,8 +290,10 @@ class iOSApi(recipe_api.RecipeApi):
     step_result.presentation.step_text = (
       '<br />GYP_DEFINES:<br />%s' % '<br />'.join(gyp_defines)
     )
+    if self.using_mb:
+      step_result.presentation.step_text += '<br />GYP_CHROMIUM_NO_ACTION=1'
 
-    if use_mb:
+    if self.using_mb:
       self.m.chromium.run_mb(self.m.properties['mastername'],
                              self.m.properties['buildername'],
                              name='generate_build_files' + suffix,

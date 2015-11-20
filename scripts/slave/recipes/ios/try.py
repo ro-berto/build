@@ -198,7 +198,12 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
-      'GYP_DEFINES': {},
+      'GYP_DEFINES': [],
+      'gn_args': [
+        'target_os="ios"',
+        'ios_enable_code_signing=false',
+      ],
+      'mb_type': 'gn',
       'compiler': 'ninja',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
@@ -209,7 +214,6 @@ def GenTests(api):
           'os': '8.1',
         },
       ],
-      'use_mb': True,
     })
   )
 
