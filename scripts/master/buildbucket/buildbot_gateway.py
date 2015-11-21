@@ -63,7 +63,7 @@ class BuildRequestGateway(object):
 
   @inlineCallbacks
   def has_builds(self):
-    builds = yield self.master.db.builds.getBuildForRequest(self.brid)
+    builds = yield self.master.db.builds.getBuildsForRequest(self.brid)
     returnValue(bool(builds))
 
 
