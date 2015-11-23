@@ -242,6 +242,7 @@
       "--variants=turbofan",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -336,6 +337,7 @@
       "--variants=turbofan",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],

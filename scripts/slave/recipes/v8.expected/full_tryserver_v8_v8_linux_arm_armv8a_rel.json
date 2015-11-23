@@ -246,6 +246,7 @@
       "--enable-armv8",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -353,6 +354,7 @@
       "--enable-armv8",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -446,6 +448,7 @@
       "--enable-armv8",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -540,6 +543,7 @@
       "--enable-armv8",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],

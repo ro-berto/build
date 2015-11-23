@@ -245,6 +245,7 @@
       "bot_default",
       "--exhaustive-variants",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -336,6 +337,7 @@
       "--download-data",
       "--exhaustive-variants",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -432,6 +434,7 @@
       "mozilla",
       "--exhaustive-variants",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -523,6 +526,7 @@
       "--download-data",
       "--exhaustive-variants",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -614,6 +618,7 @@
       "--download-data",
       "--exhaustive-variants",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],

@@ -240,6 +240,7 @@
       "--exhaustive-variants",
       "--tsan",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -339,6 +340,7 @@
       "--exhaustive-variants",
       "--tsan",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],

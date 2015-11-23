@@ -203,6 +203,7 @@
       "--extra-flags",
       "--noenable-sse3 --noenable-avx",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -295,6 +296,7 @@
       "--extra-flags",
       "--noenable-sse3 --noenable-avx",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -388,6 +390,7 @@
       "--extra-flags",
       "--noenable-sse3 --noenable-avx",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],

@@ -275,6 +275,7 @@
       "--trace_gc --turbo_stats",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -369,6 +370,7 @@
       "--optimize-for-size --trace_gc --turbo_stats",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -464,6 +466,7 @@
       "--trace_gc --turbo_stats",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -565,6 +568,7 @@
       "--trace_gc --turbo_stats",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -661,6 +665,7 @@
       "--trace_gc --turbo_stats",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],

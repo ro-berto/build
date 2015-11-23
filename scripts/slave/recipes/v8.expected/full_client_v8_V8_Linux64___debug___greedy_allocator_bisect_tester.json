@@ -203,6 +203,7 @@
       "--turbo-verify-allocation --turbo-greedy-regalloc",
       "--variants=turbofan",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -296,6 +297,7 @@
       "--turbo-verify-allocation --turbo-greedy-regalloc",
       "--variants=turbofan",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -389,6 +391,7 @@
       "--turbo-verify-allocation --turbo-greedy-regalloc",
       "--variants=turbofan",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -837,6 +840,7 @@
       "--turbo-verify-allocation --turbo-greedy-regalloc",
       "--variants=turbofan",
       "--rerun-failures-count=0",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -1067,6 +1071,7 @@
       "--turbo-verify-allocation --turbo-greedy-regalloc",
       "--variants=turbofan",
       "--rerun-failures-count=0",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],

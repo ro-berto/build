@@ -252,6 +252,7 @@
       "--turbo-verify-allocation --turbo-greedy-regalloc --trace_gc --turbo_stats",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -352,6 +353,7 @@
       "--turbo-verify-allocation --turbo-greedy-regalloc --trace_gc --turbo_stats",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -446,6 +448,7 @@
       "--turbo-verify-allocation --turbo-greedy-regalloc --trace_gc --turbo_stats",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],

@@ -203,6 +203,7 @@
       "--serialize-toplevel --cache=code",
       "--no-variants",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -295,6 +296,7 @@
       "--serialize-toplevel --cache=code",
       "--no-variants",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -389,6 +391,7 @@
       "--serialize-toplevel --cache=code",
       "--no-variants",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -482,6 +485,7 @@
       "--serialize-toplevel --cache=code",
       "--no-variants",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -575,6 +579,7 @@
       "--serialize-toplevel --cache=code",
       "--no-variants",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],

@@ -240,6 +240,7 @@
       "--exhaustive-variants",
       "--no-snap",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -351,6 +352,7 @@
       "--exhaustive-variants",
       "--no-snap",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -448,6 +450,7 @@
       "--exhaustive-variants",
       "--no-snap",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -540,6 +543,7 @@
       "--exhaustive-variants",
       "--no-snap",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],

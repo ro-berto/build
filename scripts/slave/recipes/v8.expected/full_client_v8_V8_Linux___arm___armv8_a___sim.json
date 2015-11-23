@@ -241,6 +241,7 @@
       "--extra-flags",
       "--enable-armv8",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -341,6 +342,7 @@
       "--extra-flags",
       "--enable-armv8",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -433,6 +435,7 @@
       "--extra-flags",
       "--enable-armv8",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -526,6 +529,7 @@
       "--extra-flags",
       "--enable-armv8",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],

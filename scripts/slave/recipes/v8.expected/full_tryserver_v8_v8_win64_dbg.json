@@ -231,6 +231,7 @@
       "--exhaustive-variants",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
@@ -329,6 +330,7 @@
       "--exhaustive-variants",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
+      "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],

@@ -262,6 +262,7 @@ class V8SwarmingTest(V8Test):
     # Let json results be stored in swarming's output folder. The collect
     # step will copy the folder's contents back to the client.
     extra_args += [
+      '--swarming',
       '--json-test-results',
       '${ISOLATED_OUTDIR}/output.json',
     ]
