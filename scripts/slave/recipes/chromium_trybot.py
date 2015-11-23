@@ -252,14 +252,25 @@ def _RunStepsInternal(api):
 
   affected_files = api.tryserver.get_files_affected_by_patch()
 
-  # TODO(phajdan.jr): Remove special case for layout tests.
-  add_blink_tests = False
-  if buildername in CHROMIUM_BLINK_TESTS_BUILDERS:
-    for path in CHROMIUM_BLINK_TESTS_PATHS:
-      if any([f.startswith(path) for f in affected_files]):
-        add_blink_tests = True
+  affects_blink_paths = False
+  for path in CHROMIUM_BLINK_TESTS_PATHS:
+    if any([f.startswith(path) for f in affected_files]):
+      affects_blink_paths = True
 
-  api.tryserver.set_subproject_tag('blink' if add_blink_tests else 'chromium')
+  affects_blink = any([f.startswith('third_party/WebKit')
+                       for f in affected_files])
+
+  if affects_blink:
+    subproject_tag = 'blink'
+  elif affects_blink_paths:
+    subproject_tag = 'blink-paths'
+  else:
+    subproject_tag = 'chromium'
+  api.tryserver.set_subproject_tag(subproject_tag)
+
+  # TODO(phajdan.jr): Remove special case for layout tests.
+  add_blink_tests = (affects_blink_paths and
+                     buildername in CHROMIUM_BLINK_TESTS_BUILDERS)
 
   # Add blink tests that work well with "analyze" here. The tricky ones
   # that bypass it (like the layout tests) are added later.
