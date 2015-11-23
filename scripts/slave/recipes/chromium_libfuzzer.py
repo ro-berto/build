@@ -61,6 +61,7 @@ def RunSteps(api):
           ['--root=%s' % str(api.path['checkout']),
            'refs',
            str(api.chromium.output_dir),
+           '--all',
            '--type=executable',
            '--as=output',
            '//testing/libfuzzer:libfuzzer_main',

@@ -140,6 +140,7 @@
       "--root=[SLAVE_BUILD]/src",
       "refs",
       "[SLAVE_BUILD]/src/out/Release",
+      "--all",
       "--type=executable",
       "--as=output",
       "//testing/libfuzzer:libfuzzer_main"
