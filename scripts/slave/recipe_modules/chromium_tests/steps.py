@@ -631,7 +631,12 @@ class SwarmingGTestTest(SwarmingTest):
     # It is a convention, not a hard coded rule.
     # Also include name without the _run suffix to help recipes correctly
     # interpret results returned by "analyze".
-    return [self.target_name, self.target_name + '_run']
+
+    target_name = self.target_name
+    if api.chromium.c.TARGET_PLATFORM == 'android':
+      target_name = target_name + '_apk'
+
+    return [target_name, target_name + '_run']
 
   def create_task(self, api, suffix, isolated_hash):
     # For local tests test_args are added inside api.chromium.runtest.

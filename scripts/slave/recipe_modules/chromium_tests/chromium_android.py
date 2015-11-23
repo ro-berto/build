@@ -193,6 +193,86 @@ SPEC = {
       },
     },
 
+    'Android Swarm Builder': {
+      'use_isolate': True,
+      'enable_swarming': True,
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'main_builder',
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'linux',
+      },
+      'tests': [
+        steps.GTestTest('android_webview_unittests'),
+        steps.GTestTest(
+            'base_unittests',
+            android_isolate_path='base/base_unittests.isolate',
+            enable_swarming=True),
+        steps.GTestTest(
+            'breakpad_unittests',
+            override_compile_targets=['breakpad_unittests_deps'],
+            android_isolate_path='breakpad/breakpad_unittests.isolate',
+            enable_swarming=True),
+        steps.GTestTest('cc_unittests', enable_swarming=True),
+        steps.GTestTest(
+            'components_browsertests',
+            android_isolate_path='components/components_browsertests.isolate',
+            enable_swarming=True),
+        steps.GTestTest(
+            'components_unittests',
+            android_isolate_path='components/components_unittests.isolate',
+            enable_swarming=True),
+        steps.GTestTest(
+            'content_browsertests',
+            android_isolate_path='content/content_browsertests.isolate',
+            enable_swarming=True),
+        steps.GTestTest(
+            'content_unittests',
+            android_isolate_path='content/content_unittests.isolate'),
+        steps.GTestTest('device_unittests'),
+        steps.GTestTest('events_unittests'),
+        steps.GTestTest('gl_tests'),
+        steps.GTestTest('gl_unittests'),
+        steps.GTestTest('gpu_unittests'),
+        steps.GTestTest('ipc_tests'),
+        steps.GTestTest(
+            'media_unittests',
+            android_isolate_path='media/media_unittests.isolate'),
+        steps.GTestTest(
+            'net_unittests',
+            android_isolate_path='net/net_unittests.isolate'),
+        steps.GTestTest(
+            'sandbox_linux_unittests',
+            override_compile_targets=['sandbox_linux_unittests_deps']),
+        steps.GTestTest(
+            'sql_unittests',
+            android_isolate_path='sql/sql_unittests.isolate'),
+        steps.GTestTest(
+            'sync_unit_tests',
+            android_isolate_path='sync/sync_unit_tests.isolate'),
+        steps.GTestTest('ui_android_unittests'),
+        steps.GTestTest(
+            'ui_base_unittests',
+            android_isolate_path='ui/base/ui_base_tests.isolate'),
+        steps.GTestTest('ui_touch_selection_unittests'),
+        steps.GTestTest(
+            'unit_tests',
+            android_isolate_path='chrome/unit_tests.isolate'),
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+    },
+
     'Android WebView (amp)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
