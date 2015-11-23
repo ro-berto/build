@@ -377,15 +377,27 @@ class Bisector(object):
     `improvement_direction` attribute is positive if a larger number is
     considered better, and negative if a smaller number is considered better.
     """
+    good = self.good_rev.mean_value
+    bad = self.bad_rev.mean_value
+
+    if self.is_return_code_mode():
+      if good == 1 or bad == 0:
+        self._set_failed_return_code_direction_results()
+        return False
+      return True
+
     direction = self.improvement_direction
     if direction is None:
       return True
-    good = self.good_rev.mean_value
-    bad = self.bad_rev.mean_value
     if (bad > good and direction > 0) or (bad < good and direction < 0):
       self._set_failed_direction_results()
       return False
     return True
+
+  def _set_failed_return_code_direction_results(self):  # pragma: no cover
+    self.failed_direction = True
+    self.warnings.append('The initial regression range for return code '
+                         'appears to show NO sign of a regression.')
 
   def _set_failed_direction_results(self):  # pragma: no cover
     self.failed_direction = True

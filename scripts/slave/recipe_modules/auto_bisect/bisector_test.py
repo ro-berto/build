@@ -3,6 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import copy
 import os
 import sys
 import unittest
@@ -105,6 +106,17 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
     bisector.bad_rev.mean_value = 100
     self.assertTrue(bisector.check_improvement_direction())
     self.assertNotIn('direction of improvement', ''.join(bisector.warnings))
+
+  def test_improvement_direction_return_code(self):
+    # Good revision is bad or bad revision is good, should fail.
+    bisect_config = copy.deepcopy(self.bisect_config)
+    bisect_config['test_type'] = 'return_code'
+    bisector = Bisector(self.dummy_api, bisect_config, MockRevisionClass)
+    bisector.good_rev.mean_value = 1
+    bisector.bad_rev.mean_value = 0
+    self.assertTrue(bisector.is_return_code_mode())
+    self.assertFalse(bisector.check_improvement_direction())
+    self.assertIn('return code', ''.join(bisector.warnings))
 
   def test_check_initial_confidence_zero(self):
     # A confidence score of 0 should not satisfy any default.
