@@ -393,6 +393,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Read test result and report failures",
     "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>unexpected failures:<br/>android.webkit.cts.unexpected failed classname#testUserAgentString_default<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -458,7 +459,7 @@
   },
   {
     "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "reason": "Unexpected Test Failures.",
+    "status_code": 1
   }
 ]

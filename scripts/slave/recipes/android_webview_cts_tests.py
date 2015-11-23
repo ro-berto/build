@@ -18,6 +18,7 @@ DEPS = [
   'properties',
   'python',
   'step',
+  'test_utils',
 ]
 
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
@@ -98,28 +99,40 @@ def RunSteps(api):
   report_xml = api.file.read('Read test result and report failures',
       FindTestReportXml(result.stdout))
   root = ElementTree.fromstring(report_xml)
-  failed_classes = root.findall('./TestPackage/TestSuite/TestSuite/TestSuite/' +
-      'TestCase/Test/FailedScene/../..')
-  # Tests will show as not executed if test apk installation fails.
-  not_executed_tests = root.findall(
-      './TestPackage/TestSuite/TestSuite/TestSuite/' +
-      'TestCase/Test[@result="notExecuted"]')
-  if len(not_executed_tests) > 0:
-    api.step.active_result.presentation.status = api.step.FAILURE
 
-  for failed_class in failed_classes:
-    failed_class_name = 'android.webkit.cts.' + failed_class.get('name')
-    if failed_class_name not in EXPECTED_FAILURE:
-      api.step.active_result.presentation.status = api.step.FAILURE
-      continue
-    failed_methods = failed_class.findall('Test/FailedScene/..')
-    for failed_method in failed_methods:
-      if failed_method.get('name') not in EXPECTED_FAILURE[failed_class_name]:
-        api.step.active_result.presentation.status = api.step.FAILURE
+  not_executed_tests = []
+  unexpected_test_failures = []
+  test_classes = root.findall(
+      './TestPackage/TestSuite[@name="android"]/TestSuite[@name="webkit"]/'
+      'TestSuite[@name="cts"]/TestCase')
+
+  for test_class in test_classes:
+    class_name = 'android.webkit.cts.%s' % test_class.get('name')
+    test_methods = test_class.findall('./Test')
+
+    for test_method in test_methods:
+      method_name = '%s#%s' % (class_name, test_method.get('name'))
+      if test_method.get('result') == 'notExecuted':
+        not_executed_tests.append(method_name)
+      elif (test_method.find('./FailedScene') is not None and
+          test_method.get('name') not in EXPECTED_FAILURE.get(class_name, [])):
+        unexpected_test_failures.append(method_name)
+
+  if unexpected_test_failures or not_executed_tests:
+    api.step.active_result.presentation.status = api.step.FAILURE
+    api.step.active_result.presentation.step_text += (
+        api.test_utils.format_step_text(
+            [['unexpected failures:', unexpected_test_failures],
+             ['not executed:', not_executed_tests]]))
 
   api.chromium_android.logcat_dump()
   api.chromium_android.stack_tool_steps()
   api.chromium_android.test_report()
+
+  if unexpected_test_failures:
+    raise api.step.StepFailure("Unexpected Test Failures.")
+  if not_executed_tests:
+    raise api.step.StepFailure("Tests not executed.")
 
 def GenTests(api):
   result_xml_with_unexecuted_tests = """<TestResult>
