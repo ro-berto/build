@@ -165,6 +165,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       '--target', self.c.build_config_fs,
       '--src-dir', self.m.path['checkout'],
     ]
+    if self.c.compile_py.build_args:
+      args += ['--build-args', self.c.compile_py.build_args]
     if self.c.compile_py.build_tool:
       args += ['--build-tool', self.c.compile_py.build_tool]
     if self.m.properties.get('build_data_dir'):

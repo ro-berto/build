@@ -34,7 +34,8 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
   return ConfigGroup(
     compile_py = ConfigGroup(
       default_targets = Set(basestring),
-      build_tool = Single(basestring),
+      build_args = Single(basestring, required=False),
+      build_tool = Single(basestring, required=False),
       cross_tool = Single(basestring, required=False),
       compiler = Single(basestring, required=False),
       mode = Single(basestring, required=False),
@@ -755,6 +756,9 @@ def android_findbugs(c):
 
 @config_ctx(includes=['ninja', 'shared_library', 'clang', 'goma'])
 def codesearch(c):
+  # -k 0 prevents stopping on errors, so the compile step tries to do as much as
+  # possible.
+  c.compile_py.build_args = '-k 0'
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['fastbuild'] = 1
 

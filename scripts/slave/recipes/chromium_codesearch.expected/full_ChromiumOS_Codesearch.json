@@ -176,6 +176,8 @@
       "Debug",
       "--src-dir",
       "[SLAVE_BUILD]/src",
+      "--build-args",
+      "-k 0",
       "--build-tool",
       "ninja",
       "--compiler",
