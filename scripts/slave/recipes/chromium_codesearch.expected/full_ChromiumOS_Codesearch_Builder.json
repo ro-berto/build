@@ -135,7 +135,7 @@
       "ninja",
       "-C",
       "[SLAVE_BUILD]/src/out/Debug",
-      "all",
+      "All",
       "-t",
       "compdb",
       "cc",
@@ -185,7 +185,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "all"
+      "All"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile",
