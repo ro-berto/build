@@ -17,9 +17,11 @@ def Update(c):
                             builderNames=[
           'Android32 Builder',
           'Android32 Builder (dbg)',
+          'Android32 Builder x86 (dbg)',
           'Android32 Clang (dbg)',
           'Android64 Builder',
           'Android64 Builder (dbg)',
+          'Android64 Builder x64 (dbg)',
           'Android32 GN',
           'Android32 GN (dbg)',
       ]),
@@ -48,6 +50,10 @@ def Update(c):
       'triggers': ['android_trigger_dbg'],
     },
     {
+      'name': 'Android32 Builder x86 (dbg)',
+      'slavebuilddir': 'android_x86',
+    },
+    {
       'name': 'Android32 Clang (dbg)',
       'slavebuilddir': 'android_clang',
     },
@@ -59,6 +65,10 @@ def Update(c):
     {
       'name': 'Android64 Builder (dbg)',
       'slavebuilddir': 'android_arm64',
+    },
+    {
+      'name': 'Android64 Builder x64 (dbg)',
+      'slavebuilddir': 'android_x64',
     },
     {
       'name': 'Android32 GN',

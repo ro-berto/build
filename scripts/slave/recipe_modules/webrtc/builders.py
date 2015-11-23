@@ -874,6 +874,17 @@ BUILDERS = freeze({
         'build_gs_archive': 'android_apk_dbg_archive',
         'testing': {'platform': 'linux'},
       },
+      'Android32 Builder x86 (dbg)': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'intel',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
       'Android64 Builder': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
@@ -892,6 +903,17 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
+      'Android64 Builder x64 (dbg)': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'intel',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
@@ -1131,28 +1153,6 @@ BUILDERS = freeze({
         'triggers': [
           'Android32 Tests (L Nexus6)(dbg)',
         ],
-      },
-      'Android32 Builder x86 (dbg)': {
-        'recipe_config': 'webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'intel',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Android64 Builder x64 (dbg)': {
-        'recipe_config': 'webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'intel',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
       },
       'Android32 Tests (L Nexus6)(dbg)': {
         'recipe_config': 'webrtc_android',
