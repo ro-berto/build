@@ -14,13 +14,17 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
-          'Android Builder (dbg)',
+          'Android32 Builder (dbg)',
+          'Android32 Builder x86 (dbg)',
+          'Android64 Builder x64 (dbg)',
           'Android32 ASan (L Nexus6)',
       ]),
   ])
 
   specs = [
-    {'name': 'Android Builder (dbg)'},
+    {'name': 'Android32 Builder (dbg)'},
+    {'name': 'Android32 Builder x86 (dbg)', 'slavebuilddir': 'android_x86'},
+    {'name': 'Android64 Builder x64 (dbg)', 'slavebuilddir': 'android_x64'},
     {'name': 'Android32 ASan (L Nexus6)'},
     {'name': 'Android32 Tests (L Nexus6)(dbg)'},
   ]

@@ -1117,7 +1117,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
-      'Android Builder (dbg)': {
+      'Android32 Builder (dbg)': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -1132,6 +1132,28 @@ BUILDERS = freeze({
           'Android32 Tests (L Nexus6)(dbg)',
         ],
       },
+      'Android32 Builder x86 (dbg)': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'intel',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
+      'Android64 Builder x64 (dbg)': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'intel',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
       'Android32 Tests (L Nexus6)(dbg)': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
@@ -1141,7 +1163,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
-        'parent_buildername': 'Android Builder (dbg)',
+        'parent_buildername': 'Android32 Builder (dbg)',
         'build_gs_archive': 'fyi_android_apk_dbg_archive',
         'testing': {'platform': 'linux'},
       },
@@ -1680,6 +1702,28 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
+      'android_compile_x86_dbg': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'intel',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
+      'android_compile_x64_dbg': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'intel',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',

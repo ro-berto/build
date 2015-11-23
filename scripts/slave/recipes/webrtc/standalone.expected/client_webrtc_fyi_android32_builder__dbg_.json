@@ -7,7 +7,7 @@
       "--master",
       "client.webrtc.fyi",
       "--builder",
-      "Android Builder (dbg)",
+      "Android32 Builder (dbg)",
       "--slave",
       "slavename",
       "--spec",
@@ -143,9 +143,9 @@
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android Builder (dbg)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android32 Builder (dbg)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android Builder (dbg)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}"
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android32 Builder (dbg)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
