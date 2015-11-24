@@ -73,7 +73,7 @@ def RunSteps(api):
   api.chromium_android.device_status_check()
   api.chromium_android.provision_devices(
       min_battery_level=95, disable_network=True, disable_java_debug=True,
-      reboot_timeout=180)
+      reboot_timeout=180, remove_system_webview=True)
 
   # Install system WebView.
   api.chromium_android.adb_install_apk(WEBVIEW_APK)

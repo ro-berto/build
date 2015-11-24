@@ -302,7 +302,8 @@
       "--min-battery-level",
       "95",
       "--disable-network",
-      "--disable-java-debug"
+      "--disable-java-debug",
+      "--remove-system-webview"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
