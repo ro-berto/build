@@ -131,8 +131,7 @@ def GenTests(api):
     api.test('repo_infra_failure') +
     api.properties.scheduled() +
     api.step_data('repo sync', retcode=1) +
-    api.step_data('repo sync - retry', retcode=1) +
-    dependant_change
+    api.step_data('repo sync - retry', retcode=1)
   )
 
   yield (
