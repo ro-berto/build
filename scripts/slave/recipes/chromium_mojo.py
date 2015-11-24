@@ -32,10 +32,12 @@ BUILDERS = freeze({
         },
       },
       'Chromium Mojo Android': {
+        'chromium_config': 'android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
         },
         'gclient_apply_config': ['android'],
       },
@@ -60,10 +62,12 @@ BUILDERS = freeze({
         },
       },
       'Chromium Mojo Android Nexus5 Perf': {
+        'chromium_config': 'android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
         },
         'gclient_apply_config': ['android'],
         # TODO(yzshen): Actually run perf tests.

@@ -121,7 +121,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     master_dict = builders_dict.get(mastername, {})
     bot_config = master_dict.get('builders', {}).get(buildername)
 
-    self.set_config('chromium', **bot_config.get('chromium_config_kwargs', {}))
+    self.set_config(bot_config.get('chromium_config', 'chromium'),
+                    **bot_config.get('chromium_config_kwargs', {}))
 
     for c in bot_config.get('chromium_apply_config', []):
       self.apply_config(c)

@@ -100,7 +100,8 @@
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=arm64 use_goma=1"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
   },
@@ -144,6 +145,9 @@
       "mandoline:all"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "compile",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
@@ -160,6 +164,9 @@
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "authorize_adb_devices"
   },
   {
@@ -171,6 +178,9 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "device_status_check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 1@@@",
@@ -280,6 +290,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "provision_devices"
   },
   {
