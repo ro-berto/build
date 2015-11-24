@@ -40,6 +40,11 @@ DONT_USE_GPU_IN_TESTS = freeze([
   'content_unittests',
 ])
 
+OPTIONAL_GPU_TRYBOT_TESTS_TO_RUN = freeze([
+  'angle_deqp_gles2_tests',
+  'angle_end2end_tests',
+])
+
 class GpuApi(recipe_api.RecipeApi):
   def setup(self):
     """Call this once before any of the other APIs in this module."""
@@ -170,8 +175,13 @@ class GpuApi(recipe_api.RecipeApi):
 
   @property
   def is_angle_trybot(self):
-    """Indicates whether the receipe is running on an ANGLE trybot."""
+    """Indicates whether the recipe is running on an ANGLE trybot."""
     return self.m.properties['mastername'] == 'tryserver.chromium.angle'
+
+  @property
+  def is_optional_gpu_tests_trybot(self):
+    """Indicates if the recipe is running as a Chromium GPU trybot."""
+    return 'optional_gpu_tests' in self.m.properties['buildername']
 
   def checkout_steps(self):
     self._bot_update = self.m.bot_update.ensure_checkout(force=True)
@@ -309,6 +319,29 @@ class GpuApi(recipe_api.RecipeApi):
             test_name, chrome_revision, webkit_revision, enable_swarming,
             swarming_dimensions))
 
+      return tests
+
+    # Run only specific extra tests on the GPU trybots.
+    if self.is_optional_gpu_tests_trybot:
+      test_names = list(OPTIONAL_GPU_TRYBOT_TESTS_TO_RUN)
+
+      for test_name in test_names:
+        tests.append(self._create_gtest(
+            test_name, chrome_revision, webkit_revision, enable_swarming,
+            swarming_dimensions))
+
+      tests.append(self._create_telemetry_test(
+          'webgl2_conformance', chrome_revision, webkit_revision,
+          enable_swarming, swarming_dimensions, target_name='webgl_conformance',
+          args=['--webgl-conformance-version=2.0.0', '--webgl2-only=true']))
+
+      tests.append(self._create_telemetry_test(
+          D3D9_TEST_NAME_MAPPING['webgl_conformance'], chrome_revision,
+          webkit_revision, enable_swarming, swarming_dimensions,
+          target_name='webgl_conformance',
+          extra_browser_args=['--use-angle=d3d9']))
+
+      # TODO(jmadill): Run webgl_conformance_gl once we fix AMD/Win.
       return tests
 
     # Copy the test list to avoid mutating it.

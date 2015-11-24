@@ -510,6 +510,11 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'CrWinClang64',
       },
+      # Optional GPU bots.
+      'win_optional_gpu_tests_rel': {
+        'mastername': 'chromium.win',
+        'buildername': 'Win Builder',
+      },
     },
   },
 })
