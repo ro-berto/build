@@ -632,11 +632,12 @@ class SwarmingGTestTest(SwarmingTest):
     # Also include name without the _run suffix to help recipes correctly
     # interpret results returned by "analyze".
 
-    target_name = self.target_name
     if api.chromium.c.TARGET_PLATFORM == 'android':
-      target_name = target_name + '_apk'
+      # Not all _apk_runs have a corresponding _apk, so we only return the
+      # _apk_run here.
+      return [self.target_name + '_apk_run']
 
-    return [target_name, target_name + '_run']
+    return [self.target_name, self.target_name + '_run']
 
   def create_task(self, api, suffix, isolated_hash):
     # For local tests test_args are added inside api.chromium.runtest.
