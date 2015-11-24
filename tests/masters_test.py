@@ -245,7 +245,6 @@ def main(argv):
       'master.client.art': 'ART',
       'master.client.boringssl': 'Boringssl',
       'master.client.catapult': 'Catapult',
-      'master.client.chromeproxy': 'ClientChromeproxy',
       'master.client.crashpad': 'ClientCrashpad',
       'master.client.dart': 'Dart',
       'master.client.dart.fyi': 'DartFYI',
