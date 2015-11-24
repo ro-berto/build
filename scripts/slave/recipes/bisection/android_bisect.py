@@ -190,7 +190,6 @@ results-without_patch
       + api.override_step_data(
           'load config',
           api.json.output(config_json))
-      + api.step_data('Performance Test (Without Patch) 1 of 1', retcode=1)
       + api.step_data('Performance Test (With Patch) 1 of 1', retcode=1)
       )
 
