@@ -317,25 +317,30 @@ def GenTests(api):
               revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
               buildername=buildername,
               slavename='slavename',
-              mastername=mastername) +
-          api.override_step_data(
-              'analyze',
-              api.json.output({
-                  'status': 'Found dependency',
-                  'test_targets': [
-                      'chrome_public_test_apk',
-                      'android_webview_unittests'],
-                  'compile_targets': [
-                      'chrome_public_test_apk',
-                      'android_webview_unittests_apk']})) +
-          api.step_data('[trigger] components_unittests', retcode=1) +
-          # Test runner error
-          api.step_data('[collect] chrome_public_test_apk', retcode=1) +
-          api.step_data('[collect] android_webview_unittests', retcode=1) +
-          # Test runner infrastructure error
-          api.step_data('[collect] base_unittests', retcode=87) +
-          # Test runner warning
-          api.step_data('[collect] cc_unittests', retcode=88))
+              mastername=mastername))
+      if builder.get('try'):
+        test_props += (api.override_step_data(
+            'analyze',
+            api.json.output({
+                'status': 'Found dependency',
+                'test_targets': [
+                    'chrome_public_test_apk',
+                    'content_shell_test_apk'],
+                'compile_targets': [
+                    'chrome_public_test_apk',
+                    'content_shell_test_apk']})) +
+          # Test runner errors
+          api.step_data('[trigger] chrome_public_test_apk', retcode=1) +
+          api.step_data('[collect] content_shell_test_apk', retcode=1))
+      else:
+        test_props += (
+            # Test runner errors
+            api.step_data('[trigger] components_unittests', retcode=1) +
+            api.step_data('[collect] android_webview_unittests', retcode=1) +
+            # Test runner infrastructure error
+            api.step_data('[collect] base_unittests', retcode=87) +
+            # Test runner warning
+            api.step_data('[collect] cc_unittests', retcode=88))
 
       if not builder.get('build'):
         test_props += api.properties(

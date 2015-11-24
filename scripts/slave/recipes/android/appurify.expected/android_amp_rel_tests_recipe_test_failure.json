@@ -201,12 +201,12 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"chrome_public_test_apk\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"android_webview_unittests_apk\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"content_shell_test_apk\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_targets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"chrome_public_test_apk\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"android_webview_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"content_shell_test_apk\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -240,9 +240,8 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "android_webview_unittests",
-      "android_webview_unittests_apk",
-      "chrome_public_test_apk"
+      "chrome_public_test_apk",
+      "content_shell_test_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -291,6 +290,74 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--apk-under-test",
+      "[SLAVE_BUILD]/src/out/Release/apks/ContentShell.apk",
+      "--test-apk",
+      "[SLAVE_BUILD]/src/out/Release/apks/ContentShellTest.apk",
+      "--isolate-file-path",
+      "[SLAVE_BUILD]/src/content/content_shell_test_apk.isolate",
+      "--enable-platform-mode",
+      "-e",
+      "remote_device",
+      "--api-key-file",
+      "[BUILD]/site_config/.amp_commit_queue_pool_key",
+      "--api-secret-file",
+      "[BUILD]/site_config/.amp_commit_queue_pool_secret",
+      "--api-address",
+      "172.22.21.180",
+      "--api-port",
+      "80",
+      "--api-protocol",
+      "http",
+      "--device-type",
+      "Android",
+      "--remote-device",
+      "Nexus 5",
+      "--remote-device-os",
+      "4.4.2",
+      "--remote-device-os",
+      "4.4.3",
+      "--trigger",
+      "/path/to/tmp/json",
+      "--verbose",
+      "--release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "[trigger] content_shell_test_apk",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"brand\": \"Foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Fone\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os_version\": \"1.2.3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
+      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "[trigger] save content_shell_test_apk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--apk-under-test",
       "[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk",
       "--test-apk",
       "[SLAVE_BUILD]/src/out/Release/apks/ChromePublicTest.apk",
@@ -325,7 +392,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] chrome_public_test_apk",
     "~followup_annotations": [
-      "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
+      "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"device\": {@@@",
@@ -338,19 +405,9 @@
       "@@@STEP_LOG_LINE@json.output@    \"test_run_id\": \"T35TRUN1D\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_FAILURE@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"env\": {\"device\": {\"brand\": \"Foo\", \"name\": \"Fone\", \"os_version\": \"1.2.3\"}}, \"test_run\": {\"test_run_id\": \"T35TRUN1D\"}}",
-      "[TMP_BASE]/amp_trigger_tmp_1/T35TRUN1D.json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] save chrome_public_test_apk"
   },
   {
     "cmd": [
@@ -393,7 +450,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] load chrome_public_test_apk",
+    "name": "[collect] load content_shell_test_apk",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -414,9 +471,9 @@
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "instrumentation",
       "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk",
+      "[SLAVE_BUILD]/src/out/Release/apks/ContentShell.apk",
       "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublicTest.apk",
+      "[SLAVE_BUILD]/src/out/Release/apks/ContentShellTest.apk",
       "--enable-platform-mode",
       "-e",
       "remote_device",
@@ -446,7 +503,7 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[collect] chrome_public_test_apk",
+    "name": "[collect] content_shell_test_apk",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -462,7 +519,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[upload logcat] load chrome_public_test_apk data",
+    "name": "[upload logcat] load content_shell_test_apk data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_run\": {@@@",
@@ -479,7 +536,7 @@
       "RECIPE_MODULE[zip]/resources/unzip.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[upload logcat] unzip results for chrome_public_test_apk",
+    "name": "[upload logcat] unzip results for content_shell_test_apk",
     "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
   },
   {
@@ -492,12 +549,12 @@
       "----",
       "cp",
       "[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results/appurify_results/logcat.txt",
-      "gs://chrome-amp-results/logcats/logcat_chrome_public_test_apk_T35TRUN1D.txt"
+      "gs://chrome-amp-results/logcats/logcat_content_shell_test_apk_T35TRUN1D.txt"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil [upload logcat] chrome_public_test_apk",
+    "name": "gsutil [upload logcat] content_shell_test_apk",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_chrome_public_test_apk_T35TRUN1D.txt@@@"
+      "@@@STEP_LINK@logcat@https://storage.cloud.google.com/chrome-amp-results/logcats/logcat_content_shell_test_apk_T35TRUN1D.txt@@@"
     ]
   },
   {
@@ -522,7 +579,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 out of 6 aggregated steps failed. Failures: Step('[collect] chrome_public_test_apk') failed with return_code 1",
+    "reason": "2 out of 7 aggregated steps failed. Failures: Step('[trigger] chrome_public_test_apk') failed with return_code 1, Step('[collect] content_shell_test_apk') failed with return_code 1",
     "status_code": 1
   }
 ]
