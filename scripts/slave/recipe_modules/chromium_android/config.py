@@ -38,6 +38,7 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     env = ConfigGroup(
       LLVM_FORCE_HEAD_REVISION = Single(basestring, required=False),
     ),
+    gce_setup = Single(bool, required=False, empty_val=False),
   )
 
 
@@ -199,3 +200,7 @@ def webview_perf(c):
 @config_ctx()
 def cast_builder(c):
   pass
+
+@config_ctx(includes=['x86_builder'])
+def gce_builder(c):
+  c.gce_setup = True

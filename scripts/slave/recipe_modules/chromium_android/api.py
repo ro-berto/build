@@ -675,6 +675,36 @@ class AndroidApi(recipe_api.RecipeApi):
         args=['instrumentation'] + args,
         **kwargs)
 
+  def launch_gce_instances(self, snapshot='clean-17-l-phone-image-no-popups',
+                           count=6):
+    args = [
+        self.m.properties['slavename'],
+        self.m.adb.adb_path(),
+        '--n', count,
+        'launch',
+        '--snapshot', snapshot,
+    ]
+    self.m.python(
+        'launch_instances',
+        self.resource('gce_manager.py'),
+        args,
+        infra_step=True,
+    )
+
+  def shutdown_gce_instances(self, count=6):
+    args = [
+        self.m.properties['slavename'],
+        self.m.adb.adb_path(),
+        '--n', count,
+        'shutdown',
+    ]
+    self.m.python(
+        'shutdown_instances',
+        self.resource('gce_manager.py'),
+        args,
+        infra_step=True,
+    )
+
   def logcat_dump(self, gs_bucket=None):
     if gs_bucket:
       log_path = self.m.chromium.output_dir.join('full_log')
@@ -750,27 +780,34 @@ class AndroidApi(recipe_api.RecipeApi):
     )
 
   def common_tests_setup_steps(self, perf_setup=False):
-    self.spawn_logcat_monitor()
-    self.authorize_adb_devices()
-    self.device_status_check()
-    if perf_setup:
-      kwargs = {
-          'min_battery_level': 95,
-          'disable_network': True,
-          'disable_java_debug': True,
-          'max_battery_temp': 350}
+    if self.c.gce_setup:
+      self.launch_gce_instances()
+      self.spawn_logcat_monitor()
     else:
-      kwargs = {}
-    self.provision_devices(**kwargs)
-    if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
-      self.asan_device_setup()
+      self.spawn_logcat_monitor()
+      self.authorize_adb_devices()
+      self.device_status_check()
+      if perf_setup:
+        kwargs = {
+            'min_battery_level': 95,
+            'disable_network': True,
+            'disable_java_debug': True,
+            'max_battery_temp': 350}
+      else:
+        kwargs = {}
+      self.provision_devices(**kwargs)
+      if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
+        self.asan_device_setup()
 
-    self.spawn_device_monitor()
+      self.spawn_device_monitor()
 
   def common_tests_final_steps(self, logcat_gs_bucket=None):
-    self.shutdown_device_monitor()
+    if not self.c.gce_setup:
+      self.shutdown_device_monitor()
     self.logcat_dump(gs_bucket=logcat_gs_bucket)
     self.stack_tool_steps()
+    if self.c.gce_setup:
+      self.shutdown_gce_instances()
     self.test_report()
 
   def run_bisect_script(self, extra_src='', path_to_config='', **kwargs):

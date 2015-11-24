@@ -1972,5 +1972,33 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'Android Cloud Tests': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'builder_tester',
+      'android_config': 'gce_builder',
+      'tests': [
+        steps.AndroidJunitTest('base_junit_tests'),
+        steps.AndroidJunitTest('chrome_junit_tests'),
+        steps.AndroidJunitTest('components_junit_tests'),
+        steps.AndroidJunitTest('content_junit_tests'),
+        steps.AndroidJunitTest('junit_unit_tests'),
+        steps.AndroidJunitTest('net_junit_tests'),
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
   },
 }
