@@ -155,11 +155,17 @@
       "--reviewer",
       "hablich@chromium.org,machenbach@chromium.org,yangguo@chromium.org,vogelheim@chromium.org",
       "--roll",
+      "--json-output",
+      "/path/to/tmp/json",
       "--work-dir",
       "[SLAVE_BUILD]/workdir"
     ],
     "cwd": "[SLAVE_BUILD]/src/v8",
-    "name": "roll deps"
+    "name": "roll deps",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "name": "$result",

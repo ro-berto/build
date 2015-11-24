@@ -81,6 +81,7 @@ def RunSteps(api):
        'hablich@chromium.org,machenbach@chromium.org,'
        'yangguo@chromium.org,vogelheim@chromium.org',
        '--roll',
+       '--json-output', api.json.output(),
        '--work-dir', api.path['slave_build'].join('workdir')],
       cwd=api.path['checkout'].join('v8'),
     )
