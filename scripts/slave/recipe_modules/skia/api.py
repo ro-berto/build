@@ -30,10 +30,6 @@ from . import xsan_flavor
 
 BOTO_CHROMIUM_SKIA_GM = 'chromium-skia-gm.boto'
 
-# The gsutil recipe API uses a different gsutil version which does not work
-# on our bots. Force the version using this constant.
-GSUTIL_VERSION = '3.25'
-
 TEST_EXPECTED_SKP_VERSION = '42'
 TEST_EXPECTED_SKIMAGE_VERSION = '42'
 
@@ -263,7 +259,6 @@ class SkiaApi(recipe_api.RecipeApi):
         dest=dest,
         args=['-R'],
         env=self.gsutil_env_skia_infra,
-        version=GSUTIL_VERSION,
         abort_on_failure=False)
 
   def _download_and_copy_dir(self, expected_version, version_file, gs_path,
@@ -290,8 +285,7 @@ class SkiaApi(recipe_api.RecipeApi):
           host_path,
           name='download %s' % self.m.path.basename(host_path),
           args=['-R'],
-          env=self.gsutil_env_chromium_skia_gm,
-          version=GSUTIL_VERSION)
+          env=self.gsutil_env_chromium_skia_gm)
       self._writefile(actual_version_file, expected_version)
 
     # Copy to device.
@@ -327,7 +321,6 @@ class SkiaApi(recipe_api.RecipeApi):
         url,
         name='cat %s' % timestamp_file,
         env=self.gsutil_env_chromium_skia_gm,
-        version=GSUTIL_VERSION,
         stdout=self.m.raw_io.output()).stdout.rstrip()
 
     test_data = TEST_EXPECTED_SKIMAGE_VERSION
