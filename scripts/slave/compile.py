@@ -31,6 +31,7 @@ import time
 from common import chromium_utils
 from slave import build_directory
 from slave import slave_utils
+from slave import goma_utils
 
 # Define a bunch of directory paths (same as bot_update.py)
 CURRENT_DIR = os.path.abspath(os.getcwd())
@@ -120,7 +121,7 @@ def goma_setup(options, env):
     options.goma_dir = None
     return False
 
-  hostname = GetShortHostname()
+  hostname = goma_utils.GetShortHostname()
   # HACK(shinyak, yyanagisawa, goma): Windows NO_NACL_GOMA (crbug.com/390764)
   # Building NaCl untrusted code using goma brings large performance
   # improvement but it sometimes cause build failure by race condition.
@@ -188,7 +189,7 @@ def goma_setup(options, env):
 
   # Upload compiler_proxy.INFO to investigate the reason of compiler_proxy
   # start-up failure.
-  UploadGomaCompilerProxyInfo()
+  goma_utils.UploadGomaCompilerProxyInfo()
   # Upload GomaStats to make it monitored.
   # TODO(yyanagisawa): make the case without GomaStats file monitored.
   if os.path.exists(env['GOMA_DUMP_STATS_FILE']):
@@ -207,70 +208,6 @@ def goma_setup(options, env):
   options.goma_dir = None
   env['GOMA_DISABLED'] = '1'
   return False
-
-
-def GetGomaTmpDirectory():
-  """Get goma's temp directory."""
-  candidates = ['GOMA_TMP_DIR', 'TEST_TMPDIR', 'TMPDIR', 'TMP']
-  for candidate in candidates:
-    value = os.environ.get(candidate)
-    if value and os.path.isdir(value):
-      return value
-  return '/tmp'
-
-
-def GetLatestGomaCompilerProxyInfo():
-  """Get a filename of the latest goma comiler_proxy.INFO."""
-  dirname = GetGomaTmpDirectory()
-  info_pattern = os.path.join(dirname, 'compiler_proxy.*.INFO.*')
-  candidates = glob.glob(info_pattern)
-  if not candidates:
-    return
-  return sorted(candidates, reverse=True)[0]
-
-
-def UploadToGomaLogGS(file_path, gs_filename, text_to_append=None):
-  """Upload a file to Google Cloud Storage (gs://chrome-goma-log).
-
-  Note that the uploaded file would automatically be gzip compressed.
-
-  Args:
-    file_path: a path of a file to be uploaded.
-    gs_filename: a name of a file in Google Storage.
-    text_to_append: an addtional text to be added to a file in GS.
-
-  Returns:
-    a stored path name without the bucket name in GS.
-  """
-  hostname = GetShortHostname()
-  today = datetime.datetime.utcnow().date()
-  log_path = '%s/%s/%s.gz' % (
-    today.strftime('%Y/%m/%d'), hostname, gs_filename)
-  gs_path = 'gs://%s/%s' % (GOMA_LOG_GS_BUCKET, log_path)
-  temp = tempfile.NamedTemporaryFile(delete=False)
-  try:
-    with temp as f_out:
-      with gzip.GzipFile(fileobj=f_out) as gzipf_out:
-        with open(file_path) as f_in:
-          shutil.copyfileobj(f_in, gzipf_out)
-        if text_to_append:
-          gzipf_out.write(text_to_append)
-    slave_utils.GSUtilCopy(temp.name, gs_path)
-    print "Copied log file to %s" % gs_path
-  finally:
-    os.remove(temp.name)
-  return log_path
-
-
-def UploadGomaCompilerProxyInfo():
-  """Upload goma compiler_proxy.INFO to Google Storage."""
-  latest_info = GetLatestGomaCompilerProxyInfo()
-  # Since a filename of compiler_proxy.INFO is fairly unique,
-  # we might be able to upload it as-is.
-  log_path = UploadToGomaLogGS(latest_info, os.path.basename(latest_info))
-  viewer_url = ('http://chromium-build-stats.appspot.com/compiler_proxy_log/'
-                + log_path)
-  print 'Visualization at %s' % viewer_url
 
 
 def SendGomaStats(goma_stats_file, build_data_dir):
@@ -320,55 +257,9 @@ def goma_teardown(options, env):
           goma_ctl_cmd + ['jsonstatus', options.goma_jsonstatus], env=env)
     # Always stop the proxy for now to allow in-place update.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
-    UploadGomaCompilerProxyInfo()
+    goma_utils.UploadGomaCompilerProxyInfo()
     if env.get('GOMA_DUMP_STATS_FILE'):
       SendGomaStats(env['GOMA_DUMP_STATS_FILE'], options.build_data_dir)
-
-
-def UploadNinjaLog(options, command, exit_status):
-  """Upload .ninja_log to Google Cloud Storage (gs://chrome-goma-log),
-  in the same folder with goma's compiler_proxy.INFO.
-
-  Args:
-    options: compile.py's options.
-    command: command line.
-    exit_status: ninja's exit status.
-  """
-  ninja_log_path = os.path.join(options.target_output_dir, '.ninja_log')
-  try:
-    st = os.stat(ninja_log_path)
-    mtime = datetime.datetime.fromtimestamp(st.st_mtime)
-  except OSError, e:
-    print e
-    return
-
-  cwd = os.getcwd()
-  platform = chromium_utils.PlatformName()
-
-  info = {'cmdline': command,
-          'cwd': cwd,
-          'platform': platform,
-          'exit': exit_status,
-          'argv': sys.argv,
-          'env': {}}
-  for k, v in os.environ.iteritems():
-    info['env'][k] = v
-  if options.compiler:
-    info['compiler'] = options.compiler
-  compiler_proxy_info = GetLatestGomaCompilerProxyInfo()
-  if compiler_proxy_info:
-    info['compiler_proxy_info'] = compiler_proxy_info
-
-  username = getpass.getuser()
-  hostname = GetShortHostname()
-  pid = os.getpid()
-  ninja_log_filename = 'ninja_log.%s.%s.%s.%d' % (
-      hostname, username, mtime.strftime('%Y%m%d-%H%M%S'), pid)
-  additional_text = '# end of ninja log\n' + json.dumps(info)
-  log_path = UploadToGomaLogGS(
-    ninja_log_path, ninja_log_filename, additional_text)
-  viewer_url = 'http://chromium-build-stats.appspot.com/ninja_log/' + log_path
-  print 'Visualization at %s' % viewer_url
 
 
 def common_xcode_settings(command, options, env, compiler=None):
@@ -1075,7 +966,8 @@ def main_ninja(options, args):
     return exit_status
   finally:
     goma_teardown(options, env)
-    UploadNinjaLog(options, command, exit_status)
+    goma_utils.UploadNinjaLog(
+        options.target_output_dir, options.compiler, command, exit_status)
 
 
 def main_win(options, args):
