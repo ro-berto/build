@@ -181,7 +181,8 @@
       "--",
       "cronet_package",
       "cronet_sample_test_apk",
-      "cronet_test_instrumentation_apk"
+      "cronet_test_instrumentation_apk",
+      "cronet_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -415,6 +416,26 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "spawn_device_monitor"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "cronet_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--verbose",
+      "-t",
+      "180"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "cronet_unittests"
   },
   {
     "cmd": [
