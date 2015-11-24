@@ -642,14 +642,7 @@ def GenTests(api):
     api.test('check_swarming_version_failure') +
     props() +
     api.platform.name('linux') +
-    api.step_data('swarming.py --version', retcode=1) +
-    api.override_step_data('read test spec', api.json.output({
-        'Linux Tests': {
-          'gtest_tests': ['base_unittests'],
-        },
-      })
-      ) +
-    suppress_analyze()
+    api.step_data('swarming.py --version', retcode=1)
   )
 
   # Successfully compiling, isolating and running two targets on swarming for a
