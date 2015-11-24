@@ -20,6 +20,7 @@ DEPS = [
   'properties',
   'python',
   'step',
+  'test_utils',
 ]
 
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
@@ -91,11 +92,31 @@ def RunSteps(api):
 
 def run_tests(api):
   droid = api.chromium_android
+  mock_test_results = {
+    'per_iteration_data': [{'TestA': [{'status': 'SUCCESS'}]},
+                           {'TestB': [{'status': 'FAILURE'}]}]
+  }
   for suite in INSTRUMENTATION_TESTS:
-    droid.run_instrumentation_suite(
+    json_results_file = api.json.output(add_json_log=False)
+    step_result = droid.run_instrumentation_suite(
         suite['test'], test_apk=droid.apk_path(suite['test_apk']),
-        verbose=True,
+        json_results_file=json_results_file, verbose=True,
+        step_test_data=lambda: api.json.test_api.output(mock_test_results),
         **suite.get('kwargs', {}))
+
+    try:
+      json_results = step_result.json.output
+      test_results = {test_name: test_data[0]['status']
+                      for result_dict in json_results['per_iteration_data']
+                      for test_name, test_data in result_dict.iteritems()}
+      failures = sorted(
+          [test_name for test_name, test_status in test_results.iteritems()
+           if test_status not in ['SUCCESS', 'SKIPPED']])
+    except Exception:  # pragma: no cover
+      failures = []
+    step_result.presentation.step_text += api.test_utils.format_step_text(
+        [['failures:', failures]])
+
 
 def GenTests(api):
   yield api.test('basic') + api.properties.scheduled()
