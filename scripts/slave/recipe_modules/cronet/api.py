@@ -23,7 +23,6 @@ INSTRUMENTATION_TESTS = freeze([
 ])
 
 UNIT_TESTS = freeze([
-  'cronet_unittests',
   'net_unittests',
 ])
 
