@@ -84,6 +84,11 @@ BUILDERS = freeze({
         'remove_system_webview': True,
         'disable_system_chrome': True,
     },
+    'slow_tester': {
+        'build': False,
+        'skip_wipe': False,
+        'timeout_scale': 2,
+    }
 })
 
 from recipe_engine.recipe_api import Property
@@ -172,7 +177,8 @@ def RunSteps(api, buildername):
       except_annotation='FlakyTest',
       screenshot=True,
       official_build=True,
-      host_driven_root=api.path['checkout'].join('chrome', 'test'))
+      host_driven_root=api.path['checkout'].join('chrome', 'test'),
+      timeout_scale=config.get('timeout_scale'))
   api.chromium_android.run_test_suite(
       'unittests',
       isolate_file_path=api.path['checkout'].join('some_file.isolate'),

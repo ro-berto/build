@@ -627,7 +627,8 @@ class AndroidApi(recipe_api.RecipeApi):
                                 screenshot=False, verbose=False, tool=None,
                                 apk_package=None, host_driven_root=None,
                                 official_build=False, install_apk=None,
-                                json_results_file=None, suffix=None, **kwargs):
+                                json_results_file=None, timeout_scale=None,
+                                suffix=None, **kwargs):
     if install_apk:
       self.adb_install_apk(install_apk['apk'])
     if apk_under_test:
@@ -668,6 +669,8 @@ class AndroidApi(recipe_api.RecipeApi):
       args.extend(['--official-build'])
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
+    if timeout_scale:
+      args.extend(['--timeout-scale', timeout_scale])
 
     return self.test_runner(
         'Instrumentation test %s%s' % (annotation or name,
