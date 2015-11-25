@@ -26,41 +26,45 @@ def GetCrashDumpDir():
   return '%s\\Chromium\\User Data\\Crash Reports' % local_app_data
 
 
+def CdbExistsAtLocation(candidate_dir):
+  return (os.path.exists(candidate_dir) and
+          os.path.isfile(os.path.join(candidate_dir, "cdb.exe")))
+
+
 def ProbeDebuggerDir():
-  """Probes the debugger installed path and returns the path"""
-  program_file = (os.environ.get('ProgramFiles') or
-      os.environ.get('PROGRAMFILES'))
-  if not program_file:
-    return ''
+  """Probes the debugger installed path and returns the path."""
+  program_files = os.environ.get('ProgramFiles')
+  if not program_files:
+    return None
   # Probing debugger installed path.
   # Starting with 32 bit debugger on 32 bit platform.
-  debugger_dir = '%s\\Debugging Tools For Windows' % program_file
-  if os.path.exists(debugger_dir):
+  debugger_dir = '%s\\Debugging Tools For Windows' % program_files
+  if CdbExistsAtLocation(debugger_dir):
     return debugger_dir
   # 32 bit debugger on 32 bit platform.
-  debugger_dir = '%s\\Debugging Tools For Windows (x86)' % program_file
-  if os.path.exists(debugger_dir):
+  debugger_dir = '%s\\Debugging Tools For Windows (x86)' % program_files
+  if CdbExistsAtLocation(debugger_dir):
     return debugger_dir
   # 64 bit debugger.
-  debugger_dir = '%s\\Debugging Tools For Windows (x64)' % program_file
-  if os.path.exists(debugger_dir):
+  debugger_dir = '%s\\Debugging Tools For Windows (x64)' % program_files
+  if CdbExistsAtLocation(debugger_dir):
     return debugger_dir
   # windows 8 32 bit
-  debugger_dir = '%s\\Windows Kits\\8.0\\Debuggers\\x86' % program_file
-  if os.path.exists(debugger_dir):
+  debugger_dir = '%s\\Windows Kits\\8.0\\Debuggers\\x86' % program_files
+  if CdbExistsAtLocation(debugger_dir):
     return debugger_dir
   # windows 8.1 64 bit
-  debugger_dir = '%s\\Windows Kits\\8.1\\Debuggers\\x64' % program_file
-  if os.path.exists(debugger_dir):
+  debugger_dir = '%s\\Windows Kits\\8.1\\Debuggers\\x64' % program_files
+  if CdbExistsAtLocation(debugger_dir):
     return debugger_dir
-  program_file = os.environ.get('PROGRAMW6432')
-  if not program_file:
-    return ''
+  program_files = os.environ.get('PROGRAMW6432')
+  if not program_files:
+    return None
   # 64 bit debugger on 64 bit platform.
-  debugger_dir = '%s\\Debugging Tools For Windows (x64)' % program_file
-  if os.path.exists(debugger_dir):
+  debugger_dir = '%s\\Debugging Tools For Windows (x64)' % program_files
+  if CdbExistsAtLocation(debugger_dir):
     return debugger_dir
-  return ''
+  return None
 
 
 def GetStackTrace(debugger_dir, symbol_path, dump_file):
@@ -114,6 +118,8 @@ def main():
   if not debugger_dir:
     print 'Cannot find debugger.'
     return config.Master.retcode_warnings
+
+  print 'Debugger directory: %s' % debugger_dir
 
   symbol_path = os.path.join(options.build_dir, options.target)
   dll_path = os.path.join(symbol_path, 'chrome.dll')
