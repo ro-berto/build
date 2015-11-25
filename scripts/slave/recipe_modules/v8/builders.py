@@ -1979,6 +1979,40 @@ BUILDERS = {
         'tests': [V8Testing, SimdJs],
         'testing': {'platform': 'win'},
       },
+      'v8_win64_rel_ng': {
+        'chromium_apply_config': [
+          'default_compiler',
+          'v8_ninja',
+          'goma',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'enable_swarming': True,
+        'slim_swarming_builder': True,
+        'triggers': [
+          'v8_win64_rel_ng_triggered',
+        ],
+        'testing': {'platform': 'win'},
+      },
+      'v8_win64_rel_ng_triggered': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'v8_win64_rel_ng',
+        'enable_swarming': True,
+        'slim_swarming_tester': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86-64',
+        },
+        'tests': [V8Testing, SimdJs],
+        'testing': {'platform': 'linux'},
+      },
       'v8_win64_dbg': {
         'chromium_apply_config': [
           'default_compiler',

@@ -261,7 +261,8 @@ class V8Api(recipe_api.RecipeApi):
 
   @property
   def should_upload_build(self):
-    return self.bot_type == 'builder'
+    return (self.bot_type == 'builder' and
+            not self.bot_config.get('slim_swarming_builder'))
 
   @property
   def should_download_build(self):
