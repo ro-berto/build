@@ -10,7 +10,6 @@ DEPS = [
   'path',
   'properties',
   'step',
-  'time',
 ]
 
 
@@ -50,9 +49,6 @@ def RunSteps(api):
   # Download Cluster Telemetry binary.
   api.ct_swarming.download_CT_binary(CT_BINARY)
 
-  # Record how long the step took in swarming tasks.
-  swarming_start_time = api.time.time()
-
   ct_num_slaves = api.properties.get('ct_num_slaves', DEFAULT_CT_NUM_SLAVES)
   for slave_num in range(1, ct_num_slaves + 1):
     # Download page sets and archives.
@@ -83,9 +79,6 @@ def RunSteps(api):
 
   # Now collect all tasks.
   api.ct_swarming.collect_swarming_tasks(tasks)
-
-  print ('Running isolating, triggering and collecting swarming tasks took a '
-         'total of %s seconds') % (api.time.time() - swarming_start_time)
 
 
 def GenTests(api):
