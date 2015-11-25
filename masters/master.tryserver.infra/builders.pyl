@@ -13,6 +13,17 @@
   "buildbucket_bucket": "master.tryserver.infra",
 
   "builders": {
+    "Build Presubmit": {
+      "category": "Build",
+      "recipe": "run_presubmit",
+      "properties": {
+        "repo_name": "build",
+        "runhooks": True,
+      },
+      "scheduler": None,
+      "slave_pools": ["trusty64_slave_pool"],
+      "slavebuilddir": "presubmit_build",
+    },
     "Infra Presubmit": {
       "category": "Infra",
       "recipe": "run_presubmit",
