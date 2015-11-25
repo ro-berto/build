@@ -7,7 +7,7 @@
       "--master",
       "chromium.android",
       "--builder",
-      "Android arm Builder (dbg)",
+      "Lollipop Tablet Tester",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -19,7 +19,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
+      "src@1111111",
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -132,7 +132,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Android arm Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Lollipop Tablet Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -192,144 +192,37 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Debug",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-jsonstatus",
-      "/path/to/tmp/json",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--",
-      "android_builder_tests",
-      "android_webview_test_apk",
-      "remoting_apk"
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/src/out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "compile",
+    "name": "rmtree build directory",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/zip_build.py",
+      "[BUILD]/scripts/slave/extract_build.py",
       "--target",
       "Debug",
-      "--build-url",
-      "gs://chromium-android-archive/chromium.android/Android arm Builder (dbg)",
-      "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android arm Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android arm Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "--build-archive-url",
+      "gs://test-domain/test-archive.zip",
+      "--master-name",
+      "chromium.android",
+      "--build-number",
+      "571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "package build"
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger",
-    "trigger_specs": [
-      {
-        "builder_name": "Android WebView (amp)"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android WebView (amp)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (2)",
-    "trigger_specs": [
-      {
-        "builder_name": "Jelly Bean Tester"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Jelly Bean Tester@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (3)",
-    "trigger_specs": [
-      {
-        "builder_name": "KitKat Tablet Tester"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@KitKat Tablet Tester@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (4)",
-    "trigger_specs": [
-      {
-        "builder_name": "Lollipop Low-end Tester"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Lollipop Low-end Tester@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (5)",
-    "trigger_specs": [
-      {
-        "builder_name": "Lollipop Phone Tester"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Lollipop Phone Tester@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (6)",
-    "trigger_specs": [
-      {
-        "builder_name": "Lollipop Tablet Tester"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Lollipop Tablet Tester@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (7)",
-    "trigger_specs": [
-      {
-        "builder_name": "Marshmallow Tablet Tester"
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Marshmallow Tablet Tester@@@"
-    ]
+    "name": "extract build"
   },
   {
     "name": "$result",

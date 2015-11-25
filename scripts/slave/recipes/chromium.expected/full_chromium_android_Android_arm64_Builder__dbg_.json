@@ -239,6 +239,32 @@
     "name": "package build"
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Lollipop 64 bit Tester"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Lollipop 64 bit Tester@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (2)",
+    "trigger_specs": [
+      {
+        "builder_name": "Lollipop Consumer Tester"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Lollipop Consumer Tester@@@"
+    ]
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0
