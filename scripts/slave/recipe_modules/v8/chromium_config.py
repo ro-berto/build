@@ -102,6 +102,13 @@ def v8_ninja(c):
     c.build_config_fs = c.BUILD_CONFIG + '_x64'
 
 
+# Work-around for obtaining the right build dir on linux slave that trigger
+# windows swarming jobs.
+@CONFIG_CTX(includes=['v8'])
+def use_windows_swarming_slaves(c):
+  c.build_config_fs = c.BUILD_CONFIG + '_x64'
+
+
 @CONFIG_CTX(includes=['v8', 'dcheck'])
 def no_dcheck(c):
   c.gyp_env.GYP_DEFINES['dcheck_always_on'] = 0
