@@ -21,6 +21,12 @@ TEST_CONFIGS = freeze({
     'tests': ['mjsunit'],
     'test_args': ['--variants=ignition', '--ignition'],
   },
+  'mjsunit_sp_frame_access': {
+    'name': 'Mjsunit - sp frame access',
+    'tests': ['mjsunit'],
+    'test_args': [
+      '--variants=turbofan', '--extra-flags=--turbo_sp_frame_access'],
+  },
   'mozilla': {
     'name': 'Mozilla',
     'tests': ['mozilla'],
