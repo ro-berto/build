@@ -724,7 +724,8 @@ class AndroidApi(recipe_api.RecipeApi):
           'logcat_dumps/%s/%s' % (self.m.properties['buildername'],
                                   self.m.properties['buildnumber']),
           link_name='logcat dump',
-          version='4.7')
+          version='4.7',
+          parallel_upload=True)
     else:
       self.m.python(
           'logcat_dump',

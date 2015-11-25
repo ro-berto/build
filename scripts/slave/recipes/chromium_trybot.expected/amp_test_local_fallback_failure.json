@@ -2949,6 +2949,8 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
       "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
       "----",
       "cp",
       "[SLAVE_BUILD]/src/out/Release/full_log",
