@@ -495,6 +495,9 @@
         "categories": [
           "pdfium_all"
         ],
+        "excluded_builders" : [
+          "drm_win_xfa"
+        ],
         "builders": {
           "*": {}
         },
