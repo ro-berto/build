@@ -1910,6 +1910,43 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
+      'v8_win_rel_ng': {
+        'chromium_apply_config': [
+          'default_compiler',
+          'v8_ninja',
+          'goma',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'enable_swarming': True,
+        'slim_swarming_builder': True,
+        'triggers': [
+          'v8_win_rel_ng_triggered',
+        ],
+        'testing': {'platform': 'win'},
+      },
+      'v8_win_rel_ng_triggered': {
+        'chromium_apply_config': [
+          'use_windows_swarming_slaves',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'v8_win_rel_ng',
+        'enable_swarming': True,
+        'slim_swarming_tester': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86-64',
+        },
+        'tests': [V8Testing],
+        'testing': {'platform': 'linux'},
+      },
       'v8_win_nosnap_shared_compile_rel': {
         'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [
