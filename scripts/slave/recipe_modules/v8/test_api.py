@@ -362,9 +362,14 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     if bot_config.get('bot_type') in ['builder', 'builder_tester']:
       assert parent_buildername is None
 
+    if mastername.startswith('tryserver'):
+      properties_fn = self.m.properties.tryserver
+    else:
+      properties_fn = self.m.properties.generic
+
     test = (
         recipe_test_api.RecipeTestApi.test(name) +
-        self.m.properties.generic(
+        properties_fn(
             mastername=mastername,
             buildername=buildername,
             branch=branch,
@@ -390,7 +395,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     if mastername.startswith('tryserver'):
       test += self.m.properties(
           revision='12345',
-          patch_url='svn://svn-mirror.golo.chromium.org/patch',
+          patch_project='v8',
+          patch_storage='rietveld',
+          try_job_key='1234',
       )
 
     return test

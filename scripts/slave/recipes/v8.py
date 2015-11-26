@@ -106,6 +106,20 @@ def GenTests(api):
     )
   )
 
+  # Simulate a tryjob triggered by the tryserver for setting up different
+  # swarming default tags.
+  yield (
+    api.v8.test(
+        'tryserver.v8',
+        'v8_linux_rel',
+        'triggered_by_ts',
+        requester='dude@chromium.org',
+        patch_project='v8',
+        blamelist='dude@chromium.org',
+        blamelist_real=['dude@chromium.org'],
+    )
+  )
+
   # Test usage of test filters. They're used when the buildbucket
   # job gets a property 'testfilter', which is expected to be a json list of
   # test-filter strings.
