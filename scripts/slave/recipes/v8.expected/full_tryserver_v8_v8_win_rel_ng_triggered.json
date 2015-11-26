@@ -147,7 +147,7 @@
       "--",
       "--progress=verbose",
       "--mode",
-      "Release_x64",
+      "Release",
       "--arch",
       "ia32",
       "--outdir",

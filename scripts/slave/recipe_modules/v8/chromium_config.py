@@ -103,10 +103,11 @@ def v8_ninja(c):
 
 
 # Work-around for obtaining the right build dir on linux slave that trigger
-# windows swarming jobs.
+# windows 64 bit swarming jobs.
 @CONFIG_CTX(includes=['v8'])
 def use_windows_swarming_slaves(c):
-  c.build_config_fs = c.BUILD_CONFIG + '_x64'
+  if c.TARGET_BITS == 64:
+    c.build_config_fs = c.BUILD_CONFIG + '_x64'
 
 
 @CONFIG_CTX(includes=['v8', 'dcheck'])
