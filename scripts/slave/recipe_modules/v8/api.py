@@ -1007,6 +1007,15 @@ class V8Api(recipe_api.RecipeApi):
         'parent_got_revision': self.revision,
         'parent_got_revision_cp': self.revision_cp,
       }
+      if self.m.tryserver.is_tryserver:
+        properties.update(
+          issue=self.m.properties['issue'],
+          patch_project=str(self.m.properties['patch_project']),
+          patch_storage=str(self.m.properties['patch_storage']),
+          patchset=str(self.m.properties['patchset']),
+          requester=str(self.m.properties['requester']),
+          rietveld=str(self.m.properties['rietveld']),
+        )
       swarm_hashes = self.m.isolate.isolated_tests
       if swarm_hashes:
         properties['swarm_hashes'] = swarm_hashes
