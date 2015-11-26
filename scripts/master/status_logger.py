@@ -185,8 +185,8 @@ class StatusEventLogger(StatusReceiverMultiService):
 
 
   def send_build_result(
-      self, started, finished, builder_name, bot_name, result, project_id=None,
-      subproject_tag=None):
+      self, scheduled, started, finished, builder_name, bot_name, result,
+      project_id=None, subproject_tag=None):
     """Log a build result for ts_mon.
 
     This allows computing metrics for builds in mastermon.
@@ -197,6 +197,8 @@ class StatusEventLogger(StatusReceiverMultiService):
         'slave': bot_name,
         'result': result.lower(),
         'duration_s': finished - started,
+        'pending_s': started - scheduled,
+        'total_s': finished - scheduled,
     }
     if project_id:
       d['project_id'] = project_id
@@ -474,6 +476,14 @@ class StatusEventLogger(StatusReceiverMultiService):
     self.log('buildFinished', '%s, %d, %s, %r',
              builderName, build_number, bot, results)
     started, finished = build.getTimes()
+
+    # Calculate when build was scheduled if possible. Use build started
+    # timestamp as initial approximation.
+    scheduled = started
+    source_stamp = build.getSourceStamp()
+    if source_stamp and source_stamp.changes:
+      scheduled = source_stamp.changes[0].when
+
     properties = build.getProperties()
     extra_result_code = properties.getProperty('extra_result_code')
     self.send_build_event(
@@ -487,7 +497,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     project_id = properties.getProperty('patch_project')
     subproject_tag = properties.getProperty('subproject_tag')
     self.send_build_result(
-        started, finished, builderName, bot,
+        scheduled, started, finished, builderName, bot,
         buildbot.status.results.Results[results],
         project_id, subproject_tag)
 

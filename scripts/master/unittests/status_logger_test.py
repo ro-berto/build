@@ -26,6 +26,10 @@ class Properties(object):
     return 'whatever'
 
 
+class SourceStamp(object):
+  changes = []
+
+
 class Build(object):
   def getNumber(self):
     return 5
@@ -41,6 +45,9 @@ class Build(object):
 
   def getProperties(self):
     return Properties()
+
+  def getSourceStamp(self):
+    return SourceStamp()
 
   def getTimes(self):
     return 5000, 6000
