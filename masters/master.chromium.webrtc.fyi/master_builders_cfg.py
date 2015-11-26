@@ -25,8 +25,8 @@ def Update(c):
   ]
   win_builders = [
     'Win Builder',
-    'Win GN',
-    'Win GN (dbg)',
+    'Win x64 GN',
+    'Win x64 GN (dbg)',
   ]
   all_builders = hourly_builders + win_builders
 
@@ -50,14 +50,14 @@ def Update(c):
     {'name': 'Win7 Tester', 'category': 'win'},
     {'name': 'Win10 Tester', 'category': 'win'},
     {
-      'name': 'Win GN',
-      'recipe': 'chromium_gn',
+      'name': 'Win x64 GN',
+      'recipe': 'chromium',
       'category': 'win',
       'slavebuilddir': 'win_gn',
     },
     {
-      'name': 'Win GN (dbg)',
-      'recipe': 'chromium_gn',
+      'name': 'Win x64 GN (dbg)',
+      'recipe': 'chromium',
       'category': 'win',
       'slavebuilddir': 'win_gn',
     },
@@ -65,13 +65,13 @@ def Update(c):
     {'name': 'Mac Tester', 'category': 'mac'},
     {
       'name': 'Mac GN',
-      'recipe': 'chromium_gn',
+      'recipe': 'chromium',
       'category': 'mac',
       'slavebuilddir': 'mac_gn',
     },
     {
       'name': 'Mac GN (dbg)',
-      'recipe': 'chromium_gn',
+      'recipe': 'chromium',
       'category': 'mac',
       'slavebuilddir': 'mac_gn',
     },
@@ -103,13 +103,13 @@ def Update(c):
     {'name': 'Android Tests (dbg) (L Nexus9)', 'category': 'android'},
     {
       'name': 'Android GN',
-      'recipe': 'chromium_gn',
+      'recipe': 'chromium',
       'category': 'android',
       'slavebuilddir': 'android_gn',
     },
     {
       'name': 'Android GN (dbg)',
-      'recipe': 'chromium_gn',
+      'recipe': 'chromium',
       'category': 'android',
       'slavebuilddir': 'android_gn',
     },

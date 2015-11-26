@@ -89,40 +89,6 @@ BUILDERS = freeze({
   },
   'chromium.webrtc.fyi': {
     'builders': {
-      'Win GN': {
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 32,
-        },
-        'gclient_apply_config': ['chromium_webrtc_tot'],
-      },
-      'Win GN (dbg)': {
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 32,
-        },
-        'gclient_apply_config': ['chromium_webrtc_tot'],
-      },
-      'Mac GN': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'mac',
-          'TARGET_BITS': 64,
-        },
-        'gclient_apply_config': ['chromium_webrtc_tot'],
-      },
-      'Mac GN (dbg)': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'mac',
-          'TARGET_BITS': 64,
-        },
-        'gclient_apply_config': ['chromium_webrtc_tot'],
-      },
       'Linux GN': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -139,26 +105,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'gclient_apply_config': ['chromium_webrtc_tot'],
-      },
-      'Android GN': {
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'gclient_apply_config': ['android', 'chromium_webrtc_tot'],
-      },
-      'Android GN (dbg)': {
-        'chromium_apply_config': ['gn_minimal_symbols'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'gclient_apply_config': ['android', 'chromium_webrtc_tot'],
       },
     },
   },

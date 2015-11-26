@@ -7,7 +7,7 @@
       "--master",
       "chromium.webrtc.fyi",
       "--builder",
-      "Android GN",
+      "Android GN (dbg)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -24,7 +24,6 @@
       "src/third_party/libjingle/source/talk@HEAD",
       "--revision",
       "src/third_party/webrtc@HEAD",
-      "--force",
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -120,7 +119,8 @@
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=arm use_goma=1"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gclient runhooks"
   },
@@ -136,11 +136,7 @@
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.webrtc.fyi.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Android GN\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -153,11 +149,11 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Release",
+      "Debug",
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Android GN\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Android GN (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -170,17 +166,64 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/cleanup_temp.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
+      "[SLAVE_BUILD]/src/out/Debug/debug_info_dumps",
+      "[SLAVE_BUILD]/src/out/Debug/test_logs",
+      "[SLAVE_BUILD]/src/out/build_product.zip",
+      "[SLAVE_BUILD]/src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "clean local files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil, sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1], True)@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[2], True)@@@",
+      "@@@STEP_LOG_LINE@python.inline@try:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.remove(sys.argv[3])@@@",
+      "@@@STEP_LOG_LINE@python.inline@except OSError:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  pass@@@",
+      "@@@STEP_LOG_LINE@python.inline@for base, _dirs, files in os.walk(sys.argv[4]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for f in files:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    if f.endswith('.pyc'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@      os.remove(os.path.join(base, f))@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "allow_subannotations": false,
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/tree_truth.sh",
+      "[SLAVE_BUILD]/src",
+      "src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "tree truth steps"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.webrtc.fyi",
       "-b",
-      "Android GN",
+      "Android GN (dbg)",
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[BUILD]/goma",
-      "//out/Release"
+      "//out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "generate_build_files"
@@ -191,7 +234,7 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",
@@ -202,10 +245,12 @@
       "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
-      "--",
-      "chrome_public_apk"
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "compile",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",

@@ -19,6 +19,7 @@ from . import chromium_memory_fyi
 from . import chromium_perf
 from . import chromium_perf_fyi
 from . import chromium_webkit
+from . import chromium_webrtc_fyi
 from . import chromium_win
 from . import client_skia
 from . import client_v8_fyi
@@ -42,6 +43,7 @@ BUILDERS = freeze({
   'chromium.perf': chromium_perf.SPEC,
   'chromium.perf.fyi': chromium_perf_fyi.SPEC,
   'chromium.webkit': chromium_webkit.SPEC,
+  'chromium.webrtc.fyi': chromium_webrtc_fyi.SPEC,
   'chromium.win': chromium_win.SPEC,
   'client.skia': client_skia.SPEC,
   'client.v8.fyi': client_v8_fyi.SPEC,

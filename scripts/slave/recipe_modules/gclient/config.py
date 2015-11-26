@@ -444,6 +444,37 @@ def chromium_angle(c):
   c.got_revision_mapping['src/third_party/angle'] = 'got_revision'
   c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
+@config_ctx(includes=['chromium', '_webrtc_deps'])
+def chromium_webrtc(c):
+  c.got_revision_mapping['src/third_party/libjingle/source/talk'] = (
+      'got_libjingle_revision')
+  c.got_revision_mapping['src/third_party/libvpx/source'] = (
+      'got_libvpx_revision')
+
+@config_ctx(includes=['chromium_webrtc'])
+def chromium_webrtc_tot(c):
+  """Configures ToT revisions for WebRTC and Libjingle for Chromium.
+
+  Sets up ToT instead of the DEPS-pinned revision for WebRTC and Libjingle.
+  This is used for some bots to provide data about which revisions are green to
+  roll into Chromium.
+  """
+  c.revisions['src'] = 'HEAD'
+  c.revisions['src/third_party/webrtc'] = 'HEAD'
+  c.revisions['src/third_party/libjingle/source/talk'] = 'HEAD'
+
+@config_ctx()
+def _webrtc_deps(c):
+  """Add webrtc.DEPS solution for test resources and tools.
+
+  The webrtc.DEPS solution pulls in additional resources needed for running
+  WebRTC-specific test setups in Chromium.
+  """
+  s = c.solutions.add()
+  s.name = 'webrtc.DEPS'
+  s.url = ChromiumGitURL(c, 'chromium', 'deps', 'webrtc', 'webrtc.DEPS')
+  s.deps_file = 'DEPS'
+
 @config_ctx()
 def pdfium(c):
   soln = c.solutions.add()
