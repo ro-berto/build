@@ -303,18 +303,9 @@ SPEC = {
             override_compile_targets=['breakpad_unittests_deps'],
             android_isolate_path='breakpad/breakpad_unittests.isolate',
             enable_swarming=True),
-        steps.GTestTest('cc_unittests', enable_swarming=True),
-        steps.GTestTest(
-            'components_browsertests',
-            android_isolate_path='components/components_browsertests.isolate',
-            enable_swarming=True),
         steps.GTestTest(
             'components_unittests',
             android_isolate_path='components/components_unittests.isolate',
-            enable_swarming=True),
-        steps.GTestTest(
-            'content_browsertests',
-            android_isolate_path='content/content_browsertests.isolate',
             enable_swarming=True),
         steps.GTestTest(
             'content_unittests',
@@ -332,14 +323,8 @@ SPEC = {
             'net_unittests',
             android_isolate_path='net/net_unittests.isolate'),
         steps.GTestTest(
-            'sandbox_linux_unittests',
-            override_compile_targets=['sandbox_linux_unittests_deps']),
-        steps.GTestTest(
             'sql_unittests',
             android_isolate_path='sql/sql_unittests.isolate'),
-        steps.GTestTest(
-            'sync_unit_tests',
-            android_isolate_path='sync/sync_unit_tests.isolate'),
         steps.GTestTest('ui_android_unittests'),
         steps.GTestTest(
             'ui_base_unittests',
