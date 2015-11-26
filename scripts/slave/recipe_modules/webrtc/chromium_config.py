@@ -53,5 +53,3 @@ def webrtc_gn(c):
 
 def _compiler_defaults(c):
   c.compile_py.default_targets = ['All']
-  if c.TARGET_PLATFORM in ('mac', 'ios'):
-    c.gyp_env.GYP_DEFINES['mac_sdk'] = '10.9'
