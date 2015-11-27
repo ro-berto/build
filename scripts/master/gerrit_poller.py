@@ -128,7 +128,10 @@ class GerritPoller(base.PollingChangeSource):
     return self.request(path)
 
   def _is_interesting_message(self, message):  # pylint: disable=R0201
-    return message['message'].startswith('Uploaded patch set ')
+    return any((check_str in message['message'])
+               for check_str in (
+                  'Uploaded patch set ',
+                  'Published edit on patch set ',))
 
   def checkForNewPatchset(self, change, since):
     o_params = '&'.join('o=%s' % x for x in (
