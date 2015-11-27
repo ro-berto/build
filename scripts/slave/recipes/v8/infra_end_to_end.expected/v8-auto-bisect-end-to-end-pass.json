@@ -66,7 +66,9 @@
       "@@@STEP_LOG_LINE@stdout@@@@@@",
       "@@@STEP_LOG_LINE@stdout@@@019f9408@@@@@@",
       "@@@STEP_LOG_LINE@stdout@@@@722719fe@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_LOG_END@stdout@@@",
+      "@@@STEP_LOG_LINE@retcode@1@@@",
+      "@@@STEP_LOG_END@retcode@@@"
     ]
   },
   {

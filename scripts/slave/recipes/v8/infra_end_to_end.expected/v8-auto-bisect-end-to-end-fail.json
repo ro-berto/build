@@ -66,6 +66,8 @@
       "@@@STEP_LOG_LINE@stdout@deadbeef@@@",
       "@@@STEP_LOG_LINE@stdout@deadbeef@@@",
       "@@@STEP_LOG_END@stdout@@@",
+      "@@@STEP_LOG_LINE@retcode@1@@@",
+      "@@@STEP_LOG_END@retcode@@@",
       "@@@STEP_LOG_LINE@verify suspects@Regular expression \"Suspecting multiple commits(?:.|\\s)*019f9408(?:.|\\s)*722719fe\" did not match.@@@",
       "@@@STEP_LOG_END@verify suspects@@@",
       "@@@STEP_FAILURE@@@"

@@ -83,6 +83,9 @@ def RunSteps(api):
       # Make consumed output visible again.
       result.presentation.logs['stdout'] = result.stdout.splitlines()
 
+      # Show return code to ease debugging.
+      result.presentation.logs['retcode'] = [str(result.retcode)]
+
     # Assert invariants.
     for verifier in test['verifiers']:
       if not re.search(verifier['regexp'], result.stdout):
