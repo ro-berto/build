@@ -5,7 +5,6 @@
   "master_port_alt": 41402,
   "slave_port": 31402,
   "templates": [
-    "templates",
     "../master.chromium.infra/templates",
     "../master.chromium/templates",
   ],
