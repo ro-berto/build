@@ -44,7 +44,7 @@ def GetLatestGomaCompilerProxyInfo():
   info_pattern = os.path.join(dirname, 'compiler_proxy.*.INFO.*')
   candidates = glob.glob(info_pattern)
   if not candidates:
-    return
+    return None
   return sorted(candidates, reverse=True)[0]
 
 
@@ -84,6 +84,9 @@ def UploadToGomaLogGS(file_path, gs_filename, text_to_append=None):
 def UploadGomaCompilerProxyInfo():
   """Upload goma compiler_proxy.INFO to Google Storage."""
   latest_info = GetLatestGomaCompilerProxyInfo()
+  if not latest_info:
+    print 'No compiler_proxy.INFO to upload'
+    return
   # Since a filename of compiler_proxy.INFO is fairly unique,
   # we might be able to upload it as-is.
   log_path = UploadToGomaLogGS(latest_info, os.path.basename(latest_info))
