@@ -64,20 +64,24 @@ def RunSteps(api):
   api.bot_update.ensure_checkout(force=True)
 
   for test in TESTS:
-    result = api.python(
-        name=test['name'],
-        script=api.path['checkout'].join('scripts', 'tools', 'run_recipe.py'),
-        args=[
-          'v8',
-          '--properties-file',
-          api.json.input(test['properties'])
-        ],
-        ok_ret=test['ok_ret'],
-        stdout=api.raw_io.output(),
-    )
+    try:
+      api.python(
+          name=test['name'],
+          script=api.path['checkout'].join(
+              'scripts', 'tools', 'run_recipe.py'),
+          args=[
+            'v8',
+            '--properties-file',
+            api.json.input(test['properties'])
+          ],
+          ok_ret=test['ok_ret'],
+          stdout=api.raw_io.output(),
+      )
+    finally:
+      result = api.step.active_result
 
-    # Make consumed output visible again.
-    result.presentation.logs['stdout'] = result.stdout.splitlines()
+      # Make consumed output visible again.
+      result.presentation.logs['stdout'] = result.stdout.splitlines()
 
     # Assert invariants.
     for verifier in test['verifiers']:
@@ -85,6 +89,8 @@ def RunSteps(api):
         result.presentation.status = api.step.FAILURE
         result.presentation.logs[verifier['name']] = [
             'Regular expression "%s" did not match.' % verifier['regexp']]
+        # Make the overall build fail.
+        raise api.step.StepFailure('Verifier did not match.')
 
 
 def GenTests(api):

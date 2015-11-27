@@ -73,7 +73,7 @@
   },
   {
     "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "reason": "Verifier did not match.",
+    "status_code": 1
   }
 ]
