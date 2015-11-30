@@ -21,6 +21,10 @@
       "--force",
       "--verbose",
       "--delete_unversioned_trees",
+      "--revision",
+      "src@origin/master",
+      "--revision",
+      "skia@abc123",
       "--output-json",
       "/path/to/tmp/json"
     ],

@@ -33,10 +33,17 @@ def RunSteps(api):
   src = gclient_cfg.solutions.add()
   src.name = 'src'
   src.url = 'https://chromium.googlesource.com/chromium/src.git'
+  src.revision = 'origin/master'  # Always checkout Chromium at ToT.
+
   skia = gclient_cfg.solutions.add()
   skia.name = 'skia'
   skia.url = global_constants.SKIA_REPO
+  skia.revision = (api.properties.get('parent_got_revision') or
+                   api.properties.get('orig_revision') or
+                   api.properties.get('revision') or
+                   'origin/master')
   gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
+
   api.gclient.checkout(gclient_config=gclient_cfg)
 
   # Checkout Swarming scripts.
@@ -94,6 +101,7 @@ def RunSteps(api):
 def GenTests(api):
   parent_got_swarming_client_revision = '12345'
   ct_num_slaves = 5
+  skia_revision = 'abc123'
 
   yield(
     api.test('CT_DM_10k_SKPs') +
@@ -101,6 +109,7 @@ def GenTests(api):
         buildername='CT-DM-10k-SKPs',
         parent_got_swarming_client_revision=parent_got_swarming_client_revision,
         ct_num_slaves=ct_num_slaves,
+        revision=skia_revision,
     )
   )
 
@@ -111,5 +120,6 @@ def GenTests(api):
         buildername='CT-DM-10k-SKPs',
         parent_got_swarming_client_revision=parent_got_swarming_client_revision,
         ct_num_slaves=ct_num_slaves,
+        revision=skia_revision,
     )
   )
