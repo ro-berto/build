@@ -192,8 +192,18 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
                 cmd=['shell', 'stop'],
                 infra_step=True)
 
+    # Print out battery stats.
+    self._adb(name='starting battery stats',
+              serial=self.serial,
+              cmd=['shell', 'dumpsys', 'battery'],
+              infra_step=True)
+
   def cleanup_steps(self):
     """Run any device-specific cleanup steps."""
+    self._adb(name='final battery stats',
+              serial=self.serial,
+              cmd=['shell', 'dumpsys', 'battery'],
+              infra_step=True)
     self._adb(name='reboot',
               serial=self.serial,
               cmd=['reboot'],
