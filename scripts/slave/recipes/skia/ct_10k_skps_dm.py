@@ -47,7 +47,11 @@ def RunSteps(api):
   api.gclient.checkout(gclient_config=gclient_cfg)
 
   # Checkout Swarming scripts.
-  api.swarming_client.checkout()
+  # Explicitly set revision to empty string to checkout swarming ToT. If this is
+  # not done then it crashes due to missing
+  # api.properties['parent_got_swarming_client_revision'] which seems to be
+  # set only for Chromium bots.
+  api.swarming_client.checkout(revision='')
   # Ensure swarming_client is compatible with what recipes expect.
   api.swarming.check_client_version()
 
@@ -99,7 +103,6 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  parent_got_swarming_client_revision = '12345'
   ct_num_slaves = 5
   skia_revision = 'abc123'
 
@@ -107,7 +110,6 @@ def GenTests(api):
     api.test('CT_DM_10k_SKPs') +
     api.properties(
         buildername='CT-DM-10k-SKPs',
-        parent_got_swarming_client_revision=parent_got_swarming_client_revision,
         ct_num_slaves=ct_num_slaves,
         revision=skia_revision,
     )
@@ -118,7 +120,6 @@ def GenTests(api):
     api.step_data('ct-10k-dm-3 on Ubuntu', retcode=1) +
     api.properties(
         buildername='CT-DM-10k-SKPs',
-        parent_got_swarming_client_revision=parent_got_swarming_client_revision,
         ct_num_slaves=ct_num_slaves,
         revision=skia_revision,
     )

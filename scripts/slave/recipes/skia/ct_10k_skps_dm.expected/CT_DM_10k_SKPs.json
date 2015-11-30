@@ -64,7 +64,7 @@
       "retry",
       "fetch",
       "origin",
-      "12345"
+      "master"
     ],
     "cwd": "[SLAVE_BUILD]/swarming.client",
     "name": "git fetch (swarming_client)"
