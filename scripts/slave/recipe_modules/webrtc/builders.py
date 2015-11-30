@@ -240,9 +240,6 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'chromium-webrtc-trunk-tot-rel-win',
-        },
         'bot_type': 'builder',
         'build_gs_archive': 'win_rel_archive_fyi',
         'testing': {'platform': 'win'},
@@ -307,9 +304,6 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'chromium-webrtc-trunk-tot-rel-mac',
-        },
         'bot_type': 'builder',
         'build_gs_archive': 'mac_rel_archive_fyi',
         'testing': {'platform': 'mac'},
@@ -334,9 +328,6 @@ BUILDERS = freeze({
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
-        },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'chromium-webrtc-trunk-tot-rel-linux',
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux_rel_archive_fyi',
@@ -365,9 +356,6 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android',
-        },
         'bot_type': 'builder',
         'build_gs_archive': 'android_dbg_archive_fyi',
         'testing': {'platform': 'linux'},
@@ -386,9 +374,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
-        },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-arm64',
         },
         'bot_type': 'builder',
         'build_gs_archive': 'android_dbg_archive_arm64_fyi',
