@@ -22,6 +22,19 @@ def ContainsChromiumRoll(changes):
       return True
   return False
 
+def ExtractStaleRoll(changes, api):
+  for change in changes:
+    if change['subject'].startswith('Update V8 to'):
+      is_in_cq = change['commit']
+      if not is_in_cq:
+        return change['issue']
+  return None
+
+def ResubmitToCQ(issue_id, api):
+  api.step(
+      'send issue to CQ',
+      ['commit_queue', 'set', '-i', issue_id]
+  )
 
 def RunSteps(api):
   api.chromium.cleanup_temp()
@@ -59,8 +72,18 @@ def RunSteps(api):
       'check active roll',
       step_test_data=lambda: api.raw_io.test_api.output('{"results": []}')
   )
-  if ContainsChromiumRoll(api.json.loads(result)['results']):
-    api.step.active_result.presentation.step_text = 'Active rolls found.'
+  results = api.json.loads(result)['results']
+
+  if ContainsChromiumRoll(results):
+    stale_roll = ExtractStaleRoll(results, api)
+
+    if stale_roll:
+      ResubmitToCQ(stale_roll, api)
+      api.step.active_result.presentation.step_text = (
+          'Stale roll found. Resubmitted to CQ.')
+    else:
+      api.step.active_result.presentation.step_text = 'Active rolls found.'
+
     return
 
   # Prevent race with gnumbd by waiting.
@@ -99,6 +122,14 @@ def GenTests(api):
       api.properties.generic(mastername='client.v8') +
       api.override_step_data(
           'check active roll', api.raw_io.output(
-              '{"results": [{"subject": "Update V8 to foo"}]}'))
+              '{"results": [{"subject": "Update V8 to foo",' +
+              ' "issue": 123456, "commit": true}]}'))
+    )
+  yield (api.test('stale_roll') +
+      api.properties.generic(mastername='client.v8') +
+      api.override_step_data(
+          'check active roll', api.raw_io.output(
+              '{"results": [{"subject": "Update V8 to foo",' +
+              ' "issue": 123456, "commit": false}]}'))
     )
 
