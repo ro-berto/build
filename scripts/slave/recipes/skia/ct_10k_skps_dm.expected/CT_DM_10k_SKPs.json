@@ -3,90 +3,42 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/bot_update.py",
-      "--master",
-      "chromium.perf.fyi",
-      "--builder",
-      "Linux CT Top1k Repaint Perf",
-      "--slave",
-      "test-slave",
+      "[DEPOT_TOOLS]/gclient.py",
+      "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
-      "--root",
-      "src",
-      "--revision_mapping_file",
-      "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
-      "--output_json",
-      "/path/to/tmp/json",
-      "--revision",
-      "src@HEAD",
-      "--force",
-      "--output_manifest"
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "bot_update",
+    "name": "gclient setup"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "sync",
+      "--nohooks",
+      "--force",
+      "--verbose",
+      "--delete_unversioned_trees",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gclient sync",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"skia/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 164710@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/native_client\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/native_client.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/angle\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/angle.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/webrtc\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/webrtc.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"0f90628433546e61d9268596da93418c623137f4\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/tools/swarming_client\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/tools/swarming_client.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 170242@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#170242}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"root\": \"src\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@got_nacl_revision@\"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_swarming_client_revision@\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_webrtc_revision@\"0f90628433546e61d9268596da93418c623137f4\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision@\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_nacl_revision_cp@\"refs/heads/master@{#274981}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_angle_revision@\"fac9503c46405f77757b9a728eb85b8d7bc6080c\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_v8_revision@\"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_v8_revision_cp@\"refs/heads/master@{#43426}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_swarming_client_revision_cp@\"refs/heads/master@{#276089}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_webrtc_revision_cp@\"refs/heads/master@{#120644}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#170242}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_angle_revision_cp@\"refs/heads/master@{#297276}\"@@@"
+      "@@@SET_BUILD_PROPERTY@got_revision@164710@@@"
     ]
   },
   {
@@ -170,48 +122,50 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/extract_build.py",
-      "--target",
-      "Release",
-      "--build-archive-url",
-      "http:/dummy-url.com",
-      "--master-name",
-      "chromium.perf.fyi"
+      "make",
+      "dm"
     ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Download and Extract Binary"
+    "cwd": "[SLAVE_BUILD]/skia",
+    "name": "build dm"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cp",
-      "gs://cluster-telemetry/swarming/binaries/run_chromium_perf_swarming",
-      "[SLAVE_BUILD]/src/content/test/ct/run_chromium_perf_swarming"
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "/repos/chromium/src/chrome/ct_dm.isolate",
+      "[SLAVE_BUILD]/src/chrome/ct_dm.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download run_chromium_perf_swarming"
+    "name": "copy ct_dm.isolate"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport os\nimport stat\n\nos.chmod('[SLAVE_BUILD]/src/content/test/ct/run_chromium_perf_swarming', os.stat('[SLAVE_BUILD]/src/content/test/ct/run_chromium_perf_swarming').st_mode | stat.S_IEXEC)\n"
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "/repos/chromium/src/content/test/ct/run_ct_dm.py",
+      "[SLAVE_BUILD]/src/content/test/ct/run_ct_dm.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Set executable bit on run_chromium_perf_swarming",
+    "name": "copy run_ct_dm.py"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/src/content/test/ct/slave1/skps"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rmtree SKPs dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@import stat@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@os.chmod('[SLAVE_BUILD]/src/content/test/ct/run_chromium_perf_swarming', os.stat('[SLAVE_BUILD]/src/content/test/ct/run_chromium_perf_swarming').st_mode | stat.S_IEXEC)@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
@@ -220,11 +174,11 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave1/page_sets",
+      "[SLAVE_BUILD]/src/content/test/ct/slave1/skps",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "makedirs page_sets dir",
+    "name": "makedirs SKPs dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -246,50 +200,13 @@
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
+      "-m",
       "cp",
-      "gs://cluster-telemetry/swarming/page_sets/1k/slave1/*",
-      "[SLAVE_BUILD]/src/content/test/ct/slave1/page_sets"
+      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave1/*",
+      "[SLAVE_BUILD]/src/content/test/ct/slave1/skps"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave1/page_sets/data",
-      "511"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "makedirs WPR dir",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cp",
-      "gs://cluster-telemetry/swarming/webpage_archives/1k/slave1/*",
-      "[SLAVE_BUILD]/src/content/test/ct/slave1/page_sets/data"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download (2)"
+    "name": "gsutil cp"
   },
   {
     "cmd": [
@@ -319,7 +236,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[TMP_BASE]/swarming_temp_dir/ct-task-1.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"repaint\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Linux CT Top1k Repaint Perf\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"xy12z43\", \n        \"--extra-variable\", \n        \"MASTER\", \n        \"chromium.perf.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"1\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_dm.isolate\", \n        \"--isolated\", \n        \"[TMP_BASE]/swarming_temp_dir/ct-task-1.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"1\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
       "[TMP_BASE]/swarming_temp_dir/slave1.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -329,12 +246,31 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/src/content/test/ct/slave2/skps"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rmtree SKPs dir (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave2/page_sets",
+      "[SLAVE_BUILD]/src/content/test/ct/slave2/skps",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "makedirs page_sets dir (2)",
+    "name": "makedirs SKPs dir (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -356,50 +292,13 @@
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
+      "-m",
       "cp",
-      "gs://cluster-telemetry/swarming/page_sets/1k/slave2/*",
-      "[SLAVE_BUILD]/src/content/test/ct/slave2/page_sets"
+      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave2/*",
+      "[SLAVE_BUILD]/src/content/test/ct/slave2/skps"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download (3)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave2/page_sets/data",
-      "511"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "makedirs WPR dir (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cp",
-      "gs://cluster-telemetry/swarming/webpage_archives/1k/slave2/*",
-      "[SLAVE_BUILD]/src/content/test/ct/slave2/page_sets/data"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download (4)"
+    "name": "gsutil cp (2)"
   },
   {
     "cmd": [
@@ -429,7 +328,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[TMP_BASE]/swarming_temp_dir/ct-task-2.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"repaint\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Linux CT Top1k Repaint Perf\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"xy12z43\", \n        \"--extra-variable\", \n        \"MASTER\", \n        \"chromium.perf.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"2\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_dm.isolate\", \n        \"--isolated\", \n        \"[TMP_BASE]/swarming_temp_dir/ct-task-2.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"2\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
       "[TMP_BASE]/swarming_temp_dir/slave2.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -439,12 +338,31 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/src/content/test/ct/slave3/skps"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rmtree SKPs dir (3)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave3/page_sets",
+      "[SLAVE_BUILD]/src/content/test/ct/slave3/skps",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "makedirs page_sets dir (3)",
+    "name": "makedirs SKPs dir (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -466,50 +384,13 @@
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
+      "-m",
       "cp",
-      "gs://cluster-telemetry/swarming/page_sets/1k/slave3/*",
-      "[SLAVE_BUILD]/src/content/test/ct/slave3/page_sets"
+      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave3/*",
+      "[SLAVE_BUILD]/src/content/test/ct/slave3/skps"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download (5)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave3/page_sets/data",
-      "511"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "makedirs WPR dir (3)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cp",
-      "gs://cluster-telemetry/swarming/webpage_archives/1k/slave3/*",
-      "[SLAVE_BUILD]/src/content/test/ct/slave3/page_sets/data"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download (6)"
+    "name": "gsutil cp (3)"
   },
   {
     "cmd": [
@@ -539,7 +420,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[TMP_BASE]/swarming_temp_dir/ct-task-3.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"repaint\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Linux CT Top1k Repaint Perf\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"xy12z43\", \n        \"--extra-variable\", \n        \"MASTER\", \n        \"chromium.perf.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"3\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_dm.isolate\", \n        \"--isolated\", \n        \"[TMP_BASE]/swarming_temp_dir/ct-task-3.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"3\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
       "[TMP_BASE]/swarming_temp_dir/slave3.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -549,12 +430,31 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/src/content/test/ct/slave4/skps"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rmtree SKPs dir (4)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave4/page_sets",
+      "[SLAVE_BUILD]/src/content/test/ct/slave4/skps",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "makedirs page_sets dir (4)",
+    "name": "makedirs SKPs dir (4)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -576,50 +476,13 @@
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
+      "-m",
       "cp",
-      "gs://cluster-telemetry/swarming/page_sets/1k/slave4/*",
-      "[SLAVE_BUILD]/src/content/test/ct/slave4/page_sets"
+      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave4/*",
+      "[SLAVE_BUILD]/src/content/test/ct/slave4/skps"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download (7)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave4/page_sets/data",
-      "511"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "makedirs WPR dir (4)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cp",
-      "gs://cluster-telemetry/swarming/webpage_archives/1k/slave4/*",
-      "[SLAVE_BUILD]/src/content/test/ct/slave4/page_sets/data"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download (8)"
+    "name": "gsutil cp (4)"
   },
   {
     "cmd": [
@@ -649,7 +512,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[TMP_BASE]/swarming_temp_dir/ct-task-4.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"repaint\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Linux CT Top1k Repaint Perf\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"xy12z43\", \n        \"--extra-variable\", \n        \"MASTER\", \n        \"chromium.perf.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"4\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_dm.isolate\", \n        \"--isolated\", \n        \"[TMP_BASE]/swarming_temp_dir/ct-task-4.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"4\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
       "[TMP_BASE]/swarming_temp_dir/slave4.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -659,12 +522,31 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/src/content/test/ct/slave5/skps"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rmtree SKPs dir (5)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave5/page_sets",
+      "[SLAVE_BUILD]/src/content/test/ct/slave5/skps",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "makedirs page_sets dir (5)",
+    "name": "makedirs SKPs dir (5)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -686,50 +568,13 @@
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
+      "-m",
       "cp",
-      "gs://cluster-telemetry/swarming/page_sets/1k/slave5/*",
-      "[SLAVE_BUILD]/src/content/test/ct/slave5/page_sets"
+      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave5/*",
+      "[SLAVE_BUILD]/src/content/test/ct/slave5/skps"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download (9)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave5/page_sets/data",
-      "511"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "makedirs WPR dir (5)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cp",
-      "gs://cluster-telemetry/swarming/webpage_archives/1k/slave5/*",
-      "[SLAVE_BUILD]/src/content/test/ct/slave5/page_sets/data"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download (10)"
+    "name": "gsutil cp (5)"
   },
   {
     "cmd": [
@@ -759,7 +604,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[TMP_BASE]/swarming_temp_dir/ct-task-5.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"repaint\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Linux CT Top1k Repaint Perf\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"xy12z43\", \n        \"--extra-variable\", \n        \"MASTER\", \n        \"chromium.perf.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"5\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_dm.isolate\", \n        \"--isolated\", \n        \"[TMP_BASE]/swarming_temp_dir/ct-task-5.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"5\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
       "[TMP_BASE]/swarming_temp_dir/slave5.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -811,7 +656,7 @@
       "--shards",
       "1",
       "--task-name",
-      "ct-1k-task-1/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1",
+      "ct-10k-dm-1/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -827,26 +672,24 @@
       "os",
       "Ubuntu",
       "--tag",
-      "buildername:Linux CT Top1k Repaint Perf",
+      "buildername:CT-DM-10k-SKPs",
       "--tag",
       "data:[dummy hash for slave5]",
       "--tag",
-      "master:chromium.perf.fyi",
-      "--tag",
-      "name:ct-1k-task-1",
+      "name:ct-10k-dm-1",
       "--tag",
       "os:Ubuntu",
       "--tag",
-      "stepname:ct-1k-task-1 on Ubuntu",
+      "stepname:ct-10k-dm-1 on Ubuntu",
       "[dummy hash for slave5]"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] ct-1k-task-1 on Ubuntu",
+    "name": "[trigger] ct-10k-dm-1 on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"ct-1k-task-1/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"ct-10k-dm-1/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"ct-1k-task-1/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ct-10k-dm-1/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -872,7 +715,7 @@
       "--shards",
       "1",
       "--task-name",
-      "ct-1k-task-2/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1",
+      "ct-10k-dm-2/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -888,26 +731,24 @@
       "os",
       "Ubuntu",
       "--tag",
-      "buildername:Linux CT Top1k Repaint Perf",
+      "buildername:CT-DM-10k-SKPs",
       "--tag",
       "data:[dummy hash for slave4]",
       "--tag",
-      "master:chromium.perf.fyi",
-      "--tag",
-      "name:ct-1k-task-2",
+      "name:ct-10k-dm-2",
       "--tag",
       "os:Ubuntu",
       "--tag",
-      "stepname:ct-1k-task-2 on Ubuntu",
+      "stepname:ct-10k-dm-2 on Ubuntu",
       "[dummy hash for slave4]"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] ct-1k-task-2 on Ubuntu",
+    "name": "[trigger] ct-10k-dm-2 on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"ct-1k-task-2/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"ct-10k-dm-2/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"ct-1k-task-2/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ct-10k-dm-2/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -933,7 +774,7 @@
       "--shards",
       "1",
       "--task-name",
-      "ct-1k-task-3/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1",
+      "ct-10k-dm-3/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -949,26 +790,24 @@
       "os",
       "Ubuntu",
       "--tag",
-      "buildername:Linux CT Top1k Repaint Perf",
+      "buildername:CT-DM-10k-SKPs",
       "--tag",
       "data:[dummy hash for slave1]",
       "--tag",
-      "master:chromium.perf.fyi",
-      "--tag",
-      "name:ct-1k-task-3",
+      "name:ct-10k-dm-3",
       "--tag",
       "os:Ubuntu",
       "--tag",
-      "stepname:ct-1k-task-3 on Ubuntu",
+      "stepname:ct-10k-dm-3 on Ubuntu",
       "[dummy hash for slave1]"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] ct-1k-task-3 on Ubuntu",
+    "name": "[trigger] ct-10k-dm-3 on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"ct-1k-task-3/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"ct-10k-dm-3/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"ct-1k-task-3/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ct-10k-dm-3/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -994,7 +833,7 @@
       "--shards",
       "1",
       "--task-name",
-      "ct-1k-task-4/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1",
+      "ct-10k-dm-4/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1010,26 +849,24 @@
       "os",
       "Ubuntu",
       "--tag",
-      "buildername:Linux CT Top1k Repaint Perf",
+      "buildername:CT-DM-10k-SKPs",
       "--tag",
       "data:[dummy hash for slave3]",
       "--tag",
-      "master:chromium.perf.fyi",
-      "--tag",
-      "name:ct-1k-task-4",
+      "name:ct-10k-dm-4",
       "--tag",
       "os:Ubuntu",
       "--tag",
-      "stepname:ct-1k-task-4 on Ubuntu",
+      "stepname:ct-10k-dm-4 on Ubuntu",
       "[dummy hash for slave3]"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] ct-1k-task-4 on Ubuntu",
+    "name": "[trigger] ct-10k-dm-4 on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"ct-1k-task-4/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"ct-10k-dm-4/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"ct-1k-task-4/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ct-10k-dm-4/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1055,7 +892,7 @@
       "--shards",
       "1",
       "--task-name",
-      "ct-1k-task-5/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1",
+      "ct-10k-dm-5/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1071,26 +908,24 @@
       "os",
       "Ubuntu",
       "--tag",
-      "buildername:Linux CT Top1k Repaint Perf",
+      "buildername:CT-DM-10k-SKPs",
       "--tag",
       "data:[dummy hash for slave2]",
       "--tag",
-      "master:chromium.perf.fyi",
-      "--tag",
-      "name:ct-1k-task-5",
+      "name:ct-10k-dm-5",
       "--tag",
       "os:Ubuntu",
       "--tag",
-      "stepname:ct-1k-task-5 on Ubuntu",
+      "stepname:ct-10k-dm-5 on Ubuntu",
       "[dummy hash for slave2]"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] ct-1k-task-5 on Ubuntu",
+    "name": "[trigger] ct-10k-dm-5 on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"ct-1k-task-5/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"ct-10k-dm-5/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"ct-1k-task-5/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ct-10k-dm-5/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1113,14 +948,14 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "ct-1k-task-1/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1",
+      "ct-10k-dm-1/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1",
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
       "[TMP_BASE]/swarming_temp_dir/outputs/slave1"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "ct-1k-task-1 on Ubuntu",
+    "name": "ct-10k-dm-1 on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1173,14 +1008,14 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "ct-1k-task-2/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1",
+      "ct-10k-dm-2/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1",
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
       "[TMP_BASE]/swarming_temp_dir/outputs/slave2"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "ct-1k-task-2 on Ubuntu",
+    "name": "ct-10k-dm-2 on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1233,14 +1068,14 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "ct-1k-task-3/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1",
+      "ct-10k-dm-3/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1",
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
       "[TMP_BASE]/swarming_temp_dir/outputs/slave3"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "ct-1k-task-3 on Ubuntu",
+    "name": "ct-10k-dm-3 on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1293,14 +1128,14 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "ct-1k-task-4/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1",
+      "ct-10k-dm-4/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1",
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
       "[TMP_BASE]/swarming_temp_dir/outputs/slave4"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "ct-1k-task-4 on Ubuntu",
+    "name": "ct-10k-dm-4 on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1353,14 +1188,14 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "ct-1k-task-5/Ubuntu/[dummy has/Linux CT Top1k Repaint Perf/-1",
+      "ct-10k-dm-5/Ubuntu/[dummy has/CT-DM-10k-SKPs/-1",
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
       "[TMP_BASE]/swarming_temp_dir/outputs/slave5"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "ct-1k-task-5 on Ubuntu",
+    "name": "ct-10k-dm-5 on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
