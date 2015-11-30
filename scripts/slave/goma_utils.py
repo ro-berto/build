@@ -141,3 +141,39 @@ def UploadNinjaLog(outdir, compiler, command, exit_status):
   viewer_url = 'http://chromium-build-stats.appspot.com/ninja_log/' + log_path
   print 'Visualization at %s' % viewer_url
 
+
+def SendGomaStats(goma_stats_file, build_data_dir):
+  """Send GomaStats monitoring event.
+
+  Note: this function also removes goma_stats_file.
+  """
+  # TODO(pgervais): remove this hacky partial-rollout system.
+  try:
+    if not chromium_utils.IsWindows():
+      send_monitoring_event_cmd = [
+          sys.executable,
+          '/opt/infra-python/run.py',
+          'infra.tools.send_monitoring_event',
+          '--event-mon-run-type', 'prod',
+          '--build-event-type', 'BUILD',
+          '--event-mon-timestamp-kind', 'POINT',
+          '--build-event-goma-stats-path', goma_stats_file,
+          '--event-logrequest-path',
+          '%s/log_request_proto' % build_data_dir
+      ]
+      cmd_filter = chromium_utils.FilterCapture()
+      retcode = chromium_utils.RunCommand(
+        send_monitoring_event_cmd,
+        filter_obj=cmd_filter,
+        max_time=30)
+      if retcode:
+        print('Execution of send_monitoring_event failed with code %s'
+              % retcode)
+        print '\n'.join(cmd_filter.text)
+  except Exception:  # safety net
+    # TODO(yyanagisawa): avoid a silent failure.
+    pass
+  try:
+    os.remove(goma_stats_file)
+  except OSError:  # file does not exist, for ex.
+    pass

@@ -30,6 +30,14 @@ def main():
                       type=int,
                       metavar='EXIT_STATUS',
                       help='ninja exit status.')
+  parser.add_argument('--goma-stats-file',
+                      metavar='FILENAME',
+                      help='Filename of a GomaStats binary protobuf. '
+                      'If empty or non-existing file, it will report error '
+                      'to chrome infra monitoring system.')
+  parser.add_argument('--build-data-dir',
+                      metavar='DIR',
+                      help='Directory that has build data used by event_mon.')
   args = parser.parse_args()
 
   if args.upload_compiler_proxy_info:
@@ -39,6 +47,9 @@ def main():
                               args.ninja_log_compiler,
                               args.ninja_log_command,
                               args.ninja_log_exit_status)
+  if args.goma_stats_file:
+    goma_utils.SendGomaStats(args.goma_stats_file,
+                             args.build_data_dir)
   return 0
 
 
