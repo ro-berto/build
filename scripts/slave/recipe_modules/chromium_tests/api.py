@@ -357,7 +357,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
 
   def compile(self, mastername, buildername, update_step, master_dict,
-              test_spec):
+              test_spec, mb_mastername=None, mb_buildername=None):
     """Runs compile and related steps for given builder."""
     compile_targets, tests_including_triggered = \
         self.get_compile_targets_and_tests(
@@ -366,14 +366,28 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             master_dict, test_spec)
     self.compile_specific_targets(
         mastername, buildername, update_step, master_dict,
-        compile_targets, tests_including_triggered)
+        compile_targets, tests_including_triggered,
+        mb_mastername=mb_mastername, mb_buildername=mb_buildername)
 
   def compile_specific_targets(
       self, mastername, buildername, update_step, master_dict,
-      compile_targets, tests_including_triggered, override_bot_type=None):
+      compile_targets, tests_including_triggered,
+      mb_mastername=None, mb_buildername=None, override_bot_type=None):
     """Runs compile and related steps for given builder.
 
-    Allows finer-grained control about exact compile targets used."""
+    Allows finer-grained control about exact compile targets used.
+
+    We don't use the given `mastername` and `buildername` to run MB, because
+    they may be the values of the continuous builder the trybot may be
+    configured to match; instead we need to use the actual mastername and
+    buildername we're running on (Default to the "mastername" and
+    "buildername" in the build properties -- self.m.properties, but could be
+    overridden by `mb_mastername` and `mb_buildername`), because it may be
+    configured with different MB settings.
+
+    However, recipes used by Findit for culprit finding may still set
+    (mb_mastername, mb_buildername) = (mastername, buildername) to exactly match
+    a given continuous builder."""
 
     bot_config = master_dict.get('builders', {}).get(buildername)
     master_config = master_dict.get('settings', {})
@@ -399,7 +413,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       try:
         self.transient_check(update_step, lambda transform_name:
             self.run_mb_and_compile(compile_targets, isolated_targets,
-                                    name_suffix=transform_name('')))
+                                    name_suffix=transform_name(''),
+                                    mb_mastername=mb_mastername,
+                                    mb_buildername=mb_buildername))
       except self.m.step.StepFailure:
         self.m.tryserver.set_compile_failure_tryjob_result()
         raise
@@ -467,16 +483,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           mode='dev'
       )
 
-  def run_mb_and_compile(self, compile_targets, isolated_targets, name_suffix):
+  def run_mb_and_compile(self, compile_targets, isolated_targets, name_suffix,
+                         mb_mastername=None, mb_buildername=None):
     if self.m.chromium.c.project_generator.tool == 'mb':
-      # We don't use the mastername and buildername passed in, because
-      # those may be the values of the continuous builder the trybot may
-      # be configured to match; we need to use the actual mastername
-      # and buildername we're running on, because it may be configured
-      # with different MB settings.
-      real_mastername = self.m.properties['mastername']
-      real_buildername = self.m.properties['buildername']
-      self.m.chromium.run_mb(real_mastername, real_buildername,
+      mb_mastername = mb_mastername or self.m.properties['mastername']
+      mb_buildername = mb_buildername or self.m.properties['buildername']
+      self.m.chromium.run_mb(mb_mastername, mb_buildername,
                              isolated_targets=isolated_targets,
                              name='generate_build_files%s' % name_suffix)
 
@@ -598,7 +610,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.chromium.runhooks(name='runhooks (without patch)')
 
   def run_tests_on_tryserver(self, mastername, api, tests, bot_update_step,
-                             affected_files):
+                             affected_files, mb_mastername=None,
+                             mb_buildername=None):
     def deapply_patch_fn(failing_tests):
       self.deapply_patch(bot_update_step)
       compile_targets = list(itertools.chain(
@@ -611,7 +624,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         if failing_swarming_tests:
           self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
         self.run_mb_and_compile(compile_targets, failing_swarming_tests,
-                                ' (without patch)')
+                                ' (without patch)',
+                                mb_mastername=mb_mastername,
+                                mb_buildername=mb_buildername)
         if failing_swarming_tests:
           self.m.isolate.isolate_tests(self.m.chromium.output_dir,
                                        verbose=True)
@@ -631,7 +646,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.python.failing_step('test results', 'TESTS FAILED')
 
   def analyze(self, affected_files, test_targets, additional_compile_targets,
-              config_file_name, additional_names=None):
+              config_file_name, mb_mastername=None, mb_buildername=None,
+              additional_names=None):
     """Runs "analyze" step to determine targets affected by the patch.
 
     Returns a tuple of:
@@ -650,6 +666,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         additional_names=additional_names,
         config_file_name=config_file_name,
         use_mb=use_mb,
+        mb_mastername=mb_mastername,
+        mb_buildername=mb_buildername,
         build_output_dir=build_output_dir,
         cros_board=self.m.chromium.c.TARGET_CROS_BOARD)
 

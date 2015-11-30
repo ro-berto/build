@@ -74,6 +74,8 @@ class FilterApi(recipe_api.RecipeApi):
                                  additional_names=None,
                                  config_file_name='trybot_analyze_config.json',
                                  use_mb=False,
+                                 mb_mastername=None,
+                                 mb_buildername=None,
                                  build_output_dir=None,
                                  cros_board=None,
                                  **kwargs):
@@ -90,6 +92,8 @@ class FilterApi(recipe_api.RecipeApi):
       additional_names: additional top level keys to look up exclusions in,
                         see |config_file_name|.
       conconfig_file_name: the config file to look up exclusions in.
+      mb_mastername: the mastername to pass over to run MB.
+      mb_buildername: the buildername to pass over to run MB.
 
     Within the file we concatenate "base.exclusions" and
     "|additional_names|.exclusions" (if |additional_names| is not none) to
@@ -103,6 +107,14 @@ class FilterApi(recipe_api.RecipeApi):
     If an error occurs, an exception is raised. Otherwise, after the
     call completes the results can be obtained from self.compile_targets()
     and self.test_targets().
+
+    To run MB, we need to use the actual mastername and buildername we're
+    running on, and not those of the continuous builder the trybot may be
+    configured to match, because a trybot may be configured with different MB
+    settings.
+    However, recipes used by Findit for culprit finding may override the
+    defaults with `mb_mastername` and `mb_buildername` to exactly match a given
+    continuous builder.
     """
 
     names = ['base']
@@ -160,14 +172,16 @@ class FilterApi(recipe_api.RecipeApi):
         # Ensure that mb runs in a clean environment to avoid
         # picking up any GYP_DEFINES accidentally.
         del kwargs['env']
+      mb_mastername = mb_mastername or self.m.properties['mastername']
+      mb_buildername = mb_buildername or self.m.properties['buildername']
       step_result = self.m.python(
           'analyze',
           self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
           args=['analyze',
                 '-m',
-                self.m.properties['mastername'],
+                mb_mastername,
                 '-b',
-                self.m.properties['buildername'],
+                mb_buildername,
                 '-v',
                 build_output_dir,
                 self.m.json.input(analyze_input),
