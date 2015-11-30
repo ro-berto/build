@@ -303,7 +303,7 @@
       "015d210a13480604",
       "shell",
       "dumpsys",
-      "battery"
+      "batteryproperties"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -754,7 +754,7 @@
       "015d210a13480604",
       "shell",
       "dumpsys",
-      "battery"
+      "batteryproperties"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
