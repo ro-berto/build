@@ -120,7 +120,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       dep = bot_config.get('set_component_rev')
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
-  def ensure_checkout(self, mastername, buildername):
+  def ensure_checkout(self, mastername, buildername,
+                      root_solution_revision=None):
     bot_config = self.get_bot_config(mastername, buildername)
 
     if self.m.platform.is_win:
@@ -128,7 +129,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     # Bot Update re-uses the gclient configs.
     update_step = self.m.bot_update.ensure_checkout(
-        patch_root=bot_config.get('patch_root'))
+        patch_root=bot_config.get('patch_root'),
+        root_solution_revision=root_solution_revision)
     assert update_step.json.output['did_run']
     # HACK(dnj): Remove after 'crbug.com/398105' has landed
     self.m.chromium.set_build_properties(update_step.json.output['properties'])
@@ -189,10 +191,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return freeze(master_dict)
 
-  def prepare_checkout(self, mastername, buildername):
+  def prepare_checkout(self, mastername, buildername,
+                       root_solution_revision=None):
     bot_config = self.get_bot_config(mastername, buildername)
 
-    update_step = self.ensure_checkout(mastername, buildername)
+    update_step = self.ensure_checkout(mastername, buildername,
+                                       root_solution_revision)
     # TODO(robertocn): Remove this hack by the end of Q1/2016.
     if (mastername == 'tryserver.chromium.perf'
         and bot_config.get('bot_type') == 'builder'

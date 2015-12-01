@@ -69,7 +69,8 @@ class BotUpdateApi(recipe_api.RecipeApi):
                       force=False, patch_root=None, no_shallow=False,
                       with_branch_heads=False, refs=None,
                       patch_project_roots=None, patch_oauth2=False,
-                      output_manifest=True, clobber=False, **kwargs):
+                      output_manifest=True, clobber=False,
+                      root_solution_revision=None, **kwargs):
     refs = refs or []
     # We can re-use the gclient spec from the gclient module, since all the
     # data bot_update needs is already configured into the gclient spec.
@@ -167,6 +168,8 @@ class BotUpdateApi(recipe_api.RecipeApi):
             'HEAD')
     if self.m.gclient.c and self.m.gclient.c.revisions:
       revisions.update(self.m.gclient.c.revisions)
+    if cfg.solutions and root_solution_revision:
+      revisions[cfg.solutions[0].name] = root_solution_revision
     for name, revision in sorted(revisions.items()):
       fixed_revision = self.m.gclient.resolve_revision(revision)
       if fixed_revision:
