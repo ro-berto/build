@@ -26,9 +26,12 @@ class Test(object):
     """Name of the test."""
     raise NotImplementedError()
 
-  @property
-  def isolate_target(self):
-    """Returns isolate target name. Defaults to name."""
+  def isolate_target(self, _api):
+    """Returns isolate target name. Defaults to name.
+
+    The _api is here in case classes want to use api information to alter the
+    isolation target.
+    """
     return self.name  # pragma: no cover
 
   @staticmethod
@@ -252,8 +255,7 @@ class LocalGTestTest(Test):
   def uses_local_devices(self):
     return True # pragma: no cover
 
-  @property
-  def isolate_target(self):
+  def isolate_target(self, _api):
     return self.target_name  # pragma: no cover
 
   def compile_targets(self, api):
@@ -502,8 +504,7 @@ class SwarmingTest(Test):
   def target_name(self):
     return self._target_name or self._name
 
-  @property
-  def isolate_target(self):
+  def isolate_target(self, _api):
     return self.target_name
 
   def create_task(self, api, suffix, isolated_hash):
@@ -638,6 +639,11 @@ class SwarmingGTestTest(SwarmingTest):
       return [self.target_name + '_apk_run']
 
     return [self.target_name, self.target_name + '_run']
+
+  def isolate_target(self, api):
+    if api.chromium.c.TARGET_PLATFORM == 'android':
+      return self.target_name + '_apk'
+    return self.target_name
 
   def create_task(self, api, suffix, isolated_hash):
     # For local tests test_args are added inside api.chromium.runtest.
@@ -932,8 +938,7 @@ class LocalIsolatedScriptTest(Test):
   def target_name(self):
     return self._target_name or self._name
 
-  @property
-  def isolate_target(self):
+  def isolate_target(self, _api):
     return self.target_name
 
   @property
@@ -1097,9 +1102,8 @@ class GTestTest(Test):
   def uses_local_devices(self):
     return True
 
-  @property
-  def isolate_target(self):
-    return self._test.isolate_target
+  def isolate_target(self, api):
+    return self._test.isolate_target(api)
 
   def compile_targets(self, api):
     return self._test.compile_targets(api)
@@ -1239,9 +1243,8 @@ class TelemetryGPUTest(Test):  # pylint: disable=W0232
   def name(self):
     return self._test.name
 
-  @property
-  def isolate_target(self):
-    return self._test.isolate_target
+  def isolate_target(self, api):
+    return self._test.isolate_target(api)
 
   def compile_targets(self, api):
     return self._test.compile_targets(api)
@@ -1331,8 +1334,7 @@ class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
   def target_name(self):
     return self._target_name or self._name
 
-  @property
-  def isolate_target(self):
+  def isolate_target(self, _api):
     return self.target_name  # pragma: no cover
 
   def compile_targets(self, _):
