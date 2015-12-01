@@ -54,7 +54,6 @@ def GenTests(api):
   encoded_config_test = api.test('encoded_config_test')
   broken_cp_test = api.test('broken_cp_test')
   broken_hash_test = api.test('broken_hash_test')
-  invalid_config_test = api.test('invalid_config_test')
   return_code_test = api.test('basic_return_code_test')
   basic_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
@@ -69,9 +68,6 @@ def GenTests(api):
       mastername='tryserver.chromium.perf',
       buildername='linux_perf_bisector')
   broken_hash_test += api.properties.generic(
-      mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisector')
-  invalid_config_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
       buildername='linux_perf_bisector')
   encoded_config_test += api.properties.generic(
@@ -106,7 +102,6 @@ def GenTests(api):
   broken_good_rev_test += api.properties(bisect_config=bisect_config)
   broken_cp_test += api.properties(bisect_config=bisect_config)
   broken_hash_test += api.properties(bisect_config=bisect_config)
-  invalid_config_test += api.properties(bisect_config=invalid_cp_bisect_config)
   encoded_config_test += api.properties(bcb32=base64.b32encode(json.dumps(
       bisect_config)).replace('=', '0'))
 
@@ -216,8 +211,6 @@ def GenTests(api):
       broken_good_rev_test += step_data
   broken_good_rev_test += _get_revision_range_step_data(api, doctored_data)
   yield broken_good_rev_test
-  invalid_config_test += _get_revision_range_step_data(api, doctored_data)
-  yield invalid_config_test
 
   def return_code_test_data():
     return [
