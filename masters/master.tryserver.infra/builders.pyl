@@ -153,7 +153,7 @@
         "os": "linux",
         "version": "trusty",
       },
-      "slaves": ["slave864-c4", "slave872-c4"],
+      "slaves": ["slave864-c4", "slave872-c4", "slave912-c4", "slave913-c4"],
     },
     "mac_slave_pool": {
       "slave_data": {
