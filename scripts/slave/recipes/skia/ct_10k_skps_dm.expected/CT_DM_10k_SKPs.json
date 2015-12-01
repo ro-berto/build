@@ -136,28 +136,6 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "/repos/chromium/src/chrome/ct_dm.isolate",
-      "[SLAVE_BUILD]/src/chrome/ct_dm.isolate"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "copy ct_dm.isolate"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "/repos/chromium/src/content/test/ct/run_ct_dm.py",
-      "[SLAVE_BUILD]/src/content/test/ct/run_ct_dm.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "copy run_ct_dm.py"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[SLAVE_BUILD]/src/content/test/ct/slave1/skps"
     ],

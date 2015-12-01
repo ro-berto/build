@@ -60,17 +60,6 @@ def RunSteps(api):
   # Build DM in Debug mode.
   api.step('build dm', ['make', 'dm'], cwd=api.path['slave_build'].join('skia'))
 
-  # TODO(rmistry): Remove the following after crrev.com/1469823003 is submitted.
-  api.file.copy(
-      'copy %s' % CT_DM_ISOLATE,
-      '/repos/chromium/src/chrome/%s' % CT_DM_ISOLATE,
-      chromium_checkout.join('chrome', CT_DM_ISOLATE))
-  for f in ['run_ct_dm.py']:
-    api.file.copy(
-        'copy %s' % f,
-        '/repos/chromium/src/content/test/ct/%s' % f,
-        chromium_checkout.join('content', 'test', 'ct', f))
-
   skps_chromium_build = api.properties.get(
       'skps_chromium_build', DEFAULT_SKPS_CHROMIUM_BUILD)
   ct_num_slaves = api.properties.get('ct_num_slaves', DEFAULT_CT_NUM_SLAVES)
