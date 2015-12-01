@@ -257,7 +257,6 @@
           "Until these are in the CQ, they should not close the tree."
         ],
         "excluded_builders": [
-          "Mac GN",
           "Mac GN (dbg)"
         ]
 
@@ -380,7 +379,6 @@
         "excluded_builders": [
           "Win x64 GN",
           "Win x64 GN (dbg)",
-          "Win8 GN",
           "Win8 GN (dbg)"
         ]
       }
