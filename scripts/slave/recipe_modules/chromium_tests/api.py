@@ -407,9 +407,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         t.isolate_target for t in tests_including_triggered if t.uses_swarming
       ]
 
-      if self.m.chromium.c.TARGET_PLATFORM == 'android':
-        isolated_targets = [target + '_apk' for target in isolated_targets]
-
       if isolated_targets:
         self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
 

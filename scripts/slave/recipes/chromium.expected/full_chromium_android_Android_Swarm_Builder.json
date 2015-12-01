@@ -298,19 +298,19 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/src/out/Release/breakpad_unittests_apk.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Release/components_unittests_apk.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Release/browser_tests_apk.isolated.gen.json",
-      "[SLAVE_BUILD]/src/out/Release/base_unittests_apk.isolated.gen.json"
+      "[SLAVE_BUILD]/src/out/Release/components_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Release/base_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Release/breakpad_unittests.isolated.gen.json",
+      "[SLAVE_BUILD]/src/out/Release/browser_tests.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_unittests_apk\": \"[dummy hash for base_unittests_apk]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"breakpad_unittests_apk\": \"[dummy hash for breakpad_unittests_apk]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"browser_tests_apk\": \"[dummy hash for browser_tests_apk]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"components_unittests_apk\": \"[dummy hash for components_unittests_apk]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_unittests\": \"[dummy hash for base_unittests]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"breakpad_unittests\": \"[dummy hash for breakpad_unittests]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"components_unittests\": \"[dummy hash for components_unittests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
