@@ -8,7 +8,7 @@ from recipe_engine import recipe_api
 
 class GSUtilApi(recipe_api.RecipeApi):
   def __call__(self, cmd, name=None, use_retry_wrapper=True, version=None,
-               parallel_upload=False, **kwargs):
+               parallel_upload=False, timeout=None, **kwargs):
     """A step to run arbitrary gsutil commands.
 
     Note that this assumes that gsutil authentication environment variables
@@ -36,6 +36,8 @@ class GSUtilApi(recipe_api.RecipeApi):
       # brittle path logic.
       cmd_prefix = ['--', gsutil_path]
       gsutil_path = self.resource('gsutil_wrapper.py')
+      if timeout:
+        cmd_prefix = ['--timeout', timeout] + cmd_prefix
 
     if version:
       cmd_prefix.extend(['--force-version', version])
