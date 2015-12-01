@@ -19,6 +19,11 @@ import urllib2
 
 _GITILES_PADDING = ')]}\'\n'
 
+# Gitiles paginates the list of commits; since we want to get all of the
+# commits at once, the page size should be larger than the largest revision
+# range that we expect to get.
+_PAGE_SIZE = 2048
+
 
 def fetch_intervening_revisions(min_rev, max_rev):
   """Fetches a list of revision in between two commits.
@@ -39,6 +44,7 @@ def fetch_intervening_revisions(min_rev, max_rev):
   """
   base_url= 'https://chromium.googlesource.com/chromium/src/+log/'
   url = base_url + '%s..%s?format=json' % (min_rev, max_rev)
+  url += '&n=' + _PAGE_SIZE
   response = urllib2.urlopen(url).read()
   response_json = response[len(_GITILES_PADDING):]  # Remove padding.
   response_dict = json.loads(response_json)
