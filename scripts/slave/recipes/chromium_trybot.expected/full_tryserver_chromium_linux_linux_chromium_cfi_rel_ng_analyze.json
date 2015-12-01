@@ -103,6 +103,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "cfi_vptr=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 target_arch=x64",
       "GYP_LINK_CONCURRENCY": "8"
     },
@@ -201,16 +202,18 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/gyp_chromium",
-      "--analyzer",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "analyze",
+      "-m",
+      "tryserver.chromium.linux",
+      "-b",
+      "linux_chromium_cfi_rel_ng",
+      "-v",
+      "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_DEFINES": "cfi_vptr=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 target_arch=x64",
-      "GYP_LINK_CONCURRENCY": "8"
-    },
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_TEXT@No compile necessary@@@",

@@ -224,6 +224,7 @@ SPEC = {
     },
     'CFI Linux': {
       'chromium_config': 'chromium_cfi',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
