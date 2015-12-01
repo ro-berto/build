@@ -146,31 +146,13 @@ def GenTests(api):
   failed_data[1].pop('DEPS')
   failed_data[1].pop('DEPS_interval')
   failed_data[0].pop('git_diff')
+  failed_data[0].pop('cl_info')
   yield _make_test(api, failed_data, 'failed_test')
 
   yield _make_test(api, _get_reversed_basic_test_data(), 'reversed_basic')
 
   bad_git_hash_data = _get_basic_test_data()
   bad_git_hash_data[1]['interned_hashes'] = {'003': '12345', '002': 'Bad Hash'}
-  yield _make_test(api, bad_git_hash_data, 'failed_git_hash_object')
-
-  missing_dep_data = _get_basic_test_data()
-  tricked_DEPS_file = ("vars={'v8_' + 'revision': '001'};"
-                       "deps = {'src/v8': 'v8.git@' + Var('v8_revision'),"
-                       "'src/third_party/WebKit': 'webkit.git@010'}")
-  missing_dep_data[0]['DEPS'] = tricked_DEPS_file
-  yield _make_test(api, missing_dep_data, 'missing_vars_entry')
-
-  missing_dep_data = _get_basic_test_data()
-  tricked_DEPS_file = ("vars={'v8_revision': '001'};"
-                       "deps = {'src/v8': 'v8.XXX@' + Var('v8_revision'),"
-                       "'src/third_party/WebKit': 'webkit.git@010'}")
-  missing_dep_data[0]['DEPS'] = tricked_DEPS_file
-  yield _make_test(api, missing_dep_data, 'missing_deps_entry')
-
-  bad_deps_syntax_data = _get_basic_test_data()
-  bad_deps_syntax_data[1]['DEPS'] = 'raise RuntimeError("")'
-  yield _make_test(api, bad_deps_syntax_data, 'bad_deps_syntax')
 
   bisect_script_test = _make_test(
       api, _get_basic_test_data(), 'basic_bisect_script')
@@ -419,8 +401,6 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
         for item in interval[1:]:
           step_name = 'Hashing modified DEPS file with revision ' + item
           file_hash = 'f412e8458'
-          if 'interned_hashes' in revision_data:
-            file_hash = revision_data['interned_hashes'][item]
           yield api.step_data(step_name, stdout=api.raw_io.output(file_hash))
         step_name = 'Expanding revision range for revision %s on depot %s'
         step_name %= (interval[0], depot_name)

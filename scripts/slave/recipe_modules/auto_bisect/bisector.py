@@ -184,12 +184,10 @@ class Bisector(object):
       if hash_string:
           int(hash_string, 16)
           return hash_string
-    except ValueError:
-      pass
-
-    reason = 'Git did not output a valid hash for the interned file.'
-    self.api.m.halt(reason)
-    raise self.api.m.step.StepFailure(reason)
+    except ValueError: # pragma: no cover
+      reason = 'Git did not output a valid hash for the interned file.'
+      self.api.m.halt(reason)
+      raise self.api.m.step.StepFailure(reason)
 
   def _gen_diff_patch(self, git_object_a, git_object_b, src_alias, dst_alias,
                       cwd, deps_rev):
@@ -246,7 +244,7 @@ class Bisector(object):
     deps_item_regexp = re.compile(
         r'(?<=["\']%s["\']: ["\'])([a-fA-F0-9]+)(?=["\'])' % deps_var,
         re.MULTILINE)
-    if not re.search(deps_item_regexp, original_contents):
+    if not re.search(deps_item_regexp, original_contents): # pragma: no cover
       reason = 'DEPS file does not contain entry for ' + deps_var
       self.api.m.halt(reason)
       raise self.api.m.step.StepFailure(reason)
@@ -325,13 +323,13 @@ class Bisector(object):
             self.revisions = new_revisions
             self._update_revision_list_indexes()
             return True
-    except RuntimeError:
+    except RuntimeError:  # pragma: no cover
       warning_text = ('Could not expand dependency revisions for ' +
                       revision_to_expand.revision_string)
       self.surface_result('BAD_REV')
       if warning_text not in self.warnings:
         self.warnings.append(warning_text)
-    return False
+      return False
 
   def _get_rev_range_for_depot(self, depot_name, min_rev, max_rev,
                                base_revision):
