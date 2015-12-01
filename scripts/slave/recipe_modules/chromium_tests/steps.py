@@ -1094,13 +1094,16 @@ class GTestTest(Test):
     else:
       self._test = LocalGTestTest(name, args, target_name, **runtest_kwargs)
 
+    self.enable_swarming = enable_swarming
+
   @property
   def name(self):
     return self._test.name
 
   @property
   def uses_local_devices(self):
-    return True
+    # Return True unless this test has swarming enabled.
+    return not self.enable_swarming
 
   def isolate_target(self, api):
     return self._test.isolate_target(api)
