@@ -591,7 +591,7 @@
           "chromium_tree_closer"
         ],
         "builders": {
-          "*": { "categories": [ "webrtc_compile"] }
+          "*": { "categories": [ "webrtc_all"] }
         },
         "excluded_builders": [
           "Android*Tests*"
@@ -865,9 +865,12 @@
       ],
       "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)"
     },
-    "webrtc_compile": {
+    "webrtc_all": {
       "forgiving_optional": [
-        "svnkill",
+        "bot_update",
+        "package build",
+        "extract build",
+        "cleanup_temp",
         "taskkill"
       ],
       "closing_optional": [
