@@ -362,6 +362,8 @@ class GpuApi(recipe_api.RecipeApi):
     #TODO(martiniss) convert loop
     for test in basic_tests:
       args = [''] if test in DONT_USE_GPU_IN_TESTS else ['--use-gpu-in-tests']
+      if (test == 'audio_unittests' and self.m.platform.is_win):
+        args.append('--require-audio-hardware-for-testing')
       tests.append(self._create_gtest(test, chrome_revision, webkit_revision,
                                       enable_swarming, swarming_dimensions,
                                       args=args))
