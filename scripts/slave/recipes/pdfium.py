@@ -14,7 +14,7 @@ DEPS = [
 from recipe_engine.recipe_api import Property
 
 PROPERTIES = {
-  'drmemory': Property(default=True, kind=bool),
+  'drmemory': Property(default=False, kind=bool),
 }
 
 def _CheckoutSteps(api):

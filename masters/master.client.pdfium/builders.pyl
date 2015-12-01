@@ -59,6 +59,7 @@
       "category": "1xfa",
       "properties": {
         "branch": "xfa",
+        "drmemory": True,
       },
     },
   },
