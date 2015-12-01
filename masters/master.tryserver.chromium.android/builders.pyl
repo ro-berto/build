@@ -24,6 +24,11 @@
       "scheduler": None,
       "slave_pools": ["slaves_with_devices"],
     },
+    "android_aura_compile": {
+      "recipe": "chromium_trybot",
+      "scheduler": None,
+      "slave_pools": ["ccompute_bots"],
+    },
   },
 
   "schedulers": { },
@@ -40,5 +45,15 @@
         "build38-b4",
       ],
     },
+    "ccompute_bots": {
+      "slave_data": {
+        "os": "linux",
+        "version": "precise",
+        "bits": 64,
+      },
+      "slaves": [
+        "slave57-c1",
+      ],
+    }
   }
 }

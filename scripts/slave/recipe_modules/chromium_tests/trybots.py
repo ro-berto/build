@@ -124,6 +124,11 @@ TRYBOTS = freeze({
         'buildername': 'Android Aura Builder (dbg)',
         'tester': 'Android Aura Tester (dbg)',
       },
+      'android_aura_compile': {
+        'mastername': 'chromium.android',
+        'buildername': 'Android Aura Builder (dbg)',
+        'analyze_mode': 'compile',
+      },
     },
   },
   'tryserver.chromium.angle': {
