@@ -97,11 +97,10 @@ os.chmod('%s', os.stat('%s').st_mode | stat.S_IEXEC)
       skps_chromium_build: str. The build the SKPs were captured from.
     """
     skps_dir = self.downloads_dir.join('slave%s' % slave_num, 'skps')
-    self.m.file.rmtree('SKPs dir', skps_dir)
     self.m.file.makedirs('SKPs dir', skps_dir)
-    full_source = 'gs://%s/skps/%s/%s/slave%s/*' % (
+    full_source = 'gs://%s/skps/%s/%s/slave%s' % (
         CT_GS_BUCKET, page_type, skps_chromium_build, slave_num)
-    self.m.gsutil(['-m', 'cp', full_source, skps_dir])
+    self.m.gsutil(['-m', 'rsync', '-d', '-r', full_source, skps_dir])
 
   def create_isolated_gen_json(self, isolate_path, base_dir, os_type,
                                slave_num, extra_variables):

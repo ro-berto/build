@@ -136,25 +136,6 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave1/skps"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree SKPs dir",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/src/content/test/ct/slave1/skps",
       "511"
@@ -183,12 +164,14 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "-m",
-      "cp",
-      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave1/*",
+      "rsync",
+      "-d",
+      "-r",
+      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave1",
       "[SLAVE_BUILD]/src/content/test/ct/slave1/skps"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil cp"
+    "name": "gsutil rsync"
   },
   {
     "cmd": [
@@ -228,25 +211,6 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave2/skps"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree SKPs dir (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/src/content/test/ct/slave2/skps",
       "511"
@@ -275,12 +239,14 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "-m",
-      "cp",
-      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave2/*",
+      "rsync",
+      "-d",
+      "-r",
+      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave2",
       "[SLAVE_BUILD]/src/content/test/ct/slave2/skps"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil cp (2)"
+    "name": "gsutil rsync (2)"
   },
   {
     "cmd": [
@@ -320,25 +286,6 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave3/skps"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree SKPs dir (3)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/src/content/test/ct/slave3/skps",
       "511"
@@ -367,12 +314,14 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "-m",
-      "cp",
-      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave3/*",
+      "rsync",
+      "-d",
+      "-r",
+      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave3",
       "[SLAVE_BUILD]/src/content/test/ct/slave3/skps"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil cp (3)"
+    "name": "gsutil rsync (3)"
   },
   {
     "cmd": [
@@ -412,25 +361,6 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave4/skps"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree SKPs dir (4)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/src/content/test/ct/slave4/skps",
       "511"
@@ -459,12 +389,14 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "-m",
-      "cp",
-      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave4/*",
+      "rsync",
+      "-d",
+      "-r",
+      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave4",
       "[SLAVE_BUILD]/src/content/test/ct/slave4/skps"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil cp (4)"
+    "name": "gsutil rsync (4)"
   },
   {
     "cmd": [
@@ -504,25 +436,6 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave5/skps"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree SKPs dir (5)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/src/content/test/ct/slave5/skps",
       "511"
@@ -551,12 +464,14 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "-m",
-      "cp",
-      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave5/*",
+      "rsync",
+      "-d",
+      "-r",
+      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave5",
       "[SLAVE_BUILD]/src/content/test/ct/slave5/skps"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil cp (5)"
+    "name": "gsutil rsync (5)"
   },
   {
     "cmd": [
