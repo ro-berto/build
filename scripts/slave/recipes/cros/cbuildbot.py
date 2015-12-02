@@ -63,7 +63,7 @@ def GenTests(api):
   # master.chromiumos
   #
 
-  # Test a ChromiumOS clobber Paladin build.
+  # Test a ChromiumOS Paladin build.
   yield (
       api.test('chromiumos_paladin')
       + api.properties(
@@ -75,7 +75,6 @@ def GenTests(api):
                      'manifest-versions',
           branch='master',
           revision=api.gitiles.make_hash('test'),
-          clobber=None,
           cbb_config='x86-generic-paladin',
           cbb_variant='paladin',
       )
@@ -120,7 +119,7 @@ def GenTests(api):
   # [Coverage]
   #
 
-  # Test a standard CrOS build triggered by a Chromium commit.
+  # Coverage builders for a bunch of options used in other repositories.
   yield (
       api.test('chromiumos_coverage')
       + api.properties(
@@ -128,6 +127,7 @@ def GenTests(api):
           buildername='Test',
           slavename='test',
           buildnumber=0,
+          clobber=None,
           repository='https://chromium.googlesource.com/chromiumos/'
                      'chromite.git',
           revision='fdea0dde664e229976ddb2224328da152fba15b1',

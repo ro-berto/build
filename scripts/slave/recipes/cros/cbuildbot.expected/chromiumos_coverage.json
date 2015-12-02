@@ -53,6 +53,7 @@
       "--chrome_rev",
       "stable",
       "--debug",
+      "--clobber",
       "--config_repo",
       "https://fake.googlesource.com/myconfig/repo.git",
       "x86-generic-full"
