@@ -182,3 +182,12 @@ os.chmod('%s', os.stat('%s').st_mode | stat.S_IEXEC)
       swarming_tasks: list of swarming.SwarmingTask instances.
     """
     return self.m.swarming.collect(swarming_tasks)
+
+  def collect_swarming_task(self, swarming_task):
+    """Collects the specified swarming task.
+
+    Args:
+      swarming_task: An instance of swarming.SwarmingTask.
+    """
+    return self.m.swarming.collect_task(swarming_task)
+

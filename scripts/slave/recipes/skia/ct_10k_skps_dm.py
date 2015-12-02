@@ -88,7 +88,15 @@ def RunSteps(api):
       dimensions={'os': 'Ubuntu', 'gpu': '10de'})
 
   # Now collect all tasks.
-  api.ct_swarming.collect_swarming_tasks(tasks)
+  failed_tasks = []
+  for task in tasks:
+    try:
+      api.ct_swarming.collect_swarming_task(task)
+    except api.step.StepFailure as e:
+      failed_tasks.append(e)
+  if failed_tasks:
+    raise api.step.StepFailure(
+        'Failed steps: %s' % ', '.join([f.name for f in failed_tasks]))
 
 
 def GenTests(api):
@@ -106,6 +114,17 @@ def GenTests(api):
 
   yield(
     api.test('CT_DM_10k_SKPs_slave3_failure') +
+    api.step_data('ct-10k-dm-3 on Ubuntu', retcode=1) +
+    api.properties(
+        buildername='CT-DM-10k-SKPs',
+        ct_num_slaves=ct_num_slaves,
+        revision=skia_revision,
+    )
+  )
+
+  yield(
+    api.test('CT_DM_10k_SKPs_2slaves_failure') +
+    api.step_data('ct-10k-dm-1 on Ubuntu', retcode=1) +
     api.step_data('ct-10k-dm-3 on Ubuntu', retcode=1) +
     api.properties(
         buildername='CT-DM-10k-SKPs',

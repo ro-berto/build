@@ -854,6 +854,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "ct-10k-dm-1 on Ubuntu",
     "~followup_annotations": [
+      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"shards\": [@@@",
@@ -890,7 +891,8 @@
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1137,7 +1139,7 @@
   },
   {
     "name": "$result",
-    "reason": "Failed steps: ct-10k-dm-3 on Ubuntu",
+    "reason": "Failed steps: ct-10k-dm-1 on Ubuntu, ct-10k-dm-3 on Ubuntu",
     "status_code": 1
   }
 ]
