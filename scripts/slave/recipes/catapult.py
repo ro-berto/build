@@ -57,6 +57,11 @@ def RunSteps(api):
                   'dashboard', 'bin', 'run_dev_server_tests'),
               ['--no-install-hooks', '--no-use-local-chrome',
                '--channel=stable'])
+  api.python('Dashboard Dev Server Tests Canary',
+              api.path['checkout'].join(
+                  'dashboard', 'bin', 'run_dev_server_tests'),
+              ['--no-install-hooks', '--no-use-local-chrome',
+               '--channel=canary'])
   api.python('Dashboard Python Tests',
              api.path['checkout'].join('dashboard', 'bin', 'run_py_tests'),
              ['--no-install-hooks'],
@@ -64,18 +69,34 @@ def RunSteps(api):
   api.python('Tracing Python Tests',
              api.path['checkout'].join('tracing', 'bin', 'run_py_tests'),
              ['--no-install-hooks'])
-  api.python('Tracing Dev Server Tests',
+  api.python('Tracing Dev Server Tests Stable',
              api.path['checkout'].join(
                  'tracing', 'bin', 'run_dev_server_tests'),
-             ['--no-install-hooks', '--no-use-local-chrome'])
+             ['--no-install-hooks',
+              '--no-use-local-chrome'
+              '--channel=stable'])
+  api.python('Tracing Dev Server Tests Canary',
+             api.path['checkout'].join(
+                 'tracing', 'bin', 'run_dev_server_tests'),
+             ['--no-install-hooks',
+              '--no-use-local-chrome'
+              '--channel=canary'])
   api.python('Py-vulcanize Tests',
              api.path['checkout'].join(
                  'third_party', 'py_vulcanize', 'bin', 'run_py_tests'),
              ['--no-install-hooks'])
-  api.python('Perf Insights Dev Server Tests',
+  api.python('Perf Insights Dev Server Tests Stable',
              api.path['checkout'].join(
                  'perf_insights', 'bin', 'run_dev_server_tests'),
-             ['--no-install-hooks', '--no-use-local-chrome'])
+             ['--no-install-hooks',
+              '--no-use-local-chrome',
+              '--channel=stable'])
+  api.python('Perf Insights Dev Server Tests Canary',
+             api.path['checkout'].join(
+                 'perf_insights', 'bin', 'run_dev_server_tests'),
+             ['--no-install-hooks',
+              '--no-use-local-chrome',
+              '--channel=canary'])
   api.python('Systrace Tests',
              api.path['checkout'].join('systrace', 'bin', 'run_tests'))
   if not api.platform.is_win:
