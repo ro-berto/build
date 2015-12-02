@@ -44,7 +44,7 @@ def fetch_intervening_revisions(min_rev, max_rev):
   """
   base_url= 'https://chromium.googlesource.com/chromium/src/+log/'
   url = base_url + '%s..%s?format=json' % (min_rev, max_rev)
-  url += '&n=' + _PAGE_SIZE
+  url += '&n=%d' % _PAGE_SIZE
   response = urllib2.urlopen(url).read()
   response_json = response[len(_GITILES_PADDING):]  # Remove padding.
   response_dict = json.loads(response_json)
