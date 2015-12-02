@@ -504,7 +504,9 @@ class SwarmingTest(Test):
   def target_name(self):
     return self._target_name or self._name
 
-  def isolate_target(self, _api):
+  def isolate_target(self, api):
+    if api.chromium.c.TARGET_PLATFORM == 'android':
+      return self.target_name + '_apk'
     return self.target_name
 
   def create_task(self, api, suffix, isolated_hash):
@@ -527,7 +529,7 @@ class SwarmingTest(Test):
 
     # *.isolated may be missing if *_run target is misconfigured. It's a error
     # in gyp, not a recipe failure. So carry on with recipe execution.
-    isolated_hash = api.isolate.isolated_tests.get(self.target_name)
+    isolated_hash = api.isolate.isolated_tests.get(self.isolate_target(api))
     if not isolated_hash:
       return api.python.inline(
           '[error] %s' % self._step_name(suffix),
@@ -536,7 +538,7 @@ class SwarmingTest(Test):
           print '*.isolated file for target %s is missing' % sys.argv[1]
           sys.exit(1)
           """,
-          args=[self.target_name])
+          args=[self.isolate_target(api)])
 
     # Create task.
     self._tasks[suffix] = self.create_task(api, suffix, isolated_hash)
@@ -639,11 +641,6 @@ class SwarmingGTestTest(SwarmingTest):
       return [self.target_name + '_apk_run']
 
     return [self.target_name, self.target_name + '_run']
-
-  def isolate_target(self, api):
-    if api.chromium.c.TARGET_PLATFORM == 'android':
-      return self.target_name + '_apk'
-    return self.target_name
 
   def create_task(self, api, suffix, isolated_hash):
     # For local tests test_args are added inside api.chromium.runtest.

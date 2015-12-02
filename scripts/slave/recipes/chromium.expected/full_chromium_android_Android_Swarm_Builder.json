@@ -371,7 +371,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "browser_tests"
+      "browser_tests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] browser_tests",
@@ -388,7 +388,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "android_webview_unittests"
+      "android_webview_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] android_webview_unittests",
@@ -405,7 +405,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "base_unittests"
+      "base_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] base_unittests",
@@ -422,7 +422,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "breakpad_unittests"
+      "breakpad_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] breakpad_unittests",
@@ -439,7 +439,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "components_unittests"
+      "components_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] components_unittests",
@@ -456,7 +456,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "content_unittests"
+      "content_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] content_unittests",
@@ -473,7 +473,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "device_unittests"
+      "device_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] device_unittests",
@@ -490,7 +490,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "events_unittests"
+      "events_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] events_unittests",
@@ -507,7 +507,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "gl_tests"
+      "gl_tests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] gl_tests",
@@ -524,7 +524,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "gl_unittests"
+      "gl_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] gl_unittests",
@@ -541,7 +541,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "gpu_unittests"
+      "gpu_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] gpu_unittests",
@@ -558,7 +558,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "ipc_tests"
+      "ipc_tests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] ipc_tests",
@@ -575,7 +575,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "media_unittests"
+      "media_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] media_unittests",
@@ -592,7 +592,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "net_unittests"
+      "net_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] net_unittests",
@@ -609,7 +609,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "sql_unittests"
+      "sql_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] sql_unittests",
@@ -626,7 +626,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "ui_android_unittests"
+      "ui_android_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] ui_android_unittests",
@@ -643,7 +643,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "ui_base_unittests"
+      "ui_base_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] ui_base_unittests",
@@ -660,7 +660,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "ui_touch_selection_unittests"
+      "ui_touch_selection_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] ui_touch_selection_unittests",
@@ -677,7 +677,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "unit_tests"
+      "unit_tests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[error] unit_tests",
