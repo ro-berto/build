@@ -14,18 +14,43 @@ class Metric(object):  # pragma: no cover
   NEW_STYLE_DELIMITER = '@@'
 
   def __init__(self, metric_string):
-    self._metric_string = metric_string
-    self._parts = self._metric_string.split('/')
+    parts = metric_string.split('/')
+    self.chart_name = None
+    self.interaction_record_name = None
+    self.trace_name = None
 
-  def ChartJsonFormat(self, delimiter=NEW_STYLE_DELIMITER):
-    if len(self._parts) == 3:  # foo/bar/baz -> bar@@foo/baz
-      chart_name, interaction_record_name, trace_name = self._parts
+    if len(parts) == 3:
+      # chart/interaction/trace
+      self.chart_name = parts[0]
+      self.interaction_record_name = parts[1]
+      self.trace_name = parts[2]
 
-      chart_name_with_interaction_record = (
-          interaction_record_name + delimiter + chart_name)
-      return [chart_name_with_interaction_record, trace_name]
+    if len(parts) == 2:
+      self.chart_name = parts[0]
+      if parts[0] != parts[1]:
+        self.trace_name = parts[1]
+
+  def as_pair(self, delimiter=NEW_STYLE_DELIMITER):
+    """Returns a pair of strings which represents a metric.
+
+    The first part is the chart part, which may contain an interaction record
+    name if applicable. The second part is the trace part, which is the same
+    as the first part if we want to get the summary result.
+
+    Args:
+      delimiter: The separator between interaction name and chart name.
+
+    Returns:
+      A pair of strings, or (None, None) if the metric is invalid.
+    """
+    first_part = self.chart_name
+    if self.interaction_record_name is not None:
+      first_part = self.interaction_record_name + delimiter + self.chart_name
+    if self.trace_name is not None:
+      second_part = self.trace_name
     else:
-      return self._parts
+      second_part = first_part
+    return (first_part, second_part)
 
 
 def _set_output_dir(command, output_dir):  # pragma: no cover
@@ -96,13 +121,13 @@ def run_perf_test(api, test_config, **kwargs):
       if use_chartjson:
         step_result = api.m.json.read(
             'Reading chartjson results', results_path)
-        valid_value, value, result = _get_chart_json_metric(
+        has_valid_value, value = find_values(
             step_result.json.output, Metric(metric))
       else:
-        valid_value, value = parse_metric.parse_metric(
+        has_valid_value, value = parse_metric.parse_metric(
             out, err, metric.split('/'))
       output_for_all_runs.append(out)
-      if valid_value:
+      if has_valid_value:
         values.extend(value)
       else:
         # This means the metric was not found in the output.
@@ -118,16 +143,44 @@ def run_perf_test(api, test_config, **kwargs):
   return run_results, output_for_all_runs, retcodes
 
 
-def _get_chart_json_metric(results, metric):  # pragma: no cover
-  valid_value, value, result = parse_metric.parse_chartjson_metric(
-      results, metric.ChartJsonFormat())
+def find_values(results, metric):  # pragma: no cover
+  """Tries to extract the given metric from the given results.
 
-  if valid_value:
-    return valid_value, value, result
+  This method tries several different possible chart names depending
+  on the given metric.
+
+  Args:
+    results: The chartjson dict.
+    metric: A Metric instance.
+
+  Returns:
+    A pair (has_valid_value, value), where has_valid_value is a boolean,
+    and value is the value(s) extracted from the results.
+  """
+  has_valid_value, value, _ = parse_metric.parse_chartjson_metric(
+      results, metric.as_pair())
+  if has_valid_value:
+    return True, value
+
   # TODO(eakuefner): Get rid of this fallback when bisect uses ToT Telemetry.
-  else:
-    return parse_metric.parse_chartjson_metric(
-        results, metric.ChartJsonFormat(Metric.OLD_STYLE_DELIMITER))
+  has_valid_value, value, _ = parse_metric.parse_chartjson_metric(
+        results, metric.as_pair(Metric.OLD_STYLE_DELIMITER))
+  if has_valid_value:
+    return True, value
+
+  # If we still haven't found a valid value, it's possible that the metric was
+  # specified as interaction-chart/trace or interaction-chart/interaction-chart,
+  # and the chartjson chart names use @@ as the separator between interaction
+  # and chart names.
+  if Metric.OLD_STYLE_DELIMITER not in metric.chart_name:
+    return False, []  # Give up; no results found.
+  interaction, chart = metric.chart_name.split(Metric.OLD_STYLE_DELIMITER, 1)
+  metric.interaction_record_name = interaction
+  metric.chart_name = chart
+  has_valid_value, value, _ = parse_metric.parse_chartjson_metric(
+      results, metric.as_pair())
+  return has_valid_value, value
+
 
 def _run_command(api, command, step_name):
   # TODO(robertocn): Reevaluate this approach when adding support for non-perf
