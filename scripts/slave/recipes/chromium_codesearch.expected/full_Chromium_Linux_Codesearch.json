@@ -210,7 +210,7 @@
       "tools/clang/scripts/update.py",
       "--force-local-build",
       "--without-android",
-      "--with-chrome-tools",
+      "--tools",
       "translation_unit"
     ],
     "cwd": "[SLAVE_BUILD]/src",

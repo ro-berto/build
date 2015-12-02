@@ -55,7 +55,7 @@ def RunSteps(api):
   script_path = api.path.join('tools', 'clang', 'scripts', 'update.py')
   api.step('compile translation_unit clang tool',
            [script_path, '--force-local-build', '--without-android',
-            '--with-chrome-tools', 'translation_unit'],
+            '--tools', 'translation_unit'],
            cwd=api.path['checkout'])
 
   # Run the clang tool
