@@ -384,8 +384,7 @@
       "-I",
       "https://isolateserver.appspot.com",
       "--",
-      "--use-gpu-in-tests",
-      "--require-audio-hardware-for-testing"
+      "--use-gpu-in-tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "audio_unittests"
