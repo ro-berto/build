@@ -84,26 +84,29 @@ def RunSteps(api):
   api.adb.list_devices()
 
   # Run the instrumentation tests from the package.
-  run_tests(api)
+  with api.step.defer_results():
+    for suite in INSTRUMENTATION_TESTS:
+      run_instrumentation_test(api, suite)
 
-  api.chromium_android.logcat_dump()
-  api.chromium_android.stack_tool_steps()
-  api.chromium_android.test_report()
+    api.chromium_android.logcat_dump()
+    api.chromium_android.stack_tool_steps()
+    api.chromium_android.test_report()
 
-def run_tests(api):
-  droid = api.chromium_android
+def run_instrumentation_test(api, suite):
   mock_test_results = {
     'per_iteration_data': [{'TestA': [{'status': 'SUCCESS'}]},
                            {'TestB': [{'status': 'FAILURE'}]}]
   }
-  for suite in INSTRUMENTATION_TESTS:
+  try:
     json_results_file = api.json.output(add_json_log=False)
-    step_result = droid.run_instrumentation_suite(
-        suite['test'], test_apk=droid.apk_path(suite['test_apk']),
+    api.chromium_android.run_instrumentation_suite(
+        suite['test'],
+        test_apk=api.chromium_android.apk_path(suite['test_apk']),
         json_results_file=json_results_file, verbose=True,
         step_test_data=lambda: api.json.test_api.output(mock_test_results),
         **suite.get('kwargs', {}))
-
+  finally:
+    step_result = api.step.active_result
     try:
       json_results = step_result.json.output
       test_results = {test_name: test_data[0]['status']
@@ -113,10 +116,17 @@ def run_tests(api):
           [test_name for test_name, test_status in test_results.iteritems()
            if test_status not in ['SUCCESS', 'SKIPPED']])
     except Exception:  # pragma: no cover
-      failures = []
+      failures = None
     step_result.presentation.step_text += api.test_utils.format_step_text(
         [['failures:', failures]])
 
 
 def GenTests(api):
-  yield api.test('basic') + api.properties.scheduled()
+  yield (api.test('basic') +
+      api.properties.scheduled())
+
+  yield (
+      api.test('test_failure') +
+      api.properties.scheduled() +
+      api.step_data(
+          'Instrumentation test SystemWebViewShellLayoutTest', retcode=1))
