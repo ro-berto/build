@@ -167,18 +167,6 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/tracing/bin/run_dev_server_tests",
-      "--no-install-hooks",
-      "--no-use-local-chrome",
-      "--channel=canary"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Tracing Dev Server Tests Canary"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]/catapult/third_party/py_vulcanize/bin/run_py_tests",
       "--no-install-hooks"
     ],
@@ -254,6 +242,18 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Perf Insights Python Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/tracing/bin/run_dev_server_tests",
+      "--no-install-hooks",
+      "--no-use-local-chrome",
+      "--channel=canary"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Tracing Dev Server Tests Canary"
   },
   {
     "name": "$result",

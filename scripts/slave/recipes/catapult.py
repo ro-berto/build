@@ -75,12 +75,6 @@ def RunSteps(api):
              ['--no-install-hooks',
               '--no-use-local-chrome',
               '--channel=stable'])
-  api.python('Tracing Dev Server Tests Canary',
-             api.path['checkout'].join(
-                 'tracing', 'bin', 'run_dev_server_tests'),
-             ['--no-install-hooks',
-              '--no-use-local-chrome',
-              '--channel=canary'])
   api.python('Py-vulcanize Tests',
              api.path['checkout'].join(
                  'third_party', 'py_vulcanize', 'bin', 'run_py_tests'),
@@ -114,6 +108,14 @@ def RunSteps(api):
                api.path['checkout'].join(
                    'perf_insights', 'bin', 'run_py_tests'),
                ['--no-install-hooks'])
+    # Test failing on Windows:
+    # https://github.com/catapult-project/catapult/issues/1816
+    api.python('Tracing Dev Server Tests Canary',
+               api.path['checkout'].join(
+                   'tracing', 'bin', 'run_dev_server_tests'),
+               ['--no-install-hooks',
+                '--no-use-local-chrome',
+                '--channel=canary'])
 
 
 def GenTests(api):
