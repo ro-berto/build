@@ -1009,13 +1009,20 @@ class V8Api(recipe_api.RecipeApi):
       }
       if self.m.tryserver.is_tryserver:
         properties.update(
+          category=self.m.properties['category'],
           issue=self.m.properties['issue'],
+          master=str(self.m.properties['master']),
           patch_project=str(self.m.properties['patch_project']),
           patch_storage=str(self.m.properties['patch_storage']),
           patchset=str(self.m.properties['patchset']),
+          reason=str(self.m.properties['reason']),
           requester=str(self.m.properties['requester']),
           rietveld=str(self.m.properties['rietveld']),
         )
+
+      # TODO(machenbach): Also set meaningful buildbucket tags of triggering
+      # parent.
+
       swarm_hashes = self.m.isolate.isolated_tests
       if swarm_hashes:
         properties['swarm_hashes'] = swarm_hashes

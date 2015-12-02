@@ -394,9 +394,12 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
 
     if mastername.startswith('tryserver'):
       test += self.m.properties(
-          revision='12345',
+          category='cq',
+          master='tryserver.v8',
           patch_project='v8',
           patch_storage='rietveld',
+          reason='CQ',
+          revision='12345',
           try_job_key='1234',
       )
 
