@@ -48,7 +48,7 @@ def RunSteps(api):
 
   # checkout llvm
   api.step('checkout llvm',
-           [api.path.sep.join(['tools', 'clang', 'scripts', 'update.sh']),
+           [api.path.sep.join(['tools', 'clang', 'scripts', 'update.py']),
             '--force-local-build',
             '--without-android'],
            cwd=api.path['checkout'],

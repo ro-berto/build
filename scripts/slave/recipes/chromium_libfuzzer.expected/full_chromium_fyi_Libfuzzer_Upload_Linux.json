@@ -105,7 +105,7 @@
   },
   {
     "cmd": [
-      "tools/clang/scripts/update.sh",
+      "tools/clang/scripts/update.py",
       "--force-local-build",
       "--without-android"
     ],
