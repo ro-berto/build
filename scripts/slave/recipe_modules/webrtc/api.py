@@ -70,30 +70,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     },
   }
 
-  # Map of GS archive names to urls.
-  # TODO(kjellander): Convert to use the auto-generated URLs once we've setup a
-  # separate bucket per master.
-  GS_ARCHIVES = freeze({
-    'android_dbg_archive': 'gs://chromium-webrtc/android_chromium_dbg',
-    'android_dbg_archive_fyi': ('gs://chromium-webrtc/'
-                                'android_chromium_trunk_dbg'),
-    'android_dbg_archive_arm64_fyi': ('gs://chromium-webrtc/'
-                                      'android_chromium_trunk_arm64_dbg'),
-    'android_apk_dbg_archive': 'gs://chromium-webrtc/android_dbg',
-    'android_apk_arm64_rel_archive': 'gs://chromium-webrtc/android_arm64_rel',
-    'android_apk_rel_archive': 'gs://chromium-webrtc/android_rel',
-    'win_rel_archive': 'gs://chromium-webrtc/Win Builder',
-    'win_rel_archive_fyi': 'gs://chromium-webrtc/win_rel-fyi',
-    'mac_rel_archive': 'gs://chromium-webrtc/Mac Builder',
-    'mac_rel_archive_fyi': 'gs://chromium-webrtc/mac_rel-fyi',
-    'linux_rel_archive': 'gs://chromium-webrtc/Linux Builder',
-    'linux_rel_archive_fyi': 'gs://chromium-webrtc/linux_rel-fyi',
-    'fyi_android_apk_dbg_archive': 'gs://chromium-webrtc/fyi_android_dbg',
-    'fyi_linux_asan_archive': 'gs://chromium-webrtc/Linux ASan Builder',
-    'fyi_linux_chromium_rel_archive': 'gs://chromium-webrtc/Linux Chromium FYI',
-
-  })
-
   CONTENT_UNITTESTS_GTEST_FILTER = '*WebRtc*:*WebRTC*:*MediaStream'
   BROWSER_TESTS_GTEST_FILTER = 'WebRtc*:Webrtc*:TabCapture*:*MediaStream*'
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
@@ -112,11 +88,11 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   @property
   def should_upload_build(self):
-    return self.bot_type == 'builder'
+    return self.bot_config.get('triggers')
 
   @property
   def should_download_build(self):
-    return self.bot_type == 'tester'
+    return self.bot_config.get('parent_buildername')
 
   def apply_bot_config(self, builders, recipe_configs, perf_config=None,
                        git_hashes_as_perf_revisions=False):
@@ -124,8 +100,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     buildername = self.m.properties.get('buildername')
     self.git_hashes_as_perf_revisions = git_hashes_as_perf_revisions
     master_dict = builders.get(mastername, {})
-    master_settings = master_dict.get('settings', {})
-    perf_config = master_settings.get('PERF_CONFIG')
+    self.master_config = master_dict.get('settings', {})
+    perf_config = self.master_config.get('PERF_CONFIG')
 
     self.bot_config = master_dict.get('builders', {}).get(buildername)
     assert self.bot_config, ('Unrecognized builder name "%r" for master "%r".' %
@@ -303,12 +279,14 @@ class WebRTCApi(recipe_api.RecipeApi):
       } for builder_name in triggers])
 
   def package_build(self):
-    if self.bot_config.get('build_gs_archive'):
-      self.m.archive.zip_and_upload_build(
-          'package build',
-          self.m.chromium.c.build_config_fs,
-          self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
-          build_revision=self.revision)
+    upload_url = self.m.archive.legacy_upload_url(
+        self.master_config.get('build_gs_bucket'),
+        extra_url_components=self.m.properties['mastername'])
+    self.m.archive.zip_and_upload_build(
+        'package build',
+        self.m.chromium.c.build_config_fs,
+        upload_url,
+        build_revision=self.revision)
 
   def extract_build(self):
     if not self.m.properties.get('parent_got_revision'):
@@ -322,10 +300,13 @@ class WebRTCApi(recipe_api.RecipeApi):
         'build directory',
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 
+    download_url = self.m.archive.legacy_download_url(
+       self.master_config.get('build_gs_bucket'),
+       extra_url_components=self.m.properties['mastername'])
     self.m.archive.download_and_unzip_build(
         'extract build',
         self.m.chromium.c.build_config_fs,
-        self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
+        download_url,
         build_revision=self.revision)
 
   def cleanup(self):

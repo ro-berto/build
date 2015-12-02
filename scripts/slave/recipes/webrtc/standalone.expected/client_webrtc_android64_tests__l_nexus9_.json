@@ -128,7 +128,7 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chromium-webrtc/android_arm64_rel",
+      "gs://chromium-webrtc/client.webrtc/Android64 Builder/full-build-linux.zip",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--master-name",

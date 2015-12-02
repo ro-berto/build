@@ -128,7 +128,7 @@
       "--target",
       "Debug",
       "--build-url",
-      "gs://chromium-webrtc/fyi_android_dbg",
+      "gs://chromium-webrtc/client.webrtc.fyi/Android32 Builder (dbg)/full-build-linux.zip",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--master-name",

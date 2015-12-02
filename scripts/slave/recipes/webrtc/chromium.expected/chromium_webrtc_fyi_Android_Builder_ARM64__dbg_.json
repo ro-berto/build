@@ -200,7 +200,7 @@
       "--target",
       "Debug",
       "--build-url",
-      "gs://chromium-webrtc/android_chromium_trunk_arm64_dbg",
+      "gs://chromium-webrtc/chromium.webrtc.fyi/Android Builder ARM64 (dbg)",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",

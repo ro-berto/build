@@ -176,7 +176,7 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chromium-webrtc/linux_rel-fyi",
+      "gs://chromium-webrtc/chromium.webrtc.fyi/Linux Builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",

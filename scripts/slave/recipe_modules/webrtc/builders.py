@@ -94,6 +94,9 @@ WEBRTC_REVISION_PERF_CONFIG = '{\'a_default_rev\': \'r_webrtc_rev\'}'
 
 BUILDERS = freeze({
   'chromium.webrtc': {
+    'settings': {
+      'build_gs_bucket': 'chromium-webrtc',
+    },
     'builders': {
       'Win Builder': {
         'recipe_config': 'chromium_webrtc',
@@ -102,7 +105,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
-        'build_gs_archive': 'win_rel_archive',
         'testing': {'platform': 'win'},
         'triggers': [
           'WinXP Tester',
@@ -121,7 +123,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-rel-xp',
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'win_rel_archive',
         'disable_runhooks': True,
         'parent_buildername': 'Win Builder',
         'testing': {'platform': 'win'},
@@ -136,7 +137,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-rel-7',
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'win_rel_archive',
         # TODO(kjellander): Disable the hooks on as soon we've moved away
         # from downloading test resources in that step.
         'disable_runhooks': False,
@@ -153,7 +153,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-rel-win8',
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'win_rel_archive',
         # TODO(kjellander): Disable the hooks on as soon we've moved away
         # from downloading test resources in that step.
         'disable_runhooks': False,
@@ -170,7 +169,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-rel-win10',
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'win_rel_archive',
         # TODO(kjellander): Disable the hooks on as soon we've moved away
         # from downloading test resources in that step.
         'disable_runhooks': False,
@@ -184,7 +182,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'build_gs_archive': 'mac_rel_archive',
         'testing': {'platform': 'mac'},
         'triggers': ['Mac Tester'],
       },
@@ -198,7 +195,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-rel-mac',
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'mac_rel_archive',
         'parent_buildername': 'Mac Builder',
         'testing': {'platform': 'mac'},
       },
@@ -209,7 +205,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'build_gs_archive': 'linux_rel_archive',
         'testing': {'platform': 'linux'},
         'triggers': ['Linux Tester'],
       },
@@ -223,7 +218,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-rel-linux',
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'linux_rel_archive',
         'parent_buildername': 'Linux Builder',
         'testing': {'platform': 'linux'},
       },
@@ -231,6 +225,7 @@ BUILDERS = freeze({
   },
   'chromium.webrtc.fyi': {
     'settings': {
+      'build_gs_bucket': 'chromium-webrtc',
       'PERF_CONFIG': WEBRTC_REVISION_PERF_CONFIG,
     },
     'builders': {
@@ -241,7 +236,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
-        'build_gs_archive': 'win_rel_archive_fyi',
         'testing': {'platform': 'win'},
         'triggers': [
           'WinXP Tester',
@@ -259,7 +253,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-trunk-tot-rel-winxp',
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'win_rel_archive_fyi',
         'disable_runhooks': True,
         'parent_buildername': 'Win Builder',
         'testing': {'platform': 'win'},
@@ -274,7 +267,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-trunk-tot-rel-win7',
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'win_rel_archive_fyi',
         # TODO(kjellander): Disable the hooks on Win7 as soon we've moved away
         # from downloading test resources in that step.
         'disable_runhooks': False,
@@ -291,7 +283,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-trunk-tot-rel-win10',
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'win_rel_archive_fyi',
         # TODO(kjellander): Disable the hooks on Win7 as soon we've moved away
         # from downloading test resources in that step.
         'disable_runhooks': False,
@@ -305,7 +296,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'build_gs_archive': 'mac_rel_archive_fyi',
         'testing': {'platform': 'mac'},
         'triggers': ['Mac Tester'],
       },
@@ -319,7 +309,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-trunk-tot-rel-mac',
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'mac_rel_archive_fyi',
         'parent_buildername': 'Mac Builder',
         'testing': {'platform': 'mac'},
       },
@@ -330,7 +319,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'build_gs_archive': 'linux_rel_archive_fyi',
         'testing': {'platform': 'linux'},
         'triggers': ['Linux Tester'],
       },
@@ -344,7 +332,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-trunk-tot-rel-linux',
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'linux_rel_archive_fyi',
         'parent_buildername': 'Linux Builder',
         'testing': {'platform': 'linux'},
       },
@@ -357,7 +344,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
-        'build_gs_archive': 'android_dbg_archive_fyi',
         'testing': {'platform': 'linux'},
         'triggers': [
           'Android Tests (dbg) (J Nexus4)',
@@ -376,7 +362,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'build_gs_archive': 'android_dbg_archive_arm64_fyi',
         'testing': {'platform': 'linux'},
         'triggers': [
           'Android Tests (dbg) (L Nexus9)',
@@ -394,7 +379,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus4-j',
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'android_dbg_archive_fyi',
         'parent_buildername': 'Android Builder (dbg)',
         'testing': {'platform': 'linux'},
       },
@@ -410,7 +394,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus5-k',
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'android_dbg_archive_fyi',
         'parent_buildername': 'Android Builder (dbg)',
         'testing': {'platform': 'linux'},
       },
@@ -426,7 +409,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus5',
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'android_dbg_archive_fyi',
         'parent_buildername': 'Android Builder (dbg)',
         'testing': {'platform': 'linux'},
       },
@@ -442,7 +424,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus6',
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'android_dbg_archive_fyi',
         'parent_buildername': 'Android Builder (dbg)',
         'testing': {'platform': 'linux'},
       },
@@ -458,7 +439,6 @@ BUILDERS = freeze({
           'PERF_ID': 'chromium-webrtc-trunk-tot-dbg-android-nexus72',
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'android_dbg_archive_fyi',
         'parent_buildername': 'Android Builder (dbg)',
         'testing': {'platform': 'linux'},
       },
@@ -471,7 +451,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
-        'build_gs_archive': 'android_dbg_archive_arm64_fyi',
         'parent_buildername': 'Android Builder ARM64 (dbg)',
         'testing': {'platform': 'linux'},
       },
@@ -479,6 +458,7 @@ BUILDERS = freeze({
   },
   'client.webrtc': {
     'settings': {
+      'build_gs_bucket': 'chromium-webrtc',
       'PERF_CONFIG': WEBRTC_REVISION_PERF_CONFIG,
     },
     'builders': {
@@ -844,8 +824,11 @@ BUILDERS = freeze({
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
-        'build_gs_archive': 'android_apk_rel_archive',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'Android32 Tests (L Nexus5)',
+          'Android32 Tests (L Nexus7.2)',
+        ],
       },
       'Android32 Builder (dbg)': {
         'recipe_config': 'webrtc_android',
@@ -856,8 +839,11 @@ BUILDERS = freeze({
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
-        'build_gs_archive': 'android_apk_dbg_archive',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'Android32 Tests (L Nexus5)(dbg)',
+          'Android32 Tests (L Nexus7.2)(dbg)',
+        ],
       },
       'Android32 Builder x86 (dbg)': {
         'recipe_config': 'webrtc_android',
@@ -879,8 +865,10 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'build_gs_archive': 'android_apk_arm64_rel_archive',
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'Android64 Tests (L Nexus9)',
+        ],
       },
       'Android64 Builder (dbg)': {
         'recipe_config': 'webrtc_android',
@@ -949,7 +937,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder (dbg)',
-        'build_gs_archive': 'android_apk_dbg_archive',
         'testing': {'platform': 'linux'},
       },
       'Android32 Tests (L Nexus5)': {
@@ -965,7 +952,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder',
-        'build_gs_archive': 'android_apk_rel_archive',
         'testing': {'platform': 'linux'},
       },
       'Android32 Tests (L Nexus7.2)(dbg)': {
@@ -978,7 +964,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder (dbg)',
-        'build_gs_archive': 'android_apk_dbg_archive',
         'testing': {'platform': 'linux'},
       },
       'Android32 Tests (L Nexus7.2)': {
@@ -994,7 +979,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder Release',
-        'build_gs_archive': 'android_apk_rel_archive',
         'testing': {'platform': 'linux'},
       },
       'Android64 Tests (L Nexus9)': {
@@ -1010,12 +994,14 @@ BUILDERS = freeze({
         },
         'bot_type': 'tester',
         'parent_buildername': 'Android64 Builder',
-        'build_gs_archive': 'android_apk_arm64_rel_archive',
         'testing': {'platform': 'linux'},
       },
     },
   },
   'client.webrtc.fyi': {
+    'settings': {
+      'build_gs_bucket': 'chromium-webrtc',
+    },
     'builders':  {
       'Win32 Release (swarming)': {
         'recipe_config': 'webrtc',
@@ -1133,7 +1119,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
-        'build_gs_archive': 'fyi_android_apk_dbg_archive',
         'testing': {'platform': 'linux'},
         'triggers': [
           'Android32 Tests (L Nexus6)(dbg)',
@@ -1149,7 +1134,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder (dbg)',
-        'build_gs_archive': 'fyi_android_apk_dbg_archive',
         'testing': {'platform': 'linux'},
       },
     },

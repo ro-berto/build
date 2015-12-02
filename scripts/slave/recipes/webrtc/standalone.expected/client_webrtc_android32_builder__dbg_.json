@@ -139,7 +139,7 @@
       "--target",
       "Debug",
       "--build-url",
-      "gs://chromium-webrtc/android_dbg",
+      "gs://chromium-webrtc/client.webrtc/Android32 Builder (dbg)",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
@@ -149,6 +149,32 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Android32 Tests (L Nexus5)(dbg)",
+        "properties": {
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+        }
+      },
+      {
+        "builder_name": "Android32 Tests (L Nexus7.2)(dbg)",
+        "properties": {
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+        }
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android32 Tests (L Nexus5)(dbg)<br />Android32 Tests (L Nexus7.2)(dbg)@@@"
+    ]
   },
   {
     "name": "$result",

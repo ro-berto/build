@@ -163,7 +163,7 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chromium-webrtc/Mac Builder",
+      "gs://chromium-webrtc/chromium.webrtc/Mac Builder/full-build-mac.zip",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--master-name",
