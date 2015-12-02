@@ -69,10 +69,12 @@ class GTestLogParser(object):
     self._flaky_tests = 0
 
     # Regular expressions for parsing GTest logs. Test names look like
-    #   SomeTestCase.SomeTest
+    # "x.y", with 0 or more "w/" prefixes and 0 or more "/z" suffixes.
+    # e.g.:
     #   SomeName/SomeTestCase.SomeTest/1
-    # This regexp also matches SomeName.SomeTest/1, which should be harmless.
-    test_name_regexp = r'((\w+/)?\w+\.\w+(/\d+)?)'
+    #   SomeName/SomeTestCase/1.SomeTest
+    #   SomeName/SomeTestCase/1.SomeTest/SomeModifider
+    test_name_regexp = r'((\w+/)*\w+\.\w+(/\w+)*)'
 
     self._master_name_re = re.compile(r'\[Running for master: "([^"]*)"')
     self.master_name = ''
