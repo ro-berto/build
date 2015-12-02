@@ -336,9 +336,6 @@ class FactoryCommands(object):
                                               'resource_sizes.py')
     self._gclient_safe_revert_tool = self.PathJoin(self._script_dir,
                                                    'gclient_safe_revert.py')
-
-    self._update_clang_sh_tool = self.PathJoin(
-        self._repository_root, 'tools', 'clang', 'scripts', 'update.sh')
     self._update_clang_py_tool = self.PathJoin(
         self._repository_root, 'tools', 'clang', 'scripts', 'update.py')
 
@@ -1277,12 +1274,7 @@ class FactoryCommands(object):
 
   # Checks out and builds clang
   def AddUpdateClangStep(self):
-    # TODO: exclusively use update.py once it can do everything update.sh
-    # currently does.
-    if self._target_platform != 'win32':
-      cmd = [self._update_clang_sh_tool]
-    else:
-      cmd = [self._python, self._update_clang_py_tool]
+    cmd = [self._python, self._update_clang_py_tool]
     self._factory.addStep(shell.ShellCommand,
                           name='update_clang',
                           timeout=600,

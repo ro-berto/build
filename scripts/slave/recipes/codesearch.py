@@ -52,7 +52,7 @@ def RunSteps(api):
             debug_path.join('compile_commands.json')])
 
   # Compile the clang tool
-  script_path = api.path.join('tools', 'clang', 'scripts', 'update.sh')
+  script_path = api.path.join('tools', 'clang', 'scripts', 'update.py')
   api.step('compile translation_unit clang tool',
            [script_path, '--force-local-build', '--without-android',
             '--with-chrome-tools', 'translation_unit'],
