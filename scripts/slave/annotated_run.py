@@ -204,7 +204,7 @@ def update_scripts():
     if sys.platform.startswith('win'):
       gclient_name += '.bat'
     gclient_path = os.path.join(BUILD_ROOT, '..', 'depot_tools', gclient_name)
-    gclient_cmd = [gclient_path, 'sync', '--force', '--verbose']
+    gclient_cmd = [gclient_path, 'sync', '--force', '--verbose', '--jobs=2']
     try:
       fd, output_json = tempfile.mkstemp()
       os.close(fd)
