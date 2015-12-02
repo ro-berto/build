@@ -110,7 +110,11 @@ class ArchiveApi(recipe_api.RecipeApi):
       args.extend(['--exclude-files', exclude_files])
     if 'gs_acl' in self.m.properties:
       args.extend(['--gs-acl', self.m.properties['gs_acl']])
-    args.extend(self.m.json.property_args())
+
+    properties_json = self.m.json.dumps(self.m.properties.legacy())
+    args.extend(['--factory-properties', properties_json,
+                 '--build-properties', properties_json])
+
     kwargs['allow_subannotations'] = True
     self.m.python(
       step_name,

@@ -275,7 +275,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.extend(['--test-platform', 'android'])
     if self.m.platform.is_linux:
       full_args.append('--xvfb' if xvfb else '--no-xvfb')
-    full_args += self.m.json.property_args()
+
+    properties_json = self.m.json.dumps(self.m.properties.legacy())
+    full_args.extend(['--factory-properties', properties_json,
+                      '--build-properties', properties_json])
 
     if annotate:
       full_args.append('--annotate=%s' % annotate)
@@ -390,7 +393,9 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     run_tests_args = ['--target', self.c.build_config_fs,
                       '--no-xvfb']
-    run_tests_args.extend(self.m.json.property_args())
+    properties_json = self.m.json.dumps(self.m.properties.legacy())
+    run_tests_args.extend(['--factory-properties', properties_json,
+                           '--build-properties', properties_json])
     run_tests_args.extend(['--annotate=graphing',
                            '--test-type=sizes',
                            '--builder-name=%s' % self.m.properties['buildername'],
