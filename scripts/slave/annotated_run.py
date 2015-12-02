@@ -3,9 +3,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import argparse
 import contextlib
 import json
-import optparse
 import os
 import shutil
 import socket
@@ -167,33 +167,28 @@ def get_factory_properties_from_disk(mastername, buildername):
 
 def get_args(argv):
   """Process command-line arguments."""
-
-  parser = optparse.OptionParser(
+  parser = argparse.ArgumentParser(
       description='Entry point for annotated builds.')
-  parser.add_option('--build-properties',
-                    action='callback', callback=chromium_utils.convert_json,
-                    type='string', default={},
-                    help='build properties in JSON format')
-  parser.add_option('--factory-properties',
-                    action='callback', callback=chromium_utils.convert_json,
-                    type='string', default={},
-                    help='factory properties in JSON format')
-  parser.add_option('--build-properties-gz',
-                    action='callback', callback=chromium_utils.convert_gz_json,
-                    type='string', default={}, dest='build_properties',
-                    help='build properties in b64 gz JSON format')
-  parser.add_option('--factory-properties-gz',
-                    action='callback', callback=chromium_utils.convert_gz_json,
-                    type='string', default={}, dest='factory_properties',
-                    help='factory properties in b64 gz JSON format')
-  parser.add_option('--keep-stdin', action='store_true', default=False,
-                    help='don\'t close stdin when running recipe steps')
-  parser.add_option('--master-overrides-slave', action='store_true',
-                    help='use the property values given on the command line '
-                         'from the master, not the ones looked up on the slave')
-  parser.add_option('--use-factory-properties-from-disk',
-                    action='store_true', default=False,
-                    help='use factory properties loaded from disk on the slave')
+  parser.add_argument('--build-properties',
+      type=json.loads, default={},
+      help='build properties in JSON format')
+  parser.add_argument('--factory-properties',
+      type=json.loads, default={},
+      help='factory properties in JSON format')
+  parser.add_argument('--build-properties-gz', dest='build_properties',
+      type=chromium_utils.convert_gz_json_type, default={},
+      help='build properties in b64 gz JSON format')
+  parser.add_argument('--factory-properties-gz', dest='factory_properties',
+      type=chromium_utils.convert_gz_json_type, default={},
+      help='factory properties in b64 gz JSON format')
+  parser.add_argument('--keep-stdin', action='store_true', default=False,
+      help='don\'t close stdin when running recipe steps')
+  parser.add_argument('--master-overrides-slave', action='store_true',
+      help='use the property values given on the command line from the master, '
+           'not the ones looked up on the slave')
+  parser.add_argument('--use-factory-properties-from-disk',
+      action='store_true', default=False,
+      help='use factory properties loaded from disk on the slave')
   return parser.parse_args(argv)
 
 
@@ -343,7 +338,7 @@ def build_data_directory():
 
 
 def main(argv):
-  opts, _ = get_args(argv)
+  opts = get_args(argv)
   # TODO(crbug.com/551165): remove flag "factory_properties".
   use_factory_properties_from_disk = (opts.use_factory_properties_from_disk or
                                       bool(opts.factory_properties))
@@ -422,7 +417,7 @@ def shell_main(argv):
   if update_scripts():
     return subprocess.call([sys.executable] + argv)
   else:
-    return main(argv)
+    return main(argv[1:])
 
 
 if __name__ == '__main__':

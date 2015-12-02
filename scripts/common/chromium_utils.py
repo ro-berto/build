@@ -1446,6 +1446,12 @@ def convert_gz_json(option, _, value, parser):
       json.loads(zlib.decompress(base64.b64decode(value))))
 
 
+def convert_gz_json_type(value):
+  """Provide an ArgumentParser type function to unmarshal a b64 gz JSON string.
+  """
+  return json.loads(zlib.decompress(base64.b64decode(value)))
+
+
 def SafeTranslate(inputstr):
   """Convert a free form string to one that can be used in a path.
 
