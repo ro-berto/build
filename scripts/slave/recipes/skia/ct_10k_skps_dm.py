@@ -85,7 +85,7 @@ def RunSteps(api):
   # Trigger all swarming tasks.
   tasks = api.ct_swarming.trigger_swarming_tasks(
       swarm_hashes, task_name_prefix='ct-10k-dm',
-      dimensions={'os': 'Ubuntu', 'gpu': '10de'})
+      dimensions={'os': 'Ubuntu-14.04', 'cpu': 'x86'})
 
   # Now collect all tasks.
   failed_tasks = []
@@ -114,7 +114,7 @@ def GenTests(api):
 
   yield(
     api.test('CT_DM_10k_SKPs_slave3_failure') +
-    api.step_data('ct-10k-dm-3 on Ubuntu', retcode=1) +
+    api.step_data('ct-10k-dm-3 on Ubuntu-14.04', retcode=1) +
     api.properties(
         buildername='CT-DM-10k-SKPs',
         ct_num_slaves=ct_num_slaves,
@@ -124,8 +124,8 @@ def GenTests(api):
 
   yield(
     api.test('CT_DM_10k_SKPs_2slaves_failure') +
-    api.step_data('ct-10k-dm-1 on Ubuntu', retcode=1) +
-    api.step_data('ct-10k-dm-3 on Ubuntu', retcode=1) +
+    api.step_data('ct-10k-dm-1 on Ubuntu-14.04', retcode=1) +
+    api.step_data('ct-10k-dm-3 on Ubuntu-14.04', retcode=1) +
     api.properties(
         buildername='CT-DM-10k-SKPs',
         ct_num_slaves=ct_num_slaves,

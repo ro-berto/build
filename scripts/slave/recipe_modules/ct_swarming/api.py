@@ -171,6 +171,7 @@ os.chmod('%s', os.stat('%s').st_mode | stat.S_IEXEC)
           task_output_dir=self.tasks_output_dir.join('slave%s' % (task_num+1)))
       swarming_task.dimensions = dimensions
       swarming_task.priority = 90
+      swarming_task.expiration = 2*60*60
       swarming_tasks.append(swarming_task)
     self.m.swarming.trigger(swarming_tasks)
     return swarming_tasks
