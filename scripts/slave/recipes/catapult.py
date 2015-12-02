@@ -73,13 +73,13 @@ def RunSteps(api):
              api.path['checkout'].join(
                  'tracing', 'bin', 'run_dev_server_tests'),
              ['--no-install-hooks',
-              '--no-use-local-chrome'
+              '--no-use-local-chrome',
               '--channel=stable'])
   api.python('Tracing Dev Server Tests Canary',
              api.path['checkout'].join(
                  'tracing', 'bin', 'run_dev_server_tests'),
              ['--no-install-hooks',
-              '--no-use-local-chrome'
+              '--no-use-local-chrome',
               '--channel=canary'])
   api.python('Py-vulcanize Tests',
              api.path['checkout'].join(

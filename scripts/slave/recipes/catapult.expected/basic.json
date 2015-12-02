@@ -157,7 +157,8 @@
       "-u",
       "[SLAVE_BUILD]/catapult/tracing/bin/run_dev_server_tests",
       "--no-install-hooks",
-      "--no-use-local-chrome--channel=stable"
+      "--no-use-local-chrome",
+      "--channel=stable"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Tracing Dev Server Tests Stable"
@@ -168,7 +169,8 @@
       "-u",
       "[SLAVE_BUILD]/catapult/tracing/bin/run_dev_server_tests",
       "--no-install-hooks",
-      "--no-use-local-chrome--channel=canary"
+      "--no-use-local-chrome",
+      "--channel=canary"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Tracing Dev Server Tests Canary"
