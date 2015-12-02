@@ -177,16 +177,7 @@ def GenTests(api):
   yield encoded_config_test
 
   broken_test_data = test_data()
-  for revision_data in broken_test_data:
-    for step_data in _get_step_data_for_revision(api, revision_data,
-                                                 broken_cp='306475',
-                                                 skip_results=True):
-      broken_cp_test += step_data
-    for step_data in _get_step_data_for_revision(
-        api, revision_data,
-        broken_hash='e28dc0d49c331def2a3bbf3ddd0096eb51551155',
-        skip_results=True):
-      broken_hash_test += step_data
+  broken_test_data[0].pop('cl_info')
   yield broken_hash_test
   yield broken_cp_test
 
@@ -302,18 +293,14 @@ def _get_step_data_for_revision(api, revision_data, broken_cp=None,
   if 'refrange' in revision_data:
     parent_step = 'Resolving reference range.'
     step_name = parent_step + 'resolving commit_pos ' + commit_pos
-    if commit_pos == broken_cp:
-      yield api.step_data(step_name, stdout=api.raw_io.output(''))
-    else:
+    if broken_cp is None:
       yield api.step_data(step_name, stdout=api.raw_io.output('hash:' +
                                                             commit_hash))
 
-      step_name = parent_step + 'resolving hash ' + commit_hash
-      if commit_hash == broken_hash:
-        yield api.step_data(step_name, stdout=api.raw_io.output('UnCastable'))
-      else:
-        commit_pos_str = 'refs/heads/master@{#%s}' % commit_pos
-        yield api.step_data(step_name, stdout=api.raw_io.output(commit_pos_str))
+    step_name = parent_step + 'resolving hash ' + commit_hash
+    if broken_hash is None:
+      commit_pos_str = 'refs/heads/master@{#%s}' % commit_pos
+      yield api.step_data(step_name, stdout=api.raw_io.output(commit_pos_str))
 
   if not skip_results:
     step_name = 'gsutil Get test results for build ' + commit_hash

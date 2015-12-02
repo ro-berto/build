@@ -201,85 +201,6 @@
     "name": "Resolving reference range.resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "log",
-      "--format=hash:%H",
-      "--grep",
-      "^Cr-Commit-Position: refs/heads/master@{#306478}",
-      "-1",
-      "origin/master"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "Resolving reference range.resolving commit_pos 306478",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "fetch",
-      "origin",
-      "--tags"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "Resolving reference range.git fetch tags",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "cat-file",
-      "blob",
-      "a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "Resolving reference range.git cat-file a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@v8: None@@@",
-      "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@skia: None@@@",
-      "@@@STEP_LOG_END@Debug Bad Revision DEPS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "log",
-      "--format=hash:%H",
-      "--grep",
-      "^Cr-Commit-Position: refs/heads/master@{#306475}",
-      "-1",
-      "origin/master"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "Resolving reference range.resolving commit_pos 306475",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "Resolving reference range.resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@SET_BUILD_PROPERTY@extra_result_code@[\"B4T_BAD_REV\"]@@@"
     ]
@@ -291,7 +212,7 @@
       "import sys; sys.exit(1)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Resolving reference range.Recipe failed. Reason: Failed to resolve commit position - Could not parse commit position from git output: UnCastable",
+    "name": "Resolving reference range.Recipe failed. Reason: Failed to resolve commit position - Could not parse commit position from git output: ",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys; sys.exit(1)@@@",
@@ -300,7 +221,7 @@
   },
   {
     "name": "$result",
-    "reason": "Could not parse commit position from git output: UnCastable",
+    "reason": "Could not parse commit position from git output: ",
     "status_code": 1
   }
 ]

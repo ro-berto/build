@@ -55,9 +55,10 @@ class CommitPositionApi(recipe_api.RecipeApi):
       result = result_line.split(':')[1]
       int(result, 16)
       return result
-    except (IndexError, ValueError):
+    except (IndexError, ValueError):  # pragma: no cover
       raise self.m.step.StepFailure(
-          'Could not parse commit hash from git log output' + step_result.stdout)
+          'Could not parse commit hash from git log output' +
+          step_result.stdout)
 
   def chromium_commit_position_from_hash(self, sha):
     """Resolve a chromium commit hash to its commit position."""
