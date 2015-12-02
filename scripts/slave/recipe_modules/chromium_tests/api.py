@@ -130,7 +130,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Bot Update re-uses the gclient configs.
     update_step = self.m.bot_update.ensure_checkout(
         patch_root=bot_config.get('patch_root'),
-        root_solution_revision=root_solution_revision)
+        root_solution_revision=root_solution_revision,
+        clobber=bot_config.get('clobber', False))
     assert update_step.json.output['did_run']
     # HACK(dnj): Remove after 'crbug.com/398105' has landed
     self.m.chromium.set_build_properties(update_step.json.output['properties'])

@@ -50,4 +50,25 @@ BUILDERS = freeze({
   'tryserver.chromium.linux': tryserver_chromium_linux.SPEC,
   'tryserver.chromium.mac': tryserver_chromium_mac.SPEC,
   'tryserver.chromium.perf': tryserver_chromium_perf.SPEC,
+
+  # Additional build configurations to test against for coverage. This is useful
+  # when adding configuration options that will only be exercised in other
+  # repositories.
+  #
+  # Note that this master is not real, and consequently this build configuration
+  # will never be used in production.
+  'bot_update.always_on': {
+    'builders': {
+      'coverage_clobber': {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'clobber': True,
+        'archive_build': True,
+        'testing': {
+          'platform': 'linux',
+        },
+        'gs_bucket': 'invalid',
+      },
+    },
+  },
 })
