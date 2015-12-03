@@ -18,7 +18,6 @@ DEPS = [
 ]
 
 
-CT_PAGE_TYPE = '10k'
 CT_DM_ISOLATE = 'ct_dm.isolate'
 
 # Number of slaves to shard CT runs to.
@@ -29,6 +28,15 @@ DEFAULT_SKPS_CHROMIUM_BUILD = '310ea93-42bd6bf'
 
 
 def RunSteps(api):
+  # Figure out which repository to use.
+  buildername = api.properties['buildername']
+  if '10k' in buildername:
+    ct_page_type = '10k'
+  elif '1m' in buildername:
+    ct_page_type = 'All'
+  else:
+    raise Exception('Do not recognise the buildername %s.' % buildername)
+
   # Checkout Skia and Chromium.
   gclient_cfg = api.gclient.make_config()
 
@@ -71,7 +79,7 @@ def RunSteps(api):
 
   for slave_num in range(1, ct_num_slaves + 1):
     # Download SKPs.
-    api.ct_swarming.download_skps(CT_PAGE_TYPE, slave_num, skps_chromium_build)
+    api.ct_swarming.download_skps(ct_page_type, slave_num, skps_chromium_build)
 
     # Create this slave's isolated.gen.json file to use for batcharchiving.
     isolate_dir = chromium_checkout.join('chrome')
@@ -115,6 +123,25 @@ def GenTests(api):
         ct_num_slaves=ct_num_slaves,
         revision=skia_revision,
     )
+  )
+
+  yield(
+    api.test('CT_DM_1m_SKPs') +
+    api.properties(
+        buildername='CT-DM-1m-SKPs',
+        ct_num_slaves=ct_num_slaves,
+        revision=skia_revision,
+    )
+  )
+
+  yield (
+    api.test('CT_DM_SKPs_UnknownBuilder') +
+    api.properties(
+        buildername='CT_DM_UnknownRepo_SKPs',
+        ct_num_slaves=ct_num_slaves,
+        revision=skia_revision,
+    ) +
+    api.expect_exception('Exception')
   )
 
   yield(
