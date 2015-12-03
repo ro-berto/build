@@ -895,12 +895,17 @@ def main_ninja(options, args):
         # so we would be able to use 10 * number_of_processors.
         # For the safety, we'd like to set the upper limit to 200.
         #
-        # For linux, let me keep the current value 50. It's fast enough
-        # compared to the other platforms.
-        #
         # Note that currently most try-bot build slaves have 8 processors.
         if chromium_utils.IsMac() or chromium_utils.IsWindows():
           return min(10 * number_of_processors, 200)
+
+        # For Linux, we also would like to use 10 * cpu. However, not sure
+        # backend resource is enough, so let me set Linux and Linux x64 builder
+        # only for now.
+        hostname = goma_utils.GetShortHostname()
+        if hostname in ['build14-m1', 'build48-m1']:
+          return min(10 * number_of_processors, 200)
+
         return 50
 
       goma_jobs = determine_goma_jobs()
