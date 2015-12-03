@@ -179,7 +179,7 @@
           "patchset": "1",
           "reason": "CQ",
           "requester": "commit-bot@chromium.org",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "revision": "12345",
           "rietveld": "https://codereview.chromium.org",
           "swarm_hashes": {
             "bot_default": "[dummy hash for bot_default]"

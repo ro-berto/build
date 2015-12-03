@@ -1003,7 +1003,6 @@ class V8Api(recipe_api.RecipeApi):
     triggers = self.bot_config.get('triggers')
     if triggers:
       properties = {
-        'revision': self.revision,
         'parent_got_revision': self.revision,
         'parent_got_revision_cp': self.revision_cp,
       }
@@ -1017,8 +1016,15 @@ class V8Api(recipe_api.RecipeApi):
           patchset=str(self.m.properties['patchset']),
           reason=str(self.m.properties['reason']),
           requester=str(self.m.properties['requester']),
+          # On tryservers, set revision to the same as on the current bot,
+          # as CQ expects builders and testers to match the revision field.
+          revision=str(self.m.properties.get('revision', 'HEAD')),
           rietveld=str(self.m.properties['rietveld']),
         )
+      else:
+        # On non-tryservers, we can set the revision to whatever the
+        # triggering builder checked out.
+        properties['revision'] = self.revision
 
       # TODO(machenbach): Also set meaningful buildbucket tags of triggering
       # parent.
