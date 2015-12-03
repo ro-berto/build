@@ -169,7 +169,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave1/skps",
+      "[SLAVE_BUILD]/skps/slave1",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -200,7 +200,7 @@
       "-d",
       "-r",
       "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave1",
-      "[SLAVE_BUILD]/src/content/test/ct/slave1/skps"
+      "[SLAVE_BUILD]/skps/slave1"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil rsync"
@@ -244,7 +244,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave2/skps",
+      "[SLAVE_BUILD]/skps/slave2",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -275,7 +275,7 @@
       "-d",
       "-r",
       "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave2",
-      "[SLAVE_BUILD]/src/content/test/ct/slave2/skps"
+      "[SLAVE_BUILD]/skps/slave2"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil rsync (2)"
@@ -319,7 +319,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave3/skps",
+      "[SLAVE_BUILD]/skps/slave3",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -350,7 +350,7 @@
       "-d",
       "-r",
       "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave3",
-      "[SLAVE_BUILD]/src/content/test/ct/slave3/skps"
+      "[SLAVE_BUILD]/skps/slave3"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil rsync (3)"
@@ -394,7 +394,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave4/skps",
+      "[SLAVE_BUILD]/skps/slave4",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -425,7 +425,7 @@
       "-d",
       "-r",
       "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave4",
-      "[SLAVE_BUILD]/src/content/test/ct/slave4/skps"
+      "[SLAVE_BUILD]/skps/slave4"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil rsync (4)"
@@ -469,7 +469,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/src/content/test/ct/slave5/skps",
+      "[SLAVE_BUILD]/skps/slave5",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -500,7 +500,7 @@
       "-d",
       "-r",
       "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave5",
-      "[SLAVE_BUILD]/src/content/test/ct/slave5/skps"
+      "[SLAVE_BUILD]/skps/slave5"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil rsync (5)"

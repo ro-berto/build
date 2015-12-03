@@ -79,7 +79,9 @@ def RunSteps(api):
 
   for slave_num in range(1, ct_num_slaves + 1):
     # Download SKPs.
-    api.ct_swarming.download_skps(ct_page_type, slave_num, skps_chromium_build)
+    api.ct_swarming.download_skps(
+        ct_page_type, slave_num, skps_chromium_build,
+        api.path['slave_build'].join('skps'))
 
     # Create this slave's isolated.gen.json file to use for batcharchiving.
     isolate_dir = chromium_checkout.join('chrome')

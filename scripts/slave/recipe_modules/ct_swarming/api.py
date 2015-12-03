@@ -84,7 +84,7 @@ os.chmod('%s', os.stat('%s').st_mode | stat.S_IEXEC)
                                                            slave_num),
         dest=wpr_dir)
 
-  def download_skps(self, page_type, slave_num, skps_chromium_build):
+  def download_skps(self, page_type, slave_num, skps_chromium_build, dest_dir):
     """Downloads SKPs corresponding to the specified page type, slave and build.
 
     The SKPs are downloaded into subdirectories in the downloads_dir.
@@ -95,8 +95,9 @@ os.chmod('%s', os.stat('%s').st_mode | stat.S_IEXEC)
                  directory to download from. Eg: for the top 1k, slave1 will
                  contain SKPs from webpages 1-10, slave2 will contain 11-20.
       skps_chromium_build: str. The build the SKPs were captured from.
+      dest_dir: path obj. The directory to download SKPs into.
     """
-    skps_dir = self.downloads_dir.join('slave%s' % slave_num, 'skps')
+    skps_dir = dest_dir.join('slave%s' % slave_num)
     self.m.file.makedirs('SKPs dir', skps_dir)
     full_source = 'gs://%s/skps/%s/%s/slave%s' % (
         CT_GS_BUCKET, page_type, skps_chromium_build, slave_num)
