@@ -21,11 +21,10 @@ import tempfile
 BUILD_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(
                              os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(BUILD_ROOT, 'scripts'))
-import common.env
-common.env.Install()
 
 from common import annotator
 from common import chromium_utils
+from common import env
 from common import master_cfg_utils
 
 # Logging instance.
@@ -220,14 +219,14 @@ def get_factory_properties_from_disk(workdir, mastername, buildername):
   if not master_path:
     raise LookupError('master "%s" not found.' % mastername)
 
-  script_path = os.path.join(common.env.Build, 'scripts', 'tools',
+  script_path = os.path.join(env.Build, 'scripts', 'tools',
                              'dump_master_cfg.py')
 
   master_json = os.path.join(workdir, 'dump_master_cfg.json')
   dump_cmd = [sys.executable,
               script_path,
               master_path, master_json]
-  proc = subprocess.Popen(dump_cmd, cwd=common.env.Build,
+  proc = subprocess.Popen(dump_cmd, cwd=env.Build,
                           stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   out, err = proc.communicate()
   if proc.returncode:
@@ -306,7 +305,7 @@ def update_scripts():
     gclient_name = 'gclient'
     if sys.platform.startswith('win'):
       gclient_name += '.bat'
-    gclient_path = os.path.join(common.env.Build, '..', 'depot_tools',
+    gclient_path = os.path.join(env.Build, '..', 'depot_tools',
                                 gclient_name)
     gclient_cmd = [gclient_path, 'sync', '--force', '--verbose', '--jobs=2']
     try:
@@ -319,10 +318,10 @@ def update_scripts():
     cmd_dict = {
         'name': 'update_scripts',
         'cmd': gclient_cmd,
-        'cwd': common.env.Build,
+        'cwd': env.Build,
     }
     annotator.print_step(cmd_dict, os.environ, stream)
-    rv, _ = _run_command(gclient_cmd, cwd=common.env.Build)
+    rv, _ = _run_command(gclient_cmd, cwd=env.Build)
     if rv != 0:
       s.step_text('gclient sync failed!')
       s.step_warnings()
@@ -370,7 +369,7 @@ def clean_old_recipe_engine():
   packages rollout (2015-09-16).
   """
   for (dirpath, _, filenames) in os.walk(
-      os.path.join(common.env.Build, 'third_party', 'recipe_engine')):
+      os.path.join(env.Build, 'third_party', 'recipe_engine')):
     for filename in filenames:
       if filename.endswith('.pyc'):
         os.remove(os.path.join(dirpath, filename))
@@ -452,11 +451,10 @@ def main(argv):
 
     # Use the standard recipe runner unless the recipes are explicitly in the
     # "build_limited" repository.
-    recipe_runner = os.path.join(common.env.Build,
+    recipe_runner = os.path.join(env.Build,
                                  'scripts', 'slave', 'recipes.py')
-    if common.env.BuildInternal:
-      build_limited = os.path.join(common.env.BuildInternal,
-                                        'scripts', 'slave')
+    if env.BuildInternal:
+      build_limited = os.path.join(env.BuildInternal, 'scripts', 'slave')
       if os.path.exists(os.path.join(build_limited, 'recipes', recipe_file)):
         recipe_runner = os.path.join(build_limited, 'recipes.py')
 
