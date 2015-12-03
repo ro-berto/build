@@ -5,12 +5,14 @@
 import json
 
 from recipe_engine.config import List
+from recipe_engine.config import Single
 from recipe_engine.recipe_api import Property
 
 
 DEPS = [
   'chromium',
   'chromium_tests',
+  'findit',
   'gclient',
   'json',
   'path',
@@ -32,6 +34,9 @@ PROPERTIES = {
     'requested_compile_targets': Property(
         kind=List(basestring), default=None, param_name='compile_targets',
         help='The failed compile targets, eg: browser_tests'),
+    'use_analyze': Property(
+        kind=Single(bool, empty_val=False, required=False), default=True,
+        help='Use analyze to filter out affected targets.'),
 }
 
 
@@ -42,7 +47,7 @@ class CompileResult(object):
 
 
 def _run_compile_at_revision(api, target_mastername, target_buildername,
-                             revision, compile_targets):
+                             revision, compile_targets, use_analyze):
   with api.step.nest('test %s' % str(revision)):
     # Checkout code at the given revision to recompile.
     bot_update_step, master_dict, test_spec = \
@@ -57,11 +62,27 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
     compile_targets = sorted(set(compile_targets or []))
     if not compile_targets:
       compile_targets, _ = api.chromium_tests.get_compile_targets_and_tests(
-            target_mastername,
-            target_buildername,
-            master_dict,
-            test_spec,
-            override_bot_type='builder_tester')
+          target_mastername,
+          target_buildername,
+          master_dict,
+          test_spec,
+          override_bot_type='builder_tester')
+
+      if use_analyze:
+        changed_files = api.findit.files_changed_by_revision(revision)
+
+        _, compile_targets = api.chromium_tests.analyze(
+            changed_files,
+            test_targets=[],
+            additional_compile_targets=compile_targets,
+            config_file_name='trybot_analyze_config.json',
+            mb_mastername=target_mastername,
+            mb_buildername=target_buildername,
+            additional_names=None)
+
+        if not compile_targets:
+          # No compile target is impacted by the given revision.
+          return CompileResult.SKIPPED
 
     try:
       api.chromium_tests.compile_specific_targets(
@@ -82,7 +103,7 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
 
 
 def RunSteps(api, target_mastername, target_buildername,
-             root_solution_revisions, requested_compile_targets):
+             root_solution_revisions, requested_compile_targets, use_analyze):
   api.chromium_tests.configure_build(
       target_mastername, target_buildername, override_bot_type='builder_tester')
 
@@ -91,7 +112,7 @@ def RunSteps(api, target_mastername, target_buildername,
     for current_revision in root_solution_revisions:
       compile_result = _run_compile_at_revision(
           api, target_mastername, target_buildername,
-          current_revision, requested_compile_targets)
+          current_revision, requested_compile_targets, use_analyze)
 
       results.append([current_revision, compile_result])
       if compile_result == CompileResult.FAILED:
@@ -117,7 +138,7 @@ def RunSteps(api, target_mastername, target_buildername,
 
 
 def GenTests(api):
-  def props(compile_targets=None):
+  def props(compile_targets=None, use_analyze=False):
     properties = {
         'mastername': 'tryserver.chromium.linux',
         'buildername': 'linux_variable',
@@ -126,6 +147,7 @@ def GenTests(api):
         'target_mastername': 'chromium.linux',
         'target_buildername': 'Linux Builder',
         'root_solution_revisions': ['r1'],
+        'use_analyze': use_analyze,
     }
     if compile_targets:
       properties['compile_targets'] = compile_targets
@@ -176,4 +198,39 @@ def GenTests(api):
               ],
           }),
           retcode=1)
+  )
+
+  yield (
+      api.test('compile_skipped') +
+      props(use_analyze=True) +
+      api.override_step_data(
+          'test r1.analyze',
+          api.json.output({
+              'status': 'No dependencies',
+              'compile_targets': [],
+              'test_targets': [],
+          })
+      )
+  )
+
+  yield (
+      api.test('compile_affected_targets_only') +
+      props(use_analyze=True) +
+      api.override_step_data('test r1.read test spec',
+                             api.json.output({
+                                'Linux Builder': {
+                                   'additional_compile_targets': [
+                                       'a', 'a_run',
+                                       'b', 'b_run',
+                                   ],
+                                }
+                             })) +
+      api.override_step_data(
+          'test r1.analyze',
+          api.json.output({
+              'status': 'Found dependency',
+              'compile_targets': ['a', 'a_run'],
+              'test_targets': ['a', 'a_run'],
+          })
+      )
   )
