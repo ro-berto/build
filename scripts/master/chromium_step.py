@@ -469,6 +469,22 @@ def MakeOutputDirectory(output_dir):
     os.makedirs(output_dir)
 
 
+def getSourceStamp(build):
+  """Retrieve the SourceStamp for the given build."""
+  source_stamp = build.getSourceStamp()
+  if source_stamp.revision is None:
+    revision = build.getProperties().getProperty('got_revision')
+    if revision:
+      # The source stamp is relative, but we have the "got_revision", so
+      # make it absolute.
+      source_stamp = source_stamp.getAbsoluteSourceStamp(revision)
+  else:
+    # The sourcestamp is absolute. DO NOT CALL getAbsoluteSourceStamp on it
+    # because that would wipe changes and therefore the blamelist.
+    pass
+  return source_stamp
+
+
 class AnnotationObserver(buildstep.LogLineObserver):
   """This class knows how to understand annotations.
 
@@ -1326,8 +1342,21 @@ class AnnotationObserver(buildstep.LogLineObserver):
     if not self.bb_triggering_service:
       self.bb_triggering_service = yield (
           buildbucket.trigger.get_triggering_service(self.active_master))
-    changes = map(
-        buildbucket.trigger.change_from_change_spec, changes_spec or [])
+
+    if changes_spec:
+      changes = map(
+          buildbucket.trigger.change_from_change_spec, changes_spec)
+    else:
+      def changeToBuildBucketChange(change):
+        d = change.asDict()
+        d['author'] = d.get('who')
+        d['files'] = change.files[:]
+        d['when_timestamp'] = d.get('when')
+        return buildbucket.trigger.change_from_change_spec(d)
+
+      source_stamp = getSourceStamp(build)
+      changes = map(changeToBuildBucketChange, source_stamp.changes)
+
     for builder_name in builder_names:
       result = yield self.bb_triggering_service.trigger(
           build, bucket_name, builder_name, properties, changes)
@@ -1345,24 +1374,13 @@ class AnnotationObserver(buildstep.LogLineObserver):
     """Creates a new buildset."""
     build = self.command.build
     master = build.builder.botmaster.parent
-    current_properties = build.getProperties()
 
     if changes_spec:
       # Changes have been specified explicitly.
       ssid = yield self.insertSourceStamp(master, changes_spec)
     else:
       # Use the same source stamp.
-      source_stamp = build.getSourceStamp()
-      if source_stamp.revision is None:
-        revision = current_properties.getProperty('got_revision')
-        if revision:
-          # The source stamp is relative, but we have the "got_revision", so
-          # make it absolute.
-          source_stamp = source_stamp.getAbsoluteSourceStamp(revision)
-      else:
-        # The sourcestamp is absolute. DO NOT CALL getAbsoluteSourceStamp on it
-        # because that would wipe changes and therefore the blamelist.
-        pass
+      source_stamp = getSourceStamp(build)
       ssid = yield source_stamp.getSourceStampId(master)
 
     bsid, brids = yield master.addBuildset(

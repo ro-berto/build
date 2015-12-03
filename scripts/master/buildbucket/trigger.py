@@ -108,7 +108,7 @@ def get_triggering_service(active_master):
   return result
 
 
-def change_from_change_spec(self, change):
+def change_from_change_spec(change):
   """Converts a change in change_spec format to buildbucket format.
 
   For more info on change_spec format, see
