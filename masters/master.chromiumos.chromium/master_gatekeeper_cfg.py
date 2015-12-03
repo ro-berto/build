@@ -19,10 +19,6 @@ memory_categories_steps = {
   'crosasantest': ['VMTest'],
 }
 
-trooper_categories_steps = {
-  '': ['update_scripts', 'Clear and Clone chromite'],
-}
-
 exclusions = {
 }
 
@@ -61,14 +57,3 @@ def Update(config, active_master, c):
       public_html='../master.chromiumos/public_html',
       sheriffs=['sheriff_memory'],
       use_getname=True))
-  c['status'].append(chromium_notifier.ChromiumNotifier(
-      fromaddr=active_master.from_address,
-      categories_steps=trooper_categories_steps,
-      relayhost=config.Master.smtp,
-      status_header='%(steps)s failed on "%(builder)s"',
-      subject='buildbot trooper alert on %(builder)s (%(projectName)s)',
-      extraRecipients=['chrome-troopers@google.com'],
-      sheriffs=[],
-      lookup=master_utils.FilterDomain(),
-      use_getname=True))
-
