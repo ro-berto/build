@@ -3,8 +3,8 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'path',
-  'properties',
+  'recipe_engine/path',
+  'recipe_engine/properties',
   'tryserver',
 ]
 

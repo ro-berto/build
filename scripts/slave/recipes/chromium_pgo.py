@@ -8,9 +8,9 @@ DEPS = [
   'archive',
   'chromium',
   'pgo',
-  'platform',
-  'properties',
-  'step',
+  'recipe_engine/platform',
+  'recipe_engine/properties',
+  'recipe_engine/step',
 ]
 
 

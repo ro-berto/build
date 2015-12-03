@@ -7,9 +7,9 @@ DEPS = [
   'archive',
   'ct_swarming',
   'file',
-  'path',
-  'properties',
-  'step',
+  'recipe_engine/path',
+  'recipe_engine/properties',
+  'recipe_engine/step',
 ]
 
 

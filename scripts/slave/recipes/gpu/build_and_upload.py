@@ -11,9 +11,9 @@
 DEPS = [
   'buildbot',
   'gpu',
-  'json',
-  'platform',
-  'properties',
+  'recipe_engine/json',
+  'recipe_engine/platform',
+  'recipe_engine/properties',
 ]
 
 def RunSteps(api):

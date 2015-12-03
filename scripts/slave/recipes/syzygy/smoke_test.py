@@ -24,8 +24,8 @@ testing.
 DEPS = [
   'chromium',
   'gclient',
-  'platform',
-  'properties',
+  'recipe_engine/platform',
+  'recipe_engine/properties',
   'syzygy',
 ]
 

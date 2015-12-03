@@ -11,8 +11,8 @@ DEPS = [
     'gclient',
     'isolate',
     'legion',
-    'path',
-    'properties',
+    'recipe_engine/path',
+    'recipe_engine/properties',
     'swarming',
 ]
 

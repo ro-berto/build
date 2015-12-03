@@ -4,9 +4,9 @@
 
 DEPS = [
     'git_clone_bundler',
-    'path',
-    'properties',
-    'raw_io',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/raw_io',
 ]
 
 

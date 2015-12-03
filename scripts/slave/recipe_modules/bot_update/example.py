@@ -5,8 +5,8 @@
 DEPS = [
   'bot_update',
   'gclient',
-  'path',
-  'properties',
+  'recipe_engine/path',
+  'recipe_engine/properties',
 ]
 
 def RunSteps(api):

@@ -7,7 +7,7 @@ from recipe_engine.recipe_api import Property
 
 DEPS = [
   'cronet',
-  'properties',
+  'recipe_engine/properties',
 ]
 
 BUILDERS = freeze({

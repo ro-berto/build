@@ -9,8 +9,8 @@ import zlib
 DEPS = [
   'chromite',
   'gitiles',
-  'json',
-  'properties',
+  'recipe_engine/json',
+  'recipe_engine/properties',
 ]
 
 # Map master name to 'chromite' configuration name.

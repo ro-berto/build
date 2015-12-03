@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
-    'properties',
+    'recipe_engine/properties',
     'trigger'
 ]
 

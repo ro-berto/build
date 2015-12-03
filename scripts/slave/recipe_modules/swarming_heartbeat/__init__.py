@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'properties',
-  'python',
+  'recipe_engine/properties',
+  'recipe_engine/python',
   'test_utils',
 ]

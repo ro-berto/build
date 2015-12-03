@@ -5,10 +5,10 @@
 DEPS = [
   'gclient',
   'ios',
-  'json',
-  'platform',
-  'properties',
-  'step',
+  'recipe_engine/json',
+  'recipe_engine/platform',
+  'recipe_engine/properties',
+  'recipe_engine/step',
   'tryserver',
 ]
 

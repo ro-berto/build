@@ -4,8 +4,8 @@
 
 DEPS = [
   'ios',
-  'platform',
-  'properties',
+  'recipe_engine/platform',
+  'recipe_engine/properties',
 ]
 
 def RunSteps(api):

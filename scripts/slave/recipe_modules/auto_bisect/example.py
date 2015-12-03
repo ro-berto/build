@@ -7,11 +7,11 @@ import json
 DEPS = [
     'auto_bisect',
     'chromium_tests',
-    'json',
-    'path',
-    'properties',
-    'raw_io',
-    'step',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/raw_io',
+    'recipe_engine/step',
 ]
 
 """This file is a recipe demonstrating the auto_bisect recipe module.

@@ -6,9 +6,9 @@ from recipe_engine.types import freeze
 
 DEPS = [
   'file',
-  'path',
-  'raw_io',
-  'step',
+  'recipe_engine/path',
+  'recipe_engine/raw_io',
+  'recipe_engine/step',
 ]
 
 

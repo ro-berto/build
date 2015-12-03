@@ -4,10 +4,10 @@
 
 DEPS = [
   'archive',
-  'json',
-  'path',
-  'platform',
-  'properties',
+  'recipe_engine/json',
+  'recipe_engine/path',
+  'recipe_engine/platform',
+  'recipe_engine/properties',
 ]
 
 TEST_HASH_MAIN='5e3250aadda2b170692f8e762d43b7e8deadbeef'

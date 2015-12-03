@@ -3,11 +3,11 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'path',
+  'recipe_engine/path',
   'perf_dashboard',
-  'platform',
-  'properties',
-  'step',
+  'recipe_engine/platform',
+  'recipe_engine/properties',
+  'recipe_engine/step',
 ]
 
 # To run, pass these options into properties:

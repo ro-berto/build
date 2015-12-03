@@ -1,5 +1,5 @@
 DEPS = [
     'git',
-    'raw_io',
-    'step',
+    'recipe_engine/raw_io',
+    'recipe_engine/step',
 ]

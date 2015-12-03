@@ -12,11 +12,11 @@ DEPS = [
     'chromium_android',
     'chromium_tests',
     'gclient',
-    'json',
-    'path',
-    'properties',
-    'python',
-    'step',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
     'test_utils',
 ]
 

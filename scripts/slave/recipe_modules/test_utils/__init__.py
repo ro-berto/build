@@ -1,7 +1,7 @@
 DEPS = [
-  'json',
-  'python',
-  'raw_io',
-  'step',
+  'recipe_engine/json',
+  'recipe_engine/python',
+  'recipe_engine/raw_io',
+  'recipe_engine/step',
   'tryserver',
 ]

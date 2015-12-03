@@ -5,8 +5,8 @@
 """Repeatedly fails as a way to ensure the gatekeeper is alive and well."""
 
 DEPS = [
-  'platform',
-  'step',
+  'recipe_engine/platform',
+  'recipe_engine/step',
 ]
 
 def RunSteps(api):

@@ -3,8 +3,8 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'step',
-  'example',
+  'recipe_engine/step',
+  'recipe_engine/example',
 ]
 
 from recipe_engine import recipe_api

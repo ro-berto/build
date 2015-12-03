@@ -6,10 +6,10 @@ DEPS = [
   'android',
   'chromium_android',
   'filter',
-  'json',
-  'path',
-  'properties',
-  'raw_io',
+  'recipe_engine/json',
+  'recipe_engine/path',
+  'recipe_engine/properties',
+  'recipe_engine/raw_io',
   'tryserver',
 ]
 

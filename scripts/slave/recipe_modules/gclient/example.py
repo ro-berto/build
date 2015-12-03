@@ -4,7 +4,7 @@
 
 DEPS = [
   'gclient',
-  'path',
+  'recipe_engine/path',
 ]
 
 def RunSteps(api):

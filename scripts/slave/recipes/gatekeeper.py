@@ -7,7 +7,7 @@
 
 DEPS = [
   'gatekeeper',
-  'path',
+  'recipe_engine/path',
 ]
 
 

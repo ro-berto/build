@@ -6,12 +6,12 @@ DEPS = [
   'bot_update',
   'chromium',
   'gclient',
-  'json',
-  'path',
-  'properties',
-  'python',
-  'raw_io',
-  'step',
+  'recipe_engine/json',
+  'recipe_engine/path',
+  'recipe_engine/properties',
+  'recipe_engine/python',
+  'recipe_engine/raw_io',
+  'recipe_engine/step',
   'url',
 ]
 

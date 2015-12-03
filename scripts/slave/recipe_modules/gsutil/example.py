@@ -4,7 +4,7 @@
 
 DEPS = [
   'gsutil',
-  'path',
+  'recipe_engine/path',
 ]
 
 

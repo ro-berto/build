@@ -9,7 +9,7 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 """
 
 DEPS = [
-  'properties',
+  'recipe_engine/properties',
   'swarming',
   'swarming_client',
   'swarming_heartbeat',

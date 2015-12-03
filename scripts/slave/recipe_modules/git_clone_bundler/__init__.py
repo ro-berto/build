@@ -2,7 +2,7 @@ DEPS = [
     'file',
     'git',
     'gsutil',
-    'path',
+    'recipe_engine/path',
     'repo',
-    'step',
+    'recipe_engine/step',
 ]

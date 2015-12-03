@@ -8,10 +8,10 @@ DEPS = [
   'bot_update',
   'chromium',
   'gclient',
-  'path',
-  'properties',
-  'python',
-  'step',
+  'recipe_engine/path',
+  'recipe_engine/properties',
+  'recipe_engine/python',
+  'recipe_engine/step',
   'tryserver',
 ]
 

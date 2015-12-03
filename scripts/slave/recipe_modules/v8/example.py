@@ -5,12 +5,12 @@
 DEPS = [
   'bot_update',
   'chromium',
-  'json',
+  'recipe_engine/json',
   'gclient',
-  'path',
+  'recipe_engine/path',
   'perf_dashboard',
-  'properties',
-  'step',
+  'recipe_engine/properties',
+  'recipe_engine/step',
   'v8',
 ]
 

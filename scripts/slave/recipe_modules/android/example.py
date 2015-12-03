@@ -4,7 +4,7 @@
 
 DEPS = [
   'android',
-  'properties',
+  'recipe_engine/properties',
 ]
 
 def RunSteps(api):

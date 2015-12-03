@@ -6,8 +6,8 @@ from recipe_engine import recipe_api
 
 DEPS = [
     'commit_position',
-    'properties',
-    'step',
+    'recipe_engine/properties',
+    'recipe_engine/step',
     ]
 
 VALID_CP = 'refs/heads/master@{#12345}'

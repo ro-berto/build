@@ -22,8 +22,8 @@ from recipe_engine.types import freeze
 DEPS = [
   'chromium',
   'gclient',
-  'platform',
-  'properties',
+  'recipe_engine/platform',
+  'recipe_engine/properties',
   'syzygy',
   'trigger',
 ]

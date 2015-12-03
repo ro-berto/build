@@ -4,11 +4,11 @@
 
 DEPS = [
     'git',
-    'path',
-    'platform',
-    'properties',
-    'python',
-    'step',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
 ]
 
 # TODO (joshualitt) the configure script is messed up so we need a relative

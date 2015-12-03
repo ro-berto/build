@@ -9,9 +9,9 @@ DEPS = [
   'ct_swarming',
   'file',
   'gclient',
-  'path',
-  'properties',
-  'step',
+  'recipe_engine/path',
+  'recipe_engine/properties',
+  'recipe_engine/step',
   'swarming',
   'swarming_client',
 ]

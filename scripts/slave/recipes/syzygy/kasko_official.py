@@ -20,8 +20,8 @@ Places resulting output in build/slave/fake_slave.
 DEPS = [
   'chromium',
   'gclient',
-  'platform',
-  'properties',
+  'recipe_engine/platform',
+  'recipe_engine/properties',
   'syzygy',
   'trigger',
 ]

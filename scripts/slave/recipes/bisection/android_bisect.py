@@ -12,11 +12,11 @@ DEPS = [
     'chromium_android',
     'chromium_tests',
     'gclient',
-    'json',
-    'path',
-    'properties',
-    'raw_io',
-    'step',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/raw_io',
+    'recipe_engine/step',
 ]
 
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'

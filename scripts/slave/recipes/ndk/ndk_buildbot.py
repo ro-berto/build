@@ -5,7 +5,7 @@
 DEPS = [
     'chromite',
     'ndk',
-    'properties',
+    'recipe_engine/properties',
 ]
 
 

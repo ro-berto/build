@@ -8,10 +8,10 @@ DEPS = [
   'gclient',
   'git',
   'gsutil',
-  'json',
-  'path',
-  'properties',
-  'step',
+  'recipe_engine/json',
+  'recipe_engine/path',
+  'recipe_engine/properties',
+  'recipe_engine/step',
   'v8',
 ]
 

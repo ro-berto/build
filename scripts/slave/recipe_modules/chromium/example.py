@@ -5,7 +5,7 @@
 DEPS = [
   'chromium',
   'chromium_tests',
-  'properties',
+  'recipe_engine/properties',
 ]
 
 def RunSteps(api):

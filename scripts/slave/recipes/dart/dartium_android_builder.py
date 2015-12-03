@@ -6,10 +6,10 @@ DEPS = [
   'chromium',
   'chromium_android',
   'gclient',
-  'json',
-  'path',
-  'properties',
-  'python',
+  'recipe_engine/json',
+  'recipe_engine/path',
+  'recipe_engine/properties',
+  'recipe_engine/python',
 ]
 
 def RunSteps(api):

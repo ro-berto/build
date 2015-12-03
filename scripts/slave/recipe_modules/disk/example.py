@@ -4,9 +4,9 @@
 
 DEPS = [
   'disk',
-  'json',
-  'platform',
-  'properties',
+  'recipe_engine/json',
+  'recipe_engine/platform',
+  'recipe_engine/properties',
 ]
 
 GIB = 1 << 30

@@ -3,11 +3,11 @@ DEPS = [
   'gclient',
   'git',
   'gitiles',
-  'json',
-  'path',
-  'properties',
-  'python',
+  'recipe_engine/json',
+  'recipe_engine/path',
+  'recipe_engine/properties',
+  'recipe_engine/python',
   'repo',
-  'step',
+  'recipe_engine/step',
 ]
 

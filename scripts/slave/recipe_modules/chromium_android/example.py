@@ -8,10 +8,10 @@ DEPS = [
     'adb',
     'chromium',
     'chromium_android',
-    'json',
-    'path',
-    'properties',
-    'step',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/step',
 ]
 
 BUILDERS = freeze({

@@ -8,13 +8,13 @@ import json
 
 DEPS = [
     'auto_bisect',
-    'properties',
+    'recipe_engine/properties',
     'test_utils',
     'chromium_tests',
-    'raw_io',
-    'step',
+    'recipe_engine/raw_io',
+    'recipe_engine/step',
     'halt',
-    'json',
+    'recipe_engine/json',
 ]
 
 def RunSteps(api):

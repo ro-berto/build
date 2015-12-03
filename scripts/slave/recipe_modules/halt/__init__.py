@@ -1,3 +1,3 @@
 DEPS = [
-  'python',
+  'recipe_engine/python',
 ]

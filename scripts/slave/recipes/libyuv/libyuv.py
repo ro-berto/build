@@ -13,10 +13,10 @@ DEPS = [
   'chromium',
   'gclient',
   'libyuv',
-  'path',
-  'platform',
-  'properties',
-  'step',
+  'recipe_engine/path',
+  'recipe_engine/platform',
+  'recipe_engine/properties',
+  'recipe_engine/step',
   'tryserver',
 ]
 

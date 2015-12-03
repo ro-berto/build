@@ -8,8 +8,8 @@ DEPS = [
   'chromium_tests',
   'filter',
   'gclient',
-  'json',
-  'properties',
+  'recipe_engine/json',
+  'recipe_engine/properties',
   'tryserver',
 ]
 

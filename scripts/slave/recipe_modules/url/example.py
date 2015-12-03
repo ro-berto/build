@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'step',
+  'recipe_engine/step',
   'url',
 ]
 

@@ -6,8 +6,8 @@
 
 # Recipe module dependencies.
 DEPS = [
-  'platform',
-  'properties',
+  'recipe_engine/platform',
+  'recipe_engine/properties',
   'pgo',
 ]
 

@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'raw_io',
+  'recipe_engine/raw_io',
   'swarming_client',
 ]
 

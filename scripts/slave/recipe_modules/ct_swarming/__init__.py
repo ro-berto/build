@@ -9,9 +9,9 @@ DEPS = [
   'gclient',
   'gsutil',
   'isolate',
-  'json',
-  'path',
-  'python',
+  'recipe_engine/json',
+  'recipe_engine/path',
+  'recipe_engine/python',
   'swarming',
   'swarming_client',
 ]

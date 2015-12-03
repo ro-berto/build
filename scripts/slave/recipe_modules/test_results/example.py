@@ -3,8 +3,8 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'json',
-  'properties',
+  'recipe_engine/json',
+  'recipe_engine/properties',
   'test_results',
 ]
 

@@ -1,9 +1,9 @@
 
 DEPS = [
   'amp',
-  'json',
-  'path',
-  'properties',
+  'recipe_engine/json',
+  'recipe_engine/path',
+  'recipe_engine/properties',
 ]
 
 BUILDERS = {
