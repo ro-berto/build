@@ -219,15 +219,11 @@ class CrOSTryJobGit(TryBase):
     for bot in parsed_job['bot']:
       if bot in self.cbb.configs:
         continue
-      if self.etc_builder:
-        # Assert that this is a valid 'etc' build.
-        try:
-          self.cbb.ValidateEtcBuild(bot)
-        except ValueError as e:
-          error_msgs.append("Invalid 'etc' build (%s): %s" % (bot, e.message))
-      else:
-        error_msgs.append("Unknown bot config '%s' with no 'etc' builder" % (
-            bot,))
+      # Assert that this is a valid 'etc' build.
+      try:
+        self.cbb.ValidateEtcBuild(bot)
+      except ValueError as e:
+        error_msgs.append("Invalid 'etc' build (%s): %s" % (bot, e.message))
 
     if error_msgs:
       raise BadJobfile('\n'.join(error_msgs))
