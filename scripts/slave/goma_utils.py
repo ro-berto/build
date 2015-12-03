@@ -11,6 +11,7 @@ import glob
 import gzip
 import json
 import os
+import re
 import shutil
 import socket
 import sys
@@ -142,7 +143,20 @@ def UploadNinjaLog(outdir, compiler, command, exit_status):
   print 'Visualization at %s' % viewer_url
 
 
-def SendGomaStats(goma_stats_file, build_data_dir):
+def IsCompilerProxyKilledByFatalError():
+  """Returns true if goma compiler_proxy is killed by CHECK or LOG(FATAL)."""
+  info_file = GetLatestGomaCompilerProxyInfo()
+  if not info_file:
+    return False
+  fatal_pattern = re.compile(r'^F\d{4} \d{2}:\d{2}:\d{2}\.\d{6} ')
+  with open(info_file) as f:
+    for line in f.readlines():
+      if fatal_pattern.match(line):
+        return True
+  return False
+
+
+def SendGomaStats(goma_stats_file, goma_crash_report, build_data_dir):
   """Send GomaStats monitoring event.
 
   Note: this function also removes goma_stats_file.
@@ -150,6 +164,32 @@ def SendGomaStats(goma_stats_file, build_data_dir):
   # TODO(pgervais): remove this hacky partial-rollout system.
   try:
     if not chromium_utils.IsWindows():
+      goma_options = []
+      if goma_stats_file and os.path.exists(goma_stats_file):
+        # send GomaStats.
+        goma_options = [
+            '--build-event-goma-stats-path',
+            goma_stats_file,
+        ]
+      elif goma_crash_report and os.path.exists(goma_crash_report):
+        # crash report.
+        goma_options = [
+            '--build-event-goma-error',
+            'GOMA_ERROR_CRASHED',
+            '--build-event-goma-crash-report-id-path',
+            goma_crash_report,
+        ]
+      elif IsCompilerProxyKilledByFatalError():
+        goma_options = [
+            '--build-event-goma-error',
+            'GOMA_ERROR_LOG_FATAL',
+        ]
+      else:
+        # unknown error.
+        goma_options = [
+            '--build-event-goma-error',
+            'GOMA_ERROR_UNKNOWN',
+        ]
       send_monitoring_event_cmd = [
           sys.executable,
           '/opt/infra-python/run.py',
@@ -157,10 +197,9 @@ def SendGomaStats(goma_stats_file, build_data_dir):
           '--event-mon-run-type', 'prod',
           '--build-event-type', 'BUILD',
           '--event-mon-timestamp-kind', 'POINT',
-          '--build-event-goma-stats-path', goma_stats_file,
           '--event-logrequest-path',
           '%s/log_request_proto' % build_data_dir
-      ]
+      ] + goma_options
       cmd_filter = chromium_utils.FilterCapture()
       retcode = chromium_utils.RunCommand(
         send_monitoring_event_cmd,
@@ -170,10 +209,10 @@ def SendGomaStats(goma_stats_file, build_data_dir):
         print('Execution of send_monitoring_event failed with code %s'
               % retcode)
         print '\n'.join(cmd_filter.text)
-  except Exception:  # safety net
-    # TODO(yyanagisawa): avoid a silent failure.
-    pass
-  try:
-    os.remove(goma_stats_file)
-  except OSError:  # file does not exist, for ex.
-    pass
+  except Exception, inst:  # safety net
+    print('send_monitoring_event for goma failed: %s' % inst)
+  finally:
+    try:
+      os.remove(goma_stats_file)
+    except OSError:  # file does not exist, for ex.
+      pass
