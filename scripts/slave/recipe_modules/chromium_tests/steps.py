@@ -543,13 +543,7 @@ class SwarmingTest(Test):
 
     # Add custom dimensions.
     if self._dimensions:
-      for k, v in self._dimensions.iteritems():
-        if v is None:  # pragma: no cover
-          # Remove key if it exists. This allows one to use None to remove
-          # default dimensions.
-          self._tasks[suffix].dimensions.pop(k, None)
-        else:
-          self._tasks[suffix].dimensions[k] = v
+      self._tasks[suffix].dimensions.update(self._dimensions)
 
     # Add config-specific tags.
     self._tasks[suffix].tags.update(api.chromium.c.runtests.swarming_tags)
