@@ -4,54 +4,148 @@
 # found in the LICENSE file.
 
 import argparse
+import collections
 import contextlib
 import json
+import logging
 import os
+import platform
 import shutil
 import socket
 import subprocess
 import sys
 import tempfile
-import traceback
 
+
+# Install Infra build environment.
 BUILD_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(
-    os.path.abspath(__file__))))
-sys.path.append(os.path.join(BUILD_ROOT, 'scripts'))
-sys.path.append(os.path.join(BUILD_ROOT, 'third_party'))
+                             os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(BUILD_ROOT, 'scripts'))
+import common.env
+common.env.Install()
 
 from common import annotator
 from common import chromium_utils
 from common import master_cfg_utils
 
-SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
-BUILD_LIMITED_ROOT = os.path.join(
-    os.path.dirname(BUILD_ROOT), 'build_internal', 'scripts', 'slave')
+# Logging instance.
+LOGGER = logging.getLogger('annotated_run')
 
-PACKAGE_CFG = os.path.join(
-    os.path.dirname(os.path.dirname(SCRIPT_PATH)),
-    'infra', 'config', 'recipes.cfg')
 
-if sys.platform.startswith('win'):
-  # TODO(pgervais): add windows support
-  # QQ: Where is infra/run.py on windows machines?
-  RUN_CMD = None
-else:
-  RUN_CMD = os.path.join('/', 'opt', 'infra-python', 'run.py')
+# RecipeRuntime will probe this for values.
+# - First, (system, platform)
+# - Then, (system,)
+# - Finally, (),
+PLATFORM_CONFIG = {
+  # All systems.
+  (): {},
+
+  # Linux
+  ('Linux',): {
+    'run_cmd': ['/opt/infra-python/run.py'],
+  },
+
+  # Mac OSX
+  ('Darwin',): {
+    'run_cmd': ['/opt/infra-python/run.py'],
+  },
+
+  # Windows
+  ('Windows',): {
+    'run_cmd': ['C:\\infra-python\\ENV\\Scripts\\python.exe',
+                'C:\\infra-python\\run.py'],
+  },
+}
+
+
+# Config is the runtime configuration used by `annotated_run.py` to bootstrap
+# the recipe engine.
+Config = collections.namedtuple('Config', (
+    'run_cmd',
+))
+
+
+def get_config():
+  """Returns (Config): The constructed Config object.
+
+  The Config object is constructed from:
+  - Cascading the PLATFORM_CONFIG fields together based on current
+        OS/Architecture.
+
+  Raises:
+    KeyError: if a required configuration key/parameter is not available.
+  """
+  # Cascade the platform configuration.
+  p = (platform.system(), platform.processor())
+  platform_config = {}
+  for i in xrange(len(p)+1):
+    platform_config.update(PLATFORM_CONFIG.get(p[:i], {}))
+
+  # Construct runtime configuration.
+  return Config(
+      run_cmd=platform_config.get('run_cmd'),
+      )
+
+
+def ensure_directory(*path):
+  path = os.path.join(*path)
+  if not os.path.isdir(path):
+    os.makedirs(path)
+  return path
+
+
+def _run_command(cmd, **kwargs):
+  if kwargs.pop('dry_run', False):
+    LOGGER.info('(Dry Run) Would have executed command: %s', cmd)
+    return 0, ''
+
+  LOGGER.debug('Executing command: %s', cmd)
+  proc = subprocess.Popen(cmd, stderr=subprocess.STDOUT)
+  stdout, _ = proc.communicate()
+
+  LOGGER.debug('Process [%s] returned [%d] with output:\n%s',
+               cmd, proc.returncode, stdout)
+  return proc.returncode, stdout
+
+
+def _check_command(*args, **kwargs):
+  rv, stdout = _run_command(args, **kwargs)
+  if rv != 0:
+    raise subprocess.CalledProcessError(rv, args, output=stdout)
+  return stdout
+
 
 @contextlib.contextmanager
-def namedTempFile():
-  fd, name = tempfile.mkstemp()
-  os.close(fd)  # let the exceptions fly
+def recipe_tempdir(root=None, leak=False):
+  """Creates a temporary recipe-local working directory and yields it.
+
+  This creates a temporary directory for this annotation run that is
+  automatically cleaned up. It returns the directory.
+
+  Args:
+    root (str/None): If not None, the root directory. Otherwise, |os.cwd| will
+        be used.
+    leak (bool): If true, don't clean up the temporary directory on exit.
+  """
+  basedir = ensure_directory((root or os.getcwd()), '.recipe_runtime')
   try:
-    yield name
+    tdir = tempfile.mkdtemp(dir=basedir)
+    yield tdir
   finally:
-    try:
-      os.remove(name)
-    except OSError as e:
-      print >> sys.stderr, "LEAK: %s: %s" % (name, e)
+    if basedir and os.path.isdir(basedir):
+      if not leak:
+        LOGGER.debug('Cleaning up temporary directory [%s].', basedir)
+        try:
+          chromium_utils.RemoveDirectory(basedir)
+        except Exception:
+          LOGGER.exception('Failed to clean up temporary directory [%s].',
+                           basedir)
+      else:
+        LOGGER.warning('(--leak) Leaking temporary directory [%s].', basedir)
 
 
-def get_recipe_properties(build_properties, use_factory_properties_from_disk):
+def get_recipe_properties(workdir, build_properties,
+                          use_factory_properties_from_disk):
   """Constructs the recipe's properties from buildbot's properties.
 
   This retrieves the current factory properties from the master_config
@@ -80,7 +174,7 @@ def get_recipe_properties(build_properties, use_factory_properties_from_disk):
     if mastername and buildername:
       # Load factory properties from tip-of-tree checkout on the slave builder.
       factory_properties = get_factory_properties_from_disk(
-          mastername, buildername)
+          workdir, mastername, buildername)
 
     # Check conflicts between factory properties and build properties.
     conflicting_properties = {}
@@ -93,13 +187,15 @@ def get_recipe_properties(build_properties, use_factory_properties_from_disk):
       s.step_text(
           '<br/>detected %d conflict[s] between factory and build properties'
           % len(conflicting_properties))
-      print 'Conflicting factory and build properties:'
-      for name, (factory_value, build_value) in conflicting_properties.items():
-        print ('  "%s": factory: "%s", build: "%s"' % (
+
+      conflicts = ['  "%s": factory: "%s", build: "%s"' % (
             name,
-            '<unset>' if (factory_value is None) else factory_value,
-            '<unset>' if (build_value is None) else build_value))
-      print "Will use the values from build properties."
+            '<unset>' if (fv is None) else fv,
+            '<unset>' if (bv is None) else bv)
+          for name, (fv, bv) in conflicting_properties.items()]
+      LOGGER.warning('Conflicting factory and build properties:\n%s',
+                     '\n'.join(conflicts))
+      LOGGER.warning("Will use the values from build properties.")
 
     # Figure out the factory-only properties and set them as build properties so
     # that they will show up on the build page.
@@ -113,7 +209,7 @@ def get_recipe_properties(build_properties, use_factory_properties_from_disk):
     return properties
 
 
-def get_factory_properties_from_disk(mastername, buildername):
+def get_factory_properties_from_disk(workdir, mastername, buildername):
   master_list = master_cfg_utils.GetMasters()
   master_path = None
   for name, path in master_list:
@@ -123,25 +219,23 @@ def get_factory_properties_from_disk(mastername, buildername):
   if not master_path:
     raise LookupError('master "%s" not found.' % mastername)
 
-  script_path = os.path.join(BUILD_ROOT, 'scripts', 'tools',
+  script_path = os.path.join(common.env.Build, 'scripts', 'tools',
                              'dump_master_cfg.py')
 
-  with namedTempFile() as fname:
-    dump_cmd = [sys.executable,
-                script_path,
-                master_path, fname]
-    proc = subprocess.Popen(dump_cmd, cwd=BUILD_ROOT, stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
-    out, err = proc.communicate()
-    exit_code = proc.returncode
+  master_json = os.path.join(workdir, 'dump_master_cfg.json')
+  dump_cmd = [sys.executable,
+              script_path,
+              master_path, master_json]
+  proc = subprocess.Popen(dump_cmd, cwd=common.env.Build,
+                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  out, err = proc.communicate()
+  if proc.returncode:
+    raise LookupError('Failed to get the master config; dump_master_cfg %s'
+                      'returned %d):\n%s\n%s\n'% (
+                      mastername, proc.returncode, out, err))
 
-    if exit_code:
-      raise LookupError('Failed to get the master config; dump_master_cfg %s'
-                        'returned %d):\n%s\n%s\n'% (
-                        mastername, exit_code, out, err))
-
-    with open(fname, 'rU') as f:
-      config = json.load(f)
+  with open(master_json, 'rU') as f:
+    config = json.load(f)
 
   # Now extract just the factory properties for the requested builder
   # from the master config.
@@ -169,6 +263,13 @@ def get_args(argv):
   """Process command-line arguments."""
   parser = argparse.ArgumentParser(
       description='Entry point for annotated builds.')
+  parser.add_argument('-v', '--verbose',
+      action='count', default=0,
+      help='Increase verbosity. This can be specified multiple times.')
+  parser.add_argument('-d', '--dry-run', action='store_true',
+      help='Perform the setup, but refrain from executing the recipe.')
+  parser.add_argument('-l', '--leak', action='store_true',
+      help="Refrain from cleaning up generated artifacts.")
   parser.add_argument('--build-properties',
       type=json.loads, default={},
       help='build properties in JSON format')
@@ -189,6 +290,7 @@ def get_args(argv):
   parser.add_argument('--use-factory-properties-from-disk',
       action='store_true', default=False,
       help='use factory properties loaded from disk on the slave')
+
   return parser.parse_args(argv)
 
 
@@ -203,7 +305,8 @@ def update_scripts():
     gclient_name = 'gclient'
     if sys.platform.startswith('win'):
       gclient_name += '.bat'
-    gclient_path = os.path.join(BUILD_ROOT, '..', 'depot_tools', gclient_name)
+    gclient_path = os.path.join(common.env.Build, '..', 'depot_tools',
+                                gclient_name)
     gclient_cmd = [gclient_path, 'sync', '--force', '--verbose', '--jobs=2']
     try:
       fd, output_json = tempfile.mkstemp()
@@ -215,10 +318,11 @@ def update_scripts():
     cmd_dict = {
         'name': 'update_scripts',
         'cmd': gclient_cmd,
-        'cwd': BUILD_ROOT,
+        'cwd': common.env.Build,
     }
     annotator.print_step(cmd_dict, os.environ, stream)
-    if subprocess.call(gclient_cmd, cwd=BUILD_ROOT) != 0:
+    rv, _ = _run_command(gclient_cmd, cwd=common.env.Build)
+    if rv != 0:
       s.step_text('gclient sync failed!')
       s.step_warnings()
     elif output_json:
@@ -242,7 +346,7 @@ def update_scripts():
         try:
           os.remove(output_json)
         except Exception as e:
-          print >> sys.stderr, "LEAKED:", output_json, e
+          LOGGER.warning("LEAKED: %s", output_json, exc_info=True)
     else:
       s.step_text('Unable to get SCM data')
       s.step_warnings()
@@ -263,162 +367,129 @@ def clean_old_recipe_engine():
   packages rollout (2015-09-16).
   """
   for (dirpath, _, filenames) in os.walk(
-      os.path.join(BUILD_ROOT, 'third_party', 'recipe_engine')):
+      os.path.join(common.env.Build, 'third_party', 'recipe_engine')):
     for filename in filenames:
       if filename.endswith('.pyc'):
-        path = os.path.join(dirpath, filename)
-        os.remove(path)
+        os.remove(os.path.join(dirpath, filename))
 
 
-@contextlib.contextmanager
-def build_data_directory():
-  """Context manager that creates a build-specific directory.
+def write_monitoring_event(config, outdir, build_properties):
+  # Ensure that all command components of "run_cmd" are available.
+  if not config.run_cmd:
+    LOGGER.warning('No run.py is defined for this platform.')
+    return
+  run_cmd_missing = [p for p in config.run_cmd if not os.path.exists(p)]
+  if run_cmd_missing:
+    LOGGER.warning('Unable to find run.py. Some components are missing: %s',
+                   run_cmd_missing)
+    return
 
-  The directory is wiped when exiting.
-
-  Yields:
-    build_data (str or None): full path to a writeable directory. Return None if
-        no directory can be found or if it's not writeable.
-  """
-  prefix = 'build_data'
-
-  # TODO(pgervais): import that from infra_libs.logs instead
-  if sys.platform.startswith('win'):  # pragma: no cover
-    DEFAULT_LOG_DIRECTORIES = [
-      'E:\\chrome-infra-logs',
-      'C:\\chrome-infra-logs',
-    ]
+  hostname = socket.getfqdn()
+  if hostname:  # just in case getfqdn() returns None.
+    hostname = hostname.split('.')[0]
   else:
-    DEFAULT_LOG_DIRECTORIES = ['/var/log/chrome-infra']
+    hostname = None
 
-  build_data_dir = None
-  for candidate in DEFAULT_LOG_DIRECTORIES:
-    if os.path.isdir(candidate):
-      build_data_dir = os.path.join(candidate, prefix)
-      break
-
-  # Remove any leftovers and recreate the dir.
-  if build_data_dir:
-    print >> sys.stderr, "Creating directory"
-    # TODO(pgervais): use infra_libs.rmtree instead.
-    if os.path.exists(build_data_dir):
-      try:
-        shutil.rmtree(build_data_dir)
-      except Exception as exc:
-        # Catching everything: we don't want to break any builds for that reason
-        print >> sys.stderr, (
-          "FAILURE: path can't be deleted: %s.\n%s" % (build_data_dir, str(exc))
-        )
-    print >> sys.stderr, "Creating directory"
-
-    if not os.path.exists(build_data_dir):
-      try:
-        os.mkdir(build_data_dir)
-      except Exception as exc:
-        print >> sys.stderr, (
-          "FAILURE: directory can't be created: %s.\n%s" %
-          (build_data_dir, str(exc))
-        )
-        build_data_dir = None
-
-  # Under this line build_data_dir should point to an existing empty dir
-  # or be None.
-  yield build_data_dir
-
-  # Clean up after ourselves
-  if build_data_dir:
-    # TODO(pgervais): use infra_libs.rmtree instead.
-    try:
-      shutil.rmtree(build_data_dir)
-    except Exception as exc:
-      # Catching everything: we don't want to break any builds for that reason.
-      print >> sys.stderr, (
-        "FAILURE: path can't be deleted: %s.\n%s" % (build_data_dir, str(exc))
-      )
+  try:
+    cmd = config.run_cmd + ['infra.tools.send_monitoring_event',
+       '--event-mon-output-file',
+           ensure_directory(outdir, 'log_request_proto'),
+       '--event-mon-run-type', 'file',
+       '--event-mon-service-name',
+           'buildbot/master/master.%s'
+           % build_properties.get('mastername', 'UNKNOWN'),
+       '--build-event-build-name',
+           build_properties.get('buildername', 'UNKNOWN'),
+       '--build-event-build-number',
+           str(build_properties.get('buildnumber', 0)),
+       '--build-event-build-scheduling-time',
+           str(1000*int(build_properties.get('requestedAt', 0))),
+       '--build-event-type', 'BUILD',
+       '--event-mon-timestamp-kind', 'POINT',
+       # And use only defaults for credentials.
+     ]
+    # Add this conditionally so that we get an error in
+    # send_monitoring_event log files in case it isn't present.
+    if hostname:
+      cmd += ['--build-event-hostname', hostname]
+    _check_command(cmd)
+  except Exception:
+    LOGGER.warning("Failed to send monitoring event.", exc_info=True)
 
 
 def main(argv):
   opts = get_args(argv)
-  # TODO(crbug.com/551165): remove flag "factory_properties".
-  use_factory_properties_from_disk = (opts.use_factory_properties_from_disk or
-                                      bool(opts.factory_properties))
-  properties = get_recipe_properties(
-      opts.build_properties, use_factory_properties_from_disk)
+
+  if opts.verbose == 0:
+    level = logging.INFO
+  else:
+    level = logging.DEBUG
+  logging.getLogger().setLevel(level)
 
   clean_old_recipe_engine()
 
-  # Find out if the recipe we intend to run is in build_internal's recipes. If
-  # so, use recipes.py from there, otherwise use the one from build.
-  recipe_file = properties['recipe'].replace('/', os.path.sep) + '.py'
-  if os.path.exists(os.path.join(BUILD_LIMITED_ROOT, 'recipes', recipe_file)):
-    recipe_runner = os.path.join(BUILD_LIMITED_ROOT, 'recipes.py')
-  else:
-    recipe_runner = os.path.join(SCRIPT_PATH, 'recipes.py')
+  # Enter our runtime environment.
+  with recipe_tempdir(leak=opts.leak) as tdir:
+    LOGGER.debug('Using temporary directory: [%s].', tdir)
 
-  with build_data_directory() as build_data_dir:
-    # Create a LogRequestLite proto containing this build's information.
-    if build_data_dir:
-      properties['build_data_dir'] = build_data_dir
+    # Load factory properties and configuration.
+    # TODO(crbug.com/551165): remove flag "factory_properties".
+    use_factory_properties_from_disk = (opts.use_factory_properties_from_disk or
+                                        bool(opts.factory_properties))
+    properties = get_recipe_properties(
+        tdir, opts.build_properties, use_factory_properties_from_disk)
+    LOGGER.debug('Loaded properties: %s', properties)
 
-      hostname = socket.getfqdn()
-      if hostname:  # just in case getfqdn() returns None.
-        hostname = hostname.split('.')[0]
-      else:
-        hostname = None
+    config = get_config()
+    LOGGER.debug('Loaded runtime configuration: %s', config)
 
-      if RUN_CMD and os.path.exists(RUN_CMD):
-        try:
-          cmd = [RUN_CMD, 'infra.tools.send_monitoring_event',
-             '--event-mon-output-file',
-                 os.path.join(build_data_dir, 'log_request_proto'),
-             '--event-mon-run-type', 'file',
-             '--event-mon-service-name',
-                 'buildbot/master/master.%s'
-                 % properties.get('mastername', 'UNKNOWN'),
-             '--build-event-build-name',
-                 properties.get('buildername', 'UNKNOWN'),
-             '--build-event-build-number',
-                 str(properties.get('buildnumber', 0)),
-             '--build-event-build-scheduling-time',
-                 str(1000*int(properties.get('requestedAt', 0))),
-             '--build-event-type', 'BUILD',
-             '--event-mon-timestamp-kind', 'POINT',
-             # And use only defaults for credentials.
-           ]
-          # Add this conditionally so that we get an error in
-          # send_monitoring_event log files in case it isn't present.
-          if hostname:
-            cmd += ['--build-event-hostname', hostname]
-          subprocess.call(cmd)
-        except Exception:
-          print >> sys.stderr, traceback.format_exc()
+    # Find out if the recipe we intend to run is in build_internal's recipes. If
+    # so, use recipes.py from there, otherwise use the one from build.
+    recipe_file = properties['recipe'].replace('/', os.path.sep) + '.py'
 
-      else:
-        print >> sys.stderr, (
-          'WARNING: Unable to find run.py at %r, no events will be sent.'
-          % str(RUN_CMD)
-        )
+    # Use the standard recipe runner unless the recipes are explicitly in the
+    # "build_limited" repository.
+    recipe_runner = os.path.join(common.env.Build,
+                                 'scripts', 'slave', 'recipes.py')
+    if common.env.BuildInternal:
+      build_limited = os.path.join(common.env.BuildInternal,
+                                        'scripts', 'slave')
+      if os.path.exists(os.path.join(build_limited, 'recipes', recipe_file)):
+        recipe_runner = os.path.join(build_limited, 'recipes.py')
 
-    with namedTempFile() as props_file:
-      with open(props_file, 'w') as fh:
-        fh.write(json.dumps(properties))
-      cmd = [
-          sys.executable, '-u', recipe_runner,
-          'run',
-          '--workdir=%s' % os.getcwd(),
-          '--properties-file=%s' % props_file,
-          properties['recipe'] ]
-      status = subprocess.call(cmd)
+    # Setup monitoring directory and send a monitoring event.
+    build_data_dir = ensure_directory(tdir, 'build_data')
+    properties['build_data_dir'] = build_data_dir
 
-    # TODO(pgervais): Send events from build_data_dir to the endpoint.
+    # Write our annotated_run.py monitoring event.
+    write_monitoring_event(config, tdir, properties)
+
+    # Dump properties to JSON and build recipe command.
+    props_file = os.path.join(tdir, 'recipe_properties.json')
+    with open(props_file, 'w') as fh:
+      json.dump(properties, fh)
+    cmd = [
+        sys.executable, '-u', recipe_runner,
+        'run',
+        '--workdir=%s' % os.getcwd(),
+        '--properties-file=%s' % props_file,
+        properties['recipe'],
+    ]
+
+    status, _ = _run_command(cmd, dry_run=opts.dry_run)
+
   return status
+
 
 def shell_main(argv):
   if update_scripts():
-    return subprocess.call([sys.executable] + argv)
+    # Re-execute with the updated annotated_run.py.
+    rv, _ = _run_command([sys.executable] + argv)
+    return rv
   else:
     return main(argv[1:])
 
 
 if __name__ == '__main__':
+  logging.basicConfig(level=logging.INFO)
   sys.exit(shell_main(sys.argv))
