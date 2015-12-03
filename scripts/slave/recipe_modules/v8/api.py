@@ -1008,13 +1008,13 @@ class V8Api(recipe_api.RecipeApi):
       }
       if self.m.tryserver.is_tryserver:
         properties.update(
-          category=self.m.properties['category'],
+          category=self.m.properties.get('category', 'manual_ts'),
           issue=self.m.properties['issue'],
           master=str(self.m.properties['master']),
           patch_project=str(self.m.properties['patch_project']),
           patch_storage=str(self.m.properties['patch_storage']),
           patchset=str(self.m.properties['patchset']),
-          reason=str(self.m.properties['reason']),
+          reason=str(self.m.properties.get('reason', 'ManualTS')),
           requester=str(self.m.properties['requester']),
           # On tryservers, set revision to the same as on the current bot,
           # as CQ expects builders and testers to match the revision field.
