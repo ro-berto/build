@@ -30,7 +30,13 @@ CTS_FILE_NAME = "android-cts-5.1_r1-linux_x86-arm.zip"
 # WebView user agent is changed, and new CTS hasn't been published to reflect
 # that.
 EXPECTED_FAILURE = {
-    'android.webkit.cts.WebSettingsTest': ['testUserAgentString_default']}
+    'android.webkit.cts.WebSettingsTest': ['testUserAgentString_default'],
+    #crbug.com/534643, crbug.com/514474
+    'android.webkit.cts.WebViewTest': ['testPageScroll', 'testStopLoading'],
+    #crbug.com/514473
+    'android.webkit.cts.WebViewSslTest':
+        ['testSslErrorProceedResponseNotReusedForDifferentHost']
+}
 
 WEBVIEW_APK = 'SystemWebView.apk'
 
