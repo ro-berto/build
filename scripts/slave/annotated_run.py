@@ -100,7 +100,8 @@ def _run_command(cmd, **kwargs):
     return 0, ''
 
   LOGGER.debug('Executing command: %s', cmd)
-  proc = subprocess.Popen(cmd, stderr=subprocess.STDOUT)
+  kwargs.setdefault('stderr', subprocess.STDOUT)
+  proc = subprocess.Popen(cmd, **kwargs)
   stdout, _ = proc.communicate()
 
   LOGGER.debug('Process [%s] returned [%d] with output:\n%s',
@@ -334,11 +335,13 @@ def update_scripts():
             indent=4, separators=(',', ': ')).splitlines():
           s.step_log_line('gclient_json', line)
         s.step_log_end('gclient_json')
-        revision = gclient_json['solutions']['build/']['revision']
-        scm = gclient_json['solutions']['build/']['scm']
-        s.step_text('%s - %s' % (scm, revision))
-        s.set_build_property('build_scm', json.dumps(scm))
-        s.set_build_property('build_revision', json.dumps(revision))
+
+        build_checkout = gclient_json['solutions'].get('build/')
+        if build_checkout:
+          s.step_text('%(scm)s - %(revision)s' % build_checkout)
+          s.set_build_property('build_scm', json.dumps(build_checkout['scm']))
+          s.set_build_property('build_revision',
+                               json.dumps(build_checkout['revision']))
       except Exception as e:
         s.step_text('Unable to process gclient JSON %s' % repr(e))
         s.step_warnings()
