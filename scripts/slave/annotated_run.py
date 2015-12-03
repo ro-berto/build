@@ -108,10 +108,10 @@ def _run_command(cmd, **kwargs):
   return proc.returncode, stdout
 
 
-def _check_command(*args, **kwargs):
-  rv, stdout = _run_command(args, **kwargs)
+def _check_command(cmd, **kwargs):
+  rv, stdout = _run_command(cmd, **kwargs)
   if rv != 0:
-    raise subprocess.CalledProcessError(rv, args, output=stdout)
+    raise subprocess.CalledProcessError(rv, cmd, output=stdout)
   return stdout
 
 
