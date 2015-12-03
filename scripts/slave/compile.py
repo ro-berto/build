@@ -184,9 +184,9 @@ def goma_setup(options, env):
   # start-up failure.
   goma_utils.UploadGomaCompilerProxyInfo()
   # Upload GomaStats to make it monitored.
-  if env.get('GOMA_DUMP_STATS_FILE'):
+  # TODO(yyanagisawa): make the case without GomaStats file monitored.
+  if os.path.exists(env['GOMA_DUMP_STATS_FILE']):
     goma_utils.SendGomaStats(env['GOMA_DUMP_STATS_FILE'],
-                             None,
                              options.build_data_dir)
 
   if options.goma_disable_local_fallback:
@@ -213,14 +213,11 @@ def goma_teardown(options, env):
     if options.goma_jsonstatus:
       chromium_utils.RunCommand(
           goma_ctl_cmd + ['jsonstatus', options.goma_jsonstatus], env=env)
-    env['GOMACTL_CRASH_REPORT_ID_FILE'] = os.path.join(options.build_data_dir,
-                                                       'crash_report_id_file')
     # Always stop the proxy for now to allow in-place update.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
     goma_utils.UploadGomaCompilerProxyInfo()
     if env.get('GOMA_DUMP_STATS_FILE'):
       goma_utils.SendGomaStats(env['GOMA_DUMP_STATS_FILE'],
-                               env['GOMACTL_CRASH_REPORT_ID_FILE'],
                                options.build_data_dir)
 
 

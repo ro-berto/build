@@ -35,9 +35,6 @@ def main():
                       help='Filename of a GomaStats binary protobuf. '
                       'If empty or non-existing file, it will report error '
                       'to chrome infra monitoring system.')
-  parser.add_argument('--goma-crash-report-id-file',
-                      metavar='FILENAME',
-                      help='Filename that has a crash report id.')
   parser.add_argument('--build-data-dir',
                       metavar='DIR',
                       help='Directory that has build data used by event_mon.')
@@ -52,7 +49,6 @@ def main():
                               args.ninja_log_exit_status)
   if args.goma_stats_file:
     goma_utils.SendGomaStats(args.goma_stats_file,
-                             args.goma_crash_report_id_file,
                              args.build_data_dir)
   return 0
 
