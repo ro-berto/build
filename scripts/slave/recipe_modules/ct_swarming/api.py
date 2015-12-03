@@ -15,7 +15,7 @@ class CTSwarmingApi(recipe_api.RecipeApi):
   @property
   def downloads_dir(self):
     """Path to where artifacts should be downloaded from Google Storage."""
-    return self.m.path['checkout'].join('content', 'test', 'ct')
+    return self.m.path['slave_build'].join('src', 'content', 'test', 'ct')
 
   @property
   def swarming_temp_dir(self):

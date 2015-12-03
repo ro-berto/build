@@ -14,6 +14,7 @@ DEPS = [
   'recipe_engine/step',
   'swarming',
   'swarming_client',
+  'tryserver',
 ]
 
 
@@ -30,10 +31,6 @@ DEFAULT_SKPS_CHROMIUM_BUILD = '310ea93-42bd6bf'
 def RunSteps(api):
   # Checkout Skia and Chromium.
   gclient_cfg = api.gclient.make_config()
-  src = gclient_cfg.solutions.add()
-  src.name = 'src'
-  src.url = 'https://chromium.googlesource.com/chromium/src.git'
-  src.revision = 'origin/master'  # Always checkout Chromium at ToT.
 
   skia = gclient_cfg.solutions.add()
   skia.name = 'skia'
@@ -43,6 +40,11 @@ def RunSteps(api):
                    api.properties.get('revision') or
                    'origin/master')
   gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
+
+  src = gclient_cfg.solutions.add()
+  src.name = 'src'
+  src.url = 'https://chromium.googlesource.com/chromium/src.git'
+  src.revision = 'origin/master'  # Always checkout Chromium at ToT.
 
   api.gclient.checkout(gclient_config=gclient_cfg)
 
@@ -55,10 +57,13 @@ def RunSteps(api):
   # Ensure swarming_client is compatible with what recipes expect.
   api.swarming.check_client_version()
 
-  chromium_checkout = api.path['checkout']
+  chromium_checkout = api.path['slave_build'].join('src')
+
+  # Apply issue to the Skia checkout if this is a trybot run.
+  api.tryserver.maybe_apply_issue()
 
   # Build DM in Debug mode.
-  api.step('build dm', ['make', 'dm'], cwd=api.path['slave_build'].join('skia'))
+  api.step('build dm', ['make', 'dm'], cwd=api.path['checkout'])
 
   skps_chromium_build = api.properties.get(
       'skps_chromium_build', DEFAULT_SKPS_CHROMIUM_BUILD)
@@ -130,5 +135,16 @@ def GenTests(api):
         buildername='CT-DM-10k-SKPs',
         ct_num_slaves=ct_num_slaves,
         revision=skia_revision,
+    )
+  )
+
+  yield(
+    api.test('CT_DM_10k_SKPs_Trybot') +
+    api.properties(
+        buildername='CT-DM-10k-SKPs',
+        ct_num_slaves=ct_num_slaves,
+        rietveld='codereview.chromium.org',
+        issue=1499623002,
+        patchset=1,
     )
   )

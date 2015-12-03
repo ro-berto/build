@@ -15,6 +15,17 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/slave/gclient_safe_revert.py",
+      ".",
+      "[DEPOT_TOOLS]/gclient"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gclient revert"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
@@ -22,7 +33,7 @@
       "--verbose",
       "--delete_unversioned_trees",
       "--revision",
-      "skia@abc123",
+      "skia@origin/master",
       "--revision",
       "src@origin/master",
       "--output-json",
@@ -122,6 +133,27 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@0.4.10@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/apply_issue.py",
+      "-r",
+      "[SLAVE_BUILD]/skia",
+      "-i",
+      "1499623002",
+      "-p",
+      "1",
+      "-s",
+      "codereview.chromium.org",
+      "--no-auth"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "apply_issue",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Applied issue 1499623002@1499623002@@@"
     ]
   },
   {
@@ -577,6 +609,8 @@
       "--tag",
       "os:Ubuntu-14.04",
       "--tag",
+      "rietveld:codereview.chromium.org/1499623002/#ps1",
+      "--tag",
       "stepname:ct-10k-dm-1 on Ubuntu-14.04",
       "[dummy hash for slave5]"
     ],
@@ -635,6 +669,8 @@
       "name:ct-10k-dm-2",
       "--tag",
       "os:Ubuntu-14.04",
+      "--tag",
+      "rietveld:codereview.chromium.org/1499623002/#ps1",
       "--tag",
       "stepname:ct-10k-dm-2 on Ubuntu-14.04",
       "[dummy hash for slave4]"
@@ -695,6 +731,8 @@
       "--tag",
       "os:Ubuntu-14.04",
       "--tag",
+      "rietveld:codereview.chromium.org/1499623002/#ps1",
+      "--tag",
       "stepname:ct-10k-dm-3 on Ubuntu-14.04",
       "[dummy hash for slave1]"
     ],
@@ -754,6 +792,8 @@
       "--tag",
       "os:Ubuntu-14.04",
       "--tag",
+      "rietveld:codereview.chromium.org/1499623002/#ps1",
+      "--tag",
       "stepname:ct-10k-dm-4 on Ubuntu-14.04",
       "[dummy hash for slave3]"
     ],
@@ -812,6 +852,8 @@
       "name:ct-10k-dm-5",
       "--tag",
       "os:Ubuntu-14.04",
+      "--tag",
+      "rietveld:codereview.chromium.org/1499623002/#ps1",
       "--tag",
       "stepname:ct-10k-dm-5 on Ubuntu-14.04",
       "[dummy hash for slave2]"
