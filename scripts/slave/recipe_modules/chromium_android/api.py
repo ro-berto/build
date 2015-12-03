@@ -405,7 +405,8 @@ class AndroidApi(recipe_api.RecipeApi):
                         min_battery_level=None, disable_network=False,
                         disable_java_debug=False, reboot_timeout=None,
                         max_battery_temp=None, disable_system_chrome=False,
-                        remove_system_webview=False, **kwargs):
+                        remove_system_webview=False, emulators=False,
+                        **kwargs):
     args = [
         '-t', self.m.chromium.c.BUILD_CONFIG,
         '--blacklist-file', self.blacklist_file,
@@ -439,6 +440,8 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--remove-system-webview')
     if self.c and self.c.chrome_specific_wipe:
       args.append('--chrome-specific-wipe')
+    if emulators:
+      args.append('--emulators')
     result = self.m.python(
       'provision_devices',
       self.m.path['checkout'].join(
@@ -796,6 +799,7 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.c.gce_setup:
       self.launch_gce_instances()
       self.spawn_logcat_monitor()
+      self.provision_devices(emulators=True)
     else:
       self.spawn_logcat_monitor()
       self.authorize_adb_devices()
