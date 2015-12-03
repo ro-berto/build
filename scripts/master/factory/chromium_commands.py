@@ -92,7 +92,6 @@ class ChromiumCommands(commands.FactoryCommands):
     # chrome_staging directory, relative to the build directory.
     self._staging_dir = self.PathJoin('..', 'chrome_staging')
 
-    self._telemetry_tool = self.PathJoin(self._script_dir, 'telemetry.py')
     self._telemetry_unit_tests = J('src', 'tools', 'telemetry', 'run_tests')
     self._telemetry_perf_unit_tests = J('src', 'tools', 'perf', 'run_tests')
 
@@ -640,40 +639,6 @@ class ChromiumCommands(commands.FactoryCommands):
       cmd_name=self._device_status_check,
       cmd_options=['--device-status-dashboard'], step_name='device_status',
       py_script=True, factory_properties=factory_properties, alwaysRun=True)
-
-  def AddTelemetryTest(self, test_name, step_name=None,
-                       factory_properties=None, timeout=1200,
-                       tool_options=None, dashboard_url=None):
-    """Adds a Telemetry performance test.
-
-    Args:
-      test_name: The name of the benchmark module to run.
-      step_name: The name used to build the step's logfile name and descriptions
-          in the waterfall display. Defaults to |test_name|.
-      factory_properties: A dictionary of factory property values.
-    """
-    step_name = step_name or test_name
-
-    factory_properties = (factory_properties or {}).copy()
-    factory_properties['test_name'] = test_name
-    factory_properties['target'] = self._target
-    factory_properties['target_os'] = self._target_os
-    factory_properties['target_platform'] = self._target_platform
-    factory_properties['step_name'] = factory_properties.get('step_name',
-                                                             step_name)
-
-    cmd_options = self.AddFactoryProperties(factory_properties)
-
-    log_type = 'graphing'
-    if test_name.split('.')[0] == 'page_cycler':
-      log_type = 'pagecycler'
-
-    self.AddAnnotatedPerfStep(step_name, None, log_type, factory_properties,
-                              cmd_name=self._telemetry_tool,
-                              cmd_options=cmd_options,
-                              step_name=step_name, timeout=timeout,
-                              tool_opts=tool_options, py_script=True,
-                              dashboard_url=dashboard_url)
 
   def AddBisectTest(self):
     """Adds a step to the factory to run a bisection on a range of revisions
