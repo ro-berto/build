@@ -86,7 +86,7 @@ class DeferredResource(object):
   def __init__(
       self, resource, credentials=None, max_concurrent_requests=1,
       retry_wait_seconds=None, retry_attempt_count=None, verbose=False,
-      log_prefix='', _pool=None):
+      log_prefix='', timeout=None, _pool=None):
     """Creates a DeferredResource.
 
     Args:
@@ -102,6 +102,10 @@ class DeferredResource(object):
         Defaults to 5.
       verbose (bool): if True, log each request/response.
       log_prefix (str): prefix for log messages.
+      timeout (int): request timeout in seconds. If None is passed
+        then Python's default timeout for sockets will be used. See
+        for example the docs of socket.setdefaulttimeout():
+        http://docs.python.org/library/socket.html#socket.setdefaulttimeout
     """
     max_concurrent_requests = max_concurrent_requests or 1
     assert resource, 'resource not specified'
@@ -122,6 +126,7 @@ class DeferredResource(object):
     self.api = self.Api(self)
     self._th_local = threading.local()
     self.started = False
+    self.timeout = timeout
 
   @classmethod
   def _create_thread_pool(cls, max_concurrent_requests):
@@ -156,7 +161,7 @@ class DeferredResource(object):
       developerKey=None, model=None,
       requestBuilder=apiclient.http.HttpRequest,
       retry_wait_seconds=None, retry_attempt_count=None, verbose=False,
-      log_prefix=''):
+      log_prefix='', timeout=None):
     """Asynchronously builds a DeferredResource for a discoverable API.
 
     Asynchronously builds a resource by calling apiclient.discovery.build and
@@ -184,6 +189,10 @@ class DeferredResource(object):
         Defaults to 5.
       verbose (bool): if True, log each request/response.
       log_prefix (str): prefix for log messages.
+      timeout (int): request timeout in seconds. If None is passed
+        then Python's default timeout for sockets will be used. See
+        for example the docs of socket.setdefaulttimeout():
+        http://docs.python.org/library/socket.html#socket.setdefaulttimeout
 
     Returns:
       A DeferredResource as Deferred.
@@ -207,6 +216,7 @@ class DeferredResource(object):
         retry_attempt_count=retry_attempt_count,
         verbose=verbose,
         log_prefix=log_prefix,
+        timeout=timeout,
     )
 
   def log(self, message):
@@ -278,7 +288,7 @@ class DeferredResource(object):
       def single_call():
         if getattr(self._th_local, 'http', None) is None:
           self._th_local.credentials = None
-          self._th_local.http = httplib2.Http()
+          self._th_local.http = httplib2.Http(timeout=self.timeout)
           if self.credentials:
             self._th_local.credentials = self.credentials.from_json(
                 self.credentials.to_json())
