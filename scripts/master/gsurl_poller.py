@@ -89,7 +89,8 @@ class GSURLPoller(base.PollingChangeSource):
           'GSURLPoller poll failed with exit code: %s.\nCmd: %s.\nURL: %s\n'
           'Error messages: %s. ' %
           (ret, ' '.join(cmd), self.changeurl, '\n'.join(capture.text)))
-    log.msg('GSURLPoller finished polling %s' % self.changeurl)
+    log.msg('GSURLPoller finished polling %s, got %s while last is %s'
+            % (self.changeurl, parsed_revision, self.last_change))
     if self.last_change != parsed_revision:
       self.master.addChange(who='gsurl_poller',
                             files=[],
