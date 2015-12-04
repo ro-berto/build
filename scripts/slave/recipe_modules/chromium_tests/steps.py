@@ -527,7 +527,7 @@ class SwarmingTest(Test):
 
     # *.isolated may be missing if *_run target is misconfigured. It's a error
     # in gyp, not a recipe failure. So carry on with recipe execution.
-    isolated_hash = api.isolate.isolated_tests.get(self.target_name)
+    isolated_hash = api.isolate.isolated_tests.get(self.isolate_target(api))
     if not isolated_hash:
       return api.python.inline(
           '[error] %s' % self._step_name(suffix),
@@ -536,7 +536,7 @@ class SwarmingTest(Test):
           print '*.isolated file for target %s is missing' % sys.argv[1]
           sys.exit(1)
           """,
-          args=[self.target_name])
+          args=[self.isolate_target(api)])
 
     # Create task.
     self._tasks[suffix] = self.create_task(api, suffix, isolated_hash)
