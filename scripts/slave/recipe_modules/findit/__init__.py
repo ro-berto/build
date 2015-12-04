@@ -4,7 +4,7 @@
 
 DEPS = [
   'git',
-  'path',
-  'platform',
-  'raw_io',
+  'recipe_engine/path',
+  'recipe_engine/platform',
+  'recipe_engine/raw_io',
 ]
