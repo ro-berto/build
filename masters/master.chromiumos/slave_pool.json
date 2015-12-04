@@ -54,9 +54,6 @@
       "amd64-generic-asan": [
         "build84-m2"
       ], 
-      "refresh-packages": [
-        "build94-m2"
-      ], 
       "x86-generic-asan": [
         "build84-m2"
       ]
@@ -65,6 +62,7 @@
   "unallocated": [
     "build326-m2", 
     "build327-m2", 
-    "build93-m2"
+    "build93-m2", 
+    "build94-m2"
   ]
 }
