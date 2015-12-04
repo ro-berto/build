@@ -1208,6 +1208,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
       builder_names = spec.get('builderNames')
       properties = spec.get('properties') or {}
       changes = spec.get('changes')
+      tags = spec.get('tags') or []
       if changes:
         assert isinstance(changes, list)
         changes = map(self.normalizeChangeSpec, changes)
@@ -1225,7 +1226,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
       if trigger_via_buildbucket:
         d = self.triggerBuildsViaBuildBucket(
-            bucket, builder_names, properties, changes)
+            bucket, builder_names, properties, tags, changes)
       else:
         d = self.triggerBuildsLocally(builder_names, properties, changes)
       # addAsyncOpToCursor expects a deferred to return a build result. If a
@@ -1331,7 +1332,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
   @defer.inlineCallbacks
   def triggerBuildsViaBuildBucket(
-      self, bucket_name, builder_names, properties, changes_spec=None):
+      self, bucket_name, builder_names, properties, tags, changes_spec=None):
     """Schedules builds on buildbucket."""
     if self.active_master is None:
       raise buildbucket.Error(
@@ -1359,7 +1360,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
     for builder_name in builder_names:
       result = yield self.bb_triggering_service.trigger(
-          build, bucket_name, builder_name, properties, changes)
+          build, bucket_name, builder_name, properties, tags, changes)
       response = result['response']
       section['log'].addStdout(
           'BuildBucket.put API response: %s\n' % json.dumps(response, indent=4))

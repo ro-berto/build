@@ -14,6 +14,8 @@ def RunSteps(api):
     specs = dict(specs)
     if 'buildbot_changes' in specs:
       specs['buildbot_changes'] = map(dict, specs['buildbot_changes'])
+    if 'tags' in specs:
+      specs['tags'] = dict(specs['tags'])
     return specs
 
   specs = map(normalize_specs, api.properties['trigger_specs'])
@@ -51,6 +53,16 @@ def GenTests(api):
           }],
         }])
       )
+
+  yield (
+    api.test('tags') +
+    api.properties(trigger_specs=[{
+      'builder_name': 'cross-compiler',
+      'tags': {
+        'foo': 'bar',
+      },
+    }])
+  )
 
   yield (
       api.test('backward_compatibility') +

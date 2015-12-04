@@ -46,8 +46,17 @@ class TriggeringService(object):
 
   @defer.inlineCallbacks
   def trigger(
-      self, source_build, bucket_name, builder_name, properties, changes=None):
+      self, source_build, bucket_name, builder_name, properties, tags,
+      changes=None):
     """Schedules a build on buildbucket."""
+    tags = tags or []
+    for t in tags:
+      assert len(t) >= 3 and ':' in t, t
+      key, value = t.split(':', 1)
+      assert key
+      assert value
+      assert key not in ('buildset', 'parent_build_id'), 'reserved tag %s' % t
+
     info = source_build.getProperties().getProperty(common.INFO_PROPERTY) or {}
     try:
       info = common.parse_info_property(info)
@@ -60,7 +69,6 @@ class TriggeringService(object):
       raise common.Error(
           'Neither bucket_name is specified, nor the build is from buildbucket')
 
-    tags = []
     if build_def:
       tags.append('parent_build_id:%s' % build_def['id'])
       buildset = self.get_buildset(build_def)

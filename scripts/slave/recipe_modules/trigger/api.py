@@ -41,6 +41,8 @@ class TriggerApi(recipe_api.RecipeApi):
           properties (dict): build properties for a new build.
           buildbot_changes (list of dict): list of Buildbot changes to create.
             See below.
+          tags (dict or list of str): if the trigger build is scheduled through
+            buildbucket, |tags| will be appended to the buildbucket build.
       name: name of the step. If not specified, it is generated
         automatically. Its format may change in future.
 
@@ -101,6 +103,22 @@ class TriggerApi(recipe_api.RecipeApi):
       builder_name = trigger.get('builder_name')
       assert builder_name, 'builder_name is missing: %s' % (trigger,)
       builder_names.add(builder_name)
+
+      tags = trigger.get('tags', [])
+      # Convert dict tags
+      if isinstance(tags, dict):
+        tags = ['%s:%s' % item for item in tags.iteritems()]
+        trigger['tags'] = tags
+
+      # Validate tags.
+      for t in tags:
+        assert isinstance(t, basestring), t
+        assert len(t) >= 3 and ':' in t, t
+        key, value = t.split(':', 1)
+        assert key
+        assert value
+        assert key != 'buildset', 'buildset tag is reserved'
+        assert key != 'parent_build_id', 'parent_build_id tag is reserved'
 
     result = self.m.step(
         kwargs.get('name', 'trigger'),
