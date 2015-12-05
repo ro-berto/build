@@ -34,7 +34,7 @@ class FinditApi(recipe_api.RecipeApi):
                              stdout=self.m.raw_io.output(),
                              cwd=cwd,
                              step_test_data=lambda:
-                             self.m.raw_io.test_api.stream_output('foo.cc'))
+                                 self.m.raw_io.test_api.stream_output('foo.cc'))
 
     paths = step_result.stdout.split()
     if repo_dir:
@@ -46,3 +46,35 @@ class FinditApi(recipe_api.RecipeApi):
 
     step_result.presentation.logs['files'] = paths
     return paths
+
+  def revisions_between(
+      self, start_revision, end_revision, solution_name='src'):
+    """Returns the git commit hashes between the given range.
+
+    Args:
+      start_revision (str): the git hash of a parent commit.
+      end_revision (str): the git hash of a child commit.
+      solution_name (str): the gclient solution name, eg:
+          "src" for chromium, "src/third_party/pdfium" for pdfium.
+
+    Returns:
+      A list of git commit hashes between `start_revision` (excluded) and
+      `end_revision` (included), ordered from older commits to newer commits.
+    """
+    solution_name = solution_name.replace('\\', '/')
+    repo_dir = self._calculate_repo_dir(solution_name)
+    cwd = self.m.path['checkout'].join(repo_dir)
+
+    step_result = self.m.git('log', '--format=%H',
+                             '%s..%s' % (start_revision, end_revision),
+                             name='git commits in range',
+                             stdout=self.m.raw_io.output(),
+                             cwd=cwd,
+                             step_test_data=lambda:
+                                 self.m.raw_io.test_api.stream_output('r1'))
+
+    revisions = step_result.stdout.split()
+    revisions.reverse()
+
+    step_result.presentation.logs['revisions'] = revisions
+    return revisions

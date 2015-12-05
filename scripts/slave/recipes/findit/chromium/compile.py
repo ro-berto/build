@@ -27,10 +27,10 @@ PROPERTIES = {
         kind=str, help='The target master to match compile config to.'),
     'target_buildername': Property(
         kind=str, help='The target builder to match compile config to.'),
-    'root_solution_revisions': Property(
-        kind=List(basestring),
-        help='The Chromium revisions to be tested for compile failure, '
-             'ordered from older revisions to newer revisions.'),
+    'good_revision': Property(
+        kind=str, help='The last known good chromium revision.'),
+    'bad_revision': Property(
+        kind=str, help='The first known bad chromium revision.'),
     'requested_compile_targets': Property(
         kind=List(basestring), default=None, param_name='compile_targets',
         help='The failed compile targets, eg: browser_tests'),
@@ -103,13 +103,20 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
 
 
 def RunSteps(api, target_mastername, target_buildername,
-             root_solution_revisions, requested_compile_targets, use_analyze):
+             good_revision, bad_revision,
+             requested_compile_targets, use_analyze):
   api.chromium_tests.configure_build(
       target_mastername, target_buildername, override_bot_type='builder_tester')
 
+  # Sync to bad revision, and retrieve revisions in the regression range.
+  api.chromium_tests.prepare_checkout(
+      target_mastername, target_buildername,
+      root_solution_revision=bad_revision)
+  revisions_to_check = api.findit.revisions_between(good_revision, bad_revision)
+
   results = []
   try:
-    for current_revision in root_solution_revisions:
+    for current_revision in revisions_to_check:
       compile_result = _run_compile_at_revision(
           api, target_mastername, target_buildername,
           current_revision, requested_compile_targets, use_analyze)
@@ -146,7 +153,8 @@ def GenTests(api):
         'buildnumber': '1',
         'target_mastername': 'chromium.linux',
         'target_buildername': 'Linux Builder',
-        'root_solution_revisions': ['r1'],
+        'good_revision': 'r0',
+        'bad_revision': 'r1',
         'use_analyze': use_analyze,
     }
     if compile_targets:
