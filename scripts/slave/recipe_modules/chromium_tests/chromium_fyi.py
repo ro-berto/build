@@ -11,6 +11,24 @@ SPEC = {
     'build_gs_bucket': 'chromium-fyi-archive',
   },
   'builders': {
+    'Win Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [
+        'chromium_builder_tests',
+      ],
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+      'use_isolate': True,
+    },
     'Chromium Mac 10.10 MacViews': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
@@ -1983,6 +2001,32 @@ SPEC = {
       ],
       'testing': {
         'platform': 'linux',
+      },
+    },
+    'Win10 Tests (1)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
+      'parent_buildername': 'Win Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+      'swarming_dimensions': {
+        'os': 'Windows-10-SP0',
       },
     },
   },

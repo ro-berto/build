@@ -450,6 +450,11 @@ TRYBOTS = freeze({
         'buildername': 'Win Builder',
         'tester': 'Win7 Tests (1)',
       },
+      'win10_chromium_rel_ng': {
+        'mastername': 'chromium.fyi',
+        'buildername': 'Win Builder',
+        'tester': 'Win10 Tests (1)',
+      },
       'win_chromium_rel_ng_exp': {
         'mastername': 'chromium.win',
         'buildername': 'Win Builder',
