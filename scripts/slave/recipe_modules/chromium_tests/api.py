@@ -477,9 +477,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       for loop_buildername, builder_dict in sorted(master_dict.get(
           'builders', {}).iteritems()):
         if builder_dict.get('parent_buildername') == buildername:
-          self.m.trigger({
+          trigger_spec = {
             'builder_name': loop_buildername,
-          })
+            'properties': {},
+          }
+          for name, value in update_step.presentation.properties.iteritems():
+            if name.startswith('got_'):
+              trigger_spec['properties']['parent_' + name] = value
+          self.m.trigger(trigger_spec)
 
     if bot_config.get('archive_build') and not self.m.tryserver.is_tryserver:
       self.m.chromium.archive_build(
