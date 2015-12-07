@@ -375,7 +375,7 @@ def clean_old_recipe_engine():
         os.remove(os.path.join(dirpath, filename))
 
 
-def write_monitoring_event(config, outdir, build_properties):
+def write_monitoring_event(config, datadir, build_properties):
   # Ensure that all command components of "run_cmd" are available.
   if not config.run_cmd:
     LOGGER.warning('No run.py is defined for this platform.')
@@ -394,8 +394,7 @@ def write_monitoring_event(config, outdir, build_properties):
 
   try:
     cmd = config.run_cmd + ['infra.tools.send_monitoring_event',
-       '--event-mon-output-file',
-           ensure_directory(outdir, 'log_request_proto'),
+       '--event-mon-output-file', os.path.join(datadir, 'log_request_proto'),
        '--event-mon-run-type', 'file',
        '--event-mon-service-name',
            'buildbot/master/master.%s'
@@ -463,7 +462,7 @@ def main(argv):
     properties['build_data_dir'] = build_data_dir
 
     # Write our annotated_run.py monitoring event.
-    write_monitoring_event(config, tdir, properties)
+    write_monitoring_event(config, build_data_dir, properties)
 
     # Dump properties to JSON and build recipe command.
     props_file = os.path.join(tdir, 'recipe_properties.json')
