@@ -153,6 +153,12 @@ def _UploadMandolineToGoogleStorage(api):
       remote_path = '%s/%s' % (gs_latest_path, file_path)
       api.gsutil.upload(local_path, bucket, remote_path, args=args)
 
+  # Upload a stamp file to inform any observers that the upload is complete.
+  stamp_path = api.path.mkdtemp('upload_stamp').join('stamp')
+  api.file.write('Create upload stamp', stamp_path, 'Upload complete')
+  api.gsutil.upload(stamp_path, bucket, '%s/stamp' % gs_path)
+  api.gsutil.upload(stamp_path, bucket, '%s/stamp' % gs_latest_path)
+
 
 @recipe_api.composite_step
 def _RunApptests(api):
