@@ -6,11 +6,11 @@
 from recipe_engine import recipe_api
 
 
-CT_GS_BUCKET = 'cluster-telemetry'
-
 
 class CTSwarmingApi(recipe_api.RecipeApi):
   """Provides steps to run CT tasks on swarming bots."""
+
+  CT_GS_BUCKET = 'cluster-telemetry'
 
   @property
   def downloads_dir(self):
@@ -42,7 +42,7 @@ class CTSwarmingApi(recipe_api.RecipeApi):
     binary_dest = self.downloads_dir.join(ct_binary_name)
     self.m.gsutil.download(
         name="download %s" % ct_binary_name,
-        bucket=CT_GS_BUCKET,
+        bucket=self.CT_GS_BUCKET,
         source='swarming/binaries/%s' % ct_binary_name,
         dest=binary_dest)
     # Set executable bit on the binary.
@@ -71,7 +71,7 @@ os.chmod('%s', os.stat('%s').st_mode | stat.S_IEXEC)
     page_sets_dir = self.downloads_dir.join('slave%s' % slave_num, 'page_sets')
     self.m.file.makedirs('page_sets dir', page_sets_dir)
     self.m.gsutil.download(
-        bucket=CT_GS_BUCKET,
+        bucket=self.CT_GS_BUCKET,
         source='swarming/page_sets/%s/slave%s/*' % (page_type, slave_num),
         dest=page_sets_dir)
 
@@ -79,7 +79,7 @@ os.chmod('%s', os.stat('%s').st_mode | stat.S_IEXEC)
     wpr_dir = page_sets_dir.join('data')
     self.m.file.makedirs('WPR dir', wpr_dir)
     self.m.gsutil.download(
-        bucket=CT_GS_BUCKET,
+        bucket=self.CT_GS_BUCKET,
         source='swarming/webpage_archives/%s/slave%s/*' % (page_type,
                                                            slave_num),
         dest=wpr_dir)
@@ -100,7 +100,7 @@ os.chmod('%s', os.stat('%s').st_mode | stat.S_IEXEC)
     skps_dir = dest_dir.join('slave%s' % slave_num)
     self.m.file.makedirs('SKPs dir', skps_dir)
     full_source = 'gs://%s/skps/%s/%s/slave%s' % (
-        CT_GS_BUCKET, page_type, skps_chromium_build, slave_num)
+        self.CT_GS_BUCKET, page_type, skps_chromium_build, slave_num)
     self.m.gsutil(['-m', 'rsync', '-d', '-r', full_source, skps_dir])
 
   def create_isolated_gen_json(self, isolate_path, base_dir, os_type,

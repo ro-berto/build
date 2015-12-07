@@ -122,6 +122,11 @@ def RunSteps(api):
     raise api.step.StepFailure(
         'Failed steps: %s' % ', '.join([f.name for f in failed_tasks]))
 
+  # Set build property to make finding SKPs convenient.
+  api.step.active_result.presentation.properties['Location of SKPs'] = (
+      'https://pantheon.corp.google.com/storage/browser/%s/skps/%s/%s/' % (
+          api.ct_swarming.CT_GS_BUCKET, ct_page_type, skps_chromium_build))
+
 
 def GenTests(api):
   ct_num_slaves = 5
