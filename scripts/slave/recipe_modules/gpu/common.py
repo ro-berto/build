@@ -21,6 +21,7 @@ GPU_ISOLATES = (
 FYI_ONLY_GPU_ISOLATES = (
   'audio_unittests',
   'content_unittests',
+  'telemetry_gpu_new_test',
 )
 
 # Until we have more capacity, run angle_end2end_tests only on the
