@@ -19,8 +19,8 @@ class XSanFlavorUtils(default_flavor.DefaultFlavorUtils):
       # more information:
       # http://clang.llvm.org/docs/UsersManual.html#controlling-code-generation
       'ASAN': ('address,bool,integer-divide-by-zero,null,object-size,return,'
-               'nonnull-attribute,returns-nonnull-attribute,unreachable,'
-               'vla-bound'),
+               'nonnull-attribute,returns-nonnull-attribute,'
+               'signed-integer-overflow,unreachable,vla-bound'),
       # TSAN and ASAN can't play together, so the TSAN stands alone.
       'TSAN': 'thread',
     }[self._skia_api.builder_cfg['extra_config']]
