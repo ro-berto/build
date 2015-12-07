@@ -22,7 +22,7 @@ CT_DM_ISOLATE = 'ct_dm.isolate'
 
 # Do not batch archive more slaves than this value. This is used to prevent
 # no output timeouts in the 'isolate tests' step.
-MAX_SLAVES_TO_BATCHARCHIVE = 10
+MAX_SLAVES_TO_BATCHARCHIVE = 5
 
 # Number of slaves to shard CT runs to.
 DEFAULT_CT_NUM_SLAVES = 100
