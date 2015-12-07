@@ -203,6 +203,7 @@ class GpuApi(recipe_api.RecipeApi):
     isolates = common.GPU_ISOLATES
     if self.is_fyi_waterfall:
       isolates += common.FYI_GPU_ISOLATES
+      isolates += common.TELEMETRY_GPU_NEW_ISOLATE
       if self.m.platform.is_win or self.m.platform.is_linux:
         # TODO(kbr): run these tests on the trybots as soon as there is
         # capacity to do so, and on all platforms as soon as ANGLE does.

@@ -13,6 +13,12 @@ GPU_ISOLATES = (
   'telemetry_gpu_test',
 )
 
+# This is temporary until the bots have all switched over to the new
+# isolate.
+TELEMETRY_GPU_NEW_ISOLATE = (
+  'telemetry_gpu_new_test',
+)
+
 # Until the media-only tests are extracted from content_unittests and
 # these both can be run on the commit queue with
 # --require-audio-hardware-for-testing, run them only on the FYI
