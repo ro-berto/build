@@ -142,16 +142,18 @@ os.chmod('%s', os.stat('%s').st_mode | stat.S_IEXEC)
         self.m.json.dumps(isolated_gen_dict, indent=4),
     )
 
-  def batcharchive(self, num_slaves):
+  def batcharchive(self, num_slaves, slave_start_num=1):
     """Calls batcharchive on the specified isolated.gen.json files.
 
     Args:
       num_slaves: int. The number of slaves we will batcharchive
                   isolated.gen.json files for.
+      slave_start_num: int. Which slave number to start with. Optional.
     """
     self.m.isolate.isolate_tests(
         build_dir=self.swarming_temp_dir,
-        targets=['slave%s' % num for num in range(1, num_slaves+1)])
+        targets=[
+            'slave%s' % num for num in xrange(slave_start_num, num_slaves+1)])
 
   def trigger_swarming_tasks(self, swarm_hashes, task_name_prefix, dimensions):
     """Triggers swarming tasks using swarm hashes.

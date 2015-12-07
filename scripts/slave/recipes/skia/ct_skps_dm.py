@@ -20,6 +20,10 @@ DEPS = [
 
 CT_DM_ISOLATE = 'ct_dm.isolate'
 
+# Do not batch archive more slaves than this value. This is used to prevent
+# no output timeouts in the 'isolate tests' step.
+MAX_SLAVES_TO_BATCHARCHIVE = 10
+
 # Number of slaves to shard CT runs to.
 DEFAULT_CT_NUM_SLAVES = 100
 
@@ -93,9 +97,14 @@ def RunSteps(api):
         isolate_path, isolate_dir, 'linux', slave_num, extra_variables)
 
   # Batcharchive everything on the isolate server for efficiency.
-  api.ct_swarming.batcharchive(ct_num_slaves)
-  swarm_hashes = (
-      api.step.active_result.presentation.properties['swarm_hashes']).values()
+  swarm_hashes = []
+  for slave_start_num in xrange(1, ct_num_slaves+1, MAX_SLAVES_TO_BATCHARCHIVE):
+    api.ct_swarming.batcharchive(
+        num_slaves=min(
+            MAX_SLAVES_TO_BATCHARCHIVE + slave_start_num - 1, ct_num_slaves),
+        slave_start_num=slave_start_num)
+    swarm_hashes.extend(
+        api.step.active_result.presentation.properties['swarm_hashes'].values())
 
   # Trigger all swarming tasks.
   tasks = api.ct_swarming.trigger_swarming_tasks(
