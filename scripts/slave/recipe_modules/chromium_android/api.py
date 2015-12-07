@@ -661,10 +661,7 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--verbose')
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       args.append('--release')
-    if self.c.coverage:
-      args.extend(['--coverage-dir', self.coverage_dir,
-                   '--python-only'])
-    if self.c.incremental_coverage:
+    if self.c.coverage or self.c.incremental_coverage:
       args.extend(['--coverage-dir', self.coverage_dir])
     if host_driven_root:
       args.extend(['--host-driven-root', host_driven_root])
