@@ -75,8 +75,8 @@ def Update(c):
       'category': 'mac',
       'slavebuilddir': 'mac_gn',
     },
-    {'name': 'Linux Builder', 'category': 'linux'},
-    {'name': 'Linux Tester', 'category': 'linux'},
+    {'name': 'Linux Builder', 'recipe': 'chromium', 'category': 'linux'},
+    {'name': 'Linux Tester',  'recipe': 'chromium', 'category': 'linux'},
     {
       'name': 'Linux GN',
       'recipe': 'chromium_gn',
