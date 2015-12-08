@@ -29,15 +29,14 @@ def Update(c):
     {'name': 'Win10 Tester', 'category': 'win'},
     {'name': 'Mac Builder', 'category': 'mac'},
     {'name': 'Mac Tester', 'category': 'mac'},
-    {'name': 'Linux Builder', 'recipe': 'chromium', 'category': 'linux'},
-    {'name': 'Linux Tester', 'recipe': 'chromium', 'category': 'linux'},
+    {'name': 'Linux Builder', 'category': 'linux'},
+    {'name': 'Linux Tester', 'category': 'linux'},
   ]
 
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory(spec.get('recipe',
-                                                    'webrtc/chromium')),
+        'factory': m_annotator.BaseFactory('chromium'),
         'category': spec['category'],
         'notify_on_missing': True,
       } for spec in specs
