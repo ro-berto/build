@@ -458,28 +458,26 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(1)"
+      "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
-      "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"a860d9d78c0340ef1c42d9fa74626fe7b110eeb0\"@@@"
+      "@@@STEP_TEXT@<br/>ignored:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/>@@@",
+      "@@@STEP_WARNINGS@@@",
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"3942af3920a5fbd1f779d169935562484e97d112\"@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "1 out of 1 aggregated steps failed. Failures: Step('webkit_tests') failed with return_code 1",
+    "reason": "Step('compile (without patch)') failed with return_code 1",
     "status_code": 1
   }
 ]
