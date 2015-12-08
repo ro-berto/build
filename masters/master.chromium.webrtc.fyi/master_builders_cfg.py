@@ -51,13 +51,11 @@ def Update(c):
     {'name': 'Win10 Tester', 'category': 'win'},
     {
       'name': 'Win x64 GN',
-      'recipe': 'chromium',
       'category': 'win',
       'slavebuilddir': 'win_gn',
     },
     {
       'name': 'Win x64 GN (dbg)',
-      'recipe': 'chromium',
       'category': 'win',
       'slavebuilddir': 'win_gn',
     },
@@ -65,18 +63,16 @@ def Update(c):
     {'name': 'Mac Tester', 'category': 'mac'},
     {
       'name': 'Mac GN',
-      'recipe': 'chromium',
       'category': 'mac',
       'slavebuilddir': 'mac_gn',
     },
     {
       'name': 'Mac GN (dbg)',
-      'recipe': 'chromium',
       'category': 'mac',
       'slavebuilddir': 'mac_gn',
     },
-    {'name': 'Linux Builder', 'recipe': 'chromium', 'category': 'linux'},
-    {'name': 'Linux Tester',  'recipe': 'chromium', 'category': 'linux'},
+    {'name': 'Linux Builder', 'category': 'linux'},
+    {'name': 'Linux Tester', 'category': 'linux'},
     {
       'name': 'Linux GN',
       'recipe': 'chromium_gn',
@@ -103,13 +99,11 @@ def Update(c):
     {'name': 'Android Tests (dbg) (L Nexus9)', 'category': 'android'},
     {
       'name': 'Android GN',
-      'recipe': 'chromium',
       'category': 'android',
       'slavebuilddir': 'android_gn',
     },
     {
       'name': 'Android GN (dbg)',
-      'recipe': 'chromium',
       'category': 'android',
       'slavebuilddir': 'android_gn',
     },
@@ -118,7 +112,7 @@ def Update(c):
   for spec in specs:
     builder_dict = {
       'name': spec['name'],
-      'factory': m_annotator.BaseFactory(spec.get('recipe', 'webrtc/chromium')),
+      'factory': m_annotator.BaseFactory(spec.get('recipe', 'chromium')),
       'category': spec['category'],
       'notify_on_missing': True,
     }
