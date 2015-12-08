@@ -162,6 +162,7 @@ def _UploadMandolineToGoogleStorage(api):
 
 @recipe_api.composite_step
 def _RunApptests(api):
+  # TODO(msw): Run and get compile targets via testing/scripts/mojo_apptests.py.
   runner = api.path['checkout'].join('mojo', 'tools', 'apptest_runner.py')
   api.python('app_tests', runner, [api.chromium.output_dir, '--verbose'])
 
@@ -230,7 +231,7 @@ def RunSteps(api):
                       api.properties.get('buildername'),
                       use_goma=True)
 
-  api.chromium.compile(targets=['mandoline:all'])
+  api.chromium.compile(targets=['mandoline:all', 'mash/wm:tests'])
 
   if api.chromium.c.TARGET_PLATFORM == 'android':
     api.chromium_android.detect_and_setup_devices()
