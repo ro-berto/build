@@ -29,7 +29,7 @@ class FetchInterveningRevisionsTest(unittest.TestCase):
     with mock.patch('urllib2.urlopen', mock.MagicMock(
         return_value=open(_MOCK_RESPONSE_PATH))):
       revs = fetch_intervening_revisions.fetch_intervening_revisions(
-          start, end)
+          start, end, depot_name='chromium')
     self.assertEqual(
         revs, [
             ('32ce3b13924d84004a3e05c35942626cbe93cbbd', '356382'),

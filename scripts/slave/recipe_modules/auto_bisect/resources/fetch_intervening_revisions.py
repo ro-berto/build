@@ -8,6 +8,7 @@
 
 Example usage:
   ./fetch_intervening_revisions.py 343b531d31 7b43807df3
+  ./fetch_intervening_revisions.py 235eff9574 1e4681c33f --depot v8
 """
 
 import argparse
@@ -18,19 +19,27 @@ import sys
 import urllib2
 
 _GITILES_PADDING = ')]}\'\n'
+_URL_TEMPLATE = 'https://chromium.googlesource.com/%s/+log/%s..%s?format=json'
 
 # Gitiles paginates the list of commits; since we want to get all of the
 # commits at once, the page size should be larger than the largest revision
 # range that we expect to get.
 _PAGE_SIZE = 2048
 
+_DEPOT_PATH_MAP = {
+    'chromium': 'chromium/src',
+    'angle': 'angle/angle',
+    'v8': 'v8/v8.git',
+    'skia': 'skia',
+}
 
-def fetch_intervening_revisions(min_rev, max_rev):
+def fetch_intervening_revisions(min_rev, max_rev, depot_name):
   """Fetches a list of revision in between two commits.
 
   Args:
     min_rev (str): A git commit hash in the Chromium src repository.
     max_rev (str): Another git commit hash, after min_rev.
+    depot_name (str): A respository name.
 
   Returns:
     A list of pairs (commit hash, commit position), from earliest to latest,
@@ -42,8 +51,7 @@ def fetch_intervening_revisions(min_rev, max_rev):
     ValueError: The response wasn't valid JSON.
     KeyError: The JSON didn't contain the expected data.
   """
-  base_url= 'https://chromium.googlesource.com/chromium/src/+log/'
-  url = base_url + '%s..%s?format=json' % (min_rev, max_rev)
+  url = _URL_TEMPLATE % (_DEPOT_PATH_MAP[depot_name], min_rev, max_rev)
   url += '&n=%d' % _PAGE_SIZE
   response = urllib2.urlopen(url).read()
   response_json = response[len(_GITILES_PADDING):]  # Remove padding.
@@ -64,8 +72,11 @@ def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('min_rev')
   parser.add_argument('max_rev')
+  parser.add_argument(
+      '--depot', default='chromium', choices=list(_DEPOT_PATH_MAP))
   args = parser.parse_args()
-  revisions = fetch_intervening_revisions(args.min_rev, args.max_rev)
+  revisions = fetch_intervening_revisions(
+      args.min_rev, args.max_rev, args.depot)
   print json.dumps(revisions)
 
 
