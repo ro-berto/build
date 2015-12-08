@@ -1051,6 +1051,7 @@ class VarzResource(JsonResource):
     @defer.deferredGenerator
     def asDict(self, request):
         builders = {}
+        twlog.msg('VarzResource: populating builder list')
         for builder_name in self.status.getBuilderNames():
             builder = self.status.getBuilder(builder_name)
             slaves = builder.getSlaves()
@@ -1064,14 +1065,18 @@ class VarzResource(JsonResource):
 
         # Get pending build requests directly from the db for all builders at
         # once.
+        twlog.msg('VarzResource: fetching build requests')
         d = self.status.master.db.buildrequests.getBuildRequests(claimed=False)
         def pending_builds_callback(brdicts):
+            twlog.msg('VarzResource: pending_builds_callback')
             for brdict in brdicts:
                 if brdict['buildername'] in builders:
                     builders[brdict['buildername']]['pending_builds'] += 1
+            twlog.msg('VarzResource: pending_builds_callback finished')
         d.addCallback(pending_builds_callback)
         yield defer.waitForDeferred(d)
 
+        twlog.msg('VarzResource: finished')
         yield {
             'accepting_builds': bool(self.status.master.botmaster.brd.running),
             'builders': builders,
