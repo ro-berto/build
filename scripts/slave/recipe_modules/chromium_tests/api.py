@@ -39,6 +39,13 @@ PER_TARGET_SWARMING_DIMS.update({
 })
 
 
+MASTER_SWARMING_PRIORITIES = collections.defaultdict(lambda: 25)
+MASTER_SWARMING_PRIORITIES.update({
+    'chromium.fyi': 35,  # This should be lower than the CQ.
+    'chromium.memory.fyi': 27,
+})
+
+
 class ChromiumTestsApi(recipe_api.RecipeApi):
   def __init__(self, *args, **kwargs):
     super(ChromiumTestsApi, self).__init__(*args, **kwargs)
@@ -760,13 +767,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if patch_project:
         self.m.swarming.add_default_tag('patch_project:%s' % patch_project)
     else:
-      if mastername == 'chromium.fyi':
-        # This should be lower than the CQ.
-        self.m.swarming.default_priority = 35
-      elif mastername == 'chromium.memory.fyi':
-        self.m.swarming.default_priority = 27
-      else:
-        self.m.swarming.default_priority = 25
+      self.m.swarming.default_priority = MASTER_SWARMING_PRIORITIES[mastername]
       self.m.swarming.add_default_tag('purpose:post-commit')
       self.m.swarming.add_default_tag('purpose:CI')
 
