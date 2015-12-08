@@ -206,10 +206,14 @@ def _get_basic_test_data():
               '002': 'Dummy .diff contents 001 - 002',
               '003': 'Dummy .diff contents 001 - 003',
           },
-          'cl_info': 'S3P4R4T0R'.join(['DummyAuthor', 'dummy@nowhere.com',
-                                      'Some random CL', '01/01/2015',
-                                      'A long description for a CL.\n'
-                                      'Containing multiple lines']),
+          'cl_info': {
+              'author': 'DummyAuthor',
+              'email': 'dummy@nowhere.com',
+              'subject': 'Some random CL',
+              'date': '01/01/2015',
+              'body': ('A long description for a CL.\n'
+                       'Containing multiple lines'),
+          },
       },
       {
           'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
@@ -252,10 +256,14 @@ def _get_reversed_basic_test_data():
               },
               'retcodes': [0],
           },
-          'cl_info': 'S3P4R4T0R'.join(['DummyAuthor', 'dummy@nowhere.com',
-                                      'Some random CL', '01/01/2015',
-                                      'A long description for a CL.\n'
-                                      'Containing multiple lines'])
+          'cl_info': {
+              'author': 'DummyAuthor',
+              'email': 'dummy@nowhere.com',
+              'subject': 'Some random CL',
+              'date': '01/01/2015',
+              'body': ('A long description for a CL.\n'
+                       'Containing multiple lines'),
+          },
       },
       {
           'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
@@ -409,5 +417,5 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
 
     if 'cl_info' in revision_data:
       step_name = 'Reading culprit cl information.'
-      stdout = api.raw_io.output(revision_data['cl_info'])
+      stdout = api.json.output(revision_data['cl_info'])
       yield api.step_data(step_name, stdout=stdout)

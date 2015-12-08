@@ -1123,16 +1123,25 @@
   },
   {
     "cmd": [
-      "git",
-      "log",
-      "--format=%aNS3P4R4T0R%aES3P4R4T0R%sS3P4R4T0R%cDS3P4R4T0R%b",
-      "-1",
-      "fc6dfc7ff5b1073408499478969261b826441144"
+      "python",
+      "-u",
+      "RECIPE_MODULE[auto_bisect]/resources/fetch_revision_info.py",
+      "fc6dfc7ff5b1073408499478969261b826441144",
+      "--depot",
+      "chromium"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[SLAVE_BUILD]",
     "name": "Reading culprit cl information.",
-    "stdout": "/path/to/tmp/",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"author\": \"DummyAuthor\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"body\": \"A long description for a CL.\\nContaining multiple lines\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"date\": \"01/01/2015\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"email\": \"dummy@nowhere.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"subject\": \"Some random CL\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
       "@@@SET_BUILD_PROPERTY@extra_result_code@[\"B4T_LO_FINAL_CONF\"]@@@"
     ]
   },

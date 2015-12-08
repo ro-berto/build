@@ -122,10 +122,14 @@ def GenTests(api):
                 },
                 'retcodes':[0],
             },
-            'cl_info': 'S3P4R4T0R'.join(['DummyAuthor', 'dummy@nowhere.com',
-                                         'Some random CL', '01/01/2015',
-                                         'A long description for a CL.\n'
-                                         'Containing multiple lines'])
+            'cl_info': {
+                'author': 'DummyAuthor',
+                'email': 'dummy@nowhere.com',
+                'subject': 'Some random CL',
+                'date': '01/01/2015',
+                'body': ('A long description for a CL.\n'
+                         'Containing multiple lines'),
+            },
         },
         {
             'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
@@ -217,10 +221,14 @@ def GenTests(api):
                 },
                 'retcodes':[1],
             },
-            'cl_info': 'S3P4R4T0R'.join(['DummyAuthor', 'dummy@nowhere.com',
-                                       'Some random CL', '01/01/2015',
-                                       'A long description for a CL.\n'
-                                       'Containing multiple lines'])
+            'cl_info': {
+                'author': 'DummyAuthor',
+                'email': 'dummy@nowhere.com',
+                'subject': 'Some random CL',
+                'date': '01/01/2015',
+                'body': ('A long description for a CL.\n'
+                         'Containing multiple lines'),
+            },
         },
         {
             'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
@@ -313,7 +321,7 @@ def _get_step_data_for_revision(api, revision_data, broken_cp=None,
 
     if 'cl_info' in revision_data:
       step_name = 'Reading culprit cl information.'
-      stdout = api.raw_io.output(revision_data['cl_info'])
+      stdout = api.json.output(revision_data['cl_info'])
       yield api.step_data(step_name, stdout=stdout)
 
 

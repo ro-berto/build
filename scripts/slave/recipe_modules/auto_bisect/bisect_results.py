@@ -200,13 +200,9 @@ class BisectResults(object):
     self.culprit_cl_hash = None
     api = self._bisector.api
     if culprit:
-      self.culprit_cl_hash = (culprit.deps_revision or
-                              culprit.commit_hash)
-      if culprit.depot_name != 'chromium':  # pragma: no cover
-        repo_path = api.m.path['slave_build'].join(culprit.depot['src'])
-      else:
-        repo_path = None
-      culprit_info = api.query_revision_info(self.culprit_cl_hash, repo_path)
+      self.culprit_cl_hash = culprit.deps_revision or culprit.commit_hash
+      culprit_info = api.query_revision_info(
+          self.culprit_cl_hash, culprit.depot_name)
       self.culprit_subject = culprit_info['subject']
       self.culprit_author = (culprit_info['author'] + ', ' +
                              culprit_info['email'])

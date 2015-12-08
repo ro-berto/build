@@ -6,6 +6,7 @@
 
 DEPS = [
     'auto_bisect',
+    'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
@@ -97,10 +98,15 @@ def add_revision_mapping(api, test, pos, sha):
 
 def add_revision_info(api, test):
   step_name = 'Reading culprit cl information.'
-  stdout = api.raw_io.output('S3P4R4T0R'.join(
-      ['DummyAuthor', 'dummy@nowhere.com', 'Some random CL', '01/01/2015',
-       'A long description for a CL.\n' 'Containing multiple lines']))
-  return test + api.step_data(step_name, stdout=stdout)
+  rev_info = {
+      'author': 'DummyAuthor',
+      'email': 'dummy@nowhere.com',
+      'subject': 'Some random CL',
+      'date': '01/01/2015',
+      'body': ('A long description for a CL.\n'
+               'Containing multiple lines'),
+  }
+  return test + api.step_data(step_name, stdout=api.json.output(rev_info))
 
 def GenTests(api):
   basic_test = api.test('basic_test')

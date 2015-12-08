@@ -65,39 +65,23 @@ class AutoBisectApi(recipe_api.RecipeApi):
       return False
     return True
 
-  def query_revision_info(self, revision, git_checkout_dir=None):
+  def query_revision_info(self, revision, depot_name='chromium'):
     """Gathers information on a particular revision, such as author's name,
     email, subject, and date.
 
     Args:
-      revision (str): Revision you want to gather information on; a git
-        commit hash.
-      git_checkout_dir (slave.recipe_config_types.Path): A path to run git
-        from.
+      revision (str): A git commit hash.
 
     Returns:
-      A dict in the following format:
-      {
-        'author': %s,
-        'email': %s,
-        'date': %s,
-        'subject': %s,
-        'body': %s,
-      }
+      A dict with the keys "author", "email", "date", "subject" and "body",
+      as output by fetch_revision_info.py.
     """
-    if not git_checkout_dir:
-      git_checkout_dir = self.m.path['checkout']
-
-    separator = 'S3P4R4T0R'
-    formats = separator.join(['%aN', '%aE', '%s', '%cD', '%b'])
-    targets = ['author', 'email', 'subject', 'date', 'body']
-    command_parts = ['log', '--format=%s' % formats, '-1', revision]
-
-    step_result = self.m.git(*command_parts,
-                             name='Reading culprit cl information.',
-                             cwd=git_checkout_dir,
-                             stdout=self.m.raw_io.output())
-    return dict(zip(targets, step_result.stdout.split(separator)))
+    result = self.m.python(
+        'Reading culprit cl information.',
+        self.resource('fetch_revision_info.py'),
+        [revision, '--depot', depot_name],
+        stdout=self.m.json.output())
+    return result.stdout
 
   def run_bisect_script(self, extra_src='', path_to_config='', **kwargs):
     """Executes run-perf-bisect-regression.py to perform bisection.
