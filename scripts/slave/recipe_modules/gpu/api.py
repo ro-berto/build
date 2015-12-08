@@ -600,30 +600,9 @@ class GpuApi(recipe_api.RecipeApi):
       extra_browser_args_string += ' ' + ' '.join(extra_browser_args)
     test_args.append(extra_browser_args_string)
 
-    # Run the new Telemetry GPU test isolate on the FYI waterfall.
-    # Once it's running well on all platforms, the old isolate, and
-    # the code which launches it, will be removed.
-    if self.is_fyi_waterfall:
-      # The step name must end in 'test' or 'tests' in order for the
-      # results to automatically show up on the flakiness dashboard.
-      # (At least, this was true some time ago.) Continue to use this
-      # naming convention for the time being to minimize changes.
-      step_name = name
-      if not (step_name.endswith('test') or step_name.endswith('tests')):
-        step_name = '%s_tests' % step_name
-      # Prepend Telemetry GPU-specific flags.
-      benchmark_name = target_name or name
-      prefix_args = [
-        benchmark_name, '--show-stdout',
-        '--browser=%s' % self.m.chromium.c.build_config_fs.lower() ]
-      return self.m.chromium_tests.steps.LocalIsolatedScriptTest(
-          step_name, args=prefix_args + test_args,
-          target_name='telemetry_gpu_new_test',
-          override_compile_targets=['telemetry_gpu_new_test_run'])
-    else:
-      return self.m.chromium_tests.steps.TelemetryGPUTest(
-          name, chrome_revision, webkit_revision, args=test_args,
-          target_name=target_name, enable_swarming=enable_swarming,
-          swarming_dimensions=swarming_dimensions,
-          master_class_name=self._master_class_name_for_testing,
-          swarming_extra_suffix=self._get_gpu_suffix(swarming_dimensions))
+    return self.m.chromium_tests.steps.TelemetryGPUTest(
+        name, chrome_revision, webkit_revision, args=test_args,
+        target_name=target_name, enable_swarming=enable_swarming,
+        swarming_dimensions=swarming_dimensions,
+        master_class_name=self._master_class_name_for_testing,
+        swarming_extra_suffix=self._get_gpu_suffix(swarming_dimensions))
