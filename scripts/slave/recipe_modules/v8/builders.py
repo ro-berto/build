@@ -2009,7 +2009,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
+        'enable_swarming': False,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
         },
