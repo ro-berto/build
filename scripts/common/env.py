@@ -367,7 +367,7 @@ def GetInfraPythonPath(hermetic=True, master_dir=None):
     hermetic (bool): True, prune any non-system path from the system path.
     master_dir (str): If not None, include a master path component.
   """
-  path = GetEnvPythonPath()
+  path = PythonPath()
   if master_dir:
     path += GetMasterPythonPath(master_dir)
   path += GetBuildPythonPath()
