@@ -49,6 +49,9 @@ class Build(object):
   def getSourceStamp(self):
     return SourceStamp()
 
+  def getSteps(self):
+    return []
+
   def getTimes(self):
     return 5000, 6000
 

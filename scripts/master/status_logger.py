@@ -186,7 +186,7 @@ class StatusEventLogger(StatusReceiverMultiService):
 
   def send_build_result(
       self, scheduled, started, finished, builder_name, bot_name, result,
-      project_id=None, subproject_tag=None):
+      project_id=None, subproject_tag=None, steps=None):
     """Log a build result for ts_mon.
 
     This allows computing metrics for builds in mastermon.
@@ -204,6 +204,8 @@ class StatusEventLogger(StatusReceiverMultiService):
       d['project_id'] = project_id
     if subproject_tag:
       d['subproject_tag'] = subproject_tag
+    if steps:
+      d['steps'] = steps
     self.ts_mon_logger.info(json.dumps(d))
 
   def send_build_event(self, timestamp_kind, timestamp, build_event_type,
@@ -492,6 +494,15 @@ class StatusEventLogger(StatusReceiverMultiService):
         result=buildbot.status.results.Results[results],
         extra_result_code=extra_result_code)
 
+    steps_to_send = []
+    for step in build.getSteps():
+      step_started, step_finished = step.getTimes()
+      steps_to_send.append({
+        'step_name': step.getName(),
+        'duration_s': step_finished - step_started,
+        'result': buildbot.status.results.Results[step.getResults()[0]],
+      })
+
     # If property doesn't exist, this function returns None.
     # Note: this is not true for build.getProperty(), it raises KeyError.
     project_id = properties.getProperty('patch_project')
@@ -499,7 +510,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     self.send_build_result(
         scheduled, started, finished, builderName, bot,
         buildbot.status.results.Results[results],
-        project_id, subproject_tag)
+        project_id, subproject_tag, steps=steps_to_send)
 
   def builderRemoved(self, builderName):
     self.log('builderRemoved', '%s', builderName)
