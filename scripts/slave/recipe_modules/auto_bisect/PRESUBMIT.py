@@ -7,6 +7,9 @@
 See http://dev.chromium.org/developers/how-tos/depottools/presubmit-scripts.
 """
 
+import os
+
+
 def CommonChecks(input_api, output_api):  # pragma: no cover
   results = []
   results.extend(input_api.canned_checks.RunPylint(input_api, output_api))
@@ -14,6 +17,11 @@ def CommonChecks(input_api, output_api):  # pragma: no cover
       input_api.canned_checks.RunUnitTestsInDirectory(
           input_api, output_api,
           input_api.PresubmitLocalPath(),
+          whitelist=[r'.+_test\.py$']))
+  results.extend(
+      input_api.canned_checks.RunUnitTestsInDirectory(
+          input_api, output_api,
+          os.path.join(input_api.PresubmitLocalPath(), 'resources'),
           whitelist=[r'.+_test\.py$']))
   return results
 
