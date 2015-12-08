@@ -215,7 +215,6 @@ def _RunStepsInternal(api):
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
   bot_config = get_bot_config(mastername, buildername)
-  api.chromium_tests.configure_swarming('chromium', precommit=True)
 
   # TODO(sergiyb): This is a temporary hack to run GPU tests on tryserver
   # only. This should be removed when we will convert chromium.gpu waterfall
@@ -228,6 +227,8 @@ def _RunStepsInternal(api):
       bot_config['mastername'],
       bot_config['buildername'],
       override_bot_type='builder_tester')
+
+  api.chromium_tests.configure_swarming('chromium', precommit=True)
 
   api.chromium.apply_config('trybot_flavor')
   if enable_gpu_tests:

@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import ast
+import collections
 import contextlib
 import copy
 import itertools
@@ -25,6 +26,17 @@ MB_CONFIG_FILENAME = ['tools', 'mb', 'mb_config.pyl']
 RECIPE_CONFIG_PATHS = [
     'testing/buildbot',
 ]
+
+
+PER_TARGET_SWARMING_DIMS = collections.defaultdict(dict)
+PER_TARGET_SWARMING_DIMS.update({
+    'android': {
+      'android_devices': '6',
+      'cpu': None,
+      'gpu': None,
+      'os': 'Android',
+    }
+})
 
 
 class ChromiumTestsApi(recipe_api.RecipeApi):
@@ -710,11 +722,22 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def configure_swarming(self, project_name, precommit, mastername=None):
     """Configures default swarming dimensions and tags.
 
+    Uses the 'chromium' global config to determine target platform defaults,
+    make sure something like chromium_tests.configure_build() has been called
+    beforehand.
+
     Args:
       project_name: Lowercase name of the project, e.g. "blink", "chromium".
       precommit: Boolean flag to indicate whether the tests are running before
           the changes are commited.
     """
+
+    # Set platform-specific default dims.
+    target_platform = self.m.chromium.c.TARGET_PLATFORM
+    swarming_dims = PER_TARGET_SWARMING_DIMS[target_platform]
+    for k, v in swarming_dims.iteritems():
+      self.m.swarming.set_default_dimension(k, v)
+
     self.m.swarming.set_default_dimension('pool', 'Chrome')
     self.m.swarming.add_default_tag('project:%s' % project_name)
     self.m.swarming.default_idempotent = True

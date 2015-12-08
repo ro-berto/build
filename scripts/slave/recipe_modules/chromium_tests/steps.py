@@ -542,9 +542,9 @@ class SwarmingTest(Test):
     self._tasks[suffix] = self.create_task(api, suffix, isolated_hash)
 
     # Add custom dimensions.
-    if self._dimensions:
+    if self._dimensions:  # pragma: no cover
       #TODO(stip): concoct a test case that will trigger this codepath
-      for k, v in self._dimensions.iteritems():  # pragma: no cover
+      for k, v in self._dimensions.iteritems():
          if v is None:
            # Remove key if it exists. This allows one to use None to remove
            # default dimensions.
