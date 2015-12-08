@@ -79,6 +79,7 @@ class PerfRevisionState(revision_state.RevisionState):
         '--bot', bot_name,
         '--revision', self.commit_hash,
         '--name', self.job_name,
+        '--clobber',
         '--svn_repo', api.SVN_REPO_URL,
         '--diff', self.patch_file,
     ]
