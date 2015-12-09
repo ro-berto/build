@@ -35,7 +35,7 @@
         "os":  "win",
         "version": "win7",
       },
-      "slaves": ["vm1032-m4", "vm1034-m4"],
+      "slaves": ["vm1032-m4", "vm1034-m4", "vm1108-m4", "vm1109-m4"],
     },
   },
 }
