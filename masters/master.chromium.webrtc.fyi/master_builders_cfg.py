@@ -91,7 +91,6 @@ def Update(c):
       'category': 'android',
       'slavebuilddir': 'android_arm64',
     },
-    {'name': 'Android Tests (dbg) (J Nexus4)', 'category': 'android'},
     {'name': 'Android Tests (dbg) (K Nexus5)', 'category': 'android'},
     {'name': 'Android Tests (dbg) (L Nexus5)', 'category': 'android'},
     {'name': 'Android Tests (dbg) (L Nexus6)', 'category': 'android'},

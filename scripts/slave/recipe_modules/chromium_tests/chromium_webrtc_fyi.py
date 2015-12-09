@@ -82,9 +82,6 @@ AddTestSpec('Win10 Tester', 'chromium-webrtc-trunk-tot-rel-win10', 'win',
             target_bits=32)
 AddTestSpec('Mac Tester', 'chromium-webrtc-trunk-tot-rel-mac', 'mac')
 AddTestSpec('Linux Tester', 'chromium-webrtc-trunk-tot-rel-linux', 'linux')
-AddTestSpec('Android Tests (dbg) (J Nexus4)',
-            'chromium-webrtc-trunk-tot-dbg-android-nexus4-j', 'android',
-            target_bits=32, build_config='Debug')
 AddTestSpec('Android Tests (dbg) (K Nexus5)',
             'chromium-webrtc-trunk-tot-dbg-android-nexus5-k', 'android',
             target_bits=32, build_config='Debug')
