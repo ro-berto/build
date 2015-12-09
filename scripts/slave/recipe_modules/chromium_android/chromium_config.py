@@ -58,7 +58,8 @@ def cronet_builder(c):
   c.compile_py.clobber = True
   c.compile_py.default_targets=['cronet_package',
                                 'cronet_sample_test_apk',
-                                'cronet_test_instrumentation_apk']
+                                'cronet_test_instrumentation_apk',
+                                'cronet_unittests_apk']
 
 @CONFIG_CTX(includes=['main_builder'])
 def arm_l_builder(c):  # pragma: no cover
