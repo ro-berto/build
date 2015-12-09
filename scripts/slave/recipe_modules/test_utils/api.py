@@ -158,15 +158,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
       'new_failures': sorted(new_failures),
     })
 
+    step_name = '%s (retry summary)' % test.name
     step_text = self.format_step_text([
         ['failures:', new_failures],
         ['ignored:', ignored_failures]
     ])
     try:
       if new_failures:
-        self.m.python.failing_step(test.name, step_text)
+        self.m.python.failing_step(step_name, step_text)
       else:
-        self.m.python.succeeding_step(test.name, step_text)
+        self.m.python.succeeding_step(step_name, step_text)
     finally:
       if new_failures:
         self.m.tryserver.set_test_failure_tryjob_result()

@@ -4314,7 +4314,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "pixel_test on Intel GPU on Mac",
+    "name": "pixel_test on Intel GPU on Mac (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>Test.Test1<br/>@@@",
       "@@@STEP_WARNINGS@@@"

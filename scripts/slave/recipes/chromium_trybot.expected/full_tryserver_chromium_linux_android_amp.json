@@ -2745,7 +2745,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "AndroidWebViewTest",
+    "name": "AndroidWebViewTest (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_WARNINGS@@@"
@@ -2758,7 +2758,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "ContentShellTest",
+    "name": "ContentShellTest (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_WARNINGS@@@"
@@ -2771,7 +2771,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "ChromePublicTest",
+    "name": "ChromePublicTest (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_WARNINGS@@@"
@@ -2784,7 +2784,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "ChromeSyncShellTest",
+    "name": "ChromeSyncShellTest (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_WARNINGS@@@"
@@ -2797,7 +2797,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "junit_unit_tests",
+    "name": "junit_unit_tests (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_WARNINGS@@@"
@@ -2810,7 +2810,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "chrome_junit_tests",
+    "name": "chrome_junit_tests (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_WARNINGS@@@"
@@ -2823,7 +2823,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "content_junit_tests",
+    "name": "content_junit_tests (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_WARNINGS@@@"

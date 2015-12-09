@@ -2783,18 +2783,18 @@
       "import sys; sys.exit(1)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gl_tests",
+    "name": "gl_tests (retry summary)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
       "@@@STEP_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"219632d5cbb4c4bca9faaa20654f18f250ab3f81\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"2c817ab2d4394c69c9b8a0698b954936d9e1fb76\"@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "1 out of 1 aggregated steps failed. Failures: Step('gl_tests') failed with return_code 1",
+    "reason": "1 out of 1 aggregated steps failed. Failures: Step('gl_tests (retry summary)') failed with return_code 1",
     "status_code": 1
   }
 ]

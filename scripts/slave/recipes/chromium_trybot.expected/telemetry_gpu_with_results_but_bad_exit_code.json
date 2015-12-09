@@ -4315,18 +4315,18 @@
       "import sys; sys.exit(1)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "pixel_test on Intel GPU on Mac",
+    "name": "pixel_test on Intel GPU on Mac (retry summary)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>failures:<br/>pixel_test on Intel GPU on Mac (entire test suite)<br/>@@@",
       "@@@STEP_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"8cdd83cc2af010d5e2c60792a87d697a499fe98c\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"27460841f8f2c99f44128c0d126a7714b712ce31\"@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "1 out of 1 aggregated steps failed. Failures: Step('pixel_test on Intel GPU on Mac') failed with return_code 1",
+    "reason": "1 out of 1 aggregated steps failed. Failures: Step('pixel_test on Intel GPU on Mac (retry summary)') failed with return_code 1",
     "status_code": 1
   }
 ]

@@ -2493,18 +2493,18 @@
       "import sys; sys.exit(1)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "maps_pixel_test on NVIDIA GPU on Linux",
+    "name": "maps_pixel_test on NVIDIA GPU on Linux (retry summary)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>failures:<br/>maps_pixel_test on NVIDIA GPU on Linux (entire test suite)<br/>@@@",
       "@@@STEP_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"ee830a073deb60c4db65dd980b11aa053a98ba25\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"ee4223db6cfe570efbddb3d86d1b3383610a11a2\"@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "1 out of 1 aggregated steps failed. Failures: Step('maps_pixel_test on NVIDIA GPU on Linux') failed with return_code 1",
+    "reason": "1 out of 1 aggregated steps failed. Failures: Step('maps_pixel_test on NVIDIA GPU on Linux (retry summary)') failed with return_code 1",
     "status_code": 1
   }
 ]

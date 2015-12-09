@@ -509,18 +509,18 @@
       "import sys; sys.exit(1)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "webkit_tests",
+    "name": "webkit_tests (retry summary)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/>@@@",
       "@@@STEP_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"37e83d2b25b93551efc3a64c06c7c9c349ae06c9\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"c3c333c07f535499b5146eecbf978c6b4f5b7535\"@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "1 out of 1 aggregated steps failed. Failures: Step('webkit_tests') failed with return_code 1",
+    "reason": "1 out of 1 aggregated steps failed. Failures: Step('webkit_tests (retry summary)') failed with return_code 1",
     "status_code": 1
   }
 ]

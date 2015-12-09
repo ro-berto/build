@@ -2816,7 +2816,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "AndroidWebViewTest",
+    "name": "AndroidWebViewTest (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_WARNINGS@@@"
@@ -2829,7 +2829,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "ContentShellTest",
+    "name": "ContentShellTest (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_WARNINGS@@@"
@@ -2842,7 +2842,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "ChromePublicTest",
+    "name": "ChromePublicTest (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_WARNINGS@@@"
@@ -2855,7 +2855,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "ChromeSyncShellTest",
+    "name": "ChromeSyncShellTest (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_WARNINGS@@@"
@@ -2868,7 +2868,7 @@
       "import sys; sys.exit(1)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "base_unittests",
+    "name": "base_unittests (retry summary)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
@@ -2883,7 +2883,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "junit_unit_tests",
+    "name": "junit_unit_tests (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_WARNINGS@@@"
@@ -2896,7 +2896,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "chrome_junit_tests",
+    "name": "chrome_junit_tests (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_WARNINGS@@@"
@@ -2909,7 +2909,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "content_junit_tests",
+    "name": "content_junit_tests (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_WARNINGS@@@"
@@ -3009,12 +3009,12 @@
       "@@@STEP_LOG_LINE@python.inline@      print l@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
       "@@@STEP_LOG_END@python.inline@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"01e67cd697806ea33f239ac8c503b9ca0c020466\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"f70a31cd238c86b35b0a8c2c2d85034113dc9f60\"@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "1 out of 8 aggregated steps failed. Failures: Step('base_unittests') failed with return_code 1",
+    "reason": "1 out of 8 aggregated steps failed. Failures: Step('base_unittests (retry summary)') failed with return_code 1",
     "status_code": 1
   }
 ]
