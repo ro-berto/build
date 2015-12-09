@@ -896,6 +896,7 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Arm - builder',
+        'build_gs_archive': 'arm_rel_archive',
         'tests': [
           V8Testing,
           Benchmarks,
@@ -904,12 +905,6 @@ BUILDERS = {
           MjsunitIgnition,
           Test262Ignition,
         ],
-        'enable_swarming': True,
-        'slim_swarming_tester': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-          'cpu': 'armv7l',
-        },
         'testing': {'platform': 'linux'},
       },
       'V8 Arm - debug': {
