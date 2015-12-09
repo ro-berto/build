@@ -113,6 +113,27 @@
             ]
           }
         }
+      },
+      {
+        "close_tree": false,
+        "tree_notify": [
+          "chrome-troopers+codesearch@google.com"
+        ],
+
+        "subject_template": "Codesearch build failure on %(builder_name)s",
+
+        "builders": {
+          "Chromium Linux Codesearch": {
+            "excluded_steps": [
+              "run translation_unit clang tool"
+            ]
+          },
+          "ChromiumOS Codesearch": {
+            "excluded_steps": [
+              "run translation_unit clang tool"
+            ]
+          }
+        }
       }
     ],
     "https://build.chromium.org/p/chromium.infra": [
