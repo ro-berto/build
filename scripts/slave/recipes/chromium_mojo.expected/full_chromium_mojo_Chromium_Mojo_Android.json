@@ -142,8 +142,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "mandoline:all",
-      "mash/wm:tests"
+      "mandoline:all"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

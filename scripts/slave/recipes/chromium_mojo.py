@@ -231,7 +231,10 @@ def RunSteps(api):
                       api.properties.get('buildername'),
                       use_goma=True)
 
-  api.chromium.compile(targets=['mandoline:all', 'mash/wm:tests'])
+  compile_targets = ['mandoline:all']
+  if api.chromium.c.TARGET_PLATFORM != 'android':
+    compile_targets.append('mash/wm:tests')
+  api.chromium.compile(targets=compile_targets)
 
   if api.chromium.c.TARGET_PLATFORM == 'android':
     api.chromium_android.detect_and_setup_devices()
