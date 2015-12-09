@@ -23,7 +23,6 @@ def Update(c):
   )
   specs = [
     {'name': 'Win Builder', 'category': 'win'},
-    {'name': 'WinXP Tester', 'category': 'win'},
     {'name': 'Win7 Tester', 'category': 'win'},
     {'name': 'Win8 Tester', 'category': 'win'},
     {'name': 'Win10 Tester', 'category': 'win'},

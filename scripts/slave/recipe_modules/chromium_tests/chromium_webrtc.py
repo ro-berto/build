@@ -81,8 +81,7 @@ class WebRTCTest(steps.GTestTest):
 
 
 def TestSpec(parent_builder, perf_id, platform, target_bits,
-             disable_runhooks=False, build_config='Release',
-             gclient_config='chromium_webrtc',
+             build_config='Release', gclient_config='chromium_webrtc',
              test_spec_file='chromium.webrtc.json'):
   spec = BaseSpec(
       bot_type='tester',
@@ -93,12 +92,6 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
       build_config=build_config)
 
   spec['parent_buildername'] = parent_builder
-
-  # TODO(kjellander): Re-enable hooks everywhere on as soon we've moved away
-  # from downloading test resources in that step. It would ideally be done as a
-  # separate build step instead of relying on the webrtc.DEPS solution.
-  if disable_runhooks:
-    spec['disable_runhooks'] = True
 
   spec['test_generators'] = [
     steps.generate_gtest,
@@ -115,10 +108,6 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
           android_isolate_path='content/content_browsertests.isolate'),
     ]
   else:
-    # The WinXP testers doesn't run the audio quality perf test.
-    if 'xp' in perf_id:
-      perf_id = None
-
     spec['tests'] = [
       WebRTCTest('content_browsertests',
                  args=['--gtest_filter=WebRtc*', '--run-manual',
@@ -149,19 +138,16 @@ def AddBuildSpec(name, platform, target_bits=64):
   _builders[platform][target_bits] = name
 
 
-def AddTestSpec(name, perf_id, platform, target_bits=64,
-                disable_runhooks=False):
+def AddTestSpec(name, perf_id, platform, target_bits=64):
   parent_builder = _builders[platform][target_bits]
   SPEC['builders'][name] = TestSpec(parent_builder, perf_id, platform,
-                                    target_bits, disable_runhooks)
+                                    target_bits)
 
 
 AddBuildSpec('Win Builder', 'win', target_bits=32)
 AddBuildSpec('Mac Builder', 'mac')
 AddBuildSpec('Linux Builder', 'linux')
 
-AddTestSpec('WinXP Tester', 'chromium-webrtc-rel-xp', 'win', target_bits=32,
-            disable_runhooks=True)
 AddTestSpec('Win7 Tester', 'chromium-webrtc-rel-7', 'win', target_bits=32)
 AddTestSpec('Win8 Tester', 'chromium-webrtc-rel-win8', 'win', target_bits=32)
 AddTestSpec('Win10 Tester', 'chromium-webrtc-rel-win10', 'win', target_bits=32)

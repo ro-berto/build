@@ -54,14 +54,13 @@ def AddBuildSpec(name, platform, target_bits=64, build_config='Release'):
 
 
 def AddTestSpec(name, perf_id, platform, target_bits=64,
-                build_config='Release', disable_runhooks=False):
+                build_config='Release'):
   parent_builder = _builders[platform][target_bits]
   SPEC['builders'][name] = chromium_webrtc.TestSpec(
       parent_builder,
       perf_id,
       platform,
       target_bits,
-      disable_runhooks,
       build_config,
       gclient_config='chromium_webrtc_tot',
       test_spec_file='chromium.webrtc.fyi.json')
@@ -74,8 +73,6 @@ AddBuildSpec('Android Builder (dbg)', 'android', target_bits=32,
              build_config='Debug')
 AddBuildSpec('Android Builder ARM64 (dbg)', 'android', build_config='Debug')
 
-AddTestSpec('WinXP Tester', 'chromium-webrtc-trunk-tot-rel-winxp', 'win',
-            target_bits=32, disable_runhooks=True)
 AddTestSpec('Win7 Tester', 'chromium-webrtc-trunk-tot-rel-win7', 'win',
             target_bits=32)
 AddTestSpec('Win10 Tester', 'chromium-webrtc-trunk-tot-rel-win10', 'win',
