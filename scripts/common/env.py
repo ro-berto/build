@@ -328,7 +328,7 @@ def GetEnvPythonPath():
   """
   pythonpath = os.environ.get('PYTHONPATH')
   if not pythonpath:
-    return PythonPath.FromPaths()
+    return PythonPath()
   return PythonPath.FromPathStr(pythonpath)
 
 
@@ -343,7 +343,7 @@ def GetMasterPythonPath(master_dir):
 
 def GetBuildPythonPath():
   """Returns (PythonPath): The Chrome Infra build path."""
-  build_path = PythonPath.FromPaths()
+  build_path = PythonPath()
   for extension_dir in (
       Build,
       BuildInternal,

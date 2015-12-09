@@ -16,9 +16,11 @@ import os
 import subprocess
 import sys
 
-# Import 'common.env' to load our Infra PYTHONPATH
-sys.path.insert(0, os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), os.pardir))
+# Directory where this script (runit.py) lives (i.e. scripts/tools)
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+
+# Import 'common.env' from 'scripts' directory to load our Infra PYTHONPATH
+sys.path.insert(0, os.path.dirname(SCRIPT_DIR))
 import common.env
 
 USAGE = '%s [options] <command to run>' % os.path.basename(sys.argv[0])
@@ -42,9 +44,7 @@ def main():
       print 'Set PYTHONPATH: %s' % os.environ['PYTHONPATH']
     # Use subprocess instead of execv because otherwise windows destroys
     # quoting.
-    p = subprocess.Popen(args)
-    p.wait()
-    return p.returncode
+    return subprocess.call(args)
 
 
 if __name__ == '__main__':
