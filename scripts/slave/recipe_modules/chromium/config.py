@@ -519,10 +519,6 @@ def trybot_flavor(c):
   dcheck(c, optional=True)
 
 @config_ctx()
-def gn_component_build(c):
-  c.gn_args.append('is_component_build=true')
-
-@config_ctx()
 def gn_minimal_symbols(c):
   c.gn_args.append('symbol_level=1')
 

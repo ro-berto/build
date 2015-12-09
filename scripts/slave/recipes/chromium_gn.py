@@ -87,27 +87,6 @@ BUILDERS = freeze({
       },
     },
   },
-  'chromium.webrtc.fyi': {
-    'builders': {
-      'Linux GN': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-        'gclient_apply_config': ['chromium_webrtc_tot'],
-      },
-      'Linux GN (dbg)': {
-        'chromium_apply_config': ['gn_component_build'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-        'gclient_apply_config': ['chromium_webrtc_tot'],
-      },
-    },
-  },
 })
 
 def tests_in_compile_targets(api, compile_targets, tests):

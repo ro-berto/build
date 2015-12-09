@@ -17,8 +17,6 @@ def Update(c):
     'Android GN',
     'Android GN (dbg)',
     'Linux Builder',
-    'Linux GN',
-    'Linux GN (dbg)',
     'Mac Builder',
     'Mac GN',
     'Mac GN (dbg)',
@@ -72,18 +70,6 @@ def Update(c):
     },
     {'name': 'Linux Builder', 'category': 'linux'},
     {'name': 'Linux Tester', 'category': 'linux'},
-    {
-      'name': 'Linux GN',
-      'recipe': 'chromium_gn',
-      'category': 'linux',
-      'slavebuilddir': 'linux_gn',
-    },
-    {
-      'name': 'Linux GN (dbg)',
-      'recipe': 'chromium_gn',
-      'category': 'linux',
-      'slavebuilddir': 'linux_gn',
-    },
     {'name': 'Android Builder (dbg)', 'category': 'android'},
     {
       'name': 'Android Builder ARM64 (dbg)',
