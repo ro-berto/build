@@ -105,6 +105,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -195,16 +196,18 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/gyp_chromium",
-      "--analyzer",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "analyze",
+      "-m",
+      "tryserver.chromium.android",
+      "-b",
+      "android_blink_rel",
+      "-v",
+      "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"blink_heap_unittests_apk\", \"blink_tests\", \"webkit_unit_tests_apk\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1"
-    },
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_TEXT@No compile necessary@@@",

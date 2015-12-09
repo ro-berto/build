@@ -122,7 +122,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
+      "GYP_CHROMIUM_NO_ACTION": "1",
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -195,6 +196,27 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "clean isolated files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
+      "gen",
+      "-m",
+      "chromium.webkit",
+      "-b",
+      "WebKit Win x64 Builder",
+      "--config-file",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]\\goma",
+      "--swarming-targets-file",
+      "browser_tests\n",
+      "//out/Release_x64"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files"
   },
   {
     "cmd": [
