@@ -243,6 +243,24 @@ class IsolateApi(recipe_api.RecipeApi):
         webkit_revision=webkit_revision,
         **runtest_kwargs)
 
+  def run_telemetry_test(self, isolate_name, test, revision, webkit_revision,
+                         **runtest_kwargs):
+    """Runs a Telemetry test which has previously isolated to the server.
+
+    Uses runtest_args_list, above, and delegates to
+    api.chromium.run_telemetry_test.
+    """
+    self.m.chromium.run_telemetry_test(
+        self._run_isolated_path,
+        test,
+        # When running the Telemetry test via an isolate we need to tell
+        # run_isolated.py the hash and isolate server first, and then give
+        # the isolate the test name and other arguments separately.
+        prefix_args=self.runtest_args_list(isolate_name),
+        revision=revision,
+        webkit_revision=webkit_revision,
+        **runtest_kwargs)
+
   def remove_build_metadata(self):
     """Removes the build metadata embedded in the build artifacts."""
     args = [

@@ -230,7 +230,7 @@
       "linux_chromium_rel_ng",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [\"chromium_swarm_tests\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"angle_unittests_run\", \"base_unittests\", \"content_gl_tests_run\", \"gl_tests_run\", \"gl_unittests_run\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_new_test_run\"]}",
+      "{\"additional_compile_targets\": [\"chromium_swarm_tests\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"angle_unittests_run\", \"base_unittests\", \"chrome\", \"content_gl_tests_run\", \"gl_tests_run\", \"gl_unittests_run\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",

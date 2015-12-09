@@ -10,6 +10,12 @@ GPU_ISOLATES = (
   'gles2_conform_test',
   'gpu_unittests',
   'tab_capture_end2end_tests',
+  'telemetry_gpu_test',
+)
+
+# This is temporary until the bots have all switched over to the new
+# isolate.
+TELEMETRY_GPU_NEW_ISOLATE = (
   'telemetry_gpu_new_test',
 )
 

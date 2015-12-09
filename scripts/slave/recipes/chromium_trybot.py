@@ -833,7 +833,7 @@ def GenTests(api):
 
   gpu_targets = ['angle_unittests_run', 'chrome', 'chromium_builder_tests',
                  'content_gl_tests_run', 'gl_tests_run',
-                 'tab_capture_end2end_tests_run', 'telemetry_gpu_new_test_run']
+                 'tab_capture_end2end_tests_run', 'telemetry_gpu_test_run']
   yield (
     api.test('gpu_tests') +
     props(
@@ -843,18 +843,31 @@ def GenTests(api):
     api.platform.name('mac') +
     api.override_step_data(
         'pixel_test on Intel GPU on Mac (with patch)',
-        api.test_utils.canned_isolated_script_output(
-            passing=False, is_win=False, swarming=True,
-            isolated_script_passing=False)) +
+        api.test_utils.canned_telemetry_gpu_output(
+            passing=False, is_win=False, swarming=True)) +
     api.override_step_data(
         'pixel_test on Intel GPU on Mac (without patch)',
-        api.test_utils.canned_isolated_script_output(
-            passing=False, is_win=False, swarming=True,
-            isolated_script_passing=False)) +
+        api.test_utils.canned_telemetry_gpu_output(
+            passing=False, is_win=False, swarming=True)) +
     api.override_step_data('analyze',
                            api.json.output({'status': 'Found dependency',
                                             'compile_targets': gpu_targets,
                                             'test_targets': gpu_targets}))
+  )
+
+  yield (
+    api.test('telemetry_gpu_no_summary') +
+    props(
+      mastername='tryserver.chromium.mac',
+      buildername='mac_chromium_rel_ng',
+    ) +
+    api.platform.name('mac') +
+    api.override_step_data('pixel_test on Intel GPU on Mac (with patch)',
+                           api.raw_io.output_dir({'0/results.json': ''})) +
+    api.override_step_data('analyze',
+                           api.json.output({'status': 'Found dependency',
+                                            'test_targets': gpu_targets,
+                                            'compile_targets': gpu_targets}))
   )
 
   yield (
@@ -866,8 +879,9 @@ def GenTests(api):
     api.platform.name('linux') +
     api.override_step_data(
         'maps_pixel_test on NVIDIA GPU on Linux (with patch) on Linux',
-        api.test_utils.canned_isolated_script_output(
-            passing=False, is_win=False, swarming=True),
+        api.test_utils.canned_telemetry_gpu_output(
+            passing=False, is_win=False, swarming=True,
+            empty_per_page_values=True),
         retcode=255) +
     api.override_step_data('analyze',
                            api.json.output({'status': 'Found dependency',
@@ -884,9 +898,29 @@ def GenTests(api):
     api.platform.name('mac') +
     api.override_step_data(
         'pixel_test on Intel GPU on Mac (with patch)',
-        api.test_utils.canned_isolated_script_output(
-            passing=False, is_win=False, swarming=True,
-            swarming_internal_failure=True)) +
+        api.raw_io.output_dir({
+          '0/results.json': '',
+          'summary.json': '{"shards": [{"internal_failure": true}]}'
+        })) +
+    api.override_step_data('analyze',
+                           api.json.output({'status': 'Found dependency',
+                                            'test_targets': gpu_targets,
+                                            'compile_targets': gpu_targets}))
+  )
+
+  yield (
+    api.test('telemetry_gpu_no_results') +
+    props(
+      mastername='tryserver.chromium.mac',
+      buildername='mac_chromium_rel_ng',
+    ) +
+    api.platform.name('mac') +
+    api.override_step_data(
+        'pixel_test on Intel GPU on Mac (with patch)',
+        api.raw_io.output_dir({
+          '0/results.json': '',
+          'summary.json': '{"shards": [{"internal_failure": false}]}'
+        })) +
     api.override_step_data('analyze',
                            api.json.output({'status': 'Found dependency',
                                             'test_targets': gpu_targets,
@@ -903,7 +937,7 @@ def GenTests(api):
     # passing=True, but exit code != 0.
     api.override_step_data(
         'pixel_test on Intel GPU on Mac (with patch)',
-        api.test_utils.canned_isolated_script_output(
+        api.test_utils.canned_telemetry_gpu_output(
             passing=True, is_win=False, swarming=True),
         retcode=255
     ) +
