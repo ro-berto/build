@@ -17,19 +17,18 @@ import mock
 
 from resources import fetch_intervening_revisions
 
-_TEST_DATA_PATH = os.path.join(os.path.dirname(__file__), 'test_data')
-_MOCK_RESPONSE_PATH = os.path.join(_TEST_DATA_PATH, 'MOCK_RANGE_RESPONSE_FILE')
+_TEST_DATA = os.path.join(os.path.dirname(__file__), 'test_data')
 
 
 class FetchInterveningRevisionsTest(unittest.TestCase):
 
-  def testRevisionRange(self):
-    start = '53fc07eb478520a80af6bf8b62be259bb55db0f1'
-    end = 'c89130e28fd01062104e1be7f3a6fc3abbb80ca9'
-    with mock.patch('urllib2.urlopen', mock.MagicMock(
-        return_value=open(_MOCK_RESPONSE_PATH))):
+  def test_fetch_intervening_revisions(self):
+    response = open(os.path.join(_TEST_DATA, 'MOCK_RANGE_RESPONSE_1'))
+    with mock.patch('urllib2.urlopen', mock.MagicMock(return_value=response)):
       revs = fetch_intervening_revisions.fetch_intervening_revisions(
-          start, end, depot_name='chromium')
+          '53fc07eb478520a80af6bf8b62be259bb55db0f1',
+          'c89130e28fd01062104e1be7f3a6fc3abbb80ca9',
+          depot_name='chromium')
     self.assertEqual(
         revs, [
             ('32ce3b13924d84004a3e05c35942626cbe93cbbd', '356382'),
@@ -50,6 +49,25 @@ class FetchInterveningRevisionsTest(unittest.TestCase):
             ('3861789af25e2d3502f0fb7080da5785d31308aa', '356397'),
             ('6feaa73a54d0515ad2940709161ca0a5ad91d1f8', '356398'),
             ('2e93263dc74f0496100435e1fd7232e9e8323af0', '356399')
+        ])
+
+  def test_fetch_intervening_revisions_pagination(self):
+
+    def mock_urlopen(url):
+      if 's=' not in url:
+        return open(os.path.join(_TEST_DATA, 'MOCK_RANGE_RESPONSE_2_PAGE_1'))
+      return open(os.path.join(_TEST_DATA, 'MOCK_RANGE_RESPONSE_2_PAGE_2'))
+
+    with mock.patch('urllib2.urlopen', mock_urlopen):
+      revs = fetch_intervening_revisions.fetch_intervening_revisions(
+          '7bd1741893bd4e233b5562a6926d7e395d558343',
+          '3861789af25e2d3502f0fb7080da5785d31308aa',
+          depot_name='chromium')
+    self.assertEqual(
+        revs, [
+            ('ee261f306c3c66e96339aa1026d62a6d953302fe', '356394'),
+            ('f1c777e3f97a16cc6a3aa922a23602fa59412989', '356395'),
+            ('8fcc8af20a3d41b0512e3b1486e4dc7de528a72b', '356396'),
         ])
 
 

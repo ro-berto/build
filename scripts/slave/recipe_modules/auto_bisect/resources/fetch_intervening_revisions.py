@@ -7,8 +7,11 @@
 """Gets list of revisions between two commits and their commit positions.
 
 Example usage:
-  ./fetch_intervening_revisions.py 343b531d31 7b43807df3
-  ./fetch_intervening_revisions.py 235eff9574 1e4681c33f --depot v8
+  ./fetch_intervening_revisions.py 343b531d31 7b43807df3 chromium
+  ./fetch_intervening_revisions.py 235eff9574 1e4681c33f v8
+
+Note: Another implementation of this functionality can be found in
+findit/common/git_repository.py (https://goo.gl/Rr8j9O).
 """
 
 import argparse
@@ -19,12 +22,13 @@ import sys
 import urllib2
 
 _GITILES_PADDING = ')]}\'\n'
-_URL_TEMPLATE = 'https://chromium.googlesource.com/%s/+log/%s..%s?format=json'
+_URL_TEMPLATE = ('https://chromium.googlesource.com/%s/+log/%s..%s'
+                 '?format=json&n=%d')
 
 # Gitiles paginates the list of commits; since we want to get all of the
 # commits at once, the page size should be larger than the largest revision
 # range that we expect to get.
-_PAGE_SIZE = 2048
+_PAGE_SIZE = 512
 
 _DEPOT_PATH_MAP = {
     'chromium': 'chromium/src',
@@ -33,12 +37,12 @@ _DEPOT_PATH_MAP = {
     'skia': 'skia',
 }
 
-def fetch_intervening_revisions(min_rev, max_rev, depot_name):
+def fetch_intervening_revisions(start, end, depot_name):
   """Fetches a list of revision in between two commits.
 
   Args:
-    min_rev (str): A git commit hash in the Chromium src repository.
-    max_rev (str): Another git commit hash, after min_rev.
+    start (str): A git commit hash in the Chromium src repository.
+    end (str): Another git commit hash, after start.
     depot_name (str): A respository name.
 
   Returns:
@@ -51,14 +55,34 @@ def fetch_intervening_revisions(min_rev, max_rev, depot_name):
     ValueError: The response wasn't valid JSON.
     KeyError: The JSON didn't contain the expected data.
   """
-  url = _URL_TEMPLATE % (_DEPOT_PATH_MAP[depot_name], min_rev, max_rev)
-  url += '&n=%d' % _PAGE_SIZE
-  response = urllib2.urlopen(url).read()
-  response_json = response[len(_GITILES_PADDING):]  # Remove padding.
-  response_dict = json.loads(response_json)
-  intervening_revisions = response_dict['log'][1:]
-  return [(r['commit'], _commit_position_from_message(r['message']))
-          for r in reversed(intervening_revisions)]
+  revisions = _fetch_range_from_gitiles(start, end, depot_name)
+  # The response from gitiles includes the end revision and is ordered
+  # from latest to earliest.
+  return [_commit_pair(r) for r in reversed(revisions[1:])]
+
+
+def _fetch_range_from_gitiles(start, end, depot_name):
+  """Fetches a list of revision dicts from gitiles.
+
+  Make multiple requests to get multiple pages, if necessary.
+  """
+  revisions = []
+  url = _URL_TEMPLATE % (_DEPOT_PATH_MAP[depot_name], start, end, _PAGE_SIZE)
+  current_page_url = url
+  while True:
+    response = urllib2.urlopen(current_page_url).read()
+    response_json = response[len(_GITILES_PADDING):]  # Remove padding.
+    response_dict = json.loads(response_json)
+    revisions.extend(response_dict['log'])
+    if 'next' not in response_dict:
+      break
+    current_page_url = url + '&s=' + response_dict['next']
+  return revisions
+
+
+def _commit_pair(commit_dict):
+  return (commit_dict['commit'],
+          _commit_position_from_message(commit_dict['message']))
 
 
 def _commit_position_from_message(message):
@@ -70,14 +94,13 @@ def _commit_position_from_message(message):
 
 def main():
   parser = argparse.ArgumentParser()
-  parser.add_argument('min_rev')
-  parser.add_argument('max_rev')
-  parser.add_argument(
-      '--depot', default='chromium', choices=list(_DEPOT_PATH_MAP))
+  parser.add_argument('start')
+  parser.add_argument('end')
+  parser.add_argument('depot', choices=list(_DEPOT_PATH_MAP))
   args = parser.parse_args()
-  revisions = fetch_intervening_revisions(
-      args.min_rev, args.max_rev, args.depot)
-  print json.dumps(revisions)
+  revision_pairs = fetch_intervening_revisions(
+      args.start, args.end, args.depot)
+  print json.dumps(revision_pairs)
 
 
 if __name__ == '__main__':
