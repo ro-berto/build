@@ -112,41 +112,6 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     ret.retcode = retcode
     return ret
 
-  def canned_telemetry_gpu_output(self, passing, is_win, swarming=False,
-                                  empty_per_page_values=False):
-    """Produces a 'json test results' compatible object for telemetry tests."""
-    if empty_per_page_values:
-      jsonish_results = {
-          'per_page_values': [],
-          'pages': { },
-      }
-    else:
-      jsonish_results = {
-        'per_page_values': [{'type': 'success' if passing else 'failure',
-                             'page_id': 0},
-                            {'type': 'success',
-                             'page_id': 1}],
-        'pages': {'0': {'name': 'Test.Test1'},
-                  '1': {'name': 'Test.Test2'}},
-      }
-
-    jsonish_summary = {
-      'shards': [
-        {
-          'failure': not passing,
-          'internal_failure': False
-        }
-      ]
-    }
-
-    swarming_path = '0\\results.json' if is_win else '0/results.json'
-    results_path = swarming_path if swarming else 'results.json'
-    files_dict = {
-      results_path: json.dumps(jsonish_results),
-      'summary.json': json.dumps(jsonish_summary)
-    }
-    return self.m.raw_io.output_dir(files_dict)
-
   def canned_isolated_script_output(self, passing, is_win, swarming=False,
                                     swarming_internal_failure=False,
                                     isolated_script_passing=True, valid=True):

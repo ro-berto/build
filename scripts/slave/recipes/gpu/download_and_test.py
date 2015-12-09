@@ -85,8 +85,9 @@ def GenTests(api):
     api.platform.name('linux') +
     api.step_data('content_gl_tests', retcode=1) +
     api.step_data('maps_pixel_test',
-        api.test_utils.canned_telemetry_gpu_output(
-            passing=False, is_win=False, swarming=False))
+        api.test_utils.canned_isolated_script_output(
+            passing=False, is_win=False, swarming=False,
+            isolated_script_passing=False))
   )
 
   yield (
@@ -94,9 +95,8 @@ def GenTests(api):
     props('linux', 'Release') +
     api.platform.name('linux') +
     api.step_data('maps_pixel_test',
-        api.test_utils.canned_telemetry_gpu_output(
-            passing=False, is_win=False, swarming=False,
-            empty_per_page_values=True),
+        api.test_utils.canned_isolated_script_output(
+            passing=False, is_win=False, swarming=False),
         retcode=255)
   )
 

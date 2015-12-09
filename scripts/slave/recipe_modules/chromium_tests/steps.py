@@ -1028,7 +1028,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     return True
 
   def create_task(self, api, suffix, isolated_hash):
-    # For local tests args are added inside api.chromium.run_telemetry_test.
     browser_config = api.chromium.c.build_config_fs.lower()
     args = self._args[:]
 
@@ -1210,8 +1209,6 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
         'third_party', 'WebKit', 'Tools', 'Scripts', 'run-webkit-tests')
     args.extend(['--platform', platform_arg])
 
-    # This is similar to how api.chromium.run_telemetry_test() sets the
-    # environment variable for the sandbox.
     env = {}
     if api.platform.is_linux:
       env['CHROME_DEVEL_SANDBOX'] = api.path.join(
@@ -1233,50 +1230,6 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
       targets.append('crash_service')
 
     return targets
-
-
-class TelemetryGPUTest(Test):  # pylint: disable=W0232
-  def __init__(self, name, revision=None, webkit_revision=None,
-               target_name=None, args=None, enable_swarming=False,
-               swarming_dimensions=None, swarming_extra_suffix=None,
-               **runtest_kwargs):
-    if enable_swarming:
-      self._test = SwarmingTelemetryGPUTest(
-          name, args=args, dimensions=swarming_dimensions,
-          target_name=target_name, extra_suffix=swarming_extra_suffix)
-    else:
-      self._test = LocalTelemetryGPUTest(
-          name, revision, webkit_revision, args=args, target_name=target_name,
-          **runtest_kwargs)
-
-  @property
-  def name(self):
-    return self._test.name
-
-  def isolate_target(self, api):
-    return self._test.isolate_target(api)
-
-  def compile_targets(self, api):
-    return self._test.compile_targets(api)
-
-  def pre_run(self, api, suffix):
-    return self._test.pre_run(api, suffix)
-
-  def run(self, api, suffix):
-    return self._test.run(api, suffix)
-
-  def post_run(self, api, suffix):
-    return self._test.post_run(api, suffix)
-
-  def has_valid_results(self, api, suffix):
-    return self._test.has_valid_results(api, suffix)
-
-  def failures(self, api, suffix):
-    return self._test.failures(api, suffix)
-
-  @property
-  def uses_swarming(self):
-    return self._test.uses_swarming
 
 
 class BisectTest(Test):  # pylint: disable=W0232
@@ -1313,143 +1266,6 @@ class BisectTest(Test):  # pylint: disable=W0232
 
   def failures(self, *_):
     return self._failures  # pragma: no cover
-
-
-class LocalTelemetryGPUTest(Test):  # pylint: disable=W0232
-  def __init__(self, name, revision, webkit_revision,
-               target_name=None, **runtest_kwargs):
-    """Constructs an instance of LocalTelemetryGPUTest.
-
-    Args:
-      name: Displayed name of the test. May be modified by suffixes.
-      revision: Revision of the Chrome checkout.
-      webkit_revision: Revision of the WebKit checkout.
-      target_name: Actual name of the test. Defaults to name.
-      runtest_kwargs: Additional keyword args forwarded to the runtest.
-    """
-    super(LocalTelemetryGPUTest, self).__init__()
-    self._name = name
-    self._target_name = target_name
-    self._revision = revision
-    self._webkit_revision = webkit_revision
-    self._failures = {}
-    self._valid = {}
-    self._runtest_kwargs = runtest_kwargs
-
-  @property
-  def name(self):
-    return self._name
-
-  @property
-  def target_name(self):
-    return self._target_name or self._name
-
-  def isolate_target(self, _api):
-    return self.target_name  # pragma: no cover
-
-  def compile_targets(self, _):
-    # TODO(sergiyb): Build 'chrome_public_apk' instead of 'chrome' on Android.
-    return ['chrome', 'telemetry_gpu_test_run']  # pragma: no cover
-
-  def run(self, api, suffix):  # pylint: disable=R0201
-    kwargs = self._runtest_kwargs.copy()
-    kwargs['args'].extend(['--output-format', 'json',
-                           '--output-dir', api.raw_io.output_dir()])
-    step_test_data=lambda: api.test_utils.test_api.canned_telemetry_gpu_output(
-        passing=True, is_win=api.platform.is_win)
-    try:
-      api.isolate.run_telemetry_test(
-          'telemetry_gpu_test',
-          self.target_name,
-          self._revision,
-          self._webkit_revision,
-          name=self._step_name(suffix),
-          spawn_dbus=True,
-          step_test_data=step_test_data,
-          **self._runtest_kwargs)
-    finally:
-      step_result = api.step.active_result
-      self._test_runs[suffix] = step_result
-
-      try:
-        res = api.json.loads(step_result.raw_io.output_dir['results.json'])
-        failures = [res['pages'][str(value['page_id'])]['name']
-                   for value in res['per_page_values']
-                   if value['type'] == 'failure']
-        if not failures and step_result.retcode != 0:
-          failures = ['%s (entire test suite)' % self.name]
-
-        self._failures[suffix] = failures
-        self._valid[suffix] = True
-      except (ValueError, KeyError, AttributeError):  # pragma: no cover
-        self._valid[suffix] = False
-
-      if self._valid[suffix]:
-        step_result.presentation.step_text += api.test_utils.format_step_text([
-          ['failures:', self._failures[suffix]]
-        ])
-
-  def has_valid_results(self, api, suffix):
-    return suffix in self._valid and self._valid[suffix]  # pragma: no cover
-
-  def failures(self, api, suffix):  # pragma: no cover
-    assert self.has_valid_results(api, suffix)
-    assert suffix in self._failures
-    return self._failures[suffix]
-
-
-class SwarmingTelemetryGPUTest(SwarmingTest):
-  def __init__(self, name, args=None, dimensions=None, target_name=None,
-               extra_suffix=None):
-    super(SwarmingTelemetryGPUTest, self).__init__(
-        name, dimensions, {'gpu_test:1'}, 'telemetry_gpu_test', extra_suffix)
-    self._args = args
-    self._telemetry_target_name = target_name or name
-
-  def compile_targets(self, _):
-    # TODO(sergiyb): Build 'chrome_public_apk' instead of 'chrome' on Android.
-    return ['chrome', 'telemetry_gpu_test_run']
-
-  def create_task(self, api, suffix, isolated_hash):
-    # For local tests args are added inside api.chromium.run_telemetry_test.
-    browser_config = api.chromium.c.build_config_fs.lower()
-    args = [self._telemetry_target_name, '--show-stdout',
-            '--browser=%s' % browser_config] + self._args
-
-    # If rerunning without a patch, run only tests that failed.
-    if suffix == 'without patch':
-      failed_tests = sorted(self.failures(api, 'with patch'))
-      # Telemetry test launcher uses re.compile to parse --story-filter argument,
-      # therefore we escape any special characters in test names.
-      failed_tests = [re.escape(test_name) for test_name in failed_tests]
-      args.append('--story-filter=%s' % '|'.join(failed_tests))
-
-    return api.swarming.telemetry_gpu_task(
-        title=self._step_name(suffix), isolated_hash=isolated_hash,
-        extra_args=args)
-
-  def validate_task_results(self, api, step_result):
-    results = getattr(step_result, 'telemetry_results', None) or {}
-
-    try:
-      failures = [results['pages'][str(value['page_id'])]['name']
-                  for value in results['per_page_values']
-                  if value['type'] == 'failure']
-      if not failures and step_result.retcode != 0:
-        failures = ['%s (entire test suite)' % self.name]
-
-      valid = True
-    except (ValueError, KeyError) as e:  # pragma: no cover
-      step_result.presentation.logs['invalid_results_exc'] = [str(e)]
-      valid = False
-      failures = None
-
-    if valid:
-      step_result.presentation.step_text += api.test_utils.format_step_text([
-        ['failures:', failures]
-      ])
-
-    return valid, failures
 
 
 class AndroidTest(Test):
@@ -1729,7 +1545,9 @@ class BlinkTest(Test):
 
   def has_valid_results(self, api, suffix):
     if suffix not in self._test_runs:
-      return False
+      # TODO(kbr): crbug.com/553925 - this line is flakily failing to
+      # be covered.
+      return False  # pragma: no cover
     step = self._test_runs[suffix]
     # TODO(dpranke): crbug.com/357866 - note that all comparing against
     # MAX_FAILURES_EXIT_STATUS tells us is that we did not exit early
