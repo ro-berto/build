@@ -280,7 +280,7 @@ class Bisector(object):
       step_result = self.api.m.python(
           'for revisions %s:%s' % (min_rev, max_rev),
           self.api.resource('fetch_intervening_revisions.py'),
-          [min_rev, max_rev],
+          [min_rev, max_rev, 'chromium'],
           stdout=self.api.m.json.output())
       return step_result.stdout
     except self.api.m.step.StepFailure:  # pragma: no cover

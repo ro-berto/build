@@ -185,7 +185,8 @@
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/fetch_intervening_revisions.py",
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
-      "dcdcdc0ff1122212323134879ddceeb1240b0988"
+      "dcdcdc0ff1122212323134879ddceeb1240b0988",
+      "chromium"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Expanding revision range.for revisions 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111:dcdcdc0ff1122212323134879ddceeb1240b0988",
