@@ -92,7 +92,8 @@ class BuildRequestsConnectorComponent(base.DBConnectorComponent):
         always bypasses the cache.
 
         @param buildername: limit results to buildrequests for this builder
-        @type buildername: string
+        or multiple builders.
+        @type buildername: string or a list of strings
 
         @param complete: if true, limit to completed buildrequests; if false,
         limit to incomplete buildrequests; if None, do not limit based on
@@ -128,8 +129,10 @@ class BuildRequestsConnectorComponent(base.DBConnectorComponent):
                         (tbl.c.claimed_at != 0) &
                         (tbl.c.claimed_by_name != None) &
                         (tbl.c.claimed_by_incarnation != None))
-            if buildername is not None:
+            if isinstance(buildername, basestring):
                 q = q.where(tbl.c.buildername == buildername)
+            elif isinstance(buildername, list):
+                q = q.where(tbl.c.buildername.in_(buildername))
             if complete is not None:
                 if complete:
                     q = q.where(tbl.c.complete != 0)

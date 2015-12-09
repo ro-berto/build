@@ -163,9 +163,12 @@ class BuildbotGateway(object):
   @inlineCallbacks
   def get_incomplete_build_requests(self):
     """Returns not yet completed build requests from the database as Deferred.
+
+    Does not return build requests for non-existing builders.
     """
     build_request_dicts = yield self.master.db.buildrequests.getBuildRequests(
-        complete=False)
+        complete=False,
+        buildername=self.master.getStatus().getBuilderNames())
     requests = []
     for brdict in build_request_dicts:
       # TODO(nodir): optimize: run these queries in parallel.
