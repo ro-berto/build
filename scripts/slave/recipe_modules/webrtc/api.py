@@ -70,8 +70,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     },
   }
 
-  CONTENT_UNITTESTS_GTEST_FILTER = '*WebRtc*:*WebRTC*:*MediaStream'
-  BROWSER_TESTS_GTEST_FILTER = 'WebRtc*:Webrtc*:TabCapture*:*MediaStream*'
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
   @property
@@ -83,10 +81,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     return self.bot_type in ('tester', 'builder_tester')
 
   @property
-  def should_run_hooks(self):
-    return not self.bot_config.get('disable_runhooks')
-
-  @property
   def should_upload_build(self):
     return self.bot_config.get('triggers')
 
@@ -94,11 +88,9 @@ class WebRTCApi(recipe_api.RecipeApi):
   def should_download_build(self):
     return self.bot_config.get('parent_buildername')
 
-  def apply_bot_config(self, builders, recipe_configs, perf_config=None,
-                       git_hashes_as_perf_revisions=False):
+  def apply_bot_config(self, builders, recipe_configs, perf_config=None):
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
-    self.git_hashes_as_perf_revisions = git_hashes_as_perf_revisions
     master_dict = builders.get(mastername, {})
     self.master_config = master_dict.get('settings', {})
     perf_config = self.master_config.get('PERF_CONFIG')
@@ -130,9 +122,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     # Support applying configs both at the bot and the recipe config level.
     for c in self.bot_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
-    for c in self.recipe_config.get('chromium_apply_config', []):
-      self.m.chromium.apply_config(c)
-
     for c in self.bot_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
     for c in self.recipe_config.get('gclient_apply_config', []):
@@ -166,14 +155,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.revision_cp = revs['got_revision_cp']
     self.revision_number = str(self.m.commit_position.parse_revision(
         self.revision_cp))
-    self.perf_revision = (self.revision if self.git_hashes_as_perf_revisions
-                          else self.revision_number)
-
-    # Check for properties specific to our Chromium builds.
-    self.libjingle_revision = revs.get('got_libjingle_revision')
-    self.libjingle_revision_cp = revs.get('got_libjingle_revision_cp')
-    self.webrtc_revision = revs.get('got_webrtc_revision')
-    self.webrtc_revision_cp = revs.get('got_webrtc_revision_cp')
 
   def check_swarming_version(self):
     if self.c.enable_swarming:
@@ -225,14 +206,14 @@ class WebRTCApi(recipe_api.RecipeApi):
     env = env or {}
     if perf_test and self.c.PERF_ID:
       perf_dashboard_id = perf_dashboard_id or test
-      assert self.perf_revision, (
+      assert self.revision_number, (
           'A revision number must be specified for perf tests as they upload '
           'data to the perf dashboard.')
       self.m.chromium.runtest(
           test=test, args=args, name=name,
           results_url=self.DASHBOARD_UPLOAD_URL, annotate='graphing',
           xvfb=True, perf_dashboard_id=perf_dashboard_id,
-          test_type=perf_dashboard_id, env=env, revision=self.perf_revision,
+          test_type=perf_dashboard_id, env=env, revision=self.revision_number,
           perf_id=self.c.PERF_ID, perf_config=self.c.PERF_CONFIG)
     else:
       annotate = 'gtest'
@@ -266,13 +247,6 @@ class WebRTCApi(recipe_api.RecipeApi):
         'parent_got_revision': self.revision,
         'parent_got_revision_cp': self.revision_cp,
       }
-      if self.webrtc_revision:
-        properties.update({
-          'parent_got_libjingle_revision': self.libjingle_revision,
-          'parent_got_libjingle_revision_cp': self.libjingle_revision_cp,
-          'parent_got_webrtc_revision': self.webrtc_revision,
-          'parent_got_webrtc_revision_cp': self.webrtc_revision_cp,
-        })
       self.m.trigger(*[{
         'builder_name': builder_name,
         'properties': properties,

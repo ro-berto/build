@@ -47,35 +47,6 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
         WebCamTest('video_capture_tests', revision),
         BaremetalTest('webrtc_perf_tests', revision, perf_test=True),
     ])
-  elif test_suite == 'chromium':
-    # Add WebRTC-specific browser tests that don't run in the main Chromium
-    # waterfalls (marked as MANUAL_) since they rely on special setup and/or
-    # physical audio/video devices.
-    tests.extend([
-        ChromiumTest('content_browsertests',
-                   revision,
-                   args=['--gtest_filter=WebRtc*', '--run-manual',
-                         '--test-launcher-print-test-stdio=always',
-                         '--test-launcher-bot-mode'],
-                   perf_test=True),
-        ChromiumTest('browser_tests',
-            revision,
-            # These tests needs --test-launcher-jobs=1 since some of them are
-            # not able to run in parallel (due to the usage of the
-            # peerconnection server).
-            # TODO(phoglund): increasing timeout for the HD video quality test.
-            # The original timeout was 300000. See http://crbug.com/476865.
-            args = ['--gtest_filter=%s' % api.BROWSER_TESTS_GTEST_FILTER,
-                    '--run-manual', '--ui-test-action-max-timeout=350000',
-                    '--test-launcher-jobs=1',
-                    '--test-launcher-bot-mode',
-                    '--test-launcher-print-test-stdio=always'],
-            # The WinXP tester doesn't run the audio quality perf test.
-            perf_test='xp' not in api.c.PERF_ID),
-        ChromiumTest('content_unittests', revision,
-                     args = ['--gtest_filter=%s' %
-                             api.CONTENT_UNITTESTS_GTEST_FILTER]),
-    ])
   elif test_suite == 'android':
     for test, isolate_file_path in sorted(api.ANDROID_APK_TESTS.iteritems()):
       tests.append(AndroidTest(test, isolate_path=isolate_file_path))
@@ -133,18 +104,6 @@ class WebRTCTest(Test):
       api.add_test(name=self._name, revision=self._revision,
                    parallel=self._parallel, perf_test=self._perf_test,
                    **self._runtest_kwargs)
-
-
-
-# This will removed as soon our Chromium recipe is retired and test specs are
-# used instead.
-class ChromiumTest(WebRTCTest):
-  """A Chromium desktop test."""
-  def __init__(self, name, revision, **runtest_kwargs):
-    # These tests don't use our gtest-parallel script, as Chromium tests have
-    # their own build-in parallel test execution.
-    super(ChromiumTest, self).__init__(name, revision, parallel=False,
-                                       **runtest_kwargs)
 
 
 class BaremetalTest(WebRTCTest):
