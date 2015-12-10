@@ -308,7 +308,8 @@ class LocalGTestTest(Test):
 
     try:
       if is_android:
-        api.chromium_android.run_test_suite(self.target_name, **kwargs)
+        with api.chromium_android.logcat(self.name):
+          api.chromium_android.run_test_suite(self.target_name, **kwargs)
       elif self._use_isolate:
         api.isolate.runtest(self.target_name, self._revision,
                             self._webkit_revision, **kwargs)
@@ -1612,18 +1613,20 @@ class AndroidInstrumentationTest(AndroidTest):
       'per_iteration_data': [{'TestA': [{'status': 'SUCCESS'}]},
                              {'TestB': [{'status': 'FAILURE'}]}]
     }
-    api.chromium_android.run_instrumentation_suite(
-        self.name,
-        test_apk=api.chromium_android.apk_path(self._test_apk),
-        apk_under_test=api.chromium_android.apk_path(self._apk_under_test),
-        suffix=suffix,
-        isolate_file_path=self.isolate_file_path,
-        flakiness_dashboard=self._flakiness_dashboard,
-        annotation=self._annotation, except_annotation=self._except_annotation,
-        screenshot=self._screenshot, verbose=self._verbose, tool=self._tool,
-        host_driven_root=self._host_driven_root,
-        json_results_file=json_results_file,
-        step_test_data=lambda: api.json.test_api.output(mock_test_results))
+    with api.chromium_android.logcat(self.name):
+      api.chromium_android.run_instrumentation_suite(
+          self.name,
+          test_apk=api.chromium_android.apk_path(self._test_apk),
+          apk_under_test=api.chromium_android.apk_path(self._apk_under_test),
+          suffix=suffix,
+          isolate_file_path=self.isolate_file_path,
+          flakiness_dashboard=self._flakiness_dashboard,
+          annotation=self._annotation,
+          except_annotation=self._except_annotation,
+          screenshot=self._screenshot, verbose=self._verbose, tool=self._tool,
+          host_driven_root=self._host_driven_root,
+          json_results_file=json_results_file,
+          step_test_data=lambda: api.json.test_api.output(mock_test_results))
 
 
 class BlinkTest(Test):

@@ -29,6 +29,7 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     tests = List(inner_type=basestring),
     cr_build_android = Static(Path('[CHECKOUT]', 'build', 'android')),
     test_runner = Single(Path),
+    default_logcat_dir = Single(Path),
     gclient_custom_deps = Dict(value_type=(basestring, types.NoneType)),
     channel = Single(basestring, empty_val='chrome'),
     gclient_custom_vars = Dict(value_type=(basestring, types.NoneType)),
@@ -46,6 +47,7 @@ config_ctx = config_item_context(BaseConfig)
 
 @config_ctx(is_root=True)
 def base_config(c):
+  c.default_logcat_dir = Path('[CHECKOUT]', 'out', 'logcat_dir')
   c.internal_dir_name = 'clank'
   c.test_runner = Path('[CHECKOUT]', 'build', 'android', 'test_runner.py')
 

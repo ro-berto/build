@@ -278,7 +278,7 @@
       "[BUILD]/scripts/slave/daemonizer.py",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
-      "[SLAVE_BUILD]/src/out/logcat"
+      "[SLAVE_BUILD]/src/out/logcat_dir"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -574,6 +574,27 @@
     "name": "Monkey Test"
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "AndroidWebViewTest"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[TMP_BASE]/logcat_tmp_1"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "AndroidWebViewTest.spawn_logcat_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebView.apk",
@@ -586,7 +607,10 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "install AndroidWebView.apk"
+    "name": "AndroidWebViewTest.install AndroidWebView.apk",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -615,7 +639,47 @@
       "--official-build"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test SmallTest"
+    "name": "AndroidWebViewTest.Instrumentation test SmallTest",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "/path/to/tmp/logcat",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[TMP_BASE]/logcat_tmp_1"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "AndroidWebViewTest.logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "unittests"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[TMP_BASE]/logcat_tmp_2"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "unittests.spawn_logcat_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -637,7 +701,26 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "unittests"
+    "name": "unittests.unittests",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "/path/to/tmp/logcat",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[TMP_BASE]/logcat_tmp_2"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "unittests.logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -666,10 +749,10 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/tee.py",
-      "[SLAVE_BUILD]/src/out/Release/full_log",
+      "[SLAVE_BUILD]/src/out/Release/full_logcat",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
-      "[SLAVE_BUILD]/src/out/logcat"
+      "[SLAVE_BUILD]/src/out/logcat_dir"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "logcat_dump"
@@ -680,7 +763,7 @@
       "--arch",
       "arm",
       "--more-info",
-      "[SLAVE_BUILD]/src/out/Release/full_log"
+      "[SLAVE_BUILD]/src/out/Release/full_logcat"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -705,7 +788,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/asan_symbolize.py",
       "-l",
-      "[SLAVE_BUILD]/src/out/Release/full_log"
+      "[SLAVE_BUILD]/src/out/Release/full_logcat"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

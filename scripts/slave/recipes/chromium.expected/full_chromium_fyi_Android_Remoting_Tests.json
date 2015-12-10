@@ -269,7 +269,7 @@
       "[BUILD]/scripts/slave/daemonizer.py",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
-      "[SLAVE_BUILD]/src/out/logcat"
+      "[SLAVE_BUILD]/src/out/logcat_dir"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -440,6 +440,27 @@
     "name": "spawn_device_monitor"
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "remoting_unittests"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[TMP_BASE]/logcat_tmp_1"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "remoting_unittests.spawn_logcat_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -459,7 +480,47 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "remoting_unittests"
+    "name": "remoting_unittests.remoting_unittests",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "/path/to/tmp/logcat",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[TMP_BASE]/logcat_tmp_1"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "remoting_unittests.logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ChromotingTest"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[TMP_BASE]/logcat_tmp_2"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "ChromotingTest.spawn_logcat_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -474,7 +535,10 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "install Chromoting.apk"
+    "name": "ChromotingTest.install Chromoting.apk",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -496,9 +560,25 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ChromotingTest",
+    "name": "ChromotingTest.Instrumentation test ChromotingTest",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "/path/to/tmp/logcat",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[TMP_BASE]/logcat_tmp_2"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ChromotingTest.logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -522,7 +602,7 @@
       "[SLAVE_BUILD]/src/out/Release/full_log",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
-      "[SLAVE_BUILD]/src/out/logcat"
+      "[SLAVE_BUILD]/src/out/logcat_dir"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "logcat_dump"

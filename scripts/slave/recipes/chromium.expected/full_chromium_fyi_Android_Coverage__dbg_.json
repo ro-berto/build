@@ -269,7 +269,7 @@
       "[BUILD]/scripts/slave/daemonizer.py",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
-      "[SLAVE_BUILD]/src/out/logcat"
+      "[SLAVE_BUILD]/src/out/logcat_dir"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -440,6 +440,27 @@
     "name": "spawn_device_monitor"
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "AndroidWebViewTest"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[TMP_BASE]/logcat_tmp_1"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "AndroidWebViewTest.spawn_logcat_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "[SLAVE_BUILD]/src/out/Debug/apks/AndroidWebView.apk",
@@ -451,7 +472,10 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "install AndroidWebView.apk"
+    "name": "AndroidWebViewTest.install AndroidWebView.apk",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -476,9 +500,46 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test AndroidWebViewTest",
+    "name": "AndroidWebViewTest.Instrumentation test AndroidWebViewTest",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "/path/to/tmp/logcat",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[TMP_BASE]/logcat_tmp_1"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "AndroidWebViewTest.logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ChromePublicTest"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[TMP_BASE]/logcat_tmp_2"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "ChromePublicTest.spawn_logcat_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -493,7 +554,10 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "install ChromePublic.apk"
+    "name": "ChromePublicTest.install ChromePublic.apk",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -518,9 +582,46 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ChromePublicTest",
+    "name": "ChromePublicTest.Instrumentation test ChromePublicTest",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "/path/to/tmp/logcat",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[TMP_BASE]/logcat_tmp_2"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ChromePublicTest.logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ContentShellTest"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[TMP_BASE]/logcat_tmp_3"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "ContentShellTest.spawn_logcat_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -535,7 +636,10 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "install ContentShell.apk"
+    "name": "ContentShellTest.install ContentShell.apk",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -560,9 +664,46 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ContentShellTest",
+    "name": "ContentShellTest.Instrumentation test ContentShellTest",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "/path/to/tmp/logcat",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[TMP_BASE]/logcat_tmp_3"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ContentShellTest.logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ChromeSyncShellTest"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[TMP_BASE]/logcat_tmp_4"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "ChromeSyncShellTest.spawn_logcat_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -577,7 +718,10 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "install ChromeSyncShell.apk"
+    "name": "ChromeSyncShellTest.install ChromeSyncShell.apk",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -600,9 +744,25 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ChromeSyncShellTest",
+    "name": "ChromeSyncShellTest.Instrumentation test ChromeSyncShellTest",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "/path/to/tmp/logcat",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[TMP_BASE]/logcat_tmp_4"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ChromeSyncShellTest.logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -722,7 +882,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"fake/file1.java\": [], \"fake/file2.java;\": [], \"fake/file3.java\": []}",
-      "[TMP_BASE]/coverage_tmp_1/file_changes.json"
+      "[TMP_BASE]/coverage_tmp_5/file_changes.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Saving changed lines for revision."
@@ -738,7 +898,7 @@
       "--emma-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage/coverage_html",
       "--lines-for-coverage",
-      "[TMP_BASE]/coverage_tmp_1/file_changes.json"
+      "[TMP_BASE]/coverage_tmp_5/file_changes.json"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "Incremental coverage report",
@@ -799,7 +959,7 @@
       "[SLAVE_BUILD]/src/out/Debug/full_log",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
-      "[SLAVE_BUILD]/src/out/logcat"
+      "[SLAVE_BUILD]/src/out/logcat_dir"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "logcat_dump"

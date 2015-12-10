@@ -88,8 +88,9 @@ def RunSteps(api):
     for suite in INSTRUMENTATION_TESTS:
       run_instrumentation_test(api, suite)
 
-    api.chromium_android.logcat_dump()
-    api.chromium_android.stack_tool_steps()
+    logcat_file = api.chromium.output_dir.join('full_logcat')
+    api.chromium_android.logcat_dump(output_logcat_file=logcat_file)
+    api.chromium_android.stack_tool_steps(logcat_file=logcat_file)
     api.chromium_android.test_report()
 
 def run_instrumentation_test(api, suite):

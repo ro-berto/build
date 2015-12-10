@@ -372,7 +372,7 @@
       "[BUILD]/scripts/slave/daemonizer.py",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
-      "[SLAVE_BUILD]/src/out/logcat"
+      "[SLAVE_BUILD]/src/out/logcat_dir"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -543,6 +543,27 @@
     "name": "spawn_device_monitor"
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ChromePublicTest"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[TMP_BASE]/logcat_tmp_1"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "ChromePublicTest.spawn_logcat_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk",
@@ -555,7 +576,10 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "install ChromePublic.apk"
+    "name": "ChromePublicTest.install ChromePublic.apk",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -579,9 +603,46 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ChromePublicTest (with patch)",
+    "name": "ChromePublicTest.Instrumentation test ChromePublicTest (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "/path/to/tmp/logcat",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[TMP_BASE]/logcat_tmp_1"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ChromePublicTest.logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ContentShellTest"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[TMP_BASE]/logcat_tmp_2"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "ContentShellTest.spawn_logcat_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -597,7 +658,10 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "install ContentShell.apk"
+    "name": "ContentShellTest.install ContentShell.apk",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -621,9 +685,46 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ContentShellTest (with patch)",
+    "name": "ContentShellTest.Instrumentation test ContentShellTest (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "/path/to/tmp/logcat",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[TMP_BASE]/logcat_tmp_2"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ContentShellTest.logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "breakpad_unittests"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[TMP_BASE]/logcat_tmp_3"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "breakpad_unittests.spawn_logcat_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -647,7 +748,47 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "breakpad_unittests (with patch)"
+    "name": "breakpad_unittests.breakpad_unittests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "/path/to/tmp/logcat",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[TMP_BASE]/logcat_tmp_3"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "breakpad_unittests.logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "sandbox_linux_unittests"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[TMP_BASE]/logcat_tmp_4"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "sandbox_linux_unittests.spawn_logcat_monitor",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -669,7 +810,26 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "sandbox_linux_unittests (with patch)"
+    "name": "sandbox_linux_unittests.sandbox_linux_unittests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "/path/to/tmp/logcat",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[TMP_BASE]/logcat_tmp_4"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "sandbox_linux_unittests.logcat_dump",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -822,517 +982,67 @@
     },
     "name": "net_junit_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/bot_update.py",
-      "--master",
-      "tryserver.chromium.android",
-      "--builder",
-      "android_chromium_gn_rel",
-      "--slave",
-      "TestSlavename",
-      "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']",
-      "--root",
-      "src",
-      "--revision_mapping_file",
-      "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
-      "--rietveld_server",
-      "https://codereview.chromium.org",
-      "--output_json",
-      "/path/to/tmp/json",
-      "--revision",
-      "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--force",
-      "--output_manifest"
+      "import sys; sys.exit(1)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "bot_update (without patch)",
+    "name": "ChromePublicTest (2)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Some step text@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/native_client\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/native_client.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/angle\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/angle.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/webrtc\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/webrtc.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"0f90628433546e61d9268596da93418c623137f4\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/tools/swarming_client\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/tools/swarming_client.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#170242}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"root\": \"src\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
+      "@@@STEP_FAILURE@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
-      "runhooks"
+      "import sys; sys.exit(1)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "gclient runhooks (without patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
-      "gen",
-      "-m",
-      "tryserver.chromium.android",
-      "-b",
-      "android_chromium_gn_rel",
-      "--config-file",
-      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "//out/Release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "generate_build_files (without patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-jsonstatus",
-      "/path/to/tmp/json",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--goma-fail-fast",
-      "--goma-disable-local-fallback",
-      "--",
-      "base_junit_tests",
-      "chrome_junit_tests",
-      "chrome_public_test_apk",
-      "components_invalidation_impl_junit_tests",
-      "components_policy_junit_tests",
-      "content_junit_tests",
-      "content_shell_test_apk",
-      "junit_unittests",
-      "net_junit_tests"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "compile (without patch)",
+    "name": "ContentShellTest (2)",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ChromePublic.apk (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublicTest.apk",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk",
-      "--isolate-file-path",
-      "chrome/chrome_public_test_apk.isolate",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ChromePublicTest (without patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/ContentShell.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ContentShell.apk (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ContentShellTest.apk",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/ContentShell.apk",
-      "--isolate-file-path",
-      "content/content_shell_test_apk.isolate",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ContentShellTest (without patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
+      "@@@STEP_FAILURE@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "junit",
-      "-s",
-      "base_junit_tests",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
+      "import sys; sys.exit(1)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "base_junit_tests (without patch)",
+    "name": "breakpad_unittests (2)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
+      "@@@STEP_FAILURE@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "junit",
-      "-s",
-      "chrome_junit_tests",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
+      "import sys; sys.exit(1)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "chrome_junit_tests (without patch)",
+    "name": "sandbox_linux_unittests (2)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "junit",
-      "-s",
-      "components_invalidation_impl_junit_tests",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "components_invalidation_impl_junit_tests (without patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "junit",
-      "-s",
-      "components_policy_junit_tests",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "components_policy_junit_tests (without patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "junit",
-      "-s",
-      "content_junit_tests",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "content_junit_tests (without patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "junit",
-      "-s",
-      "junit_unittests",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "junit_unittests (without patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "junit",
-      "-s",
-      "net_junit_tests",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "net_junit_tests (without patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "ChromePublicTest (retry summary)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "ContentShellTest (retry summary)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "base_junit_tests (retry summary)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "chrome_junit_tests (retry summary)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "components_invalidation_impl_junit_tests (retry summary)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "components_policy_junit_tests (retry summary)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "content_junit_tests (retry summary)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "junit_unittests (retry summary)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "net_junit_tests (retry summary)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_WARNINGS@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1356,7 +1066,7 @@
       "[SLAVE_BUILD]/src/out/Release/full_log",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
-      "[SLAVE_BUILD]/src/out/logcat"
+      "[SLAVE_BUILD]/src/out/logcat_dir"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "logcat_dump"
@@ -1405,12 +1115,13 @@
       "@@@STEP_LOG_LINE@python.inline@    for l in f.readlines():@@@",
       "@@@STEP_LOG_LINE@python.inline@      print l@@@",
       "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"664f2318b64138c1b1d3ff05621c8394cc36c7f1\"@@@"
     ]
   },
   {
     "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "reason": "4 out of 4 aggregated steps failed. Failures: Step('ChromePublicTest (2)') failed with return_code 1, Step('ContentShellTest (2)') failed with return_code 1, Step('breakpad_unittests (2)') failed with return_code 1, Step('sandbox_linux_unittests (2)') failed with return_code 1",
+    "status_code": 1
   }
 ]
