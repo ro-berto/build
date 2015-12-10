@@ -36,6 +36,12 @@ SLAVE_INFO = {
       SlaveInfo('noserial', MAC_SDK_ROOT, True),
   'skiabot-mac-10_8-compile-009':
       SlaveInfo('noserial', MAC_SDK_ROOT, True),
+  'skiabot-shuttle-ubuntu15-androidone-001':
+      SlaveInfo('AG86044202A04GC', DEFAULT_SDK_ROOT, True),
+  'skiabot-shuttle-ubuntu15-androidone-002':
+      SlaveInfo('AG8404EC06G02GC', DEFAULT_SDK_ROOT, True),
+  'skiabot-shuttle-ubuntu15-androidone-003':
+      SlaveInfo('AG8404EC0688EGC', DEFAULT_SDK_ROOT, True),
   'skiabot-shuttle-ubuntu12-galaxys3-001':
       SlaveInfo('4df713b8244a21cf', DEFAULT_SDK_ROOT, False),
   'skiabot-shuttle-ubuntu12-galaxys3-002':
