@@ -14,17 +14,43 @@ class UrlApi(recipe_api.RecipeApi):
     return '/'.join(str(x).strip('/') for x in parts)
 
   def fetch(self, url, step_name=None, attempts=None, **kwargs):
+    """Fetches data at given URL and returns it as str.
+
+    Args:
+      url: URL to fetch.
+      step_name: optional step name, 'fetch <url>' by default.
+      attempts: how many attempts to make (1 by default).
+
+    Returns:
+      Fetched data as string.
+    """
+    fetch_result = self.fetch_to_file(
+        url, None, step_name=step_name, attempts=attempts, **kwargs)
+    return fetch_result.raw_io.output
+
+  def fetch_to_file(self, url, path, step_name=None, attempts=None, **kwargs):
+    """Fetches data at given URL and writes it to file.
+
+    Args:
+      url: URL to fetch.
+      path: path to write the fetched file to. You are responsible for deleting
+            it later if not needed.
+      step_name: optional step name, 'fetch <url>' by default.
+      attempts: how many attempts to make (1 by default).
+
+    Returns:
+      Step.
+    """
     if not step_name:
       step_name = 'fetch %s' % url
     args = [
         url,
-        '--outfile', self.m.raw_io.output(),
+        '--outfile', self.m.raw_io.output(leak_to=path),
     ]
     if attempts:
       args.extend(['--attempts', attempts])
-    fetch_result = self.m.python(
+    return self.m.python(
         name=step_name,
         script=self.m.path['build'].join('scripts', 'tools', 'pycurl.py'),
         args=args,
         **kwargs)
-    return fetch_result.raw_io.output

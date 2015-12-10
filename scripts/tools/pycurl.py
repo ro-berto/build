@@ -25,22 +25,28 @@ def main():
   if args.attempts < 1:
     args.attempts = 1
 
+  logging.info('Connecting...')
   retry_delay_seconds = 2
   for i in xrange(args.attempts):
     r = requests.get(args.url)
     if r.status_code == requests.codes.ok:
       break
-    logging.error("(%d/%d) Request returned status code: %d",
+    logging.error('(%d/%d) Request returned status code: %d',
         i+1, args.attempts, r.status_code)
     if (i+1) >= args.attempts:
       r.raise_for_status()
-    logging.info("Sleeping %d seconds, then retrying.", retry_delay_seconds)
+    logging.info('Sleeping %d seconds, then retrying.', retry_delay_seconds)
     time.sleep(retry_delay_seconds)
     retry_delay_seconds *= 2
 
   if args.outfile:
-    with open(args.outfile, 'w') as f:
-      f.write(r.text)
+    total = 0.0
+    logging.info('Downloading...')
+    with open(args.outfile, 'wb') as f:
+      for chunk in r.iter_content(1024*1024):
+        f.write(chunk)
+        total += len(chunk)
+        logging.info('Downloaded %.1f MB so far', total / 1024 / 1024)
   else:
     print r.text
 
