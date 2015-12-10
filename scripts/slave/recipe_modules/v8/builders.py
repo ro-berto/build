@@ -21,6 +21,7 @@ Deopt = TestStepConfig('deopt')
 Fuzz = TestStepConfig('fuzz')
 GCMole = TestStepConfig('gcmole')
 Mjsunit = TestStepConfig('mjsunit')
+Mjsunit_2 = TestStepConfig('mjsunit', shards=2)
 Mjsunit_3 = TestStepConfig('mjsunit', shards=3)
 MjsunitIgnition = TestStepConfig('mjsunit_ignition')
 MjsunitSPFrameAccess = TestStepConfig('mjsunit_sp_frame_access')
@@ -857,6 +858,7 @@ BUILDERS = {
         'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
+          'V8 Arm - debug',
           'V8 Arm - debug - 1',
           'V8 Arm - debug - 2',
           'V8 Arm GC Stress',
@@ -921,14 +923,17 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Arm - debug builder',
-        'build_gs_archive': 'arm_dbg_archive',
         'tests': [
-          V8Testing,
+          V8Testing_2,
           OptimizeForSize,
           SimdJs,
-          MjsunitIgnition,
-          Test262Ignition,
         ],
+        'enable_swarming': True,
+        'slim_swarming_tester': True,
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'cpu': 'armv7l',
+        },
         'testing': {'platform': 'linux'},
       },
       'V8 Arm - debug - 1': {
@@ -1262,8 +1267,14 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Arm - debug builder',
-        'build_gs_archive': 'arm_dbg_archive',
-        'tests': [Mjsunit, Webkit],
+        'tests': [Mjsunit_2, Webkit],
+        'enable_swarming': True,
+        'slim_swarming_tester': True,
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'cpu': 'armv7l',
+        },
+        'swarming_priority': 35,
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 GC Stress - custom snapshot': {

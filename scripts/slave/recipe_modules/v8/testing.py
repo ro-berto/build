@@ -302,10 +302,11 @@ class V8SwarmingTest(V8Test):
       self.task.dimensions['os'] = self.api.swarming.prefered_os_dimension(
           self.api.platform.name)
 
-    # Increase default timeout on arm.
+    # Increase default timeout and expiration on arm.
     if (self.task.dimensions.get('cpu') and
         self.task.dimensions['cpu'].startswith('arm')):
       self.task.hard_timeout = 60 * 60
+      self.task.expiration = 2 * 60 * 60
 
     self.api.swarming.trigger_task(self.task)
 
