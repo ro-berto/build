@@ -220,38 +220,6 @@
         }
       },
       {
-        "builder_name": "V8 Arm - debug - 1",
-        "properties": {
-          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "parent_got_revision_cp": "refs/heads/master@{#50110}",
-          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "swarm_hashes": {
-            "bot_default": "[dummy hash for bot_default]",
-            "mjsunit": "[dummy hash for mjsunit]",
-            "optimize_for_size": "[dummy hash for optimize_for_size]",
-            "simdjs": "[dummy hash for simdjs]",
-            "webkit": "[dummy hash for webkit]"
-          }
-        }
-      },
-      {
-        "builder_name": "V8 Arm - debug - 2",
-        "properties": {
-          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "parent_got_revision_cp": "refs/heads/master@{#50110}",
-          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "swarm_hashes": {
-            "bot_default": "[dummy hash for bot_default]",
-            "mjsunit": "[dummy hash for mjsunit]",
-            "optimize_for_size": "[dummy hash for optimize_for_size]",
-            "simdjs": "[dummy hash for simdjs]",
-            "webkit": "[dummy hash for webkit]"
-          }
-        }
-      },
-      {
         "builder_name": "V8 Arm GC Stress",
         "properties": {
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
@@ -269,7 +237,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@V8 Arm - debug<br />V8 Arm - debug - 1<br />V8 Arm - debug - 2<br />V8 Arm GC Stress@@@"
+      "@@@STEP_TEXT@V8 Arm - debug<br />V8 Arm GC Stress@@@"
     ]
   },
   {
