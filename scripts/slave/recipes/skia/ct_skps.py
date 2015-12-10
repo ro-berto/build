@@ -18,7 +18,7 @@ DEPS = [
 ]
 
 
-CT_DM_ISOLATE = 'ct_dm.isolate'
+CT_SKPS_ISOLATE = 'ct_skps.isolate'
 
 # Do not batch archive more slaves than this value. This is used to prevent
 # no output timeouts in the 'isolate tests' step.
@@ -41,6 +41,14 @@ def RunSteps(api):
   else:
     raise Exception('Do not recognise the buildername %s.' % buildername)
 
+  # Figure out which tool to use.
+  if 'DM' in buildername:
+    skia_tool = 'dm'
+  elif 'BENCH' in buildername:
+    skia_tool = 'nanobench'
+  else:
+    raise Exception('Do not recognise the buildername %s.' % buildername)
+
   # Checkout Skia and Chromium.
   gclient_cfg = api.gclient.make_config()
 
@@ -58,7 +66,8 @@ def RunSteps(api):
   src.url = 'https://chromium.googlesource.com/chromium/src.git'
   src.revision = 'origin/master'  # Always checkout Chromium at ToT.
 
-  api.gclient.checkout(gclient_config=gclient_cfg)
+  update_step = api.gclient.checkout(gclient_config=gclient_cfg)
+  skia_hash = update_step.presentation.properties['got_revision']
 
   # Checkout Swarming scripts.
   # Explicitly set revision to empty string to checkout swarming ToT. If this is
@@ -74,12 +83,18 @@ def RunSteps(api):
   # Apply issue to the Skia checkout if this is a trybot run.
   api.tryserver.maybe_apply_issue()
 
-  # Build DM in Debug mode.
-  api.step('build dm', ['make', 'dm'], cwd=api.path['checkout'])
+  # Build the tool in Debug mode.
+  api.step('build %s' % skia_tool, ['make', skia_tool],
+           cwd=api.path['checkout'])
 
   skps_chromium_build = api.properties.get(
       'skps_chromium_build', DEFAULT_SKPS_CHROMIUM_BUILD)
   ct_num_slaves = api.properties.get('ct_num_slaves', DEFAULT_CT_NUM_SLAVES)
+
+  # Set build property to make finding SKPs convenient.
+  api.step.active_result.presentation.properties['Location of SKPs'] = (
+      'https://pantheon.corp.google.com/storage/browser/%s/skps/%s/%s/' % (
+          api.ct_swarming.CT_GS_BUCKET, ct_page_type, skps_chromium_build))
 
   for slave_num in range(1, ct_num_slaves + 1):
     # Download SKPs.
@@ -89,9 +104,11 @@ def RunSteps(api):
 
     # Create this slave's isolated.gen.json file to use for batcharchiving.
     isolate_dir = chromium_checkout.join('chrome')
-    isolate_path = isolate_dir.join(CT_DM_ISOLATE)
+    isolate_path = isolate_dir.join(CT_SKPS_ISOLATE)
     extra_variables = {
         'SLAVE_NUM': str(slave_num),
+        'TOOL_NAME': skia_tool,
+        'GIT_HASH': skia_hash,
     }
     api.ct_swarming.create_isolated_gen_json(
         isolate_path, isolate_dir, 'linux', slave_num, extra_variables)
@@ -108,24 +125,28 @@ def RunSteps(api):
 
   # Trigger all swarming tasks.
   tasks = api.ct_swarming.trigger_swarming_tasks(
-      swarm_hashes, task_name_prefix='ct-10k-dm',
-      dimensions={'os': 'Ubuntu-14.04', 'cpu': 'x86'})
+      swarm_hashes, task_name_prefix='ct-10k-%s' % skia_tool,
+      dimensions={'os': 'Ubuntu-14.04', 'cpu': 'x86-64'})
 
   # Now collect all tasks.
   failed_tasks = []
+  slave_num = 0
   for task in tasks:
     try:
+      slave_num += 1
       api.ct_swarming.collect_swarming_task(task)
+      if skia_tool == 'nanobench':
+        # TODO(rmistry):
+        # Upload artifacts from
+        # api.ct_swarming.tasks_output_dir.join('slave%s' % slave_num).join('0')
+        # to Google storage bucket:  gs://skia-perf/ct/10k/YYYY/MM/DD/HH/
+        # using JWT JSON service account credentials.
+        pass
     except api.step.StepFailure as e:
       failed_tasks.append(e)
   if failed_tasks:
     raise api.step.StepFailure(
         'Failed steps: %s' % ', '.join([f.name for f in failed_tasks]))
-
-  # Set build property to make finding SKPs convenient.
-  api.step.active_result.presentation.properties['Location of SKPs'] = (
-      'https://pantheon.corp.google.com/storage/browser/%s/skps/%s/%s/' % (
-          api.ct_swarming.CT_GS_BUCKET, ct_page_type, skps_chromium_build))
 
 
 def GenTests(api):
@@ -135,7 +156,17 @@ def GenTests(api):
   yield(
     api.test('CT_DM_10k_SKPs') +
     api.properties(
-        buildername='CT-DM-10k-SKPs',
+        buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_10k_SKPs',
+        ct_num_slaves=ct_num_slaves,
+        revision=skia_revision,
+    )
+  )
+
+  yield(
+    api.test('CT_BENCH_10k_SKPs') +
+    api.properties(
+        buildername=
+            'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_BENCH_10k_SKPs',
         ct_num_slaves=ct_num_slaves,
         revision=skia_revision,
     )
@@ -144,7 +175,7 @@ def GenTests(api):
   yield(
     api.test('CT_DM_1m_SKPs') +
     api.properties(
-        buildername='CT-DM-1m-SKPs',
+        buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_1m_SKPs',
         ct_num_slaves=ct_num_slaves,
         revision=skia_revision,
     )
@@ -153,7 +184,19 @@ def GenTests(api):
   yield (
     api.test('CT_DM_SKPs_UnknownBuilder') +
     api.properties(
-        buildername='CT_DM_UnknownRepo_SKPs',
+        buildername=
+            'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_UnknownRepo_SKPs',
+        ct_num_slaves=ct_num_slaves,
+        revision=skia_revision,
+    ) +
+    api.expect_exception('Exception')
+  )
+
+  yield (
+    api.test('CT_10k_SKPs_UnknownBuilder') +
+    api.properties(
+        buildername=
+            'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_UnknownTool_10k_SKPs',
         ct_num_slaves=ct_num_slaves,
         revision=skia_revision,
     ) +
@@ -164,7 +207,7 @@ def GenTests(api):
     api.test('CT_DM_10k_SKPs_slave3_failure') +
     api.step_data('ct-10k-dm-3 on Ubuntu-14.04', retcode=1) +
     api.properties(
-        buildername='CT-DM-10k-SKPs',
+        buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_10k_SKPs',
         ct_num_slaves=ct_num_slaves,
         revision=skia_revision,
     )
@@ -175,7 +218,7 @@ def GenTests(api):
     api.step_data('ct-10k-dm-1 on Ubuntu-14.04', retcode=1) +
     api.step_data('ct-10k-dm-3 on Ubuntu-14.04', retcode=1) +
     api.properties(
-        buildername='CT-DM-10k-SKPs',
+        buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_10k_SKPs',
         ct_num_slaves=ct_num_slaves,
         revision=skia_revision,
     )
@@ -184,7 +227,8 @@ def GenTests(api):
   yield(
     api.test('CT_DM_10k_SKPs_Trybot') +
     api.properties(
-        buildername='CT-DM-10k-SKPs',
+        buildername=
+            'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_10k_SKPs-Trybot',
         ct_num_slaves=ct_num_slaves,
         rietveld='codereview.chromium.org',
         issue=1499623002,
