@@ -106,15 +106,17 @@ def remove_temp():
   """Removes all the temp files on Windows."""
   with function_logger('removing TEMP'):
     root = os.environ['TEMP']
-    for path in os.listdir(root):
-      if path.startswith('goma'):
-        # Work around http://crbug.com/449511
-        continue
-      try:
-        chromium_utils.RemovePath(os.path.join(root, path))
-      except OSError:
-        pass
-
+    if os.path.isdir(root):
+      for path in os.listdir(root):
+        if path.startswith('goma'):
+          # Work around http://crbug.com/449511
+          continue
+        try:
+          chromium_utils.RemovePath(os.path.join(root, path))
+        except OSError:
+          pass
+    else:
+      print 'TEMP directory missing: %s' % root
 
 def get_free_space(path):
   """Returns the number of free bytes."""
