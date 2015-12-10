@@ -93,6 +93,11 @@ BUILDERS = freeze({
         'build': False,
         'skip_wipe': False,
         'specific_install': True,
+    },
+    'downgrade_install_tester': {
+        'build': False,
+        'skip_wipe': False,
+        'downgrade': True,
     }
 })
 
@@ -163,6 +168,9 @@ def RunSteps(api, buildername):
 
   except api.step.StepFailure as f:
     failure = f
+
+  if config.get('downgrade'):
+    api.chromium_android.adb_install_apk('apk', allow_downgrade=True)
 
   api.chromium_android.monkey_test()
 
