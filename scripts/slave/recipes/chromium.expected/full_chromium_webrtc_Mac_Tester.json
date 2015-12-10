@@ -313,7 +313,7 @@
       "--slave-name=TestSlavename",
       "--build-number=571",
       "media_unittests",
-      "--gtest_filter=VideoCaptureDeviceTests*",
+      "--gtest_filter=VideoCaptureDeviceTest*",
       "--test-launcher-jobs=1",
       "--test-launcher-print-test-stdio=always"
     ],

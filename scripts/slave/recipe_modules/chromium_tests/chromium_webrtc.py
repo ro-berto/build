@@ -129,7 +129,7 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
         WebRTCTest('content_unittests',
                    args=['--gtest_filter=*WebRtc*:*WebRTC*:*MediaStream']),
         WebRTCTest('media_unittests',
-                   args=['--gtest_filter=VideoCaptureDeviceTests*',
+                   args=['--gtest_filter=VideoCaptureDeviceTest*',
                          '--test-launcher-jobs=1',
                          '--test-launcher-print-test-stdio=always']),
     ]
