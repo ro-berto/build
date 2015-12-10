@@ -36,7 +36,6 @@ class CIPDApi(recipe_api.RecipeApi):
 
     If you specify version as a hash, make sure its correct platform.
     """
-
     # TODO(seanmccullough): clean up older CIPD installations.
     step = self.m.python(
         name=step_name,
@@ -77,20 +76,22 @@ class CIPDApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.test_api.example_build(package_name)
     )
 
-  def register(self, package_name, package_path, refs, tags):
+  def register(self, package_name, package_path, refs=None, tags=None):
     assert self._cipd_executable
-    assert self._cipd_credentials
 
     cmd = [
       self._cipd_executable,
       'pkg-register', package_path,
-      '--service-account-json', self._cipd_credentials,
       '--json-output', self.m.json.output(),
     ]
-    for ref in refs:
-      cmd.extend(['--ref', ref])
-    for tag, value in sorted(tags.items()):
-      cmd.extend(['--tag', '%s:%s' % (tag, value)])
+    if self._cipd_credentials:
+      cmd.extend(['--service-account-json', self._cipd_credentials])
+    if refs:
+      for ref in refs:
+        cmd.extend(['--ref', ref])
+    if tags:
+      for tag, value in sorted(tags.items()):
+        cmd.extend(['--tag', '%s:%s' % (tag, value)])
     return self.m.step(
         'register %s' % package_name,
         cmd,
@@ -129,14 +130,15 @@ class CIPDApi(recipe_api.RecipeApi):
 
   def set_tag(self, package_name, version, tags):
     assert self._cipd_executable
-    assert self._cipd_credentials
+
     cmd = [
       self._cipd_executable,
       'set-tag', package_name,
       '--version', version,
-      '--service-account-json', self._cipd_credentials,
       '--json-output', self.m.json.output(),
     ]
+    if self._cipd_credentials:
+      cmd.extend(['--service-account-json', self._cipd_credentials])
     for tag, value in sorted(tags.items()):
       cmd.extend(['--tag', '%s:%s' % (tag, value)])
 
@@ -150,14 +152,15 @@ class CIPDApi(recipe_api.RecipeApi):
 
   def set_ref(self, package_name, version, refs):
     assert self._cipd_executable
-    assert self._cipd_credentials
+
     cmd = [
       self._cipd_executable,
       'set-ref', package_name,
       '--version', version,
-      '--service-account-json', self._cipd_credentials,
       '--json-output', self.m.json.output(),
     ]
+    if self._cipd_credentials:
+      cmd.extend(['--service-account-json', self._cipd_credentials])
     for r in refs:
       cmd.extend(['--ref', r])
 
@@ -176,7 +179,7 @@ class CIPDApi(recipe_api.RecipeApi):
     cmd = [
       self._cipd_executable,
       'search', package_name,
-			'--tag', tag,
+      '--tag', tag,
       '--json-output', self.m.json.output(),
     ]
     if self._cipd_credentials:

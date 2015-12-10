@@ -45,7 +45,7 @@ def install_cipd_client(path, package, version):
   Returns:
     Absolute path to CIPD executable.
   """
-  print('Ensuring CIPD client is up-to-date')
+  print 'Ensuring CIPD client is up-to-date'
   version_file = os.path.join(path, 'VERSION')
   bin_file = os.path.join(path, 'cipd')
 
@@ -53,7 +53,7 @@ def install_cipd_client(path, package, version):
   instance_id = call_cipd_api(
       'repo/v1/instance/resolve',
       {'package_name': package, 'version': version})['instance_id']
-  print('CIPD client %s => %s', version, instance_id)
+  print 'CIPD client %s => %s' % (version, instance_id)
 
   # Already installed?
   installed_instance_id = (read_file(version_file) or '').strip()
@@ -64,19 +64,19 @@ def install_cipd_client(path, package, version):
   client_info = call_cipd_api(
       'repo/v1/client',
       {'package_name': package, 'instance_id': instance_id})
-  print('CIPD client binary info:\n%s', dump_json(client_info))
+  print 'CIPD client binary info:\n%s' % dump_json(client_info)
 
   # Fetch the client. It is ~10 MB, so don't bother and fetch it into memory.
   status, raw_client_bin = fetch_url(client_info['client_binary']['fetch_url'])
   if status != 200:
-    print('Failed to fetch client binary, HTTP %d' % status)
+    print 'Failed to fetch client binary, HTTP %d' % status
     raise CipdBootstrapError('Failed to fetch client binary, HTTP %d' % status)
   digest = hashlib.sha1(raw_client_bin).hexdigest()
   if digest != client_info['client_binary']['sha1']:
     raise CipdBootstrapError('Client SHA1 mismatch')
 
   # Success.
-  print('Fetched CIPD client %s:%s at %s', package, instance_id, bin_file)
+  print 'Fetched CIPD client %s:%s at %s' % (package, instance_id, bin_file)
   write_file(bin_file, raw_client_bin)
   os.chmod(bin_file, 0755)
   write_file(version_file, instance_id + '\n')
@@ -124,18 +124,18 @@ def fetch_url(url, headers=None):
   while True:
     i += 1
     try:
-      print('GET %s', url)
+      print 'GET %s' % url
       return 200, urllib2.urlopen(req, timeout=60).read()
     except Exception as e:
       if isinstance(e, urllib2.HTTPError):
-        print('Failed to fetch %s, server returned HTTP %d', url, e.code)
+        print 'Failed to fetch %s, server returned HTTP %d' % (url, e.code)
         if e.code in (401, 403, 404):
           return e.code, None
       else:
-        print('Failed to fetch %s', url)
+        print 'Failed to fetch %s' % url
       if i == 20:
         raise
-    print('Retrying in %d sec.', i)
+    print 'Retrying in %d sec.' % i
     time.sleep(i)
 
 
@@ -208,7 +208,7 @@ def main(args):
       with open(opts.json_output, 'w') as f:
         json.dump(result, f)
   except Exception as e:
-    print ("Exception installing cipd: %s" % e)
+    print 'Exception installing cipd: %s' % e
     exc_type, exc_value, exc_traceback = sys.exc_info()
     traceback.print_tb(exc_traceback)
     return 1
