@@ -55,6 +55,8 @@ def RunSteps(api):
       api.chromium_tests.prepare_checkout(mastername, buildername)
   api.chromium_tests.compile(mastername, buildername, update_step, master_dict,
                              test_spec)
+  api.chromium_tests.download_and_unzip_build(mastername, buildername,
+                                              update_step, master_dict)
   tests = api.chromium_tests.tests_for_builder(
       mastername, buildername, update_step, master_dict)
 
