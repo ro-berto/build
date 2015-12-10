@@ -715,14 +715,14 @@ class AMPTest(Test):
   AMP_INSTANCE_PROTOCOL = 'http'
   AMP_RESULTS_BUCKET = 'chrome-amp-results'
   def __init__(self, name, device_name=None, device_os=None, device_oem=None,
-               fallback_to_local=True, test_timeout=None):
+               fallback_to_local=True, test_run_timeout=None):
     self._name = name
     self._device_name = device_name
     self._device_os = device_os
     self._device_oem = device_oem
     self._fallback_to_local = fallback_to_local
     self._test_run_id = None
-    self._test_timeout = test_timeout
+    self._test_run_timeout = test_run_timeout
     self._trigger_successful = None
     self._step_results = {}
 
@@ -742,7 +742,7 @@ class AMPTest(Test):
         device_name=self._device_name,
         device_oem=self._device_oem,
         device_os=self._device_os,
-        test_timeout=self._test_timeout)
+        test_run_timeout=self._test_run_timeout)
 
   def pre_run(self, api, suffix):
     """Triggers an AMP test."""
@@ -833,11 +833,12 @@ class AMPTest(Test):
 class AMPGTestTest(AMPTest):
   def __init__(self, name, args=None, target_name=None, device_name=None,
                device_os=None, device_oem=None, android_isolate_path=None,
-               fallback_to_local=True, test_timeout=None, **runtest_kwargs):
+               fallback_to_local=True, test_run_timeout=None,
+               **runtest_kwargs):
     super(AMPGTestTest, self).__init__(
         name=name, device_name=device_name, device_os=device_os,
         device_oem=device_oem, fallback_to_local=fallback_to_local,
-        test_timeout=test_timeout)
+        test_run_timeout=test_run_timeout)
     self._args = args
     self._target_name = target_name
     self._android_isolate_path = android_isolate_path
@@ -867,14 +868,15 @@ class AMPInstrumentationTest(AMPTest):
   def __init__(self, test_apk, apk_under_test, compile_target=None,
                device_name=None, device_os=None, device_oem=None,
                android_isolate_path=None, fallback_to_local=True,
-               test_timeout=None):
+               test_run_timeout=None, test_timeout_scale=None):
     super(AMPInstrumentationTest, self).__init__(
         test_apk, device_name=device_name, device_os=device_os,
         device_oem=device_oem, fallback_to_local=fallback_to_local,
-        test_timeout=test_timeout)
+        test_run_timeout=test_run_timeout)
     self._apk_under_test = apk_under_test
     self._compile_target = compile_target
     self._android_isolate_path = android_isolate_path
+    self._test_timeout_scale = test_timeout_scale
 
   def compile_targets(self, api):
     return [self._compile_target]
@@ -890,7 +892,8 @@ class AMPInstrumentationTest(AMPTest):
     return api.amp.instrumentation_test_arguments(
         apk_under_test=self._apk_under_test,
         test_apk=self.name,
-        isolate_file_path=isolate_file_path)
+        isolate_file_path=isolate_file_path,
+        timeout_scale=self._test_timeout_scale)
 
   #override
   def run_test_locally(self, api, suffix):
@@ -901,7 +904,8 @@ class AMPInstrumentationTest(AMPTest):
         compile_target=self._compile_target,
         apk_under_test=self._apk_under_test,
         test_apk=self.name,
-        isolate_file_path=isolate_file_path).run(api, suffix)
+        isolate_file_path=isolate_file_path,
+        timeout_scale=self._test_timeout_scale).run(api, suffix)
 
 
 class LocalIsolatedScriptTest(Test):
@@ -1407,7 +1411,7 @@ class AndroidInstrumentationTest(AndroidTest):
   }
 
   def __init__(self, name, compile_target=None, apk_under_test=None,
-               test_apk=None, isolate_file_path=None,
+               test_apk=None, isolate_file_path=None, timeout_scale=None,
                flakiness_dashboard='test-results.appspot.com',
                annotation=None, except_annotation=None, screenshot=False,
                verbose=True, tool=None, host_driven_root=None):
@@ -1424,6 +1428,7 @@ class AndroidInstrumentationTest(AndroidTest):
     self._host_driven_root = host_driven_root
     self._screenshot = screenshot
     self._test_apk = test_apk or suite_defaults.get('test_apk')
+    self._timeout_scale = timeout_scale
     self._tool = tool
     self._verbose = verbose
 
@@ -1444,6 +1449,7 @@ class AndroidInstrumentationTest(AndroidTest):
         screenshot=self._screenshot, verbose=self._verbose, tool=self._tool,
         host_driven_root=self._host_driven_root,
         json_results_file=json_results_file,
+        timeout_scale=self._timeout_scale,
         step_test_data=lambda: api.json.test_api.output(mock_test_results))
 
 

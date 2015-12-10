@@ -216,7 +216,7 @@ class AmpApi(recipe_api.RecipeApi):
 
   def instrumentation_test_arguments(
       self, apk_under_test, test_apk, isolate_file_path=None,
-      additional_apks=None, annotation=None):
+      additional_apks=None, annotation=None, timeout_scale=None):
     """Generate command-line arguments for running instrumentation tests.
 
     Args:
@@ -226,6 +226,7 @@ class AmpApi(recipe_api.RecipeApi):
         dependency information for the test suite.
       annotation: Comma-separated list of annotations. Will only run
         tests with any of the given annotations.
+      timeout_scale: Scale for the timeouts of individual tests.
 
     Returns:
       A list of command-line arguments as strings.
@@ -241,6 +242,8 @@ class AmpApi(recipe_api.RecipeApi):
     if additional_apks:
       for apk in additional_apks:
         instrumentation_test_args += ['--additional-apk', apk]
+    if timeout_scale:
+      instrumentation_test_args += ['--timeout-scale', timeout_scale]
     return instrumentation_test_args
 
   def uirobot_arguments(self, app_under_test=None, minutes=5):
@@ -262,7 +265,8 @@ class AmpApi(recipe_api.RecipeApi):
   def amp_arguments(
       self, device_type='Android', device_minimum_os=None, device_name=None,
       device_oem=None, device_os=None, device_timeout=None, api_address=None,
-      api_port=None, api_protocol=None, network_config=None, test_timeout=None):
+      api_port=None, api_protocol=None, network_config=None,
+      test_run_timeout=None):
     """Generate command-line arguments for running tests on AMP.
 
     Args:
@@ -284,7 +288,7 @@ class AmpApi(recipe_api.RecipeApi):
         environment. See the availible network environment options at
         https://appurify.atlassian.net/wiki/display/APD/
           Run+Configurations+-+Test+and+Network
-      test_timeout: The timeout for the test runtime on AMP.
+      test_run_timeout: The timeout for the test runtime on AMP.
 
     Returns:
       A list of command-line arguments as strings.
@@ -324,8 +328,8 @@ class AmpApi(recipe_api.RecipeApi):
     if network_config:
       amp_args += ['--network-config', network_config]
 
-    if test_timeout:
-      amp_args += ['--test-timeout', test_timeout]
+    if test_run_timeout:
+      amp_args += ['--test-timeout', test_run_timeout]
 
     return amp_args
 

@@ -325,7 +325,8 @@ SPEC = {
             compile_target='android_webview_test_apk',
             device_name=['Nexus 7'], device_os=['4.4.2'],
             fallback_to_local=False,
-            test_timeout=3600),
+            test_run_timeout=3600,
+            test_timeout_scale=5),
         steps.AMPInstrumentationTest(
             test_apk='AndroidWebViewTest',
             apk_under_test='AndroidWebView',
@@ -334,7 +335,8 @@ SPEC = {
             compile_target='android_webview_test_apk',
             device_name=['Galaxy S4'], device_os=['4.4.2'],
             fallback_to_local=False,
-            test_timeout=3600),
+            test_run_timeout=3600,
+            test_timeout_scale=5),
         steps.AMPInstrumentationTest(
             test_apk='AndroidWebViewTest',
             apk_under_test='AndroidWebView',
@@ -343,7 +345,8 @@ SPEC = {
             compile_target='android_webview_test_apk',
             device_name=['Galaxy Note 3'], device_os=['4.4.2'],
             fallback_to_local=False,
-            test_timeout=3600),
+            test_run_timeout=3600,
+            test_timeout_scale=5),
         steps.AMPInstrumentationTest(
             test_apk='AndroidWebViewTest',
             apk_under_test='AndroidWebView',
@@ -352,7 +355,8 @@ SPEC = {
             compile_target='android_webview_test_apk',
             device_name=['Moto G'], device_os=['4.4.2'],
             fallback_to_local=False,
-            test_timeout=3600),
+            test_run_timeout=3600,
+            test_timeout_scale=5),
         steps.AMPInstrumentationTest(
             test_apk='AndroidWebViewTest',
             apk_under_test='AndroidWebView',
@@ -361,7 +365,8 @@ SPEC = {
             compile_target='android_webview_test_apk',
             device_name=['One M8'], device_os=['4.4.2'],
             fallback_to_local=False,
-            test_timeout=3600),
+            test_run_timeout=3600,
+            test_timeout_scale=5),
       ],
       'test_generators': [
         steps.generate_gtest,
