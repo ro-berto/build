@@ -6,8 +6,8 @@
 
 from config_bootstrap import Master
 
-class NativeClientPorts(Master.NaClBase):
-  project_name = 'NativeClientPorts'
+class WebPorts(Master.NaClBase):
+  project_name = 'WebPorts'
   master_port = 8035
   slave_port = 8135
   master_port_alt = 8235

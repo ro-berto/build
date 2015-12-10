@@ -104,8 +104,8 @@
                  href="../client.nacl/">NativeClient</a> |
               <a name="menu1" id="NativeClientToolchain"
                  href="../client.nacl.toolchain/">Toolchain</a> |
-              <a name="menu1" id="NativeClientPorts"
-                 href="../client.nacl.ports/">NaCl&nbsp;Ports</a> |
+              <a name="menu1" id="WebPorts"
+                 href="../client.nacl.ports/">webports</a> |
               <a name="menu1" id="NativeClientSDK"
                  href="../client.nacl.sdk/">SDK</a> |
               <a name="menu1" id="NativeClientTryServer"
@@ -144,22 +144,18 @@
               var tree_status_link = document.getElementById('tree_status_link');
               var source_link = document.getElementById('source_link');
               var www_link = document.getElementById('www_link');
-              if (data.project.title == 'NativeClientPorts') {
+              if (data.project.title == 'WebPorts') {
                 tree_status_link.href = 'https://naclports-status.appspot.com/';
-                source_link.href = 'https://code.google.com/p/naclports/source/browse/#svn/trunk';
-                www_link.href = 'https://code.google.com/p/naclports';
+                source_link.href = 'https://chromium.googlesource.com/webports';
+                www_link.href = 'https://chromium.googlesource.com/webports';
               } else if (data.project.title == 'NativeClientSDK') {
                 tree_status_link.href = 'https://chromium-status.appspot.com/';
-                source_link.href = 'https://src.chromium.org/viewvc/chrome/trunk/src/native_client_sdk/';
-                www_link.href = 'https://src.chromium.org';
-              } else if (data.project.title == 'NativeClientRagel') {
-                tree_status_link.href = 'https://chromium-status.appspot.com/';
-                source_link.href = 'https://src.chromium.org/viewvc/chrome/trunk/src/';
-                www_link.href = 'https://code.google.com/p/chromium';
+                source_link.href = 'https://chromium.googlesource.com/chromium/src/+/30decfbd7b5bcc677a337f1390266e9f2a4c7d32/native_client_sdk/src';
+                www_link.href = 'https://developer.chrome.com/native-client';
               } else {
                 tree_status_link.href = 'https://nativeclient-status.appspot.com/';
-                source_link.href = 'https://src.chromium.org/viewvc/native_client/trunk/';
-                www_link.href = 'https://code.google.com/p/nativeclient';
+                source_link.href = 'https://chromium.googlesource.com/native_client/src/native_client';
+                www_link.href = 'https://developer.chrome.com/native-client';
               }
               document.getElementById(
                   'tree_status').src = tree_status_link.href + 'current';
