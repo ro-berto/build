@@ -58,6 +58,8 @@ SUPPRESSIONS = {
         'Linux Release (NVIDIA)',
         'Mac 10.10 Debug (ATI)',
         'Mac 10.10 Release (ATI)',
+        'Mac 10.10 Debug (Intel)',
+        'Mac 10.10 Release (Intel)',
         'Mac 10.8 Debug (Intel)',
         'Mac 10.8 Release (Intel)',
         'Mac Debug (Intel)',
