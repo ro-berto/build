@@ -7,30 +7,30 @@
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 
-INSTRUMENTATION_TESTS = freeze([
-  {
-    'test': 'CronetSampleTest',
-    'gyp_target': 'cronet_sample_test_apk',
-    'apk_under_test': 'CronetSample.apk',
-    'test_apk': 'CronetSampleTest.apk',
-  },
-  {
-    'test': 'CronetTestInstrumentation',
-    'gyp_target': 'cronet_test_instrumentation_apk',
-    'apk_under_test': 'CronetTest.apk',
-    'test_apk': 'CronetTestInstrumentation.apk',
-  },
-])
-
-UNIT_TESTS = freeze([
-  'cronet_unittests',
-  'net_unittests',
-])
-
 class CronetApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(CronetApi, self).__init__(**kwargs)
     self._repo_path = None
+
+  INSTRUMENTATION_TESTS = freeze([
+    {
+      'test': 'CronetSampleTest',
+      'gyp_target': 'cronet_sample_test_apk',
+      'apk_under_test': 'CronetSample.apk',
+      'test_apk': 'CronetSampleTest.apk',
+    },
+    {
+      'test': 'CronetTestInstrumentation',
+      'gyp_target': 'cronet_test_instrumentation_apk',
+      'apk_under_test': 'CronetTest.apk',
+      'test_apk': 'CronetTestInstrumentation.apk',
+    },
+  ])
+
+  UNIT_TESTS = freeze([
+    'cronet_unittests',
+    'net_unittests',
+  ])
 
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
@@ -88,14 +88,16 @@ class CronetApi(recipe_api.RecipeApi):
                           perf_id=perf_id, platform='android-cronet')
 
 
-  def run_tests(self, build_config):
+  def run_tests(
+      self, build_config, unit_tests=UNIT_TESTS,
+      instrumentation_tests=INSTRUMENTATION_TESTS):
     droid = self.m.chromium_android
     checkout_path = self.m.path['checkout']
     droid.common_tests_setup_steps()
     with self.m.step.defer_results():
-      for suite in UNIT_TESTS:
+      for suite in unit_tests:
         droid.run_test_suite(suite, shard_timeout=180)
-      for suite in INSTRUMENTATION_TESTS:
+      for suite in instrumentation_tests:
         droid.run_instrumentation_suite(
             name=suite['test'],
             apk_under_test=droid.apk_path(suite.get('apk_under_test')),
