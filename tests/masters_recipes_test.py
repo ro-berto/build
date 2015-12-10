@@ -74,6 +74,7 @@ SUPPRESSIONS = {
     ],
     'master.chromium.mac': [
         'Mac10.9 Tests',
+        'Mac10.11 Tests',
         'iOS_Device',
         'iOS_Device_(ninja)',
         'iOS_Simulator_(dbg)',

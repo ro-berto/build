@@ -119,6 +119,25 @@ SPEC = {
         'platform': 'mac',
       },
     },
+    'Mac10.11 Tests': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'Mac Builder',
+      'testing': {
+        'platform': 'mac',
+      },
+    },
     'Mac GN': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
