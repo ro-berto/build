@@ -88,6 +88,11 @@ BUILDERS = freeze({
         'build': False,
         'skip_wipe': False,
         'timeout_scale': 2,
+    },
+    'specific_install_tester': {
+        'build': False,
+        'skip_wipe': False,
+        'specific_install': True,
     }
 })
 
@@ -133,6 +138,9 @@ def RunSteps(api, buildername):
   if config.get('java_method_count'):
     api.chromium_android.java_method_count(
         api.chromium.output_dir.join('chrome_public_apk', 'classes.dex.zip'))
+
+  if config.get('specific_install'):
+    api.chromium_android.adb_install_apk('Chrome.apk', devices=['abc123'])
 
   api.adb.root_devices()
   api.chromium_android.spawn_logcat_monitor()

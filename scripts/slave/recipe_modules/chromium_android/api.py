@@ -460,13 +460,16 @@ class AndroidApi(recipe_api.RecipeApi):
   def apk_path(self, apk):
     return self.m.chromium.output_dir.join('apks', apk) if apk else None
 
-  def adb_install_apk(self, apk):
+  def adb_install_apk(self, apk, devices=None):
     install_cmd = [
         self.m.path['checkout'].join('build',
                                      'android',
                                      'adb_install_apk.py'),
         apk, '-v', '--blacklist-file', self.blacklist_file,
     ]
+    if devices and isinstance(devices, list):
+      for d in devices:
+        install_cmd += ['-d', d]
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       install_cmd.append('--release')
     return self.m.step('install ' + self.m.path.basename(apk), install_cmd,
