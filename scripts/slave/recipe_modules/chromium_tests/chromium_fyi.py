@@ -1337,7 +1337,6 @@ SPEC = {
             android_isolate_path='components/components_browsertests.isolate',
             android_tool='asan'),
         steps.GTestTest('gfx_unittests', android_tool='asan'),
-        steps.AndroidInstrumentationTest('ChromePublicTest', tool='asan'),
       ],
       'testing': {
         'platform': 'linux',
