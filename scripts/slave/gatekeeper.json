@@ -688,6 +688,27 @@
               "compile"
             ],
             "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
+          },
+          "CFI Linux": {
+            "tree_notify": [
+              "krasin@chromium.org"
+            ],
+            "forgive_all": "true",
+            "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
+          },
+          "CFI Linux ToT": {
+            "tree_notify": [
+              "krasin@chromium.org"
+            ],
+            "forgive_all": "true",
+            "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
+          },
+          "CFI Linux CF": {
+            "tree_notify": [
+              "krasin@chromium.org"
+            ],
+            "forgive_all": "true",
+            "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
           }
         }
       }
