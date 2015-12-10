@@ -88,8 +88,9 @@ def GenTests(api):
     api.platform.name('linux') +
     api.step_data('content_gl_tests', retcode=1) +
     api.step_data('maps_pixel_test',
-        api.test_utils.canned_telemetry_gpu_output(
-            passing=False, is_win=False, swarming=False))
+        api.test_utils.canned_isolated_script_output(
+            passing=False, is_win=False, swarming=False,
+            isolated_script_passing=False))
   )
 
   yield (
@@ -97,19 +98,14 @@ def GenTests(api):
     props('linux', 'Release') +
     api.platform.name('linux') +
     api.step_data('maps_pixel_test',
-        api.test_utils.canned_telemetry_gpu_output(
-            passing=False, is_win=False, swarming=False,
-            empty_per_page_values=True),
+        api.test_utils.canned_isolated_script_output(
+            passing=False, is_win=False, swarming=False),
         retcode=255)
   )
 
-  linux_fyi_hashes = api.gpu.dummy_linux_fyi_swarm_hashes
-
   yield (
-    api.test('telemetry_gpu_fyi_test_harness_failure') +
-    props('linux', 'Release',
-          hashes=linux_fyi_hashes,
-          mastername='chromium.gpu.fyi') +
+    api.test('telemetry_gpu_test_harness_failure_zero_retcode') +
+    props('linux', 'Release') +
     api.platform.name('linux') +
     api.override_step_data('maps_pixel_test',
         api.test_utils.canned_isolated_script_output(
@@ -125,6 +121,8 @@ def GenTests(api):
     named_props('win', 'Release', 'win release dEQP tester', win_fyi_hashes) +
     api.platform.name('win')
   )
+
+  linux_fyi_hashes = api.gpu.dummy_linux_fyi_swarm_hashes
 
   yield (
     api.test('linux_release_deqp') +

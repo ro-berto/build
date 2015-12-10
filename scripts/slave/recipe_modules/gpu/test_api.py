@@ -62,7 +62,7 @@ class GpuTestApi(recipe_test_api.RecipeTestApi):
     return self.m.json.output({
         'status': 'Found dependency',
         'compile_targets': ['All'],
-        'test_targets': ['telemetry_gpu_test_run'],
+        'test_targets': ['telemetry_gpu_new_test_run'],
         })
 
   @property
@@ -74,7 +74,7 @@ class GpuTestApi(recipe_test_api.RecipeTestApi):
           # confuse the recipe
           'All', 'app_list_demo', 'app_list_unittests', 'app_shell',
           'chrome_initial') +
-          # The names of our isolates (even though telemetry_gpu_test
+          # The names of our isolates (even though telemetry_gpu_new_test
           # won't actually be reported by analyze)
           common.GPU_ISOLATES ),
         'test_targets': [u'%s_run' % test for test in common.GPU_ISOLATES],

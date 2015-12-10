@@ -10,12 +10,6 @@ GPU_ISOLATES = (
   'gles2_conform_test',
   'gpu_unittests',
   'tab_capture_end2end_tests',
-  'telemetry_gpu_test',
-)
-
-# This is temporary until the bots have all switched over to the new
-# isolate.
-TELEMETRY_GPU_NEW_ISOLATE = (
   'telemetry_gpu_new_test',
 )
 
@@ -60,7 +54,6 @@ WIN_ONLY_FYI_ONLY_GPU_ISOLATES = (
 # A list of all the Linux FYI isolates for testing
 ALL_LINUX_FYI_GPU_ISOLATES = (
   GPU_ISOLATES +
-  TELEMETRY_GPU_NEW_ISOLATE +  # TODO(kbr): remove; temporary only.
   FYI_GPU_ISOLATES +
   WIN_AND_LINUX_ONLY_FYI_ONLY_GPU_ISOLATES
 )
