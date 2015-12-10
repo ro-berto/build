@@ -83,6 +83,7 @@
       "scheduler": None,
       "slave_pools": ["webview_amp"],
       "category": "1Webview",
+      "mergeRequests": True,
     },
     "Android Aura Tester (dbg)": {
       "recipe": "chromium",
@@ -145,55 +146,62 @@
       "scheduler": "android_commits",
       "slave_pools": ["builders"],
       "category": "4Swarming",
-      "mergeRequests": True,
     },
     "Jelly Bean Tester": {
       "recipe": "chromium",
       "scheduler": None,
       "slave_pools": ["jelly_bean_tester"],
       "category": "3Testers",
+      "mergeRequests": True,
     },
     "KitKat Tablet Tester": {
       "recipe": "chromium",
       "scheduler": None,
       "slave_pools": ["kit_kat_tablet"],
       "category": "3Testers",
-    },
-    "Lollipop 64 bit Tester": {
-      "recipe": "chromium",
-      "scheduler": None,
-      "slave_pools": ["lollipop_64"],
-      "category": "3Testers",
+      "mergeRequests": True,
     },
     "Lollipop Consumer Tester": {
       "recipe": "chromium",
       "scheduler": None,
       "slave_pools": ["lollipop_consumer"],
       "category": "3Testers",
+      "mergeRequests": True,
     },
     "Lollipop Low-end Tester": {
       "recipe": "chromium",
       "scheduler": None,
       "slave_pools": ["lollipop_low_end"],
       "category": "3Testers",
+      "mergeRequests": True,
     },
     "Lollipop Phone Tester": {
       "recipe": "chromium",
       "scheduler": None,
       "slave_pools": ["lollipop_phone"],
       "category": "3Testers",
+      "mergeRequests": True,
     },
     "Lollipop Tablet Tester": {
       "recipe": "chromium",
       "scheduler": None,
       "slave_pools": ["lollipop_tablet"],
       "category": "3Testers",
+      "mergeRequests": True,
+    },
+    "Marshmallow 64 bit Tester": {
+      "recipe": "chromium",
+      "scheduler": None,
+      "slave_pools": ["marshmallow_64"],
+      "category": "3Testers",
+      "mergeRequests": True,
     },
     "Marshmallow Tablet Tester": {
       "recipe": "chromium",
       "scheduler": None,
-      "slave_pools": ["marshmallow_phone"],
+      "slave_pools": ["marshmallow_tablet"],
       "category": "3Testers",
+      "mergeRequests": True,
     },
   },
 
@@ -297,7 +305,7 @@
       },
       "slaves": ["build42-b1"],
     },
-    "lollipop_64": {
+    "marshmallow_64": {
       "slave_data": {
         "os": "linux",
         "version": "precise",
@@ -337,7 +345,7 @@
       },
       "slaves": ["build43-b1"],
     },
-    "marshmallow_phone": {
+    "marshmallow_tablet": {
       "slave_data": {
         "os": "linux",
         "version": "precise",
