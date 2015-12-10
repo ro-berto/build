@@ -321,10 +321,10 @@ def nacl(c):
   m['native_client'] = 'got_revision'
 
 @config_ctx()
-def naclports(c):
+def webports(c):
   s = c.solutions.add()
   s.name = 'src'
-  s.url = ChromiumGitURL(c, 'external', 'naclports.git')
+  s.url = ChromiumGitURL(c, 'webports.git')
   m = c.got_revision_mapping
   m['src'] = 'got_revision'
 

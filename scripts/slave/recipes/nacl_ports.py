@@ -14,7 +14,7 @@ DEPS = [
 
 
 def _CheckoutSteps(api):
-  api.gclient.set_config('naclports')
+  api.gclient.set_config('webports')
   result = api.bot_update.ensure_checkout(force=True)
   api.gclient.runhooks()
   # HACK(aneeshm): Borrowed from iannucci's hack in nacl.py.

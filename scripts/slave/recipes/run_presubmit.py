@@ -94,7 +94,7 @@ def RunSteps(api):
 def GenTests(api):
   # TODO(machenbach): This uses the same tryserver for all repos, which doesn't
   # reflect reality (cosmetical problem only).
-  for repo_name in ['chromium', 'v8', 'nacl', 'naclports', 'gyp',
+  for repo_name in ['chromium', 'v8', 'nacl', 'webports', 'gyp',
                     'build', 'build_internal', 'build_internal_scripts_slave',
                     'depot_tools', 'skia', 'chrome_golo', 'webrtc', 'catapult']:
     yield (
