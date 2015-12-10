@@ -31,37 +31,10 @@ class Master(config_private.Master):
   webkit_trunk_url = (config_private.Master.webkit_root_url + '/trunk')
 
   trunk_url_src = config_private.Master.git_server_url + '/chromium/src.git'
-  trunk_url_tools = trunk_url + '/tools'
-  nacl_url = config_private.Master.nacl_trunk_url + '/src/native_client'
-  nacl_sdk_root_url = 'https://nativeclient-sdk.googlecode.com/svn'
-  nacl_ports_trunk_url = 'https://naclports.googlecode.com/svn/trunk'
-  nacl_ports_url = nacl_ports_trunk_url + '/src'
-  gears_url = 'http://gears.googlecode.com/svn/trunk'
-  gyp_trunk_url = 'http://gyp.googlecode.com/svn/trunk'
-  branch_url = (config_private.Master.server_url +
-                config_private.Master.repo_root + '/branches')
-  merge_branch_url = branch_url + '/chrome_webkit_merge_branch'
-  merge_branch_url_src = merge_branch_url + '/src'
-
-  v8_url = 'http://v8.googlecode.com/svn'
-  v8_branch_url = (v8_url + '/branches')
-  v8_bleeding_edge = v8_branch_url + '/bleeding_edge'
-  v8_trunk = v8_url + '/trunk'
-  es5conform_root_url = "https://es5conform.svn.codeplex.com/svn/"
-  es5conform_revision = 62998
 
   dart_url = config_private.Master.googlecode_url % 'dart'
   dart_bleeding = dart_url + '/branches/bleeding_edge'
   dart_trunk = dart_url + '/trunk'
-
-  oilpan_url = (config_private.Master.webkit_root_url + '/branches/oilpan')
-
-  skia_url = 'http://skia.googlecode.com/svn/'
-
-  syzygy_url = 'http://sawbuck.googlecode.com/svn/'
-
-  webrtc_url = config_private.Master.googlecode_url % 'webrtc'
-  libyuv_url = 'http://libyuv.googlecode.com/svn'
 
   # Default target platform if none was given to the factory.
   default_platform = 'win32'
