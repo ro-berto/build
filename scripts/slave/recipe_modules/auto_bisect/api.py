@@ -79,7 +79,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
     result = self.m.python(
         'Reading culprit cl information.',
         self.resource('fetch_revision_info.py'),
-        [revision, '--depot', depot_name],
+        [revision, depot_name],
         stdout=self.m.json.output())
     return result.stdout
 

@@ -1128,7 +1128,6 @@
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/fetch_revision_info.py",
       "fc6dfc7ff5b1073408499478969261b826441144",
-      "--depot",
       "chromium"
     ],
     "cwd": "[SLAVE_BUILD]",

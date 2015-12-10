@@ -180,7 +180,6 @@
       "-u",
       "RECIPE_MODULE[auto_bisect]/resources/fetch_revision_info.py",
       "deadbeef",
-      "--depot",
       "chromium"
     ],
     "cwd": "[SLAVE_BUILD]",
