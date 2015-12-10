@@ -2029,5 +2029,22 @@ SPEC = {
         'os': 'Windows-10-SP0',
       },
     },
+    'Win SyzyAsan (rel)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['syzyasan_compile_only'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'win',
+        'TARGET_BITS': 32,
+      },
+      'compile_targets': [
+        'chromium',
+      ],
+      'enable_swarming': True,
+      'testing': {
+        'platform': 'win',
+      },
+    },
   },
 }

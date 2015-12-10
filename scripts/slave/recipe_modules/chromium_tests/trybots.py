@@ -503,6 +503,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.win',
         'buildername': 'Win8 GN (dbg)',
       },
+      'win_chromium_syzyasan_rel': {
+        'mastername': 'chromium.fyi',
+        'buildername': 'Win SyzyAsan (rel)',
+      },
       # Experimental clang/win bots.
       'win_clang_dbg': {
         'mastername': 'chromium.fyi',
