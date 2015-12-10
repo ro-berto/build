@@ -60,6 +60,7 @@ WIN_ONLY_FYI_ONLY_GPU_ISOLATES = (
 # A list of all the Linux FYI isolates for testing
 ALL_LINUX_FYI_GPU_ISOLATES = (
   GPU_ISOLATES +
+  TELEMETRY_GPU_NEW_ISOLATE +  # TODO(kbr): remove; temporary only.
   FYI_GPU_ISOLATES +
   WIN_AND_LINUX_ONLY_FYI_ONLY_GPU_ISOLATES
 )

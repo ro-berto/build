@@ -988,6 +988,11 @@ class LocalIsolatedScriptTest(Test):
             api.test_utils.format_step_text([
               ['failures:', self.failures(api, suffix)]
             ]))
+      elif api.step.active_result.retcode == 0:
+        # This failure won't be caught automatically. Need to manually
+        # raise it as a step failure.
+        api.step.active_result.presentation.status = api.step.FAILURE
+        raise api.step.StepFailure('Test results were invalid')
 
     return self._test_runs[suffix]
 

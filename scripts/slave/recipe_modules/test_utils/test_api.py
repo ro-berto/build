@@ -167,10 +167,12 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       ]
     }
 
-    swarming_path = '0\\output.json' if is_win else '0/output.json'
-    results_path = swarming_path if swarming else 'output.json'
-    files_dict = {
-      results_path: json.dumps(jsonish_results),
-      'summary.json': json.dumps(jsonish_summary)
-    }
-    return self.m.raw_io.output_dir(files_dict)
+    if swarming:
+      swarming_path = '0\\output.json' if is_win else '0/output.json'
+      files_dict = {
+        swarming_path: json.dumps(jsonish_results),
+        'summary.json': json.dumps(jsonish_summary)
+      }
+      return self.m.raw_io.output_dir(files_dict)
+    else:
+      return self.m.json.output(jsonish_results)
