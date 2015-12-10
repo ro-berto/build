@@ -189,7 +189,8 @@
       "browser_tests",
       "chromium_builder_webrtc",
       "content_browsertests",
-      "content_unittests"
+      "content_unittests",
+      "media_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile",

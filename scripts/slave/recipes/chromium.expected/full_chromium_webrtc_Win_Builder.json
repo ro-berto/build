@@ -195,7 +195,8 @@
       "chromium_builder_webrtc",
       "content_browsertests",
       "content_unittests",
-      "crash_service"
+      "crash_service",
+      "media_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile",
