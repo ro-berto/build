@@ -131,9 +131,8 @@ def RunSteps(api):
             [['unexpected failures:', unexpected_test_failures],
              ['not executed:', not_executed_tests]]))
 
-  logcat_file = api.chromium.output_dir.join('full_logcat')
-  api.chromium_android.logcat_dump(output_logcat_file=logcat_file)
-  api.chromium_android.stack_tool_steps(logcat_file=logcat_file)
+  api.chromium_android.logcat_dump()
+  api.chromium_android.stack_tool_steps()
   api.chromium_android.test_report()
 
   if unexpected_test_failures:

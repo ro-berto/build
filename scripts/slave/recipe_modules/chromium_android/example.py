@@ -167,33 +167,28 @@ def RunSteps(api, buildername):
   except api.step.StepFailure as f:
     failure = f
 
-  with api.chromium_android.logcat('AndroidWebViewTest'):
-    api.chromium_android.run_instrumentation_suite(
-        name='AndroidWebViewTest',
-        apk_under_test=api.chromium_android.apk_path('AndroidWebView.apk'),
-        test_apk=api.chromium_android.apk_path('AndroidWebViewTest.apk'),
-        isolate_file_path='android_webview/android_webview_test_apk.isolate',
-        flakiness_dashboard='test-results.appspot.com',
-        annotation='SmallTest',
-        except_annotation='FlakyTest',
-        screenshot=True,
-        official_build=True,
-        host_driven_root=api.path['checkout'].join('chrome', 'test'),
-        timeout_scale=config.get('timeout_scale'))
-  with api.chromium_android.logcat('unittests'):
-    api.chromium_android.run_test_suite(
-        'unittests',
-        isolate_file_path=api.path['checkout'].join('some_file.isolate'),
-        gtest_filter='WebRtc*',
-        tool='asan')
-
+  api.chromium_android.run_instrumentation_suite(
+      name='AndroidWebViewTest',
+      apk_under_test=api.chromium_android.apk_path('AndroidWebView.apk'),
+      test_apk=api.chromium_android.apk_path('AndroidWebViewTest.apk'),
+      isolate_file_path='android_webview/android_webview_test_apk.isolate',
+      flakiness_dashboard='test-results.appspot.com',
+      annotation='SmallTest',
+      except_annotation='FlakyTest',
+      screenshot=True,
+      official_build=True,
+      host_driven_root=api.path['checkout'].join('chrome', 'test'),
+      timeout_scale=config.get('timeout_scale'))
+  api.chromium_android.run_test_suite(
+      'unittests',
+      isolate_file_path=api.path['checkout'].join('some_file.isolate'),
+      gtest_filter='WebRtc*',
+      tool='asan')
   if not failure:
       api.chromium_android.run_bisect_script(extra_src='test.py',
                                              path_to_config='test.py')
-
-  logcat_file = api.chromium.output_dir.join('full_logcat')
-  api.chromium_android.logcat_dump(output_logcat_file=logcat_file)
-  api.chromium_android.stack_tool_steps(logcat_file=logcat_file)
+  api.chromium_android.logcat_dump()
+  api.chromium_android.stack_tool_steps()
   if config.get('coverage', False):
     api.chromium_android.coverage_report()
 

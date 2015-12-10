@@ -167,7 +167,7 @@
       "[BUILD]/scripts/slave/daemonizer.py",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
-      "[SLAVE_BUILD]/src/out/logcat_dir"
+      "[SLAVE_BUILD]/src/out/logcat"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -398,10 +398,10 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/tee.py",
-      "[SLAVE_BUILD]/src/out/Release/full_logcat",
+      "[SLAVE_BUILD]/src/out/Release/full_log",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
-      "[SLAVE_BUILD]/src/out/logcat_dir"
+      "[SLAVE_BUILD]/src/out/logcat"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "logcat_dump"
@@ -412,7 +412,7 @@
       "--arch",
       "arm",
       "--more-info",
-      "[SLAVE_BUILD]/src/out/Release/full_logcat"
+      "[SLAVE_BUILD]/src/out/Release/full_log"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

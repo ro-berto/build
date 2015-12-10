@@ -569,7 +569,7 @@ def GenTests(api):
     suppress_analyze() +
     api.override_step_data('[trigger] base_unittests (with patch)',
                            retcode=1) +
-    api.override_step_data('base_unittests.base_unittests (with patch)',
+    api.override_step_data('base_unittests (with patch)',
                            canned_test(passing=False), retcode=1)
   )
 

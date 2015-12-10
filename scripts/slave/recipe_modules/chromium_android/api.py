@@ -249,6 +249,15 @@ class AndroidApi(recipe_api.RecipeApi):
         src_dir=self.m.path['slave_build'].join('src'),
         exclude_files='lib.target,gen,android_webview,jingle_unittests')
 
+  def spawn_logcat_monitor(self):
+    self.m.step(
+        'spawn_logcat_monitor',
+        [self.m.path['build'].join('scripts', 'slave', 'daemonizer.py'),
+         '--', self.c.cr_build_android.join('adb_logcat_monitor.py'),
+         self.m.chromium.c.build_dir.join('logcat')],
+        env=self.m.chromium.get_env(),
+        infra_step=True)
+
   def spawn_device_monitor(self):
     script = self.m.path['build'].join('scripts', 'slave', 'daemonizer.py')
     args = [
@@ -699,33 +708,19 @@ class AndroidApi(recipe_api.RecipeApi):
         infra_step=True,
     )
 
-  def spawn_logcat_monitor(self, logcat_dir=None):
-    if not logcat_dir:
-      logcat_dir = self.c.default_logcat_dir
-
-    self.m.step(
-        'spawn_logcat_monitor',
-        [self.m.path['build'].join('scripts', 'slave', 'daemonizer.py'),
-         '--', self.c.cr_build_android.join('adb_logcat_monitor.py'),
-         logcat_dir],
-        env=self.m.chromium.get_env(),
-        infra_step=True)
-
-  def logcat_dump(self, output_logcat_file, logcat_dir=None, gs_bucket=None):
-    if not logcat_dir:
-      logcat_dir = self.c.default_logcat_dir
-
+  def logcat_dump(self, gs_bucket=None):
     if gs_bucket:
+      log_path = self.m.chromium.output_dir.join('full_log')
       self.m.python(
           'logcat_dump',
           self.m.path['checkout'].join('build', 'android',
                                        'adb_logcat_printer.py'),
-          ['--output-path', output_logcat_file, logcat_dir],
+          [ '--output-path', log_path,
+            self.m.path['checkout'].join('out', 'logcat') ],
           infra_step=True)
-
       try:
         self.m.gsutil.upload(
-            output_logcat_file,
+            log_path,
             gs_bucket,
             'logcat_dumps/%s/%s' % (self.m.properties['buildername'],
                                     self.m.properties['buildnumber']),
@@ -739,34 +734,23 @@ class AndroidApi(recipe_api.RecipeApi):
         # the build. We don't want a failed logcat upload crashing a tryjob
         step_result = self.m.step.active_result
         step_result.presentation.status = self.m.step.WARNING
+
     else:
       self.m.python(
           'logcat_dump',
           self.m.path['build'].join('scripts', 'slave', 'tee.py'),
-          [output_logcat_file,
+          [self.m.chromium.output_dir.join('full_log'),
            '--',
            self.m.path['checkout'].join('build', 'android',
                                         'adb_logcat_printer.py'),
-           logcat_dir],
-          infra_step=True)
+           self.m.path['checkout'].join('out', 'logcat')],
+          infra_step=True,
+          )
 
-  @contextlib.contextmanager
-  def logcat(self, step_name):
-    """Context manager for recording logcat.
-
-    Args:
-      step_name: Name of the outer step. Any steps ran inside this context
-          manager will be nested inside.
-    """
-    with self.m.step.nest(step_name):
-      logcat_dir = self.m.path.mkdtemp('logcat')
-      self.spawn_logcat_monitor(logcat_dir)
-      yield
-      self.logcat_dump(logcat_dir=logcat_dir,
-                       output_logcat_file=self.m.raw_io.output('logcat'),
-                       gs_bucket=None)
-
-  def stack_tool_steps(self, logcat_file):
+  def stack_tool_steps(self):
+    log_file = self.m.path['checkout'].join('out',
+                                            self.m.chromium.c.BUILD_CONFIG,
+                                            'full_log')
     target_arch = self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch']
     # gyp converts ia32 to x86, bot needs to do the same
     target_arch = {'ia32': 'x86'}.get(target_arch) or target_arch
@@ -774,7 +758,7 @@ class AndroidApi(recipe_api.RecipeApi):
         'stack_tool_with_logcat_dump',
         [self.m.path['checkout'].join('third_party', 'android_platform',
                               'development', 'scripts', 'stack'),
-         '--arch', target_arch, '--more-info', logcat_file],
+         '--arch', target_arch, '--more-info', log_file],
         env=self.m.chromium.get_env(),
         infra_step=True)
     self.m.step(
@@ -788,7 +772,7 @@ class AndroidApi(recipe_api.RecipeApi):
           [self.m.path['checkout'].join('build',
                                         'android',
                                         'asan_symbolize.py'),
-           '-l', logcat_file], env=self.m.chromium.get_env(),
+           '-l', log_file], env=self.m.chromium.get_env(),
           infra_step=True)
 
   def test_report(self):
@@ -834,10 +818,8 @@ class AndroidApi(recipe_api.RecipeApi):
   def common_tests_final_steps(self, logcat_gs_bucket=None):
     if not self.c.gce_setup:
       self.shutdown_device_monitor()
-    logcat_file = self.m.chromium.output_dir.join('full_log')
-    self.logcat_dump(output_logcat_file=logcat_file,
-                     gs_bucket=logcat_gs_bucket)
-    self.stack_tool_steps(logcat_file=logcat_file)
+    self.logcat_dump(gs_bucket=logcat_gs_bucket)
+    self.stack_tool_steps()
     if self.c.gce_setup:
       self.shutdown_gce_instances()
     self.test_report()
