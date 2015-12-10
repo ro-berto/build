@@ -29,6 +29,7 @@ def BaseSpec(bot_type, chromium_apply_config, gclient_config, platform,
       'TARGET_BITS': target_bits,
     },
     'gclient_config': gclient_config,
+    'gclient_apply_config': [],
     'testing': {
       'platform': 'linux' if platform == 'android' else platform,
     },
@@ -38,7 +39,7 @@ def BaseSpec(bot_type, chromium_apply_config, gclient_config, platform,
     spec['chromium_config_kwargs']['TARGET_ARCH'] = 'arm'
     spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
     spec['chromium_apply_config'].append('android')
-    spec['gclient_apply_config'] = ['android']
+    spec['gclient_apply_config'].append('android')
   return spec
 
 
@@ -108,6 +109,7 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
           android_isolate_path='content/content_browsertests.isolate'),
     ]
   else:
+    spec['gclient_apply_config'].append('webrtc_test_resources')
     spec['tests'] = [
       WebRTCTest('content_browsertests',
                  args=['--gtest_filter=WebRtc*', '--run-manual',

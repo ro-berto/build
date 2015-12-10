@@ -444,7 +444,7 @@ def chromium_angle(c):
   c.got_revision_mapping['src/third_party/angle'] = 'got_revision'
   c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
-@config_ctx(includes=['chromium', '_webrtc_deps'])
+@config_ctx(includes=['chromium'])
 def chromium_webrtc(c):
   c.got_revision_mapping['src/third_party/libjingle/source/talk'] = (
       'got_libjingle_revision')
@@ -464,7 +464,7 @@ def chromium_webrtc_tot(c):
   c.revisions['src/third_party/libjingle/source/talk'] = 'HEAD'
 
 @config_ctx()
-def _webrtc_deps(c):
+def webrtc_test_resources(c):
   """Add webrtc.DEPS solution for test resources and tools.
 
   The webrtc.DEPS solution pulls in additional resources needed for running
