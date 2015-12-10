@@ -150,14 +150,6 @@ class iOSApi(recipe_api.RecipeApi):
 
     self.__config.setdefault('mb_type', None)
 
-    if self.__config.get('use_goma'):
-      # For GN/MB this is handled inside chromium.run_gn/run_mb.
-      # Handle goma here as opposed to completely src-side, because only
-      # in recipes we know path to the goma dir.
-      assert isinstance(self.__config['GYP_DEFINES'], dict)
-      self.__config['GYP_DEFINES']['use_goma'] = 1
-      self.__config['GYP_DEFINES']['gomadir'] = self.m.path['build'].join('goma')
-
     # Elements of the "tests" list are dicts. There are two types of elements,
     # determined by the presence of one of these mutually exclusive keys:
     #   "app": This says to run a particular app.

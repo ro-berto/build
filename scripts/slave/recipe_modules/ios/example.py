@@ -78,25 +78,3 @@ def GenTests(api):
       ],
     })
   )
-
-  yield (
-    api.test('goma')
-    + api.platform('mac', 64)
-    + api.properties(
-      buildername='ios',
-      buildnumber='0',
-      mastername='chromium.fake',
-      slavename='fake-vm',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': '6.1.1',
-      'GYP_DEFINES': {
-      },
-      'use_goma': True,
-      'compiler': 'xcodebuild',
-      'configuration': 'Debug',
-      'sdk': 'iphonesimulator8.1',
-      'tests': [
-      ],
-    })
-  )
