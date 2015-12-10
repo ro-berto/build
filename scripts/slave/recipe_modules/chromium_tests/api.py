@@ -332,7 +332,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot_config = master_dict.get('builders', {}).get(buildername)
     bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
 
-    tests = bot_config.get('tests', [])
+    tests = [copy.deepcopy(t) for t in bot_config.get('tests', [])]
     if override_tests is not None:
       tests = override_tests
 
@@ -566,8 +566,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           bot_config.get('root_devices')):
         self.m.adb.root_devices()
 
-    # TODO(shinyak): bot_config.get('tests', []) sometimes return tuple.
-    tests = list(bot_config.get('tests', []))
+    tests = [copy.deepcopy(t) for t in bot_config.get('tests', [])]
 
     if bot_config.get('goma_canary') or bot_config.get('goma_staging'):
       tests.insert(0, steps.DiagnoseGomaTest())
