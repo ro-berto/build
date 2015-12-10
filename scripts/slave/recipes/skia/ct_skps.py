@@ -98,6 +98,9 @@ def RunSteps(api):
       'https://pantheon.corp.google.com/storage/browser/%s/skps/%s/%s/' % (
           api.ct_swarming.CT_GS_BUCKET, ct_page_type, skps_chromium_build))
 
+  # Delete swarming_temp_dir to ensure it starts from a clean slate.
+  api.file.rmtree('swarming temp dir', api.ct_swarming.swarming_temp_dir)
+
   for slave_num in range(1, ct_num_slaves + 1):
     # Download SKPs.
     api.ct_swarming.download_skps(
@@ -162,6 +165,7 @@ def RunSteps(api):
 
     except api.step.StepFailure as e:
       failed_tasks.append(e)
+
   if failed_tasks:
     raise api.step.StepFailure(
         'Failed steps: %s' % ', '.join([f.name for f in failed_tasks]))

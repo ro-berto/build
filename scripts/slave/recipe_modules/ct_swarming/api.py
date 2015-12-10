@@ -20,7 +20,7 @@ class CTSwarmingApi(recipe_api.RecipeApi):
   @property
   def swarming_temp_dir(self):
     """Path where artifacts like isolate file and json output will be stored."""
-    return self.m.path['tmp_base'].join('swarming_temp_dir')
+    return self.m.path['slave_build'].join('swarming_temp_dir')
 
   @property
   def tasks_output_dir(self):

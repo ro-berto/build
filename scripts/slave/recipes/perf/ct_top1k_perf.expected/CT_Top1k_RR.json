@@ -296,7 +296,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[TMP_BASE]/swarming_temp_dir",
+      "[SLAVE_BUILD]/swarming_temp_dir",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -319,8 +319,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[TMP_BASE]/swarming_temp_dir/ct-task-1.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"rasterize_and_record_micro\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Linux CT Top1k RR Perf\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"xy12z43\", \n        \"--extra-variable\", \n        \"MASTER\", \n        \"chromium.perf.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"1\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
-      "[TMP_BASE]/swarming_temp_dir/slave1.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/ct-task-1.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"rasterize_and_record_micro\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Linux CT Top1k RR Perf\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"xy12z43\", \n        \"--extra-variable\", \n        \"MASTER\", \n        \"chromium.perf.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"1\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "[SLAVE_BUILD]/swarming_temp_dir/slave1.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Write slave1.isolated.gen.json"
@@ -406,7 +406,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[TMP_BASE]/swarming_temp_dir",
+      "[SLAVE_BUILD]/swarming_temp_dir",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -429,8 +429,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[TMP_BASE]/swarming_temp_dir/ct-task-2.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"rasterize_and_record_micro\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Linux CT Top1k RR Perf\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"xy12z43\", \n        \"--extra-variable\", \n        \"MASTER\", \n        \"chromium.perf.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"2\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
-      "[TMP_BASE]/swarming_temp_dir/slave2.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/ct-task-2.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"rasterize_and_record_micro\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Linux CT Top1k RR Perf\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"xy12z43\", \n        \"--extra-variable\", \n        \"MASTER\", \n        \"chromium.perf.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"2\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "[SLAVE_BUILD]/swarming_temp_dir/slave2.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Write slave2.isolated.gen.json"
@@ -516,7 +516,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[TMP_BASE]/swarming_temp_dir",
+      "[SLAVE_BUILD]/swarming_temp_dir",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -539,8 +539,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[TMP_BASE]/swarming_temp_dir/ct-task-3.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"rasterize_and_record_micro\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Linux CT Top1k RR Perf\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"xy12z43\", \n        \"--extra-variable\", \n        \"MASTER\", \n        \"chromium.perf.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"3\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
-      "[TMP_BASE]/swarming_temp_dir/slave3.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/ct-task-3.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"rasterize_and_record_micro\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Linux CT Top1k RR Perf\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"xy12z43\", \n        \"--extra-variable\", \n        \"MASTER\", \n        \"chromium.perf.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"3\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "[SLAVE_BUILD]/swarming_temp_dir/slave3.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Write slave3.isolated.gen.json"
@@ -626,7 +626,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[TMP_BASE]/swarming_temp_dir",
+      "[SLAVE_BUILD]/swarming_temp_dir",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -649,8 +649,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[TMP_BASE]/swarming_temp_dir/ct-task-4.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"rasterize_and_record_micro\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Linux CT Top1k RR Perf\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"xy12z43\", \n        \"--extra-variable\", \n        \"MASTER\", \n        \"chromium.perf.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"4\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
-      "[TMP_BASE]/swarming_temp_dir/slave4.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/ct-task-4.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"rasterize_and_record_micro\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Linux CT Top1k RR Perf\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"xy12z43\", \n        \"--extra-variable\", \n        \"MASTER\", \n        \"chromium.perf.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"4\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "[SLAVE_BUILD]/swarming_temp_dir/slave4.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Write slave4.isolated.gen.json"
@@ -736,7 +736,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[TMP_BASE]/swarming_temp_dir",
+      "[SLAVE_BUILD]/swarming_temp_dir",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -759,8 +759,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[TMP_BASE]/swarming_temp_dir/ct-task-5.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"rasterize_and_record_micro\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Linux CT Top1k RR Perf\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"xy12z43\", \n        \"--extra-variable\", \n        \"MASTER\", \n        \"chromium.perf.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"5\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
-      "[TMP_BASE]/swarming_temp_dir/slave5.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/ct-task-5.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"rasterize_and_record_micro\", \n        \"--extra-variable\", \n        \"BUILDER\", \n        \"Linux CT Top1k RR Perf\", \n        \"--extra-variable\", \n        \"GIT_HASH\", \n        \"xy12z43\", \n        \"--extra-variable\", \n        \"MASTER\", \n        \"chromium.perf.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"5\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "[SLAVE_BUILD]/swarming_temp_dir/slave5.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Write slave5.isolated.gen.json"
@@ -776,11 +776,11 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "[TMP_BASE]/swarming_temp_dir/slave1.isolated.gen.json",
-      "[TMP_BASE]/swarming_temp_dir/slave2.isolated.gen.json",
-      "[TMP_BASE]/swarming_temp_dir/slave3.isolated.gen.json",
-      "[TMP_BASE]/swarming_temp_dir/slave4.isolated.gen.json",
-      "[TMP_BASE]/swarming_temp_dir/slave5.isolated.gen.json"
+      "[SLAVE_BUILD]/swarming_temp_dir/slave1.isolated.gen.json",
+      "[SLAVE_BUILD]/swarming_temp_dir/slave2.isolated.gen.json",
+      "[SLAVE_BUILD]/swarming_temp_dir/slave3.isolated.gen.json",
+      "[SLAVE_BUILD]/swarming_temp_dir/slave4.isolated.gen.json",
+      "[SLAVE_BUILD]/swarming_temp_dir/slave5.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
@@ -1117,7 +1117,7 @@
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/swarming_temp_dir/outputs/slave1"
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/slave1"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "ct-1k-task-1 on Ubuntu",
@@ -1177,7 +1177,7 @@
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/swarming_temp_dir/outputs/slave2"
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/slave2"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "ct-1k-task-2 on Ubuntu",
@@ -1237,7 +1237,7 @@
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/swarming_temp_dir/outputs/slave3"
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/slave3"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "ct-1k-task-3 on Ubuntu",
@@ -1297,7 +1297,7 @@
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/swarming_temp_dir/outputs/slave4"
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/slave4"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "ct-1k-task-4 on Ubuntu",
@@ -1357,7 +1357,7 @@
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/swarming_temp_dir/outputs/slave5"
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/slave5"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "ct-1k-task-5 on Ubuntu",
