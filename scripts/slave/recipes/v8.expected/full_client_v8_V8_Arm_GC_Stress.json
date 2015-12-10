@@ -291,7 +291,9 @@
       "--print-status-updates",
       "--shards",
       "2",
-      "Mjsunit/Ubuntu-14.04/[dummy has/V8 Arm GC Stress/571"
+      "Mjsunit/Ubuntu-14.04/[dummy has/V8 Arm GC Stress/571",
+      "--timeout",
+      "10800"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Mjsunit",
@@ -332,7 +334,9 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "Webkit/Ubuntu-14.04/[dummy has/V8 Arm GC Stress/571"
+      "Webkit/Ubuntu-14.04/[dummy has/V8 Arm GC Stress/571",
+      "--timeout",
+      "10800"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Webkit",

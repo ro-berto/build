@@ -251,6 +251,12 @@ class V8SwarmingTest(V8Test):
     args.append('--')
     args.extend(self.api.swarming.get_collect_cmd_args(task))
 
+    # We need to wait longer for tasks on arm as there the hard
+    # timeout and expiration are also higher.
+    if (self.task.dimensions.get('cpu') and
+        self.task.dimensions['cpu'].startswith('arm')):
+      args.extend(['--timeout', '%d' % (3 * 60 * 60)])
+
     return self.api.python(
         name=self.test['name'],
         script=self.v8.resource('collect_v8_task.py'),

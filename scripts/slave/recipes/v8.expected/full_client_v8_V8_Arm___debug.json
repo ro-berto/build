@@ -380,7 +380,9 @@
       "--print-status-updates",
       "--shards",
       "2",
-      "Check/Ubuntu-14.04/[dummy has/V8 Arm - debug/571"
+      "Check/Ubuntu-14.04/[dummy has/V8 Arm - debug/571",
+      "--timeout",
+      "10800"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Check",
@@ -421,7 +423,9 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Arm - debug/571"
+      "OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Arm - debug/571",
+      "--timeout",
+      "10800"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "OptimizeForSize",
@@ -462,7 +466,9 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "SimdJs - all/Ubuntu-14.04/[dummy has/V8 Arm - debug/571"
+      "SimdJs - all/Ubuntu-14.04/[dummy has/V8 Arm - debug/571",
+      "--timeout",
+      "10800"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "SimdJs - all",
