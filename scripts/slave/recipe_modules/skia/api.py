@@ -250,7 +250,7 @@ class SkiaApi(recipe_api.RecipeApi):
         self.failed.append(e)
 
   def gsutil_upload(self, name, source, bucket, dest):
-    """Upload to Google Storage."""
+    """Upload to Google Storage without using a .boto file."""
     self.run(
         self.m.gsutil.upload,
         name,

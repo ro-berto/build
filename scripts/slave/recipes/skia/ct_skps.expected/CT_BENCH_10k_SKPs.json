@@ -569,6 +569,9 @@
       "cpu",
       "x86-64",
       "--dimension",
+      "gpu",
+      "10de:104a",
+      "--dimension",
       "os",
       "Ubuntu-14.04",
       "--tag",
@@ -627,6 +630,9 @@
       "--dimension",
       "cpu",
       "x86-64",
+      "--dimension",
+      "gpu",
+      "10de:104a",
       "--dimension",
       "os",
       "Ubuntu-14.04",
@@ -687,6 +693,9 @@
       "cpu",
       "x86-64",
       "--dimension",
+      "gpu",
+      "10de:104a",
+      "--dimension",
       "os",
       "Ubuntu-14.04",
       "--tag",
@@ -746,6 +755,9 @@
       "cpu",
       "x86-64",
       "--dimension",
+      "gpu",
+      "10de:104a",
+      "--dimension",
       "os",
       "Ubuntu-14.04",
       "--tag",
@@ -804,6 +816,9 @@
       "--dimension",
       "cpu",
       "x86-64",
+      "--dimension",
+      "gpu",
+      "10de:104a",
       "--dimension",
       "os",
       "Ubuntu-14.04",
@@ -900,6 +915,76 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
+      "[TMP_BASE]/swarming_temp_dir/outputs/slave1/0",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "listdir output dir",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"file 1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"file 2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import json, os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  with open(sys.argv[2], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    json.dump(os.listdir(sys.argv[1]), f)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "-R",
+      "[TMP_BASE]/swarming_temp_dir/outputs/slave1/0/file 1",
+      "gs://skia-perf/ct/10k/2012/05/14/12/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": null,
+      "BOTO_CONFIG": null
+    },
+    "name": "gsutil upload json output",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "-R",
+      "[TMP_BASE]/swarming_temp_dir/outputs/slave1/0/file 2",
+      "gs://skia-perf/ct/10k/2012/05/14/12/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": null,
+      "BOTO_CONFIG": null
+    },
+    "name": "gsutil upload json output (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/swarming.client/swarming.py",
       "collect",
       "--swarming",
@@ -954,6 +1039,76 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
+      "[TMP_BASE]/swarming_temp_dir/outputs/slave2/0",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "listdir output dir (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"file 1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"file 2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import json, os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  with open(sys.argv[2], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    json.dump(os.listdir(sys.argv[1]), f)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "-R",
+      "[TMP_BASE]/swarming_temp_dir/outputs/slave2/0/file 1",
+      "gs://skia-perf/ct/10k/2012/05/14/12/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": null,
+      "BOTO_CONFIG": null
+    },
+    "name": "gsutil upload json output (3)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "-R",
+      "[TMP_BASE]/swarming_temp_dir/outputs/slave2/0/file 2",
+      "gs://skia-perf/ct/10k/2012/05/14/12/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": null,
+      "BOTO_CONFIG": null
+    },
+    "name": "gsutil upload json output (4)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
     ]
   },
   {
@@ -1020,6 +1175,76 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
+      "[TMP_BASE]/swarming_temp_dir/outputs/slave3/0",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "listdir output dir (3)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"file 1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"file 2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import json, os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  with open(sys.argv[2], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    json.dump(os.listdir(sys.argv[1]), f)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "-R",
+      "[TMP_BASE]/swarming_temp_dir/outputs/slave3/0/file 1",
+      "gs://skia-perf/ct/10k/2012/05/14/12/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": null,
+      "BOTO_CONFIG": null
+    },
+    "name": "gsutil upload json output (5)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "-R",
+      "[TMP_BASE]/swarming_temp_dir/outputs/slave3/0/file 2",
+      "gs://skia-perf/ct/10k/2012/05/14/12/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": null,
+      "BOTO_CONFIG": null
+    },
+    "name": "gsutil upload json output (6)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/swarming.client/swarming.py",
       "collect",
       "--swarming",
@@ -1080,6 +1305,76 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
+      "[TMP_BASE]/swarming_temp_dir/outputs/slave4/0",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "listdir output dir (4)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"file 1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"file 2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import json, os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  with open(sys.argv[2], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    json.dump(os.listdir(sys.argv[1]), f)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "-R",
+      "[TMP_BASE]/swarming_temp_dir/outputs/slave4/0/file 1",
+      "gs://skia-perf/ct/10k/2012/05/14/12/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": null,
+      "BOTO_CONFIG": null
+    },
+    "name": "gsutil upload json output (7)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "-R",
+      "[TMP_BASE]/swarming_temp_dir/outputs/slave4/0/file 2",
+      "gs://skia-perf/ct/10k/2012/05/14/12/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": null,
+      "BOTO_CONFIG": null
+    },
+    "name": "gsutil upload json output (8)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/swarming.client/swarming.py",
       "collect",
       "--swarming",
@@ -1134,6 +1429,76 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
+      "[TMP_BASE]/swarming_temp_dir/outputs/slave5/0",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "listdir output dir (5)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"file 1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"file 2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import json, os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  with open(sys.argv[2], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    json.dump(os.listdir(sys.argv[1]), f)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "-R",
+      "[TMP_BASE]/swarming_temp_dir/outputs/slave5/0/file 1",
+      "gs://skia-perf/ct/10k/2012/05/14/12/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": null,
+      "BOTO_CONFIG": null
+    },
+    "name": "gsutil upload json output (9)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "-R",
+      "[TMP_BASE]/swarming_temp_dir/outputs/slave5/0/file 2",
+      "gs://skia-perf/ct/10k/2012/05/14/12/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": null,
+      "BOTO_CONFIG": null
+    },
+    "name": "gsutil upload json output (10)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
     ]
   },
   {

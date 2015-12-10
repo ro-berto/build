@@ -9,9 +9,11 @@ DEPS = [
   'ct_swarming',
   'file',
   'gclient',
+  'gsutil',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/step',
+  'recipe_engine/time',
   'swarming',
   'swarming_client',
   'tryserver',
@@ -124,9 +126,13 @@ def RunSteps(api):
         api.step.active_result.presentation.properties['swarm_hashes'].values())
 
   # Trigger all swarming tasks.
+  dimensions={'os': 'Ubuntu-14.04', 'cpu': 'x86-64'}
+  if skia_tool == 'nanobench':
+    # Run on GPU bots for nanobench.
+    dimensions['gpu'] = '10de:104a'
   tasks = api.ct_swarming.trigger_swarming_tasks(
       swarm_hashes, task_name_prefix='ct-10k-%s' % skia_tool,
-      dimensions={'os': 'Ubuntu-14.04', 'cpu': 'x86-64'})
+      dimensions=dimensions)
 
   # Now collect all tasks.
   failed_tasks = []
@@ -135,13 +141,25 @@ def RunSteps(api):
     try:
       slave_num += 1
       api.ct_swarming.collect_swarming_task(task)
+
       if skia_tool == 'nanobench':
-        # TODO(rmistry):
-        # Upload artifacts from
-        # api.ct_swarming.tasks_output_dir.join('slave%s' % slave_num).join('0')
-        # to Google storage bucket:  gs://skia-perf/ct/10k/YYYY/MM/DD/HH/
-        # using JWT JSON service account credentials.
-        pass
+        output_dir = api.ct_swarming.tasks_output_dir.join(
+            'slave%s' % slave_num).join('0')
+        utc = api.time.utcnow()
+        gs_dest_dir = 'ct/10k/%d/%02d/%02d/%02d/' % (
+            utc.year, utc.month, utc.day, utc.hour)
+        for json_output in api.file.listdir('output dir', output_dir):
+          # TODO(rmistry): Use api.skia.gsutil_upload once the skia recipe
+          #                is usable without needing to call gen_steps first.
+          api.gsutil.upload(
+              name='upload json output',
+              source=output_dir.join(json_output),
+              bucket='skia-perf',
+              dest=gs_dest_dir,
+              env={'AWS_CREDENTIAL_FILE': None, 'BOTO_CONFIG': None},
+              args=['-R']
+          )
+
     except api.step.StepFailure as e:
       failed_tasks.append(e)
   if failed_tasks:
