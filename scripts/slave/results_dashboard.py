@@ -257,6 +257,7 @@ def MakeDashboardJsonV1(chart_json, revision_dict, test_name, bot, buildername,
   fields = {
       'master': master,
       'bot': bot,
+      'test_suite_name': test_name,
       'point_id': point_id,
       'supplemental': supplemental,
       'versions': versions,

@@ -70,6 +70,7 @@ class ResultsDashboardFormatTest(unittest.TestCase):
             'bot': 'my-bot',
             'chart_data': {'some_json': 'from_telemetry'},
             'is_ref': True,
+            'test_suite_name': 'foo_test',
             'point_id': 307226,
             'supplemental': {
                 'annotation': 'xyz',
