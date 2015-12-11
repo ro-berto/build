@@ -15,6 +15,10 @@ def Update(c):
                             treeStableTimer=0,
                             builderNames=[
                                 'Win32 Release (swarming)',
+                                'Win32 Debug (Clang)',
+                                'Win32 Release (Clang)',
+                                'Win64 Debug (Clang)',
+                                'Win64 Release (Clang)',
                             ]),
   ])
 
@@ -23,6 +27,10 @@ def Update(c):
       'name': 'Win32 Release (swarming)',
       'slavebuilddir': 'win_swarming',
     },
+    {'name': 'Win32 Debug (Clang)', 'slavebuilddir': 'win_clang'},
+    {'name': 'Win32 Release (Clang)', 'slavebuilddir': 'win_clang'},
+    {'name': 'Win64 Debug (Clang)', 'slavebuilddir': 'win_clang'},
+    {'name': 'Win64 Release (Clang)', 'slavebuilddir': 'win_clang'},
   ]
 
   c['builders'].extend([

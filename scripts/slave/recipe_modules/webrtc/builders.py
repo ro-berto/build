@@ -614,6 +614,42 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
       },
+      'Win32 Debug (Clang)': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'win'},
+      },
+      'Win32 Release (Clang)': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'win'},
+      },
+      'Win64 Debug (Clang)': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'win'},
+      },
+      'Win64 Release (Clang)': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'win'},
+      },
       'Mac64 Release (swarming)': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -829,6 +865,42 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'chromium_apply_config': ['webrtc_gn'],
+        'bot_type': 'builder',
+        'testing': {'platform': 'win'},
+      },
+      'win_clang_dbg': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'win'},
+      },
+      'win_clang_rel': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'win'},
+      },
+      'win_x64_clang_dbg': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'win'},
+      },
+      'win_x64_clang_rel': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
         'bot_type': 'builder',
         'testing': {'platform': 'win'},
       },
