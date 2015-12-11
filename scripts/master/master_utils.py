@@ -40,6 +40,9 @@ CQ_SERVICE_ACCOUNT = (
 # kill really crazy long builds that also gum up resources.
 CQ_MAX_TIME = 2*60*60
 
+# Larger timeout for Windows, see http://crbug.com/567377 .
+CQ_MAX_TIME_WIN = 3*60*60
+
 
 def HackMaxTime(maxTime=8*60*60):
   """Set maxTime default value to 8 hours. This function must be called before
