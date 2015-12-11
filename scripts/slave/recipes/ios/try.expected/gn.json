@@ -133,7 +133,8 @@
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"gn_args\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"target_os=\\\"ios\\\"\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"ios_enable_code_signing=false\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ios_enable_code_signing=false\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"use_goma=true\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mb_type\": \"gn\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphonesimulator8.0\", @@@",
@@ -153,7 +154,7 @@
     "cmd": [
       "echo",
       "-e",
-      "{\n  \"GYP_DEFINES\": [], \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"compiler\": \"ninja\", \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [\n    \"target_os=\\\"ios\\\"\", \n    \"ios_enable_code_signing=false\"\n  ], \n  \"mb_type\": \"gn\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests\", \n      \"device type\": \"fake device\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"xcode version\": \"fake xcode version\"\n}"
+      "{\n  \"GYP_DEFINES\": [], \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"compiler\": \"ninja\", \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [\n    \"target_os=\\\"ios\\\"\", \n    \"ios_enable_code_signing=false\", \n    \"use_goma=true\"\n  ], \n  \"mb_type\": \"gn\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests\", \n      \"device type\": \"fake device\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"xcode version\": \"fake xcode version\"\n}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "finalize build config"
@@ -241,7 +242,9 @@
       "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"f.*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
@@ -257,35 +260,29 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
-      "analyze",
-      "-m",
-      "tryserver.fake",
-      "-b",
-      "ios",
-      "-v",
-      "//out/None",
-      "{\"additional_compile_targets\": [\"All\", \"fake tests\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"fake tests\"]}",
-      "/path/to/tmp/json"
+      "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "analyze",
     "~followup_annotations": [
-      "@@@STEP_TEXT@No compile necessary@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
+      "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"All\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"fake tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"All\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"fake tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"All\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"fake tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"fake tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"fake tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
@@ -294,11 +291,88 @@
     ]
   },
   {
-    "cmd": [],
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/clang_revision.py",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[skipped] fake tests (fake device iOS 8.1)",
+    "name": "clang_revision",
     "~followup_annotations": [
-      "@@@STEP_TEXT@This test was skipped because it was not affected.@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Debug-iphonesimulator",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma-clang",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--goma-fail-fast",
+      "--goma-disable-local-fallback",
+      "--",
+      "All",
+      "fake tests"
+    ],
+    "cwd": "[SLAVE_BUILD]/src/out/Debug-iphonesimulator",
+    "name": "compile",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/ios/run.py",
+      "--app",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/fake tests.app",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--iossim",
+      "[SLAVE_BUILD]/src/out/Debug-iphonesimulator/iossim",
+      "--platform",
+      "fake device",
+      "--version",
+      "8.1"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "fake tests (fake device iOS 8.1)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"links\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake URL text\": \"fake URL\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"logs\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake log\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"fake log line 1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"fake log line 2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@fake log@fake log line 1@@@",
+      "@@@STEP_LOG_LINE@fake log@fake log line 2@@@",
+      "@@@STEP_LOG_END@fake log@@@",
+      "@@@STEP_LINK@fake URL text@fake URL@@@"
     ]
   },
   {

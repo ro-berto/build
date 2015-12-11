@@ -144,11 +144,11 @@ class iOSApi(recipe_api.RecipeApi):
     # we default to empty values of their respective types, so in other places
     # we can iterate over them without having to check if they are in the dict
     # at all.
-    self.__config['triggered bots'] = self.__config.get('triggered bots', {})
-    self.__config['tests'] = self.__config.get('tests', [])
-    self.__config['env'] = self.__config.get('env', {})
-
+    self.__config.setdefault('triggered bots', {})
+    self.__config.setdefault('tests', [])
+    self.__config.setdefault('env', {})
     self.__config.setdefault('mb_type', None)
+    self.__config.setdefault('gn_args', [])
 
     # Elements of the "tests" list are dicts. There are two types of elements,
     # determined by the presence of one of these mutually exclusive keys:
@@ -246,6 +246,9 @@ class iOSApi(recipe_api.RecipeApi):
     else:
       gyp_defines = self.__config['GYP_DEFINES']
 
+    mb_type = self.__config['mb_type']
+    gn_args = self.__config['gn_args']
+
     env = {
       'GYP_DEFINES': ' '.join(gyp_defines),
       'LANDMINES_VERBOSE': '1',
@@ -254,7 +257,7 @@ class iOSApi(recipe_api.RecipeApi):
     # Add extra env variables.
     env.update(self.__config['env'])
 
-    sub_path = ''
+    build_sub_path = ''
 
     if self.compiler == 'xcodebuild':
       env['GYP_GENERATORS'] = 'xcode'
@@ -272,12 +275,12 @@ class iOSApi(recipe_api.RecipeApi):
     elif self.compiler == 'ninja':
       env['GYP_CROSSCOMPILE'] = '1'
       env['GYP_GENERATORS'] = 'ninja'
-      sub_path = '%s-%s' % (self.configuration, {
+      build_sub_path = '%s-%s' % (self.configuration, {
           'simulator': 'iphonesimulator',
           'device': 'iphoneos',
         }[self.platform])
 
-      cwd = self.m.path['checkout'].join('out', sub_path)
+      cwd = self.m.path['checkout'].join('out', build_sub_path)
       cmd = ['ninja', '-C', cwd]
 
     if self.using_mb:
@@ -297,7 +300,7 @@ class iOSApi(recipe_api.RecipeApi):
       self.m.chromium.run_mb(self.m.properties['mastername'],
                              self.m.properties['buildername'],
                              name='generate_build_files' + suffix,
-                             build_dir='//out/' + sub_path)
+                             build_dir='//out/' + build_sub_path)
 
     if (self.compiler == 'ninja' and
         self.m.tryserver.is_tryserver and
@@ -328,7 +331,17 @@ class iOSApi(recipe_api.RecipeApi):
       else:
         return
 
-    self.m.step('compile' + suffix, cmd, cwd=cwd)
+    use_goma = (self.compiler == 'ninja' and
+                ('use_goma=1' in gyp_defines or 'use_goma=true' in gn_args))
+    if use_goma:
+      self.m.chromium.apply_config('ninja')
+      self.m.chromium.apply_config('default_compiler')
+      self.m.chromium.apply_config('goma')
+      self.m.chromium.compile(targets=compile_targets,
+                              target=build_sub_path,
+                              cwd=cwd)
+    else:
+      self.m.step('compile' + suffix, cmd, cwd=cwd)
 
   def test(self, *args):
     """Runs tests as instructed by this bot's build config.

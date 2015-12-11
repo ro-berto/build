@@ -202,6 +202,7 @@ def GenTests(api):
       'gn_args': [
         'target_os="ios"',
         'ios_enable_code_signing=false',
+        'use_goma=true',
       ],
       'mb_type': 'gn',
       'compiler': 'ninja',
@@ -215,6 +216,7 @@ def GenTests(api):
         },
       ],
     })
+    + suppress_analyze()
   )
 
 

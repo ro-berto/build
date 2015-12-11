@@ -153,7 +153,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     return (buildername, bot_config)
 
   def compile(self, targets=None, name=None, force_clobber=False, out_dir=None,
-              **kwargs):
+              target=None, **kwargs):
     """Return a compile.py invocation."""
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
@@ -163,7 +163,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       self._clang_version = self.get_clang_version()
 
     args = [
-      '--target', self.c.build_config_fs,
+      '--target', target or self.c.build_config_fs,
       '--src-dir', self.m.path['checkout'],
     ]
     if self.c.compile_py.build_args:
