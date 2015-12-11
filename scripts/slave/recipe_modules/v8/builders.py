@@ -1242,7 +1242,6 @@ BUILDERS = {
           'os': 'Ubuntu-14.04',
           'cpu': 'armv7l',
         },
-        'swarming_priority': 35,
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 GC Stress - custom snapshot': {
