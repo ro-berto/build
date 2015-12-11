@@ -138,15 +138,13 @@ def x86_try_instrumentation_tests(c):
 def coverage_builder_tests(c):  # pragma: no cover
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['emma_coverage'] = 1
-  gyp_defs['emma_filter'] = 'com.google.android.apps.chrome.*'
+  gyp_defs['emma_filter'] = 'com.google.android.apps.chrome.*, org.chromium.*'
 
 @CONFIG_CTX(includes=['main_builder'])
 def incremental_coverage_builder_tests(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['emma_coverage'] = 1
-  # TODO(estevenson): Update the filter to capture all packages once
-  # crbug.com/272790 (multidex) is fixed.
-  gyp_defs['emma_filter'] = 'org.chromium.content.browser.*'
+  gyp_defs['emma_filter'] = 'org.chromium.*'
 
 @CONFIG_CTX(includes=['main_builder'])
 def non_device_wipe_provisioning(c):
