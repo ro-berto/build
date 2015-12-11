@@ -100,7 +100,7 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
-      "7200",
+      "14400",
       "--io-timeout",
       "1200",
       "--hard-timeout",
@@ -196,7 +196,7 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
-      "7200",
+      "14400",
       "--io-timeout",
       "1200",
       "--hard-timeout",
@@ -288,7 +288,7 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
-      "7200",
+      "14400",
       "--io-timeout",
       "1200",
       "--hard-timeout",
@@ -382,7 +382,7 @@
       "2",
       "Check/Ubuntu-14.04/[dummy has/V8 Arm - debug/571",
       "--timeout",
-      "10800"
+      "18000"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Check",
@@ -425,7 +425,7 @@
       "1",
       "OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Arm - debug/571",
       "--timeout",
-      "10800"
+      "18000"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "OptimizeForSize",
@@ -468,7 +468,7 @@
       "1",
       "SimdJs - all/Ubuntu-14.04/[dummy has/V8 Arm - debug/571",
       "--timeout",
-      "10800"
+      "18000"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "SimdJs - all",
