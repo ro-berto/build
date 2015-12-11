@@ -497,6 +497,7 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
         'testing': {'platform': 'linux'},
+        'enable_swarming': True,
         'triggers': [
           'V8 Linux64 - custom snapshot - debug',
           'V8 Linux64 GC Stress - custom snapshot',
@@ -595,6 +596,8 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
+        'enable_swarming': True,
+        'slim_swarming_tester': True,
         'parent_buildername': 'V8 Linux64 - custom snapshot - debug builder',
         'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
         'tests': [Mjsunit],
@@ -1251,7 +1254,9 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - custom snapshot - debug builder',
         'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
-        'tests': [Mjsunit],
+        'enable_swarming': True,
+        'slim_swarming_tester': True,
+        'tests': [Mjsunit_2],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux gcc 4.8': {
