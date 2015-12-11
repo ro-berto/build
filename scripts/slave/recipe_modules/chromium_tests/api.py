@@ -524,60 +524,52 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     self.m.chromium.compile(compile_targets, name='compile%s' % name_suffix)
 
-  def download_and_unzip_build(self, mastername, buildername, update_step,
-                               master_dict, build_archive_url=None,
-                               build_revision=None, override_bot_type=None):
-    # We only want to do this for tester bots (i.e. those which do not compile
-    # locally).
-    bot_type = override_bot_type or master_dict.get('builders', {}).get(
-        buildername, {}).get('bot_type')
-    if bot_type != 'tester':
-      return
-
-    # Protect against hard to debug mismatches between directory names
-    # used to run tests from and extract build to. We've had several cases
-    # where a stale build directory was used on a tester, and the extracted
-    # build was not used at all, leading to confusion why source code changes
-    # are not taking effect.
-    #
-    # The best way to ensure the old build directory is not used is to
-    # remove it.
-    self.m.file.rmtree(
-      'build directory',
-      self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
-
-    legacy_build_url = None
-    got_revision = update_step.presentation.properties['got_revision']
-    build_revision = build_revision or self.m.properties.get(
-        'parent_got_revision') or got_revision
-    build_archive_url = build_archive_url or self.m.properties.get(
-        'parent_build_archive_url')
-    if build_archive_url is None:
-      master_config = master_dict.get('settings', {})
-      legacy_build_url = self._make_legacy_build_url(master_config, mastername)
-
-    self.m.archive.download_and_unzip_build(
-      step_name='extract build',
-      target=self.m.chromium.c.build_config_fs,
-      build_url=legacy_build_url,
-      build_revision=build_revision,
-      build_archive_url=build_archive_url)
-
   def tests_for_builder(self, mastername, buildername, update_step, master_dict,
                         override_bot_type=None):
+    got_revision = update_step.presentation.properties['got_revision']
 
     bot_config = master_dict.get('builders', {}).get(buildername)
+    master_config = master_dict.get('settings', {})
+
     bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
-    # TODO(shinyak): bot_config.get('tests', []) sometimes return tuple.
+
+    if bot_type == 'tester':
+      # Protect against hard to debug mismatches between directory names
+      # used to run tests from and extract build to. We've had several cases
+      # where a stale build directory was used on a tester, and the extracted
+      # build was not used at all, leading to confusion why source code changes
+      # are not taking effect.
+      #
+      # The best way to ensure the old build directory is not used is to
+      # remove it.
+      self.m.file.rmtree(
+        'build directory',
+        self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
+
+      # Do not attempt to compose an archive URL if one is given.
+      specified_url = self.m.properties.get('parent_build_archive_url')
+      if specified_url:
+        legacy_build_url = None
+      else:
+        legacy_build_url = self._make_legacy_build_url(master_config,
+                                                       mastername)
+
+      self.m.archive.download_and_unzip_build(
+        step_name='extract build',
+        target=self.m.chromium.c.build_config_fs,
+        build_url=legacy_build_url,
+        build_revision=self.m.properties.get('parent_got_revision',
+                                             got_revision),
+        build_archive_url=specified_url)
+
+      if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
+          bot_config.get('root_devices')):
+        self.m.adb.root_devices()
+
     tests = [copy.deepcopy(t) for t in bot_config.get('tests', [])]
 
     if bot_config.get('goma_canary') or bot_config.get('goma_staging'):
       tests.insert(0, steps.DiagnoseGomaTest())
-
-    if bot_type == 'tester':
-      if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
-          bot_config.get('root_devices')):
-        self.m.adb.root_devices()
 
     if bot_type in ('tester', 'builder_tester'):
       isolated_targets = [

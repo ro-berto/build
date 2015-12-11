@@ -157,13 +157,12 @@ class AutoBisectApi(recipe_api.RecipeApi):
             args=[zip_dir, build_dir],
         )
     else:
-      api.chromium_tests.download_and_unzip_build(mastername, buildername,
-                                                  update_step, master_dict,
-                                                  override_bot_type='tester')
-
-      api.chromium_tests.tests_for_builder(mastername, buildername, update_step,
-                                           master_dict,
-                                           override_bot_type='tester')
+      api.chromium_tests.tests_for_builder(
+          mastername,
+          buildername,
+          update_step,
+          master_dict,
+          override_bot_type='tester')
 
     tests = [api.chromium_tests.steps.BisectTest()]
 
