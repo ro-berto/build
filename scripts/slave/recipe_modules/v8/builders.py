@@ -75,10 +75,11 @@ BUILDERS = {
         ],
       },
       'V8 Linux - swarming staging builder': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
+        'chromium_apply_config': [
+          'clang', 'v8_ninja', 'goma', 'embed_script_mjsunit'],
         'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux_swarming_staging_archive',
@@ -179,41 +180,37 @@ BUILDERS = {
         },
       },
       'V8 Linux - swarming staging 1': {
-        'chromium_apply_config': ['simulate_arm'],
+        'v8_apply_config': ['no_harness'],
         'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - swarming staging builder',
         'build_gs_archive': 'linux_swarming_staging_archive',
-        'tests': [
-          V8Testing_2,
-        ],
+        'tests': [Mjsunit],
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
         'slim_swarming_tester': True,
         'swarming_dimensions': {
-          'os': 'Ubuntu-12.04',
+          'os': 'Ubuntu',
         },
       },
       'V8 Linux - swarming staging 2': {
-        'chromium_apply_config': ['simulate_arm'],
+        'v8_apply_config': ['gc_stress', 'no_harness'],
         'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - swarming staging builder',
         'build_gs_archive': 'linux_swarming_staging_archive',
-        'tests': [
-          V8Testing_2,
-        ],
+        'tests': [Mjsunit],
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
         'slim_swarming_tester': True,
         'swarming_dimensions': {
-          'os': 'Ubuntu-12.04',
+          'os': 'Ubuntu',
         },
       },
       'V8 Linux - swarming staging 3': {

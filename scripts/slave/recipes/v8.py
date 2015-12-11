@@ -304,7 +304,15 @@ def GenTests(api):
         'V8 Linux - swarming staging 1',
         'slim_bisect_tester_swarming',
     ) +
-    api.v8.fail('Check') +
+    api.v8.fail('Mjsunit') +
+    api.override_step_data(
+        'Bisect a0.gsutil download isolated json',
+        api.json.output({'mjsunit': '[dummy hash for bisection]'}),
+    ) +
+    api.override_step_data(
+        'Bisect a1.gsutil download isolated json',
+        api.json.output({'mjsunit': '[dummy hash for bisection]'}),
+    ) +
     api.time.step(120)
   )
 
