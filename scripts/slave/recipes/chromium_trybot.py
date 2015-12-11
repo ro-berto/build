@@ -833,7 +833,7 @@ def GenTests(api):
 
   gpu_targets = ['angle_unittests_run', 'chrome', 'chromium_builder_tests',
                  'content_gl_tests_run', 'gl_tests_run',
-                 'tab_capture_end2end_tests_run', 'telemetry_gpu_new_test_run']
+                 'tab_capture_end2end_tests_run', 'telemetry_gpu_test_run']
   yield (
     api.test('gpu_tests') +
     props(

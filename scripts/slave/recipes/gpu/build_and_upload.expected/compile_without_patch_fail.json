@@ -176,7 +176,7 @@
       "-u",
       "[SLAVE_BUILD]\\src\\build\\gyp_chromium",
       "--analyzer",
-      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"angle_unittests_run\", \"content_gl_tests_run\", \"gl_tests_run\", \"gl_unittests_run\", \"gles2_conform_test_run\", \"gpu_unittests_run\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_new_test_run\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"angle_unittests_run\", \"content_gl_tests_run\", \"gl_tests_run\", \"gl_unittests_run\", \"gles2_conform_test_run\", \"gpu_unittests_run\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -199,7 +199,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"gles2_conform_test\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"gpu_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"tab_capture_end2end_tests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_new_test\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_test\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_targets\": [@@@",
@@ -210,7 +210,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"gles2_conform_test_run\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"gpu_unittests_run\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"tab_capture_end2end_tests_run\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_new_test_run\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_test_run\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -255,8 +255,8 @@
       "gpu_unittests_run",
       "tab_capture_end2end_tests",
       "tab_capture_end2end_tests_run",
-      "telemetry_gpu_new_test",
-      "telemetry_gpu_new_test_run"
+      "telemetry_gpu_test",
+      "telemetry_gpu_test_run"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile (with patch)",
@@ -408,8 +408,8 @@
       "gpu_unittests_run",
       "tab_capture_end2end_tests",
       "tab_capture_end2end_tests_run",
-      "telemetry_gpu_new_test",
-      "telemetry_gpu_new_test_run"
+      "telemetry_gpu_test",
+      "telemetry_gpu_test_run"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile (without patch)",

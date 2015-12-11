@@ -233,7 +233,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests_run\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"gl_unittests_run\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"tab_capture_end2end_tests_run\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_new_test_run\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_test_run\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"angle_unittests_run\", @@@",
@@ -242,7 +242,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests_run\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"gl_unittests_run\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"tab_capture_end2end_tests_run\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_new_test_run\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_test_run\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"angle_unittests_run\", @@@",
@@ -250,7 +250,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests_run\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"gl_unittests_run\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"tab_capture_end2end_tests_run\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_new_test_run\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_test_run\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"angle_unittests_run\", @@@",
@@ -258,7 +258,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests_run\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"gl_unittests_run\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"tab_capture_end2end_tests_run\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_new_test_run\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_test_run\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
@@ -300,7 +300,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--swarming-targets-file",
-      "content_gl_tests\ngl_tests\nangle_unittests\ngl_unittests\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntab_capture_end2end_tests\n",
+      "content_gl_tests\ngl_tests\nangle_unittests\ngl_unittests\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntab_capture_end2end_tests\n",
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -333,7 +333,7 @@
       "gl_tests_run",
       "gl_unittests_run",
       "tab_capture_end2end_tests_run",
-      "telemetry_gpu_new_test_run"
+      "telemetry_gpu_test_run"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile (with patch)",
@@ -453,7 +453,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--swarming-targets-file",
-      "content_gl_tests\ngl_tests\nangle_unittests\ngl_unittests\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntelemetry_gpu_new_test\ntab_capture_end2end_tests\n",
+      "content_gl_tests\ngl_tests\nangle_unittests\ngl_unittests\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntab_capture_end2end_tests\n",
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -486,7 +486,7 @@
       "gl_tests_run",
       "gl_unittests_run",
       "tab_capture_end2end_tests_run",
-      "telemetry_gpu_new_test_run"
+      "telemetry_gpu_test_run"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile (without patch)",

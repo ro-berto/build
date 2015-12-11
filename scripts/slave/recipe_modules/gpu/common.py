@@ -10,7 +10,7 @@ GPU_ISOLATES = (
   'gles2_conform_test',
   'gpu_unittests',
   'tab_capture_end2end_tests',
-  'telemetry_gpu_new_test',
+  'telemetry_gpu_test',
 )
 
 # Until the media-only tests are extracted from content_unittests and

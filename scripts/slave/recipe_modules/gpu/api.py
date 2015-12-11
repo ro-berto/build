@@ -614,13 +614,13 @@ class GpuApi(recipe_api.RecipeApi):
     if enable_swarming:
       return self.m.chromium_tests.steps.SwarmingIsolatedScriptTest(
           name, args=prefix_args + test_args,
-          target_name='telemetry_gpu_new_test',
+          target_name='telemetry_gpu_test',
           dimensions=swarming_dimensions,
           tags={'gpu_test:1'},
           extra_suffix=self._get_gpu_suffix(swarming_dimensions),
-          override_compile_targets=['telemetry_gpu_new_test_run'])
+          override_compile_targets=['telemetry_gpu_test_run'])
     else:
       return self.m.chromium_tests.steps.LocalIsolatedScriptTest(
           step_name, args=prefix_args + test_args,
-          target_name='telemetry_gpu_new_test',
-          override_compile_targets=['telemetry_gpu_new_test_run'])
+          target_name='telemetry_gpu_test',
+          override_compile_targets=['telemetry_gpu_test_run'])
