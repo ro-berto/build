@@ -1483,35 +1483,6 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - x32 - nosnap - debug builder': {
-        'v8_apply_config': ['no_snapshot'],
-        'chromium_apply_config': [
-          'v8_ninja', 'default_compiler', 'goma', 'no_snapshot', 'x32'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'build_gs_archive': 'linux_x32_nosnap_dbg_archive',
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Linux - x32 - nosnap - debug',
-        ],
-      },
-      'V8 Linux - x32 - nosnap - debug': {
-        'v8_apply_config': ['no_snapshot'],
-        'chromium_apply_config': [
-          'v8_ninja', 'default_compiler', 'goma', 'no_snapshot', 'x32'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux - x32 - nosnap - debug builder',
-        'build_gs_archive': 'linux_x32_nosnap_dbg_archive',
-        'tests': [V8Testing],
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux - x87 - nosnap - debug builder': {
         'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [
