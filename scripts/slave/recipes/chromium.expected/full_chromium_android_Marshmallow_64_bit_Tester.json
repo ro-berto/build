@@ -7,7 +7,7 @@
       "--master",
       "chromium.android",
       "--builder",
-      "Lollipop 64 bit Tester",
+      "Marshmallow 64 bit Tester",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -132,7 +132,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Lollipop 64 bit Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Marshmallow 64 bit Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",

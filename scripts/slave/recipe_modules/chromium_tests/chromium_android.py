@@ -151,7 +151,7 @@ SPEC = {
       },
     },
 
-    'Lollipop 64 bit Tester': {
+    'Marshmallow 64 bit Tester': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
