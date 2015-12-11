@@ -494,14 +494,23 @@ class StatusEventLogger(StatusReceiverMultiService):
         result=buildbot.status.results.Results[results],
         extra_result_code=extra_result_code)
 
+    # It's important that the recipe does not generate unbounded number
+    # of step names (e.g. one for each git revision), to avoid stream
+    # explosion in the monitoring system. Another alternative is for the recipe
+    # to clearly mark such dynamic steps - e.g. add "(dynamic)" to the name,
+    # and exclude such steps here.
+    WHITELISTED_RECIPES = [
+      'chromium_trybot',
+    ]
     steps_to_send = []
-    for step in build.getSteps():
-      step_started, step_finished = step.getTimes()
-      steps_to_send.append({
-        'step_name': step.getName(),
-        'duration_s': step_finished - step_started,
-        'result': buildbot.status.results.Results[step.getResults()[0]],
-      })
+    if properties.getProperty('recipe') in WHITELISTED_RECIPES:
+      for step in build.getSteps():
+        step_started, step_finished = step.getTimes()
+        steps_to_send.append({
+          'step_name': step.getName(),
+          'duration_s': step_finished - step_started,
+          'result': buildbot.status.results.Results[step.getResults()[0]],
+        })
 
     # If property doesn't exist, this function returns None.
     # Note: this is not true for build.getProperty(), it raises KeyError.
