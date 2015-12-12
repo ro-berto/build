@@ -331,6 +331,33 @@
     "name": "media_unittests"
   },
   {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Linux Builder\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=remoting_unittests",
+      "--step-name=remoting_unittests",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--builder-name=Linux Tester",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "remoting_unittests",
+      "--gtest_filter=Webrtc*"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "remoting_unittests"
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

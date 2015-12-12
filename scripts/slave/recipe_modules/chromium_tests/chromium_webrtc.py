@@ -136,6 +136,7 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
                          '--v=1',
                          '--test-launcher-jobs=1',
                          '--test-launcher-print-test-stdio=always']),
+        WebRTCTest('remoting_unittests', args=['--gtest_filter=Webrtc*']),
     ]
   return spec
 

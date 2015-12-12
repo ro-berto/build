@@ -200,7 +200,8 @@
       "content_browsertests",
       "content_unittests",
       "crash_service",
-      "media_unittests"
+      "media_unittests",
+      "remoting_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile",
