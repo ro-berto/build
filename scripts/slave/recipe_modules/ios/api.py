@@ -281,6 +281,7 @@ class iOSApi(recipe_api.RecipeApi):
         }[self.platform])
 
       cwd = self.m.path['checkout'].join('out', build_sub_path)
+      compile_targets = self.__config['additional_compile_targets']
       cmd = ['ninja', '-C', cwd]
 
     if self.using_mb:

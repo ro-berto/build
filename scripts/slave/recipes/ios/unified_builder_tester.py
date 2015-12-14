@@ -77,6 +77,30 @@ def GenTests(api):
   )
 
   yield (
+    api.test('goma')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios',
+      buildnumber='0',
+      mastername='chromium.fake',
+      slavename='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': 'fake xcode version',
+      'GYP_DEFINES': {
+        'fake gyp define 1': 'fake value 1',
+        'fake gyp define 2': 'fake value 2',
+        'use_goma': '1',
+      },
+      'compiler': 'ninja',
+      'configuration': 'Release',
+      'sdk': 'iphoneos8.0',
+      'tests': [
+      ],
+    })
+  )
+
+  yield (
     api.test('test_failure')
     + api.platform('mac', 64)
     + api.properties(patch_url='patch url')
