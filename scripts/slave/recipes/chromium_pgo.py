@@ -20,6 +20,7 @@ PGO_BUILDERS = freeze({
       'recipe_config': 'chromium',
       'chromium_config_instrument': 'chromium_pgo_instrument',
       'chromium_config_optimize': 'chromium_pgo_optimize',
+      'chromium_apply_config': ['msvs2015'],
       'gclient_config': 'chromium',
       'clobber': True,
       # TODO(sebmarchand): This is a hack to get 100% coverage, remove me

@@ -48,6 +48,8 @@ class PGOApi(recipe_api.RecipeApi):
     """
     self.m.chromium.set_config(bot_config['chromium_config_instrument'],
                                **bot_config.get('chromium_config_kwargs'))
+    for c in bot_config.get('chromium_apply_config', []):
+      self.m.chromium.apply_config(c)
     self.m.chromium.runhooks(name='Runhooks: Instrumentation phase.')
     # Remove the profile files from the previous builds.
     self.m.file.rmwildcard('*.pg[cd]', str(self.m.chromium.output_dir))
@@ -83,6 +85,8 @@ class PGOApi(recipe_api.RecipeApi):
     """
     self.m.chromium.set_config(bot_config['chromium_config_optimize'],
                                **bot_config.get('chromium_config_kwargs'))
+    for c in bot_config.get('chromium_apply_config', []):
+      self.m.chromium.apply_config(c)
     self.m.chromium.runhooks(name='Runhooks: Optimization phase.')
 
     # Increase the stack size of pgomgr.exe.

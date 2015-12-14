@@ -255,6 +255,10 @@ def msvs2013(c):
   c.gyp_env.GYP_MSVS_VERSION = '2013'
 
 @config_ctx()
+def msvs2015(c):
+  c.gyp_env.GYP_MSVS_VERSION = '2015'
+
+@config_ctx()
 def goma_canary(c):
   c.compile_py.goma_hermetic = 'error'
 
