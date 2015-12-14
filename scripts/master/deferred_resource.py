@@ -7,7 +7,7 @@
 import datetime
 import functools
 import httplib
-import time
+import ssl
 import threading
 import traceback
 
@@ -258,17 +258,15 @@ class DeferredResource(object):
       except Exception as ex:
         if not self.started:
           raise ex
-        if isinstance(ex, apiclient.errors.HttpError):
-          status = ex.resp.status if ex.resp else None
-          if status >= 500 and attempts > 0:
-            self.log('Transient error while calling %s. '
-                     'Will retry in %d seconds.' % (method_name, wait))
-            # TODO(nodir), optimize: stop waiting if the resource is stopped.
-            yield sleep(wait)
-            if not self.started:
-              raise ex
-            wait = min(wait * 2, 30)
-            continue
+        if attempts > 0 and is_transient(ex):
+          self.log('Transient error while calling %s. '
+                   'Will retry in %d seconds.' % (method_name, wait))
+          # TODO(nodir), optimize: stop waiting if the resource is stopped.
+          yield sleep(wait)
+          if not self.started:
+            raise ex
+          wait = min(wait * 2, 30)
+          continue
         self.log('RPC "%s" failed: %s'% (method_name, traceback.format_exc()))
         raise ex
 
@@ -317,3 +315,12 @@ def sleep(secs):
   d = defer.Deferred()
   reactor.callLater(secs, d.callback, None)
   return d
+
+
+def is_transient(ex):
+  if isinstance(ex, apiclient.errors.HttpError) and ex.resp:
+    return ex.resp.status >= 500;
+  if isinstance(ex, ssl.SSLError):
+    # No reason, no errcode.
+    return "timeout" in str(ex)
+  return False
