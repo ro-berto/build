@@ -49,9 +49,9 @@ CHROMIUM_GPU_DIMENSION_SETS = freeze({
     ],
     'mac_angle_rel_ng': [
       {
-        'gpu': '8086:0116',  # Intel HD Graphics 3000
+        'gpu': '8086:0a2e',  # Intel Iris
         'hidpi': '0',
-        'os': 'Mac-10.8',
+        'os': 'Mac-10.10',
       }, {
         'gpu': '10de:0fe9',  # NVIDIA GeForce GT 750M
         'hidpi': '1',
@@ -60,9 +60,9 @@ CHROMIUM_GPU_DIMENSION_SETS = freeze({
     ],
     'mac_angle_dbg_ng': [
       {
-        'gpu': '8086:0116',  # Intel HD Graphics 3000
+        'gpu': '8086:0a2e',  # Intel Iris
         'hidpi': '0',
-        'os': 'Mac-10.8',
+        'os': 'Mac-10.10',
       }, {
         'gpu': '10de:0fe9',  # NVIDIA GeForce GT 750M
         'hidpi': '1',
@@ -117,9 +117,9 @@ CHROMIUM_GPU_DIMENSION_SETS = freeze({
   'tryserver.chromium.mac': {
     'mac_chromium_rel_ng': [
       {
-        'gpu': '8086:0116',  # Intel HD Graphics 3000
+        'gpu': '8086:0a2e',  # Intel Iris
         'hidpi': '0',
-        'os': 'Mac-10.8',
+        'os': 'Mac-10.10',
       }, {
         'gpu': '10de:0fe9',  # NVIDIA GeForce GT 750M
         'hidpi': '1',
@@ -842,12 +842,12 @@ def GenTests(api):
     ) +
     api.platform.name('mac') +
     api.override_step_data(
-        'pixel_test on Intel GPU on Mac (with patch)',
+        'pixel_test on Intel GPU on Mac (with patch) on Mac-10.10',
         api.test_utils.canned_isolated_script_output(
             passing=False, is_win=False, swarming=True,
             isolated_script_passing=False)) +
     api.override_step_data(
-        'pixel_test on Intel GPU on Mac (without patch)',
+        'pixel_test on Intel GPU on Mac (without patch) on Mac-10.10',
         api.test_utils.canned_isolated_script_output(
             passing=False, is_win=False, swarming=True,
             isolated_script_passing=False)) +
@@ -883,7 +883,7 @@ def GenTests(api):
     ) +
     api.platform.name('mac') +
     api.override_step_data(
-        'pixel_test on Intel GPU on Mac (with patch)',
+        'pixel_test on Intel GPU on Mac (with patch) on Mac-10.10',
         api.test_utils.canned_isolated_script_output(
             passing=False, is_win=False, swarming=True,
             swarming_internal_failure=True)) +
@@ -902,7 +902,7 @@ def GenTests(api):
     api.platform.name('mac') +
     # passing=True, but exit code != 0.
     api.override_step_data(
-        'pixel_test on Intel GPU on Mac (with patch)',
+        'pixel_test on Intel GPU on Mac (with patch) on Mac-10.10',
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True),
         retcode=255
