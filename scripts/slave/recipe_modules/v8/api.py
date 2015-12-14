@@ -379,6 +379,78 @@ class V8Api(recipe_api.RecipeApi):
     step_result = self.m.step.active_result
     self._isolated_tests_override = step_result.json.output
 
+  @property
+  def build_output_dir(self):
+    return self.m.path.join(
+        self.m.chromium.c.build_dir,
+        self.m.chromium.c.build_config_fs,
+    )
+
+  @property
+  def generate_gcov_coverage(self):
+    return bool(self.bot_config.get('gcov_coverage_folder'))
+
+  def init_gcov_coverage(self):
+    """Delete all gcov counter files."""
+    self.m.step(
+        'lcov zero counters',
+        ['lcov', '--directory', self.build_output_dir, '--zerocounters'],
+    )
+
+  def upload_gcov_coverage_report(self):
+    """Capture coverage data and upload a report."""
+    coverage_dir = self.m.path.mkdtemp('gcov_coverage')
+    report_dir = self.m.path.mkdtemp('gcov_coverage_html')
+    output_file = self.m.path.join(coverage_dir, 'app.info')
+
+    # Capture data from gcda and gcno files.
+    self.m.step(
+        'lcov capture',
+        [
+          'lcov',
+          '--directory', self.build_output_dir,
+          '--capture',
+          '--output-file', output_file,
+        ],
+    )
+
+    # Remove unwanted data.
+    self.m.step(
+        'lcov remove',
+        [
+          'lcov',
+          '--directory', self.build_output_dir,
+          '--remove', output_file,
+          'third_party/*',
+          'testing/gtest/*',
+          'testing/gmock/*',
+          '/usr/include/*',
+          '--output-file', output_file,
+        ],
+    )
+
+    # Generate html report into a temp folder.
+    self.m.step(
+        'genhtml',
+        [
+          'genhtml',
+          '--output-directory', report_dir,
+          output_file,
+        ],
+    )
+
+    # Upload report to google storage.
+    dest = '%s/%s' % (self.bot_config['gcov_coverage_folder'], self.revision)
+    result = self.m.gsutil(
+        [
+          '-m', 'cp', '-a', 'public-read', '-R', report_dir,
+          'gs://chromium-v8/%s' % dest,
+        ],
+        'coverage report',
+    )
+    result.presentation.links['report'] = (
+      'https://storage.cloud.google.com/chromium-v8/%s/index.html' % dest)
+
   def create_test(self, test):
     """Wrapper that allows to shortcut common tests with their names.
 
@@ -445,6 +517,9 @@ class V8Api(recipe_api.RecipeApi):
     """Build-local bisection for one failure."""
     # Don't activate for branch or fyi bots.
     if self.m.properties['mastername'] != 'client.v8':
+      return
+
+    if self.bot_config.get('disable_auto_bisect'):  # pragma: no cover
       return
 
     # Only bisect over failures not flakes. Rerun only the fastest test.

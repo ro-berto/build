@@ -1474,6 +1474,20 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
 ####### Category: FYI
+      'V8 Linux64 - gcov coverage': {
+        'chromium_apply_config': [
+          'v8_ninja', 'gcov_coverage', 'goma', 
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'gcov_coverage_folder': 'linux64_gcov_rel',
+        'disable_auto_bisect': True,
+        'tests': [V8Testing],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux - vtunejit': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'vtunejit'],
         'v8_config_kwargs': {

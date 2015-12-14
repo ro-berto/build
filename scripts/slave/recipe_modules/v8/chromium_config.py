@@ -76,6 +76,11 @@ def enable_slow_dchecks(c):
   c.gyp_env.GYP_DEFINES['v8_enable_slow_dchecks'] = 1  # pragma: no cover
 
 
+@CONFIG_CTX(includes=['v8', 'gcc'])
+def gcov_coverage(c):
+  c.gyp_env.GYP_DEFINES['coverage'] = 1
+
+
 @CONFIG_CTX(includes=['v8'])
 def internal_snapshot(c):
   c.gyp_env.GYP_DEFINES['v8_use_external_startup_data'] = 0

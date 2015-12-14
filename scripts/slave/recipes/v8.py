@@ -53,6 +53,9 @@ def RunSteps(api):
     v8.runhooks()
     api.chromium.cleanup_temp()
 
+    if v8.generate_gcov_coverage:
+      v8.init_gcov_coverage()
+
     if v8.should_build:
       v8.compile()
 
@@ -74,6 +77,9 @@ def RunSteps(api):
     if test_results.is_negative:
       # Let the overall build fail for failures and flakes.
       raise api.step.StepFailure('Failures or flakes in build.')
+
+  if v8.generate_gcov_coverage:
+    v8.upload_gcov_coverage_report()
 
   v8.maybe_trigger(**additional_trigger_properties)
   v8.verify_cq_integrity()
