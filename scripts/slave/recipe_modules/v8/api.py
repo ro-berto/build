@@ -449,7 +449,7 @@ class V8Api(recipe_api.RecipeApi):
         'coverage report',
     )
     result.presentation.links['report'] = (
-      'https://storage.cloud.google.com/chromium-v8/%s/index.html' % dest)
+      'https://storage.googleapis.com/chromium-v8/%s/index.html' % dest)
 
   def create_test(self, test):
     """Wrapper that allows to shortcut common tests with their names.
