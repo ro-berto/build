@@ -1475,6 +1475,7 @@ BUILDERS = {
       },
 ####### Category: FYI
       'V8 Linux64 - gcov coverage': {
+      'v8_apply_config': ['gcov_coverage'],
         'chromium_apply_config': [
           'v8_ninja', 'gcov_coverage', 'goma', 
         ],

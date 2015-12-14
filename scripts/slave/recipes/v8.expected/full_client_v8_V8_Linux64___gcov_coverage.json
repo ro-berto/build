@@ -124,6 +124,7 @@
       "--timeout=200",
       "bot_default",
       "--exhaustive-variants",
+      "--gcov-coverage",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"

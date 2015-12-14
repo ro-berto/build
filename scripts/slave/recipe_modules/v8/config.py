@@ -86,6 +86,11 @@ def gc_stress(c):
 
 
 @config_ctx()
+def gcov_coverage(c):
+  c.testing.test_args.extend(['--gcov-coverage'])
+
+
+@config_ctx()
 def greedy_allocator(c):
   c.testing.test_args.extend(
       ['--extra-flags', '--turbo-verify-allocation --turbo-greedy-regalloc'])
