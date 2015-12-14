@@ -589,17 +589,18 @@ class AndroidApi(recipe_api.RecipeApi):
         print_step_cmd.extend(['--get-output-dir-archive', archive])
 
       try:
-        self.m.chromium.runtest(
-          self.c.test_runner,
-          print_step_cmd,
-          name=test_name,
-          perf_dashboard_id=test_type,
-          test_type=test_type,
-          annotate=annotate,
-          results_url='https://chromeperf.appspot.com',
-          perf_id=perf_id,
-          env=self.m.chromium.get_env(),
-          chartjson_file=chartjson_file)
+        with self.handle_exit_codes():
+          self.m.chromium.runtest(
+            self.c.test_runner,
+            print_step_cmd,
+            name=test_name,
+            perf_dashboard_id=test_type,
+            test_type=test_type,
+            annotate=annotate,
+            results_url='https://chromeperf.appspot.com',
+            perf_id=perf_id,
+            env=self.m.chromium.get_env(),
+            chartjson_file=chartjson_file)
       except self.m.step.StepFailure as f:
         failures.append(f)
       finally:

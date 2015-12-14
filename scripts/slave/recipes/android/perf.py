@@ -260,3 +260,31 @@ def GenTests(api):
                   "script": "host_info.py"
                 }]}})) +
       api.step_data('host_info', retcode=1))
+  yield (api.test('test_failure') +
+      api.properties.generic(
+          repo_name='src',
+          repo_url=REPO_URL,
+          mastername='chromium.perf',
+          buildername='Android Nexus5 Perf (1)',
+          parent_buildername='parent_buildername',
+          parent_buildnumber='1729',
+          parent_revision='deadbeef',
+          revision='deadbeef',
+          slavename='slavename',
+          target='Release') +
+      api.override_step_data(
+          'perf_test.foo', retcode=1))
+  yield (api.test('missing_device') +
+      api.properties.generic(
+          repo_name='src',
+          repo_url=REPO_URL,
+          mastername='chromium.perf',
+          buildername='Android Nexus5 Perf (1)',
+          parent_buildername='parent_buildername',
+          parent_buildnumber='1729',
+          parent_revision='deadbeef',
+          revision='deadbeef',
+          slavename='slavename',
+          target='Release') +
+      api.override_step_data(
+          'perf_test.foo', retcode=87))
