@@ -13,6 +13,15 @@
       "slave_pools": ["linux_trusty"],
       "category": "0master",
     },
+    "linux_asan": {
+      "recipe": "pdfium",
+      "scheduler": "pdfium_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "0master",
+      "properties": {
+        "memory_tool": "asan",
+      },
+    },
     "mac": {
       "recipe": "pdfium",
       "scheduler": "pdfium_commits",
@@ -32,6 +41,16 @@
       "category": "1xfa",
       "properties": {
         "branch": "xfa",
+      },
+    },
+    "linux_xfa_asan": {
+      "recipe": "pdfium",
+      "scheduler": "pdfium_xfa_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "1xfa",
+      "properties": {
+        "branch": "xfa",
+        "memory_tool": "asan",
       },
     },
     "mac_xfa": {
@@ -59,7 +78,7 @@
       "category": "1xfa",
       "properties": {
         "branch": "xfa",
-        "drmemory": True,
+        "memory_tool": "drmemory",
       },
     },
   },
