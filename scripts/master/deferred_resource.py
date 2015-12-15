@@ -322,5 +322,5 @@ def is_transient(ex):
     return ex.resp.status >= 500;
   if isinstance(ex, ssl.SSLError):
     # No reason, no errcode.
-    return "timeout" in str(ex)
+    return "timed out" in str(ex)
   return False
