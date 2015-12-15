@@ -1,8 +1,11 @@
 DEPS = [
+    'bisect_tester',
     'bot_update',
     'chromium',
+    'chromium_tests',
     'commit_position',
     'file',
+    'gclient',
     'git',
     'gsutil',
     'recipe_engine/json',

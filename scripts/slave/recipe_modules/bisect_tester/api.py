@@ -18,6 +18,14 @@ class BisectTesterApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(BisectTesterApi, self).__init__(**kwargs)
 
+  def local_test_enabled(self):
+    buildername = os.environ.get('BUILDBOT_BUILDERNAME')
+    cr_config = self.m.chromium.c
+    if (buildername and buildername.endswith('_bisect') and cr_config
+        and cr_config.TARGET_PLATFORM != 'android'):
+      return True # pragma: no cover
+    return False
+
   def load_config_from_dict(self, bisect_config):
     """Copies the required configuration keys to a new dict."""
     return {
@@ -41,10 +49,11 @@ class BisectTesterApi(recipe_api.RecipeApi):
       return {'values': retcodes}
     return {'values': run_results['measured_values']}
 
-  def upload_results(self, output, results, retcodes):
+  def upload_results(self, output, results, retcodes, test_parameters):
     """Puts the results as a JSON file in a GS bucket."""
-    gs_filename = (RESULTS_GS_DIR + '/' +
-                   self.m.properties['job_name'] + '.results')
+    job_name = (test_parameters.get('job_name') or
+                self.m.properties.get('job_name'))
+    gs_filename = '%s/%s.results' % (RESULTS_GS_DIR, job_name)
     contents = {'results': results, 'output': output, 'retcodes': retcodes}
     contents_json = json.dumps(contents)
     local_save_results = self.m.python('saving json to temp file',
@@ -59,7 +68,11 @@ class BisectTesterApi(recipe_api.RecipeApi):
 
   def upload_job_url(self):
     """Puts the URL to the job's status on a GS file."""
-    gs_filename = RESULTS_GS_DIR + '/' + self.m.properties['job_name']
+    # If we are running the test locally there is no need for this.
+    if self.local_test_enabled():
+      return  # pragma: no cover
+    gs_filename = RESULTS_GS_DIR + '/' + self.m.properties.get(
+        'job_name')
     if 'TESTING_MASTER_HOST' in os.environ:  # pragma: no cover
       url = "http://%s:8041/json/builders/%s/builds/%s" % (
           os.environ['TESTING_MASTER_HOST'],

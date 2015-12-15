@@ -1244,6 +1244,10 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
 class BisectTest(Test):  # pylint: disable=W0232
   name = 'bisect_test'
 
+  def __init__(self, test_parameters={}):
+    super(BisectTest, self).__init__()
+    self._test_parameters = test_parameters
+
   @property
   def abort_on_failure(self):
     return True  # pragma: no cover
@@ -1258,7 +1262,8 @@ class BisectTest(Test):  # pylint: disable=W0232
 
   def pre_run(self, api, _):
     self.test_config = api.bisect_tester.load_config_from_dict(
-        api.properties.get('bisect_config'))
+        self._test_parameters.get('bisect_config',
+                                  api.properties.get('bisect_config')))
 
   def run(self, api, _):
     self._run_results, self.test_output, self.retcodes = (
@@ -1268,7 +1273,7 @@ class BisectTest(Test):  # pylint: disable=W0232
       self.values = api.bisect_tester.digest_run_results(
           self._run_results, self.retcodes, self.test_config)
       api.bisect_tester.upload_results(self.test_output, self.values,
-                                       self.retcodes)
+                                       self.retcodes, self._test_parameters)
 
   def has_valid_results(self, *_):
     return len(getattr(self, 'values', [])) > 0  # pragma: no cover

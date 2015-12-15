@@ -8,9 +8,12 @@ This API is meant to enable the bisect recipe to bisect any chromium-supported
 platform for any test that can be run via buildbot, perf or otherwise.
 """
 
+import os
+
 from recipe_engine import recipe_api
 from . import bisector
 from . import perf_revision_state
+from . import local_bisect
 
 BISECT_CONFIG_FILE = 'tools/auto_bisect/bisect.cfg'
 
@@ -52,6 +55,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
     revision_class = self._get_revision_class()
     return bisector.Bisector(self, bisect_config_dict, revision_class,
                              init_revisions=not dummy_mode)
+
 
   def _get_revision_class(self):
     """Gets the particular subclass of Revision."""
@@ -119,11 +123,25 @@ class AutoBisectApi(recipe_api.RecipeApi):
         name='Running Bisection',
         xvfb=True, **kwargs)
 
-  def start_test_run_for_bisect(self, api, update_step, master_dict):
+  def run_local_test_run(self, api, test_config_params):  # pragma: no cover
+    mastername = api.properties.get('mastername')
+    buildername = api.properties.get('buildername')
+    api.chromium_tests.configure_build(mastername, buildername)
+    api.gclient.apply_config('perf')
+    update_step, master_dict, _ = \
+        api.chromium_tests.prepare_checkout(
+            mastername, buildername,
+            root_solution_revision=test_config_params['revision'])
+    self.start_test_run_for_bisect(api, update_step, master_dict,
+                                   test_config_params, run_locally=True)
+
+  def start_test_run_for_bisect(self, api, update_step, master_dict,
+                                test_config_params, run_locally=False):
     mastername = api.properties.get('mastername')
     buildername = api.properties.get('buildername')
     bot_config = master_dict.get('builders', {}).get(buildername)
-    api.bisect_tester.upload_job_url()
+    if not run_locally:
+      api.bisect_tester.upload_job_url()
     if api.chromium.c.TARGET_PLATFORM == 'android':
       # The best way to ensure the old build directory is not used is to
       # remove it.
@@ -157,15 +175,17 @@ class AutoBisectApi(recipe_api.RecipeApi):
             args=[zip_dir, build_dir],
         )
     else:
-      api.chromium_tests.download_and_unzip_build(mastername, buildername,
-                                                  update_step, master_dict,
-                                                  override_bot_type='tester')
+      api.chromium_tests.download_and_unzip_build(
+          mastername, buildername, update_step, master_dict,
+          build_archive_url=test_config_params['parent_build_archive_url'],
+          build_revision=test_config_params['parent_got_revision'],
+          override_bot_type='tester')
 
-      api.chromium_tests.tests_for_builder(mastername, buildername, update_step,
-                                           master_dict,
-                                           override_bot_type='tester')
+      api.chromium_tests.tests_for_builder(
+          mastername, buildername, update_step, master_dict,
+          override_bot_type='tester')
 
-    tests = [api.chromium_tests.steps.BisectTest()]
+    tests = [api.chromium_tests.steps.BisectTest(test_config_params)]
 
     if not tests:  # pragma: no cover
       return
@@ -197,7 +217,18 @@ class AutoBisectApi(recipe_api.RecipeApi):
         kwargs['path_to_config'] = ''
         self.run_bisect_script(**kwargs)
       elif api.properties.get('bisect_config'):
-        self.start_test_run_for_bisect(api, update_step, master_dict)
+        # We can distinguish between a config for a full bisect vs a single
+        # test by checking for the presence of the good_revision key.
+        # Also, at the moment android is not supported and return_code mode
+        # does not require device affinity.
+        platform = self.m.chromium.c.TARGET_PLATFORM
+        test_type = api.properties.get('bisect_config').get('test_type')
+        if (api.properties.get('bisect_config').get('good_revision')
+            and platform != 'android' and test_type != 'return_code'):
+          local_bisect.perform_local_bisect(self)  # pragma: no cover
+        else:
+          self.start_test_run_for_bisect(api, update_step, master_dict,
+                                         api.properties)
       else:
         self.m.perf_try.start_perf_try_job(
             affected_files, update_step, master_dict)

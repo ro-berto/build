@@ -142,10 +142,14 @@ class PerfRevisionState(revision_state.RevisionState):
     if 'CACHE_TEST_RESULTS' in os.environ and test_results_cache.has_results(
         self.job_name):  # pragma: no cover
       return
-    step_name = 'Triggering test job for ' + str(self.revision_string)
     self.test_results_url = (self.bisector.api.GS_RESULTS_URL +
                              self.job_name + '.results')
-    api.m.trigger(perf_test_properties, name=step_name)
+    if api.m.bisect_tester.local_test_enabled():  # pragma: no cover
+      overrides = perf_test_properties['properties']
+      api.run_local_test_run(api.m, overrides)
+    else:
+      step_name = 'Triggering test job for ' + str(self.revision_string)
+      api.m.trigger(perf_test_properties, name=step_name)
 
   def get_next_url(self):
     if self.status == PerfRevisionState.BUILDING:

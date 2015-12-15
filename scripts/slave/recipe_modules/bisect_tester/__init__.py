@@ -1,4 +1,5 @@
 DEPS = [
+    'chromium',
     'file',
     'gsutil',
     'recipe_engine/json',
