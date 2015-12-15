@@ -237,7 +237,7 @@ TRYBOTS = freeze({
         'buildername': 'Android Builder',
         'tester': 'Android Tests',
       },
-      'linux_arm_compile': {
+      'linux_arm': {
         'mastername': 'chromium.fyi',
         'buildername': 'Linux ARM',
       },
