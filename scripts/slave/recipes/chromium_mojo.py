@@ -172,7 +172,11 @@ def _RunUnitAndAppTests(api):
     api.chromium.runtest('html_viewer_unittests')
     api.chromium.runtest('ipc_mojo_unittests')
     api.chromium.runtest('mojo_common_unittests')
-    api.chromium.runtest('mojo_js_unittests')
+
+    # TODO(yzshen): fix missing JS files on Android. crbug.com/536669
+    if api.chromium.c.TARGET_PLATFORM != 'android':
+      api.chromium.runtest('mojo_js_unittests')
+
     api.chromium.runtest('mojo_public_application_unittests')
     api.chromium.runtest('mojo_public_bindings_unittests')
     api.chromium.runtest('mojo_public_environment_unittests')
