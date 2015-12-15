@@ -11,11 +11,10 @@ _BUILD_PATH = os.path.abspath(os.path.join(
     os.path.dirname(__file__), os.path.pardir, os.path.pardir,
     os.path.pardir, os.path.pardir, os.path.pardir))
 sys.path.insert(0, os.path.join(_BUILD_PATH, 'third_party', 'mock-1.0.1'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.path.pardir))
 
 import mock
 
-from resources import fetch_intervening_revisions
+import fetch_intervening_revisions  # pylint: disable=relative-import
 
 _TEST_DATA = os.path.join(os.path.dirname(__file__), 'test_data')
 

@@ -21,6 +21,8 @@ import re
 import sys
 import urllib2
 
+import depot_map  # pylint: disable=relative-import
+
 _GITILES_PADDING = ')]}\'\n'
 _URL_TEMPLATE = ('https://chromium.googlesource.com/%s/+log/%s..%s'
                  '?format=json&n=%d')
@@ -29,13 +31,6 @@ _URL_TEMPLATE = ('https://chromium.googlesource.com/%s/+log/%s..%s'
 # commits at once, the page size should be larger than the largest revision
 # range that we expect to get.
 _PAGE_SIZE = 512
-
-_DEPOT_PATH_MAP = {
-    'chromium': 'chromium/src',
-    'angle': 'angle/angle',
-    'v8': 'v8/v8.git',
-    'skia': 'skia',
-}
 
 def fetch_intervening_revisions(start, end, depot_name):
   """Fetches a list of revision in between two commits.
@@ -67,7 +62,8 @@ def _fetch_range_from_gitiles(start, end, depot_name):
   Make multiple requests to get multiple pages, if necessary.
   """
   revisions = []
-  url = _URL_TEMPLATE % (_DEPOT_PATH_MAP[depot_name], start, end, _PAGE_SIZE)
+  url = _URL_TEMPLATE % (depot_map.DEPOT_PATH_MAP[depot_name],
+                         start, end, _PAGE_SIZE)
   current_page_url = url
   while True:
     response = urllib2.urlopen(current_page_url).read()
@@ -96,7 +92,7 @@ def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('start')
   parser.add_argument('end')
-  parser.add_argument('depot', choices=list(_DEPOT_PATH_MAP))
+  parser.add_argument('depot', choices=list(depot_map.DEPOT_PATH_MAP))
   args = parser.parse_args()
   revision_pairs = fetch_intervening_revisions(
       args.start, args.end, args.depot)

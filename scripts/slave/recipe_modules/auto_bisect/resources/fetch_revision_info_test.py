@@ -10,11 +10,10 @@ _BUILD_PATH = os.path.abspath(os.path.join(
     os.path.dirname(__file__), os.path.pardir, os.path.pardir,
     os.path.pardir, os.path.pardir, os.path.pardir))
 sys.path.insert(0, os.path.join(_BUILD_PATH, 'third_party', 'mock-1.0.1'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.path.pardir))
 
 import mock
 
-from resources import fetch_revision_info
+import fetch_revision_info  # pylint: disable=relative-import
 
 _TEST_DATA_PATH = os.path.join(os.path.dirname(__file__), 'test_data')
 _MOCK_RESPONSE_PATH = os.path.join(_TEST_DATA_PATH, 'MOCK_INFO_RESPONSE_FILE')

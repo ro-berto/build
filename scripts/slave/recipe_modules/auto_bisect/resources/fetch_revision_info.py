@@ -14,25 +14,15 @@ import argparse
 import json
 import urllib2
 
+import depot_map  # pylint: disable=relative-import
+
 _GITILES_PADDING = ')]}\'\n'
 _URL_TEMPLATE = 'https://chromium.googlesource.com/%s/+/%s?format=json'
-
-# For each entry in this map, the key is a "depot" name (a Chromium dependency
-# in the DEPS file) and the value is a path used for the repo on gitiles; each
-# repo can be found at https://chromium.googlesource.com/<PATH>.
-# TODO(qyearsley): Extract this dict out to a common place so it can be used by
-# fetch_intervening_revisions.py as well.
-_DEPOT_PATH_MAP = {
-    'chromium': 'chromium/src',
-    'angle': 'angle/angle',
-    'v8': 'v8/v8.git',
-    'skia': 'skia',
-}
 
 
 def fetch_revision_info(commit_hash, depot_name):
   """Gets information about a chromium revision."""
-  path = _DEPOT_PATH_MAP[depot_name]
+  path = depot_map.DEPOT_PATH_MAP[depot_name]
   url = _URL_TEMPLATE % (path, commit_hash)
   response = urllib2.urlopen(url).read()
   response_json = response[len(_GITILES_PADDING):]
@@ -53,7 +43,7 @@ def fetch_revision_info(commit_hash, depot_name):
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('commit_hash')
-  parser.add_argument('depot', choices=list(_DEPOT_PATH_MAP))
+  parser.add_argument('depot', choices=list(depot_map.DEPOT_PATH_MAP))
   args = parser.parse_args()
   revision_info = fetch_revision_info(args.commit_hash, args.depot)
   print json.dumps(revision_info)
