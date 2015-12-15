@@ -2038,7 +2038,7 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'compile_targets': [
-        'chromium',
+        'chrome',
       ],
       'enable_swarming': True,
       'testing': {
