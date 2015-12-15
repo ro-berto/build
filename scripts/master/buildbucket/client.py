@@ -48,5 +48,5 @@ def create_buildbucket_service(
       discoveryServiceUrl=buildbucket_api_discovery_url(hostname),
       verbose=verbose or False,
       log_prefix=common.LOG_PREFIX,
-      timeout=10,
+      timeout=60,
   )
