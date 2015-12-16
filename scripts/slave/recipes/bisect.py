@@ -18,40 +18,12 @@ DEPS = [
 ]
 
 def RunSteps(api):
-  _ensure_checkout(api)
-  # HORRIBLE hack to get buildbot web ui to let us pass stuff as properties
-  bisect_config_b32_string = api.properties.get('bcb32')
-  if bisect_config_b32_string is not None:
-    bisect_config = bisect_config_b32_string.replace('0', '=')
-    bisect_config = base64.b32decode(bisect_config)
-    bisect_config = json.loads(bisect_config)
-  else:
-    bisect_config = api.properties.get('bisect_config')
-  assert isinstance(bisect_config, collections.Mapping)
-  bisector = api.auto_bisect.create_bisector(bisect_config)
-  with api.step.nest('Gathering reference values'):
-    _gather_reference_range(api, bisector)
-  if (not bisector.failed and bisector.check_improvement_direction() and
-      bisector.check_initial_confidence()):
-    if bisector.check_reach_adjacent_revision(bisector.good_rev):
-      # Only show this step if bisect has reached adjacent revisions.
-      with bisector.api.m.step.nest(str('Check bisect finished on revision ' +
-          bisector.good_rev.revision_string)):  # pragma: no cover
-        if bisector.check_bisect_finished(bisector.good_rev):
-          bisector.bisect_over = True
-    if not bisector.bisect_over:
-      _bisect_main_loop(bisector)
-  else:  # pragma: no cover
-    bisector.bisect_over = True
-  bisector.print_result_debug_info()
-  bisector.print_result()
-
+  api.auto_bisect.perform_bisect()
 
 def GenTests(api):
   basic_test = api.test('basic')
   broken_bad_rev_test = api.test('broken_bad_revision_test')
   broken_good_rev_test = api.test('broken_good_revision_test')
-  encoded_config_test = api.test('encoded_config_test')
   broken_cp_test = api.test('broken_cp_test')
   broken_hash_test = api.test('broken_hash_test')
   return_code_test = api.test('basic_return_code_test')
@@ -68,9 +40,6 @@ def GenTests(api):
       mastername='tryserver.chromium.perf',
       buildername='linux_perf_bisector')
   broken_hash_test += api.properties.generic(
-      mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisector')
-  encoded_config_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
       buildername='linux_perf_bisector')
   return_code_test += api.properties.generic(
@@ -102,8 +71,6 @@ def GenTests(api):
   broken_good_rev_test += api.properties(bisect_config=bisect_config)
   broken_cp_test += api.properties(bisect_config=bisect_config)
   broken_hash_test += api.properties(bisect_config=bisect_config)
-  encoded_config_test += api.properties(bcb32=base64.b32encode(json.dumps(
-      bisect_config)).replace('=', '0'))
 
   # This data represents fake results for a basic scenario, the items in it are
   # passed to the `_gen_step_data_for_revision` that patches the necessary steps
@@ -174,11 +141,8 @@ def GenTests(api):
   for revision_data in basic_test_data:
     for step_data in _get_step_data_for_revision(api, revision_data):
       basic_test += step_data
-      encoded_config_test += step_data
   basic_test += _get_revision_range_step_data(api, basic_test_data)
   yield basic_test
-  encoded_config_test += _get_revision_range_step_data(api, basic_test_data)
-  yield encoded_config_test
 
   broken_test_data = test_data()
   broken_test_data[0].pop('cl_info')
@@ -323,90 +287,3 @@ def _get_step_data_for_revision(api, revision_data, broken_cp=None,
       step_name = 'Reading culprit cl information.'
       stdout = api.json.output(revision_data['cl_info'])
       yield api.step_data(step_name, stdout=stdout)
-
-
-def _ensure_checkout(api):
-  mastername = api.properties.get('mastername')
-  buildername = api.properties.get('buildername')
-  # TODO(akuegel): Explicitly load the configs for the builders and don't rely
-  # on builders.py in chromium_tests recipe module.
-  api.chromium_tests.configure_build(mastername, buildername)
-  api.chromium_tests.prepare_checkout(mastername, buildername)
-
-
-def _gather_reference_range(api, bisector):
-  bisector.good_rev.start_job()
-  bisector.bad_rev.start_job()
-  bisector.wait_for_all([bisector.good_rev, bisector.bad_rev])
-  if bisector.good_rev.failed:
-    bisector.surface_result('REF_RANGE_FAIL')
-    api.halt('Testing the "good" revision failed')
-    bisector.failed = True
-  elif bisector.bad_rev.failed:
-    bisector.surface_result('REF_RANGE_FAIL')
-    api.halt('Testing the "bad" revision failed')
-    bisector.failed = True
-    bisector.api.m.halt('Testing the "good" revision failed')
-  else:
-    bisector.compute_relative_change()
-
-
-def _bisect_main_loop(bisector):
-  """This is the main bisect loop.
-
-  It gets an evenly distributed number of revisions in the candidate range,
-  then it starts them in parallel and waits for them to finish.
-  """
-  while not bisector.bisect_over:
-    # TODO(simonhatch): Refactor this since get_revision_to_eval() returns a
-    # a single revision now.
-    # crbug.com/546695
-    revisions_to_check = bisector.get_revision_to_eval()
-    # TODO: Add a test case to remove this pragma
-    if not revisions_to_check:  # pragma: no cover
-      bisector.bisect_over = True
-      break
-
-    completed_revisions = []
-    with bisector.api.m.step.nest(str('Working on revision ' +
-                                  revisions_to_check[0].revision_string)):
-      nest_step_result = bisector.api.m.step.active_result
-      partial_results = bisector.partial_results().splitlines()
-      nest_step_result.presentation.logs['Partial Results'] = partial_results
-      for r in revisions_to_check:
-        r.start_job()
-      completed_revisions = _wait_for_revisions(bisector, revisions_to_check)
-
-    for completed_revision in completed_revisions:
-      if not bisector.check_reach_adjacent_revision(completed_revision):
-        continue
-      # Only show this step if bisect has reached adjacent revisions.
-      with bisector.api.m.step.nest(str('Check bisect finished on revision ' +
-                                    completed_revisions[0].revision_string)):
-        if bisector.check_bisect_finished(completed_revision):
-          bisector.bisect_over = True
-
-
-def _wait_for_revisions(bisector, revisions_to_check):
-  """Wait for possibly multiple revision evaluations.
-
-  Waits for the first of such revisions to finish, it then checks if any of the
-  other revisions in progress has become superfluous and has them aborted.
-
-  If such revision completes the bisect process it sets the flag so that the
-  main loop stops.
-  """
-  completed_revisions = []
-  while revisions_to_check:
-    completed_revision = bisector.wait_for_any(revisions_to_check)
-    if completed_revision in revisions_to_check:
-      revisions_to_check.remove(completed_revision)
-    else:
-      bisector.api.m.step.active_result.presentation.status = (
-          bisector.api.m.step.WARNING)  # pragma: no cover
-      bisector.api.m.step.active_result.presentation.logs['WARNING'] = (
-          ['Tried to remove revision not in list'])  # pragma: no cover
-    if not (completed_revision.aborted or completed_revision.failed):
-      completed_revisions.append(completed_revision)
-      bisector.abort_unnecessary_jobs()
-  return completed_revisions

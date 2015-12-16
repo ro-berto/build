@@ -7,7 +7,7 @@ import collections
 import json
 
 
-def perform_local_bisect(api):  # pragma: no cover
+def perform_bisect(api):  # pragma: no cover
   _ensure_checkout(api)
   bisect_config = api.m.properties.get('bisect_config')
   assert isinstance(bisect_config, collections.Mapping)

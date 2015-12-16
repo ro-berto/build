@@ -39,6 +39,9 @@ class AutoBisectApi(recipe_api.RecipeApi):
     super(AutoBisectApi, self).__init__(*args, **kwargs)
     self.override_poll_interval = None
 
+  def perform_bisect(self):
+    return local_bisect.perform_bisect(self)
+
   def create_bisector(self, bisect_config_dict, dummy_mode=False):
     """Passes the api and the config dictionary to the Bisector constructor.
 
@@ -225,7 +228,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
         test_type = api.properties.get('bisect_config').get('test_type')
         if (api.properties.get('bisect_config').get('good_revision')
             and platform != 'android' and test_type != 'return_code'):
-          local_bisect.perform_local_bisect(self)  # pragma: no cover
+          local_bisect.perform_bisect(self)  # pragma: no cover
         else:
           self.start_test_run_for_bisect(api, update_step, master_dict,
                                          api.properties)
