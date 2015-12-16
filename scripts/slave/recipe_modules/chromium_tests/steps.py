@@ -492,6 +492,33 @@ class SwarmingTest(Test):
     self._dimensions = dimensions
     self._tags = tags
     self._extra_suffix = extra_suffix
+    if dimensions and not extra_suffix:
+      self._extra_suffix = self._get_gpu_suffix(dimensions)
+
+  @staticmethod
+  def _get_gpu_suffix(dimensions):
+    if not dimensions.get('gpu'):
+      return None
+    gpu_vendor_id = dimensions.get('gpu', '').split(':')[0].lower()
+    vendor_ids = {
+      '8086': 'Intel',
+      '10de': 'NVIDIA',
+      '1002': 'ATI',
+    }
+    gpu_vendor = vendor_ids.get(gpu_vendor_id) or '(%s)' % gpu_vendor_id
+
+    os = dimensions.get('os', '')
+    if os.startswith('Mac'):
+      if dimensions.get('hidpi', '') == '1':
+        os_name = 'Mac Retina'
+      else:
+        os_name = 'Mac'
+    elif os.startswith('Windows'):
+      os_name = 'Windows'
+    else:
+      os_name = 'Linux'
+
+    return 'on %s GPU on %s' % (gpu_vendor, os_name)
 
   @property
   def name(self):
@@ -1068,17 +1095,31 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       ])
     return valid, failures
 
+
+# TODO(kbr): remove after http://crbug.com/570075 is fixed.
+def sanitize_swarming_dimension_sets(dimension_sets):
+  if not dimension_sets:
+    return None
+  return [
+    { str(k): str(v) for k, v in dimensions.iteritems() }
+    for dimensions in dimension_sets
+  ]
+
+
 def generate_isolated_script(api, mastername, buildername, test_spec,
                              enable_swarming=False,
                              scripts_compile_targets=None):
   for spec in test_spec.get(buildername, {}).get('isolated_scripts', []):
     use_swarming = False
     swarming_shards = 1
+    swarming_dimension_sets = None
     if enable_swarming:
       swarming_spec = spec.get('swarming', {})
       if swarming_spec.get('can_use_on_swarming_builders', False):
         use_swarming = True
         swarming_shards = swarming_spec.get('shards', 1)
+        swarming_dimension_sets = sanitize_swarming_dimension_sets(
+          swarming_spec.get('dimension_sets'))
     name = str(spec['name'])
     args = args=spec.get('args', [])
     target_name = spec['isolate_name']
@@ -1088,9 +1129,19 @@ def generate_isolated_script(api, mastername, buildername, test_spec,
     # to GN.
     override_compile_targets = spec.get('override_compile_targets', None)
     if use_swarming:
-      yield SwarmingIsolatedScriptTest(
-          name=name, args=args, target_name=target_name, shards=swarming_shards,
-          override_compile_targets=override_compile_targets)
+      if swarming_dimension_sets:
+        for dimensions in swarming_dimension_sets:
+          # Yield potentially multiple invocations of the same test,
+          # on different machine configurations.
+          yield SwarmingIsolatedScriptTest(
+              name=name, args=args, target_name=target_name,
+              shards=swarming_shards, dimensions=dimensions,
+              override_compile_targets=override_compile_targets)
+      else:
+        yield SwarmingIsolatedScriptTest(
+            name=name, args=args, target_name=target_name,
+            shards=swarming_shards,
+            override_compile_targets=override_compile_targets)
     else:
       yield LocalIsolatedScriptTest(
           name=name, args=args, target_name=target_name,

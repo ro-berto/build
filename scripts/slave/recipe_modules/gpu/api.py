@@ -519,37 +519,6 @@ class GpuApi(recipe_api.RecipeApi):
 
     return tests
 
-  def _get_gpu_suffix(self, dimensions):
-    if dimensions is None:
-      return None
-
-    gpu_vendor_id = dimensions.get('gpu', '').split(':')[0].lower()
-    if gpu_vendor_id == '8086':
-      gpu_vendor = 'Intel'
-    # TODO(sergiyb): Mocking various vendors IDs is currently difficult as they
-    # are hard coded in the recipe. When we'll move the configs to an external
-    # json file read in a dedicated step whose data can be overriden, we should
-    # create tests for all GPUs and remove no-cover pragmas below.
-    elif gpu_vendor_id == '10de':  # pragma: no cover
-      gpu_vendor = 'NVIDIA'
-    elif gpu_vendor_id == '1002':  # pragma: no cover
-      gpu_vendor = 'ATI'
-    else:
-      gpu_vendor = '(%s)' % gpu_vendor_id  # pragma: no cover
-
-    os = dimensions.get('os', '')
-    if os.startswith('Mac'):
-      if dimensions.get('hidpi', '') == '1':
-        os_name = 'Mac Retina'
-      else:
-        os_name = 'Mac'
-    elif os.startswith('Windows'):  # pragma: no cover
-      os_name = 'Windows'
-    else:  # pragma: no cover
-      os_name = 'Linux'
-
-    return 'on %s GPU on %s' % (gpu_vendor, os_name)
-
   def _create_gtest(self, name, chrome_revision, webkit_revision,
                     enable_swarming, swarming_dimensions,
                     args=[], target_name=None):
@@ -575,8 +544,7 @@ class GpuApi(recipe_api.RecipeApi):
         webkit_revision=webkit_revision,
         master_class_name=self._master_class_name_for_testing,
         enable_swarming=enable_swarming,
-        swarming_dimensions=swarming_dimensions,
-        swarming_extra_suffix=self._get_gpu_suffix(swarming_dimensions))
+        swarming_dimensions=swarming_dimensions)
 
   def _create_telemetry_test(self, name, chrome_revision, webkit_revision,
                              enable_swarming, swarming_dimensions,
@@ -617,7 +585,6 @@ class GpuApi(recipe_api.RecipeApi):
           target_name='telemetry_gpu_test',
           dimensions=swarming_dimensions,
           tags={'gpu_test:1'},
-          extra_suffix=self._get_gpu_suffix(swarming_dimensions),
           override_compile_targets=['telemetry_gpu_test_run'])
     else:
       return self.m.chromium_tests.steps.LocalIsolatedScriptTest(
