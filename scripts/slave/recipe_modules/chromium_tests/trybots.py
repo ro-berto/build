@@ -129,6 +129,62 @@ TRYBOTS = freeze({
         'buildername': 'Android Aura Builder (dbg)',
         'analyze_mode': 'compile',
       },
+      'android_amp': {
+        'mastername': 'chromium.fyi',
+        'buildername': 'Android Tests (amp split)',
+      },
+      'android_archive_rel_ng': {
+        'mastername': 'chromium',
+        'buildername': 'Android',
+      },
+      'android_arm64_dbg_recipe': {
+        'mastername': 'chromium.linux',
+        'buildername': 'Android Arm64 Builder (dbg)',
+        'analyze_mode': 'compile',
+      },
+      'android_clang_dbg_recipe': {
+        'mastername': 'chromium.linux',
+        'buildername': 'Android Clang Builder (dbg)',
+        'analyze_mode': 'compile',
+      },
+      'android_chromium_gn_compile_dbg': {
+        'mastername': 'chromium.linux',
+        'buildername': 'Android GN (dbg)',
+        'analyze_mode': 'compile',
+      },
+      'android_chromium_gn_compile_rel': {
+        'mastername': 'chromium.linux',
+        'buildername': 'Android GN',
+        'analyze_mode': 'compile',
+      },
+      'android_compile_dbg': {
+        'mastername': 'chromium.linux',
+        'buildername': 'Android Builder (dbg)',
+        'analyze_mode': 'compile',
+      },
+      'android_compile_rel': {
+        'mastername': 'chromium.linux',
+        'buildername': 'Android Builder',
+        'analyze_mode': 'compile',
+      },
+      'android_coverage': {
+        'mastername': 'chromium.fyi',
+        'buildername': 'Android Coverage (dbg)'
+      },
+      'cast_shell_android': {
+        'mastername': 'chromium.linux',
+        'buildername': 'Cast Android (dbg)',
+      },
+      'linux_android_dbg_ng': {
+        'mastername': 'chromium.linux',
+        'buildername': 'Android Builder (dbg)',
+        'tester': 'Android Tests (dbg)',
+      },
+      'linux_android_rel_ng': {
+        'mastername': 'chromium.linux',
+        'buildername': 'Android Builder',
+        'tester': 'Android Tests',
+      },
     },
   },
   'tryserver.chromium.angle': {
@@ -177,65 +233,9 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.linux': {
     'builders': {
-      'android_amp': {
-        'mastername': 'chromium.fyi',
-        'buildername': 'Android Tests (amp split)',
-      },
-      'android_archive_rel_ng': {
-        'mastername': 'chromium',
-        'buildername': 'Android',
-      },
-      'android_arm64_dbg_recipe': {
-        'mastername': 'chromium.linux',
-        'buildername': 'Android Arm64 Builder (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'android_clang_dbg_recipe': {
-        'mastername': 'chromium.linux',
-        'buildername': 'Android Clang Builder (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'android_chromium_gn_compile_dbg': {
-        'mastername': 'chromium.linux',
-        'buildername': 'Android GN (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'android_chromium_gn_compile_rel': {
-        'mastername': 'chromium.linux',
-        'buildername': 'Android GN',
-        'analyze_mode': 'compile',
-      },
-      'android_compile_dbg': {
-        'mastername': 'chromium.linux',
-        'buildername': 'Android Builder (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'android_compile_rel': {
-        'mastername': 'chromium.linux',
-        'buildername': 'Android Builder',
-        'analyze_mode': 'compile',
-      },
-      'android_coverage': {
-        'mastername': 'chromium.fyi',
-        'buildername': 'Android Coverage (dbg)'
-      },
       'cast_shell_linux': {
         'mastername': 'chromium.linux',
         'buildername': 'Cast Linux',
-      },
-      'cast_shell_android': {
-        'mastername': 'chromium.linux',
-        'buildername': 'Cast Android (dbg)',
-      },
-      'linux_android_dbg_ng': {
-        'mastername': 'chromium.linux',
-        'buildername': 'Android Builder (dbg)',
-        'tester': 'Android Tests (dbg)',
-      },
-      'linux_android_rel_ng': {
-        'mastername': 'chromium.linux',
-        'buildername': 'Android Builder',
-        'tester': 'Android Tests',
       },
       'linux_arm': {
         'mastername': 'chromium.fyi',
