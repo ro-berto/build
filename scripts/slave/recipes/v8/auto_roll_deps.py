@@ -15,6 +15,8 @@ DEPS = [
   'url',
 ]
 
+# Location of the infra-python package's run script.
+_RUN_PY = '/opt/infra-python/run.py'
 
 def ContainsChromiumRoll(changes):
   for change in changes:
@@ -37,76 +39,98 @@ def ResubmitToCQ(issue_id, api):
   )
 
 def RunSteps(api):
-  api.chromium.cleanup_temp()
-  api.gclient.set_config('chromium')
-  api.gclient.apply_config('v8_bleeding_edge_git')
+  monitoring_state = 'failure'
+  try:
+    api.chromium.cleanup_temp()
+    api.gclient.set_config('chromium')
+    api.gclient.apply_config('v8_bleeding_edge_git')
 
-  step_result = api.python(
-      'check roll status',
-      api.path['build'].join('scripts', 'tools', 'runit.py'),
-      [api.path['build'].join('scripts', 'tools', 'pycurl.py'),
-       'https://v8-roll.appspot.com/status'],
-      stdout=api.raw_io.output(),
-      step_test_data=lambda: api.raw_io.test_api.stream_output(
-          '1', stream='stdout')
-  )
-  step_result.presentation.logs['stdout'] = step_result.stdout.splitlines()
-  if step_result.stdout.strip() != '1':
-    step_result.presentation.step_text = 'Rolling deactivated'
-    return
-  else:
-    step_result.presentation.step_text = 'Rolling activated'
-
-  params = {
-    'closed': 3,
-    'owner': 'v8-autoroll@chromium.org',
-    'limit': 30,
-    'format': 'json',
-  }
-
-  params = api.url.urlencode(params)
-  search_url = 'https://codereview.chromium.org/search?' + params
-
-  result = api.url.fetch(
-      search_url,
-      'check active roll',
-      step_test_data=lambda: api.raw_io.test_api.output('{"results": []}')
-  )
-  results = api.json.loads(result)['results']
-
-  if ContainsChromiumRoll(results):
-    stale_roll = ExtractStaleRoll(results, api)
-
-    if stale_roll:
-      ResubmitToCQ(stale_roll, api)
-      api.step.active_result.presentation.step_text = (
-          'Stale roll found. Resubmitted to CQ.')
+    step_result = api.python(
+        'check roll status',
+        api.path['build'].join('scripts', 'tools', 'runit.py'),
+        [api.path['build'].join('scripts', 'tools', 'pycurl.py'),
+         'https://v8-roll.appspot.com/status'],
+        stdout=api.raw_io.output(),
+        step_test_data=lambda: api.raw_io.test_api.stream_output(
+            '1', stream='stdout')
+    )
+    step_result.presentation.logs['stdout'] = step_result.stdout.splitlines()
+    if step_result.stdout.strip() != '1':
+      step_result.presentation.step_text = 'Rolling deactivated'
+      monitoring_state = 'deactivated'
+      return
     else:
-      api.step.active_result.presentation.step_text = 'Active rolls found.'
+      step_result.presentation.step_text = 'Rolling activated'
 
-    return
+    params = {
+      'closed': 3,
+      'owner': 'v8-autoroll@chromium.org',
+      'limit': 30,
+      'format': 'json',
+    }
 
-  # Prevent race with gnumbd by waiting.
-  api.python.inline(
-      'wait for gnumbd',
-      'import time; time.sleep(20)',
-  )
+    params = api.url.urlencode(params)
+    search_url = 'https://codereview.chromium.org/search?' + params
 
-  api.bot_update.ensure_checkout(force=True, no_shallow=True)
+    result = api.url.fetch(
+        search_url,
+        'check active roll',
+        step_test_data=lambda: api.raw_io.test_api.output('{"results": []}')
+    )
+    results = api.json.loads(result)['results']
 
-  api.python(
-      'roll deps',
-      api.path['checkout'].join(
-          'v8', 'tools', 'release', 'auto_roll.py'),
-      ['--chromium', api.path['checkout'],
-       '--author', 'v8-autoroll@chromium.org',
-       '--reviewer',
-       'hablich@chromium.org,machenbach@chromium.org,'
-       'yangguo@chromium.org,vogelheim@chromium.org',
-       '--roll',
-       '--json-output', api.json.output(),
-       '--work-dir', api.path['slave_build'].join('workdir')],
-      cwd=api.path['checkout'].join('v8'),
+    if ContainsChromiumRoll(results):
+      stale_roll = ExtractStaleRoll(results, api)
+
+      if stale_roll:
+        ResubmitToCQ(stale_roll, api)
+        api.step.active_result.presentation.step_text = (
+            'Stale roll found. Resubmitted to CQ.')
+        monitoring_state = 'stale_roll'
+      else:
+        api.step.active_result.presentation.step_text = 'Active rolls found.'
+        monitoring_state = 'active_roll'
+
+      return
+
+    # Prevent race with gnumbd by waiting.
+    api.python.inline(
+        'wait for gnumbd',
+        'import time; time.sleep(20)',
+    )
+
+    api.bot_update.ensure_checkout(force=True, no_shallow=True)
+
+    result = api.python(
+        'roll deps',
+        api.path['checkout'].join(
+            'v8', 'tools', 'release', 'auto_roll.py'),
+        ['--chromium', api.path['checkout'],
+         '--author', 'v8-autoroll@chromium.org',
+         '--reviewer',
+         'hablich@chromium.org,machenbach@chromium.org,'
+         'yangguo@chromium.org,vogelheim@chromium.org',
+         '--roll',
+         '--json-output', api.json.output(),
+         '--work-dir', api.path['slave_build'].join('workdir')],
+        cwd=api.path['checkout'].join('v8'),
+        step_test_data=lambda: api.json.test_api.output(
+            {'monitoring_state': 'success'}),
+    )
+    monitoring_state = result.json.output['monitoring_state']
+  finally:
+    counter_config = {
+      'name': '/chrome/infra/v8/autoroller/count',
+      'project': 'v8-roll',
+      'result': monitoring_state,
+    }
+    api.python(
+        'upload stats',
+        _RUN_PY,
+        [
+          'infra.tools.send_ts_mon_values',
+          '--counter', api.json.dumps(counter_config),
+        ],
     )
 
 

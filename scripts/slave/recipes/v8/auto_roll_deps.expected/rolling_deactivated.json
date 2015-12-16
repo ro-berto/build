@@ -26,6 +26,18 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "/opt/infra-python/run.py",
+      "infra.tools.send_ts_mon_values",
+      "--counter",
+      "{\"name\": \"/chrome/infra/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"deactivated\"}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "upload stats"
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

@@ -163,9 +163,23 @@
     "cwd": "[SLAVE_BUILD]/src/v8",
     "name": "roll deps",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"monitoring_state\": \"success\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "/opt/infra-python/run.py",
+      "infra.tools.send_ts_mon_values",
+      "--counter",
+      "{\"name\": \"/chrome/infra/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"success\"}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "upload stats"
   },
   {
     "name": "$result",
