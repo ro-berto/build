@@ -97,6 +97,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "cfi_vptr=1 clang=1 clang_use_chrome_plugins=0 component=static_library target_arch=x64",
       "GYP_LINK_CONCURRENCY": "8",
       "LLVM_FORCE_HEAD_REVISION": "YES"
@@ -149,6 +150,25 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.fyi",
+      "-b",
+      "CFI Linux ToT",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files"
   },
   {
     "allow_subannotations": true,

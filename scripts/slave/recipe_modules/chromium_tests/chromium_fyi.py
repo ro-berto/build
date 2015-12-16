@@ -260,7 +260,7 @@ SPEC = {
     },
     'CFI Linux ToT': {
       'chromium_config': 'chromium_cfi',
-      'chromium_apply_config': ['clang_tot'],
+      'chromium_apply_config': ['mb', 'clang_tot'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
