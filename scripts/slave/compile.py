@@ -185,7 +185,8 @@ def goma_setup(options, env):
   goma_utils.UploadGomaCompilerProxyInfo()
   # Upload GomaStats to make it monitored.
   # TODO(yyanagisawa): make the case without GomaStats file monitored.
-  if os.path.exists(env['GOMA_DUMP_STATS_FILE']):
+  if ('GOMA_DUMP_STATS_FILE' in env and
+      os.path.exists(env['GOMA_DUMP_STATS_FILE'])):
     goma_utils.SendGomaStats(env['GOMA_DUMP_STATS_FILE'],
                              options.build_data_dir)
 
