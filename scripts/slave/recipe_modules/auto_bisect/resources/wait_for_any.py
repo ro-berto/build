@@ -40,7 +40,10 @@ def _print_usage(argv):
 
 def _gs_file_exists(gsutil_path, url):
   """Checks that running 'gsutil ls' returns 0 to see if file at url exists."""
-  cmd = [gsutil_path, 'ls', url]
+  if os.name == 'nt' and gsutil_path.endswith('.py'):
+    cmd = ['python', gsutil_path, 'ls', url]
+  else:
+    cmd = [gsutil_path, 'ls', url]
   error = subprocess.call(cmd, stdout=open(os.devnull, 'wb'))
   return not error
 
