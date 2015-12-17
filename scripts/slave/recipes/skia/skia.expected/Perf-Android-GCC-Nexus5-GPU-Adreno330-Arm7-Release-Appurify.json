@@ -103,7 +103,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=arm skia_warnings_as_errors=0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
@@ -210,7 +210,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
-      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
     },
     "name": "has ccache?",
@@ -341,7 +341,7 @@
       "ANDROID_MAKE_CCACHE": "/usr/bin/ccache",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
-      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
     },
@@ -373,7 +373,7 @@
       "APPURIFY_API_PORT": "80",
       "APPURIFY_API_PROTO": "http",
       "BUILDTYPE": "Release",
-      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
     },
@@ -390,7 +390,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
-      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
     },
     "name": "unzip_results"
@@ -465,10 +465,10 @@
       "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
       "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
       "BUILDTYPE": "Release",
-      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
     },
-    "name": "Upload Nanobench Results"
+    "name": "Upload nanobench Results"
   },
   {
     "name": "$result",

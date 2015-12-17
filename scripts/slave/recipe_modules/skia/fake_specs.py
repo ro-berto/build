@@ -226,7 +226,8 @@ FAKE_SPECS = {
     'do_perf_steps': True,
     'do_test_steps': False,
     'env': {
-      'GYP_DEFINES': 'skia_arch_type=arm skia_warnings_as_errors=0',
+      'GYP_DEFINES':
+          'skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0',
     },
     'nanobench_flags': [
       '--dummy-flags',
@@ -257,7 +258,41 @@ FAKE_SPECS = {
     'do_perf_steps': True,
     'do_test_steps': False,
     'env': {
-      'GYP_DEFINES': 'skia_arch_type=arm skia_warnings_as_errors=0',
+      'GYP_DEFINES':
+          'skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0',
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': True,
+  },
+  'Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench': {
+    'build_targets': [
+      'visualbench',
+    ],
+    'builder_cfg': {
+      'arch': 'x86_64',
+      'compiler': 'GCC',
+      'configuration': 'Release',
+      'cpu_or_gpu': 'GPU',
+      'cpu_or_gpu_value': 'GTX550Ti',
+      'extra_config': 'VisualBench',
+      'is_trybot': False,
+      'model': 'ShuttleA',
+      'os': 'Ubuntu',
+      'role': 'Perf',
+    },
+    'configuration': 'Release',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': True,
+    'do_test_steps': False,
+    'env': {
+      'GYP_DEFINES':
+          ('skia_arch_type=x86_64 skia_dump_stats=1 skia_use_sdl=1 skia_warni'
+           'ngs_as_errors=0'),
     },
     'nanobench_flags': [
       '--dummy-flags',
@@ -289,7 +324,8 @@ FAKE_SPECS = {
     'env': {
       'GYP_DEFINES':
           ('qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 ski'
-           'a_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp'),
+           'a_dump_stats=1 skia_warnings_as_errors=0 skia_win_debuggers_path='
+           'c:/DbgHelp'),
     },
     'nanobench_flags': [
       '--dummy-flags',

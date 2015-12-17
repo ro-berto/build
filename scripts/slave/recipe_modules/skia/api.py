@@ -570,8 +570,11 @@ print json.dumps({'ccache': ccache})
         'patchset', self.m.properties['patchset'],
       ])
 
+    target = 'nanobench'
+    if 'VisualBench' in self.builder_name:
+      target = 'visualbench'
     args = [
-        'nanobench',
+        target,
         '--undefok',   # This helps branches that may not know new flags.
         '-i',       self.device_dirs.resource_dir,
         '--skps',   self.device_dirs.skp_dir,
@@ -602,7 +605,7 @@ print json.dumps({'ccache': ccache})
         if not k in keys_blacklist:
           args.extend([k, self.builder_cfg[k]])
 
-    self.run(self.flavor.step, 'nanobench', cmd=args, abort_on_failure=False,
+    self.run(self.flavor.step, target, cmd=args, abort_on_failure=False,
              env=self.default_env)
 
     # See skia:2789.
@@ -610,7 +613,7 @@ print json.dumps({'ccache': ccache})
         self.builder_cfg.get('cpu_or_gpu') == 'GPU'):
       abandonGpuContext = list(args)
       abandonGpuContext.extend(['--abandonGpuContext', '--nocpu'])
-      self.run(self.flavor.step, 'nanobench --abandonGpuContext',
+      self.run(self.flavor.step, '%s --abandonGpuContext' % target,
                cmd=abandonGpuContext, abort_on_failure=False,
                env=self.default_env)
 
@@ -626,7 +629,7 @@ print json.dumps({'ccache': ccache})
       if self.is_trybot:
         upload_args.append(self.m.properties['issue'])
       self.run(self.m.python,
-               'Upload Nanobench Results',
+               'Upload %s Results' % target,
                script=self.resource('upload_bench_results.py'),
                args=upload_args,
                cwd=self.m.path['checkout'],
