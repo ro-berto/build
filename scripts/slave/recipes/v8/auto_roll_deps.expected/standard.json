@@ -176,7 +176,7 @@
       "/opt/infra-python/run.py",
       "infra.tools.send_ts_mon_values",
       "--counter",
-      "{\"name\": \"/chrome/infra/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"success\"}"
+      "{\"name\": \"/chrome/infra/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"success\", \"value\": 1}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "upload stats"

@@ -123,6 +123,7 @@ def RunSteps(api):
       'name': '/chrome/infra/v8/autoroller/count',
       'project': 'v8-roll',
       'result': monitoring_state,
+      'value': 1,
     }
     api.python(
         'upload stats',
