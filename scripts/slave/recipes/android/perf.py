@@ -60,15 +60,15 @@ def _ChromiumPerfTesters():
   _AddTestSpec('Android Galaxy S5 Perf', 'android-galaxy-s5',
       num_device_shards=7, num_host_shards=3, target_bits=32)
   _AddTestSpec('Android Nexus5 Perf', 'android-nexus5',
-      num_device_shards=7, num_host_shards=2, target_bits=32)
+      num_device_shards=7, num_host_shards=3, target_bits=32)
   _AddTestSpec('Android Nexus6 Perf', 'android-nexus6',
-      num_device_shards=7, num_host_shards=2, target_bits=32)
+      num_device_shards=7, num_host_shards=3, target_bits=32)
   _AddTestSpec('Android Nexus7v2 Perf', 'android-nexus7v2',
-      num_device_shards=7, num_host_shards=2, target_bits=32)
+      num_device_shards=7, num_host_shards=3, target_bits=32)
   _AddTestSpec('Android Nexus9 Perf', 'android-nexus9',
-      num_device_shards=7, num_host_shards=2)
+      num_device_shards=7, num_host_shards=3)
   _AddTestSpec('Android One Perf', 'android-one',
-      num_device_shards=7, num_host_shards=2, target_bits=32)
+      num_device_shards=7, num_host_shards=3, target_bits=32)
 
   return testers
 
