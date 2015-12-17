@@ -181,6 +181,7 @@
       "[BUILD]/goma",
       "--goma-hermetic",
       "error",
+      "--goma-enable-compiler-info-cache",
       "--clobber",
       "--",
       "base_unittests",

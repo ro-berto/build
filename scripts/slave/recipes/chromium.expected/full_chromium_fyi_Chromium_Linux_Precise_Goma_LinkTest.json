@@ -183,6 +183,7 @@
       "error",
       "--goma-enable-remote-link",
       "--goma-store-local-run-output",
+      "--goma-enable-compiler-info-cache",
       "--",
       "base_unittests",
       "chromium_builder_tests",
