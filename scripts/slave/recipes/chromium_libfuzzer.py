@@ -36,6 +36,19 @@ BUILDERS = freeze({
   },
 })
 
+def gn_refs(api, step_name, args):
+  """Runs gn refs with given additional arguments.
+  Returns: the list of matched targets.
+  """
+  step_result = api.python(step_name,
+          api.path['depot_tools'].join('gn.py'),
+          ['--root=%s' % str(api.path['checkout']),
+           'refs',
+           str(api.chromium.output_dir),
+          ] + args,
+          stdout=api.raw_io.output())
+  return step_result.stdout.split()
+
 
 def RunSteps(api):
   mastername = api.m.properties['mastername']
@@ -56,27 +69,31 @@ def RunSteps(api):
 
   api.chromium.run_mb(mastername, buildername, use_goma=False)
 
-  step_result = api.python('calculate targets',
-          api.path['depot_tools'].join('gn.py'),
-          ['--root=%s' % str(api.path['checkout']),
-           'refs',
-           str(api.chromium.output_dir),
-           '--all',
+  all_fuzzers = gn_refs(
+          api,
+          'calculate all_fuzzers',
+          ['--all',
            '--type=executable',
            '--as=output',
-           '//testing/libfuzzer:libfuzzer_main',
-          ],
-          stdout=api.raw_io.output())
-
-  targets = step_result.stdout.split()
+           '//testing/libfuzzer:libfuzzer_main'])
+  no_clusterfuzz = gn_refs(
+          api,
+          'calculate no_clusterfuzz',
+          ['--all',
+           '--type=executable',
+           '--as=output',
+           '//testing/libfuzzer:no_clusterfuzz'])
+  targets = list(set(all_fuzzers).difference(set(no_clusterfuzz)))
+  api.step.active_result.presentation.logs['all_fuzzers'] = all_fuzzers
+  api.step.active_result.presentation.logs['no_clusterfuzz'] = no_clusterfuzz
   api.step.active_result.presentation.logs['targets'] = targets
   api.chromium.compile(targets=targets)
 
   api.archive.clusterfuzz_archive(
-          api.path['slave_build'].join('src', 'out', 'Release'),
-          checkout_results.json.output['properties'],
-          bot_config['upload_bucket'],
-          'libfuzzer',
+          build_dir=api.path['slave_build'].join('src', 'out', 'Release'),
+          update_properties=checkout_results.json.output['properties'],
+          gs_bucket=bot_config['upload_bucket'],
+          archive_prefix='libfuzzer',
           archive_subdir_suffix=bot_config['upload_directory'],
           gs_acl='public-read')
 
@@ -84,7 +101,9 @@ def RunSteps(api):
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
     yield (test +
-           api.step_data('calculate targets',
-               stdout=api.raw_io.output('target1 target2 target3'))
+           api.step_data('calculate all_fuzzers',
+               stdout=api.raw_io.output('target1 target2 target3')) +
+           api.step_data('calculate no_clusterfuzz',
+               stdout=api.raw_io.output('target1'))
            )
 
