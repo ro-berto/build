@@ -696,7 +696,7 @@ def chromium_clang(c):
 
 @config_ctx(includes=['ninja', 'clang', 'cfi_vptr'])
 def chromium_cfi(c):
-  c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+  c.compile_py.default_targets = ['All']
 
 @config_ctx(includes=['xcode', 'static_library'])
 def chromium_xcode(c):  # pragma: no cover

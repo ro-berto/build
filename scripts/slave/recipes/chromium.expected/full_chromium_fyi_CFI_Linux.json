@@ -162,18 +162,18 @@
   {
     "cmd": [
       "python",
-          "-u",
-          "[SLAVE_BUILD]/src/tools/mb/mb.py",
-          "gen",
-          "-m",
-          "chromium.fyi",
-          "-b",
-          "CFI Linux",
-          "--config-file",
-          "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
-          "--goma-dir",
-          "[BUILD]/goma",
-          "//out/Release"
+      "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.fyi",
+      "-b",
+      "CFI Linux",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "generate_build_files"
@@ -212,8 +212,7 @@
       "--compiler",
       "clang",
       "--",
-      "All",
-      "chromium_builder_tests"
+      "All"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
