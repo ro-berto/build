@@ -52,6 +52,9 @@ def RunSteps(api):
              api.path['checkout'].join('catapult_build', 'bin', 'run_py_tests'))
   api.python('Util Tests',
              api.path['checkout'].join('catapult_base', 'run_tests.py'))
+  api.python('Dependency Manager Tests',
+             api.path['checkout'].join(
+                 'dependency_manager', 'bin', 'run_tests'))
   api.python('Dashboard Dev Server Tests Stable',
               api.path['checkout'].join(
                   'dashboard', 'bin', 'run_dev_server_tests'),

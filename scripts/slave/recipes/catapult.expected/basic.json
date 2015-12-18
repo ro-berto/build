@@ -108,6 +108,15 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/catapult/dependency_manager/bin/run_tests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Dependency Manager Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/catapult/dashboard/bin/run_dev_server_tests",
       "--no-install-hooks",
       "--no-use-local-chrome",
