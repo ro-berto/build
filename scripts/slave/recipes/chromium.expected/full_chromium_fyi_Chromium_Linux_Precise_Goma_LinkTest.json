@@ -8,7 +8,7 @@
       "--verbose",
       "--force",
       "--revision",
-      "build/goma@HEAD"
+      "build/goma@refs/heads/master"
     ],
     "cwd": "[BUILD]",
     "name": "gclient update goma canary"

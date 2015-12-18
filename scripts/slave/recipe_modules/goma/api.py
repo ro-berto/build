@@ -11,10 +11,6 @@ class GomaApi(recipe_api.RecipeApi):
     """Returns a step for updating goma canary."""
     # for git checkout, should use @refs/heads/master to use head.
     head = 'refs/heads/master'
-    # svn checkout works with @HEAD.
-    # As of Sep 29, Linux goma canaries are svn checkout, others are not.
-    if 'Linux' in buildername:
-      head = 'HEAD'
     self.m.gclient('update goma canary',
                    ['sync', '--verbose', '--force',
                     '--revision', 'build/goma@%s' % head],
