@@ -57,9 +57,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
   # TODO(martinis) rewrite this. can be written better using 1.5 syntax.
   # TODO(phajdan.jr): Deduplicate this and chromium_tests.create_test_runner.
-  def run_tests(self, caller_api, tests, suffix):
+  def run_tests(self, caller_api, tests, suffix, test_filters=None):
     """
-    Utility function for running a list of tests.
+    Utility function for running a list of tests and returning the failed tests.
 
     Args:
       caller_api - caller's recipe API; this is needed because self.m here
@@ -69,32 +69,53 @@ class TestUtilsApi(recipe_api.RecipeApi):
       tests - iterable of objects implementing the Test interface above
       suffix - custom suffix, e.g. "with patch", "without patch" indicating
                context of the test run
+      test_filters - a dict mapping test full name to a list of tests, e.g.:
+                     {
+                       'base_unittests on Windows-XP-SP3': [
+                         'suite11.test1',
+                         'suite12.test2'
+                       ],
+                       'browser_tests on Windows-XP-SP3': [
+                         'suite21.test1',
+                         'suite22.test2'
+                       ],
+                     }
+
+    Returns:
+      The list of failed tests.
     """
+    failed_tests = []
+    test_filters = test_filters or {}
+
     #TODO(martiniss) convert loops
     for t in tests:
       try:
-        t.pre_run(caller_api, suffix)
+        t.pre_run(caller_api, suffix, test_filter=test_filters.get(t.name))
       # TODO(iannucci): Write a test.
       except caller_api.step.InfraFailure:  # pragma: no cover
         raise
       except caller_api.step.StepFailure:  # pragma: no cover
-        pass
+        failed_tests.append(t)
+
     for t in tests:
       try:
-        t.run(caller_api, suffix)
+        t.run(caller_api, suffix, test_filter=test_filters.get(t.name))
       except caller_api.step.InfraFailure:  # pragma: no cover
         raise
       # TODO(iannucci): How should exceptions be accumulated/handled here?
       except caller_api.step.StepFailure:
-        pass
+        failed_tests.append(t)
+
     for t in tests:
       try:
-        t.post_run(caller_api, suffix)
+        t.post_run(caller_api, suffix, test_filter=test_filters.get(t.name))
       # TODO(iannucci): Write a test.
       except caller_api.step.InfraFailure:  # pragma: no cover
         raise
       except caller_api.step.StepFailure:  # pragma: no cover
-        pass
+        failed_tests.append(t)
+
+    return failed_tests
 
   def run_tests_with_patch(self, caller_api, tests):
     self.run_tests(caller_api, tests, 'with patch')
