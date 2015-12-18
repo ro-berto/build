@@ -140,6 +140,8 @@
       "--tag",
       "rietveld:https://codereview.chromium.org/12853011/#ps1",
       "--tag",
+      "slavename:TestSlavename",
+      "--tag",
       "stepname:Check on Windows-7-SP1",
       "--user",
       "commit-bot@chromium.org",

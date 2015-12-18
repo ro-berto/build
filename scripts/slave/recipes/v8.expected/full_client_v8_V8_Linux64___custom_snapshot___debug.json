@@ -136,6 +136,8 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
+      "slavename:TestSlavename",
+      "--tag",
       "stepname:Mjsunit",
       "[dummy hash for mjsunit]",
       "--",

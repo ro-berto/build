@@ -218,6 +218,8 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
+      "slavename:TestSlavename",
+      "--tag",
       "stepname:Check on Ubuntu-14.04",
       "[dummy hash for bot_default]",
       "--",

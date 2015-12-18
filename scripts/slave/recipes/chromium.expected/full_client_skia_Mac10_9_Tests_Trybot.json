@@ -296,6 +296,8 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
+      "slavename:TestSlavename",
+      "--tag",
       "stepname:browser_tests on Mac-10.9",
       "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",

@@ -306,6 +306,8 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
+      "slavename:TestSlavename",
+      "--tag",
       "stepname:browser_tests on Windows-Vista-SP2",
       "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",

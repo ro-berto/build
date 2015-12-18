@@ -316,6 +316,8 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
+      "slavename:TestSlavename",
+      "--tag",
       "stepname:browser_tests",
       "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",

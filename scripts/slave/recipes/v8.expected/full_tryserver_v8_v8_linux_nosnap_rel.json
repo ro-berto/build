@@ -230,6 +230,8 @@
       "--tag",
       "rietveld:https://codereview.chromium.org/12853011/#ps1",
       "--tag",
+      "slavename:TestSlavename",
+      "--tag",
       "stepname:Check",
       "--user",
       "commit-bot@chromium.org",

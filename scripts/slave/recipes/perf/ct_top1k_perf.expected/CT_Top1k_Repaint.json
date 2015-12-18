@@ -837,6 +837,8 @@
       "--tag",
       "os:Ubuntu",
       "--tag",
+      "slavename:test-slave",
+      "--tag",
       "stepname:ct-1k-task-1 on Ubuntu",
       "[dummy hash for slave5]"
     ],
@@ -897,6 +899,8 @@
       "name:ct-1k-task-2",
       "--tag",
       "os:Ubuntu",
+      "--tag",
+      "slavename:test-slave",
       "--tag",
       "stepname:ct-1k-task-2 on Ubuntu",
       "[dummy hash for slave4]"
@@ -959,6 +963,8 @@
       "--tag",
       "os:Ubuntu",
       "--tag",
+      "slavename:test-slave",
+      "--tag",
       "stepname:ct-1k-task-3 on Ubuntu",
       "[dummy hash for slave1]"
     ],
@@ -1020,6 +1026,8 @@
       "--tag",
       "os:Ubuntu",
       "--tag",
+      "slavename:test-slave",
+      "--tag",
       "stepname:ct-1k-task-4 on Ubuntu",
       "[dummy hash for slave3]"
     ],
@@ -1080,6 +1088,8 @@
       "name:ct-1k-task-5",
       "--tag",
       "os:Ubuntu",
+      "--tag",
+      "slavename:test-slave",
       "--tag",
       "stepname:ct-1k-task-5 on Ubuntu",
       "[dummy hash for slave2]"

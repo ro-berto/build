@@ -296,6 +296,8 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
+      "slavename:TestSlavename",
+      "--tag",
       "stepname:telemetry_gpu_unittests on NVIDIA GPU on Linux on Linux",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
