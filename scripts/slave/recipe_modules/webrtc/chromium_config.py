@@ -51,5 +51,10 @@ def webrtc_ios(c):
 def webrtc_gn(c):
   c.compile_py.default_targets = ['all']
 
+@CONFIG_CTX(includes=['gn'])
+def webrtc_libfuzzer(c):
+  c.gn_args = ['use_libfuzzer=true',
+               'is_asan=true']
+
 def _compiler_defaults(c):
   c.compile_py.default_targets = ['All']
