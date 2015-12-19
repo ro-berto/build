@@ -621,7 +621,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         if require_device_steps:
           # TODO(phajdan.jr): Configure logcat GS bucket in cleaner way.
           logcat_gs_bucket = None
-          if mastername in ('chromium.linux', 'tryserver.chromium.linux'):
+          if mastername in ('chromium.linux', 'tryserver.chromium.android'):
             logcat_gs_bucket = 'chromium-android'
           self.m.chromium_android.common_tests_final_steps(
               logcat_gs_bucket=logcat_gs_bucket)
