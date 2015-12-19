@@ -23,7 +23,7 @@ MEMORY_TOOLS = ('memcheck', 'drmemory_full', 'drmemory_light')
 PROJECT_GENERATORS = ('gyp', 'gn', 'mb')
 
 def check(val, potentials):
-  assert val in potentials
+  assert val in potentials, (val, potentials)
   return val
 
 # Schema for config items in this module.
