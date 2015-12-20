@@ -49,6 +49,7 @@ def Update(c):
     {'name': 'Linux64 Release (GN)', 'slavebuilddir': 'linux64_gn'},
     {
       'name': 'Linux64 Release (Libfuzzer)',
+      'recipe': 'webrtc/libfuzzer',
       'slavebuilddir': 'linux64_libfuzzer',
     },
   ]
@@ -56,7 +57,8 @@ def Update(c):
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory('webrtc/standalone'),
+        'factory': m_annotator.BaseFactory(spec.get('recipe',
+                                                    'webrtc/standalone')),
         'notify_on_missing': True,
         'category': spec.get('category', 'compile|testers'),
         'slavebuilddir': spec['slavebuilddir'],
