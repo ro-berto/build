@@ -298,6 +298,8 @@ def main():
         if '.svn' in dirs:
           svn_dirs.add(os.path.join(relpath, root, '.svn'))
           dirs.remove('.svn')
+        else:
+          dirs[:] = []
     for rel_svn_dir in svn_dirs:
       svn_dir = os.path.join(b_dir, rel_svn_dir)
       log('Moving %s to %s.backup' % (svn_dir, svn_dir))
