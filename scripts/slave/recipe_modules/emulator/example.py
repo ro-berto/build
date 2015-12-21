@@ -59,9 +59,7 @@ def RunSteps(api, mastername, buildername):
   api.bot_update.ensure_checkout()
   api.chromium.runhooks()
 
-  api.emulator.install_emulator_deps(
-      abi=builder.get('abi'),
-      api_level=builder.get('api_level'))
+  api.emulator.install_emulator_deps(api_level=builder.get('api_level'))
 
   provision_settings = builder.get('provision_provision_settings', {})
 

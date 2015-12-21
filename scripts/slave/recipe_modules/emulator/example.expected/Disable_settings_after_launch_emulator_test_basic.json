@@ -107,8 +107,6 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/android/install_emulator_deps.py",
-      "--abi",
-      "x86",
       "--api-level",
       "23"
     ],

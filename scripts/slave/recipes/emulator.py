@@ -76,9 +76,7 @@ def RunSteps(api, mastername, buildername):
     targets.append(target)
   api.chromium.compile(targets=targets)
 
-  api.emulator.install_emulator_deps(
-      abi=builder.get('abi'),
-      api_level=builder.get('api_level'))
+  api.emulator.install_emulator_deps(api_level=builder.get('api_level'))
 
   provision_settings = builder.get('provision_provision_settings', {})
 

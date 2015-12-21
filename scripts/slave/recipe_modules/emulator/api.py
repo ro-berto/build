@@ -9,9 +9,8 @@ from recipe_engine.config_types import Path
 
 class EmulatorApi(recipe_api.RecipeApi):
 
-  def install_emulator_deps(self, abi, api_level, **kwargs):
+  def install_emulator_deps(self, api_level, **kwargs):
     args = [
-        '--abi', abi,
         '--api-level', api_level,
     ]
     return self.m.python('[emulator] installing emulator deps',
