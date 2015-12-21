@@ -80,6 +80,7 @@
       "--remote-version=4",
       "xxx-fakeboard-fakebuild"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cbuildbot [xxx-fakeboard-fakebuild]"
   },
   {

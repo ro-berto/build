@@ -89,6 +89,7 @@
       "--remote-version=4",
       "internal-paladin"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cbuildbot [internal-paladin]"
   },
   {

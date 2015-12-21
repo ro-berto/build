@@ -88,6 +88,7 @@
       "--remote-version=4",
       "x86-generic-full"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cbuildbot [x86-generic-full]"
   },
   {

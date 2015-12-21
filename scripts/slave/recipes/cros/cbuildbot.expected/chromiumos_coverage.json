@@ -58,6 +58,7 @@
       "https://fake.googlesource.com/myconfig/repo.git",
       "x86-generic-full"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cbuildbot [x86-generic-full]"
   },
   {

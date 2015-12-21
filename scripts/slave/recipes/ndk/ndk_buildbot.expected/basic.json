@@ -54,6 +54,7 @@
       "https://android.googlesource.com/toolchain/ndk_chromite_config",
       "ndk-linux-arm64-v8a"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cbuildbot [ndk-linux-arm64-v8a]"
   },
   {

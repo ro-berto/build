@@ -361,4 +361,4 @@ class ChromiteApi(recipe_api.RecipeApi):
     return self.cbuildbot(str('cbuildbot [%s]' % (self.c.cbb.config,)),
                           self.c.cbb.config,
                           args=cbb_args,
-                          cwd=self.m.path['slave_root'])
+                          cwd=self.m.path['slave_build'])

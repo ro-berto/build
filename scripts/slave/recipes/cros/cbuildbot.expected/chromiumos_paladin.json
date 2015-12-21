@@ -92,6 +92,7 @@
       "1337",
       "x86-generic-paladin"
     ],
+    "cwd": "[SLAVE_BUILD]",
     "name": "cbuildbot [x86-generic-paladin]"
   },
   {
