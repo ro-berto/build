@@ -163,7 +163,7 @@ PATCH=1
     step = self.m.bot_update.ensure_checkout(force=True)
     self._revision = step.presentation.properties['got_revision']
     github_url = self._SYZYGY_GITHUB + str(self._revision)
-    step.presentation.links[self._revision] = github_url
+    step.presentation.links[str(self._revision)] = github_url
     return step
 
   def runhooks(self):

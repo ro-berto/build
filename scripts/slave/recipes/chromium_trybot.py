@@ -660,8 +660,7 @@ def GenTests(api):
   # commit queue job.
   yield (
     api.test('swarming_basic_cq') +
-    props(requester='commit-bot@chromium.org', blamelist='joe@chromium.org',
-          blamelist_real=['joe@chromium.org'],
+    props(requester='commit-bot@chromium.org', blamelist=['joe@chromium.org'],
           extra_swarmed_tests=['base_unittests', 'browser_tests']) +
     api.platform.name('linux') +
     suppress_analyze()
@@ -680,8 +679,7 @@ def GenTests(api):
   # One target (browser_tests) failed to produce *.isolated file.
   yield (
     api.test('swarming_missing_isolated') +
-    props(requester='commit-bot@chromium.org', blamelist='joe@chromium.org',
-          blamelist_real=['joe@chromium.org'],
+    props(requester='commit-bot@chromium.org', blamelist=['joe@chromium.org'],
           extra_swarmed_tests=['base_unittests']) +
     api.platform.name('linux') +
     suppress_analyze()
