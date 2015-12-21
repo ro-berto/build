@@ -78,6 +78,9 @@ def _GetTargetCMakeArgs(buildername, bot_utils):
     args['CMAKE_CXX_COMPILER'] = bot_utils.join('llvm-build', 'bin', 'clang++')
     _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-fsanitize=address')
     _AppendFlags(args, 'CMAKE_C_FLAGS', '-fsanitize=address')
+  if _HasToken(buildername, 'small'):
+    _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-DOPENSSL_SMALL=1')
+    _AppendFlags(args, 'CMAKE_C_FLAGS', '-DOPENSSL_SMALL=1')
   return args
 
 
@@ -171,9 +174,13 @@ def GenTests(api):
     ('linux32', api.platform('linux', 64)),
     ('linux_noasm_asan', api.platform('linux', 64)),
     ('linux32_noasm_asan', api.platform('linux', 64)),
+    ('linux_small', api.platform('linux', 64)),
     ('mac', api.platform('mac', 64)),
+    ('mac_small', api.platform('mac', 64)),
     ('win32', api.platform('win', 64)),
+    ('win32_small', api.platform('win', 64)),
     ('win64', api.platform('win', 64)),
+    ('win64_small', api.platform('win', 64)),
   ]
   for (buildername, host_platform) in tests:
     yield (
