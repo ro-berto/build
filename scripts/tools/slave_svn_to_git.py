@@ -239,20 +239,26 @@ def main():
 
     # Sync both repos (SVN first since mirroring happens from SVN to Git).
     try:
-      check_call(['gclient', 'sync'], cwd=b_dir, env=env)
-    except subprocess.CalledProcessError:
-      # On Windows, gclient sync occasionally reports 'checksum mismatch' error
-      # for build/scripts/slave/recipes/deterministic_build.expected/
-      # full_chromium_swarm_linux_deterministic.json when calling 'svn update'
-      # on 'build' directory. As a workaround, we delete parent dir containing
-      # invalid .svn files and try again. The missing directory should be
-      # re-created with the correct checksum by repeated call to 'svn update'.
-      if is_win:
-        parent_dir = os.path.join(b_dir, 'build', 'scripts', 'slave', 'recipes',
-                                  'deterministic_build.expected')
-        check_call(['rmdir', parent_dir, '/s', '/q'], cwd=b_dir, env=env)
-        check_call(['gclient', 'sync'], cwd=b_dir, env=env)
-      else:
+      try:
+        check_output(['gclient', 'sync'], cwd=b_dir, env=env)
+      except subprocess.CalledProcessError:
+        # On Windows, gclient sync occasionally reports 'checksum mismatch'
+        # error for build/scripts/slave/recipes/deterministic_build.expected/
+        # full_chromium_swarm_linux_deterministic.json when calling 'svn update'
+        # on 'build' directory. As a workaround, we delete parent dir containing
+        # invalid .svn files and try again. The missing directory should be
+        # re-created with the correct checksum by repeated call to 'svn update'.
+        if is_win:
+          parent_dir = os.path.join(
+              b_dir, 'build', 'scripts', 'slave', 'recipes',
+              'deterministic_build.expected')
+          check_call(['rmdir', parent_dir, '/s', '/q'], cwd=b_dir, env=env)
+          check_output(['gclient', 'sync'], cwd=b_dir, env=env)
+        else:
+          raise
+    except subprocess.CalledProcessError as e:
+      if 'DEPS source of truth has been moved to Git' not in e.output:
+        print e.output  # simulate output if we've failed for another reason
         raise
 
     check_call(['gclient', 'sync'], cwd=tmpdir, env=env)
