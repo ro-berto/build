@@ -206,12 +206,6 @@ def get_recipe_properties(workdir, build_properties,
     # Build properties override factory properties.
     properties = factory_properties.copy()
     properties.update(build_properties)
-
-    # Unhack buildbot-hacked blamelist (iannucci).
-    if ('blamelist_real' in properties and 'blamelist' in properties):
-      properties['blamelist'] = properties['blamelist_real']
-      del properties['blamelist_real']
-
     return properties
 
 

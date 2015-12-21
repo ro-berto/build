@@ -107,7 +107,8 @@ def GenTests(api):
         'triggered_by_cq',
         requester='commit-bot@chromium.org',
         patch_project='v8',
-        blamelist=['dude@chromium.org'],
+        blamelist='dude@chromium.org',
+        blamelist_real=['dude@chromium.org'],
     )
   )
 
@@ -120,7 +121,8 @@ def GenTests(api):
         'triggered_by_ts',
         requester='dude@chromium.org',
         patch_project='v8',
-        blamelist=['dude@chromium.org'],
+        blamelist='dude@chromium.org',
+        blamelist_real=['dude@chromium.org'],
     )
   )
 
