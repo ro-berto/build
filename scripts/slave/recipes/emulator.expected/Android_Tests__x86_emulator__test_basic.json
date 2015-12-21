@@ -192,10 +192,9 @@
       "x86",
       "--api-level",
       "23",
-      "--amount",
+      "--num",
       "1",
-      "--kill-and-launch",
-      "--sdcard_size",
+      "--sdcard-size",
       "500M"
     ],
     "cwd": "[SLAVE_BUILD]",

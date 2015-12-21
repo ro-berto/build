@@ -26,13 +26,12 @@ class EmulatorApi(recipe_api.RecipeApi):
         'run',
         '--abi', abi,
         '--api-level', api_level,
-        '--amount', amount,
-        '--kill-and-launch',
+        '--num', amount,
     ]
     if partition_size:
-      args += ['--partition_size', partition_size]
+      args += ['--partition-size', partition_size]
     if sdcard_size:
-      args += ['--sdcard_size', sdcard_size]
+      args += ['--sdcard-size', sdcard_size]
 
     self.m.python(launch_step_name, self.c.avd_script_path, args, **kwargs)
     try:
