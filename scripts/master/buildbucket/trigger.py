@@ -5,6 +5,7 @@
 """Build triggering via buildbucket."""
 
 import json
+import uuid
 
 from twisted.internet import defer
 
@@ -78,6 +79,7 @@ class TriggeringService(object):
     response = yield self.buildbucket_service.api.put(body={
         'bucket': bucket_name,
         'tags': tags,
+        'client_operation_id': str(uuid.uuid1()),
         'parameters_json': json.dumps({
             'builder_name': builder_name,
             'properties': properties,
