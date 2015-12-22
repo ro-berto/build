@@ -54,6 +54,7 @@ def dartium_builder(c):
 def cronet_builder(c):
   c.gyp_env.GYP_DEFINES['disable_file_support'] = 1
   c.gyp_env.GYP_DEFINES['disable_ftp_support'] = 1
+  c.gyp_env.GYP_DEFINES['enable_bidirectional_stream'] = 1
   c.gyp_env.GYP_DEFINES['enable_websockets'] = 0
   c.compile_py.clobber = True
   c.compile_py.default_targets=['cronet_package',
