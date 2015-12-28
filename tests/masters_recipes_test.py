@@ -63,6 +63,8 @@ SUPPRESSIONS = {
         'Mac 10.10 Release (Intel)',
         'Mac Retina Debug',
         'Mac Retina Release',
+        'Mac 10.10 Retina Debug (AMD)',
+        'Mac 10.10 Retina Release (AMD)',
         'Win7 Debug (NVIDIA)',
         'Win7 Release (NVIDIA)',
         'Win8 Debug (NVIDIA)',
