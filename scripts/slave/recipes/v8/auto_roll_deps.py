@@ -120,7 +120,7 @@ def RunSteps(api):
     monitoring_state = result.json.output['monitoring_state']
   finally:
     counter_config = {
-      'name': '/chrome/infra/v8/autoroller/count',
+      'name': '/v8/autoroller/count',
       'project': 'v8-roll',
       'result': monitoring_state,
       'value': 1,
@@ -130,6 +130,7 @@ def RunSteps(api):
         _RUN_PY,
         [
           'infra.tools.send_ts_mon_values',
+          '--ts-mon-target-type', 'task',
           '--counter', api.json.dumps(counter_config),
         ],
     )

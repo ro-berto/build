@@ -31,8 +31,10 @@
       "-u",
       "/opt/infra-python/run.py",
       "infra.tools.send_ts_mon_values",
+      "--ts-mon-target-type",
+      "task",
       "--counter",
-      "{\"name\": \"/chrome/infra/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"deactivated\", \"value\": 1}"
+      "{\"name\": \"/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"deactivated\", \"value\": 1}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "upload stats"
