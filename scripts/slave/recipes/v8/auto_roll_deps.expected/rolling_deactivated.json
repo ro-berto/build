@@ -33,6 +33,10 @@
       "infra.tools.send_ts_mon_values",
       "--ts-mon-target-type",
       "task",
+      "--ts-mon-task-service-name",
+      "auto-roll",
+      "--ts-mon-task-job-name",
+      "roll",
       "--counter",
       "{\"name\": \"/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"deactivated\", \"value\": 1}"
     ],

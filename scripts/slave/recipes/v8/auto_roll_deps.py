@@ -131,6 +131,8 @@ def RunSteps(api):
         [
           'infra.tools.send_ts_mon_values',
           '--ts-mon-target-type', 'task',
+          '--ts-mon-task-service-name', 'auto-roll',
+          '--ts-mon-task-job-name', 'roll',
           '--counter', api.json.dumps(counter_config),
         ],
     )
