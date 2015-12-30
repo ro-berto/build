@@ -143,6 +143,7 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
+      'enable_swarming': True,
     },
     'Mac NextGen 10.10 Retina Debug (AMD)': {
       'chromium_config': 'chromium',
@@ -162,6 +163,7 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
+      'enable_swarming': True,
     },
   },
 }
