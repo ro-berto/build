@@ -1400,7 +1400,16 @@ def MasterEnvironment(master_dir):
 
 
 def ParsePythonCfg(cfg_filepath, fail_hard=False):
-  """Retrieves data from a python config file."""
+  """Retrieves data from a python config file.
+
+  Args:
+    cfg_filepath(str): path to a slaves.cfg file.
+    fail_hard(boolean): if True, raise exception on error, otherwise returns {}
+
+  Returns:
+    vars(dict): names defined by slaves.cfg, with values.
+  """
+
   if not os.path.exists(cfg_filepath):
     return None
 
@@ -1902,7 +1911,17 @@ def ParseBuildersFileContents(path, contents):
 
 
 def GetSlavesFromBuildersFile(builders_path):
-  """Read builders_path and return a list of slave dicts."""
+  """Read builders_path and return a list of slave dicts.
+
+  Args:
+     builders_path (str): path to a builders.pyl file.
+
+  Returns:
+    slaves(list of dict): each element is a dict with keys 'hostname',
+      'builder', 'master', 'os', 'version', 'bits', as found in slaves.cfg.
+      The return value must match the output of RunSlavesCfg(). The source of
+      truth is in master/slave_list.py.
+  """
   builders = ReadBuildersFile(builders_path)
   return GetSlavesFromBuilders(builders)
 

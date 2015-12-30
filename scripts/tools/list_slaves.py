@@ -28,6 +28,14 @@ def ProcessShortName(master):
 
 
 def LoadMaster(slaves, path):
+  """Add list of slaves for a given master to 'slaves'.
+
+  Args:
+    slaves(list): this list is extended with dicts describing each slave from
+      the specified master. *This is the output of this function*.
+    path(str): path to a master directory
+      (e.g. '<leading dirs>/build/masters/master.chromium.infra/')
+  """
   cur_slaves = chromium_utils.GetSlavesFromMasterPath(path)
   cur_master = os.path.basename(path)
   for cur_slave in cur_slaves:
