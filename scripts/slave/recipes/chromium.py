@@ -197,6 +197,40 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_swarmed_gtest_mac_gpu') +
+    api.properties.generic(mastername='chromium.mac',
+                           buildername='Mac10.9 Tests',
+                           parent_buildername='Mac Builder') +
+    api.properties(swarm_hashes={
+      'gl_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.platform('mac', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Mac10.9 Tests': {
+        'gtest_tests': [
+          {
+            'test': 'gl_tests',
+            'swarming': {
+              'can_use_on_swarming_builders': True,
+              'dimension_sets': [
+                {
+                  'gpu': '8086:0a2e',  # Intel Iris
+                  'hidpi': '0',
+                  'os': 'Mac-10.10',
+                }, {
+                  'gpu': '10de:0fe9',  # NVIDIA GeForce GT 750M
+                  'hidpi': '1',
+                  'os': 'Mac-10.9',
+                },
+              ],
+            },
+          },
+        ],
+      },
+    }))
+  )
+
+  yield (
     api.test('build_dynamic_isolated_script_test') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Builder') +

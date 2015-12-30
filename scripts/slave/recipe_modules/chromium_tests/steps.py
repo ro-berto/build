@@ -370,16 +370,28 @@ def generate_gtest(api, mastername, buildername, test_spec,
                    '--test-launcher-total-shards=%d' % test['total_shards']])
     use_swarming = False
     swarming_shards = 1
+    swarming_dimension_sets = None
     if enable_swarming:
       swarming_spec = test.get('swarming', {})
       if swarming_spec.get('can_use_on_swarming_builders'):
         use_swarming = True
         swarming_shards = swarming_spec.get('shards', 1)
+        swarming_dimension_sets = swarming_spec.get('dimension_sets')
     override_compile_targets = test.get('override_compile_targets', None)
-    yield GTestTest(str(test['test']), args=args, flakiness_dash=True,
-                    enable_swarming=use_swarming,
-                    swarming_shards=swarming_shards,
-                    override_compile_targets=override_compile_targets)
+    if use_swarming and swarming_dimension_sets:
+      for dimensions in swarming_dimension_sets:
+        # Yield potentially multiple invocations of the same test, on
+        # different machine configurations.
+        yield GTestTest(str(test['test']), args=args, flakiness_dash=True,
+                        enable_swarming=True,
+                        swarming_shards=swarming_shards,
+                        swarming_dimensions=dimensions,
+                        override_compile_targets=override_compile_targets)
+    else:
+      yield GTestTest(str(test['test']), args=args, flakiness_dash=True,
+                      enable_swarming=use_swarming,
+                      swarming_shards=swarming_shards,
+                      override_compile_targets=override_compile_targets)
 
 
 def generate_script(api, mastername, buildername, test_spec,
@@ -1101,16 +1113,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     return valid, failures
 
 
-# TODO(kbr): remove after http://crbug.com/570075 is fixed.
-def sanitize_swarming_dimension_sets(dimension_sets):
-  if not dimension_sets:
-    return None
-  return [
-    { str(k): str(v) for k, v in dimensions.iteritems() }
-    for dimensions in dimension_sets
-  ]
-
-
 def generate_isolated_script(api, mastername, buildername, test_spec,
                              enable_swarming=False,
                              scripts_compile_targets=None):
@@ -1123,8 +1125,7 @@ def generate_isolated_script(api, mastername, buildername, test_spec,
       if swarming_spec.get('can_use_on_swarming_builders', False):
         use_swarming = True
         swarming_shards = swarming_spec.get('shards', 1)
-        swarming_dimension_sets = sanitize_swarming_dimension_sets(
-          swarming_spec.get('dimension_sets'))
+        swarming_dimension_sets = swarming_spec.get('dimension_sets')
     name = str(spec['name'])
     args = args=spec.get('args', [])
     target_name = spec['isolate_name']
