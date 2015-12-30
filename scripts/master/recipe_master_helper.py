@@ -50,7 +50,10 @@ def AddSchedulersAndTriggers(buildmaster_config=None,
   for slave in slave_list.slaves:
     builder = slave['builder']
     parent_builder = slave.get('triggered_by')
-    if parent_builder is not None:
+    if parent_builder == 'none':
+      # Uses recipe-side triggers. Don't add to trigger maps.
+      pass
+    elif parent_builder is not None:
       if slave_list.GetSlave(builder=parent_builder) is None:
         raise Exception('Could not find parent builder %s for builder %s' %
                         (parent_builder, builder))
