@@ -669,18 +669,21 @@ class SwarmingTest(Test):
 class SwarmingGTestTest(SwarmingTest):
   def __init__(self, name, args=None, target_name=None, shards=1,
                dimensions=None, tags=None, extra_suffix=None,
-               upload_test_results=True):
+               upload_test_results=True, override_compile_targets=None):
     super(SwarmingGTestTest, self).__init__(name, dimensions, tags, target_name,
                                             extra_suffix)
     self._args = args or []
     self._shards = shards
     self._upload_test_results = upload_test_results
+    self._override_compile_targets = override_compile_targets
 
   def compile_targets(self, api):
     # <X>_run target depends on <X>, and then isolates it invoking isolate.py.
     # It is a convention, not a hard coded rule.
     # Also include name without the _run suffix to help recipes correctly
     # interpret results returned by "analyze".
+    if self._override_compile_targets:
+      return self._override_compile_targets
 
     if api.chromium.c.TARGET_PLATFORM == 'android':
       # Not all _apk_runs have a corresponding _apk, so we only return the
@@ -1162,7 +1165,9 @@ class GTestTest(Test):
     if enable_swarming:
       self._test = SwarmingGTestTest(
           name, args, target_name, swarming_shards, swarming_dimensions,
-          swarming_tags, swarming_extra_suffix)
+          swarming_tags, swarming_extra_suffix,
+          override_compile_targets=runtest_kwargs.get(
+            'override_compile_targets'))
     else:
       self._test = LocalGTestTest(name, args, target_name, **runtest_kwargs)
 

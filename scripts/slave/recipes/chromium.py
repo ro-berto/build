@@ -231,6 +231,29 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_swarmed_gtest_override_compile_targets') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Builder') +
+    api.platform('linux', 64) +
+    api.properties(swarm_hashes={
+      'tab_capture_end2end_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux Tests': {
+        'gtest_tests': [
+          {
+            'test': 'tab_capture_end2end_tests',
+            'override_compile_targets': [ 'tab_capture_end2end_tests_run' ],
+            'swarming': {
+              'can_use_on_swarming_builders': True,
+            },
+          },
+        ],
+      },
+    }))
+  )
+
+  yield (
     api.test('build_dynamic_isolated_script_test') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Builder') +
