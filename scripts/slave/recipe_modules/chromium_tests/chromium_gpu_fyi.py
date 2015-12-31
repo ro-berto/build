@@ -16,7 +16,8 @@ SPEC = {
     'GPU NextGen Linux Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
-                                'archive_gpu_tests', 'chrome_with_codecs'],
+                                'archive_gpu_tests', 'chrome_with_codecs',
+                                'internal_gles2_conform_tests'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -34,7 +35,8 @@ SPEC = {
     'GPU NextGen Linux Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
-                                'archive_gpu_tests', 'chrome_with_codecs'],
+                                'archive_gpu_tests', 'chrome_with_codecs',
+                                'internal_gles2_conform_tests'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -92,7 +94,8 @@ SPEC = {
     'GPU NextGen Mac Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
-                                'chrome_with_codecs'],
+                                'chrome_with_codecs',
+                                'internal_gles2_conform_tests'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -110,7 +113,8 @@ SPEC = {
     'GPU NextGen Mac Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
-                                'chrome_with_codecs'],
+                                'chrome_with_codecs',
+                                'internal_gles2_conform_tests'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',

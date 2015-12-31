@@ -823,3 +823,7 @@ def chromium_deterministic_build(c):
 @config_ctx(includes=['chromium_clang'])
 def cast_linux(c):
   c.gyp_env.GYP_DEFINES['chromecast'] = 1
+
+@config_ctx()
+def internal_gles2_conform_tests(c):
+  c.gyp_env.GYP_DEFINES['internal_gles2_conform_tests'] = 1
