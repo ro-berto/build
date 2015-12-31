@@ -19,6 +19,7 @@ SPEC = {
                                 'archive_gpu_tests', 'chrome_with_codecs',
                                 'internal_gles2_conform_tests'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -38,6 +39,7 @@ SPEC = {
                                 'archive_gpu_tests', 'chrome_with_codecs',
                                 'internal_gles2_conform_tests'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -97,6 +99,7 @@ SPEC = {
                                 'chrome_with_codecs',
                                 'internal_gles2_conform_tests'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -116,6 +119,7 @@ SPEC = {
                                 'chrome_with_codecs',
                                 'internal_gles2_conform_tests'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
