@@ -3,13 +3,19 @@
 # found in the LICENSE file.
 
 
+from common.chromium_utils import GetActiveMaster
+
+
 DEPS = [
   'archive',
   'ct_swarming',
   'file',
+  'perf_dashboard',
+  'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/step',
+  'recipe_engine/time',
 ]
 
 
@@ -49,6 +55,9 @@ def RunSteps(api):
   # Download Cluster Telemetry binary.
   api.ct_swarming.download_CT_binary(CT_BINARY)
 
+  # Delete swarming_temp_dir to ensure it starts from a clean slate.
+  api.file.rmtree('swarming temp dir', api.ct_swarming.swarming_temp_dir)
+
   ct_num_slaves = api.properties.get('ct_num_slaves', DEFAULT_CT_NUM_SLAVES)
   for slave_num in range(1, ct_num_slaves + 1):
     # Download page sets and archives.
@@ -59,9 +68,6 @@ def RunSteps(api):
     isolate_path = isolate_dir.join(CT_ISOLATE)
     extra_variables = {
         'SLAVE_NUM': str(slave_num),
-        'MASTER': api.properties['mastername'],
-        'BUILDER': api.properties['buildername'],
-        'GIT_HASH': api.properties['git_revision'],
         'BENCHMARK': benchmark,
     }
     api.ct_swarming.create_isolated_gen_json(
@@ -75,22 +81,188 @@ def RunSteps(api):
   # Trigger all swarming tasks.
   tasks = api.ct_swarming.trigger_swarming_tasks(
       swarm_hashes, task_name_prefix='ct-1k-task',
-      dimensions={'os': 'Ubuntu', 'gpu': '10de'})
+      dimensions={'os': 'Ubuntu-14.04', 'gpu': '10de:104a', 'cpu': 'x86-64'})
 
-  # Now collect all tasks.
-  api.ct_swarming.collect_swarming_tasks(tasks)
+  # The format of results_json is described in https://goo.gl/LmRBDk
+  results_json = {
+    'master': GetActiveMaster(slavename=api.properties['slavename']),
+    'bot': api.properties['buildername'],
+    'chart_data': {},
+    'point_id': int(api.time.time()),
+    'versions': {'chromium': api.properties['git_revision']},
+    'supplemental': {},
+  }
+
+  # Now collect all tasks and populate results_json.
+  slave_num = 0
+  num_webpages_reported = 0
+  for task in tasks:
+    slave_num += 1
+    api.ct_swarming.collect_swarming_task(task)
+
+    output_dir = api.ct_swarming.tasks_output_dir.join(
+        'slave%s' % slave_num).join('0')
+    output_files = api.file.listdir('output dir', output_dir)
+    if not output_files:
+      raise api.step.StepFailure(
+          'No output files were found for slave%d' % slave_num)
+    slave_data_found = False
+
+    # Loop through all output files and gather results in results_json.
+    for json_output_file in output_files:
+      json_output = api.json.read(
+          'read output json', output_dir.join(json_output_file)).json.output
+      if not json_output:
+        # The output of some webpages could be empty if they repeatedly crashed.
+        continue
+
+      if not results_json['chart_data']:
+        # Initialize the chart_data dict since it does not exist yet.
+        results_json['chart_data'] = json_output
+        # Empty out the 'summary' values of all fields because we will
+        # recalculate them in the next section.
+        results_json_charts = results_json['chart_data']['charts']
+        for field_name in json_output['charts'].keys():
+          results_json_charts[field_name]['summary']['values'] = []
+
+      # The following block of code does the following:
+      #
+      # 1. Loop through all fields.
+      #   2. Loop through all webpages in the field.
+      #     3. Add the webpage to results_json_charts[field_name].
+      #     4. Find all values of the webpage for this field.
+      #     5. Calculate the average of webpage's values.
+      #     6. Append the webpage's average to the 'summary' values of this
+      #        field.
+      #     7. Update the num_webpages_reported variable with the number of
+      #        entries in the 'summary' values of this field.
+      #
+      # These steps are done to appropriately update the results_json dict with
+      # new webpages.
+      #
+      results_json_charts = results_json['chart_data']['charts']
+      # 1. Loop through all fields.
+      for field_name in json_output['charts'].keys():
+        slave_data_found = True
+        # 2. Loop through all webpages in the field.
+        for webpage_name in json_output['charts'][field_name].keys():
+          if webpage_name == 'summary':
+            # We will populate the summary section separately below.
+            continue
+          else:
+            # 3. Add the webpage to results_json_charts[field_name].
+            results_json_charts[field_name][webpage_name] = (
+                json_output['charts'][field_name][webpage_name])
+            # 4. Find all values of the webpage for this field.
+            values = results_json_charts[field_name][webpage_name]['values']
+            # 5. Calculate the average of webpage's values.
+            values_avg = sum(values)/len(values)
+            # 6. Append the webpage's average to the 'summary' values of this
+            #    field.
+            results_json_charts[field_name]['summary']['values'].append(
+                values_avg)
+            # 7. Update the num_webpages_reported variable with the number of
+            #    entries in the 'summary' values of this field.
+            num_webpages_reported = max(
+                len(results_json_charts[field_name]['summary']['values']),
+                num_webpages_reported)
+
+    if not slave_data_found:
+      # Throw a failure if this slave had no results.
+      raise api.step.StepFailure('Received no data from slave #%d' % slave_num)
+
+  # Upload results_json to the perf dashboard.
+  api.perf_dashboard.set_default_config()
+  api.perf_dashboard.post(results_json)
+
+  # Set build property that displays how many webpages reported results.
+  api.step.active_result.presentation.properties['Number of webpages'] = (
+      num_webpages_reported)
+
+
+def _GetTestJsonOutput(webpage, values, populate_charts=True):
+  json_output = {
+    "trace_rerun_options": [],
+    "format_version": "0.1",
+    "benchmark_description": "Measures rasterize and record performance for "
+                             "Cluster Telemetry.",
+    "charts": {},
+    "benchmark_metadata": {
+      "rerun_options": [],
+      "type": "telemetry_benchmark",
+      "name": "rasterize_and_record_micro_ct",
+      "description": "Measures rasterize and record performance for "
+                     "Cluster Telemetry."
+    },
+    "next_version": "0.2",
+    "benchmark_name": "rasterize_and_record_micro_ct"
+  }
+
+  if populate_charts:
+    json_output['charts'] = {
+      "viewport_picture_size": {
+        webpage: {
+          "std": 0.0,
+          "name": "viewport_picture_size",
+          "type": "list_of_scalar_values",
+          "important": True,
+          "values": values,
+          "units": "bytes",
+          "page_id": 0
+        },
+        "summary": {
+          "std": 0.0,
+          "name": "viewport_picture_size",
+          "important": True,
+          "values": values,
+          "units": "bytes",
+          "type": "list_of_scalar_values"
+        }
+      }
+    }
+
+  return json_output
 
 
 def GenTests(api):
   mastername = 'chromium.perf.fyi'
-  slavename = 'test-slave'
+  slavename = 'slave50-c1'
   parent_build_archive_url = 'http:/dummy-url.com'
   parent_got_swarming_client_revision = '12345'
   git_revision = 'xy12z43'
-  ct_num_slaves = 5
+  ct_num_slaves = 3
+
+  # Slave1 file1 and file2.
+  json_output_slave1_file1 = _GetTestJsonOutput('http://www.google.com',
+                                                [20822, 20824])
+  json_output_slave1_file2 = _GetTestJsonOutput('http://www.facebook.com',
+                                                [208, 210])
+
+  # Slave2 file1 and file2.
+  json_output_slave2_file1 = _GetTestJsonOutput('http://www.amazon.com',
+                                                [2, 4])
+  json_output_slave2_file2 = _GetTestJsonOutput('http://www.twitter.com',
+                                                [8, 10])
+
+  # Slave3 file1 and file2.
+  json_output_slave3_file1 = _GetTestJsonOutput('http://www.baidu.com',
+                                                [20, 40])
+  json_output_slave3_file2 = _GetTestJsonOutput('', [], populate_charts=False)
 
   yield(
     api.test('CT_Top1k_RR') +
+    api.override_step_data(
+        'read output json', api.json.output(json_output_slave1_file1)) +
+    api.override_step_data(
+        'read output json (2)', api.json.output(json_output_slave1_file2)) +
+    api.override_step_data(
+        'read output json (3)', api.json.output(json_output_slave2_file1)) +
+    api.override_step_data(
+        'read output json (4)', api.json.output(json_output_slave2_file2)) +
+    api.override_step_data(
+        'read output json (5)', api.json.output(json_output_slave3_file1)) +
+    api.override_step_data(
+        'read output json (6)', api.json.output(json_output_slave3_file2)) +
     api.properties(
         buildername='Linux CT Top1k RR Perf',
         mastername=mastername,
@@ -104,6 +276,18 @@ def GenTests(api):
 
   yield(
     api.test('CT_Top1k_Repaint') +
+    api.override_step_data(
+        'read output json', api.json.output(json_output_slave1_file1)) +
+    api.override_step_data(
+        'read output json (2)', api.json.output(json_output_slave1_file2)) +
+    api.override_step_data(
+        'read output json (3)', api.json.output(json_output_slave2_file1)) +
+    api.override_step_data(
+        'read output json (4)', api.json.output(json_output_slave2_file2)) +
+    api.override_step_data(
+        'read output json (5)', api.json.output(json_output_slave3_file1)) +
+    api.override_step_data(
+        'read output json (6)', api.json.output(json_output_slave3_file2)) +
     api.properties(
         buildername='Linux CT Top1k Repaint Perf',
         mastername=mastername,
@@ -130,8 +314,43 @@ def GenTests(api):
   )
 
   yield(
-    api.test('CT_Top1k_slave3_failure') +
-    api.step_data('ct-1k-task-3 on Ubuntu', retcode=1) +
+    api.test('CT_Top1k_slave1_empty_dir') +
+    api.override_step_data('listdir output dir', api.json.output([])) +
+    api.properties(
+        buildername='Linux CT Top1k Repaint Perf',
+        mastername=mastername,
+        slavename=slavename,
+        parent_build_archive_url=parent_build_archive_url,
+        parent_got_swarming_client_revision=parent_got_swarming_client_revision,
+        git_revision=git_revision,
+        ct_num_slaves=ct_num_slaves,
+    )
+  )
+
+  yield(
+    api.test('CT_Top1k_slave2_no_output') +
+    api.override_step_data(
+        'read output json', api.json.output(json_output_slave1_file1)) +
+    api.override_step_data(
+        'read output json (2)', api.json.output(json_output_slave1_file2)) +
+    api.properties(
+        buildername='Linux CT Top1k Repaint Perf',
+        mastername=mastername,
+        slavename=slavename,
+        parent_build_archive_url=parent_build_archive_url,
+        parent_got_swarming_client_revision=parent_got_swarming_client_revision,
+        git_revision=git_revision,
+        ct_num_slaves=ct_num_slaves,
+    )
+  )
+
+  yield(
+    api.test('CT_Top1k_slave2_failure') +
+        api.override_step_data(
+        'read output json', api.json.output(json_output_slave1_file1)) +
+    api.override_step_data(
+        'read output json (2)', api.json.output(json_output_slave1_file2)) +
+    api.step_data('ct-1k-task-2 on Ubuntu-14.04', retcode=1) +
     api.properties(
         buildername='Linux CT Top1k RR Perf',
         mastername=mastername,

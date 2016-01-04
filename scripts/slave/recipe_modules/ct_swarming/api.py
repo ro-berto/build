@@ -179,14 +179,6 @@ os.chmod('%s', os.stat('%s').st_mode | stat.S_IEXEC)
     self.m.swarming.trigger(swarming_tasks)
     return swarming_tasks
 
-  def collect_swarming_tasks(self, swarming_tasks):
-    """Collects all swarming tasks triggered by this recipe.
-
-    Args:
-      swarming_tasks: list of swarming.SwarmingTask instances.
-    """
-    return self.m.swarming.collect(swarming_tasks)
-
   def collect_swarming_task(self, swarming_task):
     """Collects the specified swarming task.
 
