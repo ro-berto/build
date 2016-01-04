@@ -7,7 +7,6 @@ GPU_ISOLATES = (
   'content_gl_tests',
   'gl_tests',
   'gl_unittests',
-  'gles2_conform_test',
   'gpu_unittests',
   'tab_capture_end2end_tests',
   'telemetry_gpu_test',
@@ -21,6 +20,9 @@ GPU_ISOLATES = (
 FYI_ONLY_GPU_ISOLATES = (
   'audio_unittests',
   'content_unittests',
+  # The gles2_conform_tests are closed-source and deliberately only run
+  # on the FYI waterfall.
+  'gles2_conform_test',
 )
 
 # Until we have more capacity, run angle_end2end_tests only on the

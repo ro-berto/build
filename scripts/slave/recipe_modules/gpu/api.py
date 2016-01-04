@@ -102,14 +102,14 @@ class GpuApi(recipe_api.RecipeApi):
     del self.m.gclient.c.solutions[1].custom_deps[
         'src/chrome/test/data/perf/frame_rate/private']
 
-    self.m.chromium.c.gyp_env.GYP_DEFINES['internal_gles2_conform_tests'] = 1
-
     # This recipe requires the use of isolates for running tests.
     self.m.isolate.set_isolate_environment(self.m.chromium.c)
 
-    # The FYI waterfall is being used to test top-of-tree ANGLE with
-    # Chromium on all platforms.
     if self.is_fyi_waterfall:
+      # Only build the closed-source tests on the FYI waterfall.
+      self.m.chromium.c.gyp_env.GYP_DEFINES['internal_gles2_conform_tests'] = 1
+      # The FYI waterfall is being used to test top-of-tree ANGLE with
+      # Chromium on all platforms.
       self.m.gclient.c.solutions[0].custom_vars['angle_revision'] = (
           'refs/remotes/origin/master')
 
@@ -348,9 +348,6 @@ class GpuApi(recipe_api.RecipeApi):
     basic_tests = list(SIMPLE_TESTS_TO_RUN)
     if self.is_fyi_waterfall:
       basic_tests += common.FYI_GPU_ISOLATES
-      # Only run tests on the tree closers and on the CQ which are
-      # available in the open-source repository.
-      basic_tests += SIMPLE_NON_OPEN_SOURCE_TESTS_TO_RUN
 
     # Run the ANGLE tests on the ANGLE trybots
     if self.is_angle_trybot:
