@@ -496,8 +496,14 @@ class Bisector(object):
 
   def print_result(self):
     results = bisect_results.BisectResults(self).as_string()
-    self.api.m.step('Results', ['cat'],
-                    stdin=self.api.m.raw_io.input(data=results))
+    self.api.m.python.inline(
+        'Results',
+        """
+        import shutil
+        import sys
+        shutil.copyfileobj(open(sys.argv[1]), sys.stdout)
+        """,
+        args=[self.api.m.raw_io.input(data=results)])
 
   def get_revision_to_eval(self):
     """Gets the next RevistionState object in the candidate range.
