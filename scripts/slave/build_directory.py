@@ -90,6 +90,8 @@ def RmtreeExceptNinjaOrGomaFiles(build_output_dir):
           f == 'args.gn' or f == 'mb_type' or f == 'runtime_deps' or
           f.startswith('msvc') or  # VS runtime DLLs.
           f.startswith('pgort') or  # VS PGO runtime DLL.
+          f.startswith('vccorlib') or  # VS2015 core libraries.
+          f.startswith('vcruntime') or  # VS2015 runtime libraries.
           f in ('gyp-mac-tool', 'gyp-win-tool',
                 'environment.x86', 'environment.x64')):
         continue
