@@ -91,6 +91,14 @@ def RunSteps(api):
     api.chromium_android.logcat_dump()
     api.chromium_android.stack_tool_steps()
     api.chromium_android.test_report()
+    api.chromium_android.resource_sizes(
+        apk_path=api.chromium_android.apk_path(WEBVIEW_APK),
+        so_path=api.path['checkout'].join(
+            'out', api.chromium.c.BUILD_CONFIG, 'system_webview_apk', 'libs',
+            'armeabi-v7a', 'libwebviewchromium.so'),
+        so_with_symbols_path=api.path['checkout'].join(
+            'out', api.chromium.c.BUILD_CONFIG, 'lib',
+            'libwebviewchromium.so'))
 
 def run_instrumentation_test(api, suite):
   mock_test_results = {

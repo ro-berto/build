@@ -192,6 +192,20 @@ class AndroidApi(recipe_api.RecipeApi):
         perf_dashboard_id=name,
         test_type=name)
 
+  def resource_sizes(self, apk_path, so_path, so_with_symbols_path):
+    self.m.chromium.runtest(
+        self.m.path['checkout'].join('build', 'android', 'resource_sizes.py'),
+        args=[
+            apk_path,
+            '--so-path', so_path,
+            '--so-with-symbols-path', so_with_symbols_path,
+            '--build_type', self.m.chromium.c.BUILD_CONFIG],
+        annotate='graphing',
+        results_url='https://chromeperf.appspot.com',
+        perf_id=self.m.properties['buildername'],
+        perf_dashboard_id='resource_sizes',
+        test_type='resource_sizes')
+
   def check_webview_licenses(self, name='check licenses'):
     self.m.python(
         name,
