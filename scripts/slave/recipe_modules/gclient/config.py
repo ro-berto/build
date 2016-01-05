@@ -500,6 +500,15 @@ def boringssl(c):
   soln.url = 'https://boringssl.googlesource.com/boringssl.git'
   soln.deps_file = 'util/bot/DEPS'
 
+@config_ctx()
+def dart(c):
+  soln = c.solutions.add()
+  soln.name = 'sdk'
+  soln.url = ('https://chromium.googlesource.com/external/github.com/' +
+              'dart-lang/sdk.git')
+  soln.deps_file = 'DEPS'
+  soln.managed = False
+
 @config_ctx(config_vars={'GIT_MODE': True})
 def infra(c):
   soln = c.solutions.add()

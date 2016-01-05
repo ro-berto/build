@@ -17,17 +17,7 @@ DEPS = [
 ]
 
 def RunSteps(api):
-  # Enable dart config when it is committed.
-  # api.gclient.set_config('dart')
-  # Until then, fix up a boringssl config
-  api.gclient.set_config('boringssl')
-  s = api.gclient.c.solutions[0]
-  s.name = 'sdk'
-  s.url = ('https://chromium.googlesource.com/external/github.com/' +
-           'dart-lang/sdk.git')
-  s.deps_file = 'DEPS'
-  s.managed = False
-  # End of fixes to boringssl config
+  api.gclient.set_config('dart')
   api.bot_update.ensure_checkout(force=True)
   api.gclient.runhooks()
   api.python('build dart',
