@@ -22,7 +22,7 @@ def RunSteps(api):
   # Until then, fix up a boringssl config
   api.gclient.set_config('boringssl')
   s = api.gclient.c.solutions[0]
-  s.name = 'dart'
+  s.name = 'sdk'
   s.url = ('https://chromium.googlesource.com/external/github.com/' +
            'dart-lang/sdk.git')
   s.deps_file = 'DEPS'
