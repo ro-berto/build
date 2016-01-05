@@ -1740,32 +1740,6 @@ SPEC = {
       },
     },
 
-    'Android Tests (L Nexus5)(dbg)': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'Android Builder (dbg)',
-      'android_config': 'main_builder',
-      'root_devices': True,
-      'tests': [
-        steps.AndroidJunitTest('base_junit_tests'),
-        steps.GTestTest(
-            'components_browsertests',
-            android_isolate_path='components/components_browsertests.isolate'),
-        steps.GTestTest('gfx_unittests'),
-        steps.AndroidInstrumentationTest('ChromePublicTest'),
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Android Tests (trial)(dbg)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',

@@ -208,7 +208,6 @@
       "--",
       "android_webview_test_apk",
       "android_webview_unittests_apk",
-      "base_junit_tests",
       "base_unittests_apk",
       "breakpad_unittests_deps",
       "cc_unittests_apk",
@@ -216,7 +215,6 @@
       "chrome_public_test_apk",
       "chrome_sync_shell_test_apk",
       "chromedriver_webview_shell_apk",
-      "components_browsertests_apk",
       "components_unittests_apk",
       "content_browsertests_apk",
       "content_junit_tests",
@@ -330,33 +328,6 @@
     "name": "trigger (3)",
     "trigger_specs": [
       {
-        "builder_name": "Android Tests (L Nexus5)(dbg)",
-        "properties": {
-          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
-          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
-          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
-          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
-          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-          "parent_got_revision_cp": "refs/heads/master@{#170242}",
-          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
-          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
-          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
-          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
-          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
-          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
-        }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Android Tests (L Nexus5)(dbg)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (4)",
-    "trigger_specs": [
-      {
         "builder_name": "Android Tests (amp instrumentation test split)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -381,7 +352,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (5)",
+    "name": "trigger (4)",
     "trigger_specs": [
       {
         "builder_name": "Android Tests (amp split)",
@@ -408,7 +379,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (6)",
+    "name": "trigger (5)",
     "trigger_specs": [
       {
         "builder_name": "Android Tests (trial)(dbg)",
