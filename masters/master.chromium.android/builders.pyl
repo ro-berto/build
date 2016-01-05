@@ -85,13 +85,6 @@
       "category": "1Webview",
       "mergeRequests": True,
     },
-    "Android Aura Tester (dbg)": {
-      "recipe": "chromium",
-      "scheduler": None,
-      "slave_pools": ["aura_testers"],
-      "category": "3Testers",
-      "mergeRequests": True,
-    },
     "Android MIPS Builder (dbg)": {
       "recipe": "android/builder",
       "scheduler": "android_commits",
@@ -128,13 +121,6 @@
       "slavebuilddir": "android_build",
     },
     "Android GN Builder (dbg)": {
-      "recipe": "chromium",
-      "scheduler": "android_commits",
-      "slave_pools": ["gn_builders"],
-      "category": "2Builders",
-      "slavebuilddir": "gn",
-    },
-    "Android Aura Builder (dbg)": {
       "recipe": "chromium",
       "scheduler": "android_commits",
       "slave_pools": ["gn_builders"],
@@ -221,16 +207,6 @@
       },
       "slaves": [
           "slave35-c1",
-        ],
-    },
-    "aura_testers": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": [
-          "build29-b1",
         ],
     },
     "builders": {
