@@ -261,7 +261,7 @@ def _get_basic_test_data():
           "DEPS": ("vars={'v8_revision': '004'};"
                    "deps = {'src/v8': 'v8.git@' + Var('v8_revision'),"
                    "'src/third_party/WebKit': 'webkit.git@010'}"),
-          'DEPS_interval': {'v8': '004 003 002'.split()},
+          'DEPS_interval': {'v8': '002 003 004'.split()},
       },
       {
           'refrange': True,
@@ -329,7 +329,7 @@ def _get_reversed_basic_test_data():
           "DEPS": ("vars={'v8_revision': '004'};"
                    "deps = {'src/v8': 'v8.git@' + Var('v8_revision'),"
                    "'src/third_party/WebKit': 'webkit.git@010'}"),
-          'DEPS_interval': {'v8': '004 003 002'.split()},
+          'DEPS_interval': {'v8': '002 003 004'.split()},
       },
   ]
 
@@ -439,13 +439,13 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
 
     if 'DEPS_interval' in revision_data:
       for depot_name, interval in revision_data['DEPS_interval'].iteritems():
-        for item in interval[1:]:
+        for item in reversed(interval[:-1]):
           step_name = 'Hashing modified DEPS file with revision ' + item
           file_hash = 'f412e8458'
           yield api.step_data(step_name, stdout=api.raw_io.output(file_hash))
         step_name = 'Expanding revision range for revision %s on depot %s'
-        step_name %= (interval[0], depot_name)
-        stdout = api.raw_io.output('\n'.join(interval))
+        step_name %= (interval[-1], depot_name)
+        stdout = api.json.output([(r, 0) for r in interval[:-1]])
         yield api.step_data(step_name, stdout=stdout)
 
     if 'cl_info' in revision_data:

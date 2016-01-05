@@ -647,13 +647,55 @@
   },
   {
     "cmd": [
-      "git",
-      "log",
-      "--format=%H",
-      "001...004"
+      "python",
+      "-u",
+      "RECIPE_MODULE[auto_bisect]/resources/fetch_intervening_revisions.py",
+      "001",
+      "004",
+      "v8"
     ],
-    "cwd": "[SLAVE_BUILD]/src/v8",
+    "cwd": "[SLAVE_BUILD]",
     "name": "Expanding revision range for revision 004 on depot v8",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"002\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    0@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"003\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    0@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "hash-object",
+      "-t",
+      "blob",
+      "-w",
+      "--stdin"
+    ],
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
+    "name": "Hashing modified DEPS file with revision 002",
+    "stdin": "vars={'v8_revision': '002'};deps = {'src/v8': 'v8.git@' + Var('v8_revision'),'src/third_party/WebKit': 'webkit.git@010'}",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
+      "diff",
+      "a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS",
+      "f412e8458",
+      "--src-prefix=IAMSRC:",
+      "--dst-prefix=IAMDST:"
+    ],
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
+    "name": "Generating patch for a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS to 002",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -681,33 +723,6 @@
     ],
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "Generating patch for a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS to 003",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "git",
-      "hash-object",
-      "-t",
-      "blob",
-      "-w",
-      "--stdin"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Hashing modified DEPS file with revision 002",
-    "stdin": "vars={'v8_revision': '002'};deps = {'src/v8': 'v8.git@' + Var('v8_revision'),'src/third_party/WebKit': 'webkit.git@010'}",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "git",
-      "diff",
-      "a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS",
-      "f412e8458",
-      "--src-prefix=IAMSRC:",
-      "--dst-prefix=IAMDST:"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Generating patch for a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS to 002",
     "stdout": "/path/to/tmp/"
   },
   {

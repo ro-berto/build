@@ -333,29 +333,26 @@ class Bisector(object):
 
   def _get_rev_range_for_depot(self, depot_name, min_rev, max_rev,
                                base_revision):
-    results = []
-    depot = depot_config.DEPOT_DEPS_NAME[depot_name]
-    depot_path = self.api.m.path['slave_build'].join(depot['src'])
-    step_name = ('Expanding revision range for revision %s on depot %s'
-                 % (max_rev, depot_name))
-
     try:
-      step_result = self.api.m.git('log', '--format=%H', min_rev + '...' +
-                                   max_rev, stdout=self.api.m.raw_io.output(),
-                                   cwd=depot_path, name=step_name)
+      step_result = self.api.m.python(
+          ('Expanding revision range for revision %s on depot %s'
+           % (max_rev, depot_name)),
+          self.api.resource('fetch_intervening_revisions.py'),
+          [min_rev, max_rev, depot_name],
+          stdout=self.api.m.json.output())
     except self.api.m.step.StepFailure:  # pragma: no cover
       self.surface_result('BAD_REV')
       raise
-    # We skip the first revision in the list as it is max_rev
-    new_revisions = step_result.stdout.splitlines()[1:]
-    for revision in new_revisions:
-      results.append(self.revision_class(None, self,
-                                         base_revision=base_revision,
-                                         deps_revision=revision,
-                                         dependency_depot_name=depot_name))
-    results.reverse()
+    results = []
+    for git_hash, _ in step_result.stdout:
+      revision_object = self.revision_class(
+          None,
+          self,
+          base_revision=base_revision,
+          deps_revision=git_hash,
+          dependency_depot_name=depot_name)
+      results.append(revision_object)
     return results
-
 
   def _update_revision_list_indexes(self):
     """Sets list_index, next and previous properties for each revision."""
