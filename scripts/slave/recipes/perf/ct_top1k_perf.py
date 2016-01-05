@@ -3,9 +3,6 @@
 # found in the LICENSE file.
 
 
-from common.chromium_utils import GetActiveMaster
-
-
 DEPS = [
   'archive',
   'ct_swarming',
@@ -34,6 +31,14 @@ def _DownloadAndExtractBinary(api):
       target='Release',
       build_url=None,  # This is a required parameter, but has no effect.
       build_archive_url=api.properties['parent_build_archive_url'])
+
+
+def _GetMasterNameInPerfFormat(master_name):
+  """Returns the master name in the capitalized format expected by chromeperf.
+
+  Eg: chromium.perf.fyi becomes ChromiumPerfFyi.
+  """
+  return ''.join(x for x in master_name.title() if x != '.')
 
 
 def RunSteps(api):
@@ -85,7 +90,7 @@ def RunSteps(api):
 
   # The format of results_json is described in https://goo.gl/LmRBDk
   results_json = {
-    'master': GetActiveMaster(slavename=api.properties['slavename']),
+    'master': _GetMasterNameInPerfFormat(api.properties['mastername']),
     'bot': api.properties['buildername'],
     'chart_data': {},
     'point_id': int(api.time.time()),
