@@ -46,6 +46,10 @@ class PerfRevisionState(revision_state.RevisionState):
       api = self.bisector.api
       self.mean_value = api.m.math_utils.mean(self.values)
       self.std_dev = api.m.math_utils.standard_deviation(self.values)
+    # Values were not found, but the test did not otherwise fail.
+    else:
+      self.status = PerfRevisionState.FAILED
+      self.bisector.surface_result('MISSING_METRIC')
     # We cannot test the goodness of the initial rev range.
     if self.bisector.good_rev != self and self.bisector.bad_rev != self:
       if self._check_revision_good():

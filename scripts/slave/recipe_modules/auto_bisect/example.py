@@ -103,6 +103,14 @@ def GenTests(api):
       stdout=api.json.output(failed_build_test_step_data), retcode=1)
   yield failed_build_test
 
+  missing_metric_test = _make_test(
+      api, _get_ref_range_only_missing_metric_test_data(),
+      'missing_metric_test')
+  missing_metric_test += api.step_data(
+      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      stdout=api.json.output(wait_for_any_output))
+  yield missing_metric_test
+
   windows_test = _make_test(
       api, _get_basic_test_data(), 'windows_bisector', platform='windows')
   windows_test += api.step_data(
@@ -186,6 +194,31 @@ def _get_ref_range_only_test_data():
       },
   ]
 
+def _get_ref_range_only_missing_metric_test_data():
+  return [
+      {
+          'refrange': True,
+          'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
+          'commit_pos': '314015',
+          'test_results': {
+              'results': {
+                  'values': [],
+              },
+              'retcodes': [0],
+          }
+      },
+      {
+          'refrange': True,
+          'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
+          'commit_pos': '314017',
+          'test_results': {
+              'results': {
+                  'values': [],
+              },
+              'retcodes': [0],
+          }
+      },
+  ]
 
 def _get_basic_test_data():
   return [
