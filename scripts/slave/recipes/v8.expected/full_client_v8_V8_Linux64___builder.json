@@ -154,6 +154,7 @@
       "--verbose",
       "[SLAVE_BUILD]/v8/out/Release/benchmarks.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Release/ignition.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/mjsunit.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/mozilla.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/optimize_for_size.isolated.gen.json",
@@ -166,6 +167,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"benchmarks\": \"[dummy hash for benchmarks]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"ignition\": \"[dummy hash for ignition]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", @@@",
@@ -186,7 +188,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"simdjs\": \"[dummy hash for simdjs]\", \"test262\": \"[dummy hash for test262]\"}",
+      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"ignition\": \"[dummy hash for ignition]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"simdjs\": \"[dummy hash for simdjs]\", \"test262\": \"[dummy hash for test262]\"}",
       "gs://chromium-v8/v8-linux64-rel/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -230,6 +232,7 @@
           "swarm_hashes": {
             "benchmarks": "[dummy hash for benchmarks]",
             "bot_default": "[dummy hash for bot_default]",
+            "ignition": "[dummy hash for ignition]",
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
@@ -248,6 +251,7 @@
           "swarm_hashes": {
             "benchmarks": "[dummy hash for benchmarks]",
             "bot_default": "[dummy hash for bot_default]",
+            "ignition": "[dummy hash for ignition]",
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",

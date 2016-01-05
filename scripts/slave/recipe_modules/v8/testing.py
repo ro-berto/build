@@ -12,14 +12,14 @@ TEST_CONFIGS = freeze({
     'tests': ['benchmarks'],
     'test_args': ['--download-data'],
   },
+  'ignition': {
+    'name': 'Ignition',
+    'tests': ['ignition'],
+    'test_args': ['--variants=ignition', '--ignition'],
+  },
   'mjsunit': {
     'name': 'Mjsunit',
     'tests': ['mjsunit'],
-  },
-  'mjsunit_ignition': {
-    'name': 'Mjsunit - ignition',
-    'tests': ['mjsunit'],
-    'test_args': ['--variants=ignition', '--ignition'],
   },
   'mjsunit_sp_frame_access': {
     'name': 'Mjsunit - sp frame access',
