@@ -31,8 +31,9 @@ CTS_FILE_NAME = "android-cts-5.1_r1-linux_x86-arm.zip"
 # that.
 EXPECTED_FAILURE = {
     'android.webkit.cts.WebSettingsTest': ['testUserAgentString_default'],
-    #crbug.com/534643, crbug.com/514474
-    'android.webkit.cts.WebViewTest': ['testPageScroll', 'testStopLoading'],
+    #crbug.com/534643, crbug.com/514474, crbug.com/563493
+    'android.webkit.cts.WebViewTest': ['testPageScroll', 'testStopLoading',
+        'testJavascriptInterfaceForClientPopup', 'testRequestImageRef'],
     #crbug.com/514473
     'android.webkit.cts.WebViewSslTest':
         ['testSslErrorProceedResponseNotReusedForDifferentHost']
