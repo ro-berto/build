@@ -20,6 +20,8 @@
       "/path/to/tmp/json",
       "--revision",
       "src@HEAD",
+      "--revision",
+      "src/third_party/angle@HEAD",
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",

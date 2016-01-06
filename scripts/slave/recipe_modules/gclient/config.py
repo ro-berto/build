@@ -604,3 +604,12 @@ def custom_tabs_client(c):
   soln.url = ('https://chromium.googlesource.com/external/github.com/'
               'GoogleChrome/custom-tabs-client.git')
   c.got_revision_mapping['custom_tabs_client'] = 'got_revision'
+
+@config_ctx()
+def angle_top_of_tree(c):
+  """Configures the top-of-tree ANGLE in a Chromium checkout.
+
+  Sets up ToT instead of the DEPS-pinned revision for ANGLE. 
+  """
+  c.solutions[0].revision = 'HEAD'
+  c.revisions['src/third_party/angle'] = 'HEAD'
