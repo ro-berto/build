@@ -12,7 +12,8 @@ SPEC = {
      'Linux Builder (ANGLE)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium_angle',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -27,7 +28,8 @@ SPEC = {
     'Linux Tests (ANGLE)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium_angle',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -47,7 +49,8 @@ SPEC = {
     'Linux Builder (dbg) (ANGLE)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium_angle',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -62,7 +65,8 @@ SPEC = {
     'Linux Tests (dbg) (ANGLE)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium_angle',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -83,7 +87,8 @@ SPEC = {
     'Mac Builder (ANGLE)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
-      'gclient_config': 'chromium_angle',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -98,7 +103,8 @@ SPEC = {
     'Mac10.8 Tests (ANGLE)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
-      'gclient_config': 'chromium_angle',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -121,7 +127,8 @@ SPEC = {
     'Mac Builder (dbg) (ANGLE)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
-      'gclient_config': 'chromium_angle',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -136,7 +143,8 @@ SPEC = {
     'Mac10.8 Tests (dbg) (ANGLE)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
-      'gclient_config': 'chromium_angle',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -159,7 +167,8 @@ SPEC = {
 
     'Win Builder (ANGLE)': {
       'chromium_config': 'chromium',
-      'gclient_config': 'chromium_angle',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -174,7 +183,8 @@ SPEC = {
     },
     'Win7 Tests (ANGLE)': {
       'chromium_config': 'chromium',
-      'gclient_config': 'chromium_angle',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -194,7 +204,8 @@ SPEC = {
     },
     'Win Builder (dbg) (ANGLE)': {
       'chromium_config': 'chromium',
-      'gclient_config': 'chromium_angle',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -209,7 +220,8 @@ SPEC = {
     },
     'Win7 Tests (dbg) (ANGLE)': {
       'chromium_config': 'chromium',
-      'gclient_config': 'chromium_angle',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -229,7 +241,8 @@ SPEC = {
     },
     'Win x64 Builder (ANGLE)': {
       'chromium_config': 'chromium',
-      'gclient_config': 'chromium_angle',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -244,7 +257,8 @@ SPEC = {
     },
     'Win7 Tests x64 (ANGLE)': {
       'chromium_config': 'chromium',
-      'gclient_config': 'chromium_angle',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -264,7 +278,8 @@ SPEC = {
     },
     'Win x64 Builder (dbg) (ANGLE)': {
       'chromium_config': 'chromium',
-      'gclient_config': 'chromium_angle',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -279,7 +294,8 @@ SPEC = {
     },
     'Win7 Tests x64 (dbg) (ANGLE)': {
       'chromium_config': 'chromium',
-      'gclient_config': 'chromium_angle',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
