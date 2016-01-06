@@ -14,11 +14,9 @@ def Update(c):
                             branch='master',
                             treeStableTimer=30,
                             builderNames=[
-          'Mac32 Debug',
-          'Mac32 Release',
           'Mac64 Debug',
           'Mac64 Release',
-          'Mac32 Release [large tests]',
+          'Mac64 Release [large tests]',
           'Mac64 Debug (GN)',
           'Mac64 Release (GN)',
           'Mac Asan',
@@ -34,12 +32,10 @@ def Update(c):
   # 'slavebuilddir' below is used to reduce the number of checkouts since some
   # of the builders are pooled over multiple slave machines.
   specs = [
-    {'name': 'Mac32 Debug', 'slavebuilddir': 'mac32'},
-    {'name': 'Mac32 Release', 'slavebuilddir': 'mac32'},
     {'name': 'Mac64 Debug', 'slavebuilddir': 'mac64'},
     {'name': 'Mac64 Release', 'slavebuilddir': 'mac64'},
     {
-      'name': 'Mac32 Release [large tests]',
+      'name': 'Mac64 Release [large tests]',
       'category': 'compile|baremetal',
       'slavebuilddir': 'mac_baremetal',
     },

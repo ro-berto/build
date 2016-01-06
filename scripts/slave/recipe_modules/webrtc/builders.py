@@ -197,24 +197,6 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
-      'Mac32 Debug': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-      },
-      'Mac32 Release': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-      },
       'Mac64 Debug': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -258,16 +240,16 @@ BUILDERS = freeze({
         'chromium_apply_config': ['asan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
       },
-      'Mac32 Release [large tests]': {
+      'Mac64 Release [large tests]': {
         'recipe_config': 'webrtc_baremetal',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'webrtc_config_kwargs': {
           'PERF_ID': 'webrtc-mac-large-tests',
@@ -958,30 +940,12 @@ BUILDERS = freeze({
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
-      'mac_compile_rel': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'mac'},
-      },
-      'mac_compile_x64_dbg': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
-      'mac_compile_x64_rel': {
+      'mac_compile_rel': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -994,7 +958,7 @@ BUILDERS = freeze({
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
@@ -1003,30 +967,12 @@ BUILDERS = freeze({
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-      },
-      'mac_x64_dbg': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
       },
-      'mac_x64_rel': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-      },
-      'mac_x64_gn_dbg': {
+      'mac_gn_dbg': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -1036,7 +982,7 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
       },
-      'mac_x64_gn_rel': {
+      'mac_gn_rel': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -1051,7 +997,7 @@ BUILDERS = freeze({
         'chromium_apply_config': ['asan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
@@ -1060,7 +1006,7 @@ BUILDERS = freeze({
         'recipe_config': 'webrtc_baremetal',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
