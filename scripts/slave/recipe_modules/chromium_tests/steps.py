@@ -1456,6 +1456,10 @@ class AndroidInstrumentationTest(AndroidTest):
       'isolate_file_path': 'chrome/chrome_public_test_apk.isolate',
       'apk_under_test': 'ChromePublic.apk',
       'test_apk': 'ChromePublicTest.apk',
+      'additional_apks': [
+        'ChromePublicTestSupport.apk',
+        'ChromiumNetTestSupport.apk',
+      ],
     },
     'ChromeSyncShellTest': {
       'compile_target': 'chrome_sync_shell_test_apk',
@@ -1481,12 +1485,15 @@ class AndroidInstrumentationTest(AndroidTest):
                test_apk=None, isolate_file_path=None, timeout_scale=None,
                flakiness_dashboard='test-results.appspot.com',
                annotation=None, except_annotation=None, screenshot=False,
-               verbose=True, tool=None, host_driven_root=None):
+               verbose=True, tool=None, host_driven_root=None,
+               additional_apks=None):
     suite_defaults = AndroidInstrumentationTest._DEFAULT_SUITES.get(name, {})
     super(AndroidInstrumentationTest, self).__init__(
         name,
         compile_target or suite_defaults.get('compile_target'),
         isolate_file_path or suite_defaults.get('isolate_file_path'))
+    self._additional_apks = (
+        additional_apks or suite_defaults.get('additional_apks'))
     self._annotation = annotation
     self._apk_under_test = (
         apk_under_test or suite_defaults.get('apk_under_test'))
@@ -1509,6 +1516,9 @@ class AndroidInstrumentationTest(AndroidTest):
         self.name,
         test_apk=api.chromium_android.apk_path(self._test_apk),
         apk_under_test=api.chromium_android.apk_path(self._apk_under_test),
+        additional_apks=[
+            api.chromium_android.apk_path(a)
+            for a in self._additional_apks or []],
         suffix=suffix,
         isolate_file_path=self.isolate_file_path,
         flakiness_dashboard=self._flakiness_dashboard,

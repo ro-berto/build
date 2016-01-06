@@ -644,6 +644,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                 name,
                                 test_apk,
                                 apk_under_test=None,
+                                additional_apks=None,
                                 isolate_file_path=None,
                                 flakiness_dashboard=None,
                                 annotation=None, except_annotation=None,
@@ -665,6 +666,8 @@ class AndroidApi(recipe_api.RecipeApi):
     ]
     if apk_under_test:
       args.extend(['--apk-under-test', apk_under_test])
+    for a in additional_apks or []:
+      args.extend(['--additional-apk', a])
     if isolate_file_path:
       args.extend(['--isolate-file-path', isolate_file_path])
     if tool:
