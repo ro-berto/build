@@ -21,10 +21,10 @@ def RunSteps(api):
   api.bot_update.ensure_checkout(force=True)
   api.gclient.runhooks()
   api.python('build dart',
-             api.path['checkout'].join('sdk', 'tools', 'build.py'),
+             api.path['checkout'].join('tools', 'build.py'),
              args= ['-mrelease', 'runtime'])
   api.python('test vm',
-             api.path['checkout'].join('sdk', 'tools', 'test.py'),
+             api.path['checkout'].join('tools', 'test.py'),
              args= ['-mrelease', '-cnone', '-rvm'])
 
 def GenTests(api):

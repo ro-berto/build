@@ -53,7 +53,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/sdk/tools/build.py",
+      "[SLAVE_BUILD]/sdk/tools/build.py",
       "-mrelease",
       "runtime"
     ],
@@ -64,7 +64,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/sdk/sdk/tools/test.py",
+      "[SLAVE_BUILD]/sdk/tools/test.py",
       "-mrelease",
       "-cnone",
       "-rvm"
