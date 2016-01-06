@@ -176,6 +176,18 @@ def RunSteps(api):
       # Throw a failure if this slave had no results.
       raise api.step.StepFailure('Received no data from slave #%d' % slave_num)
 
+  # Add num_webpages_reported as a custom field to charts.
+  results_json['chart_data']['charts']['num_webpages_reported'] = {
+    'summary': {
+      'important': True,
+      'type': 'scalar',
+      'name': 'num_webpages_reported',
+      'std': 0.0,
+      'units': 'num',
+      'value': num_webpages_reported,
+    }
+  }
+
   # Upload results_json to the perf dashboard.
   api.perf_dashboard.set_default_config()
   api.perf_dashboard.post(results_json)
