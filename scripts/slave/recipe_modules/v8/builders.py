@@ -634,8 +634,7 @@ BUILDERS = {
         'enable_swarming': True,
         'testing': {'platform': 'win'},
         'triggers': [
-          'V8 Win32 - 1',
-          'V8 Win32 - 2',
+          'V8 Win32',
         ],
       },
       'V8 Win32 - debug builder': {
@@ -653,36 +652,24 @@ BUILDERS = {
         'enable_swarming': True,
         'testing': {'platform': 'win'},
         'triggers': [
-          'V8 Win32 - debug - 1',
-          'V8 Win32 - debug - 2',
-          'V8 Win32 - debug - 3'
+          'V8 Win32 - debug',
         ],
       },
-      'V8 Win32 - 1': {
+      'V8 Win32': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
-          'SHARD_COUNT': 2,
-          'SHARD_RUN': 1,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - builder',
-        'build_gs_archive': 'win32_rel_archive',
+        'enable_swarming': True,
+        'slim_swarming_tester': True,
         'tests': [V8Testing, Test262, Mozilla],
-        'testing': {'platform': 'win'},
-      },
-      'V8 Win32 - 2': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-          'SHARD_COUNT': 2,
-          'SHARD_RUN': 2,
+        'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'os': 'Windows-XP-SP3',
+          'cpu': 'x86-32',
         },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Win32 - builder',
-        'build_gs_archive': 'win32_rel_archive',
-        'tests': [V8Testing, Test262, Mozilla],
-        'testing': {'platform': 'win'},
       },
       'V8 Win32 - nosnap - shared': {
         'v8_apply_config': ['no_snapshot'],
@@ -701,44 +688,21 @@ BUILDERS = {
         'tests': [V8Testing],
         'testing': {'platform': 'win'},
       },
-      'V8 Win32 - debug - 1': {
+      'V8 Win32 - debug': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
-          'SHARD_COUNT': 3,
-          'SHARD_RUN': 1,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - debug builder',
-        'build_gs_archive': 'win32_dbg_archive',
-        'tests': [V8Testing, Test262, Mozilla],
-        'testing': {'platform': 'win'},
-      },
-      'V8 Win32 - debug - 2': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-          'SHARD_COUNT': 3,
-          'SHARD_RUN': 2,
+        'enable_swarming': True,
+        'slim_swarming_tester': True,
+        'tests': [V8Testing_2, Test262, Mozilla],
+        'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'os': 'Windows-XP-SP3',
+          'cpu': 'x86-32',
         },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Win32 - debug builder',
-        'build_gs_archive': 'win32_dbg_archive',
-        'tests': [V8Testing, Test262, Mozilla],
-        'testing': {'platform': 'win'},
-      },
-      'V8 Win32 - debug - 3': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-          'SHARD_COUNT': 3,
-          'SHARD_RUN': 3,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Win32 - debug builder',
-        'build_gs_archive': 'win32_dbg_archive',
-        'tests': [V8Testing, Test262, Mozilla],
-        'testing': {'platform': 'win'},
       },
       'V8 Win64': {
         'chromium_apply_config': [
