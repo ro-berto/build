@@ -2273,8 +2273,6 @@ BUILDERS = {
           'v8_ninja',
           'goma',
           'no_dcheck',
-          'no_snapshot',
-          'shared_library',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -2285,8 +2283,8 @@ BUILDERS = {
         'tests': [V8Testing, Test262],
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-          'cpu': 'x86-64',
+          'os': 'Windows-XP-SP3',
+          'cpu': 'x86-32',
         },
       },
     },
