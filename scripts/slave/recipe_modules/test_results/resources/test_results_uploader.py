@@ -23,6 +23,10 @@ class TimeoutError(Exception):
   pass
 
 
+class PermanentError(Exception):
+  pass
+
+
 def upload_test_results(host, params, files, timeout_secs):
   """Upload json files to test results server.
 
@@ -98,7 +102,7 @@ def _encode_form_data(fields, files):
 
 
 def _retry_exp_backoff(func, timeout_secs):
-  """Returns a retries a until timeout_seconds has passed.
+  """Retries a function until timeout_seconds has passed.
 
   Args:
     func: Callable that takes a seconds remaining parameter.
@@ -108,7 +112,8 @@ def _retry_exp_backoff(func, timeout_secs):
     Return value of func() on success.
 
   Raises:
-    TimeoutError if timeout_secs seconds pass.
+    TimeoutError if timeout_secs seconds pass. PermanentError if this
+    receives an HTTP status != 5xx.
   """
   initial_backoff_secs = 10
   backoff_secs = initial_backoff_secs
@@ -121,6 +126,10 @@ def _retry_exp_backoff(func, timeout_secs):
     except urllib2.HTTPError as e:
       if total_sleep + backoff_secs > timeout_secs:
         raise TimeoutError()
+      # Don't retry if we aren't getting a 5xx response.
+      if e.code / 100 != 5:
+        raise PermanentError('Received HTTP status %s loading "%s".'
+                             % (e.code, e.filename))
       logging.warn('Received HTTP status %s loading "%s".  '
                    'Retrying in %s seconds...',
                    e.code, e.filename, backoff_secs)
