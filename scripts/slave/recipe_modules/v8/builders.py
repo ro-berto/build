@@ -2267,7 +2267,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_swarming_staging': {
-        'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [
           'default_compiler',
           'v8_ninja',
