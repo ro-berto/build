@@ -22,10 +22,12 @@ def RunSteps(api):
   api.gclient.runhooks()
   api.python('build dart',
              api.path['checkout'].join('tools', 'build.py'),
-             args= ['-mrelease', 'runtime'])
+             args= ['-mrelease', 'runtime'],
+             cwd=api.path['checkout'])
   api.python('test vm',
              api.path['checkout'].join('tools', 'test.py'),
-             args= ['-mrelease', '-cnone', '-rvm'])
+             args= ['-mrelease', '-cnone', '-rvm'],
+             cwd=api.path['checkout'])
 
 def GenTests(api):
    yield (

@@ -57,7 +57,7 @@
       "-mrelease",
       "runtime"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "build dart"
   },
   {
@@ -69,7 +69,7 @@
       "-cnone",
       "-rvm"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[SLAVE_BUILD]/sdk",
     "name": "test vm"
   },
   {
