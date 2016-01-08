@@ -203,7 +203,7 @@ class JSONResultsGenerator(object):
 
   def _write_json(self, json_object, file_path):
     # Specify separators in order to get compact encoding.
-    json_data = json.dumps(json_object, separators=(',', ':'))
+    json_data = json.dumps(json_object, separators=(',', ':'), indent=2)
     json_string = json_data
     if self._file_writer:
       self._file_writer(file_path, json_string)
