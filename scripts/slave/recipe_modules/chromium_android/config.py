@@ -39,6 +39,7 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
       LLVM_FORCE_HEAD_REVISION = Single(basestring, required=False),
     ),
     gce_setup = Single(bool, required=False, empty_val=False),
+    gce_snapshot = Single(basestring, required=False),
   )
 
 
@@ -204,3 +205,4 @@ def cast_builder(c):
 @config_ctx(includes=['x86_builder'])
 def gce_builder(c):
   c.gce_setup = True
+  c.gce_snapshot = 'clean-19-l-phone-snapshot'

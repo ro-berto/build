@@ -817,7 +817,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def common_tests_setup_steps(self, perf_setup=False):
     if self.c.gce_setup:
-      self.launch_gce_instances()
+      self.launch_gce_instances(snapshot=self.c.gce_snapshot)
       self.spawn_logcat_monitor()
       self.provision_devices(emulators=True)
     else:

@@ -234,7 +234,7 @@
       "6",
       "launch",
       "--snapshot",
-      "clean-17-l-phone-image-no-popups"
+      "clean-19-l-phone-snapshot"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "launch_instances"
