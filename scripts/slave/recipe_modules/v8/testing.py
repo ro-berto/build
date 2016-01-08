@@ -61,6 +61,10 @@ TEST_CONFIGS = freeze({
     'name': 'Unittests',
     'tests': ['unittests'],
   },
+  'v8initializers': {
+    'tool': 'check-static-initializers',
+    'isolated_target': 'check-static-initializers',
+  },
   'v8testing': {
     'name': 'Check',
     'tests': ['bot_default'],
@@ -80,6 +84,21 @@ class BaseTest(object):
     self.name = test_step_config.name
     self.api = api
     self.v8 = v8
+
+  def _get_isolated_hash(self, test):
+    isolated = test.get('isolated_target')
+    if not isolated:
+      # Normally we run only one test and the isolate name is the same as the
+      # test name.
+      assert len(test['tests']) == 1
+      isolated = test['tests'][0]
+
+    isolated_hash = self.v8.isolated_tests.get(isolated)
+
+    # TODO(machenbach): Maybe this is too hard. Implement a more forgiving
+    # solution.
+    assert isolated_hash
+    return isolated_hash
 
   @property
   def uses_swarming(self):
@@ -220,21 +239,6 @@ class V8SwarmingTest(V8Test):
     """Returns true if the test uses swarming."""
     return True
 
-  def _get_isolated_hash(self, test):
-    isolated = test.get('isolated_target')
-    if not isolated:
-      # Normally we run only one test and the isolate name is the same as the
-      # test name.
-      assert len(test['tests']) == 1
-      isolated = test['tests'][0]
-
-    isolated_hash = self.v8.isolated_tests.get(isolated)
-
-    # TODO(machenbach): Maybe this is too hard. Implement a more forgiving
-    # solution.
-    assert isolated_hash
-    return isolated_hash
-
   def _v8_collect_step(self, task, **kwargs):
     """Produces a step that collects and processes a result of a v8 task."""
     # Placeholder for the merged json output.
@@ -363,6 +367,32 @@ class V8CheckInitializers(BaseTest):
     return TestResults.empty()
 
 
+class V8CheckInitializersSwarming(BaseTest):
+  @property
+  def uses_swarming(self):
+    """Returns true if the test uses swarming."""
+    return True
+
+  def pre_run(self, test=None, **kwargs):
+    self.test = test or TEST_CONFIGS[self.name]
+    self.task = self.api.swarming.task(
+        title='Static-Initializers',
+        isolated_hash=self._get_isolated_hash(self.test),
+        extra_args=[
+          self.api.path.join(
+              self.api.path.basename(self.api.chromium.c.build_dir),
+              self.api.chromium.c.build_config_fs,
+              'd8'),
+        ],
+    )
+    self.api.swarming.trigger_task(self.task)
+
+  def run(self, **kwargs):
+    assert self.task
+    self.api.swarming.collect_task(self.task)
+    return TestResults.empty()
+
+
 class V8Fuzzer(BaseTest):
   def run(self, **kwargs):
     assert self.api.chromium.c.HOST_PLATFORM == 'linux'
@@ -467,7 +497,18 @@ V8_NON_STANDARD_TESTS = freeze({
   'gcmole': V8GCMole,
   'presubmit': V8Presubmit,
   'simpleleak': V8SimpleLeakCheck,
-  'v8initializers': V8CheckInitializers,
+})
+
+
+TOOL_TO_TEST = freeze({
+  'check-static-initializers': V8CheckInitializers,
+  'run-tests': V8Test,
+})
+
+
+TOOL_TO_TEST_SWARMING = freeze({
+  'check-static-initializers': V8CheckInitializersSwarming,
+  'run-tests': V8SwarmingTest,
 })
 
 
@@ -510,9 +551,12 @@ def create_test(test_step_config, api, v8_api):
   test_cls = V8_NON_STANDARD_TESTS.get(test_step_config.name)
   if not test_cls:
     # TODO(machenbach): Implement swarming for non-standard tests.
-    if v8_api.bot_config.get('enable_swarming'):
-      test_cls = V8SwarmingTest
+    if v8_api.bot_config.get('enable_swarming') and test_step_config.swarming:
+      tools_mapping = TOOL_TO_TEST_SWARMING
     else:
-      test_cls = V8Test
-  return test_cls(test_step_config, api, v8_api)
+      tools_mapping = TOOL_TO_TEST
 
+    # The tool the test is going to use. Default: V8 test runner (run-tests).
+    tool = TEST_CONFIGS[test_step_config.name].get('tool', 'run-tests')
+    test_cls = tools_mapping[tool]
+  return test_cls(test_step_config, api, v8_api)

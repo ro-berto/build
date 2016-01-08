@@ -277,8 +277,16 @@ class V8Api(recipe_api.RecipeApi):
       tests_to_isolate = []
       def add_tests_to_isolate(tests):
         for test in tests:
-          config = testing.TEST_CONFIGS.get(test.name)
-          if config:
+          if not test.swarming:
+            # Skip tests that explicitly disable swarming.
+            continue
+          config = testing.TEST_CONFIGS.get(test.name) or {}
+
+          # Tests either define an explicit isolate target or use the test
+          # names for convenience.
+          if config.get('isolated_target'):
+            tests_to_isolate.append(config['isolated_target'])
+          elif config.get('tests'):
             tests_to_isolate.extend(config['tests'])
 
       # Find tests to isolate on builders.

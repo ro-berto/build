@@ -337,14 +337,23 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
   def _make_dummy_swarm_hashes(self, bot_config):
     """Makes dummy isolate hashes for all tests of a bot.
  
-    The naming convention is test name == isolate target name.
+    Either an explicit isolate target must be defined or the naming
+    convention "test name == isolate target name" will be used.
     """
+    def gen_isolate_targets(test_config):
+      config = testing.TEST_CONFIGS.get(test_config.name, {})
+      if config.get('isolated_target'):
+        yield config['isolated_target']
+      else:
+        for test in config.get('tests', []):
+          yield test
+
     return dict(
-        (test, '[dummy hash for %s]' % test)
+        (target, '[dummy hash for %s]' % target)
         for test_config in bot_config.get('tests', [])
-        for test in testing.TEST_CONFIGS.get(test_config.name, {}).get(
-            'tests', [])
+        for target in gen_isolate_targets(test_config)
     )
+
 
   def test(self, mastername, buildername, suffix='', **kwargs):
     name = '_'.join(filter(bool, [
