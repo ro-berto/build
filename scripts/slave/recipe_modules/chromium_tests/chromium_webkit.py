@@ -720,6 +720,25 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
+  'WebKit Linux Oilpan Builder': {
+    'chromium_config': 'chromium',
+    'chromium_apply_config': ['mb', 'oilpan'],
+    'gclient_config': 'chromium',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 64,
+    },
+    'bot_type': 'builder',
+    'compile_targets': [
+      'blink_tests',
+    ],
+    'testing': {
+      'platform': 'linux',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
   'WebKit Linux Oilpan': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb', 'oilpan'],
@@ -729,9 +748,8 @@ SPEC['builders'].update({
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 64,
     },
-    'compile_targets': [
-      'blink_tests',
-    ],
+    'bot_type': 'tester',
+    'parent_buildername': 'WebKit Linux Oilpan Builder',
     'test_generators': [
       steps.generate_gtest,
       steps.generate_script,

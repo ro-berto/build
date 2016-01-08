@@ -42,6 +42,10 @@ F('f_webkit_linux_rel_trusty', m_annotator.BaseFactory('chromium'))
 B('WebKit Linux 32', 'f_webkit_linux_rel_32', scheduler='global_scheduler')
 F('f_webkit_linux_rel_32', m_annotator.BaseFactory('chromium'))
 
+B('WebKit Linux Oilpan Builder', 'f_webkit_linux_oilpan_builder_rel',
+    scheduler='global_scheduler', category='oilpan')
+F('f_webkit_linux_oilpan_builder_rel', m_annotator.BaseFactory('chromium'))
+
 B('WebKit Linux Oilpan', 'f_webkit_linux_oilpan_rel',
     scheduler='global_scheduler', category='oilpan')
 F('f_webkit_linux_oilpan_rel', m_annotator.BaseFactory('chromium'))
