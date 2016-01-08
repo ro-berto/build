@@ -2231,11 +2231,14 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_swarming_staging': {
+        'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [
           'default_compiler',
           'v8_ninja',
           'goma',
           'no_dcheck',
+          'no_snapshot',
+          'shared_library',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -2243,12 +2246,12 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing, Test262],
-        'testing': {'platform': 'win'},
+        'tests': [V8Testing],
         'swarming_dimensions': {
-          'os': 'Windows-XP-SP3',
-          'cpu': 'x86-32',
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86-64',
         },
+        'testing': {'platform': 'win'},
       },
     },
   },
