@@ -60,6 +60,10 @@ and 'closing_steps', but they won't close if the step is missing. This is like
 previous gatekeeper behavior. They can be set to '*', which will match all
 steps in the builder.
 
+Note that if a builder sets something as forgiving_optional which is set as
+closing_optional in the master config, this value will be removed from
+closing_optional. This allows builders to override master configuration values.
+
 The 'comment' key can be put anywhere and is ignored by the parser.
 
 # Python, not JSON.
@@ -135,6 +139,33 @@ def allowed_keys(test_dict, *keys):
       'not valid: %s; allowed: %s' % (
           ', '.join(set(test_dict.keys()) - set(keys)),
           ', '.join(keys)))
+
+
+
+def check_builder_conflicts(special_keys, builder_cats, categories):
+  """Checks if the builder has configuration conflicts.
+
+  A conflict occurs if two keys in the builder dictionary (as determined by the
+  special_keys dictionary) have duplicate items.
+
+  special_keys: a dictionary mapping key -> conflicting key
+  builder_cats: the categories for this particular builder
+  categories: the general, known categories.
+  """
+  special_key_sets = {
+      k: set() for k in (special_keys.keys() + special_keys.values())
+  }
+
+  for c in builder_cats:
+    for key in special_key_sets:
+      special_key_sets[key] |= set(categories[c].get(key, []))
+
+  for k, v in special_keys.items():
+    union = special_key_sets[k] & special_key_sets[v]
+    if union:
+      raise ValueError(
+        "The builder categories have conflicting entries %s for keys %s "
+        "and %s." % (union, k, v))
 
 
 def load_gatekeeper_config(filename):
@@ -222,15 +253,37 @@ def load_gatekeeper_config(filename):
             'respect_build_status', False)
 
         # Inherit any values from the categories.
-        all_categories = (builder.get('categories', []) +
-                          master_section.get('categories', []))
-        for c in all_categories:
+        for c in master_section.get('categories', []):
           for k in builder_keys:
             if k in strings:
               if k in categories[c]:
                 gatekeeper_builder[k] = categories[c][k]
             else:
               gatekeeper_builder[k] |= set(categories[c].get(k, []))
+
+        special_keys = {
+          'forgiving': 'closing',
+          'forgiving_optional': 'closing_optional',
+        }
+
+        check_builder_conflicts(
+            special_keys, builder.get('categories', []), categories)
+
+        for c in builder.get('categories', []):
+          for k in builder_keys:
+            if k in strings:
+              if k in categories[c]:
+                gatekeeper_builder[k] = categories[c][k]
+            else:
+              gatekeeper_builder[k] |= set(categories[c].get(k, []))
+
+        # If we're forgiving something in the builder that we set as
+        # closing in the master config, then don't close on it. Builders
+        # can override master configurations.
+        for key, key_to_modify in special_keys.items():
+          if key_to_modify in gatekeeper_builder:
+            gatekeeper_builder[key_to_modify] -= set(
+                gatekeeper_builder.get(key, []))
 
         # Add in any builder-specific values.
         for k in builder_keys:
