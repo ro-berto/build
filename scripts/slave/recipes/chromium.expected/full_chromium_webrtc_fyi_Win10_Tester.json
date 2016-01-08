@@ -310,8 +310,7 @@
       "--builder-name=Win10 Tester",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "content_unittests.exe",
-      "--gtest_filter=*WebRtc*:*WebRTC*:*MediaStream"
+      "content_unittests.exe"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "content_unittests"

@@ -290,8 +290,7 @@
       "--builder-name=Mac Tester",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "content_unittests",
-      "--gtest_filter=*WebRtc*:*WebRTC*:*MediaStream"
+      "content_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "content_unittests"
