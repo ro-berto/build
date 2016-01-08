@@ -23,7 +23,7 @@ def RunSteps(api):
       'BUILDBOT_GOT_WATERFALL_REVISION': got_revision,
   }
   api.python('annotated steps',
-             api.path['checkout'].join('build.py'),
+             api.path['checkout'].join('src', 'build.py'),
              allow_subannotations=True,
              cwd=api.path['checkout'],
              env = env)
