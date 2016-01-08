@@ -15,6 +15,7 @@ defaults = {}
 helper = master_config.Helper(defaults)
 B = helper.Builder
 F = helper.Factory
+T = helper.Triggerable
 
 def linux():
   return chromium_factory.ChromiumFactory('src/out', 'linux2')
@@ -27,6 +28,10 @@ defaults['category'] = 'layout'
 ################################################################################
 ## Release
 ################################################################################
+
+# Artificial scheduler to make master start. Actual triggering is done
+# from recipes.
+T('webkit_linux_oilpan_rel_trigger')
 
 #
 # Linux Rel Builder/Tester
@@ -47,7 +52,7 @@ B('WebKit Linux Oilpan Builder', 'f_webkit_linux_oilpan_builder_rel',
 F('f_webkit_linux_oilpan_builder_rel', m_annotator.BaseFactory('chromium'))
 
 B('WebKit Linux Oilpan', 'f_webkit_linux_oilpan_rel',
-    scheduler='global_scheduler', category='oilpan')
+    scheduler='webkit_linux_oilpan_rel_trigger', category='oilpan')
 F('f_webkit_linux_oilpan_rel', m_annotator.BaseFactory('chromium'))
 
 B('WebKit Linux ASAN', 'f_webkit_linux_rel_asan', scheduler='global_scheduler',
