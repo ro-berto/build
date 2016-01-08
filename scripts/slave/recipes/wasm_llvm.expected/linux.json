@@ -54,7 +54,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/buildbot/build.py"
+      "[SLAVE_BUILD]/src/build.py"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
