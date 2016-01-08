@@ -685,7 +685,12 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'tests': [V8Testing],
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86-64',
+        },
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - debug': {
@@ -1921,7 +1926,12 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'tests': [V8Testing],
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86-64',
+        },
         'testing': {'platform': 'win'},
       },
       'v8_win64_compile_rel': {
