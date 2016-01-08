@@ -19,7 +19,7 @@ _ADBD_PORT = 5555
 _MACHINE_TYPE = 'n1-standard-2'
 _INSTANCE_PROPERTIES = {
     'cfg_sta_initial_locale': 'en_US',
-    'cfg_sta_ephemeral_data_size_mb': '2048',
+    'cfg_sta_ephemeral_data_size_mb': '4096',
     'cfg_sta_data_preimage_device': '/dev/block/sda2',
     'cfg_sta_ephemeral_cache_size_mb': '512',
     'cfg_sta_display_resolution': '800x1280x16x150',
