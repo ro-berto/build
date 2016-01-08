@@ -333,9 +333,9 @@ def wasm_llvm(c):
   s = c.solutions.add()
   s.name = 'src'
   s.url = ChromiumGitURL(
-      c, 'external', 'github.com', 'WebAssembly', 'experimental.git')
+      c, 'external', 'github.com', 'WebAssembly', 'waterfall.git')
   m = c.got_revision_mapping
-  m['src'] = 'got_experimental_revision'
+  m['src'] = 'got_waterfall_revision'
   c.revisions['src'] = 'origin/master'
 
 @config_ctx()
