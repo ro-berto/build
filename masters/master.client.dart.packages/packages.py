@@ -170,23 +170,8 @@ PACKAGES = [
   Package(github_repo='rpc', published=False),
 
   # Github samples which are not published on pub.dartlang.org
-  Package(github_repo='sample-clock', sample=True, published=False),
-  Package(github_repo='sample-dartiverse-search', sample=True, published=False),
-  Package(github_repo='sample-dcat', sample=True, published=False),
-  Package(github_repo='sample-dgrep', sample=True, published=False),
-  Package(github_repo='sample-gauge', sample=True, published=False),
-  Package(github_repo='sample-google-maps', sample=True, published=False),
-  Package(github_repo='sample-jsonp', sample=True, published=False),
-  Package(github_repo='sample-multi-touch', sample=True, published=False),
-  Package(github_repo='sample-polymer-intl', sample=True, published=False),
   Package(github_repo='sample-pop_pop_win', sample=True, published=False),
-  Package(github_repo='sample-searchable-list', sample=True, published=False),
-  Package(github_repo='sample-solar', sample=True, published=False),
-  Package(github_repo='sample-spirodraw', sample=True, published=False),
-  Package(github_repo='sample-sunflower', sample=True, published=False),
-  Package(github_repo='sample-swipe', sample=True, published=False),
   Package(github_repo='sample-todomvc-polymer', sample=True, published=False),
-  Package(github_repo='sample-tracker', sample=True, published=False),
 ]
 
 GITHUB_TESTING_PACKAGES = [
