@@ -21,10 +21,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
                             parallel=False,
                             enable_swarming=False))
   elif test_suite == 'webrtc_baremetal':
-    # Add baremetal tests, which are different depending on the platform.
-    if api.m.platform.is_win or api.m.platform.is_mac:
-      tests.append(BaremetalTest('audio_device_tests', revision))
-    elif api.m.platform.is_linux:
+    if api.m.platform.is_linux:
       f = api.m.path['checkout'].join
       tests.extend([
           BaremetalTest('audioproc',
@@ -43,6 +40,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
       ])
 
     tests.extend([
+        BaremetalTest('audio_device_tests', revision),
         BaremetalTest('voe_auto_test', revision, args=['--automated']),
         WebCamTest('video_capture_tests', revision),
         BaremetalTest('webrtc_perf_tests', revision, perf_test=True),
