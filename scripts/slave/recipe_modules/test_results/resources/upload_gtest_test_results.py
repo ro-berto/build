@@ -144,8 +144,15 @@ def main():
 
     # Set uploading timeout in case appengine server is having problem.
     # 120 seconds are more than enough to upload test results.
-    test_results_uploader.upload_test_results(
-        options.test_results_server, attrs, files, 120)
+    try:
+      test_results_uploader.upload_test_results(
+          options.test_results_server, attrs, files, 120)
+    except test_results_uploader.PermanentError as e:
+      # Dump the offending input gtest json to stderr to aid in debugging.
+      print>>sys.stderr, 'Dump of input gtest json causing a permanent error:'
+      with file(options.input_gtest_json) as json_file:
+        sys.stderr.write(json_file.read())
+      raise
   return 0
 
 
