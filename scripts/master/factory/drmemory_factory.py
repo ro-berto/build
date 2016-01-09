@@ -556,6 +556,8 @@ class CTest(Test):
           build_count += 1
         if 'build successful; no tests for this build' in line:
           continue  # Successful build with no tests
+        if 'cross-compile configuration unavailable' in line:
+          continue  # Build skipped
         if 'Error in read script' in line:
           continue  # DR i#636: Spurious line from ctest
 
