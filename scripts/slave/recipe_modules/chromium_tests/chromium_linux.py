@@ -148,7 +148,9 @@ SPEC = {
         steps.generate_isolated_script,
       ],
       'tests': [
+        steps.AndroidInstrumentationTest('AndroidWebViewTest'),
         steps.AndroidInstrumentationTest('ChromePublicTest'),
+        steps.AndroidInstrumentationTest('ChromeSyncShellTest'),
         steps.AndroidInstrumentationTest('ContentShellTest'),
         steps.GTestTest(
             'breakpad_unittests',
