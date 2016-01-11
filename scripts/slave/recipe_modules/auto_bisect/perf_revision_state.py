@@ -50,6 +50,7 @@ class PerfRevisionState(revision_state.RevisionState):
     else:
       self.status = PerfRevisionState.FAILED
       self.bisector.surface_result('MISSING_METRIC')
+      return
     # We cannot test the goodness of the initial rev range.
     if self.bisector.good_rev != self and self.bisector.bad_rev != self:
       if self._check_revision_good():
