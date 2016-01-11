@@ -108,8 +108,11 @@ def RunSteps(api, mastername, buildername):
   update_step = api.bot_update.ensure_checkout()
   api.chromium_android.clean_local_files()
 
+  bot_db = api.chromium_tests.create_bot_db_from_master_dict(
+      mastername, master_dict)
+
   api.auto_bisect.start_try_job(api, update_step=update_step,
-                                master_dict=master_dict)
+                                bot_db=bot_db)
 
 def GenTests(api):
   config_json_main = {

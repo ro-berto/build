@@ -23,10 +23,10 @@ def RunSteps(api):
   # builder.py from chromium_tests recipe module.
   api.chromium_tests.configure_build(mastername, buildername)
   api.gclient.apply_config('perf')
-  update_step, master_dict, _ = \
+  update_step, bot_db = \
       api.chromium_tests.prepare_checkout(mastername, buildername)
   api.auto_bisect.start_try_job(api, update_step=update_step,
-                                master_dict=master_dict)
+                                bot_db=bot_db)
 
 def GenTests(api):
   yield (api.test('basic')

@@ -41,19 +41,19 @@ class PerfTryJobApi(recipe_api.RecipeApi):
   def __init__(self, *args, **kwargs):
     super(PerfTryJobApi, self).__init__(*args, **kwargs)
 
-  def start_perf_try_job(self, affected_files, bot_update_step, master_dict):
+  def start_perf_try_job(self, affected_files, bot_update_step, bot_db):
     """Entry point pert tryjob or CQ tryjob."""
     perf_config = self._get_perf_config(affected_files)
     if perf_config:
-      self._run_perf_job(perf_config, bot_update_step, master_dict)
+      self._run_perf_job(perf_config, bot_update_step, bot_db)
     elif (not perf_config and
           self.m.properties.get('requester') == 'commit-bot@chromium.org'):
-      self.run_cq_job(bot_update_step, master_dict, affected_files)
+      self.run_cq_job(bot_update_step, bot_db, affected_files)
     else:
       self.m.halt('Could not load config file. Double check your changes to '
                   'config files for syntax errors.')
 
-  def _run_perf_job(self, perf_cfg, bot_update_step, master_dict):
+  def _run_perf_job(self, perf_cfg, bot_update_step, bot_db):
     """Runs performance try job with and without patch."""
     r = self._resolve_revisions_from_config(perf_cfg)
     test_cfg = self.m.bisect_tester.load_config_from_dict(perf_cfg)
@@ -63,7 +63,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     _prepend_src_to_path_in_command(test_cfg)
     # Run with patch.
     results_with_patch = self._build_and_run_tests(
-        test_cfg, bot_update_step, master_dict, r[0],
+        test_cfg, bot_update_step, bot_db, r[0],
         name='With Patch' if r[0] is None else r[0],
         reset_on_first_run=True,
         upload_on_last_run=True,
@@ -76,7 +76,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
 
     # Run without patch.
     results_without_patch = self._build_and_run_tests(
-        test_cfg, bot_update_step, master_dict, r[1],
+        test_cfg, bot_update_step, bot_db, r[1],
         name='Without Patch' if r[1] is None else r[1],
         reset_on_first_run=False,
         upload_on_last_run=True,
@@ -92,7 +92,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     self._compare_and_present_results(
         test_cfg, results_without_patch, results_with_patch, labels)
 
-  def run_cq_job(self, update_step, master_dict, files_in_patch):
+  def run_cq_job(self, update_step, bot_db, files_in_patch):
     """Runs benchmarks affected by a CL on CQ."""
     buildername = self.m.properties['buildername']
     affected_benchmarks = self._get_affected_benchmarks(files_in_patch)
@@ -103,7 +103,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
           ' aborting the try job.')
       return
     self._compile('With Patch', self.m.properties['mastername'],
-                  self.m.properties['buildername'], update_step, master_dict)
+                  self.m.properties['buildername'], update_step, bot_db)
 
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.adb_install_apk('ChromePublic.apk')
@@ -145,7 +145,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
         modified_benchmarks.append(benchmark)
     return modified_benchmarks
 
-  def _checkout_revision(self, update_step, master_dict, revision=None):
+  def _checkout_revision(self, update_step, bot_db, revision=None):
     """Checkouts specific revisions and updates bot_update step."""
     if revision:
       if self.m.platform.is_win:  # pragma: no cover
@@ -159,16 +159,12 @@ class PerfTryJobApi(recipe_api.RecipeApi):
 
     return update_step
 
-  def _compile(self, name, mastername, buildername, update_step,
-               master_dict, test_spec=None):
+  def _compile(self, name, mastername, buildername, update_step, bot_db):
     """Runs compile and related steps for given builder."""
-    if test_spec is None:
-      test_spec = {}
     compile_targets, _ = self.m.chromium_tests.get_compile_targets_and_tests(
         mastername,
         buildername,
-        master_dict,
-        test_spec,
+        bot_db,
         override_bot_type='builder_tester',
         override_tests=[])
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
@@ -205,12 +201,12 @@ class PerfTryJobApi(recipe_api.RecipeApi):
         'output': ''.join(overall_output)
     }
 
-  def _build_and_run_tests(self, cfg, update_step, master_dict, revision,
+  def _build_and_run_tests(self, cfg, update_step, bot_db, revision,
                            **kwargs):
     """Compiles binaries and runs tests for a given a revision."""
-    update_step = self._checkout_revision(update_step, master_dict, revision)
+    update_step = self._checkout_revision(update_step, bot_db, revision)
     self._compile(kwargs['name'], self.m.properties['mastername'],
-                  self.m.properties['buildername'], update_step, master_dict)
+                  self.m.properties['buildername'], update_step, bot_db)
 
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.adb_install_apk('ChromePublic.apk')

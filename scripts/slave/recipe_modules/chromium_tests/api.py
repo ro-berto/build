@@ -13,6 +13,7 @@ from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
+from . import bot_config_and_test_db as bdb_module
 from . import builders
 from . import steps
 from . import trybots
@@ -68,7 +69,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """Adds builders to our builder map"""
     self._builders.update(builders)
 
-  def get_bot_config(self, mastername, buildername):
+  def _get_bot_config(self, mastername, buildername):
     master_dict = self.builders.get(mastername, {})
     return freeze(master_dict.get('builders', {}).get(buildername))
 
@@ -141,7 +142,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def ensure_checkout(self, mastername, buildername,
                       root_solution_revision=None):
-    bot_config = self.get_bot_config(mastername, buildername)
+    bot_config = self._get_bot_config(mastername, buildername)
 
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
@@ -158,7 +159,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return update_step
 
   def set_up_swarming(self, mastername, buildername):
-    bot_config = self.get_bot_config(mastername, buildername)
+    bot_config = self._get_bot_config(mastername, buildername)
 
     enable_swarming = bot_config.get('enable_swarming')
     if enable_swarming:
@@ -179,7 +180,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium.runhooks()
 
   def get_test_spec(self, mastername, buildername):
-    bot_config = self.get_bot_config(mastername, buildername)
+    bot_config = self._get_bot_config(mastername, buildername)
 
     test_spec_file = bot_config.get('testing', {}).get(
         'test_spec_file', '%s.json' % mastername)
@@ -189,7 +190,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       return {}
     return self.read_test_spec(self.m, test_spec_file)
 
-  def get_master_dict_with_dynamic_tests(
+  def _get_master_dict_with_dynamic_tests(
       self, mastername, buildername, test_spec, scripts_compile_targets):
     # We manually thaw the path to the elements we are modifying, since the
     # builders are frozen.
@@ -211,9 +212,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return freeze(master_dict)
 
+  def create_bot_db_from_master_dict(self, mastername, master_dict):
+    bot_db = bdb_module.BotConfigAndTestDB()
+    bot_db._add_master_dict_and_test_spec(mastername, master_dict, {})
+    return bot_db
+
   def prepare_checkout(self, mastername, buildername,
                        root_solution_revision=None):
-    bot_config = self.get_bot_config(mastername, buildername)
+    bot_config = self._get_bot_config(mastername, buildername)
 
     update_step = self.ensure_checkout(mastername, buildername,
                                        root_solution_revision)
@@ -238,14 +244,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       scripts_compile_targets = \
           self.get_compile_targets_for_scripts().json.output
 
-    master_dict = self.get_master_dict_with_dynamic_tests(
+    master_dict = self._get_master_dict_with_dynamic_tests(
         mastername, buildername, test_spec, scripts_compile_targets)
 
     if self.m.chromium.c.lto and \
         not self.m.chromium.c.env.LLVM_FORCE_HEAD_REVISION:
       self.m.chromium.download_lto_plugin()
 
-    return update_step, master_dict, test_spec
+    bot_db = bdb_module.BotConfigAndTestDB()
+    bot_db._add_master_dict_and_test_spec(mastername, master_dict, test_spec)
+
+    return update_step, bot_db
 
   def generate_tests_from_test_spec(self, api, test_spec, builder_dict,
       buildername, mastername, enable_swarming, scripts_compile_targets,
@@ -323,13 +332,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return test_runner
 
   def get_compile_targets_and_tests(
-      self, mastername, buildername, master_dict, test_spec,
+      self, mastername, buildername, bot_db,
       override_bot_type=None, override_tests=None):
     """Returns a tuple: list of compile targets and list of tests.
 
     The list of tests includes ones on the triggered testers."""
 
-    bot_config = master_dict.get('builders', {}).get(buildername)
+    assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
+        "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
+    bot_config = bot_db.get_bot_config(mastername, buildername)
     bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
 
     tests = [copy.deepcopy(t) for t in bot_config.get('tests', [])]
@@ -341,9 +352,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     compile_targets = set(bot_config.get('compile_targets', []))
     tests_including_triggered = list(tests)
-    for _, builder_dict in master_dict.get('builders', {}).iteritems():
-      if builder_dict.get('parent_buildername') == buildername:
-        tests_including_triggered.extend(builder_dict.get('tests', []))
+    for _, test_bot in bot_db.bot_configs_matching_parent_buildername(
+        mastername, buildername):
+      tests_including_triggered.extend(test_bot.get('tests', []))
 
     if bot_config.get('add_tests_as_compile_targets', True):
       for t in tests_including_triggered:
@@ -356,7 +367,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       compile_targets.add('crash_service')
 
     # Lastly, add any targets the checkout-side test spec told us to use.
-    compile_targets.update(test_spec.get(buildername, {}).get(
+    compile_targets.update(bot_db.get_test_spec(mastername, buildername).get(
         'additional_compile_targets', []))
 
     return sorted(compile_targets), tests_including_triggered
@@ -380,21 +391,23 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       command(lambda name: name)
 
 
-  def compile(self, mastername, buildername, update_step, master_dict,
-              test_spec, mb_mastername=None, mb_buildername=None):
+  def compile(self, mastername, buildername, update_step, bot_db,
+              mb_mastername=None, mb_buildername=None):
     """Runs compile and related steps for given builder."""
+    assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
+        "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
     compile_targets, tests_including_triggered = \
         self.get_compile_targets_and_tests(
             mastername,
             buildername,
-            master_dict, test_spec)
+            bot_db)
     self.compile_specific_targets(
-        mastername, buildername, update_step, master_dict,
+        mastername, buildername, update_step, bot_db,
         compile_targets, tests_including_triggered,
         mb_mastername=mb_mastername, mb_buildername=mb_buildername)
 
   def compile_specific_targets(
-      self, mastername, buildername, update_step, master_dict,
+      self, mastername, buildername, update_step, bot_db,
       compile_targets, tests_including_triggered,
       mb_mastername=None, mb_buildername=None, override_bot_type=None):
     """Runs compile and related steps for given builder.
@@ -413,8 +426,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     (mb_mastername, mb_buildername) = (mastername, buildername) to exactly match
     a given continuous builder."""
 
-    bot_config = master_dict.get('builders', {}).get(buildername)
-    master_config = master_dict.get('settings', {})
+    assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
+        "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
+    bot_config = bot_db.get_bot_config(mastername, buildername)
+    master_config = bot_db.get_master_settings(mastername)
     bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
 
     self.m.chromium.cleanup_temp()
@@ -493,17 +508,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                 self.m.chromium.c.HOST_PLATFORM == 'mac'),
         )
 
-      for loop_buildername, builder_dict in sorted(master_dict.get(
-          'builders', {}).iteritems()):
-        if builder_dict.get('parent_buildername') == buildername:
-          trigger_spec = {
+      for loop_buildername, builder_dict in sorted(
+          bot_db.bot_configs_matching_parent_buildername(
+              mastername, buildername)):
+        trigger_spec = {
             'builder_name': loop_buildername,
             'properties': {},
-          }
-          for name, value in update_step.presentation.properties.iteritems():
-            if name.startswith('got_'):
-              trigger_spec['properties']['parent_' + name] = value
-          self.m.trigger(trigger_spec)
+        }
+        for name, value in update_step.presentation.properties.iteritems():
+          if name.startswith('got_'):
+            trigger_spec['properties']['parent_' + name] = value
+        self.m.trigger(trigger_spec)
 
     if bot_config.get('archive_build') and not self.m.tryserver.is_tryserver:
       self.m.chromium.archive_build(
@@ -525,12 +540,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.chromium.compile(compile_targets, name='compile%s' % name_suffix)
 
   def download_and_unzip_build(self, mastername, buildername, update_step,
-                               master_dict, build_archive_url=None,
+                               bot_db, build_archive_url=None,
                                build_revision=None, override_bot_type=None):
+    assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
+        "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
     # We only want to do this for tester bots (i.e. those which do not compile
     # locally).
-    bot_type = override_bot_type or master_dict.get('builders', {}).get(
-        buildername, {}).get('bot_type')
+    bot_type = override_bot_type or bot_db.get_bot_config(
+        mastername, buildername).get('bot_type')
     if bot_type != 'tester':
       return
 
@@ -553,7 +570,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     build_archive_url = build_archive_url or self.m.properties.get(
         'parent_build_archive_url')
     if build_archive_url is None:
-      master_config = master_dict.get('settings', {})
+      master_config = bot_db.get_master_settings(mastername)
       legacy_build_url = self._make_legacy_build_url(master_config, mastername)
 
     self.m.archive.download_and_unzip_build(
@@ -563,10 +580,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       build_revision=build_revision,
       build_archive_url=build_archive_url)
 
-  def tests_for_builder(self, mastername, buildername, update_step, master_dict,
+  def tests_for_builder(self, mastername, buildername, update_step, bot_db,
                         override_bot_type=None):
-
-    bot_config = master_dict.get('builders', {}).get(buildername)
+    assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
+        "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
+    bot_config = bot_db.get_bot_config(mastername, buildername)
     bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
     # TODO(shinyak): bot_config.get('tests', []) sometimes return tuple.
     tests = [copy.deepcopy(t) for t in bot_config.get('tests', [])]

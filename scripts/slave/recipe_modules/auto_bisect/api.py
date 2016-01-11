@@ -131,18 +131,18 @@ class AutoBisectApi(recipe_api.RecipeApi):
     buildername = api.properties.get('buildername')
     api.chromium_tests.configure_build(mastername, buildername)
     api.gclient.apply_config('perf')
-    update_step, master_dict, _ = \
+    update_step, bot_db = \
         api.chromium_tests.prepare_checkout(
             mastername, buildername,
             root_solution_revision=test_config_params['revision'])
-    self.start_test_run_for_bisect(api, update_step, master_dict,
+    self.start_test_run_for_bisect(api, update_step, bot_db,
                                    test_config_params, run_locally=True)
 
-  def start_test_run_for_bisect(self, api, update_step, master_dict,
+  def start_test_run_for_bisect(self, api, update_step, bot_db,
                                 test_config_params, run_locally=False):
     mastername = api.properties.get('mastername')
     buildername = api.properties.get('buildername')
-    bot_config = master_dict.get('builders', {}).get(buildername)
+    bot_config = bot_db.get_bot_config(mastername, buildername)
     if not run_locally:
       api.bisect_tester.upload_job_url()
     if api.chromium.c.TARGET_PLATFORM == 'android':
@@ -179,13 +179,13 @@ class AutoBisectApi(recipe_api.RecipeApi):
         )
     else:
       api.chromium_tests.download_and_unzip_build(
-          mastername, buildername, update_step, master_dict,
+          mastername, buildername, update_step, bot_db,
           build_archive_url=test_config_params['parent_build_archive_url'],
           build_revision=test_config_params['parent_got_revision'],
           override_bot_type='tester')
 
       api.chromium_tests.tests_for_builder(
-          mastername, buildername, update_step, master_dict,
+          mastername, buildername, update_step, bot_db,
           override_bot_type='tester')
 
     tests = [api.chromium_tests.steps.BisectTest(test_config_params)]
@@ -201,9 +201,10 @@ class AutoBisectApi(recipe_api.RecipeApi):
         api.chromium_android.adb_install_apk('ChromePublic.apk')
       test_runner()
 
-  def start_try_job(self, api, update_step=None, master_dict=None, **kwargs):
-    if master_dict is None:  # pragma: no cover
-      master_dict = {}
+  def start_try_job(self, api, update_step=None, bot_db=None, **kwargs):
+    if bot_db is None:  # pragma: no cover
+      bot_db = api.chromium_tests.create_bot_db_from_master_dict(
+          '', None, None)
     affected_files = self.m.tryserver.get_files_affected_by_patch()
 
     # Avoid duplication of device setup steps for bisect recipe tester which
@@ -230,11 +231,11 @@ class AutoBisectApi(recipe_api.RecipeApi):
             and platform != 'android' and test_type != 'return_code'):
           local_bisect.perform_bisect(self)  # pragma: no cover
         else:
-          self.start_test_run_for_bisect(api, update_step, master_dict,
+          self.start_test_run_for_bisect(api, update_step, bot_db,
                                          api.properties)
       else:
         self.m.perf_try.start_perf_try_job(
-            affected_files, update_step, master_dict)
+            affected_files, update_step, bot_db)
     finally:
       # Avoid duplication of device setup steps for bisect recipe tester, which
       # are run while running tests in chromium_tests.wrap_chromium_tests.

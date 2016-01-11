@@ -13,10 +13,10 @@ def RunSteps(api):
   buildername = api.properties.get('buildername')
 
   api.chromium_tests.configure_build(mastername, buildername)
-  update_step, master_dict, test_spec = \
+  update_step, bot_db = \
      api.chromium_tests.prepare_checkout(mastername, buildername)
-  #api.chromium_tests.compile(mastername, buildername, update_step, master_dict,
-  #                           test_spec, out_dir='/tmp')
+  #api.chromium_tests.compile(mastername, buildername, update_step, bot_db,
+  #                           out_dir='/tmp')
   api.chromium.compile(targets=['All'], out_dir='/tmp')
 
 def GenTests(api):

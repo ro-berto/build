@@ -200,13 +200,13 @@ def is_source_file(api, filepath):
   return ext in ['.c', '.cc', '.cpp', '.h', '.java', '.mm']
 
 def _RunStepsInternal(api):
-  def get_bot_config(mastername, buildername):
+  def _get_bot_config(mastername, buildername):
     master_dict = api.chromium_tests.trybots.get(mastername, {})
     return master_dict.get('builders', {}).get(buildername)
 
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
-  bot_config = get_bot_config(mastername, buildername)
+  bot_config = _get_bot_config(mastername, buildername)
 
   # TODO(sergiyb): This is a temporary hack to run GPU tests on tryserver
   # only. This should be removed when we will convert chromium.gpu waterfall
@@ -232,7 +232,7 @@ def _RunStepsInternal(api):
                     'Please re-create the CL using fresh checkout after '
                     'the blink merge.')
 
-  bot_update_step, master_dict, test_spec = \
+  bot_update_step, bot_db = \
       api.chromium_tests.prepare_checkout(
           bot_config['mastername'],
           bot_config['buildername'])
@@ -241,18 +241,18 @@ def _RunStepsInternal(api):
       bot_config['mastername'],
       bot_config['buildername'],
       bot_update_step,
-      master_dict,
+      bot_db,
       override_bot_type='builder_tester'))
   tester = bot_config.get('tester', '')
   if tester:
-    test_config = master_dict.get('builders', {}).get(tester)
+    test_config = bot_db.get_bot_config(bot_config['mastername'], tester)
     for key, value in test_config.get('swarming_dimensions', {}).iteritems():
       api.swarming.set_default_dimension(key, value)
     tests.extend(api.chromium_tests.tests_for_builder(
         bot_config['mastername'],
         tester,
         bot_update_step,
-        master_dict,
+        bot_db,
         override_bot_type='builder_tester'))
 
   if enable_gpu_tests:
@@ -298,8 +298,7 @@ def _RunStepsInternal(api):
       api.chromium_tests.get_compile_targets_and_tests(
           bot_config['mastername'],
           bot_config['buildername'],
-          master_dict,
-          test_spec,
+          bot_db,
           override_bot_type='builder_tester',
           override_tests=tests)
 
@@ -346,7 +345,7 @@ def _RunStepsInternal(api):
         bot_config['mastername'],
         bot_config['buildername'],
         bot_update_step,
-        master_dict,
+        bot_db,
         compile_targets,
         tests_including_triggered,
         override_bot_type='builder_tester')
