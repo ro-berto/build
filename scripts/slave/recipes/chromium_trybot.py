@@ -153,6 +153,7 @@ CHROMIUM_GPU_DIMENSION_SETS = freeze({
 # TODO(phajdan.jr): Remove special case for layout tests.
 # This could be done by moving layout tests to main waterfall.
 CHROMIUM_BLINK_TESTS_BUILDERS = freeze([
+  'linux_blink_oilpan_rel',
   'linux_chromium_rel_ng',
   'mac_chromium_rel_ng',
   'win_chromium_rel_ng',

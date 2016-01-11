@@ -243,7 +243,7 @@ TRYBOTS = freeze({
       },
       'linux_blink_oilpan_rel': {
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Linux Oilpan',
+        'buildername': 'WebKit Linux Oilpan Builder',
       },
       'linux_chromium_dbg_32_ng': {
         'mastername': 'chromium.linux',
