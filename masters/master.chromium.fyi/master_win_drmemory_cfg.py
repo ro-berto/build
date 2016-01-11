@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from master import gitiles_poller
 from master import master_config
 from master import master_utils
 from master.factory import chromium_factory
@@ -78,4 +79,8 @@ F('win_lkgr_drmemory_x64', win().ChromiumFactory(
     }))
 
 def Update(_update_config, _active_master, c):
+  lkgr_poller = gitiles_poller.GitilesPoller(
+    'https://chromium.googlesource.com/chromium/src',
+    branches=['lkgr'])
+  c['change_source'].append(lkgr_poller)
   return helper.Update(c)
