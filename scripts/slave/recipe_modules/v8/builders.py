@@ -754,7 +754,12 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'swarming_dimensions': {
+          'os': 'Mac-10.9',
+          'cpu': 'x86-64',
+        },
         'testing': {'platform': 'mac'},
       },
       'V8 Mac - debug': {
@@ -764,7 +769,12 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'swarming_dimensions': {
+          'os': 'Mac-10.9',
+          'cpu': 'x86-64',
+        },
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64': {
@@ -774,7 +784,12 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'swarming_dimensions': {
+          'os': 'Mac-10.9',
+          'cpu': 'x86-64',
+        },
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64 - debug': {
@@ -784,7 +799,12 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'swarming_dimensions': {
+          'os': 'Mac-10.9',
+          'cpu': 'x86-64',
+        },
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64 - xcode': {
@@ -1193,7 +1213,12 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [Mjsunit, Webkit],
+        'enable_swarming': True,
+        'tests': [Mjsunit_3, Webkit],
+        'swarming_dimensions': {
+          'os': 'Mac-10.9',
+          'cpu': 'x86-64',
+        },
         'testing': {'platform': 'mac'},
       },
       'V8 Arm GC Stress': {
