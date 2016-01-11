@@ -2250,14 +2250,14 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_swarming_staging': {
-        'chromium_apply_config': ['v8_ninja', 'clang', 'goma'],
+        'chromium_apply_config': ['v8_ninja', 'clang', 'asan', 'goma'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'tests': [V8Testing_2],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
