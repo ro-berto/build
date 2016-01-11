@@ -817,7 +817,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def common_tests_setup_steps(self, perf_setup=False):
     if self.c.gce_setup:
-      self.launch_gce_instances(snapshot=self.c.gce_snapshot)
+      self.launch_gce_instances(snapshot=self.c.gce_snapshot, count=self.c.gce_count)
       self.spawn_logcat_monitor()
       self.provision_devices(emulators=True)
     else:
@@ -844,7 +844,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.logcat_dump(gs_bucket=logcat_gs_bucket)
     self.stack_tool_steps()
     if self.c.gce_setup:
-      self.shutdown_gce_instances()
+      self.shutdown_gce_instances(count=self.c.gce_count)
     self.test_report()
 
   def run_bisect_script(self, extra_src='', path_to_config='', **kwargs):

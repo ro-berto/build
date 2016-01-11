@@ -40,6 +40,7 @@ def BaseConfig(INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     ),
     gce_setup = Single(bool, required=False, empty_val=False),
     gce_snapshot = Single(basestring, required=False),
+    gce_count = Single(int, required=False),
   )
 
 
@@ -206,3 +207,4 @@ def cast_builder(c):
 def gce_builder(c):
   c.gce_setup = True
   c.gce_snapshot = 'clean-19-l-phone-snapshot'
+  c.gce_count = 10
