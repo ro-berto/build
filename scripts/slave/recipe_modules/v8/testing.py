@@ -352,22 +352,6 @@ class V8Presubmit(BaseTest):
 
 
 class V8CheckInitializers(BaseTest):
-  def run(self, **kwargs):
-    self.api.step(
-      'Static-Initializers',
-      ['bash',
-       self.api.path['checkout'].join('tools', 'check-static-initializers.sh'),
-       self.api.path.join(
-           self.api.path.basename(self.api.chromium.c.build_dir),
-           self.api.chromium.c.build_config_fs,
-           'd8'),
-      ],
-      cwd=self.api.path['checkout'],
-    )
-    return TestResults.empty()
-
-
-class V8CheckInitializersSwarming(BaseTest):
   @property
   def uses_swarming(self):
     """Returns true if the test uses swarming."""
@@ -385,6 +369,11 @@ class V8CheckInitializersSwarming(BaseTest):
               'd8'),
         ],
     )
+    # Set default value.
+    # TODO(machenbach): Merge this code with other swarming tests.
+    if 'os' not in self.task.dimensions:
+      self.task.dimensions['os'] = self.api.swarming.prefered_os_dimension(
+          self.api.platform.name)
     self.api.swarming.trigger_task(self.task)
 
   def run(self, **kwargs):
@@ -501,13 +490,12 @@ V8_NON_STANDARD_TESTS = freeze({
 
 
 TOOL_TO_TEST = freeze({
-  'check-static-initializers': V8CheckInitializers,
   'run-tests': V8Test,
 })
 
 
 TOOL_TO_TEST_SWARMING = freeze({
-  'check-static-initializers': V8CheckInitializersSwarming,
+  'check-static-initializers': V8CheckInitializers,
   'run-tests': V8SwarmingTest,
 })
 

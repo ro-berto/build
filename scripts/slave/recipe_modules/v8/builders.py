@@ -39,8 +39,7 @@ Test262Variants = TestStepConfig('test262_variants')
 Test262Variants_2 = TestStepConfig('test262_variants', shards=2)
 Test262Variants_3 = TestStepConfig('test262_variants', shards=3)
 Unittests = TestStepConfig('unittests')
-V8Initializers = TestStepConfig('v8initializers', swarming=False)
-V8InitializersSwarming = TestStepConfig('v8initializers', swarming=True)
+V8Initializers = TestStepConfig('v8initializers')
 V8Testing = TestStepConfig('v8testing')
 V8Testing_2 = TestStepConfig('v8testing', shards=2)
 V8Testing_3 = TestStepConfig('v8testing', shards=3)
@@ -190,7 +189,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - swarming staging builder',
         'build_gs_archive': 'linux_swarming_staging_archive',
-        'tests': [Mjsunit, V8InitializersSwarming],
+        'tests': [Mjsunit, V8Initializers],
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
         'slim_swarming_tester': True,

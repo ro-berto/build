@@ -277,7 +277,7 @@ class V8Api(recipe_api.RecipeApi):
       tests_to_isolate = []
       def add_tests_to_isolate(tests):
         for test in tests:
-          if not test.swarming:
+          if not test.swarming:  # pragma: no cover
             # Skip tests that explicitly disable swarming.
             continue
           config = testing.TEST_CONFIGS.get(test.name) or {}
