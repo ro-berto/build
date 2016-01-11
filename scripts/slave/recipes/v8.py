@@ -267,7 +267,7 @@ def GenTests(api):
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux - swarming staging 3',
+        'V8 Linux - shared',
         'bisect_swarming',
     ) +
     api.v8.fail('Check') +

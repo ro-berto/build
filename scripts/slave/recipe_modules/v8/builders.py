@@ -75,24 +75,6 @@ BUILDERS = {
           'V8 Linux - presubmit',
         ],
       },
-      'V8 Linux - swarming staging builder': {
-        'chromium_apply_config': [
-          'clang', 'v8_ninja', 'goma', 'embed_script_mjsunit'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'build_gs_archive': 'linux_swarming_staging_archive',
-        'enable_swarming': True,
-        'testing': {
-          'platform': 'linux',
-        },
-        'triggers': [
-          'V8 Linux - swarming staging 1',
-          'V8 Linux - swarming staging 2',
-        ],
-      },
       'V8 Linux - debug builder': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_config_kwargs': {
@@ -180,41 +162,7 @@ BUILDERS = {
           'os': 'Ubuntu-12.04',
         },
       },
-      'V8 Linux - swarming staging 1': {
-        'v8_apply_config': ['no_harness'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux - swarming staging builder',
-        'build_gs_archive': 'linux_swarming_staging_archive',
-        'tests': [Mjsunit, V8Initializers],
-        'testing': {'platform': 'linux'},
-        'enable_swarming': True,
-        'slim_swarming_tester': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu',
-        },
-      },
-      'V8 Linux - swarming staging 2': {
-        'v8_apply_config': ['gc_stress', 'no_harness'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux - swarming staging builder',
-        'build_gs_archive': 'linux_swarming_staging_archive',
-        'tests': [Mjsunit],
-        'testing': {'platform': 'linux'},
-        'enable_swarming': True,
-        'slim_swarming_tester': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu',
-        },
-      },
-      'V8 Linux - swarming staging 3': {
+      'V8 Linux - swarming staging': {
         'chromium_apply_config': [
           'v8_ninja', 'clang', 'asan', 'goma'],
         'v8_config_kwargs': {
