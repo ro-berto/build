@@ -1413,8 +1413,8 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [V8Testing_2],
+        'enable_swarming': False,
+        'tests': [V8Testing],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -2092,8 +2092,8 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [V8Testing_2],
+        'enable_swarming': False,
+        'tests': [V8Testing],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
