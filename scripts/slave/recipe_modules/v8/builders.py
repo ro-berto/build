@@ -1413,7 +1413,12 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing],
+        'enable_swarming': True,
+        'tests': [V8Testing_2],
+        'swarming_dimensions': {
+          'os': 'Mac-10.9',
+          'cpu': 'x86-64',
+        },
         'testing': {'platform': 'mac'},
       },
 ####### Category: FYI
@@ -2005,7 +2010,12 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'swarming_dimensions': {
+          'os': 'Mac-10.9',
+          'cpu': 'x86-64',
+        },
         'testing': {'platform': 'mac'},
       },
       'v8_mac_dbg': {
@@ -2015,7 +2025,12 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'swarming_dimensions': {
+          'os': 'Mac-10.9',
+          'cpu': 'x86-64',
+        },
         'testing': {'platform': 'mac'},
       },
       'v8_mac64_rel': {
@@ -2025,7 +2040,12 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'swarming_dimensions': {
+          'os': 'Mac-10.9',
+          'cpu': 'x86-64',
+        },
         'testing': {'platform': 'mac'},
       },
       'v8_mac64_dbg': {
@@ -2035,7 +2055,12 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, SimdJs],
+        'enable_swarming': True,
+        'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'swarming_dimensions': {
+          'os': 'Mac-10.9',
+          'cpu': 'x86-64',
+        },
         'testing': {'platform': 'mac'},
       },
       'v8_mac_gc_stress_dbg': {
@@ -2046,7 +2071,12 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [Mjsunit, Webkit],
+        'enable_swarming': True,
+        'tests': [Mjsunit_3, Webkit],
+        'swarming_dimensions': {
+          'os': 'Mac-10.9',
+          'cpu': 'x86-64',
+        },
         'testing': {'platform': 'mac'},
       },
       'v8_mac64_asan_rel': {
@@ -2062,7 +2092,12 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing],
+        'enable_swarming': True,
+        'tests': [V8Testing_2],
+        'swarming_dimensions': {
+          'os': 'Mac-10.9',
+          'cpu': 'x86-64',
+        },
         'testing': {'platform': 'mac'},
       },
       'v8_linux_arm_rel': {
