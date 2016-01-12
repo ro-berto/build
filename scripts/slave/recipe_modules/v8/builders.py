@@ -203,10 +203,15 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'enable_swarming': True,
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'tests': [V8Testing, Benchmarks, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'pool': 'V8-AVX2',
+        },
       },
       'V8 Linux - shared': {
         'chromium_apply_config': [
@@ -479,6 +484,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - builder',
         'build_gs_archive': 'linux64_rel_archive',
+        'enable_swarming': True,
         'tests': [
           V8Testing,
           Benchmarks,
@@ -486,6 +492,10 @@ BUILDERS = {
           SimdJs,
         ],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'pool': 'V8-AVX2',
+        },
       },
       'V8 Linux64 - debug': {
         'v8_config_kwargs': {
@@ -515,6 +525,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - debug builder',
         'build_gs_archive': 'linux64_dbg_archive',
+        'enable_swarming': True,
         'tests': [
           V8Testing,
           Benchmarks,
@@ -522,6 +533,10 @@ BUILDERS = {
           SimdJs,
         ],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'pool': 'V8-AVX2',
+        },
       },
       'V8 Linux64 - internal snapshot': {
         'chromium_apply_config': [
