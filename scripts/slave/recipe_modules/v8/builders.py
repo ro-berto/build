@@ -532,6 +532,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
