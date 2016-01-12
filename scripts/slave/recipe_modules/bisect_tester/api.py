@@ -21,8 +21,7 @@ class BisectTesterApi(recipe_api.RecipeApi):
   def local_test_enabled(self):
     buildername = os.environ.get('BUILDBOT_BUILDERNAME')
     cr_config = self.m.chromium.c
-    if (buildername and buildername.endswith('_bisect') and cr_config
-        and cr_config.TARGET_PLATFORM != 'android'):
+    if buildername and buildername.endswith('_bisect') and cr_config:
       return True # pragma: no cover
     return False
 

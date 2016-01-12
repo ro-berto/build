@@ -18,6 +18,12 @@ DEPS = [
 ]
 
 def RunSteps(api):
+  mastername = api.m.properties.get('mastername')
+  buildername = api.m.properties.get('buildername')
+  # TODO(akuegel): Explicitly load the configs for the builders and don't rely
+  # on builders.py in chromium_tests recipe module.
+  api.m.chromium_tests.configure_build(mastername, buildername)
+  api.m.chromium_tests.prepare_checkout(mastername, buildername)
   api.auto_bisect.perform_bisect()
 
 def GenTests(api):

@@ -38,7 +38,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
   def __init__(self, *args, **kwargs):
     super(AutoBisectApi, self).__init__(*args, **kwargs)
     self.override_poll_interval = None
-
+    self.bot_db =  None
   def perform_bisect(self):
     return local_bisect.perform_bisect(self)
 
@@ -127,15 +127,9 @@ class AutoBisectApi(recipe_api.RecipeApi):
         xvfb=True, **kwargs)
 
   def run_local_test_run(self, api, test_config_params):  # pragma: no cover
-    mastername = api.properties.get('mastername')
-    buildername = api.properties.get('buildername')
-    api.chromium_tests.configure_build(mastername, buildername)
-    api.gclient.apply_config('perf')
-    update_step, bot_db = \
-        api.chromium_tests.prepare_checkout(
-            mastername, buildername,
-            root_solution_revision=test_config_params['revision'])
-    self.start_test_run_for_bisect(api, update_step, bot_db,
+    update_step = api.bot_update.ensure_checkout(
+        root_solution_revision=test_config_params['revision'])
+    self.start_test_run_for_bisect(api, update_step, self.bot_db,
                                    test_config_params, run_locally=True)
 
   def start_test_run_for_bisect(self, api, update_step, bot_db,
@@ -160,8 +154,10 @@ class AutoBisectApi(recipe_api.RecipeApi):
       if self.m.path.exists(zip_dir):  # pragma: no cover
         self.m.file.rmtree('full-build-linux directory', zip_dir)
 
-      api.chromium_android.download_build(bucket=bot_config['bucket'],
-                                          path=bot_config['path'](api))
+      api.chromium_android.download_build(
+          bucket=bot_config['bucket'],
+          path=(bot_config['path'](api) %
+                test_config_params['parent_got_revision']))
 
       # crbug.com/535218, the way android builders on tryserver.chromium.perf
       # are archived is different from builders on chromium.per. In order to
@@ -203,15 +199,12 @@ class AutoBisectApi(recipe_api.RecipeApi):
 
   def start_try_job(self, api, update_step=None, bot_db=None, **kwargs):
     if bot_db is None:  # pragma: no cover
-      bot_db = api.chromium_tests.create_bot_db_from_master_dict(
+      self.bot_db = api.chromium_tests.create_bot_db_from_master_dict(
           '', None, None)
+    else:
+      self.bot_db = bot_db
     affected_files = self.m.tryserver.get_files_affected_by_patch()
-
-    # Avoid duplication of device setup steps for bisect recipe tester which
-    # is ran while executing tests in chromium_tests.wrap_chromium_tests and
-    # also we don't want to execute runhooks since this just tests the build.
-    if (api.properties.get('bisect_config') is None and
-        api.chromium.c.TARGET_PLATFORM == 'android'):
+    if api.chromium.c.TARGET_PLATFORM == 'android':
       api.chromium_android.common_tests_setup_steps(perf_setup=True)
       api.chromium.runhooks()
     try:
@@ -225,20 +218,16 @@ class AutoBisectApi(recipe_api.RecipeApi):
         # test by checking for the presence of the good_revision key.
         # Also, at the moment android is not supported and return_code mode
         # does not require device affinity.
-        platform = self.m.chromium.c.TARGET_PLATFORM
         test_type = api.properties.get('bisect_config').get('test_type')
         if (api.properties.get('bisect_config').get('good_revision')
-            and platform != 'android' and test_type != 'return_code'):
+            and test_type != 'return_code'):
           local_bisect.perform_bisect(self)  # pragma: no cover
         else:
-          self.start_test_run_for_bisect(api, update_step, bot_db,
+          self.start_test_run_for_bisect(api, update_step, self.bot_db,
                                          api.properties)
       else:
         self.m.perf_try.start_perf_try_job(
-            affected_files, update_step, bot_db)
+            affected_files, update_step, self.bot_db)
     finally:
-      # Avoid duplication of device setup steps for bisect recipe tester, which
-      # are run while running tests in chromium_tests.wrap_chromium_tests.
-      if (api.properties.get('bisect_config') is None and
-          api.chromium.c.TARGET_PLATFORM == 'android'):
+      if api.chromium.c.TARGET_PLATFORM == 'android':
         api.chromium_android.common_tests_final_steps()

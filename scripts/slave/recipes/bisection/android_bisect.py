@@ -28,50 +28,43 @@ BUILDERS = freeze({
         'recipe_config': 'perf',
          'gclient_apply_config': ['android', 'perf'],
         'bucket': 'chrome-perf',
-        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                              api.properties['parent_got_revision']),
+        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'),
       },
       'android_nexus5_perf_bisect': {
         'recipe_config': 'perf',
         'gclient_apply_config': ['android', 'perf'],
         'bucket': 'chrome-perf',
-        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                              api.properties['parent_got_revision']),
+        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'),
       },
       'android_nexus6_perf_bisect': {
         'recipe_config': 'perf',
         'gclient_apply_config': ['android', 'perf'],
         'bucket': 'chrome-perf',
-        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                              api.properties['parent_got_revision']),
+        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'),
       },
       'android_nexus7_perf_bisect': {
         'recipe_config': 'perf',
         'gclient_apply_config': ['android', 'perf'],
         'bucket': 'chrome-perf',
-        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                              api.properties['parent_got_revision']),
+        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'),
       },
       'android_nexus9_perf_bisect': {
         'recipe_config': 'arm64_builder',
         'gclient_apply_config': ['android', 'perf'],
         'bucket': 'chrome-perf',
-        'path': lambda api: ('android_perf_rel_arm64/full-build-linux_%s.zip' %
-                              api.properties['parent_got_revision']),
+        'path': lambda api: ('android_perf_rel_arm64/full-build-linux_%s.zip'),
       },
       'android_s5_perf_bisect': {
         'recipe_config': 'perf',
         'gclient_apply_config': ['android', 'perf'],
         'bucket': 'chrome-perf',
-        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                              api.properties['parent_got_revision']),
+        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'),
       },
       'android_fyi_perf_bisect': {
         'recipe_config': 'perf',
         'gclient_apply_config': ['android', 'perf'],
         'bucket': 'chrome-perf',
-        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip' %
-                              api.properties['parent_got_revision']),
+        'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'),
       },
     },
   },
@@ -281,8 +274,6 @@ results-without_patch
           'test_type': 'perf',
           'command': './tools/perf/run_benchmark -v '
                      '--browser=android-chromium page_cycler.intl_ar_fa_he',
-          'good_revision': '300138',
-          'bad_revision': '300148',
           'metric': 'warm_times/page_load_time',
           'repeat_count': '2',
           'max_time_minutes': '5',

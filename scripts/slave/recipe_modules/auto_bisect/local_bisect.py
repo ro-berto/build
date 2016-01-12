@@ -8,7 +8,6 @@ import json
 
 
 def perform_bisect(api):  # pragma: no cover
-  _ensure_checkout(api)
   bisect_config = api.m.properties.get('bisect_config')
   assert isinstance(bisect_config, collections.Mapping)
   bisector = api.create_bisector(bisect_config)
@@ -28,15 +27,6 @@ def perform_bisect(api):  # pragma: no cover
     bisector.bisect_over = True
   bisector.print_result_debug_info()
   bisector.print_result()
-
-
-def _ensure_checkout(api):  # pragma: no cover
-  mastername = api.m.properties.get('mastername')
-  buildername = api.m.properties.get('buildername')
-  # TODO(akuegel): Explicitly load the configs for the builders and don't rely
-  # on builders.py in chromium_tests recipe module.
-  api.m.chromium_tests.configure_build(mastername, buildername)
-  api.m.chromium_tests.prepare_checkout(mastername, buildername)
 
 
 def _gather_reference_range(api, bisector):  # pragma: no cover

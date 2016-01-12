@@ -139,80 +139,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[bisect_tester]/resources/put_temp.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "saving url to temp file",
-    "stdin": "http://build.chromium.org/p/tryserver.chromium.perf/json/builders/android_nexus7_perf_bisect/builds/571",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cp",
-      "/tmp/dummy1",
-      "gs://chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil bisect-results/f7a7b4135624439cbd27fdd5133d74ec",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree build directory",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "--force-version",
-      "4.7",
-      "----",
-      "cp",
-      "gs://chrome-perf/android_perf_rel/full-build-linux_1111111.zip",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil download_build_product"
-  },
-  {
-    "cmd": [
-      "unzip",
-      "-o",
-      "[SLAVE_BUILD]/src/out/build_product.zip"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "unzip_build_product"
-  },
-  {
-    "cmd": [
       "[BUILD]/scripts/slave/daemonizer.py",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
@@ -394,6 +320,95 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "OS=android branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[bisect_tester]/resources/put_temp.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "saving url to temp file",
+    "stdin": "http://build.chromium.org/p/tryserver.chromium.perf/json/builders/android_nexus7_perf_bisect/builds/571",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "/tmp/dummy1",
+      "gs://chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil bisect-results/f7a7b4135624439cbd27fdd5133d74ec",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/bisect-results/f7a7b4135624439cbd27fdd5133d74ec@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/src/out/Release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rmtree build directory",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "----",
+      "cp",
+      "gs://chrome-perf/android_perf_rel/full-build-linux_1111111.zip",
+      "[SLAVE_BUILD]/src/out/build_product.zip"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil download_build_product"
+  },
+  {
+    "cmd": [
+      "unzip",
+      "-o",
+      "[SLAVE_BUILD]/src/out/build_product.zip"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "unzip_build_product"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
       "ChromePublic.apk",
       "-v",
@@ -474,6 +489,26 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
+      "[SLAVE_BUILD]/src/out/Release/test_logs/*.log"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "test_report",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import glob, os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@for report in glob.glob(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  with open(report, 'r') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    for l in f.readlines():@@@",
+      "@@@STEP_LOG_LINE@python.inline@      print l@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/daemonizer.py",
       "--action",
       "stop",
@@ -531,7 +566,7 @@
       "[SLAVE_BUILD]/src/out/Release/test_logs/*.log"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "test_report",
+    "name": "test_report (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import glob, os, sys@@@",

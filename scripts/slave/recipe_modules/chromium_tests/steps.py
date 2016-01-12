@@ -1316,7 +1316,7 @@ class BisectTest(Test):  # pylint: disable=W0232
 
   @property
   def uses_local_devices(self):
-    return True
+    return False
 
   @staticmethod
   def compile_targets(_):  # pragma: no cover
