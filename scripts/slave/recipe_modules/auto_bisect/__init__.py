@@ -14,6 +14,7 @@ DEPS = [
     'math_utils',
     'recipe_engine/path',
     'perf_try',
+    'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/raw_io',
