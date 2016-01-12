@@ -204,6 +204,7 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'enable_swarming': True,
+        'slim_swarming_tester': True,
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'tests': [V8Testing, Benchmarks, Mozilla, SimdJs],
@@ -486,6 +487,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux64 - builder',
         'build_gs_archive': 'linux64_rel_archive',
         'enable_swarming': True,
+        'slim_swarming_tester': True,
         'tests': [
           V8Testing,
           Benchmarks,
@@ -528,6 +530,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux64 - debug builder',
         'build_gs_archive': 'linux64_dbg_archive',
         'enable_swarming': True,
+        'slim_swarming_tester': True,
         'tests': [
           V8Testing,
           Benchmarks,
