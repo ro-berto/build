@@ -127,8 +127,6 @@ class AutoBisectApi(recipe_api.RecipeApi):
         xvfb=True, **kwargs)
 
   def run_local_test_run(self, api, test_config_params):  # pragma: no cover
-    if self.m.platform.is_win:
-      self.m.chromium.taskkill()
     update_step = api.bot_update.ensure_checkout(
         root_solution_revision=test_config_params['revision'])
     self.start_test_run_for_bisect(api, update_step, self.bot_db,
