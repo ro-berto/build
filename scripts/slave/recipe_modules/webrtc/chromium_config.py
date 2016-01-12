@@ -12,7 +12,7 @@ CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
 SUPPORTED_TARGET_ARCHS = ('intel', 'arm')
 
 
-@CONFIG_CTX(includes=['chromium', 'dcheck'])
+@CONFIG_CTX(includes=['chromium', 'dcheck', 'openh264'])
 def webrtc_standalone(c):
   _compiler_defaults(c)
 
@@ -25,11 +25,11 @@ def webrtc_standalone(c):
 def webrtc_gcc(c):
   _compiler_defaults(c)
 
-@CONFIG_CTX(includes=['chromium_clang', 'dcheck'])
+@CONFIG_CTX(includes=['chromium_clang', 'dcheck', 'openh264'])
 def webrtc_clang(c):
   _compiler_defaults(c)
 
-@CONFIG_CTX(includes=['chromium', 'dcheck', 'static_library'])
+@CONFIG_CTX(includes=['chromium', 'dcheck', 'static_library', 'openh264'])
 def webrtc_ios(c):
   if c.HOST_PLATFORM != 'mac':
     raise BadConf('Only "mac" host platform is supported for iOS (got: "%s")' %
@@ -50,11 +50,18 @@ def webrtc_ios(c):
 @CONFIG_CTX(includes=['gn'])
 def webrtc_gn(c):
   c.compile_py.default_targets = ['all']
+  c.gn_args = [
+    'ffmpeg_branding="Chrome"',
+    'use_openh264=true',
+    'use_third_party_h264=true',
+  ]
 
-@CONFIG_CTX(includes=['gn'])
+@CONFIG_CTX(includes=['webrtc_gn'])
 def webrtc_libfuzzer(c):
-  c.gn_args = ['use_libfuzzer=true',
-               'is_asan=true']
+  c.gn_args.extend([
+    'use_libfuzzer=true',
+    'is_asan=true',
+  ])
 
 def _compiler_defaults(c):
   c.compile_py.default_targets = ['All']

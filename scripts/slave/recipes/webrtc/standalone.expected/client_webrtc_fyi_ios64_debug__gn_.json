@@ -78,7 +78,7 @@
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=ios chromium_ios_signing=0 clang=1 component=static_library dcheck_always_on=1 gomadir='[BUILD]/goma' target_arch=arm64 use_goma=1",
+      "GYP_DEFINES": "OS=ios chromium_ios_signing=0 clang=1 component=static_library dcheck_always_on=1 ffmpeg_branding=Chrome gomadir='[BUILD]/goma' target_arch=arm64 use_goma=1 use_openh264=1 use_third_party_h264=1",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
@@ -91,7 +91,7 @@
       "--root=[SLAVE_BUILD]/src",
       "gen",
       "//out/Debug-iphoneos",
-      "--args=is_debug=true target_os=\"ios\" target_cpu=\"arm\" use_goma=true goma_dir=\"[BUILD]/goma\""
+      "--args=ffmpeg_branding=\"Chrome\" use_openh264=true use_third_party_h264=true is_debug=true target_os=\"ios\" target_cpu=\"arm\" use_goma=true goma_dir=\"[BUILD]/goma\""
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gn"

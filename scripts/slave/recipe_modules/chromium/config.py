@@ -366,6 +366,12 @@ def proprietary_codecs(c, invert=False):
   c.gyp_env.GYP_DEFINES['proprietary_codecs'] = int(not invert)
 
 @config_ctx()
+def openh264(c):
+  ffmpeg_branding(c, branding='Chrome')
+  c.gyp_env.GYP_DEFINES['use_openh264'] = 1
+  c.gyp_env.GYP_DEFINES['use_third_party_h264'] = 1
+
+@config_ctx()
 def chrome_with_codecs(c):
   ffmpeg_branding(c, branding='Chrome')
   proprietary_codecs(c)
