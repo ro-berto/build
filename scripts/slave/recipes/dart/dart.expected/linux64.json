@@ -55,7 +55,9 @@
       "-u",
       "[SLAVE_BUILD]/sdk/tools/build.py",
       "-mrelease",
-      "runtime"
+      "--arch=x64",
+      "runtime",
+      "create_sdk"
     ],
     "cwd": "[SLAVE_BUILD]/sdk",
     "name": "build dart"
@@ -66,8 +68,7 @@
       "-u",
       "[SLAVE_BUILD]/sdk/tools/test.py",
       "-mrelease",
-      "-cnone",
-      "-rvm"
+      "--arch=x64"
     ],
     "cwd": "[SLAVE_BUILD]/sdk",
     "name": "test vm"
