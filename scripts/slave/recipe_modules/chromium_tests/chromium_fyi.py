@@ -85,6 +85,7 @@ SPEC = {
       'enable_swarming': True,
       'swarming_dimensions': {
         'cpu': 'armv7l-32',
+        'os': 'Ubuntu-14.04',
       },
     },
     'Linux Trusty': {
