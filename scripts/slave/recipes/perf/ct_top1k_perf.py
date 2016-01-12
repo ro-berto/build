@@ -86,7 +86,8 @@ def RunSteps(api):
   # Trigger all swarming tasks.
   tasks = api.ct_swarming.trigger_swarming_tasks(
       swarm_hashes, task_name_prefix='ct-1k-task',
-      dimensions={'os': 'Ubuntu-14.04', 'gpu': '10de:104a', 'cpu': 'x86-64'})
+      dimensions={'os': 'Ubuntu-14.04', 'gpu': '10de:104a', 'cpu': 'x86-64',
+                  'pool': 'Chrome'})
 
   # The format of results_json is described in https://goo.gl/LmRBDk
   results_json = {

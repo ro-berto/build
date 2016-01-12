@@ -129,7 +129,7 @@ def RunSteps(api):
         api.step.active_result.presentation.properties['swarm_hashes'].values())
 
   # Trigger all swarming tasks.
-  dimensions={'os': 'Ubuntu-14.04', 'cpu': 'x86-64'}
+  dimensions={'os': 'Ubuntu-14.04', 'cpu': 'x86-64', 'pool': 'Chrome'}
   if skia_tool == 'nanobench':
     # Run on GPU bots for nanobench.
     dimensions['gpu'] = '10de:104a'
