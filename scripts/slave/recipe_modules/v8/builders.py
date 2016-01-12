@@ -164,7 +164,7 @@ BUILDERS = {
       },
       'V8 Linux - swarming staging': {
         'chromium_apply_config': [
-          'v8_ninja', 'clang', 'asan', 'goma'],
+          'v8_ninja', 'clang', 'goma', 'internal_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -175,9 +175,6 @@ BUILDERS = {
           V8Testing,
         ],
         'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-        },
       },
       'V8 Linux - debug': {
         'v8_config_kwargs': {
