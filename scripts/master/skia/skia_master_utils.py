@@ -11,6 +11,7 @@ from buildbot.scheduler import AnyBranchScheduler
 from buildbot.scheduler import Scheduler
 from buildbot.scheduler import Triggerable
 from buildbot.schedulers import timed
+from buildbot.status.status_push import HttpStatusPush
 from common import chromium_utils
 from common.skia import builder_name_schema
 from common.skia import global_constants
@@ -338,6 +339,10 @@ def SetupMaster(ActiveMaster):
         mode='all',
         relayhost=config.Master.smtp,
         lookup=master_utils.UsersAreEmails()))
+
+    # Push status updates to GrandCentral.
+    c['status'].append(HttpStatusPush(
+        serverUrl='https://grandcentral.skia.org/buildbot'))
 
   c['mergeRequests'] = CanMergeBuildRequests
   return c
