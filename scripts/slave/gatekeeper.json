@@ -709,44 +709,6 @@
           }
         }
       }
-    ],
-    "https://build.chromium.org/p/client.skia": [
-      {
-        "builders": {
-          "*ASAN*": {
-            "closing_optional": ["*"],
-            "excluded_steps": [
-              "abort rebase"
-            ]
-          },
-          "*Valgrind*": {
-            "closing_optional": ["*"],
-            "excluded_steps": [
-               "abort rebase"
-            ]
-          }
-        },
-        "excluded_builders": [
-          "*-Trybot"
-        ]
-      }
-    ],
-    "https://build.chromium.org/p/client.skia.compile": [
-      {
-        "builders": {
-          "*": {
-            "closing_optional": ["*"],
-            "excluded_steps": [
-              "abort rebase",
-              "has ccache?"
-            ]
-          }
-        },
-        "excluded_builders": [
-          "*-Trybot",
-          "*ANGLE*"
-        ]
-      }
     ]
   },
 
