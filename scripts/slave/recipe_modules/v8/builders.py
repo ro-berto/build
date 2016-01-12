@@ -1385,6 +1385,10 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+        },
         'tests': [
           V8Testing,
           OptimizeForSize,
