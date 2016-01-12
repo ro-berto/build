@@ -29,13 +29,15 @@ S('chromium_drmemory_lkgr', branch='lkgr')
 #
 # Windows LKGR DrMemory Builder
 #
-B('Windows LKGR (DrMemory)', 'win_lkgr_drmemory',
+# crbug.com/399990: short name to avoid hitting path length limit
+B('Win LKGR (DrM)', 'win_lkgr_drmemory',
   # not use a gatekeeper yet
   scheduler='chromium_drmemory_lkgr',
   notify_on_missing=True)
 F('win_lkgr_drmemory', win().ChromiumFactory(
     clobber=True,
     slave_type='Builder',
+    target='Release',
     options=['--build-tool=ninja', '--', 'chromium_builder_dbg_drmemory_win'],
     compile_timeout=9600, # Release build is LONG
     factory_properties={
@@ -54,7 +56,8 @@ F('win_lkgr_drmemory', win().ChromiumFactory(
 #
 # Windows LKGR DrMemory X64 Builder
 #
-B('Windows LKGR (DrMemory x64)', 'win_lkgr_drmemory_x64',
+# crbug.com/399990: short name to avoid hitting path length limit
+B('Win LKGR (DrM 64)', 'win_lkgr_drmemory_x64',
   # not use a gatekeeper yet
   scheduler='chromium_drmemory_lkgr',
   notify_on_missing=True)
