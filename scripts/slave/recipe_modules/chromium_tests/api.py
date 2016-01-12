@@ -182,6 +182,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def get_test_spec(self, mastername, buildername):
     bot_config = self._get_bot_config(mastername, buildername)
 
+    # The official builders specify the test spec using a test_spec property in
+    # the bot_config instead of reading it from a file.
+    if 'test_spec' in bot_config:
+      return { buildername: bot_config['test_spec'] }
+
     test_spec_file = bot_config.get('testing', {}).get(
         'test_spec_file', '%s.json' % mastername)
 

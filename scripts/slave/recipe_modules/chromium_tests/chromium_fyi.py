@@ -368,6 +368,34 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'ChromePracticeFullTester': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+        'chromium_swarm_tests',
+      ],
+      'tests': [
+        steps.GTestTest('base_unittests'),
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      # The official builders specify the test_spec here as opposed to
+      # reading it from a file.
+      'test_spec': {
+      },
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'ChromiumPractice': {
       'chromium_config': 'chromium',
       'gclient_config': 'blink_merged',
