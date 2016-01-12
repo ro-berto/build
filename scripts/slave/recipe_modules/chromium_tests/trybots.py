@@ -531,4 +531,12 @@ TRYBOTS = freeze({
       },
     },
   },
+  'tryserver.v8': {
+    'builders': {
+      'v8_linux_blink_rel': {
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux',
+      },
+    },
+  },
 })
