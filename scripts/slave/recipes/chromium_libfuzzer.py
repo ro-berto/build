@@ -22,7 +22,7 @@ DEPS = [
 BUILDERS = freeze({
   'chromium.fyi': {
     'builders': {
-      'Libfuzzer Upload Linux': {
+      'Libfuzzer Upload Linux ASan': {
         'chromium_apply_config': [ 'proprietary_codecs' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -32,9 +32,20 @@ BUILDERS = freeze({
         'upload_bucket': 'chromium-browser-libfuzzer',
         'upload_directory': 'asan',
       },
+      'Libfuzzer Upload Linux MSan': {
+        'chromium_apply_config': [ 'proprietary_codecs' ],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
+        },
+        'upload_bucket': 'chromium-browser-libfuzzer',
+        'upload_directory': 'msan',
+      },
     },
   },
 })
+
 
 def gn_refs(api, step_name, args):
   """Runs gn refs with given additional arguments.

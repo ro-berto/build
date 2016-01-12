@@ -7,7 +7,7 @@
       "--master",
       "chromium.fyi",
       "--builder",
-      "Libfuzzer Upload Linux",
+      "Libfuzzer Upload Linux ASan",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -124,7 +124,7 @@
       "-m",
       "chromium.fyi",
       "-b",
-      "Libfuzzer Upload Linux",
+      "Libfuzzer Upload Linux ASan",
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "//out/Release"
