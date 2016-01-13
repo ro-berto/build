@@ -2,6 +2,41 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+
+class BotConfig(object):
+  """Wrapper that allows combining several compatible bot configs."""
+
+  def __init__(self, bots_dict, bot_ids):
+    self._bots_dict = bots_dict
+
+    assert len(bot_ids) >= 1
+    self._bot_ids = bot_ids
+
+  def _consistent_get(self, getter, name, default=None):
+    result = getter(self._bot_ids[0], name, default)
+    for bot_id in self._bot_ids:
+      other_result = getter(bot_id, name, default)
+      assert result == other_result, (
+          'Inconsistent value for %r: bot %r has %r, '
+          'but bot %r has %r' % (
+              name, self._bot_ids[0], result, bot_id, other_result))
+    return result
+
+  def _get(self, bot_id, name, default=None):
+    return self._bots_dict.get(bot_id['mastername'], {}).get(
+        'builders', {}).get(bot_id['buildername'], {}).get(name, default)
+
+  def get(self, name, default=None):
+    return self._consistent_get(self._get, name, default)
+
+  def _get_master_setting(self, bot_id, name, default=None):
+    return self._bots_dict.get(bot_id['mastername'], {}).get(
+        'settings', {}).get(name, default)
+
+  def get_master_setting(self, name, default=None):
+    return self._consistent_get(self._get_master_setting, name, default)
+
+
 class BotConfigAndTestDB(object):
   """An immutable database of bot configurations and test specifications.
   Holds the data for potentially multiple waterfalls (masternames). Most

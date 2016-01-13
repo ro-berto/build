@@ -73,10 +73,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     master_dict = self.builders.get(mastername, {})
     return freeze(master_dict.get('builders', {}).get(buildername))
 
-  def configure_build(self, mastername, buildername, override_bot_type=None):
-    master_dict = self.builders.get(mastername, {})
-    bot_config = master_dict.get('builders', {}).get(buildername)
-
+  def _configure_build(self, bot_config, override_bot_type=None):
     # Get the buildspec version. It can be supplied as a build property or as
     # a recipe config value.
     buildspec_version = (self.m.properties.get('buildspec_version') or
@@ -99,13 +96,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         BUILDSPEC_VERSION=buildspec_version,
         **bot_config.get('gclient_config_kwargs', {}))
 
-    if 'android_config' in bot_config:
+    if bot_config.get('android_config'):
       self.m.chromium_android.configure_from_properties(
-          bot_config['android_config'],
+          bot_config.get('android_config'),
           **bot_config.get('chromium_config_kwargs', {}))
 
-    if 'amp_config' in bot_config:
-      self.m.amp.set_config(bot_config['amp_config'])
+    if bot_config.get('amp_config'):
+      self.m.amp.set_config(bot_config.get('amp_config'))
 
     for c in bot_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
@@ -116,11 +113,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # WARNING: src-side runtest.py is only tested with chromium CQ builders.
     # Usage not covered by chromium CQ is not supported and can break
     # without notice.
-    if master_dict.get('settings', {}).get('src_side_runtest_py'):
+    if bot_config.get_master_setting('src_side_runtest_py'):
       self.m.chromium.c.runtest_py.src_side = True
 
     if bot_config.get('goma_canary'):
-      self.m.goma.update_goma_canary(buildername)
+      self.m.goma.update_goma_canary()
 
     bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
 
@@ -139,6 +136,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             'parent_got_revision', component_rev)
       dep = bot_config.get('set_component_rev')
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
+
+  def configure_build(self, mastername, buildername, override_bot_type=None):
+    self._configure_build(
+        bdb_module.BotConfig(
+            self.builders,
+            [{'mastername': mastername, 'buildername': buildername}]
+        ), override_bot_type)
 
   def ensure_checkout(self, mastername, buildername,
                       root_solution_revision=None):

@@ -7,7 +7,7 @@ from recipe_engine import recipe_api
 class GomaApi(recipe_api.RecipeApi):
   """GomaApi contains helper functions for using goma."""
 
-  def update_goma_canary(self, buildername):
+  def update_goma_canary(self):
     """Returns a step for updating goma canary."""
     # for git checkout, should use @refs/heads/master to use head.
     head = 'refs/heads/master'
