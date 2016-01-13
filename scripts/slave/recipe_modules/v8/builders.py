@@ -204,7 +204,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'enable_swarming': True,
-        'slim_swarming_tester': True,
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'tests': [V8Testing, Benchmarks, Mozilla, SimdJs],
@@ -487,7 +486,6 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux64 - builder',
         'build_gs_archive': 'linux64_rel_archive',
         'enable_swarming': True,
-        'slim_swarming_tester': True,
         'tests': [
           V8Testing,
           Benchmarks,
@@ -530,7 +528,6 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux64 - debug builder',
         'build_gs_archive': 'linux64_dbg_archive',
         'enable_swarming': True,
-        'slim_swarming_tester': True,
         'tests': [
           V8Testing,
           Benchmarks,
@@ -565,7 +562,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'enable_swarming': True,
-        'slim_swarming_tester': True,
         'parent_buildername': 'V8 Linux64 - custom snapshot - debug builder',
         'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
         'tests': [Mjsunit],
@@ -631,7 +627,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - builder',
         'enable_swarming': True,
-        'slim_swarming_tester': True,
         'tests': [V8Testing, Test262, Mozilla],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
@@ -669,7 +664,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Win32 - debug builder',
         'enable_swarming': True,
-        'slim_swarming_tester': True,
         'tests': [V8Testing_2, Test262, Mozilla],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
@@ -862,7 +856,6 @@ BUILDERS = {
           Test262Ignition,
         ],
         'enable_swarming': True,
-        'slim_swarming_tester': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'armv7l',
@@ -884,7 +877,6 @@ BUILDERS = {
           SimdJs,
         ],
         'enable_swarming': True,
-        'slim_swarming_tester': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'armv7l',
@@ -1199,7 +1191,6 @@ BUILDERS = {
         'parent_buildername': 'V8 Arm - debug builder',
         'tests': [Mjsunit_2, Webkit],
         'enable_swarming': True,
-        'slim_swarming_tester': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'armv7l',
@@ -1216,7 +1207,6 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux64 - custom snapshot - debug builder',
         'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
         'enable_swarming': True,
-        'slim_swarming_tester': True,
         'tests': [Mjsunit_2],
         'testing': {'platform': 'linux'},
       },
@@ -1889,7 +1879,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'v8_win_rel_ng',
         'enable_swarming': True,
-        'slim_swarming_tester': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -2000,7 +1989,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'v8_win64_rel_ng',
         'enable_swarming': True,
-        'slim_swarming_tester': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
