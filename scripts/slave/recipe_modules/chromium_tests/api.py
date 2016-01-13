@@ -73,7 +73,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     master_dict = self.builders.get(mastername, {})
     return freeze(master_dict.get('builders', {}).get(buildername))
 
-  def _configure_build(self, bot_config, override_bot_type=None):
+  def create_bot_config_object(self, mastername, buildername):
+    return bdb_module.BotConfig(
+        self.builders,
+        [{'mastername': mastername, 'buildername': buildername}])
+
+  def configure_build(self, bot_config, override_bot_type=None):
     # Get the buildspec version. It can be supplied as a build property or as
     # a recipe config value.
     buildspec_version = (self.m.properties.get('buildspec_version') or
@@ -136,13 +141,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             'parent_got_revision', component_rev)
       dep = bot_config.get('set_component_rev')
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
-
-  def configure_build(self, mastername, buildername, override_bot_type=None):
-    self._configure_build(
-        bdb_module.BotConfig(
-            self.builders,
-            [{'mastername': mastername, 'buildername': buildername}]
-        ), override_bot_type)
 
   def ensure_checkout(self, mastername, buildername,
                       root_solution_revision=None):

@@ -215,10 +215,10 @@ def _RunStepsInternal(api):
   builder = api.properties['buildername']
   enable_gpu_tests = builder in CHROMIUM_GPU_DIMENSION_SETS.get(master, {})
 
+  bot_config_object = api.chromium_tests.create_bot_config_object(
+      bot_config['mastername'], bot_config['buildername'])
   api.chromium_tests.configure_build(
-      bot_config['mastername'],
-      bot_config['buildername'],
-      override_bot_type='builder_tester')
+      bot_config_object, override_bot_type='builder_tester')
 
   api.chromium_tests.configure_swarming('chromium', precommit=True)
 

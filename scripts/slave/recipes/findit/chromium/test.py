@@ -146,8 +146,10 @@ def RunSteps(api, target_mastername, target_testername,
                         target_testername)
 
   # Configure to match the compile config on the builder.
+  bot_config = api.chromium_tests.create_bot_config_object(
+      target_mastername, target_buildername)
   api.chromium_tests.configure_build(
-      target_mastername, target_buildername, override_bot_type='builder_tester')
+      bot_config, override_bot_type='builder_tester')
 
   # Configure to match the test config on the tester, as builders don't have the
   # settings for swarming tests.

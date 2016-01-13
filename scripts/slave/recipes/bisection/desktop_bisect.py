@@ -21,7 +21,9 @@ def RunSteps(api):
   buildername = api.properties.get('buildername')
   # TODO(akuegel): Explicitly load the builder configs instead of relying on
   # builder.py from chromium_tests recipe module.
-  api.chromium_tests.configure_build(mastername, buildername)
+  bot_config = api.chromium_tests.create_bot_config_object(
+      mastername, buildername)
+  api.chromium_tests.configure_build(bot_config)
   api.gclient.apply_config('perf')
   update_step, bot_db = \
       api.chromium_tests.prepare_checkout(mastername, buildername)

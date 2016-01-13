@@ -22,7 +22,9 @@ def RunSteps(api):
   buildername = api.m.properties.get('buildername')
   # TODO(akuegel): Explicitly load the configs for the builders and don't rely
   # on builders.py in chromium_tests recipe module.
-  api.m.chromium_tests.configure_build(mastername, buildername)
+  bot_config = api.chromium_tests.create_bot_config_object(
+      mastername, buildername)
+  api.chromium_tests.configure_build(bot_config)
   api.m.chromium_tests.prepare_checkout(mastername, buildername)
   api.auto_bisect.perform_bisect()
 

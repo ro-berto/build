@@ -61,7 +61,9 @@ def RunSteps(api):
     # builders.py entries in chromium_tests.
     mastername = api.properties.get('mastername')
     buildername = api.properties.get('buildername')
-    api.chromium_tests.configure_build(mastername, buildername)
+    bot_config = api.chromium_tests.create_bot_config_object(
+        mastername, buildername)
+    api.chromium_tests.configure_build(bot_config)
     api.chromium_tests.prepare_checkout(mastername, buildername)
     api.auto_bisect.run_bisect_script('dummy_extra_src', '/dummy/path/')
 

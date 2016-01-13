@@ -104,8 +104,10 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
 def RunSteps(api, target_mastername, target_buildername,
              good_revision, bad_revision,
              requested_compile_targets, use_analyze):
+  bot_config = api.chromium_tests.create_bot_config_object(
+      target_mastername, target_buildername)
   api.chromium_tests.configure_build(
-      target_mastername, target_buildername, override_bot_type='builder_tester')
+      bot_config, override_bot_type='builder_tester')
 
   # Sync to bad revision, and retrieve revisions in the regression range.
   api.chromium_tests.prepare_checkout(
