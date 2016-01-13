@@ -48,13 +48,6 @@
       "scheduler": "build",
       "slave_pools": ["trusty_64"],
     },
-    "recipe-simulation_win64": {
-      "auto_reboot": False,
-      "category": "continuous",
-      "recipe": "infra/recipe_simulation",
-      "scheduler": "build",
-      "slave_pools": ["win7_64"],
-    },
   },
 
   "schedulers": {
