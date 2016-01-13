@@ -23,6 +23,7 @@ from master.factory import annotator_factory
 from master.gitiles_poller import GitilesPoller
 from master.skia import status_json
 from master.skia import skia_notifier
+from twisted.python import log
 
 import collections
 import config
@@ -324,6 +325,7 @@ def SetupMaster(ActiveMaster):
 
   if (ActiveMaster.is_production_host and
       ActiveMaster.project_name != 'SkiaInternal'):
+    log.msg('skia_master_utils: Running in production; adding status push.')
     # Build result emails.
     c['status'].append(status_logger.StatusEventLogger())
     c['status'].append(skia_notifier.SkiaMailNotifier(
@@ -343,6 +345,11 @@ def SetupMaster(ActiveMaster):
     # Push status updates to GrandCentral.
     c['status'].append(HttpStatusPush(
         serverUrl='https://grandcentral.skia.org/buildbot'))
+  else:
+    log.msg(('skia_master_utils: Not adding status push '
+             '(is_production_host=%s, project_name=%s)') % (
+                'True' if ActiveMaster.is_production_host else 'False',
+                ActiveMaster.project_name))
 
   c['mergeRequests'] = CanMergeBuildRequests
   return c
