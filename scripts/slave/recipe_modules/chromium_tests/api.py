@@ -181,44 +181,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     else:
       self.m.chromium.runhooks()
 
-  def get_test_spec(self, mastername, buildername):
-    bot_config = self._get_bot_config(mastername, buildername)
-
-    # The official builders specify the test spec using a test_spec property in
-    # the bot_config instead of reading it from a file.
-    if 'test_spec' in bot_config:
-      return { buildername: bot_config['test_spec'] }
-
-    test_spec_file = bot_config.get('testing', {}).get(
-        'test_spec_file', '%s.json' % mastername)
-
-    # TODO(phajdan.jr): Bots should have no generators instead.
-    if bot_config.get('disable_tests'):
-      return {}
-    return self.read_test_spec(self.m, test_spec_file)
-
-  def _get_master_dict_with_dynamic_tests(
-      self, mastername, buildername, test_spec, scripts_compile_targets):
-    # We manually thaw the path to the elements we are modifying, since the
-    # builders are frozen.
-    master_dict = dict(self.builders[mastername])
-    builders = master_dict['builders'] = dict(master_dict['builders'])
-    bot_config = builders[buildername]
-    for loop_buildername in builders:
-      builder_dict = builders[loop_buildername] = (
-          dict(builders[loop_buildername]))
-      builders[loop_buildername]['tests'] = (
-          self.generate_tests_from_test_spec(
-              self.m, test_spec, builder_dict, loop_buildername, mastername,
-              # TODO(phajdan.jr): Get enable_swarming value from builder_dict.
-              # Above should remove the need to get bot_config and buildername
-              # in this method.
-              bot_config.get('enable_swarming', False),
-              scripts_compile_targets, builder_dict.get('test_generators', [])
-          ))
-
-    return freeze(master_dict)
-
+  # TODO(phajdan.jr): remove create_bot_db_from_master_dict. It adds another
+  # entry point to _add_master_dict_and_test_spec which can really complicate
+  # things.
   def create_bot_db_from_master_dict(self, mastername, master_dict):
     bot_db = bdb_module.BotConfigAndTestDB()
     bot_db._add_master_dict_and_test_spec(mastername, master_dict, {})
@@ -242,24 +207,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.set_up_swarming(mastername, buildername)
     self.runhooks(update_step)
 
-    test_spec = self.get_test_spec(mastername, buildername)
-
-    # TODO(phajdan.jr): Bots should have no generators instead.
-    if bot_config.get('disable_tests'):
-      scripts_compile_targets = {}
-    else:
-      scripts_compile_targets = \
-          self.get_compile_targets_for_scripts().json.output
-
-    master_dict = self._get_master_dict_with_dynamic_tests(
-        mastername, buildername, test_spec, scripts_compile_targets)
+    bot_db = bdb_module.BotConfigAndTestDB()
+    bot_config_object = self.create_bot_config_object(mastername, buildername)
+    bot_config_object.initialize_bot_db(self, bot_db)
 
     if self.m.chromium.c.lto and \
         not self.m.chromium.c.env.LLVM_FORCE_HEAD_REVISION:
       self.m.chromium.download_lto_plugin()
-
-    bot_db = bdb_module.BotConfigAndTestDB()
-    bot_db._add_master_dict_and_test_spec(mastername, master_dict, test_spec)
 
     return update_step, bot_db
 

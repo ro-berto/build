@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.types import freeze
+
 
 class BotConfig(object):
   """Wrapper that allows combining several compatible bot configs."""
@@ -22,9 +24,12 @@ class BotConfig(object):
               name, self._bot_ids[0], result, bot_id, other_result))
     return result
 
-  def _get(self, bot_id, name, default=None):
+  def _get_bot_config(self, bot_id):
     return self._bots_dict.get(bot_id['mastername'], {}).get(
-        'builders', {}).get(bot_id['buildername'], {}).get(name, default)
+        'builders', {}).get(bot_id['buildername'], {})
+
+  def _get(self, bot_id, name, default=None):
+    return self._get_bot_config(bot_id).get(name, default)
 
   def get(self, name, default=None):
     return self._consistent_get(self._get, name, default)
@@ -35,6 +40,66 @@ class BotConfig(object):
 
   def get_master_setting(self, name, default=None):
     return self._consistent_get(self._get_master_setting, name, default)
+
+  def _get_test_spec(self, chromium_tests_api):
+    # TODO(phajdan.jr): Make test specs work for more than 1 bot.
+    assert len(self._bot_ids) == 1
+
+    bot_config = self._get_bot_config(self._bot_ids[0])
+    mastername = self._bot_ids[0]['mastername']
+    buildername = self._bot_ids[0]['buildername']
+
+    # The official builders specify the test spec using a test_spec property in
+    # the bot_config instead of reading it from a file.
+    if 'test_spec' in bot_config:
+      return { buildername: bot_config['test_spec'] }
+
+    test_spec_file = bot_config.get('testing', {}).get(
+        'test_spec_file', '%s.json' % mastername)
+
+    # TODO(phajdan.jr): Bots should have no generators instead.
+    if bot_config.get('disable_tests'):
+      return {}
+    return chromium_tests_api.read_test_spec(chromium_tests_api.m, test_spec_file)
+
+  def initialize_bot_db(self, chromium_tests_api, bot_db):
+    # TODO(phajdan.jr): Make this work for more than 1 bot.
+    assert len(self._bot_ids) == 1
+
+    bot_config = self._get_bot_config(self._bot_ids[0])
+    mastername = self._bot_ids[0]['mastername']
+    buildername = self._bot_ids[0]['buildername']
+
+    test_spec = self._get_test_spec(chromium_tests_api)
+
+    # TODO(phajdan.jr): Bots should have no generators instead.
+    if bot_config.get('disable_tests'):
+      scripts_compile_targets = {}
+    else:
+      scripts_compile_targets = \
+          chromium_tests_api.get_compile_targets_for_scripts().json.output
+
+    # We manually thaw the path to the elements we are modifying, since the
+    # builders are frozen.
+    master_dict = dict(self._bots_dict[mastername])
+    builders = master_dict['builders'] = dict(master_dict['builders'])
+    bot_config = builders[buildername]
+    for loop_buildername in builders:
+      builder_dict = builders[loop_buildername] = (
+          dict(builders[loop_buildername]))
+      builders[loop_buildername]['tests'] = (
+          chromium_tests_api.generate_tests_from_test_spec(
+              chromium_tests_api.m, test_spec, builder_dict,
+              loop_buildername, mastername,
+              # TODO(phajdan.jr): Get enable_swarming value from builder_dict.
+              # Above should remove the need to get bot_config and buildername
+              # in this method.
+              bot_config.get('enable_swarming', False),
+              scripts_compile_targets, builder_dict.get('test_generators', [])
+          ))
+
+    bot_db._add_master_dict_and_test_spec(
+        mastername, freeze(master_dict), freeze(test_spec))
 
 
 class BotConfigAndTestDB(object):
