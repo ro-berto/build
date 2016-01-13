@@ -1574,11 +1574,17 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'tests': [
           V8Testing,
           SimdJs,
         ],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'pool': 'V8-AVX2',
+          'gpu': '102b',
+        },
       },
       'v8_linux_nodcheck_rel': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'no_dcheck'],
@@ -1700,11 +1706,17 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'tests': [
           V8Testing,
           SimdJs,
         ],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'pool': 'V8-AVX2',
+          'gpu': '102b',
+        },
       },
       'v8_linux64_avx2_dbg': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
@@ -1713,11 +1725,17 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'tests': [
           V8Testing,
           SimdJs,
         ],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'pool': 'V8-AVX2',
+          'gpu': '102b',
+        },
       },
       'v8_linux64_greedy_allocator_dbg': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
