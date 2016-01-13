@@ -103,7 +103,7 @@ class PerfRevisionState(revision_state.RevisionState):
       if (self.patch_file != '/dev/null' and
           'TESTING_SLAVENAME' not in os.environ):
         try:
-          api.m.step('cleaning up patch', ['rm', self.patch_file])
+          api.m.file.remove('cleaning up patch', self.patch_file)
         except api.m.step.StepFailure:  # pragma: no cover
           print 'Could not clean up ' + self.patch_file
 
