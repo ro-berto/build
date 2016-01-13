@@ -912,8 +912,11 @@ def main_ninja(options, args):
         # For Linux, we also would like to use 10 * cpu. However, not sure
         # backend resource is enough, so let me set Linux and Linux x64 builder
         # only for now.
+        # Also increasing cpus for v8/blink trybots.
         hostname = goma_utils.GetShortHostname()
-        if hostname in ['build14-m1', 'build48-m1']:
+        if hostname in (
+            ['build14-m1', 'build48-m1'] +
+            ['build%d-m4' % x for x in xrange(45, 48)]):
           return min(10 * number_of_processors, 200)
 
         return 50
