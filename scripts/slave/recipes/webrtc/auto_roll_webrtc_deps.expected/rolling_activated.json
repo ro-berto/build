@@ -3,6 +3,22 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILD]/scripts/tools/pycurl.py",
+      "https://webrtc-roll-cr-rev-status.appspot.com/status"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "check roll status",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Rolling activated@@@",
+      "@@@STEP_LOG_LINE@stdout@1@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
