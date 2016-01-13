@@ -378,17 +378,21 @@ def generate_gtest(api, mastername, buildername, test_spec,
         swarming_shards = swarming_spec.get('shards', 1)
         swarming_dimension_sets = swarming_spec.get('dimension_sets')
     override_compile_targets = test.get('override_compile_targets', None)
+    target_name = str(test['test'])
+    name = str(test.get('name', target_name))
     if use_swarming and swarming_dimension_sets:
       for dimensions in swarming_dimension_sets:
         # Yield potentially multiple invocations of the same test, on
         # different machine configurations.
-        yield GTestTest(str(test['test']), args=args, flakiness_dash=True,
+        yield GTestTest(name, args=args, target_name=target_name,
+                        flakiness_dash=True,
                         enable_swarming=True,
                         swarming_shards=swarming_shards,
                         swarming_dimensions=dimensions,
                         override_compile_targets=override_compile_targets)
     else:
-      yield GTestTest(str(test['test']), args=args, flakiness_dash=True,
+      yield GTestTest(name, args=args, target_name=target_name,
+                      flakiness_dash=True,
                       enable_swarming=use_swarming,
                       swarming_shards=swarming_shards,
                       override_compile_targets=override_compile_targets)
