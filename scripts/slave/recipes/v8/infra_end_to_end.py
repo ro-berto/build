@@ -31,6 +31,8 @@ TESTS = [
       'parent_buildername': 'V8 Linux - nosnap builder',
       'git_revision': 'c08e952566c3923f8fcbd693dae05f8eae73938b',
       'parent_got_revision': 'c08e952566c3923f8fcbd693dae05f8eae73938b',
+      'parent_got_swarming_client_revision':
+          'df99a00d96fae932bae824dccba13156bf7eddd0',
       'buildnumber': 5472,
       'slavename': 'slave4-c3',
       'swarm_hashes': {
