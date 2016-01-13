@@ -25,8 +25,7 @@ def RunSteps(api):
       mastername, buildername)
   api.chromium_tests.configure_build(bot_config)
   api.gclient.apply_config('perf')
-  update_step, bot_db = \
-      api.chromium_tests.prepare_checkout(mastername, buildername)
+  update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
   api.auto_bisect.start_try_job(api, update_step=update_step,
                                 bot_db=bot_db)
 

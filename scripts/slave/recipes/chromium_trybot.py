@@ -232,10 +232,8 @@ def _RunStepsInternal(api):
                     'Please re-create the CL using fresh checkout after '
                     'the blink merge.')
 
-  bot_update_step, bot_db = \
-      api.chromium_tests.prepare_checkout(
-          bot_config['mastername'],
-          bot_config['buildername'])
+  bot_update_step, bot_db = api.chromium_tests.prepare_checkout(
+      bot_config_object)
 
   tests = list(api.chromium_tests.tests_for_builder(
       bot_config['mastername'],

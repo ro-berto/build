@@ -25,7 +25,7 @@ def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object(
       mastername, buildername)
   api.chromium_tests.configure_build(bot_config)
-  api.m.chromium_tests.prepare_checkout(mastername, buildername)
+  api.m.chromium_tests.prepare_checkout(bot_config)
   api.auto_bisect.perform_bisect()
 
 def GenTests(api):

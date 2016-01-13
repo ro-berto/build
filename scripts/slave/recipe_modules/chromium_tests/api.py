@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import ast
 import collections
 import contextlib
 import copy
@@ -17,9 +16,6 @@ from . import bot_config_and_test_db as bdb_module
 from . import builders
 from . import steps
 from . import trybots
-
-
-MB_CONFIG_FILENAME = ['tools', 'mb', 'mb_config.pyl']
 
 
 # Paths which affect recipe config and behavior in a way that survives
@@ -68,10 +64,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def add_builders(self, builders):
     """Adds builders to our builder map"""
     self._builders.update(builders)
-
-  def _get_bot_config(self, mastername, buildername):
-    master_dict = self.builders.get(mastername, {})
-    return freeze(master_dict.get('builders', {}).get(buildername))
 
   def create_bot_config_object(self, mastername, buildername):
     return bdb_module.BotConfig(
@@ -142,10 +134,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       dep = bot_config.get('set_component_rev')
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
-  def ensure_checkout(self, mastername, buildername,
-                      root_solution_revision=None):
-    bot_config = self._get_bot_config(mastername, buildername)
-
+  def ensure_checkout(self, bot_config, root_solution_revision=None):
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
 
@@ -160,15 +149,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return update_step
 
-  def set_up_swarming(self, mastername, buildername):
-    bot_config = self._get_bot_config(mastername, buildername)
-
-    enable_swarming = bot_config.get('enable_swarming')
-    if enable_swarming:
-      self.m.isolate.set_isolate_environment(self.m.chromium.c)
-      self.m.swarming.check_client_version()
-      for key, value in bot_config.get('swarming_dimensions', {}).iteritems():
-        self.m.swarming.set_default_dimension(key, value)
+  def set_up_swarming(self, bot_config):
+    if not bot_config.get('enable_swarming'):
+      return
+    self.m.isolate.set_isolate_environment(self.m.chromium.c)
+    self.m.swarming.check_client_version()
+    for key, value in bot_config.get('swarming_dimensions', {}).iteritems():
+      self.m.swarming.set_default_dimension(key, value)
 
   def runhooks(self, update_step):
     if self.m.tryserver.is_tryserver:
@@ -189,27 +176,22 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot_db._add_master_dict_and_test_spec(mastername, master_dict, {})
     return bot_db
 
-  def prepare_checkout(self, mastername, buildername,
-                       root_solution_revision=None):
-    bot_config = self._get_bot_config(mastername, buildername)
+  def prepare_checkout(self, bot_config, root_solution_revision=None):
+    update_step = self.ensure_checkout(bot_config, root_solution_revision)
 
-    update_step = self.ensure_checkout(mastername, buildername,
-                                       root_solution_revision)
     # TODO(robertocn): Remove this hack by the end of Q1/2016.
-    if (mastername == 'tryserver.chromium.perf'
-        and bot_config.get('bot_type') == 'builder'
-        and buildername.endswith('builder')):
-      force_legacy_compile = self.should_force_legacy_compiling(
-          mastername, buildername)
-      if force_legacy_compile:
+    if (bot_config.matches_any_bot_id(
+            lambda bot_id: bot_id['mastername'] == 'tryserver.chromium.perf' and
+                           bot_id['buildername'].endswith('builder'))
+        and bot_config.get('bot_type') == 'builder'):
+      if bot_config.should_force_legacy_compiling(self):
         self.m.chromium.c.project_generator.tool = 'gyp'
 
-    self.set_up_swarming(mastername, buildername)
+    self.set_up_swarming(bot_config)
     self.runhooks(update_step)
 
     bot_db = bdb_module.BotConfigAndTestDB()
-    bot_config_object = self.create_bot_config_object(mastername, buildername)
-    bot_config_object.initialize_bot_db(self, bot_db)
+    bot_config.initialize_bot_db(self, bot_db)
 
     if self.m.chromium.c.lto and \
         not self.m.chromium.c.env.LLVM_FORCE_HEAD_REVISION:
@@ -828,36 +810,3 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             '--',
         ] + self.get_common_args_for_scripts(),
         step_test_data=lambda: self.m.json.test_api.output({}))
-
-  def should_force_legacy_compiling(self, master, builder):
-    """Determines if a given chromium revision needs to be built with gyp.
-
-    This is done by checking the contents of tools/mb/mb_config.pyl at the rev.
-
-    Args:
-      master (str): The master name used as a key on mb_config.pyl
-      builder (str): The builder name used as a key on mb_config.pyl
-
-    Returns:
-      True if the revision occurred before the changeover from GYP to MP.
-    """
-    try:
-      config_pyl = self.m.file.read(
-          'Reading MB config',
-          self.m.path['checkout'].join(*MB_CONFIG_FILENAME),
-          test_data=('{\'masters\': {'
-                     '\'tryserver.chromium.perf\': {'
-                     '\'linux_perf_bisect_builder\':'
-                     '\'gyp_something_something\'}}}'))
-      config = ast.literal_eval(config_pyl or '{}')
-      _ = config['masters'][master][builder]
-      result_text = 'MB is enabled for this builder at this revision.'
-      log_name = 'Builder MB-ready'
-      self.m.step.active_result.presentation.logs[log_name] = [result_text]
-      return False
-    except (self.m.step.StepFailure, KeyError):
-      result_text = 'MB is not enabled for this builder at this revision.'
-      log_name = 'Builder NOT MB-ready'
-      self.m.step.active_result.presentation.logs[log_name] = [result_text]
-      self.m.step.active_result.presentation.status = self.m.step.WARNING
-      return True

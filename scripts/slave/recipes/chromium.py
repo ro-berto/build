@@ -53,8 +53,7 @@ def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object(
       mastername, buildername)
   api.chromium_tests.configure_build(bot_config)
-  update_step, bot_db = \
-      api.chromium_tests.prepare_checkout(mastername, buildername)
+  update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
   api.chromium_tests.compile(mastername, buildername, update_step, bot_db)
   api.chromium_tests.download_and_unzip_build(mastername, buildername,
                                               update_step, bot_db)

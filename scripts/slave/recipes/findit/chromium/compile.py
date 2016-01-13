@@ -50,10 +50,11 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
                              revision, compile_targets, use_analyze):
   with api.step.nest('test %s' % str(revision)):
     # Checkout code at the given revision to recompile.
+    bot_config = api.chromium_tests.create_bot_config_object(
+        target_mastername, target_buildername)
     bot_update_step, bot_db = \
         api.chromium_tests.prepare_checkout(
-            target_mastername,
-            target_buildername,
+            bot_config,
             root_solution_revision=revision)
 
     # TODO(http://crbug.com/560991): if compile targets are provided, check
@@ -111,7 +112,7 @@ def RunSteps(api, target_mastername, target_buildername,
 
   # Sync to bad revision, and retrieve revisions in the regression range.
   api.chromium_tests.prepare_checkout(
-      target_mastername, target_buildername,
+      bot_config,
       root_solution_revision=bad_revision)
   revisions_to_check = api.findit.revisions_between(good_revision, bad_revision)
 
