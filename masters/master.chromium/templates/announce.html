@@ -266,6 +266,7 @@
             c.lkgr = '';
             c.gpu = '';
             c.gpu_fyi = '';
+            c.webkit = '';
 
             c.status = '../chromium';
             c.status_win = '../chromium.win';
@@ -279,6 +280,7 @@
             c.status_lkgr = '../chromium.lkgr';
             c.status_gpu = '../chromium.gpu';
             c.status_gpu_fyi = '../chromium.gpu.fyi';
+            c.status_webkit = '../chromium.webkit';
 
             /**
              * Builds a reference for the iframe with boxes.
@@ -331,6 +333,7 @@
               ]
             );
             c.bar_gpu_fyi = BarUrl('chromium.gpu.fyi');
+            c.bar_webkit = BarUrl('chromium.webkit');
 
 
             /**
@@ -462,7 +465,9 @@
                           reflect which ones are tree closers.
                           crbug.com/372576 */
                        HTMLBaseBar(c.status_gpu, c.bar_gpu_closers, c.gpu,
-                                   'GPU', 'colspan=3')))))));
+                                   'GPU', 'colspan=3')) +
+                    tr(HTMLBaseBar(c.status_webkit, c.bar_webkit, c.webkit,
+                                  'Webkit', 'colspan=6')))))));
 
             document.write(tr(
                 HTMLBaseBar(c.status_perf, c.bar_perf, c.perf,
