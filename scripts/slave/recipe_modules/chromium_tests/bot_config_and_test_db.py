@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import ast
+import copy
 
 from recipe_engine.types import freeze
 
@@ -30,6 +31,8 @@ class BotConfig(object):
     return result
 
   def _get_bot_config(self, bot_id):
+    # WARNING: This doesn't take into account dynamic
+    # tests from test spec etc. If you need that, please use bot_db.
     return self._bots_dict.get(bot_id['mastername'], {}).get(
         'builders', {}).get(bot_id['buildername'], {})
 
@@ -137,6 +140,42 @@ class BotConfig(object):
       p.logs[log_name] = [result_text]
       p.status = chromium_tests_api.m.step.WARNING
       return True
+
+  def get_compile_targets_and_tests(
+      self, chromium_tests_api, bot_db, override_bot_type=None,
+      override_tests=None):
+    bot_type = override_bot_type or self.get('bot_type', 'builder_tester')
+    if bot_type not in ['builder', 'builder_tester']:
+      return [], []
+
+    if override_tests:
+      tests = override_tests
+    else:
+      tests = []
+      for bot_id in self._bot_ids:
+        bot_config = bot_db.get_bot_config(
+            bot_id['mastername'], bot_id['buildername'])
+        tests.extend([copy.deepcopy(t) for t in bot_config.get('tests', [])])
+
+    compile_targets = set()
+    tests_including_triggered = list(tests)
+    for bot_id in self._bot_ids:
+      bot_config = bot_db.get_bot_config(
+          bot_id['mastername'], bot_id['buildername'])
+      compile_targets.update(set(bot_config.get('compile_targets', [])))
+      compile_targets.update(bot_db.get_test_spec(
+          bot_id['mastername'], bot_id['buildername']).get(
+              'additional_compile_targets', []))
+
+      for _, test_bot in bot_db.bot_configs_matching_parent_buildername(
+          bot_id['mastername'], bot_id['buildername']):
+        tests_including_triggered.extend(test_bot.get('tests', []))
+
+    if self.get('add_tests_as_compile_targets', True):
+      for t in tests_including_triggered:
+        compile_targets.update(t.compile_targets(chromium_tests_api.m))
+
+    return sorted(compile_targets), tests_including_triggered
 
   def matches_any_bot_id(self, fun):
     return any(fun(bot_id) for bot_id in self._bot_ids)

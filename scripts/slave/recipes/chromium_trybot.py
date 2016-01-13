@@ -294,8 +294,7 @@ def _RunStepsInternal(api):
 
   compile_targets, tests_including_triggered = \
       api.chromium_tests.get_compile_targets_and_tests(
-          bot_config['mastername'],
-          bot_config['buildername'],
+          bot_config_object,
           bot_db,
           override_bot_type='builder_tester',
           override_tests=tests)
@@ -340,8 +339,7 @@ def _RunStepsInternal(api):
       compile_targets = sorted(set(compile_targets))
 
     api.chromium_tests.compile_specific_targets(
-        bot_config['mastername'],
-        bot_config['buildername'],
+        bot_config_object,
         bot_update_step,
         bot_db,
         compile_targets,

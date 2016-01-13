@@ -161,9 +161,11 @@ class PerfTryJobApi(recipe_api.RecipeApi):
 
   def _compile(self, name, mastername, buildername, update_step, bot_db):
     """Runs compile and related steps for given builder."""
+    # TODO(phajdan.jr): Change this method to take bot_config as parameter.
+    bot_config = self.m.chromium_tests.create_bot_config_object(
+        mastername, buildername)
     compile_targets, _ = self.m.chromium_tests.get_compile_targets_and_tests(
-        mastername,
-        buildername,
+        bot_config,
         bot_db,
         override_bot_type='builder_tester',
         override_tests=[])

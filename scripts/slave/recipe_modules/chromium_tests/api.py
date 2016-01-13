@@ -275,7 +275,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return test_runner
 
   def get_compile_targets_and_tests(
-      self, mastername, buildername, bot_db,
+      self, bot_config, bot_db,
       override_bot_type=None, override_tests=None):
     """Returns a tuple: list of compile targets and list of tests.
 
@@ -283,37 +283,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
         "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
-    bot_config = bot_db.get_bot_config(mastername, buildername)
-    bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
 
-    tests = [copy.deepcopy(t) for t in bot_config.get('tests', [])]
-    if override_tests is not None:
-      tests = override_tests
-
-    if bot_type not in ['builder', 'builder_tester']:
-      return [], []
-
-    compile_targets = set(bot_config.get('compile_targets', []))
-    tests_including_triggered = list(tests)
-    for _, test_bot in bot_db.bot_configs_matching_parent_buildername(
-        mastername, buildername):
-      tests_including_triggered.extend(test_bot.get('tests', []))
-
-    if bot_config.get('add_tests_as_compile_targets', True):
-      for t in tests_including_triggered:
-        compile_targets.update(t.compile_targets(self.m))
+    compile_targets, tests = bot_config.get_compile_targets_and_tests(
+        self, bot_db, override_bot_type, override_tests)
 
     # Only add crash_service when we have explicit compile targets.
+    compile_targets = set(compile_targets)
     if (self.m.platform.is_win and
         compile_targets and
         'all' not in compile_targets):
       compile_targets.add('crash_service')
 
-    # Lastly, add any targets the checkout-side test spec told us to use.
-    compile_targets.update(bot_db.get_test_spec(mastername, buildername).get(
-        'additional_compile_targets', []))
-
-    return sorted(compile_targets), tests_including_triggered
+    return sorted(compile_targets), tests
 
   def transient_check(self, update_step, command):
     """Runs command, checking for transience if this is a try job.
@@ -334,23 +315,20 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       command(lambda name: name)
 
 
-  def compile(self, mastername, buildername, update_step, bot_db,
+  def compile(self, bot_config, update_step, bot_db,
               mb_mastername=None, mb_buildername=None):
     """Runs compile and related steps for given builder."""
     assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
         "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
-    compile_targets, tests_including_triggered = \
-        self.get_compile_targets_and_tests(
-            mastername,
-            buildername,
-            bot_db)
+    compile_targets, tests = self.get_compile_targets_and_tests(
+        bot_config, bot_db)
     self.compile_specific_targets(
-        mastername, buildername, update_step, bot_db,
-        compile_targets, tests_including_triggered,
+        bot_config, update_step, bot_db,
+        compile_targets, tests,
         mb_mastername=mb_mastername, mb_buildername=mb_buildername)
 
   def compile_specific_targets(
-      self, mastername, buildername, update_step, bot_db,
+      self, bot_config, update_step, bot_db,
       compile_targets, tests_including_triggered,
       mb_mastername=None, mb_buildername=None, override_bot_type=None):
     """Runs compile and related steps for given builder.
@@ -371,8 +349,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
         "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
-    bot_config = bot_db.get_bot_config(mastername, buildername)
-    master_config = bot_db.get_master_settings(mastername)
     bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
 
     self.m.chromium.cleanup_temp()
@@ -413,7 +389,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             verbose=True,
             set_swarm_hashes=False)
 
-    if bot_type == 'builder':
+  def archive_build(self, mastername, buildername, update_step, bot_db):
+    bot_config = bot_db.get_bot_config(mastername, buildername)
+
+    if bot_config.get('bot_type') == 'builder':
       if (mastername == 'chromium.linux' and
           self.m.chromium.c.TARGET_PLATFORM != 'android'):
         # TODO(samuong): This is restricted to Linux for now until I have more
@@ -437,6 +416,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             fixed_staging_dir=bot_config.get('fixed_staging_dir', False),
         )
       else:
+        master_config = bot_db.get_master_settings(mastername)
         build_revision = update_step.presentation.properties['got_revision']
         self.m.archive.zip_and_upload_build(
             'package build',

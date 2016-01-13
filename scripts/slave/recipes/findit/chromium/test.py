@@ -87,8 +87,7 @@ def _compile_and_test_at_revision(api, target_mastername, target_buildername,
 
     if compile_targets:
       api.chromium_tests.compile_specific_targets(
-          target_mastername,
-          target_buildername,
+          bot_config,
           bot_update_step,
           bot_db,
           compile_targets,

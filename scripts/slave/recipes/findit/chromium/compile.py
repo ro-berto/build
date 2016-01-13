@@ -63,8 +63,7 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
     compile_targets = sorted(set(compile_targets or []))
     if not compile_targets:
       compile_targets, _ = api.chromium_tests.get_compile_targets_and_tests(
-          target_mastername,
-          target_buildername,
+          bot_config,
           bot_db,
           override_bot_type='builder_tester')
 
@@ -86,8 +85,7 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
 
     try:
       api.chromium_tests.compile_specific_targets(
-          target_mastername,
-          target_buildername,
+          bot_config,
           bot_update_step,
           bot_db,
           compile_targets,
