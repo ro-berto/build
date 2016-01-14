@@ -6,6 +6,7 @@ import argparse
 import collections
 import datetime
 import math
+import random
 import re
 import urllib
 
@@ -127,6 +128,26 @@ class V8Api(recipe_api.RecipeApi):
     if self._isolated_tests_override is not None:  # pragma: no cover
       return self._isolated_tests_override
     return self.m.isolate.isolated_tests
+
+  def testing_random_seed(self):
+    """Return a random seed suitable for v8 testing.
+
+    If there are isolate hashes, build a random seed based on the hashes.
+    Otherwise use the system's PRNG. This uses a deterministic seed for
+    recipe simulation.
+    """
+    r = random.Random()
+    if self.isolated_tests:
+      r.seed(tuple(self.isolated_tests))
+    elif self._test_data.enabled:
+      r.seed(12345)
+
+    seed = 0
+    while not seed:
+      # Avoid 0 because v8 switches off usage of random seeds when
+      # passing 0 and creates a new one.
+      seed = r.randint(-2147483648, 2147483647)
+    return seed
 
   def set_bot_config(self, bot_config):
     """Set bot configuration for testing only."""
@@ -803,6 +824,10 @@ class V8Api(recipe_api.RecipeApi):
       '--buildbot',
       '--timeout=200',
     ]
+
+    # On reruns, there's a fixed random seed set in the test configuration.
+    if '--random-seed' not in test.get('test_args', []):
+      full_args.append('--random-seed=%d' % self.testing_random_seed())
 
     # Either run tests as specified by the filter (trybots only) or as
     # specified by the test configuration.

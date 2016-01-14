@@ -122,6 +122,7 @@
       "out",
       "--buildbot",
       "--timeout=200",
+      "--random-seed=-358114921",
       "bot_default",
       "--exhaustive-variants",
       "--gcov-coverage",

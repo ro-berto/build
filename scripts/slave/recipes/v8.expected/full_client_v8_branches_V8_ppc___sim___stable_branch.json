@@ -133,6 +133,7 @@
       "out",
       "--buildbot",
       "--timeout=200",
+      "--random-seed=-358114921",
       "unittests",
       "--exhaustive-variants",
       "--rerun-failures-count=2",

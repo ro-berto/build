@@ -232,6 +232,7 @@
       "out",
       "--buildbot",
       "--timeout=200",
+      "--random-seed=-976563914",
       "bot_default",
       "--exhaustive-variants",
       "--rerun-failures-count=2",

@@ -208,7 +208,7 @@ class V8Test(BaseTest):
     isolated_target = orig_config.get(
         'isolated_target', orig_config['tests'][0])
 
-    # Filter variant manipulation and from test arguments.
+    # Filter variant manipulation from test arguments.
     # We'll specify exactly the variant which failed.
     orig_args = [x for x in orig_config.get('test_args', [])
                  if x != '--no-variants']
