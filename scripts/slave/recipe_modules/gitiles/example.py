@@ -11,8 +11,9 @@ DEPS = [
 def RunSteps(api):
   url = 'https://chromium.googlesource.com/chromium/src'
   for ref in api.gitiles.refs(url):
-    api.gitiles.log(url, ref)
-  api.gitiles.log_with_props(url, 'HEAD')
+    _, cursor = api.gitiles.log(url, ref)
+    if cursor:
+      api.gitiles.log(url, ref, limit=10, cursor=cursor)
   api.gitiles.commit_log(url, api.properties['commit_log_hash'])
 
   data = api.gitiles.download_file(url, 'OWNERS')
@@ -31,20 +32,20 @@ def GenTests(api):
       'refs/tags/B',
     ))
     + api.step_data(
-      'log: HEAD',
+      'gitiles log: HEAD',
+      api.gitiles.make_log_test_data('HEAD', cursor='deadbeaf'),
+    )
+    + api.step_data(
+      'gitiles log: HEAD from deadbeaf',
       api.gitiles.make_log_test_data('HEAD'),
     )
     + api.step_data(
-      'log: refs/heads/A',
+      'gitiles log: refs/heads/A',
       api.gitiles.make_log_test_data('A'),
     )
     + api.step_data(
-      'log: refs/tags/B',
+      'gitiles log: refs/tags/B',
       api.gitiles.make_log_test_data('B')
-    )
-    + api.step_data(
-      'log with properties: HEAD',
-      api.gitiles.make_log_with_props_test_data('HEAD'),
     )
     + api.step_data(
       'commit log: %s' % (api.gitiles.make_hash('commit')),

@@ -14,20 +14,8 @@ class GitilesTestApi(recipe_test_api.RecipeTestApi):
   def make_refs_test_data(self, *refs):
     return self._make_gitiles_response_json({ref: None for ref in refs})
 
-  def make_log_test_data(self, s, n=3):
-    return self._make_gitiles_response_json({
-      'log': [
-        {
-          'commit': 'fake %s hash %d' % (s, i),
-          'author': {
-            'email': 'fake %s email %d' % (s, i),
-          },
-        } for i in xrange(n)
-      ],
-    })
-
-  def make_log_with_props_test_data(self, s, n=3):
-    return self._make_gitiles_response_json({
+  def make_log_test_data(self, s, n=3, cursor=None):
+    result = {
       'log': [
         self.make_commit_gitiles_dict(
             commit='fake %s hash %d' % (s, i),
@@ -37,7 +25,10 @@ class GitilesTestApi(recipe_test_api.RecipeTestApi):
         )
         for i in xrange(n)
       ],
-    })
+    }
+    if cursor:
+      result['next'] = cursor
+    return self._make_gitiles_response_json(result)
 
   def make_commit_test_data(self, commit, msg, new_files=None, email=None):
     """Constructs fake Gitiles commit JSON test output.

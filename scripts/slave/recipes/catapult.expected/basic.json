@@ -67,7 +67,9 @@
       "--json-file",
       "/path/to/tmp/json",
       "--url",
-      "https://chromium.googlesource.com/infra/infra/+/f849aad85ac3589c931197bff861faf0e2ef0ece/bootstrap/get_appengine.py?format=text"
+      "https://chromium.googlesource.com/infra/infra/+/f849aad85ac3589c931197bff861faf0e2ef0ece/bootstrap/get_appengine.py",
+      "--format",
+      "text"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Fetch SDK downloader"

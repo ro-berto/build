@@ -23,15 +23,23 @@ from common import find_depot_tools
 from gerrit_util import CreateHttpConn, ReadHttpResponse, ReadHttpJsonResponse
 
 
-class Error(Exception):
-  pass
+def reparse_url(parsed_url, qdict):
+  return urlparse.ParseResult(
+      scheme=parsed_url.scheme,
+      netloc=parsed_url.netloc,
+      path=parsed_url.path,
+      params=parsed_url.params,
+      fragment=parsed_url.fragment,
+      query=urllib.urlencode(qdict),
+  )
 
 
 def gitiles_get(parsed_url, handler, attempts):
+  # This insanity is due to CreateHttpConn interface :(
   host = parsed_url.netloc
   path = parsed_url.path
   if parsed_url.query:
-    path += '?%s' % (parsed_url.query,)
+    path += '?%s' % (parsed_url.query, )
 
   retry_delay_seconds = 1
   attempt = 1
@@ -51,29 +59,49 @@ def gitiles_get(parsed_url, handler, attempts):
     attempt += 1
 
 
-def main(args):
+def fetch_log_with_paging(qdict, limit, fetch):
+  # Log api returns {'log':[list of commits], 'next': hash}.
+  last_result = fetch(qdict)
+  commits = last_result['log']
+  while last_result.get('next') and len(commits) < limit:
+    qdict['s'] = last_result.get('next')
+    last_result = fetch(qdict)
+    # The first commit in `last_result` is not necessarily the parent of the
+    # last commit in result so far!  This is because log command can be done on
+    # one file object (for example,
+    # https://gerrit.googlesource.com/gitiles/+log/1c21279f337da813062950959ac3d39d262883ae/COPYING)
+    # Even when getting log for the whole repository, there could be merge
+    # commits.
+    commits.extend(last_result['log'])
+  # Use 'next' field (if any) from last_result, but commits aggregated from
+  # all the results. This essentially imitates paging with at least
+  # `limit` page size.
+  last_result['log'] = commits
+  logging.debug('fetched %d commits, next: %s.', len(commits), last_result.get('next'))
+  return last_result
+
+def main(arguments):
+  parser = create_argparser()
+  args = parser.parse_args(arguments)
+
   parsed_url = urlparse.urlparse(args.url)
   if not parsed_url.scheme.startswith('http'):
-    raise Error('Invalid URI scheme (expected http or https): %s' % args.url)
+    parser.error('Invalid URI scheme (expected http or https): %s' % args.url)
 
-  # Force the format specified on command-line.
   qdict = {}
   if parsed_url.query:
     qdict.update(urlparse.parse_qs(parsed_url.query))
-
-  f = qdict.get('format')
-  if f:
-    # Load the latest format specification.
-    f = f[-1]
-  else:
-    # Default to JSON.
-    f = 'json'
+  # Force the format specified on command-line.
+  if qdict.get('format'):
+    parser.error('URL must not contain format; use --format command line flag '
+                 'instead.')
+  qdict['format'] = args.format
 
   # Choose handler.
-  if f == 'json':
+  if args.format == 'json':
     def handler(conn):
       return ReadHttpJsonResponse(conn)
-  elif f == 'text':
+  elif args.format == 'text':
     # Text fetching will pack the text into structured JSON.
     def handler(conn):
       result = ReadHttpResponse(conn).read()
@@ -83,28 +111,60 @@ def main(args):
       return {
         'value': result,
       }
-  else:
-    raise ValueError('Unknown format: %s' % (f,))
 
-  result = gitiles_get(parsed_url, handler, args.attempts)
-  if not args.quiet:
-    logging.info('Read from %s: %s', parsed_url.geturl(), result)
+  if args.log_start:
+    qdict['s'] = args.log_start
+
+  def fetch(qdict):
+    parsed_url_with_query = reparse_url(parsed_url, qdict)
+    result = gitiles_get(parsed_url_with_query, handler, args.attempts)
+    if not args.quiet:
+      logging.info('Read from %s: %s', parsed_url_with_query.geturl(), result)
+    return result
+
+  if args.log_limit:
+    if args.format != 'json':
+      parser.error('--log-limit works with json format only')
+    result = fetch_log_with_paging(qdict, args.log_limit, fetch)
+  else:
+    # Either not a log request, or don't care about paging.
+    # So, just return whatever is fetched the first time.
+    result = fetch(qdict)
+
   with open(args.json_file, 'w') as json_file:
     json.dump(result, json_file)
   return 0
 
 
+def create_argparser():
+  parser = argparse.ArgumentParser()
+  parser.add_argument('-j', '--json-file', required=True,
+      help='Path to json file for output.')
+  parser.add_argument('-f', '--format', required=True,
+      choices=('json', 'text'))
+  parser.add_argument('-u', '--url', required=True,
+      help='Url of gitiles. For example, '
+           'https://chromium.googlesource.com/chromium/src/+refs. '
+           'Insert a/ after domain for authenticated access.')
+  parser.add_argument('-a', '--attempts', type=int, default=1,
+      help='The number of attempts to make (with exponential backoff) before '
+           'failing. If several requests are to be made, applies per each '
+           'request separately.')
+  parser.add_argument('-q', '--quiet', action='store_true',
+      help='Suppress file contents logging output.')
+  parser.add_argument('--log-limit', type=int, default=None,
+      help='Follow gitiles pages to fetch at least this many commits. By '
+           'default, first page with unspecified number of commits is fetched. '
+           'Only for https://<hostname>/<repo>/+log/... gitiles request.')
+  parser.add_argument('--log-start',
+      help='If given, continue fetching log by paging from this commit hash. '
+           'This value can be typically be taken from json result of previous '
+           'call to log, which returns next page start commit as "next" key. '
+           'Only for https://<hostname>/<repo>/+log/... gitiles request.')
+  return parser
+
+
 if __name__ == '__main__':
   logging.basicConfig()
   logging.getLogger().setLevel(logging.INFO)
-
-  parser = argparse.ArgumentParser()
-  parser.add_argument('-j', '--json-file', required=True)
-  parser.add_argument('-u', '--url', required=True)
-  parser.add_argument('-a', '--attempts', type=int, default=1,
-      help='The number of attempts make (with exponential backoff) before '
-           'failing.')
-  parser.add_argument('-q', '--quiet', action='store_true',
-      help='Suppress file contents logging output.')
-
-  sys.exit(main(parser.parse_args()))
+  sys.exit(main(sys.argv[1:]))
