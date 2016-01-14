@@ -96,13 +96,14 @@ def _ComputeBuilders(builders, m_annotator):
 
   for builder_name in sorted(builders['builders'], cmp=cmp_fn):
     builder_data = builders['builders'][builder_name]
-    scheduler_name = builder_data['scheduler']
+    has_schedulers = bool(
+        builder_data.get('scheduler', builder_data.get('schedulers')))
 
     # We will automatically merge all build requests for any
     # builder that can be scheduled; this is normally the behavior
     # we want for repo-triggered builders and cron-triggered builders.
     # You can override this behavior by setting the mergeRequests field though.
-    merge_requests = builder_data.get('mergeRequests', bool(scheduler_name))
+    merge_requests = builder_data.get('mergeRequests', has_schedulers)
 
     slavebuilddir = builder_data.get('slavebuilddir',
                                      util.safeTranslate(builder_name))
@@ -128,11 +129,15 @@ def _ComputeBuilders(builders, m_annotator):
 def _ComputeSchedulers(builders):
   scheduler_to_builders = {}
   for builder_name, builder_data in builders['builders'].items():
-    scheduler_name = builder_data['scheduler']
-    if scheduler_name:
-      if scheduler_name not in builders['schedulers']:
-        raise ValueError('unknown scheduler "%s"' % scheduler_name)
-      scheduler_to_builders.setdefault(scheduler_name, []).append(builder_name)
+    scheduler_names = builder_data.get('schedulers', [])
+    if 'scheduler' in builder_data:
+      scheduler_names.append(builder_data['scheduler'])
+    for scheduler_name in scheduler_names:
+      if scheduler_name:
+        if scheduler_name not in builders['schedulers']:
+          raise ValueError('unknown scheduler "%s"' % scheduler_name)
+        scheduler_to_builders.setdefault(
+            scheduler_name, []).append(builder_name)
 
   schedulers = []
   for scheduler_name, scheduler_values in builders['schedulers'].items():

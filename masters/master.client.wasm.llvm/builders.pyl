@@ -10,7 +10,7 @@
     "linux": {
       "category": "continuous",
       "recipe": "wasm_llvm",
-      "scheduler": "llvm_commits",
+      "schedulers": ["llvm_commits", "clang_commits"],
       "slave_pools": ["linux"],
     },
   },
@@ -19,6 +19,11 @@
     "llvm_commits": {
       "type": "git_poller",
       "git_repo_url": "https://chromium.googlesource.com/chromiumos/third_party/llvm",
+      "treeStableTimer": 0
+    },
+    "clang_commits": {
+      "type": "git_poller",
+      "git_repo_url": "https://chromium.googlesource.com/chromiumos/third_party/clang",
       "treeStableTimer": 0
     },
   },
