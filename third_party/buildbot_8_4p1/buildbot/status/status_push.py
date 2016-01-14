@@ -334,6 +334,8 @@ class StatusPush(StatusReceiverMultiService):
 class HttpStatusPush(StatusPush):
     """Event streamer to a HTTP server."""
 
+    compare_attrs = ('serverUrl', 'debug', 'chunkSize', 'extra_post_params')
+
     def __init__(self, serverUrl, debug=None, maxMemoryItems=None,
                  maxDiskItems=None, chunkSize=200, maxHttpRequestSize=2**20,
                  extra_post_params=None, **kwargs):
