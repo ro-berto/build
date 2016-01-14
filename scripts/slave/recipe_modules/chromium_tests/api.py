@@ -536,7 +536,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                    else self.m.properties['mastername']))
 
   @contextlib.contextmanager
-  def wrap_chromium_tests(self, mastername, tests=None):
+  def wrap_chromium_tests(self, bot_config, tests=None):
     # Some recipes use this wrapper to setup devices and have their own way
     # to run tests. If platform is Android and tests is None, run device steps.
     require_device_steps = (tests is None or
@@ -545,9 +545,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.chromium.c.TARGET_PLATFORM == 'android' and require_device_steps:
       #TODO(prasadv): Remove this hack and implement specific functions
       # at the point of call.
-      self.m.chromium_android.common_tests_setup_steps(
-          perf_setup=(mastername.startswith('chromium.perf') or
-                      mastername.startswith('tryserver.chromium.perf')))
+      perf_setup = bot_config.matches_any_bot_id(lambda bot_id:
+          bot_id['mastername'].startswith('chromium.perf') or
+          bot_id['mastername'].startswith('tryserver.chromium.perf'))
+      self.m.chromium_android.common_tests_setup_steps(perf_setup=perf_setup)
 
     if self.m.platform.is_win:
       self.m.chromium.crash_handler()
@@ -584,7 +585,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         force=True, patch=False, update_presentation=False)
     self.m.chromium.runhooks(name='runhooks (without patch)')
 
-  def run_tests_on_tryserver(self, mastername, api, tests, bot_update_step,
+  def run_tests_on_tryserver(self, bot_config, api, tests, bot_update_step,
                              affected_files, mb_mastername=None,
                              mb_buildername=None):
     def deapply_patch_fn(failing_tests):
@@ -612,7 +613,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         deapply_patch = False
         break
 
-    with self.wrap_chromium_tests(mastername, tests):
+    with self.wrap_chromium_tests(bot_config, tests):
       if deapply_patch:
         self.m.test_utils.determine_new_failures(api, tests, deapply_patch_fn)
       else:

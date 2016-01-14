@@ -97,8 +97,7 @@ def _compile_and_test_at_revision(api, target_mastername, target_buildername,
           override_bot_type='builder_tester')
 
     # Run the tests.
-    with api.chromium_tests.wrap_chromium_tests(
-        target_mastername, tests_to_run):
+    with api.chromium_tests.wrap_chromium_tests(bot_config, tests_to_run):
       failed_tests = api.test_utils.run_tests(
           api, tests_to_run, suffix=revision, test_filters=requested_tests)
 

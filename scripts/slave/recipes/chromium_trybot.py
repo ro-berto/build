@@ -359,7 +359,7 @@ def _RunStepsInternal(api):
     return
 
   api.chromium_tests.run_tests_on_tryserver(
-      mastername, api, tests, bot_update_step, affected_files)
+      bot_config_object, api, tests, bot_update_step, affected_files)
 
 
 def RunSteps(api):

@@ -169,14 +169,16 @@ def _RunStepsInternal(api):
                          force_clobber=force_clobber)
 
   if tests:
+    bot_config_object = api.chromium_tests.create_bot_config_object(
+        mastername, buildername)
     if api.tryserver.is_tryserver:
       api.chromium_tests.run_tests_on_tryserver(
-          mastername, api, tests, bot_update_step, affected_files)
+          bot_config_object, api, tests, bot_update_step, affected_files)
     else:
       api.chromium_tests.configure_swarming('chromium', precommit=False,
                                             mastername=mastername)
       test_runner = api.chromium_tests.create_test_runner(api, tests)
-      with api.chromium_tests.wrap_chromium_tests(mastername, tests):
+      with api.chromium_tests.wrap_chromium_tests(bot_config_object, tests):
         test_runner()
 
 

@@ -194,7 +194,9 @@ class AutoBisectApi(recipe_api.RecipeApi):
         'chromium', precommit=False, mastername=mastername)
     test_runner = api.chromium_tests.create_test_runner(api, tests)
 
-    with api.chromium_tests.wrap_chromium_tests(mastername, tests):
+    bot_config_object = api.chromium_tests.create_bot_config_object(
+        mastername, buildername)
+    with api.chromium_tests.wrap_chromium_tests(bot_config_object, tests):
       if api.chromium.c.TARGET_PLATFORM == 'android':
         api.chromium_android.adb_install_apk('ChromePublic.apk')
       test_runner()
