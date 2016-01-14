@@ -30,6 +30,7 @@ twistd.pid
 !/masters/*/public_html/
 /masters/*/public_html/auto-*
 /masters/*/.*
+/masters/*/config.current.txt
 /masters/*/actions.log
 /masters/*/actions_parser.timestamp
 /masters/*/revinfo.log
