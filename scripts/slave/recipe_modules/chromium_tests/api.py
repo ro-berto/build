@@ -515,17 +515,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if bot_config.get('goma_canary') or bot_config.get('goma_staging'):
       tests.insert(0, steps.DiagnoseGomaTest())
 
-    if bot_type == 'tester':
-      if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
-          bot_config.get('root_devices')):
-        self.m.adb.root_devices()
-
-    if bot_type in ('tester', 'builder_tester'):
-      isolated_targets = [
-          t.isolate_target(self.m) for t in tests if t.uses_swarming]
-      if isolated_targets:
-        self.m.isolate.find_isolated_tests(self.m.chromium.output_dir)
-
     return tests
 
   def _make_legacy_build_url(self, master_config, mastername):
@@ -537,6 +526,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   @contextlib.contextmanager
   def wrap_chromium_tests(self, bot_config, tests=None):
+    bot_type = bot_config.get('bot_type', 'builder_tester')
+
+    if bot_type in ('tester', 'builder_tester'):
+      isolated_targets = [
+          t.isolate_target(self.m) for t in tests if t.uses_swarming]
+      if isolated_targets:
+        self.m.isolate.find_isolated_tests(self.m.chromium.output_dir)
+
+    if bot_type == 'tester':
+      if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
+          bot_config.get('root_devices')):
+        self.m.adb.root_devices()
+
     # Some recipes use this wrapper to setup devices and have their own way
     # to run tests. If platform is Android and tests is None, run device steps.
     require_device_steps = (tests is None or
