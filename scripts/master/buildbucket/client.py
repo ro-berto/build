@@ -4,18 +4,11 @@
 
 """This file contains buildbucket service client."""
 
-import json
-import logging
-import sys
+import datetime
 
 from master import auth
+from master import deferred_resource
 from master.buildbucket import common
-from master.deferred_resource import DeferredResource
-
-from oauth2client.client import SignedJwtAssertionCredentials
-import httplib2
-import apiclient
-
 
 BUILDBUCKET_HOSTNAME_PRODUCTION = 'cr-buildbucket.appspot.com'
 BUILDBUCKET_HOSTNAME_TESTING = 'cr-buildbucket-test.appspot.com'
@@ -40,10 +33,16 @@ def create_buildbucket_service(
     A DeferredResource as Deferred.
   """
   hostname = hostname or get_default_buildbucket_hostname(master)
-  return DeferredResource.build(
+
+  cred_factory = deferred_resource.CredentialFactory(
+    lambda: auth.create_credentials_for_master(master),
+    ttl=datetime.timedelta(minutes=5),
+  )
+
+  return deferred_resource.DeferredResource.build(
       'buildbucket',
       'v1',
-      credentials=auth.create_credentials_for_master(master),
+      credentials=cred_factory,
       max_concurrent_requests=10,
       discoveryServiceUrl=buildbucket_api_discovery_url(hostname),
       verbose=verbose or False,
