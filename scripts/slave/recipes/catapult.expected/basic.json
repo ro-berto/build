@@ -267,6 +267,15 @@
     "name": "Tracing Dev Server Tests Canary"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/devil/bin/run_py_tests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Devil Python Tests"
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

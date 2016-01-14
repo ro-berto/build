@@ -119,6 +119,9 @@ def RunSteps(api):
                ['--no-install-hooks',
                 '--no-use-local-chrome',
                 '--channel=canary'])
+  if api.platform.is_linux:
+    api.python('Devil Python Tests',
+               api.path['checkout'].join('devil', 'bin', 'run_py_tests'))
 
 
 def GenTests(api):
