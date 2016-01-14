@@ -54,13 +54,16 @@ def RunSteps(api):
       mastername, buildername)
   api.chromium_tests.configure_build(bot_config)
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
-  api.chromium_tests.compile(bot_config, update_step, bot_db)
+  compile_targets, tests, tests_including_triggered = \
+      api.chromium_tests.get_compile_targets_and_tests(
+          bot_config, bot_db)
+  api.chromium_tests.compile_specific_targets(
+      bot_config, update_step, bot_db,
+      compile_targets, tests_including_triggered)
   api.chromium_tests.archive_build(
       mastername, buildername, update_step, bot_db)
   api.chromium_tests.download_and_unzip_build(mastername, buildername,
                                               update_step, bot_db)
-  tests = api.chromium_tests.tests_for_builder(
-      mastername, buildername, update_step, bot_db)
 
   if not tests:
     return

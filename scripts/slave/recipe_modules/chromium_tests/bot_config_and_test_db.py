@@ -142,12 +142,7 @@ class BotConfig(object):
       return True
 
   def get_compile_targets_and_tests(
-      self, chromium_tests_api, bot_db, override_bot_type=None,
-      override_tests=None):
-    bot_type = override_bot_type or self.get('bot_type', 'builder_tester')
-    if bot_type not in ['builder', 'builder_tester']:
-      return [], []
-
+      self, chromium_tests_api, bot_db, override_tests=None):
     if override_tests:
       tests = override_tests
     else:
@@ -175,7 +170,7 @@ class BotConfig(object):
       for t in tests_including_triggered:
         compile_targets.update(t.compile_targets(chromium_tests_api.m))
 
-    return sorted(compile_targets), tests_including_triggered
+    return sorted(compile_targets), tests, tests_including_triggered
 
   def matches_any_bot_id(self, fun):
     return any(fun(bot_id) for bot_id in self._bot_ids)

@@ -239,8 +239,7 @@ def _RunStepsInternal(api):
       bot_config['mastername'],
       bot_config['buildername'],
       bot_update_step,
-      bot_db,
-      override_bot_type='builder_tester'))
+      bot_db))
   tester = bot_config.get('tester', '')
   if tester:
     test_config = bot_db.get_bot_config(bot_config['mastername'], tester)
@@ -250,8 +249,7 @@ def _RunStepsInternal(api):
         bot_config['mastername'],
         tester,
         bot_update_step,
-        bot_db,
-        override_bot_type='builder_tester'))
+        bot_db))
 
   if enable_gpu_tests:
     tests.extend(api.gpu.create_tests(
@@ -292,7 +290,7 @@ def _RunStepsInternal(api):
         api.chromium_tests.steps.GTestTest('wtf_unittests'),
     ])
 
-  compile_targets, tests_including_triggered = \
+  compile_targets, _, tests_including_triggered = \
       api.chromium_tests.get_compile_targets_and_tests(
           bot_config_object,
           bot_db,

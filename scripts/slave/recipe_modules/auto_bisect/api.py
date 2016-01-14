@@ -182,10 +182,6 @@ class AutoBisectApi(recipe_api.RecipeApi):
           build_revision=test_config_params['parent_got_revision'],
           override_bot_type='tester')
 
-      api.chromium_tests.tests_for_builder(
-          mastername, buildername, update_step, bot_db,
-          override_bot_type='tester')
-
     tests = [api.chromium_tests.steps.BisectTest(test_config_params)]
 
     if not tests:  # pragma: no cover

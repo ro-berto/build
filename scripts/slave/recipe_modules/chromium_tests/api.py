@@ -284,8 +284,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
         "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
 
-    compile_targets, tests = bot_config.get_compile_targets_and_tests(
-        self, bot_db, override_bot_type, override_tests)
+    compile_targets, tests, tests_including_triggered = \
+        bot_config.get_compile_targets_and_tests(
+            self, bot_db, override_tests)
+
+    if bot_config.get('goma_canary') or bot_config.get('goma_staging'):
+      tests.insert(0, steps.DiagnoseGomaTest())
+      tests_including_triggered.insert(0, steps.DiagnoseGomaTest())
 
     # Only add crash_service when we have explicit compile targets.
     compile_targets = set(compile_targets)
@@ -294,7 +299,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         'all' not in compile_targets):
       compile_targets.add('crash_service')
 
-    return sorted(compile_targets), tests
+    return sorted(compile_targets), tests, tests_including_triggered
 
   def transient_check(self, update_step, command):
     """Runs command, checking for transience if this is a try job.
@@ -313,19 +318,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         raise
     else:
       command(lambda name: name)
-
-
-  def compile(self, bot_config, update_step, bot_db,
-              mb_mastername=None, mb_buildername=None):
-    """Runs compile and related steps for given builder."""
-    assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
-        "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
-    compile_targets, tests = self.get_compile_targets_and_tests(
-        bot_config, bot_db)
-    self.compile_specific_targets(
-        bot_config, update_step, bot_db,
-        compile_targets, tests,
-        mb_mastername=mb_mastername, mb_buildername=mb_buildername)
 
   def compile_specific_targets(
       self, bot_config, update_step, bot_db,
@@ -503,19 +495,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       build_revision=build_revision,
       build_archive_url=build_archive_url)
 
-  def tests_for_builder(self, mastername, buildername, update_step, bot_db,
-                        override_bot_type=None):
+  def tests_for_builder(self, mastername, buildername, update_step, bot_db):
     assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
         "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
     bot_config = bot_db.get_bot_config(mastername, buildername)
-    bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
-    # TODO(shinyak): bot_config.get('tests', []) sometimes return tuple.
-    tests = [copy.deepcopy(t) for t in bot_config.get('tests', [])]
-
-    if bot_config.get('goma_canary') or bot_config.get('goma_staging'):
-      tests.insert(0, steps.DiagnoseGomaTest())
-
-    return tests
+    return [copy.deepcopy(t) for t in bot_config.get('tests', [])]
 
   def _make_legacy_build_url(self, master_config, mastername):
     return self.m.archive.legacy_download_url(

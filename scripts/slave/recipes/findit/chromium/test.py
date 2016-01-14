@@ -74,8 +74,7 @@ def _compile_and_test_at_revision(api, target_mastername, target_buildername,
         target_mastername,
         target_testername,  # If not tester, this is same as target_buildername.
         bot_update_step,
-        bot_db,
-        override_bot_type='builder_tester')
+        bot_db)
 
     tests_to_run = [test for test in all_tests if test.name in requested_tests]
 
