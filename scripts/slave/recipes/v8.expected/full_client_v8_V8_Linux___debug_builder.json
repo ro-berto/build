@@ -356,25 +356,6 @@
         }
       },
       {
-        "builder_name": "V8 Linux - memcheck",
-        "properties": {
-          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "parent_got_revision_cp": "refs/heads/master@{#50110}",
-          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "swarm_hashes": {
-            "benchmarks": "[dummy hash for benchmarks]",
-            "bot_default": "[dummy hash for bot_default]",
-            "ignition": "[dummy hash for ignition]",
-            "mjsunit": "[dummy hash for mjsunit]",
-            "mozilla": "[dummy hash for mozilla]",
-            "simdjs": "[dummy hash for simdjs]",
-            "test262": "[dummy hash for test262]",
-            "webkit": "[dummy hash for webkit]"
-          }
-        }
-      },
-      {
         "builder_name": "V8 Linux - debug - greedy allocator",
         "properties": {
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
@@ -395,7 +376,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@V8 Linux - debug<br />V8 Linux - debug - avx2<br />V8 Linux - debug - code serializer<br />V8 Linux - debug - greedy allocator<br />V8 Linux - debug - isolates<br />V8 Linux - debug - nosse3<br />V8 Linux - debug - nosse4<br />V8 Linux - gc stress<br />V8 Linux - memcheck@@@"
+      "@@@STEP_TEXT@V8 Linux - debug<br />V8 Linux - debug - avx2<br />V8 Linux - debug - code serializer<br />V8 Linux - debug - greedy allocator<br />V8 Linux - debug - isolates<br />V8 Linux - debug - nosse3<br />V8 Linux - debug - nosse4<br />V8 Linux - gc stress@@@"
     ]
   },
   {

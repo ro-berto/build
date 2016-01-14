@@ -459,24 +459,17 @@ class V8GCMole(BaseTest):
 
 class V8SimpleLeakCheck(BaseTest):
   def run(self, **kwargs):
-    # TODO(machenbach): Add task kill step for windows.
     relative_d8_path = self.api.path.join(
         self.api.path.basename(self.api.chromium.c.build_dir),
         self.api.chromium.c.build_config_fs,
         'd8')
-    step_result = self.api.step(
+    tool = self.api.path['checkout'].join('tools', 'run-valgrind.py')
+    step_result = self.api.python(
       'Simple Leak Check',
-      ['valgrind', '--leak-check=full', '--show-reachable=yes',
-       '--num-callers=20', relative_d8_path, '-e', '"print(1+2)"'],
+      tool,
+      [relative_d8_path, '-e', 'print(1+2)'],
       cwd=self.api.path['checkout'],
-      stderr=self.api.raw_io.output(),
-      step_test_data=lambda: self.api.raw_io.test_api.stream_output(
-          'tons of leaks', stream='stderr')
     )
-    step_result.presentation.logs['stderr'] = step_result.stderr.splitlines()
-    if not 'no leaks are possible' in (step_result.stderr):
-      step_result.presentation.status = self.api.step.FAILURE
-      raise self.api.step.StepFailure('Failed leak check')
     return TestResults.empty()
 
 

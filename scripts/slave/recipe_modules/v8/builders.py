@@ -93,7 +93,6 @@ BUILDERS = {
           'V8 Linux - debug - isolates',
           'V8 Linux - debug - nosse3',
           'V8 Linux - debug - nosse4',
-          'V8 Linux - memcheck',
           'V8 Linux - debug - greedy allocator',
         ],
       },
@@ -437,6 +436,7 @@ BUILDERS = {
           'V8 Linux64 - debug',
           'V8 Linux64 - debug - avx2',
           'V8 Linux64 - debug - greedy allocator',
+          'V8 Linux64 - memcheck',
         ],
       },
       'V8 Linux64 - custom snapshot - debug builder': {
@@ -1408,14 +1408,15 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - memcheck': {
+      'V8 Linux64 - memcheck': {
+        'gclient_apply_config': ['v8_valgrind'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux - debug builder',
-        'build_gs_archive': 'linux_dbg_archive',
+        'parent_buildername': 'V8 Linux64 - debug builder',
+        'build_gs_archive': 'linux64_dbg_archive',
         'tests': [SimpleLeak],
         'testing': {'platform': 'linux'},
       },

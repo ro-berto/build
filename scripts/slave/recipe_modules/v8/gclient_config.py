@@ -46,3 +46,9 @@ def dynamorio(c):
 def mozilla_tests(c):
   c.solutions[0].custom_deps['v8/test/mozilla/data'] = ChromiumSvnSubURL(
       c, 'chrome', 'trunk', 'deps', 'third_party', 'mozilla-tests')
+
+
+@CONFIG_CTX(includes=['v8'])
+def v8_valgrind(c):
+  c.solutions[0].custom_deps['v8/third_party/valgrind'] = (
+    'https://chromium.googlesource.com/chromium/deps/valgrind/binaries.git')

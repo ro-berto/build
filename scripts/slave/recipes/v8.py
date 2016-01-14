@@ -193,18 +193,6 @@ def GenTests(api):
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux - memcheck',
-        'no_errors',
-    ) +
-    api.v8.stderr(
-        'Simple Leak Check',
-        'no leaks are possible',
-    )
-  )
-
-  yield (
-    api.v8.test(
-        'client.v8',
         'V8 Fuzzer',
         'fuzz_archive',
     ) +
