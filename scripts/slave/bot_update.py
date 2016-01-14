@@ -1591,7 +1591,8 @@ def checkout(options, git_slns, specs, buildspec, master,
                 patch_apply_return_code=e.code,
                 patch_root=options.patch_root,
                 patch_failure=True,
-                step_text='%s PATCH FAILED' % step_text)
+                step_text='%s PATCH FAILED' % step_text,
+                fixed_revisions=revisions)
     else:
       # If we're not on recipes, tell annotator about our got_revisions.
       emit_log_lines('patch error', e.output)
@@ -1630,6 +1631,7 @@ def checkout(options, git_slns, specs, buildspec, master,
               root=first_sln,
               patch_root=options.patch_root,
               step_text=step_text,
+              fixed_revisions=revisions,
               properties=got_revisions,
               manifest=manifest)
   else:
