@@ -47,6 +47,10 @@ WHITELIST_ALL = '*'
 # Whitelist of {master}=>[{builder}|WHITELIST_ALL] whitelisting specific masters
 # and builders for experimental LogDog/Annotee export.
 LOGDOG_WHITELIST_MASTER_BUILDERS = {
+    'chromium.infra': {
+      'luci-gae-trusty64',
+      'luci-go-trusty64',
+    },
 }
 
 # Configuration for a Pub/Sub topic.
