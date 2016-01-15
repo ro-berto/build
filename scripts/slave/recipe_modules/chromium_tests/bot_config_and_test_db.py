@@ -78,14 +78,14 @@ class BotConfig(object):
     mastername = self._bot_ids[0]['mastername']
     buildername = self._bot_ids[0]['buildername']
 
-    test_spec = self._get_test_spec(chromium_tests_api)
-
     # TODO(phajdan.jr): Bots should have no generators instead.
     if bot_config.get('disable_tests'):
       scripts_compile_targets = {}
     else:
       scripts_compile_targets = \
           chromium_tests_api.get_compile_targets_for_scripts().json.output
+
+    test_spec = self._get_test_spec(chromium_tests_api)
 
     # We manually thaw the path to the elements we are modifying, since the
     # builders are frozen.

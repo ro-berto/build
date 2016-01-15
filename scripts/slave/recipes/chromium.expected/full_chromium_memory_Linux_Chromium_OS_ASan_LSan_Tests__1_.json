@@ -122,6 +122,29 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
+      "--output",
+      "/path/to/tmp/json",
+      "--",
+      "--build-config-fs",
+      "Release",
+      "--use-src-side-runtest-py",
+      "--paths",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "--properties",
+      "{\"buildername\": \"Linux Chromium OS ASan LSan Tests (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "get compile targets for scripts",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[SLAVE_BUILD]/src/testing/buildbot/chromium.memory.json",
       "/path/to/tmp/json"
@@ -142,29 +165,6 @@
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
-      "--output",
-      "/path/to/tmp/json",
-      "--",
-      "--build-config-fs",
-      "Release",
-      "--use-src-side-runtest-py",
-      "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
-      "--properties",
-      "{\"buildername\": \"Linux Chromium OS ASan LSan Tests (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "get compile targets for scripts",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
