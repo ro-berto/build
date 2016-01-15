@@ -236,6 +236,7 @@
       "slavename:TestSlavename",
       "--tag",
       "stepname:Check",
+      "--idempotent",
       "--user",
       "commit-bot@chromium.org",
       "[dummy hash for bot_default]",

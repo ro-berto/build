@@ -139,6 +139,7 @@
       "slavename:TestSlavename",
       "--tag",
       "stepname:Mjsunit",
+      "--idempotent",
       "[dummy hash for mjsunit]",
       "--",
       "--progress=verbose",

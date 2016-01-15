@@ -224,6 +224,7 @@
       "slavename:TestSlavename",
       "--tag",
       "stepname:Check",
+      "--idempotent",
       "[dummy hash for bot_default]",
       "--",
       "--progress=verbose",

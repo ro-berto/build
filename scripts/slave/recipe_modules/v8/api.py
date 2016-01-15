@@ -199,9 +199,7 @@ class V8Api(recipe_api.RecipeApi):
     self.m.swarming.add_default_tag('project:v8')
     self.m.swarming.default_hard_timeout = 45 * 60
 
-    # TODO(machenbach): Set this to True once we don't fail tryjobs on simple
-    # flakes anymore.
-    self.m.swarming.default_idempotent = False
+    self.m.swarming.default_idempotent = True
 
     if self.m.properties['mastername'] == 'tryserver.v8':
       self.m.swarming.add_default_tag('purpose:pre-commit')
