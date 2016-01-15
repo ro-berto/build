@@ -89,8 +89,8 @@ PLATFORM_CONFIG = {
                           'latest', 'logdog_butler'),
         annotee=CipdBinary('infra/tools/luci/logdog/annotee/linux-amd64',
                           'latest', 'logdog_annotee'),
-        credential_path=(
-            '/creds/service_accounts/service-account-luci-logdog-pubsub.json'),
+        credential_path=('/creds/service_accounts/'
+                         'service-account-luci-logdog-publisher.json'),
         streamserver='unix',
     ),
   },
