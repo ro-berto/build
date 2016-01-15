@@ -216,7 +216,8 @@ def _RunStepsInternal(api):
   enable_gpu_tests = builder in CHROMIUM_GPU_DIMENSION_SETS.get(master, {})
 
   bot_config_object = api.chromium_tests.create_bot_config_object(
-      bot_config['mastername'], bot_config['buildername'])
+      bot_config['mastername'], bot_config['buildername'],
+      tester=bot_config.get('tester'))
   api.chromium_tests.configure_build(
       bot_config_object, override_bot_type='builder_tester')
 
@@ -235,24 +236,14 @@ def _RunStepsInternal(api):
   bot_update_step, bot_db = api.chromium_tests.prepare_checkout(
       bot_config_object)
 
-  tests = list(api.chromium_tests.tests_for_builder(
-      bot_config['mastername'],
-      bot_config['buildername'],
-      bot_update_step,
-      bot_db))
-  tester = bot_config.get('tester', '')
-  if tester:
-    test_config = bot_db.get_bot_config(bot_config['mastername'], tester)
-    for key, value in test_config.get('swarming_dimensions', {}).iteritems():
-      api.swarming.set_default_dimension(key, value)
-    tests.extend(api.chromium_tests.tests_for_builder(
-        bot_config['mastername'],
-        tester,
-        bot_update_step,
-        bot_db))
+  tests, tests_including_triggered = api.chromium_tests.get_tests(
+      bot_config_object, bot_db)
+  def add_tests(additional_tests):
+    tests.extend(additional_tests)
+    tests_including_triggered.extend(additional_tests)
 
   if enable_gpu_tests:
-    tests.extend(api.gpu.create_tests(
+    add_tests(api.gpu.create_tests(
         bot_update_step.presentation.properties['got_revision'],
         bot_update_step.presentation.properties['got_revision'],
         enable_swarming=True,
@@ -283,19 +274,17 @@ def _RunStepsInternal(api):
   # Add blink tests that work well with "analyze" here. The tricky ones
   # that bypass it (like the layout tests) are added later.
   if add_blink_tests:
-    tests.extend([
+    add_tests([
         api.chromium_tests.steps.GTestTest('blink_heap_unittests'),
         api.chromium_tests.steps.GTestTest('blink_platform_unittests'),
         api.chromium_tests.steps.GTestTest('webkit_unit_tests'),
         api.chromium_tests.steps.GTestTest('wtf_unittests'),
     ])
 
-  compile_targets, _, tests_including_triggered = \
-      api.chromium_tests.get_compile_targets_and_tests(
-          bot_config_object,
-          bot_db,
-          override_bot_type='builder_tester',
-          override_tests=tests)
+  compile_targets = api.chromium_tests.get_compile_targets(
+      bot_config_object,
+      bot_db,
+      tests_including_triggered)
 
   test_targets = sorted(set(
       all_compile_targets(api, tests + tests_including_triggered)))
@@ -330,8 +319,7 @@ def _RunStepsInternal(api):
               collections.defaultdict(list)),
           api.chromium_tests.steps.BlinkTest(),
       ]
-      tests.extend(blink_tests)
-      tests_including_triggered.extend(blink_tests)
+      add_tests(blink_tests)
       for test in blink_tests:
         compile_targets.extend(test.compile_targets(api))
       compile_targets = sorted(set(compile_targets))

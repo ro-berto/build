@@ -1683,6 +1683,10 @@ class DiagnoseGomaTest(Test):
   def name(self):
     return 'diagnose_goma'
 
+  @staticmethod
+  def compile_targets(_):
+    return []
+
   def run(self, api, suffix, test_filter=None):
     diagnose_goma_log_py = api.path['build'].join('goma',
                                                   'diagnose_goma_log.py')

@@ -70,12 +70,7 @@ def _compile_and_test_at_revision(api, target_mastername, target_buildername,
             root_solution_revision=revision)
 
     # Figure out which test steps to run.
-    all_tests = api.chromium_tests.tests_for_builder(
-        target_mastername,
-        target_testername,  # If not tester, this is same as target_buildername.
-        bot_update_step,
-        bot_db)
-
+    _, all_tests = api.chromium_tests.get_tests(bot_config, bot_db)
     tests_to_run = [test for test in all_tests if test.name in requested_tests]
 
     # Figure out which targets to compile.

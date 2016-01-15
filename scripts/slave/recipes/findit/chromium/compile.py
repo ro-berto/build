@@ -62,11 +62,10 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
     # the given revision.
     compile_targets = sorted(set(compile_targets or []))
     if not compile_targets:
-      compile_targets, _tests, _tests_including_triggered = \
-          api.chromium_tests.get_compile_targets_and_tests(
-              bot_config,
-              bot_db,
-              override_bot_type='builder_tester')
+      _, tests_including_triggered = api.chromium_tests.get_tests(
+          bot_config, bot_db)
+      compile_targets = api.chromium_tests.get_compile_targets(
+          bot_config, bot_db, tests_including_triggered)
 
       if use_analyze:
         changed_files = api.findit.files_changed_by_revision(revision)

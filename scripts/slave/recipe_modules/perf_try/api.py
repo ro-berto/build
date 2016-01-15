@@ -164,12 +164,8 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     # TODO(phajdan.jr): Change this method to take bot_config as parameter.
     bot_config = self.m.chromium_tests.create_bot_config_object(
         mastername, buildername)
-    compile_targets, _tests, _tests_including_triggered = \
-        self.m.chromium_tests.get_compile_targets_and_tests(
-            bot_config,
-            bot_db,
-            override_bot_type='builder_tester',
-            override_tests=[])
+    compile_targets = self.m.chromium_tests.get_compile_targets(
+        bot_config, bot_db, tests=[])
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.clean_local_files()
       compile_targets = None

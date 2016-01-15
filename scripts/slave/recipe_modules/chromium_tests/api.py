@@ -65,10 +65,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """Adds builders to our builder map"""
     self._builders.update(builders)
 
-  def create_bot_config_object(self, mastername, buildername):
-    return bdb_module.BotConfig(
-        self.builders,
-        [{'mastername': mastername, 'buildername': buildername}])
+  def create_bot_config_object(self, mastername, buildername, tester=None):
+    bot_id = {'mastername': mastername, 'buildername': buildername}
+    if tester:
+      bot_id['tester'] = tester
+    return bdb_module.BotConfig(self.builders, [bot_id])
 
   def configure_build(self, bot_config, override_bot_type=None):
     # Get the buildspec version. It can be supplied as a build property or as
@@ -274,23 +275,26 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return test_runner
 
-  def get_compile_targets_and_tests(
-      self, bot_config, bot_db,
-      override_bot_type=None, override_tests=None):
-    """Returns a tuple: list of compile targets and list of tests.
-
-    The list of tests includes ones on the triggered testers."""
+  def get_tests(self, bot_config, bot_db):
+    """Returns a tuple: list of tests, and list of tests on the triggered
+       testers."""
 
     assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
         "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
 
-    compile_targets, tests, tests_including_triggered = \
-        bot_config.get_compile_targets_and_tests(
-            self, bot_db, override_tests)
+    tests, tests_including_triggered = bot_config.get_tests(bot_db)
 
     if bot_config.get('goma_canary') or bot_config.get('goma_staging'):
       tests.insert(0, steps.DiagnoseGomaTest())
       tests_including_triggered.insert(0, steps.DiagnoseGomaTest())
+
+    return tests, tests_including_triggered
+
+  def get_compile_targets(self, bot_config, bot_db, tests):
+    assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
+        "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
+
+    compile_targets = bot_config.get_compile_targets(self, bot_db, tests)
 
     # Only add crash_service when we have explicit compile targets.
     compile_targets = set(compile_targets)
@@ -299,7 +303,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         'all' not in compile_targets):
       compile_targets.add('crash_service')
 
-    return sorted(compile_targets), tests, tests_including_triggered
+    return sorted(compile_targets)
 
   def transient_check(self, update_step, command):
     """Runs command, checking for transience if this is a try job.
@@ -494,12 +498,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       build_url=legacy_build_url,
       build_revision=build_revision,
       build_archive_url=build_archive_url)
-
-  def tests_for_builder(self, mastername, buildername, update_step, bot_db):
-    assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
-        "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
-    bot_config = bot_db.get_bot_config(mastername, buildername)
-    return [copy.deepcopy(t) for t in bot_config.get('tests', [])]
 
   def _make_legacy_build_url(self, master_config, mastername):
     return self.m.archive.legacy_download_url(

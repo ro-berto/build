@@ -30,14 +30,14 @@ class BotConfig(object):
               name, self._bot_ids[0], result, bot_id, other_result))
     return result
 
-  def _get_bot_config(self, bot_id):
+  def _get_builder_bot_config(self, bot_id):
     # WARNING: This doesn't take into account dynamic
     # tests from test spec etc. If you need that, please use bot_db.
     return self._bots_dict.get(bot_id['mastername'], {}).get(
         'builders', {}).get(bot_id['buildername'], {})
 
   def _get(self, bot_id, name, default=None):
-    return self._get_bot_config(bot_id).get(name, default)
+    return self._get_builder_bot_config(bot_id).get(name, default)
 
   def get(self, name, default=None):
     return self._consistent_get(self._get, name, default)
@@ -53,7 +53,7 @@ class BotConfig(object):
     # TODO(phajdan.jr): Make test specs work for more than 1 bot.
     assert len(self._bot_ids) == 1
 
-    bot_config = self._get_bot_config(self._bot_ids[0])
+    bot_config = self._get_builder_bot_config(self._bot_ids[0])
     mastername = self._bot_ids[0]['mastername']
     buildername = self._bot_ids[0]['buildername']
 
@@ -74,7 +74,7 @@ class BotConfig(object):
     # TODO(phajdan.jr): Make this work for more than 1 bot.
     assert len(self._bot_ids) == 1
 
-    bot_config = self._get_bot_config(self._bot_ids[0])
+    bot_config = self._get_builder_bot_config(self._bot_ids[0])
     mastername = self._bot_ids[0]['mastername']
     buildername = self._bot_ids[0]['buildername']
 
@@ -141,19 +141,31 @@ class BotConfig(object):
       p.status = chromium_tests_api.m.step.WARNING
       return True
 
-  def get_compile_targets_and_tests(
-      self, chromium_tests_api, bot_db, override_tests=None):
-    if override_tests:
-      tests = override_tests
-    else:
-      tests = []
-      for bot_id in self._bot_ids:
+  def get_tests(self, bot_db):
+    tests = []
+    for bot_id in self._bot_ids:
+      bot_config = bot_db.get_bot_config(
+          bot_id['mastername'], bot_id['buildername'])
+      tests.extend([copy.deepcopy(t) for t in bot_config.get('tests', [])])
+
+      if bot_id.get('tester'):
         bot_config = bot_db.get_bot_config(
-            bot_id['mastername'], bot_id['buildername'])
+            bot_id['mastername'], bot_id['tester'])
         tests.extend([copy.deepcopy(t) for t in bot_config.get('tests', [])])
 
-    compile_targets = set()
     tests_including_triggered = list(tests)
+    for bot_id in self._bot_ids:
+      bot_config = bot_db.get_bot_config(
+          bot_id['mastername'], bot_id['buildername'])
+
+      for _, test_bot in bot_db.bot_configs_matching_parent_buildername(
+          bot_id['mastername'], bot_id['buildername']):
+        tests_including_triggered.extend(test_bot.get('tests', []))
+
+    return tests, tests_including_triggered
+
+  def get_compile_targets(self, chromium_tests_api, bot_db, tests):
+    compile_targets = set()
     for bot_id in self._bot_ids:
       bot_config = bot_db.get_bot_config(
           bot_id['mastername'], bot_id['buildername'])
@@ -162,15 +174,11 @@ class BotConfig(object):
           bot_id['mastername'], bot_id['buildername']).get(
               'additional_compile_targets', []))
 
-      for _, test_bot in bot_db.bot_configs_matching_parent_buildername(
-          bot_id['mastername'], bot_id['buildername']):
-        tests_including_triggered.extend(test_bot.get('tests', []))
-
     if self.get('add_tests_as_compile_targets', True):
-      for t in tests_including_triggered:
+      for t in tests:
         compile_targets.update(t.compile_targets(chromium_tests_api.m))
 
-    return sorted(compile_targets), tests, tests_including_triggered
+    return sorted(compile_targets)
 
   def matches_any_bot_id(self, fun):
     return any(fun(bot_id) for bot_id in self._bot_ids)
