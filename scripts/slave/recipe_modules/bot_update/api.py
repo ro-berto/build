@@ -158,6 +158,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
 
 
     revisions = {}
+    fixed_revisions = {}
     for solution in cfg.solutions:
       if solution.revision:
         revisions[solution.name] = solution.revision
@@ -173,6 +174,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
     for name, revision in sorted(revisions.items()):
       fixed_revision = self.m.gclient.resolve_revision(revision)
       if fixed_revision:
+        fixed_revisions[name] = fixed_revision
         flags.append(['--revision', '%s@%s' % (name, fixed_revision)])
 
     # Add extra fetch refspecs.
@@ -200,7 +202,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
     step_test_data = lambda: self.test_api.output_json(
         master, builder, slave, root, first_sln, rev_map, git_mode, force,
         self.m.properties.get('fail_patch', False),
-        output_manifest=output_manifest)
+        output_manifest=output_manifest, fixed_revisions=fixed_revisions)
 
     # Add suffixes to the step name, if specified.
     name = 'bot_update'

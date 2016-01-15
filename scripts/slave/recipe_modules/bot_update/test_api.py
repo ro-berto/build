@@ -20,7 +20,7 @@ from slave import bot_update
 class BotUpdateTestApi(recipe_test_api.RecipeTestApi):
   def output_json(self, master, builder, slave, root, first_sln,
                   revision_mapping, git_mode, force=False, fail_patch=False,
-                  output_manifest=False):
+                  output_manifest=False, fixed_revisions=None):
     """Deterministically synthesize json.output test data for gclient's
     --output-json option.
     """
@@ -68,6 +68,9 @@ class BotUpdateTestApi(recipe_test_api.RecipeTestApi):
             for project_name in revision_mapping
           }
         })
+
+      if fixed_revisions:
+        output['fixed_revisions'] = fixed_revisions
 
       if fail_patch:
         output['log_lines'] = [('patch error', 'Patch failed to apply'),]
