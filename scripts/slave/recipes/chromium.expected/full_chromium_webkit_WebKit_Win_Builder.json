@@ -236,7 +236,7 @@
       "--goma-dir",
       "[BUILD]\\goma",
       "--swarming-targets-file",
-      "browser_tests\nbrowser_tests\nbrowser_tests\n",
+      "browser_tests\n",
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",

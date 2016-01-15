@@ -301,7 +301,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--swarming-targets-file",
-      "content_gl_tests\ngl_tests\nangle_unittests\ngl_unittests\nangle_end2end_tests\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\ntelemetry_gpu_test\n",
+      "angle_end2end_tests\nangle_unittests\ncontent_gl_tests\ngl_tests\ngl_unittests\ntelemetry_gpu_test\n",
       "//out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",

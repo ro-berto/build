@@ -567,7 +567,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--goma-dir', self.m.path['build'].join('goma')]
 
     if isolated_targets:
-      data = '\n'.join(isolated_targets) + '\n'
+      data = '\n'.join(sorted(set(isolated_targets))) + '\n'
 
       # TODO(dpranke): Change the MB flag to '--isolate-targets-file', maybe?
       args += ['--swarming-targets-file', self.m.raw_io.input(data)]
