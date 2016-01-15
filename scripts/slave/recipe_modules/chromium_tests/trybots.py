@@ -5,538 +5,514 @@
 from recipe_engine.types import freeze
 
 
+def simple_bot(bot_id, analyze_mode=None):
+  return {
+    'bot_ids': [bot_id],
+    'analyze_mode': analyze_mode,
+  }
+
+
 TRYBOTS = freeze({
   'tryserver.blink': {
     'builders': {
       # TODO(joelo): Remove this builder.
-      'linux_blink_rel_ng': {
+      'linux_blink_rel_ng': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux',
-      },
-      'linux_blink_dbg': {
+      }),
+      'linux_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux (dbg)',
-      },
-      'linux_blink_rel': {
+      }),
+      'linux_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux',
-      },
-      'linux_blink_compile_dbg': {
+      }),
+      'linux_blink_compile_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'linux_blink_compile_rel': {
+      }, analyze_mode='compile'),
+      'linux_blink_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux',
-        'analyze_mode': 'compile',
-      },
-      'linux_blink_oilpan_dbg': {
+      }, analyze_mode='compile'),
+      'linux_blink_oilpan_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux Oilpan (dbg)',
-      },
-      'linux_blink_oilpan_rel': {
+      }),
+      'linux_blink_oilpan_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux Oilpan',
-      },
-      'linux_blink_oilpan_compile_rel': {
+      }),
+      'linux_blink_oilpan_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux Oilpan',
-        'analyze_mode': 'compile',
-      },
-      'mac_blink_dbg': {
+      }, analyze_mode='compile'),
+      'mac_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.7 (dbg)',
-      },
-      'mac_blink_rel': {
+      }),
+      'mac_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.9',
-      },
-      'mac_blink_compile_dbg': {
+      }),
+      'mac_blink_compile_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.7 (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'mac_blink_compile_rel': {
+      }, analyze_mode='compile'),
+      'mac_blink_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.9',
-        'analyze_mode': 'compile',
-      },
-      'mac_blink_oilpan_dbg': {
+      }, analyze_mode='compile'),
+      'mac_blink_oilpan_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac Oilpan (dbg)',
-      },
-      'mac_blink_oilpan_rel': {
+      }),
+      'mac_blink_oilpan_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac Oilpan',
-      },
-      'mac_blink_oilpan_compile_rel': {
+      }),
+      'mac_blink_oilpan_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac Oilpan',
-        'analyze_mode': 'compile',
-      },
-      'win_blink_dbg': {
+      }, analyze_mode='compile'),
+      'win_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win7 (dbg)',
-      },
-      'win_blink_rel': {
+      }),
+      'win_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win7',
-      },
-      'win_blink_compile_dbg': {
+      }),
+      'win_blink_compile_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win7 (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'win_blink_compile_rel': {
+      }, analyze_mode='compile'),
+      'win_blink_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win7',
-        'analyze_mode': 'compile',
-      },
-      'win_blink_oilpan_dbg': {
+      }, analyze_mode='compile'),
+      'win_blink_oilpan_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win Oilpan (dbg)',
-      },
-      'win_blink_oilpan_rel': {
+      }),
+      'win_blink_oilpan_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win Oilpan',
-      },
-      'win_blink_oilpan_compile_rel': {
+      }),
+      'win_blink_oilpan_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win Oilpan',
-        'analyze_mode': 'compile',
-      },
+      }, analyze_mode='compile'),
     },
   },
   'tryserver.chromium.android': {
     'builders': {
-      'android_blink_rel': {
+      'android_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Android (Nexus4)',
-        'analyze_mode': 'compile',
-      },
-      'android_chromium_gn_rel': {
+      }, analyze_mode='compile'),
+      'android_chromium_gn_rel': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Android GN',
-      },
-      'android_aura_tester': {
+      }),
+      'android_aura_tester': simple_bot({
         'mastername': 'chromium.android',
         'buildername': 'Android Aura Builder (dbg)',
         'tester': 'Android Aura Tester (dbg)',
-      },
-      'android_aura_compile': {
+      }),
+      'android_aura_compile': simple_bot({
         'mastername': 'chromium.android',
         'buildername': 'Android Aura Builder (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'android_amp': {
+      }, analyze_mode='compile'),
+      'android_amp': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Android Tests (amp split)',
-      },
-      'android_archive_rel_ng': {
+      }),
+      'android_archive_rel_ng': simple_bot({
         'mastername': 'chromium',
         'buildername': 'Android',
-      },
-      'android_arm64_dbg_recipe': {
+      }),
+      'android_arm64_dbg_recipe': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Android Arm64 Builder (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'android_clang_dbg_recipe': {
+      }, analyze_mode='compile'),
+      'android_clang_dbg_recipe': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Android Clang Builder (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'android_chromium_gn_compile_dbg': {
+      }, analyze_mode='compile'),
+      'android_chromium_gn_compile_dbg': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Android GN (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'android_chromium_gn_compile_rel': {
+      }, analyze_mode='compile'),
+      'android_chromium_gn_compile_rel': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Android GN',
-        'analyze_mode': 'compile',
-      },
-      'android_compile_dbg': {
+      }, analyze_mode='compile'),
+      'android_compile_dbg': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Android Builder (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'android_compile_rel': {
+      }, analyze_mode='compile'),
+      'android_compile_rel': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Android Builder',
-        'analyze_mode': 'compile',
-      },
-      'android_coverage': {
+      }, analyze_mode='compile'),
+      'android_coverage': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Android Coverage (dbg)'
-      },
-      'cast_shell_android': {
+      }),
+      'cast_shell_android': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Cast Android (dbg)',
-      },
-      'linux_android_dbg_ng': {
+      }),
+      'linux_android_dbg_ng': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Android Builder (dbg)',
         'tester': 'Android Tests (dbg)',
-      },
-      'linux_android_rel_ng': {
+      }),
+      'linux_android_rel_ng': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Android Builder',
         'tester': 'Android Tests',
-      },
+      }),
     },
   },
   'tryserver.chromium.angle': {
     'builders': {
-      'linux_angle_rel_ng': {
+      'linux_angle_rel_ng': simple_bot({
         'mastername': 'chromium.angle',
         'buildername': 'Linux Builder (ANGLE)',
         'tester': 'Linux Tests (ANGLE)',
-      },
-      'linux_angle_dbg_ng': {
+      }),
+      'linux_angle_dbg_ng': simple_bot({
         'mastername': 'chromium.angle',
         'buildername': 'Linux Builder (dbg) (ANGLE)',
         'tester': 'Linux Tests (dbg) (ANGLE)',
-      },
-      'mac_angle_rel_ng': {
+      }),
+      'mac_angle_rel_ng': simple_bot({
         'mastername': 'chromium.angle',
         'buildername': 'Mac Builder (ANGLE)',
         'tester': 'Mac10.8 Tests (ANGLE)',
-      },
-      'mac_angle_dbg_ng': {
+      }),
+      'mac_angle_dbg_ng': simple_bot({
         'mastername': 'chromium.angle',
         'buildername': 'Mac Builder (dbg) (ANGLE)',
         'tester': 'Mac10.8 Tests (dbg) (ANGLE)',
-      },
-      'win_angle_rel_ng': {
+      }),
+      'win_angle_rel_ng': simple_bot({
         'mastername': 'chromium.angle',
         'buildername': 'Win Builder (ANGLE)',
         'tester': 'Win7 Tests (ANGLE)',
-      },
-      'win_angle_dbg_ng': {
+      }),
+      'win_angle_dbg_ng': simple_bot({
         'mastername': 'chromium.angle',
         'buildername': 'Win Builder (dbg) (ANGLE)',
         'tester': 'Win7 Tests (dbg) (ANGLE)',
-      },
-      'win_angle_x64_rel_ng': {
+      }),
+      'win_angle_x64_rel_ng': simple_bot({
         'mastername': 'chromium.angle',
         'buildername': 'Win x64 Builder (ANGLE)',
         'tester': 'Win7 Tests x64 (ANGLE)',
-      },
-      'win_angle_x64_dbg_ng': {
+      }),
+      'win_angle_x64_dbg_ng': simple_bot({
         'mastername': 'chromium.angle',
         'buildername': 'Win x64 Builder (dbg) (ANGLE)',
         'tester': 'Win7 Tests x64 (dbg) (ANGLE)',
-      },
+      }),
     },
   },
   'tryserver.chromium.linux': {
     'builders': {
-      'cast_shell_linux': {
+      'cast_shell_linux': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Cast Linux',
-      },
-      'linux_arm': {
+      }),
+      'linux_arm': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Linux ARM',
-      },
-      'linux_blink_oilpan_rel': {
+      }),
+      'linux_blink_oilpan_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux Oilpan Builder',
-      },
-      'linux_chromium_dbg_32_ng': {
+      }),
+      'linux_chromium_dbg_32_ng': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder (dbg)(32)',
         'tester': 'Linux Tests (dbg)(1)(32)',
-      },
-      'linux_chromium_dbg_ng': {
+      }),
+      'linux_chromium_dbg_ng': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder (dbg)',
         'tester': 'Linux Tests (dbg)(1)',
-      },
-      'linux_chromium_gn_chromeos_dbg': {
+      }),
+      'linux_chromium_gn_chromeos_dbg': simple_bot({
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS GN (dbg)',
-      },
-      'linux_chromium_gn_chromeos_rel': {
+      }),
+      'linux_chromium_gn_chromeos_rel': simple_bot({
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS GN',
-      },
-      'linux_chromium_rel_ng': {
+      }),
+      'linux_chromium_rel_ng': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder',
         'tester': 'Linux Tests',
-      },
-      'linux_chromium_asan_rel_ng': {
+      }),
+      'linux_chromium_asan_rel_ng': simple_bot({
         'mastername': 'chromium.memory',
         'buildername': 'Linux ASan LSan Builder',
         'tester': 'Linux ASan LSan Tests (1)',
-      },
-      'linux_chromium_compile_dbg_ng': {
+      }),
+      'linux_chromium_compile_dbg_ng': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'linux_chromium_compile_rel_ng': {
+      }, analyze_mode='compile'),
+      'linux_chromium_compile_rel_ng': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder',
-        'analyze_mode': 'compile',
-      },
-      'linux_chromium_archive_rel_32_ng': {
+      }, analyze_mode='compile'),
+      'linux_chromium_archive_rel_32_ng': simple_bot({
         'mastername': 'chromium',
         'buildername': 'Linux',
-      },
-      'linux_chromium_archive_rel_ng': {
+      }),
+      'linux_chromium_archive_rel_ng': simple_bot({
         'mastername': 'chromium',
         'buildername': 'Linux x64',
-      },
-      'linux_chromium_clobber_rel_ng': {
+      }),
+      'linux_chromium_clobber_rel_ng': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Linux Builder (clobber)',
-        'analyze_mode': 'compile',
-      },
-      'linux_chromium_chromeos_dbg_ng': {
+      }, analyze_mode='compile'),
+      'linux_chromium_chromeos_dbg_ng': simple_bot({
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS Builder (dbg)',
         'tester': 'Linux ChromiumOS Tests (dbg)(1)',
-      },
-      'linux_chromium_chromeos_compile_dbg_ng': {
+      }),
+      'linux_chromium_chromeos_compile_dbg_ng': simple_bot({
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS Builder (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'linux_chromium_chromeos_rel_ng': {
+      }, analyze_mode='compile'),
+      'linux_chromium_chromeos_rel_ng': simple_bot({
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS Builder',
         'tester': 'Linux ChromiumOS Tests (1)',
-      },
-      'linux_chromium_chromeos_asan_rel_ng': {
+      }),
+      'linux_chromium_chromeos_asan_rel_ng': simple_bot({
         'mastername': 'chromium.memory',
         'buildername': 'Linux Chromium OS ASan LSan Builder',
         'tester': 'Linux Chromium OS ASan LSan Tests (1)',
-      },
-      'chromeos_x86-generic_chromium_compile_only_ng': {
+      }),
+      'chromeos_x86-generic_chromium_compile_only_ng': simple_bot({
         'mastername': 'chromium.chromiumos',
         'buildername': 'ChromiumOS x86-generic Compile',
-        'analyze_mode': 'compile',
-      },
-      'chromeos_amd64-generic_chromium_compile_only_ng': {
+      }, analyze_mode='compile'),
+      'chromeos_amd64-generic_chromium_compile_only_ng': simple_bot({
         'mastername': 'chromium.chromiumos',
         'buildername': 'ChromiumOS amd64-generic Compile',
-        'analyze_mode': 'compile',
-      },
-      'chromeos_daisy_chromium_compile_only_ng': {
+      }, analyze_mode='compile'),
+      'chromeos_daisy_chromium_compile_only_ng': simple_bot({
         'mastername': 'chromium.chromiumos',
         'buildername': 'ChromiumOS daisy Compile',
-        'analyze_mode': 'compile',
-      },
-      'linux_chromium_chromeos_compile_rel_ng': {
+      }, analyze_mode='compile'),
+      'linux_chromium_chromeos_compile_rel_ng': simple_bot({
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS Builder',
-        'analyze_mode': 'compile',
-      },
-      'linux_chromium_chromeos_msan_rel_ng': {
+      }, analyze_mode='compile'),
+      'linux_chromium_chromeos_msan_rel_ng': simple_bot({
         'mastername': 'chromium.memory.fyi',
         'buildername': 'Chromium Linux ChromeOS MSan Builder',
         'tester': 'Linux ChromeOS MSan Tests',
-      },
-      'linux_chromium_chromeos_ozone_rel_ng': {
+      }),
+      'linux_chromium_chromeos_ozone_rel_ng': simple_bot({
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS Ozone Builder',
         'tester': 'Linux ChromiumOS Ozone Tests (1)',
-      },
-      'linux_chromium_compile_dbg_32_ng': {
+      }),
+      'linux_chromium_compile_dbg_32_ng': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder (dbg)(32)',
-        'analyze_mode': 'compile',
-      },
-      'linux_chromium_msan_rel_ng': {
+      }, analyze_mode='compile'),
+      'linux_chromium_msan_rel_ng': simple_bot({
         'mastername': 'chromium.memory.fyi',
         'buildername': 'Chromium Linux MSan Builder',
         'tester': 'Linux MSan Tests',
-      },
-      'linux_chromium_tsan_rel_ng': {
+      }),
+      'linux_chromium_tsan_rel_ng': simple_bot({
         'mastername': 'chromium.memory.fyi',
         'buildername': 'Chromium Linux TSan Builder',
         'tester': 'Linux TSan Tests',
-      },
-      'linux_chromium_cfi_rel_ng': {
+      }),
+      'linux_chromium_cfi_rel_ng': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'CFI Linux',
-      },
-      'linux_site_isolation': {
+      }),
+      'linux_site_isolation': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Site Isolation Linux',
-      },
-      'linux_chromium_practice_rel_ng': {
+      }),
+      'linux_chromium_practice_rel_ng': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'ChromiumPracticeFullTester',
-      },
+      }),
     },
   },
   'tryserver.chromium.mac': {
     'builders': {
-      'mac_chromium_archive_rel_ng': {
+      'mac_chromium_archive_rel_ng': simple_bot({
         'mastername': 'chromium',
         'buildername': 'Mac',
-      },
-      'mac_chromium_dbg_ng': {
+      }),
+      'mac_chromium_dbg_ng': simple_bot({
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder (dbg)',
         'tester': 'Mac10.9 Tests (dbg)',
-      },
-      'mac_chromium_gn_dbg': {
+      }),
+      'mac_chromium_gn_dbg': simple_bot({
         'mastername': 'chromium.mac',
         'buildername': 'Mac GN (dbg)',
-      },
-      'mac_chromium_gn_rel': {
+      }),
+      'mac_chromium_gn_rel': simple_bot({
         'mastername': 'chromium.mac',
         'buildername': 'Mac GN',
-      },
-      'mac_chromium_rel_ng': {
+      }),
+      'mac_chromium_rel_ng': simple_bot({
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder',
         'tester': 'Mac10.8 Tests',
-      },
-      'mac_chromium_10.6_rel_ng': {
+      }),
+      'mac_chromium_10.6_rel_ng': simple_bot({
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder',
         'tester': 'Mac10.6 Tests',
-      },
-      'mac_chromium_10.10_rel_ng': {
+      }),
+      'mac_chromium_10.10_rel_ng': simple_bot({
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder',
         'tester': 'Mac10.10 Tests',
-      },
-      'mac_chromium_compile_dbg_ng': {
+      }),
+      'mac_chromium_compile_dbg_ng': simple_bot({
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'mac_chromium_compile_rel_ng': {
+      }, analyze_mode='compile'),
+      'mac_chromium_compile_rel_ng': simple_bot({
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder',
-        'analyze_mode': 'compile',
-      },
-      'mac_chromium_asan_rel_ng': {
+      }, analyze_mode='compile'),
+      'mac_chromium_asan_rel_ng': simple_bot({
         'mastername': 'chromium.memory',
         'buildername': 'Mac ASan 64 Builder',
         'tester': 'Mac ASan 64 Tests (1)',
-      },
+      }),
     },
   },
   'tryserver.chromium.win': {
     'builders': {
-      'win_archive': {
+      'win_archive': simple_bot({
         'mastername': 'chromium',
         'buildername': 'Win',
-      },
-      'win_chromium_dbg_ng': {
+      }),
+      'win_chromium_dbg_ng': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win Builder (dbg)',
         'tester': 'Win7 Tests (dbg)(1)',
-      },
-      'win_chromium_gn_x64_dbg': {
+      }),
+      'win_chromium_gn_x64_dbg': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win x64 GN (dbg)',
-      },
-      'win_chromium_gn_x64_rel': {
+      }),
+      'win_chromium_gn_x64_rel': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win x64 GN',
-      },
-      'win_chromium_rel_ng': {
+      }),
+      'win_chromium_rel_ng': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win Builder',
         'tester': 'Win7 Tests (1)',
-      },
-      'win10_chromium_rel_ng': {
+      }),
+      'win10_chromium_rel_ng': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Win Builder',
         'tester': 'Win10 Tests (1)',
-      },
-      'win_chromium_rel_ng_exp': {
+      }),
+      'win_chromium_rel_ng_exp': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win Builder',
         'tester': 'Win7 Tests (1)',
-      },
-      'win_chromium_xp_rel_ng': {
+      }),
+      'win_chromium_xp_rel_ng': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win Builder',
         'tester': 'XP Tests (1)',
-      },
-      'win_chromium_vista_rel_ng': {
+      }),
+      'win_chromium_vista_rel_ng': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win Builder',
         'tester': 'Vista Tests (1)',
-      },
-      'win_chromium_compile_dbg_ng': {
+      }),
+      'win_chromium_compile_dbg_ng': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win Builder (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'win_chromium_compile_dbg_ng_exp': {
+      }, analyze_mode='compile'),
+      'win_chromium_compile_dbg_ng_exp': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win Builder (dbg)',
-        'analyze_mode': 'compile',
-      },
-      'win_chromium_compile_rel_ng': {
+      }, analyze_mode='compile'),
+      'win_chromium_compile_rel_ng': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win Builder',
-        'analyze_mode': 'compile',
-      },
-      'win_chromium_x64_rel_ng': {
+      }, analyze_mode='compile'),
+      'win_chromium_x64_rel_ng': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win x64 Builder',
         'tester': 'Win 7 Tests x64 (1)',
-      },
-      'win_chromium_x64_rel_ng_exp': {
+      }),
+      'win_chromium_x64_rel_ng_exp': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win x64 Builder',
         'tester': 'Win 7 Tests x64 (1)',
-      },
-      'win8_chromium_ng': {
+      }),
+      'win8_chromium_ng': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win8 Aura',
-      },
-      'win8_chromium_gn_dbg': {
+      }),
+      'win8_chromium_gn_dbg': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win8 GN (dbg)',
-      },
-      'win_chromium_syzyasan_rel': {
+      }),
+      'win_chromium_syzyasan_rel': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Win SyzyAsan (rel)',
-      },
+      }),
       # Experimental clang/win bots.
-      'win_clang_dbg': {
+      'win_clang_dbg': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'CrWinClang(dbg)',
-      },
-      'win_clang_rel': {
+      }),
+      'win_clang_rel': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'CrWinClang',
-      },
-      'win_clang_x64_dbg': {
+      }),
+      'win_clang_x64_dbg': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'CrWinClang64(dbg)',
-      },
-      'win_clang_x64_rel': {
+      }),
+      'win_clang_x64_rel': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'CrWinClang64',
-      },
+      }),
       # Optional GPU bots.
-      'win_optional_gpu_tests_rel': {
+      'win_optional_gpu_tests_rel': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win Builder',
-      },
+      }),
     },
   },
   'tryserver.v8': {
     'builders': {
-      'v8_linux_blink_rel': {
+      'v8_linux_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux',
-      },
+      }),
     },
   },
 })

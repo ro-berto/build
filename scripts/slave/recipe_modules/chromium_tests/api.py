@@ -65,11 +65,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """Adds builders to our builder map"""
     self._builders.update(builders)
 
-  def create_bot_config_object(self, mastername, buildername, tester=None):
+  def create_bot_config_object(self, mastername, buildername):
     bot_id = {'mastername': mastername, 'buildername': buildername}
-    if tester:
-      bot_id['tester'] = tester
     return bdb_module.BotConfig(self.builders, [bot_id])
+
+  def create_generalized_bot_config_object(self, bot_ids):
+    return bdb_module.BotConfig(self.builders, bot_ids)
 
   def configure_build(self, bot_config, override_bot_type=None):
     # Get the buildspec version. It can be supplied as a build property or as

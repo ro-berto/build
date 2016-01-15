@@ -208,14 +208,15 @@ def main(argv):
 
       # TODO(phajdan.jr): Make it an error if any builders referenced here
       # are not using chromium recipe.
-      main_waterfall_master = 'master.' + bot_config['mastername']
-      bots = [bot_config['buildername']]
-      if bot_config.get('tester'):
-        bots.append(bot_config['tester'])
-      for mw_builder in bots:
-        if mw_builder in chromium_recipe_builders.get(
-            main_waterfall_master, []):
-          covered_builders.add((main_waterfall_master, mw_builder))
+      for bot_id in bot_config['bot_ids']:
+        main_waterfall_master = 'master.' + bot_id['mastername']
+        bots = [bot_id['buildername']]
+        if bot_id.get('tester'):
+          bots.append(bot_id['tester'])
+        for mw_builder in bots:
+          if mw_builder in chromium_recipe_builders.get(
+              main_waterfall_master, []):
+            covered_builders.add((main_waterfall_master, mw_builder))
 
   # TODO(phajdan.jr): Add a way to only count trybots launched by CQ by default.
   print 'Main waterfall ng-trybot coverage: %.2f' % (

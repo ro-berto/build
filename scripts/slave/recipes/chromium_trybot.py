@@ -215,9 +215,8 @@ def _RunStepsInternal(api):
   builder = api.properties['buildername']
   enable_gpu_tests = builder in CHROMIUM_GPU_DIMENSION_SETS.get(master, {})
 
-  bot_config_object = api.chromium_tests.create_bot_config_object(
-      bot_config['mastername'], bot_config['buildername'],
-      tester=bot_config.get('tester'))
+  bot_config_object = api.chromium_tests.create_generalized_bot_config_object(
+      bot_config['bot_ids'])
   api.chromium_tests.configure_build(
       bot_config_object, override_bot_type='builder_tester')
 
@@ -408,8 +407,7 @@ def GenTests(api):
                                       analyze)
         yield (
           api.test(test_name) +
-          api.chromium_tests.platform(
-              bot_config['mastername'], bot_config['buildername']) +
+          api.chromium_tests.platform(bot_config['bot_ids']) +
           (api.empty_test_data() if analyze else suppress_analyze()) +
           props(mastername=mastername, buildername=buildername)
         )
@@ -428,8 +426,7 @@ def GenTests(api):
               suppress_analyze() +
               props(mastername='tryserver.blink',
                     buildername=buildername) +
-              api.chromium_tests.platform(
-                  bot_config['mastername'], bot_config['buildername']) +
+              api.chromium_tests.platform(bot_config['bot_ids']) +
               api.override_step_data('webkit_tests (with patch)',
                   api.test_utils.canned_test_output(passing=pass_first)))
       if not pass_first:
