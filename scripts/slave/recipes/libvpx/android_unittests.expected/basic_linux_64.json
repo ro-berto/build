@@ -29,7 +29,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/git_setup.py",
+      "RECIPE_PACKAGE[build]/git_setup.py",
       "--path",
       "[SLAVE_BUILD]/android_tools",
       "--url",
@@ -95,7 +95,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/git_setup.py",
+      "RECIPE_PACKAGE[build]/git_setup.py",
       "--path",
       "[SLAVE_BUILD]/libvpx",
       "--url",

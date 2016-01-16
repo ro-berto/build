@@ -12,7 +12,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/git_setup.py",
+      "RECIPE_PACKAGE[build]/git_setup.py",
       "--path",
       "[SLAVE_BUILD]/swarming.client",
       "--url",

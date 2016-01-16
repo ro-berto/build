@@ -174,7 +174,7 @@ class GitApi(recipe_api.RecipeApi):
     steps = [
         self.m.python(
             'git setup%s' % step_suffix,
-            self.m.path['build'].join('scripts', 'slave', 'git_setup.py'),
+            self.package_resource('git_setup.py'),
             git_setup_args),
     ]
 
