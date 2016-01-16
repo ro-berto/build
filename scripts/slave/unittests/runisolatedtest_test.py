@@ -70,7 +70,7 @@ class TestAll(unittest.TestCase):
     ]
     expected = [
       [
-        '/usr/bin/python',
+        sys.executable,
         'build/src/tools/swarming_client/isolate.py',
         'run',
         '--isolated',
