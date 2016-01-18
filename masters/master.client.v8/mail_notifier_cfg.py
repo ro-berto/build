@@ -86,7 +86,11 @@ def Update(config, active_master, c):
       exclusions={},
       relayhost=config.Master.smtp,
       sendToInterestedUsers=False,
-      extraRecipients=['weiliang.lin@intel.com', 'chunyang.dai@intel.com'],
+      extraRecipients=[
+        'weiliang.lin@intel.com',
+        'chunyang.dai@intel.com',
+        'zhengxing.li@intel.com',
+      ],
       status_header='buildbot failure in %(project)s on %(builder)s, %(steps)s',
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps))
