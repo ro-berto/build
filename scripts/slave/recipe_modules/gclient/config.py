@@ -600,7 +600,13 @@ def custom_tabs_client(c):
 def angle_top_of_tree(c):
   """Configures the top-of-tree ANGLE in a Chromium checkout.
 
-  Sets up ToT instead of the DEPS-pinned revision for ANGLE. 
+  Sets up ToT instead of the DEPS-pinned revision for ANGLE.
   """
   c.solutions[0].revision = 'HEAD'
   c.revisions['src/third_party/angle'] = 'HEAD'
+
+@config_ctx()
+def gerrit_test_cq_normal(c):
+  soln = c.solutions.add()
+  soln.name = 'gerrit-test-cq-normal'
+  soln.url = 'https://chromium.googlesource.com/playground/gerrit-cq/normal.git'

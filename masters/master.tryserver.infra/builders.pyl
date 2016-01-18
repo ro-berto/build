@@ -134,6 +134,13 @@
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "presubmit_recipespy",
     },
+    "gerrit-test-cq-normal": {
+      "category": "Gerrit CQ",
+      "recipe": "infra/gerrit_cq_test",
+      "scheduler": None,
+      "slave_pools": ["trusty64_slave_pool"],
+      "slavebuilddir": "gerrit-test-cq-normal",
+    },
   },
 
   "schedulers": {},
