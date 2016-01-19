@@ -407,10 +407,16 @@ div.BuildWaterfall {
   border-color: #A77272;
 }
 
-.exception, .offline, .retry {
+.exception, .retry {
   color: #FFFFFF;
   background-color: #e0b0ff;
   border-color: #ACA0B3;
+}
+
+.offline {
+  color: #FFFFFF;
+  background-color: #777777;
+  border-color: #dddddd;
 }
 
 .start,.running, td.building {

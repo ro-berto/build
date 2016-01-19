@@ -150,7 +150,7 @@ Build #{{ b.getNumber() }}
                    b.getProperty('mastername') }}/{{ b.getBuilder().getName()
                    }}/{{ '%.7d' % b.getNumber() }}/{{ s.name|replace('/', '_') }}.{{
                    l.name|replace('/', '_') }}"
-             title="Raw file stored on Google Cloud Storage (available after up to 5 min after end of build)">cache</a>
+             title="Raw log stored on Google Cloud Storage (available after up to 5 min after end of build)">cache</a>
 </li>
       {% else %}
         <li class="{{ item_class.next() }}">- no logs -</li>
@@ -165,7 +165,7 @@ Build #{{ b.getNumber() }}
 
 {# Close out all open indentation sections. #}
 {% for _ in range(-1, nest_level) %}
- </li></ul>
+ </li></ol>
 {% endfor %}
 
 </div>
