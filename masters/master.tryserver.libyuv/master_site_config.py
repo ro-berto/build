@@ -17,3 +17,5 @@ class LibyuvTryServer(Master.Master4):
   code_review_site = 'https://codereview.chromium.org'
   svn_url = 'svn://svn-mirror.golo.chromium.org/chrome-try/try-libyuv'
   buildbot_url = 'http://build.chromium.org/p/tryserver.libyuv/'
+  service_account_file = 'service-account-libyuv.json'
+  buildbucket_bucket = 'master.tryserver.libyuv'
