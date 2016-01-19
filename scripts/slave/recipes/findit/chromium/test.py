@@ -44,7 +44,7 @@ PROPERTIES = {
     'requested_tests': Property(
         kind=Dict(value_type=list), param_name='tests',
         help='The failed tests, the test name should be full name, e.g.: {'
-             '  "browser_tests on Windows-XP-SP3": ['
+             '  "browser_tests": ['
              '    "suite.test1", "suite.test2"'
              '  ]'
              '}'),
@@ -187,14 +187,14 @@ def RunSteps(api, target_mastername, target_testername,
 
 
 def GenTests(api):
-  def props(tests):
+  def props(tests, platform_name, tester_name):
     properties = {
-        'mastername': 'tryserver.chromium.win',
-        'buildername': 'win_chromium_variable',
+        'mastername': 'tryserver.chromium.%s' % platform_name,
+        'buildername': '%s_chromium_variable' % platform_name,
         'slavename': 'build1-a1',
         'buildnumber': 1,
-        'target_mastername': 'chromium.win',
-        'target_testername': 'Vista Tests (1)',
+        'target_mastername': 'chromium.%s' % platform_name,
+        'target_testername': tester_name,
         'good_revision': 'r0',
         'bad_revision': 'r1',
         'tests': tests,
@@ -225,9 +225,10 @@ def GenTests(api):
 
   yield (
       api.test('nonexistent_test_step_skipped') +
-      props({'newly_added_tests': ['Test.One', 'Test.Two', 'Test.Three']}) +
+      props({'newly_added_tests': ['Test.One', 'Test.Two', 'Test.Three']},
+            'win', 'Win7 Tests (1)') +
       api.override_step_data('test r1.read test spec', api.json.output({
-          'Vista Tests (1)': {
+          'Win7 Tests (1)': {
               'gtest_tests': [
                   {
                     'test': 'gl_tests',
@@ -240,9 +241,10 @@ def GenTests(api):
 
   yield (
       api.test('all_test_failed') +
-      props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']}) +
+      props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
+            'win', 'Win7 Tests (1)') +
       api.override_step_data('test r1.read test spec', api.json.output({
-          'Vista Tests (1)': {
+          'Win7 Tests (1)': {
               'gtest_tests': [
                   {
                     'test': 'gl_tests',
@@ -252,16 +254,18 @@ def GenTests(api):
           },
       })) +
       api.override_step_data(
-          'test r1.gl_tests (r1) on Windows-Vista-SP2',
+          'test r1.gl_tests (r1)',
           simulated_gtest_output(
               failed_test_names=['Test.One', 'Test.Two', 'Test.Three'])
       )
   )
+
   yield (
       api.test('all_test_passed') +
-      props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']}) +
+      props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
+            'win', 'Win7 Tests (1)') +
       api.override_step_data('test r1.read test spec', api.json.output({
-          'Vista Tests (1)': {
+          'Win7 Tests (1)': {
               'gtest_tests': [
                   {
                     'test': 'gl_tests',
@@ -271,7 +275,7 @@ def GenTests(api):
           },
       })) +
       api.override_step_data(
-          'test r1.gl_tests (r1) on Windows-Vista-SP2',
+          'test r1.gl_tests (r1)',
           simulated_gtest_output(
               passed_test_names=['Test.One', 'Test.Two', 'Test.Three'])
       )
@@ -279,9 +283,10 @@ def GenTests(api):
 
   yield (
       api.test('only_one_test_passed') +
-      props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']}) +
+      props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
+            'win', 'Win7 Tests (1)') +
       api.override_step_data('test r1.read test spec', api.json.output({
-          'Vista Tests (1)': {
+          'Win7 Tests (1)': {
               'gtest_tests': [
                   {
                     'test': 'gl_tests',
@@ -291,7 +296,7 @@ def GenTests(api):
           },
       })) +
       api.override_step_data(
-          'test r1.gl_tests (r1) on Windows-Vista-SP2',
+          'test r1.gl_tests (r1)',
           simulated_gtest_output(
               failed_test_names=['Test.One', 'Test.Two'],
               passed_test_names=['Test.Three'])
@@ -300,9 +305,9 @@ def GenTests(api):
 
   yield (
       api.test('compile_skipped') +
-      props({'checkperms': []}) +
+      props({'checkperms': []}, 'win', 'Win7 Tests (1)') +
       api.override_step_data('test r1.read test spec', api.json.output({
-          'Vista Tests (1)': {
+          'Win7 Tests (1)': {
               'scripts': [
                   {
                       'name': 'checkperms',
@@ -315,9 +320,10 @@ def GenTests(api):
 
   yield (
       api.test('none_swarming_tests') +
-      props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']}) +
+      props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
+            'win', 'Win7 Tests (1)') +
       api.override_step_data('test r1.read test spec', api.json.output({
-          'Vista Tests (1)': {
+          'Win7 Tests (1)': {
               'gtest_tests': [
                   {
                     'test': 'gl_tests',
@@ -331,5 +337,24 @@ def GenTests(api):
           simulated_gtest_output(
               failed_test_names=['Test.One', 'Test.Two'],
               passed_test_names=['Test.Three'])
+      )
+  )
+
+  yield (
+      api.test('swarming_tests') +
+      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests') +
+      api.override_step_data('test r1.read test spec', api.json.output({
+          'Mac10.9 Tests': {
+              'gtest_tests': [
+                  {
+                    'test': 'gl_tests',
+                    'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data(
+          'test r1.gl_tests (r1) on Mac-10.9',
+          simulated_gtest_output(passed_test_names=['Test.One'])
       )
   )

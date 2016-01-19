@@ -324,7 +324,7 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.win.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Vista Tests (1)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Win7 Tests (1)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
