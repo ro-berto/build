@@ -718,7 +718,7 @@ class DartUtils(object):
          'slavenames': slaves.GetSlavesName(builder=v['name']),
          'category': v['category'],
          'locks': slave_locks,
-         'auto_reboot': auto_reboot}
+         'auto_reboot': v.get('auto_reboot', auto_reboot)}
       if 'merge_requests' in v:
         builder['mergeRequests'] = v['merge_requests']
       builders.append(builder)
