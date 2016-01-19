@@ -22,9 +22,9 @@ class WebRTCApi(recipe_api.RecipeApi):
     'common_video_unittests',
     'libjingle_media_unittest',
     'libjingle_p2p_unittest',
-    'libjingle_peerconnection_unittest',
     'modules_tests',
     'modules_unittests',
+    'peerconnection_unittests',
     'rtc_unittests',
     'system_wrappers_unittests',
     'test_support_unittests',
@@ -43,6 +43,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         'webrtc/common_video/common_video_unittests.isolate',
     'modules_tests': 'webrtc/modules/modules_tests.isolate',
     'modules_unittests': 'webrtc/modules/modules_unittests.isolate',
+    'peerconnection_unittests': 'talk/peerconnection_unittests.isolate',
     'system_wrappers_unittests':
         'webrtc/system_wrappers/system_wrappers_unittests.isolate',
     'test_support_unittests': 'webrtc/test/test_support_unittests.isolate',

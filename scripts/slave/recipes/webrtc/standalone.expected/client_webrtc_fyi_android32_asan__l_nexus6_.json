@@ -467,6 +467,29 @@
       "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
       "gtest",
       "-s",
+      "peerconnection_unittests",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--verbose",
+      "--release",
+      "--isolate_file_path=[SLAVE_BUILD]/src/talk/peerconnection_unittests.isolate",
+      "--tool=asan",
+      "-t",
+      "900"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "peerconnection_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
+      "gtest",
+      "-s",
       "system_wrappers_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",

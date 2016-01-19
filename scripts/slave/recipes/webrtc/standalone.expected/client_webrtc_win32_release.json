@@ -246,31 +246,6 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--test-type=libjingle_peerconnection_unittest",
-      "--step-name=libjingle_peerconnection_unittest",
-      "--builder-name=Win32 Release",
-      "--slave-name=slavename",
-      "--build-number=1337",
-      "--run-python-script",
-      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[SLAVE_BUILD]\\src\\out\\Release\\libjingle_peerconnection_unittest",
-      "--"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "libjingle_peerconnection_unittest"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Release",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--test-type=modules_tests",
       "--step-name=modules_tests",
       "--builder-name=Win32 Release",
@@ -309,6 +284,31 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "modules_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--test-type=peerconnection_unittests",
+      "--step-name=peerconnection_unittests",
+      "--builder-name=Win32 Release",
+      "--slave-name=slavename",
+      "--build-number=1337",
+      "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
+      "[SLAVE_BUILD]\\src\\out\\Release\\peerconnection_unittests",
+      "--"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "peerconnection_unittests"
   },
   {
     "cmd": [

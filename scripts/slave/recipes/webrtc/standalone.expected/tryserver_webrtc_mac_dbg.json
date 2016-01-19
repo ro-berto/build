@@ -269,30 +269,6 @@
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_dbg\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_dbg\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
-      "--test-type=libjingle_peerconnection_unittest",
-      "--step-name=libjingle_peerconnection_unittest",
-      "--builder-name=mac_dbg",
-      "--slave-name=slavename",
-      "--run-python-script",
-      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Debug/libjingle_peerconnection_unittest",
-      "--"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "libjingle_peerconnection_unittest"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_dbg\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_dbg\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--test-type=modules_tests",
       "--step-name=modules_tests",
       "--builder-name=mac_dbg",
@@ -329,6 +305,30 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "modules_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_dbg\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"mac_dbg\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--test-type=peerconnection_unittests",
+      "--step-name=peerconnection_unittests",
+      "--builder-name=mac_dbg",
+      "--slave-name=slavename",
+      "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Debug/peerconnection_unittests",
+      "--"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "peerconnection_unittests"
   },
   {
     "cmd": [
