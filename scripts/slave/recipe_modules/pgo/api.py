@@ -48,8 +48,6 @@ class PGOApi(recipe_api.RecipeApi):
     """
     self.m.chromium.set_config(bot_config['chromium_config_instrument'],
                                **bot_config.get('chromium_config_kwargs'))
-    for c in bot_config.get('chromium_apply_config', []):
-      self.m.chromium.apply_config(c)
     self.m.chromium.runhooks(name='Runhooks: Instrumentation phase.')
     # Remove the profile files from the previous builds.
     self.m.file.rmwildcard('*.pg[cd]', str(self.m.chromium.output_dir))
@@ -61,7 +59,7 @@ class PGOApi(recipe_api.RecipeApi):
     Run a suite of telemetry benchmarks to generate some profiling data.
     """
     pgosweep_path = self.m.path['depot_tools'].join(
-        'win_toolchain', 'vs2013_files', 'VC', 'bin')
+        'win_toolchain', 'vs_files', 'VC', 'bin')
     pgo_env = {
         'PATH': '%s;%s' % (pgosweep_path, '%(PATH)s'),
         'PogoSafeMode': 1
@@ -85,19 +83,7 @@ class PGOApi(recipe_api.RecipeApi):
     """
     self.m.chromium.set_config(bot_config['chromium_config_optimize'],
                                **bot_config.get('chromium_config_kwargs'))
-    for c in bot_config.get('chromium_apply_config', []):
-      self.m.chromium.apply_config(c)
     self.m.chromium.runhooks(name='Runhooks: Optimization phase.')
-
-    # Increase the stack size of pgomgr.exe.
-    #
-    # TODO(sebmarchand): Remove this once the bug has been fixed.
-    self.m.python('increase pgomgr.exe stack size',
-        self.resource('increase_pgomgr_stack_size.py'),
-        args=[self.m.path['depot_tools'].join(
-            'win_toolchain', 'vs2013_files', 'VC', 'bin', 'amd64_x86')],
-        cwd=self.m.path['slave_build'])
-
     self.m.chromium.compile(name='Compile: Optimization phase.')
 
   def compile_pgo(self, bot_config):

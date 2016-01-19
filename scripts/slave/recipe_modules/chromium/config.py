@@ -771,7 +771,7 @@ def codesearch(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['fastbuild'] = 1
 
-@config_ctx(includes=['ninja', 'static_library'])
+@config_ctx(includes=['ninja', 'static_library', 'msvs2015'])
 def chromium_pgo_base(c):
   c.gyp_env.GYP_DEFINES['buildtype'] = 'Official'
   c.gyp_env.GYP_DEFINES['use_goma'] = 0
