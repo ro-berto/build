@@ -50,6 +50,8 @@ LOGDOG_WHITELIST_MASTER_BUILDERS = {
     'chromium.infra': {
       'luci-gae-trusty64',
       'luci-go-trusty64',
+      'infra-continuous-trusty-64',
+      'infra-continuous-precise-64',
     },
 }
 
