@@ -774,7 +774,6 @@ def codesearch(c):
 @config_ctx(includes=['ninja', 'static_library'])
 def chromium_pgo_base(c):
   c.gyp_env.GYP_DEFINES['buildtype'] = 'Official'
-  c.gyp_env.GYP_DEFINES['optimize'] = 'max'
   c.gyp_env.GYP_DEFINES['use_goma'] = 0
   fastbuild(c, invert=True)
   c.compile_py.default_targets = ['chrome']
