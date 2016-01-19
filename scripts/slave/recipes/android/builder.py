@@ -59,7 +59,7 @@ BUILDERS = freeze({
   },
   'chromium.perf': {
     'Android Builder': {
-      'recipe_config': 'perf',
+      'recipe_config': 'main_builder_rel_mb',
       'gclient_apply_config': ['android', 'perf'],
       'kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -68,10 +68,11 @@ BUILDERS = freeze({
         'bucket': 'chrome-perf',
         'path': lambda api: ('android_perf_rel/full-build-linux_%s.zip'
                              % api.properties['revision']),
-      }
+      },
+      'run_mb': True,
     },
     'Android arm64 Builder': {
-      'recipe_config': 'arm64_builder',
+      'recipe_config': 'arm64_builder_rel_mb',
       'gclient_apply_config': ['android', 'perf'],
       'kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -81,7 +82,8 @@ BUILDERS = freeze({
         'path': lambda api: (
             'android_perf_rel_arm64/full-build-linux_%s.zip'
             % api.properties['revision']),
-      }
+      },
+      'run_mb': True,
     }
   },
   'tryserver.chromium.perf': {
@@ -174,6 +176,9 @@ def _RunStepsInternal(api, mastername, buildername, revision):
   api.chromium_android.clean_local_files()
 
   api.chromium.runhooks()
+
+  if bot_config.get('run_mb'):
+    api.chromium.run_mb(mastername, buildername, use_goma=True)
 
   if bot_config.get('check_licenses'):
     with bot_config['check_licenses']():
