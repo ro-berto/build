@@ -551,6 +551,44 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         else:
           self.m.chromium_android.test_report()
 
+  def _resolve_fixed_revisions(self, bot_update_json):
+    """Set all fixed revisions from the first sync to their respective
+    got_X_revision values.
+
+    If on the first sync, a revision was requested to be HEAD, this avoids
+    using HEAD potentially resolving to a different revision on the second
+    sync. Instead, we sync explicitly to whatever was checked out the first
+    time.
+
+    Example (chromium trybot used with v8 patch):
+
+    First sync was called with
+    bot_update.py --revision src@abc --revision src/v8@HEAD
+    Fixed revisions are: src, src/v8
+    Got_revision_mapping: src->got_revision, src/v8->got_v8_revision
+    got_revision = abc, got_v8_revision = deadbeef
+    Second sync will be called with
+    bot_update.py --revision src@abc --revision src/v8@deadbeef
+
+    Example (chromium trybot used with chromium DEPS change, changing v8 from
+    "v8_before" to "v8_after"):
+
+    First sync was called with
+    bot_update.py --revision src@abc
+    Fixed revisions are: src
+    Got_revision_mapping: src->got_revision, src/v8->got_v8_revision
+    got_revision = abc, got_v8_revision = v8_after
+    Second sync will be called with
+    bot_update.py --revision src@abc
+    When deapplying the patch, v8 will be synced to v8_before.
+    """
+    for name in bot_update_json.get('fixed_revisions', {}):
+      rev_property = self.m.gclient.c.got_revision_mapping.get(name)
+      if rev_property and bot_update_json['properties'].get(rev_property):
+        self.m.gclient.c.revisions[name] = str(
+            bot_update_json['properties'][rev_property])
+
+
   def deapply_patch(self, bot_update_step):
     assert self.m.tryserver.is_tryserver
 
@@ -566,6 +604,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     rev_property = self.m.gclient.c.got_revision_mapping[first_solution_name]
     self.m.gclient.c.revisions[first_solution_name] = str(
         bot_update_json['properties'][rev_property])
+    self._resolve_fixed_revisions(bot_update_json)
     self.m.bot_update.ensure_checkout(
         force=True, patch=False, update_presentation=False)
     self.m.chromium.runhooks(name='runhooks (without patch)')

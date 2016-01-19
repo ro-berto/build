@@ -383,13 +383,13 @@ def GenTests(api):
       **kwargs
     )
 
-  def suppress_analyze():
+  def suppress_analyze(more_exclusions=None):
     """Overrides analyze step data so that all targets get compiled."""
     return api.override_step_data(
         'read filter exclusion spec',
         api.json.output({
             'base': {
-                'exclusions': ['f.*'],
+                'exclusions': ['f.*'] + (more_exclusions or []),
             },
             'chromium': {
                 'exclusions': [],
@@ -1061,4 +1061,17 @@ def GenTests(api):
           buildername='mac_blink_rel',
           patch_project='v8') +
     api.platform.name('mac')
+  )
+
+  yield (
+    api.test('use_v8_patch_on_blink_trybot_test_failures') +
+    props(mastername='tryserver.v8',
+          buildername='v8_linux_blink_rel',
+          patch_project='v8') +
+    api.platform.name('linux') +
+    suppress_analyze(more_exclusions=['v8/f.*']) +
+    api.override_step_data('webkit_tests (with patch)',
+        api.test_utils.canned_test_output(passing=False)) +
+    api.override_step_data('webkit_tests (without patch)',
+        api.test_utils.canned_test_output(passing=True, minimal=True))
   )

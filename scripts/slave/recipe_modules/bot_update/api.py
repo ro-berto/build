@@ -157,8 +157,12 @@ class BotUpdateApi(recipe_api.RecipeApi):
         ['--output_json', self.m.json.output()],]
 
 
-    revisions = {}
+    # Collect all fixed revisions to simulate them in the json output.
+    # Fixed revision are the explicit input revisions of bot_update.py, i.e.
+    # every command line parameter "--revision name@value".
     fixed_revisions = {}
+
+    revisions = {}
     for solution in cfg.solutions:
       if solution.revision:
         revisions[solution.name] = solution.revision
