@@ -56,6 +56,10 @@ def main_builder(c):
   pass
 
 @config_ctx()
+def main_builder_rel_mb(c):
+  pass
+
+@config_ctx()
 def clang_builder(c):
   pass
 
@@ -120,6 +124,10 @@ def arm64_builder(c):
 
 @config_ctx()
 def arm64_builder_rel(c):  # pragma: no cover
+  pass
+
+@config_ctx()
+def arm64_builder_rel_mb(c):
   pass
 
 @config_ctx()

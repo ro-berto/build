@@ -59,7 +59,7 @@ BUILDERS = freeze({
   },
   'chromium.perf': {
     'Android Builder': {
-      'recipe_config': 'perf',
+      'recipe_config': 'main_builder_rel_mb',
       'gclient_apply_config': ['android', 'perf'],
       'kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -71,7 +71,7 @@ BUILDERS = freeze({
       }
     },
     'Android arm64 Builder': {
-      'recipe_config': 'arm64_builder',
+      'recipe_config': 'arm64_builder_rel_mb',
       'gclient_apply_config': ['android', 'perf'],
       'kwargs': {
         'BUILD_CONFIG': 'Release',
