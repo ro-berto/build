@@ -19,17 +19,11 @@
       "scheduler": None,
       "slave_pools": ["slaves_with_devices"],
     },
-    "android_aura_tester": {
-      "recipe": "chromium_trybot",
+    "android_cronet_tester": {
+      "recipe": "cronet",
       "scheduler": None,
       "slave_pools": ["slaves_with_devices"],
     },
-    "android_aura_compile": {
-      "recipe": "chromium_trybot",
-      "scheduler": None,
-      "slave_pools": ["ccompute_bots"],
-    },
-
     "android_arm64_dbg_recipe": {
       "recipe": "chromium_trybot",
       "scheduler": None,
@@ -268,16 +262,6 @@
         "build199-a4",
         "build38-b4",
         "build97-b4",
-      ],
-    },
-    "ccompute_bots": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": [
-        "slave57-c1",
       ],
     },
     "amp": {

@@ -116,15 +116,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'Android GN',
       }),
-      'android_aura_tester': simple_bot({
-        'mastername': 'chromium.android',
-        'buildername': 'Android Aura Builder (dbg)',
-        'tester': 'Android Aura Tester (dbg)',
-      }),
-      'android_aura_compile': simple_bot({
-        'mastername': 'chromium.android',
-        'buildername': 'Android Aura Builder (dbg)',
-      }, analyze_mode='compile'),
       'android_amp': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Android Tests (amp split)',
