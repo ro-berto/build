@@ -38,21 +38,6 @@ TEST_BUILDERS = freeze({
         'platform': 'win',
       },
     },
-    'Test builder silent failure': {
-      'recipe_config': 'chromium',
-      'chromium_config_instrument': 'chromium_pgo_instrument',
-      'chromium_config_optimize': 'chromium_pgo_optimize',
-      'gclient_config': 'chromium',
-      'clobber': True,
-      'fail_silently': True,
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'testing': {
-        'platform': 'win',
-      },
-    },
   }
 })
 
@@ -86,24 +71,4 @@ def GenTests(api):
                            buildername='Test builder') +
     api.platform('win', 32) +
     api.step_data('Telemetry benchmark: sunspider', retcode=1)
-  )
-
-  yield (
-    api.test('full_%s_%s_compile_failure' %
-        (_sanitize_nonalpha('chromium_pgo.test'),
-         _sanitize_nonalpha('Test builder'))) +
-    api.properties.generic(mastername='chromium_pgo.test',
-                           buildername='Test builder') +
-    api.platform('win', 32) +
-    api.step_data('Compile: Optimization phase.', retcode=1)
-  )
-
-  yield (
-    api.test('full_%s_%s_silent_compile_failure' %
-        (_sanitize_nonalpha('chromium_pgo.test'),
-         _sanitize_nonalpha('Test builder silent failure'))) +
-    api.properties.generic(mastername='chromium_pgo.test',
-                           buildername='Test builder silent failure') +
-    api.platform('win', 32) +
-    api.step_data('Compile: Optimization phase.', retcode=1)
   )

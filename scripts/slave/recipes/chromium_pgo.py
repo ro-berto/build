@@ -23,9 +23,6 @@ PGO_BUILDERS = freeze({
       'chromium_apply_config': ['msvs2015'],
       'gclient_config': 'chromium',
       'clobber': True,
-      # TODO(sebmarchand): This is a hack to get 100% coverage, remove me
-      # and fix this.
-      'patch_root': 'src',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
