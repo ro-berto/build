@@ -23,11 +23,6 @@ def main_builder(c):
     raise recipe_config.BadConf(
       'Cannot target arm with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
-@CONFIG_CTX(includes=['main_builder', 'mb'],
-            config_vars={'BUILD_CONFIG': 'Release'})
-def main_builder_rel_mb(c):
-  pass
-
 @CONFIG_CTX(includes=['base_config', 'clang', 'goma', 'android_findbugs'])
 def clang_builder(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
@@ -97,10 +92,6 @@ def arm64_builder(c):
 @CONFIG_CTX(includes=['arm64_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})
 def arm64_builder_rel(c):  # pragma: no cover
-  pass
-
-@CONFIG_CTX(includes=['arm64_builder_rel', 'mb'])
-def arm64_builder_rel_mb(c):
   pass
 
 @CONFIG_CTX(includes=['main_builder'])
