@@ -413,6 +413,20 @@ def build_internal_scripts_slave(c):
   build(c)
   c.got_revision_mapping['build'] = 'got_build_revision'
 
+@config_ctx()
+def slave_deps(c):
+  s = c.solutions.add()
+  s.name = 'build_internal/slave.DEPS'
+  s.url = 'https://chrome-internal.googlesource.com/chrome/tools/build/slave.DEPS.git'
+  c.got_revision_mapping['build_internal/slave.DEPS'] = 'got_revision'
+
+@config_ctx()
+def internal_deps(c):
+  s = c.solutions.add()
+  s.name = 'build_internal/internal.DEPS'
+  s.url = 'https://chrome-internal.googlesource.com/chrome/tools/build/internal.DEPS.git'
+  c.got_revision_mapping['build_internal/internal.DEPS'] = 'got_revision'
+
 @config_ctx(includes=['chromium', 'chrome_internal'])
 def perf(c):
   s = c.solutions[0]
