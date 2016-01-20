@@ -1439,7 +1439,7 @@ BUILDERS = {
       'V8 Linux64 - gcov coverage': {
       'v8_apply_config': ['gcov_coverage'],
         'chromium_apply_config': [
-          'v8_ninja', 'gcov_coverage', 'goma', 
+          'clobber', 'v8_ninja', 'gcov_coverage', 'goma', 
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',

@@ -102,6 +102,7 @@
       "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
+      "--clobber",
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",
