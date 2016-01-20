@@ -121,6 +121,7 @@ def RunSteps(api):
         'SLAVE_NUM': str(slave_num),
         'TOOL_NAME': skia_tool,
         'GIT_HASH': skia_hash,
+        'CONFIGURATION': configuration,
     }
     api.ct_swarming.create_isolated_gen_json(
         isolate_path, isolate_dir, 'linux', slave_num, extra_variables)
