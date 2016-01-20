@@ -43,6 +43,12 @@ def RunSteps(api):
   else:
     raise Exception('Do not recognise the buildername %s.' % buildername)
 
+  # Figure out which configuration to build.
+  if 'Release' in buildername:
+    configuration = 'Release'
+  else:
+    configuration = 'Debug'
+
   # Figure out which tool to use.
   if 'DM' in buildername:
     skia_tool = 'dm'
@@ -85,8 +91,9 @@ def RunSteps(api):
   # Apply issue to the Skia checkout if this is a trybot run.
   api.tryserver.maybe_apply_issue()
 
-  # Build the tool in Debug mode.
-  api.step('build %s' % skia_tool, ['make', skia_tool],
+  # Build the tool.
+  api.step('build %s' % skia_tool,
+           ['make', skia_tool, 'BUILDTYPE=%s' % configuration],
            cwd=api.path['checkout'])
 
   skps_chromium_build = api.properties.get(
@@ -188,7 +195,7 @@ def GenTests(api):
     api.test('CT_BENCH_10k_SKPs') +
     api.properties(
         buildername=
-            'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_BENCH_10k_SKPs',
+            'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-CT_BENCH_10k_SKPs',
         ct_num_slaves=ct_num_slaves,
         revision=skia_revision,
     )

@@ -127,7 +127,8 @@
   {
     "cmd": [
       "make",
-      "dm"
+      "dm",
+      "BUILDTYPE=Debug"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "build dm",
