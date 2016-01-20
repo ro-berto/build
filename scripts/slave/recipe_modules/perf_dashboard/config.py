@@ -7,16 +7,18 @@ import types
 from recipe_engine.config import config_item_context, ConfigGroup
 from recipe_engine.config import Single
 
+
 def BaseConfig(**_kwargs):
-  return ConfigGroup(
-    url = Single(basestring)
-  )
+  return ConfigGroup(url=Single(basestring))
+
 
 config_ctx = config_item_context(BaseConfig)
+
 
 @config_ctx()
 def production(c):
   c.url = "https://chromeperf.appspot.com"
+
 
 @config_ctx()
 def testing(c):
