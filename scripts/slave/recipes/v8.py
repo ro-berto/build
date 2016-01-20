@@ -331,5 +331,10 @@ def GenTests(api):
     api.v8.fail('Mjsunit') +
     api.override_step_data(
         'Bisect.Fetch changes', api.v8.example_one_buildbot_change()) +
+    api.override_step_data(
+        'Bisect.Get change range',
+        api.v8.example_bisection_range_one_change(),
+    ) +
+
     api.time.step(120)
   )

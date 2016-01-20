@@ -1532,43 +1532,44 @@
   },
   {
     "cmd": [
-      "git",
-      "log",
-      "a1~1..a3"
+      "python",
+      "-u",
+      "RECIPE_MODULE[gitiles]/resources/gerrit_client.py",
+      "--json-file",
+      "/path/to/tmp/json",
+      "--url",
+      "https://chromium.googlesource.com/v8/v8/+log/a1~2..a3",
+      "--format",
+      "json",
+      "--log-limit",
+      "100"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
-    "name": "Bisect.Show changes",
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Bisect.Get change range",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "log",
-      "a1~1",
-      "--format=%H",
-      "-n1"
-    ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
-    "name": "Bisect.Get latest previous change",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "log",
-      "a0..a3",
-      "--format=%H"
-    ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
-    "name": "Bisect.Fetch range",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br />4 commits fetched@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"log\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"commit\": \"a3\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"msg\": \"Cool commit 3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"commit\": \"a2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"msg\": \"Cool commit 2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"commit\": \"a1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"msg\": \"Cool commit 1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"commit\": \"a0\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"msg\": \"Cool commit 0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

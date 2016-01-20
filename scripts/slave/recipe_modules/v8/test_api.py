@@ -308,11 +308,25 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     })
 
   def example_bisection_range(self):
-    # Git returns changes in the order newest -> oldest.
-    return self.m.raw_io.stream_output('a3\na2\na1', stream='stdout')
+    # Gitiles returns changes in the order newest -> oldest.
+    return self.m.json.output({
+      'log': [
+        {'commit': 'a3', 'msg': 'Cool commit 3'},
+        {'commit': 'a2', 'msg': 'Cool commit 2'},
+        {'commit': 'a1', 'msg': 'Cool commit 1'},
+        {'commit': 'a0', 'msg': 'Cool commit 0'},
+      ],
+    })
 
-  def example_latest_previous_hash(self):
-    return self.m.raw_io.stream_output('a0', stream='stdout')
+  def example_bisection_range_one_change(self):
+    # A1 is the single change in the range, while a0 is the latest previous
+    # before the range.
+    return self.m.json.output({
+      'log': [
+        {'commit': 'a1', 'msg': 'Cool commit 1'},
+        {'commit': 'a0', 'msg': 'Cool commit 0'},
+      ],
+    })
 
   def example_available_builds(self, revision):
     # When 'gsutil ls' is called, it will only find builds for a1 or a3.

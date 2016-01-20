@@ -18,7 +18,9 @@ from . import builders
 from . import testing
 
 
-COMMIT_TEMPLATE = 'https://chromium.googlesource.com/v8/v8/+/%s'
+V8_URL = 'https://chromium.googlesource.com/v8/v8'
+
+COMMIT_TEMPLATE = '%s/+/%%s' % V8_URL
 
 # Regular expressions for v8 branch names.
 RELEASE_BRANCH_RE = re.compile(r'^\d+\.\d+$')
@@ -601,23 +603,11 @@ class V8Api(recipe_api.RecipeApi):
 
     with self.m.step.nest('Bisect'):
       # Setup bisection range ("from" exclusive).
-      from_change, to_change, nchanges = self.get_change_range()
-      if nchanges <= 1:
+      latest_previous, bisect_range = self.get_change_range()
+      if len(bisect_range) <= 1:
         self.m.step('disabled - less than two changes', cmd=None)
         return
-      assert from_change
-      assert to_change
 
-      # Initialize bisection range.
-      step_result = self.m.git(
-        'log', '%s..%s' % (from_change, to_change), '--format=%H',
-        name='Fetch range',
-        cwd=self.m.path['checkout'],
-        stdout=self.m.raw_io.output(),
-        step_test_data=lambda: self.test_api.example_bisection_range()
-      )
-      bisect_range = list(reversed(step_result.stdout.strip().splitlines()))
-      
       if self.bot_type == 'tester':
         # Filter the bisect range to the revisions for which isolate hashes or
         # archived builds are available, depending on whether swarming is used
@@ -627,13 +617,13 @@ class V8Api(recipe_api.RecipeApi):
       else:
         available_bisect_range = bisect_range
 
-    if is_bad(from_change):
-      # If from_change is already "bad", the test failed before the current
+    if is_bad(latest_previous):
+      # If latest_previous is already "bad", the test failed before the current
       # build's change range, i.e. it is a recurring failure.
       # TODO: Try to be smarter here, fetch the build data from the previous
       # one or two builds and check if the failure happened in revision
-      # from_change. Otherwise, the cost of calling is_bad is as much as one
-      # bisect step.
+      # latest_previous. Otherwise, the cost of calling is_bad is as much as
+      # one bisect step.
       step_result = self.m.step(
           'Bisection disabled - recurring failure', cmd=None)
       step_result.presentation.status = self.m.step.WARNING
@@ -1172,23 +1162,25 @@ class V8Api(recipe_api.RecipeApi):
     first_change = changes[0]['revision']
     last_change = changes[-1]['revision']
 
-    self.m.git(
-        'log', '%s~1..%s' % (first_change, last_change),
-        name='Show changes',
-        cwd=self.m.path['checkout'],
+    # Commits is a list of gitiles commit dicts in reverse chronological order.
+    commits, _ = self.m.gitiles.log(
+        url=V8_URL,
+        ref='%s~2..%s' % (first_change, last_change),
+        limit=100,
+        step_name='Get change range',
+        step_test_data=lambda: self.test_api.example_bisection_range()
     )
 
-    step_result = self.m.git(
-        'log', '%s~1' % first_change, '--format=%H', '-n1',
-        name='Get latest previous change',
-        cwd=self.m.path['checkout'],
-        stdout=self.m.raw_io.output(),
-        step_test_data=lambda: self.test_api.example_latest_previous_hash()
-    )
+    # We get minimum two commits when the first and last commit are equal (i.e.
+    # there was only one commit C). Commits will contain the latest previous
+    # commit and C.
+    assert len(commits) > 1
+
     return (
-        step_result.stdout.strip(),
-        str(last_change),
-        len(changes),
+        # Latest previous.
+        commits[-1]['commit'],
+        # List of commits oldest -> newest, without the latest previous.
+        [commit['commit'] for commit in reversed(commits[:-1])],
     )
 
   def get_archive_name_pattern(self, use_swarming):

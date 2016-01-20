@@ -11,7 +11,7 @@ class Gitiles(recipe_api.RecipeApi):
   """Module for polling a git repository using the Gitiles web interface."""
 
   def _fetch(self, url, step_name, fmt, attempts=None, add_json_log=True,
-             log_limit=None, log_start=None):
+             log_limit=None, log_start=None, **kwargs):
     """Fetch information from Gitiles.
 
     Arguments:
@@ -32,8 +32,8 @@ class Gitiles(recipe_api.RecipeApi):
       args.extend(['--log-limit', log_limit])
     if log_start is not None:
       args.extend(['--log-start', log_start])
-    a = self.m.python(step_name,
-      self.resource('gerrit_client.py'), args)
+    a = self.m.python(
+        step_name, self.resource('gerrit_client.py'), args, **kwargs)
     return a
 
   def refs(self, url, step_name='refs', attempts=None):
@@ -49,7 +49,7 @@ class Gitiles(recipe_api.RecipeApi):
     return refs
 
   def log(self, url, ref, limit=0, cursor=None,
-          step_name=None, attempts=None):
+          step_name=None, attempts=None, **kwargs):
     """Returns the most recent commits under the given ref with properties.
 
     Args:
@@ -82,7 +82,8 @@ class Gitiles(recipe_api.RecipeApi):
         log_start=cursor,
         attempts=attempts,
         fmt='json',
-        add_json_log=True)
+        add_json_log=True,
+        **kwargs)
 
     # The output is formatted as a JSON dict with a "log" key. The "log" key
     # is a list of commit dicts, which contain information about the commit.

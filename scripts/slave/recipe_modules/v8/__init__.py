@@ -5,7 +5,7 @@ DEPS = [
   'commit_position',
   'file',
   'gclient',
-  'git',
+  'gitiles',
   'gsutil',
   'isolate',
   'recipe_engine/json',
