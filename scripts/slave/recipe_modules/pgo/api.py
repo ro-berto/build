@@ -61,7 +61,8 @@ class PGOApi(recipe_api.RecipeApi):
     pgosweep_path = self.m.path['depot_tools'].join(
         'win_toolchain', 'vs_files', 'VC', 'bin')
     pgo_env = {
-        'PATH': '%s;%s' % (pgosweep_path, '%(PATH)s'),
+        'PATH': '%s;%s;%s' % (
+            pgosweep_path, self.m.chromium.output_dir, '%(PATH)s'),
         'PogoSafeMode': 1
     }
     pgo_args = ['--profiler=win_pgo_profiler']

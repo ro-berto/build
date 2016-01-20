@@ -167,7 +167,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: smoothness.tough_animation_cases"
@@ -183,7 +183,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: blink_perf.svg"
@@ -199,7 +199,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: dromaeo.jslibtraverseprototype"
@@ -215,7 +215,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: dromaeo.domcorequery"
@@ -231,7 +231,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: tab_switching.top_10"
@@ -247,7 +247,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: dromaeo.jslibeventjquery"
@@ -263,7 +263,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: dromaeo.jslibtraversejquery"
@@ -279,7 +279,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: dromaeo.jslibmodifyprototype"
@@ -295,7 +295,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: media.mse_cases"
@@ -311,7 +311,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: indexeddb_perf"
@@ -327,7 +327,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: dromaeo.jslibattrprototype"
@@ -343,7 +343,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: dromaeo.jslibeventprototype"
@@ -359,7 +359,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: dromaeo.domcoreattr"
@@ -375,7 +375,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: dromaeo.jslibstyleprototype"
@@ -391,7 +391,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: dromaeo.jslibstylejquery"
@@ -407,7 +407,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: dromaeo.jslibmodifyjquery"
@@ -423,7 +423,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: dromaeo.domcoremodify"
@@ -439,7 +439,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: sunspider"
@@ -455,7 +455,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: blink_perf.css"
@@ -471,7 +471,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: dromaeo.domcoretraverse"
@@ -487,7 +487,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;%(PATH)s",
+      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: dromaeo.jslibattrjquery"
