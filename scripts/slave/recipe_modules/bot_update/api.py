@@ -175,6 +175,8 @@ class BotUpdateApi(recipe_api.RecipeApi):
       revisions.update(self.m.gclient.c.revisions)
     if cfg.solutions and root_solution_revision:
       revisions[cfg.solutions[0].name] = root_solution_revision
+    # Allow for overrides required to bisect into rolls.
+    revisions.update(self.m.properties.get('deps_revision_overrides', {}))
     for name, revision in sorted(revisions.items()):
       fixed_revision = self.m.gclient.resolve_revision(revision)
       if fixed_revision:
