@@ -111,6 +111,16 @@ BUILDERS = freeze({
       'BUILD_CONFIG': 'Release',
     },
   },
+  'android_cronet_tester': {
+    'recipe_config': 'main_builder',
+    'run_tests': True,
+    'kwargs': {
+      'BUILD_CONFIG': 'Debug',
+    },
+    'gyp_defs': {
+      'enable_data_reduction_proxy_support': 1,
+    }
+  },
   'Android Cronet Data Reduction Proxy Builder': {
     'recipe_config': 'main_builder',
     'run_tests': True,
@@ -142,7 +152,7 @@ def RunSteps(api, buildername):
   api.cronet.init_and_sync(recipe_config, kwargs, gyp_defs)
   api.cronet.build()
 
-  if cronet_kwargs['PERF_ID']:
+  if cronet_kwargs.get('PERF_ID'):
     api.cronet.sizes(cronet_kwargs['PERF_ID'])
   if builder_config['run_tests']:
     api.cronet.run_tests(kwargs['BUILD_CONFIG'])
