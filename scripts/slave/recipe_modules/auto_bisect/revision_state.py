@@ -193,9 +193,11 @@ class RevisionState(object):
     api = self.bisector.api
     if self.deps:
       return
-    step_result = api.m.git.cat_file_at_commit(depot_config.DEPS_FILENAME,
-                                               self.commit_hash,
-                                               stdout=api.m.raw_io.output())
+    step_result = api.m.python(
+        'fetch file %s:%s' % (self.commit_hash, depot_config.DEPS_FILENAME),
+        api.resource('fetch_file.py'),
+        [depot_config.DEPS_FILENAME, '--commit', self.commit_hash],
+        stdout=api.m.raw_io.output())
     self.deps_file_contents = step_result.stdout
     try:
       deps_data = self._gen_deps_local_scope()

@@ -80,27 +80,15 @@
   },
   {
     "cmd": [
-      "git",
-      "fetch",
-      "origin",
-      "--tags"
+      "python",
+      "-u",
+      "RECIPE_MODULE[auto_bisect]/resources/fetch_file.py",
+      "DEPS",
+      "--commit",
+      "dcdcdc0ff1122212323134879ddceeb1240b0988"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Resolving reference range.git fetch tags",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "cat-file",
-      "blob",
-      "dcdcdc0ff1122212323134879ddceeb1240b0988:DEPS"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Resolving reference range.git cat-file dcdcdc0ff1122212323134879ddceeb1240b0988:DEPS",
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Resolving reference range.fetch file dcdcdc0ff1122212323134879ddceeb1240b0988:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -142,27 +130,15 @@
   },
   {
     "cmd": [
-      "git",
-      "fetch",
-      "origin",
-      "--tags"
+      "python",
+      "-u",
+      "RECIPE_MODULE[auto_bisect]/resources/fetch_file.py",
+      "DEPS",
+      "--commit",
+      "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Resolving reference range.git fetch tags (2)",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "cat-file",
-      "blob",
-      "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111:DEPS"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Resolving reference range.git cat-file 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111:DEPS",
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Resolving reference range.fetch file 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -596,46 +572,28 @@
   },
   {
     "cmd": [
-      "git",
-      "fetch",
-      "origin",
-      "--tags"
+      "python",
+      "-u",
+      "RECIPE_MODULE[auto_bisect]/resources/fetch_file.py",
+      "DEPS",
+      "--commit",
+      "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "git fetch tags",
+    "cwd": "[SLAVE_BUILD]",
+    "name": "fetch file a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
-      "git",
-      "cat-file",
-      "blob",
-      "a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS"
+      "python",
+      "-u",
+      "RECIPE_MODULE[auto_bisect]/resources/fetch_file.py",
+      "DEPS",
+      "--commit",
+      "dcdcdc0ff1122212323134879ddceeb1240b0988"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "git cat-file a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "git",
-      "fetch",
-      "origin",
-      "--tags"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "git fetch tags (2)",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "git",
-      "cat-file",
-      "blob",
-      "dcdcdc0ff1122212323134879ddceeb1240b0988:DEPS"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "git cat-file dcdcdc0ff1122212323134879ddceeb1240b0988:DEPS",
+    "cwd": "[SLAVE_BUILD]",
+    "name": "fetch file dcdcdc0ff1122212323134879ddceeb1240b0988:DEPS",
     "stdout": "/path/to/tmp/"
   },
   {

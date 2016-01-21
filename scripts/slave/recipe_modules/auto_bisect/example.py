@@ -425,7 +425,7 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
       yield api.step_data(step_name, stdout=api.json.output(test_results))
 
     if revision_data.get('DEPS', False):
-      step_name = 'git cat-file %s:DEPS' % commit_hash
+      step_name = 'fetch file %s:DEPS' % commit_hash
       yield api.step_data(step_name, stdout=api.raw_io.output(
           revision_data['DEPS']))
 

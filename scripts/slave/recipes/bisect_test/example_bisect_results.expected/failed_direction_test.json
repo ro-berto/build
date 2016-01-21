@@ -80,27 +80,15 @@
   },
   {
     "cmd": [
-      "git",
-      "fetch",
-      "origin",
-      "--tags"
+      "python",
+      "-u",
+      "RECIPE_MODULE[auto_bisect]/resources/fetch_file.py",
+      "DEPS",
+      "--commit",
+      "deadbeef"
     ],
-    "cwd": "[TMP_BASE]/bogus_tmp_1",
-    "name": "Resolving reference range.git fetch tags",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "cat-file",
-      "blob",
-      "deadbeef:DEPS"
-    ],
-    "cwd": "[TMP_BASE]/bogus_tmp_1",
-    "name": "Resolving reference range.git cat-file deadbeef:DEPS",
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Resolving reference range.fetch file deadbeef:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -142,27 +130,15 @@
   },
   {
     "cmd": [
-      "git",
-      "fetch",
-      "origin",
-      "--tags"
+      "python",
+      "-u",
+      "RECIPE_MODULE[auto_bisect]/resources/fetch_file.py",
+      "DEPS",
+      "--commit",
+      "c001c0de"
     ],
-    "cwd": "[TMP_BASE]/bogus_tmp_1",
-    "name": "Resolving reference range.git fetch tags (2)",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "cat-file",
-      "blob",
-      "c001c0de:DEPS"
-    ],
-    "cwd": "[TMP_BASE]/bogus_tmp_1",
-    "name": "Resolving reference range.git cat-file c001c0de:DEPS",
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Resolving reference range.fetch file c001c0de:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
