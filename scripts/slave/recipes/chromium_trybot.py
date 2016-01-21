@@ -170,9 +170,14 @@ CHROMIUM_BLINK_TESTS_EXTRA_ARGS = freeze({
 
 CHROMIUM_BLINK_TESTS_PATHS = freeze([
   # Service worker code is primarily tested in Blink layout tests.
+  'content/browser/bluetooth',
   'content/browser/service_worker',
   'content/child/service_worker',
+  'content/common/bluetooth',
+  'content/renderer/bluetooth',
   'content/renderer/service_worker',
+  'content/shell/browser/layout_test',
+  'device/bluetooth',
   'third_party/WebKit',
   'third_party/harfbuzz-ng',
   'v8',
