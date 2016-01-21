@@ -160,6 +160,14 @@ CHROMIUM_BLINK_TESTS_BUILDERS = freeze([
 ])
 
 
+CHROMIUM_BLINK_TESTS_EXTRA_ARGS = freeze({
+  'linux_blink_oilpan_rel': [
+    '--additional-expectations',
+    'src/third_party/WebKit/LayoutTests/OilpanExpectations',
+  ],
+})
+
+
 CHROMIUM_BLINK_TESTS_PATHS = freeze([
   # Service worker code is primarily tested in Blink layout tests.
   'content/browser/service_worker',
@@ -317,7 +325,8 @@ def _RunStepsInternal(api):
           api.chromium_tests.steps.ScriptTest(
               'webkit_python_tests', 'webkit_python_tests.py',
               collections.defaultdict(list)),
-          api.chromium_tests.steps.BlinkTest(),
+          api.chromium_tests.steps.BlinkTest(
+              extra_args=CHROMIUM_BLINK_TESTS_EXTRA_ARGS.get(buildername)),
       ]
       add_tests(blink_tests)
       for test in blink_tests:
