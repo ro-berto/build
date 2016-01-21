@@ -217,6 +217,7 @@ def _RunStepsInternal(api):
 
   bot_config_object = api.chromium_tests.create_generalized_bot_config_object(
       bot_config['bot_ids'])
+  api.chromium_tests.set_precommit_mode()
   api.chromium_tests.configure_build(
       bot_config_object, override_bot_type='builder_tester')
 
@@ -473,6 +474,37 @@ def GenTests(api):
                            canned_test(passing=False)) +
     api.override_step_data('base_unittests (without patch)',
                            api.test_utils.raw_gtest_output(None, retcode=1))
+  )
+
+  yield (
+    api.test('dynamic_isolated_script_test_with_args_on_trybot') +
+    props(extra_swarmed_tests=['telemetry_gpu_unittests']) +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec', api.json.output({
+        'Linux Tests': {
+            'isolated_scripts': [
+                {
+                  'isolate_name': 'telemetry_gpu_unittests',
+                  'name': 'telemetry_gpu_unittests',
+                  'args': ['--correct-common-arg'],
+                  'non_precommit_args': [
+                    '--SHOULD-NOT-BE-PRESENT-DURING-THE-RUN'
+                  ],
+                  'precommit_args': [
+                    '--these-args-should-be-present',
+                    '--test-machine-name=\"${buildername}\"',
+                    '--build-revision=\"${got_revision}\"',
+                  ],
+                  'swarming': {'can_use_on_swarming_builders': True},
+                },
+            ],
+        },
+    })) +
+    suppress_analyze() +
+    api.override_step_data(
+        'telemetry_gpu_unittests (with patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, is_win=False, swarming=True))
   )
 
   yield (

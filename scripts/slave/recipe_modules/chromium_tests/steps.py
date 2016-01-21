@@ -347,8 +347,46 @@ class LocalGTestTest(Test):
     return self._test_runs[suffix].test_utils.gtest_results.failures
 
 
-def generate_gtest(api, mastername, buildername, test_spec,
-                   enable_swarming=False, scripts_compile_targets=None):
+def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
+  """Gets the argument list for a dynamically generated test, as
+  provided by the JSON files in src/testing/buildbot/ in the Chromium
+  workspace. This function provides the following build properties in
+  the form of variable substitutions in the tests' argument lists:
+
+      buildername
+      got_revision
+
+  so, for example, a test can declare the argument:
+
+      --test-machine-name=\"${buildername}\"
+
+  and ${buildername} will be replaced with the associated build
+  property. In this example, it will also be double-quoted, to handle
+  the case where the machine name contains contains spaces.
+
+  This function also supports trybot-only and waterfall-only
+  arguments, so that a test can pass a different argument lists on the
+  continuous builders compared to tryjobs. This is useful when the
+  waterfall bots generate some reference data that is tested against
+  during tryjobs.
+  """
+
+  args = test_spec.get('args', [])
+  if chromium_tests_api.is_precommit_mode():
+    args = args + test_spec.get('precommit_args', [])
+  else:
+    args = args + test_spec.get('non_precommit_args', [])
+  # Perform substitution of known variables.
+  substitutions = {
+    'buildername': api.properties.get('buildername'),
+    'got_revision': bot_update_step.presentation.properties['got_revision']
+  }
+  return [string.Template(arg).safe_substitute(substitutions) for arg in args]
+
+
+def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
+                   bot_update_step, enable_swarming=False,
+                   scripts_compile_targets=None):
   def canonicalize_test(test):
     if isinstance(test, basestring):
       canonical_test = {'test': test}
@@ -398,8 +436,9 @@ def generate_gtest(api, mastername, buildername, test_spec,
                       override_compile_targets=override_compile_targets)
 
 
-def generate_script(api, mastername, buildername, test_spec,
-                    enable_swarming=False, scripts_compile_targets=None):
+def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
+                    bot_update_step, enable_swarming=False,
+                    scripts_compile_targets=None):
   for script_spec in test_spec.get(buildername, {}).get('scripts', []):
     yield ScriptTest(
         str(script_spec['name']),
@@ -1120,8 +1159,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     return valid, failures
 
 
-def generate_isolated_script(api, mastername, buildername, test_spec,
-                             enable_swarming=False,
+def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
+                             test_spec, bot_update_step, enable_swarming=False,
                              scripts_compile_targets=None):
   for spec in test_spec.get(buildername, {}).get('isolated_scripts', []):
     use_swarming = False
@@ -1134,7 +1173,10 @@ def generate_isolated_script(api, mastername, buildername, test_spec,
         swarming_shards = swarming_spec.get('shards', 1)
         swarming_dimension_sets = swarming_spec.get('dimension_sets')
     name = str(spec['name'])
-    args = args=spec.get('args', [])
+    # The variable substitution and precommit/non-precommit arguments
+    # could be supported for the other test types too, but that wasn't
+    # desired at the time of this writing.
+    args = get_args_for_test(api, chromium_tests_api, spec, bot_update_step)
     target_name = spec['isolate_name']
     # This features is only needed for the cases in which the *_run compile
     # target is needed to generate isolate files that contains dynamically libs.

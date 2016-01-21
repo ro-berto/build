@@ -134,13 +134,14 @@ def _RunStepsInternal(api):
   test_spec = api.chromium_tests.read_test_spec(api, test_spec_file)
 
   tests = list(api.chromium_tests.steps.generate_gtest(
-      api, mastername, buildername, test_spec))
+      api, api.chromium_tests, mastername, buildername, test_spec,
+      bot_update_step))
 
   scripts_compile_targets = \
       api.chromium_tests.get_compile_targets_for_scripts().json.output
   tests += list(api.chromium_tests.steps.generate_script(
-      api, mastername, buildername, test_spec,
-      scripts_compile_targets=scripts_compile_targets))
+      api, api.chromium_tests, mastername, buildername, test_spec,
+      bot_update_step, scripts_compile_targets=scripts_compile_targets))
 
   additional_compile_targets = test_spec.get(buildername, {}).get(
       'additional_compile_targets',

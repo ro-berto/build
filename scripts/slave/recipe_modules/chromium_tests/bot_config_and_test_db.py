@@ -70,7 +70,7 @@ class BotConfig(object):
       return {}
     return chromium_tests_api.read_test_spec(chromium_tests_api.m, test_spec_file)
 
-  def initialize_bot_db(self, chromium_tests_api, bot_db):
+  def initialize_bot_db(self, chromium_tests_api, bot_db, bot_update_step):
     # TODO(phajdan.jr): Make this work for more than 1 bot.
     assert len(self._bot_ids) == 1
 
@@ -103,7 +103,8 @@ class BotConfig(object):
               # Above should remove the need to get bot_config and buildername
               # in this method.
               bot_config.get('enable_swarming', False),
-              scripts_compile_targets, builder_dict.get('test_generators', [])
+              scripts_compile_targets, builder_dict.get('test_generators', []),
+              bot_update_step
           ))
 
     bot_db._add_master_dict_and_test_spec(

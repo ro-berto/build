@@ -291,7 +291,14 @@ def GenTests(api):
         'isolated_scripts': [
           {
             'isolate_name': 'telemetry_gpu_unittests',
-            'name': 'telemetry_gpu_unittests'
+            'name': 'telemetry_gpu_unittests',
+            'args': ['--correct-common-arg'],
+            'precommit_args': ['--SHOULD-NOT-BE-PRESENT-DURING-THE-RUN'],
+            'non_precommit_args': [
+              '--these-args-should-be-present',
+              '--test-machine-name=\"${buildername}\"',
+              '--build-revision=\"${got_revision}\"',
+            ],
           },
         ],
       },

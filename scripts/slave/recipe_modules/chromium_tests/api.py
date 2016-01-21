@@ -48,6 +48,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     super(ChromiumTestsApi, self).__init__(*args, **kwargs)
     self._builders = {}
     self.add_builders(builders.BUILDERS)
+    self._precommit_mode = False
 
   @property
   def builders(self):
@@ -71,6 +72,21 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def create_generalized_bot_config_object(self, bot_ids):
     return bdb_module.BotConfig(self.builders, bot_ids)
+
+  def set_precommit_mode(self):
+    """Configures this module to indicate that tests are running before
+    the changes are committed. This must be called very early in the
+    recipe, certainly before prepare_checkout, and the action can not
+    be undone.
+    """
+    self._precommit_mode = True
+
+  def is_precommit_mode(self):
+    """Returns a Boolean indicating whether this module is running in
+    precommit mode; i.e., whether tests are running before the changes
+    are committed.
+    """
+    return self._precommit_mode
 
   def configure_build(self, bot_config, override_bot_type=None):
     # Get the buildspec version. It can be supplied as a build property or as
@@ -193,7 +209,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.runhooks(update_step)
 
     bot_db = bdb_module.BotConfigAndTestDB()
-    bot_config.initialize_bot_db(self, bot_db)
+    bot_config.initialize_bot_db(self, bot_db, update_step)
 
     if self.m.chromium.c.lto and \
         not self.m.chromium.c.env.LLVM_FORCE_HEAD_REVISION:
@@ -203,13 +219,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def generate_tests_from_test_spec(self, api, test_spec, builder_dict,
       buildername, mastername, enable_swarming, scripts_compile_targets,
-      generators):
+      generators, bot_update_step):
     tests = builder_dict.get('tests', ())
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
     for generator in generators:
       tests = (
-          tuple(generator(api, mastername, buildername, test_spec,
-                         enable_swarming=enable_swarming,
+          tuple(generator(api, self, mastername, buildername, test_spec,
+                         bot_update_step, enable_swarming=enable_swarming,
                          scripts_compile_targets=scripts_compile_targets)) +
           tests)
     return tests

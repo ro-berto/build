@@ -140,7 +140,7 @@ def RunSteps(api):
     dep = builder.get('set_component_rev')
     api.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
-  api.bot_update.ensure_checkout()
+  bot_update_step = api.bot_update.ensure_checkout()
 
   test_spec_file = builder.get('test_spec_file')
   test_spec = {}
@@ -152,7 +152,8 @@ def RunSteps(api):
 
     builder['tests'] = api.chromium_tests.generate_tests_from_test_spec(
         api, test_spec, builder, buildername, mastername, False,
-        scripts_compile_targets, [api.chromium_tests.steps.generate_script])
+        scripts_compile_targets, [api.chromium_tests.steps.generate_script],
+        bot_update_step)
 
   api.path['checkout'] = api.path['slave_build'].join('src')
   api.chromium_android.clean_local_files()
