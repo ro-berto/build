@@ -165,7 +165,7 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "name": "build dm",
     "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@Location of SKPs@\"https://pantheon.corp.google.com/storage/browser/cluster-telemetry/skps/10k/310ea93-42bd6bf/\"@@@"
+      "@@@SET_BUILD_PROPERTY@Location of SKPs@\"https://pantheon.corp.google.com/storage/browser/cluster-telemetry/skps/10k/57259e0-05dcb4c/\"@@@"
     ]
   },
   {
@@ -222,7 +222,7 @@
       "rsync",
       "-d",
       "-r",
-      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave1",
+      "gs://cluster-telemetry/skps/10k/57259e0-05dcb4c/slave1",
       "[SLAVE_BUILD]/skps/slave1"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -297,7 +297,7 @@
       "rsync",
       "-d",
       "-r",
-      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave2",
+      "gs://cluster-telemetry/skps/10k/57259e0-05dcb4c/slave2",
       "[SLAVE_BUILD]/skps/slave2"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -372,7 +372,7 @@
       "rsync",
       "-d",
       "-r",
-      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave3",
+      "gs://cluster-telemetry/skps/10k/57259e0-05dcb4c/slave3",
       "[SLAVE_BUILD]/skps/slave3"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -447,7 +447,7 @@
       "rsync",
       "-d",
       "-r",
-      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave4",
+      "gs://cluster-telemetry/skps/10k/57259e0-05dcb4c/slave4",
       "[SLAVE_BUILD]/skps/slave4"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -522,7 +522,7 @@
       "rsync",
       "-d",
       "-r",
-      "gs://cluster-telemetry/skps/10k/310ea93-42bd6bf/slave5",
+      "gs://cluster-telemetry/skps/10k/57259e0-05dcb4c/slave5",
       "[SLAVE_BUILD]/skps/slave5"
     ],
     "cwd": "[SLAVE_BUILD]",
