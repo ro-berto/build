@@ -360,6 +360,9 @@ SPEC = {
         'content_unittests',
         'content_browsertests',
       ],
+      'tests': [
+        steps.BlinkTest(["--additional-driver-flag=--enable-browser-side-navigation"]),
+      ],
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
