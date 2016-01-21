@@ -71,7 +71,14 @@
       "-u",
       "[SLAVE_BUILD]/sdk/tools/test.py",
       "-mrelease",
-      "--arch=x64"
+      "--arch=x64",
+      "--progress=line",
+      "--report",
+      "--time",
+      "--failure-summary",
+      "--write-debug-log",
+      "--write-test-outcome-log",
+      "--copy-coredumps"
     ],
     "cwd": "[SLAVE_BUILD]/sdk",
     "name": "test vm"
