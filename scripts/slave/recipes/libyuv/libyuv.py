@@ -186,22 +186,6 @@ BUILDERS = freeze({
         },
         'testing': {'platform': 'win'},
       },
-      'Mac32 Debug': {
-        'recipe_config': 'libyuv',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'testing': {'platform': 'mac'},
-      },
-      'Mac32 Release': {
-        'recipe_config': 'libyuv',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'testing': {'platform': 'mac'},
-      },
       'Mac64 Debug': {
         'recipe_config': 'libyuv',
         'chromium_config_kwargs': {
@@ -223,7 +207,7 @@ BUILDERS = freeze({
         'chromium_apply_config': ['asan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'mac'},
       },
@@ -463,19 +447,11 @@ BUILDERS = freeze({
         'recipe_config': 'libyuv',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'mac'},
       },
       'mac_rel': {
-        'recipe_config': 'libyuv',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'testing': {'platform': 'mac'},
-      },
-      'mac_x64_rel': {
         'recipe_config': 'libyuv',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -488,7 +464,7 @@ BUILDERS = freeze({
         'chromium_apply_config': ['asan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'mac'},
       },
