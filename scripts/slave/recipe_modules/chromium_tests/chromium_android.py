@@ -19,7 +19,7 @@ SPEC = {
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
-      'android_config': 'main_builder',
+      'android_config': 'main_builder_mb',
       'compile_targets': [
         'android_builder_tests',
         'remoting_apk',
@@ -39,7 +39,7 @@ SPEC = {
         'TARGET_BITS': 64,
         'TARGET_PLATFORM': 'android',
       },
-      'android_config': 'main_builder',
+      'android_config': 'main_builder_mb',
       'compile_targets': [
         'android_builder_tests'
       ],
@@ -51,7 +51,6 @@ SPEC = {
 
     'Android GN Builder (dbg)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -59,51 +58,13 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
         'TARGET_ARCH': 'arm',
       },
-      'android_config': 'main_builder',
+      'android_config': 'main_builder_mb',
        'test_generators': [
          steps.generate_gtest,
          steps.generate_script,
          steps.generate_isolated_script,
         ],
       'bot_type': 'builder',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
-    'Android Aura Builder (dbg)': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_apply_config': ['mb'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder',
-      'bot_type': 'builder',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
-    'Android Aura Tester (dbg)': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_PLATFORM': 'android',
-      },
-      'parent_buildername': 'Android Aura Builder (dbg)',
-      'bot_type': 'tester',
-      'android_config': 'main_builder',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -119,7 +80,7 @@ SPEC = {
       },
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'main_builder',
+      'android_config': 'main_builder_mb',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -140,7 +101,7 @@ SPEC = {
       },
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'main_builder',
+      'android_config': 'main_builder_mb',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -161,7 +122,7 @@ SPEC = {
       },
       'parent_buildername': 'Android arm64 Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'main_builder',
+      'android_config': 'main_builder_mb',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -182,7 +143,7 @@ SPEC = {
       },
       'parent_buildername': 'Android arm64 Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'main_builder',
+      'android_config': 'main_builder_mb',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -203,7 +164,7 @@ SPEC = {
       },
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'main_builder',
+      'android_config': 'main_builder_mb',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -224,7 +185,7 @@ SPEC = {
       },
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'main_builder',
+      'android_config': 'main_builder_mb',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -245,7 +206,7 @@ SPEC = {
       },
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'main_builder',
+      'android_config': 'main_builder_mb',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -266,7 +227,7 @@ SPEC = {
       },
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'main_builder',
+      'android_config': 'main_builder_mb',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -288,7 +249,7 @@ SPEC = {
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
-      'android_config': 'main_builder',
+      'android_config': 'main_builder_mb',
       'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',
@@ -314,7 +275,7 @@ SPEC = {
       },
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'main_builder',
+      'android_config': 'main_builder_mb',
       'enable_swarming': False,
       'tests': [
         steps.AMPInstrumentationTest(

@@ -23,7 +23,11 @@ def main_builder(c):
     raise recipe_config.BadConf(
       'Cannot target arm with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
-@CONFIG_CTX(includes=['main_builder', 'mb'],
+@CONFIG_CTX(includes=['main_builder', 'mb'])
+def main_builder_mb(c):
+  pass
+
+@CONFIG_CTX(includes=['main_builder_mb'],
             config_vars={'BUILD_CONFIG': 'Release'})
 def main_builder_rel_mb(c):
   pass

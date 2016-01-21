@@ -114,6 +114,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm test_isolation_mode=prepare use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
@@ -227,6 +228,27 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "clean isolated files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.android",
+      "-b",
+      "Android Swarm Builder",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--swarming-targets-file",
+      "browser_tests_apk\n",
+      "//out/Release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files"
   },
   {
     "cmd": [
