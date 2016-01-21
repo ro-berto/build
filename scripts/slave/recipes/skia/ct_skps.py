@@ -44,7 +44,7 @@ def RunSteps(api):
     raise Exception('Do not recognise the buildername %s.' % buildername)
 
   # Figure out which configuration to build.
-  if 'BENCH' in buildername:
+  if 'Release' in buildername:
     configuration = 'Release'
   else:
     configuration = 'Debug'
