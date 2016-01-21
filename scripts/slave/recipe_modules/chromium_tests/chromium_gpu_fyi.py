@@ -253,5 +253,44 @@ SPEC = {
       },
       'enable_swarming': True,
     },
+
+    'GPU Fake Linux Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop',
+                                'archive_gpu_tests', 'chrome_with_codecs' ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+      'use_isolate': True,
+      'enable_swarming': True,
+    },
+    'Fake Linux Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'parent_buildername': 'GPU Fake Linux Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': True,
+    },
   },
 }

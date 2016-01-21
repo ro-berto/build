@@ -225,8 +225,8 @@ def _RunStepsInternal(api):
 
   api.chromium.apply_config('trybot_flavor')
   if enable_gpu_tests:
-    api.chromium.apply_config('archive_gpu_tests')
-    api.chromium.apply_config('chrome_with_codecs')
+    api.chromium.apply_config('archive_gpu_tests', optional=True)
+    api.chromium.apply_config('chrome_with_codecs', optional=True)
 
   if api.properties.get('patch_project') == 'blink':  # pragma: no cover
     raise Exception('CLs which use blink project are not supported. '
