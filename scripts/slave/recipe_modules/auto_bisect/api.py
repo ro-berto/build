@@ -198,6 +198,23 @@ class AutoBisectApi(recipe_api.RecipeApi):
       test_runner()
 
   def start_try_job(self, api, update_step=None, bot_db=None, **kwargs):
+    """Starts a recipe bisect job, perf test run, or legacy bisect run.
+
+    This function is an entry point for:
+      1. A legacy bisect job run (in this case, there will be a patch
+         with a bisect config file).
+      2. A recipe bisect job run (in this case, there will be a property
+         called bisect_config which contains the config parameters).
+      3. A single test run for a recipe bisect job (there will be a
+         bisect_config property but it won't contain good/bad revisions).
+      4. A perf try job run.
+
+    Args:
+      api: The recipe api object.
+      update_step: Extra update_step to, used for some job types.
+      bot_db: A BotConfigAndTestDB object, used for some job types.
+      kwargs: Args to use only for legacy bisect.
+    """
     if bot_db is None:  # pragma: no cover
       self.bot_db = api.chromium_tests.create_bot_db_from_master_dict(
           '', None, None)
