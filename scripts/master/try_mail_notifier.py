@@ -91,10 +91,14 @@ class TryMailNotifier(mail.MailNotifier):
         "try %(result)s for %(reason)s on %(builder)s @ r%(revision)s" % info)
 
     build_props = build.getProperties()
-    if build_props.getProperty('requester') == 'commit-bot@chromium.org':
+    if (build_props.getProperty('requester') == 'commit-bot@chromium.org' or
+        build_props.getProperty('reason') == 'CQ'):
       # CQ handles notifying people about the ultimate success/failure of
       # tryjobs by posting to rietveld. It also generates a LOT of email
       # from the tryserver which is noisy.
+      # Also check 'reason', as requester will be a service account for
+      # triggered tryjobs.
+      log.msg('Skipping try job email on CQ.')
       return
 
     parent_html = ''
