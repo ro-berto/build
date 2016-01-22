@@ -64,12 +64,16 @@ def _Populate(BuildmasterConfig, builders, active_master_cls):
       builders['master_classname'])
   master_utils.VerifySetup(c, slaves)
 
+  default_public_html = os.path.join(chromium_utils.BUILD_DIR,
+                                     'masters', 'master.chromium',
+                                     'public_html')
+  public_html = builders.get('public_html', default_public_html)
+
   # Adds common status and tools to this master.
   # TODO: Look at the logic in this routine to see if any of the logic
   # in this routine can be moved there to simplify things.
   master_utils.AutoSetupMaster(c, active_master_cls,
-      public_html=os.path.join(chromium_utils.BUILD_DIR,
-                               'masters', 'master.chromium', 'public_html'),
+      public_html=public_html,
       templates=builders['templates'],
       tagComparator=tag_comparator,
       enable_http_status_push=active_master_cls.is_production_host)
