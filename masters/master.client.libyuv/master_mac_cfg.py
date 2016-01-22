@@ -14,8 +14,6 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
-          'Mac32 Debug',
-          'Mac32 Release',
           'Mac64 Debug',
           'Mac64 Release',
           'Mac Asan',
@@ -27,8 +25,6 @@ def Update(c):
   ])
 
   specs = [
-    {'name': 'Mac32 Debug', 'slavebuilddir': 'mac32'},
-    {'name': 'Mac32 Release', 'slavebuilddir': 'mac32'},
     {'name': 'Mac64 Debug', 'slavebuilddir': 'mac64'},
     {'name': 'Mac64 Release', 'slavebuilddir': 'mac64'},
     {'name': 'Mac Asan', 'slavebuilddir': 'mac_asan'},
