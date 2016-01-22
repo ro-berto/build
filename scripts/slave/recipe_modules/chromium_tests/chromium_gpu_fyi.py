@@ -93,6 +93,86 @@ SPEC = {
       },
       'enable_swarming': True,
     },
+    'Win8 NextGen Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'parent_buildername': 'GPU NextGen Win Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+    },
+    'Win8 NextGen Debug (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'parent_buildername': 'GPU NextGen Win Builder (dbg)',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+    },
+    'Win7 NextGen Release (AMD)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'parent_buildername': 'GPU NextGen Win Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+    },
+    'Win7 NextGen dEQP (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'parent_buildername': 'GPU NextGen Win Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+    },
     'GPU NextGen Linux Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
