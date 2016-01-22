@@ -94,6 +94,8 @@ def RunSteps(api):
              ['--no-install-hooks',
               '--no-use-local-chrome',
               '--channel=canary'])
+  api.python('Telemetry Tests',
+             api.path['checkout'].join('telemetry', 'bin', 'run_tests'))
   api.python('Systrace Tests',
              api.path['checkout'].join('systrace', 'bin', 'run_tests'))
   if not api.platform.is_win:

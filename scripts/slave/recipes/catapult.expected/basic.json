@@ -215,6 +215,15 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/catapult/telemetry/bin/run_tests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Telemetry Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/catapult/systrace/bin/run_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
