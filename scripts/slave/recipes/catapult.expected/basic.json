@@ -215,10 +215,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/telemetry/bin/run_tests"
+      "[SLAVE_BUILD]/catapult/telemetry/bin/run_tests",
+      "--browser=reference"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Telemetry Tests"
+    "name": "Telemetry Tests with stable browser"
   },
   {
     "cmd": [
