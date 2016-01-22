@@ -60,6 +60,9 @@ class PGOApi(recipe_api.RecipeApi):
     """
     pgosweep_path = self.m.path['depot_tools'].join(
         'win_toolchain', 'vs_files', 'VC', 'bin')
+    # Make sure that we're using the x64 version of pgosweep for the x64 builds.
+    if self.m.chromium.c.TARGET_BITS == 64:
+      pgosweep_path = pgosweep_path.join('amd64')
     pgo_env = {
         'PATH': '%s;%s;%s' % (
             pgosweep_path, self.m.chromium.output_dir, '%(PATH)s'),
