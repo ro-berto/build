@@ -78,13 +78,6 @@
       "slave_pools": ["webview_m"],
       "category": "1Webview",
     },
-    "Android WebView (amp)": {
-      "recipe": "chromium",
-      "scheduler": None,
-      "slave_pools": ["webview_amp"],
-      "category": "1Webview",
-      "mergeRequests": True,
-    },
     "Android MIPS Builder (dbg)": {
       "recipe": "android/builder",
       "scheduler": "android_commits",
@@ -328,14 +321,6 @@
         "bits": "64",
       },
       "slaves": ["build44-b1"],
-    },
-    "webview_amp": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": ["build55-a1"],
     },
     "webview_cts": {
       "slave_data": {
