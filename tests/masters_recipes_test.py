@@ -67,8 +67,6 @@ SUPPRESSIONS = {
         'Mac 10.10 Retina Release (AMD)',
         'Win7 Debug (NVIDIA)',
         'Win7 Release (NVIDIA)',
-        'Win8 Debug (NVIDIA)',
-        'Win8 Release (NVIDIA)',
         'Win7 Release (ATI)',
     ],
     'master.chromium.mac': [
