@@ -1,3 +1,7 @@
+# This file has 'set noparent' because src/ side code has a dependency on the
+# APIs provided. Changes here may cause subtle breakage unless coordinated.
+# See https://goto.google.com/vpegg for context.
+
 set noparent
 phajdan.jr@chromium.org
 sergeyberezin@chromium.org
