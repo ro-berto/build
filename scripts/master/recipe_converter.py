@@ -69,15 +69,6 @@ _step_signatures = {
                    'workdir': 'build',
                  }
                 ),
-  'win_bot_update': (master.chromium_step.AnnotatedCommand,
-                 {
-                   'command': ['python', '-u',
-                               '..\\..\\..\\scripts\\slave\\bot_update.py'],
-                   'description': 'bot_update',
-                   'name': 'bot_update',
-                   'workdir': 'build',
-                 }
-                ),
   'cleanup_temp': (master.log_parser.retcode_command.ReturnCodeCommand,
                    {
                      'command': ['python',
@@ -86,14 +77,6 @@ _step_signatures = {
                      'name': 'cleanup_temp',
                    }
                   ),
-  'win_cleanup_temp': (master.log_parser.retcode_command.ReturnCodeCommand,
-      {
-        'command': ['python',
-                    '..\\..\\..\\scripts\\slave\\cleanup_temp.py'],
-        'description': 'cleanup_temp',
-        'name': 'cleanup_temp',
-      }
-    ),
   'gclient_update':      (master.chromium_step.GClient,
                           {
                             'mode': 'update',
@@ -108,16 +91,6 @@ _step_signatures = {
                             'workdir': 'build',
                           }
     ),
-  'win_gclient_safe_revert': (buildbot.steps.shell.ShellCommand,
-      {
-        'command': ['python_slave',
-          '..\\..\\..\\scripts\\slave\\gclient_safe_revert.py',
-          '.', 'gclient.bat'],
-        'description': 'gclient_revert',
-        'name': 'gclient_revert',
-        'workdir': 'build',
-      }
-    ),
   'bb_run_bot':   (master.chromium_step.AnnotatedCommand,
                    {
                      'command': ['python',
@@ -126,85 +99,6 @@ _step_signatures = {
                      'description': 'slave_steps',
                    }
                   ),
-  'gclient_runhooks_wrapper': (buildbot.steps.shell.ShellCommand,
-      {
-        'command': ['python', '../../../scripts/slave/runhooks_wrapper.py'],
-        'description': 'gclient hooks',
-        'env': {},
-        'name': 'runhooks'
-        # NOTE: locking shouldn't be required, as only one recipe is ever run on
-        # a slave at a time; specifically, a SlaveLock of type slave_exclusive
-        # *should be* redundant. Noted here in case it isn't. (aneeshm)
-      }
-    ),
-  'win_gclient_runhooks_wrapper': (buildbot.steps.shell.ShellCommand,
-      {
-        'command': ['python_slave',
-                    '..\\..\\..\\scripts\\slave\\runhooks_wrapper.py'],
-        'description': 'gclient hooks',
-        'env': {},
-        'name': 'runhooks'
-        # NOTE: locking shouldn't be required, as only one recipe is ever run on
-        # a slave at a time; specifically, a SlaveLock of type slave_exclusive
-        # *should be* redundant. Noted here in case it isn't. (aneeshm)
-      }
-    ),
-  'chromedriver_buildbot_run': (master.chromium_step.AnnotatedCommand,
-      {
-        'name': 'annotated_steps',
-        'description': 'annotated_steps',
-        'command': ['python',
-          '../../../scripts/slave/chromium/chromedriver_buildbot_run.py'],
-      }
-    ),
-  'win_chromedriver_buildbot_run': (master.chromium_step.AnnotatedCommand,
-      {
-        'name': 'annotated_steps',
-        'description': 'annotated_steps',
-        'command': ['python_slave',
-          '..\\..\\..\\scripts\\slave\\chromium\\chromedriver_buildbot_run.py'],
-      }
-    ),
-  'chromedriver_compile_py':
-    (master.factory.commands.CompileWithRequiredSwarmTargets,
-      {
-        'command': ['python', '../../../scripts/slave/compile.py'],
-        'name': 'compile',
-        'description': 'compiling',
-        'descriptionDone': 'compile',
-      }
-    ),
-  'win_chromedriver_compile_py':
-    (master.factory.commands.CompileWithRequiredSwarmTargets,
-      {
-        'command': ['python_slave', '..\\..\\..\\scripts\\slave\\compile.py'],
-        'name': 'compile',
-        'description': 'compiling',
-        'descriptionDone': 'compile',
-      }
-    ),
-  'win_svnkill': (buildbot.steps.shell.ShellCommand,
-      {
-        'command': ['%WINDIR%\\system32\\taskkill', '/f', '/im', 'svn.exe',
-                    '||', 'set', 'ERRORLEVEL=0'],
-        'description': 'svnkill',
-        'name': 'svnkill',
-      }
-    ),
-  'win_update_scripts': (buildbot.steps.shell.ShellCommand,
-      {
-        'command': ['gclient.bat', 'sync', '--verbose', '--force'],
-        'description': 'update_scripts',
-        'name': 'update_scripts',
-      }
-    ),
-  'win_taskkill': (master.log_parser.retcode_command.ReturnCodeCommand,
-      {
-        'command': ['python', '..\\..\\..\\scripts\\slave\\kill_processes.py'],
-        'name': 'taskkill',
-        'description': 'taskkill',
-      }
-    )
 }
 
 # Conversion functions for specific step types.
@@ -213,20 +107,6 @@ _step_signatures = {
 def dump_converter(step):
   rc = recipe_chunk()
   rc.steps.append(pprint.pformat(step, indent=2))
-  return rc
-
-def win_taskkill_converter(step):
-  rc = recipe_chunk()
-  rc.deps.add('recipe_engine/python')
-  rc.deps.add('recipe_engine/path')
-  rc.steps.append('# taskkill step')
-  rc.steps.append('api.python("taskkill", api.path["build"].join("scripts", '+\
-      '"slave", "kill_processes.py"))')
-  return rc
-
-def win_svnkill_converter(step):
-  rc = recipe_chunk()
-  rc.steps.append('# svnkill step; not necessary in recipes')
   return rc
 
 def cleanup_temp_converter(step):
@@ -248,8 +128,10 @@ def gclient_safe_revert_converter(step):
   rc = recipe_chunk()
   # This *should be* a no-op if run after bot_update; and bot_update has been
   # found to have been run on all builders encountered/attempted to be converted
-  # so far.
-  rc.steps.append('# gclient revert step; made unnecessary by bot_update')
+  # so far. The following code is here just in case.
+  rc.deps.add('gclient')
+  rc.steps.append('# gclient revert step')
+  rc.steps.append('api.gclient.revert()')
   return rc
 
 def gclient_update_converter(step):
@@ -257,7 +139,6 @@ def gclient_update_converter(step):
   # This *should be* a no-op if run after bot_update; and bot_update has been
   # found to have been run on all builders encountered/attempted to be converted
   # so far.
-  rc.steps.append('# gclient update step; made unnecessary by bot_update')
   return rc
 
 def bot_update_converter(step):
@@ -290,12 +171,7 @@ def bot_update_converter(step):
         gclient_config['revision_mapping'])
   rc.steps.append('api.gclient.c = src_cfg')
   # Then, call bot_update on it.
-  rc.steps.append('result = api.bot_update.ensure_checkout(force=True)')
-  rc.steps.append(
-      'build_properties.update(result.json.output.get("properties", {}))')
-  # NOTE: wherever there is a gclient_runhooks steps after bot_update (which
-  # *should* be everywhere), the '--gyp_env' argument need not be passed in;
-  # that is why it is ignored here. (aneeshm)
+  rc.steps.append('api.bot_update.ensure_checkout(force=True)')
   return rc
 
 def bb_run_bot_converter(step):
@@ -304,111 +180,28 @@ def bb_run_bot_converter(step):
   rc.deps.add('recipe_engine/python')
   rc.deps.add('recipe_engine/json')
   build_properties = "'--build-properties=%s' % " +\
-      "api.json.dumps(build_properties, separators=(',', ':'))"
+      "api.json.dumps(api.properties.legacy(), separators=(',', ':'))"
   fmtstr = 'api.python("slave_steps", "%s", args=[%s, \'%s\'],' +\
       ' allow_subannotations=True)'
   rc.steps.append(fmtstr % (step[1]['command'][1], build_properties,
                             step[1]['command'][3]))
   return rc
 
-def gclient_runhooks_wrapper_converter(step):
-  rc = recipe_chunk()
-  rc.deps.add('recipe_engine/python')
-  rc.deps.add('recipe_engine/path')
-  rc.steps.append('# gclient runhooks wrapper step')
-  rc.steps.append('env = %s' % repr(step[1]['env']))
-  rc.steps.append('api.python("gclient runhooks wrapper", ' +\
-      'api.path["build"].join("scripts", "slave", "runhooks_wrapper.py"), '+\
-      'env=env)')
-  return rc
-
-def chromedriver_buildbot_run_converter(step):
-  rc = recipe_chunk()
-  rc.steps.append('# annotated_steps step')
-  rc.deps.add('recipe_engine/python')
-  rc.deps.add('recipe_engine/json')
-  build_properties = "'--build-properties=%s' % " +\
-      "api.json.dumps(build_properties, separators=(',', ':'))"
-  cdbbrun_command = 'api.path["build"].join("scripts", "slave", "chromium", '+\
-      '"chromedriver_buildbot_run.py")'
-  fmtstr = 'api.python("annotated_steps", %s, args=[%s, \'%s\'],' +\
-      ' allow_subannotations=True)'
-  rc.steps.append(fmtstr % (cdbbrun_command, build_properties,
-                            step[1]['command'][3]))
-  return rc
-
-def win_chromedriver_buildbot_run_converter(step):
-  rc = recipe_chunk()
-  rc.steps.append('# annotated_steps step')
-  rc.deps.add('recipe_engine/step')
-  rc.deps.add('recipe_engine/json')
-  build_properties = "'--build-properties=%s' % " +\
-      "api.json.dumps(build_properties, separators=(',', ':'))"
-  cdbbrun_command = 'api.path["build"].join("scripts", "slave", "chromium", '+\
-      '"chromedriver_buildbot_run.py")'
-  fmtstr = 'api.step("annotated_steps", ["python_slave", %s, %s, \'%s\'],' +\
-      ' allow_subannotations=True)'
-  rc.steps.append(fmtstr % (cdbbrun_command, build_properties,
-                            step[1]['command'][3]))
-  return rc
-
-# NOTE(aneeshm): I have no idea what the 'WithProperties' does in the 'items'
-# attribute of the 'command' attribute of this step; since it doesn't *seem*
-# to do anything, I'm not bothering with it.
-def chromedriver_compile_py_converter(step):
-  rc = recipe_chunk()
-  rc.steps.append('# chromedriver compile.py step')
-  rc.deps.add('recipe_engine/python')
-  rc.deps.add('recipe_engine/path')
-  fmtstr = 'api.python("compile", %s, args=%s)'
-  compile_command = 'api.path["build"].join("scripts", "slave", "compile.py")'
-  args = [x for x in step[1]['command'].items[2:] if isinstance(x, str)]
-  rc.steps.append(fmtstr % (compile_command, repr(args)))
-  return rc
-
-def win_chromedriver_compile_py_converter(step):
-  rc = recipe_chunk()
-  rc.steps.append('# chromedriver compile.py step')
-  rc.deps.add('recipe_engine/path')
-  fmtstr = 'api.step("compile", ["%s", %s, %s])'
-  compile_command = 'api.path["build"].join("scripts", "slave", "compile.py")'
-  args = [x for x in step[1]['command'].items[2:] if isinstance(x, str)]
-  rc.steps.append(fmtstr % ('python_slave', compile_command, repr(args)[1:-1]))
-  return rc
-
 _step_converters_map = {
     'cleanup_temp': cleanup_temp_converter,
-    'win_cleanup_temp': cleanup_temp_converter,
     'update_scripts': update_scripts_converter,
     'gclient_safe_revert': gclient_safe_revert_converter,
-    'win_gclient_safe_revert': gclient_safe_revert_converter,
     'gclient_update': gclient_update_converter,
     'bot_update': bot_update_converter,
-    'win_bot_update': bot_update_converter,
     'bb_run_bot': bb_run_bot_converter,
-    'gclient_runhooks_wrapper': gclient_runhooks_wrapper_converter,
-    'win_gclient_runhooks_wrapper': gclient_runhooks_wrapper_converter,
-    'chromedriver_buildbot_run': chromedriver_buildbot_run_converter,
-    'win_chromedriver_buildbot_run': win_chromedriver_buildbot_run_converter,
-    'chromedriver_compile_py': chromedriver_compile_py_converter,
-    'win_chromedriver_compile_py': win_chromedriver_compile_py_converter,
-    'win_svnkill': win_svnkill_converter,
-    'win_update_scripts': update_scripts_converter,
-    'win_taskkill': win_taskkill_converter,
 }
 
 def signature_match(step, signature):
   # Simple attributes are those for which an equality comparison suffices to
   # test for equality.
-  simple_attributes = {'description',
-                       'descriptionDone',
-                       'name',
-                       'workdir',
-                       'mode'}
-  subset_dictionary_attributes = {'env'}
-  special_attributes = {'command'}
-  all_attributes = simple_attributes | special_attributes | \
-      subset_dictionary_attributes
+  simple_attributes = {'description', 'name', 'workdir', 'mode'}
+  prefix_list_attributes = {'command'}
+  all_attributes = simple_attributes | prefix_list_attributes
 
   # Specific matching functions for complex attributes
   def list_startswith(base_list, prefix_list):
@@ -418,23 +211,12 @@ def signature_match(step, signature):
       return False
     return True
 
-  def command_matcher(base_command, command_signature):
-    if isinstance(base_command, list):
-      return list_startswith(base_command, command_signature)
-    if isinstance(base_command, master.optional_arguments.ListProperties):
-      return list_startswith(base_command.items, command_signature)
-    return False
-
-  def is_subdictionary(containing_dict, subdict):
-    return set(subdict.items()).issubset(set(containing_dict.items()))
-
   attribute_match = {}
   # For simple attributes, an equality comparison suffices.
   for attribute in simple_attributes:
     attribute_match[attribute] = lambda x, y: x == y
-  for attribute in subset_dictionary_attributes:
-    attribute_match[attribute] = is_subdictionary
-  attribute_match['command'] = command_matcher
+  for attribute in prefix_list_attributes:
+    attribute_match[attribute] = list_startswith
 
   if step[0] != signature[0]:
     return False
@@ -600,8 +382,7 @@ class recipe_skeleton(object):
 
   def report_recipe(self):
     def sanitize_builder_name(builder_name):
-      return builder_name.replace(' ', '_').replace('(', '_').replace(')', '_')\
-                         .replace('.', '_')
+      return builder_name.replace(' ', '_').replace('(', '_').replace(')', '_')
     sbn = sanitize_builder_name
 
     report = [
@@ -672,10 +453,7 @@ def builder_to_recipe_chunk(c, builder_name):
 
 
 def steplist_to_recipe_chunk(steplist):
-  rc = recipe_chunk()
-  rc.deps.add('recipe_engine/properties')
-  rc.steps.append('build_properties = api.properties.legacy()')
-  return sum(map(step_to_recipe_chunk, steplist), rc)
+  return sum(map(step_to_recipe_chunk, steplist), recipe_chunk())
 
 
 # Fails if a step cannot be converted. Perhaps add graceful degradation later,
