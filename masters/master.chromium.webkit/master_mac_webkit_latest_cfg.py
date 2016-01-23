@@ -20,7 +20,6 @@
 
 from master import master_config
 from master.factory import annotator_factory
-from master.factory import chromium_factory
 
 import master_site_config
 
@@ -33,8 +32,6 @@ B = helper.Builder
 F = helper.Factory
 T = helper.Triggerable
 
-def mac():
-  return chromium_factory.ChromiumFactory('src/out', 'darwin')
 
 m_annotator = annotator_factory.AnnotatorFactory()
 
