@@ -227,8 +227,7 @@ def win_taskkill_converter(step):
 def win_svnkill_converter(step):
   rc = recipe_chunk()
   rc.deps.add('recipe_engine/step')
-  rc.steps.append('# svnkill step')
-  rc.steps.append('api.step("svnkill", %s)' % repr(step[1]['command']))
+  rc.steps.append('# svnkill step; not necessary in recipes')
   return rc
 
 def cleanup_temp_converter(step):

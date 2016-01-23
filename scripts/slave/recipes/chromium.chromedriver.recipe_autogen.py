@@ -20,14 +20,6 @@ def Linux32_steps(api):
   soln = src_cfg.solutions.add()
   soln.name = "src"
   soln.url = "https://chromium.googlesource.com/chromium/src.git"
-  soln.custom_deps = {'src/chrome/test/chromedriver/third_party/java_tests':
-      'http://src.chromium.org/svn/trunk/deps/third_party/webdriver',
-      'src/third_party/WebKit/LayoutTests': None}
-  soln.custom_vars = {'webkit_trunk': 'http://src.chromium.org/blink/trunk',
-      'googlecode_url': 'http://%s.googlecode.com/svn',
-      'nacl_trunk': 'http://src.chromium.org/native_client/trunk',
-      'sourceforge_url': 'https://svn.code.sf.net/p/%(repo)s/code',
-      'llvm_url': 'http://llvm.org/svn/llvm-project'}
   src_cfg.got_revision_mapping.update({'src': 'got_revision',
     'src/third_party/WebKit': 'got_webkit_revision',
     'src/tools/swarming_client': 'got_swarming_client_revision',
@@ -68,14 +60,6 @@ def Mac_10_6_steps(api):
   soln = src_cfg.solutions.add()
   soln.name = "src"
   soln.url = "https://chromium.googlesource.com/chromium/src.git"
-  soln.custom_deps = {'src/chrome/test/chromedriver/third_party/java_tests':
-      'http://src.chromium.org/svn/trunk/deps/third_party/webdriver',
-      'src/third_party/WebKit/LayoutTests': None}
-  soln.custom_vars = {'webkit_trunk': 'http://src.chromium.org/blink/trunk',
-      'googlecode_url': 'http://%s.googlecode.com/svn',
-      'nacl_trunk': 'http://src.chromium.org/native_client/trunk',
-      'sourceforge_url': 'https://svn.code.sf.net/p/%(repo)s/code',
-      'llvm_url': 'http://llvm.org/svn/llvm-project'}
   src_cfg.got_revision_mapping.update({'src': 'got_revision',
     'src/third_party/WebKit': 'got_webkit_revision',
     'src/tools/swarming_client': 'got_swarming_client_revision',
@@ -106,9 +90,6 @@ def Mac_10_6_steps(api):
 
 
 def Win7_steps(api):
-  # svnkill step
-  api.step("svnkill", ['%WINDIR%\\system32\\taskkill', '/f', '/im', 'svn.exe',
-    '||', 'set', 'ERRORLEVEL=0'])
   # update scripts step; implicitly run by recipe engine.
   # taskkill step
   api.python("taskkill", api.path["build"].join("scripts", "slave",
@@ -118,14 +99,6 @@ def Win7_steps(api):
   soln = src_cfg.solutions.add()
   soln.name = "src"
   soln.url = "https://chromium.googlesource.com/chromium/src.git"
-  soln.custom_deps = {'src/chrome/test/chromedriver/third_party/java_tests':
-      'http://src.chromium.org/svn/trunk/deps/third_party/webdriver',
-      'src/third_party/WebKit/LayoutTests': None}
-  soln.custom_vars = {'webkit_trunk': 'http://src.chromium.org/blink/trunk',
-      'googlecode_url': 'http://%s.googlecode.com/svn',
-      'nacl_trunk': 'http://src.chromium.org/native_client/trunk',
-      'sourceforge_url': 'https://svn.code.sf.net/p/%(repo)s/code',
-      'llvm_url': 'http://llvm.org/svn/llvm-project'}
   src_cfg.got_revision_mapping.update({'src': 'got_revision',
     'src/third_party/WebKit': 'got_webkit_revision',
     'src/tools/swarming_client': 'got_swarming_client_revision',
@@ -162,14 +135,6 @@ def Linux_steps(api):
   soln = src_cfg.solutions.add()
   soln.name = "src"
   soln.url = "https://chromium.googlesource.com/chromium/src.git"
-  soln.custom_deps = {'src/chrome/test/chromedriver/third_party/java_tests':
-      'http://src.chromium.org/svn/trunk/deps/third_party/webdriver',
-      'src/third_party/WebKit/LayoutTests': None}
-  soln.custom_vars = {'webkit_trunk': 'http://src.chromium.org/blink/trunk',
-      'googlecode_url': 'http://%s.googlecode.com/svn',
-      'nacl_trunk': 'http://src.chromium.org/native_client/trunk',
-      'sourceforge_url': 'https://svn.code.sf.net/p/%(repo)s/code',
-      'llvm_url': 'http://llvm.org/svn/llvm-project'}
   src_cfg.got_revision_mapping.update({'src': 'got_revision',
     'src/third_party/WebKit': 'got_webkit_revision',
     'src/tools/swarming_client': 'got_swarming_client_revision',
