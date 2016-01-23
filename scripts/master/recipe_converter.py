@@ -226,7 +226,6 @@ def win_taskkill_converter(step):
 
 def win_svnkill_converter(step):
   rc = recipe_chunk()
-  rc.deps.add('recipe_engine/step')
   rc.steps.append('# svnkill step; not necessary in recipes')
   return rc
 
@@ -291,7 +290,9 @@ def bot_update_converter(step):
         gclient_config['revision_mapping'])
   rc.steps.append('api.gclient.c = src_cfg')
   # Then, call bot_update on it.
-  rc.steps.append('api.bot_update.ensure_checkout(force=True)')
+  rc.steps.append('result = api.bot_update.ensure_checkout(force=True)')
+  rc.steps.append(
+      'build_properties.update(result.json.output.get("properties", {}))')
   # NOTE: wherever there is a gclient_runhooks steps after bot_update (which
   # *should* be everywhere), the '--gyp_env' argument need not be passed in;
   # that is why it is ignored here. (aneeshm)
@@ -303,7 +304,7 @@ def bb_run_bot_converter(step):
   rc.deps.add('recipe_engine/python')
   rc.deps.add('recipe_engine/json')
   build_properties = "'--build-properties=%s' % " +\
-      "api.json.dumps(api.properties.legacy(), separators=(',', ':'))"
+      "api.json.dumps(build_properties, separators=(',', ':'))"
   fmtstr = 'api.python("slave_steps", "%s", args=[%s, \'%s\'],' +\
       ' allow_subannotations=True)'
   rc.steps.append(fmtstr % (step[1]['command'][1], build_properties,
@@ -327,7 +328,7 @@ def chromedriver_buildbot_run_converter(step):
   rc.deps.add('recipe_engine/python')
   rc.deps.add('recipe_engine/json')
   build_properties = "'--build-properties=%s' % " +\
-      "api.json.dumps(api.properties.legacy(), separators=(',', ':'))"
+      "api.json.dumps(build_properties, separators=(',', ':'))"
   cdbbrun_command = 'api.path["build"].join("scripts", "slave", "chromium", '+\
       '"chromedriver_buildbot_run.py")'
   fmtstr = 'api.python("annotated_steps", %s, args=[%s, \'%s\'],' +\
@@ -342,7 +343,7 @@ def win_chromedriver_buildbot_run_converter(step):
   rc.deps.add('recipe_engine/step')
   rc.deps.add('recipe_engine/json')
   build_properties = "'--build-properties=%s' % " +\
-      "api.json.dumps(api.properties.legacy(), separators=(',', ':'))"
+      "api.json.dumps(build_properties, separators=(',', ':'))"
   cdbbrun_command = 'api.path["build"].join("scripts", "slave", "chromium", '+\
       '"chromedriver_buildbot_run.py")'
   fmtstr = 'api.step("annotated_steps", ["python_slave", %s, %s, \'%s\'],' +\
@@ -671,7 +672,10 @@ def builder_to_recipe_chunk(c, builder_name):
 
 
 def steplist_to_recipe_chunk(steplist):
-  return sum(map(step_to_recipe_chunk, steplist), recipe_chunk())
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/properties')
+  rc.steps.append('build_properties = api.properties.legacy()')
+  return sum(map(step_to_recipe_chunk, steplist), rc)
 
 
 # Fails if a step cannot be converted. Perhaps add graceful degradation later,

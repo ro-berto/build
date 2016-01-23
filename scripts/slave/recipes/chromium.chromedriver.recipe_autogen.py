@@ -25,7 +25,9 @@ def Linux32_steps(api):
     'src/tools/swarming_client': 'got_swarming_client_revision',
     'src/v8': 'got_v8_revision'})
   api.gclient.c = src_cfg
-  api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True)
+  build_properties = api.properties.legacy()
+  build_properties.update(result.json.output.get('properties', {}))
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
   env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1', 'LANDMINES_VERBOSE': '1',
@@ -43,7 +45,7 @@ def Linux32_steps(api):
   # annotated_steps step
   api.python("annotated_steps", api.path["build"].join("scripts", "slave",
     "chromium", "chromedriver_buildbot_run.py"),
-    args=['--build-properties=%s' % api.json.dumps(api.properties.legacy(),
+    args=['--build-properties=%s' % api.json.dumps(build_properties,
       separators=(',', ':')), '--factory-properties={"annotated_script":'+\
           '"chromedriver_buildbot_run.py","blink_config":"chromium",'+\
           '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
@@ -65,7 +67,9 @@ def Mac_10_6_steps(api):
     'src/tools/swarming_client': 'got_swarming_client_revision',
     'src/v8': 'got_v8_revision'})
   api.gclient.c = src_cfg
-  api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True)
+  build_properties = api.properties.legacy()
+  build_properties.update(result.json.output.get('properties', {}))
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
   env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1', 'LANDMINES_VERBOSE': '1',
@@ -81,7 +85,7 @@ def Mac_10_6_steps(api):
   # annotated_steps step
   api.python("annotated_steps", api.path["build"].join("scripts", "slave",
     "chromium", "chromedriver_buildbot_run.py"),
-    args=['--build-properties=%s' % api.json.dumps(api.properties.legacy(),
+    args=['--build-properties=%s' % api.json.dumps(build_properties,
       separators=(',', ':')), '--factory-properties={"annotated_script":"c'+\
           'hromedriver_buildbot_run.py","blink_config":"chromium","gclient_e'+\
           'nv":{"CHROMIUM_GYP_SYNTAX_CHECK":"1","DEPOT_TOOLS_UPDATE":"0","GYP'+\
@@ -104,7 +108,9 @@ def Win7_steps(api):
     'src/tools/swarming_client': 'got_swarming_client_revision',
     'src/v8': 'got_v8_revision'})
   api.gclient.c = src_cfg
-  api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True)
+  build_properties = api.properties.legacy()
+  build_properties.update(result.json.output.get('properties', {}))
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
   env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1', 'LANDMINES_VERBOSE': '1',
@@ -120,7 +126,7 @@ def Win7_steps(api):
   # annotated_steps step
   api.step("annotated_steps", ["python_slave", api.path["build"].join("scripts",
     "slave", "chromium", "chromedriver_buildbot_run.py"),
-    '--build-properties=%s' % api.json.dumps(api.properties.legacy(),
+    '--build-properties=%s' % api.json.dumps(build_properties,
       separators=(',', ':')), '--factory-properties={"annotated_script":"chro'+\
           'medriver_buildbot_run.py","blink_config":"chromium","gclient_env":'+\
           '{"CHROMIUM_GYP_SYNTAX_CHECK":"1","DEPOT_TOOLS_UPDATE":"0","GYP_DEF'+\
@@ -140,7 +146,9 @@ def Linux_steps(api):
     'src/tools/swarming_client': 'got_swarming_client_revision',
     'src/v8': 'got_v8_revision'})
   api.gclient.c = src_cfg
-  api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True)
+  build_properties = api.properties.legacy()
+  build_properties.update(result.json.output.get('properties', {}))
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
   env = {'CHROMIUM_GYP_SYNTAX_CHECK': '1', 'LANDMINES_VERBOSE': '1',
@@ -157,7 +165,7 @@ def Linux_steps(api):
   # annotated_steps step
   api.python("annotated_steps", api.path["build"].join("scripts", "slave",
     "chromium", "chromedriver_buildbot_run.py"),
-    args=['--build-properties=%s' % api.json.dumps(api.properties.legacy(),
+    args=['--build-properties=%s' % api.json.dumps(build_properties,
       separators=(',', ':')), '--factory-properties={"annotated_script":"chro'+\
           'medriver_buildbot_run.py","blink_config":"chromium","gclient_env":'+\
           '{"CHROMIUM_GYP_SYNTAX_CHECK":"1","DEPOT_TOOLS_UPDATE":"0","GYP_DEF'+\
