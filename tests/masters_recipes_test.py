@@ -80,6 +80,7 @@ SUPPRESSIONS = {
         'Linux ASan Tests (sandboxed)',
     ],
     'master.chromium.win': [
+        'Win7 (32) Tests',
         'Win x64 Builder (dbg)',
     ],
 }
