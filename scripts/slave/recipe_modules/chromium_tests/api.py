@@ -417,18 +417,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             buildername,
             self.m.properties.get('buildnumber'))
 
-      if bot_config.get('cf_archive_build'):
-        self.m.archive.clusterfuzz_archive(
-            build_dir=self.m.chromium.c.build_dir.join(
-                self.m.chromium.c.build_config_fs),
-            update_properties=update_step.presentation.properties,
-            gs_bucket=bot_config.get('cf_gs_bucket'),
-            gs_acl=bot_config.get('cf_gs_acl'),
-            archive_prefix=bot_config.get('cf_archive_name'),
-            revision_dir=bot_config.get('cf_revision_dir'),
-            fixed_staging_dir=bot_config.get('fixed_staging_dir', False),
-        )
-      else:
+      if not bot_config.get('cf_archive_build'):
         master_config = bot_db.get_master_settings(mastername)
         build_revision = update_step.presentation.properties['got_revision']
         self.m.archive.zip_and_upload_build(
@@ -463,6 +452,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           bot_config.get('gs_acl'),
           mode='dev'
       )
+    if bot_config.get('cf_archive_build') and not self.m.tryserver.is_tryserver:
+       self.m.archive.clusterfuzz_archive(
+         build_dir=self.m.chromium.c.build_dir.join(
+         self.m.chromium.c.build_config_fs),
+         update_properties=update_step.presentation.properties,
+         gs_bucket=bot_config.get('cf_gs_bucket'),
+         gs_acl=bot_config.get('cf_gs_acl'),
+         archive_prefix=bot_config.get('cf_archive_name'),
+         revision_dir=bot_config.get('cf_revision_dir'),
+         fixed_staging_dir=bot_config.get('fixed_staging_dir', False),
+       )
 
   def run_mb_and_compile(self, compile_targets, isolated_targets, name_suffix,
                          mb_mastername=None, mb_buildername=None):
