@@ -1,0 +1,46 @@
+{
+  "master_base_class": "Master3",
+  "master_port": 20301,
+  "master_port_alt": 40301,
+  "slave_port": 30301,
+  "templates": ["../master.chromium/templates"],
+
+  "builders": {
+    "Linux": {
+      "recipe": "flutter",
+      "scheduler": "flutter_commits",
+      "slave_pools": ["linux"],
+    },
+    "Mac": {
+      "recipe": "flutter",
+      "scheduler": "flutter_commits",
+      "slave_pools": ["mac"],
+    },
+  },
+
+  "schedulers": {
+    "flutter_commits": {
+      "type": "git_poller",
+      "git_repo_url": "https://chromium.googlesource.com/external/github.com/flutter/flutter",
+    },
+  },
+
+  "slave_pools": {
+    "linux": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave1-c3", "slave2-c3"],
+    },
+    "mac": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "mac",
+        "version": "10.11",
+      },
+      "slaves": ["build21-m3", "build22-m3"],
+    },
+  },
+}
