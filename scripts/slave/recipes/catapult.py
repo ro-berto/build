@@ -13,7 +13,6 @@ DEPS = [
 ]
 
 
-
 def _CheckoutSteps(api, buildername):
   """Checks out the catapult repo (and any dependencies) using gclient."""
   api.gclient.set_config('catapult')
@@ -46,6 +45,12 @@ def RunSteps(api):
   sdk_path = _FetchAppEngineSDKSteps(api)
   modified_env = {
     'PYTHONPATH': api.path.pathsep.join(['%(PYTHONPATH)s', str(sdk_path)])
+  }
+
+  # The sandbox is needed to run chrome on linux, but is harmless to set on
+  # other platforms.
+  sandbox_env = {
+    'CHROME_DEVEL_SANDBOX': '/opt/chromium/chrome_sandbox'
   }
 
   api.python('Build Python Tests',
@@ -94,11 +99,13 @@ def RunSteps(api):
              ['--no-install-hooks',
               '--no-use-local-chrome',
               '--channel=canary'])
-  api.python('Telemetry Tests with stable browser',
-             api.path['checkout'].join('telemetry', 'bin', 'run_tests'),
-             ['--browser=reference'])
   api.python('Systrace Tests',
              api.path['checkout'].join('systrace', 'bin', 'run_tests'))
+  api.python('Telemetry Tests with Stable Browser',
+             api.path['checkout'].join('telemetry', 'bin', 'run_tests'),
+             ['--browser=reference',
+              '--start-xvfb'],
+              env=sandbox_env)
   if not api.platform.is_win:
     # D8/vinn currently unavailable on Windows.
     # TODO(sullivan): Add these tests on Windows when available.
