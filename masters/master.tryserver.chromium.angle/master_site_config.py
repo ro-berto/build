@@ -13,3 +13,5 @@ class TryServerANGLE(Master.Master4a):
   master_port_alt = 41403
   buildbot_url = 'http://build.chromium.org/p/tryserver.chromium.angle/'
   gerrit_host = 'https://chromium-review.googlesource.com'
+  service_account_file = 'service-account-chromium-tryserver.json'
+  buildbucket_bucket = 'master.tryserver.chromium.angle'
