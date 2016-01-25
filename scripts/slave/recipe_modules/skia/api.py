@@ -30,8 +30,14 @@ from . import xsan_flavor
 
 BOTO_CHROMIUM_SKIA_GM = 'chromium-skia-gm.boto'
 
+GS_SUBDIR_TMPL_SK_IMAGE = 'skimage/v%s'
+GS_SUBDIR_TMPL_SKP = 'playback_%s/skps'
+
 TEST_EXPECTED_SKP_VERSION = '42'
-TEST_EXPECTED_SKIMAGE_VERSION = '42'
+TEST_EXPECTED_SK_IMAGE_VERSION = '42'
+
+VERSION_FILE_SK_IMAGE = 'SK_IMAGE_VERSION'
+VERSION_FILE_SKP = 'SKP_VERSION'
 
 
 def is_android(builder_cfg):
@@ -126,12 +132,8 @@ class SkiaApi(recipe_api.RecipeApi):
     self.perf_data_dir = None
     self.resource_dir = self.skia_dir.join('resources')
     self.images_dir = self.slave_dir.join('images')
-    self.local_skp_dirs = default_flavor.SKPDirs(
-        str(self.slave_dir.join('playback')),
-        self.builder_name, self.m.path.sep)
+    self.local_skp_dir = self.slave_dir.join('playback', 'skps')
     self.out_dir = self.m.path['checkout'].join('out', self.builder_name)
-    self.storage_skp_dirs = default_flavor.SKPDirs(
-        'playback', self.builder_name, '/')
     self.tmp_dir = self.m.path['slave_build'].join('tmp')
 
     self.gsutil_env_chromium_skia_gm = self.gsutil_env(BOTO_CHROMIUM_SKIA_GM)
@@ -261,13 +263,25 @@ class SkiaApi(recipe_api.RecipeApi):
         env=self.gsutil_env_skia_infra,
         abort_on_failure=False)
 
-  def _download_and_copy_dir(self, expected_version, version_file, gs_path,
-                             host_path, device_path, test_actual_version):
+  def _download_and_copy_dir(self, version_file, gs_path_tmpl, host_path,
+                             device_path, test_expected_version,
+                             test_actual_version):
+    # Ensure that the tmp_dir exists.
+    self._run_once(self.m.file.makedirs,
+                   'tmp_dir',
+                   self.tmp_dir,
+                   infra_step=True)
+
+    expected_version_file = self.m.path['checkout'].join(version_file)
+    expected_version = self._readfile(expected_version_file,
+                                      name='Get expected %s' % version_file,
+                                      test_data=test_expected_version).rstrip()
+
     actual_version_file = self.m.path.join(self.tmp_dir, version_file)
     try:
       actual_version = self._readfile(actual_version_file,
                                       name='Get downloaded %s' % version_file,
-                                      test_data=test_actual_version)
+                                      test_data=test_actual_version).rstrip()
     except self.m.step.StepFailure:
       actual_version = -1
 
@@ -281,7 +295,7 @@ class SkiaApi(recipe_api.RecipeApi):
       self.flavor.create_clean_host_dir(host_path)
       self.m.gsutil.download(
           global_constants.GS_GM_BUCKET,
-          gs_path + '/*',
+          (gs_path_tmpl % expected_version) + '/*',
           host_path,
           name='download %s' % self.m.path.basename(host_path),
           args=['-R'],
@@ -307,58 +321,25 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def download_and_copy_images(self):
     """Download test images if needed."""
-    # Ensure that the tmp_dir exists.
-    self._run_once(self.m.file.makedirs,
-                   'tmp_dir',
-                   self.tmp_dir,
-                   infra_step=True)
-
-    # Determine which version we have and which version we want.
-    timestamp_file = 'TIMESTAMP_LAST_UPLOAD_COMPLETED'
-    url = '/'.join(('gs:/', global_constants.GS_GM_BUCKET, 'skimage', 'input',
-                    timestamp_file))
-    expected_version = self.m.gsutil.cat(
-        url,
-        name='cat %s' % timestamp_file,
-        env=self.gsutil_env_chromium_skia_gm,
-        stdout=self.m.raw_io.output()).stdout.rstrip()
-
-    test_data = TEST_EXPECTED_SKIMAGE_VERSION
-    if self.m.properties.get('test_downloaded_skimage_version'):
-      test_data = self.m.properties['test_downloaded_skimage_version']
-
-    self._download_and_copy_dir(expected_version,
-                                'SKIMAGE_VERSION',
-                                '/'.join(('skimage', 'input')),
-                                self.images_dir,
-                                self.device_dirs.images_dir,
-                                test_actual_version=test_data)
+    self._download_and_copy_dir(
+        VERSION_FILE_SK_IMAGE,
+        GS_SUBDIR_TMPL_SK_IMAGE,
+        self.images_dir,
+        self.device_dirs.images_dir,
+        test_expected_version=TEST_EXPECTED_SK_IMAGE_VERSION,
+        test_actual_version=self.m.properties.get(
+            'test_downloaded_sk_image_version', TEST_EXPECTED_SK_IMAGE_VERSION))
 
   def download_and_copy_skps(self):
     """Download the SKPs if needed."""
-    # Ensure that the tmp_dir exists.
-    self._run_once(self.m.file.makedirs,
-                   'tmp_dir',
-                   self.tmp_dir,
-                   infra_step=True)
-
-    # Determine which version we have and which version we want.
-    version_file = 'SKP_VERSION'
-    expected_version_file = self.m.path['checkout'].join(version_file)
-    expected_version = self._readfile(expected_version_file,
-                                      name='Get expected SKP_VERSION',
-                                      test_data=TEST_EXPECTED_SKP_VERSION)
-
-    test_data = TEST_EXPECTED_SKP_VERSION
-    if self.m.properties.get('test_downloaded_skp_version'):
-      test_data = self.m.properties['test_downloaded_skp_version']
-
-    self._download_and_copy_dir(expected_version,
-                                version_file,
-                                self.storage_skp_dirs.skp_dir(expected_version),
-                                self.local_skp_dirs.skp_dir(),
-                                self.device_dirs.skp_dir,
-                                test_actual_version=test_data)
+    self._download_and_copy_dir(
+        VERSION_FILE_SKP,
+        GS_SUBDIR_TMPL_SKP,
+        self.local_skp_dir,
+        self.device_dirs.skp_dir,
+        test_expected_version=TEST_EXPECTED_SKP_VERSION,
+        test_actual_version=self.m.properties.get(
+            'test_downloaded_skp_version', TEST_EXPECTED_SKP_VERSION))
 
   def install(self):
     """Copy the required executables and files to the device."""
@@ -488,8 +469,9 @@ print json.dumps({'ccache': ccache})
       '--undefok',   # This helps branches that may not know new flags.
       '--verbose',
       '--resourcePath', self.device_dirs.resource_dir,
-      '--skps',         self.device_dirs.skp_dir,
-      '--images',       self.device_dirs.images_dir,
+      '--skps', self.device_dirs.skp_dir,
+      '--images', self.flavor.device_path_join(
+          self.device_dirs.images_dir, 'dm'),
       '--nameByHash',
       '--properties'
     ] + properties
@@ -578,7 +560,8 @@ print json.dumps({'ccache': ccache})
         '--undefok',   # This helps branches that may not know new flags.
         '-i',       self.device_dirs.resource_dir,
         '--skps',   self.device_dirs.skp_dir,
-        '--images', self.device_dirs.images_dir,
+        '--images', self.flavor.device_path_join(
+            self.device_dirs.images_dir, 'dm'),  # Using DM images for now.
     ]
 
     skip_flag = None

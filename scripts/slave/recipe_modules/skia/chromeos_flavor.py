@@ -53,7 +53,6 @@ class ChromeOSFlavorUtils(ssh_flavor.SSHFlavorUtils):
         perf_data_dir=join('perf'),
         resource_dir=join('resources'),
         images_dir=join('images'),
-        skp_dirs=default_flavor.SKPDirs(
-            join('skp'), self._skia_api.builder_name, '/'),
+        skp_dir=self.device_path_join(join('skp'), 'skps'),
         tmp_dir=join('tmp_dir'))
 

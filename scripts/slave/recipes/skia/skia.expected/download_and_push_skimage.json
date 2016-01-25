@@ -400,41 +400,33 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cat",
-      "gs://chromium-skia-gm/skimage/input/TIMESTAMP_LAST_UPLOAD_COMPLETED"
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/skia/SK_IMAGE_VERSION",
+      "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
-      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto"
-    },
-    "name": "gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED",
-    "stdout": "/path/to/tmp/"
+    "name": "Get expected SK_IMAGE_VERSION"
   },
   {
     "cmd": [
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SKIMAGE_VERSION",
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Get downloaded SKIMAGE_VERSION"
+    "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
     "cmd": [
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[SLAVE_BUILD]/tmp/SKIMAGE_VERSION"
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "remove actual SKIMAGE_VERSION",
+    "name": "remove actual SK_IMAGE_VERSION",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
@@ -495,7 +487,7 @@
       "----",
       "cp",
       "-R",
-      "gs://chromium-skia-gm/skimage/input/*",
+      "gs://chromium-skia-gm/skimage/v42/*",
       "[SLAVE_BUILD]/images"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -511,10 +503,10 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "42",
-      "[SLAVE_BUILD]/tmp/SKIMAGE_VERSION"
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "write SKIMAGE_VERSION"
+    "name": "write SK_IMAGE_VERSION"
   },
   {
     "cmd": [
@@ -523,7 +515,7 @@
       "015d210a13480604",
       "shell",
       "cat",
-      "/storage/emulated/legacy/skiabot/skia_tmp_dir/SKIMAGE_VERSION"
+      "/storage/emulated/legacy/skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -531,7 +523,7 @@
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug"
     },
-    "name": "read SKIMAGE_VERSION",
+    "name": "read SK_IMAGE_VERSION",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -542,7 +534,7 @@
       "shell",
       "rm",
       "-f",
-      "/storage/emulated/legacy/skiabot/skia_tmp_dir/SKIMAGE_VERSION"
+      "/storage/emulated/legacy/skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -550,7 +542,7 @@
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug"
     },
-    "name": "rm SKIMAGE_VERSION"
+    "name": "rm SK_IMAGE_VERSION"
   },
   {
     "cmd": [
@@ -639,8 +631,8 @@
       "-s",
       "015d210a13480604",
       "push",
-      "[SLAVE_BUILD]/tmp/SKIMAGE_VERSION",
-      "/storage/emulated/legacy/skiabot/skia_tmp_dir/SKIMAGE_VERSION"
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
+      "/storage/emulated/legacy/skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -648,7 +640,7 @@
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug"
     },
-    "name": "push SKIMAGE_VERSION"
+    "name": "push SK_IMAGE_VERSION"
   },
   {
     "cmd": [
@@ -836,7 +828,7 @@
       "--skps",
       "/storage/emulated/legacy/skiabot/skia_skp/skps",
       "--images",
-      "/storage/emulated/legacy/skiabot/skia_images",
+      "/storage/emulated/legacy/skiabot/skia_images/dm",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -936,7 +928,7 @@
       "--skps",
       "/storage/emulated/legacy/skiabot/skia_skp/skps",
       "--images",
-      "/storage/emulated/legacy/skiabot/skia_images",
+      "/storage/emulated/legacy/skiabot/skia_images/dm",
       "--nocpu",
       "--dummy-flags"
     ],

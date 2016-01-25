@@ -208,31 +208,23 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cat",
-      "gs://chromium-skia-gm/skimage/input/TIMESTAMP_LAST_UPLOAD_COMPLETED"
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/skia/SK_IMAGE_VERSION",
+      "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
-      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto"
-    },
-    "name": "gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED",
-    "stdout": "/path/to/tmp/"
+    "name": "Get expected SK_IMAGE_VERSION"
   },
   {
     "cmd": [
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SKIMAGE_VERSION",
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Get downloaded SKIMAGE_VERSION"
+    "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
     "cmd": [
@@ -334,7 +326,7 @@
       "--skps",
       "[SLAVE_BUILD]/playback/skps",
       "--images",
-      "[SLAVE_BUILD]/images",
+      "[SLAVE_BUILD]/images/dm",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -403,7 +395,7 @@
       "--skps",
       "[SLAVE_BUILD]/playback/skps",
       "--images",
-      "[SLAVE_BUILD]/images",
+      "[SLAVE_BUILD]/images/dm",
       "--nogpu",
       "--dummy-flags"
     ],

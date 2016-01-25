@@ -247,7 +247,6 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         perf_data_dir=prefix + 'perf',
         resource_dir=prefix + 'resources',
         images_dir=prefix + 'images',
-        skp_dirs=default_flavor.SKPDirs(
-            prefix + 'skp', self._skia_api.builder_name, '/'),
+        skp_dir=prefix + 'skp/skps',
         tmp_dir=prefix + 'tmp_dir')
 

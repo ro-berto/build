@@ -65,7 +65,7 @@ class AppurifyFlavorUtils(default_flavor.DefaultFlavorUtils):
       '--apk', main_apk,
       '--test-apk', test_apk,
       '--result-dir', self._skia_api.tmp_dir,
-      '--skp-dir', self._skia_api.local_skp_dirs.skp_dir(),
+      '--skp-dir', self._skia_api.local_skp_dir,
       '--resource-dir', self._skia_api.resource_dir,
     ]
     env = dict(env or {})
@@ -132,6 +132,5 @@ class AppurifyFlavorUtils(default_flavor.DefaultFlavorUtils):
         perf_data_dir=results_dir,
         resource_dir=sdcard + '/resources',
         images_dir=sdcard + '/images',
-        skp_dirs=default_flavor.SKPDirs(
-            sdcard, self._skia_api.builder_name, '/'),
+        skp_dir=sdcard + '/skps',
         tmp_dir=sdcard + '/tmp')

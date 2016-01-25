@@ -81,7 +81,7 @@ def GenTests(api):
             'read SKP_VERSION',
             stdout=api.raw_io.output('42')) +
         api.step_data(
-            'read SKIMAGE_VERSION',
+            'read SK_IMAGE_VERSION',
             stdout=api.raw_io.output('42'))
     )
     if 'Test' in builder:
@@ -112,9 +112,6 @@ def GenTests(api):
               api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
           )
         )
-        if 'Test' in builder or 'Perf' in builder:
-          test += api.step_data('gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED',
-                                stdout=api.raw_io.output('42'))
         if 'Android' in builder:
           ccache = '/usr/bin/ccache' if 'Appurify' in builder else None
           test += api.step_data('has ccache?',
@@ -126,7 +123,7 @@ def GenTests(api):
         if 'ChromeOS' in builder:
           test += api.step_data('read SKP_VERSION',
                                 stdout=api.raw_io.output('42'))
-          test += api.step_data('read SKIMAGE_VERSION',
+          test += api.step_data('read SK_IMAGE_VERSION',
                                 stdout=api.raw_io.output('42'))
         if 'Trybot' in builder:
           test += api.properties(issue=500,
@@ -144,8 +141,6 @@ def GenTests(api):
                    mastername='client.skia',
                    slavename='skiabot-linux-tester-000',
                    buildnumber=6) +
-    api.step_data('gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED',
-                  stdout=api.raw_io.output('42')) +
     api.step_data('dm', retcode=1)
   )
 
@@ -175,9 +170,7 @@ def GenTests(api):
     AndroidTestData(builder) +
     api.step_data('read SKP_VERSION',
                   stdout=api.raw_io.output('42')) +
-    api.step_data('gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED',
-                  stdout=api.raw_io.output('42')) +
-    api.step_data('read SKIMAGE_VERSION',
+    api.step_data('read SK_IMAGE_VERSION',
                   stdout=api.raw_io.output('42')) +
     api.step_data('get uninteresting hashes', retcode=1) +
     api.path.exists(
@@ -200,9 +193,7 @@ def GenTests(api):
     AndroidTestData(builder) +
     api.step_data('read SKP_VERSION',
                   stdout=api.raw_io.output('2')) +
-    api.step_data('gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED',
-                  stdout=api.raw_io.output('42')) +
-    api.step_data('read SKIMAGE_VERSION',
+    api.step_data('read SK_IMAGE_VERSION',
                   stdout=api.raw_io.output('42')) +
     api.step_data(
         'exists skps',
@@ -226,9 +217,7 @@ def GenTests(api):
     AndroidTestData(builder) +
     api.step_data('read SKP_VERSION',
                   retcode=1) +
-    api.step_data('gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED',
-                  stdout=api.raw_io.output('42')) +
-    api.step_data('read SKIMAGE_VERSION',
+    api.step_data('read SK_IMAGE_VERSION',
                   stdout=api.raw_io.output('42')) +
     api.step_data(
         'exists skps',
@@ -246,16 +235,14 @@ def GenTests(api):
                    slavename=slave,
                    buildnumber=6,
                    revision='abc123',
-                   test_downloaded_skimage_version='2') +
+                   test_downloaded_sk_image_version='2') +
     api.step_data(
                 'has ccache?',
                 stdout=api.json.output({'ccache':None})) +
     AndroidTestData(builder) +
     api.step_data('read SKP_VERSION',
                   stdout=api.raw_io.output('42')) +
-    api.step_data('gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED',
-                  stdout=api.raw_io.output('42')) +
-    api.step_data('read SKIMAGE_VERSION',
+    api.step_data('read SK_IMAGE_VERSION',
                   stdout=api.raw_io.output('2')) +
     api.step_data(
         'exists skia_images',
@@ -267,7 +254,7 @@ def GenTests(api):
   )
 
   yield (
-    api.test('missing_SKIMAGE_VERSION_device') +
+    api.test('missing_SK_IMAGE_VERSION_device') +
     api.properties(buildername=builder,
                    mastername=master,
                    slavename=slave,
@@ -279,9 +266,7 @@ def GenTests(api):
     AndroidTestData(builder) +
     api.step_data('read SKP_VERSION',
                   stdout=api.raw_io.output('42')) +
-    api.step_data('gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED',
-                  stdout=api.raw_io.output('42')) +
-    api.step_data('read SKIMAGE_VERSION',
+    api.step_data('read SK_IMAGE_VERSION',
                   retcode=1) +
     api.step_data(
         'exists skia_images',
@@ -303,8 +288,6 @@ def GenTests(api):
                    buildnumber=6,
                    revision='abc123') +
     api.step_data('Get downloaded SKP_VERSION', retcode=1) +
-    api.step_data('gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED',
-                  stdout=api.raw_io.output('42')) +
     api.path.exists(
         api.path['slave_build'].join('skia'),
         api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
@@ -312,15 +295,13 @@ def GenTests(api):
   )
 
   yield (
-    api.test('missing_SKIMAGE_VERSION_host') +
+    api.test('missing_SK_IMAGE_VERSION_host') +
     api.properties(buildername=builder,
                    mastername=master,
                    slavename=slave,
                    buildnumber=6,
                    revision='abc123') +
-    api.step_data('gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED',
-                  stdout=api.raw_io.output('42')) +
-    api.step_data('Get downloaded SKIMAGE_VERSION', retcode=1) +
+    api.step_data('Get downloaded SK_IMAGE_VERSION', retcode=1) +
     api.path.exists(
         api.path['slave_build'].join('skia'),
         api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')

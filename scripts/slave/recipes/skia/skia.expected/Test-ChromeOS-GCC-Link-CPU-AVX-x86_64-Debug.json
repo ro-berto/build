@@ -347,31 +347,23 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cat",
-      "gs://chromium-skia-gm/skimage/input/TIMESTAMP_LAST_UPLOAD_COMPLETED"
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/skia/SK_IMAGE_VERSION",
+      "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
-      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto"
-    },
-    "name": "gsutil cat TIMESTAMP_LAST_UPLOAD_COMPLETED",
-    "stdout": "/path/to/tmp/"
+    "name": "Get expected SK_IMAGE_VERSION"
   },
   {
     "cmd": [
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SKIMAGE_VERSION",
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Get downloaded SKIMAGE_VERSION"
+    "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
     "cmd": [
@@ -380,7 +372,7 @@
       "22",
       "root@192.168.1.123",
       "cat",
-      "/usr/local/skiabot/skia_tmp_dir/SKIMAGE_VERSION"
+      "/usr/local/skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -388,7 +380,7 @@
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
-    "name": "read SKIMAGE_VERSION",
+    "name": "read SK_IMAGE_VERSION",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -399,7 +391,7 @@
       "root@192.168.1.123",
       "rm",
       "-f",
-      "/usr/local/skiabot/skia_tmp_dir/SKIMAGE_VERSION"
+      "/usr/local/skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -407,7 +399,7 @@
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
-    "name": "rm SKIMAGE_VERSION"
+    "name": "rm SK_IMAGE_VERSION"
   },
   {
     "cmd": [
@@ -464,8 +456,8 @@
       "scp",
       "-P",
       "22",
-      "[SLAVE_BUILD]/tmp/SKIMAGE_VERSION",
-      "root@192.168.1.123:/usr/local/skiabot/skia_tmp_dir/SKIMAGE_VERSION"
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
+      "root@192.168.1.123:/usr/local/skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -473,7 +465,7 @@
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
-    "name": "scp SKIMAGE_VERSION"
+    "name": "scp SK_IMAGE_VERSION"
   },
   {
     "cmd": [
@@ -646,7 +638,7 @@
       "--skps",
       "/usr/local/skiabot/skia_skp/skps",
       "--images",
-      "/usr/local/skiabot/skia_images",
+      "/usr/local/skiabot/skia_images/dm",
       "--nameByHash",
       "--properties",
       "gitHash",
@@ -748,7 +740,7 @@
       "--skps",
       "/usr/local/skiabot/skia_skp/skps",
       "--images",
-      "/usr/local/skiabot/skia_images",
+      "/usr/local/skiabot/skia_images/dm",
       "--nogpu",
       "--dummy-flags"
     ],

@@ -6,38 +6,19 @@
 """Default flavor utils class, used for desktop builders."""
 
 
-class SKPDirs(object):
-  """Wraps up important directories for SKP-related testing."""
-
-  def __init__(self, root_dir, builder_name, path_sep):
-    self._root_dir = root_dir
-    self._builder_name = builder_name
-    self._path_sep = path_sep
-
-  @property
-  def root_dir(self):
-    return self._root_dir
-
-  def skp_dir(self, skp_version=None):
-    root_dir = self.root_dir
-    if skp_version:
-      root_dir += '_%s' % skp_version
-    return self._path_sep.join((root_dir, 'skps'))
-
-
 class DeviceDirs(object):
   def __init__(self,
                dm_dir,
                perf_data_dir,
                resource_dir,
                images_dir,
-               skp_dirs,
+               skp_dir,
                tmp_dir):
     self._dm_dir = dm_dir
     self._perf_data_dir = perf_data_dir
     self._resource_dir = resource_dir
     self._images_dir = images_dir
-    self._skp_dir = skp_dirs.skp_dir()
+    self._skp_dir = skp_dir
     self._tmp_dir = tmp_dir
 
   @property
@@ -201,7 +182,7 @@ class DefaultFlavorUtils(object):
         perf_data_dir=self._skia_api.perf_data_dir,
         resource_dir=self._skia_api.resource_dir,
         images_dir=join('images'),
-        skp_dirs=self._skia_api.local_skp_dirs,
+        skp_dir=self._skia_api.local_skp_dir,
         tmp_dir=join('tmp'))
 
   def __repr__(self):
