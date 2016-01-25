@@ -371,8 +371,7 @@
             "WebKit Mac10.6 (deps)",
             "WebKit Win Builder (deps)",
             "WebKit Win Oilpan (dbg)",
-            "WebKit Win Oilpan",
-            "WebKit XP (deps)"
+            "WebKit Win Oilpan"
         ],
 
         "builders": {

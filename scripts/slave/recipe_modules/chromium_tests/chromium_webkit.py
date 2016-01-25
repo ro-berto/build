@@ -36,30 +36,6 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
-  'WebKit XP': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
-    'gclient_config': 'chromium',
-    'gclient_apply_config': ['blink_or_chromium'],
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': 32,
-    },
-    'bot_type': 'tester',
-    'parent_buildername': 'WebKit Win Builder',
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
-    'tests': [
-      steps.BlinkTest(),
-    ],
-    'testing': {
-      'platform': 'win',
-    },
-    'enable_swarming': True,
-    'use_isolate': True,
-  },
   'WebKit Win7': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb'],

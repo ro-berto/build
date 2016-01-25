@@ -444,16 +444,6 @@ TRYBOTS = freeze({
         'buildername': 'Win Builder',
         'tester': 'Win7 Tests (1)',
       }),
-      'win_chromium_xp_rel_ng': simple_bot({
-        'mastername': 'chromium.win',
-        'buildername': 'Win Builder',
-        'tester': 'XP Tests (1)',
-      }),
-      'win_chromium_vista_rel_ng': simple_bot({
-        'mastername': 'chromium.win',
-        'buildername': 'Win Builder',
-        'tester': 'Vista Tests (1)',
-      }),
       'win_chromium_compile_dbg_ng': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win Builder (dbg)',

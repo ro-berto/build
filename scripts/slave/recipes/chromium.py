@@ -867,7 +867,7 @@ def GenTests(api):
     api.test('chromium_webkit_parent_revision_webkit') +
     api.properties.generic(
         mastername='chromium.webkit',
-        buildername='WebKit XP',
+        buildername='WebKit Win7',
         project='webkit',
         parent_buildername='WebKit Win Builder',
         parent_got_revision='7496f63cbefd34b2d791022fbad64a82838a3f3f',
@@ -880,7 +880,7 @@ def GenTests(api):
     api.test('chromium_webkit_parent_revision_chromium') +
     api.properties.generic(
         mastername='chromium.webkit',
-        buildername='WebKit XP',
+        buildername='WebKit Win7',
         project='chromium',
         parent_buildername='WebKit Win Builder',
         parent_got_revision='1e74b372f951d4491f305ec64f6decfcda739e73',

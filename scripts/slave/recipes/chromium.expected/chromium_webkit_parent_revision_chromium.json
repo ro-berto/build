@@ -16,7 +16,7 @@
       "--master",
       "chromium.webkit",
       "--builder",
-      "WebKit XP",
+      "WebKit Win7",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -144,7 +144,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
-      "{\"buildername\": \"WebKit XP\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"buildername\": \"WebKit Win7\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -235,11 +235,11 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit XP\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"parent_buildername\": \"WebKit Win Builder\", \"parent_got_revision\": \"1e74b372f951d4491f305ec64f6decfcda739e73\", \"parent_got_webkit_revision\": \"191269\", \"project\": \"chromium\", \"recipe\": \"chromium\", \"revision\": \"1e74b372f951d4491f305ec64f6decfcda739e73\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Win7\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"parent_buildername\": \"WebKit Win Builder\", \"parent_got_revision\": \"1e74b372f951d4491f305ec64f6decfcda739e73\", \"parent_got_webkit_revision\": \"191269\", \"project\": \"chromium\", \"recipe\": \"chromium\", \"revision\": \"1e74b372f951d4491f305ec64f6decfcda739e73\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit XP\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"parent_buildername\": \"WebKit Win Builder\", \"parent_got_revision\": \"1e74b372f951d4491f305ec64f6decfcda739e73\", \"parent_got_webkit_revision\": \"191269\", \"project\": \"chromium\", \"recipe\": \"chromium\", \"revision\": \"1e74b372f951d4491f305ec64f6decfcda739e73\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Win7\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"parent_buildername\": \"WebKit Win Builder\", \"parent_got_revision\": \"1e74b372f951d4491f305ec64f6decfcda739e73\", \"parent_got_webkit_revision\": \"191269\", \"project\": \"chromium\", \"recipe\": \"chromium\", \"revision\": \"1e74b372f951d4491f305ec64f6decfcda739e73\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests",
-      "--builder-name=WebKit XP",
+      "--builder-name=WebKit Win7",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
@@ -257,7 +257,7 @@
       "--build-number",
       "571",
       "--builder-name",
-      "WebKit XP"
+      "WebKit Win7"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests",
@@ -277,15 +277,15 @@
       "--build-number",
       "571",
       "--builder-name",
-      "WebKit XP",
+      "WebKit Win7",
       "--gs-bucket",
       "gs://chromium-layout-test-archives"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_XP/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_XP/571/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Win7/571/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Win7/571/layout-test-results.zip@@@"
     ]
   },
   {

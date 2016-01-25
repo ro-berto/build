@@ -27,8 +27,6 @@ def Update(config, active_master, c):
   ])
   specs = [
     {'name': 'Win Builder'},
-    {'name': 'XP Tests (1)'},
-    {'name': 'Vista Tests (1)'},
     {'name': 'Win7 (32) Tests'},
     {'name': 'Win7 Tests (1)'},
     {'name': 'Win x64 Builder'},

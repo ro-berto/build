@@ -31,53 +31,6 @@ SPEC = {
       'enable_swarming': True,
       'use_isolate': True,
     },
-    'XP Tests (1)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
-      'parent_buildername': 'Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
-      'swarming_dimensions': {
-        'cpu': 'x86-32',
-        'os': 'Windows-XP-SP3',
-      },
-    },
-    'Vista Tests (1)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
-      'parent_buildername': 'Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
-      'swarming_dimensions': {
-        'os': 'Windows-Vista-SP2',
-      },
-    },
     'Win7 (32) Tests': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],

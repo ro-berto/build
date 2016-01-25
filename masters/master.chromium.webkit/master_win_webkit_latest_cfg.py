@@ -46,7 +46,6 @@ F('f_webkit_win_rel', m_annotator.BaseFactory(
 #
 # Win Rel WebKit testers
 #
-B('WebKit XP', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger')
 B('WebKit Win7', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger')
 B('WebKit Win10', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger')
 F('f_webkit_rel_tests', m_annotator.BaseFactory('chromium'))
