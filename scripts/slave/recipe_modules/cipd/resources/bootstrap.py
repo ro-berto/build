@@ -5,7 +5,6 @@
 import argparse
 import errno
 import hashlib
-import httplib
 import json
 import os
 import sys
@@ -21,13 +20,13 @@ CIPD_BACKEND_URL = 'https://chrome-infra-packages.appspot.com'
 
 # ./cipd resolve \
 #     infra/tools/cipd/ \
-#     -version=git_revision:b5ececbd33984d968138f30f5cdee49574828328
+#     -version=git_revision:40a69b87c6c49c529bc3a1e57f099bddad71e38a
 CLIENT_VERSIONS = {
-  'linux-386': 'a4e3ba1a926b614a93001f34cf46ab6aec726c1d',
-  'linux-amd64': 'bcca10926e0f0c060a8f57cdb3cd228f9e83c395',
-  'mac-amd64': 'c7218f9e18aab4a13736f2e85cd2aeff2ea0324d',
-  'windows-386': 'c9cf5d35297a967b6e56e9f87f7b4f5bb3f521b4',
-  'windows-amd64': 'c4165da82db2cc587000aaaa355244f3e40bbc50',
+  'linux-386': '1d44a12b8bbea451ccc42a7409bcb0b6e2d7ebc8',
+  'linux-amd64': 'ec815bd831e9d2117620bb890af9edd9a8a3e4e4',
+  'mac-amd64': '65a72d248166409c2db79e5c2f2a44044834454a',
+  'windows-386': '386dfc4c3ca4be2d7e6ff3c87c17d9e170a3827a',
+  'windows-amd64': '93f58713e3625baf88f02d831a1d36ed13815c51',
 }
 
 
