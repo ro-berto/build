@@ -555,21 +555,6 @@
           "V8 Random Deopt Fuzzer - debug"
         ],
         "builders": {
-          "V8 Linux64 ASAN": {
-            "tree_notify": [
-              "svenpanne@chromium.org"
-            ]
-          },
-          "V8 Linux64 TSAN": {
-            "tree_notify": [
-              "svenpanne@chromium.org"
-            ]
-          },
-          "V8 Linux - arm64 - sim - MSAN": {
-            "tree_notify": [
-              "svenpanne@chromium.org"
-            ]
-          },
           "V8 Linux - predictable": {
             "excluded_steps": [
               "Mjsunit",
@@ -577,6 +562,16 @@
               "Benchmarks",
               "Test262",
               "Mozilla"
+            ]
+          },
+          "V8 Win64": {
+            "excluded_steps": [
+              "Test262 - no variants"
+            ]
+          },
+          "V8 Win64 - debug": {
+            "excluded_steps": [
+              "Test262 - no variants"
             ]
           },
           "*": {}
