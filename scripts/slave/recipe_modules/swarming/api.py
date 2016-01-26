@@ -645,7 +645,18 @@ class SwarmingApi(recipe_api.RecipeApi):
     if merged_test_output:
       args.extend(['--merged-test-output', merged_test_output])
       if not step_test_data:
-        step_test_data = lambda: self.m.test_utils.test_api.canned_gtest_output(True)
+        sample_swarming_summary = {
+          'swarming_summary': {
+            'shards': [{
+              'isolated_out': {
+                'view_url': 'blah',
+              },
+            }]
+          },
+        }
+
+        step_test_data = lambda: self.m.test_utils.test_api.canned_gtest_output(
+            True, extra_json=sample_swarming_summary)
 
     # Arguments for actual 'collect' command.
     args.append('--')
@@ -679,8 +690,15 @@ class SwarmingApi(recipe_api.RecipeApi):
           p.step_text += self.m.test_utils.format_step_text([
             ['failures:', gtest_results.failures]
           ])
-        self._display_pending(gtest_results.raw.get('swarming_summary', {}),
-                              step_result.presentation)
+        swarming_summary = gtest_results.raw.get('swarming_summary', {})
+        self._display_pending(swarming_summary, step_result.presentation)
+
+        # Show any remaining isolated outputs (such as logcats).
+        for index, shard in enumerate(swarming_summary.get('shards', [])):
+          isolated_out = shard.get('isolated_out')
+          if isolated_out:
+            link_name = 'shard #%d isolated out' % index
+            p.links[link_name] = isolated_out['view_url']
 
   def _isolated_script_collect_step(self, task, **kwargs):
     step_test_data = kwargs.pop('step_test_data', None)

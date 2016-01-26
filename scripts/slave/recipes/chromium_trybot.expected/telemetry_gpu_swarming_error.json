@@ -3097,7 +3097,10 @@
       "content_gl_tests on Intel GPU on Mac (with patch)/Mac-10.10/[dummy has/mac_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "content_gl_tests on Intel GPU on Mac (with patch) on Mac-10.10"
+    "name": "content_gl_tests on Intel GPU on Mac (with patch) on Mac-10.10",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3105,7 +3108,7 @@
       "-u",
       "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.mac",
       "--builder-name",
@@ -3145,7 +3148,10 @@
       "gl_tests on Intel GPU on Mac (with patch)/Mac-10.10/[dummy has/mac_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gl_tests on Intel GPU on Mac (with patch) on Mac-10.10"
+    "name": "gl_tests on Intel GPU on Mac (with patch) on Mac-10.10",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3153,7 +3159,7 @@
       "-u",
       "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.mac",
       "--builder-name",
@@ -3193,7 +3199,10 @@
       "angle_unittests on Intel GPU on Mac (with patch)/Mac-10.10/[dummy has/mac_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "angle_unittests on Intel GPU on Mac (with patch) on Mac-10.10"
+    "name": "angle_unittests on Intel GPU on Mac (with patch) on Mac-10.10",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3201,7 +3210,7 @@
       "-u",
       "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.mac",
       "--builder-name",
@@ -3505,7 +3514,10 @@
       "tab_capture_end2end_tests on Intel GPU on Mac (with patch)/Mac-10.10/[dummy has/mac_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "tab_capture_end2end_tests on Intel GPU on Mac (with patch) on Mac-10.10"
+    "name": "tab_capture_end2end_tests on Intel GPU on Mac (with patch) on Mac-10.10",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3513,7 +3525,7 @@
       "-u",
       "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.mac",
       "--builder-name",
@@ -3553,7 +3565,10 @@
       "content_gl_tests on NVIDIA GPU on Mac Retina (with patch)/Mac-10.9/[dummy has/mac_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "content_gl_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
+    "name": "content_gl_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3561,7 +3576,7 @@
       "-u",
       "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.mac",
       "--builder-name",
@@ -3601,7 +3616,10 @@
       "gl_tests on NVIDIA GPU on Mac Retina (with patch)/Mac-10.9/[dummy has/mac_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gl_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
+    "name": "gl_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3609,7 +3627,7 @@
       "-u",
       "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.mac",
       "--builder-name",
@@ -3649,7 +3667,10 @@
       "angle_unittests on NVIDIA GPU on Mac Retina (with patch)/Mac-10.9/[dummy has/mac_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "angle_unittests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
+    "name": "angle_unittests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3657,7 +3678,7 @@
       "-u",
       "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.mac",
       "--builder-name",
@@ -3957,7 +3978,10 @@
       "tab_capture_end2end_tests on NVIDIA GPU on Mac Retina (with patch)/Mac-10.9/[dummy has/mac_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "tab_capture_end2end_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9"
+    "name": "tab_capture_end2end_tests on NVIDIA GPU on Mac Retina (with patch) on Mac-10.9",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3965,7 +3989,7 @@
       "-u",
       "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.mac",
       "--builder-name",

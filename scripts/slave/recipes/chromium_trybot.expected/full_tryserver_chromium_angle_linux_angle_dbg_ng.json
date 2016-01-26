@@ -1793,7 +1793,10 @@
       "content_gl_tests on NVIDIA GPU on Linux (with patch)/Linux/[dummy has/linux_angle_dbg_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "content_gl_tests on NVIDIA GPU on Linux (with patch) on Linux"
+    "name": "content_gl_tests on NVIDIA GPU on Linux (with patch) on Linux",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -1801,7 +1804,7 @@
       "-u",
       "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.angle",
       "--builder-name",
@@ -1841,7 +1844,10 @@
       "gl_tests on NVIDIA GPU on Linux (with patch)/Linux/[dummy has/linux_angle_dbg_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gl_tests on NVIDIA GPU on Linux (with patch) on Linux"
+    "name": "gl_tests on NVIDIA GPU on Linux (with patch) on Linux",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -1849,7 +1855,7 @@
       "-u",
       "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.angle",
       "--builder-name",
@@ -1889,7 +1895,10 @@
       "angle_unittests on NVIDIA GPU on Linux (with patch)/Linux/[dummy has/linux_angle_dbg_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "angle_unittests on NVIDIA GPU on Linux (with patch) on Linux"
+    "name": "angle_unittests on NVIDIA GPU on Linux (with patch) on Linux",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -1897,7 +1906,7 @@
       "-u",
       "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.angle",
       "--builder-name",
@@ -1937,7 +1946,10 @@
       "gl_unittests on NVIDIA GPU on Linux (with patch)/Linux/[dummy has/linux_angle_dbg_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gl_unittests on NVIDIA GPU on Linux (with patch) on Linux"
+    "name": "gl_unittests on NVIDIA GPU on Linux (with patch) on Linux",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -1945,7 +1957,7 @@
       "-u",
       "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.angle",
       "--builder-name",
@@ -1985,7 +1997,10 @@
       "angle_end2end_tests on NVIDIA GPU on Linux (with patch)/Linux/[dummy has/linux_angle_dbg_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "angle_end2end_tests on NVIDIA GPU on Linux (with patch) on Linux"
+    "name": "angle_end2end_tests on NVIDIA GPU on Linux (with patch) on Linux",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -1993,7 +2008,7 @@
       "-u",
       "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.angle",
       "--builder-name",

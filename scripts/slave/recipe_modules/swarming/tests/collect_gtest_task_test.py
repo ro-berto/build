@@ -140,6 +140,13 @@ GOOD_GTEST_JSON_MERGED = {
       'status': 'SUCCESS',
     }],
   }],
+  'swarming_summary': {
+    'shards': [{
+      'isolated_out': {
+        'view_url': 'blah',
+      },
+    }],
+  },
 }
 
 
@@ -324,7 +331,13 @@ class MergeShardResultsTest(auto_stub.TestCase):
       '1/output.json': GOOD_GTEST_JSON_1,
     })
     merged, stdout = self.call()
-    merged.pop('swarming_summary')
+    merged['swarming_summary'] = {
+      'shards': [{
+        'isolated_out': {
+          'view_url': 'blah',
+        },
+      }],
+    }
     self.assertEqual(GOOD_GTEST_JSON_MERGED, merged)
     self.assertEqual('', stdout)
 

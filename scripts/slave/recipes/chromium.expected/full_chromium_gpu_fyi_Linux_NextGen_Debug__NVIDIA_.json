@@ -338,7 +338,10 @@
       "browser_tests/Ubuntu-12.04/ffffffffff/Linux NextGen Debug (NVIDIA)/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "browser_tests"
+    "name": "browser_tests",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -346,7 +349,7 @@
       "-u",
       "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "chromium.gpu.fyi",
       "--builder-name",

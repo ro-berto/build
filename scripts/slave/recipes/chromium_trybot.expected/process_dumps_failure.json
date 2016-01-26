@@ -3192,7 +3192,10 @@
       "content_gl_tests on NVIDIA GPU on Windows (with patch)/Windows/[dummy has/win_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "content_gl_tests on NVIDIA GPU on Windows (with patch) on Windows"
+    "name": "content_gl_tests on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3200,7 +3203,7 @@
       "-u",
       "RECIPE_MODULE[test_results]\\resources\\upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.win",
       "--builder-name",
@@ -3240,7 +3243,10 @@
       "gl_tests on NVIDIA GPU on Windows (with patch)/Windows/[dummy has/win_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gl_tests on NVIDIA GPU on Windows (with patch) on Windows"
+    "name": "gl_tests on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3248,7 +3254,7 @@
       "-u",
       "RECIPE_MODULE[test_results]\\resources\\upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.win",
       "--builder-name",
@@ -3288,7 +3294,10 @@
       "angle_unittests on NVIDIA GPU on Windows (with patch)/Windows/[dummy has/win_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "angle_unittests on NVIDIA GPU on Windows (with patch) on Windows"
+    "name": "angle_unittests on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3296,7 +3305,7 @@
       "-u",
       "RECIPE_MODULE[test_results]\\resources\\upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.win",
       "--builder-name",
@@ -3336,7 +3345,10 @@
       "gl_unittests on NVIDIA GPU on Windows (with patch)/Windows/[dummy has/win_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gl_unittests on NVIDIA GPU on Windows (with patch) on Windows"
+    "name": "gl_unittests on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3344,7 +3356,7 @@
       "-u",
       "RECIPE_MODULE[test_results]\\resources\\upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.win",
       "--builder-name",
@@ -3644,7 +3656,10 @@
       "tab_capture_end2end_tests on NVIDIA GPU on Windows (with patch)/Windows/[dummy has/win_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "tab_capture_end2end_tests on NVIDIA GPU on Windows (with patch) on Windows"
+    "name": "tab_capture_end2end_tests on NVIDIA GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3652,7 +3667,7 @@
       "-u",
       "RECIPE_MODULE[test_results]\\resources\\upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.win",
       "--builder-name",
@@ -3692,7 +3707,10 @@
       "content_gl_tests on ATI GPU on Windows (with patch)/Windows/[dummy has/win_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "content_gl_tests on ATI GPU on Windows (with patch) on Windows"
+    "name": "content_gl_tests on ATI GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3700,7 +3718,7 @@
       "-u",
       "RECIPE_MODULE[test_results]\\resources\\upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.win",
       "--builder-name",
@@ -3740,7 +3758,10 @@
       "gl_tests on ATI GPU on Windows (with patch)/Windows/[dummy has/win_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gl_tests on ATI GPU on Windows (with patch) on Windows"
+    "name": "gl_tests on ATI GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3748,7 +3769,7 @@
       "-u",
       "RECIPE_MODULE[test_results]\\resources\\upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.win",
       "--builder-name",
@@ -3788,7 +3809,10 @@
       "angle_unittests on ATI GPU on Windows (with patch)/Windows/[dummy has/win_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "angle_unittests on ATI GPU on Windows (with patch) on Windows"
+    "name": "angle_unittests on ATI GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3796,7 +3820,7 @@
       "-u",
       "RECIPE_MODULE[test_results]\\resources\\upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.win",
       "--builder-name",
@@ -3836,7 +3860,10 @@
       "gl_unittests on ATI GPU on Windows (with patch)/Windows/[dummy has/win_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gl_unittests on ATI GPU on Windows (with patch) on Windows"
+    "name": "gl_unittests on ATI GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -3844,7 +3871,7 @@
       "-u",
       "RECIPE_MODULE[test_results]\\resources\\upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.win",
       "--builder-name",
@@ -4144,7 +4171,10 @@
       "tab_capture_end2end_tests on ATI GPU on Windows (with patch)/Windows/[dummy has/win_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "tab_capture_end2end_tests on ATI GPU on Windows (with patch) on Windows"
+    "name": "tab_capture_end2end_tests on ATI GPU on Windows (with patch) on Windows",
+    "~followup_annotations": [
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -4152,7 +4182,7 @@
       "-u",
       "RECIPE_MODULE[test_results]\\resources\\upload_gtest_test_results.py",
       "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"isolated_out\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
       "tryserver.chromium.win",
       "--builder-name",
