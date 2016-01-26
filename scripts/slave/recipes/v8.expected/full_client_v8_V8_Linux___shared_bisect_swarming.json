@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/bot_update.py",
+      "RECIPE_PACKAGE[build]/bot_update.py",
       "--master",
       "client.v8",
       "--builder",
@@ -840,7 +840,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/bot_update.py",
+      "RECIPE_PACKAGE[build]/bot_update.py",
       "--master",
       "client.v8",
       "--builder",
@@ -1150,7 +1150,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/bot_update.py",
+      "RECIPE_PACKAGE[build]/bot_update.py",
       "--master",
       "client.v8",
       "--builder",
@@ -1486,7 +1486,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/bot_update.py",
+      "RECIPE_PACKAGE[build]/bot_update.py",
       "--master",
       "client.v8",
       "--builder",

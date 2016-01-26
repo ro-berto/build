@@ -55,8 +55,7 @@ class BotUpdateApi(recipe_api.RecipeApi):
   def __call__(self, name, cmd, **kwargs):
     """Wrapper for easy calling of bot_update."""
     assert isinstance(cmd, (list, tuple))
-    bot_update_path = self.m.path['build'].join(
-        'scripts', 'slave', 'bot_update.py')
+    bot_update_path = self.package_resource('bot_update.py')
     kwargs.setdefault('infra_step', True)
     return self.m.python(name, bot_update_path, cmd, **kwargs)
 

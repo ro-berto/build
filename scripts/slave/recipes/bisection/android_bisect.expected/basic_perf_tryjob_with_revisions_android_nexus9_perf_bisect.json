@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/bot_update.py",
+      "RECIPE_PACKAGE[build]/bot_update.py",
       "--master",
       "tryserver.chromium.perf",
       "--builder",
@@ -394,7 +394,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/bot_update.py",
+      "RECIPE_PACKAGE[build]/bot_update.py",
       "--master",
       "tryserver.chromium.perf",
       "--builder",
@@ -593,7 +593,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/bot_update.py",
+      "RECIPE_PACKAGE[build]/bot_update.py",
       "--master",
       "tryserver.chromium.perf",
       "--builder",
