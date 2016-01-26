@@ -395,7 +395,7 @@
       "4.7",
       "----",
       "cp",
-      "gs://chrome-perf/android_perf_rel/full-build-linux_1111111.zip",
+      "gs://chrome-perf/test-archive.zip",
       "[SLAVE_BUILD]/src/out/build_product.zip"
     ],
     "cwd": "[SLAVE_BUILD]",

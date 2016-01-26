@@ -139,6 +139,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
     mastername = api.properties.get('mastername')
     buildername = api.properties.get('buildername')
     bot_config = bot_db.get_bot_config(mastername, buildername)
+    build_archive_url = test_config_params['parent_build_archive_url']
     if not run_locally:
       api.bisect_tester.upload_job_url()
     if api.chromium.c.TARGET_PLATFORM == 'android':
@@ -155,11 +156,12 @@ class AutoBisectApi(recipe_api.RecipeApi):
       zip_dir = self.m.path.join(self.m.path['checkout'], 'full-build-linux')
       if self.m.path.exists(zip_dir):  # pragma: no cover
         self.m.file.rmtree('full-build-linux directory', zip_dir)
-
+      
+      gs_bucket = 'gs://%s/' % bot_config['bucket']
+      archive_path = build_archive_url[len(gs_bucket):]
       api.chromium_android.download_build(
           bucket=bot_config['bucket'],
-          path=(bot_config['path'](api) %
-                test_config_params['parent_got_revision']))
+          path=archive_path)
 
       # crbug.com/535218, the way android builders on tryserver.chromium.perf
       # are archived is different from builders on chromium.per. In order to
@@ -178,7 +180,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
     else:
       api.chromium_tests.download_and_unzip_build(
           mastername, buildername, update_step, bot_db,
-          build_archive_url=test_config_params['parent_build_archive_url'],
+          build_archive_url=build_archive_url,
           build_revision=test_config_params['parent_got_revision'],
           override_bot_type='tester')
 
