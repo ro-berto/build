@@ -49,11 +49,19 @@ def x86_builder(c):
     raise recipe_config.BadConf(
       'Cannot target x86 with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
+@CONFIG_CTX(includes=['x86_builder', 'mb'])
+def x86_builder_mb(c):
+  pass
+
 @CONFIG_CTX(includes=['base_config', 'default_compiler'],
             config_vars={'TARGET_ARCH': 'mipsel'})
 def mipsel_builder(c):
   if c.TARGET_ARCH != 'mipsel':  # pragma: no cover
     raise recipe_config.BadConf('I dunno what to put in a mips builder!')
+
+@CONFIG_CTX(includes=['mipsel_builder', 'mb'])
+def mipsel_builder_mb(c):
+  pass
 
 @CONFIG_CTX(includes=['main_builder'])
 def dartium_builder(c):
@@ -85,9 +93,9 @@ def arm_l_builder_lto(c):  # pragma: no cover
 def arm_l_builder_rel(c):  # pragma: no cover
   pass
 
-@CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'],
+@CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma', 'mb'],
             config_vars={'TARGET_ARCH': 'intel', 'TARGET_BITS': 64})
-def x64_builder(c):
+def x64_builder_mb(c):
   if c.TARGET_ARCH != 'intel' or c.TARGET_BITS != 64:
     raise recipe_config.BadConf(
       'Cannot target x64 with TARGET_ARCH == %s, TARGET_BITS == %d'

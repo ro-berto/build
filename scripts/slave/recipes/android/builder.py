@@ -27,17 +27,17 @@ def FYIStep():
 BUILDERS = freeze({
   'chromium.android': {
     'Android x64 Builder (dbg)': {
-      'recipe_config': 'x64_builder',
+      'recipe_config': 'x64_builder_mb',
       'check_licenses': FYIStep,
       'gclient_apply_config': ['android', 'chrome_internal'],
     },
     'Android x86 Builder (dbg)' : {
-      'recipe_config': 'x86_builder',
+      'recipe_config': 'x86_builder_mb',
       'check_licenses': FYIStep,
       'gclient_apply_config': ['android', 'chrome_internal'],
     },
     'Android MIPS Builder (dbg)': {
-      'recipe_config': 'mipsel_builder',
+      'recipe_config': 'mipsel_builder_mb',
       'check_licenses': FYIStep,
       'gclient_apply_config': ['android', 'chrome_internal'],
     },

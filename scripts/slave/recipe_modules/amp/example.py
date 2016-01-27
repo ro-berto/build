@@ -78,6 +78,15 @@ BUILDERS = {
     'api_protocol': 'http',
     'network_config': 8, # Sprint 4G 1 Bar
   },
+  'slow_tests': {
+    'device_name': ['SampleDevice'],
+    'device_os': ['SampleDeviceOS'],
+    'api_address': '127.0.0.1',
+    'api_port': '80',
+    'api_protocol': 'http',
+    'timeout_scale': 10,
+    'test_run_timeout': 3600,
+  },
 }
 
 AMP_RESULTS_BUCKET = 'chrome-amp-results'
@@ -116,7 +125,8 @@ def RunSteps(api, buildername):
           test_apk='TestApk.apk',
           additional_apks=['ExtraApk1.apk', 'ExtraApk2.apk'],
           isolate_file_path='isolate_file.isolate',
-          annotation='SmallTest'),
+          annotation='SmallTest',
+          timeout_scale=builder.get('timeout_scale')),
       api.amp.amp_arguments(
           device_minimum_os=builder.get('device_minimum_os', None),
           device_name=builder.get('device_name', None),
@@ -126,7 +136,8 @@ def RunSteps(api, buildername):
           api_address=builder.get('api_address', None),
           api_port=builder.get('api_port', None),
           api_protocol=builder.get('api_protocol', None),
-          network_config=builder.get('network_config', None)))
+          network_config=builder.get('network_config', None),
+          test_run_timeout=builder.get('test_run_timeout')))
  
   uirobot_test_id = api.amp.trigger_test_suite(
       'example_uirobot_suite', 'uirobot',

@@ -84,12 +84,20 @@ def x86_base(c):
 def x86_builder(c):
   pass
 
+@config_ctx(includes=['x86_builder'])
+def x86_builder_mb(c):
+  pass
+
 @config_ctx()
 def mipsel_base(c):
   pass
 
 @config_ctx(includes=['mipsel_base'])
 def mipsel_builder(c):
+  pass
+
+@config_ctx(includes=['mipsel_base'])
+def mipsel_builder_mb(c):
   pass
 
 @config_ctx(includes=['main_builder'])
@@ -119,7 +127,7 @@ def x64_base(c):
   pass
 
 @config_ctx(includes=['x64_base'])
-def x64_builder(c):
+def x64_builder_mb(c):
   pass
 
 @config_ctx()
