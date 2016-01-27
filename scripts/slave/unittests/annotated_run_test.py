@@ -103,7 +103,7 @@ class _AnnotatedRunExecTestBase(unittest.TestCase):
     self.cwd = os.path.join('home', 'user')
     self.rpy_path = os.path.join(env.Build, 'scripts', 'slave', 'recipes.py')
     self.recipe_args = [
-        sys.executable, '-u', self.rpy_path, 'run',
+        sys.executable, '-u', self.rpy_path, '--verbose', 'run',
         '--workdir=%s' % (self.cwd,),
         '--properties-file=%s' % (self._tp('recipe_properties.json'),),
         'example/recipe']

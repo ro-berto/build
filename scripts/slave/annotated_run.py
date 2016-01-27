@@ -823,6 +823,7 @@ def _exec_recipe(rt, opts, tdir, config, properties):
 
   cmd = [
       sys.executable, '-u', recipe_runner,
+      '--verbose',
       'run',
       '--workdir=%s' % os.getcwd(),
       '--properties-file=%s' % props_file,
