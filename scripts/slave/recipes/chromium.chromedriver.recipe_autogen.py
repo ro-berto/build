@@ -20,6 +20,8 @@ def Linux32_steps(api):
   soln = src_cfg.solutions.add()
   soln.name = "src"
   soln.url = "https://chromium.googlesource.com/chromium/src.git"
+  soln.custom_deps = {'src/chrome/test/chromedriver/third_party/java_tests':
+      'https://chromium.googlesource.com/chromium/deps/webdriver'}
   soln = src_cfg.solutions.add()
   soln.name = "src-internal"
   soln.url = "svn://svn.chromium.org/chrome-internal/trunk/src-internal"
@@ -83,6 +85,8 @@ def Mac_10_6_steps(api):
   soln = src_cfg.solutions.add()
   soln.name = "src"
   soln.url = "https://chromium.googlesource.com/chromium/src.git"
+  soln.custom_deps = {'src/chrome/test/chromedriver/third_party/java_tests':
+      'https://chromium.googlesource.com/chromium/deps/webdriver'}
   soln = src_cfg.solutions.add()
   soln.name = "src-internal"
   soln.url = "svn://svn.chromium.org/chrome-internal/trunk/src-internal"
@@ -145,6 +149,8 @@ def Win7_steps(api):
   soln = src_cfg.solutions.add()
   soln.name = "src"
   soln.url = "https://chromium.googlesource.com/chromium/src.git"
+  soln.custom_deps = {'src/chrome/test/chromedriver/third_party/java_tests':
+      'https://chromium.googlesource.com/chromium/deps/webdriver'}
   soln = src_cfg.solutions.add()
   soln.name = "src-internal"
   soln.url = "svn://svn.chromium.org/chrome-internal/trunk/src-internal"
@@ -204,6 +210,8 @@ def Linux_steps(api):
   soln = src_cfg.solutions.add()
   soln.name = "src"
   soln.url = "https://chromium.googlesource.com/chromium/src.git"
+  soln.custom_deps = {'src/chrome/test/chromedriver/third_party/java_tests':
+      'https://chromium.googlesource.com/chromium/deps/webdriver'}
   soln = src_cfg.solutions.add()
   soln.name = "src-internal"
   soln.url = "svn://svn.chromium.org/chrome-internal/trunk/src-internal"
