@@ -17,7 +17,7 @@ class FletchFactory(gclient_factory.GClientFactory):
   def __init__(self, build_dir='fletch', target_platform='posix'):
     self.target_platform = target_platform
     self._build_dir = build_dir
-    deps_url = 'https://github.com/dart-lang/fletch.git'
+    deps_url = 'https://github.com/dartino/sdk.git'
     main = gclient_factory.GClientSolution(deps_url, custom_deps_list=[])
     gclient_factory.GClientFactory.__init__(self, build_dir, [main],
                                             target_platform=target_platform)
