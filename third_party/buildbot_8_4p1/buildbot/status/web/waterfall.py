@@ -90,6 +90,11 @@ class CurrentBox(components.Adapter):
             if builds:
                 for b in builds:
                     eta = b.getETA()
+                    if len(builds) <= 2:
+                        # Show more information if there's only one or two
+                        # builds.
+                        started = time.localtime(b.getTimes()[0])
+                        text.extend(["start:", time.strftime("%H:%M", started)])
                     text.extend(self.formatETA("ETA in", eta))
         elif state == "offline":
             text = ["offline"]
