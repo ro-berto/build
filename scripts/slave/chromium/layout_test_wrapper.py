@@ -234,11 +234,17 @@ def main():
   option_parser.add_option('--driver-name',
                            help=('If specified, alternative DumpRenderTree '
                                  'binary to use'))
-  option_parser.add_option('--additional-drt-flag', action='append',
-                           default=[],
+
+  # TODO(dpranke): Remove additional-drt-flag as it should not be used
+  # any more.
+  option_parser.add_option('--additional-driver-flag',
+                           '--additional-drt-flag',
+                           dest='additional_drt_flag',
+                           action='append', default=[],
                            help=('If specified, additional command line flag '
                                  'to pass to DumpRenderTree. Specify multiple '
                                  'times to add multiple flags.'))
+
   option_parser.add_option('--json-test-results',
                            help=('Path to write json results to allow '
                                  'TryJob recipe to know how to ignore '
