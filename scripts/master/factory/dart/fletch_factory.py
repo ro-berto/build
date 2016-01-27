@@ -14,7 +14,7 @@ from master.factory import gclient_factory
 from master.factory.dart import dart_commands
 
 class FletchFactory(gclient_factory.GClientFactory):
-  def __init__(self, build_dir='fletch', target_platform='posix'):
+  def __init__(self, build_dir='sdk', target_platform='posix'):
     self.target_platform = target_platform
     self._build_dir = build_dir
     deps_url = 'https://github.com/dartino/sdk.git'
