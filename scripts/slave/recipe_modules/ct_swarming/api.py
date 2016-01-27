@@ -151,6 +151,7 @@ os.chmod('%s', os.stat('%s').st_mode | stat.S_IEXEC)
       slave_start_num: int. Which slave number to start with. Optional.
     """
     self.m.isolate.isolate_tests(
+        verbose=True,  # To avoid no output timeouts.
         build_dir=self.swarming_temp_dir,
         targets=[
             'slave%s' % num for num in xrange(slave_start_num, num_slaves+1)])

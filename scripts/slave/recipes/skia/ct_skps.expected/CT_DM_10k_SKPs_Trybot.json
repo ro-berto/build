@@ -573,6 +573,7 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
+      "--verbose",
       "[SLAVE_BUILD]/swarming_temp_dir/slave1.isolated.gen.json",
       "[SLAVE_BUILD]/swarming_temp_dir/slave2.isolated.gen.json",
       "[SLAVE_BUILD]/swarming_temp_dir/slave3.isolated.gen.json",
