@@ -180,6 +180,14 @@ master: %(master)s
 builder: %(builder)s
 slave: %(slave)s
 forced by recipes: %(recipe)s
+CURRENT_DIR: %(CURRENT_DIR)s
+BUILDER_DIR: %(BUILDER_DIR)s
+SLAVE_DIR: %(SLAVE_DIR)s
+THIS_DIR: %(THIS_DIR)s
+SCRIPTS_DIR: %(SCRIPTS_DIR)s
+BUILD_DIR: %(BUILD_DIR)s
+ROOT_DIR: %(ROOT_DIR)s
+DEPOT_TOOLS_DIR: %(DEPOT_TOOLS_DIR)s
 bot_update.py is:"""
 
 ACTIVATED_MESSAGE = """ACTIVE.
@@ -1655,6 +1663,14 @@ def print_help_text(force, output_json, active, master, builder, slave):
     'builder': builder or 'Not specified',
     'slave': slave or 'Not specified',
     'recipe': recipe_force,
+    'CURRENT_DIR': CURRENT_DIR,
+    'BUILDER_DIR': BUILDER_DIR,
+    'SLAVE_DIR': SLAVE_DIR,
+    'THIS_DIR': THIS_DIR,
+    'SCRIPTS_DIR': SCRIPTS_DIR,
+    'BUILD_DIR': BUILD_DIR,
+    'ROOT_DIR': ROOT_DIR,
+    'DEPOT_TOOLS_DIR': DEPOT_TOOLS_DIR,
   },
   print ACTIVATED_MESSAGE if active else NOT_ACTIVATED_MESSAGE
 
