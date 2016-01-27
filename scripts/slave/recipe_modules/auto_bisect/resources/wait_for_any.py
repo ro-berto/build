@@ -128,17 +128,17 @@ def main(argv):
 
   The script will wait until the first of the following conditions becomes true:
     - An object exists at one of the GS locations
-    - One of the buildbot jobs completes as succesful
+    - One of the buildbot jobs completes as successful
     - One of the buildbot jobs fails
     - One week elapses from the invocation of the script. (The exact timeout may
-      be overriden from the command line)
+      be overridden from the command line)
 
   The return code will be:
     0 if a buildbot job succeeds or an object exists at the GS locations.
     1 if a buildbot job fails
     2 if the one-week timeout is triggered.
 
-  Additionally, a json object will be written to standard output containig the
+  Additionally, a json object will be written to standard output containing the
   results of the script.
 
   Example of expected stdin:

@@ -51,7 +51,7 @@ def RunSteps(api):
   else:
     raise api.step.StepFailure('Expected revisions to check.')
   # TODO(robertocn): Add examples for the following operations:
-  #  Abort unnecesary jobs
+  #  Abort unnecessary jobs
   #  Print results (may be done in a unit test)
 
   # Test runner for classic bisect script; calls bisect script in recipe

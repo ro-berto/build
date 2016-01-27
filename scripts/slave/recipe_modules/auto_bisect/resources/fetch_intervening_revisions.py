@@ -38,7 +38,7 @@ def fetch_intervening_revisions(start, end, depot_name):
   Args:
     start (str): A git commit hash in the Chromium src repository.
     end (str): Another git commit hash, after start.
-    depot_name (str): A respository name.
+    depot_name (str): A repository name.
 
   Returns:
     A list of pairs (commit hash, commit position), from earliest to latest,

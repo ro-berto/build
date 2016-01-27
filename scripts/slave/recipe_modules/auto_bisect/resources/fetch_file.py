@@ -31,7 +31,7 @@ def fetch_file(repo, commit, path):
 
   Raises:
     urllib2.HTTPError: There was an error when making the request.
-    binascii.Error: There was an error decodding the response.
+    binascii.Error: There was an error decoding the response.
   """
   url = _URL_TEMPLATE % (repo, commit, path)
   encoded_content = urllib2.urlopen(url).read()

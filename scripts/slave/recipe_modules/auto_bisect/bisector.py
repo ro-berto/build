@@ -503,7 +503,7 @@ class Bisector(object):
         args=[self.api.m.raw_io.input(data=results)])
 
   def get_revision_to_eval(self):
-    """Gets the next RevistionState object in the candidate range.
+    """Gets the next RevisionState object in the candidate range.
 
     Returns:
        The next Revision object in a list.
