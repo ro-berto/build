@@ -242,11 +242,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
       elif api.properties.get('bisect_config'):
         # We can distinguish between a config for a full bisect vs a single
         # test by checking for the presence of the good_revision key.
-        # Also, at the moment android is not supported and return_code mode
-        # does not require device affinity.
-        test_type = api.properties.get('bisect_config').get('test_type')
-        if (api.properties.get('bisect_config').get('good_revision')
-            and test_type != 'return_code'):
+        if api.properties.get('bisect_config').get('good_revision'):
           local_bisect.perform_bisect(self)  # pragma: no cover
         else:
           self.start_test_run_for_bisect(api, update_step, self.bot_db,

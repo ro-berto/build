@@ -219,8 +219,6 @@ results-without_patch
       'test_type': 'return_code',
       'command': './tools/perf/run_benchmark -v '
                  '--browser=release page_cycler.intl_ar_fa_he',
-      'good_revision': '300138',
-      'bad_revision': '300148',
       'metric': 'warm_times/page_load_time',
       'repeat_count': '2',
       'max_time_minutes': '5',
