@@ -1,0 +1,7 @@
+[
+  {
+    "name": "$result",
+    "reason": "Builder unsupported by recipe.",
+    "status_code": 1
+  }
+]

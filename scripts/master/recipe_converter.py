@@ -5,6 +5,7 @@
 import master.chromium_step
 import master.log_parser.retcode_command
 import master.master_utils
+import buildbot.process.properties
 import sys
 import collections
 import cStringIO
@@ -24,11 +25,15 @@ _master_builder_map = {
                               'Linux32',
                               'Mac 10.6',
                              ],
+    'Chromium GPU FYI': ['Win7 Audio',
+                         'Linux Audio',
+                        ]
 }
 
 _master_name_map = {
     'Chromium GPU': 'chromium.gpu',
-    'Chromium ChromeDriver': 'chromium.chromedriver'
+    'Chromium ChromeDriver': 'chromium.chromedriver',
+    'Chromium GPU FYI': 'chromium.gpu.fyi'
 }
 
 # Used like a structure.
@@ -165,7 +170,7 @@ _step_signatures = {
           '..\\..\\..\\scripts\\slave\\chromium\\chromedriver_buildbot_run.py'],
       }
     ),
-  'chromedriver_compile_py':
+  'compile_py':
     (master.factory.commands.CompileWithRequiredSwarmTargets,
       {
         'command': ['python', '../../../scripts/slave/compile.py'],
@@ -174,7 +179,7 @@ _step_signatures = {
         'descriptionDone': 'compile',
       }
     ),
-  'win_chromedriver_compile_py':
+  'win_compile_py':
     (master.factory.commands.CompileWithRequiredSwarmTargets,
       {
         'command': ['python_slave', '..\\..\\..\\scripts\\slave\\compile.py'],
@@ -204,15 +209,75 @@ _step_signatures = {
         'name': 'taskkill',
         'description': 'taskkill',
       }
-    )
+    ),
+  'runtest': (master.chromium_step.AnnotatedCommand,
+      {
+        'command': ['python', '../../../scripts/slave/runtest.py'],
+      }
+    ),
+  'win_runtest': (master.chromium_step.AnnotatedCommand,
+      {
+        'command': ['python_slave', '..\\..\\..\\scripts\\slave\\runtest.py'],
+      }
+    ),
 }
 
 # Conversion functions for specific step types.
+
+# Convert special arguments to recipes.
+def convert_arguments(args):
+  arg_lookup = {
+      '--build-number': ("'%s', %s", '--build-number',
+                         'api.properties["buildnumber"]'),
+      '--builder-name': ("'%s', %s", '--builder-name',
+                         'api.properties["buildername"]'),
+
+  }
+  fmtstr = ''
+  fmtlist = []
+  for arg in args:
+    if isinstance(arg, str):
+      if arg in arg_lookup:
+        fmtstr = fmtstr + ', ' + arg_lookup[arg][0]
+        fmtlist = fmtlist + list(arg_lookup[arg][1:])
+      else:
+        fmtstr = fmtstr + ", '%s'"
+        fmtlist = fmtlist + [arg]
+    if isinstance(arg, buildbot.process.properties.WithProperties):
+      if arg.fmtstring == '--build-properties=%s':
+        fmtstr = fmtstr + ', ' + '"--build-properties=%%s" %% %s'
+        fmtlist = fmtlist +\
+            ["api.json.dumps(build_properties, separators=(',', ':'))"]
+
+  return fmtstr[2:] % tuple(fmtlist)
 
 # Converter for use when step a step is unmatched or multiply matched.
 def dump_converter(step):
   rc = recipe_chunk()
   rc.steps.append(pprint.pformat(step, indent=2))
+  return rc
+
+def runtest_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/python')
+  rc.deps.add('recipe_engine/path')
+  rc.deps.add('recipe_engine/json')
+  rc.steps.append('# runtest step')
+  fmtstr = 'api.python("%s", api.path["build"].join("scripts", "slave",'+\
+      '"runtest.py"), args=[%s])'
+  rc.steps.append(fmtstr % (step[1]['name'],
+    convert_arguments(step[1]['command'].items[2:])))
+  return rc
+
+def win_runtest_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/python')
+  rc.deps.add('recipe_engine/path')
+  rc.steps.append('# runtest step')
+  fmtstr = 'api.step("%s", ["python_slave", '+\
+      'api.path["build"].join("scripts", "slave", "runtest.py"), %s])'
+  rc.steps.append(fmtstr % (step[1]['name'],
+    convert_arguments(step[1]['command'].items[2:])))
   return rc
 
 def win_taskkill_converter(step):
@@ -352,28 +417,40 @@ def win_chromedriver_buildbot_run_converter(step):
                             step[1]['command'][3]))
   return rc
 
-# NOTE(aneeshm): I have no idea what the 'WithProperties' does in the 'items'
-# attribute of the 'command' attribute of this step; since it doesn't *seem*
-# to do anything, I'm not bothering with it.
-def chromedriver_compile_py_converter(step):
+def compile_py_converter(step):
   rc = recipe_chunk()
-  rc.steps.append('# chromedriver compile.py step')
+  rc.steps.append('# compile.py step')
   rc.deps.add('recipe_engine/python')
   rc.deps.add('recipe_engine/path')
-  fmtstr = 'api.python("compile", %s, args=%s)'
+  rc.deps.add('recipe_engine/properties')
+  fmtstr = 'api.python("compile", %s, args=args)'
   compile_command = 'api.path["build"].join("scripts", "slave", "compile.py")'
   args = [x for x in step[1]['command'].items[2:] if isinstance(x, str)]
-  rc.steps.append(fmtstr % (compile_command, repr(args)))
+  rc.steps.append('args = %s' % repr(args))
+  for x in step[1]['command'].items[2:]:
+    if isinstance(x, buildbot.process.properties.WithProperties) and\
+       x.fmtstring == '%s' and\
+       x.args == ('clobber:+--clobber',):
+      rc.steps.append('if api.properties.get("clobber"):')
+      rc.steps.append(['args.append("--clobber")'])
+  rc.steps.append(fmtstr % compile_command)
   return rc
 
-def win_chromedriver_compile_py_converter(step):
+def win_compile_py_converter(step):
   rc = recipe_chunk()
-  rc.steps.append('# chromedriver compile.py step')
+  rc.steps.append('# compile.py step')
   rc.deps.add('recipe_engine/path')
-  fmtstr = 'api.step("compile", ["%s", %s, %s])'
+  fmtstr = 'api.step("compile", ["%s", %s].extend(args))'
   compile_command = 'api.path["build"].join("scripts", "slave", "compile.py")'
   args = [x for x in step[1]['command'].items[2:] if isinstance(x, str)]
-  rc.steps.append(fmtstr % ('python_slave', compile_command, repr(args)[1:-1]))
+  rc.steps.append('args = %s' % repr(args))
+  for x in step[1]['command'].items[2:]:
+    if isinstance(x, buildbot.process.properties.WithProperties) and\
+       x.fmtstring == '%s' and\
+       x.args == ('clobber:+--clobber',):
+      rc.steps.append('if api.properties.get("clobber"):')
+      rc.steps.append(['args.append("--clobber")'])
+  rc.steps.append(fmtstr % ('python_slave', compile_command))
   return rc
 
 _step_converters_map = {
@@ -390,11 +467,13 @@ _step_converters_map = {
     'win_gclient_runhooks_wrapper': gclient_runhooks_wrapper_converter,
     'chromedriver_buildbot_run': chromedriver_buildbot_run_converter,
     'win_chromedriver_buildbot_run': win_chromedriver_buildbot_run_converter,
-    'chromedriver_compile_py': chromedriver_compile_py_converter,
-    'win_chromedriver_compile_py': win_chromedriver_compile_py_converter,
+    'compile_py': compile_py_converter,
+    'win_compile_py': win_compile_py_converter,
     'win_svnkill': win_svnkill_converter,
     'win_update_scripts': update_scripts_converter,
     'win_taskkill': win_taskkill_converter,
+    'runtest': runtest_converter,
+    'win_runtest': win_runtest_converter,
 }
 
 def signature_match(step, signature):
