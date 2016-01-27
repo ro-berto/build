@@ -648,7 +648,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         sample_swarming_summary = {
           'swarming_summary': {
             'shards': [{
-              'isolated_out': {
+              'outputs_ref': {
                 'view_url': 'blah',
               },
             }]
@@ -694,11 +694,13 @@ class SwarmingApi(recipe_api.RecipeApi):
         self._display_pending(swarming_summary, step_result.presentation)
 
         # Show any remaining isolated outputs (such as logcats).
+        # Note that collect_gtest_task.py uses the default summary.json, which
+        # only has 'outputs_ref' instead of the deprecated 'isolated_out'.
         for index, shard in enumerate(swarming_summary.get('shards', [])):
-          isolated_out = shard.get('isolated_out')
-          if isolated_out:
+          outputs_ref = shard.get('outputs_ref')
+          if outputs_ref:
             link_name = 'shard #%d isolated out' % index
-            p.links[link_name] = isolated_out['view_url']
+            p.links[link_name] = outputs_ref['view_url']
 
   def _isolated_script_collect_step(self, task, **kwargs):
     step_test_data = kwargs.pop('step_test_data', None)

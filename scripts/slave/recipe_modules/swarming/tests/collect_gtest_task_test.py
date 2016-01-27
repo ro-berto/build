@@ -142,7 +142,7 @@ GOOD_GTEST_JSON_MERGED = {
   }],
   'swarming_summary': {
     'shards': [{
-      'isolated_out': {
+      'outputs_ref': {
         'view_url': 'blah',
       },
     }],
@@ -333,7 +333,7 @@ class MergeShardResultsTest(auto_stub.TestCase):
     merged, stdout = self.call()
     merged['swarming_summary'] = {
       'shards': [{
-        'isolated_out': {
+        'outputs_ref': {
           'view_url': 'blah',
         },
       }],
