@@ -14,7 +14,6 @@ if 'CACHE_TEST_RESULTS' in os.environ:  # pragma: no cover
 
 
 class PerfRevisionState(revision_state.RevisionState):
-
   """Contains the state and results for one revision in a perf bisect job."""
 
   def __init__(self, *args, **kwargs):
@@ -59,6 +58,7 @@ class PerfRevisionState(revision_state.RevisionState):
         self.bad = True
 
   def _write_deps_patch_file(self, build_name):
+    """Saves the DEPS patch in a temp location and returns the file path."""
     api = self.bisector.api
     file_name = str(api.m.path['tmp_base'].join(build_name + '.diff'))
     api.m.file.write('Saving diff patch for ' + str(self.revision_string),
@@ -125,7 +125,12 @@ class PerfRevisionState(revision_state.RevisionState):
     return result
 
   def _do_test(self):
-    """Posts a request to buildbot to download and perf-test this build."""
+    """Triggers tests for a revision, either locally or via try job.
+
+    If local testing is enabled (i.e. director/tester merged) then
+    the test will be run on the same machine. Otherwise, this posts
+    a request to buildbot to download and perf-test this build.
+    """
     if self.bisector.dummy_builds:
       self.job_name = self.commit_hash + '-test'
     elif 'CACHE_TEST_RESULTS' in os.environ:  # pragma: no cover
@@ -157,12 +162,19 @@ class PerfRevisionState(revision_state.RevisionState):
       api.m.trigger(perf_test_properties, name=step_name)
 
   def get_next_url(self):
+    """Returns a GS URL for checking progress of a build or test."""
     if self.status == PerfRevisionState.BUILDING:
       return self.build_url
     if self.status == PerfRevisionState.TESTING:
       return self.test_results_url
 
   def get_buildbot_locator(self):
+    """Returns information about the buildbot job that we're waiting for.
+
+    This is used to check on the progress of a build or test that we're
+    waiting for. If we're not waiting for a build or test job, this should
+    return None.
+    """
     if self.status not in (PerfRevisionState.BUILDING,
                            PerfRevisionState.TESTING):  # pragma: no cover
       return None

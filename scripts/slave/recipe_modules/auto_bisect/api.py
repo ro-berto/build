@@ -53,6 +53,9 @@ class AutoBisectApi(recipe_api.RecipeApi):
       dummy_mode (bool): In dummy mode we prevent the bisector for expanding
         the revision range at construction, to avoid the need for lots of step
         data when performing certain tests (such as results output).
+
+    Returns:
+      An instance of bisector.Bisector.
     """
     self.override_poll_interval = bisect_config_dict.get('poll_sleep')
     revision_class = self._get_revision_class()
@@ -127,6 +130,10 @@ class AutoBisectApi(recipe_api.RecipeApi):
         xvfb=True, **kwargs)
 
   def run_local_test_run(self, api, test_config_params):  # pragma: no cover
+    """Starts a test run on the same machine.
+
+    This is for the merged director/tester flow.
+    """
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
     update_step = api.bot_update.ensure_checkout(
@@ -156,7 +163,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
       zip_dir = self.m.path.join(self.m.path['checkout'], 'full-build-linux')
       if self.m.path.exists(zip_dir):  # pragma: no cover
         self.m.file.rmtree('full-build-linux directory', zip_dir)
-      
+
       gs_bucket = 'gs://%s/' % bot_config['bucket']
       archive_path = build_archive_url[len(gs_bucket):]
       api.chromium_android.download_build(

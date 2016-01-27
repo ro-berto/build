@@ -276,6 +276,10 @@ class Bisector(object):
       self._update_revision_list_indexes()
 
   def _get_chromium_rev_range(self, min_rev, max_rev):
+    """Returns a list of Chromium commit (hash, position) pairs in a range.
+
+    The returned range does not include the given |min_rev| or |max_rev|.
+    """
     try:
       step_result = self.api.m.python(
           'for revisions %s:%s' % (min_rev, max_rev),
@@ -333,6 +337,14 @@ class Bisector(object):
 
   def _get_rev_range_for_depot(self, depot_name, min_rev, max_rev,
                                base_revision):
+    """Returns a list of revision objects in a range for a non-Chromium repo.
+
+    Args:
+      depot_name: Short string name of repo, e.g. chromium or v8.
+      min_rev: Start commit hash (not included).
+      max_rev: End commit hash (not included).
+      base_revision: Base revision in the downstream repo (e.g. chromium).
+    """
     try:
       step_result = self.api.m.python(
           ('Expanding revision range for revision %s on depot %s'
@@ -453,6 +465,7 @@ class Bisector(object):
              self.required_initial_confidence, actual_confidence))
 
   def _results_debug_message(self):
+    """Returns a string with values used to debug a bisect result."""
     result = 'bisector.lkgr: %r\n' % self.lkgr
     result += 'bisector.fkbr: %r\n\n' % self.fkbr
     result += self._revision_value_table()
@@ -717,19 +730,24 @@ class Bisector(object):
     assert self.lkgr and self.fkbr
 
   def get_perf_tester_name(self):
-    recipe_tester_name = self.bisect_config.get('recipe_tester_name')
+    """Gets the name of the tester bot (on tryserver.chromium.perf) to use.
+
+    If the tester bot is explicitly specified using "recipe_tester_name"
+    in the bisect config, use that; otherwise make a best guess.
+    """
     original_bot_name = self.bisect_config.get('original_bot_name', '')
+    recipe_tester_name = self.bisect_config.get('recipe_tester_name')
     if recipe_tester_name:
       return recipe_tester_name
     elif 'win' in original_bot_name:  # pragma: no cover
       return 'win64_nv_tester'
     else:  # pragma: no cover
-      # Reasonable fallback
+      # Reasonable fallback.
       return 'linux_perf_tester'
 
   def get_builder_bot_for_this_platform(self):
-    # TODO(prasadv): We should refactor these codes to remove hard coded
-    # values.
+    """Returns the name of the builder bot to use."""
+    # TODO(prasadv): Refactor this code to remove hard coded values.
     bot_name = self.get_perf_tester_name()
     if 'win' in bot_name:
       if any(b in bot_name for b in ['x64', 'gpu']):
@@ -747,8 +765,14 @@ class Bisector(object):
     return 'linux_perf_bisect_builder'
 
   def get_platform_gs_prefix(self):
-    # TODO(prasadv): We should refactor these codes to remove hard coded
-    # values.
+    """Returns the prefix of a GS URL where a build can be found.
+
+    This prefix includes the schema, bucket, directory and beginning
+    of filename. It is joined together with the part of the filename
+    that includes the revision and the file extension to form the
+    full GS URL.
+    """
+    # TODO(prasadv): Refactor this code to remove hard coded values.
     bot_name = self.get_perf_tester_name()
     if 'win' in bot_name:
       if any(b in bot_name for b in ['x64', 'gpu']):
