@@ -18,55 +18,38 @@ BUILDERS = freeze({
     'basic_builder': {
         'target': 'Release',
         'build': True,
-        'skip_wipe': False,
     },
     'restart_usb_builder': {
         'restart_usb': True,
         'target': 'Release',
         'build': True,
-        'skip_wipe': False,
     },
     'coverage_builder': {
         'coverage': True,
         'target': 'Debug',
         'build': True,
-        'skip_wipe': False,
     },
-    'tester': {
-        'build': False,
-        'skip_wipe': False,
-    },
+    'tester': {},
     'perf_runner': {
         'perf_config': 'sharded_perf_tests.json',
-        'build': False,
-        'skip_wipe': False,
     },
     'perf_runner_user_build': {
         'perf_config': 'sharded_perf_tests.json',
-        'build': False,
         'skip_wipe': True,
     },
     'perf_runner_disable_location': {
         'perf_config': 'sharded_perf_tests.json',
-        'build': False,
-        'skip_wipe': False,
         'disable_location': True,
     },
     'perf_runner_allow_low_battery': {
         'perf_config': 'sharded_perf_tests.json',
-        'build': False,
-        'skip_wipe': False,
         'min_battery_level': 50,
     },
     'perf_adb_vendor_keys': {
         'adb_vendor_keys': True,
-        'build': False,
-        'skip_wipe': False,
     },
     'perf_runner_allow_high_battery_temp': {
         'perf_config': 'sharded_perf_tests.json',
-        'build': False,
-        'skip_wipe': False,
         'max_battery_temp': 500,
     },
     'gerrit_try_builder': {
@@ -75,30 +58,24 @@ BUILDERS = freeze({
     },
     'java_method_count_builder': {
         'build': True,
-        'skip_wipe': False,
         'java_method_count': True,
     },
     'webview_tester': {
-        'build': False,
-        'skip_wipe': False,
         'remove_system_webview': True,
         'disable_system_chrome': True,
     },
     'slow_tester': {
-        'build': False,
-        'skip_wipe': False,
         'timeout_scale': 2,
     },
     'specific_install_tester': {
-        'build': False,
-        'skip_wipe': False,
         'specific_install': True,
     },
     'downgrade_install_tester': {
-        'build': False,
-        'skip_wipe': False,
         'downgrade': True,
-    }
+    },
+    'no_strict_mode_tester': {
+        'strict_mode': 'off',
+    },
 })
 
 from recipe_engine.recipe_api import Property
@@ -131,7 +108,7 @@ def RunSteps(api, buildername):
   api.chromium_android.run_tree_truth(additional_repos=['foo'])
   assert 'MAJOR' in api.chromium.get_version()
 
-  if config['build']:
+  if config.get('build', False):
     api.chromium.compile()
     api.chromium_android.make_zip_archive('zip_build_proudct', 'archive.zip',
         filters=['*.apk'])
@@ -159,7 +136,7 @@ def RunSteps(api, buildername):
       restart_usb=config.get('restart_usb', False))
 
     api.chromium_android.provision_devices(
-        skip_wipe=config['skip_wipe'],
+        skip_wipe=config.get('skip_wipe', False),
         disable_location=config.get('disable_location', False),
         min_battery_level=config.get('min_battery_level'),
         max_battery_temp=config.get('max_battery_temp'),
@@ -194,7 +171,8 @@ def RunSteps(api, buildername):
       screenshot=True,
       official_build=True,
       host_driven_root=api.path['checkout'].join('chrome', 'test'),
-      timeout_scale=config.get('timeout_scale'))
+      timeout_scale=config.get('timeout_scale'),
+      strict_mode=config.get('strict_mode'))
   api.chromium_android.run_test_suite(
       'unittests',
       isolate_file_path=api.path['checkout'].join('some_file.isolate'),
