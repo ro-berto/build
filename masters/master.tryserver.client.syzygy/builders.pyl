@@ -23,6 +23,13 @@
       "slave_pools": ["win7"],
       "trybot": True,
     },
+    "win8_rel_try": {
+      "category": "trybots",
+      "recipe": "syzygy/continuous",
+      "scheduler": None,
+      "slave_pools": ["win8"],
+      "trybot": True,
+    },
   },
 
   "schedulers": {
@@ -37,6 +44,14 @@
       },
       "slaves": ["vm1032-m4", "vm1034-m4", "vm1108-m4", "vm1109-m4",
                  "vm1110-m4", "vm1111-m4", "vm1112-m4", "vm1113-m4"],
+    },
+    "win8": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "win",
+        "version": "win8",
+      },
+      "slaves": ["vm1114-m4", "vm1115-m4"],
     },
   },
 }
