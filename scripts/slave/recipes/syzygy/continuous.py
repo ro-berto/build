@@ -38,6 +38,7 @@ BUILDERS = freeze({
   # Trybots.
   'win_rel_try': ('syzygy', {'BUILD_CONFIG': 'Release'}),
   'win_dbg_try': ('syzygy', {'BUILD_CONFIG': 'Debug'}),
+  'win8_rel_try': ('syzygy', {'BUILD_CONFIG': 'Release'}),
 })
 
 
