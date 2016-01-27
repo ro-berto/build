@@ -128,6 +128,8 @@
       "23",
       "--num",
       "1",
+      "--headless",
+      "--enable-kvm",
       "--partition-size",
       "1024M",
       "--sdcard-size",

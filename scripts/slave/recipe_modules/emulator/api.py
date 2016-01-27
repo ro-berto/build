@@ -27,6 +27,8 @@ class EmulatorApi(recipe_api.RecipeApi):
         '--abi', abi,
         '--api-level', api_level,
         '--num', amount,
+        '--headless',
+        '--enable-kvm',
     ]
     if partition_size:
       args += ['--partition-size', partition_size]

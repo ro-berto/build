@@ -197,6 +197,8 @@
       "23",
       "--num",
       "1",
+      "--headless",
+      "--enable-kvm",
       "--sdcard-size",
       "500M"
     ],
