@@ -1,4 +1,7 @@
 set noparent
 sergiyb@chromium.org
+iannucci@chromium.org
 
+per-file recipes.cfg=estaab@chromium.org
 per-file recipes.cfg=luqui@chromium.org
+per-file recipes.cfg=martiniss@chromium.org
