@@ -265,6 +265,7 @@ ENABLED_MASTERS = [
     'client.nacl.ports',
     'client.nacl.sdk',
     'client.nacl.toolchain',
+    'client.pdfium',
     'client.skia',
     'client.skia.fyi',
     'client.v8',

@@ -4,6 +4,7 @@
 
 DEPS = [
   'gclient',
+  'bot_update',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -14,18 +15,17 @@ DEPS = [
 from recipe_engine.recipe_api import Property
 
 PROPERTIES = {
-  'memory_tool': Property(default=None),
+  'branch': Property(default=None, kind=str),
+  'memory_tool': Property(default=None, kind=str),
 }
 
-def _CheckoutSteps(api):
+def _CheckoutSteps(api, memory_tool, branch):
   # Checkout pdfium and its dependencies (specified in DEPS) using gclient
   api.gclient.set_config('pdfium')
-  branch = api.properties.get('branch')
   if branch:
     api.gclient.c.solutions[0].revision = 'origin/' + branch
-  api.gclient.checkout()
+  api.bot_update.ensure_checkout()
 
-  memory_tool = api.properties.get('memory_tool')
   env = {}
   if memory_tool == 'asan':
     env.update({'GYP_DEFINES': 'asan=1'})
@@ -61,8 +61,7 @@ def _RunDrMemoryTests(api):
              cwd=api.path['checkout'])
 
 
-def _RunTests(api):
-  memory_tool = api.properties.get('memory_tool')
+def _RunTests(api, memory_tool):
   if memory_tool == 'drmemory':
     _RunDrMemoryTests(api)
     return
@@ -103,27 +102,88 @@ def _RunTests(api):
              cwd=api.path['checkout'], env=env)
 
 
-def RunSteps(api):
-  _CheckoutSteps(api)
+def RunSteps(api, memory_tool, branch):
+  _CheckoutSteps(api, memory_tool, branch)
   _BuildSteps(api)
   with api.step.defer_results():
-    _RunTests(api)
+    _RunTests(api, memory_tool)
 
 
 def GenTests(api):
-  yield api.test('win') + api.platform('win', 64)
-  yield api.test('linux') + api.platform('linux', 64)
-  yield api.test('mac') + api.platform('mac', 64)
-  yield (api.test('linux_asan') + api.platform('linux', 64) +
-         api.properties(memory_tool='asan'))
+  yield (
+      api.test('win') +
+      api.platform('win', 64) +
+      api.properties(mastername="client.pdfium",
+                     buildername='windows',
+                     slavename="test_slave")
+  )
+  yield (
+      api.test('linux') +
+      api.platform('linux', 64) +
+      api.properties(mastername="client.pdfium",
+                     buildername='linux',
+                     slavename="test_slave")
+  )
+  yield (
+      api.test('mac') +
+      api.platform('mac', 64) +
+      api.properties(mastername="client.pdfium",
+                     buildername='mac',
+                     slavename="test_slave")
+  )
 
-  yield (api.test('win_xfa') + api.platform('win', 64) +
-         api.properties(branch='xfa'))
-  yield (api.test('linux_xfa') + api.platform('linux', 64) +
-         api.properties(branch='xfa'))
-  yield (api.test('mac_xfa') + api.platform('mac', 64) +
-         api.properties(branch='xfa'))
-  yield (api.test('drm_win_xfa') + api.platform('win', 64) +
-         api.properties(branch='xfa', memory_tool='drmemory'))
-  yield (api.test('linux_xfa_asan') + api.platform('linux', 64) +
-         api.properties(branch='xfa', memory_tool='asan'))
+  yield (
+      api.test('win_xfa') +
+      api.platform('win', 64) +
+      api.properties(branch='xfa',
+                     mastername="client.pdfium",
+                     buildername='windows_xfa',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('linux_xfa') +
+      api.platform('linux', 64) +
+      api.properties(branch='xfa',
+                     mastername="client.pdfium",
+                     buildername='linux_xfa',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('mac_xfa') +
+      api.platform('mac', 64) +
+      api.properties(branch='xfa',
+                     mastername="client.pdfium",
+                     buildername='mac_xfa',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('linux_asan') +
+      api.platform('linux', 64) +
+      api.properties(memory_tool='asan',
+                     mastername="client.pdfium",
+                     buildername='linux_asan',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('drm_win_xfa') +
+      api.platform('win', 64) +
+      api.properties(branch='xfa',
+                     memory_tool='drmemory',
+                     mastername="client.pdfium",
+                     buildername='drm_win_xfa',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('linux_xfa_asan') +
+      api.platform('linux', 64) +
+      api.properties(branch='xfa',
+                     memory_tool='asan',
+                     mastername="client.pdfium",
+                     buildername='linux_xfa_asan',
+                     slavename="test_slave")
+  )
