@@ -655,11 +655,9 @@ class AndroidApi(recipe_api.RecipeApi):
                                 annotation=None, except_annotation=None,
                                 screenshot=False, verbose=False, tool=None,
                                 apk_package=None, host_driven_root=None,
-                                official_build=False, install_apk=None,
-                                json_results_file=None, timeout_scale=None,
-                                strict_mode=None, suffix=None, **kwargs):
-    if install_apk:
-      self.adb_install_apk(install_apk['apk'])
+                                official_build=False, json_results_file=None,
+                                timeout_scale=None, strict_mode=None,
+                                suffix=None, **kwargs):
     if apk_under_test:
       # TODO(jbudorick): Remove this once the test runner handles installation
       # of the APK under test.
@@ -822,11 +820,13 @@ class AndroidApi(recipe_api.RecipeApi):
                                             '*.log')],
     )
 
-  def common_tests_setup_steps(self, perf_setup=False):
+  def common_tests_setup_steps(self, perf_setup=False,
+                               remove_system_webview=False):
     if self.c.gce_setup:
       self.launch_gce_instances(snapshot=self.c.gce_snapshot, count=self.c.gce_count)
       self.spawn_logcat_monitor()
-      self.provision_devices(emulators=True)
+      self.provision_devices(emulators=True,
+                             remove_system_webview=remove_system_webview)
     else:
       self.spawn_logcat_monitor()
       self.authorize_adb_devices()
@@ -839,7 +839,8 @@ class AndroidApi(recipe_api.RecipeApi):
             'max_battery_temp': 350}
       else:
         kwargs = {}
-      self.provision_devices(**kwargs)
+      self.provision_devices(remove_system_webview=remove_system_webview,
+                             **kwargs)
       if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
         self.asan_device_setup()
 

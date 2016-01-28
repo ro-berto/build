@@ -546,10 +546,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.chromium.c.TARGET_PLATFORM == 'android' and require_device_steps:
       #TODO(prasadv): Remove this hack and implement specific functions
       # at the point of call.
+      remove_system_webview = bot_config.get('remove_system_webview')
       perf_setup = bot_config.matches_any_bot_id(lambda bot_id:
           bot_id['mastername'].startswith('chromium.perf') or
           bot_id['mastername'].startswith('tryserver.chromium.perf'))
-      self.m.chromium_android.common_tests_setup_steps(perf_setup=perf_setup)
+      self.m.chromium_android.common_tests_setup_steps(
+          perf_setup=perf_setup,
+          remove_system_webview=remove_system_webview)
 
     if self.m.platform.is_win:
       self.m.chromium.crash_handler()

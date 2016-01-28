@@ -303,5 +303,63 @@ SPEC = {
         steps.generate_isolated_script,
       ],
     },
+
+    'Android Webview L (dbg)': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'amp_config': 'main_pool',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'android',
+      },
+      'parent_buildername': 'Android arm Builder (dbg)',
+      'bot_type': 'tester',
+      'android_config': 'main_builder_mb',
+      'remove_system_webview': True,
+      'tests': [
+        steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
+        steps.AndroidApkSizeTest(
+            apk_name='SystemWebView.apk',
+            compile_targets=['system_webview_apk'],
+            so_path=['system_webview_apk', 'libs', 'armeabi-v7a',
+                     'libwebviewchromium.so'],
+            so_with_symbols_path=['lib', 'libwebviewchromium.so'])
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
+    'Android Webview M (dbg)': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'amp_config': 'main_pool',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'android',
+      },
+      'parent_buildername': 'Android arm Builder (dbg)',
+      'bot_type': 'tester',
+      'android_config': 'main_builder_mb',
+      'remove_system_webview': True,
+      'tests': [
+        steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
   },
 }

@@ -991,7 +991,7 @@ class AMPInstrumentationTest(AMPTest):
                          if self._android_isolate_path else None)
     return AndroidInstrumentationTest(
         name=self.name,
-        compile_target=self._compile_target,
+        compile_targets=self._compile_target,
         apk_under_test=self._apk_under_test,
         test_apk=self.name,
         isolate_file_path=isolate_file_path,
@@ -1391,11 +1391,11 @@ class BisectTest(Test):  # pylint: disable=W0232
 
 
 class AndroidTest(Test):
-  def __init__(self, name, compile_target, isolate_file_path=None):
+  def __init__(self, name, compile_targets, isolate_file_path=None):
     super(AndroidTest, self).__init__()
 
     self._name = name
-    self.compile_target = compile_target
+    self._compile_targets = compile_targets
 
     self.isolate_file_path = isolate_file_path
 
@@ -1460,7 +1460,7 @@ class AndroidTest(Test):
         ])
 
   def compile_targets(self, _):
-    return [self.compile_target]
+    return self._compile_targets
 
   def has_valid_results(self, api, suffix):
     if suffix not in self._test_runs:
@@ -1474,7 +1474,7 @@ class AndroidTest(Test):
 
 class AndroidJunitTest(AndroidTest):
   def __init__(self, name):
-    super(AndroidJunitTest, self).__init__(name, compile_target=name,
+    super(AndroidJunitTest, self).__init__(name, compile_targets=[name],
         isolate_file_path=None)
 
   #override
@@ -1492,13 +1492,13 @@ class AndroidJunitTest(AndroidTest):
 class AndroidInstrumentationTest(AndroidTest):
   _DEFAULT_SUITES = {
     'AndroidWebViewTest': {
-      'compile_target': 'android_webview_test_apk',
+      'compile_targets': ['android_webview_test_apk'],
       'isolate_file_path': 'android_webview/android_webview_test_apk.isolate',
       'apk_under_test': 'AndroidWebView.apk',
       'test_apk': 'AndroidWebViewTest.apk',
     },
     'ChromePublicTest': {
-      'compile_target': 'chrome_public_test_apk',
+      'compile_targets': ['chrome_public_test_apk'],
       'isolate_file_path': 'chrome/chrome_public_test_apk.isolate',
       'apk_under_test': 'ChromePublic.apk',
       'test_apk': 'ChromePublicTest.apk',
@@ -1508,26 +1508,37 @@ class AndroidInstrumentationTest(AndroidTest):
       ],
     },
     'ChromeSyncShellTest': {
-      'compile_target': 'chrome_sync_shell_test_apk',
+      'compile_targets': ['chrome_sync_shell_test_apk'],
       'isolate_file_path': None,
       'apk_under_test': 'ChromeSyncShell.apk',
       'test_apk': 'ChromeSyncShellTest.apk',
     },
     'ChromotingTest': {
-      'compile_target': 'remoting_test_apk',
+      'compile_targets': ['remoting_test_apk'],
       'isolate_file_path': None,
       'apk_under_test': 'Chromoting.apk',
       'test_apk': 'ChromotingTest.apk',
     },
     'ContentShellTest': {
-      'compile_target': 'content_shell_test_apk',
+      'compile_targets': ['content_shell_test_apk'],
       'isolate_file_path': 'content/content_shell_test_apk.isolate',
       'apk_under_test': 'ContentShell.apk',
       'test_apk': 'ContentShellTest.apk',
     },
+    'SystemWebViewShellLayoutTest': {
+      'compile_targets': ['system_webview_apk',
+                          'system_webview_shell_apk',
+                          'system_webview_shell_layout_test_apk',
+                          'android_tools'],
+      'isolate_file_path': ('android_webview/'
+                            'system_webview_shell_test_apk.isolate'),
+      'apk_under_test': 'SystemWebViewShell.apk',
+      'test_apk': 'SystemWebViewShellLayoutTest.apk',
+      'additional_apks': ['SystemWebView.apk'],
+    }
   }
 
-  def __init__(self, name, compile_target=None, apk_under_test=None,
+  def __init__(self, name, compile_targets=None, apk_under_test=None,
                test_apk=None, isolate_file_path=None, timeout_scale=None,
                flakiness_dashboard='test-results.appspot.com',
                annotation=None, except_annotation=None, screenshot=False,
@@ -1536,7 +1547,7 @@ class AndroidInstrumentationTest(AndroidTest):
     suite_defaults = AndroidInstrumentationTest._DEFAULT_SUITES.get(name, {})
     super(AndroidInstrumentationTest, self).__init__(
         name,
-        compile_target or suite_defaults.get('compile_target'),
+        compile_targets or suite_defaults.get('compile_targets'),
         isolate_file_path or suite_defaults.get('isolate_file_path'))
     self._additional_apks = (
         additional_apks or suite_defaults.get('additional_apks'))
@@ -1763,6 +1774,51 @@ class IncrementalCoverageTest(Test):
     api.chromium_android.get_changed_lines_for_revision()
     api.chromium_android.incremental_coverage_report()
 
+
+class AndroidApkSizeTest(Test):
+
+  def __init__(self, apk_name, compile_targets, so_path, so_with_symbols_path):
+    """Initialize a test to measure and upload a resource size.
+
+    Args:
+      apk_name: Name of the apk.
+      compile_targets: List of targets that need to be compiled.
+      so_path: Path as list of .so relative to output directory.
+      so_with_symbols_path: Path as list of .so with symobls relative to
+          output directory.
+    """
+    self._name = 'resource size %s' % apk_name
+    self._apk_name = apk_name
+    self._compile_targets = compile_targets
+    self._so_path = so_path
+    self._so_with_symbols_path = so_with_symbols_path
+
+  @property
+  def name(self):  # pragma: no cover
+    return self._name
+
+  @property
+  def uses_local_devices(self):
+    return True
+
+  def compile_targets(self, _):
+    return self._compile_targets
+
+  def has_valid_results(self, api, suffix):  # pragma: no cover
+    return True
+
+  def failures(self, api, suffix):  # pragma: no cover
+    return []
+
+  def run(self, api, suffix, test_filter=None):
+    full_apk_path = api.chromium_android.apk_path(self._apk_name)
+    full_so_path = api.path['checkout'].join(
+        'out', api.chromium.c.BUILD_CONFIG, *self._so_path)
+    full_so_with_symbols_path = api.path['checkout'].join(
+        'out', api.chromium.c.BUILD_CONFIG, *self._so_with_symbols_path)
+    api.chromium_android.resource_sizes(
+        apk_path=full_apk_path, so_path=full_so_path,
+        so_with_symbols_path=full_so_with_symbols_path)
 
 GOMA_TESTS = [
   GTestTest('base_unittests'),

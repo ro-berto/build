@@ -228,7 +228,11 @@
       "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
-      "--"
+      "--",
+      "android_tools",
+      "system_webview_apk",
+      "system_webview_shell_apk",
+      "system_webview_shell_layout_test_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -266,6 +270,60 @@
     "name": "trigger",
     "trigger_specs": [
       {
+        "builder_name": "Android Webview L (dbg)",
+        "properties": {
+          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
+          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
+          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
+          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
+          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
+          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
+          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
+        }
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Webview L (dbg)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (2)",
+    "trigger_specs": [
+      {
+        "builder_name": "Android Webview M (dbg)",
+        "properties": {
+          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
+          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
+          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
+          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
+          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
+          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
+          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
+        }
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Webview M (dbg)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (3)",
+    "trigger_specs": [
+      {
         "builder_name": "Jelly Bean Tester",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
@@ -290,7 +348,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (2)",
+    "name": "trigger (4)",
     "trigger_specs": [
       {
         "builder_name": "KitKat Tablet Tester",
@@ -317,7 +375,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (3)",
+    "name": "trigger (5)",
     "trigger_specs": [
       {
         "builder_name": "Lollipop Low-end Tester",
@@ -344,7 +402,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (4)",
+    "name": "trigger (6)",
     "trigger_specs": [
       {
         "builder_name": "Lollipop Phone Tester",
@@ -371,7 +429,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (5)",
+    "name": "trigger (7)",
     "trigger_specs": [
       {
         "builder_name": "Lollipop Tablet Tester",
@@ -398,7 +456,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (6)",
+    "name": "trigger (8)",
     "trigger_specs": [
       {
         "builder_name": "Marshmallow Tablet Tester",
