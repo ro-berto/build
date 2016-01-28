@@ -546,13 +546,17 @@ class DartUtils(object):
 
 
   @staticmethod
-  def get_git_poller(repo, project, revlink, branch=None, master=None,
-                     interval=None):
-    project = '%s-%s' % (project, branch) if branch else project
+  def get_git_poller(repo, project, name, revlink, branch=None, master=None,
+                     interval=None, hostid=None):
+    combined = '%s-%s' % (project, name)
+    if branch:
+      combined = '%s-%s-%s' % (project, name, branch)
+    hostid = hostid or 'github'
     branch = branch or 'master'
     master = master or 'main'
     interval = interval or 40
-    workdir = '/tmp/git_workdir_%s_%s_%s' % (project, branch, master)
+    workdir = '/tmp/git_workdir_%s_%s_%s_%s' % (
+        hostid, combined, branch, master)
     return gitpoller.GitPoller(repourl=repo,
                                pollinterval=interval,
                                project=project,
@@ -575,14 +579,17 @@ class DartUtils(object):
   def get_github_poller(project, name, branch=None, master=None, interval=None):
     repository = 'https://github.com/%s/%s.git' % (project, name)
     revlink = ('https://github.com/' + project + '/' + name + '/commit/%s')
-    return DartUtils.get_git_poller(repository, name, revlink, branch, master,
-                                    interval=interval)
+    return DartUtils.get_git_poller(
+        repository, project, name, revlink, branch, master, interval=interval,
+        hostid='github')
 
   @staticmethod
   def get_github_mirror_poller(project, name, branch=None, master=None):
     repository = '%s/%s/%s.git' % (github_mirror, project, name)
     revlink = ('https://github.com/' + project + '/' + name + '/commit/%s')
-    return DartUtils.get_git_poller(repository, name, revlink, branch, master)
+    return DartUtils.get_git_poller(
+        repository, project, name, revlink, branch, master,
+        hostid='github_mirror')
 
   @staticmethod
   def prioritize_builders(buildmaster, builders):
