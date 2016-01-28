@@ -5,10 +5,9 @@
 from recipe_engine.recipe_api import Property
 
 DEPS = [
-  'chromium',
-  'depot_tools/bot_update',
+  'bot_update',
   'file',
-  'depot_tools/gclient',
+  'gclient',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',

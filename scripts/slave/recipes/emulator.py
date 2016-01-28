@@ -7,11 +7,11 @@ from recipe_engine.recipe_api import Property
 from recipe_engine.types import freeze
 
 DEPS = [
-  'depot_tools/bot_update',
+  'bot_update',
   'chromium',
   'chromium_android',
   'emulator',
-  'depot_tools/gclient',
+  'gclient',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/step',

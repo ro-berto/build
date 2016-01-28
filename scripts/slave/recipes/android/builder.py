@@ -9,12 +9,12 @@ from recipe_engine.types import freeze
 DEPS = [
   'chromium',
   'chromium_android',
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
+  'bot_update',
+  'gclient',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/step',
-  'depot_tools/tryserver',
+  'tryserver',
 ]
 
 @contextmanager

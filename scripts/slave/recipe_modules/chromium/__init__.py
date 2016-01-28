@@ -1,8 +1,8 @@
 DEPS = [
-  'depot_tools/bot_update',
+  'bot_update',
   'commit_position',
   'file',
-  'depot_tools/gclient',  # in order to have set_config automatically populate gclient
+  'gclient',  # in order to have set_config automatically populate gclient
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -10,5 +10,5 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/step',
-  'depot_tools/tryserver',
+  'tryserver',
 ]

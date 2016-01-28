@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
+      "RECIPE_PACKAGE[build]/bot_update.py",
       "--master",
       "tryserver.v8",
       "--builder",
@@ -366,7 +366,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
+      "RECIPE_PACKAGE[build]/bot_update.py",
       "--master",
       "tryserver.v8",
       "--builder",

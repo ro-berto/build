@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/git',
+  'git',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/raw_io',

@@ -5,7 +5,7 @@
 from recipe_engine.types import freeze
 
 DEPS = [
-  'depot_tools/bot_update',
+  'bot_update',
   'chromium',
   'chromium_tests',
   'recipe_engine/json',
@@ -15,7 +15,7 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/step',
   'test_utils',
-  'depot_tools/tryserver',
+  'tryserver',
   'webrtc',
 ]
 

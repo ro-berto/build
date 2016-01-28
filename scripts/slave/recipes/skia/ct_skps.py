@@ -8,7 +8,7 @@ from common.skia import global_constants
 DEPS = [
   'ct_swarming',
   'file',
-  'depot_tools/gclient',
+  'gclient',
   'gsutil',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -16,7 +16,7 @@ DEPS = [
   'recipe_engine/time',
   'swarming',
   'swarming_client',
-  'depot_tools/tryserver',
+  'tryserver',
 ]
 
 

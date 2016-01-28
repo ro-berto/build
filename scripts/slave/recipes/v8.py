@@ -5,7 +5,7 @@
 DEPS = [
   'archive',
   'chromium',
-  'depot_tools/gclient',
+  'gclient',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -14,7 +14,7 @@ DEPS = [
   'recipe_engine/step',
   'swarming_client',
   'recipe_engine/time',
-  'depot_tools/tryserver',
+  'tryserver',
   'v8',
 ]
 

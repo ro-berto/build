@@ -7,11 +7,11 @@ Recipe for running WebView CTS using system WebView.
 """
 DEPS = [
   'adb',
-  'depot_tools/bot_update',
+  'bot_update',
   'chromium',
   'chromium_android',
   'file',
-  'depot_tools/gclient',
+  'gclient',
   'recipe_engine/json',
   'recipe_engine/raw_io',
   'recipe_engine/path',

@@ -3,15 +3,15 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
-  'depot_tools/git',
+  'bot_update',
+  'gclient',
+  'git',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
-  'depot_tools/tryserver',
-  'depot_tools/rietveld',
+  'tryserver',
+  'rietveld',
   'v8',
   'webrtc',
 ]

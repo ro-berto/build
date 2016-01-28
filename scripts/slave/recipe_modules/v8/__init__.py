@@ -1,10 +1,10 @@
 DEPS = [
   'archive',
-  'depot_tools/bot_update',
+  'bot_update',
   'chromium',
   'commit_position',
   'file',
-  'depot_tools/gclient',
+  'gclient',
   'gitiles',
   'gsutil',
   'isolate',
@@ -21,5 +21,5 @@ DEPS = [
   'test_utils',
   'recipe_engine/time',
   'trigger',
-  'depot_tools/tryserver',
+  'tryserver',
 ]

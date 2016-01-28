@@ -23,7 +23,7 @@ testing.
 # Recipe module dependencies.
 DEPS = [
   'chromium',
-  'depot_tools/gclient',
+  'gclient',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'syzygy',

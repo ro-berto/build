@@ -3,13 +3,13 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/gclient',
+  'gclient',
   'ios',
   'recipe_engine/json',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/step',
-  'depot_tools/tryserver',
+  'tryserver',
 ]
 
 def RunSteps(api):

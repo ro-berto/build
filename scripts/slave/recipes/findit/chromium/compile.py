@@ -13,7 +13,7 @@ DEPS = [
   'chromium',
   'chromium_tests',
   'findit',
-  'depot_tools/gclient',
+  'gclient',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',

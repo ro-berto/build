@@ -10,12 +10,12 @@ from recipe_engine.recipe_api import Property
 
 DEPS = [
   'adb',
-  'depot_tools/bot_update',
+  'bot_update',
   'chromium',
   'chromium_tests',
   'commit_position',
   'findit',
-  'depot_tools/gclient',
+  'gclient',
   'isolate',
   'recipe_engine/json',
   'recipe_engine/path',

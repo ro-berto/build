@@ -6,9 +6,8 @@
 
 
 DEPS = [
-  'chromium',
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
+  'bot_update',
+  'gclient',
   'gsutil',
   'recipe_engine/path',
   'recipe_engine/properties',

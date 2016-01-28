@@ -3,14 +3,14 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/bot_update',
+  'bot_update',
   'chromium',
   'chromium_tests',
   'filter',
-  'depot_tools/gclient',
+  'gclient',
   'recipe_engine/json',
   'recipe_engine/properties',
-  'depot_tools/tryserver',
+  'tryserver',
 ]
 
 

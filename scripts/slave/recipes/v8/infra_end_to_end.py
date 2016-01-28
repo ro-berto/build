@@ -5,8 +5,8 @@
 import re
 
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
+  'bot_update',
+  'gclient',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',

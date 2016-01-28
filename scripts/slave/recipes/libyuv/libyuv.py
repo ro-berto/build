@@ -9,15 +9,15 @@ Recipe for building and running tests for Libyuv stand-alone.
 from recipe_engine.types import freeze
 
 DEPS = [
-  'depot_tools/bot_update',
+  'bot_update',
   'chromium',
-  'depot_tools/gclient',
+  'gclient',
   'libyuv',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/step',
-  'depot_tools/tryserver',
+  'tryserver',
 ]
 
 RECIPE_CONFIGS = freeze({

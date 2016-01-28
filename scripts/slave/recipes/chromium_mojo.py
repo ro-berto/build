@@ -8,7 +8,7 @@ from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 
 DEPS = [
-  'depot_tools/bot_update',
+  'bot_update',
   'chromium',
   'chromium_android',
   'file',

@@ -5,8 +5,8 @@
 DEPS = [
   'adb',
   'file',
-  'depot_tools/gclient',
-  'depot_tools/git',
+  'gclient',
+  'git',
   'gsutil',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -16,5 +16,5 @@ DEPS = [
   'recipe_engine/raw_io',
   'recipe_engine/step',
   'recipe_engine/time',
-  'depot_tools/tryserver',
+  'tryserver',
 ]

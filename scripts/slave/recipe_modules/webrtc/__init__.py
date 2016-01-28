@@ -1,12 +1,12 @@
 DEPS = [
   'archive',
-  'depot_tools/bot_update',
+  'bot_update',
   'chromium',
   'chromium_tests',
   'chromium_android',
   'commit_position',
   'file',
-  'depot_tools/gclient',
+  'gclient',
   'isolate',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -16,5 +16,5 @@ DEPS = [
   'swarming',
   'test_utils',
   'trigger',
-  'depot_tools/tryserver',
+  'tryserver',
 ]

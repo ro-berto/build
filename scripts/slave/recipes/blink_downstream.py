@@ -28,10 +28,10 @@ in a forced build with no revision provided).
 from recipe_engine.types import freeze
 
 DEPS = [
-  'depot_tools/bot_update',
+  'bot_update',
   'chromium',
   'chromium_tests',
-  'depot_tools/gclient',
+  'gclient',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',

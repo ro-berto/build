@@ -10,10 +10,10 @@ from recipe_engine.types import freeze
 
 DEPS = [
   'adb',
-  'depot_tools/bot_update',
+  'bot_update',
   'chromium',
   'chromium_android',
-  'depot_tools/gclient',
+  'gclient',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',

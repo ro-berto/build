@@ -5,11 +5,11 @@
 from recipe_engine.types import freeze
 
 DEPS = [
-  'depot_tools/bot_update',
+  'bot_update',
   'chromium',
   'commit_position',
   'file',
-  'depot_tools/gclient',
+  'gclient',
   'gsutil',
   'recipe_engine/json',
   'recipe_engine/path',

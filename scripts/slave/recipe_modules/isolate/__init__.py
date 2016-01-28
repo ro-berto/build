@@ -5,7 +5,7 @@
 DEPS = [
   'chromium',
   'file',
-  'depot_tools/git',
+  'git',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',

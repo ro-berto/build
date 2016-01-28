@@ -24,7 +24,7 @@ DEPS = [
   'swarming',
   'swarming_client',
   'test_utils',
-  'depot_tools/tryserver',
+  'tryserver',
 ]
 
 def RunSteps(api):

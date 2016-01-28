@@ -6,15 +6,15 @@
 
 DEPS = [
   'archive',
-  'depot_tools/bot_update',
+  'bot_update',
   'chromium',
   'chromium_android',
-  'depot_tools/gclient',
+  'gclient',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/step',
-  'depot_tools/tryserver',
+  'tryserver',
   'webrtc',
 ]
 

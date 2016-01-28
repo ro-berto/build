@@ -8,13 +8,13 @@ from recipe_engine.types import freeze
 
 DEPS = [
   'amp',
-  'depot_tools/bot_update',
+  'bot_update',
   'chromium',
   'chromium_android',
   'chromium_tests',
   'commit_position',
   'file',
-  'depot_tools/gclient',
+  'gclient',
   'gpu',
   'isolate',
   'recipe_engine/json',
@@ -27,7 +27,7 @@ DEPS = [
   'swarming',
   'test_results',
   'test_utils',
-  'depot_tools/tryserver',
+  'tryserver',
 ]
 
 
