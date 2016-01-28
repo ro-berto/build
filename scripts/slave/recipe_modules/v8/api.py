@@ -1094,8 +1094,9 @@ class V8Api(recipe_api.RecipeApi):
     ).stdout
 
   def maybe_trigger(self, **additional_properties):
-    triggers = self.bot_config.get('triggers')
-    if triggers:
+    triggers = self.bot_config.get('triggers', [])
+    triggers_proxy = self.bot_config.get('triggers_proxy', False)
+    if triggers or triggers_proxy:
       properties = {
         'parent_got_revision': self.revision,
         'parent_got_revision_cp': self.revision_cp,
@@ -1131,6 +1132,21 @@ class V8Api(recipe_api.RecipeApi):
         'builder_name': builder_name,
         'properties': properties,
       } for builder_name in triggers])
+
+      if triggers_proxy:
+        proxy_properties = {
+          'archive': self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
+        }
+        proxy_properties.update(properties)
+        self.m.trigger(*[{
+          'builder_name': 'v8_trigger_proxy',
+          'bucket': 'master.internal.client.v8',
+          'properties': proxy_properties,
+          'buildbot_changes': [{
+            'author': 'trigger_proxy',
+            'revision': self.revision,
+          }]
+        }])
 
   def get_change_range(self):
     if self.m.properties.get('override_changes'):

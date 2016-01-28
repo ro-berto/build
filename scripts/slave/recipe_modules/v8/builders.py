@@ -74,6 +74,7 @@ BUILDERS = {
           'V8 Linux - nosse4',
           'V8 Linux - presubmit',
         ],
+        'triggers_proxy': True,
       },
       'V8 Linux - debug builder': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
