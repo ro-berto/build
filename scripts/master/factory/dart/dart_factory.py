@@ -548,18 +548,17 @@ class DartUtils(object):
   @staticmethod
   def get_git_poller(repo, project, name, revlink, branch=None, master=None,
                      interval=None, hostid=None):
-    combined = '%s-%s' % (project, name)
-    if branch:
-      combined = '%s-%s-%s' % (project, name, branch)
+    changesource_project = '%s-%s' % (name, branch) if branch else name
+
     hostid = hostid or 'github'
     branch = branch or 'master'
     master = master or 'main'
     interval = interval or 40
     workdir = '/tmp/git_workdir_%s_%s_%s_%s' % (
-        hostid, combined, branch, master)
+        hostid, project, changesource_project, master)
     return gitpoller.GitPoller(repourl=repo,
                                pollinterval=interval,
-                               project=project,
+                               project=changesource_project,
                                branch=branch,
                                workdir=workdir,
                                revlinktmpl=revlink)
