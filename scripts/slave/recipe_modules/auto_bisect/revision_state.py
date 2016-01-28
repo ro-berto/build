@@ -166,6 +166,10 @@ class RevisionState(object):
 
   def deps_change(self):
     """Uses `git show` to see if a given commit contains a DEPS change."""
+    # Avoid checking DEPS changes for dependency repo revisions.
+    # crbug.com/580681
+    if self.needs_patch:  # pragma: no cover
+      return False
     api = self.bisector.api
     name = 'Checking DEPS for ' + self.commit_hash
     step_result = api.m.git(
