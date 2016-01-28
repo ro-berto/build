@@ -48,7 +48,7 @@ SPEC = {
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
+        'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'mipsel_builder_mb',
@@ -80,7 +80,7 @@ SPEC = {
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
+        'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'x86_builder_mb',
