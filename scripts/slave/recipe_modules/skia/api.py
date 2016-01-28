@@ -456,6 +456,8 @@ print json.dumps({'ccache': ccache})
     # Run DM.
     properties = [
       'gitHash',      self.got_revision,
+      'master',       self.master_name,
+      'builder',      self.builder_name,
       'build_number', self.m.properties['buildnumber'],
     ]
     if self.is_trybot:
