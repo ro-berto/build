@@ -499,7 +499,12 @@ class AndroidApi(recipe_api.RecipeApi):
         '--lib',
         self.m.path['checkout'].join(
             'third_party', 'llvm-build', 'Release+Asserts', 'lib', 'clang',
-            '3.8.0', 'lib', 'linux', 'libclang_rt.asan-arm-android.so')
+            # TODO(kjellander): Don't hardcode the clang version number here,
+            # else the bot will break every time it changes.  Instead,
+            # get it from `tools/clang/scripts/update.py --print-clang-version`,
+            # then the version can be updated atomically with a src-side change
+            # in clang rolls, instead of it being both in src/ and build/.
+            '3.9.0', 'lib', 'linux', 'libclang_rt.asan-arm-android.so')
     ]
     for d in self.devices:
       self.m.step('asan_device_setup.sh %s' % str(d),
