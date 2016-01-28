@@ -23,6 +23,7 @@ BUILDERS = freeze({
   'chromium.fyi': {
     'builders': {
       'Libfuzzer Upload Linux ASan': {
+        'chromium_config': 'chromium_clang',
         'chromium_apply_config': [ 'proprietary_codecs' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -33,7 +34,10 @@ BUILDERS = freeze({
         'upload_directory': 'asan',
       },
       'Libfuzzer Upload Linux MSan': {
-        'chromium_apply_config': [ 'proprietary_codecs' ],
+        'chromium_config': 'chromium_clang',
+        'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
+                                  'prebuilt_instrumented_libraries',
+                                  'proprietary_codecs' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
