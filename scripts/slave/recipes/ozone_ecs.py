@@ -68,11 +68,7 @@ def RunSteps(api):
   api.chromium.set_config('chromium', BUILD_CONFIG='Debug')
   api.gclient.set_config('chromium', BUILD_CONFIG='Debug')
 
-  step_result = api.bot_update.ensure_checkout()
-  if not step_result.json.output['did_run']:
-    api.gclient.checkout()
-
-    api.tryserver.maybe_apply_issue()
+  api.bot_update.ensure_checkout()
 
   api.chromium.c.gyp_env.GYP_DEFINES['embedded'] = 1
 
@@ -114,11 +110,24 @@ def RunSteps(api):
       pass
 
 def GenTests(api):
-  yield api.test('basic') + api.properties.scheduled()
-  yield api.test('trybot') + api.properties.tryserver()
+  yield (
+      api.test('basic') +
+      api.properties.scheduled(mastername="chromium.fyi",
+                               buildername='linux_ecs_ozone',
+                               slavename="test_slave")
+  )
+
+  yield (
+      api.test('trybot') +
+      api.properties.tryserver(mastername="chromium.fyi",
+                               buildername='linux_ecs_ozone',
+                               slavename="test_slave")
+  )
 
   yield (
     api.test('check_ecs_deps_fail') +
-    api.properties.scheduled() +
+    api.properties.scheduled(mastername="chromium.fyi",
+                            buildername='linux_ecs_ozone',
+                            slavename="test_slave") +
     api.step_data('check ecs deps', retcode=1)
   )
