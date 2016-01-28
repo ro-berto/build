@@ -1777,7 +1777,8 @@ class IncrementalCoverageTest(Test):
 
 class AndroidApkSizeTest(Test):
 
-  def __init__(self, apk_name, compile_targets, so_path, so_with_symbols_path):
+  def __init__(self, apk_name, compile_targets, so_path=None,
+               so_with_symbols_path=None):
     """Initialize a test to measure and upload a resource size.
 
     Args:
@@ -1812,10 +1813,12 @@ class AndroidApkSizeTest(Test):
 
   def run(self, api, suffix, test_filter=None):
     full_apk_path = api.chromium_android.apk_path(self._apk_name)
-    full_so_path = api.path['checkout'].join(
-        'out', api.chromium.c.BUILD_CONFIG, *self._so_path)
-    full_so_with_symbols_path = api.path['checkout'].join(
+    full_so_path = (api.path['checkout'].join(
+          'out', api.chromium.c.BUILD_CONFIG, *self._so_path)
+          if self._so_path else None)
+    full_so_with_symbols_path = (api.path['checkout'].join(
         'out', api.chromium.c.BUILD_CONFIG, *self._so_with_symbols_path)
+        if self._so_path else None)
     api.chromium_android.resource_sizes(
         apk_path=full_apk_path, so_path=full_so_path,
         so_with_symbols_path=full_so_with_symbols_path)

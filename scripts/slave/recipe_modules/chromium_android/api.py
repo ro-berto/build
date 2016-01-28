@@ -192,14 +192,16 @@ class AndroidApi(recipe_api.RecipeApi):
         perf_dashboard_id=name,
         test_type=name)
 
-  def resource_sizes(self, apk_path, so_path, so_with_symbols_path):
+  def resource_sizes(self, apk_path, so_path=None, so_with_symbols_path=None):
+    args=[apk_path, '--build_type', self.m.chromium.c.BUILD_CONFIG]
+    if so_path:
+      args.extend(['--so-path', so_path])
+    if so_with_symbols_path:
+      args.extend(['--so-with-symbols-path', so_with_symbols_path])
+
     self.m.chromium.runtest(
         self.m.path['checkout'].join('build', 'android', 'resource_sizes.py'),
-        args=[
-            apk_path,
-            '--so-path', so_path,
-            '--so-with-symbols-path', so_with_symbols_path,
-            '--build_type', self.m.chromium.c.BUILD_CONFIG],
+        args=args,
         annotate='graphing',
         results_url='https://chromeperf.appspot.com',
         perf_id=self.m.properties['buildername'],

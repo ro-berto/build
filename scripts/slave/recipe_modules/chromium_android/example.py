@@ -76,6 +76,9 @@ BUILDERS = freeze({
     'no_strict_mode_tester': {
         'strict_mode': 'off',
     },
+    'resource_size_builder': {
+        'resource_size': True,
+    }
 })
 
 from recipe_engine.recipe_api import Property
@@ -181,6 +184,16 @@ def RunSteps(api, buildername):
   if not failure:
       api.chromium_android.run_bisect_script(extra_src='test.py',
                                              path_to_config='test.py')
+
+  if config.get('resource_size'):
+    api.chromium_android.resource_sizes(
+        apk_path=api.chromium_android.apk_path('Chrome.apk'),
+        so_path=api.path['checkout'].join(
+            'out', api.chromium.c.BUILD_CONFIG, 'chrome_apk', 'libs',
+            'armeabi-v7a', 'libchrome.so'),
+        so_with_symbols_path=api.path['checkout'].join(
+          'out', api.chromium.c.BUILD_CONFIG, 'lib', 'libchrome.so'))
+
   api.chromium_android.logcat_dump()
   api.chromium_android.stack_tool_steps()
   if config.get('coverage', False):

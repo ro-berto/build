@@ -322,9 +322,8 @@ SPEC = {
         steps.AndroidApkSizeTest(
             apk_name='SystemWebView.apk',
             compile_targets=['system_webview_apk'],
-            so_path=['system_webview_apk', 'libs', 'armeabi-v7a',
-                     'libwebviewchromium.so'],
-            so_with_symbols_path=['lib', 'libwebviewchromium.so'])
+            so_path=['libwebviewchromium.so'],
+            so_with_symbols_path=['lib.unstripped', 'libwebviewchromium.so'])
       ],
       'test_generators': [
         steps.generate_gtest,
