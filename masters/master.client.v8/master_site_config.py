@@ -17,3 +17,4 @@ class V8(Master.Master3):
   master_port_alt = 8236
   project_url = 'http://v8.googlecode.com'
   buildbot_url = 'http://build.chromium.org/p/client.v8/'
+  service_account_file = 'service-account-v8.json'
