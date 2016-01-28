@@ -264,7 +264,6 @@ def main(argv):
       'master.client.nacl.toolchain': 'NativeClientToolchain',
       'master.client.ndk': 'NDK',
       'master.client.pdfium': 'Pdfium',
-      'master.client.sfntly': 'Sfntly',
       'master.client.skia': 'Skia',
       'master.client.skia.android': 'SkiaAndroid',
       'master.client.skia.compile': 'SkiaCompile',
