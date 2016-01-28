@@ -10,7 +10,7 @@ from common.skia import global_constants
 
 
 DEPS = [
-  'gclient',
+  'depot_tools/gclient',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',

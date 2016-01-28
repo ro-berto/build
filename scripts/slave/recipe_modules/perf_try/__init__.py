@@ -1,13 +1,13 @@
 DEPS = [
-    'bot_update',
+    'depot_tools/bot_update',
     'bisect_tester',
     'chromium',
     'chromium_android',
     'chromium_tests',
     'commit_position',
     'file',
-    'gclient',
-    'git',
+    'depot_tools/gclient',
+    'depot_tools/git',
     'gsutil',
     'recipe_engine/json',
     'halt',
@@ -19,5 +19,5 @@ DEPS = [
     'recipe_engine/raw_io',
     'recipe_engine/step',
     'trigger',
-    'tryserver',
+    'depot_tools/tryserver',
 ]

@@ -7,7 +7,7 @@ DEPS = [
   'bisect_tester',
   'chromium',
   'chromium_tests',
-  'gclient',
+  'depot_tools/gclient',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',

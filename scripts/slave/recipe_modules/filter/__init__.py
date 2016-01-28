@@ -4,14 +4,14 @@
 
 DEPS = [
   'chromium',
-  'git',
+  'depot_tools/git',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
-  'rietveld',
+  'depot_tools/rietveld',
   'recipe_engine/step',
-  'tryserver',
+  'depot_tools/tryserver',
 ]

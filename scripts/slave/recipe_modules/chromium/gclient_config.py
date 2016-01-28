@@ -1,91 +1,41 @@
-# Copyright 2013 The Chromium Authors. All rights reserved.
+# Copyright 2016 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import types
 
-from recipe_engine.config import config_item_context, ConfigGroup, BadConf
-from recipe_engine.config import ConfigList, Dict, Single, Static, Set, List
-
-from . import api as gclient_api
+from recipe_engine.config import BadConf
 
 
-def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None,
-               PATCH_PROJECT=None, BUILDSPEC_VERSION=None,
-               **_kwargs):
-  deps = '.DEPS.git' if GIT_MODE else 'DEPS'
-  cache_dir = str(CACHE_DIR) if GIT_MODE and CACHE_DIR else None
-  return ConfigGroup(
-    solutions = ConfigList(
-      lambda: ConfigGroup(
-        name = Single(basestring),
-        url = Single(basestring),
-        deps_file = Single(basestring, empty_val=deps, required=False,
-                           hidden=False),
-        managed = Single(bool, empty_val=True, required=False, hidden=False),
-        custom_deps = Dict(value_type=(basestring, types.NoneType)),
-        custom_vars = Dict(value_type=basestring),
-        safesync_url = Single(basestring, required=False),
+import DEPS
+CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
 
-        revision = Single(
-            (basestring, gclient_api.RevisionResolver),
-            required=False, hidden=True),
-      )
-    ),
-    deps_os = Dict(value_type=basestring),
-    hooks = List(basestring),
-    target_os = Set(basestring),
-    target_os_only = Single(bool, empty_val=False, required=False),
-    cache_dir = Static(cache_dir, hidden=False),
 
-    # If supplied, use this as the source root (instead of the first solution's
-    # checkout).
-    src_root = Single(basestring, required=False, hidden=True),
+gclient_api = DEPS['gclient'].api
 
-    # Maps 'solution' -> build_property
-    got_revision_mapping = Dict(hidden=True),
 
-    # Addition revisions we want to pass in.  For now theres a duplication
-    # of code here of setting custom vars AND passing in --revision. We hope
-    # to remove custom vars later.
-    revisions = Dict(
-        value_type=(basestring, gclient_api.RevisionResolver),
-        hidden=True),
+ChromeInternalGitURL = DEPS['gclient'].config.ChromeInternalGitURL
+ChromiumGitURL = DEPS['gclient'].config.ChromiumGitURL
 
-    # TODO(iannucci): HACK! The use of None here to indicate that we apply this
-    #   to the solution.revision field is really terrible. I mostly blame
-    #   gclient.
-    # Maps 'parent_build_property' -> 'custom_var_name'
-    # Maps 'parent_build_property' -> None
-    # If value is None, the property value will be applied to
-    # solutions[0].revision. Otherwise, it will be applied to
-    # solutions[0].custom_vars['custom_var_name']
-    parent_got_revision_mapping = Dict(hidden=True),
-    delete_unversioned_trees = Single(bool, empty_val=True, required=False),
 
-    # Check out refs/branch-heads.
-    # TODO (machenbach): Only implemented for bot_update atm.
-    with_branch_heads = Single(
-        bool,
-        empty_val=False,
-        required=False,
-        hidden=True),
+class ProjectRevisionResolver(gclient_api.RevisionResolver):
+  """Revision resolver that takes into account the project."""
+  def __init__(self, project, parent_got_revision=None):
+    self.project = project
+    self.parent_got_revision = parent_got_revision or 'parent_got_revision'
 
-    GIT_MODE = Static(bool(GIT_MODE)),
-    USE_MIRROR = Static(bool(USE_MIRROR)),
-    PATCH_PROJECT = Static(str(PATCH_PROJECT), hidden=True),
-    BUILDSPEC_VERSION= Static(BUILDSPEC_VERSION, hidden=True),
-  )
-
-config_ctx = config_item_context(BaseConfig)
+  def resolve(self, properties):
+    """Resolve the revision if project matches, otherwise default to HEAD."""
+    if properties.get('project') == self.project:
+      return (properties.get(self.parent_got_revision) or
+              properties.get('revision') or
+              'HEAD')
+    return (properties.get(self.parent_got_revision) or
+            'HEAD')
 
 def ChromiumSvnSubURL(c, *pieces):
   BASES = ('https://src.chromium.org',
            'svn://svn-mirror.golo.chromium.org')
   return '/'.join((BASES[c.USE_MIRROR],) + pieces)
-
-def ChromiumGitURL(_c, *pieces):
-  return '/'.join(('https://chromium.googlesource.com',) + pieces)
 
 def ChromiumSrcURL(c):
   if c.GIT_MODE:
@@ -104,9 +54,6 @@ def ChromeSvnSubURL(c, *pieces):
            'svn://svn-mirror.golo.chromium.org')
   return '/'.join((BASES[c.USE_MIRROR],) + pieces)
 
-def ChromeInternalGitURL(_c, *pieces):
-  return '/'.join(('https://chrome-internal.googlesource.com',) + pieces)
-
 def ChromeInternalSrcURL(c):
   if c.GIT_MODE:
     return ChromeInternalGitURL(c, 'chrome', 'src-internal.git')
@@ -116,7 +63,7 @@ def ChromeInternalSrcURL(c):
 def mirror_only(c, obj, default=None):
   return obj if c.USE_MIRROR else (default or obj.__class__())
 
-@config_ctx()
+@CONFIG_CTX()
 def chromium_bare(c):
   s = c.solutions.add()
   s.name = 'src'
@@ -154,16 +101,16 @@ def chromium_bare(c):
   if patch_revision:
     c.revisions[patch_revision[0]] = patch_revision[1]
 
-@config_ctx(includes=['chromium_bare'])
+@CONFIG_CTX(includes=['chromium_bare'])
 def chromium_empty(c):
   c.solutions[0].deps_file = ''  # pragma: no cover
 
-@config_ctx(includes=['chromium_bare'])
+@CONFIG_CTX(includes=['chromium_bare'])
 def chromium(c):
   s = c.solutions[0]
   s.custom_deps = mirror_only(c, {})
 
-@config_ctx(includes=['chromium'])
+@CONFIG_CTX(includes=['chromium'])
 def chromium_lkcr(c):
   # TODO(phajdan.jr): Add git hashes for LKCR crbug.com/349277.
   if c.GIT_MODE:
@@ -175,7 +122,7 @@ def chromium_lkcr(c):
   #               rather than origin/lkcr.
   s.revision = 'origin/lkcr'
 
-@config_ctx(includes=['chromium'])
+@CONFIG_CTX(includes=['chromium'])
 def chromium_lkgr(c):
   s = c.solutions[0]
   safesync_url = 'https://chromium-status.appspot.com/lkgr'
@@ -185,7 +132,7 @@ def chromium_lkgr(c):
   s.safesync_url = safesync_url
   s.revision = 'origin/lkgr'
 
-@config_ctx(includes=['chromium_bare'])
+@CONFIG_CTX(includes=['chromium_bare'])
 def android_bare(c):
   # We inherit from chromium_bare to get the got_revision mapping.
   # NOTE: We don't set a specific got_revision mapping for src/repo.
@@ -195,7 +142,7 @@ def android_bare(c):
   s.deps_file = '.DEPS.git'
 
 # TODO(iannucci,vadimsh): Switch this to src-limited
-@config_ctx()
+@CONFIG_CTX()
 def chrome_internal(c):
   s = c.solutions.add()
   s.name = 'src-internal'
@@ -225,34 +172,34 @@ def chrome_internal(c):
     "src/webkit/data/xbm_decoder":None,
   }
 
-@config_ctx(includes=['chromium'])
+@CONFIG_CTX(includes=['chromium'])
 def blink(c):
   c.solutions[0].revision = 'HEAD'
   del c.solutions[0].custom_deps
   c.revisions['src/third_party/WebKit'] = 'HEAD'
 
-@config_ctx(includes=['chromium'])
+@CONFIG_CTX(includes=['chromium'])
 def blink_or_chromium(c):
-  c.solutions[0].revision = gclient_api.ProjectRevisionResolver('chromium')
+  c.solutions[0].revision = ProjectRevisionResolver('chromium')
   del c.solutions[0].custom_deps
   c.revisions['src/third_party/WebKit'] = \
-      gclient_api.ProjectRevisionResolver(
+      ProjectRevisionResolver(
           'webkit', parent_got_revision='parent_got_webkit_revision')
 
-@config_ctx(includes=['chromium'])
+@CONFIG_CTX(includes=['chromium'])
 def blink_merged(c):
   c.solutions[0].url = \
       'https://chromium.googlesource.com/playground/chromium-blink-merge.git'
 
-@config_ctx()
+@CONFIG_CTX()
 def android(c):
   c.target_os.add('android')
 
-@config_ctx(includes=['chromium', 'chrome_internal'])
+@CONFIG_CTX(includes=['chromium', 'chrome_internal'])
 def ios(c):
   c.target_os.add('ios')
 
-@config_ctx(includes=['chromium'])
+@CONFIG_CTX(includes=['chromium'])
 def show_v8_revision(c):
   # Have the V8 revision appear in the web UI instead of Chromium's.
   c.got_revision_mapping['src'] = 'got_cr_revision'
@@ -260,7 +207,7 @@ def show_v8_revision(c):
   # Needed to get the testers to properly sync the right revision.
   c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
-@config_ctx(includes=['chromium'])
+@CONFIG_CTX(includes=['chromium'])
 def v8_bleeding_edge_git(c):
   c.solutions[0].revision = 'HEAD'
   # TODO(machenbach): If bot_update is activated for all v8-chromium bots
@@ -268,11 +215,11 @@ def v8_bleeding_edge_git(c):
   c.solutions[0].custom_vars['v8_branch'] = 'branches/bleeding_edge'
   c.revisions['src/v8'] = 'HEAD'
 
-@config_ctx()
+@CONFIG_CTX()
 def v8_canary(c):
   c.revisions['src/v8'] = 'origin/canary'
 
-@config_ctx(includes=['chromium'])
+@CONFIG_CTX(includes=['chromium'])
 def oilpan(c):  # pragma: no cover
   if c.GIT_MODE:
     raise BadConf("Oilpan requires SVN for now")
@@ -296,7 +243,7 @@ def oilpan(c):  # pragma: no cover
   del c.got_revision_mapping['src']
   c.got_revision_mapping['src/third_party/WebKit/Source'] = 'got_revision'
 
-@config_ctx(includes=['oilpan', 'chrome_internal'])
+@CONFIG_CTX(includes=['oilpan', 'chrome_internal'])
 def oilpan_internal(c):  # pragma: no cover
   # Add back the oilpan data dependencies
   needed_components_internal = [
@@ -312,7 +259,7 @@ def oilpan_internal(c):  # pragma: no cover
   for key in needed_components_internal:
     del c.solutions[1].custom_deps[key]
 
-@config_ctx()
+@CONFIG_CTX()
 def nacl(c):
   s = c.solutions.add()
   s.name = 'native_client'
@@ -320,7 +267,7 @@ def nacl(c):
   m = c.got_revision_mapping
   m['native_client'] = 'got_revision'
 
-@config_ctx()
+@CONFIG_CTX()
 def webports(c):
   s = c.solutions.add()
   s.name = 'src'
@@ -328,7 +275,7 @@ def webports(c):
   m = c.got_revision_mapping
   m['src'] = 'got_revision'
 
-@config_ctx()
+@CONFIG_CTX()
 def wasm_llvm(c):
   s = c.solutions.add()
   s.name = 'src'
@@ -338,7 +285,7 @@ def wasm_llvm(c):
   m['src'] = 'got_waterfall_revision'
   c.revisions['src'] = 'origin/master'
 
-@config_ctx()
+@CONFIG_CTX()
 def gyp(c):
   s = c.solutions.add()
   s.name = 'gyp'
@@ -346,7 +293,7 @@ def gyp(c):
   m = c.got_revision_mapping
   m['gyp'] = 'got_revision'
 
-@config_ctx(config_vars={'GIT_MODE': True})
+@CONFIG_CTX(config_vars={'GIT_MODE': True})
 def build(c):  # pragma: no cover
   if not c.GIT_MODE:
     raise BadConf('build only supports git')
@@ -356,7 +303,7 @@ def build(c):  # pragma: no cover
   m = c.got_revision_mapping
   m['build'] = 'got_revision'
 
-@config_ctx(config_vars={'GIT_MODE': True})
+@CONFIG_CTX(config_vars={'GIT_MODE': True})
 def depot_tools(c):  # pragma: no cover
   if not c.GIT_MODE:
     raise BadConf('depot_tools only supports git')
@@ -366,7 +313,7 @@ def depot_tools(c):  # pragma: no cover
   m = c.got_revision_mapping
   m['depot_tools'] = 'got_revision'
 
-@config_ctx(config_vars={'GIT_MODE': True})
+@CONFIG_CTX(config_vars={'GIT_MODE': True})
 def skia(c):  # pragma: no cover
   if not c.GIT_MODE:
     raise BadConf('skia only supports git')
@@ -376,7 +323,7 @@ def skia(c):  # pragma: no cover
   m = c.got_revision_mapping
   m['skia'] = 'got_revision'
 
-@config_ctx(config_vars={'GIT_MODE': True})
+@CONFIG_CTX(config_vars={'GIT_MODE': True})
 def chrome_golo(c): # pragma: no cover
   if not c.GIT_MODE:
     raise BadConf('chrome_golo only supports git')
@@ -385,7 +332,7 @@ def chrome_golo(c): # pragma: no cover
   s.url = 'https://chrome-internal.googlesource.com/chrome-golo/chrome-golo.git'
   c.got_revision_mapping['chrome_golo'] = 'got_revision'
 
-@config_ctx(config_vars={'GIT_MODE': True})
+@CONFIG_CTX(config_vars={'GIT_MODE': True})
 def build_internal(c):
   if not c.GIT_MODE:  # pragma: no cover
     raise BadConf('build_internal only supports git')
@@ -399,7 +346,7 @@ def build_internal(c):
   build(c)
   c.got_revision_mapping['build'] = 'got_build_revision'
 
-@config_ctx(config_vars={'GIT_MODE': True})
+@CONFIG_CTX(config_vars={'GIT_MODE': True})
 def build_internal_scripts_slave(c):
   if not c.GIT_MODE:  # pragma: no cover
     raise BadConf('build_internal_scripts_slave only supports git')
@@ -413,21 +360,21 @@ def build_internal_scripts_slave(c):
   build(c)
   c.got_revision_mapping['build'] = 'got_build_revision'
 
-@config_ctx()
+@CONFIG_CTX()
 def slave_deps(c):
   s = c.solutions.add()
   s.name = 'build_internal/slave.DEPS'
   s.url = 'https://chrome-internal.googlesource.com/chrome/tools/build/slave.DEPS.git'
   c.got_revision_mapping['build_internal/slave.DEPS'] = 'got_revision'
 
-@config_ctx()
+@CONFIG_CTX()
 def internal_deps(c):
   s = c.solutions.add()
   s.name = 'build_internal/internal.DEPS'
   s.url = 'https://chrome-internal.googlesource.com/chrome/tools/build/internal.DEPS.git'
   c.got_revision_mapping['build_internal/internal.DEPS'] = 'got_revision'
 
-@config_ctx(includes=['chromium', 'chrome_internal'])
+@CONFIG_CTX(includes=['chromium', 'chrome_internal'])
 def perf(c):
   s = c.solutions[0]
   s.custom_vars['llvm_url'] = 'svn://svn-mirror.golo.chromium.org/llvm-project'
@@ -439,7 +386,7 @@ def perf(c):
     del c.solutions[1].custom_deps[key]
   c.solutions[1].managed = False
 
-@config_ctx(includes=['chromium'])
+@CONFIG_CTX(includes=['chromium'])
 def chromium_skia(c):
   c.solutions[0].revision = 'HEAD'
   del c.solutions[0].custom_deps
@@ -449,14 +396,14 @@ def chromium_skia(c):
   c.got_revision_mapping['src/third_party/skia'] = 'got_revision'
   c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
-@config_ctx(includes=['chromium'])
+@CONFIG_CTX(includes=['chromium'])
 def chromium_webrtc(c):
   c.got_revision_mapping['src/third_party/libjingle/source/talk'] = (
       'got_libjingle_revision')
   c.got_revision_mapping['src/third_party/libvpx/source'] = (
       'got_libvpx_revision')
 
-@config_ctx(includes=['chromium_webrtc'])
+@CONFIG_CTX(includes=['chromium_webrtc'])
 def chromium_webrtc_tot(c):
   """Configures ToT revisions for WebRTC and Libjingle for Chromium.
 
@@ -468,7 +415,7 @@ def chromium_webrtc_tot(c):
   c.revisions['src/third_party/webrtc'] = 'HEAD'
   c.revisions['src/third_party/libjingle/source/talk'] = 'HEAD'
 
-@config_ctx()
+@CONFIG_CTX()
 def webrtc_test_resources(c):
   """Add webrtc.DEPS solution for test resources and tools.
 
@@ -480,32 +427,32 @@ def webrtc_test_resources(c):
   s.url = ChromiumGitURL(c, 'chromium', 'deps', 'webrtc', 'webrtc.DEPS')
   s.deps_file = 'DEPS'
 
-@config_ctx()
+@CONFIG_CTX()
 def pdfium(c):
   soln = c.solutions.add()
   soln.name = 'pdfium'
   soln.url = 'https://pdfium.googlesource.com/pdfium.git'
 
-@config_ctx()
+@CONFIG_CTX()
 def mojo(c):
   soln = c.solutions.add()
   soln.name = 'src'
   soln.url = 'https://chromium.googlesource.com/external/mojo.git'
 
-@config_ctx()
+@CONFIG_CTX()
 def crashpad(c):
   soln = c.solutions.add()
   soln.name = 'crashpad'
   soln.url = 'https://chromium.googlesource.com/crashpad/crashpad.git'
 
-@config_ctx()
+@CONFIG_CTX()
 def boringssl(c):
   soln = c.solutions.add()
   soln.name = 'boringssl'
   soln.url = 'https://boringssl.googlesource.com/boringssl.git'
   soln.deps_file = 'util/bot/DEPS'
 
-@config_ctx()
+@CONFIG_CTX()
 def dart(c):
   soln = c.solutions.add()
   soln.name = 'sdk'
@@ -514,21 +461,21 @@ def dart(c):
   soln.deps_file = 'DEPS'
   soln.managed = False
 
-@config_ctx(config_vars={'GIT_MODE': True})
+@CONFIG_CTX(config_vars={'GIT_MODE': True})
 def infra(c):
   soln = c.solutions.add()
   soln.name = 'infra'
   soln.url = 'https://chromium.googlesource.com/infra/infra.git'
   c.got_revision_mapping['infra'] = 'got_revision'
 
-@config_ctx(config_vars={'GIT_MODE': True})
+@CONFIG_CTX(config_vars={'GIT_MODE': True})
 def infra_internal(c):  # pragma: no cover
   soln = c.solutions.add()
   soln.name = 'infra_internal'
   soln.url = 'https://chrome-internal.googlesource.com/infra/infra_internal.git'
   c.got_revision_mapping['infra_internal'] = 'got_revision'
 
-@config_ctx(includes=['infra'])
+@CONFIG_CTX(includes=['infra'])
 def luci_gae(c):
   # luci/gae is checked out as a part of infra.git solution at HEAD.
   c.revisions['infra'] = 'origin/master'
@@ -540,7 +487,7 @@ def luci_gae(c):
   del m['infra']
   m['infra/go/src/github.com/luci/gae'] = 'got_revision'
 
-@config_ctx(includes=['infra'])
+@CONFIG_CTX(includes=['infra'])
 def luci_go(c):
   # luci-go is checked out as a part of infra.git solution at HEAD.
   c.revisions['infra'] = 'origin/master'
@@ -550,7 +497,7 @@ def luci_go(c):
   del m['infra']
   m['infra/go/src/github.com/luci/luci-go'] = 'got_revision'
 
-@config_ctx(includes=['infra'])
+@CONFIG_CTX(includes=['infra'])
 def luci_py(c):
   # luci-py is checked out as part of infra just to have appengine
   # pre-installed, as that's what luci-py PRESUBMIT relies on.
@@ -561,7 +508,7 @@ def luci_py(c):
   del m['infra']
   m['infra/luci'] = 'got_revision'
 
-@config_ctx(includes=['infra'])
+@CONFIG_CTX(includes=['infra'])
 def recipes_py(c):
   c.revisions['infra'] = 'origin/master'
   c.revisions['infra/recipes-py'] = (
@@ -570,7 +517,7 @@ def recipes_py(c):
   del m['infra']
   m['infra/recipes-py'] = 'got_revision'
 
-@config_ctx()
+@CONFIG_CTX()
 def chrome_from_buildspec(c):  # pragma: no cover
   soln = c.solutions.add()
   soln.name = 'chrome_from_buildspec'
@@ -581,7 +528,7 @@ def chrome_from_buildspec(c):  # pragma: no cover
   soln.custom_vars['svn_url'] = 'svn://svn-mirror.golo.chromium.org'
   soln.custom_deps = {}
 
-@config_ctx()
+@CONFIG_CTX()
 def catapult(c):
   soln = c.solutions.add()
   soln.name = 'catapult'
@@ -589,7 +536,7 @@ def catapult(c):
               'catapult-project/catapult.git')
   c.got_revision_mapping['catapult'] = 'got_revision'
 
-@config_ctx(includes=['infra_internal'], config_vars={'GIT_MODE': True})
+@CONFIG_CTX(includes=['infra_internal'], config_vars={'GIT_MODE': True})
 def infradata_master_manager(c):
   soln = c.solutions.add()
   soln.name = 'infra-data-master-manager'
@@ -597,11 +544,11 @@ def infradata_master_manager(c):
       'https://chrome-internal.googlesource.com/infradata/master-manager.git')
   c.got_revision_mapping['infra-data-master-manager'] = 'got_revision'
 
-@config_ctx()
+@CONFIG_CTX()
 def with_branch_heads(c):
   c.with_branch_heads = True
 
-@config_ctx()
+@CONFIG_CTX()
 def custom_tabs_client(c):
   soln = c.solutions.add()
   soln.name = 'custom_tabs_client'
@@ -610,7 +557,7 @@ def custom_tabs_client(c):
               'GoogleChrome/custom-tabs-client.git')
   c.got_revision_mapping['custom_tabs_client'] = 'got_revision'
 
-@config_ctx()
+@CONFIG_CTX()
 def angle_top_of_tree(c):
   """Configures the top-of-tree ANGLE in a Chromium checkout.
 
@@ -619,7 +566,7 @@ def angle_top_of_tree(c):
   c.solutions[0].revision = 'HEAD'
   c.revisions['src/third_party/angle'] = 'HEAD'
 
-@config_ctx()
+@CONFIG_CTX()
 def gerrit_test_cq_normal(c):
   soln = c.solutions.add()
   soln.name = 'gerrit-test-cq-normal'

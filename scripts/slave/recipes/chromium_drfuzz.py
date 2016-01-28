@@ -7,7 +7,7 @@ from recipe_engine.types import freeze
 
 DEPS = [
   'archive',
-  'bot_update',
+  'depot_tools/bot_update',
   'chromium',
   'file',
   'recipe_engine/json',

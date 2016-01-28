@@ -5,14 +5,14 @@
 from recipe_engine.types import freeze
 
 DEPS = [
-  'bot_update',
+  'depot_tools/bot_update',
   'chromium',
-  'gclient',
+  'depot_tools/gclient',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/step',
-  'tryserver',
+  'depot_tools/tryserver',
 ]
 
 OZONE_TESTS = freeze([

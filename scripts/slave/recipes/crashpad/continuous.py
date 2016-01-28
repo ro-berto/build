@@ -7,7 +7,7 @@
 
 DEPS = [
   'file',
-  'gclient',
+  'depot_tools/gclient',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',

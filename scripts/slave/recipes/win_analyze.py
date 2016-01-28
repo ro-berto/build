@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'bot_update',
+  'depot_tools/bot_update',
   'chromium',
 ]
 

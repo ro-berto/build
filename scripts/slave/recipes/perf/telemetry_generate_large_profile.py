@@ -4,10 +4,10 @@
 
 DEPS = [
   'archive',
-  'bot_update',
+  'depot_tools/bot_update',
   'chromium',
   'file',
-  'gclient',
+  'depot_tools/gclient',
   'gsutil',
   'recipe_engine/path',
   'recipe_engine/platform',

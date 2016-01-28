@@ -10,7 +10,7 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
-  'tryserver',
+  'depot_tools/tryserver',
 ]
 
 AOSP_MANIFEST_PATH = 'android_webview/buildbot/aosp_manifest.xml'
