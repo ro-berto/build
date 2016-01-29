@@ -203,7 +203,7 @@
       "linux_site_isolation",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [\"content_browsertests\", \"content_unittests\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
+      "{\"additional_compile_targets\": [\"content_browsertests\", \"content_unittests\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"blink_tests\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -224,7 +224,9 @@
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": []@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
     ]

@@ -312,6 +312,16 @@ SPEC = {
         'content_unittests',
         'content_browsertests',
       ],
+      'tests': [
+        steps.BlinkTest(extra_args=[
+          '--additional-driver-flag',
+          '--site-per-process',
+          '--additional-expectations',
+          'src/third_party/WebKit/LayoutTests/FlagExpectations/site-per-process',
+          '--options',
+          'http/tests/security',
+        ]),
+      ],
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
