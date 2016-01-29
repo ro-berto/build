@@ -92,7 +92,7 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'compile_targets': [
-        'chrome',
+        'chrome_official_builder_no_unittests',
       ],
       'testing': {
         'platform': 'win',
