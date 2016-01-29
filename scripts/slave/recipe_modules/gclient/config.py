@@ -624,3 +624,9 @@ def gerrit_test_cq_normal(c):
   soln = c.solutions.add()
   soln.name = 'gerrit-test-cq-normal'
   soln.url = 'https://chromium.googlesource.com/playground/gerrit-cq/normal.git'
+
+@config_ctx()
+def valgrind(c):
+  """Add Valgrind binaries to the gclient solution."""
+  c.solutions[0].custom_deps['src/third_party/valgrind'] = \
+    ChromiumGitURL(c, 'chromium', 'deps', 'valgrind', 'binaries')

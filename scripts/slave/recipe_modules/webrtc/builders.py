@@ -392,7 +392,7 @@ BUILDERS = freeze({
       'Linux Memcheck': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['memcheck'],
-        'gclient_apply_config': ['valgrind'],
+        'gclient_apply_config': ['webrtc_valgrind'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1181,7 +1181,7 @@ BUILDERS = freeze({
       'linux_memcheck': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['memcheck'],
-        'gclient_apply_config': ['valgrind'],
+        'gclient_apply_config': ['webrtc_valgrind'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
