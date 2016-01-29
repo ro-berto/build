@@ -211,6 +211,8 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'use_isolate': True,
+      'enable_swarming': True,
     },
     'Android GN (dbg)': {
       'chromium_config': 'android',
@@ -265,7 +267,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
     },
 
@@ -286,6 +287,8 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'use_isolate': True,
+      'enable_swarming': True,
     },
     'Android Tests': {
       'chromium_config': 'android',
@@ -320,7 +323,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
     },
 
