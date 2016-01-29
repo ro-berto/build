@@ -631,8 +631,8 @@ BUILDERS = {
         'tests': [V8Testing, Test262, Mozilla],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Windows-XP-SP3',
-          'cpu': 'x86-32',
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86-64',
         },
       },
       'V8 Win32 - nosnap - shared': {
@@ -668,8 +668,8 @@ BUILDERS = {
         'tests': [V8Testing_2, Test262, Mozilla],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Windows-XP-SP3',
-          'cpu': 'x86-32',
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86-64',
         },
       },
       'V8 Win64': {
