@@ -421,6 +421,7 @@ BUILDERS = {
           'V8 Linux64',
           'V8 Linux64 - avx2',
         ],
+        'triggers_proxy': True,
       },
       'V8 Linux64 - debug builder': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
@@ -795,6 +796,7 @@ BUILDERS = {
         'triggers': [
           'V8 Arm',
         ],
+        'triggers_proxy': True,
       },
       'V8 Arm - debug builder': {
         'chromium_apply_config': [
@@ -826,6 +828,7 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'android_arm_rel_archive',
         'testing': {'platform': 'linux'},
+        'triggers_proxy': True,
       },
       'V8 Android Arm64 - builder': {
         'gclient_apply_config': ['android'],
@@ -839,6 +842,7 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'android_arm64_rel_archive',
         'testing': {'platform': 'linux'},
+        'triggers_proxy': True,
       },
       'V8 Arm': {
         'v8_config_kwargs': {

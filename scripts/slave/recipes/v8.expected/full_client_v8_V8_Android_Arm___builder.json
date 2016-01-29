@@ -123,6 +123,37 @@
     "name": "package build"
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger (2)",
+    "trigger_specs": [
+      {
+        "bucket": "master.internal.client.v8",
+        "buildbot_changes": [
+          {
+            "author": "trigger_proxy",
+            "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+          }
+        ],
+        "builder_name": "v8_trigger_proxy",
+        "properties": {
+          "archive": "gs://chromium-v8/v8-android-arm-rel",
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@v8_trigger_proxy@@@"
+    ]
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0
