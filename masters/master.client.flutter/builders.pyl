@@ -1,8 +1,8 @@
 {
   "master_base_class": "Master3",
-  "master_port": 20306,
-  "master_port_alt": 40306,
-  "slave_port": 30306,
+  "master_port": 20307,
+  "master_port_alt": 40307,
+  "slave_port": 30307,
   "templates": ["../master.chromium/templates"],
 
   "builders": {
