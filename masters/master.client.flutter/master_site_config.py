@@ -14,9 +14,9 @@ from config_bootstrap import Master
 
 class ClientFlutter(Master.Master3):
   project_name = 'ClientFlutter'
-  master_port = 20301
-  slave_port = 30301
-  master_port_alt = 40301
+  master_port = 20306
+  slave_port = 30306
+  master_port_alt = 40306
   buildbot_url = 'https://build.chromium.org/p/client.flutter/'
   buildbucket_bucket = None
   service_account_file = None
