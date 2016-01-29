@@ -3,20 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\kill_processes.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "taskkill"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE[build]\\bot_update.py",
+      "RECIPE_PACKAGE[build]/bot_update.py",
       "--master",
       "chromium.gpu.fyi",
       "--builder",
-      "GPU NextGen Win Builder",
+      "GPU Mac Builder (dbg)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -107,7 +98,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -121,12 +112,12 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "archive_gpu_tests=1 clang=1 component=shared_library ffmpeg_branding=Chrome gomadir='[BUILD]/goma' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -134,17 +125,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
+      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Release",
+      "Debug",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"GPU NextGen Win Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"buildername\": \"GPU Mac Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -158,15 +149,15 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.gpu.fyi.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.gpu.fyi.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.gpu.fyi.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.gpu.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win7 NextGen Release (AMD)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.10 Debug (ATI)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -176,7 +167,7 @@
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win7 NextGen Release (Intel)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.10 Debug (Intel)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -186,27 +177,7 @@
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win7 NextGen Release (NVIDIA)\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win7 NextGen dEQP (NVIDIA)\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win8 NextGen Release (NVIDIA)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.10 Retina Debug (AMD)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -224,7 +195,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
+      "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
@@ -233,36 +204,55 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[isolate]\\resources\\find_isolated_tests.py",
+      "RECIPE_MODULE[isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[SLAVE_BUILD]/src/out/Debug",
       "--clean-isolated-files"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "clean isolated files"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
-      "--target",
-      "Release",
+      "[BUILD]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[SLAVE_BUILD]\\src",
+      "[SLAVE_BUILD]/src",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "clang_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma",
+      "goma-clang",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-dir",
-      "[BUILD]\\goma",
+      "[BUILD]/goma",
       "--ninja-ensure-up-to-date",
       "--",
       "browser_tests",
-      "browser_tests_run",
-      "crash_service"
+      "browser_tests_run"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile",
@@ -275,11 +265,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[isolate]\\resources\\remove_build_metadata.py",
+      "RECIPE_MODULE[isolate]/resources/remove_build_metadata.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[SLAVE_BUILD]/src/out/Debug",
       "--src-dir",
-      "[SLAVE_BUILD]\\src"
+      "[SLAVE_BUILD]/src"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"
@@ -288,15 +278,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[isolate]\\resources\\isolate.py",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
+      "RECIPE_MODULE[isolate]/resources/isolate.py",
+      "[SLAVE_BUILD]/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]\\src\\out\\Release\\browser_tests.isolated.gen.json"
+      "[SLAVE_BUILD]/src/out/Debug/browser_tests.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
@@ -312,17 +302,17 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\zip_build.py",
+      "[BUILD]/scripts/slave/zip_build.py",
       "--target",
-      "Release",
+      "Debug",
       "--build-url",
-      "gs://chromium-gpu-fyi-archive/chromium.gpu.fyi/GPU NextGen Win Builder",
+      "gs://chromium-gpu-fyi-archive/chromium.gpu.fyi/GPU Mac Builder (dbg)",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"GPU NextGen Win Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"GPU Mac Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"GPU NextGen Win Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"GPU Mac Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
@@ -333,7 +323,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Win7 NextGen Release (AMD)",
+        "builder_name": "Mac 10.10 Debug (ATI)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -351,7 +341,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win7 NextGen Release (AMD)@@@"
+      "@@@STEP_TEXT@Mac 10.10 Debug (ATI)@@@"
     ]
   },
   {
@@ -360,7 +350,7 @@
     "name": "trigger (2)",
     "trigger_specs": [
       {
-        "builder_name": "Win7 NextGen Release (Intel)",
+        "builder_name": "Mac 10.10 Debug (Intel)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -378,7 +368,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win7 NextGen Release (Intel)@@@"
+      "@@@STEP_TEXT@Mac 10.10 Debug (Intel)@@@"
     ]
   },
   {
@@ -387,7 +377,7 @@
     "name": "trigger (3)",
     "trigger_specs": [
       {
-        "builder_name": "Win7 NextGen Release (NVIDIA)",
+        "builder_name": "Mac 10.10 Retina Debug (AMD)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -405,61 +395,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Win7 NextGen Release (NVIDIA)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (4)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win7 NextGen dEQP (NVIDIA)",
-        "properties": {
-          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
-          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
-          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
-          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
-          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-          "parent_got_revision_cp": "refs/heads/master@{#170242}",
-          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
-          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
-          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
-          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
-          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
-          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
-        }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win7 NextGen dEQP (NVIDIA)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (5)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win8 NextGen Release (NVIDIA)",
-        "properties": {
-          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
-          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
-          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
-          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
-          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-          "parent_got_revision_cp": "refs/heads/master@{#170242}",
-          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
-          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
-          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
-          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
-          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
-          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
-        }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win8 NextGen Release (NVIDIA)@@@"
+      "@@@STEP_TEXT@Mac 10.10 Retina Debug (AMD)@@@"
     ]
   },
   {

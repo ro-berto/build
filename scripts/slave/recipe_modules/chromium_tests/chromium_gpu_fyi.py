@@ -13,7 +13,7 @@ SPEC = {
     'src_side_runtest_py': True,
   },
   'builders': {
-    'GPU NextGen Win Builder': {
+    'GPU Win Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
                                 'chrome_with_codecs',
@@ -33,7 +33,7 @@ SPEC = {
       'enable_swarming': True,
       'use_isolate': True,
     },
-    'GPU NextGen Win Builder (dbg)': {
+    'GPU Win Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
                                 'chrome_with_codecs',
@@ -53,7 +53,7 @@ SPEC = {
       'enable_swarming': True,
       'use_isolate': True,
     },
-    'Win7 NextGen Release (NVIDIA)': {
+    'Win7 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -67,13 +67,13 @@ SPEC = {
         steps.generate_script,
         steps.generate_isolated_script,
       ],
-      'parent_buildername': 'GPU NextGen Win Builder',
+      'parent_buildername': 'GPU Win Builder',
       'testing': {
         'platform': 'win',
       },
       'enable_swarming': True,
     },
-    'Win7 NextGen Debug (NVIDIA)': {
+    'Win7 Debug (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -87,13 +87,13 @@ SPEC = {
         steps.generate_script,
         steps.generate_isolated_script,
       ],
-      'parent_buildername': 'GPU NextGen Win Builder (dbg)',
+      'parent_buildername': 'GPU Win Builder (dbg)',
       'testing': {
         'platform': 'win',
       },
       'enable_swarming': True,
     },
-    'Win8 NextGen Release (NVIDIA)': {
+    'Win8 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -107,13 +107,13 @@ SPEC = {
         steps.generate_script,
         steps.generate_isolated_script,
       ],
-      'parent_buildername': 'GPU NextGen Win Builder',
+      'parent_buildername': 'GPU Win Builder',
       'testing': {
         'platform': 'win',
       },
       'enable_swarming': True,
     },
-    'Win8 NextGen Debug (NVIDIA)': {
+    'Win8 Debug (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -127,13 +127,13 @@ SPEC = {
         steps.generate_script,
         steps.generate_isolated_script,
       ],
-      'parent_buildername': 'GPU NextGen Win Builder (dbg)',
+      'parent_buildername': 'GPU Win Builder (dbg)',
       'testing': {
         'platform': 'win',
       },
       'enable_swarming': True,
     },
-    'Win7 NextGen Release (AMD)': {
+    'Win7 Release (ATI)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -147,13 +147,13 @@ SPEC = {
         steps.generate_script,
         steps.generate_isolated_script,
       ],
-      'parent_buildername': 'GPU NextGen Win Builder',
+      'parent_buildername': 'GPU Win Builder',
       'testing': {
         'platform': 'win',
       },
       'enable_swarming': True,
     },
-    'Win7 NextGen Release (Intel)': {
+    'Win7 Release (Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -167,7 +167,7 @@ SPEC = {
         steps.generate_script,
         steps.generate_isolated_script,
       ],
-      'parent_buildername': 'GPU NextGen Win Builder',
+      'parent_buildername': 'GPU Win Builder',
       'testing': {
         'platform': 'win',
       },
@@ -177,7 +177,7 @@ SPEC = {
       # in order to keep up with the faster cycle time of the tests.
       'enable_swarming': False,
     },
-    'Win7 NextGen dEQP (NVIDIA)': {
+    'Win7 Release dEQP (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -191,13 +191,13 @@ SPEC = {
         steps.generate_script,
         steps.generate_isolated_script,
       ],
-      'parent_buildername': 'GPU NextGen Win Builder',
+      'parent_buildername': 'GPU Win Builder',
       'testing': {
         'platform': 'win',
       },
       'enable_swarming': True,
     },
-    'GPU NextGen Linux Builder': {
+    'GPU Linux Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
                                 'archive_gpu_tests', 'chrome_with_codecs',
@@ -217,7 +217,7 @@ SPEC = {
       'use_isolate': True,
       'enable_swarming': True,
     },
-    'GPU NextGen Linux Builder (dbg)': {
+    'GPU Linux Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
                                 'archive_gpu_tests', 'chrome_with_codecs',
@@ -237,7 +237,7 @@ SPEC = {
       'use_isolate': True,
       'enable_swarming': True,
     },
-    'Linux NextGen Release (NVIDIA)': {
+    'Linux Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -251,13 +251,82 @@ SPEC = {
         steps.generate_script,
         steps.generate_isolated_script,
       ],
-      'parent_buildername': 'GPU NextGen Linux Builder',
+      'parent_buildername': 'GPU Linux Builder',
       'testing': {
         'platform': 'linux',
       },
       'enable_swarming': True,
     },
-    'Linux NextGen Debug (NVIDIA)': {
+    'Linux Release (Intel)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'parent_buildername': 'GPU Linux Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      # Swarming is deliberately NOT enabled on this one-off configuration.
+      # Multiple copies of the machines have to be deployed into swarming
+      # in order to keep up with the faster cycle time of the tests.
+      'enable_swarming': False,
+    },
+    'Linux Release (Intel Graphics Stack)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'parent_buildername': 'GPU Linux Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      # Swarming is deliberately NOT enabled on this one-off configuration.
+      # Multiple copies of the machines have to be deployed into swarming
+      # in order to keep up with the faster cycle time of the tests.
+      'enable_swarming': False,
+    },
+    'Linux Release (ATI)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'parent_buildername': 'GPU Linux Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      # Swarming is deliberately NOT enabled on this one-off configuration.
+      # Multiple copies of the machines have to be deployed into swarming
+      # in order to keep up with the faster cycle time of the tests.
+      'enable_swarming': False,
+    },
+    'Linux Debug (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -271,13 +340,36 @@ SPEC = {
         steps.generate_script,
         steps.generate_isolated_script,
       ],
-      'parent_buildername': 'GPU NextGen Linux Builder (dbg)',
+      'parent_buildername': 'GPU Linux Builder (dbg)',
       'testing': {
         'platform': 'linux',
       },
       'enable_swarming': True,
     },
-    'GPU NextGen Mac Builder': {
+    'Linux Release dEQP (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'parent_buildername': 'GPU Linux Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      # Swarming is deliberately NOT enabled on this one-off configuration.
+      # TODO(kbr): it isn't clear whether these tests will shard properly
+      # on Linux, so wait to make that change until a subsequent CL.
+      'enable_swarming': False,
+    },
+    'GPU Mac Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
                                 'chrome_with_codecs',
@@ -297,7 +389,7 @@ SPEC = {
       'enable_swarming': True,
       'use_isolate': True,
     },
-    'GPU NextGen Mac Builder (dbg)': {
+    'GPU Mac Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
                                 'chrome_with_codecs',
@@ -317,7 +409,7 @@ SPEC = {
       'enable_swarming': True,
       'use_isolate': True,
     },
-    'Mac NextGen 10.10 Retina Release (AMD)': {
+    'Mac 10.10 Release (Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -331,13 +423,13 @@ SPEC = {
         steps.generate_isolated_script,
       ],
       'bot_type': 'tester',
-      'parent_buildername': 'GPU NextGen Mac Builder',
+      'parent_buildername': 'GPU Mac Builder',
       'testing': {
         'platform': 'mac',
       },
       'enable_swarming': True,
     },
-    'Mac NextGen 10.10 Retina Debug (AMD)': {
+    'Mac 10.10 Debug (Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -351,7 +443,93 @@ SPEC = {
         steps.generate_isolated_script,
       ],
       'bot_type': 'tester',
-      'parent_buildername': 'GPU NextGen Mac Builder (dbg)',
+      'parent_buildername': 'GPU Mac Builder (dbg)',
+      'testing': {
+        'platform': 'mac',
+      },
+      'enable_swarming': True,
+    },
+    'Mac 10.10 Release (ATI)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Mac Builder',
+      'testing': {
+        'platform': 'mac',
+      },
+      # Swarming is deliberately NOT enabled on this one-off configuration.
+      # Multiple copies of the machines have to be deployed into swarming
+      # in order to keep up with the faster cycle time of the tests.
+      'enable_swarming': False,
+    },
+    'Mac 10.10 Debug (ATI)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Mac Builder (dbg)',
+      'testing': {
+        'platform': 'mac',
+      },
+      # Swarming is deliberately NOT enabled on this one-off configuration.
+      # Multiple copies of the machines have to be deployed into swarming
+      # in order to keep up with the faster cycle time of the tests.
+      'enable_swarming': False,
+    },
+    'Mac 10.10 Retina Release (AMD)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Mac Builder',
+      'testing': {
+        'platform': 'mac',
+      },
+      'enable_swarming': True,
+    },
+    'Mac 10.10 Retina Debug (AMD)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Mac Builder (dbg)',
       'testing': {
         'platform': 'mac',
       },

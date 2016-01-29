@@ -3,20 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\kill_processes.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "taskkill"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE[build]\\bot_update.py",
+      "RECIPE_PACKAGE[build]/bot_update.py",
       "--master",
       "chromium.gpu.fyi",
       "--builder",
-      "Win7 NextGen Release (Intel)",
+      "Linux Release (Intel Graphics Stack)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -104,12 +95,13 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1"
+      "GYP_CHROMIUM_NO_ACTION": "1",
+      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -117,7 +109,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
+      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
@@ -125,9 +117,9 @@
       "Release",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Win7 NextGen Release (Intel)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"buildername\": \"Linux Release (Intel Graphics Stack)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -141,13 +133,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.gpu.fyi.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.gpu.fyi.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.gpu.fyi.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.gpu.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -156,7 +148,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
+      "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
@@ -166,7 +158,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]\\src\\out\\Release"
+      "[SLAVE_BUILD]/src/out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "rmtree build directory",
@@ -184,7 +176,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\extract_build.py",
+      "[BUILD]/scripts/slave/extract_build.py",
       "--target",
       "Release",
       "--build-archive-url",

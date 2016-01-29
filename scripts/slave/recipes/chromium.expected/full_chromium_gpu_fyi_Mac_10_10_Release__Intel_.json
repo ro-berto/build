@@ -7,7 +7,7 @@
       "--master",
       "chromium.gpu.fyi",
       "--builder",
-      "Mac NextGen 10.10 Retina Debug (AMD)",
+      "Mac 10.10 Release (Intel)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -114,7 +114,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "clang=1 component=shared_library gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "clang=1 component=static_library gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -127,12 +127,12 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Debug",
+      "Release",
       "--use-src-side-runtest-py",
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Mac NextGen 10.10 Retina Debug (AMD)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
+      "{\"buildername\": \"Mac 10.10 Release (Intel)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -154,7 +154,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.gpu.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Mac NextGen 10.10 Retina Debug (AMD)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.10 Release (Intel)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -182,7 +182,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Debug"
+      "[SLAVE_BUILD]/src/out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "rmtree build directory",
@@ -202,7 +202,7 @@
       "-u",
       "[BUILD]/scripts/slave/extract_build.py",
       "--target",
-      "Debug",
+      "Release",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--master-name",
@@ -219,7 +219,7 @@
       "-u",
       "RECIPE_MODULE[isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out/Debug",
+      "[SLAVE_BUILD]/src/out/Release",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -249,7 +249,7 @@
       "--shards",
       "1",
       "--task-name",
-      "browser_tests/Mac-10.8/ffffffffff/Mac NextGen 10.10 Retina Debug (AMD)/571",
+      "browser_tests/Mac-10.8/ffffffffff/Mac 10.10 Release (Intel)/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -271,7 +271,7 @@
       "pool",
       "Chrome",
       "--tag",
-      "buildername:Mac NextGen 10.10 Retina Debug (AMD)",
+      "buildername:Mac 10.10 Release (Intel)",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -301,9 +301,9 @@
     "name": "[trigger] browser_tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Mac-10.8/ffffffffff/Mac NextGen 10.10 Retina Debug (AMD)/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Mac-10.8/ffffffffff/Mac 10.10 Release (Intel)/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Mac-10.8/ffffffffff/Mac NextGen 10.10 Retina Debug (AMD)/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Mac-10.8/ffffffffff/Mac 10.10 Release (Intel)/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -334,7 +334,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "browser_tests/Mac-10.8/ffffffffff/Mac NextGen 10.10 Retina Debug (AMD)/571"
+      "browser_tests/Mac-10.8/ffffffffff/Mac 10.10 Release (Intel)/571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "browser_tests",
@@ -352,7 +352,7 @@
       "--master-name",
       "chromium.gpu.fyi",
       "--builder-name",
-      "Mac NextGen 10.10 Retina Debug (AMD)",
+      "Mac 10.10 Release (Intel)",
       "--build-number",
       "571",
       "--test-type",

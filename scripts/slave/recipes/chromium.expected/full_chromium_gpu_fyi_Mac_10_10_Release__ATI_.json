@@ -3,20 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\kill_processes.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "taskkill"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE[build]\\bot_update.py",
+      "RECIPE_PACKAGE[build]/bot_update.py",
       "--master",
       "chromium.gpu.fyi",
       "--builder",
-      "Win7 NextGen Release (NVIDIA)",
+      "Mac 10.10 Release (ATI)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -104,26 +95,12 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
-      "--version"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "clang=1 component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -131,7 +108,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
+      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
@@ -139,9 +116,9 @@
       "Release",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Win7 NextGen Release (NVIDIA)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"buildername\": \"Mac 10.10 Release (ATI)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -155,25 +132,14 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.gpu.fyi.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.gpu.fyi.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.gpu.fyi.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win7 NextGen Release (NVIDIA)\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.gpu.fyi.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -181,7 +147,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
+      "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
@@ -191,7 +157,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]\\src\\out\\Release"
+      "[SLAVE_BUILD]/src/out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "rmtree build directory",
@@ -209,7 +175,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\extract_build.py",
+      "[BUILD]/scripts/slave/extract_build.py",
       "--target",
       "Release",
       "--build-archive-url",
@@ -221,180 +187,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "extract build"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[isolate]\\resources\\find_isolated_tests.py",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "find isolated tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
-      "--target",
-      "Release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "start_crash_service"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
-      "trigger",
-      "--swarming",
-      "https://chromium-swarm.appspot.com",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--priority",
-      "25",
-      "--shards",
-      "1",
-      "--task-name",
-      "browser_tests/Windows-7-SP1/ffffffffff/Win7 NextGen Release (NVIDIA)/571",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--expiration",
-      "3600",
-      "--io-timeout",
-      "1200",
-      "--hard-timeout",
-      "3600",
-      "--dimension",
-      "cpu",
-      "x86-64",
-      "--dimension",
-      "gpu",
-      "none",
-      "--dimension",
-      "os",
-      "Windows-7-SP1",
-      "--dimension",
-      "pool",
-      "Chrome",
-      "--tag",
-      "buildername:Win7 NextGen Release (NVIDIA)",
-      "--tag",
-      "buildnumber:571",
-      "--tag",
-      "data:ffffffffffffffffffffffffffffffffffffffff",
-      "--tag",
-      "master:chromium.gpu.fyi",
-      "--tag",
-      "name:browser_tests",
-      "--tag",
-      "os:Windows-7-SP1",
-      "--tag",
-      "project:chromium",
-      "--tag",
-      "purpose:CI",
-      "--tag",
-      "purpose:post-commit",
-      "--tag",
-      "slavename:TestSlavename",
-      "--tag",
-      "stepname:browser_tests",
-      "--idempotent",
-      "ffffffffffffffffffffffffffffffffffffffff",
-      "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] browser_tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Windows-7-SP1/ffffffffff/Win7 NextGen Release (NVIDIA)/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Windows-7-SP1/ffffffffff/Win7 NextGen Release (NVIDIA)/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[swarming]\\resources\\collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
-      "collect",
-      "--swarming",
-      "https://chromium-swarm.appspot.com",
-      "--decorate",
-      "--print-status-updates",
-      "--shards",
-      "1",
-      "browser_tests/Windows-7-SP1/ffffffffff/Win7 NextGen Release (NVIDIA)/571"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "browser_tests",
-    "~followup_annotations": [
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[test_results]\\resources\\upload_gtest_test_results.py",
-      "--input-gtest-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
-      "--master-name",
-      "chromium.gpu.fyi",
-      "--builder-name",
-      "Win7 NextGen Release (NVIDIA)",
-      "--build-number",
-      "571",
-      "--test-type",
-      "browser_tests",
-      "--test-results-server",
-      "test-results.appspot.com",
-      "--chrome-revision",
-      "170242"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Upload to test-results [browser_tests]"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\process_dumps.py",
-      "--target",
-      "Release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "process_dumps"
   },
   {
     "name": "$result",
