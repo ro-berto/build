@@ -295,7 +295,9 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_FAILURE@@@",
+      "@@@STEP_LOG_LINE@exception@TypeError(\"'NoneType' object has no attribute '__getitem__'\",)@@@",
+      "@@@STEP_LOG_END@exception@@@",
+      "@@@STEP_WARNINGS@@@",
       "@@@SET_BUILD_PROPERTY@failure_hash@\"69f4c2db516d85aa3fa17ec9bd58b142179522fa\"@@@"
     ]
   },

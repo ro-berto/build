@@ -236,19 +236,21 @@ class ChromiumApi(recipe_api.RecipeApi):
                     env=env,
                     **kwargs)
     except self.m.step.StepFailure as e:
-      infra_failure = False
+      # Handle failures caused by goma.
+      if 'goma' in self.c.compile_py.compiler:
+        infra_failure = False
+        step_result = self.m.step.active_result
+        try:
+          json_status = step_result.json.output['notice'][0]
+          if (not json_status.get('infra_status') or
+              json_status['infra_status']['ping_status_code'] != 200):
+            infra_failure = True
+        except Exception as ex:
+          step_result.presentation.logs['exception'] = ['%r' % ex]
+          step_result.presentation.status = self.m.step.WARNING
 
-      step_result = self.m.step.active_result
-      try:
-        if (not step_result.json.output['notice'][0].get('infra_status') or
-            step_result.json.output['notice'][0]['infra_status'][
-                'ping_status_code'] != 200):
-          infra_failure = True
-      except Exception:  # pragma: no cover
-        pass
-
-      if infra_failure:
-        raise self.m.step.InfraFailure('Infra compile failure: %s' % e)
+        if infra_failure:
+          raise self.m.step.InfraFailure('Infra compile failure: %s' % e)
 
       raise e
 
