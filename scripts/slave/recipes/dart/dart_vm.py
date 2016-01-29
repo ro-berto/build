@@ -36,12 +36,12 @@ builders = {
     'target_arch': 'x64',
     'env': linux_asan_env_64},
   'vm-linux-debug-ia32': {
-    'mode': 'release',
+    'mode': 'debug',
     'target_arch': 'ia32',
     'test_args': ['--exclude-suite=pkg'],
     'env': linux_clang_env},
   'vm-linux-debug-x64': {
-    'mode': 'release',
+    'mode': 'debug',
     'target_arch': 'x64',
     'test_args': ['--exclude-suite=pkg'],
     'env': linux_clang_env},
