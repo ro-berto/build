@@ -1775,54 +1775,6 @@ class IncrementalCoverageTest(Test):
     api.chromium_android.incremental_coverage_report()
 
 
-class AndroidApkSizeTest(Test):
-
-  def __init__(self, apk_name, compile_targets, so_path=None,
-               so_with_symbols_path=None):
-    """Initialize a test to measure and upload a resource size.
-
-    Args:
-      apk_name: Name of the apk.
-      compile_targets: List of targets that need to be compiled.
-      so_path: Path as list of .so relative to output directory.
-      so_with_symbols_path: Path as list of .so with symobls relative to
-          output directory.
-    """
-    self._name = 'resource size %s' % apk_name
-    self._apk_name = apk_name
-    self._compile_targets = compile_targets
-    self._so_path = so_path
-    self._so_with_symbols_path = so_with_symbols_path
-
-  @property
-  def name(self):  # pragma: no cover
-    return self._name
-
-  @property
-  def uses_local_devices(self):
-    return True
-
-  def compile_targets(self, _):
-    return self._compile_targets
-
-  def has_valid_results(self, api, suffix):  # pragma: no cover
-    return True
-
-  def failures(self, api, suffix):  # pragma: no cover
-    return []
-
-  def run(self, api, suffix, test_filter=None):
-    full_apk_path = api.chromium_android.apk_path(self._apk_name)
-    full_so_path = (api.path['checkout'].join(
-          'out', api.chromium.c.BUILD_CONFIG, *self._so_path)
-          if self._so_path else None)
-    full_so_with_symbols_path = (api.path['checkout'].join(
-        'out', api.chromium.c.BUILD_CONFIG, *self._so_with_symbols_path)
-        if self._so_path else None)
-    api.chromium_android.resource_sizes(
-        apk_path=full_apk_path, so_path=full_so_path,
-        so_with_symbols_path=full_so_with_symbols_path)
-
 GOMA_TESTS = [
   GTestTest('base_unittests'),
   GTestTest('content_unittests'),

@@ -447,43 +447,6 @@
     ]
   },
   {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--test-platform",
-      "android",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Webview L (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Android arm Builder (dbg)\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Webview L (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Android arm Builder (dbg)\", \"parent_got_revision\": \"1111111\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=graphing",
-      "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=resource_sizes",
-      "--perf-id=Android Webview L (dbg)",
-      "--test-type=resource_sizes",
-      "--step-name=resource_sizes",
-      "--builder-name=Android Webview L (dbg)",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/build/android/resource_sizes.py",
-      "[SLAVE_BUILD]/src/out/Debug/apks/SystemWebView.apk",
-      "--build_type",
-      "Debug",
-      "--so-path",
-      "[SLAVE_BUILD]/src/out/Debug/libwebviewchromium.so",
-      "--so-with-symbols-path",
-      "[SLAVE_BUILD]/src/out/Debug/lib.unstripped/libwebviewchromium.so"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "resource_sizes"
-  },
-  {
     "cmd": [
       "python",
       "-u",

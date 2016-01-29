@@ -319,11 +319,6 @@ SPEC = {
       'remove_system_webview': True,
       'tests': [
         steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
-        steps.AndroidApkSizeTest(
-            apk_name='SystemWebView.apk',
-            compile_targets=['system_webview_apk'],
-            so_path=['libwebviewchromium.so'],
-            so_with_symbols_path=['lib.unstripped', 'libwebviewchromium.so'])
       ],
       'test_generators': [
         steps.generate_gtest,
