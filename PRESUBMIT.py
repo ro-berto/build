@@ -113,9 +113,18 @@ def CommonChecks(input_api, output_api):
   try:
     sys.path = infra_path + sys.path
     import common.master_cfg_utils  # pylint: disable=F0401
+    # Fetch recipe dependencies once in serial so that we don't hit a race
+    # condition where multiple tests are trying to fetch at once.
+    output = input_api.RunTests([input_api.Command(
+        name='recipes fetch',
+        cmd=[input_api.python_executable,
+             input_api.os_path.join('scripts', 'slave', 'recipes.py'), 'fetch'],
+        kwargs={},
+        message=output_api.PresubmitError,
+    )])
     # Run the tests.
     with common.master_cfg_utils.TemporaryMasterPasswords():
-      output = input_api.RunTests(tests)
+      output.extend(input_api.RunTests(tests))
 
     output.extend(input_api.canned_checks.PanProjectChecks(
       input_api, output_api, excluded_paths=black_list))
