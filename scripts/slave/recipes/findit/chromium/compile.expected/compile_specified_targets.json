@@ -401,14 +401,16 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "report",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result@[@@@",
-      "@@@STEP_LOG_LINE@result@  [@@@",
-      "@@@STEP_LOG_LINE@result@    \"r1\", @@@",
-      "@@@STEP_LOG_LINE@result@    \"passed\"@@@",
-      "@@@STEP_LOG_LINE@result@  ]@@@",
-      "@@@STEP_LOG_LINE@result@]@@@",
+      "@@@STEP_LOG_LINE@result@{@@@",
+      "@@@STEP_LOG_LINE@result@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@result@    \"r1\": \"passed\"@@@",
+      "@@@STEP_LOG_LINE@result@  }, @@@",
+      "@@@STEP_LOG_LINE@result@  \"metadata\": {@@@",
+      "@@@STEP_LOG_LINE@result@    \"regression_range_size\": 1@@@",
+      "@@@STEP_LOG_LINE@result@  }@@@",
+      "@@@STEP_LOG_LINE@result@}@@@",
       "@@@STEP_LOG_END@result@@@",
-      "@@@SET_BUILD_PROPERTY@result@[[\"r1\", \"passed\"]]@@@"
+      "@@@SET_BUILD_PROPERTY@result@{\"metadata\": {\"regression_range_size\": 1}, \"result\": {\"r1\": \"passed\"}}@@@"
     ]
   },
   {
