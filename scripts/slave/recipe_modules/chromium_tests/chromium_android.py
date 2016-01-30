@@ -163,7 +163,7 @@ SPEC = {
       },
       'parent_buildername': 'Android arm64 Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'main_builder_mb',
+      'android_config': 'arm64_builder_mb',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,
@@ -184,7 +184,7 @@ SPEC = {
       },
       'parent_buildername': 'Android arm64 Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'main_builder_mb',
+      'android_config': 'arm64_builder_mb',
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,

@@ -135,6 +135,10 @@ def arm64_builder(c):
   pass
 
 @config_ctx()
+def arm64_builder_mb(c):
+  pass
+
+@config_ctx()
 def arm64_builder_rel(c):  # pragma: no cover
   pass
 

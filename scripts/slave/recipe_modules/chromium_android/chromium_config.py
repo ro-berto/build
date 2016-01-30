@@ -101,10 +101,14 @@ def x64_builder_mb(c):
       'Cannot target x64 with TARGET_ARCH == %s, TARGET_BITS == %d'
        % (c.TARGET_ARCH, c.TARGET_BITS))  # pragma: no cover
 
-@CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'])
+@CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'],
+            config_vars={'TARGET_BITS': 64})
 def arm64_builder(c):
-  gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['target_arch'] = 'arm64'
+  pass
+
+@CONFIG_CTX(includes=['arm64_builder', 'mb'])
+def arm64_builder_mb(c):
+  pass
 
 @CONFIG_CTX(includes=['arm64_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})
