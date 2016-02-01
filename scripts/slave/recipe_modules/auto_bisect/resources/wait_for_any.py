@@ -87,9 +87,9 @@ def _check_buildbot_jobs(jobs_to_check):
   for master in jobs.keys():
     for builder in jobs[master].keys():
       config = {
-        'master': master,
-        'builder': builder,
-        'job_names': jobs[master][builder],
+          'master': master,
+          'builder': builder,
+          'job_names': jobs[master][builder],
       }
       builder_results = check_buildbot.main(config)
       completed_results += builder_results.get('completed', [])
@@ -185,7 +185,7 @@ def main(argv):
   }
   EOF
   """
-  start_time  = time.time()
+  start_time = time.time()
   # Default timeout: six days
   timeout_interval = 6 * 24 * 60 * 60
   if argv[-1].startswith('--timeout='):

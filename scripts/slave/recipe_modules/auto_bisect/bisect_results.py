@@ -108,7 +108,7 @@ class BisectResults(object):
     # used by the dashboard to separate the bisect results from other buildbot
     # output.
     if self.partial:
-       return '---partial bisect results start here---\n'
+      return '---partial bisect results start here---\n'
     header = '---bisect results start here---\n'
     if not self.abort_reason:
       header += _RESULTS_BANNER % {

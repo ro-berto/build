@@ -196,6 +196,7 @@ def _get_ref_range_only_test_data():
       },
   ]
 
+
 def _get_ref_range_only_missing_metric_test_data():
   return [
       {
@@ -222,6 +223,7 @@ def _get_ref_range_only_missing_metric_test_data():
       },
   ]
 
+
 def _get_basic_test_data():
   return [
       {
@@ -229,7 +231,7 @@ def _get_basic_test_data():
           'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
           'commit_pos': '314015',
           'test_results': {
-              'results':{
+              'results': {
                   'values': [19, 20, 21],
               },
               'retcodes': [0],

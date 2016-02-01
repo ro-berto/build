@@ -19,7 +19,6 @@ import mock
 from auto_bisect.bisector import Bisector
 
 
-
 class MockRevisionClass(object):  # pragma: no cover
 
   def __init__(self, rev_string, bisector):

@@ -32,6 +32,7 @@ _URL_TEMPLATE = ('https://chromium.googlesource.com/%s/+log/%s..%s'
 # range that we expect to get.
 _PAGE_SIZE = 512
 
+
 def fetch_intervening_revisions(start, end, depot_name):
   """Fetches a list of revision in between two commits.
 

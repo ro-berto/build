@@ -18,7 +18,7 @@ def perform_bisect(api):  # pragma: no cover
     if bisector.check_reach_adjacent_revision(bisector.good_rev):
       # Only show this step if bisect has reached adjacent revisions.
       with api.m.step.nest(str('Check bisect finished on revision ' +
-          bisector.good_rev.revision_string)):
+                               bisector.good_rev.revision_string)):
         if bisector.check_bisect_finished(bisector.good_rev):
           bisector.bisect_over = True
     if not bisector.bisect_over:
@@ -64,7 +64,7 @@ def _bisect_main_loop(bisector):  # pragma: no cover
 
     completed_revisions = []
     with bisector.api.m.step.nest(str('Working on revision ' +
-                                  revisions_to_check[0].revision_string)):
+                                      revisions_to_check[0].revision_string)):
       nest_step_result = bisector.api.m.step.active_result
       partial_results = bisector.partial_results().splitlines()
       nest_step_result.presentation.logs['Partial Results'] = partial_results
@@ -76,8 +76,9 @@ def _bisect_main_loop(bisector):  # pragma: no cover
       if not bisector.check_reach_adjacent_revision(completed_revision):
         continue
       # Only show this step if bisect has reached adjacent revisions.
-      with bisector.api.m.step.nest(str('Check bisect finished on revision ' +
-                                    completed_revisions[0].revision_string)):
+      with bisector.api.m.step.nest(
+          str('Check bisect finished on revision ' +
+              completed_revisions[0].revision_string)):
         if bisector.check_bisect_finished(completed_revision):
           bisector.bisect_over = True
 

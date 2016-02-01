@@ -1,5 +1,4 @@
 #!/usr/bin/python
-#
 # Copyright 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -60,7 +59,7 @@ def main(config):
            'builds/_all?as_text=1&filter=0') % {
                'host': os.environ['TESTING_MASTER_HOST'],
                'builder': builder,
-            }
+    }
   else:
     url = BASE_URL % {'master': master, 'builder': builder}
   sys.stderr.write('Using the following url to check builds:' + url)
@@ -70,7 +69,7 @@ def main(config):
   for build_num in builds_info.keys():
     build_name = _get_build_name(builds_info[build_num])
     if build_name in job_names:
-      if builds_info[build_num]['results'] in [2,3,4]:
+      if builds_info[build_num]['results'] in [2, 3, 4]:
         failed_jobs.append(build_name)
         job_urls[build_name] = LINK_URL % {
             'master': master,

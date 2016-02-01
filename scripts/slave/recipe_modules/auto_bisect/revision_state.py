@@ -226,7 +226,7 @@ class RevisionState(object):
           re_results = revision_regex.search(src_dir)
           if re_results:
             results[depot_name] = re_results.group('revision')
-          else: # pragma: no cover
+          else:  # pragma: no cover
             warning_text = ('Could not parse revision for %s while bisecting '
                             '%s' % (depot_name, self.depot))
             if warning_text not in self.bisector.warnings:

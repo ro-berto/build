@@ -21,24 +21,25 @@ BISECT_CONFIG_FILE = 'tools/auto_bisect/bisect.cfg'
 class AutoBisectApi(recipe_api.RecipeApi):
   """A module for bisect specific functions."""
 
-  # Number of seconds to wait between polls for test results
+  # Number of seconds to wait between polls for test results.
   POLLING_INTERVAL = 60
   # GS bucket to use for communicating results and job state between bisector
-  # and tester bots
+  # and tester bots.
   BUCKET = 'chrome-perf'
-  # Directory within the above bucket to store results
+  # Directory within the above bucket to store results.
   RESULTS_GS_DIR = 'bisect-results'
   GS_RESULTS_URL = 'gs://%s/%s/' % (BUCKET, RESULTS_GS_DIR)
-  # Repo for triggering build jobs
+  # Repo for triggering build jobs.
   SVN_REPO_URL = 'svn://svn.chromium.org/chrome-try/try-perf'
   # Email to send on try jobs (for build requests) since git try will not
-  # necessarily rely on a local checkout for that information
+  # necessarily rely on a local checkout for that information.
   BOT_EMAIL = 'chrome_bot@chromium.org'
 
   def __init__(self, *args, **kwargs):
     super(AutoBisectApi, self).__init__(*args, **kwargs)
     self.override_poll_interval = None
-    self.bot_db =  None
+    self.bot_db = None
+
   def perform_bisect(self):
     return local_bisect.perform_bisect(self)
 
@@ -62,7 +63,6 @@ class AutoBisectApi(recipe_api.RecipeApi):
     return bisector.Bisector(self, bisect_config_dict, revision_class,
                              init_revisions=not dummy_mode)
 
-
   def _get_revision_class(self):
     """Gets the particular subclass of Revision."""
     return perf_revision_state.PerfRevisionState
@@ -76,8 +76,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
     return True
 
   def query_revision_info(self, revision, depot_name='chromium'):
-    """Gathers information on a particular revision, such as author's name,
-    email, subject, and date.
+    """Gathers information on a particular revision.
 
     Args:
       revision (str): A git commit hash.
@@ -94,7 +93,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
     return result.stdout
 
   def run_bisect_script(self, extra_src='', path_to_config='', **kwargs):
-    """Executes run-perf-bisect-regression.py to perform bisection.
+    """Executes src/tools/run-perf-bisect-regression.py to perform bisection.
 
     Args:
       extra_src (str): Path to extra source file. If this is supplied,
@@ -156,10 +155,10 @@ class AutoBisectApi(recipe_api.RecipeApi):
           self.m.chromium.c.build_config_fs)
       self.m.file.rmtree('build directory', build_dir)
 
-      # crbug.com/535218, the way android builders on tryserver.chromium.perf
-      # are archived is different from builders on chromium.per. In order to
-      # support both forms of archives we added this temporary hack until
-      # builders are fixed.
+      # The way android builders on tryserver.chromium.perf are archived is
+      # different from builders on chromium.perf. In order to support both
+      # forms of archives, we added this temporary hack until builders are
+      # fixed. See http://crbug.com/535218.
       zip_dir = self.m.path.join(self.m.path['checkout'], 'full-build-linux')
       if self.m.path.exists(zip_dir):  # pragma: no cover
         self.m.file.rmtree('full-build-linux directory', zip_dir)
@@ -170,20 +169,19 @@ class AutoBisectApi(recipe_api.RecipeApi):
           bucket=bot_config['bucket'],
           path=archive_path)
 
-      # crbug.com/535218, the way android builders on tryserver.chromium.perf
-      # are archived is different from builders on chromium.per. In order to
-      # support both forms of archives we added this temporary hack until
-      # builders are fixed.
+      # The way android builders on tryserver.chromium.perf are archived is
+      # different from builders on chromium.perf. In order to support both
+      # forms of archives, we added this temporary hack until builders are
+      # fixed. See http://crbug.com/535218.
       if self.m.path.exists(zip_dir):  # pragma: no cover
         self.m.python.inline(
-            'moving full-build-linux to out/Release ',
+            'moving full-build-linux to out/Release',
             """
             import shutil
             import sys
             shutil.move(sys.argv[1], sys.argv[2])
             """,
-            args=[zip_dir, build_dir],
-        )
+            args=[zip_dir, build_dir])
     else:
       api.chromium_tests.download_and_unzip_build(
           mastername, buildername, update_step, bot_db,

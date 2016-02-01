@@ -182,9 +182,9 @@ class Bisector(object):
     hash_string = step_result.stdout.splitlines()[0]
     try:
       if hash_string:
-          int(hash_string, 16)
-          return hash_string
-    except ValueError: # pragma: no cover
+        int(hash_string, 16)
+        return hash_string
+    except ValueError:  # pragma: no cover
       reason = 'Git did not output a valid hash for the interned file.'
       self.api.m.halt(reason)
       raise self.api.m.step.StepFailure(reason)
@@ -239,12 +239,12 @@ class Bisector(object):
     original_contents = str(base_file_contents)
     patched_contents = str(original_contents)
 
-    # Modify DEPS
+    # Modify DEPS.
     deps_var = depot['deps_var']
     deps_item_regexp = re.compile(
         r'(?<=["\']%s["\']: ["\'])([a-fA-F0-9]+)(?=["\'])' % deps_var,
         re.MULTILINE)
-    if not re.search(deps_item_regexp, original_contents): # pragma: no cover
+    if not re.search(deps_item_regexp, original_contents):  # pragma: no cover
       reason = 'DEPS file does not contain entry for ' + deps_var
       self.api.m.halt(reason)
       raise self.api.m.step.StepFailure(reason)
@@ -534,9 +534,9 @@ class Bisector(object):
     with self.api.m.step.nest(
         'Wiggling revision ' + str(default_revision.revision_string)):
       # We'll search up to 25% of the range (in either direction) to try and
-      #find a nearby commit that's already been built.
+      # find a nearby commit that's already been built.
       max_wiggle = int(len(candidate_range) * DEFAULT_SEARCH_RANGE_PERCENTAGE)
-      for _ in xrange(max_wiggle): # pragma: no cover
+      for _ in xrange(max_wiggle):  # pragma: no cover
         index = len(candidate_range) / 2
         if candidate_range[index]._is_build_archived():
           return [candidate_range[index]]
@@ -584,7 +584,7 @@ class Bisector(object):
     """Waits for all revisions in list to finish."""
     # TODO(simonhatch): Simplify these (and callers) since
     # get_revision_to_eval() no longer returns multiple revisions.
-    # crbug.com/546695
+    # See http://crbug.com/546695.
     while any([r.in_progress for r in revision_list]):
       revision_list.remove(self.wait_for_any(revision_list))
 
@@ -642,10 +642,12 @@ class Bisector(object):
     step_results = api.m.step.active_result.stdout
     build_failed = api.m.step.active_result.retcode
 
-    if build_failed:  # Explicitly making the step red
+    if build_failed:
+      # Explicitly make the step red.
       api.m.step.active_result.presentation.status = api.m.step.FAILURE
 
-    if not step_results:  # For most recipe_simulation_test cases.
+    if not step_results:
+      # For most recipe_simulation_test cases.
       return None
 
     failed_jobs = step_results.get('failed', [])
@@ -677,12 +679,12 @@ class Bisector(object):
     """Waits for any of the revisions in the list to finish its job(s)."""
     # TODO(simonhatch): Simplify these (and callers) since
     # get_revision_to_eval() no longer returns multiple revisions.
-    # crbug.com/546695
+    # See http://crbug.com/546695.
     while True:
       if not revision_list or any(r.status == revision_state.RevisionState.NEW
                                   for r in revision_list):  # pragma: no cover
         # We want to avoid waiting forever for revisions that are not started,
-        # or for an empty list. Hence we fail fast.
+        # or for an empty list, hence we fail fast.
         assert False
 
       finished_revision = self.sleep_until_next_revision_ready(revision_list)
@@ -815,4 +817,3 @@ class Bisector(object):
       self.result_codes.add(result_code)
       properties = self.api.m.step.active_result.presentation.properties
       properties['extra_result_code'] = sorted(self.result_codes)
-
