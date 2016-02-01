@@ -1186,7 +1186,6 @@ SPEC = {
       },
       'GYP_DEFINES': {
         'component': 'shared_library',
-        'werror': '',
 
         # Enable debug info, as on official builders, to catch issues with
         # optimized debug info.
@@ -1234,9 +1233,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
-      'GYP_DEFINES': {
-        'werror': '',
-      },
       'compile_targets': [
         'all',
       ],
@@ -1259,9 +1255,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'chromium_apply_config': ['lsan'],
-      'GYP_DEFINES': {
-        'werror': '',
-      },
       'compile_targets': [
         'all',
       ],
@@ -1300,9 +1293,6 @@ SPEC = {
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
-      },
-      'GYP_DEFINES': {
-        'werror': '',
       },
       'compile_targets': [
         'all',
@@ -1347,7 +1337,6 @@ SPEC = {
       },
       'GYP_DEFINES': {
         'component': 'shared_library',
-        'werror': '',
       },
       'compile_targets': [
         'all',
@@ -1393,7 +1382,6 @@ SPEC = {
       },
       'GYP_DEFINES': {
         'component': 'shared_library',
-        'werror': '',
       },
       'compile_targets': [
         'all',
@@ -1435,9 +1423,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
-      'GYP_DEFINES': {
-        'werror': '',
-      },
       'compile_targets': [
         'all',
       ],
@@ -1458,9 +1443,6 @@ SPEC = {
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
-      },
-      'GYP_DEFINES': {
-        'werror': '',
       },
       'compile_targets': [
         'all',
