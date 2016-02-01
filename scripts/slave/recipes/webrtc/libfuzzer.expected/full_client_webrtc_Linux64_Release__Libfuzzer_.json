@@ -72,9 +72,6 @@
       "--without-android"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "env": {
-      "LLVM_FORCE_HEAD_REVISION": "YES"
-    },
     "name": "checkout llvm"
   },
   {
