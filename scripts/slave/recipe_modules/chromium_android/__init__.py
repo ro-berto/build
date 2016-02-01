@@ -18,6 +18,7 @@ DEPS = [
   'recipe_engine/raw_io',
   'recipe_engine/step',
   'test_utils',
+  'tryserver',
   'url',
   'archive',
 ]

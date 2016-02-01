@@ -749,11 +749,16 @@ class AndroidApi(recipe_api.RecipeApi):
             self.m.path['checkout'].join('out', 'logcat') ],
           infra_step=True)
       try:
+        if self.m.tryserver.is_tryserver and not self.c.INTERNAL:
+          args = ['-a', 'public-read']
+        else:
+          args = []
         self.m.gsutil.upload(
             log_path,
             gs_bucket,
             'logcat_dumps/%s/%s' % (self.m.properties['buildername'],
                                     self.m.properties['buildnumber']),
+            args=args,
             link_name='logcat dump',
             version='4.7',
             parallel_upload=True,

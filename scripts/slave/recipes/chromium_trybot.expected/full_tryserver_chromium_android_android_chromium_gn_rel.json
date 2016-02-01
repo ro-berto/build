@@ -1591,6 +1591,8 @@
       "GSUtil:parallel_composite_upload_threshold=50M",
       "----",
       "cp",
+      "-a",
+      "public-read",
       "[SLAVE_BUILD]/src/out/Release/full_log",
       "gs://chromium-android/logcat_dumps/android_chromium_gn_rel/571"
     ],
