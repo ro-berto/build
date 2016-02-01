@@ -68,3 +68,33 @@ class PerfDashboardApi(recipe_api.RecipeApi):
                       'url': '%s/add_point' % self.c.url,
                       'data': data
                   }))
+
+  def post_bisect_results(self, data, halt_on_failure=False):
+    """Posts bisect results to Perf Dashboard."""
+    response = self.m.python(
+        name='Post bisect results',
+        script=self.resource('post_json.py'),
+        stdin=self.m.json.input({
+            'url' : '%s/post_bisect_results' % self.c.url,
+            'data' : data
+        }),
+        stdout=self.m.json.output())
+
+    stdout = response.stdout
+    if not stdout or stdout['status_code'] != 200:  # pragma: no cover
+      error = (stdout['status_code'] if stdout else 'None')
+      reason = ('Failed to upload result to Perf Dashboard. '
+                'Error response: %s' % error)
+      if halt_on_failure:
+        self.halt(response, reason)
+      else:
+        self.warning(response, reason)
+
+  def halt(self, step_result, reason):  # pragma: no cover
+    step_result.presentation.step_text = reason
+    step_result.presentation.status = self.m.step.FAILURE
+    raise self.m.step.StepFailure(reason)
+
+  def warning(self, step_result, reason):  # pragma: no cover
+    step_result.presentation.step_text = reason
+    step_result.presentation.status = self.m.step.WARNING

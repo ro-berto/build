@@ -3,16 +3,17 @@
 # found in the LICENSE file.
 
 DEPS = [
-    'recipe_engine/path',
     'perf_dashboard',
+    'recipe_engine/path',
+    'recipe_engine/json',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/step',
 ]
 
 # To run, pass these options into properties:
-# slavename="multivm-windows-release", 
-# buildername="multivm-windows-perf-be", 
+# slavename="multivm-windows-release",
+# buildername="multivm-windows-perf-be",
 # mastername="client.dart.fyi", buildnumber=75
 
 
@@ -31,8 +32,22 @@ def RunSteps(api):
   api.perf_dashboard.set_default_config()
   api.perf_dashboard.post([s1, s2])
 
+  bisect_results = {
+      'try_job_id': 1,
+      'status': 'completed'
+  }
+  api.perf_dashboard.post_bisect_results(bisect_results)
+
 
 def GenTests(api):
+  bisect_response = {
+      'post_data': {
+          'try_job_id': 1,
+          'status': 'completed'
+      },
+      'text': '',
+      'status_code': 200
+  }
   for platform in ('linux', 'win', 'mac'):
     for production in (True, False):
       yield (api.test('%s%s' %
@@ -42,4 +57,6 @@ def GenTests(api):
                             slavename='multivm-windows-release',
                             buildername='multivm-windows-perf-be',
                             buildnumber=75,
-                            mastername='client.dart.fyi'))
+                            mastername='client.dart.fyi') +
+             api.step_data('Post bisect results',
+                           stdout=api.json.output(bisect_response)))

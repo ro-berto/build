@@ -6,5 +6,6 @@ DEPS = [
     'recipe_engine/python',
     'recipe_engine/platform',
     'recipe_engine/properties',
+    'recipe_engine/step',
     'recipe_engine/json',
 ]

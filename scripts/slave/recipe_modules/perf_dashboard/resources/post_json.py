@@ -22,15 +22,16 @@ import requests
 def main():
   """See perf_dashboard/api.py, def post(...) for format of |args|."""
   args = json.load(sys.stdin)
-  json.dump(args['data'], sys.stdout, indent=4, sort_keys=True)
   url = args['url']
-
-  data = urllib.urlencode({'data': json.dumps(args['data'])})
-  print 'Posting %s to %s...' % (data, url)
-
+  data =  urllib.urlencode({'data' : json.dumps(args['data'])})
   response = requests.post(url, data=data)
-  print response.status_code
-  print response.text
+
+  results = {
+    'post_data': args['data'],
+    'text': response.text,
+    'status_code': response.status_code
+  }
+  print json.dumps(results, indent=4, sort_keys=True)
 
 
 if __name__ == '__main__':
