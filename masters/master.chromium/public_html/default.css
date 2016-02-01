@@ -144,12 +144,6 @@ td.Activity {
   padding: 2px 0 2px 0;
 }
 
-td.idle, td.waiting, td.offline, td.building {
-  border-top-left-radius: 0px;
-  -webkit-border-top-left-radius: 0px;
-  -moz-border-radius-topleft: 0px;
-}
-
 .LastBuild {
   border-top-left-radius: 5px;
   -webkit-border-top-left-radius: 5px;
@@ -391,7 +385,6 @@ div.BuildWaterfall {
   color: #FFFFFF;
   background-color: #e98080;
   border-color: #A77272;
-  border-width: 3px;
   border-style: solid;
 }
 
