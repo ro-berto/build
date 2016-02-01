@@ -49,6 +49,10 @@ LINUX_GN_ARGS = [
   'symbol_level=1',
   'target_cpu="x64"',
   'use_goma=true',
+  # We allow embedding of build metadata so that we can have absolute
+  # file paths in clang's intermediate output, which codesearch seems to need.
+  # See crbug.com/580103 for more details.
+  'dont_embed_build_metadata=false'
 ]
 
 CHROMEOS_GN_ARGS = LINUX_GN_ARGS + [

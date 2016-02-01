@@ -128,7 +128,7 @@
       "[SLAVE_BUILD]/src/buildtools/linux64/gn",
       "gen",
       "[SLAVE_BUILD]/src/out/Debug",
-      "--args=is_clang=true is_component_build=true is_debug=true goma_dir=\"/b/build/goma\" symbol_level=1 target_cpu=\"x64\" use_goma=true"
+      "--args=is_clang=true is_component_build=true is_debug=true goma_dir=\"/b/build/goma\" symbol_level=1 target_cpu=\"x64\" use_goma=true dont_embed_build_metadata=false"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "generate build files for linux"
