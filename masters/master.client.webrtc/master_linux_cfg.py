@@ -22,6 +22,7 @@ def Update(c):
           'Linux Memcheck',
           'Linux MSan',
           'Linux Tsan v2',
+          'Linux UBSan vptr',
           'Linux64 Release [large tests]',
           'Linux64 Debug (GN)',
           'Linux64 Release (GN)',
@@ -40,6 +41,7 @@ def Update(c):
     {'name': 'Linux MSan', 'slavebuilddir': 'linux_msan'},
     {'name': 'Linux Memcheck', 'slavebuilddir': 'linux_memcheck_tsan'},
     {'name': 'Linux Tsan v2', 'slavebuilddir': 'linux_tsan2'},
+    {'name': 'Linux UBSan vptr', 'slavebuilddir': 'linux_ubsan_vptr'},
     {
       'name': 'Linux64 Release [large tests]',
       'category': 'compile|baremetal',
