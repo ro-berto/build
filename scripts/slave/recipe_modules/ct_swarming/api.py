@@ -37,6 +37,20 @@ class CTSwarmingApi(recipe_api.RecipeApi):
     # Ensure swarming_client is compatible with what recipes expect.
     self.m.swarming.check_client_version()
 
+  # TODO(rmistry): Remove once the Go binaries are moved to recipes or buildbot.
+  def setup_go_isolate(self):
+    """Generates and puts in place the isolate Go binary."""
+    # Run 'gclient runhooks' on the chromium checkout to generate the binary.
+    self.m.step('gclient runhooks', ['gclient', 'runhooks'],
+                cwd=self.m.path['slave_build'].join('src'))
+    # Copy binaries to the expected location.
+    dest = self.m.path['slave_build'].join('luci-go')
+    self.m.file.rmtree('Go binary dir', dest)
+    self.m.file.copytree('Copy Go binary',
+                         source=self.m.path['slave_build'].join(
+                             'src', 'tools', 'luci-go'),
+                         dest=dest)
+
   def download_CT_binary(self, ct_binary_name):
     """Downloads the specified CT binary from GS into the downloads_dir."""
     binary_dest = self.downloads_dir.join(ct_binary_name)

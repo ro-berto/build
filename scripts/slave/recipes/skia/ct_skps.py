@@ -85,6 +85,8 @@ def RunSteps(api):
   api.swarming_client.checkout(revision='')
   # Ensure swarming_client is compatible with what recipes expect.
   api.swarming.check_client_version()
+  # Setup Go isolate binary.
+  api.ct_swarming.setup_go_isolate()
 
   chromium_checkout = api.path['slave_build'].join('src')
 
