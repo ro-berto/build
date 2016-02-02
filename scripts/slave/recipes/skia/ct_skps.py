@@ -24,7 +24,7 @@ CT_SKPS_ISOLATE = 'ct_skps.isolate'
 
 # Do not batch archive more slaves than this value. This is used to prevent
 # no output timeouts in the 'isolate tests' step.
-MAX_SLAVES_TO_BATCHARCHIVE = 5
+MAX_SLAVES_TO_BATCHARCHIVE = 100
 
 # Number of slaves to shard CT runs to.
 DEFAULT_CT_NUM_SLAVES = 100
