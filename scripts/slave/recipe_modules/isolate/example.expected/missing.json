@@ -83,7 +83,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.isolate]/resources/find_isolated_tests.py",
+      "RECIPE_MODULE[isolate]/resources/find_isolated_tests.py",
       "--build-dir",
       "[BUILD]",
       "--output-json",
@@ -107,7 +107,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.isolate]/resources/isolate.py",
+      "RECIPE_MODULE[isolate]/resources/isolate.py",
       "[SLAVE_BUILD]/swarming.client",
       "batcharchive",
       "--dump-json",

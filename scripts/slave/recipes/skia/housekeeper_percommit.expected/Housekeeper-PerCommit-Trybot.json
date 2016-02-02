@@ -136,7 +136,7 @@
   {
     "cmd": [
       "python",
-      "RECIPE_MODULE[build.skia]/resources/run_binary_size_analysis.py",
+      "RECIPE_MODULE[skia]/resources/run_binary_size_analysis.py",
       "--library",
       "[SLAVE_BUILD]/skia/out/Housekeeper-PerCommit-Trybot/Release/lib/libskia.so",
       "--githash",

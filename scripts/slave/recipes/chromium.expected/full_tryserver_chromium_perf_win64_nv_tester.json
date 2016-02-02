@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.bisect_tester]\\resources\\put_temp.py"
+      "RECIPE_MODULE[bisect_tester]\\resources\\put_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "saving url to temp file",
@@ -14,7 +14,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.gsutil]\\resources\\gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]\\resources\\gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]\\gsutil.py",
       "----",
@@ -270,7 +270,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.bisect_tester]\\resources\\put_temp.py"
+      "RECIPE_MODULE[bisect_tester]\\resources\\put_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "saving json to temp file",
@@ -281,7 +281,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.gsutil]\\resources\\gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]\\resources\\gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]\\gsutil.py",
       "----",

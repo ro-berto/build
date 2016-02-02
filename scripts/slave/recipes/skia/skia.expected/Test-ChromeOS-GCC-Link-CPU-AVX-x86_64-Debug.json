@@ -184,7 +184,7 @@
   },
   {
     "cmd": [
-      "RECIPE_MODULE[build.skia]/resources/scp_dir_contents.sh",
+      "RECIPE_MODULE[skia]/resources/scp_dir_contents.sh",
       "[SLAVE_BUILD]/skia/resources",
       "root@192.168.1.123:/usr/local/skiabot/skia_resources"
     ],
@@ -315,7 +315,7 @@
   },
   {
     "cmd": [
-      "RECIPE_MODULE[build.skia]/resources/scp_dir_contents.sh",
+      "RECIPE_MODULE[skia]/resources/scp_dir_contents.sh",
       "[SLAVE_BUILD]/playback/skps",
       "root@192.168.1.123:/usr/local/skiabot/skia_skp/skps"
     ],
@@ -439,7 +439,7 @@
   },
   {
     "cmd": [
-      "RECIPE_MODULE[build.skia]/resources/scp_dir_contents.sh",
+      "RECIPE_MODULE[skia]/resources/scp_dir_contents.sh",
       "[SLAVE_BUILD]/images",
       "root@192.168.1.123:/usr/local/skiabot/skia_images"
     ],
@@ -681,7 +681,7 @@
   },
   {
     "cmd": [
-      "RECIPE_MODULE[build.skia]/resources/scp_dir_contents.sh",
+      "RECIPE_MODULE[skia]/resources/scp_dir_contents.sh",
       "root@192.168.1.123:/usr/local/skiabot/skia_dm_out",
       "[SLAVE_BUILD]/dm"
     ],
@@ -697,7 +697,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.skia]/resources/upload_dm_results.py",
+      "RECIPE_MODULE[skia]/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
       "Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug",

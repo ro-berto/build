@@ -221,7 +221,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.isolate]/resources/find_isolated_tests.py",
+      "RECIPE_MODULE[isolate]/resources/find_isolated_tests.py",
       "--build-dir",
       "[SLAVE_BUILD]/src/out/Release",
       "--clean-isolated-files"
@@ -274,7 +274,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.isolate]/resources/remove_build_metadata.py",
+      "RECIPE_MODULE[isolate]/resources/remove_build_metadata.py",
       "--build-dir",
       "[SLAVE_BUILD]/src/out/Release",
       "--src-dir",
@@ -287,7 +287,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.isolate]/resources/isolate.py",
+      "RECIPE_MODULE[isolate]/resources/isolate.py",
       "[SLAVE_BUILD]/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",

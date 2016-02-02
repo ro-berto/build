@@ -55,7 +55,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.webrtc]/resources/cleanup_files.py",
+      "RECIPE_MODULE[webrtc]/resources/cleanup_files.py",
       "[SLAVE_BUILD]/src/out"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -306,7 +306,7 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid",
       "--",
-      "RECIPE_MODULE[build.chromium_android]/resources/spawn_device_monitor.py",
+      "RECIPE_MODULE[chromium_android]/resources/spawn_device_monitor.py",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "[\"07a00ca4\"]",
       "client.webrtc",

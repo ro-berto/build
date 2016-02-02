@@ -354,7 +354,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.gitiles]/resources/gerrit_client.py",
+      "RECIPE_MODULE[gitiles]/resources/gerrit_client.py",
       "--json-file",
       "/path/to/tmp/json",
       "--url",

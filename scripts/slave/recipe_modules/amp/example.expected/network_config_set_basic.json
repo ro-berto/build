@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
@@ -18,7 +18,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
@@ -311,7 +311,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.zip]/resources/unzip.py"
+      "RECIPE_MODULE[zip]/resources/unzip.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for example_gtest_suite",
@@ -321,7 +321,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
@@ -418,7 +418,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.zip]/resources/unzip.py"
+      "RECIPE_MODULE[zip]/resources/unzip.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for example_instrumentation_suite",
@@ -428,7 +428,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
@@ -523,7 +523,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.zip]/resources/unzip.py"
+      "RECIPE_MODULE[zip]/resources/unzip.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for example_uirobot_suite",
@@ -533,7 +533,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",

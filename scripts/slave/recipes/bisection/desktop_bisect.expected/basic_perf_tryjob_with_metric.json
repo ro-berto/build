@@ -130,7 +130,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.perf_try]/resources/load_config_to_json.py",
+      "RECIPE_MODULE[perf_try]/resources/load_config_to_json.py",
       "--source",
       "[SLAVE_BUILD]/src/tools/run-perf-test.cfg",
       "--output_json",

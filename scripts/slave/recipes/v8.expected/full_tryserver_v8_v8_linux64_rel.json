@@ -155,7 +155,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.isolate]/resources/isolate.py",
+      "RECIPE_MODULE[isolate]/resources/isolate.py",
       "[SLAVE_BUILD]/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
@@ -1065,7 +1065,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
@@ -1106,7 +1106,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
@@ -1147,7 +1147,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
@@ -1188,7 +1188,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
@@ -1229,7 +1229,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
@@ -1270,7 +1270,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",
@@ -1311,7 +1311,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/v8/tools/swarming_client",
       "--temp-root-dir",

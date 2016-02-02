@@ -108,7 +108,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.perf_dashboard]/resources/post_json.py"
+      "RECIPE_MODULE[perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "perf dashboard post",
@@ -118,7 +118,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.v8]/resources/merge_perf_results.py",
+      "RECIPE_MODULE[v8]/resources/merge_perf_results.py",
       "[SLAVE_BUILD]/test_output1.json",
       "[SLAVE_BUILD]/test_output2.json"
     ],
@@ -144,7 +144,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.v8]/resources/merge_perf_result_maps.py",
+      "RECIPE_MODULE[v8]/resources/merge_perf_result_maps.py",
       "{\"example1\": \"[SLAVE_BUILD]/test_output1.json\", \"example2\": \"[SLAVE_BUILD]/test_output2.json\"}"
     ],
     "cwd": "[SLAVE_BUILD]",

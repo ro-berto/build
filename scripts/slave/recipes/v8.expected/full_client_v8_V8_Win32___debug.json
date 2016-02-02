@@ -379,7 +379,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
@@ -420,7 +420,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
@@ -461,7 +461,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",

@@ -143,7 +143,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.isolate]/resources/remove_build_metadata.py",
+      "RECIPE_MODULE[isolate]/resources/remove_build_metadata.py",
       "--build-dir",
       "[SLAVE_BUILD]/src/out/Release",
       "--src-dir",
@@ -227,7 +227,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.isolate]/resources/remove_build_metadata.py",
+      "RECIPE_MODULE[isolate]/resources/remove_build_metadata.py",
       "--build-dir",
       "[SLAVE_BUILD]/src/out/Release",
       "--src-dir",
@@ -261,7 +261,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build.isolate]/resources/compare_build_artifacts.py",
+      "RECIPE_MODULE[isolate]/resources/compare_build_artifacts.py",
       "--first-build-dir",
       "[SLAVE_BUILD]/src/out/Release.1",
       "--second-build-dir",
