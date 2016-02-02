@@ -24,6 +24,17 @@
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "presubmit_build",
     },
+    "Build Try Cipd builder": {
+      "category": "Build",
+      "recipe": "infra/cipd_test",
+      "properties": {
+        "repo_name": "build",
+        "runhooks": True,
+      },
+      "scheduler": None,
+      "slave_pools": ["trusty64_slave_pool"],
+      "slavebuilddir": "build_cipd_test",
+    },
     "Infra Presubmit": {
       "category": "Infra",
       "recipe": "run_presubmit",
