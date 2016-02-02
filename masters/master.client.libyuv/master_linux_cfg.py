@@ -21,6 +21,8 @@ def Update(c):
           'Linux Asan',
           'Linux Memcheck',
           'Linux Tsan v2',
+          'Linux UBSan',
+          'Linux UBSan vptr',
       ]),
   ])
 
@@ -32,6 +34,8 @@ def Update(c):
     {'name': 'Linux Asan', 'slavebuilddir': 'linux_asan'},
     {'name': 'Linux Memcheck', 'slavebuilddir': 'linux_memcheck_tsan'},
     {'name': 'Linux Tsan v2', 'slavebuilddir': 'linux_tsan2'},
+    {'name': 'Linux UBSan', 'slavebuilddir': 'linux_ubsan'},
+    {'name': 'Linux UBSan vptr', 'slavebuilddir': 'linux_ubsan_vptr'},
   ]
 
   c['builders'].extend([

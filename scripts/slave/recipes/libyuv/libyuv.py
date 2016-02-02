@@ -329,6 +329,26 @@ BUILDERS = freeze({
         },
         'testing': {'platform': 'linux'},
       },
+      'Linux UBSan': {
+        'recipe_config': 'libyuv_clang',
+        'chromium_apply_config': ['ubsan'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
+      'Linux UBSan vptr': {
+        'recipe_config': 'libyuv_clang',
+        'chromium_apply_config': ['ubsan_vptr'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
       'Android Debug': {
         'recipe_config': 'libyuv_android',
         'chromium_config_kwargs': {
@@ -568,6 +588,26 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
+        'testing': {'platform': 'linux'},
+      },
+      'linux_ubsan': {
+        'recipe_config': 'libyuv_clang',
+        'chromium_apply_config': ['ubsan'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
+      'linux_ubsan_vptr': {
+        'recipe_config': 'libyuv_clang',
+        'chromium_apply_config': ['ubsan_vptr'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'android': {
