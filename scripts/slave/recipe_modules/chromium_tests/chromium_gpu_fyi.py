@@ -535,6 +535,46 @@ SPEC = {
       # in order to keep up with the faster cycle time of the tests.
       'enable_swarming': False,
     },
+    'Mac Retina Release': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Mac Builder',
+      'testing': {
+        'platform': 'mac',
+      },
+      'enable_swarming': True,
+    },
+    'Mac Retina Debug': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Mac Builder (dbg)',
+      'testing': {
+        'platform': 'mac',
+      },
+      'enable_swarming': True,
+    },
     'Mac 10.10 Retina Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
