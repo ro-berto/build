@@ -163,22 +163,6 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--browser=release_x64",
-      "jitter"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
-    "name": "Telemetry benchmark: jitter"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
       "blink_perf.layout"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -243,30 +227,14 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--browser=release_x64",
-      "new_tab.new_tab_page"
+      "speedometer"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
-    "name": "Telemetry benchmark: new_tab.new_tab_page"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
-      "webrtc.webrtc_smoothness"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
-    "name": "Telemetry benchmark: webrtc.webrtc_smoothness"
+    "name": "Telemetry benchmark: speedometer"
   },
   {
     "cmd": [
@@ -347,22 +315,6 @@
       "PogoSafeMode": "1"
     },
     "name": "Telemetry benchmark: blink_style.top_25"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
-      "speedometer"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
-    "name": "Telemetry benchmark: speedometer"
   },
   {
     "cmd": [
@@ -579,22 +531,6 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--browser=release_x64",
-      "blink_perf.css"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
-    "name": "Telemetry benchmark: blink_perf.css"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
       "blink_perf.canvas"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -691,14 +627,14 @@
       "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
       "--profiler=win_pgo_profiler",
       "--browser=release_x64",
-      "blob_storage.blob_storage"
+      "blink_perf.css"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
       "PogoSafeMode": "1"
     },
-    "name": "Telemetry benchmark: blob_storage.blob_storage"
+    "name": "Telemetry benchmark: blink_perf.css"
   },
   {
     "cmd": [
