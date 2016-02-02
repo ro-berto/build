@@ -110,7 +110,16 @@
     "name": "cleanup_temp"
   },
   {
-    "cmd": [],
+    "cmd": [
+      "python_slave",
+      "[BUILD]/scripts/slave/compile.py",
+      "--solution",
+      "all.sln",
+      "--project",
+      "chromium_builder_tests",
+      "--target",
+      "Release"
+    ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   },

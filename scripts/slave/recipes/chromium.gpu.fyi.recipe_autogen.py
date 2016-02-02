@@ -68,7 +68,7 @@ def Win7_Audio_steps(api):
   if api.properties.get("clobber"):
     args.append("--clobber")
   api.step("compile", ["python_slave",
-    api.path["build"].join("scripts", "slave", "compile.py")].extend(args))
+    api.path["build"].join("scripts", "slave", "compile.py")] + args)
   # runtest step
   api.step("content_unittests",
       ["python_slave", api.path["build"].join("scripts", "slave", "runtest.py"),

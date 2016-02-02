@@ -440,7 +440,7 @@ def win_compile_py_converter(step):
   rc = recipe_chunk()
   rc.steps.append('# compile.py step')
   rc.deps.add('recipe_engine/path')
-  fmtstr = 'api.step("compile", ["%s", %s].extend(args))'
+  fmtstr = 'api.step("compile", ["%s", %s] + args)'
   compile_command = 'api.path["build"].join("scripts", "slave", "compile.py")'
   args = [x for x in step[1]['command'].items[2:] if isinstance(x, str)]
   rc.steps.append('args = %s' % repr(args))
