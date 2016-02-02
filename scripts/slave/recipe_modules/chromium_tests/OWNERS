@@ -11,6 +11,7 @@ tandrii@chromium.org
 per-file chromium*.py=dpranke@chromium.org
 per-file chromium_android.py=jbudorick@chromium.org
 per-file chromium_android.py=stip@chromium.org
+per-file chromium_gpu*=kbr@chromium.org
 per-file chromium_perf*=dtu@chromium.org
 per-file chromium_perf*=eakuefner@chromium.org
 per-file chromium_perf*=fmeawad@chromium.org
