@@ -13,11 +13,11 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 """
 
 DEPS = [
-  'bot_update',
+  'depot_tools/bot_update',
   'chromium',
   'commit_position',
   'file',
-  'gclient',
+  'depot_tools/gclient',
   'isolate',
   'recipe_engine/json',
   'recipe_engine/path',

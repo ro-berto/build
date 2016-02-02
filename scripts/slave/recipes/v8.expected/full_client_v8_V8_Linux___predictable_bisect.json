@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[build]/bot_update.py",
+      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
       "--master",
       "client.v8",
       "--builder",
@@ -407,7 +407,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[build]/bot_update.py",
+      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
       "--master",
       "client.v8",
       "--builder",
@@ -585,7 +585,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[build]/bot_update.py",
+      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
       "--master",
       "client.v8",
       "--builder",
@@ -789,7 +789,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[build]/bot_update.py",
+      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
       "--master",
       "client.v8",
       "--builder",

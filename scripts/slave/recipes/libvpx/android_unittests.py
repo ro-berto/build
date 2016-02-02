@@ -5,7 +5,7 @@
 from recipe_engine.types import freeze
 
 DEPS = [
-    'git',
+    'depot_tools/git',
     'recipe_engine/json',
     'recipe_engine/path',
     'perf_dashboard',

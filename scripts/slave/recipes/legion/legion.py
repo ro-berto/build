@@ -7,8 +7,8 @@
 from recipe_engine.types import freeze
 
 DEPS = [
-    'bot_update',
-    'gclient',
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
     'isolate',
     'legion',
     'recipe_engine/path',

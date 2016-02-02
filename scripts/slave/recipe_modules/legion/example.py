@@ -5,8 +5,8 @@
 """Specifies how to launch chromoting integration test on build_internal."""
 
 DEPS = [
-    'bot_update',
-    'gclient',
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
     'legion',
     'recipe_engine/properties',
 ]

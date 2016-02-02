@@ -4,12 +4,12 @@
 
 DEPS = [
   'adb',
-  'bot_update',
+  'depot_tools/bot_update',
   'chromium',
   'file',
-  'gclient',
+  'depot_tools/gclient',
   'recipe_engine/generator_script',
-  'git',
+  'depot_tools/git',
   'gsutil',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -18,7 +18,7 @@ DEPS = [
   'recipe_engine/raw_io',
   'recipe_engine/step',
   'test_utils',
-  'tryserver',
+  'depot_tools/tryserver',
   'url',
   'archive',
 ]

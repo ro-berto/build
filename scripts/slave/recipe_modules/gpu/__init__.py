@@ -4,11 +4,11 @@
 
 DEPS = [
   'archive',
-  'bot_update',
+  'depot_tools/bot_update',
   'chromium',
   'chromium_tests',
   'filter',
-  'gclient',
+  'depot_tools/gclient',
   'isolate',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -17,5 +17,5 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/step',
   'swarming',
-  'tryserver',
+  'depot_tools/tryserver',
 ]

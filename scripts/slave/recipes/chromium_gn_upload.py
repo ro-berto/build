@@ -5,7 +5,7 @@
 from recipe_engine.types import freeze
 
 DEPS = [
-  'bot_update',
+  'depot_tools/bot_update',
   'chromium',
   'file',
   'gsutil',

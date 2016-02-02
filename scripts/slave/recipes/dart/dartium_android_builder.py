@@ -5,7 +5,7 @@
 DEPS = [
   'chromium',
   'chromium_android',
-  'gclient',
+  'depot_tools/gclient',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',

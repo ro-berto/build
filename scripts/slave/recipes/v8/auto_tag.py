@@ -20,8 +20,8 @@ import re
 
 DEPS = [
   'file',
-  'gclient',
-  'git',
+  'depot_tools/gclient',
+  'depot_tools/git',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',

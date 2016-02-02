@@ -8,16 +8,16 @@ from recipe_engine import recipe_api
 DEPS = [
   'archive',
   'amp',
-  'bot_update',
+  'depot_tools/bot_update',
   'chromium',
   'chromium_android',
   'filter',
-  'gclient',
+  'depot_tools/gclient',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/step',
-  'tryserver',
+  'depot_tools/tryserver',
 ]
 
 CHROMIUM_AMP_INSTRUMENTATION_TESTS = freeze([

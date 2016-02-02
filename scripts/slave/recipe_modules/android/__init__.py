@@ -1,7 +1,7 @@
 DEPS = [
-  'bot_update',
+  'depot_tools/bot_update',
   'file',
-  'gclient',
+  'depot_tools/gclient',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',

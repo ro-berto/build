@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[build]/git_setup.py",
+      "RECIPE_MODULE[git]/resources/git_setup.py",
       "--path",
       "[SLAVE_BUILD]/swarming.client",
       "--url",

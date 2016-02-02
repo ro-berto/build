@@ -3,9 +3,17 @@
 # found in the LICENSE file.
 
 DEPS = [
-    'auto_bisect', 'bisect_tester', 'chromium', 'chromium_tests', 'gclient',
-    'recipe_engine/json', 'recipe_engine/path', 'recipe_engine/platform',
-    'recipe_engine/properties', 'recipe_engine/raw_io', 'recipe_engine/step'
+    'auto_bisect',
+    'bisect_tester',
+    'chromium',
+    'chromium_tests',
+    'depot_tools/gclient',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/raw_io',
+    'recipe_engine/step',
 ]
 
 

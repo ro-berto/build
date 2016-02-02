@@ -5,7 +5,7 @@
 DEPS = [
   'recipe_engine/path',
   'recipe_engine/step',
-  'git',
+  'depot_tools/git',
 ]
 
 def RunSteps(api):
