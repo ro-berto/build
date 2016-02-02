@@ -307,7 +307,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[isolate]/resources/find_isolated_tests.py",
+      "RECIPE_MODULE[build.isolate]/resources/find_isolated_tests.py",
       "--build-dir",
       "[SLAVE_BUILD]/src/out/Release",
       "--clean-isolated-files"
@@ -377,7 +377,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[isolate]/resources/remove_build_metadata.py",
+      "RECIPE_MODULE[build.isolate]/resources/remove_build_metadata.py",
       "--build-dir",
       "[SLAVE_BUILD]/src/out/Release",
       "--src-dir",
@@ -390,7 +390,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[isolate]/resources/isolate.py",
+      "RECIPE_MODULE[build.isolate]/resources/isolate.py",
       "[SLAVE_BUILD]/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
@@ -1922,7 +1922,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[swarming]/resources/collect_gtest_task.py",
+      "RECIPE_MODULE[build.swarming]/resources/collect_gtest_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/src/tools/swarming_client",
       "--temp-root-dir",
@@ -1949,7 +1949,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
+      "RECIPE_MODULE[build.test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
@@ -1973,7 +1973,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[swarming]/resources/collect_gtest_task.py",
+      "RECIPE_MODULE[build.swarming]/resources/collect_gtest_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/src/tools/swarming_client",
       "--temp-root-dir",
@@ -2000,7 +2000,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
+      "RECIPE_MODULE[build.test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
@@ -2024,7 +2024,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[swarming]/resources/collect_gtest_task.py",
+      "RECIPE_MODULE[build.swarming]/resources/collect_gtest_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/src/tools/swarming_client",
       "--temp-root-dir",
@@ -2051,7 +2051,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
+      "RECIPE_MODULE[build.test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
@@ -2075,7 +2075,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[swarming]/resources/collect_gtest_task.py",
+      "RECIPE_MODULE[build.swarming]/resources/collect_gtest_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/src/tools/swarming_client",
       "--temp-root-dir",
@@ -2102,7 +2102,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
+      "RECIPE_MODULE[build.test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
@@ -2386,7 +2386,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[swarming]/resources/collect_gtest_task.py",
+      "RECIPE_MODULE[build.swarming]/resources/collect_gtest_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/src/tools/swarming_client",
       "--temp-root-dir",
@@ -2413,7 +2413,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[test_results]/resources/upload_gtest_test_results.py",
+      "RECIPE_MODULE[build.test_results]/resources/upload_gtest_test_results.py",
       "--input-gtest-json",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",

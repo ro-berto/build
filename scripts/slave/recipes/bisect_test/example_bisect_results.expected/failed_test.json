@@ -82,7 +82,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[auto_bisect]/resources/fetch_file.py",
+      "RECIPE_MODULE[build.auto_bisect]/resources/fetch_file.py",
       "DEPS",
       "--commit",
       "deadbeef"
@@ -132,7 +132,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[auto_bisect]/resources/fetch_file.py",
+      "RECIPE_MODULE[build.auto_bisect]/resources/fetch_file.py",
       "DEPS",
       "--commit",
       "c001c0de"

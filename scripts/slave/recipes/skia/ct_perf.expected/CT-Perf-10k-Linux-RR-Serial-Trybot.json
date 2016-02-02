@@ -3,7 +3,7 @@
     "allow_subannotations": true,
     "cmd": [
       "python",
-      "RECIPE_MODULE[skia]/resources/trigger_wait_ct_task.py",
+      "RECIPE_MODULE[build.skia]/resources/trigger_wait_ct_task.py",
       "--issue",
       "123",
       "--patchset",

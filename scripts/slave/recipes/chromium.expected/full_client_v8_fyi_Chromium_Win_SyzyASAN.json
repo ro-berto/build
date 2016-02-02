@@ -253,7 +253,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[archive]\\resources\\zip_archive.py",
+      "RECIPE_MODULE[build.archive]\\resources\\zip_archive.py",
       "[SLAVE_BUILD]\\chrome_staging",
       "syzyasan-win32-release-v8-component-43426",
       "[\"file 1\", \"file 2\"]",

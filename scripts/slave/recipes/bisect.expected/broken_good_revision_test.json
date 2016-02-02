@@ -225,7 +225,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[auto_bisect]/resources/fetch_file.py",
+      "RECIPE_MODULE[build.auto_bisect]/resources/fetch_file.py",
       "DEPS",
       "--commit",
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
@@ -275,7 +275,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[auto_bisect]/resources/fetch_file.py",
+      "RECIPE_MODULE[build.auto_bisect]/resources/fetch_file.py",
       "DEPS",
       "--commit",
       "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
@@ -299,7 +299,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[auto_bisect]/resources/fetch_intervening_revisions.py",
+      "RECIPE_MODULE[build.auto_bisect]/resources/fetch_intervening_revisions.py",
       "e28dc0d49c331def2a3bbf3ddd0096eb51551155",
       "a6298e4afedbf2cd461755ea6f45b0ad64222222",
       "chromium"
@@ -331,7 +331,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build.gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
@@ -397,7 +397,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build.gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
@@ -463,7 +463,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
+      "RECIPE_MODULE[build.auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -480,7 +480,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build.gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
@@ -523,7 +523,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build.gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
@@ -566,7 +566,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
+      "RECIPE_MODULE[build.auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -583,7 +583,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build.gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
@@ -600,7 +600,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build.gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
@@ -618,7 +618,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[auto_bisect]/resources/wait_for_any.py",
+      "RECIPE_MODULE[build.auto_bisect]/resources/wait_for_any.py",
       "[DEPOT_TOOLS]/gsutil.py"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -635,7 +635,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build.gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
@@ -652,7 +652,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build.gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",

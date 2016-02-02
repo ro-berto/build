@@ -123,7 +123,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build.gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
@@ -315,7 +315,7 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid",
       "--",
-      "RECIPE_MODULE[chromium_android]/resources/spawn_device_monitor.py",
+      "RECIPE_MODULE[build.chromium_android]/resources/spawn_device_monitor.py",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "[\"07a00ca4\"]",
       "chromium.perf.fyi",

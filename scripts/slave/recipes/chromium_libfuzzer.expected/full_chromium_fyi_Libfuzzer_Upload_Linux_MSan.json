@@ -256,7 +256,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[archive]/resources/zip_archive.py",
+      "RECIPE_MODULE[build.archive]/resources/zip_archive.py",
       "[TMP_BASE]/chrome_staging_tmp_1",
       "libfuzzer-linux-release-170242",
       "[\"file 1\", \"file 2\"]",

@@ -234,7 +234,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[chromium_android]/resources/gce_manager.py",
+      "RECIPE_MODULE[build.chromium_android]/resources/gce_manager.py",
       "TestSlavename",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--n",
@@ -596,7 +596,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build.gsutil]/resources/gsutil_wrapper.py",
       "--timeout",
       "300",
       "--",
@@ -647,7 +647,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[chromium_android]/resources/gce_manager.py",
+      "RECIPE_MODULE[build.chromium_android]/resources/gce_manager.py",
       "TestSlavename",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--n",

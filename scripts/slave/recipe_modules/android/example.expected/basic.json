@@ -105,7 +105,7 @@
       "[BUILD]/scripts/slave/android/with_lunch",
       "[SLAVE_BUILD]/android-src",
       "nakasi-userdebug",
-      "RECIPE_MODULE[android]/resources/update_default_props.py",
+      "RECIPE_MODULE[build.android]/resources/update_default_props.py",
       "ro.adb.secure=0"
     ],
     "cwd": "[SLAVE_BUILD]",

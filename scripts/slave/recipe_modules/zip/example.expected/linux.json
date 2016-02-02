@@ -50,7 +50,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[zip]/resources/zip.py"
+      "RECIPE_MODULE[build.zip]/resources/zip.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "zipping",
@@ -60,7 +60,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[zip]/resources/zip.py"
+      "RECIPE_MODULE[build.zip]/resources/zip.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "zipping more",
@@ -78,7 +78,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[zip]/resources/unzip.py"
+      "RECIPE_MODULE[build.zip]/resources/unzip.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "unzipping",

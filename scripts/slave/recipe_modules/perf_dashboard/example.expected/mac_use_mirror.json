@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[perf_dashboard]/resources/post_json.py"
+      "RECIPE_MODULE[build.perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "perf dashboard post",
@@ -13,7 +13,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[perf_dashboard]/resources/post_json.py"
+      "RECIPE_MODULE[build.perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Post bisect results",
