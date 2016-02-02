@@ -15,6 +15,8 @@ SPEC = {
         chromium_perf.SPEC['builders']['Linux Builder'],
     'linux_perf_bisect':
         chromium_perf.SPEC['builders']['Linux Builder'],
+    'linux_perf_cq':
+        chromium_perf.SPEC['builders']['Linux Builder'],
     'linux_fyi_perf_bisect':
         chromium_perf.SPEC['builders']['Linux Builder'],
     'win_perf_bisect_builder':
@@ -37,6 +39,8 @@ SPEC = {
         chromium_perf.SPEC['builders']['Win x64 Builder'],
     'winx64_zen_perf_bisect':
         chromium_perf.SPEC['builders']['Win x64 Builder'],
+    'winx64_10_perf_cq':
+        chromium_perf.SPEC['builders']['Win x64 Builder'],
     'win_fyi_perf_bisect':
         chromium_perf.SPEC['builders']['Win Builder'],
     'mac_perf_bisect_builder':
@@ -48,6 +52,8 @@ SPEC = {
     'mac_retina_perf_bisect':
         chromium_perf.SPEC['builders']['Mac Builder'],
     'mac_hdd_perf_bisect':
+        chromium_perf.SPEC['builders']['Mac Builder'],
+    'mac_retina_perf_cq':
         chromium_perf.SPEC['builders']['Mac Builder'],
     'mac_fyi_perf_bisect':
         chromium_perf.SPEC['builders']['Mac Builder'],
