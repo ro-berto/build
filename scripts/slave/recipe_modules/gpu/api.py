@@ -350,11 +350,18 @@ class GpuApi(recipe_api.RecipeApi):
       basic_tests += common.FYI_GPU_ISOLATES
 
     # Run the ANGLE tests on the ANGLE trybots
-    if self.is_angle_trybot:
-      basic_tests += common.ANGLE_TRYBOTS_GPU_ISOLATES
-      is_win_or_linux = self.m.platform.is_win or self.m.platform.is_linux
-      if self.m.chromium.is_release_build and is_win_or_linux:
-        basic_tests += common.WIN_AND_LINUX_ONLY_RELEASE_ONLY_ANGLE_TRYBOTS_GPU_ISOLATES
+    # Note: these "# pragma: no cover" statements are only temporary
+    # to minimize the amount of code changes. Shortly, this entire
+    # recipe_module and all of the code which references it will be
+    # deleted.
+    if self.is_angle_trybot:  # pragma: no cover
+      basic_tests += common.ANGLE_TRYBOTS_GPU_ISOLATES  # pragma: no cover
+      is_win_or_linux = (self.m.platform.is_win or
+                         self.m.platform.is_linux)  # pragma: no cover
+      if (self.m.chromium.is_release_build and
+          is_win_or_linux):  # pragma: no cover
+        basic_tests += (
+            common.WIN_LINUX_RELEASE_ANGLE_TRYBOTS_ISOLATES)  # pragma: no cover
 
     #TODO(martiniss) convert loop
     for test in basic_tests:

@@ -171,44 +171,68 @@ TRYBOTS = freeze({
   'tryserver.chromium.angle': {
     'builders': {
       'linux_angle_rel_ng': simple_bot({
-        'mastername': 'chromium.angle',
-        'buildername': 'Linux Builder (ANGLE)',
-        'tester': 'Linux Tests (ANGLE)',
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU Linux Builder',
+        'tester': 'Linux Release (NVIDIA)',
       }),
       'linux_angle_dbg_ng': simple_bot({
-        'mastername': 'chromium.angle',
-        'buildername': 'Linux Builder (dbg) (ANGLE)',
-        'tester': 'Linux Tests (dbg) (ANGLE)',
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU Linux Builder (dbg)',
+        'tester': 'Linux Debug (NVIDIA)',
       }),
-      'mac_angle_rel_ng': simple_bot({
-        'mastername': 'chromium.angle',
-        'buildername': 'Mac Builder (ANGLE)',
-        'tester': 'Mac10.8 Tests (ANGLE)',
-      }),
-      'mac_angle_dbg_ng': simple_bot({
-        'mastername': 'chromium.angle',
-        'buildername': 'Mac Builder (dbg) (ANGLE)',
-        'tester': 'Mac10.8 Tests (dbg) (ANGLE)',
-      }),
-      'win_angle_rel_ng': simple_bot({
-        'mastername': 'chromium.angle',
-        'buildername': 'Win Builder (ANGLE)',
-        'tester': 'Win7 Tests (ANGLE)',
-      }),
+      'mac_angle_rel_ng': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Mac Builder',
+            'tester': 'Mac 10.10 Release (Intel)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Mac Builder',
+            'tester': 'Mac Retina Release',
+          },
+        ],
+      },
+      'mac_angle_dbg_ng': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Mac Builder (dbg)',
+            'tester': 'Mac 10.10 Debug (Intel)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Mac Builder (dbg)',
+            'tester': 'Mac Retina Debug',
+          },
+        ],
+      },
+      'win_angle_rel_ng': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Win Builder',
+            'tester': 'Win7 Release (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Win Builder',
+            'tester': 'Win7 Release (ATI)',
+          },
+        ],
+      },
+      # TODO(kbr): add back the ATI tests on this bot.
+      # Currently we're missing a bot to mirror.
       'win_angle_dbg_ng': simple_bot({
-        'mastername': 'chromium.angle',
-        'buildername': 'Win Builder (dbg) (ANGLE)',
-        'tester': 'Win7 Tests (dbg) (ANGLE)',
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU Win Builder (dbg)',
+        'tester': 'Win7 Debug (NVIDIA)',
       }),
       'win_angle_x64_rel_ng': simple_bot({
-        'mastername': 'chromium.angle',
-        'buildername': 'Win x64 Builder (ANGLE)',
-        'tester': 'Win7 Tests x64 (ANGLE)',
-      }),
-      'win_angle_x64_dbg_ng': simple_bot({
-        'mastername': 'chromium.angle',
-        'buildername': 'Win x64 Builder (dbg) (ANGLE)',
-        'tester': 'Win7 Tests x64 (dbg) (ANGLE)',
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU Win x64 Builder',
+        'tester': 'Win7 x64 Release (NVIDIA)',
       }),
     },
   },
