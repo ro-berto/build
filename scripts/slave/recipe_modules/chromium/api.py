@@ -250,6 +250,8 @@ class ChromiumApi(recipe_api.RecipeApi):
           step_result.presentation.status = self.m.step.WARNING
 
         if infra_failure:
+          # Mark goma setup failure as exception instead of step failure.
+          step_result.presentation.status = self.m.step.EXCEPTION
           raise self.m.step.InfraFailure('Infra compile failure: %s' % e)
 
       raise e
