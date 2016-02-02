@@ -40,6 +40,8 @@ def BaseSpec(bot_type, chromium_apply_config, gclient_config, platform,
     spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
     spec['chromium_apply_config'].append('android')
     spec['gclient_apply_config'].append('android')
+  else:
+    spec['chromium_apply_config'].append('chrome_with_codecs')
   return spec
 
 
