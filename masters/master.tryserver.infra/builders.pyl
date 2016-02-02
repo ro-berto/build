@@ -24,7 +24,7 @@
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "presubmit_build",
     },
-    "Build Try Cipd builder": {
+    "Build Try Cipd Test": {
       "category": "Build",
       "recipe": "infra/cipd_test",
       "properties": {
