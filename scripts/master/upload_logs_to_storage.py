@@ -34,7 +34,7 @@ import pytz  # pylint: disable=F0401
 
 from common import find_depot_tools
 DEPOT_TOOLS_DIR = find_depot_tools.add_depot_tools_to_path()
-GSUTIL_BIN = os.path.join(DEPOT_TOOLS_DIR, 'third_party', 'gsutil', 'gsutil')
+GSUTIL_BIN = os.path.join(DEPOT_TOOLS_DIR, 'gsutil.py')
 assert os.path.isfile(GSUTIL_BIN), 'gsutil may have moved in the hierarchy'
 
 # Define logger as root logger by default. Modified by set_logging() below.
@@ -63,7 +63,7 @@ def call_gsutil(args, dry_run=False, stdin=None):
   if not isinstance(stdin, (basestring, types.NoneType)):
     raise ValueError('Incorrect type for stdin: must be a string or None.')
 
-  cmd = [GSUTIL_BIN]
+  cmd = [GSUTIL_BIN, '--force-version', '4.15', '--']
   cmd.extend(args)
   logger.debug('Running: %s', ' '.join(cmd))
   if dry_run:
