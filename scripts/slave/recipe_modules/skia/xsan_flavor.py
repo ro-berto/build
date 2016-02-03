@@ -21,7 +21,8 @@ class XSanFlavorUtils(default_flavor.DefaultFlavorUtils):
       'ASAN': ('address,bool,function,integer-divide-by-zero,nonnull-attribute,'
                'null,object-size,return,returns-nonnull-attribute,shift,'
                'signed-integer-overflow,unreachable,vla-bound,vptr'),
-      # TSAN and ASAN can't play together, so the TSAN stands alone.
+      # MSAN and TSAN can't run together with ASAN, so they're their own bots.
+      'MSAN': 'memory',
       'TSAN': 'thread',
     }[self._skia_api.builder_cfg['extra_config']]
 
