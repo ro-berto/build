@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "client.webrtc.fyi",
       "--builder",
@@ -55,7 +55,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[webrtc]/resources/cleanup_files.py",
+      "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
       "[SLAVE_BUILD]/src/out"
     ],
     "cwd": "[SLAVE_BUILD]",

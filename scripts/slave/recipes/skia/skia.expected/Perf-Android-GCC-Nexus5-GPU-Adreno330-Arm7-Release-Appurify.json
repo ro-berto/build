@@ -348,7 +348,7 @@
   {
     "cmd": [
       "python",
-      "RECIPE_MODULE[skia]/resources/appurify_wrapper.py",
+      "RECIPE_MODULE[build::skia]/resources/appurify_wrapper.py",
       "--device",
       "Nexus5",
       "--apk",
@@ -454,7 +454,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[skia]/resources/upload_bench_results.py",
+      "RECIPE_MODULE[build::skia]/resources/upload_bench_results.py",
       "Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify",
       "5",
       "[SLAVE_BUILD]/perfdata/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify/data",

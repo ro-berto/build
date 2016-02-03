@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "tryserver.chromium.android",
       "--builder",
@@ -528,7 +528,7 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid",
       "--",
-      "RECIPE_MODULE[chromium_android]/resources/spawn_device_monitor.py",
+      "RECIPE_MODULE[build::chromium_android]/resources/spawn_device_monitor.py",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "[\"07a00ca4\"]",
       "tryserver.chromium.android",
@@ -845,7 +845,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "tryserver.chromium.android",
       "--builder",
@@ -1441,7 +1441,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--timeout",
       "300",
       "--",

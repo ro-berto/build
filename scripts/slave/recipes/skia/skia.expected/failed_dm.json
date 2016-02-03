@@ -346,7 +346,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[skia]/resources/upload_dm_results.py",
+      "RECIPE_MODULE[build::skia]/resources/upload_dm_results.py",
       "[SLAVE_BUILD]/dm",
       "164710",
       "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug",

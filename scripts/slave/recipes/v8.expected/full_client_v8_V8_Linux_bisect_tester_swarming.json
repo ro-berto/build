@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[git]/resources/git_setup.py",
+      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
       "[SLAVE_BUILD]/swarming.client",
       "--url",
@@ -1096,7 +1096,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
@@ -1173,7 +1173,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
@@ -1214,7 +1214,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
@@ -1255,7 +1255,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
@@ -1296,7 +1296,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
@@ -1337,7 +1337,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
@@ -1378,7 +1378,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
@@ -1419,7 +1419,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
@@ -1460,7 +1460,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
@@ -1534,7 +1534,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gitiles]/resources/gerrit_client.py",
+      "RECIPE_MODULE[build::gitiles]/resources/gerrit_client.py",
       "--json-file",
       "/path/to/tmp/json",
       "--url",
@@ -1576,7 +1576,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
@@ -1594,7 +1594,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
@@ -1617,7 +1617,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
@@ -1739,7 +1739,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
@@ -1794,7 +1794,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
@@ -1916,7 +1916,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",

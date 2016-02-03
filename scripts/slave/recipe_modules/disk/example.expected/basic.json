@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[disk]/resources/statvfs.py",
+      "RECIPE_MODULE[build::disk]/resources/statvfs.py",
       "[SLAVE_BUILD]"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -22,7 +22,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[disk]/resources/statvfs.py",
+      "RECIPE_MODULE[build::disk]/resources/statvfs.py",
       "[SLAVE_BUILD]"
     ],
     "cwd": "[SLAVE_BUILD]",

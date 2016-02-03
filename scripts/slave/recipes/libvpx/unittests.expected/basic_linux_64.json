@@ -35,7 +35,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[git]/resources/git_setup.py",
+      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
       "[SLAVE_BUILD]/libvpx",
       "--url",

@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "tryserver.chromium.perf",
       "--builder",
@@ -310,7 +310,7 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid",
       "--",
-      "RECIPE_MODULE[chromium_android]/resources/spawn_device_monitor.py",
+      "RECIPE_MODULE[build::chromium_android]/resources/spawn_device_monitor.py",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "[\"07a00ca4\"]",
       "tryserver.chromium.perf",
@@ -340,7 +340,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[perf_try]/resources/load_config_to_json.py",
+      "RECIPE_MODULE[build::perf_try]/resources/load_config_to_json.py",
       "--source",
       "[SLAVE_BUILD]/src/tools/run-perf-test.cfg",
       "--output_json",
@@ -464,7 +464,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "tryserver.chromium.perf",
       "--builder",

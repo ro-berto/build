@@ -340,7 +340,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[skia]/resources/upload_bench_results.py",
+      "RECIPE_MODULE[build::skia]/resources/upload_bench_results.py",
       "Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench",
       "5",
       "[SLAVE_BUILD]/perfdata/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench/data",

@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "client.v8",
       "--builder",
@@ -134,7 +134,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[isolate]/resources/isolate.py",
+      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
       "[SLAVE_BUILD]/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
@@ -167,7 +167,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",

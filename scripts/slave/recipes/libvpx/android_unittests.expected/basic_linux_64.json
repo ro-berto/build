@@ -29,7 +29,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[git]/resources/git_setup.py",
+      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
       "[SLAVE_BUILD]/android_tools",
       "--url",
@@ -95,7 +95,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[git]/resources/git_setup.py",
+      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
       "[SLAVE_BUILD]/libvpx",
       "--url",
@@ -309,7 +309,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[perf_dashboard]/resources/post_json.py"
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "perf dashboard post",

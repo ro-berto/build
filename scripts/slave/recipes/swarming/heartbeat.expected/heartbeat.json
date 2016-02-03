@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[git]/resources/git_setup.py",
+      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
       "[SLAVE_BUILD]/swarming.client",
       "--url",
@@ -82,7 +82,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[swarming_heartbeat]/resources/job_runs_fine.py"
+      "RECIPE_MODULE[build::swarming_heartbeat]/resources/job_runs_fine.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "job_runs_fine.py"

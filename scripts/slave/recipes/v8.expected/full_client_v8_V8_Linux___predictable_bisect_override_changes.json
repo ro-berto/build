@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "client.v8",
       "--builder",
@@ -351,7 +351,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[gitiles]/resources/gerrit_client.py",
+      "RECIPE_MODULE[build::gitiles]/resources/gerrit_client.py",
       "--json-file",
       "/path/to/tmp/json",
       "--url",
@@ -398,7 +398,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "client.v8",
       "--builder",
@@ -576,7 +576,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "client.v8",
       "--builder",
@@ -780,7 +780,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "client.v8",
       "--builder",

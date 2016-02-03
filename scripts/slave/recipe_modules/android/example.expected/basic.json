@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "chromium.linux",
       "--builder",
@@ -105,7 +105,7 @@
       "[BUILD]/scripts/slave/android/with_lunch",
       "[SLAVE_BUILD]/android-src",
       "nakasi-userdebug",
-      "RECIPE_MODULE[android]/resources/update_default_props.py",
+      "RECIPE_MODULE[build::android]/resources/update_default_props.py",
       "ro.adb.secure=0"
     ],
     "cwd": "[SLAVE_BUILD]",
