@@ -99,9 +99,6 @@
       "[TMP_BASE]/zip-example_tmp_1"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": ".:%(PYTHONPATH)s"
-    },
     "name": "rmtree cleanup",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

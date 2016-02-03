@@ -197,9 +197,6 @@
       "[SLAVE_BUILD]\\src\\out\\Release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": ".;%(PYTHONPATH)s"
-    },
     "name": "rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

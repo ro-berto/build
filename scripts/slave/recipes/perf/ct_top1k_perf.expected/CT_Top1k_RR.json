@@ -187,9 +187,6 @@
       "[SLAVE_BUILD]/luci-go"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": ".:%(PYTHONPATH)s"
-    },
     "name": "rmtree Go binary dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -268,9 +265,6 @@
       "[SLAVE_BUILD]/swarming_temp_dir"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": ".:%(PYTHONPATH)s"
-    },
     "name": "rmtree swarming temp dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

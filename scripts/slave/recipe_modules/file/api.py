@@ -11,12 +11,6 @@ class FileApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(FileApi, self).__init__(**kwargs)
 
-  @property
-  def _common_path(self):
-    # TODO(martiniss) fix this once package resource is relative to root.
-    return self.m.path.abspath(
-        self.m.path.join(self.package_resource(), '..'))
-
   def copy(self, name, source, dest, step_test_data=None, **kwargs):
     """Copy a file."""
     return self.m.python.inline(
@@ -146,7 +140,7 @@ class FileApi(recipe_api.RecipeApi):
   def rmtree(self, name, path, **kwargs):
     """Wrapper for chromium_utils.RemoveDirectory."""
     self.m.path.assert_absolute(path)
-    self._python_with_path(
+    self.m.python.inline(
       'rmtree ' + name,
       """
       import os, sys
@@ -169,7 +163,7 @@ class FileApi(recipe_api.RecipeApi):
     a call that doesn't delete the directory itself.
     """
     self.m.path.assert_absolute(path)
-    self._python_with_path(
+    self.m.python.inline(
       'rmcontents ' + name,
       """
       import os, sys
@@ -192,7 +186,7 @@ class FileApi(recipe_api.RecipeApi):
     Removes all files in the subtree of path matching the glob pattern.
     """
     self.m.path.assert_absolute(path)
-    self._python_with_path(
+    self.m.python.inline(
       'rmwildcard %s in %s' % (pattern, path),
       """
       import sys
@@ -202,11 +196,3 @@ class FileApi(recipe_api.RecipeApi):
       """,
       args=[pattern,path],
       **kwargs)
-
-  def _python_with_path(self, name, program, **kwargs):
-    env = kwargs.get('env', {})
-    env['PYTHONPATH'] = self.m.path.pathsep.join((
-        self._common_path,'%(PYTHONPATH)s'))
-    kwargs['env'] = env
-    return self.m.python.inline(name, program, **kwargs)
-

@@ -45,9 +45,6 @@
       "[SLAVE_BUILD]/crashpad/out"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": ".:%(PYTHONPATH)s"
-    },
     "name": "rmtree out",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

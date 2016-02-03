@@ -99,9 +99,6 @@
       "[SLAVE_BUILD]/src/third_party/llvm-build"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": ".:%(PYTHONPATH)s"
-    },
     "name": "rmtree llvm-build",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

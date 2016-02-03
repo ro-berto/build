@@ -82,9 +82,6 @@
       "[SLAVE_BUILD]/v8/out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": ".:%(PYTHONPATH)s"
-    },
     "name": "rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -768,9 +765,6 @@
       "[SLAVE_BUILD]/v8/out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": ".:%(PYTHONPATH)s"
-    },
     "name": "Bisect a0.rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

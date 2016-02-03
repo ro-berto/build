@@ -104,9 +104,6 @@
       "[SLAVE_BUILD]\\src\\out\\Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": ".;%(PYTHONPATH)s"
-    },
     "name": "rmwildcard metrics.csv in [SLAVE_BUILD]\\src\\out\\Debug",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

@@ -64,9 +64,6 @@
       "[SLAVE_BUILD]"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": ".:%(PYTHONPATH)s"
-    },
     "name": "rmwildcard *.o in [SLAVE_BUILD]",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -241,9 +238,6 @@
       "[SLAVE_BUILD]/copytree_example_tmp"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": ".:%(PYTHONPATH)s"
-    },
     "name": "rmtree cleanup",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -263,9 +257,6 @@
       "[SLAVE_BUILD]/copytree_example_tmp2"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": ".:%(PYTHONPATH)s"
-    },
     "name": "rmtree cleanup2",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

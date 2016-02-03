@@ -18,6 +18,7 @@ import os
 import shutil
 import sys
 
+from common import find_depot_tools
 import subprocess2
 
 def main(argv):
