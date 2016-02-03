@@ -223,6 +223,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"junit_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"mojo_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"net_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"sandbox_linux_unittests_deps\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
@@ -238,6 +239,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"junit_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"mojo_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"net_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"sandbox_linux_unittests_deps\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
@@ -253,6 +255,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"junit_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"mojo_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"net_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"sandbox_linux_unittests_deps\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
@@ -268,6 +271,7 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"junit_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"mojo_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"net_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"sandbox_linux_unittests_deps\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
@@ -372,6 +376,7 @@
       "content_junit_tests",
       "content_shell_test_apk",
       "junit_unittests",
+      "mojo_test_apk",
       "net_junit_tests",
       "sandbox_linux_unittests_deps"
     ],
@@ -735,6 +740,29 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "[SLAVE_BUILD]/src/out/Release/apks/MojoTest.apk",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--flakiness-dashboard-server",
+      "test-results.appspot.com",
+      "--verbose",
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Instrumentation test MojoTest (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "gtest",
       "-s",
       "breakpad_unittests",
@@ -1082,6 +1110,7 @@
       "content_junit_tests",
       "content_shell_test_apk",
       "junit_unittests",
+      "mojo_test_apk",
       "net_junit_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1260,6 +1289,29 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ContentShellTest (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "[SLAVE_BUILD]/src/out/Release/apks/MojoTest.apk",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--flakiness-dashboard-server",
+      "test-results.appspot.com",
+      "--verbose",
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Instrumentation test MojoTest (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
@@ -1465,6 +1517,19 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "ContentShellTest (retry summary)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "MojoTest (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_WARNINGS@@@"

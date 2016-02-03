@@ -1535,6 +1535,12 @@ class AndroidInstrumentationTest(AndroidTest):
       'apk_under_test': 'SystemWebViewShell.apk',
       'test_apk': 'SystemWebViewShellLayoutTest.apk',
       'additional_apks': ['SystemWebView.apk'],
+    },
+    'MojoTest': {
+      'compile_targets': ['mojo_test_apk'],
+      'isolate_file_path': None,
+      'apk_under_test': None,
+      'test_apk': 'MojoTest.apk',
     }
   }
 

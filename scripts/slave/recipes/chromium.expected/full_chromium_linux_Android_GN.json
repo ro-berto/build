@@ -246,6 +246,7 @@
       "content_junit_tests",
       "content_shell_test_apk",
       "junit_unittests",
+      "mojo_test_apk",
       "net_junit_tests",
       "sandbox_linux_unittests_deps"
     ],
@@ -600,6 +601,29 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ContentShellTest",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "[SLAVE_BUILD]/src/out/Release/apks/MojoTest.apk",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--flakiness-dashboard-server",
+      "test-results.appspot.com",
+      "--verbose",
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Instrumentation test MojoTest",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]

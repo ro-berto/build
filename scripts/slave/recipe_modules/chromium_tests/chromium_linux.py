@@ -157,6 +157,7 @@ SPEC = {
         steps.AndroidInstrumentationTest('ChromePublicTest'),
         steps.AndroidInstrumentationTest('ChromeSyncShellTest'),
         steps.AndroidInstrumentationTest('ContentShellTest'),
+        steps.AndroidInstrumentationTest('MojoTest'),
         steps.GTestTest(
             'breakpad_unittests',
             override_compile_targets=['breakpad_unittests_deps'],
