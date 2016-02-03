@@ -319,7 +319,7 @@ SPEC = {
           '--additional-expectations',
           'src/third_party/WebKit/LayoutTests/FlagExpectations/site-per-process',
           '--options',
-          'http/tests/security',
+          'http/tests',
         ]),
       ],
       'test_generators': [

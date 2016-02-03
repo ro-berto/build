@@ -240,7 +240,7 @@
       "--additional-expectations",
       "src/third_party/WebKit/LayoutTests/FlagExpectations/site-per-process",
       "--options",
-      "http/tests/security"
+      "http/tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests",
