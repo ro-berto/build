@@ -152,7 +152,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       dep = bot_config.get('set_component_rev')
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
-  def ensure_checkout(self, bot_config, root_solution_revision=None):
+  def ensure_checkout(self, bot_config, root_solution_revision=None,
+                      force=False):
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
 
@@ -160,7 +161,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     update_step = self.m.bot_update.ensure_checkout(
         patch_root=bot_config.get('patch_root'),
         root_solution_revision=root_solution_revision,
-        clobber=bot_config.get('clobber', False))
+        clobber=bot_config.get('clobber', False),
+        force=force)
     assert update_step.json.output['did_run']
     # HACK(dnj): Remove after 'crbug.com/398105' has landed
     self.m.chromium.set_build_properties(update_step.json.output['properties'])
@@ -194,8 +196,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot_db._add_master_dict_and_test_spec(mastername, master_dict, {})
     return bot_db
 
-  def prepare_checkout(self, bot_config, root_solution_revision=None):
-    update_step = self.ensure_checkout(bot_config, root_solution_revision)
+  def prepare_checkout(self, bot_config, root_solution_revision=None,
+                       force=False):
+    update_step = self.ensure_checkout(
+        bot_config, root_solution_revision, force=force)
 
     # TODO(robertocn): Remove this hack by the end of Q1/2016.
     if (bot_config.matches_any_bot_id(
