@@ -3,6 +3,7 @@
   "master_port": 20307,
   "master_port_alt": 40307,
   "slave_port": 30307,
+  # TODO(eseidel): We should create our own templates.
   "templates": ["../master.chromium/templates"],
 
   "builders": {
@@ -16,12 +17,26 @@
       "scheduler": "flutter_commits",
       "slave_pools": ["mac"],
     },
+    "Linux Engine": {
+      "recipe": "flutter_engine",
+      "scheduler": "engine_commits",
+      "slave_pools": ["linux"],
+    },
+    "Mac Engine": {
+      "recipe": "flutter_engine",
+      "scheduler": "engine_commits",
+      "slave_pools": ["mac"],
+    },
   },
 
   "schedulers": {
     "flutter_commits": {
       "type": "git_poller",
       "git_repo_url": "https://chromium.googlesource.com/external/github.com/flutter/flutter",
+    },
+    "engine_commits": {
+      "type": "git_poller",
+      "git_repo_url": "https://chromium.googlesource.com/external/github.com/flutter/engine",
     },
   },
 

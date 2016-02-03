@@ -1,0 +1,321 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "config",
+      "--spec",
+      "cache_dir = '[ROOT]/git_cache'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/flutter/engine'}]"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gclient setup"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "sync",
+      "--verbose",
+      "--with_branch_heads",
+      "--nohooks",
+      "-j8",
+      "--reset",
+      "--force",
+      "--upstream",
+      "--no-nag-max",
+      "--delete_unversioned_trees",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gclient sync",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "recurse",
+      "git",
+      "config",
+      "user.name",
+      "local_bot"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gclient recurse (git config user.name)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "recurse",
+      "git",
+      "config",
+      "user.email",
+      "local_bot@example.com"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gclient recurse (git config user.email)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/sky/tools/gn",
+      "--debug"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gn --debug"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[SLAVE_BUILD]/src/out/Debug",
+      "generate_dart_ui"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "build Debug"
+  },
+  {
+    "cmd": [
+      "/bin/sh",
+      "travis/analyze.sh"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "analyze dart_ui"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/sky/tools/gn",
+      "--release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gn --release"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[SLAVE_BUILD]/src/out/Release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "build Release"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Zip Linux Artifacts",
+    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/Release/flutter.mojo\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/Release/icudtl.dat\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/Release/sky_shell\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/Release/sky_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_1/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\", \"use_python_zip\": false}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]/tmp_tmp_1/artifacts.zip",
+      "gs://mojo_infra/flutter/None/linux-x64/artifacts.zip"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/linux-x64/artifacts.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[TMP_BASE]/tmp_tmp_1"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rmtree temp dir",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/sky/tools/gn",
+      "--release",
+      "--android",
+      "--enable-firebase",
+      "--enable-gcm"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gn --release --android --enable-firebase --enable-gcm"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[SLAVE_BUILD]/src/out/android_Release",
+      "apks/SkyShell.apk",
+      "flutter.mojo",
+      "sky/services/gcm",
+      "sky/services/firebase"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "build android_Release"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Zip Android Artifacts",
+    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/android_Release/apks/SkyShell.apk\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/android_Release/flutter.mojo\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/android_Release/gen/sky/shell/shell/shell/libs/armeabi-v7a/libsky_shell.so\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/android_Release/icudtl.dat\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/android_Release/gen/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/android_Release/gen/sky/shell/shell/classes.dex\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_2/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\", \"use_python_zip\": false}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]/tmp_tmp_2/artifacts.zip",
+      "gs://mojo_infra/flutter/None/android-arm/artifacts.zip"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/android-arm/artifacts.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[TMP_BASE]/tmp_tmp_2"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rmtree temp dir (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "[SLAVE_BUILD]/src/out/android_Release/gen/sky/services/gcm/gcm_lib.dex.jar",
+      "gs://mojo_infra/flutter/None/gcm/gcm_lib.dex.jar"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload (3)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/gcm/gcm_lib.dex.jar@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "[SLAVE_BUILD]/src/out/android_Release/gen/sky/services/gcm/interfaces_java.dex.jar",
+      "gs://mojo_infra/flutter/None/gcm/interfaces_java.dex.jar"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload (4)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/gcm/interfaces_java.dex.jar@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "[SLAVE_BUILD]/src/out/android_Release/gen/sky/services/firebase/firebase_lib.dex.jar",
+      "gs://mojo_infra/flutter/None/firebase/firebase_lib.dex.jar"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload (5)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/firebase/firebase_lib.dex.jar@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "[SLAVE_BUILD]/src/out/android_Release/gen/sky/services/firebase/interfaces_java.dex.jar",
+      "gs://mojo_infra/flutter/None/firebase/interfaces_java.dex.jar"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload (6)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/firebase/interfaces_java.dex.jar@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
