@@ -27,10 +27,6 @@ class RepoApi(recipe_api.RecipeApi):
       self._repo_path = self.m.path['depot_tools'].join('repo')
     return self._repo_path
 
-  @repo_path.setter
-  def repo_path(self, path):
-    self._repo_path = path
-
   def __call__(self, args, name=None, **kwargs):
     """Executes 'repo' with the supplied arguments.
 
@@ -54,11 +50,8 @@ class RepoApi(recipe_api.RecipeApi):
     """Sync an already-init'd repo."""
     # NOTE: This does not set self.m.path['checkout']
     kwargs.setdefault('infra_step', True)
-    suffix = kwargs.pop('suffix', None)
     if not 'name' in kwargs:
       name = 'repo sync'
-      if suffix:
-        name += ' - ' + suffix
       kwargs['name'] = name
     return self(['sync'] + list(args), **kwargs)
 
