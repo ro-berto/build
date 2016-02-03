@@ -15,8 +15,11 @@ SPEC = {
   'builders': {
     'GPU Win Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
-                                'chrome_with_codecs'],
+      'chromium_apply_config': [
+        'ninja_confirm_noop',
+        'archive_gpu_tests',
+        'chrome_with_codecs'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -33,8 +36,11 @@ SPEC = {
     },
     'GPU Win Builder (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
-                                'chrome_with_codecs'],
+      'chromium_apply_config': [
+        'ninja_confirm_noop',
+        'archive_gpu_tests',
+        'chrome_with_codecs'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -111,8 +117,12 @@ SPEC = {
     },
     'GPU Linux Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop',
-                                'archive_gpu_tests', 'chrome_with_codecs'],
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+        'archive_gpu_tests',
+        'chrome_with_codecs'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -129,8 +139,12 @@ SPEC = {
     },
     'GPU Linux Builder (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop',
-                                'archive_gpu_tests', 'chrome_with_codecs'],
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+        'archive_gpu_tests',
+        'chrome_with_codecs'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -187,8 +201,11 @@ SPEC = {
     },
     'GPU Mac Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
-                                'chrome_with_codecs'],
+      'chromium_apply_config': [
+        'ninja_confirm_noop',
+        'archive_gpu_tests',
+        'chrome_with_codecs'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -205,8 +222,11 @@ SPEC = {
     },
     'GPU Mac Builder (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
-                                'chrome_with_codecs'],
+      'chromium_apply_config': [
+        'ninja_confirm_noop',
+        'archive_gpu_tests',
+        'chrome_with_codecs'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',

@@ -15,7 +15,11 @@ SPEC = {
   'builders': {
     'Win Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'ninja_confirm_noop',
+        'archive_gpu_tests',
+        'chrome_with_codecs'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
