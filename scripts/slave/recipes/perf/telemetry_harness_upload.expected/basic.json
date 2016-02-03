@@ -143,6 +143,9 @@
       "[TMP_BASE]/telemetry-harness_tmp_1"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PYTHONPATH": ".:%(PYTHONPATH)s"
+    },
     "name": "rmtree remove harness temp directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

@@ -7,6 +7,9 @@
       "[SLAVE_BUILD]/git_clone_bundler/bundles"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PYTHONPATH": ".:%(PYTHONPATH)s"
+    },
     "name": "rmtree old bundles",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

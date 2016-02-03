@@ -252,6 +252,9 @@
       "[SLAVE_BUILD]\\perfdata\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot\\data"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PYTHONPATH": ".;%(PYTHONPATH)s"
+    },
     "name": "rmtree data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

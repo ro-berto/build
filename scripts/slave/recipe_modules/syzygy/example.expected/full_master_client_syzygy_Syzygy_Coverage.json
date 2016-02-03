@@ -108,6 +108,9 @@
       "[SLAVE_BUILD]\\src\\out\\Coverage"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PYTHONPATH": ".;%(PYTHONPATH)s"
+    },
     "name": "rmwildcard metrics.csv in [SLAVE_BUILD]\\src\\out\\Coverage",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

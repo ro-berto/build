@@ -158,6 +158,9 @@
       "[TMP_BASE]\\large-profile_tmp_1"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PYTHONPATH": ".;%(PYTHONPATH)s"
+    },
     "name": "rmtree Remove profile directory.",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -177,6 +180,9 @@
       "[TMP_BASE]\\zipped-profile_tmp_2"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PYTHONPATH": ".;%(PYTHONPATH)s"
+    },
     "name": "rmtree Remove zipped profile directory.",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
