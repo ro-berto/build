@@ -320,6 +320,16 @@ BUILDERS = freeze({
         },
         'testing': {'platform': 'linux'},
       },
+      'Linux MSan': {
+        'recipe_config': 'libyuv_clang',
+        'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
+                                  'prebuilt_instrumented_libraries'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'linux'},
+      },
       'Linux Tsan v2': {
         'recipe_config': 'libyuv_clang',
         'chromium_apply_config': ['tsan2'],
@@ -336,7 +346,6 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'Linux UBSan vptr': {
@@ -346,7 +355,6 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'Android Debug': {
@@ -581,6 +589,16 @@ BUILDERS = freeze({
         },
         'testing': {'platform': 'linux'},
       },
+      'linux_msan': {
+        'recipe_config': 'libyuv_clang',
+        'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
+                                  'prebuilt_instrumented_libraries'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'linux'},
+      },
       'linux_tsan2': {
         'recipe_config': 'libyuv_clang',
         'chromium_apply_config': ['tsan2'],
@@ -597,7 +615,6 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'linux_ubsan_vptr': {
@@ -607,7 +624,6 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'android': {
