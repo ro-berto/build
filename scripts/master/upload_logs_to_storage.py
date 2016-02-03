@@ -34,7 +34,7 @@ import pytz  # pylint: disable=F0401
 
 from common import find_depot_tools
 DEPOT_TOOLS_DIR = find_depot_tools.add_depot_tools_to_path()
-GSUTIL_BIN = os.path.join(DEPOT_TOOLS_DIR, 'third_party', 'gsutil', 'gsutil')
+GSUTIL_BIN = os.path.join(DEPOT_TOOLS_DIR, 'gsutil.py')
 assert os.path.isfile(GSUTIL_BIN), 'gsutil may have moved in the hierarchy'
 
 # Define logger as root logger by default. Modified by set_logging() below.
@@ -63,7 +63,7 @@ def call_gsutil(args, dry_run=False, stdin=None):
   if not isinstance(stdin, (basestring, types.NoneType)):
     raise ValueError('Incorrect type for stdin: must be a string or None.')
 
-  cmd = [GSUTIL_BIN]
+  cmd = [GSUTIL_BIN, '--force-version', '4.15', '--']
   cmd.extend(args)
   logger.debug('Running: %s', ' '.join(cmd))
   if dry_run:
@@ -207,7 +207,7 @@ class GCStorage(object):
                                         dry_run=self._dry_run)
     if returncode != 0:
       # The object can be missing when the builder name hasn't been used yet.
-      if not 'No such object' in stderr:
+      if not 'matched no objects' in stderr:
         logger.error('Unable to list bucket content.')
         raise GSutilError('Unable to list bucket content. gsutil stderr: %s',
                           stderr)
@@ -350,7 +350,7 @@ class GCStorage(object):
                                          self._get_flag_gs_url(builder_name)],
                                         dry_run=self._dry_run)
     if returncode != 0:
-      if not 'No such object' in stderr:
+      if not 'matched no objects' in stderr:
         logger.error("Unable to list bucket content.")
         raise GSutilError("Unable to list bucket content. gsutil stderr: %s",
                           stderr)
@@ -480,7 +480,8 @@ class Waterfall(object):
       basename = re.sub(r'[^\w\.\-]', '_', basename)
       filename = os.path.join(self._master_path, basedir, basename)
       ref = (build_properties['builderName'],
-             build_number, re.sub(r'/', '_', step_name) + '.' + log_name)
+             build_number,
+             re.sub(r'[/\[\]*+?]', '_', step_name) + '.' + log_name)
 
       for ext in ('', '.gz', '.bz2'):
         filename_ext = filename + ext
