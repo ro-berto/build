@@ -68,23 +68,18 @@ class PGOApi(recipe_api.RecipeApi):
     """
     Run a suite of telemetry benchmarks to generate some profiling data.
     """
-    pgosweep_path = self.m.path['depot_tools'].join(
-        'win_toolchain', 'vs_files', 'VC', 'bin')
-    # Make sure that we're using the x64 version of pgosweep for the x64 builds.
-    if self.m.chromium.c.TARGET_BITS == 64:
-      pgosweep_path = pgosweep_path.join('amd64')
-    pgo_env = {
-        'PATH': '%s;%s;%s' % (
-            pgosweep_path, self.m.chromium.output_dir, '%(PATH)s'),
-        'PogoSafeMode': 1
-    }
-    pgo_args = ['--profiler=win_pgo_profiler']
-
     for benchmark in _BENCHMARKS_TO_RUN:
       try:
-        self.m.chromium.run_telemetry_benchmark(benchmark_name=benchmark,
-                                                cmd_args=pgo_args,
-                                                env=pgo_env)
+        args = [
+            '--checkout-dir', self.m.path['checkout'],
+            '--browser-type', self.m.chromium.c.build_config_fs.lower(),
+            '--target-bits', self.m.chromium.c.TARGET_BITS,
+            '--benchmark', benchmark,
+        ]
+        self.m.python(
+          'Telemetry benchmark: %s' % benchmark,
+          self.resource('run_benchmark.py'),
+          args)
       except self.m.step.StepFailure:
         # Turn the failures into warning, we shouldn't stop the build for a
         # benchmark.

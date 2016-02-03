@@ -446,19 +446,6 @@ class ChromiumApi(recipe_api.RecipeApi):
   def is_release_build(self):
     return self.c.BUILD_CONFIG == 'Release'
 
-  def run_telemetry_benchmark(self, benchmark_name, cmd_args=None, env=None):
-    cmd_args = cmd_args or []
-    args = [
-        '--browser=%s' % self.c.build_config_fs.lower(),
-        benchmark_name
-    ]
-    return self.m.python(
-        'Telemetry benchmark: %s' % benchmark_name,
-        self.m.path['checkout'].join('tools', 'perf', 'run_benchmark'),
-        args=cmd_args + args,
-        env=env,
-    )
-
   def get_cros_chrome_sdk_wrapper(self, clean=False):
     """Returns: a wrapper command for 'cros chrome-sdk'
 

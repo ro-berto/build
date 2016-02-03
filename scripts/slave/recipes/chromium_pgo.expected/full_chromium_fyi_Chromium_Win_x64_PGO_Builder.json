@@ -165,496 +165,527 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "blink_perf.layout"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: blink_perf.layout"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "page_cycler.morejs"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: page_cycler.morejs"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "dromaeo.jslibstyleprototype"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: dromaeo.jslibstyleprototype"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "dromaeo.jslibeventprototype"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: dromaeo.jslibeventprototype"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "speedometer"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: speedometer"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "smoothness.top_25_smooth"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: smoothness.top_25_smooth"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "octane"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: octane"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "blink_perf.svg"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: blink_perf.svg"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "dromaeo.jslibtraverseprototype"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: dromaeo.jslibtraverseprototype"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "blink_style.top_25"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: blink_style.top_25"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "jetstream"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: jetstream"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "dromaeo.domcoreattr"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: dromaeo.domcoreattr"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "blink_perf.dom"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: blink_perf.dom"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "dromaeo.jslibattrprototype"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: dromaeo.jslibattrprototype"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "sunspider"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: sunspider"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "media.mse_cases"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: media.mse_cases"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "blink_perf.shadow_dom"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: blink_perf.shadow_dom"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "blink_perf.events"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: blink_perf.events"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "dromaeo.domcoretraverse"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: dromaeo.domcoretraverse"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "dromaeo.domcoremodify"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: dromaeo.domcoremodify"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "tab_switching.typical_25"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: tab_switching.typical_25"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "dromaeo.cssqueryjquery"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: dromaeo.cssqueryjquery"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "indexeddb_perf"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: indexeddb_perf"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "blink_perf.canvas"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: blink_perf.canvas"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "dromaeo.domcorequery"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: dromaeo.domcorequery"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "blink_perf.bindings"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: blink_perf.bindings"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "dromaeo.jslibtraversejquery"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: dromaeo.jslibtraversejquery"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "dromaeo.jslibmodifyprototype"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: dromaeo.jslibmodifyprototype"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "kraken"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: kraken"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "blink_perf.css"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: blink_perf.css"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\perf\\run_benchmark",
-      "--profiler=win_pgo_profiler",
-      "--browser=release_x64",
+      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
+      "--checkout-dir",
+      "[SLAVE_BUILD]\\src",
+      "--browser-type",
+      "release_x64",
+      "--target-bits",
+      "64",
+      "--benchmark",
       "blink_perf.paint"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[DEPOT_TOOLS]\\win_toolchain\\vs_files\\VC\\bin\\amd64;[SLAVE_BUILD]\\src\\out\\Release_x64;%(PATH)s",
-      "PogoSafeMode": "1"
-    },
     "name": "Telemetry benchmark: blink_perf.paint"
   },
   {
