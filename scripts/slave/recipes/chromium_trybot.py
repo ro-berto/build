@@ -34,37 +34,7 @@ DEPS = [
 # TODO(sergiyb): This config should be read from an external JSON file
 # in a custom step, which can then be mocked in the GenTests.
 CHROMIUM_GPU_DIMENSION_SETS = freeze({
-  'tryserver.chromium.linux': {
-    'linux_chromium_rel_ng': [
-      {
-        'gpu': '10de:104a',  # NVIDIA GeForce GT 610
-        'os': 'Linux',
-      },
-    ],
-  },
-  'tryserver.chromium.mac': {
-    'mac_chromium_rel_ng': [
-      {
-        'gpu': '8086:0a2e',  # Intel Iris
-        'hidpi': '0',
-        'os': 'Mac-10.10',
-      }, {
-        'gpu': '10de:0fe9',  # NVIDIA GeForce GT 750M
-        'hidpi': '1',
-        'os': 'Mac-10.9',
-      },
-    ],
-  },
   'tryserver.chromium.win': {
-    'win_chromium_rel_ng': [
-      {
-        'gpu': '10de:104a',  # NVIDIA GeForce GT 610
-        'os': 'Windows',
-      }, {
-        'gpu': '1002:6779',  # AMD Radeon HD 6450
-        'os': 'Windows',
-      },
-    ],
     'win_optional_gpu_tests_rel': [
       {
         'gpu': '10de:104a',  # NVIDIA GeForce GT 610
@@ -406,7 +376,9 @@ def GenTests(api):
     api.test('invalid_results') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
+    # TODO(kbr): disambiguate multiple "read test spec" steps better
+    # for trybots which mirror multiple waterfall bots.
+    api.override_step_data('read test spec (2)', api.json.output({
         'Linux Tests': {
             'gtest_tests': ['base_unittests'],
         },
@@ -422,7 +394,7 @@ def GenTests(api):
     api.test('dynamic_isolated_script_test_with_args_on_trybot') +
     props(extra_swarmed_tests=['telemetry_gpu_unittests']) +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
+    api.override_step_data('read test spec (2)', api.json.output({
         'Linux Tests': {
             'isolated_scripts': [
                 {
@@ -470,7 +442,7 @@ def GenTests(api):
     api.test('swarming_test_failure') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
+    api.override_step_data('read test spec (2)', api.json.output({
         'Linux Tests': {
             'gtest_tests': [
                 {
@@ -521,7 +493,7 @@ def GenTests(api):
     api.test('compile_failure_without_patch_deapply_fn') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data('read test spec', api.json.output({
+    api.override_step_data('read test spec (2)', api.json.output({
         'Linux Tests': {
           'gtest_tests': ['base_unittests'],
         },
@@ -773,89 +745,6 @@ def GenTests(api):
       api.json.output({'invalid_targets': ['invalid target', 'another one']}))
   )
 
-  gpu_targets = ['angle_unittests_run', 'chrome', 'chromium_builder_tests',
-                 'content_gl_tests_run', 'gl_tests_run',
-                 'tab_capture_end2end_tests_run', 'telemetry_gpu_test_run']
-  yield (
-    api.test('gpu_tests') +
-    props(
-      mastername='tryserver.chromium.mac',
-      buildername='mac_chromium_rel_ng',
-    ) +
-    api.platform.name('mac') +
-    api.override_step_data(
-        'pixel_test on Intel GPU on Mac (with patch) on Mac-10.10',
-        api.test_utils.canned_isolated_script_output(
-            passing=False, is_win=False, swarming=True,
-            isolated_script_passing=False)) +
-    api.override_step_data(
-        'pixel_test on Intel GPU on Mac (without patch) on Mac-10.10',
-        api.test_utils.canned_isolated_script_output(
-            passing=False, is_win=False, swarming=True,
-            isolated_script_passing=False)) +
-    api.override_step_data('analyze',
-                           api.json.output({'status': 'Found dependency',
-                                            'compile_targets': gpu_targets,
-                                            'test_targets': gpu_targets}))
-  )
-
-  yield (
-    api.test('telemetry_gpu_harness_failure') +
-    props(
-      mastername='tryserver.chromium.linux',
-      buildername='linux_chromium_rel_ng',
-    ) +
-    api.platform.name('linux') +
-    api.override_step_data(
-        'maps_pixel_test on NVIDIA GPU on Linux (with patch) on Linux',
-        api.test_utils.canned_isolated_script_output(
-            passing=False, is_win=False, swarming=True),
-        retcode=255) +
-    api.override_step_data('analyze',
-                           api.json.output({'status': 'Found dependency',
-                                            'test_targets': gpu_targets,
-                                            'compile_targets': gpu_targets}))
-  )
-
-  yield (
-    api.test('telemetry_gpu_swarming_error') +
-    props(
-      mastername='tryserver.chromium.mac',
-      buildername='mac_chromium_rel_ng',
-    ) +
-    api.platform.name('mac') +
-    api.override_step_data(
-        'pixel_test on Intel GPU on Mac (with patch) on Mac-10.10',
-        api.test_utils.canned_isolated_script_output(
-            passing=False, is_win=False, swarming=True,
-            swarming_internal_failure=True)) +
-    api.override_step_data('analyze',
-                           api.json.output({'status': 'Found dependency',
-                                            'test_targets': gpu_targets,
-                                            'compile_targets': gpu_targets}))
-  )
-
-  yield (
-    api.test('telemetry_gpu_with_results_but_bad_exit_code') +
-    props(
-      mastername='tryserver.chromium.mac',
-      buildername='mac_chromium_rel_ng',
-    ) +
-    api.platform.name('mac') +
-    # passing=True, but exit code != 0.
-    api.override_step_data(
-        'pixel_test on Intel GPU on Mac (with patch) on Mac-10.10',
-        api.test_utils.canned_isolated_script_output(
-            passing=True, is_win=False, swarming=True),
-        retcode=255
-    ) +
-    api.override_step_data('analyze',
-                           api.json.output({'status': 'Found dependency',
-                                            'test_targets': gpu_targets,
-                                            'compile_targets': gpu_targets}))
-  )
-
-
   yield (
     api.test('use_v8_patch_on_chromium_trybot') +
     props(buildername='win_chromium_rel_ng',
@@ -878,18 +767,6 @@ def GenTests(api):
     ) +
     api.platform.name('win') +
     api.override_step_data('analyze', api.gpu.analyze_builds_angle_unittests)
-  )
-
-  yield (
-    api.test('swarming_time_out_is_handled_correctly') +
-    api.properties.tryserver(
-      mastername='tryserver.chromium.win',
-      buildername='win_chromium_rel_ng'
-    ) +
-    api.platform.name('win') +
-    api.override_step_data('analyze', api.gpu.analyze_builds_pixel_test) +
-    api.override_step_data('pixel_test on NVIDIA GPU on Windows (with patch) '
-                           'on Windows', api.raw_io.output_dir({}))
   )
 
   # Tests that we run nothing if analyze said we didn't have to run anything.

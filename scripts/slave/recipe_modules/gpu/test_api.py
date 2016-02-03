@@ -58,14 +58,6 @@ class GpuTestApi(recipe_test_api.RecipeTestApi):
         })
 
   @property
-  def analyze_builds_pixel_test(self):
-    return self.m.json.output({
-        'status': 'Found dependency',
-        'compile_targets': ['All'],
-        'test_targets': ['telemetry_gpu_test_run'],
-        })
-
-  @property
   def analyze_builds_everything(self):
     return self.m.json.output({
         'status': 'Found dependency',

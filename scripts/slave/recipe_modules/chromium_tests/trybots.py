@@ -268,11 +268,20 @@ TRYBOTS = freeze({
         'mastername': 'chromium.chromiumos',
         'buildername': 'Linux ChromiumOS GN',
       }),
-      'linux_chromium_rel_ng': simple_bot({
-        'mastername': 'chromium.linux',
-        'buildername': 'Linux Builder',
-        'tester': 'Linux Tests',
-      }),
+      'linux_chromium_rel_ng': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.linux',
+            'buildername': 'Linux Builder',
+            'tester': 'Linux Tests',
+          },
+          {
+            'mastername': 'chromium.gpu',
+            'buildername': 'GPU Linux Builder',
+            'tester': 'Linux Release (NVIDIA)',
+          },
+        ],
+      },
       'linux_chromium_gpu_rel_ng': {
         'bot_ids': [
           {
@@ -404,11 +413,25 @@ TRYBOTS = freeze({
         'mastername': 'chromium.mac',
         'buildername': 'Mac GN',
       }),
-      'mac_chromium_rel_ng': simple_bot({
-        'mastername': 'chromium.mac',
-        'buildername': 'Mac Builder',
-        'tester': 'Mac10.8 Tests',
-      }),
+      'mac_chromium_rel_ng': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.mac',
+            'buildername': 'Mac Builder',
+            'tester': 'Mac10.8 Tests',
+          },
+          {
+            'mastername': 'chromium.gpu',
+            'buildername': 'GPU Mac Builder',
+            'tester': 'Mac 10.10 Release (Intel)',
+          },
+          {
+            'mastername': 'chromium.gpu',
+            'buildername': 'GPU Mac Builder',
+            'tester': 'Mac Retina Release',
+          },
+        ],
+      },
       'mac_chromium_10.6_rel_ng': simple_bot({
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder',
@@ -453,11 +476,25 @@ TRYBOTS = freeze({
         'mastername': 'chromium.win',
         'buildername': 'Win x64 GN',
       }),
-      'win_chromium_rel_ng': simple_bot({
-        'mastername': 'chromium.win',
-        'buildername': 'Win Builder',
-        'tester': 'Win7 Tests (1)',
-      }),
+      'win_chromium_rel_ng': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.win',
+            'buildername': 'Win Builder',
+            'tester': 'Win7 Tests (1)',
+          },
+          {
+            'mastername': 'chromium.gpu',
+            'buildername': 'GPU Win Builder',
+            'tester': 'Win7 Release (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu',
+            'buildername': 'GPU Win Builder',
+            'tester': 'Win7 Release (ATI)',
+          },
+        ],
+      },
       'win10_chromium_rel_ng': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Win Builder',

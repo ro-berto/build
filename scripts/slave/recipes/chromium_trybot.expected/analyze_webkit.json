@@ -166,11 +166,27 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json",
+      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.gpu.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.gpu.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "read test spec (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -225,7 +241,7 @@
       "-u",
       "[SLAVE_BUILD]\\src\\build\\gyp_chromium",
       "--analyzer",
-      "{\"additional_compile_targets\": [\"chromium_builder_tests\", \"crash_service\"], \"files\": [\"third_party/WebKit/Source/core/dom/Element.cpp\"], \"test_targets\": [\"angle_unittests_run\", \"blink_heap_unittests\", \"blink_platform_unittests\", \"content_gl_tests_run\", \"gl_tests_run\", \"gl_unittests_run\", \"mini_installer\", \"tab_capture_end2end_tests_run\", \"telemetry_gpu_test_run\", \"webkit_unit_tests\", \"wtf_unittests\"]}",
+      "{\"additional_compile_targets\": [\"chromium_builder_tests\", \"crash_service\"], \"files\": [\"third_party/WebKit/Source/core/dom/Element.cpp\"], \"test_targets\": [\"blink_heap_unittests\", \"blink_platform_unittests\", \"mini_installer\", \"webkit_unit_tests\", \"wtf_unittests\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -250,15 +266,9 @@
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"angle_unittests_run\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"blink_heap_unittests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"blink_platform_unittests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"content_gl_tests_run\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests_run\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"gl_unittests_run\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"tab_capture_end2end_tests_run\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_test_run\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"webkit_unit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"wtf_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
