@@ -16,6 +16,8 @@
       "build_internal/scripts/slave",
       "--revision_mapping_file",
       "{\"build\": \"got_build_revision\", \"build_internal/scripts/slave\": \"got_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
       "--issue",
       "12853011",
       "--patchset",

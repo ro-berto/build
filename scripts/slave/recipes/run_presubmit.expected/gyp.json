@@ -16,6 +16,8 @@
       "gyp",
       "--revision_mapping_file",
       "{\"gyp\": \"got_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
       "--issue",
       "12853011",
       "--patchset",

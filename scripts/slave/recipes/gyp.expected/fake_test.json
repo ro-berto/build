@@ -16,6 +16,8 @@
       "gyp",
       "--revision_mapping_file",
       "{\"gyp\": \"got_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",

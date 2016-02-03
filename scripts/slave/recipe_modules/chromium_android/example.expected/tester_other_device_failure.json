@@ -40,6 +40,8 @@
       "src/repo",
       "--revision_mapping_file",
       "{}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
       "--patch_url",
       "https://the.patch.url/the.patch",
       "--output_json",

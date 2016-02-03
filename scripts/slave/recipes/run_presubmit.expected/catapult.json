@@ -16,6 +16,8 @@
       "catapult",
       "--revision_mapping_file",
       "{\"catapult\": \"got_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
       "--issue",
       "12853011",
       "--patchset",

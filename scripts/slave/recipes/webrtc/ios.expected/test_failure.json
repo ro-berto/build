@@ -39,6 +39,8 @@
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
       "--patch_url",
       "patch url",
       "--output_json",

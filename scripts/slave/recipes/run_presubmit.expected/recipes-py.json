@@ -16,6 +16,8 @@
       "infra/recipes-py",
       "--revision_mapping_file",
       "{\"infra/recipes-py\": \"got_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
       "--issue",
       "12853011",
       "--patchset",

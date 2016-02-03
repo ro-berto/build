@@ -40,6 +40,8 @@
       "dartium.deps",
       "--revision_mapping_file",
       "{}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",

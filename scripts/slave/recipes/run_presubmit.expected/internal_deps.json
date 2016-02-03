@@ -16,6 +16,8 @@
       "build_internal/internal.DEPS",
       "--revision_mapping_file",
       "{\"build_internal/internal.DEPS\": \"got_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
       "--issue",
       "12853011",
       "--patchset",

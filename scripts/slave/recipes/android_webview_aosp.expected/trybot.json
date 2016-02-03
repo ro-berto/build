@@ -16,6 +16,8 @@
       "src",
       "--revision_mapping_file",
       "{}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
       "--issue",
       "12853011",
       "--patchset",

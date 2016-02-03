@@ -16,6 +16,8 @@
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
       "--issue",
       "666666",
       "--patchset",

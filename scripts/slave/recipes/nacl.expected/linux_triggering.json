@@ -16,6 +16,8 @@
       "native_client",
       "--revision_mapping_file",
       "{\"native_client\": \"got_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",

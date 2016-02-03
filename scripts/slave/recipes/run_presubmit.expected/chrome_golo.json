@@ -16,6 +16,8 @@
       "chrome_golo",
       "--revision_mapping_file",
       "{\"chrome_golo\": \"got_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
       "--issue",
       "12853011",
       "--patchset",

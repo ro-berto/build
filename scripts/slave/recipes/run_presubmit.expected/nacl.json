@@ -16,6 +16,8 @@
       "native_client",
       "--revision_mapping_file",
       "{\"native_client\": \"got_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
       "--issue",
       "12853011",
       "--patchset",

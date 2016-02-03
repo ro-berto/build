@@ -16,6 +16,8 @@
       "depot_tools",
       "--revision_mapping_file",
       "{\"depot_tools\": \"got_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
       "--issue",
       "12853011",
       "--patchset",

@@ -16,6 +16,8 @@
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
       "--patch_url",
       "try_job_svn_patch",
       "--output_json",
