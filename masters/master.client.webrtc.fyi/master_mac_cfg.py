@@ -17,6 +17,8 @@ def Update(c):
                                 'Mac64 Release (swarming)',
                                 'iOS64 Debug (GN)',
                                 'iOS64 Release (GN)',
+                                'iOS64 Debug',
+                                'iOS64 Simulator Debug',
                             ]),
   ])
 
@@ -24,12 +26,23 @@ def Update(c):
     {'name': 'Mac64 Release (swarming)', 'slavebuilddir': 'mac_swarming'},
     {'name': 'iOS64 Debug (GN)', 'slavebuilddir': 'mac64_gn'},
     {'name': 'iOS64 Release (GN)', 'slavebuilddir': 'mac64_gn'},
+    {
+      'name': 'iOS64 Debug',
+      'slavebuilddir': 'mac64',
+      'recipe': 'webrtc/ios',
+    },
+    {
+      'name': 'iOS64 Simulator Debug',
+      'slavebuilddir': 'mac64',
+      'recipe': 'webrtc/ios',
+    },
   ]
 
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory('webrtc/standalone'),
+        'factory': m_annotator.BaseFactory(spec.get('recipe',
+                                                    'webrtc/standalone')),
         'notify_on_missing': True,
         'category': 'mac',
         'slavebuilddir': spec['slavebuilddir'],

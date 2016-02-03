@@ -149,6 +149,7 @@ class iOSApi(recipe_api.RecipeApi):
     self.__config.setdefault('env', {})
     self.__config.setdefault('mb_type', None)
     self.__config.setdefault('gn_args', [])
+    self.__config.setdefault('use_analyze', True)
 
     # Elements of the "tests" list are dicts. There are two types of elements,
     # determined by the presence of one of these mutually exclusive keys:
@@ -303,7 +304,9 @@ class iOSApi(recipe_api.RecipeApi):
                              name='generate_build_files' + suffix,
                              build_dir='//out/' + build_sub_path)
 
-    if (self.compiler == 'ninja' and
+    use_analyze = self.__config['use_analyze']
+    if (use_analyze and
+        self.compiler == 'ninja' and
         self.m.tryserver.is_tryserver and
         'without patch' not in suffix):
       affected_files = self.m.tryserver.get_files_affected_by_patch()
