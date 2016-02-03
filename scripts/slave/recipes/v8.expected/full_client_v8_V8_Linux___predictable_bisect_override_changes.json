@@ -26,9 +26,6 @@
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "RECIPE_PACKAGE[depot_tools]:%(PATH)s"
-    },
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -426,9 +423,6 @@
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "RECIPE_PACKAGE[depot_tools]:%(PATH)s"
-    },
     "name": "Bisect a0.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -609,9 +603,6 @@
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "RECIPE_PACKAGE[depot_tools]:%(PATH)s"
-    },
     "name": "Bisect a2.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -818,9 +809,6 @@
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "RECIPE_PACKAGE[depot_tools]:%(PATH)s"
-    },
     "name": "Bisect a1.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
