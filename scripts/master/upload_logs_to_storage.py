@@ -207,7 +207,7 @@ class GCStorage(object):
                                         dry_run=self._dry_run)
     if returncode != 0:
       # The object can be missing when the builder name hasn't been used yet.
-      if not 'No such object' in stderr:
+      if not 'matched no objects' in stderr:
         logger.error('Unable to list bucket content.')
         raise GSutilError('Unable to list bucket content. gsutil stderr: %s',
                           stderr)
@@ -350,7 +350,7 @@ class GCStorage(object):
                                          self._get_flag_gs_url(builder_name)],
                                         dry_run=self._dry_run)
     if returncode != 0:
-      if not 'No such object' in stderr:
+      if not 'matched no objects' in stderr:
         logger.error("Unable to list bucket content.")
         raise GSutilError("Unable to list bucket content. gsutil stderr: %s",
                           stderr)
