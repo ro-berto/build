@@ -34,7 +34,7 @@ import pytz  # pylint: disable=F0401
 
 from common import find_depot_tools
 DEPOT_TOOLS_DIR = find_depot_tools.add_depot_tools_to_path()
-GSUTIL_BIN = os.path.join(DEPOT_TOOLS_DIR, 'gsutil.py')
+GSUTIL_BIN = os.path.join(DEPOT_TOOLS_DIR, 'third_party', 'gsutil', 'gsutil')
 assert os.path.isfile(GSUTIL_BIN), 'gsutil may have moved in the hierarchy'
 
 # Define logger as root logger by default. Modified by set_logging() below.
@@ -63,7 +63,7 @@ def call_gsutil(args, dry_run=False, stdin=None):
   if not isinstance(stdin, (basestring, types.NoneType)):
     raise ValueError('Incorrect type for stdin: must be a string or None.')
 
-  cmd = [GSUTIL_BIN, '--force-version', '4.15', '--']
+  cmd = [GSUTIL_BIN]
   cmd.extend(args)
   logger.debug('Running: %s', ' '.join(cmd))
   if dry_run:
@@ -207,7 +207,7 @@ class GCStorage(object):
                                         dry_run=self._dry_run)
     if returncode != 0:
       # The object can be missing when the builder name hasn't been used yet.
-      if not 'matched no objects' in stderr:
+      if not 'No such object' in stderr:
         logger.error('Unable to list bucket content.')
         raise GSutilError('Unable to list bucket content. gsutil stderr: %s',
                           stderr)
@@ -350,7 +350,7 @@ class GCStorage(object):
                                          self._get_flag_gs_url(builder_name)],
                                         dry_run=self._dry_run)
     if returncode != 0:
-      if not 'matched no objects' in stderr:
+      if not 'No such object' in stderr:
         logger.error("Unable to list bucket content.")
         raise GSutilError("Unable to list bucket content. gsutil stderr: %s",
                           stderr)
