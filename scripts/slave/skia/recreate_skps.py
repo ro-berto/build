@@ -47,7 +47,7 @@ def main(chrome_src_path, browser_executable, dry_run=False):
                            commit_queue=not dry_run):
     subprocess.check_call(['python', os.path.join('tools', 'skp',
                                                   'recreate_skps.py'),
-                           chrome_src_path, browser_executable])
+                           chrome_src_path, browser_executable, str(dry_run)])
 
 
 if '__main__' == __name__:
