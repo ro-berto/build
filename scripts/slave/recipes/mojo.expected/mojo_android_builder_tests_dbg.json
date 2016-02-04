@@ -94,7 +94,9 @@
       "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py",
       "--json-output",
       "/path/to/tmp/json",
-      "--restart-usb"
+      "--restart-usb",
+      "--known-devices-file",
+      "[BUILD]/site_config/.known_devices"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "device_status_check",

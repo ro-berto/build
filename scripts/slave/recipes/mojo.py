@@ -67,7 +67,12 @@ def _BuildSteps(api, buildername, is_debug, is_official):
 
 
 def _DeviceCheckStep(api):
-  args = ['--json-output', api.json.output(), '--restart-usb']
+  devices_path = api.m.path['build'].join('site_config', '.known_devices')
+  args = [
+      '--json-output', api.json.output(),
+      '--restart-usb',
+      '--known-devices-file', devices_path,
+  ]
   try:
     result = api.python(
         'device_status_check',

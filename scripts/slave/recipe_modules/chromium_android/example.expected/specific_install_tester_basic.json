@@ -329,7 +329,9 @@
       "--json-output",
       "/path/to/tmp/json",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--known-devices-file",
+      "[BUILD]/site_config/.known_devices"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -455,7 +457,9 @@
       "--json-output",
       "/path/to/tmp/json",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json"
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--known-devices-file",
+      "[BUILD]/site_config/.known_devices"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

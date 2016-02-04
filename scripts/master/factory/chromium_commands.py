@@ -633,12 +633,14 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddDeviceStatus(self, factory_properties=None):
     """Reports the status of the bot devices."""
     factory_properties = factory_properties or {}
+    devices_path = self.m.path['build'].join('site_config', '.known_devices')
+    args = ['--device-status-dashboard', '--known-devices-file', devices_path]
 
     self.AddBuildrunnerAnnotatedPerfStep(
       'device_status', None, 'graphing',
       cmd_name=self._device_status_check,
-      cmd_options=['--device-status-dashboard'], step_name='device_status',
-      py_script=True, factory_properties=factory_properties, alwaysRun=True)
+      cmd_options=args, step_name='device_status',  py_script=True,
+      factory_properties=factory_properties, alwaysRun=True)
 
   def AddBisectTest(self):
     """Adds a step to the factory to run a bisection on a range of revisions

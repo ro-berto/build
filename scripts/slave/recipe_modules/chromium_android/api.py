@@ -322,9 +322,11 @@ class AndroidApi(recipe_api.RecipeApi):
     return self.out_path.join('bad_devices.json')
 
   def device_status_check(self, restart_usb=False, **kwargs):
+    devices_path = self.m.path['build'].join('site_config', '.known_devices')
     args = [
         '--json-output', self.m.json.output(),
         '--blacklist-file', self.blacklist_file,
+        '--known-devices-file', devices_path,
     ]
     if restart_usb:
       args += ['--restart-usb']
