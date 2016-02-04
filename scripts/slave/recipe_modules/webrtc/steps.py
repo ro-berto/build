@@ -46,13 +46,10 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
         BaremetalTest('webrtc_perf_tests', revision, perf_test=True),
     ])
   elif test_suite == 'android':
-    for test, isolate_file_path in sorted(api.ANDROID_APK_TESTS.iteritems()):
-      tests.append(AndroidTest(test, isolate_path=isolate_file_path))
-    for test, isolate_file_path in sorted(
-        api.ANDROID_APK_PERF_TESTS.iteritems()):
-      tests.append(AndroidPerfTest(test, revision,
-                                   isolate_path=isolate_file_path,
-                                   perf_id=api.c.PERF_ID))
+    for test in api.ANDROID_APK_TESTS:
+      tests.append(AndroidTest(test))
+    tests.append(AndroidPerfTest('webrtc_perf_tests', revision,
+                                 perf_id=api.c.PERF_ID))
     for test_name, test_config in api.ANDROID_INSTRUMENTATION_TESTS.iteritems():
       tests.append(AndroidInstrumentationTest(test_name, test_config))
 
@@ -134,16 +131,11 @@ class AndroidTest(Test):
   # Android test framework.
   _SHARD_TIMEOUT = 15 * 60
 
-  def __init__(self, name, isolate_path):
+  def __init__(self, name):
     super(AndroidTest, self).__init__(name)
-    self._isolate_path = isolate_path
 
   def run(self, api, suffix):
-    # Use absolute path here to avoid the Chromium hardcoded fallback in
-    # src/build/android/pylib/base/base_setup.py.
-    isolate_path = api.m.path['checkout'].join(self._isolate_path)
     api.m.chromium_android.run_test_suite(self._name,
-                                          isolate_file_path=isolate_path,
                                           tool=get_android_tool(api),
                                           shard_timeout=self._SHARD_TIMEOUT)
 
@@ -176,27 +168,20 @@ class AndroidPerfTest(Test):
   # Android test framework.
   _SHARD_TIMEOUT = 30 * 60
 
-  def __init__(self, name, revision, isolate_path, perf_id=None):
+  def __init__(self, name, revision, perf_id=None):
     super(AndroidPerfTest, self).__init__(name)
     self._revision = revision
-    self._isolate_path = isolate_path
     self._perf_id = perf_id
 
   def run(self, api, suffix):
-    # Use absolute path here to avoid the Chromium hardcoded fallback in
-    # src/build/android/pylib/base/base_setup.py.
-    isolate_path = api.m.path['checkout'].join(self._isolate_path)
-
     if not self._perf_id or api.m.chromium.c.BUILD_CONFIG == 'Debug':
       # Run as a normal test for trybots and Debug, without perf data scraping.
       api.m.chromium_android.run_test_suite(
           self._name,
-          isolate_file_path=isolate_path,
           tool=get_android_tool(api),
           shard_timeout=self._SHARD_TIMEOUT)
     else:
       args = ['gtest', '-s', self._name, '--verbose', '--release',
-              '--isolate-file-path', isolate_path,
               '-t', str(self._SHARD_TIMEOUT)]
       tool = get_android_tool(api)
       api.add_test(name=self._name,

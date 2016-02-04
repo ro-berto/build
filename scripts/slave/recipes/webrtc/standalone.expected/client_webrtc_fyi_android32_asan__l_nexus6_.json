@@ -364,7 +364,6 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/modules/audio_decoder_unittests.isolate",
       "--tool=asan",
       "-t",
       "900"
@@ -387,7 +386,6 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/common_audio/common_audio_unittests.isolate",
       "--tool=asan",
       "-t",
       "900"
@@ -410,7 +408,6 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/common_video/common_video_unittests.isolate",
       "--tool=asan",
       "-t",
       "900"
@@ -433,7 +430,6 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/modules/modules_tests.isolate",
       "--tool=asan",
       "-t",
       "900"
@@ -456,7 +452,6 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/modules/modules_unittests.isolate",
       "--tool=asan",
       "-t",
       "900"
@@ -479,7 +474,6 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/talk/peerconnection_unittests.isolate",
       "--tool=asan",
       "-t",
       "900"
@@ -502,7 +496,6 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/system_wrappers/system_wrappers_unittests.isolate",
       "--tool=asan",
       "-t",
       "900"
@@ -525,7 +518,6 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/test/test_support_unittests.isolate",
       "--tool=asan",
       "-t",
       "900"
@@ -548,7 +540,6 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/tools/tools_unittests.isolate",
       "--tool=asan",
       "-t",
       "900"
@@ -571,7 +562,6 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/video_engine_tests.isolate",
       "--tool=asan",
       "-t",
       "900"
@@ -594,7 +584,6 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/voice_engine/voice_engine_unittests.isolate",
       "--tool=asan",
       "-t",
       "900"
@@ -617,7 +606,6 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/webrtc_nonparallel_tests.isolate",
       "--tool=asan",
       "-t",
       "900"
@@ -640,7 +628,6 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
       "--release",
-      "--isolate_file_path=[SLAVE_BUILD]/src/webrtc/webrtc_perf_tests.isolate",
       "--tool=asan",
       "-t",
       "1800"

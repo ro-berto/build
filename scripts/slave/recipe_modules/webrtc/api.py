@@ -34,29 +34,20 @@ class WebRTCApi(recipe_api.RecipeApi):
   )
 
   # Android APK tests.
-  ANDROID_APK_TESTS = freeze({
-    'audio_decoder_unittests':
-        'webrtc/modules/audio_decoder_unittests.isolate',
-    'common_audio_unittests':
-        'webrtc/common_audio/common_audio_unittests.isolate',
-    'common_video_unittests':
-        'webrtc/common_video/common_video_unittests.isolate',
-    'modules_tests': 'webrtc/modules/modules_tests.isolate',
-    'modules_unittests': 'webrtc/modules/modules_unittests.isolate',
-    'peerconnection_unittests': 'talk/peerconnection_unittests.isolate',
-    'system_wrappers_unittests':
-        'webrtc/system_wrappers/system_wrappers_unittests.isolate',
-    'test_support_unittests': 'webrtc/test/test_support_unittests.isolate',
-    'tools_unittests': 'webrtc/tools/tools_unittests.isolate',
-    'video_engine_tests': 'webrtc/video_engine_tests.isolate',
-    'voice_engine_unittests':
-        'webrtc/voice_engine/voice_engine_unittests.isolate',
-    'webrtc_nonparallel_tests': 'webrtc/webrtc_nonparallel_tests.isolate',
-  })
-
-  ANDROID_APK_PERF_TESTS = freeze({
-    'webrtc_perf_tests': 'webrtc/webrtc_perf_tests.isolate'
-  })
+  ANDROID_APK_TESTS = (
+    'audio_decoder_unittests',
+    'common_audio_unittests',
+    'common_video_unittests',
+    'modules_tests',
+    'modules_unittests',
+    'peerconnection_unittests',
+    'system_wrappers_unittests',
+    'test_support_unittests',
+    'tools_unittests',
+    'video_engine_tests',
+    'voice_engine_unittests',
+    'webrtc_nonparallel_tests',
+  )
 
   # Instrumentation tests may target a separate APK to be tested. In that case,
   # specify the APK name (without the .apk extension) as key in the dict below.
