@@ -78,8 +78,8 @@ def main():
   # Augment the PATH to make sure that the benchmarking script can find
   # pgosweep.exe and its runtime libraries.
   env = os.environ.copy()
-  env['PATH'] = os.pathsep.join([pgo_sweep_dir, options.build_dir,
-                                 os.environ['PATH']])
+  env['PATH'] = str(os.pathsep.join([pgo_sweep_dir, options.build_dir,
+                                     os.environ['PATH']]))
   env['PogoSafeMode'] = '1'
 
   benchmark_command = [
