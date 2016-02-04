@@ -86,6 +86,9 @@
       "--debug"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "gn --debug"
   },
   {
@@ -96,6 +99,9 @@
       "generate_dart_ui"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "build Debug"
   },
   {
@@ -104,6 +110,9 @@
       "travis/analyze.sh"
     ],
     "cwd": "[SLAVE_BUILD]/src",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "analyze dart_ui"
   },
   {
@@ -112,6 +121,9 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "gn --release"
   },
   {
@@ -121,6 +133,9 @@
       "[SLAVE_BUILD]/src/out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "build Release"
   },
   {
@@ -130,6 +145,9 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "Zip Linux Artifacts",
     "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/Release/flutter.mojo\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/Release/icudtl.dat\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/Release/sky_shell\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/Release/sky_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_1/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\", \"use_python_zip\": false}"
   },
@@ -146,6 +164,9 @@
       "gs://mojo_infra/flutter/None/linux-x64/artifacts.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/linux-x64/artifacts.zip@@@"
@@ -159,6 +180,9 @@
       "[TMP_BASE]/tmp_tmp_1"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "rmtree temp dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -179,6 +203,9 @@
       "--enable-gcm"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "gn --release --android --enable-firebase --enable-gcm"
   },
   {
@@ -192,6 +219,9 @@
       "sky/services/firebase"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "build android_Release"
   },
   {
@@ -201,6 +231,9 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "Zip Android Artifacts",
     "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/android_Release/apks/SkyShell.apk\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/android_Release/flutter.mojo\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/android_Release/gen/sky/shell/shell/shell/libs/armeabi-v7a/libsky_shell.so\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/android_Release/icudtl.dat\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/android_Release/gen/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}, {\"path\": \"[SLAVE_BUILD]/src/out/android_Release/gen/sky/shell/shell/classes.dex\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_2/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\", \"use_python_zip\": false}"
   },
@@ -217,6 +250,9 @@
       "gs://mojo_infra/flutter/None/android-arm/artifacts.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "gsutil upload (2)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/android-arm/artifacts.zip@@@"
@@ -230,6 +266,9 @@
       "[TMP_BASE]/tmp_tmp_2"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "rmtree temp dir (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -254,6 +293,9 @@
       "gs://mojo_infra/flutter/None/gcm/gcm_lib.dex.jar"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "gsutil upload (3)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/gcm/gcm_lib.dex.jar@@@"
@@ -272,6 +314,9 @@
       "gs://mojo_infra/flutter/None/gcm/interfaces_java.dex.jar"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "gsutil upload (4)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/gcm/interfaces_java.dex.jar@@@"
@@ -290,6 +335,9 @@
       "gs://mojo_infra/flutter/None/firebase/firebase_lib.dex.jar"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "gsutil upload (5)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/firebase/firebase_lib.dex.jar@@@"
@@ -308,6 +356,9 @@
       "gs://mojo_infra/flutter/None/firebase/interfaces_java.dex.jar"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "gsutil upload (6)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/firebase/interfaces_java.dex.jar@@@"

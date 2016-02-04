@@ -86,6 +86,9 @@
       "--debug"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "gn --debug"
   },
   {
@@ -96,6 +99,9 @@
       "generate_dart_ui"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "build Debug"
   },
   {
@@ -104,6 +110,9 @@
       "travis/analyze.sh"
     ],
     "cwd": "[SLAVE_BUILD]/src",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "analyze dart_ui"
   },
   {
@@ -112,6 +121,9 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "gn --release"
   },
   {
@@ -122,6 +134,9 @@
       "sky_snapshot"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "build Release"
   },
   {
@@ -131,6 +146,9 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "Zip Artifacts",
     "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/Release/sky_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_1/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\", \"use_python_zip\": false}"
   },
@@ -147,6 +165,9 @@
       "gs://mojo_infra/flutter/None/darwin-x64/artifacts.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/darwin-x64/artifacts.zip@@@"
@@ -160,6 +181,9 @@
       "[TMP_BASE]/tmp_tmp_1"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "rmtree temp dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -179,6 +203,9 @@
       "--simulator"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "gn --release --ios --simulator"
   },
   {
@@ -188,6 +215,9 @@
       "[SLAVE_BUILD]/src/out/ios_sim_Release"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "build ios_sim_Release"
   },
   {
@@ -197,6 +227,9 @@
       "--ios"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "gn --release --ios"
   },
   {
@@ -206,6 +239,9 @@
       "[SLAVE_BUILD]/src/out/ios_Release"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "build ios_Release"
   },
   {
@@ -217,6 +253,9 @@
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "makedirs mkdir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -241,6 +280,9 @@
       "0"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "copy sim"
   },
   {
@@ -253,6 +295,9 @@
       "0"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "copy sim (2)"
   },
   {
@@ -262,6 +307,9 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "make FlutterXcode.zip",
     "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/FlutterXcode/Flutter\", \"type\": \"dir\"}], \"output\": \"[SLAVE_BUILD]/src/out/FlutterXcode.zip\", \"root\": \"[SLAVE_BUILD]/src/out/FlutterXcode/Flutter\", \"use_python_zip\": false}"
   },
@@ -278,6 +326,9 @@
       "gs://flutter_infra/flutter/None/ios/FlutterXcode.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "gsutil upload (2)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/ios/FlutterXcode.zip@@@"

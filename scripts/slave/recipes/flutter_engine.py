@@ -183,15 +183,22 @@ def GetCheckout(api):
 
 def RunSteps(api):
   GetCheckout(api)
-  AnalyzeDartUI(api)
 
-  if api.platform.is_linux:
-    BuildLinux(api)
-    BuildLinuxAndroid(api)
+  checkout = api.path['checkout']
+  dart_bin = checkout.join('third_party', 'dart-sdk', 'dart-sdk', 'bin')
+  env = { 'PATH': api.path.pathsep.join((str(dart_bin), '%(PATH)s')) }
 
-  if api.platform.is_mac:
-    BuildMac(api)
-    GenerateXcodeProject(api)
+  # The context adds dart to the path, only needed for the analyze step for now.
+  with api.step.context({'env': env}):
+    AnalyzeDartUI(api)
+
+    if api.platform.is_linux:
+      BuildLinux(api)
+      BuildLinuxAndroid(api)
+
+    if api.platform.is_mac:
+      BuildMac(api)
+      GenerateXcodeProject(api)
 
 
 def GenTests(api):
