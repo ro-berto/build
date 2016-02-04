@@ -274,10 +274,13 @@ class GpuApi(recipe_api.RecipeApi):
     """
     tests = []
     if enable_swarming:
-      for swarming_dimensions in swarming_dimension_sets:
-        tests.extend(self._create_test_batch(chrome_revision, webkit_revision,
-                                             enable_swarming,
-                                             swarming_dimensions))
+      # The pragmas are only temporary; this entire file is about to
+      # be deleted.
+      for swarming_dimensions in swarming_dimension_sets:  # pragma: no cover
+        tests.extend(self._create_test_batch(
+            chrome_revision, webkit_revision,
+            enable_swarming,
+            swarming_dimensions))  # pragma: no cover
     else:
       tests.extend(self._create_test_batch(chrome_revision, webkit_revision))
     return tests
@@ -322,27 +325,29 @@ class GpuApi(recipe_api.RecipeApi):
       return tests
 
     # Run only specific extra tests on the GPU trybots.
+    # The pragmas are only temporary; this entire file is about to be deleted.
     if self.is_optional_gpu_tests_trybot:
-      test_names = list(OPTIONAL_GPU_TRYBOT_TESTS_TO_RUN)
+      test_names = list(OPTIONAL_GPU_TRYBOT_TESTS_TO_RUN)  # pragma: no cover
 
-      for test_name in test_names:
+      for test_name in test_names:  # pragma: no cover
         tests.append(self._create_gtest(
             test_name, chrome_revision, webkit_revision, enable_swarming,
-            swarming_dimensions))
+            swarming_dimensions))  # pragma: no cover
 
       tests.append(self._create_telemetry_test(
           'webgl2_conformance', chrome_revision, webkit_revision,
           enable_swarming, swarming_dimensions, target_name='webgl_conformance',
-          args=['--webgl-conformance-version=2.0.0', '--webgl2-only=true']))
+          args=['--webgl-conformance-version=2.0.0', '--webgl2-only=true'])
+      )  # pragma: no cover
 
       tests.append(self._create_telemetry_test(
           D3D9_TEST_NAME_MAPPING['webgl_conformance'], chrome_revision,
           webkit_revision, enable_swarming, swarming_dimensions,
           target_name='webgl_conformance',
-          extra_browser_args=['--use-angle=d3d9']))
+          extra_browser_args=['--use-angle=d3d9']))  # pragma: no cover
 
       # TODO(jmadill): Run webgl_conformance_gl once we fix AMD/Win.
-      return tests
+      return tests  # pragma: no cover
 
     # Copy the test list to avoid mutating it.
     basic_tests = list(SIMPLE_TESTS_TO_RUN)
@@ -589,7 +594,8 @@ class GpuApi(recipe_api.RecipeApi):
           target_name='telemetry_gpu_test',
           dimensions=swarming_dimensions,
           tags={'gpu_test:1'},
-          override_compile_targets=['telemetry_gpu_test_run'])
+          override_compile_targets=['telemetry_gpu_test_run']
+      )  # pragma: no cover
     else:
       return self.m.chromium_tests.steps.LocalIsolatedScriptTest(
           step_name, args=prefix_args + test_args,

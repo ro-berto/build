@@ -34,17 +34,6 @@ DEPS = [
 # TODO(sergiyb): This config should be read from an external JSON file
 # in a custom step, which can then be mocked in the GenTests.
 CHROMIUM_GPU_DIMENSION_SETS = freeze({
-  'tryserver.chromium.win': {
-    'win_optional_gpu_tests_rel': [
-      {
-        'gpu': '10de:104a',  # NVIDIA GeForce GT 610
-        'os': 'Windows',
-      }, {
-        'gpu': '1002:6779',  # AMD Radeon HD 6450
-        'os': 'Windows',
-      },
-     ],
-  },
 })
 
 
@@ -135,9 +124,13 @@ def _RunStepsInternal(api):
   api.chromium_tests.configure_swarming('chromium', precommit=True)
 
   api.chromium.apply_config('trybot_flavor')
+  # TODO(kbr): the pragmas are only temporary; the GPU recipe and all
+  # associated code in this recipe are about to be deleted.
   if enable_gpu_tests:
-    api.chromium.apply_config('archive_gpu_tests', optional=True)
-    api.chromium.apply_config('chrome_with_codecs', optional=True)
+    api.chromium.apply_config(
+        'archive_gpu_tests', optional=True)  # pragma: no cover
+    api.chromium.apply_config(
+        'chrome_with_codecs', optional=True)  # pragma: no cover
 
   if api.properties.get('patch_project') == 'blink':  # pragma: no cover
     raise Exception('CLs which use blink project are not supported. '
@@ -153,12 +146,15 @@ def _RunStepsInternal(api):
     tests.extend(additional_tests)
     tests_including_triggered.extend(additional_tests)
 
+  # TODO(kbr): the pragma is only temporary; the GPU recipe and all
+  # associated code in this recipe are about to be deleted.
   if enable_gpu_tests:
     add_tests(api.gpu.create_tests(
         bot_update_step.presentation.properties['got_revision'],
         bot_update_step.presentation.properties['got_revision'],
         enable_swarming=True,
-        swarming_dimension_sets=CHROMIUM_GPU_DIMENSION_SETS[master][builder]))
+        swarming_dimension_sets=CHROMIUM_GPU_DIMENSION_SETS[master][builder])
+    )  # pragma: no cover
 
   affected_files = api.tryserver.get_files_affected_by_patch()
 

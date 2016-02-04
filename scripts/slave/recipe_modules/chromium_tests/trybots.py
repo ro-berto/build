@@ -557,10 +557,20 @@ TRYBOTS = freeze({
         'buildername': 'CrWinClang64',
       }),
       # Optional GPU bots.
-      'win_optional_gpu_tests_rel': simple_bot({
-        'mastername': 'chromium.win',
-        'buildername': 'Win Builder',
-      }),
+      'win_optional_gpu_tests_rel': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Win Builder',
+            'tester': 'Optional Win7 Release (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Win Builder',
+            'tester': 'Optional Win7 Release (ATI)',
+          },
+        ],
+      },
     },
   },
   'tryserver.v8': {
