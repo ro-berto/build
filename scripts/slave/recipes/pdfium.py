@@ -15,21 +15,33 @@ DEPS = [
 from recipe_engine.recipe_api import Property
 
 PROPERTIES = {
-  'branch': Property(default=None, kind=str),
+  'xfa': Property(default=False, kind=bool),
   'memory_tool': Property(default=None, kind=str),
+  'v8': Property(default=True, kind=bool),
 }
 
-def _CheckoutSteps(api, memory_tool, branch):
+
+def _MakeGypDefines(gyp_defines):
+  return ' '.join(['%s=%s' % (key, str(value)) for key, value in
+                   gyp_defines.iteritems()])
+
+
+def _CheckoutSteps(api, memory_tool, xfa, v8):
   # Checkout pdfium and its dependencies (specified in DEPS) using gclient
   api.gclient.set_config('pdfium')
-  if branch:
-    api.gclient.c.solutions[0].revision = 'origin/' + branch
   api.bot_update.ensure_checkout()
 
-  env = {}
-  if memory_tool == 'asan':
-    env.update({'GYP_DEFINES': 'asan=1'})
+  gyp_defines = {
+      'pdf_enable_v8': int(v8),
+      'pdf_enable_xfa': int(xfa),
+  }
 
+  if memory_tool == 'asan':
+    gyp_defines['asan'] = 1
+
+  env = {
+      'GYP_DEFINES': _MakeGypDefines(gyp_defines)
+  }
   api.gclient.runhooks(env=env)
 
 
@@ -39,7 +51,7 @@ def _BuildSteps(api):
   api.step('compile with ninja', ['ninja', '-C', debug_path])
 
 
-def _RunDrMemoryTests(api):
+def _RunDrMemoryTests(api, v8):
   pdfium_tests_py = str(api.path['checkout'].join('tools',
                                                   'drmemory',
                                                   'scripts',
@@ -50,9 +62,10 @@ def _RunDrMemoryTests(api):
   api.python('embeddertests', pdfium_tests_py,
              args=['--test', 'pdfium_embeddertests'],
              cwd=api.path['checkout'])
-  api.python('javascript tests', pdfium_tests_py,
-             args=['--test', 'pdfium_javascript'],
-             cwd=api.path['checkout'])
+  if v8:
+    api.python('javascript tests', pdfium_tests_py,
+               args=['--test', 'pdfium_javascript'],
+               cwd=api.path['checkout'])
   api.python('pixel tests', pdfium_tests_py,
              args=['--test', 'pdfium_pixel'],
              cwd=api.path['checkout'])
@@ -61,9 +74,9 @@ def _RunDrMemoryTests(api):
              cwd=api.path['checkout'])
 
 
-def _RunTests(api, memory_tool):
+def _RunTests(api, memory_tool, v8):
   if memory_tool == 'drmemory':
-    _RunDrMemoryTests(api)
+    _RunDrMemoryTests(api, v8)
     return
 
   env = {}
@@ -86,10 +99,11 @@ def _RunTests(api, memory_tool):
            cwd=api.path['checkout'],
            env=env)
 
-  javascript_path = str(api.path['checkout'].join('testing', 'tools',
-                                                  'run_javascript_tests.py'))
-  api.python('javascript tests', javascript_path,
-             cwd=api.path['checkout'], env=env)
+  if v8:
+    javascript_path = str(api.path['checkout'].join('testing', 'tools',
+                                                    'run_javascript_tests.py'))
+    api.python('javascript tests', javascript_path,
+               cwd=api.path['checkout'], env=env)
 
   pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                    'run_pixel_tests.py'))
@@ -102,11 +116,11 @@ def _RunTests(api, memory_tool):
              cwd=api.path['checkout'], env=env)
 
 
-def RunSteps(api, memory_tool, branch):
-  _CheckoutSteps(api, memory_tool, branch)
+def RunSteps(api, memory_tool, xfa, v8):
+  _CheckoutSteps(api, memory_tool, xfa, v8)
   _BuildSteps(api)
   with api.step.defer_results():
-    _RunTests(api, memory_tool)
+    _RunTests(api, memory_tool, v8)
 
 
 def GenTests(api):
@@ -133,9 +147,34 @@ def GenTests(api):
   )
 
   yield (
+      api.test('win_no_v8') +
+      api.platform('win', 64) +
+      api.properties(v8=False,
+                     mastername="client.pdfium",
+                     buildername='windows',
+                     slavename="test_slave")
+  )
+  yield (
+      api.test('linux_no_v8') +
+      api.platform('linux', 64) +
+      api.properties(v8=False,
+                     mastername="client.pdfium",
+                     buildername='linux',
+                     slavename="test_slave")
+  )
+  yield (
+      api.test('mac_no_v8') +
+      api.platform('mac', 64) +
+      api.properties(v8=False,
+                     mastername="client.pdfium",
+                     buildername='mac',
+                     slavename="test_slave")
+  )
+
+  yield (
       api.test('win_xfa') +
       api.platform('win', 64) +
-      api.properties(branch='xfa',
+      api.properties(xfa=True,
                      mastername="client.pdfium",
                      buildername='windows_xfa',
                      slavename="test_slave")
@@ -144,7 +183,7 @@ def GenTests(api):
   yield (
       api.test('linux_xfa') +
       api.platform('linux', 64) +
-      api.properties(branch='xfa',
+      api.properties(xfa=True,
                      mastername="client.pdfium",
                      buildername='linux_xfa',
                      slavename="test_slave")
@@ -153,7 +192,7 @@ def GenTests(api):
   yield (
       api.test('mac_xfa') +
       api.platform('mac', 64) +
-      api.properties(branch='xfa',
+      api.properties(xfa=True,
                      mastername="client.pdfium",
                      buildername='mac_xfa',
                      slavename="test_slave")
@@ -171,7 +210,7 @@ def GenTests(api):
   yield (
       api.test('drm_win_xfa') +
       api.platform('win', 64) +
-      api.properties(branch='xfa',
+      api.properties(xfa=True,
                      memory_tool='drmemory',
                      mastername="client.pdfium",
                      buildername='drm_win_xfa',
@@ -181,7 +220,7 @@ def GenTests(api):
   yield (
       api.test('linux_xfa_asan') +
       api.platform('linux', 64) +
-      api.properties(branch='xfa',
+      api.properties(xfa=True,
                      memory_tool='asan',
                      mastername="client.pdfium",
                      buildername='linux_xfa_asan',

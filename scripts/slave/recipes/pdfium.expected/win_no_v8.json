@@ -55,7 +55,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "pdf_enable_v8=1 pdf_enable_xfa=0"
+      "GYP_DEFINES": "pdf_enable_v8=0 pdf_enable_xfa=0"
     },
     "name": "gclient runhooks"
   },
@@ -81,15 +81,6 @@
     ],
     "cwd": "[SLAVE_BUILD]\\pdfium",
     "name": "embeddertests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\pdfium\\testing\\tools\\run_javascript_tests.py"
-    ],
-    "cwd": "[SLAVE_BUILD]\\pdfium",
-    "name": "javascript tests"
   },
   {
     "cmd": [

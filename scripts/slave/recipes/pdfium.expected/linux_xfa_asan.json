@@ -21,7 +21,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "pdfium@origin/xfa",
+      "pdfium@HEAD",
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -34,7 +34,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"pdfium\": \"origin/xfa\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"pdfium\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
@@ -55,7 +55,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "asan=1"
+      "GYP_DEFINES": "pdf_enable_v8=1 pdf_enable_xfa=1 asan=1"
     },
     "name": "gclient runhooks"
   },

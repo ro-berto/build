@@ -55,7 +55,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "asan=1"
+      "GYP_DEFINES": "pdf_enable_v8=1 pdf_enable_xfa=0 asan=1"
     },
     "name": "gclient runhooks"
   },
