@@ -3,7 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Utility class to generate a Fletch-specific BuildFactory.
+"""Utility class to generate a Dartino-specific BuildFactory.
 
 Based on gclient_factory.py.
 """
@@ -13,7 +13,7 @@ from buildbot.steps import trigger
 from master.factory import gclient_factory
 from master.factory.dart import dart_commands
 
-class FletchFactory(gclient_factory.GClientFactory):
+class DartinoFactory(gclient_factory.GClientFactory):
   def __init__(self, build_dir='sdk', target_platform='posix'):
     self.target_platform = target_platform
     self._build_dir = build_dir
@@ -22,8 +22,8 @@ class FletchFactory(gclient_factory.GClientFactory):
     gclient_factory.GClientFactory.__init__(self, build_dir, [main],
                                             target_platform=target_platform)
 
-  def FletchAnnotatedFactory(self, python_script, target='Release',
-                             env=None, trigger_schedulers=None):
+  def DartinoAnnotatedFactory(self, python_script, target='Release',
+                              env=None, trigger_schedulers=None):
     factory_properties = {
       # Make sure that pulled in projects have the right revision based on date.
       'gclient_transitive': True,
