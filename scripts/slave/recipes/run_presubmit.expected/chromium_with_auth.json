@@ -154,6 +154,9 @@
       "[BUILD]/site_config/.rietveld_secret_key"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+    },
     "name": "presubmit",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
