@@ -172,6 +172,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "blink_perf.layout"
     ],
@@ -189,6 +191,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "page_cycler.morejs"
     ],
@@ -206,6 +210,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.jslibstyleprototype"
     ],
@@ -223,6 +229,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.jslibeventprototype"
     ],
@@ -240,6 +248,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "speedometer"
     ],
@@ -257,6 +267,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "smoothness.top_25_smooth"
     ],
@@ -274,6 +286,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "octane"
     ],
@@ -291,6 +305,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "blink_perf.svg"
     ],
@@ -308,6 +324,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.jslibtraverseprototype"
     ],
@@ -325,6 +343,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "blink_style.top_25"
     ],
@@ -342,6 +362,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "jetstream"
     ],
@@ -359,6 +381,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.domcoreattr"
     ],
@@ -376,6 +400,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "blink_perf.dom"
     ],
@@ -393,6 +419,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.jslibattrprototype"
     ],
@@ -410,6 +438,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "sunspider"
     ],
@@ -431,6 +461,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "media.mse_cases"
     ],
@@ -448,6 +480,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "blink_perf.shadow_dom"
     ],
@@ -465,6 +499,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "blink_perf.events"
     ],
@@ -482,6 +518,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.domcoretraverse"
     ],
@@ -499,6 +537,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.domcoremodify"
     ],
@@ -516,6 +556,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "tab_switching.typical_25"
     ],
@@ -533,6 +575,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.cssqueryjquery"
     ],
@@ -550,6 +594,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "indexeddb_perf"
     ],
@@ -567,6 +613,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "blink_perf.canvas"
     ],
@@ -584,6 +632,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.domcorequery"
     ],
@@ -601,6 +651,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "blink_perf.bindings"
     ],
@@ -618,6 +670,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.jslibtraversejquery"
     ],
@@ -635,6 +689,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "dromaeo.jslibmodifyprototype"
     ],
@@ -652,6 +708,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "kraken"
     ],
@@ -669,6 +727,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "blink_perf.css"
     ],
@@ -686,6 +746,8 @@
       "release",
       "--target-bits",
       "32",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
       "blink_perf.paint"
     ],

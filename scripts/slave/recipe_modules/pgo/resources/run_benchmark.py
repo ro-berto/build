@@ -48,6 +48,7 @@ def main():
                               'benchmark runner).')
   parser.add_option('--target-bits', help='The target\'s bitness.', type=int)
   parser.add_option('--benchmark', help='The benchmark to run.')
+  parser.add_option('--build-dir', help='Chrome build directory.')
   options, _ = parser.parse_args()
 
   if not options.checkout_dir:
@@ -58,6 +59,8 @@ def main():
     parser.error('--target-bits is required')
   if not options.benchmark:
     parser.error('--benchmark is required')
+  if not options.build_dir:
+    parser.error('--build-dir is required')
 
   # Starts by finding the directory containing pgosweep.exe
   pgo_sweep_dir = find_pgosweep(options.checkout_dir, options.target_bits)
@@ -73,9 +76,10 @@ def main():
     return 1
 
   # Augment the PATH to make sure that the benchmarking script can find
-  # pgosweep.exe.
+  # pgosweep.exe and its runtime libraries.
   env = os.environ.copy()
-  env['PATH'] = str(pgo_sweep_dir + os.pathsep + os.environ['PATH'])
+  env['PATH'] = os.pathsep.join([pgo_sweep_dir, options.build_dir,
+                                 os.environ['PATH']])
   env['PogoSafeMode'] = '1'
 
   benchmark_command = [

@@ -172,6 +172,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "blink_perf.layout"
     ],
@@ -189,6 +191,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "page_cycler.morejs"
     ],
@@ -206,6 +210,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "dromaeo.jslibstyleprototype"
     ],
@@ -223,6 +229,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "dromaeo.jslibeventprototype"
     ],
@@ -240,6 +248,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "speedometer"
     ],
@@ -257,6 +267,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "smoothness.top_25_smooth"
     ],
@@ -274,6 +286,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "octane"
     ],
@@ -291,6 +305,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "blink_perf.svg"
     ],
@@ -308,6 +324,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "dromaeo.jslibtraverseprototype"
     ],
@@ -325,6 +343,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "blink_style.top_25"
     ],
@@ -342,6 +362,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "jetstream"
     ],
@@ -359,6 +381,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "dromaeo.domcoreattr"
     ],
@@ -376,6 +400,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "blink_perf.dom"
     ],
@@ -393,6 +419,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "dromaeo.jslibattrprototype"
     ],
@@ -410,6 +438,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "sunspider"
     ],
@@ -427,6 +457,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "media.mse_cases"
     ],
@@ -444,6 +476,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "blink_perf.shadow_dom"
     ],
@@ -461,6 +495,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "blink_perf.events"
     ],
@@ -478,6 +514,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "dromaeo.domcoretraverse"
     ],
@@ -495,6 +533,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "dromaeo.domcoremodify"
     ],
@@ -512,6 +552,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "tab_switching.typical_25"
     ],
@@ -529,6 +571,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "dromaeo.cssqueryjquery"
     ],
@@ -546,6 +590,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "indexeddb_perf"
     ],
@@ -563,6 +609,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "blink_perf.canvas"
     ],
@@ -580,6 +628,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "dromaeo.domcorequery"
     ],
@@ -597,6 +647,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "blink_perf.bindings"
     ],
@@ -614,6 +666,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "dromaeo.jslibtraversejquery"
     ],
@@ -631,6 +685,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "dromaeo.jslibmodifyprototype"
     ],
@@ -648,6 +704,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "kraken"
     ],
@@ -665,6 +723,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "blink_perf.css"
     ],
@@ -682,6 +742,8 @@
       "release_x64",
       "--target-bits",
       "64",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--benchmark",
       "blink_perf.paint"
     ],

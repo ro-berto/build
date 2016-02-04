@@ -74,6 +74,7 @@ class PGOApi(recipe_api.RecipeApi):
             '--checkout-dir', self.m.path['checkout'],
             '--browser-type', self.m.chromium.c.build_config_fs.lower(),
             '--target-bits', self.m.chromium.c.TARGET_BITS,
+            '--build-dir', self.m.chromium.output_dir,
             '--benchmark', benchmark,
         ]
         self.m.python(
