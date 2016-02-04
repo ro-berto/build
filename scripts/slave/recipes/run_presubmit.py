@@ -6,6 +6,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/git',
+  'depot_tools/presubmit',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -82,8 +83,7 @@ def _RunStepsInternal(api):
     # the scripts from presubmit_build checkout).
     env['PYTHONPATH'] = ''
 
-  api.python('presubmit', api.path['depot_tools'].join('presubmit_support.py'),
-             presubmit_args, env=env)
+  api.presubmit(*presubmit_args, env=env)
 
 
 def RunSteps(api):
