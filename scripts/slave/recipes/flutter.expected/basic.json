@@ -67,10 +67,20 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/flutter/infra/download_dart_sdk.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "download dart sdk"
+  },
+  {
+    "cmd": [
       "dart",
       "[SLAVE_BUILD]/flutter/dev/update_packages.dart"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "update packages"
   },
   {
@@ -80,6 +90,9 @@
       "populate"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/flutter",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "populate flutter cache"
   },
   {
@@ -92,6 +105,9 @@
       "--congratulate"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "flutter analyze"
   },
   {
@@ -102,6 +118,9 @@
       "-j1"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/cassowary",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "test packages/cassowary"
   },
   {
@@ -110,6 +129,9 @@
       "test"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/flutter",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "test packages/flutter"
   },
   {
@@ -120,6 +142,9 @@
       "-j1"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/flutter_tools",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "test packages/flutter_tools"
   },
   {
@@ -130,6 +155,9 @@
       "-j1"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/flx",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "test packages/flx"
   },
   {
@@ -140,6 +168,9 @@
       "-j1"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/newton",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "test packages/newton"
   },
   {
@@ -148,6 +179,9 @@
       "test"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/examples/stocks",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
     "name": "test examples/stocks"
   },
   {
