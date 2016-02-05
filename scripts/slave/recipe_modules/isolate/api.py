@@ -191,28 +191,6 @@ class IsolateApi(recipe_api.RecipeApi):
     """Returns the path to run_isolated.py."""
     return self.m.swarming_client.path.join('run_isolated.py')
 
-  def runtest_args_list(self, test, args=None):
-    """Array of arguments for running the given test via run_isolated.py.
-
-    The test should be already uploaded to the isolated server. The method
-    expects to find |test| as a key in the isolated_tests dictionary.
-    """
-    assert test in self.isolated_tests, (test, self.isolated_tests)
-    full_args = [
-      '--isolated',
-      self.isolated_tests[test],
-      '-I',
-      self._isolate_server,
-      # Always append '--' to the argument list. api.chromium.runtest
-      # will add any flags like --gtest_output to the end of the command
-      # line. run_isolated.py must treat these as extra arguments to the
-      # isolate.
-      '--'
-    ]
-    if args:
-      full_args.extend(args)
-    return full_args
-
   def run_isolated(self, name, isolate_hash, args=None, **kwargs):
     """Runs an isolated test."""
     cmd = [
@@ -224,24 +202,6 @@ class IsolateApi(recipe_api.RecipeApi):
       cmd.append('--')
       cmd.extend(args)
     self.m.python(name, self._run_isolated_path, cmd, **kwargs)
-
-  def runtest(self, test, revision, webkit_revision, args=None, name=None,
-              **runtest_kwargs):
-    """Runs a test which has previously been isolated to the server.
-
-    Uses runtest_args_list, above, and delegates to api.chromium.runtest.
-
-    DEPRECATED - run_isolated above is strongly recommended for all new callers.
-    """
-    self.m.chromium.runtest(
-        self._run_isolated_path,
-        args=self.runtest_args_list(test, args),
-        # We must use the name of the test as the name in order to avoid
-        # duplicate steps called "run_isolated".
-        name=name or test,
-        revision=revision,
-        webkit_revision=webkit_revision,
-        **runtest_kwargs)
 
   def remove_build_metadata(self):
     """Removes the build metadata embedded in the build artifacts."""

@@ -262,9 +262,8 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def runtest(self, test, args=None, xvfb=False, name=None, annotate=None,
               results_url=None, perf_dashboard_id=None, test_type=None,
-              generate_json_file=False, results_directory=None,
               python_mode=False, spawn_dbus=True, parallel=False,
-              revision=None, webkit_revision=None, master_class_name=None,
+              revision=None, webkit_revision=None,
               test_launcher_summary_output=None, flakiness_dash=None,
               perf_id=None, perf_config=None, chartjson_file=False,
               disable_src_side_runtest_py=False, **kwargs):
@@ -306,14 +305,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--test-type=%s' % test_type)
     step_name = name or t_name
     full_args.append('--step-name=%s' % step_name)
-    if generate_json_file:
-      full_args.append('--generate-json-file')
     if chartjson_file:
       full_args.append('--chartjson-file')
       full_args.append(self.m.json.output())
       kwargs['step_test_data'] = lambda: self.m.json.test_api.output([])
-    if results_directory:
-      full_args.append('--results-directory=%s' % results_directory)
     if test_launcher_summary_output:
       full_args.extend([
         '--test-launcher-summary-output',
@@ -342,13 +337,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     if revision:
       full_args.append('--revision=%s' % revision)
     if webkit_revision:
-      full_args.append('--webkit-revision=%s' % webkit_revision)
-    # The master_class_name is normally computed by runtest.py itself.
-    # The only reason it is settable via this API is to enable easier
-    # local testing of recipes. Be very careful when passing this
-    # argument.
-    if master_class_name:
-      full_args.append('--master-class-name=%s' % master_class_name)
+      # TODO(kbr): figure out how to cover this line of code with
+      # tests after the removal of the GPU recipe. crbug.com/584469
+      full_args.append(
+          '--webkit-revision=%s' % webkit_revision)  # pragma: no cover
 
     if (self.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1 or
         self.c.runtests.run_asan_test):
@@ -441,10 +433,6 @@ class ChromiumApi(recipe_api.RecipeApi):
         **kwargs)
     return step_result.json.output['clang_revision']
 
-
-  @property
-  def is_release_build(self):
-    return self.c.BUILD_CONFIG == 'Release'
 
   def get_cros_chrome_sdk_wrapper(self, clean=False):
     """Returns: a wrapper command for 'cros chrome-sdk'
@@ -693,22 +681,6 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def get_annotate_by_test_name(self, test_name):
     return 'graphing'
-
-  def get_vs_toolchain_if_necessary(self):
-    """Updates and/or installs the Visual Studio toolchain if necessary.
-    Used on Windows bots which only run tests and do not check out the
-    Chromium workspace. Has no effect on non-Windows platforms."""
-    # These hashes come from src/build/toolchain_vs2013.hash in the
-    # Chromium workspace.
-    if self.m.platform.is_win:
-      self.m.python(
-          name='get_vs_toolchain_if_necessary',
-          script=self.m.path['depot_tools'].join(
-              'win_toolchain', 'get_toolchain_if_necessary.py'),
-          args=[
-              '27eac9b2869ef6c89391f305a3f01285ea317867',
-              '9d9a93134b3eabd003b85b4e7dea06c0eae150ed',
-          ])
 
   def download_lto_plugin(self):
     return self.m.python(

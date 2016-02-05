@@ -15,7 +15,6 @@ DEPS = [
   'commit_position',
   'file',
   'depot_tools/gclient',
-  'gpu',
   'isolate',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -29,12 +28,6 @@ DEPS = [
   'test_utils',
   'depot_tools/tryserver',
 ]
-
-
-# TODO(sergiyb): This config should be read from an external JSON file
-# in a custom step, which can then be mocked in the GenTests.
-CHROMIUM_GPU_DIMENSION_SETS = freeze({
-})
 
 
 # TODO(phajdan.jr): Remove special case for layout tests.
@@ -108,13 +101,6 @@ def _RunStepsInternal(api):
   buildername = api.properties.get('buildername')
   bot_config = _get_bot_config(mastername, buildername)
 
-  # TODO(sergiyb): This is a temporary hack to run GPU tests on tryserver
-  # only. This should be removed when we will convert chromium.gpu waterfall
-  # to swarming and be able to replicate the tests to tryserver automatically.
-  master = api.properties['mastername']
-  builder = api.properties['buildername']
-  enable_gpu_tests = builder in CHROMIUM_GPU_DIMENSION_SETS.get(master, {})
-
   bot_config_object = api.chromium_tests.create_generalized_bot_config_object(
       bot_config['bot_ids'])
   api.chromium_tests.set_precommit_mode()
@@ -124,13 +110,6 @@ def _RunStepsInternal(api):
   api.chromium_tests.configure_swarming('chromium', precommit=True)
 
   api.chromium.apply_config('trybot_flavor')
-  # TODO(kbr): the pragmas are only temporary; the GPU recipe and all
-  # associated code in this recipe are about to be deleted.
-  if enable_gpu_tests:
-    api.chromium.apply_config(
-        'archive_gpu_tests', optional=True)  # pragma: no cover
-    api.chromium.apply_config(
-        'chrome_with_codecs', optional=True)  # pragma: no cover
 
   if api.properties.get('patch_project') == 'blink':  # pragma: no cover
     raise Exception('CLs which use blink project are not supported. '
@@ -145,16 +124,6 @@ def _RunStepsInternal(api):
   def add_tests(additional_tests):
     tests.extend(additional_tests)
     tests_including_triggered.extend(additional_tests)
-
-  # TODO(kbr): the pragma is only temporary; the GPU recipe and all
-  # associated code in this recipe are about to be deleted.
-  if enable_gpu_tests:
-    add_tests(api.gpu.create_tests(
-        bot_update_step.presentation.properties['got_revision'],
-        bot_update_step.presentation.properties['got_revision'],
-        enable_swarming=True,
-        swarming_dimension_sets=CHROMIUM_GPU_DIMENSION_SETS[master][builder])
-    )  # pragma: no cover
 
   affected_files = api.tryserver.get_files_affected_by_patch()
 
@@ -280,7 +249,7 @@ def GenTests(api):
             buildername='linux_chromium_rel_ng', extra_swarmed_tests=None,
             **kwargs):
     kwargs.setdefault('revision', None)
-    swarm_hashes = api.gpu.get_dummy_swarm_hashes_for_trybot(mastername)
+    swarm_hashes = {}
     if extra_swarmed_tests:
       for test in extra_swarmed_tests:
         swarm_hashes[test] = '[dummy hash for %s]' % test
@@ -436,7 +405,7 @@ def GenTests(api):
 
   yield (
     api.test('swarming_test_failure') +
-    props() +
+    props(extra_swarmed_tests=['gl_tests']) +
     api.platform.name('linux') +
     api.override_step_data('read test spec (2)', api.json.output({
         'Linux Tests': {
@@ -749,34 +718,6 @@ def GenTests(api):
     api.platform.name('win')
   )
 
-
-  # Tests that we only run the angle_unittests isolate if that's all
-  # that analyze said to rebuild.
-  all_hashes = api.gpu.dummy_swarm_hashes
-  angle_unittests_hash = {x: all_hashes[x] for x in ['angle_unittests']}
-  yield (
-    api.test('analyze_runs_only_angle_unittests') +
-    api.properties.tryserver(
-      mastername='tryserver.chromium.win',
-      buildername='win_chromium_rel_ng',
-      swarm_hashes=angle_unittests_hash
-    ) +
-    api.platform.name('win') +
-    api.override_step_data('analyze', api.gpu.analyze_builds_angle_unittests)
-  )
-
-  # Tests that we run nothing if analyze said we didn't have to run anything.
-  yield (
-    api.test('analyze_runs_nothing') +
-    api.properties.tryserver(
-      mastername='tryserver.chromium.win',
-      buildername='win_chromium_rel_ng',
-      swarm_hashes={}
-    ) +
-    api.platform.name('win') +
-    api.override_step_data('analyze', api.gpu.analyze_builds_nothing)
-  )
-
   # Tests that we run nothing if analyze said we didn't have to run anything
   # and there were no source file changes.
   yield (
@@ -787,7 +728,7 @@ def GenTests(api):
       swarm_hashes={}
     ) +
     api.platform.name('win') +
-    api.override_step_data('analyze', api.gpu.analyze_builds_nothing) +
+    api.override_step_data('analyze', api.chromium.analyze_builds_nothing) +
     api.override_step_data(
         'git diff to analyze patch',
         api.raw_io.stream_output('README.md\nfoo/bar/baz.py')

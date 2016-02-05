@@ -311,12 +311,12 @@ class LocalGTestTest(Test):
     try:
       if is_android:
         api.chromium_android.run_test_suite(self.target_name, **kwargs)
-      elif self._use_isolate:
-        api.isolate.runtest(self.target_name, self._revision,
-                            self._webkit_revision, **kwargs)
       else:
         api.chromium.runtest(self.target_name, revision=self._revision,
                              webkit_revision=self._webkit_revision, **kwargs)
+      # TODO(kbr): add functionality to generate_gtest to be able to
+      # force running these local gtests via isolate from the src-side
+      # JSON files. crbug.com/584469
     finally:
       step_result = api.step.active_result
       self._test_runs[suffix] = step_result
@@ -670,7 +670,7 @@ class SwarmingTest(Test):
     # Add custom tags.
     if self._tags:
       # TODO(kbr): figure out how to cover this line of code with
-      # tests after the removal of the GPU recipe.
+      # tests after the removal of the GPU recipe. crbug.com/584469
       self._tasks[suffix].tags.update(self._tags)  # pragma: no cover
 
     # Set default value.
@@ -727,7 +727,7 @@ class SwarmingTest(Test):
     # Test wasn't triggered or wasn't collected.
     if suffix not in self._tasks or not suffix in self._results:
       # TODO(kbr): figure out how to cover this line of code with
-      # tests after the removal of the GPU recipe.
+      # tests after the removal of the GPU recipe. crbug.com/584469
       return False  # pragma: no cover
     return self._results[suffix]['valid']
 
@@ -1283,20 +1283,6 @@ class GTestTest(Test):
   @property
   def uses_swarming(self):
     return self._test.uses_swarming
-
-
-# TODO(sergiyb): GPU Tests do not always follow the Chromium convention to have
-# a 'test' target for each 'test_run' target. Instead they use gyp dependencies.
-# Chromium tests return both 'test' and 'test_run' to circumvent and issue with
-# analyze step, while GPU tests do not require this.
-class GPUGTestTest(GTestTest):
-  def __init__(self, name, **kwargs):
-    kwargs['swarming_tags'] = set(kwargs.get('swarming_tags') or [])
-    kwargs['swarming_tags'] |= {'gpu_test:1'}
-    super(GPUGTestTest, self).__init__(name, **kwargs)
-
-  def compile_targets(self, api):
-    return ['%s_run' % self._test.target_name]  # pragma: no cover
 
 
 class PythonBasedTest(Test):

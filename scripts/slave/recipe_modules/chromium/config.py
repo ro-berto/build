@@ -716,10 +716,6 @@ def chromium_official(c):
 def blink(c):
   c.compile_py.default_targets = ['blink_tests']
 
-@config_ctx(includes=['chromium_clang'])
-def blink_clang(c):
-  c.compile_py.default_targets = ['blink_tests']
-
 @config_ctx()
 def blink_logging_on(c, invert=False):
   c.gyp_env.GYP_DEFINES['blink_logging_always_on'] = int(not invert)
