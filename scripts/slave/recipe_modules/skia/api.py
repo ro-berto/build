@@ -67,6 +67,7 @@ def is_valgrind(builder_cfg):
 
 def is_xsan(builder_cfg):
   return (builder_cfg.get('extra_config') == 'ASAN' or
+          builder_cfg.get('extra_config') == 'MSAN' or
           builder_cfg.get('extra_config') == 'TSAN')
 
 
