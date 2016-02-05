@@ -121,7 +121,8 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 component=shared_library dcheck_always_on=1 fastbuild=1 target_arch=x64"
+      "GYP_DEFINES": "clang=1 component=shared_library dcheck_always_on=1 fastbuild=1 target_arch=x64",
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks (with patch)"
   },

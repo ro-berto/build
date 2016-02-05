@@ -115,7 +115,8 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library syzyasan=1 target_arch=ia32 win_z7=1",
-      "GYP_USE_SEPARATE_MSPDBSRV": "1"
+      "GYP_USE_SEPARATE_MSPDBSRV": "1",
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },

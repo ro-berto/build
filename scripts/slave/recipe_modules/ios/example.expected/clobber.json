@@ -155,7 +155,8 @@
       "GYP_DEFINES": "component=static_library OS=ios",
       "GYP_GENERATORS": "xcode",
       "GYP_GENERATOR_FLAGS": "xcode_project_version=3.2",
-      "LANDMINES_VERBOSE": "1"
+      "LANDMINES_VERBOSE": "1",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks",
     "~followup_annotations": [

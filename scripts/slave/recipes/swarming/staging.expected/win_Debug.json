@@ -58,6 +58,9 @@
       "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'swarming_revision': '', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
+    },
     "name": "gclient setup"
   },
   {
@@ -78,6 +81,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
+    },
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -134,7 +140,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },

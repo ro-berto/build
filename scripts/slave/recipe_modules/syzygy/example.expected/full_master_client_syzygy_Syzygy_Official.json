@@ -82,7 +82,8 @@
     "env": {
       "GYP_DEFINES": "official_build=1 target_arch=ia32",
       "GYP_GENERATORS": "msvs-ninja,ninja",
-      "GYP_MSVS_VERSION": "2013"
+      "GYP_MSVS_VERSION": "2013",
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },

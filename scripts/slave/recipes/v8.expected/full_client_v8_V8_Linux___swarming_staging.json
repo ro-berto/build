@@ -89,7 +89,8 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
-      "GYP_GENERATORS": "ninja"
+      "GYP_GENERATORS": "ninja",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },

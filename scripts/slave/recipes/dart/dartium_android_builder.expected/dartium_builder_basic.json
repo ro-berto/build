@@ -71,6 +71,9 @@
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'dartium.deps', 'url': 'https://dart.googlecode.com/svn/trunk/deps/dartium.deps'}]\ntarget_os = ['android']"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+    },
     "name": "gclient setup"
   },
   {
@@ -91,6 +94,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+    },
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -166,7 +172,7 @@
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },

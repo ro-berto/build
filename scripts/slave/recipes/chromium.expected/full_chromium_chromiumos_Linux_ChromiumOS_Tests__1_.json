@@ -119,7 +119,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "chromeos=1 component=static_library ffmpeg_branding=ChromeOS gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "chromeos=1 component=static_library ffmpeg_branding=ChromeOS gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 test_isolation_mode=prepare use_goma=1",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },

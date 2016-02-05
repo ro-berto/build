@@ -58,7 +58,8 @@
     "env": {
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=ios clang=1 component=static_library gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
-      "GYP_GENERATORS": "ninja"
+      "GYP_GENERATORS": "ninja",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },

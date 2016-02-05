@@ -129,7 +129,8 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library fastbuild=1 target_arch=ia32 test_isolation_mode=prepare",
-      "LLVM_FORCE_HEAD_REVISION": "YES"
+      "LLVM_FORCE_HEAD_REVISION": "YES",
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },

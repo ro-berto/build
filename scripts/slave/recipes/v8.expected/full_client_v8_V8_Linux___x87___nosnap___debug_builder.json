@@ -67,7 +67,8 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=x87 v8_use_snapshot=false",
-      "GYP_GENERATORS": "ninja"
+      "GYP_GENERATORS": "ninja",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },

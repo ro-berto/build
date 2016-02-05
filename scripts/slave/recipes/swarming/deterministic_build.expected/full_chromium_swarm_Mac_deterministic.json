@@ -115,7 +115,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library dont_embed_build_metadata=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "clang=1 component=static_library dont_embed_build_metadata=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -250,7 +251,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library dont_embed_build_metadata=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1"
+      "GYP_DEFINES": "clang=1 component=static_library dont_embed_build_metadata=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks (2)"
   },

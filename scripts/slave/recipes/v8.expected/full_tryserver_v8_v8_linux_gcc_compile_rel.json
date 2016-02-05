@@ -72,7 +72,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "clang=0 dcheck_always_on=0 fastbuild=1 target_arch=ia32 v8_target_arch=ia32"
+      "GYP_DEFINES": "clang=0 dcheck_always_on=0 fastbuild=1 target_arch=ia32 v8_target_arch=ia32",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },

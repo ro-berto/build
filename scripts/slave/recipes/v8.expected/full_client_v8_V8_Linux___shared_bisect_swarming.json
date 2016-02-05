@@ -89,7 +89,8 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "clang=1 component=shared_library gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32",
-      "GYP_GENERATORS": "ninja"
+      "GYP_GENERATORS": "ninja",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -914,7 +915,8 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "clang=1 component=shared_library gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32",
-      "GYP_GENERATORS": "ninja"
+      "GYP_GENERATORS": "ninja",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "Bisect a0.gclient runhooks",
     "~followup_annotations": [
@@ -1229,7 +1231,8 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "clang=1 component=shared_library gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32",
-      "GYP_GENERATORS": "ninja"
+      "GYP_GENERATORS": "ninja",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "Bisect a2.gclient runhooks",
     "~followup_annotations": [
@@ -1570,7 +1573,8 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "clang=1 component=shared_library gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32",
-      "GYP_GENERATORS": "ninja"
+      "GYP_GENERATORS": "ninja",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "Bisect a1.gclient runhooks",
     "~followup_annotations": [

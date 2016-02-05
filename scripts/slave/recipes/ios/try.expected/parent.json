@@ -209,7 +209,8 @@
       "GYP_DEFINES": "fake gyp define 1=fake value 1 fake gyp define 2=fake value 2 component=static_library OS=ios",
       "GYP_GENERATORS": "xcode",
       "GYP_GENERATOR_FLAGS": "xcode_project_version=3.2",
-      "LANDMINES_VERBOSE": "1"
+      "LANDMINES_VERBOSE": "1",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks (with patch)",
     "~followup_annotations": [

@@ -105,7 +105,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[BUILD]/goma' linux_dump_symbols=0 target_arch=x64 test_isolation_mode=noop use_goma=1"
+      "GYP_DEFINES": "clang=1 component=static_library gomadir='[BUILD]/goma' linux_dump_symbols=0 target_arch=x64 test_isolation_mode=noop use_goma=1",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },

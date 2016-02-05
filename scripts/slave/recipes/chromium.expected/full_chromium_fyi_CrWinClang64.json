@@ -128,7 +128,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library fastbuild=1 target_arch=x64 test_isolation_mode=prepare"
+      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library fastbuild=1 target_arch=x64 test_isolation_mode=prepare",
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },

@@ -67,7 +67,8 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "target_arch=mips v8_target_arch=mips"
+      "GYP_DEFINES": "target_arch=mips v8_target_arch=mips",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },

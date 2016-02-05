@@ -117,7 +117,7 @@
     "env": {
       "GYP_DEFINES": "buildtype=Official chrome_pgo_phase=1 component=static_library fastbuild=0 target_arch=ia32 use_goma=0",
       "GYP_MSVS_VERSION": "2015",
-      "PATH": "[SLAVE_BUILD]\\src\\out\\Release;%(PATH)s"
+      "PATH": "[SLAVE_BUILD]\\src\\out\\Release;%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient Runhooks: Instrumentation phase."
   },
@@ -759,7 +759,8 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "buildtype=Official chrome_pgo_phase=2 component=static_library fastbuild=0 target_arch=ia32 use_goma=0",
-      "GYP_MSVS_VERSION": "2015"
+      "GYP_MSVS_VERSION": "2015",
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient Runhooks: Optimization phase."
   },

@@ -120,7 +120,8 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "clang=1 clang_use_chrome_plugins=0 component=static_library release_extra_cflags=-fno-sanitize-recover=undefined sanitizer_coverage=3 target_arch=x64 test_isolation_mode=prepare ubsan_vptr=1",
-      "LLVM_FORCE_HEAD_REVISION": "YES"
+      "LLVM_FORCE_HEAD_REVISION": "YES",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },

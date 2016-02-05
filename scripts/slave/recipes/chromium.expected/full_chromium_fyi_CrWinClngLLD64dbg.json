@@ -129,7 +129,8 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 target_arch=x64 test_isolation_mode=prepare use_lld=1",
-      "LLVM_FORCE_HEAD_REVISION": "YES"
+      "LLVM_FORCE_HEAD_REVISION": "YES",
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },
