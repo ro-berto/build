@@ -175,25 +175,6 @@
       "--build-dir",
       "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
-      "blink_perf.layout"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Telemetry benchmark: blink_perf.layout"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
-      "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
-      "--browser-type",
-      "release",
-      "--target-bits",
-      "32",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
-      "--benchmark",
       "page_cycler.morejs"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -365,25 +346,6 @@
       "--build-dir",
       "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
-      "jetstream"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Telemetry benchmark: jetstream"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
-      "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
-      "--browser-type",
-      "release",
-      "--target-bits",
-      "32",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
-      "--benchmark",
       "dromaeo.domcoreattr"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -483,25 +445,6 @@
       "--build-dir",
       "[SLAVE_BUILD]\\src\\out\\Release",
       "--benchmark",
-      "blink_perf.shadow_dom"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Telemetry benchmark: blink_perf.shadow_dom"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
-      "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
-      "--browser-type",
-      "release",
-      "--target-bits",
-      "32",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
-      "--benchmark",
       "blink_perf.events"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -544,25 +487,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.domcoremodify"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
-      "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
-      "--browser-type",
-      "release",
-      "--target-bits",
-      "32",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
-      "--benchmark",
-      "tab_switching.typical_25"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Telemetry benchmark: tab_switching.typical_25"
   },
   {
     "cmd": [
@@ -696,25 +620,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Telemetry benchmark: dromaeo.jslibmodifyprototype"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::pgo]\\resources\\run_benchmark.py",
-      "--checkout-dir",
-      "[SLAVE_BUILD]\\src",
-      "--browser-type",
-      "release",
-      "--target-bits",
-      "32",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
-      "--benchmark",
-      "kraken"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Telemetry benchmark: kraken"
   },
   {
     "cmd": [
