@@ -2,10 +2,14 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import contextlib
+
 DEPS = [
+  'depot_tools/git',
+  'file',
+  'gsutil',
   'recipe_engine/path',
   'recipe_engine/step',
-  'depot_tools/git',
 ]
 
 FLUTTER_CLI_PATH = 'bin/flutter'
@@ -57,26 +61,79 @@ def TestFlutterPackagesAndExamples(api):
   _flutter_test('examples/stocks')
 
 
+# TODO(eseidel): Would be nice to have this on api.path or api.file.
+@contextlib.contextmanager
+def MakeTempDir(api):
+  try:
+    temp_dir = api.path.mkdtemp('tmp')
+    yield temp_dir
+  finally:
+    api.file.rmtree('temp dir', temp_dir)
+
+
+def GenerateDocs(api, pub_cache):
+  # TODO(abarth): Do we still need a specific dartdoc version?
+  activate_cmd = ['pub', 'global', 'activate', 'dartdoc', '0.8.4']
+  api.step('pub global activate dartdoc', activate_cmd)
+  dartdoc = pub_cache.join('bin', 'dartdoc')
+
+  checkout = api.path['checkout']
+  flutter_styles = checkout.join('packages', 'flutter', 'doc', 'styles.html')
+  analytics = checkout.join('doc', '_analytics.html')
+  header_contents = '\n'.join([
+    api.file.read('Read styles.html', flutter_styles, test_data='styles'),
+    api.file.read('Read _analytics.html', analytics, test_data='analytics'),
+  ])
+
+  with MakeTempDir(api) as temp_dir:
+    header = temp_dir.join('_header.html')
+    api.file.write('Write _header.html', header, header_contents)
+
+    # NOTE: If you add to this list, be sure to edit doc/index.html
+    DOCUMENTED_PACKAGES = [
+      'packages/flutter',
+      'packages/playfair',
+      'packages/cassowary',
+      'packages/flutter_test',
+      'packages/flutter_sprites',
+    ]
+    for package in DOCUMENTED_PACKAGES:
+        package_path = checkout.join(package)
+        api.step('dartdoc %s' % package, [dartdoc, '--header', header],
+            cwd=package_path)
+        api_path = package_path.join('doc', 'api')
+        api.gsutil.upload(api_path, 'docs.flutter.io', package_path.pieces[-1])
+
+    index_path = checkout.join('doc', 'index.html')
+    api.gsutil.upload(index_path, 'docs.flutter.io', 'index.html')
+
+
 def RunSteps(api):
   api.git.checkout(
       'https://chromium.googlesource.com/external/github.com/flutter/flutter',
       recursive=True)
-
   checkout = api.path['checkout']
 
   download_sdk = checkout.join('infra', 'download_dart_sdk.py')
   api.step('download dart sdk', [download_sdk])
 
-  checkout = api.path['checkout']
   dart_bin = checkout.join('infra', 'dart-sdk', 'dart-sdk', 'bin')
-  env = { 'PATH': api.path.pathsep.join((str(dart_bin), '%(PATH)s')) }
+  pub_cache = api.path['slave_build'].join('pub_cache')
+  env = {
+    'PATH': api.path.pathsep.join((str(dart_bin), '%(PATH)s')),
+    # Setup our own pub_cache to not affect other slaves on this machine.
+    'PUB_CACHE': pub_cache,
+  }
 
-  # The context adds dart-sdk tools to PATH.
+  # The context adds dart-sdk tools to PATH sets PUB_CACHE.
   with api.step.context({'env': env}):
     UpdatePackages(api)
     PopulateFlutterCache(api)
     AnalyzeFlutter(api)
     TestFlutterPackagesAndExamples(api)
+    # TODO(eseidel): Is there a way for GenerateDocs to read PUB_CACHE from the
+    # env instead of me passing it in?
+    GenerateDocs(api, pub_cache)
 
 
 def GenTests(api):
