@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
+      "RECIPE_PACKAGE[depot_tools]\\gclient.py",
       "config",
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'dartium_base': 'svn://svn-mirror.golo.chromium.org', 'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'dartium.deps', 'url': 'svn://svn-mirror.golo.chromium.org/dart/branches/bleeding_edge/deps/dartium.deps'}]"
@@ -15,7 +15,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
+      "RECIPE_PACKAGE[depot_tools]\\gclient.py",
       "sync",
       "--nohooks",
       "--force",
@@ -67,7 +67,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
+      "RECIPE_PACKAGE[depot_tools]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",

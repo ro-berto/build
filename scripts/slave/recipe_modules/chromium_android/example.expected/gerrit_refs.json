@@ -69,7 +69,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
+      "RECIPE_PACKAGE[depot_tools]/gclient.py",
       "config",
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src/repo', 'url': 'svn://svn.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']"
@@ -92,7 +92,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
+      "RECIPE_PACKAGE[depot_tools]/gclient.py",
       "sync",
       "--nohooks",
       "--force",
@@ -172,7 +172,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
+      "RECIPE_PACKAGE[depot_tools]/gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",

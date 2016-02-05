@@ -31,7 +31,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
+      "RECIPE_PACKAGE[depot_tools]/gclient.py",
       "config",
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
@@ -54,7 +54,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
+      "RECIPE_PACKAGE[depot_tools]/gclient.py",
       "sync",
       "--nohooks",
       "--force",

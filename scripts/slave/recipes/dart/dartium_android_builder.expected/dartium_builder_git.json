@@ -65,7 +65,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
+      "RECIPE_PACKAGE[depot_tools]/gclient.py",
       "config",
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'tools/deps/dartium.deps/DEPS', 'managed': True, 'name': 'src/dart', 'url': 'https://github.com/dart-lang/sdk.git'}]\ntarget_os = ['android']"
@@ -77,7 +77,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
+      "RECIPE_PACKAGE[depot_tools]/gclient.py",
       "sync",
       "--nohooks",
       "--force",
@@ -159,7 +159,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
+      "RECIPE_PACKAGE[depot_tools]/gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
