@@ -29,6 +29,8 @@
       "--upstream",
       "--no-nag-max",
       "--delete_unversioned_trees",
+      "--revision",
+      "src@380d5353cb47d2cfd84ff8f31a4dc0b5919b0167",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -176,7 +178,7 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_1/artifacts.zip",
-      "gs://mojo_infra/flutter/None/linux-x64/artifacts.zip"
+      "gs://flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/linux-x64/artifacts.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -184,7 +186,7 @@
     },
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/linux-x64/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/linux-x64/artifacts.zip@@@"
     ]
   },
   {
@@ -262,7 +264,7 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_2/artifacts.zip",
-      "gs://mojo_infra/flutter/None/android-arm/artifacts.zip"
+      "gs://flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/android-arm/artifacts.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -270,7 +272,7 @@
     },
     "name": "gsutil upload (2)",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/android-arm/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/android-arm/artifacts.zip@@@"
     ]
   },
   {
@@ -305,7 +307,7 @@
       "----",
       "cp",
       "[SLAVE_BUILD]/src/out/android_Release/gen/sky/services/gcm/gcm_lib.dex.jar",
-      "gs://mojo_infra/flutter/None/gcm/gcm_lib.dex.jar"
+      "gs://flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/gcm/gcm_lib.dex.jar"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -313,7 +315,7 @@
     },
     "name": "gsutil upload (3)",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/gcm/gcm_lib.dex.jar@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/gcm/gcm_lib.dex.jar@@@"
     ]
   },
   {
@@ -326,7 +328,7 @@
       "----",
       "cp",
       "[SLAVE_BUILD]/src/out/android_Release/gen/sky/services/gcm/interfaces_java.dex.jar",
-      "gs://mojo_infra/flutter/None/gcm/interfaces_java.dex.jar"
+      "gs://flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/gcm/interfaces_java.dex.jar"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -334,7 +336,7 @@
     },
     "name": "gsutil upload (4)",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/gcm/interfaces_java.dex.jar@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/gcm/interfaces_java.dex.jar@@@"
     ]
   },
   {
@@ -347,7 +349,7 @@
       "----",
       "cp",
       "[SLAVE_BUILD]/src/out/android_Release/gen/sky/services/firebase/firebase_lib.dex.jar",
-      "gs://mojo_infra/flutter/None/firebase/firebase_lib.dex.jar"
+      "gs://flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/firebase/firebase_lib.dex.jar"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -355,7 +357,7 @@
     },
     "name": "gsutil upload (5)",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/firebase/firebase_lib.dex.jar@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/firebase/firebase_lib.dex.jar@@@"
     ]
   },
   {
@@ -368,7 +370,7 @@
       "----",
       "cp",
       "[SLAVE_BUILD]/src/out/android_Release/gen/sky/services/firebase/interfaces_java.dex.jar",
-      "gs://mojo_infra/flutter/None/firebase/interfaces_java.dex.jar"
+      "gs://flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/firebase/interfaces_java.dex.jar"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -376,7 +378,7 @@
     },
     "name": "gsutil upload (6)",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mojo_infra/flutter/None/firebase/interfaces_java.dex.jar@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/firebase/interfaces_java.dex.jar@@@"
     ]
   },
   {

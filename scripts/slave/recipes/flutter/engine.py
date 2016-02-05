@@ -16,8 +16,7 @@ DEPS = [
   'zip',
 ]
 
-# TODO(eseidel): This should be flutter_infra, not mojo_infra.
-BUCKET_NAME = 'mojo_infra'
+BUCKET_NAME = 'flutter_infra'
 
 def GetCloudPath(api, path):
   # TODO(eseidel): Is 'revision' the right way to get the git hash?
@@ -165,7 +164,7 @@ def GenerateXcodeProject(api):
     flutter_zip)
 
   cloud_path =  GetCloudPath(api, 'ios/FlutterXcode.zip')
-  api.gsutil.upload(flutter_zip, 'flutter_infra', cloud_path)
+  api.gsutil.upload(flutter_zip, BUCKET_NAME, cloud_path)
 
 
 def GetCheckout(api):
@@ -202,5 +201,8 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield api.test('linux') + api.platform('linux', 64)
-  yield api.test('mac') + api.platform('mac', 64)
+  # A valid commit to flutter/engine, to make the gsutil urls look real.
+  TEST_REVISION = '380d5353cb47d2cfd84ff8f31a4dc0b5919b0167'
+  for platform in ('mac', 'linux'):
+    yield (api.test(platform) + api.platform(platform, 64)
+        + api.properties(revision=TEST_REVISION))

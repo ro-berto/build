@@ -8,22 +8,22 @@
 
   "builders": {
     "Linux": {
-      "recipe": "flutter",
+      "recipe": "flutter/flutter",
       "scheduler": "flutter_commits",
       "slave_pools": ["linux"],
     },
     "Mac": {
-      "recipe": "flutter",
+      "recipe": "flutter/flutter",
       "scheduler": "flutter_commits",
       "slave_pools": ["mac"],
     },
     "Linux Engine": {
-      "recipe": "flutter_engine",
+      "recipe": "flutter/engine",
       "scheduler": "engine_commits",
       "slave_pools": ["linux"],
     },
     "Mac Engine": {
-      "recipe": "flutter_engine",
+      "recipe": "flutter/engine",
       "scheduler": "engine_commits",
       "slave_pools": ["mac"],
     },
