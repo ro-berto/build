@@ -127,8 +127,12 @@ def RunSteps(api, buildername):
   bot_utils = api.path['checkout'].join('util', 'bot')
   go_env = bot_utils.join('go', 'env.py')
   build_dir = api.path['checkout'].join('build')
-  api.file.makedirs('mkdir', build_dir)
   runner_dir = api.path['checkout'].join('ssl', 'test', 'runner')
+
+  # CMake is stateful, so do a clean build. BoringSSL builds quickly enough that
+  # this isn't a concern.
+  api.file.rmtree('clean', build_dir)
+  api.file.makedirs('mkdir', build_dir)
 
   # If building with MSVC, all commands must run with an environment wrapper.
   # This is necessary both to find the toolchain and the runtime dlls. Rather
