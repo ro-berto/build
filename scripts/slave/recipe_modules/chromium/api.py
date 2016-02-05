@@ -243,7 +243,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         try:
           json_status = step_result.json.output['notice'][0]
           if (not json_status.get('infra_status') or
-              json_status['infra_status']['ping_status_code'] != 200):
+              json_status['infra_status']['ping_status_code'] != 200 or
+              json_status['infra_status'].get('num_user_error', 0) > 0):
             infra_failure = True
         except Exception as ex:
           step_result.presentation.logs['exception'] = ['%r' % ex]
