@@ -282,20 +282,6 @@ TRYBOTS = freeze({
           },
         ],
       },
-      'linux_chromium_gpu_rel_ng': {
-        'bot_ids': [
-          {
-            'mastername': 'chromium.linux',
-            'buildername': 'Linux Builder',
-            'tester': 'Linux Tests',
-          },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Fake Linux Builder',
-            'tester': 'Fake Linux Release (NVIDIA)',
-          },
-        ],
-      },
       'linux_chromium_asan_rel_ng': simple_bot({
         'mastername': 'chromium.memory',
         'buildername': 'Linux ASan LSan Builder',
