@@ -436,6 +436,33 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                       override_compile_targets=override_compile_targets)
 
 
+def generate_instrumentation_test(api, chromium_tests_api, mastername,
+                                  buildername, test_spec, bot_update_step,
+                                  enable_swarming=False,
+                                  scripts_compile_targets=None):
+  for test in test_spec.get(buildername, {}).get('instrumentation_tests', []):
+    test_name = str(test.get('test'))
+    use_swarming = False
+    if enable_swarming:
+      swarming_spec = test.get('swarming', {})
+      if swarming_spec.get('can_use_on_swarming_builders'):
+        use_swarming = True
+        swarming_shards = swarming_spec.get('shards', 1)
+        swarming_dimension_sets = swarming_spec.get('dimension_sets')
+    if use_swarming and swarming_dimension_sets:
+      for dimensions in swarming_dimension_sets:
+        # TODO(stip): Swarmify instrumentation tests
+        pass
+    else:
+      yield AndroidInstrumentationTest(
+          test_name,
+          compile_targets=test.get('override_compile_targets', None),
+          isolate_file_path=test.get('isolate_file_path', None),
+          apk_under_test=test.get('apk_under_test', None),
+          test_apk=test.get('test_apk', None),
+          additional_apks=test.get('additional_apks', None))
+
+
 def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
                     bot_update_step, enable_swarming=False,
                     scripts_compile_targets=None):

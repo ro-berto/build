@@ -597,6 +597,51 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_instrumentation_test') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Android Tests',
+                           parent_buildername='Android Builder') +
+    api.override_step_data('read test spec', api.json.output({
+      'Android Tests': {
+        'instrumentation_tests': [
+          {
+            'test': 'ChromePublicTest',
+            'test_apk': 'one_apk',
+            'apk_under_test': 'second_apk',
+            'additional_apks': [
+              'another_apk',
+              'omg_so_many_apks',
+            ]
+          }
+        ],
+      },
+    }))
+  )
+
+  yield (
+    api.test('dynamic_swarmed_instrumentation_test') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Android Tests',
+                           parent_buildername='Android Builder') +
+    api.override_step_data('read test spec', api.json.output({
+      'Android Tests': {
+        'instrumentation_tests': [
+          {
+            'test': 'ChromePublicTest',
+            'swarming': {
+              'can_use_on_swarming_builders': True,
+              'dimension_sets':  {
+                'build.id': 'KTU84P',
+                'product.board': 'hammerhead',
+              }
+            },
+          }
+        ],
+      },
+    }))
+  )
+
+  yield (
     api.test('goma_with_diagnose_goma_failure') +
     api.properties.generic(mastername='chromium.fyi',
                            buildername='CrWinGoma',

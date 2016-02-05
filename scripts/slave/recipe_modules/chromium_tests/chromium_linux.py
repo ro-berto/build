@@ -320,6 +320,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_script,
         steps.generate_isolated_script,
+        steps.generate_instrumentation_test,
       ],
       'testing': {
         'platform': 'linux',
