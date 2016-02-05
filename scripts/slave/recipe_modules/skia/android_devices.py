@@ -84,6 +84,10 @@ SLAVE_INFO = {
       SlaveInfo('04217150066510000078', MACMINI_SDK_ROOT, False),
   'skiabot-linux-housekeeper-003':
       SlaveInfo('noserial', DEFAULT_SDK_ROOT, False),
+  'vm690-m3': SlaveInfo('noserial', MACMINI_SDK_ROOT, False),
+  'vm691-m3': SlaveInfo('noserial', MACMINI_SDK_ROOT, False),
+  'vm692-m3': SlaveInfo('noserial', MACMINI_SDK_ROOT, False),
+  'vm693-m3': SlaveInfo('noserial', MACMINI_SDK_ROOT, False),
   'default':
       SlaveInfo('noserial', DEFAULT_SDK_ROOT, False),
 }
