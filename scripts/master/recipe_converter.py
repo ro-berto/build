@@ -4,8 +4,12 @@
 
 import master.chromium_step
 import master.log_parser.retcode_command
+import master.factory.commands
+import master.factory.drmemory_factory
 import master.master_utils
 import buildbot.process.properties
+import buildbot.steps.transfer
+import buildbot.steps.shell
 import sys
 import collections
 import cStringIO
@@ -27,13 +31,25 @@ _master_builder_map = {
                              ],
     'Chromium GPU FYI': ['Win7 Audio',
                          'Linux Audio',
-                        ]
+                        ],
+    'DynamoRIO': ['win-xp-dr',
+                  'win-7-dr',
+                  'win-8-dr',
+                  'linux-dr',
+                  'linux-dr-package',
+                  'win-dr-package',
+                  'win-xp-dr-nightly',
+                  'win-7-dr-nightly',
+                  'win-8-dr-nightly',
+                  'linux-dr-nightly',
+                  ],
 }
 
 _master_name_map = {
     'Chromium GPU': 'chromium.gpu',
     'Chromium ChromeDriver': 'chromium.chromedriver',
-    'Chromium GPU FYI': 'chromium.gpu.fyi'
+    'Chromium GPU FYI': 'chromium.gpu.fyi',
+    'DynamoRIO': 'client.dynamorio',
 }
 
 # Used like a structure.
@@ -220,6 +236,113 @@ _step_signatures = {
         'command': ['python_slave', '..\\..\\..\\scripts\\slave\\runtest.py'],
       }
     ),
+  'clear_tools': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['rd', '/q', '/s', 'buildbot'],
+        'name': 'clear tools directory',
+        'workdir': 'tools',
+      }
+    ),
+  'checkout_dynamorio': (buildbot.steps.source.Git,
+      {
+        'branch': 'master',
+        'name': 'Checkout DynamoRIO',
+        'workdir': 'dynamorio',
+        'repourl': 'https://github.com/DynamoRIO/dynamorio.git',
+      }
+    ),
+  'checkout_dynamorio_tools': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['git', 'clone',
+          'https://github.com/DynamoRIO/buildbot.git'],
+        'name': 'update tools',
+        'workdir': 'tools',
+      }
+    ),
+  'dynamorio_unpack_tools': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['unpack.bat'],
+        'name': 'unpack tools',
+        'description': 'unpack tools',
+        'workdir': 'tools/buildbot/bot_tools',
+      }
+    ),
+  'win_dynamorio_nightly_suite': (master.factory.drmemory_factory.CTest,
+      {
+        'command': ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat',
+          'ctest', '--timeout', '120', '-VV', '-S'],
+        'name': 'nightly suite',
+        'descriptionDone': 'nightly suite',
+      }
+    ),
+  'dynamorio_nightly_suite': (master.factory.drmemory_factory.CTest,
+      {
+        'command': ['ctest', '--timeout', '120', '-VV', '-S',
+          '../dynamorio/suite/runsuite.cmake,nightly;long;'+\
+              'site=X64.Linux.VS2010.BuildBot'],
+        'descriptionDone': 'nightly suite',
+        'name': 'nightly suite',
+      }
+    ),
+  'win_dynamorio_precommit':(master.factory.drmemory_factory.CTest,
+      {
+        'command': ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat',
+          'ctest', '--timeout', '120', '-VV', '-S',
+          '../dynamorio/suite/runsuite.cmake'],
+        'descriptionDone': 'pre-commit suite',
+        'name': 'pre-commit suite',
+      }
+    ),
+  'dynamorio_precommit': (master.factory.drmemory_factory.CTest,
+      {
+        'command': ['ctest', '--timeout', '120', '-VV', '-S',
+          '../dynamorio/suite/runsuite.cmake'],
+        'name': 'pre-commit suite',
+        'descriptionDone': 'pre-commit suite',
+      }
+    ),
+  'upload_dynamorio_docs': (buildbot.steps.transfer.DirectoryUpload,
+      {
+        'blocksize': 16384,
+        'masterdest': 'public_html/dr_docs',
+        'slavesrc': 'install/docs/html',
+        'workdir': 'build',
+      }
+    ),
+  'get_dynamorio_buildnumber': (buildbot.steps.shell.SetProperty,
+      {
+        'description': 'get package build number',
+        'name': 'get package build number',
+      }
+    ),
+  'package_dynamorio': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['ctest', '-VV', '-S'],
+        'description': 'Package DynamoRIO',
+        'name': 'Package DynamoRIO',
+      }
+    ),
+  'find_dynamorio_package': (buildbot.steps.shell.SetProperty,
+      {
+        'description': 'find package file',
+        'name': 'find package file',
+        'strip': True,
+      }
+    ),
+  'upload_dynamorio_package': (buildbot.steps.transfer.FileUpload,
+      {
+        'blocksize': 16384,
+        'name': 'Upload DR package',
+      }
+    ),
+  'win_package_dynamorio': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat',
+          'ctest', '-VV', '-S'],
+        'description': 'Package DynamoRIO',
+        'name': 'Package DynamoRIO',
+      }
+    ),
 }
 
 # Conversion functions for specific step types.
@@ -252,9 +375,160 @@ def convert_arguments(args):
   return fmtstr[2:] % tuple(fmtlist)
 
 # Converter for use when step a step is unmatched or multiply matched.
-def dump_converter(step):
+def dump_converter(step, comment):
   rc = recipe_chunk()
+  rc.steps.append('# %s' % comment)
   rc.steps.append(pprint.pformat(step, indent=2))
+  return rc
+
+def win_package_dynamorio_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.deps.add('recipe_engine/properties')
+  rc.steps.append('# Package DynamoRIO step')
+  build_env_bat = 'api.path["build"].join("scripts", "slave", "drmemory", '+\
+      '"build_env.bat")'
+  confstr = 'str(api.path["checkout"].join("make", "package.cmake")) + '+\
+      '",build=0x" + str(api.properties["revision"])[:7]'
+  env = '{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '+\
+      '"bot_tools")}'
+  rc.steps.append('api.step("Package DynamoRIO", '+\
+      '[%s, "ctest", "-VV", "-S", %s], env=%s)' % (build_env_bat, confstr, env))
+  return rc
+
+def dynamorio_nightly_suite_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.steps.append('# dynamorio nightly suite step')
+  rc.steps.append('api.step("nightly suite", ["ctest", "--timeout", "120", '+\
+      '"-VV", "-S", str(api.path["checkout"].join("suite", "runsuite.cmake"))'+\
+      ' + ",nightly;long;site=X64.Linux.VS2010.BuildBot"])')
+  return rc
+
+def find_dynamorio_package_converter(step):
+  rc = recipe_chunk()
+  rc.steps.append('# find package file step; no longer necessary')
+  return rc
+
+def upload_dynamorio_package_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/properties')
+  rc.deps.add('gsutil')
+  rc.steps.append('# upload dynamorio package')
+  local_file = '"DynamoRIO-Linux-*" + str(api.properties["revision"])[:7]'+\
+      ' + ".tar.gz"'
+  bucket = 'chromium-dynamorio'
+  remote_dir = '"builds/"'
+  rc.steps.append('api.gsutil.upload(%s, "%s", %s)' % (local_file, bucket,
+    remote_dir))
+  local_file = '"DynamoRIO-Windows-*" + str(api.properties["revision"])'+\
+      '[:7] + ".zip"'
+  rc.steps.append('api.gsutil.upload(%s, "%s", %s)' % (local_file, bucket,
+    remote_dir))
+  return rc
+
+def package_dynamorio_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.deps.add('recipe_engine/properties')
+  rc.steps.append('# Package DynamoRIO step')
+  confstr = 'str(api.path["checkout"].join("make", "package.cmake")) + '+\
+      '",build=0x" + build_properties["revision"][:7]'
+  rc.steps.append('api.step("Package DynamoRIO", ["ctest", "-VV", "-S", %s])' %\
+      confstr)
+  return rc
+
+def get_dynamorio_buildnumber_converter(step):
+  rc = recipe_chunk()
+  rc.steps.append('# get buildnumber step; no longer needed')
+  return rc
+
+def upload_dynamorio_docs_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('gsutil')
+  rc.deps.add('recipe_engine/path')
+  local_file = 'api.path["slave_build"].join("install", "docs", "html")'
+  bucket = '"chromium-dynamorio"'
+  remote_dir = '"dr_docs/"'
+  args = ['-r', '-m']
+  rc.steps.append("# upload dynamorio docs step")
+  rc.steps.append('api.gsutil.upload(%s, %s, %s, "%s")' % (local_file,
+    bucket, remote_dir, repr(args)))
+  return rc
+
+def dynamorio_precommit_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.steps.append('# pre-commit suite step')
+  command = repr(step[1]['command'][:-1])[1:-1]
+  cmake_file = 'api.path["checkout"].join("suite", "runsuite.cmake")'
+  cwd = 'api.path["slave_build"]'
+  rc.steps.append('api.step("pre-commit suite", '+\
+      '[%s, %s], cwd=%s, ok_ret="all")' % (command, cmake_file, cwd))
+  return rc
+
+def win_dynamorio_precommit_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.steps.append('# build_env step')
+  fmtstr = 'api.step("pre-commit suite", [%s, %s, %s],  env=%s, '+\
+      'cwd=api.path["slave_build"])'
+  command = 'api.path["build"].join("scripts", "slave", "drmemory", '+\
+      '"build_env.bat")'
+  args = step[1]['command'][1:-1]
+  runsuite = 'api.path["checkout"].join("suite", "runsuite.cmake")'
+  env = '{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '+\
+      '"bot_tools")}'
+  rc.steps.append(fmtstr % (command, repr(args)[1:-1], runsuite, env))
+  return rc
+
+def win_dynamorio_nightly_suite_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.steps.append('# dynamorio win nightly suite step')
+  fmtstr = 'api.step("%s", [%s, %s], env=%s, cwd=api.path["slave_build"])'
+  env = '{"BOTTOOLS": '+\
+      'api.path["slave_build"].join("tools", "buildbot", "bot_tools")}'
+  command = 'api.path["build"].join("scripts", "slave", "drmemory", '+\
+      '"build_env.bat")'
+  step[1]['command'][-1] = step[1]['command'][-1][3:]
+  command_args = repr(step[1]['command'][1:])[1:-1]
+  rc.steps.append(fmtstr % (step[1]['name'], command, command_args, env))
+  return rc
+
+def checkout_dynamorio_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('depot_tools/bot_update')
+  rc.deps.add('depot_tools/gclient')
+  rc.steps.append('# checkout DynamiRIO step')
+  rc.steps.append('src_cfg = api.gclient.make_config(GIT_MODE=True)')
+  rc.steps.append('soln = src_cfg.solutions.add()')
+  rc.steps.append('soln.name = "%s"' % 'dynamorio')
+  rc.steps.append('soln.url = "%s"' % step[1]['repourl'])
+  rc.steps.append('api.gclient.c = src_cfg')
+  rc.steps.append('result = api.bot_update.ensure_checkout(force=True)')
+  rc.steps.append(
+      'build_properties.update(result.json.output.get("properties", {}))')
+  return rc
+
+def generic_shellcommand_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  fmtstr = 'api.step("%s", %s, env=%s, cwd=%s)'
+  cwd = 'api.path["slave_build"]'
+  if step[1].get('workdir', ''):
+    cwd += '.join(%s)' % repr(step[1]['workdir'].split('/'))[1:-1]
+  env = "{}"
+  if step[1].get('env', {}):
+    env = repr(step[1]['env'])
+  rc.steps.append('# %s step; generic ShellCommand converted' % step[1]['name'])
+  rc.steps.append(fmtstr % (step[1]['name'], repr(step[1]['command']), env,
+    cwd))
   return rc
 
 def runtest_converter(step):
@@ -327,7 +601,7 @@ def gclient_update_converter(step):
 
 def bot_update_converter(step):
   rc = recipe_chunk()
-  rc.deps = {'gclient', 'bot_update'}
+  rc.deps = {'depot_tools/gclient', 'depot_tools/bot_update'}
   rc.steps.append('# bot_update step')
   # First, get the gclient config out of the command
   gclient_config = {}
@@ -474,6 +748,20 @@ _step_converters_map = {
     'win_taskkill': win_taskkill_converter,
     'runtest': runtest_converter,
     'win_runtest': win_runtest_converter,
+    'clear_tools': generic_shellcommand_converter,
+    'checkout_dynamorio': checkout_dynamorio_converter,
+    'checkout_dynamorio_tools': generic_shellcommand_converter,
+    'dynamorio_unpack_tools': generic_shellcommand_converter,
+    'win_dynamorio_nightly_suite': win_dynamorio_nightly_suite_converter,
+    'win_dynamorio_precommit': win_dynamorio_precommit_converter,
+    'dynamorio_precommit': dynamorio_precommit_converter,
+    'upload_dynamorio_docs': upload_dynamorio_docs_converter,
+    'get_dynamorio_buildnumber': get_dynamorio_buildnumber_converter,
+    'package_dynamorio': package_dynamorio_converter,
+    'find_dynamorio_package': find_dynamorio_package_converter,
+    'upload_dynamorio_package': upload_dynamorio_package_converter,
+    'dynamorio_nightly_suite': dynamorio_nightly_suite_converter,
+    'win_package_dynamorio': win_package_dynamorio_converter,
 }
 
 def signature_match(step, signature):
@@ -483,7 +771,13 @@ def signature_match(step, signature):
                        'descriptionDone',
                        'name',
                        'workdir',
-                       'mode'}
+                       'mode',
+                       'repourl',
+                       'branch',
+                       'blocksize',
+                       'masterdest',
+                       'slavesrc',
+                       'strip'}
   subset_dictionary_attributes = {'env'}
   special_attributes = {'command'}
   all_attributes = simple_attributes | special_attributes | \
@@ -687,7 +981,7 @@ class recipe_skeleton(object):
   def report_recipe(self):
     def sanitize_builder_name(builder_name):
       return builder_name.replace(' ', '_').replace('(', '_').replace(')', '_')\
-                         .replace('.', '_')
+                         .replace('.', '_').replace('-', '_')
     sbn = sanitize_builder_name
 
     report = [
@@ -729,12 +1023,12 @@ class recipe_skeleton(object):
     report.append(steps)
     report.append('')
 
-    # Dump tests;
-    # TODO iff required; this may be unneeded complexity otherwise.
+    # Generate tests.
     report.append('def GenTests(api):')
     for builder_name in self.builder_names_to_steps:
       test_properties = ["api.properties(mastername='%s') +" % self.master_name,
                          "api.properties(buildername='%s') +" % builder_name,
+                         "api.properties(revision='123456789abcdef') +",
                          "api.properties(slavename='%s')" % "TestSlave",]
       test = ["yield (api.test('%s') +" % sbn(builder_name)] +\
              [test_properties] +\
@@ -771,15 +1065,14 @@ def step_to_recipe_chunk(step):
   logging.debug("Matches:")
   logging.debug(pprint.pformat(matches))
   if len(matches) != 1:
-    # raise Exception('Unconvertable step')
     logging.debug("Unconvertible step; calling dump_converter")
-    ret = dump_converter(step)
+    ret = dump_converter(step, 'step matched %d times' % len(matches))
     logging.debug("dump_converted step:")
     logging.debug(ret)
     return ret
   step_type = matches.pop()
   if step_type not in _step_converters_map:
-    return dump_converter(step)
+    return dump_converter(step, 'step recognised, no converter found')
   return _step_converters_map[step_type](step)
 
 def write_recipe(c, ActiveMaster, filename=None):
@@ -818,5 +1111,4 @@ def write_numsteps_builder(c, buildername, filename):
 
 def write_builder_steplist(c, builder_name, filename):
   with open(filename, 'w') as f:
-
     f.write(pprint.pformat(extract_builder_steplist(c, builder_name), indent=2))
