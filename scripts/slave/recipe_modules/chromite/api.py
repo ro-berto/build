@@ -155,7 +155,6 @@ class ChromiteApi(recipe_api.RecipeApi):
       match = self._BUILD_ID_RE.match(line)
       if match:
         self.c.cbb.build_id = match.group(1)
-        loaded.append('Build ID: %s' % (self.c.cbb.build_id,))
         continue
     if loaded:
       loaded.insert(0, '')
