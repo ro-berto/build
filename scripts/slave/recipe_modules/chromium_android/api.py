@@ -127,15 +127,6 @@ class AndroidApi(recipe_api.RecipeApi):
 
     return result
 
-  def create_adb_symlink(self):
-    # Creates a sym link to the adb executable in the home dir
-    self.m.python(
-          'create adb symlink',
-          self.m.path['checkout'].join('build', 'symlink.py'),
-          [self.m.adb.adb_path(), os.path.join('~', 'adb')],
-          infra_step=True,
-    )
-
   def clean_local_files(self):
     target = self.c.BUILD_CONFIG
     debug_info_dumps = self.m.path['checkout'].join('out',
@@ -840,7 +831,6 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def common_tests_setup_steps(self, perf_setup=False,
                                remove_system_webview=False):
-    self.create_adb_symlink()
     if self.c.gce_setup:
       self.launch_gce_instances(snapshot=self.c.gce_snapshot, count=self.c.gce_count)
       self.spawn_logcat_monitor()

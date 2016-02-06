@@ -239,17 +239,6 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/symlink.py",
-      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
-      "~/adb"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "create adb symlink"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::chromium_android]/resources/gce_manager.py",
       "TestSlavename",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
