@@ -1,26 +1,39 @@
 #!/usr/bin/env python
 
-# Copyright 2015 The Chromium Authors. All rights reserved.
+# Copyright 2016 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Bootstrap script to clone and forward to the recipe engine tool."""
+"""Bootstrap script to clone and forward to the recipe engine tool.
+
+***********************************************************************
+** DO NOT MODIFY EXCEPT IN THE PER-REPO CONFIGURATION SECTION BELOW. **
+***********************************************************************
+
+This is a copy of https://github.com/luci/recipes-py/blob/master/doc/recipes.py.
+To fix bugs, fix in the github repo then copy it back to here and fix the
+PER-REPO CONFIGURATION section to look like this one.
+"""
+
+import os
+
+#### PER-REPO CONFIGURATION (editable) ####
+# The root of the repository relative to the directory of this file.
+REPO_ROOT = os.path.join(os.pardir, os.pardir)
+# The path of the recipes.cfg file relative to the root of the repository.
+RECIPES_CFG = os.path.join('infra', 'config', 'recipes.cfg')
+#### END PER-REPO CONFIGURATION ####
+
+BOOTSTRAP_VERSION = 1
 
 import ast
 import logging
-import os
 import random
 import re
 import subprocess
 import sys
 import time
 import traceback
-
-BOOTSTRAP_VERSION = 1
-# The root of the repository relative to the directory of this file.
-REPO_ROOT = os.path.join(os.pardir, os.pardir)
-# The path of the recipes.cfg file relative to the root of the repository.
-RECIPES_CFG = os.path.join('infra', 'config', 'recipes.cfg')
 
 
 def parse_protobuf(fh):
@@ -60,7 +73,7 @@ def parse_protobuf(fh):
     if line == '}': return ret
     if line == '': continue
 
-    raise Exception('Could not understand line: <%s>' % line)
+    raise ValueError('Could not understand line: <%s>' % line)
 
   return ret
 
