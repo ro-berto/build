@@ -3,9 +3,7 @@
 # found in the LICENSE file.
 
 import argparse
-import collections
 import datetime
-import math
 import random
 import re
 import urllib
@@ -103,9 +101,6 @@ class V8Api(recipe_api.RecipeApi):
       self.m.gclient.c.got_revision_mapping['v8/tools/swarming_client'] = (
           'got_swarming_client_revision')
 
-    # Initialize perf_dashboard api if any perf test should run.
-    self.m.perf_dashboard.set_default_config()
-
     # FIXME(machenbach): Use a context object that stores the state for each
     # test process. Otherwise it's easy to introduce bugs with multiple test
     # processes and stale context data. E.g. during bisection these values
@@ -150,10 +145,6 @@ class V8Api(recipe_api.RecipeApi):
       # passing 0 and creates a new one.
       seed = r.randint(-2147483648, 2147483647)
     return seed
-
-  def set_bot_config(self, bot_config):
-    """Set bot configuration for testing only."""
-    self.bot_config = bot_config
 
   def init_tryserver(self):
     self.m.chromium.apply_config('trybot_flavor')
@@ -287,10 +278,6 @@ class V8Api(recipe_api.RecipeApi):
   @property
   def should_download_build(self):
     return self.bot_type == 'tester'
-
-  @property
-  def perf_tests(self):
-    return self.bot_config.get('perf', [])
 
   def isolate_tests(self):
     if self.bot_config.get('enable_swarming'):
@@ -861,237 +848,6 @@ class V8Api(recipe_api.RecipeApi):
     if self.extra_flags:
       result = self.m.step('CQ integrity - used extra flags', cmd=None)
       result.presentation.status = self.m.step.FAILURE
-
-  @staticmethod
-  def mean(values):
-    return float(sum(values)) / len(values)
-
-  @staticmethod
-  def variance(values, average):
-    return map(lambda x: (x - average) ** 2, values)
-
-  @staticmethod
-  def standard_deviation(values, average):
-    return math.sqrt(V8Api.mean(V8Api.variance(values, average)))
-
-  def perf_upload(self, results, category):
-    """Upload performance results to the performance dashboard.
-
-    Args:
-      results: A list of result maps. Each result map has an errors and a
-               traces item.
-      category: Name of the perf category (e.g. ia32 or N5). The bot field
-                of the performance dashboard is used to hold this category.
-    """
-    # Make sure that bots that run perf tests have a revision property.
-    if results:
-      assert self.revision_number and self.revision, (
-          'Revision must be specified for perf tests as '
-          'they upload data to the perf dashboard.')
-
-    points = []
-    for result in results:
-      for trace in result['traces']:
-        # Make 'v8' the root of all standalone v8 performance tests.
-        test_path = '/'.join(['v8'] + trace['graphs'])
-
-        # Ignore empty traces.
-        # TODO(machenbach): Show some kind of failure on the waterfall on empty
-        # traces without skipping to upload.
-        if not trace['results']:
-          continue
-
-        values = map(float, trace['results'])
-        average = V8Api.mean(values)
-
-        p = self.m.perf_dashboard.get_skeleton_point(
-            test_path, self.revision_number, str(average))
-        p['units'] = trace['units']
-        p['bot'] = category or p['bot']
-        p['supplemental_columns'] = {'a_default_rev': 'r_v8_git',
-                                     'r_v8_git': self.revision}
-
-        # A trace might provide a value for standard deviation if the test
-        # driver already calculated it, otherwise calculate it here.
-        p['error'] = (trace.get('stddev') or
-                      str(V8Api.standard_deviation(values, average)))
-
-        points.append(p)
-
-    # Send all perf data to the perf dashboard in one step.
-    if points:
-      self.m.perf_dashboard.post(points)
-
-
-  def _runperf(self, tests, perf_configs, category=None, suffix='',
-              upload=True, extra_flags=None, out_dir_no_patch=None):
-    """Run v8 performance tests and upload results.
-
-    Args:
-      tests: A list of tests from perf_configs to run.
-      perf_configs: A mapping from test name to a suite configuration json.
-      category: Optionally use bot nesting level as category. Bot names are
-                irrelevant if several different bots run in the same category
-                like ia32.
-      suffix: Optional name suffix to differentiate multiple runs of the same
-              step.
-      upload: If true, adds a link to the uploaded data on the performance
-              dashboard.
-      extra_flags: List of flags to be passed to the test executable.
-      out_dir_no_patch: A folder pointing to executables without patch on a
-                        trybot. Using this parameter will execute the tests
-                        in interleaved mode.
-    Returns: A tuple with 1) A mapping of test config name->results map.
-             Each results map has an errors and a traces item. 2) A mapping
-             without patch. Undefined, if out_dir_no_patch wasn't specified.
-             3) A boolean indicating if any step has failed.
-    """
-
-    results_mapping = collections.defaultdict(dict)
-    results_mapping_no_patch = collections.defaultdict(dict)
-    def run_single_perf_test(test, name, json_file, download_test=None):
-      """Call the v8 perf test runner.
-
-      Performance results are saved in the json test results file as a dict with
-      'errors' for accumulated errors and 'traces' for the measurements.
-      """
-      full_args = [
-        '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
-        '--buildbot',
-        '--json-test-results', self.m.json.output(add_json_log=False),
-      ]
-
-      if out_dir_no_patch:
-        full_args.extend([
-          '--outdir-no-patch', out_dir_no_patch,
-          '--json-test-results-no-patch',
-          self.m.json.output(add_json_log=False),
-        ])
-
-      if extra_flags:
-        full_args.extend(['--extra-flags', ' '.join(extra_flags)])
-
-      full_args.append(json_file)
-
-      def step_test_data():
-        test_data = self.test_api.perf_json(
-            self._test_data.get('perf_failures', False))
-        if out_dir_no_patch:
-          return test_data + self.test_api.perf_improvement_json()
-        else:
-          return test_data
-
-      try:
-        if download_test is not None:
-          self.m.python(
-            '%s%s - download-data' % (name, suffix),
-            self.m.path['checkout'].join('tools', 'run-tests.py'),
-            ['--download-data-only', download_test],
-            cwd=self.m.path['checkout'],
-          )
-        self.m.python(
-          '%s%s' % (name, suffix),
-          self.m.path['checkout'].join('tools', 'run_perf.py'),
-          full_args,
-          cwd=self.m.path['checkout'],
-          step_test_data=step_test_data,
-        )
-      finally:
-        step_result = self.m.step.active_result
-        results_mapping[test] = step_result.json.output_all[0]
-        errors = results_mapping[test]['errors']
-        if out_dir_no_patch:
-          results_mapping_no_patch[test] = step_result.json.output_all[1]
-          errors += results_mapping_no_patch[test]['errors']
-        if errors:
-          step_result.presentation.logs['Errors'] = errors
-        elif upload:
-          # Add a link to the dashboard. This assumes the naming convention
-          # step name == suite name. If this convention didn't hold, we'd need
-          # to use the path from the json output graphs here.
-          self.m.perf_dashboard.add_dashboard_link(
-              step_result.presentation,
-              'v8/%s' % name,
-              self.revision_number,
-              bot=category)
-
-    failed = False
-    for t in tests:
-      assert perf_configs[t]
-      assert perf_configs[t]['name']
-      assert perf_configs[t]['json']
-      try:
-        run_single_perf_test(
-            t, perf_configs[t]['name'], perf_configs[t]['json'],
-            download_test=perf_configs[t].get('download_test'))
-      except self.m.step.StepFailure:
-        failed = True
-
-    return results_mapping, results_mapping_no_patch, failed
-
-
-  def runperf(self, tests, perf_configs, category=None, suffix='',
-              upload=True, extra_flags=None):
-    """Convenience wrapper."""
-    results_mapping, _, failed = self._runperf(
-      tests,
-      perf_configs,
-      category=category,
-      upload=upload,
-      suffix=suffix,
-      extra_flags=extra_flags,
-    )
-
-    # Collect all perf data of the previous steps.
-    if upload:
-      self.perf_upload(
-          [results_mapping[k] for k in sorted(results_mapping.keys())],
-          category)
-
-    if failed:
-      raise self.m.step.StepFailure('One or more performance tests failed.')
-
-    return results_mapping
-
-  def runperf_interleaved(
-      self, tests, perf_configs, out_dir_no_patch, category=None,
-      extra_flags=None):
-    """Convenience wrapper."""
-    # A failure of a single step is not required to be raised on perf trybots
-    # as the overall builds don't get inspected on a waterfall.
-    results_mapping, results_mapping_no_patch, _ = self._runperf(
-      tests,
-      perf_configs,
-      category=category,
-      upload=False,
-      extra_flags=extra_flags,
-      out_dir_no_patch=out_dir_no_patch,
-    )
-    return results_mapping, results_mapping_no_patch
-
-  # TODO(machenbach): Deprecated in favor of method below.
-  def merge_perf_results(self, *args, **kwargs):
-    """Merge perf results from a list of result files and return the resulting
-    json.
-    """
-    return self.m.python(
-      'merge perf results' + kwargs.pop('suffix', ''),
-      self.resource('merge_perf_results.py'),
-      map(str, args),
-      stdout=self.m.json.output(),
-      **kwargs
-    ).stdout
-
-  def merge_perf_result_maps(self, results_file_map, **kwargs):
-    """Merge perf results from a mapping of result files and return the
-    resulting json.
-    """
-    return self.m.python(
-      'merge perf results' + kwargs.pop('suffix', ''),
-      self.resource('merge_perf_result_maps.py'),
-      [self.m.json.input(results_file_map)],
-      stdout=self.m.json.output(),
-    ).stdout
 
   def maybe_trigger(self, **additional_properties):
     triggers = self.bot_config.get('triggers', [])

@@ -10,7 +10,6 @@ DEPS = [
   'isolate',
   'recipe_engine/json',
   'recipe_engine/path',
-  'perf_dashboard',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',

@@ -32,6 +32,13 @@ def RunSteps(api):
   api.perf_dashboard.set_default_config()
   api.perf_dashboard.post([s1, s2])
 
+  api.perf_dashboard.add_dashboard_link(
+      api.step.active_result.presentation,
+      'sunspider/string-unpack-code',
+      33241,
+      bot='bot_name',
+  )
+
   bisect_results = {
       'try_job_id': 1,
       'status': 'completed'

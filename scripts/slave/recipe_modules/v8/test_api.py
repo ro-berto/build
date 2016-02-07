@@ -243,54 +243,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'slowest_tests': V8TestApi.SLOWEST_TESTS,
     }])
 
-  def perf_json(self, has_failures=False):
-    result = {
-      'errors': [],
-      'traces':[
-        {
-          'units': 'score',
-          'graphs': ['v8', 'Richards'],
-          'results': ['30', '10', '20'],
-        },
-        {
-          'units': 'ms',
-          'graphs': ['v8', 'DeltaBlue'],
-          'results': ['1.2', '1.2'],
-        },
-        {
-          'units': 'score',
-          'graphs': ['v8', 'Empty'],
-          'results': [],
-        },
-      ],
-    }
-    if has_failures:
-      result['errors'].extend(['Error line 1.', 'Error line 2.'])
-    return self.m.json.output(result)
-
-  def perf_improvement_json(self):
-    result = {
-      'errors': [],
-      'traces':[
-        {
-          'units': 'score',
-          'graphs': ['v8', 'Richards'],
-          'results': ['50', '20', '30'],
-        },
-        {
-          'units': 'ms',
-          'graphs': ['v8', 'DeltaBlue'],
-          'results': ['2.2', '2.2'],
-        },
-        {
-          'units': 'score',
-          'graphs': ['v8', 'Empty'],
-          'results': [],
-        },
-      ],
-    }
-    return self.m.json.output(result)
-
   def example_buildbot_changes(self):
     return self.m.json.output({
       'changes': [
@@ -454,14 +406,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
   def wrong_results(wrong_results):
     return wrong_results
 
-  @recipe_test_api.mod_test_data
-  @staticmethod
-  def perf_failures(has_failures):
-    return has_failures
-
-  def __call__(self, test_failures=False, wrong_results=False,
-               perf_failures=False, flakes=False):
+  def __call__(self, test_failures=False, wrong_results=False, flakes=False):
     return (self.test_failures(test_failures) +
             self.wrong_results(wrong_results) +
-            self.flakes(flakes) +
-            self.perf_failures(perf_failures))
+            self.flakes(flakes))
