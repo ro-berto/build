@@ -728,9 +728,7 @@
       "--arch",
       "arm",
       "--more-info",
-      "[SLAVE_BUILD]/src/out/Release/full_log",
-      "--output-directory",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[SLAVE_BUILD]/src/out/Release/full_log"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -741,8 +739,6 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/tombstones.py",
-      "--output-directory",
-      "[SLAVE_BUILD]/src/out/Release",
       "-a",
       "-s",
       "-w"
@@ -756,8 +752,6 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/asan_symbolize.py",
-      "--output-directory",
-      "[SLAVE_BUILD]/src/out/Release",
       "-l",
       "[SLAVE_BUILD]/src/out/Release/full_log"
     ],
