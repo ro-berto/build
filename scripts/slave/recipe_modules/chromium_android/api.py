@@ -785,9 +785,9 @@ class AndroidApi(recipe_api.RecipeApi):
           )
 
   def stack_tool_steps(self):
-    log_file = self.m.path['checkout'].join('out',
-                                            self.m.chromium.c.BUILD_CONFIG,
-                                            'full_log')
+    build_dir = self.m.path['checkout'].join('out',
+                                             self.m.chromium.c.BUILD_CONFIG)
+    log_file = build_dir.join('full_log')
     target_arch = self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch']
     # gyp converts ia32 to x86, bot needs to do the same
     target_arch = {'ia32': 'x86'}.get(target_arch) or target_arch
@@ -795,13 +795,14 @@ class AndroidApi(recipe_api.RecipeApi):
         'stack_tool_with_logcat_dump',
         [self.m.path['checkout'].join('third_party', 'android_platform',
                               'development', 'scripts', 'stack'),
-         '--arch', target_arch, '--more-info', log_file],
+         '--arch', target_arch, '--more-info', log_file,
+         '--output-directory', build_dir],
         env=self.m.chromium.get_env(),
         infra_step=True)
     self.m.step(
         'stack_tool_for_tombstones',
         [self.m.path['checkout'].join('build', 'android', 'tombstones.py'),
-         '-a', '-s', '-w'], env=self.get_env(),
+         '--output-directory', build_dir, '-a', '-s', '-w'], env=self.get_env(),
         infra_step=True)
     if self.c.asan_symbolize:
       self.m.step(
@@ -809,8 +810,8 @@ class AndroidApi(recipe_api.RecipeApi):
           [self.m.path['checkout'].join('build',
                                         'android',
                                         'asan_symbolize.py'),
-           '-l', log_file], env=self.m.chromium.get_env(),
-          infra_step=True)
+           '--output-directory', build_dir, '-l', log_file],
+          env=self.m.chromium.get_env(), infra_step=True)
 
   def test_report(self):
     self.m.python.inline(

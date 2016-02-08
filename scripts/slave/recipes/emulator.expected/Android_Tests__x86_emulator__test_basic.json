@@ -481,7 +481,9 @@
       "--arch",
       "x86",
       "--more-info",
-      "[SLAVE_BUILD]/src/out/Debug/full_log"
+      "[SLAVE_BUILD]/src/out/Debug/full_log",
+      "--output-directory",
+      "[SLAVE_BUILD]/src/out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -492,6 +494,8 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/tombstones.py",
+      "--output-directory",
+      "[SLAVE_BUILD]/src/out/Debug",
       "-a",
       "-s",
       "-w"
