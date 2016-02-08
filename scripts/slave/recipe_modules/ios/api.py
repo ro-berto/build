@@ -75,6 +75,7 @@ class iOSApi(recipe_api.RecipeApi):
     master_name=None,
     build_config_dir=None,
     include_dir=None,
+    buildername=None,
   ):
     """Reads the iOS build config for this bot.
 
@@ -98,10 +99,11 @@ class iOSApi(recipe_api.RecipeApi):
       'bots',
       'tests',
     )
+    buildername = buildername or self.m.properties['buildername']
 
     self.__config = self.m.json.read(
       'read build config',
-      build_config_dir.join('%s.json' % self.m.properties['buildername']),
+      build_config_dir.join('%s.json' % buildername),
       step_test_data=lambda: self.m.json.test_api.output(
         self._test_data['build_config']
       ),

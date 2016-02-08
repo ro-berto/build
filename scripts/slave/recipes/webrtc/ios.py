@@ -12,6 +12,7 @@ DEPS = [
   'webrtc'
 ]
 
+
 def RunSteps(api):
   api.gclient.set_config('webrtc_ios')
 
@@ -31,8 +32,10 @@ def RunSteps(api):
       'ios',
       'tests',
   )
+  buildername = api.properties['buildername'].replace(' ', '_')
   api.ios.read_build_config(build_config_dir=build_config_dir,
-                            include_dir=include_dir)
+                            include_dir=include_dir,
+                            buildername=buildername)
   api.ios.build()
   api.ios.test()
 
@@ -42,7 +45,7 @@ def GenTests(api):
     api.test('basic')
     + api.platform('mac', 64)
     + api.properties(
-      buildername='ios',
+      buildername='ios debug',
       buildnumber='0',
       mastername='chromium.fake',
       slavename='fake-vm',
