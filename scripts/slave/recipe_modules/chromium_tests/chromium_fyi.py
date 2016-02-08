@@ -653,8 +653,7 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      # TODO(thakis): Reenable when swarming works in gn http://crbug.com/480053
-      #'enable_swarming': True,
+      'enable_swarming': True,
     },
     'CrWinClang64(dll)': {
       'chromium_config': 'chromium_win_clang',
