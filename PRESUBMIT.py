@@ -8,7 +8,18 @@ See http://dev.chromium.org/developers/how-tos/depottools/presubmit-scripts for
 details on the presubmit API built into gcl.
 """
 
+import contextlib
 import sys
+
+
+@contextlib.contextmanager
+def pythonpath(path):
+  orig = sys.path
+  try:
+    sys.path = path
+    yield
+  finally:
+    sys.path = orig
 
 
 def CommonChecks(input_api, output_api):
@@ -38,19 +49,18 @@ def CommonChecks(input_api, output_api):
 
   infra_path = input_api.subprocess.check_output(
       ['python', 'scripts/common/env.py', 'print']).split()
-  sys_path_backup = sys.path
-  try:
-    sys.path = infra_path + [
-        # Initially, a separate run was done for unit tests but now that
-        # pylint is fetched in memory with setuptools, it seems it caches
-        # sys.path so modifications to sys.path aren't kept.
-        join('scripts', 'master', 'unittests'),
-        join('scripts', 'master', 'buildbucket', 'unittests'),
-        join('scripts', 'slave', 'unittests'),
-        join('scripts', 'tools', 'deps2git'),
-        join('tests'),
-    ] + sys.path
 
+  test_sys_path = infra_path + [
+      # Initially, a separate run was done for unit tests but now that
+      # pylint is fetched in memory with setuptools, it seems it caches
+      # sys.path so modifications to sys.path aren't kept.
+      join('scripts', 'master', 'unittests'),
+      join('scripts', 'master', 'buildbucket', 'unittests'),
+      join('scripts', 'slave', 'unittests'),
+      join('scripts', 'tools', 'deps2git'),
+      join('tests'),
+  ] + sys.path
+  with pythonpath(test_sys_path):
     disabled_warnings = [
       'C0301',  # Line too long (NN/80)
       'C0321',  # More than one statement on a single line
@@ -61,8 +71,6 @@ def CommonChecks(input_api, output_api):
         output_api,
         black_list=black_list,
         disabled_warnings=disabled_warnings))
-  finally:
-    sys.path = sys_path_backup
 
   # Run our 'test_env.py' script to generate any required binaries before
   # executing the tests in parallel. Otherwise, individual tests may attempt to
@@ -110,8 +118,7 @@ def CommonChecks(input_api, output_api):
         path,
         whitelist))
 
-  try:
-    sys.path = infra_path + sys.path
+  with pythonpath(infra_path + sys.path):
     import common.master_cfg_utils  # pylint: disable=F0401
     # Fetch recipe dependencies once in serial so that we don't hit a race
     # condition where multiple tests are trying to fetch at once.
@@ -129,8 +136,6 @@ def CommonChecks(input_api, output_api):
     output.extend(input_api.canned_checks.PanProjectChecks(
       input_api, output_api, excluded_paths=black_list))
     return output
-  finally:
-    sys.path = sys_path_backup
 
 
 def ConditionalChecks(input_api, output_api):
