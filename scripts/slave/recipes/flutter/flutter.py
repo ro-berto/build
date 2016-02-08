@@ -112,7 +112,10 @@ def RunSteps(api):
 
   dart_bin = checkout.join('infra', 'dart-sdk', 'dart-sdk', 'bin')
   flutter_bin = checkout.join('bin')
-  pub_cache = api.path['slave_build'].join('pub_cache')
+  # TODO(eseidel): This is named exactly '.pub-cache' as a hack around
+  # a regexp in flutter_tools analyze.dart which is in turn a hack around:
+  # https://github.com/dart-lang/sdk/issues/25722
+  pub_cache = api.path['slave_build'].join('.pub-cache')
   env = {
     'PATH': api.path.pathsep.join((str(flutter_bin), str(dart_bin),
         '%(PATH)s')),

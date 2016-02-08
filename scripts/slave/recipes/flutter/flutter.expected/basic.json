@@ -80,7 +80,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "update packages"
   },
@@ -93,7 +93,7 @@
     "cwd": "[SLAVE_BUILD]/flutter/packages/flutter",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "populate flutter cache"
   },
@@ -109,7 +109,7 @@
     "cwd": "[SLAVE_BUILD]/flutter",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "flutter analyze"
   },
@@ -123,7 +123,7 @@
     "cwd": "[SLAVE_BUILD]/flutter/packages/cassowary",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "test packages/cassowary"
   },
@@ -135,7 +135,7 @@
     "cwd": "[SLAVE_BUILD]/flutter/packages/flutter",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "test packages/flutter"
   },
@@ -149,7 +149,7 @@
     "cwd": "[SLAVE_BUILD]/flutter/packages/flutter_tools",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "test packages/flutter_tools"
   },
@@ -163,7 +163,7 @@
     "cwd": "[SLAVE_BUILD]/flutter/packages/flx",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "test packages/flx"
   },
@@ -177,7 +177,7 @@
     "cwd": "[SLAVE_BUILD]/flutter/packages/newton",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "test packages/newton"
   },
@@ -189,7 +189,7 @@
     "cwd": "[SLAVE_BUILD]/flutter/examples/stocks",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "test examples/stocks"
   },
@@ -204,7 +204,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "pub global activate dartdoc"
   },
@@ -219,7 +219,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "Read styles.html"
   },
@@ -234,7 +234,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "Read _analytics.html"
   },
@@ -249,20 +249,20 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "Write _header.html"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/pub_cache/bin/dartdoc",
+      "[SLAVE_BUILD]/.pub-cache/bin/dartdoc",
       "--header",
       "[TMP_BASE]/tmp_tmp_1/_header.html"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/flutter",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "dartdoc packages/flutter"
   },
@@ -281,7 +281,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "gsutil upload",
     "~followup_annotations": [
@@ -290,14 +290,14 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/pub_cache/bin/dartdoc",
+      "[SLAVE_BUILD]/.pub-cache/bin/dartdoc",
       "--header",
       "[TMP_BASE]/tmp_tmp_1/_header.html"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/playfair",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "dartdoc packages/playfair"
   },
@@ -316,7 +316,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "gsutil upload (2)",
     "~followup_annotations": [
@@ -325,14 +325,14 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/pub_cache/bin/dartdoc",
+      "[SLAVE_BUILD]/.pub-cache/bin/dartdoc",
       "--header",
       "[TMP_BASE]/tmp_tmp_1/_header.html"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/cassowary",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "dartdoc packages/cassowary"
   },
@@ -351,7 +351,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "gsutil upload (3)",
     "~followup_annotations": [
@@ -360,14 +360,14 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/pub_cache/bin/dartdoc",
+      "[SLAVE_BUILD]/.pub-cache/bin/dartdoc",
       "--header",
       "[TMP_BASE]/tmp_tmp_1/_header.html"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/flutter_test",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "dartdoc packages/flutter_test"
   },
@@ -386,7 +386,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "gsutil upload (4)",
     "~followup_annotations": [
@@ -395,14 +395,14 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/pub_cache/bin/dartdoc",
+      "[SLAVE_BUILD]/.pub-cache/bin/dartdoc",
       "--header",
       "[TMP_BASE]/tmp_tmp_1/_header.html"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/flutter_sprites",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "dartdoc packages/flutter_sprites"
   },
@@ -421,7 +421,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "gsutil upload (5)",
     "~followup_annotations": [
@@ -443,7 +443,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "gsutil upload (6)",
     "~followup_annotations": [
@@ -460,7 +460,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/pub_cache"
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "rmtree temp dir",
     "~followup_annotations": [
