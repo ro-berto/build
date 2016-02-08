@@ -12,45 +12,38 @@ DEPS = [
   'recipe_engine/step',
 ]
 
-FLUTTER_CLI_PATH = 'bin/flutter'
-
-
 def UpdatePackages(api):
   update_packages = api.path['checkout'].join('dev', 'update_packages.dart')
   api.step('update packages', ['dart', update_packages])
 
 
 def PopulateFlutterCache(api):
-  checkout = api.path['checkout']
-  flutter_package = checkout.join('packages', 'flutter')
-  populate_cmd = [checkout.join(FLUTTER_CLI_PATH), 'cache', 'populate']
+  flutter_package = api.path['checkout'].join('packages', 'flutter')
+  populate_cmd = ['flutter', 'cache', 'populate']
   api.step('populate flutter cache', populate_cmd, cwd=flutter_package)
 
 
 def AnalyzeFlutter(api):
-  checkout = api.path['checkout']
   analyze_cmd = [
-    checkout.join(FLUTTER_CLI_PATH),
+    'flutter',
     'analyze',
     '--flutter-repo',
     '--no-current-directory',
     '--no-current-package',
     '--congratulate'
   ]
-  api.step('flutter analyze', analyze_cmd)
+  api.step('flutter analyze', analyze_cmd, cwd=api.path['checkout'])
 
 
 def TestFlutterPackagesAndExamples(api):
   checkout = api.path['checkout']
-  flutter_cli = checkout.join(FLUTTER_CLI_PATH)
 
   def _pub_test(path):
     api.step('test %s' % path, ['pub', 'run', 'test', '-j1'],
       cwd=checkout.join(path))
 
   def _flutter_test(path):
-    api.step('test %s' % path, [flutter_cli, 'test'],
-      cwd=checkout.join(path))
+    api.step('test %s' % path, ['flutter', 'test'], cwd=checkout.join(path))
 
   _pub_test('packages/cassowary')
   _flutter_test('packages/flutter')
@@ -118,9 +111,11 @@ def RunSteps(api):
   api.step('download dart sdk', [download_sdk])
 
   dart_bin = checkout.join('infra', 'dart-sdk', 'dart-sdk', 'bin')
+  flutter_bin = checkout.join('bin')
   pub_cache = api.path['slave_build'].join('pub_cache')
   env = {
-    'PATH': api.path.pathsep.join((str(dart_bin), '%(PATH)s')),
+    'PATH': api.path.pathsep.join((str(flutter_bin), str(dart_bin),
+        '%(PATH)s')),
     # Setup our own pub_cache to not affect other slaves on this machine.
     'PUB_CACHE': pub_cache,
   }
