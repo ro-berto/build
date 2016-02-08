@@ -99,10 +99,13 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--copy-coredumps"
+      "--copy-coredumps",
+      "--exclude-suite=pkg",
+      "--builder-tag=asan",
+      "--timeout=240"
     ],
     "cwd": "[SLAVE_BUILD]/sdk",
-    "name": "test vm"
+    "name": "vm tests"
   },
   {
     "cmd": [
@@ -118,10 +121,13 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
+      "--exclude-suite=pkg",
+      "--builder-tag=asan",
+      "--timeout=240",
       "--checked"
     ],
     "cwd": "[SLAVE_BUILD]/sdk",
-    "name": "test vm (2)"
+    "name": "checked vm tests"
   },
   {
     "cmd": [

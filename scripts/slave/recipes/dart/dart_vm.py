@@ -30,10 +30,12 @@ builders = {
   'vm-linux-release-ia32-asan': {
     'mode': 'release',
     'target_arch': 'ia32',
+    'test_args': ['--exclude-suite=pkg', '--builder-tag=asan', '--timeout=240'],
     'env': linux_asan_env_32},
   'vm-linux-release-x64-asan': {
     'mode': 'release',
     'target_arch': 'x64',
+    'test_args': ['--exclude-suite=pkg', '--builder-tag=asan', '--timeout=240'],
     'env': linux_asan_env_64},
   'vm-linux-debug-ia32': {
     'mode': 'debug',
@@ -45,6 +47,17 @@ builders = {
     'target_arch': 'x64',
     'test_args': ['--exclude-suite=pkg'],
     'env': linux_clang_env},
+  'vm-linux-release-ia32': {
+    'mode': 'release',
+    'target_arch': 'ia32',
+    'test_args': ['--exclude-suite=pkg'],
+    'env': linux_clang_env},
+  'vm-linux-release-x64': {
+    'mode': 'release',
+    'target_arch': 'x64',
+    'test_args': ['--exclude-suite=pkg'],
+    'env': linux_clang_env},
+  # This is used by recipe coverage tests, not by any actual master.
   'test-coverage': {
     'mode': 'release',
     'target_arch': 'x64',
@@ -59,7 +72,7 @@ def RunSteps(api):
   api.path['tools'] = api.path['checkout'].join('tools')
   buildername = api.properties.get('buildername')
   (buildername, _, channel) = buildername.rpartition('-')
-  assert( channel in ['be', 'dev', 'stable', 'integration'] )
+  assert channel in ['be', 'dev', 'stable', 'integration']
   buildername = buildername.replace('-recipe', '')
   b = builders[buildername]
 
@@ -93,12 +106,12 @@ def RunSteps(api):
                '--write-test-outcome-log',
                '--copy-coredumps']
   test_args.extend(b.get('test_args', []))
-  api.python('test vm',
+  api.python('vm tests',
              api.path['checkout'].join('tools', 'test.py'),
              args=test_args,
              cwd=api.path['checkout'])
   test_args.append('--checked')
-  api.python('test vm',
+  api.python('checked vm tests',
              api.path['checkout'].join('tools', 'test.py'),
              args=test_args,
              cwd=api.path['checkout'])
