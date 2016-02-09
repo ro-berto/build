@@ -274,7 +274,10 @@
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
-      "cp",
+      "-m",
+      "rsync",
+      "-d",
+      "-r",
       "[SLAVE_BUILD]/flutter/packages/flutter/doc/api",
       "gs://docs.flutter.io/packages/flutter"
     ],
@@ -283,10 +286,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/docs.flutter.io/packages/flutter@@@"
-    ]
+    "name": "gsutil rsync"
   },
   {
     "cmd": [
@@ -309,7 +309,10 @@
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
-      "cp",
+      "-m",
+      "rsync",
+      "-d",
+      "-r",
       "[SLAVE_BUILD]/flutter/packages/playfair/doc/api",
       "gs://docs.flutter.io/packages/playfair"
     ],
@@ -318,10 +321,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil upload (2)",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/docs.flutter.io/packages/playfair@@@"
-    ]
+    "name": "gsutil rsync (2)"
   },
   {
     "cmd": [
@@ -344,7 +344,10 @@
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
-      "cp",
+      "-m",
+      "rsync",
+      "-d",
+      "-r",
       "[SLAVE_BUILD]/flutter/packages/cassowary/doc/api",
       "gs://docs.flutter.io/packages/cassowary"
     ],
@@ -353,10 +356,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil upload (3)",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/docs.flutter.io/packages/cassowary@@@"
-    ]
+    "name": "gsutil rsync (3)"
   },
   {
     "cmd": [
@@ -379,7 +379,10 @@
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
-      "cp",
+      "-m",
+      "rsync",
+      "-d",
+      "-r",
       "[SLAVE_BUILD]/flutter/packages/flutter_test/doc/api",
       "gs://docs.flutter.io/packages/flutter_test"
     ],
@@ -388,10 +391,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil upload (4)",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/docs.flutter.io/packages/flutter_test@@@"
-    ]
+    "name": "gsutil rsync (4)"
   },
   {
     "cmd": [
@@ -414,7 +414,10 @@
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
-      "cp",
+      "-m",
+      "rsync",
+      "-d",
+      "-r",
       "[SLAVE_BUILD]/flutter/packages/flutter_sprites/doc/api",
       "gs://docs.flutter.io/packages/flutter_sprites"
     ],
@@ -423,10 +426,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil upload (5)",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/docs.flutter.io/packages/flutter_sprites@@@"
-    ]
+    "name": "gsutil rsync (5)"
   },
   {
     "cmd": [
@@ -445,7 +445,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil upload (6)",
+    "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/docs.flutter.io/index.html@@@"
     ]
