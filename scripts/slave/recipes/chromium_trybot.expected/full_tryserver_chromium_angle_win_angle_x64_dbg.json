@@ -14,9 +14,9 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--master",
-      "chromium.gpu.fyi",
+      "tryserver.chromium.angle",
       "--builder",
-      "GPU Win Builder (dbg)",
+      "win_angle_x64_dbg",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -27,6 +27,12 @@
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
       "[GIT_CACHE]",
+      "--issue",
+      "12853011",
+      "--patchset",
+      "1",
+      "--rietveld_server",
+      "https://codereview.chromium.org",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -131,10 +137,10 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=shared_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=shared_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=x64 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
-    "name": "gclient runhooks"
+    "name": "gclient runhooks (with patch)"
   },
   {
     "cmd": [
@@ -145,12 +151,12 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Debug",
+      "Debug_x64",
       "--use-src-side-runtest-py",
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
-      "{\"buildername\": \"GPU Win Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"buildername\": \"win_angle_x64_dbg\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.angle\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -171,36 +177,46 @@
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.gpu.fyi.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[DEPOT_TOOLS]\\git.bat",
+      "diff",
+      "--cached",
+      "--name-only"
+    ],
+    "cwd": "[SLAVE_BUILD]\\src",
+    "name": "git diff to analyze patch",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@files@foo.cc@@@",
+      "@@@STEP_LOG_END@files@@@",
+      "@@@SET_BUILD_PROPERTY@subproject_tag@\"chromium\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]\\src\\testing\\buildbot\\trybot_analyze_config.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "read filter exclusion spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: 'testing\\\\buildbot\\\\trybot_analyze_config.json'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win7 Debug (ATI)\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"f.*\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win7 Debug (NVIDIA)\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win8 Debug (NVIDIA)\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -210,188 +226,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
+      "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "cleanup_temp"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Debug",
-      "--clean-isolated-files"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clean isolated files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
-      "--target",
-      "Debug",
-      "--src-dir",
-      "[SLAVE_BUILD]\\src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--goma-jsonstatus",
-      "/path/to/tmp/json",
-      "--goma-dir",
-      "[BUILD]\\goma",
-      "--ninja-ensure-up-to-date",
-      "--",
-      "browser_tests",
-      "browser_tests_run",
-      "crash_service"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "compile",
+    "name": "analyze",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]\\resources\\remove_build_metadata.py",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Debug",
-      "--src-dir",
-      "[SLAVE_BUILD]\\src"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "remove_build_metadata"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--verbose",
-      "[SLAVE_BUILD]\\src\\out\\Debug\\browser_tests.isolated.gen.json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "isolate tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\zip_build.py",
-      "--target",
-      "Debug",
-      "--build-url",
-      "gs://chromium-gpu-fyi-archive/chromium.gpu.fyi/GPU Win Builder (dbg)",
-      "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"GPU Win Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"GPU Win Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "package build"
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger",
-    "trigger_specs": [
-      {
-        "builder_name": "Win7 Debug (ATI)",
-        "properties": {
-          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
-          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
-          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
-          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
-          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-          "parent_got_revision_cp": "refs/heads/master@{#170242}",
-          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
-          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
-          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
-          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
-          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
-          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
-        }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win7 Debug (ATI)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (2)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win7 Debug (NVIDIA)",
-        "properties": {
-          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
-          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
-          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
-          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
-          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-          "parent_got_revision_cp": "refs/heads/master@{#170242}",
-          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
-          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
-          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
-          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
-          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
-          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
-        }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win7 Debug (NVIDIA)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger (3)",
-    "trigger_specs": [
-      {
-        "builder_name": "Win8 Debug (NVIDIA)",
-        "properties": {
-          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
-          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
-          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
-          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
-          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-          "parent_got_revision_cp": "refs/heads/master@{#170242}",
-          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
-          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
-          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
-          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
-          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
-          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
-        }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win8 Debug (NVIDIA)@@@"
+      "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
+      "@@@STEP_LOG_END@excluded_files@@@",
+      "@@@STEP_LOG_LINE@analyze_details@{@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": []@@@",
+      "@@@STEP_LOG_LINE@analyze_details@}@@@",
+      "@@@STEP_LOG_END@analyze_details@@@"
     ]
   },
   {

@@ -153,6 +153,26 @@ SPEC = {
       },
       'enable_swarming': True,
     },
+    'Win7 Debug (ATI)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'parent_buildername': 'GPU Win Builder (dbg)',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+    },
     'Win7 Release (Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
@@ -217,6 +237,26 @@ SPEC = {
       'enable_swarming': True,
       'use_isolate': True,
     },
+    'GPU Win x64 Builder (dbg)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
+                                'chrome_with_codecs',
+                                'internal_gles2_conform_tests'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [
+      ],
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+      'use_isolate': True,
+    },
     'Win7 x64 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
@@ -232,6 +272,26 @@ SPEC = {
         steps.generate_isolated_script,
       ],
       'parent_buildername': 'GPU Win x64 Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+    },
+    'Win7 x64 Debug (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'parent_buildername': 'GPU Win x64 Builder (dbg)',
       'testing': {
         'platform': 'win',
       },

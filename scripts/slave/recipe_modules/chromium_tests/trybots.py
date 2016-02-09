@@ -222,17 +222,29 @@ TRYBOTS = freeze({
           },
         ],
       },
-      # TODO(kbr): add back the ATI tests on this bot.
-      # Currently we're missing a bot to mirror.
-      'win_angle_dbg_ng': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU Win Builder (dbg)',
-        'tester': 'Win7 Debug (NVIDIA)',
-      }),
+      'win_angle_dbg_ng': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Win Builder (dbg)',
+            'tester': 'Win7 Debug (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Win Builder (dbg)',
+            'tester': 'Win7 Debug (ATI)',
+          },
+        ],
+      },
       'win_angle_x64_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU Win x64 Builder',
         'tester': 'Win7 x64 Release (NVIDIA)',
+      }),
+      'win_angle_x64_dbg': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU Win x64 Builder (dbg)',
+        'tester': 'Win7 x64 Debug (NVIDIA)',
       }),
     },
   },
