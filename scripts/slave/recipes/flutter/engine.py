@@ -129,6 +129,16 @@ def BuildLinux(api):
     api.gsutil.upload(local_zip, BUCKET_NAME, remote_zip)
 
 
+def TestObservatory(api):
+  checkout = api.path['checkout']
+  sky_shell_path = checkout.join('out/Release/sky_shell')
+  empty_main_path = \
+      checkout.join('sky/shell/testing/observatory/empty_main.dart')
+  test_path = checkout.join('sky/shell/testing/observatory/test.dart')
+  test_cmd = ['dart', test_path, sky_shell_path, empty_main_path]
+  api.step('test observatory and service protocol', test_cmd, cwd=checkout)
+
+
 def BuildMac(api):
   RunGN(api, '--release')
   Build(api, 'Release', 'sky_snapshot')
@@ -177,7 +187,8 @@ def GetCheckout(api):
   src_cfg = api.gclient.make_config(GIT_MODE=True)
   soln = src_cfg.solutions.add()
   soln.name = 'src'
-  soln.url = 'https://chromium.googlesource.com/external/github.com/flutter/engine'
+  soln.url = \
+      'https://chromium.googlesource.com/external/github.com/flutter/engine'
   # TODO(eseidel): What does parent_got_revision_mapping do?  Do I care?
   src_cfg.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
   api.gclient.c = src_cfg
@@ -199,6 +210,7 @@ def RunSteps(api):
 
     if api.platform.is_linux:
       BuildLinux(api)
+      TestObservatory(api)
       BuildLinuxAndroid(api)
 
     if api.platform.is_mac:
