@@ -109,12 +109,14 @@ def RunSteps(api):
   api.python('vm tests',
              api.path['checkout'].join('tools', 'test.py'),
              args=test_args,
-             cwd=api.path['checkout'])
+             cwd=api.path['checkout'],
+             ok_ret='any')
   test_args.append('--checked')
   api.python('checked vm tests',
              api.path['checkout'].join('tools', 'test.py'),
              args=test_args,
-             cwd=api.path['checkout'])
+             cwd=api.path['checkout'],
+             ok_ret='any')
 
   api.python('taskkill after testing',
              api.path['checkout'].join('tools', 'task_kill.py'),

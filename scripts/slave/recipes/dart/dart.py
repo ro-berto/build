@@ -45,7 +45,8 @@ def RunSteps(api):
   api.python('test vm',
              api.path['checkout'].join('tools', 'test.py'),
              args=test_args,
-             cwd=api.path['checkout'])
+             cwd=api.path['checkout'],
+             ok_ret='any')
 
 def GenTests(api):
    yield (
