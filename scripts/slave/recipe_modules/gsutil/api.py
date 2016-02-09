@@ -93,13 +93,6 @@ class GSUtilApi(recipe_api.RecipeApi):
     name = kwargs.pop('name', 'download_url')
     self(cmd, name, **kwargs)
 
-  def ls(self, bucket, path, args=None, **kwargs):
-    args = args or []
-    full_path = 'gs://%s/%s' % (bucket, path)
-    cmd = ['ls'] + args + [full_path]
-    name = kwargs.pop('name', 'ls %s' % full_path)
-    return self(cmd, name, **kwargs)
-
   def cat(self, url, args=None, **kwargs):
     args = args or []
     url = self._normalize_url(url)

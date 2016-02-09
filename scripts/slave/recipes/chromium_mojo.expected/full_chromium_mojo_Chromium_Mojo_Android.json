@@ -150,7 +150,8 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "mandoline:all"
+      "mojo:tests",
+      "mojo_apptests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -304,29 +305,6 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "provision_devices"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--test-platform",
-      "android",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Mojo Android\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"recipe\": \"chromium_mojo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Mojo Android\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"recipe\": \"chromium_mojo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--step-name=html_viewer_unittests",
-      "--builder-name=Chromium Mojo Android",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "html_viewer_unittests"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "html_viewer_unittests"
   },
   {
     "cmd": [
@@ -660,112 +638,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "app_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "get version",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Found version 37.0.2021.0@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "ls",
-      "gs://mandoline/"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil ls gs://mandoline/",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@ls result stdout@@@@",
-      "@@@STEP_LOG_END@ls result stdout@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/mandoline/tools/data/FILES.cfg",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "read FILES.cfg"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "rm",
-      "-r",
-      "gs://mandoline/latest/android"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil remove"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "Upload complete",
-      "[TMP_BASE]/upload_stamp_tmp_1/stamp"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Create upload stamp"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cp",
-      "[TMP_BASE]/upload_stamp_tmp_1/stamp",
-      "gs://mandoline/37.0.2021.0/android/stamp"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mandoline/37.0.2021.0/android/stamp@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cp",
-      "[TMP_BASE]/upload_stamp_tmp_1/stamp",
-      "gs://mandoline/latest/android/stamp"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil upload (2)",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/mandoline/latest/android/stamp@@@"
-    ]
   },
   {
     "name": "$result",
