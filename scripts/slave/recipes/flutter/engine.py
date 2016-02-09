@@ -152,13 +152,19 @@ def GenerateXcodeProject(api):
   RunGN(api, '--release', '--ios')
   Build(api, 'ios_Release')
 
-  # Merge build artifacts
+  # Copy device 'Flutter' directory to a deploy dir:
   deploy_dir = out_dir.join('FlutterXcode')
-  api.file.makedirs('mkdir', deploy_dir)
-  api.file.copytree('copy sim', checkout.join('out/ios_sim_Release/Flutter'),
-      deploy_dir)
-  api.file.copytree('copy sim', checkout.join('out/ios_Release/Flutter'),
-      deploy_dir)
+  api.file.makedirs('deployment directory', deploy_dir)
+  device_flutter = out_dir.join('ios_Release/Flutter')
+  api.file.copytree('copy sim', device_flutter, deploy_dir)
+
+  # Copy the missing simulator tools into the deploy dir:
+  sim_flutter = out_dir.join('ios_sim_Release/Flutter')
+  sim_tools = 'Tools/iphonesimulator'
+  api.file.copytree('copy simulator tools', sim_flutter.join(sim_tools),
+      deploy_dir.join(sim_tools))
+
+  # Zip the whole thing and upload it to cloud storage:
   flutter_zip = out_dir.join('FlutterXcode.zip')
   api.zip.directory('make FlutterXcode.zip', deploy_dir.join('Flutter'),
     flutter_zip)

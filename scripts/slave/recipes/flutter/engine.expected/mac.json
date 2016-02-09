@@ -273,7 +273,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "makedirs mkdir",
+    "name": "makedirs deployment directory",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -292,7 +292,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
-      "[SLAVE_BUILD]/src/out/ios_sim_Release/Flutter",
+      "[SLAVE_BUILD]/src/out/ios_Release/Flutter",
       "[SLAVE_BUILD]/src/out/FlutterXcode",
       "0"
     ],
@@ -307,15 +307,15 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
-      "[SLAVE_BUILD]/src/out/ios_Release/Flutter",
-      "[SLAVE_BUILD]/src/out/FlutterXcode",
+      "[SLAVE_BUILD]/src/out/ios_sim_Release/Flutter/Tools/iphonesimulator",
+      "[SLAVE_BUILD]/src/out/FlutterXcode/Tools/iphonesimulator",
       "0"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "copy sim (2)"
+    "name": "copy simulator tools"
   },
   {
     "cmd": [
