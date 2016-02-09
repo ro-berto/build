@@ -206,7 +206,7 @@ class StatusPush(StatusReceiverMultiService):
   # Perform verbose logging.
   verbose = False
 
-  def __init__(self, activeMaster, pushInterval=None):
+  def __init__(self, activeMaster, topic_url, pushInterval=None):
     """Instantiates a new StatusPush service.
 
     Args:
@@ -232,10 +232,7 @@ class StatusPush(StatusReceiverMultiService):
           'A master name must be supplied for pubsub push support.')
 
     # Specify the topic url to push status updates to.
-    self.topic_url = getattr(activeMaster, 'pubsub_topic_url', None)
-    if not self.topic_url:
-      raise ConfigError(
-          'A pubsub_topic_url must be specified for pubsub push support.')
+    self.topic_url = topic_url
 
     if not hasattr(activeMaster, 'service_account_file'):
       raise ConfigError('A service account file must be specified.')
