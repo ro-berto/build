@@ -155,9 +155,9 @@ def GenerateXcodeProject(api):
   # Merge build artifacts
   deploy_dir = out_dir.join('FlutterXcode')
   api.file.makedirs('mkdir', deploy_dir)
-  api.file.copytree('copy sim', checkout.join('ios_sim_Release/Flutter'),
+  api.file.copytree('copy sim', checkout.join('out/ios_sim_Release/Flutter'),
       deploy_dir)
-  api.file.copytree('copy sim', checkout.join('ios_Release/Flutter'),
+  api.file.copytree('copy sim', checkout.join('out/ios_Release/Flutter'),
       deploy_dir)
   flutter_zip = out_dir.join('FlutterXcode.zip')
   api.zip.directory('make FlutterXcode.zip', deploy_dir.join('Flutter'),

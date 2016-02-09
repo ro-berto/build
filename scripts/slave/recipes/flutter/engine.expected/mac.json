@@ -292,7 +292,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
-      "[SLAVE_BUILD]/src/ios_sim_Release/Flutter",
+      "[SLAVE_BUILD]/src/out/ios_sim_Release/Flutter",
       "[SLAVE_BUILD]/src/out/FlutterXcode",
       "0"
     ],
@@ -307,7 +307,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
-      "[SLAVE_BUILD]/src/ios_Release/Flutter",
+      "[SLAVE_BUILD]/src/out/ios_Release/Flutter",
       "[SLAVE_BUILD]/src/out/FlutterXcode",
       "0"
     ],
