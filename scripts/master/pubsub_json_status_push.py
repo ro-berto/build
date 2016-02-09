@@ -26,6 +26,8 @@ from twisted.python import log
 
 
 PUBSUB_SCOPES = ['https://www.googleapis.com/auth/pubsub']
+
+
 def parent_is_alive():
   """Check For the existence of a unix pid.
 
@@ -81,7 +83,7 @@ class PubSubClient(object):
     self.runner = multiprocessing.Process(target=self._runner)
     try:
       self.credentials = auth.create_service_account_credentials(
-          self.service_account_file)
+          self.service_account_file, scope=PUBSUB_SCOPES)
     except auth.Error as e:
       log.err(
           'Could not load credentials %s: %s.' % (self.service_account_file, e))
@@ -116,7 +118,7 @@ class PubSubClient(object):
   def _send_data(client, topic, data):
     # TODO(hinoka): Sign messages so that they can be verified to originate
     # from buildbot.
-    body = { 'messages': [{'data': base64.b64encode(json.dumps(data))}] }
+    body = { 'messages': [{'data': base64.b64encode(data)}] }
     log.msg('Sending message to topic %s' % topic)
 
     @exponential_retry(retries=4, delay=1)
@@ -151,11 +153,7 @@ class PubSubClient(object):
 
     Copied from https://cloud.google.com/pubsub/configure
     """
-    credentials = oauth2client.GoogleCredentials.get_application_default()
-    if credentials.create_scoped_required():
-      credentials = credentials.create_scoped(PUBSUB_SCOPES)
-    if not http:
-      http = httplib2.Http()
+    http = httplib2.Http()
     credentials.authorize(http)
 
     return discovery.build('pubsub', 'v1', http=http)
@@ -181,6 +179,8 @@ def event_handler(func):
 
 class ConfigError(ValueError):
   pass
+class NotEnabled(Exception):
+  """Raised when PubSub is purposely not enabled."""
 
 
 _BuildBase = collections.namedtuple(
@@ -196,54 +196,58 @@ class StatusPush(StatusReceiverMultiService):
   Periodically push builder status updates to pubsub.
   """
 
-  # Path of the status push configuration file to load.
-  CONFIG = 'pubsub_json_status_push.config'
-  # The section for the status push in the config file.
-  CONFIG_SECTION = 'pubsub_json_status_push'
-  # The default push interval, in seconds.
   DEFAULT_PUSH_INTERVAL_SEC = 30
 
   # Perform verbose logging.
   verbose = False
 
-  def __init__(self, activeMaster, topic_url, pushInterval=None):
-    """Instantiates a new StatusPush service.
-
-    Args:
-      activeMaster: The current Master instance.
-      pushInterval: (number/timedelta) The data push interval. If a number is
-          supplied, it is the number of seconds.
-    """
+  @classmethod
+  def CreateStatusPush(cls, activeMaster, pushInterval=None):
     assert activeMaster, 'An active master must be supplied.'
-    StatusReceiverMultiService.__init__(self)
-
-    self.enabled = True
     if not (
           activeMaster.is_production_host or os.environ.get('TESTING_MASTER')):
       log.msg(
           'Not a production host or testing, not loading the PubSub '
           'status listener.')
-      return
+      return None
+
+    topic_url = getattr(activeMaster, 'pubsub_topic_url', None)
+    if not topic_url:
+      log.msg('Missing pubsub_topic_url, not enabling.')
+      return None
 
     # Set the master name, for indexing purposes.
-    self.master = getattr(activeMaster, 'name', None)
-    if not self.master:
+    name = getattr(activeMaster, 'name', None)
+    if not name:
       raise ConfigError(
           'A master name must be supplied for pubsub push support.')
 
-    # Specify the topic url to push status updates to.
-    self.topic_url = topic_url
-
-    if not hasattr(activeMaster, 'service_account_file'):
+    service_account_file = getattr(
+        activeMaster, 'pubsub_service_account_file', None)
+    if not service_account_file:
       raise ConfigError('A service account file must be specified.')
 
+    return cls(topic_url, service_account_file, name, pushInterval)
+
+
+  def __init__(self, topic_url, service_account_file, name, pushInterval=None):
+    """Instantiates a new StatusPush service.
+
+    Args:
+      topic_url: Pubsub URL to push updates to.
+      service_account_file: Credentials to use to push to pubsub.
+      pushInterval: (number/timedelta) The data push interval. If a number is
+          supplied, it is the number of seconds.
+    """
+    StatusReceiverMultiService.__init__(self)
+
     # Parameters.
-    self.activeMaster = activeMaster
     self.pushInterval = self._getTimeDelta(pushInterval or
                                            self.DEFAULT_PUSH_INTERVAL_SEC)
 
-    self._client = PubSubClient(
-        self.topic_url, activeMaster.service_account_file)
+    self.name = name  # Master name, since builds don't include this info.
+    self.topic_url = topic_url
+    self._client = PubSubClient(self.topic_url, service_account_file)
     self._status = None
     self._res = None
     self._updated_builds = set()
@@ -281,19 +285,6 @@ class StatusPush(StatusReceiverMultiService):
     self._client.close()
 
   @defer.inlineCallbacks
-  def _loadResource(self):
-    """Loads and instantiates a cloud endpoints resource to CBE master push."""
-    # Construct our DeferredResource.
-    service = yield DeferredResource.build(
-        'master_push',
-        'v0',
-        credentials=auth.create_credentials_for_master(self.activeMaster),
-        discoveryServiceUrl=self.discoveryUrlTemplate,
-        verbose=self.verbose,
-        log_prefix='CBEStatusPush')
-    defer.returnValue(service)
-
-  @defer.inlineCallbacks
   def _doStatusPush(self, updated_builds):
     """Pushes the current state of the builds in 'updated_builds'.
 
@@ -319,7 +310,9 @@ class StatusPush(StatusReceiverMultiService):
         continue
 
       # result is a (build, build_dict) tuple.
-      send_builds.append(result[1])
+      send_build, _ = result
+      send_build['master'] = self.name
+      send_builds.append(send_build)
 
     # If there are no builds to send, do nothing.
     if not send_builds:

@@ -332,13 +332,12 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   # topic.  This will not run unless is_production_host is set to True.
   # This will fail on a production host if it cannot find the service
   # account file.
-  topic_url = getattr(active_master, 'pubsub_topic_url', None)
-  if topic_url:
-    c['status'].append(
-      pubsub_json_status_push.StatusPush(
-          activeMaster=active_master, topic_url=topic_url))
+  pubsub_pusher = pubsub_json_status_push.StatusPush.CreateStatusPush(
+      activeMaster=active_master)
+  if pubsub_pusher:
+    c['status'].append(pubsub_pusher)
   else:
-    log.msg('No pubsub topic url found, not enabling pubsub json publishing.')
+    log.msg('Pubsub not enabled.')
 
   # For all production masters, notify our health-monitoring webapp.
   if enable_http_status_push:
