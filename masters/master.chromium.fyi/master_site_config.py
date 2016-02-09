@@ -13,6 +13,3 @@ class ChromiumFYI(Master.Master1):
   master_port_alt = 8211
   buildbot_url = 'http://build.chromium.org/p/chromium.fyi/'
   reboot_on_step_timeout = True
-  pubsub_service_account_file = 'service-account-pubsub.json'
-  pubsub_topic_url = 'projects/luci-milo/topics/public-buildbot'
-  name = 'chromium.fyi'
