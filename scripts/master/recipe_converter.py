@@ -10,6 +10,7 @@ import master.master_utils
 import buildbot.process.properties
 import buildbot.steps.transfer
 import buildbot.steps.shell
+import buildbot.steps.trigger
 import sys
 import collections
 import cStringIO
@@ -18,6 +19,8 @@ import buildbot
 import logging
 import datetime
 
+# Terrible hack; to enable converting triggers.
+_GLOBAL_BUILDMASTER_CONFIG = None
 
 _master_builder_map = {
     'Chromium GPU': ['Android Debug (Nexus 5)',
@@ -43,6 +46,39 @@ _master_builder_map = {
                   'win-8-dr-nightly',
                   'linux-dr-nightly',
                   ],
+    'Dart': ['cross-dartino-linux-arm',
+             'dartino-linux-release-x86',
+             'dartino-linux-debug-x86',
+             'dartino-linux-release-asan-x86',
+             'dartino-linux-debug-asan-x86',
+             'target-dartino-linux-release-arm',
+             'target-dartino-linux-debug-arm',
+             'dartino-win-debug-x86',
+             'dartino-mac-release-x86',
+             'dartino-mac-debug-x86',
+             'dartino-mac-release-asan-x86',
+             'dartino-mac-debug-asan-x86',
+             'dartino-free-rtos',
+             'dartino-lk-debug-arm-qemu',
+             'dartino-linux-release-x64-sdk',
+             'dartino-mac-release-x64-sdk',
+             'dartino-linux-release-x86-dev',
+             'dartino-linux-debug-x86-dev',
+             'dartino-linux-release-asan-x86-dev',
+             'dartino-linux-debug-asan-x86-dev',
+             'cross-dartino-linux-arm-dev',
+             'target-dartino-linux-release-arm-dev',
+             'target-dartino-linux-debug-arm-dev',
+             'dartino-win-debug-x86-dev',
+             'dartino-mac-release-x86-dev',
+             'dartino-mac-debug-x86-dev',
+             'dartino-mac-release-asan-x86-dev',
+             'dartino-mac-debug-asan-x86-dev',
+             'dartino-free-rtos-dev',
+             'dartino-lk-debug-arm-qemu-dev',
+             'dartino-linux-release-x64-sdk-dev',
+             'dartino-mac-release-x64-sdk-dev',
+            ]
 }
 
 _master_name_map = {
@@ -50,6 +86,7 @@ _master_name_map = {
     'Chromium ChromeDriver': 'chromium.chromedriver',
     'Chromium GPU FYI': 'chromium.gpu.fyi',
     'DynamoRIO': 'client.dynamorio',
+    'Dart': 'client.fletch',
 }
 
 # Used like a structure.
@@ -343,6 +380,45 @@ _step_signatures = {
         'name': 'Package DynamoRIO',
       }
     ),
+  'dartino': (master.chromium_step.AnnotatedCommand,
+      {
+        'command': ['python', 'tools/bots/dartino.py'],
+        'description': 'annotated_steps',
+        'env': {'BUILDBOT_ANNOTATED_STEPS_RUN': '1'},
+        'name': 'annotated_steps',
+        'workdir': 'build/sdk',
+      }
+    ),
+  'dart_taskkill': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': 'python third_party/dart/tools/task_kill.py'+\
+            ' --kill_browsers=True',
+        'name': 'Taskkill',
+        'workdir': 'build/sdk',
+      }
+    ),
+  'trigger': (buildbot.steps.trigger.Trigger,
+      {
+        # nothing here for now
+      }
+    ),
+  'win_dart_taskkill': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': 'python third_party/dart/tools/task_kill.py'+\
+            ' --kill_browsers=True',
+        'name': 'Taskkill',
+        'workdir': 'build\\sdk',
+      }
+    ),
+  'win_dartino': (master.chromium_step.AnnotatedCommand,
+      {
+        'command': ['python_slave', 'tools/bots/dartino.py'],
+        'description': 'annotated_steps',
+        'env': {'BUILDBOT_ANNOTATED_STEPS_RUN': '1'},
+        'name': 'annotated_steps',
+        'workdir': 'build\\sdk',
+      }
+    ),
 }
 
 # Conversion functions for specific step types.
@@ -374,11 +450,90 @@ def convert_arguments(args):
 
   return fmtstr[2:] % tuple(fmtlist)
 
+# Helpers for converting trigger steps
+def get_builders_from_triggerable(c, sched_name):
+  for sched in c['schedulers']:
+    if sched.name == sched_name:
+      return sched.builderNames
+  raise Exception('Triggerable %s not found' % sched_name)
+
+def builders_to_triggerspec(builder_list):
+  return [{'builder_name': x} for x in builder_list]
+
+def sched_to_triggerspec(sched_name):
+  return builders_to_triggerspec(\
+      get_builders_from_triggerable(_GLOBAL_BUILDMASTER_CONFIG, sched_name))
+
 # Converter for use when step a step is unmatched or multiply matched.
 def dump_converter(step, comment):
   rc = recipe_chunk()
   rc.steps.append('# %s' % comment)
   rc.steps.append(pprint.pformat(step, indent=2))
+  return rc
+
+def trigger_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('trigger')
+  trigger_spec = []
+  for sched in step[1]['schedulerNames']:
+    trigger_spec.extend(sched_to_triggerspec(sched))
+  rc.steps.append('# trigger step')
+  rc.steps.append('trigger_spec = %s' % repr(trigger_spec))
+  rc.steps.append('api.trigger(*trigger_spec)')
+  return rc
+
+def dart_taskkill_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/python')
+  rc.deps.add('recipe_engine/path')
+  env = {}
+  if 'BUILDBOT_JAVA_HOME' in step[1]['env']:
+    env = "{'BUILDBOT_JAVA_HOME': api.path['checkout'].join('third_party', "+\
+        "'java', 'linux', 'j2sdk')}"
+  rc.steps.append("# taskkill step")
+  rc.steps.append('api.python("Taskkill", '+\
+      'api.path["checkout"].join("third_party", "dart", "tools", '+\
+      '"task_kill.py"), args=["--kill_browsers=True"], '+\
+      'env=%s, ' % env +\
+      'cwd=api.path["checkout"])')
+  return rc
+
+def win_dart_taskkill_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/python')
+  rc.deps.add('recipe_engine/path')
+  rc.steps.append("# taskkill step")
+  rc.steps.append('api.python("Taskkill", '+\
+      'api.path["checkout"].join("third_party", "dart", "tools", '+\
+      '"task_kill.py"), args=["--kill_browsers=True"], '+\
+      'cwd=api.path["checkout"])')
+  return rc
+
+def dartino_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/python')
+  rc.deps.add('recipe_engine/path')
+  rc.deps.add('recipe_engine/properties')
+  rc.steps.append("# dartino annotated steps step")
+  env_add = ', "BUILDBOT_BUILDERNAME": api.properties["buildername"]'
+  rc.steps.append('api.python("annotated steps", '+\
+      'api.path["checkout"].join("tools", "bots", "dartino.py"), '+\
+      'allow_subannotations=True, env={%s%s}, ' % (repr(step[1]['env'])[1:-1],
+        env_add) +\
+      'cwd=api.path["checkout"])')
+  return rc
+
+def win_dartino_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.steps.append("# dartino annotated steps step")
+  env_add = ', "BUILDBOT_BUILDERNAME": api.properties["buildername"]'
+  rc.steps.append('api.step("annotated steps", ["python_slave", '+\
+      'api.path["checkout"].join("tools", "bots", "dartino.py")], '+\
+      'allow_subannotations=True, env={%s%s}, ' % (repr(step[1]['env'])[1:-1],
+        env_add) +\
+      'cwd=api.path["checkout"])')
   return rc
 
 def win_package_dynamorio_converter(step):
@@ -762,6 +917,11 @@ _step_converters_map = {
     'upload_dynamorio_package': upload_dynamorio_package_converter,
     'dynamorio_nightly_suite': dynamorio_nightly_suite_converter,
     'win_package_dynamorio': win_package_dynamorio_converter,
+    'dartino': dartino_converter,
+    'dart_taskkill': dart_taskkill_converter,
+    'trigger': trigger_converter,
+    'win_dart_taskkill': win_dart_taskkill_converter,
+    'win_dartino': win_dartino_converter,
 }
 
 def signature_match(step, signature):
@@ -792,6 +952,8 @@ def signature_match(step, signature):
     return True
 
   def command_matcher(base_command, command_signature):
+    if isinstance(base_command, str):
+      return base_command == command_signature
     if isinstance(base_command, list):
       return list_startswith(base_command, command_signature)
     if isinstance(base_command, master.optional_arguments.ListProperties):
@@ -1076,6 +1238,8 @@ def step_to_recipe_chunk(step):
   return _step_converters_map[step_type](step)
 
 def write_recipe(c, ActiveMaster, filename=None):
+  global _GLOBAL_BUILDMASTER_CONFIG
+  _GLOBAL_BUILDMASTER_CONFIG = c
   if ActiveMaster.project_name not in _master_builder_map:
     pass # TODO
   rs = recipe_skeleton(_master_name_map[ActiveMaster.project_name])
