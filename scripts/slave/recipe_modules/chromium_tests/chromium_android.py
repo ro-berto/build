@@ -100,11 +100,12 @@ SPEC = {
         'TARGET_ARCH': 'arm',
       },
       'android_config': 'main_builder_mb',
-       'test_generators': [
-         steps.generate_gtest,
-         steps.generate_script,
-         steps.generate_isolated_script,
-        ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_instrumentation_test,
+        steps.generate_isolated_script,
+        steps.generate_script,
+      ],
       'bot_type': 'builder',
       'testing': {
         'platform': 'linux',
@@ -124,8 +125,9 @@ SPEC = {
       'android_config': 'main_builder_mb',
       'test_generators': [
         steps.generate_gtest,
-        steps.generate_script,
+        steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -145,8 +147,9 @@ SPEC = {
       'android_config': 'main_builder_mb',
       'test_generators': [
         steps.generate_gtest,
-        steps.generate_script,
+        steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -166,8 +169,9 @@ SPEC = {
       'android_config': 'arm64_builder_mb',
       'test_generators': [
         steps.generate_gtest,
-        steps.generate_script,
+        steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -187,8 +191,9 @@ SPEC = {
       'android_config': 'arm64_builder_mb',
       'test_generators': [
         steps.generate_gtest,
-        steps.generate_script,
+        steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -208,8 +213,9 @@ SPEC = {
       'android_config': 'main_builder_mb',
       'test_generators': [
         steps.generate_gtest,
-        steps.generate_script,
+        steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -229,8 +235,9 @@ SPEC = {
       'android_config': 'main_builder_mb',
       'test_generators': [
         steps.generate_gtest,
-        steps.generate_script,
+        steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -250,8 +257,9 @@ SPEC = {
       'android_config': 'main_builder_mb',
       'test_generators': [
         steps.generate_gtest,
-        steps.generate_script,
+        steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -271,8 +279,9 @@ SPEC = {
       'android_config': 'main_builder_mb',
       'test_generators': [
         steps.generate_gtest,
-        steps.generate_script,
+        steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',
