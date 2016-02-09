@@ -9,24 +9,24 @@ from recipe_engine.recipe_api import Property
 
 
 DEPS = [
-  'adb',
-  'depot_tools/bot_update',
-  'chromium',
-  'chromium_tests',
-  'commit_position',
-  'findit',
-  'depot_tools/gclient',
-  'isolate',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/raw_io',
-  'recipe_engine/step',
-  'swarming',
-  'test_results',
-  'test_utils',
+    'adb',
+    'depot_tools/bot_update',
+    'chromium',
+    'chromium_tests',
+    'commit_position',
+    'findit',
+    'depot_tools/gclient',
+    'isolate',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/raw_io',
+    'recipe_engine/step',
+    'swarming',
+    'test_results',
+    'test_utils',
 ]
 
 
@@ -64,10 +64,8 @@ def _compile_and_test_at_revision(api, target_mastername, target_buildername,
     # Checkout code at the given revision to recompile.
     bot_config = api.chromium_tests.create_bot_config_object(
         target_mastername, target_buildername)
-    bot_update_step, bot_db = \
-        api.chromium_tests.prepare_checkout(
-            bot_config,
-            root_solution_revision=revision)
+    bot_update_step, bot_db = api.chromium_tests.prepare_checkout(
+        bot_config, root_solution_revision=revision)
 
     # Figure out which test steps to run.
     _, all_tests = api.chromium_tests.get_tests(bot_config, bot_db)
@@ -158,7 +156,14 @@ def RunSteps(api, target_mastername, target_testername,
       root_solution_revision=bad_revision)
   revisions_to_check = api.findit.revisions_between(good_revision, bad_revision)
 
-  results = {}
+  test_results = {}
+  try_job_metadata = {
+      'regression_range_size': len(revisions_to_check)
+  }
+  report = {
+      'result': test_results,
+      'metadata': try_job_metadata
+  }
 
   try:
     # We compile & run tests from the first revision to the last revision in the
@@ -169,7 +174,7 @@ def RunSteps(api, target_mastername, target_testername,
     # If this won't work out, we will figure out a better solution for speed of
     # both compile and test.
     for current_revision in revisions_to_check:
-      results[current_revision] = _compile_and_test_at_revision(
+      test_results[current_revision] = _compile_and_test_at_revision(
           api, target_mastername, target_buildername, target_testername,
           current_revision, requested_tests)
       # TODO(http://crbug.com/566975): check whether culprits for all failed
@@ -177,13 +182,13 @@ def RunSteps(api, target_mastername, target_testername,
   finally:
     # Report the result.
     step_result = api.python.succeeding_step(
-        'report', [json.dumps(results, indent=2)], as_log='result')
+        'report', [json.dumps(report, indent=2)], as_log='result')
 
     # Set the result as a build property too, so that it will be reported back
     # to Buildbucket and Findit will pull from there instead of buildbot master.
-    step_result.presentation.properties['result'] = results
+    step_result.presentation.properties['result'] = report
 
-  return results
+  return report
 
 
 def GenTests(api):
@@ -217,7 +222,7 @@ def GenTests(api):
       }]
 
     canned_jsonish = {
-      'per_iteration_data': [cur_iteration_data]
+        'per_iteration_data': [cur_iteration_data]
     }
 
     return api.test_utils.raw_gtest_output(
@@ -231,8 +236,8 @@ def GenTests(api):
           'Win7 Tests (1)': {
               'gtest_tests': [
                   {
-                    'test': 'gl_tests',
-                    'swarming': {'can_use_on_swarming_builders': True},
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
                   },
               ],
           },
@@ -247,8 +252,8 @@ def GenTests(api):
           'Win7 Tests (1)': {
               'gtest_tests': [
                   {
-                    'test': 'gl_tests',
-                    'swarming': {'can_use_on_swarming_builders': True},
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
                   },
               ],
           },
@@ -268,8 +273,8 @@ def GenTests(api):
           'Win7 Tests (1)': {
               'gtest_tests': [
                   {
-                    'test': 'gl_tests',
-                    'swarming': {'can_use_on_swarming_builders': True},
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
                   },
               ],
           },
@@ -289,8 +294,8 @@ def GenTests(api):
           'Win7 Tests (1)': {
               'gtest_tests': [
                   {
-                    'test': 'gl_tests',
-                    'swarming': {'can_use_on_swarming_builders': True},
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
                   },
               ],
           },
@@ -326,8 +331,8 @@ def GenTests(api):
           'Win7 Tests (1)': {
               'gtest_tests': [
                   {
-                    'test': 'gl_tests',
-                    'swarming': {'can_use_on_swarming_builders': False},
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': False},
                   },
               ],
           },
@@ -347,8 +352,8 @@ def GenTests(api):
           'Mac10.9 Tests': {
               'gtest_tests': [
                   {
-                    'test': 'gl_tests',
-                    'swarming': {'can_use_on_swarming_builders': True},
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
                   },
               ],
           },
