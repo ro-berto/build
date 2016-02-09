@@ -356,6 +356,22 @@ def GenTests(api):
   )
 
   yield (
+    api.test('script_test_with_overridden_compile_targets') +
+      props() +
+      api.platform.name('linux') +
+      api.override_step_data('read test spec (2)', api.json.output({
+          'Linux Tests': {
+              'scripts': [
+                  {
+                      'name': 'script_test',
+                      'script': 'fake_script.py',
+                      'override_compile_targets': ['overridden_target']
+                  }
+              ],
+          }}))
+  )
+
+  yield (
     api.test('dynamic_isolated_script_test_with_args_on_trybot') +
     props(extra_swarmed_tests=['telemetry_gpu_unittests']) +
     api.platform.name('linux') +

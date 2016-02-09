@@ -128,18 +128,23 @@ class ScriptTest(Test):  # pylint: disable=W0232
   All new tests are strongly encouraged to use this infrastructure.
   """
 
-  def __init__(self, name, script, all_compile_targets, script_args=None):
+  def __init__(self, name, script, all_compile_targets, script_args=None,
+               override_compile_targets=None):
     super(ScriptTest, self).__init__()
     self._name = name
     self._script = script
     self._all_compile_targets = all_compile_targets
     self._script_args = script_args
+    self._override_compile_targets = override_compile_targets
 
   @property
   def name(self):
     return self._name
 
   def compile_targets(self, api):
+    if self._override_compile_targets:
+      return self._override_compile_targets
+
     try:
       substitutions = {'name': self._name}
 
@@ -470,8 +475,9 @@ def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
     yield ScriptTest(
         str(script_spec['name']),
         script_spec['script'],
-        scripts_compile_targets,  # pragma: no cover
-        script_spec.get('args', []))
+        scripts_compile_targets,
+        script_spec.get('args', []),
+        script_spec.get('override_compile_targets', []))
 
 
 class DynamicPerfTests(Test):
