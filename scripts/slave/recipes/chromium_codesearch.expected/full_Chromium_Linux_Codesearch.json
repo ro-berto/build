@@ -277,7 +277,6 @@
       "build",
       "infra",
       "tools",
-      "/usr/include",
       "-f",
       "chromium_src_linux.tar.bz2"
     ],

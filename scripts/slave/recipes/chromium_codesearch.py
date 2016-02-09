@@ -222,7 +222,7 @@ def RunSteps(api):
   api.python('archive source',
              api.path['build'].join('scripts','slave',
                                     'archive_source_codesearch.py'),
-             ['src', 'build', 'infra', 'tools', '/usr/include', '-f',
+             ['src', 'build', 'infra', 'tools', '-f',
               tarball_name])
 
   # Upload the source code.
