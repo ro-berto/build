@@ -299,7 +299,8 @@
       "--disable-network",
       "--disable-java-debug",
       "--max-battery-temp",
-      "350"
+      "350",
+      "--remove-system-webview"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

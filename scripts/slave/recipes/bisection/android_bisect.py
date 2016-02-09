@@ -81,6 +81,12 @@ BUILDERS = freeze({
                 'path':
                     lambda api: ('android_perf_rel/full-build-linux_%s.zip'),
             },
+            'android_webview_aosp_perf_bisect': {
+                'recipe_config': 'perf',
+                'gclient_apply_config': ['android', 'perf'],
+                'bucket': 'chrome-perf',
+                'webview': True,
+            },
         },
     },
 })

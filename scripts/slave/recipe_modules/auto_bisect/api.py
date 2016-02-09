@@ -201,7 +201,11 @@ class AutoBisectApi(recipe_api.RecipeApi):
         mastername, buildername)
     with api.chromium_tests.wrap_chromium_tests(bot_config_object, tests):
       if api.chromium.c.TARGET_PLATFORM == 'android':
-        api.chromium_android.adb_install_apk('ChromePublic.apk')
+        if bot_config.get('webview'):
+          api.chromium_android.adb_install_apk('SystemWebView.apk')
+          api.chromium_android.adb_install_apk('SystemWebViewShell.apk')
+        else:
+          api.chromium_android.adb_install_apk('ChromePublic.apk')
       test_runner()
 
   def start_try_job(self, api, update_step=None, bot_db=None, **kwargs):
@@ -229,7 +233,8 @@ class AutoBisectApi(recipe_api.RecipeApi):
       self.bot_db = bot_db
     affected_files = self.m.tryserver.get_files_affected_by_patch()
     if api.chromium.c.TARGET_PLATFORM == 'android':
-      api.chromium_android.common_tests_setup_steps(perf_setup=True)
+      api.chromium_android.common_tests_setup_steps(
+          perf_setup=True, remove_system_webview=True)
       api.chromium.runhooks()
     try:
       # Run legacy bisect script if the patch contains bisect.cfg.
