@@ -115,13 +115,27 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
+      "--version"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.4.10@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE[depot_tools]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 component=shared_library dcheck_always_on=1 fastbuild=1 target_arch=x64",
+      "GYP_DEFINES": "clang=1 component=shared_library dcheck_always_on=1 fastbuild=1 target_arch=x64 test_isolation_mode=prepare",
       "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks (with patch)"

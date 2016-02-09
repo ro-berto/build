@@ -660,9 +660,8 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      # TODO(thakis): Reenable when swarming works in gn http://crbug.com/480053
-      #'use_isolate': True,
-      #'enable_swarming': True,
+      'use_isolate': True,
+      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
