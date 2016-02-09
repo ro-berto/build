@@ -414,12 +414,10 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
   if 'refrange' in revision_data:
     parent_step = 'Resolving reference range.'
     step_name = parent_step + 'resolving commit_pos ' + commit_pos
-    yield api.step_data(step_name,
-                        stdout=api.raw_io.output('hash:' + commit_hash))
+    yield api.step_data(step_name, stdout=api.raw_io.output(commit_hash))
 
     step_name = parent_step + 'resolving hash ' + commit_hash
-    commit_pos_str = 'refs/heads/master@{#%s}' % commit_pos
-    yield api.step_data(step_name, stdout=api.raw_io.output(commit_pos_str))
+    yield api.step_data(step_name, stdout=api.raw_io.output(str(commit_pos)))
 
   if include_build_steps:
     if test_results:

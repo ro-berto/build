@@ -257,7 +257,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
       return rev
 
     try:
-      result = self.m.commit_position.chromium_hash_from_commit_position(rev)
+      result = self.m.crrev.chromium_hash_from_commit_position(rev)
     except self.m.step.StepFailure as sf:  # pragma: no cover
       self.m.halt(('Failed to resolve commit position %s- ' % rev) + sf.reason)
       raise

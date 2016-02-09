@@ -198,12 +198,13 @@
   },
   {
     "cmd": [
-      "git",
-      "footers",
-      "--position",
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::crrev]/resources/crrev.py",
+      "commit_hash",
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[SLAVE_BUILD]",
     "name": "Resolving reference range.resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -218,7 +219,7 @@
       "import sys; sys.exit(1)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Resolving reference range.Recipe failed. Reason: Failed to resolve commit position - Could not parse commit position from git output: ",
+    "name": "Resolving reference range.Recipe failed. Reason: Failed to resolve commit position - Could not fetch commit position for hash: a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys; sys.exit(1)@@@",
@@ -227,7 +228,7 @@
   },
   {
     "name": "$result",
-    "reason": "Could not parse commit position from git output: ",
+    "reason": "Could not fetch commit position for hash: a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "status_code": 1
   }
 ]

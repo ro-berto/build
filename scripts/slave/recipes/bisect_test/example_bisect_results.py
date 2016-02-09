@@ -88,11 +88,10 @@ def set_attributes(target, attributes):
 
 def add_revision_mapping(api, test, pos, sha):
   step_name = 'Resolving reference range.resolving commit_pos ' + pos
-  stdout = api.raw_io.output('hash:' + sha)
+  stdout = api.raw_io.output(sha)
   test += api.step_data(step_name, stdout=stdout)
   step_name = 'Resolving reference range.resolving hash ' + sha
-  pos = 'refs/heads/master@{#%s}' % pos
-  stdout = api.raw_io.output(pos)
+  stdout = api.raw_io.output(str(pos))
   test += api.step_data(step_name, stdout=stdout)
   return test
 
