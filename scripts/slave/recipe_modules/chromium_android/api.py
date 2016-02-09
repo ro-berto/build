@@ -667,9 +667,11 @@ class AndroidApi(recipe_api.RecipeApi):
       # of the APK under test.
       self.adb_install_apk(apk_under_test)
 
+    logcat_output_file = self.m.raw_io.output()
     args = [
       '--test-apk', test_apk,
       '--blacklist-file', self.blacklist_file,
+      '--logcat-output-file', logcat_output_file,
     ]
     if apk_under_test:
       args.extend(['--apk-under-test', apk_under_test])
@@ -704,11 +706,15 @@ class AndroidApi(recipe_api.RecipeApi):
     if strict_mode:
       args.extend(['--strict-mode', strict_mode])
 
-    return self.test_runner(
+    step_result = self.test_runner(
         'Instrumentation test %s%s' % (annotation or name,
                                        ' (%s)' % suffix if suffix else ''),
         args=['instrumentation'] + args,
         **kwargs)
+    if step_result.raw_io.output:
+      step_result.presentation.logs['logcat'] = (
+          step_result.raw_io.output.splitlines())
+    return step_result
 
   def launch_gce_instances(self, snapshot='clean-17-l-phone-image-no-popups',
                            count=6):

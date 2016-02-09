@@ -763,6 +763,8 @@
       "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebViewTest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--logcat-output-file",
+      "/path/to/tmp/",
       "--apk-under-test",
       "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebView.apk",
       "--isolate-file-path",
@@ -780,7 +782,13 @@
       "--official-build"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test SmallTest"
+    "name": "Instrumentation test SmallTest",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@logcat@logging...@@@",
+      "@@@STEP_LOG_LINE@logcat@beep@@@",
+      "@@@STEP_LOG_LINE@logcat@boop\bbop@@@",
+      "@@@STEP_LOG_END@logcat@@@"
+    ]
   },
   {
     "cmd": [

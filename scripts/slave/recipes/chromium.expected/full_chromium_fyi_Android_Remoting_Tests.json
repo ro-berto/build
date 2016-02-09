@@ -496,6 +496,8 @@
       "[SLAVE_BUILD]/src/out/Release/apks/ChromotingTest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--logcat-output-file",
+      "/path/to/tmp/",
       "--apk-under-test",
       "[SLAVE_BUILD]/src/out/Release/apks/Chromoting.apk",
       "--flakiness-dashboard-server",

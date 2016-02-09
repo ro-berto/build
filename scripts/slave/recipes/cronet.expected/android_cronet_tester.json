@@ -446,6 +446,8 @@
       "[SLAVE_BUILD]/src/out/Debug/apks/CronetSampleTest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--logcat-output-file",
+      "/path/to/tmp/",
       "--apk-under-test",
       "[SLAVE_BUILD]/src/out/Debug/apks/CronetSample.apk",
       "--verbose"
@@ -477,6 +479,8 @@
       "[SLAVE_BUILD]/src/out/Debug/apks/CronetTestInstrumentation.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--logcat-output-file",
+      "/path/to/tmp/",
       "--apk-under-test",
       "[SLAVE_BUILD]/src/out/Debug/apks/CronetTest.apk",
       "--verbose"

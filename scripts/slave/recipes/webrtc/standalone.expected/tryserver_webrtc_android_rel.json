@@ -621,6 +621,8 @@
       "[SLAVE_BUILD]/src/out/Release/apks/AppRTCDemoTest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--logcat-output-file",
+      "/path/to/tmp/",
       "--apk-under-test",
       "[SLAVE_BUILD]/src/out/Release/apks/AppRTCDemo.apk",
       "--verbose",
@@ -639,6 +641,8 @@
       "[SLAVE_BUILD]/src/out/Release/apks/libjingle_peerconnection_android_unittest.apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--logcat-output-file",
+      "/path/to/tmp/",
       "--verbose",
       "--release"
     ],

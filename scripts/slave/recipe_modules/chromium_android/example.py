@@ -11,6 +11,7 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
+    'recipe_engine/raw_io',
     'recipe_engine/step',
 ]
 
@@ -175,7 +176,9 @@ def RunSteps(api, buildername):
       official_build=True,
       host_driven_root=api.path['checkout'].join('chrome', 'test'),
       timeout_scale=config.get('timeout_scale'),
-      strict_mode=config.get('strict_mode'))
+      strict_mode=config.get('strict_mode'),
+      step_test_data=lambda: api.raw_io.test_api.output(
+          'logging...\nbeep\nboop\bbop'))
   api.chromium_android.run_test_suite(
       'unittests',
       isolate_file_path=api.path['checkout'].join('some_file.isolate'),
