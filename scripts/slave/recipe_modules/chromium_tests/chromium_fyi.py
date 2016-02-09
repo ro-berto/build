@@ -184,6 +184,35 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'MD Top Chrome ChromeOS non-material': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['chromeos'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'chromeos',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+        'chrome',
+        'unit_tests',
+        'interactive_ui_tests',
+        'browser_tests',
+        'views_unittests',
+        'ui_base_unittests',
+        'aura_unittests',
+        'ash_unittests',
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Print Preview Linux': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
