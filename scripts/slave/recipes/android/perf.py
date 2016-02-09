@@ -187,7 +187,8 @@ def RunSteps(api):
     if failures:
       raise api.step.StepFailure('src-side perf tests failed %s' % failures)
   finally:
-    api.chromium_android.common_tests_final_steps()
+    api.chromium_android.common_tests_final_steps(
+        logcat_gs_bucket='chromium-android')
 
 
 def _sanitize_nonalpha(text):
