@@ -1,0 +1,477 @@
+# Copyright 2015 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# TODO: remove redundant DEPS.
+DEPS = [
+  'file',
+  'recipe_engine/path',
+  'recipe_engine/properties',
+  'repo',
+  'recipe_engine/step',
+]
+
+_TARGET_DEVICE_MAP = {
+    'volantis': {
+      'bitness': 64,
+      'make_jobs': 2,
+      'product': 'armv8',
+      },
+    'hammerhead': {
+      'bitness': 32,
+      'make_jobs': 4,
+      'product': 'arm_krait',
+      },
+    'fugu': {
+      'bitness': 32,
+      'make_jobs': 4,
+      'product': 'silvermont',
+      },
+    'mips64_emulator': {
+      'bitness': 64,
+      'make_jobs': 1,
+      'product': 'mips64r6',
+      },
+    'mips32': {
+      'bitness': 32,
+      'make_jobs': 2,
+      'product': 'mips32r2_fp',
+      },
+    }
+
+_ANDROID_CLEAN_DIRS = ['/data/local/tmp', '/data/art-test',
+                       '/data/nativetest']
+
+def checkout(api):
+  api.repo.init('https://android.googlesource.com/platform/manifest',
+      '-b', 'master-art')
+  api.repo.sync()
+
+def full_checkout(api):
+  api.repo.init('https://android.googlesource.com/platform/manifest',
+      '-b', 'master')
+  api.repo.sync()
+
+def clobber(api):
+  if api.properties.get("clobber"):
+    api.file.rmtree('clobber', api.path['slave_build'].join('out'))
+
+def warn_only_step(api):
+  def warn_step(*args, **kwargs):
+    try:
+      api.step(*args, **kwargs)
+    except api.step.StepFailure:
+      api.step.active_result.presentation.status = api.step.WARNING
+
+  return warn_step
+
+def setup_host_x86(api, debug, bitness, concurrent_collector=False):
+  checkout(api)
+  clobber(api)
+
+  warn_step = warn_only_step(api)
+
+  build_top_dir = api.path['slave_build']
+  art_tools = api.path['slave_build'].join('art', 'tools')
+  env = { 'TARGET_PRODUCT': 'sdk',
+          'TARGET_BUILD_VARIANT': 'eng',
+          'TARGET_BUILD_TYPE': 'release',
+          'ANDROID_BUILD_TOP': build_top_dir,
+          'LEGACY_USE_JAVA7': 'true',
+          'JACK_SERVER': 'false',
+          'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk', 'tools',
+                                                    'jacks')),
+          'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
+                      api.path.pathsep + '%(PATH)s',
+          'ART_USE_OPTIMIZING_COMPILER' : 'true',
+          'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
+          'ART_TEST_INTERPRETER': 'true',
+          'ART_TEST_JIT': 'true',
+          'ART_TEST_OPTIMIZING': 'true',
+          'ART_TEST_FULL': 'false',
+          'ART_TEST_KEEP_GOING': 'true' }
+
+  if bitness == 32:
+    env.update({ 'HOST_PREFER_32_BIT' : 'true' })
+
+  if not debug:
+    env.update({ 'ART_TEST_RUN_TEST_NDEBUG' : 'true' })
+    env.update({ 'ART_TEST_RUN_TEST_DEBUG' : 'false' })
+
+  if concurrent_collector:
+    env.update({ 'ART_USE_READ_BARRIER' : 'true'  })
+    env.update({ 'ART_HEAP_POISONING' : 'true'  })
+
+  api.step('build sdk-eng',
+           [art_tools.join('buildbot-build.sh'), '-j8', '--host'],
+           env=env)
+
+  warn_step('test gtest',
+      ['make', '-j8', 'test-art-host-gtest%d' % bitness],
+      env=env)
+  warn_step('test quick', ['make', '-j8', 'test-art-host-run-test-default',
+    'dist'], env=env)
+
+  optimizing_env = env.copy()
+  optimizing_env.update({ 'ART_TEST_RUN_TEST_DEBUGGABLE': 'true' })
+  warn_step('test optimizing', ['make', '-j8',
+    'test-art-host-run-test-optimizing', 'dist'], env=optimizing_env)
+  # Use a lower -j number for interpreter, some tests take a long time
+  # to run on it.
+  warn_step('test interpreter', ['make', '-j5',
+    'test-art-host-run-test-interpreter', 'dist'], env=env)
+
+  warn_step('test jit', ['make', '-j8', 'test-art-host-run-test-jit',
+                        'dist'],
+           env=env)
+
+  libcore_command = [art_tools.join('run-libcore-tests.sh'),
+                     '--mode=host',
+                     '--variant=X%d' % bitness]
+  if debug:
+    libcore_command.append('--debug')
+  warn_step('test libcore', libcore_command, env=env)
+
+  jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
+                  '--mode=host',
+                  '--variant=X%d' % bitness]
+  if debug:
+    jdwp_command.append('--debug')
+  warn_step('test jdwp', jdwp_command, env=env)
+
+def setup_target(api,
+    serial,
+    debug,
+    device,
+    concurrent_collector=False):
+  build_top_dir = api.path['slave_build']
+  art_tools = api.path['slave_build'].join('art', 'tools')
+  android_root = '/data/local/tmp/system'
+
+  warn_step = warn_only_step(api)
+
+  env = {'TARGET_BUILD_VARIANT': 'eng',
+         'TARGET_BUILD_TYPE': 'release',
+         'ANDROID_SERIAL': serial,
+         'ANDROID_BUILD_TOP': build_top_dir,
+         'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
+                     api.path.pathsep + '%(PATH)s',
+          'LEGACY_USE_JAVA7': 'true',
+         'JACK_SERVER': 'false',
+         'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk', 'tools',
+                                                   'jacks')),
+         'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
+         'ART_USE_OPTIMIZING_COMPILER' : 'true',
+         'ART_TEST_INTERPRETER': 'true',
+         'ART_TEST_JIT': 'true',
+         'ART_TEST_OPTIMIZING': 'true',
+         'ART_TEST_FULL': 'false',
+         'ART_TEST_ANDROID_ROOT': android_root,
+         'USE_DEX2OAT_DEBUG': 'false',
+         'ART_BUILD_HOST_DEBUG': 'false',
+         'ART_TEST_KEEP_GOING': 'true'}
+
+  if not debug:
+    env.update({ 'ART_TEST_RUN_TEST_NDEBUG' : 'true' })
+    env.update({ 'ART_TEST_RUN_TEST_DEBUG' : 'false' })
+
+  if concurrent_collector:
+    env.update({ 'ART_USE_READ_BARRIER' : 'true' })
+    env.update({ 'ART_HEAP_POISONING' : 'true' })
+
+
+  bitness = _TARGET_DEVICE_MAP[device]['bitness']
+  make_jobs = _TARGET_DEVICE_MAP[device]['make_jobs']
+  env.update(
+      {'TARGET_PRODUCT': _TARGET_DEVICE_MAP[device]['product'],
+       'ANDROID_PRODUCT_OUT': build_top_dir.join('out','target', 'product',
+         _TARGET_DEVICE_MAP[device]['product'])
+      })
+
+  if bitness == 32:
+    env.update({ 'CUSTOM_TARGET_LINKER': '%s/bin/linker' % android_root  })
+  else:
+    env.update({ 'CUSTOM_TARGET_LINKER': '%s/bin/linker64' % android_root  })
+
+  checkout(api)
+  clobber(api)
+
+  api.step('build target', [art_tools.join('buildbot-build.sh'),
+                            '-j8', '--target'],
+           env=env)
+
+  warn_step('setup device', [art_tools.join('setup-buildbot-device.sh')],
+           env=env)
+
+  warn_step('device cleanup', ['adb', 'shell', 'rm', '-rf'] +
+                             _ANDROID_CLEAN_DIRS,
+           env=env)
+
+  api.step('sync target', ['make', 'test-art-target-sync'], env=env)
+
+  def test_logging(api, test_name):
+    api.step(test_name + ': adb logcat',
+             ['adb', 'logcat', '-d', '-v', 'threadtime'],
+             env=env)
+    api.step(test_name + ': adb clear log', ['adb', 'logcat', '-c'], env=env)
+
+  test_env = env.copy()
+  test_env.update({ 'ART_TEST_NO_SYNC': 'true' })
+
+  warn_step('test gtest', ['make', '-j%d' % (make_jobs),
+    'test-art-target-gtest%d' % bitness], env=test_env)
+  test_logging(api, 'test gtest')
+
+  warn_step('test quick', ['make', '-j%d' % (make_jobs),
+    'test-art-target-run-test-default', 'dist'], env=test_env)
+  test_logging(api, 'test quick')
+
+  optimizing_env = test_env.copy()
+  optimizing_env.update({ 'ART_TEST_RUN_TEST_DEBUGGABLE': 'true' })
+  warn_step('test optimizing', ['make', '-j%d' % (make_jobs),
+    'test-art-target-run-test-optimizing', 'dist'], env=optimizing_env)
+  test_logging(api, 'test optimizing')
+
+  warn_step('test interpreter', ['make', '-j%d' % (make_jobs),
+                                'test-art-target-run-test-interpreter',
+                                'dist'],
+           env=test_env)
+  test_logging(api, 'test interpreter')
+
+  warn_step('test jit', ['make', '-j%d' % (make_jobs),
+    'test-art-target-run-test-jit', 'dist'], env=test_env)
+  test_logging(api, 'test jit')
+
+  libcore_command = [art_tools.join('run-libcore-tests.sh'),
+                     '--mode=device',
+                     '--variant=X%d' % bitness]
+  if debug:
+    libcore_command.append('--debug')
+  warn_step('test libcore', libcore_command, env=test_env)
+  test_logging(api, 'test libcore')
+
+  jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
+                  '--mode=device',
+                  '--variant=X%d' % bitness]
+  if debug:
+    jdwp_command.append('--debug')
+  warn_step('test jdwp', jdwp_command, env=test_env)
+  test_logging(api, 'test jdwp')
+
+def setup_aosp_builder(api):
+  full_checkout(api)
+  clobber(api)
+
+  warn_step = warn_only_step(api)
+
+  builds = ['x86', 'x86_64', 'arm', 'arm64']
+  # TODO: adds mips and mips64 once we have enough storage on the bot.
+  # ['mips', 'mips64']
+  for build in builds:
+    env = { 'ART_USE_OPTIMIZING_COMPILER': 'true',
+            'TARGET_PRODUCT': 'aosp_%s' % build,
+            'TARGET_BUILD_VARIANT': 'eng',
+            'TARGET_BUILD_TYPE': 'release'}
+    warn_step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'],
+        env=env)
+    warn_step('build %s' % build, ['make', '-j8'], env=env)
+
+_CONFIG_MAP = {
+  'client.art': {
+
+    'x86': {
+      'host-x86-ndebug': {
+        'debug': False,
+        'bitness': 32,
+      },
+      'host-x86-debug': {
+        'debug': True,
+        'bitness': 32,
+      },
+      'host-x86_64-ndebug': {
+        'debug': False,
+        'bitness': 64,
+      },
+      'host-x86_64-debug': {
+        'debug': True,
+        'bitness': 64,
+      },
+      'host-x86-concurrent-collector': {
+        'debug': True,
+        'bitness': 32,
+        'concurrent_collector': True,
+      },
+      'host-x86_64-concurrent-collector': {
+        'debug': True,
+        'bitness': 64,
+        'concurrent_collector': True,
+      },
+    },
+
+    'target': {
+      'hammerhead-ndebug': {
+        'serial': '073038cf006ae3bb',
+        'device': 'hammerhead',
+        'debug': False,
+      },
+      'hammerhead-debug': {
+        'serial': '03848d73f0e944cb',
+        'device': 'hammerhead',
+        'debug': True,
+      },
+      'armv8-ndebug': {
+        'serial': 'HT4CTJT03670',
+        'device': 'volantis',
+        'debug': False,
+      },
+      'armv8-debug': {
+        'serial': 'HT49CJT00070',
+        'device': 'volantis',
+        'debug': True,
+      },
+      'fugu-ndebug': {
+        'serial': '8C4CC68F',
+        'device': 'fugu',
+        'debug': False,
+      },
+      'fugu-debug': {
+        'serial': '0FF57BB6',
+        'device': 'fugu',
+        'debug': False,
+      },
+      'hammerhead-concurrent-collector': {
+        'serial': '0713a1b8005a0076',
+        'device': 'hammerhead',
+        'debug': True,
+        'concurrent_collector': True,
+      },
+      'armv8-concurrent-collector': {
+        'serial': 'HT4CTJT03586',
+        'device': 'volantis',
+        'debug': True,
+        'concurrent_collector': True,
+      },
+      'mips32-ndebug': {
+        'serial': '5163bae65fe0f8c8',
+        'device': 'mips32',
+        'debug': False,
+      },
+      'mips32-debug': {
+        'serial': '9163bae65fe0f880',
+        'device': 'mips32',
+        'debug': True,
+      },
+      'mips64-emulator-debug': {
+        'serial': 'emulator-5554',
+        'device': 'mips64_emulator',
+        'debug': True,
+      },
+    },
+
+    'aosp': {
+      'aosp-builder': {},
+    },
+  },
+}
+
+_CONFIG_DISPATCH_MAP = {
+  'client.art': {
+    'x86': setup_host_x86,
+    'target': setup_target,
+    'aosp': setup_aosp_builder,
+  }
+}
+
+def RunSteps(api):
+  if api.properties['mastername'] not in _CONFIG_MAP: # pragma: no cover
+    error = "Master not found in recipe's local config!"
+    raise KeyError(error)
+
+  builder_found = False
+  config = _CONFIG_MAP[api.properties['mastername']]
+  for builder_type in config:
+    if api.properties['buildername'] in config[builder_type]:
+      builder_found = True
+      builder_dict = config[builder_type][api.properties['buildername']]
+      _CONFIG_DISPATCH_MAP[api.properties['mastername']][builder_type](api,
+          **builder_dict)
+      break
+
+  if not builder_found: # pragma: no cover
+    error = "Builder not found in recipe's local config!"
+    raise KeyError(error)
+
+def GenTests(api):
+  for mastername, config_dict in _CONFIG_MAP.iteritems():
+    for builders in config_dict.values():
+      for buildername in builders:
+        for clb in (None, True):
+          yield (
+              api.test("%s__ON__%s__%s" % (buildername, mastername,
+                ("" if clb else "no") + "clobber")) +
+              api.properties(
+                mastername=mastername,
+                buildername=buildername,
+                slavename='TestSlave',
+                clobber=clb,
+              )
+            )
+  yield (
+      api.test('x86_32_test_failure') +
+      api.properties(
+        mastername='client.art',
+        buildername='host-x86-ndebug',
+        slavename='TestSlave',
+      ) +
+      api.step_data('test jdwp', retcode=1))
+  yield (
+      api.test('target_hammerhead_setup_failure') +
+      api.properties(
+        mastername='client.art',
+        buildername='hammerhead-ndebug',
+        slavename='TestSlave',
+      )
+      + api.step_data('setup device', retcode=1))
+  yield (
+      api.test('target_hammerhead_test_failure') +
+      api.properties(
+        mastername='client.art',
+        buildername='hammerhead-ndebug',
+        slavename='TestSlave',
+      ) +
+      api.step_data('test jdwp', retcode=1))
+  yield (
+      api.test('target_hammerhead_device_cleanup_failure') +
+      api.properties(
+        mastername='client.art',
+        buildername='hammerhead-ndebug',
+        slavename='TestSlave',
+      ) +
+      api.step_data('device cleanup', retcode=1))
+  yield (
+      api.test('aosp_x86_build_failure') +
+      api.properties(
+        mastername='client.art',
+        buildername='aosp-builder',
+        slavename='TestSlave',
+      ) +
+      api.step_data('build x86', retcode=1))
+#  These tests *should* exist, but can't be included as they cause the recipe
+#  simulation to error out, instead of showing that the build should become
+#  purple instead. This may need to be fixed in the simulation test script.
+#  yield (
+#      api.test('invalid mastername') +
+#      api.properties(
+#        mastername='client.art.does_not_exist',
+#        buildername='aosp-builder',
+#        slavename='TestSlave',
+#      )
+#    )
+#  yield (
+#      api.test('invalid buildername') +
+#      api.properties(
+#        mastername='client.art',
+#        buildername='builder_does_not_exist',
+#        slavename='TestSlave',
+#      )
+#    )

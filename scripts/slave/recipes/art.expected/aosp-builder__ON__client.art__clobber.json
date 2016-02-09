@@ -1,0 +1,162 @@
+[
+  {
+    "cmd": [
+      "[DEPOT_TOOLS]/repo",
+      "init",
+      "-u",
+      "https://android.googlesource.com/platform/manifest",
+      "-b",
+      "master"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "repo init"
+  },
+  {
+    "cmd": [
+      "[DEPOT_TOOLS]/repo",
+      "sync"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "repo sync"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/out"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rmtree clobber",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "clean-oat-host"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_x86"
+    },
+    "name": "Clean oat x86"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_x86"
+    },
+    "name": "build x86"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "clean-oat-host"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_x86_64"
+    },
+    "name": "Clean oat x86_64"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_x86_64"
+    },
+    "name": "build x86_64"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "clean-oat-host"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_arm"
+    },
+    "name": "Clean oat arm"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_arm"
+    },
+    "name": "build arm"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "clean-oat-host"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_arm64"
+    },
+    "name": "Clean oat arm64"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_arm64"
+    },
+    "name": "build arm64"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
