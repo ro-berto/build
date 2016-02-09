@@ -154,7 +154,7 @@ def GenerateXcodeProject(api):
 
   # Copy device 'Flutter' directory to a deploy dir:
   deploy_dir = out_dir.join('FlutterXcode')
-  api.file.makedirs('deployment directory', deploy_dir)
+  api.file.rmtree('deployment directory', deploy_dir)
   device_flutter = out_dir.join('ios_Release/Flutter')
   api.file.copytree('copy sim', device_flutter, deploy_dir)
 
