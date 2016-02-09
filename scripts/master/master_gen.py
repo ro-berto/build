@@ -5,6 +5,7 @@
 import ast
 import os
 
+from buildbot.changes.filter import ChangeFilter
 from buildbot.schedulers.basic import SingleBranchScheduler
 from buildbot.schedulers.timed import Nightly
 from buildbot.status.mail import MailNotifier
@@ -148,10 +149,27 @@ def _ComputeSchedulers(builders):
     scheduler_type = scheduler_values['type']
     builder_names = scheduler_to_builders[scheduler_name]
 
-    if scheduler_type in ('git_poller', 'repo_poller'):
+    if scheduler_type == 'git_poller':
+      # git_poller pollers group changes, so we match on our specific repository
+      # to ensure that we only pick up changes from our poller.
       schedulers.append(SingleBranchScheduler(
           name=scheduler_name,
-          branch=scheduler_values.get('branch', 'master'),
+          change_filter=ChangeFilter(
+              repository=scheduler_values['git_repo_url'],
+              branch=scheduler_values.get('branch', 'master'),
+          ),
+          treeStableTimer=scheduler_values.get('treeStableTimer', 60),
+          builderNames=builder_names))
+
+    elif scheduler_type == 'repo_poller':
+      # repo_poller pollers punt changes that use the scheduler name as their
+      # category (see _ComputeChangeSourceAndTagComparator). Matching on this
+      # ensures that we only match changes from our poller.
+      schedulers.append(SingleBranchScheduler(
+          name=scheduler_name,
+          change_filter=ChangeFilter(
+              category=str(scheduler_name),
+          ),
           treeStableTimer=scheduler_values.get('treeStableTimer', 60),
           builderNames=builder_names))
 
@@ -186,7 +204,7 @@ def _ComputeChangeSourceAndTagComparator(builders):
     change_source.append(
         gitiles_poller.GitilesPoller(url, branches=list(branches)))
 
-  for scheduler_config in builders['schedulers'].values():
+  for scheduler_name, scheduler_config in builders['schedulers'].iteritems():
     if scheduler_config['type'] != 'repo_poller':
       continue
 
@@ -196,6 +214,7 @@ def _ComputeChangeSourceAndTagComparator(builders):
     change_source.append(repo_poller.RepoPoller(
         repo_url=scheduler_config['repo_url'],
         manifest='manifest',
+        category=str(scheduler_name),
         repo_branches=branches,
         pollInterval=300,
         revlinktmpl=rev_link_template))
