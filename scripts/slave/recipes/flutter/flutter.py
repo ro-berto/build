@@ -9,6 +9,7 @@ DEPS = [
   'file',
   'gsutil',
   'recipe_engine/path',
+  'recipe_engine/platform',
   'recipe_engine/step',
 ]
 
@@ -43,7 +44,10 @@ def TestFlutterPackagesAndExamples(api):
       cwd=checkout.join(path))
 
   def _flutter_test(path):
-    api.step('test %s' % path, ['flutter', 'test'], cwd=checkout.join(path))
+    # TODO(eseidel): Sadly tests are linux-only for now. :(
+    # https://github.com/flutter/flutter/issues/1707
+    if api.platform.is_linux:
+      api.step('test %s' % path, ['flutter', 'test'], cwd=checkout.join(path))
 
   _pub_test('packages/cassowary')
   _flutter_test('packages/flutter')
@@ -137,4 +141,5 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield api.test('basic')
+  for platform in ('mac', 'linux'):
+    yield api.test(platform) + api.platform(platform, 64)

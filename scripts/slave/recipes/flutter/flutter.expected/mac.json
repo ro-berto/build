@@ -1,0 +1,457 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
+      "--path",
+      "[SLAVE_BUILD]/flutter",
+      "--url",
+      "https://chromium.googlesource.com/external/github.com/flutter/flutter"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "git setup"
+  },
+  {
+    "cmd": [
+      "git",
+      "retry",
+      "fetch",
+      "origin",
+      "master",
+      "--recurse-submodules"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter",
+    "name": "git fetch"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "FETCH_HEAD"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter",
+    "name": "git checkout"
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter",
+    "name": "git clean"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "sync"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter",
+    "name": "submodule sync"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "update",
+      "--init",
+      "--recursive"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter",
+    "name": "submodule update"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/flutter/infra/download_dart_sdk.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "download dart sdk"
+  },
+  {
+    "cmd": [
+      "dart",
+      "[SLAVE_BUILD]/flutter/dev/update_packages.dart"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "update packages"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "cache",
+      "populate"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/packages/flutter",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "populate flutter cache"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "analyze",
+      "--flutter-repo",
+      "--no-current-directory",
+      "--no-current-package",
+      "--congratulate"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "flutter analyze"
+  },
+  {
+    "cmd": [
+      "pub",
+      "run",
+      "test",
+      "-j1"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/packages/cassowary",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "test packages/cassowary"
+  },
+  {
+    "cmd": [
+      "pub",
+      "run",
+      "test",
+      "-j1"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/packages/flutter_tools",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "test packages/flutter_tools"
+  },
+  {
+    "cmd": [
+      "pub",
+      "run",
+      "test",
+      "-j1"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/packages/flx",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "test packages/flx"
+  },
+  {
+    "cmd": [
+      "pub",
+      "run",
+      "test",
+      "-j1"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/packages/newton",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "test packages/newton"
+  },
+  {
+    "cmd": [
+      "pub",
+      "global",
+      "activate",
+      "dartdoc",
+      "0.8.4"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "pub global activate dartdoc"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/flutter/packages/flutter/doc/styles.html",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "Read styles.html"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/flutter/doc/_analytics.html",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "Read _analytics.html"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "styles\nanalytics",
+      "[TMP_BASE]/tmp_tmp_1/_header.html"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "Write _header.html"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/.pub-cache/bin/dartdoc",
+      "--header",
+      "[TMP_BASE]/tmp_tmp_1/_header.html"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/packages/flutter",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "dartdoc packages/flutter"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "-m",
+      "rsync",
+      "-d",
+      "-r",
+      "[SLAVE_BUILD]/flutter/packages/flutter/doc/api",
+      "gs://docs.flutter.io/packages/flutter"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "gsutil rsync"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/.pub-cache/bin/dartdoc",
+      "--header",
+      "[TMP_BASE]/tmp_tmp_1/_header.html"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/packages/playfair",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "dartdoc packages/playfair"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "-m",
+      "rsync",
+      "-d",
+      "-r",
+      "[SLAVE_BUILD]/flutter/packages/playfair/doc/api",
+      "gs://docs.flutter.io/packages/playfair"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "gsutil rsync (2)"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/.pub-cache/bin/dartdoc",
+      "--header",
+      "[TMP_BASE]/tmp_tmp_1/_header.html"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/packages/cassowary",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "dartdoc packages/cassowary"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "-m",
+      "rsync",
+      "-d",
+      "-r",
+      "[SLAVE_BUILD]/flutter/packages/cassowary/doc/api",
+      "gs://docs.flutter.io/packages/cassowary"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "gsutil rsync (3)"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/.pub-cache/bin/dartdoc",
+      "--header",
+      "[TMP_BASE]/tmp_tmp_1/_header.html"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/packages/flutter_test",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "dartdoc packages/flutter_test"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "-m",
+      "rsync",
+      "-d",
+      "-r",
+      "[SLAVE_BUILD]/flutter/packages/flutter_test/doc/api",
+      "gs://docs.flutter.io/packages/flutter_test"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "gsutil rsync (4)"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/.pub-cache/bin/dartdoc",
+      "--header",
+      "[TMP_BASE]/tmp_tmp_1/_header.html"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/packages/flutter_sprites",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "dartdoc packages/flutter_sprites"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "-m",
+      "rsync",
+      "-d",
+      "-r",
+      "[SLAVE_BUILD]/flutter/packages/flutter_sprites/doc/api",
+      "gs://docs.flutter.io/packages/flutter_sprites"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "gsutil rsync (5)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "[SLAVE_BUILD]/flutter/doc/index.html",
+      "gs://docs.flutter.io/index.html"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/docs.flutter.io/index.html@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[TMP_BASE]/tmp_tmp_1"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "rmtree temp dir",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
