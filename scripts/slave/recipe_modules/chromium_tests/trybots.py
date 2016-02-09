@@ -390,6 +390,16 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'ChromiumPracticeFullTester',
       }),
+      # Optional GPU bots.
+      'linux_optional_gpu_tests_rel': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Linux Builder',
+            'tester': 'Optional Linux Release (NVIDIA)',
+          },
+        ],
+      },
     },
   },
   'tryserver.chromium.mac': {
@@ -453,6 +463,21 @@ TRYBOTS = freeze({
         'buildername': 'Mac ASan 64 Builder',
         'tester': 'Mac ASan 64 Tests (1)',
       }),
+      # Optional GPU bots.
+      'mac_optional_gpu_tests_rel': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Mac Builder',
+            'tester': 'Optional Mac 10.10 Release (Intel)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Mac Builder',
+            'tester': 'Optional Mac Retina Release',
+          },
+        ],
+      },
     },
   },
   'tryserver.chromium.win': {
