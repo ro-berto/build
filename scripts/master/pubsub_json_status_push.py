@@ -181,6 +181,8 @@ def event_handler(func):
 
 class ConfigError(ValueError):
   pass
+class NotEnabled(Exception):
+  """Raised when PubSub is purposely not enabled."""
 
 
 _BuildBase = collections.namedtuple(
@@ -206,7 +208,7 @@ class StatusPush(StatusReceiverMultiService):
   # Perform verbose logging.
   verbose = False
 
-  def __init__(self, activeMaster, topic_url, pushInterval=None):
+  def __init__(self, activeMaster, pushInterval=None):
     """Instantiates a new StatusPush service.
 
     Args:
@@ -217,22 +219,23 @@ class StatusPush(StatusReceiverMultiService):
     assert activeMaster, 'An active master must be supplied.'
     StatusReceiverMultiService.__init__(self)
 
-    self.enabled = True
     if not (
           activeMaster.is_production_host or os.environ.get('TESTING_MASTER')):
       log.msg(
           'Not a production host or testing, not loading the PubSub '
           'status listener.')
-      return
+      raise NotEnabled()
+
+    self.topic_url = getattr(activeMaster, 'pubsub_topic_url', None)
+    if not self.topic_url:
+      log.msg('Missing pubsub_topic_url, not enabling.')
+      raise NotEnabled()
 
     # Set the master name, for indexing purposes.
     self.master = getattr(activeMaster, 'name', None)
     if not self.master:
       raise ConfigError(
           'A master name must be supplied for pubsub push support.')
-
-    # Specify the topic url to push status updates to.
-    self.topic_url = topic_url
 
     if not hasattr(activeMaster, 'service_account_file'):
       raise ConfigError('A service account file must be specified.')
