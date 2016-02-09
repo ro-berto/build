@@ -66,10 +66,11 @@
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
       "----",
       "cp",
       "-r",
-      "-m",
       "[SLAVE_BUILD]/install/docs/html",
       "gs://chromium-dynamorio/dr_docs/"
     ],

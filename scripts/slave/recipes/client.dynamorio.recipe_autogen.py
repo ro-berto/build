@@ -57,7 +57,7 @@ def linux_dr_steps(api):
     cwd=api.path["slave_build"], ok_ret="all")
   # upload dynamorio docs step
   api.gsutil.upload(api.path["slave_build"].join("install", "docs", "html"),
-      "chromium-dynamorio", "dr_docs/", ["-r", "-m"])
+      "chromium-dynamorio", "dr_docs/", ["-r"], parallel_upload=True)
 
 
 def win_7_dr_steps(api):
@@ -102,12 +102,14 @@ def linux_dr_package_steps(api):
   # Package DynamoRIO step
   api.step("Package DynamoRIO", ["ctest", "-VV", "-S",
     str(api.path["checkout"].join("make", "package.cmake")) + ",build=0x" +
-    build_properties["revision"][:7]])
+    build_properties["got_revision"][:7]])
   # find package file step; no longer necessary
   # upload dynamorio package
-  api.gsutil.upload("DynamoRIO-Linux-*" + str(api.properties["revision"])[:7] +
+  api.gsutil.upload("DynamoRIO-Linux-*" +
+      str(api.properties["got_revision"])[:7] +
       ".tar.gz", "chromium-dynamorio", "builds/")
-  api.gsutil.upload("DynamoRIO-Windows-*" + str(api.properties["revision"])[:7]
+  api.gsutil.upload("DynamoRIO-Windows-*" +
+      str(api.properties["got_revision"])[:7]
       + ".zip", "chromium-dynamorio", "builds/")
 
 
@@ -251,14 +253,16 @@ def win_dr_package_steps(api):
   api.step("Package DynamoRIO", [api.path["build"].join("scripts", "slave",
     "drmemory", "build_env.bat"), "ctest", "-VV", "-S",
     str(api.path["checkout"].join("make", "package.cmake")) + ",build=0x" +
-    str(api.properties["revision"])[:7]],
+    str(api.properties["got_revision"])[:7]],
     env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
       "bot_tools")})
   # find package file step; no longer necessary
   # upload dynamorio package
-  api.gsutil.upload("DynamoRIO-Linux-*" + str(api.properties["revision"])[:7] +
+  api.gsutil.upload("DynamoRIO-Linux-*" +
+      str(api.properties["got_revision"])[:7] +
       ".tar.gz", "chromium-dynamorio", "builds/")
-  api.gsutil.upload("DynamoRIO-Windows-*" + str(api.properties["revision"])[:7]
+  api.gsutil.upload("DynamoRIO-Windows-*" +
+      str(api.properties["got_revision"])[:7]
       + ".zip", "chromium-dynamorio", "builds/")
 
 
@@ -309,6 +313,7 @@ def GenTests(api):
     api.properties(mastername='client.dynamorio') +
     api.properties(buildername='linux-dr') +
     api.properties(revision='123456789abcdef') +
+    api.properties(got_revision='123456789abcdef') +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('win_7_dr') +
@@ -321,6 +326,7 @@ def GenTests(api):
     api.properties(mastername='client.dynamorio') +
     api.properties(buildername='linux-dr-package') +
     api.properties(revision='123456789abcdef') +
+    api.properties(got_revision='123456789abcdef') +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('win_8_dr') +
@@ -351,6 +357,7 @@ def GenTests(api):
     api.properties(mastername='client.dynamorio') +
     api.properties(buildername='win-dr-package') +
     api.properties(revision='123456789abcdef') +
+    api.properties(got_revision='123456789abcdef') +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('linux_dr_nightly') +
