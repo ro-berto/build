@@ -2234,6 +2234,8 @@
       "[SLAVE_BUILD]/src/third_party/android_platform/development/scripts/stack",
       "--arch",
       "arm",
+      "--output-directory",
+      "[SLAVE_BUILD]/src/out/Release",
       "--more-info",
       "[SLAVE_BUILD]/src/out/Release/full_log"
     ],
@@ -2246,6 +2248,8 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/src/build/android/tombstones.py",
+      "--output-directory",
+      "[SLAVE_BUILD]/src/out/Release",
       "-a",
       "-s",
       "-w"
