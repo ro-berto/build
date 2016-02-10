@@ -426,7 +426,7 @@ TRYBOTS = freeze({
           {
             'mastername': 'chromium.mac',
             'buildername': 'Mac Builder',
-            'tester': 'Mac10.8 Tests',
+            'tester': 'Mac10.9 Tests',
           },
           {
             'mastername': 'chromium.gpu',
