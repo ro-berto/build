@@ -350,7 +350,11 @@ def Archive(options):
   zip_base, zip_ext, versioned_file = MakeVersionedArchive(
       zip_file, version_suffix, options)
 
-  PruneOldArchives(staging_dir, zip_base, zip_ext, prune_limit=10)
+  prune_limit = 10
+  if options.build_url.startswith('gs://'):
+    # Don't keep builds lying around when uploading them to google storage.
+    prune_limit = 3
+  PruneOldArchives(staging_dir, zip_base, zip_ext, prune_limit=prune_limit)
 
   # Update the latest revision file in the staging directory
   # to allow testers to figure out the latest packaged revision
