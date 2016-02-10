@@ -37,13 +37,13 @@ class AnnotatorFactory(object):
     annotated_run will attempt to look up the recipe from builders.pyl in the
     master.
 
-    |timeout| refers to the maximum number of seconds a step should be allowed
-    to run without output. After no output for |timeout| seconds, the step is
+    |timeout| refers to the maximum number of seconds a build should be allowed
+    to run without output. After no output for |timeout| seconds, the build is
     forcibly killed.
 
-    |max_time| refers to the maximum number of seconds a step should be allowed
-    to run, regardless of output. After |max_time| seconds, the step is forcibly
-    killed.
+    |max_time| refers to the maximum number of seconds a build should be allowed
+    to run, regardless of output. After |max_time| seconds, the build is
+    forcibly killed.
     """
     factory_properties = factory_properties or {}
     if recipe:

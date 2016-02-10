@@ -114,6 +114,7 @@ def _ComputeBuilders(builders, m_annotator):
                                      util.safeTranslate(builder_name))
     factory = m_annotator.BaseFactory(
         recipe=builder_data['recipe'],
+        max_time=builder_data.get('builder_timeout_s'),
         factory_properties=builder_data.get('properties')
     )
     actual_builders.append({
