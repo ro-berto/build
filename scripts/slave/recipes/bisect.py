@@ -274,11 +274,13 @@ def _get_step_data_for_revision(api, revision_data, broken_cp=None,
     parent_step = 'Resolving reference range.'
     step_name = parent_step + 'resolving commit_pos ' + commit_pos
     if broken_cp is None:
-      yield api.step_data(step_name, stdout=api.raw_io.output(commit_hash))
+      yield api.step_data(step_name, stdout=api.raw_io.output('hash:' +
+                                                            commit_hash))
 
     step_name = parent_step + 'resolving hash ' + commit_hash
     if broken_hash is None:
-      yield api.step_data(step_name, stdout=api.raw_io.output(str(commit_pos)))
+      commit_pos_str = 'refs/heads/master@{#%s}' % commit_pos
+      yield api.step_data(step_name, stdout=api.raw_io.output(commit_pos_str))
 
   if not skip_results:
     step_name = 'gsutil Get test results for build ' + commit_hash

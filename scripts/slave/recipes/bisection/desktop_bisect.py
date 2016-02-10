@@ -109,10 +109,10 @@ results-without_patch
       api.override_step_data('load config', api.json.output(config_json)) +
       api.step_data(
           'resolving commit_pos ' + config_json['good_revision'],
-          stdout=api.raw_io.output('d49c331def2a3bbf3ddd0096eb51551155')) +
+          stdout=api.raw_io.output('hash:d49c331def2a3bbf3ddd0096eb51551155')) +
       api.step_data(
           'resolving commit_pos ' + config_json['bad_revision'],
-          stdout=api.raw_io.output('bad49c331def2a3bbf3ddd0096eb51551155'))
+          stdout=api.raw_io.output('hash:bad49c331def2a3bbf3ddd0096eb51551155'))
       + api.step_data(
           'Performance Test (d49c331def2a3bbf3ddd0096eb51551155) 1 of 1',
           stdout=api.raw_io.output(results_without_patch)) + api.step_data(

@@ -372,25 +372,29 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::crrev]/resources/crrev.py",
-      "commit_hash",
-      "306476"
+      "git",
+      "log",
+      "--format=hash:%H",
+      "--grep",
+      "^Cr-Commit-Position: refs/heads/master@{#306476}",
+      "-1",
+      "origin/master"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "resolving commit_pos 306476",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::crrev]/resources/crrev.py",
-      "commit_hash",
-      "306475"
+      "git",
+      "log",
+      "--format=hash:%H",
+      "--grep",
+      "^Cr-Commit-Position: refs/heads/master@{#306475}",
+      "-1",
+      "origin/master"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "resolving commit_pos 306475",
     "stdout": "/path/to/tmp/"
   },

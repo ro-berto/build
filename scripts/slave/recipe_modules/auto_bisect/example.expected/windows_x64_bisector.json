@@ -49,13 +49,15 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::crrev]/resources/crrev.py",
-      "commit_hash",
-      "314017"
+      "git",
+      "log",
+      "--format=hash:%H",
+      "--grep",
+      "^Cr-Commit-Position: refs/heads/master@{#314017}",
+      "-1",
+      "origin/master"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "Resolving reference range.resolving commit_pos 314017",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -64,13 +66,12 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::crrev]/resources/crrev.py",
-      "commit_hash",
+      "git",
+      "footers",
+      "--position",
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "Resolving reference range.resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -99,13 +100,15 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::crrev]/resources/crrev.py",
-      "commit_hash",
-      "314015"
+      "git",
+      "log",
+      "--format=hash:%H",
+      "--grep",
+      "^Cr-Commit-Position: refs/heads/master@{#314015}",
+      "-1",
+      "origin/master"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "Resolving reference range.resolving commit_pos 314015",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -114,13 +117,12 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::crrev]/resources/crrev.py",
-      "commit_hash",
+      "git",
+      "footers",
+      "--position",
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
     "name": "Resolving reference range.resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
