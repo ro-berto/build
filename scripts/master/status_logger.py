@@ -186,7 +186,7 @@ class StatusEventLogger(StatusReceiverMultiService):
 
   def send_build_result(
       self, scheduled, started, finished, builder_name, bot_name, result,
-      project_id=None, subproject_tag=None, steps=None):
+      project_id=None, subproject_tag=None, steps=None, pre_test_time_s=None):
     """Log a build result for ts_mon.
 
     This allows computing metrics for builds in mastermon.
@@ -206,6 +206,8 @@ class StatusEventLogger(StatusReceiverMultiService):
       d['subproject_tag'] = subproject_tag
     if steps:
       d['steps'] = steps
+    if pre_test_time_s is not None:
+      d['pre_test_time_s'] = pre_test_time_s
     self.ts_mon_logger.info(json.dumps(d))
 
   def send_build_event(self, timestamp_kind, timestamp, build_event_type,
@@ -494,6 +496,12 @@ class StatusEventLogger(StatusReceiverMultiService):
         result=buildbot.status.results.Results[results],
         extra_result_code=extra_result_code)
 
+    pre_test_time_s = None
+    for step in build.getSteps():
+      if step.getName() == 'mark: before_tests':
+        step_started, _ = step.getTimes()
+        pre_test_time_s = step_started - started
+
     # It's important that the recipe does not generate unbounded number
     # of step names (e.g. one for each git revision), to avoid stream
     # explosion in the monitoring system. Another alternative is for the recipe
@@ -519,7 +527,8 @@ class StatusEventLogger(StatusReceiverMultiService):
     self.send_build_result(
         scheduled, started, finished, builderName, bot,
         buildbot.status.results.Results[results],
-        project_id, subproject_tag, steps=steps_to_send)
+        project_id, subproject_tag, steps=steps_to_send,
+        pre_test_time_s=pre_test_time_s)
 
   def builderRemoved(self, builderName):
     self.log('builderRemoved', '%s', builderName)
