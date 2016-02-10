@@ -241,7 +241,7 @@ TRYBOTS = freeze({
         'buildername': 'GPU Win x64 Builder',
         'tester': 'Win7 x64 Release (NVIDIA)',
       }),
-      'win_angle_x64_dbg': simple_bot({
+      'win_angle_x64_dbg_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU Win x64 Builder (dbg)',
         'tester': 'Win7 x64 Debug (NVIDIA)',
