@@ -310,7 +310,7 @@ class StatusPush(StatusReceiverMultiService):
         continue
 
       # result is a (build, build_dict) tuple.
-      send_build, _ = result
+      _, send_build = result
       send_build['master'] = self.name
       send_builds.append(send_build)
 
