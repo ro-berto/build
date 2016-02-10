@@ -227,52 +227,36 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"system_webview_apk\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"android_webview_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"base_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_junit_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_public_test_apk\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_sync_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"content_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"junit_unit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"net_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"system_webview_apk\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"android_webview_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"base_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_junit_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_public_test_apk\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_sync_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"content_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"junit_unit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"net_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"system_webview_apk\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"android_webview_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"base_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_junit_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_public_test_apk\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_sync_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"content_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"junit_unit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"net_junit_tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"android_webview_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"base_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chrome_junit_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_public_test_apk\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chrome_sync_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"components_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"content_shell_test_apk\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"junit_unit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"net_junit_tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
@@ -347,14 +331,10 @@
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
-      "android_webview_test_apk",
       "base_junit_tests",
       "chrome_junit_tests",
-      "chrome_public_test_apk",
-      "chrome_sync_shell_test_apk",
       "components_junit_tests",
       "content_junit_tests",
-      "content_shell_test_apk",
       "junit_unit_tests",
       "net_junit_tests",
       "system_webview_apk"
@@ -545,184 +525,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "spawn_device_monitor"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebView.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install AndroidWebView.apk"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebViewTest.apk",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--logcat-output-file",
-      "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebView.apk",
-      "--isolate-file-path",
-      "android_webview/android_webview_test_apk.isolate",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test AndroidWebViewTest (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ChromePublic.apk"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublicTest.apk",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--logcat-output-file",
-      "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk",
-      "--additional-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublicTestSupport.apk",
-      "--additional-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromiumNetTestSupport.apk",
-      "--isolate-file-path",
-      "chrome/chrome_public_test_apk.isolate",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ChromePublicTest (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/ContentShell.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ContentShell.apk"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ContentShellTest.apk",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--logcat-output-file",
-      "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/ContentShell.apk",
-      "--isolate-file-path",
-      "content/content_shell_test_apk.isolate",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ContentShellTest (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromeSyncShell.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ChromeSyncShell.apk"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromeSyncShellTest.apk",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--logcat-output-file",
-      "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromeSyncShell.apk",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ChromeSyncShellTest (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
   },
   {
     "cmd": [
@@ -979,14 +781,10 @@
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
-      "android_webview_test_apk",
       "base_junit_tests",
       "chrome_junit_tests",
-      "chrome_public_test_apk",
-      "chrome_sync_shell_test_apk",
       "components_junit_tests",
       "content_junit_tests",
-      "content_shell_test_apk",
       "junit_unit_tests",
       "net_junit_tests"
     ],
@@ -998,184 +796,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebView.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install AndroidWebView.apk (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebViewTest.apk",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--logcat-output-file",
-      "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebView.apk",
-      "--isolate-file-path",
-      "android_webview/android_webview_test_apk.isolate",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test AndroidWebViewTest (without patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ChromePublic.apk (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublicTest.apk",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--logcat-output-file",
-      "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk",
-      "--additional-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublicTestSupport.apk",
-      "--additional-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromiumNetTestSupport.apk",
-      "--isolate-file-path",
-      "chrome/chrome_public_test_apk.isolate",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ChromePublicTest (without patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/ContentShell.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ContentShell.apk (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ContentShellTest.apk",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--logcat-output-file",
-      "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/ContentShell.apk",
-      "--isolate-file-path",
-      "content/content_shell_test_apk.isolate",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ContentShellTest (without patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromeSyncShell.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ChromeSyncShell.apk (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromeSyncShellTest.apk",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--logcat-output-file",
-      "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromeSyncShell.apk",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ChromeSyncShellTest (without patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
   },
   {
@@ -1308,58 +928,6 @@
     "name": "net_junit_tests (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "AndroidWebViewTest (retry summary)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "ChromePublicTest (retry summary)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "ContentShellTest (retry summary)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "ChromeSyncShellTest (retry summary)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
-      "@@@STEP_WARNINGS@@@"
     ]
   },
   {

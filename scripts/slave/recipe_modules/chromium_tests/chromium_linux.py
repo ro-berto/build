@@ -249,10 +249,6 @@ SPEC = {
       'android_config': 'main_builder',
       'root_devices': True,
       'tests': [
-        steps.AndroidInstrumentationTest('AndroidWebViewTest'),
-        steps.AndroidInstrumentationTest('ChromePublicTest'),
-        steps.AndroidInstrumentationTest('ContentShellTest'),
-        steps.AndroidInstrumentationTest('ChromeSyncShellTest'),
         steps.AndroidJunitTest('base_junit_tests'),
         steps.AndroidJunitTest('chrome_junit_tests'),
         steps.AndroidJunitTest('components_junit_tests'),
@@ -262,8 +258,9 @@ SPEC = {
       ],
       'test_generators': [
         steps.generate_gtest,
-        steps.generate_script,
+        steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',
@@ -305,10 +302,6 @@ SPEC = {
       'android_config': 'main_builder',
       'root_devices': True,
       'tests': [
-        steps.AndroidInstrumentationTest('AndroidWebViewTest'),
-        steps.AndroidInstrumentationTest('ChromePublicTest'),
-        steps.AndroidInstrumentationTest('ContentShellTest'),
-        steps.AndroidInstrumentationTest('ChromeSyncShellTest'),
         steps.AndroidJunitTest('base_junit_tests'),
         steps.AndroidJunitTest('chrome_junit_tests'),
         steps.AndroidJunitTest('components_junit_tests'),
@@ -318,9 +311,9 @@ SPEC = {
       ],
       'test_generators': [
         steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
         steps.generate_instrumentation_test,
+        steps.generate_isolated_script,
+        steps.generate_script,
       ],
       'testing': {
         'platform': 'linux',
