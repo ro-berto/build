@@ -324,7 +324,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "make FlutterXcode.zip",
-    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/FlutterXcode/Flutter\", \"type\": \"dir\"}], \"output\": \"[SLAVE_BUILD]/src/out/FlutterXcode.zip\", \"root\": \"[SLAVE_BUILD]/src/out/FlutterXcode/Flutter\", \"use_python_zip\": false}"
+    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/FlutterXcode\", \"type\": \"dir\"}], \"output\": \"[SLAVE_BUILD]/src/out/FlutterXcode.zip\", \"root\": \"[SLAVE_BUILD]/src/out/FlutterXcode\", \"use_python_zip\": false}"
   },
   {
     "cmd": [

@@ -176,8 +176,7 @@ def GenerateXcodeProject(api):
 
   # Zip the whole thing and upload it to cloud storage:
   flutter_zip = out_dir.join('FlutterXcode.zip')
-  api.zip.directory('make FlutterXcode.zip', deploy_dir.join('Flutter'),
-    flutter_zip)
+  api.zip.directory('make FlutterXcode.zip', deploy_dir, flutter_zip)
 
   cloud_path =  GetCloudPath(api, 'ios/FlutterXcode.zip')
   api.gsutil.upload(flutter_zip, BUCKET_NAME, cloud_path)
