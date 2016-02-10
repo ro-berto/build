@@ -92,7 +92,7 @@ class _AnnotatedRunExecTestBase(unittest.TestCase):
         logdog_service_account_json=None)
     self.config = annotated_run.Config(
         run_cmd=['run.py'],
-        logdog_pubsub=None,
+        logdog_pubsub_topic=None,
         logdog_platform=None,
     )
     self.properties = {
@@ -166,7 +166,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
       'buildnumber': 1337,
     })
     self.config = self.config._replace(
-        logdog_pubsub=annotated_run.PubSubConfig(project='test', topic='logs'),
+        logdog_pubsub_topic='projects/test/topics/logs',
         logdog_platform=annotated_run.LogDogPlatform(
             butler=annotated_run.CipdBinary('cipd/butler', 'head', 'butler'),
             annotee=annotated_run.CipdBinary('cipd/annotee', 'head', 'annotee'),
@@ -223,7 +223,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
     annotated_run._run_command.assert_called_with(
         [butler_path,
             '-prefix', 'bb/master.some/yesbuilder/1337',
-            '-output', 'pubsub,project="test",topic="logs"',
+            '-output', 'pubsub,topic="projects/test/topics/logs"',
             '-service-account-json', 'creds.json',
             'run',
             '-stdout', 'tee=stdout',
@@ -299,7 +299,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
         mock.call([
             'butler',
             '-prefix', 'bb/master.some/yesbuilder/1337',
-            '-output', 'pubsub,project="test",topic="logs"',
+            '-output', 'pubsub,topic="projects/test/topics/logs"',
             '-service-account-json', 'creds.json',
             'run',
             '-stdout', 'tee=stdout',

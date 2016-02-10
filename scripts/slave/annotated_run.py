@@ -48,15 +48,29 @@ WHITELIST_ALL = '*'
 # and builders for experimental LogDog/Annotee export.
 LOGDOG_WHITELIST_MASTER_BUILDERS = {
     'chromium.infra': {
-      'luci-gae-trusty64',
+      # Linux / x86_64
       'luci-go-trusty64',
+      'luci-gae-trusty64',
       'infra-continuous-trusty-64',
       'infra-continuous-precise-64',
+      'conda-cipd-pkg-trusty-64',
+
+      # Linux / 386
+      'luci-go-precise32',
+      'infra-continuous-trusty-32',
+      'infra-continuous-precise-32',
+
+      # Mac / x86_64
+      'luci-go-osx',
+      'infra-continuous-mac-10.6-64',
+      'infra-continuous-mac-10.7-64',
+      'infra-continuous-mac-10.8-64',
+      'infra-continuous-mac-10.9-64',
+      'infra-continuous-mac-10.10-64',
+      'infra-continuous-mac-10.11-64',
+      'conda-cipd-pkg-mac-10.9-64',
     },
 }
-
-# Configuration for a Pub/Sub topic.
-PubSubConfig = collections.namedtuple('PubSubConfig', ('project', 'topic'))
 
 # LogDogPlatform is the set of platform-specific LogDog bootstrapping
 # configuration parameters.
@@ -77,14 +91,10 @@ CipdBinary = collections.namedtuple('CipdBinary',
 PLATFORM_CONFIG = {
   # All systems.
   (): {
-    'logdog_pubsub': PubSubConfig(
-        project='luci-logdog',
-        topic='logs',
-    ),
+    'logdog_pubsub_topic': 'projects/luci-logdog/topics/logs',
   },
 
-  # Linux
-  ('Linux',): {
+  ('Linux', 'x86_64'): {
     'run_cmd': ['/opt/infra-python/run.py'],
     'logdog_platform': LogDogPlatform(
         butler=CipdBinary('infra/tools/luci/logdog/butler/linux-amd64',
@@ -97,9 +107,30 @@ PLATFORM_CONFIG = {
     ),
   },
 
-  # Mac OSX
-  ('Darwin',): {
+  ('Linux', 'i386'): {
     'run_cmd': ['/opt/infra-python/run.py'],
+    'logdog_platform': LogDogPlatform(
+        butler=CipdBinary('infra/tools/luci/logdog/butler/linux-i386',
+                          'latest', 'logdog_butler'),
+        annotee=CipdBinary('infra/tools/luci/logdog/annotee/linux-i386',
+                          'latest', 'logdog_annotee'),
+        credential_path=('/creds/service_accounts/'
+                         'service-account-luci-logdog-publisher.json'),
+        streamserver='unix',
+    ),
+  },
+
+  ('Darwin', 'x86_64'): {
+    'run_cmd': ['/opt/infra-python/run.py'],
+    'logdog_platform': LogDogPlatform(
+        butler=CipdBinary('infra/tools/luci/logdog/butler/mac-amd64',
+                          'latest', 'logdog_butler'),
+        annotee=CipdBinary('infra/tools/luci/logdog/annotee/mac-amd64',
+                          'latest', 'logdog_annotee'),
+        credential_path=('/creds/service_accounts/'
+                         'service-account-luci-logdog-publisher.json'),
+        streamserver='unix',
+    ),
   },
 
   # Windows
@@ -114,7 +145,7 @@ PLATFORM_CONFIG = {
 # the recipe engine.
 Config = collections.namedtuple('Config', (
     'run_cmd',
-    'logdog_pubsub',
+    'logdog_pubsub_topic',
     'logdog_platform',
 ))
 
@@ -190,7 +221,7 @@ def get_config():
     KeyError: if a required configuration key/parameter is not available.
   """
   # Cascade the platform configuration.
-  p = (platform.system(), platform.processor())
+  p = (platform.system(), platform.machine())
   platform_config = {}
   for i in xrange(len(p)+1):
     platform_config.update(PLATFORM_CONFIG.get(p[:i], {}))
@@ -198,7 +229,7 @@ def get_config():
   # Construct runtime configuration.
   return Config(
       run_cmd=platform_config.get('run_cmd'),
-      logdog_pubsub=platform_config.get('logdog_pubsub'),
+      logdog_pubsub_topic=platform_config.get('logdog_pubsub_topic'),
       logdog_platform=platform_config.get('logdog_platform'),
       )
 
@@ -412,12 +443,8 @@ def _logdog_bootstrap(rt, opts, tempdir, config, properties, cmd):
   if opts.logdog_annotee_path:
     annotee = opts.logdog_annotee_path
 
-  if not config.logdog_pubsub:
+  if not config.logdog_pubsub_topic:
     raise LogDogNotBootstrapped('No Pub/Sub configured.')
-  if not config.logdog_pubsub.project:
-    raise LogDogNotBootstrapped('No Pub/Sub project configured.')
-  if not config.logdog_pubsub.topic:
-    raise LogDogNotBootstrapped('No Pub/Sub topic configured.')
 
   # Determine LogDog verbosity.
   logdog_verbose = []
@@ -449,8 +476,7 @@ def _logdog_bootstrap(rt, opts, tempdir, config, properties, cmd):
   cmd = [
       butler,
       '-prefix', prefix,
-      '-output', 'pubsub,project="%(project)s",topic="%(topic)s"' % (
-          config.logdog_pubsub._asdict()),
+      '-output', 'pubsub,topic="%s"' % (config.logdog_pubsub_topic,),
   ]
   cmd += logdog_verbose
   cmd += service_account_args
