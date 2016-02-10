@@ -465,10 +465,15 @@ def sched_to_triggerspec(sched_name):
       get_builders_from_triggerable(_GLOBAL_BUILDMASTER_CONFIG, sched_name))
 
 # Converter for use when step a step is unmatched or multiply matched.
-def dump_converter(step, comment):
+def dump_converter(step, comment="dump converter"):
   rc = recipe_chunk()
   rc.steps.append('# %s' % comment)
   rc.steps.append(pprint.pformat(step, indent=2))
+  return rc
+
+def null_converter(step):
+  rc = recipe_chunk()
+  rc.steps.append('# %s step; null converted' % step[1]['name'])
   return rc
 
 def trigger_converter(step):
@@ -675,7 +680,7 @@ def generic_shellcommand_converter(step):
   rc = recipe_chunk()
   rc.deps.add('recipe_engine/step')
   fmtstr = 'api.step("%s", %s, env=%s, cwd=%s)'
-  cwd = 'api.path["slave_build"]'
+  cwd = 'api.path["checkout"]'
   if step[1].get('workdir', ''):
     cwd += '.join(%s)' % repr(step[1]['workdir'].split('/'))[1:-1]
   env = "{}"
@@ -903,7 +908,7 @@ _step_converters_map = {
     'win_taskkill': win_taskkill_converter,
     'runtest': runtest_converter,
     'win_runtest': win_runtest_converter,
-    'clear_tools': generic_shellcommand_converter,
+    'clear_tools': null_converter,
     'checkout_dynamorio': checkout_dynamorio_converter,
     'checkout_dynamorio_tools': generic_shellcommand_converter,
     'dynamorio_unpack_tools': generic_shellcommand_converter,

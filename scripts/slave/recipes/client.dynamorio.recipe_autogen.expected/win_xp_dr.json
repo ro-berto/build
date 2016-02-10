@@ -49,28 +49,18 @@
   },
   {
     "cmd": [
-      "rd",
-      "/q",
-      "/s",
-      "buildbot"
-    ],
-    "cwd": "[SLAVE_BUILD]/tools",
-    "name": "clear tools directory"
-  },
-  {
-    "cmd": [
       "git",
       "clone",
       "https://github.com/DynamoRIO/buildbot.git"
     ],
-    "cwd": "[SLAVE_BUILD]/tools",
+    "cwd": "[SLAVE_BUILD]/dynamorio/tools",
     "name": "update tools"
   },
   {
     "cmd": [
       "unpack.bat"
     ],
-    "cwd": "[SLAVE_BUILD]/tools/buildbot/bot_tools",
+    "cwd": "[SLAVE_BUILD]/dynamorio/tools/buildbot/bot_tools",
     "name": "unpack tools"
   },
   {
@@ -85,7 +75,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
+      "BOTTOOLS": "[SLAVE_BUILD]/dynamorio/tools/buildbot/bot_tools"
     },
     "name": "pre-commit suite"
   },
