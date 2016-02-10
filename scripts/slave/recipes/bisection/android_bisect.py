@@ -28,58 +28,41 @@ BUILDERS = freeze({
                 'recipe_config': 'perf',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
-                'path':
-                    lambda api: ('android_perf_rel/full-build-linux_%s.zip'),
             },
             'android_nexus5_perf_bisect': {
                 'recipe_config': 'perf',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
-                'path':
-                    lambda api: ('android_perf_rel/full-build-linux_%s.zip'),
             },
             'android_nexus6_perf_bisect': {
                 'recipe_config': 'perf',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
-                'path':
-                    lambda api: ('android_perf_rel/full-build-linux_%s.zip'),
             },
             'android_nexus7_perf_bisect': {
                 'recipe_config': 'perf',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
-                'path':
-                    lambda api: ('android_perf_rel/full-build-linux_%s.zip'),
             },
             'android_nexus9_perf_bisect': {
                 'recipe_config': 'arm64_builder',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
-                'path':
-                    lambda api: (
-                        'android_perf_rel_arm64/full-build-linux_%s.zip'),
             },
             'android_s5_perf_bisect': {
                 'recipe_config': 'perf',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
-                'path':
-                    lambda api: ('android_perf_rel/full-build-linux_%s.zip'),
             },
             'android_s5_perf_cq': {
                 'recipe_config': 'perf',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
-                'path':
-                    lambda api: ('android_perf_rel/full-build-linux_%s.zip'),
             },
             'android_fyi_perf_bisect': {
                 'recipe_config': 'perf',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
-                'path':
-                    lambda api: ('android_perf_rel/full-build-linux_%s.zip'),
             },
             'android_webview_aosp_perf_bisect': {
                 'recipe_config': 'perf',
