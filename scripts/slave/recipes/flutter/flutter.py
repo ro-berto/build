@@ -135,9 +135,16 @@ def RunSteps(api):
     PopulateFlutterCache(api)
     AnalyzeFlutter(api)
     TestFlutterPackagesAndExamples(api)
-    # TODO(eseidel): Is there a way for GenerateDocs to read PUB_CACHE from the
-    # env instead of me passing it in?
-    GenerateDocs(api, pub_cache)
+
+    # TODO(eseidel): We only want to generate one copy of the docs at a time
+    # otherwise multiple rsyncs could race, causing badness. We'll eventually
+    # need both a lock on the bucket, as well as some assurance that we're
+    # always moving the docs forward. Possibly by using a separate builder.
+    # Until then, only generate on linux to reduce the chance of race.
+    if api.platform.is_linux:
+      # TODO(eseidel): Is there a way for GenerateDocs to read PUB_CACHE from
+      # the env instead of me passing it in?
+      GenerateDocs(api, pub_cache)
 
 
 def GenTests(api):
