@@ -20,31 +20,10 @@
 
       "slavebuilddir": "chromium_mojo",
     },
-    "Chromium Mojo Linux Perf": {
-      "recipe": "chromium_mojo",
-      "scheduler": "chromium_commits",
-      "slave_pools": ["linux_precise_perf"],
-
-      "slavebuilddir": "chromium_mojo",
-    },
-    "Chromium Mojo Android Nexus5 Perf": {
-      "recipe": "chromium_mojo",
-      "scheduler": "chromium_commits",
-      "slave_pools": ["linux_precise_android_nexus5_perf"],
-
-      "slavebuilddir": "chromium_mojo",
-    },
     "Chromium Mojo Windows": {
       "recipe": "chromium_mojo",
       "scheduler": "chromium_commits",
       "slave_pools": ["windows_7"],
-
-      "slavebuilddir": "chromium_mojo",
-    },
-    "Chromium Mojo Windows 7 Perf": {
-      "recipe": "chromium_mojo",
-      "scheduler": "chromium_commits",
-      "slave_pools": ["windows_7_perf"],
 
       "slavebuilddir": "chromium_mojo",
     },
@@ -74,22 +53,6 @@
       },
       "slaves": ["build136-a1"],
     },
-    "linux_precise_perf": {
-      "slave_data": {
-        "bits": 64,
-        "os":  "linux",
-        "version": "precise",
-      },
-      "slaves": ["build153-m1"],
-    },
-    "linux_precise_android_nexus5_perf": {
-      "slave_data": {
-        "bits": 64,
-        "os":  "linux",
-        "version": "precise",
-      },
-      "slaves": ["build13-a1"],
-    },
     "windows_7": {
       "slave_data": {
         "bits": 64,
@@ -97,14 +60,6 @@
         "version": "win7",
       },
       "slaves": ["vm16-m1"],
-    },
-    "windows_7_perf": {
-      "slave_data": {
-        "bits": 64,
-        "os":  "win",
-        "version": "win7",
-      },
-      "slaves": ["build137-m1"],
     },
   },
 }
