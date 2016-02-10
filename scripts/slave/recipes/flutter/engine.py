@@ -190,6 +190,7 @@ def GetCheckout(api):
       'https://chromium.googlesource.com/external/github.com/flutter/engine'
   # TODO(eseidel): What does parent_got_revision_mapping do?  Do I care?
   src_cfg.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
+  src_cfg.target_os = set(['android'])
   api.gclient.c = src_cfg
   api.gclient.checkout()
   # Do I need to call gclient.sync(src_cfg)?
