@@ -54,31 +54,6 @@ def _RunApptests(api):
   api.python('app_tests', runner, [api.chromium.output_dir, '--verbose'])
 
 
-def _RunUnitAndAppTests(api):
-  with api.step.defer_results():
-    api.chromium.runtest('ipc_mojo_unittests')
-    api.chromium.runtest('mojo_common_unittests')
-
-    # TODO(yzshen): fix missing JS files on Android. crbug.com/536669
-    if api.chromium.c.TARGET_PLATFORM != 'android':
-      api.chromium.runtest('mojo_js_integration_tests')
-      api.chromium.runtest('mojo_js_unittests')
-
-    api.chromium.runtest('mojo_public_application_unittests')
-    api.chromium.runtest('mojo_public_bindings_unittests')
-    api.chromium.runtest('mojo_public_environment_unittests')
-    api.chromium.runtest('mojo_public_system_unittests')
-    api.chromium.runtest('mojo_public_utility_unittests')
-    api.chromium.runtest('mojo_runner_host_unittests')
-    api.chromium.runtest('mojo_shell_unittests')
-    api.chromium.runtest('mojo_surfaces_lib_unittests')
-    api.chromium.runtest('mojo_system_unittests')
-    api.chromium.runtest('mojo_view_manager_lib_unittests')
-    api.chromium.runtest('resource_provider_unittests')
-    api.chromium.runtest('window_manager_unittests')
-    _RunApptests(api)
-
-
 def RunSteps(api):
   api.chromium.configure_bot(BUILDERS, ['gn'])
 
@@ -90,12 +65,13 @@ def RunSteps(api):
                       api.properties.get('buildername'),
                       use_goma=True)
 
-  api.chromium.compile(targets=['mojo:tests', 'mojo_apptests'])
+  api.chromium.compile(targets=['mojo_apptests'])
 
   if api.chromium.c.TARGET_PLATFORM == 'android':
     api.chromium_android.detect_and_setup_devices()
 
-  _RunUnitAndAppTests(api)
+  with api.step.defer_results():
+    _RunApptests(api)
 
 
 def GenTests(api):
