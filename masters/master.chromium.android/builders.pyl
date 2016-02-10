@@ -61,8 +61,8 @@
       "category": "0Cronet",
     },
     "Android WebView CTS L-MR1 (dbg)": {
-      "recipe": "android_webview_cts_tests",
-      "scheduler": "android_commits",
+      "recipe": "chromium",
+      "scheduler": None,
       "slave_pools": ["webview_cts"],
       "category": "1Webview",
     },

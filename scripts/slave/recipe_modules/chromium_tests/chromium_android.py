@@ -318,7 +318,6 @@ SPEC = {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
-      'amp_config': 'main_pool',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_PLATFORM': 'android',
@@ -344,7 +343,6 @@ SPEC = {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
-      'amp_config': 'main_pool',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_PLATFORM': 'android',
@@ -355,6 +353,31 @@ SPEC = {
       'remove_system_webview': True,
       'tests': [
         steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
+    'Android Webview CTS L-MR1 (dbg)': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'android',
+      },
+      'parent_buildername': 'Android arm Builder (dbg)',
+      'bot_type': 'tester',
+      'android_config': 'main_builder_mb',
+      'remove_system_webview': True,
+      'tests': [
+        steps.WebViewCTSTest(),
       ],
       'test_generators': [
         steps.generate_gtest,

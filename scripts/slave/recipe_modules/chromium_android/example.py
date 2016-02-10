@@ -79,6 +79,9 @@ BUILDERS = freeze({
     },
     'resource_size_builder': {
         'resource_size': True,
+    },
+    'webview_cts': {
+        'run_webview_cts': True,
     }
 })
 
@@ -197,6 +200,9 @@ def RunSteps(api, buildername):
         so_with_symbols_path=api.path['checkout'].join(
           'out', api.chromium.c.BUILD_CONFIG, 'lib', 'libchrome.so'))
 
+  if config.get('run_webview_cts'):
+    api.chromium_android.run_webview_cts()
+
   api.chromium_android.logcat_dump()
   api.chromium_android.stack_tool_steps()
   if config.get('coverage', False):
@@ -250,3 +256,100 @@ def GenTests(api):
         repo_url='svn://svn.chromium.org/chrome/trunk/src',
         revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
         internal=True, **({'event.patchSet.ref':'refs/changes/50/176150/1'})))
+
+  result_xml_with_unexecuted_tests = """<TestResult>
+                          <TestPackage>
+                            <TestSuite name='android'>
+                              <TestSuite name='webkit'>
+                                <TestSuite name='cts'>
+                                  <TestCase name='WebSettingsTest'>
+                                    <Test name='test' result='notExecuted'>
+                                    </Test>
+                                  </TestCase>
+                                </TestSuite>
+                              </TestSuite>
+                            </TestSuite>
+                          </TestPackage>
+                        </TestResult>  """
+  yield (api.test('webview_cts_unexecuted_tests') +
+         properties_for('webview_cts') +
+         api.override_step_data('Run CTS', api.raw_io.stream_output(
+             'Created xml report file at file:///path/to/testResult.xml',
+             stream='stdout')) + \
+         api.override_step_data('Read test result and report failures',
+             api.raw_io.output(result_xml_with_unexecuted_tests)))
+
+  result_xml_with_expected_failure = """<TestResult>
+                          <TestPackage>
+                            <TestSuite name='android'>
+                              <TestSuite name='webkit'>
+                                <TestSuite name='cts'>
+                                  <TestCase name='WebSettingsTest'>
+                                    <Test name='testUserAgentString_default'>
+                                      <FailedScene> </FailedScene>
+                                    </Test>
+                                  </TestCase>
+                                </TestSuite>
+                              </TestSuite>
+                            </TestSuite>
+                          </TestPackage>
+                        </TestResult>  """
+  yield (api.test('webview_cts_expected_failure') +
+         properties_for('webview_cts') +
+         api.override_step_data('Run CTS', api.raw_io.stream_output(
+             'Created xml report file at file:///path/to/testResult.xml',
+             stream='stdout')) +
+         api.override_step_data('Read test result and report failures',
+             api.raw_io.output(result_xml_with_expected_failure)))
+
+  result_xml_with_unexpected_failure_class= """<TestResult>
+                          <TestPackage>
+                            <TestSuite name='android'>
+                              <TestSuite name='webkit'>
+                                <TestSuite name='cts'>
+                                  <TestCase name='unexpected failed classname'>
+                                    <Test name='testUserAgentString_default'>
+                                      <FailedScene> </FailedScene>
+                                    </Test>
+                                  </TestCase>
+                                </TestSuite>
+                              </TestSuite>
+                            </TestSuite>
+                          </TestPackage>
+                        </TestResult>  """
+  yield (api.test('webview_cts_unexpected_class_failure') +
+         properties_for('webview_cts') +         
+         api.override_step_data('Run CTS', api.raw_io.stream_output(
+             'Created xml report file at file:///path/to/testResult.xml',
+             stream='stdout')) +
+         api.override_step_data('Read test result and report failures',
+              api.raw_io.output(result_xml_with_unexpected_failure_class)))
+
+  result_xml_with_unexpected_failure_method = """<TestResult>
+                          <TestPackage>
+                            <TestSuite name='android'>
+                              <TestSuite name='webkit'>
+                                <TestSuite name='cts'>
+                                  <TestCase name='WebSettingsTest'>
+                                    <Test name='unexpected failed methodname'>
+                                      <FailedScene> </FailedScene>
+                                    </Test>
+                                  </TestCase>
+                                </TestSuite>
+                              </TestSuite>
+                            </TestSuite>
+                          </TestPackage>
+                        </TestResult>  """
+  yield (api.test('webview_cts_unexpected_method_failure') +
+         properties_for('webview_cts') +
+         api.override_step_data('Run CTS', api.raw_io.stream_output(
+             'Created xml report file at file:///path/to/testResult.xml',
+             stream='stdout')) +
+         api.override_step_data('Read test result and report failures',
+             api.raw_io.output(result_xml_with_unexpected_failure_method)))
+
+  yield (api.test('webview_cts_invalid_output') +
+         properties_for('webview_cts') +
+         api.override_step_data('Run CTS', api.raw_io.stream_output(
+             'Invalid CTS output here...',
+             stream='stdout')))

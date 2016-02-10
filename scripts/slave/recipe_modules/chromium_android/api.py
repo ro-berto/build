@@ -943,6 +943,98 @@ class AndroidApi(recipe_api.RecipeApi):
         env=self.m.chromium.get_env(),
         **kwargs)
 
+  def run_webview_cts(self):
+
+    _CTS_FILE_NAME = 'android-cts-5.1_r1-linux_x86-arm.zip'
+    _CTS_XML_TESTCASE_ELEMENTS = ('./TestPackage/TestSuite[@name="android"]/'
+                                  'TestSuite[@name="webkit"]/'
+                                  'TestSuite[@name="cts"]/TestCase')
+    # WebView user agent is changed, and new CTS hasn't been published to
+    # reflect that.
+    _EXPECTED_FAILURES = {
+      'android.webkit.cts.WebSettingsTest': [
+        'testUserAgentString_default',
+      ],
+      # crbug.com/534643, crbug.com/514474, crbug.com/563493
+      'android.webkit.cts.WebViewTest': [
+        'testPageScroll',
+        'testStopLoading',
+        'testJavascriptInterfaceForClientPopup',
+        'testRequestImageRef',
+      ],
+      # crbug.com/514473
+      'android.webkit.cts.WebViewSslTest': [
+        'testSslErrorProceedResponseNotReusedForDifferentHost',
+      ],
+    }
+
+    cts_base_dir = self.m.path.mkdtemp('cts')
+    cts_zip_path = cts_base_dir.join(_CTS_FILE_NAME)
+    self.m.gsutil.download(name='Download CTS',
+                           bucket='chromium-cts',
+                           source=_CTS_FILE_NAME,
+                           dest=cts_zip_path)
+
+    cts_extract_dir = cts_base_dir.join('cts-extracted')
+    self.m.zip.unzip(step_name='Extract CTS',
+                     zip_file=cts_zip_path,
+                     output=cts_extract_dir)
+
+    cts_path = cts_extract_dir.join('android_cts', 'tools', 'cts-tradefed')
+    env = {'PATH': self.m.path.pathsep.join([str(self.m.adb.adb_path()),
+                                             '%(PATH)s'])}
+
+    try:
+      result = self.m.step(
+          'Run CTS', [cts_path, 'run', 'cts', '-p', 'android.webkit'],
+          env=env, stdout=self.m.raw_io.output())
+
+      from xml.etree import ElementTree
+
+      def find_test_report_html(test_output):
+        if test_output:
+          for line in test_output.splitlines():
+            split = line.split('Created xml report file at file://')
+            if (len(split) > 1):
+              return split[1]
+        raise self.m.step.StepFailure(
+            "Failed to parse the CTS output for the xml report file location")
+
+      report_xml = self.m.file.read('Read test result and report failures',
+                                    find_test_report_html(result.stdout))
+      root = ElementTree.fromstring(report_xml)
+      not_executed_tests = []
+      unexpected_test_failures = []
+      test_classes = root.findall(_CTS_XML_TESTCASE_ELEMENTS)
+
+      for test_class in test_classes:
+        class_name = 'android.webkit.cts.%s' % test_class.get('name')
+        test_methods = test_class.findall('./Test')
+
+        for test_method in test_methods:
+          method_name = '%s#%s' % (class_name, test_method.get('name'))
+          if test_method.get('result') == 'notExecuted':
+            not_executed_tests.append(method_name)
+          elif (test_method.find('./FailedScene') is not None and
+                test_method.get('name') not in _EXPECTED_FAILURES.get(
+                    class_name, [])):
+            unexpected_test_failures.append(method_name)
+
+      if unexpected_test_failures or not_executed_tests:
+        self.m.step.active_result.presentation.status = self.m.step.FAILURE
+        self.m.step.active_result.presentation.step_text += (
+            self.m.test_utils.format_step_text(
+                [['unexpected failures:', unexpected_test_failures],
+                 ['not executed:', not_executed_tests]]))
+
+      if unexpected_test_failures:
+        raise self.m.step.StepFailure("Unexpected Test Failures.")
+      if not_executed_tests:
+        raise self.m.step.StepFailure("Tests not executed.")
+    finally:
+      self.m.file.rmtree('Delete CTS downloads', cts_base_dir)
+
+
   def coverage_report(self, upload=True, **kwargs):
     """Creates an EMMA HTML report and optionally uploads it to storage bucket.
 

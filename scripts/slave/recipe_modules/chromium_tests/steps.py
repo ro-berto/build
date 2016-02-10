@@ -1758,6 +1758,27 @@ class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
       **kwargs)
 
 
+class WebViewCTSTest(Test):
+
+  @property
+  def name(self):
+    return 'WebView CTS'
+  
+  @property
+  def uses_local_devices(self):
+    return True
+
+  @staticmethod
+  def compile_targets(api):
+    return ['system_webview_apk']
+
+  def run(self, api, suffix, test_filter=None):
+    api.chromium_android.adb_install_apk(
+        api.chromium_android.apk_path('SystemWebView.apk'),
+        allow_downgrade=True)
+    api.chromium_android.run_webview_cts()
+
+
 class DiagnoseGomaTest(Test):
   name = 'diagnose_goma'
 

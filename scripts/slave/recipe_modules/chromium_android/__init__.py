@@ -21,4 +21,5 @@ DEPS = [
   'depot_tools/tryserver',
   'url',
   'archive',
+  'zip',
 ]
