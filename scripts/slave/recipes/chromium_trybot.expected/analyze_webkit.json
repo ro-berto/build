@@ -331,6 +331,15 @@
     "cmd": [
       "python",
       "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "mark: before_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]\\src\\testing\\scripts\\webkit_lint.py",
       "--build-config-fs",
       "Release",

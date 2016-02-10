@@ -244,6 +244,15 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "mark: before_tests"
+  },
+  {
+    "cmd": [
       "tools/perf/run_benchmark",
       "-v",
       "--browser=release",

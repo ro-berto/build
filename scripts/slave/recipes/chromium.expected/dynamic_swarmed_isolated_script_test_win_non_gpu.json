@@ -272,6 +272,15 @@
     "cmd": [
       "python",
       "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "mark: before_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",

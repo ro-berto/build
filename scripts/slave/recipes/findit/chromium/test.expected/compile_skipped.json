@@ -352,6 +352,18 @@
     "cmd": [
       "python",
       "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "test r1.mark: before_tests",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/testing/scripts/checkperms.py",
       "--build-config-fs",
       "Release",

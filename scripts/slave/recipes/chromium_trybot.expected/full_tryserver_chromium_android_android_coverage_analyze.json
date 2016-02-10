@@ -456,6 +456,15 @@
     "cmd": [
       "python",
       "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "mark: before_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/build/android/generate_emma_html.py",
       "--coverage-dir",
       "[SLAVE_BUILD]/src/out/Debug/coverage",

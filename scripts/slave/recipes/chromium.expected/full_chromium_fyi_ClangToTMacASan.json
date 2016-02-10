@@ -325,6 +325,15 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "mark: before_tests"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
