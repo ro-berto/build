@@ -259,7 +259,7 @@ class V8SwarmingTest(V8Test):
     # timeout and expiration are also higher.
     if (self.task.dimensions.get('cpu') and
         self.task.dimensions['cpu'].startswith('arm')):
-      args.extend(['--timeout', '%d' % (5 * 60 * 60)])
+      args.extend(['--timeout', '%d' % (7 * 60 * 60)])
 
     return self.api.python(
         name=self.test['name'],
@@ -316,7 +316,7 @@ class V8SwarmingTest(V8Test):
     if (self.task.dimensions.get('cpu') and
         self.task.dimensions['cpu'].startswith('arm')):
       self.task.hard_timeout = 60 * 60
-      self.task.expiration = 4 * 60 * 60
+      self.task.expiration = 6 * 60 * 60
 
     self.api.swarming.trigger_task(self.task)
 

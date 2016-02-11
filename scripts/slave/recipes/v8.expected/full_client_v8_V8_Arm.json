@@ -100,7 +100,7 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
-      "14400",
+      "21600",
       "--io-timeout",
       "1200",
       "--hard-timeout",
@@ -195,7 +195,7 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
-      "14400",
+      "21600",
       "--io-timeout",
       "1200",
       "--hard-timeout",
@@ -291,7 +291,7 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
-      "14400",
+      "21600",
       "--io-timeout",
       "1200",
       "--hard-timeout",
@@ -388,7 +388,7 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
-      "14400",
+      "21600",
       "--io-timeout",
       "1200",
       "--hard-timeout",
@@ -484,7 +484,7 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
-      "14400",
+      "21600",
       "--io-timeout",
       "1200",
       "--hard-timeout",
@@ -581,7 +581,7 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
-      "14400",
+      "21600",
       "--io-timeout",
       "1200",
       "--hard-timeout",
@@ -681,7 +681,7 @@
       "1",
       "Check/Ubuntu-14.04/[dummy has/V8 Arm/571",
       "--timeout",
-      "18000"
+      "25200"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Check",
@@ -724,7 +724,7 @@
       "1",
       "Benchmarks/Ubuntu-14.04/[dummy has/V8 Arm/571",
       "--timeout",
-      "18000"
+      "25200"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Benchmarks",
@@ -767,7 +767,7 @@
       "1",
       "OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Arm/571",
       "--timeout",
-      "18000"
+      "25200"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "OptimizeForSize",
@@ -810,7 +810,7 @@
       "1",
       "SimdJs - all/Ubuntu-14.04/[dummy has/V8 Arm/571",
       "--timeout",
-      "18000"
+      "25200"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "SimdJs - all",
@@ -853,7 +853,7 @@
       "1",
       "Ignition/Ubuntu-14.04/[dummy has/V8 Arm/571",
       "--timeout",
-      "18000"
+      "25200"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Ignition",
@@ -896,7 +896,7 @@
       "1",
       "Test262 - ignition/Ubuntu-14.04/[dummy has/V8 Arm/571",
       "--timeout",
-      "18000"
+      "25200"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Test262 - ignition",

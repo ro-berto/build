@@ -100,7 +100,7 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
-      "14400",
+      "21600",
       "--io-timeout",
       "1200",
       "--hard-timeout",
@@ -202,7 +202,7 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
-      "14400",
+      "21600",
       "--io-timeout",
       "1200",
       "--hard-timeout",
@@ -301,7 +301,7 @@
       "2",
       "Mjsunit/Ubuntu-14.04/[dummy has/V8 Arm GC Stress/571",
       "--timeout",
-      "18000"
+      "25200"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Mjsunit",
@@ -344,7 +344,7 @@
       "1",
       "Webkit/Ubuntu-14.04/[dummy has/V8 Arm GC Stress/571",
       "--timeout",
-      "18000"
+      "25200"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Webkit",
