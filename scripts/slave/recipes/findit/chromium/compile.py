@@ -146,12 +146,12 @@ def RunSteps(api, target_mastername, target_buildername,
         compile_results.get(last_revision) == CompileResult.FAILED):
       step_result.presentation.step_text = '<br/>Culprit: %s' % last_revision
 
-    step_result.presentation.logs.setdefault('result', []).append(
+    step_result.presentation.logs.setdefault('report', []).append(
         json.dumps(report, indent=2))
 
-    # Set the result as a build property too, so that it will be reported back
+    # Set the report as a build property too, so that it will be reported back
     # to Buildbucket and Findit will pull from there instead of buildbot master.
-    step_result.presentation.properties['result'] = report
+    step_result.presentation.properties['report'] = report
 
   return report
 
