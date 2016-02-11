@@ -166,7 +166,7 @@ class AndroidPerfTest(Test):
   """
   # WebRTC tests need a longer timeout to avoid getting killed by the Chromium
   # Android test framework.
-  _SHARD_TIMEOUT = 30 * 60
+  _SHARD_TIMEOUT = 45 * 60
 
   def __init__(self, name, revision, perf_id=None):
     super(AndroidPerfTest, self).__init__(name)

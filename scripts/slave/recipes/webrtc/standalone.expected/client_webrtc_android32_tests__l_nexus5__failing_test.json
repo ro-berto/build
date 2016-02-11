@@ -615,7 +615,7 @@
       "--verbose",
       "--release",
       "-t",
-      "1800"
+      "2700"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webrtc_perf_tests"

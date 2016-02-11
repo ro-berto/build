@@ -630,7 +630,7 @@
       "--release",
       "--tool=asan",
       "-t",
-      "1800"
+      "2700"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
