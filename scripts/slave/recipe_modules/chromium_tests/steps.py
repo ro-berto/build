@@ -391,7 +391,7 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
 
 def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                    bot_update_step, enable_swarming=False,
-                   scripts_compile_targets=None):
+                   swarming_dimensions=None, scripts_compile_targets=None):
   def canonicalize_test(test):
     if isinstance(test, basestring):
       canonical_test = {'test': test}
@@ -423,20 +423,24 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
     override_compile_targets = test.get('override_compile_targets', None)
     target_name = str(test['test'])
     name = str(test.get('name', target_name))
+    swarming_dimensions = swarming_dimensions or {}
     if use_swarming and swarming_dimension_sets:
       for dimensions in swarming_dimension_sets:
         # Yield potentially multiple invocations of the same test, on
         # different machine configurations.
+        new_dimensions = dict(swarming_dimensions)
+        new_dimensions.update(dimensions)
         yield GTestTest(name, args=args, target_name=target_name,
                         flakiness_dash=True,
                         enable_swarming=True,
                         swarming_shards=swarming_shards,
-                        swarming_dimensions=dimensions,
+                        swarming_dimensions=new_dimensions,
                         override_compile_targets=override_compile_targets)
     else:
       yield GTestTest(name, args=args, target_name=target_name,
                       flakiness_dash=True,
                       enable_swarming=use_swarming,
+                      swarming_dimensions=swarming_dimensions,
                       swarming_shards=swarming_shards,
                       override_compile_targets=override_compile_targets)
 
@@ -444,6 +448,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
 def generate_instrumentation_test(api, chromium_tests_api, mastername,
                                   buildername, test_spec, bot_update_step,
                                   enable_swarming=False,
+                                  swarming_dimensions=None,
                                   scripts_compile_targets=None):
   for test in test_spec.get(buildername, {}).get('instrumentation_tests', []):
     test_name = str(test.get('test'))
@@ -470,7 +475,7 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
 
 def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
                     bot_update_step, enable_swarming=False,
-                    scripts_compile_targets=None):
+                    swarming_dimensions=None, scripts_compile_targets=None):
   for script_spec in test_spec.get(buildername, {}).get('scripts', []):
     yield ScriptTest(
         str(script_spec['name']),
@@ -1198,6 +1203,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
 def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
                              test_spec, bot_update_step, enable_swarming=False,
+                             swarming_dimensions=None,
                              scripts_compile_targets=None):
   for spec in test_spec.get(buildername, {}).get('isolated_scripts', []):
     use_swarming = False
@@ -1220,19 +1226,22 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
     # TODO(nednguyen, kbr): Remove this once all the GYP builds are converted
     # to GN.
     override_compile_targets = spec.get('override_compile_targets', None)
+    swarming_dimensions = swarming_dimensions or {}
     if use_swarming:
       if swarming_dimension_sets:
         for dimensions in swarming_dimension_sets:
           # Yield potentially multiple invocations of the same test,
           # on different machine configurations.
+          new_dimensions = dict(swarming_dimensions)
+          new_dimensions.update(dimensions)
           yield SwarmingIsolatedScriptTest(
               name=name, args=args, target_name=target_name,
-              shards=swarming_shards, dimensions=dimensions,
+              shards=swarming_shards, dimensions=new_dimensions,
               override_compile_targets=override_compile_targets)
       else:
         yield SwarmingIsolatedScriptTest(
             name=name, args=args, target_name=target_name,
-            shards=swarming_shards,
+            shards=swarming_shards, dimensions=swarming_dimensions,
             override_compile_targets=override_compile_targets)
     else:
       yield LocalIsolatedScriptTest(

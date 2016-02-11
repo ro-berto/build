@@ -93,6 +93,7 @@ class BotConfig(object):
                 # Above should remove the need to get bot_config and buildername
                 # in this method.
                 self.get('enable_swarming', False),
+                builder_dict.get('swarming_dimensions', {}),
                 scripts_compile_targets,
                 builder_dict.get('test_generators', []),
                 bot_update_step

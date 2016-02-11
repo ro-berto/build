@@ -222,15 +222,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return update_step, bot_db
 
   def generate_tests_from_test_spec(self, api, test_spec, builder_dict,
-      buildername, mastername, enable_swarming, scripts_compile_targets,
-      generators, bot_update_step):
+      buildername, mastername, enable_swarming, swarming_dimensions,
+      scripts_compile_targets, generators, bot_update_step):
     tests = builder_dict.get('tests', ())
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
     for generator in generators:
       tests = (
           tuple(generator(api, self, mastername, buildername, test_spec,
-                         bot_update_step, enable_swarming=enable_swarming,
-                         scripts_compile_targets=scripts_compile_targets)) +
+                          bot_update_step, enable_swarming=enable_swarming,
+                          swarming_dimensions=swarming_dimensions,
+                          scripts_compile_targets=scripts_compile_targets)) +
           tests)
     return tests
 
