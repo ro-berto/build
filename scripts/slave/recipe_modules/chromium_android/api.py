@@ -980,7 +980,7 @@ class AndroidApi(recipe_api.RecipeApi):
                      zip_file=cts_zip_path,
                      output=cts_extract_dir)
 
-    cts_path = cts_extract_dir.join('android_cts', 'tools', 'cts-tradefed')
+    cts_path = cts_extract_dir.join('android-cts', 'tools', 'cts-tradefed')
     env = {'PATH': self.m.path.pathsep.join([str(self.m.adb.adb_path()),
                                              '%(PATH)s'])}
 

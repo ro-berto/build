@@ -709,7 +709,7 @@
   },
   {
     "cmd": [
-      "[TMP_BASE]/cts_tmp_1/cts-extracted/android_cts/tools/cts-tradefed",
+      "[TMP_BASE]/cts_tmp_1/cts-extracted/android-cts/tools/cts-tradefed",
       "run",
       "cts",
       "-p",
