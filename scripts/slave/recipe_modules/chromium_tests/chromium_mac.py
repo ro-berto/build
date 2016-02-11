@@ -122,6 +122,9 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
+      'swarming_dimensions': {
+        'os': 'Mac-10.10',
+      },
     },
     'Mac10.11 Tests': {
       'chromium_config': 'chromium',
