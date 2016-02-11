@@ -7,7 +7,7 @@
       "--master",
       "chromium.android",
       "--builder",
-      "Android Webview CTS L-MR1 (dbg)",
+      "Android WebView CTS L-MR1 (dbg)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -125,7 +125,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"Android Webview CTS L-MR1 (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Android WebView CTS L-MR1 (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -404,7 +404,7 @@
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "[\"07a00ca4\"]",
       "chromium.android",
-      "Android Webview CTS L-MR1 (dbg)",
+      "Android WebView CTS L-MR1 (dbg)",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
@@ -535,12 +535,12 @@
       "----",
       "cp",
       "[SLAVE_BUILD]/src/out/Debug/full_log",
-      "gs://chromium-android/logcat_dumps/Android Webview CTS L-MR1 (dbg)/571"
+      "gs://chromium-android/logcat_dumps/Android WebView CTS L-MR1 (dbg)/571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android Webview CTS L-MR1 (dbg)/571@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android WebView CTS L-MR1 (dbg)/571@@@"
     ]
   },
   {

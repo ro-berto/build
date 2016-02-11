@@ -364,7 +364,7 @@ SPEC = {
       },
     },
 
-    'Android Webview CTS L-MR1 (dbg)': {
+    'Android WebView CTS L-MR1 (dbg)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],

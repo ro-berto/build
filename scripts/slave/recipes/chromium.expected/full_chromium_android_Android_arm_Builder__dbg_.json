@@ -275,7 +275,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Android Webview CTS L-MR1 (dbg)",
+        "builder_name": "Android WebView CTS L-MR1 (dbg)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -293,7 +293,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android Webview CTS L-MR1 (dbg)@@@"
+      "@@@STEP_TEXT@Android WebView CTS L-MR1 (dbg)@@@"
     ]
   },
   {
