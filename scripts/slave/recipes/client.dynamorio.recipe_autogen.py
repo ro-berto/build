@@ -18,13 +18,11 @@ def win_xp_dr_nightly_steps(api):
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
+  soln.custom_deps = {'dynamorio/tools/buildbot':
+      'https://github.com/DynamoRIO/buildbot.git'}
   api.gclient.c = src_cfg
   result = api.bot_update.ensure_checkout(force=True)
   build_properties.update(result.json.output.get("properties", {}))
-  # update tools step; generic ShellCommand converted
-  api.step("update tools", ['git', 'clone',
-    'https://github.com/DynamoRIO/buildbot.git'], env={},
-    cwd=api.path["checkout"].join('tools'))
   # unpack tools step; generic ShellCommand converted
   api.step("unpack tools", ['unpack.bat'], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
@@ -64,13 +62,11 @@ def win_7_dr_steps(api):
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
+  soln.custom_deps = {'dynamorio/tools/buildbot':
+      'https://github.com/DynamoRIO/buildbot.git'}
   api.gclient.c = src_cfg
   result = api.bot_update.ensure_checkout(force=True)
   build_properties.update(result.json.output.get("properties", {}))
-  # update tools step; generic ShellCommand converted
-  api.step("update tools", ['git', 'clone',
-    'https://github.com/DynamoRIO/buildbot.git'], env={},
-    cwd=api.path["checkout"].join('tools'))
   # unpack tools step; generic ShellCommand converted
   api.step("unpack tools", ['unpack.bat'], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
@@ -102,9 +98,6 @@ def linux_dr_package_steps(api):
   api.gsutil.upload("DynamoRIO-Linux-*" +
       build_properties["got_revision"][:7] +
       ".tar.gz", "chromium-dynamorio", "builds/")
-  api.gsutil.upload("DynamoRIO-Windows-*" +
-      build_properties["got_revision"][:7]
-      + ".zip", "chromium-dynamorio", "builds/")
 
 
 def win_8_dr_steps(api):
@@ -114,13 +107,11 @@ def win_8_dr_steps(api):
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
+  soln.custom_deps = {'dynamorio/tools/buildbot':
+      'https://github.com/DynamoRIO/buildbot.git'}
   api.gclient.c = src_cfg
   result = api.bot_update.ensure_checkout(force=True)
   build_properties.update(result.json.output.get("properties", {}))
-  # update tools step; generic ShellCommand converted
-  api.step("update tools", ['git', 'clone',
-    'https://github.com/DynamoRIO/buildbot.git'], env={},
-    cwd=api.path["checkout"].join('tools'))
   # unpack tools step; generic ShellCommand converted
   api.step("unpack tools", ['unpack.bat'], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
@@ -140,13 +131,11 @@ def win_xp_dr_steps(api):
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
+  soln.custom_deps = {'dynamorio/tools/buildbot':
+      'https://github.com/DynamoRIO/buildbot.git'}
   api.gclient.c = src_cfg
   result = api.bot_update.ensure_checkout(force=True)
   build_properties.update(result.json.output.get("properties", {}))
-  # update tools step; generic ShellCommand converted
-  api.step("update tools", ['git', 'clone',
-    'https://github.com/DynamoRIO/buildbot.git'], env={},
-    cwd=api.path["checkout"].join('tools'))
   # unpack tools step; generic ShellCommand converted
   api.step("unpack tools", ['unpack.bat'], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
@@ -165,13 +154,11 @@ def win_7_dr_nightly_steps(api):
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
+  soln.custom_deps = {'dynamorio/tools/buildbot':
+      'https://github.com/DynamoRIO/buildbot.git'}
   api.gclient.c = src_cfg
   result = api.bot_update.ensure_checkout(force=True)
   build_properties.update(result.json.output.get("properties", {}))
-  # update tools step; generic ShellCommand converted
-  api.step("update tools", ['git', 'clone',
-    'https://github.com/DynamoRIO/buildbot.git'], env={},
-    cwd=api.path["checkout"].join('tools'))
   # unpack tools step; generic ShellCommand converted
   api.step("unpack tools", ['unpack.bat'], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
@@ -191,13 +178,11 @@ def win_8_dr_nightly_steps(api):
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
+  soln.custom_deps = {'dynamorio/tools/buildbot':
+      'https://github.com/DynamoRIO/buildbot.git'}
   api.gclient.c = src_cfg
   result = api.bot_update.ensure_checkout(force=True)
   build_properties.update(result.json.output.get("properties", {}))
-  # update tools step; generic ShellCommand converted
-  api.step("update tools", ['git', 'clone',
-    'https://github.com/DynamoRIO/buildbot.git'], env={},
-    cwd=api.path["checkout"].join('tools'))
   # unpack tools step; generic ShellCommand converted
   api.step("unpack tools", ['unpack.bat'], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
@@ -217,13 +202,11 @@ def win_dr_package_steps(api):
   soln = src_cfg.solutions.add()
   soln.name = "dynamorio"
   soln.url = "https://github.com/DynamoRIO/dynamorio.git"
+  soln.custom_deps = {'dynamorio/tools/buildbot':
+      'https://github.com/DynamoRIO/buildbot.git'}
   api.gclient.c = src_cfg
   result = api.bot_update.ensure_checkout(force=True)
   build_properties.update(result.json.output.get("properties", {}))
-  # update tools step; generic ShellCommand converted
-  api.step("update tools", ['git', 'clone',
-    'https://github.com/DynamoRIO/buildbot.git'], env={},
-    cwd=api.path["checkout"].join('tools'))
   # unpack tools step; generic ShellCommand converted
   api.step("unpack tools", ['unpack.bat'], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
@@ -237,9 +220,6 @@ def win_dr_package_steps(api):
       "bot_tools")})
   # find package file step; no longer necessary
   # upload dynamorio package
-  api.gsutil.upload("DynamoRIO-Linux-*" +
-      build_properties["got_revision"][:7] +
-      ".tar.gz", "chromium-dynamorio", "builds/")
   api.gsutil.upload("DynamoRIO-Windows-*" +
       build_properties["got_revision"][:7]
       + ".zip", "chromium-dynamorio", "builds/")

@@ -11,7 +11,7 @@
       "--slave",
       "TestSlave",
       "--spec",
-      "cache_dir = '[ROOT]/git_cache'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'dynamorio', 'url': 'https://github.com/DynamoRIO/dynamorio.git'}]",
+      "cache_dir = '[ROOT]/git_cache'\nsolutions = [{'custom_deps': {'dynamorio/tools/buildbot': 'https://github.com/DynamoRIO/buildbot.git'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'dynamorio', 'url': 'https://github.com/DynamoRIO/dynamorio.git'}]",
       "--root",
       "dynamorio",
       "--revision_mapping_file",
@@ -49,15 +49,6 @@
   },
   {
     "cmd": [
-      "git",
-      "clone",
-      "https://github.com/DynamoRIO/buildbot.git"
-    ],
-    "cwd": "[SLAVE_BUILD]/dynamorio/tools",
-    "name": "update tools"
-  },
-  {
-    "cmd": [
       "unpack.bat"
     ],
     "cwd": "[SLAVE_BUILD]/dynamorio/tools/buildbot/bot_tools",
@@ -86,29 +77,11 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "DynamoRIO-Linux-*1234567.tar.gz",
-      "gs://chromium-dynamorio/builds/"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-dynamorio/builds/@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cp",
       "DynamoRIO-Windows-*1234567.zip",
       "gs://chromium-dynamorio/builds/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil upload (2)",
+    "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-dynamorio/builds/@@@"
     ]

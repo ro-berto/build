@@ -76,24 +76,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cp",
-      "DynamoRIO-Windows-*1234567.zip",
-      "gs://chromium-dynamorio/builds/"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gsutil upload (2)",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-dynamorio/builds/@@@"
-    ]
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

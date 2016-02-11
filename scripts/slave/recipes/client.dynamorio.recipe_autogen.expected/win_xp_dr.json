@@ -11,7 +11,7 @@
       "--slave",
       "TestSlave",
       "--spec",
-      "cache_dir = '[ROOT]/git_cache'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'dynamorio', 'url': 'https://github.com/DynamoRIO/dynamorio.git'}]",
+      "cache_dir = '[ROOT]/git_cache'\nsolutions = [{'custom_deps': {'dynamorio/tools/buildbot': 'https://github.com/DynamoRIO/buildbot.git'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'dynamorio', 'url': 'https://github.com/DynamoRIO/dynamorio.git'}]",
       "--root",
       "dynamorio",
       "--revision_mapping_file",
@@ -46,15 +46,6 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
-  },
-  {
-    "cmd": [
-      "git",
-      "clone",
-      "https://github.com/DynamoRIO/buildbot.git"
-    ],
-    "cwd": "[SLAVE_BUILD]/dynamorio/tools",
-    "name": "update tools"
   },
   {
     "cmd": [
