@@ -5,8 +5,8 @@
 import contextlib
 
 DEPS = [
+  'depot_tools/bot_update',
   'depot_tools/gclient',
-  'depot_tools/git',
   'file',
   'gsutil',
   'recipe_engine/path',
@@ -19,8 +19,10 @@ DEPS = [
 BUCKET_NAME = 'flutter_infra'
 
 def GetCloudPath(api, path):
-  # TODO(eseidel): Is 'revision' the right way to get the git hash?
-  return 'flutter/%s/%s' % (api.properties.get('revision'), path)
+  # TODO(eseidel): api.bot_update.properties is supposedly a known api wart.
+  # iannucci says it will be improved at some point.
+  git_hash = api.bot_update.properties['got_engine_revision']
+  return 'flutter/%s/%s' % (git_hash, path)
 
 
 # TODO(eseidel): This belongs as api.zip.ZipPackage.add_files
@@ -192,9 +194,10 @@ def GetCheckout(api):
   src_cfg.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
   src_cfg.target_os = set(['android'])
   api.gclient.c = src_cfg
-  api.gclient.checkout()
-  # Do I need to call gclient.sync(src_cfg)?
-  api.gclient.runhooks()
+  api.gclient.c.got_revision_mapping['src'] = 'got_engine_revision'
+  # TODO(eseidel): According to iannucci force=True is required.
+  # See https://codereview.chromium.org/1690713003#msg6
+  api.bot_update.ensure_checkout(force=True)
 
 
 def RunSteps(api):
@@ -222,7 +225,8 @@ def RunSteps(api):
 
 def GenTests(api):
   # A valid commit to flutter/engine, to make the gsutil urls look real.
-  TEST_REVISION = '380d5353cb47d2cfd84ff8f31a4dc0b5919b0167'
   for platform in ('mac', 'linux'):
     yield (api.test(platform) + api.platform(platform, 64)
-        + api.properties(revision=TEST_REVISION))
+        + api.properties(mastername='client.flutter',
+              buildername='%s Engine' % platform.capitalize(),
+              slavename='fake-m1'))

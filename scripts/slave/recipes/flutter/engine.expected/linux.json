@@ -3,99 +3,59 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[depot_tools]/gclient.py",
-      "config",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--master",
+      "client.flutter",
+      "--builder",
+      "Linux Engine",
+      "--slave",
+      "fake-m1",
       "--spec",
-      "cache_dir = '[ROOT]/git_cache'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/flutter/engine'}]\ntarget_os = ['android']"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
-    },
-    "name": "gclient setup"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE[depot_tools]/gclient.py",
-      "sync",
-      "--verbose",
-      "--with_branch_heads",
-      "--nohooks",
-      "-j8",
-      "--reset",
-      "--force",
-      "--upstream",
-      "--no-nag-max",
-      "--delete_unversioned_trees",
+      "cache_dir = '[ROOT]/git_cache'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/flutter/engine'}]\ntarget_os = ['android']",
+      "--root",
+      "src",
+      "--revision_mapping_file",
+      "{\"src\": \"got_engine_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
+      "--output_json",
+      "/path/to/tmp/json",
       "--revision",
-      "src@380d5353cb47d2cfd84ff8f31a4dc0b5919b0167",
-      "--output-json",
-      "/path/to/tmp/json"
+      "src@HEAD",
+      "--force",
+      "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
-    "name": "gclient sync",
+    "name": "bot_update",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src.git\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_engine_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_engine_revision_cp\": \"refs/heads/master@{#170242}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_engine_revision@\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_engine_revision_cp@\"refs/heads/master@{#170242}\"@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE[depot_tools]/gclient.py",
-      "recurse",
-      "git",
-      "config",
-      "user.name",
-      "local_bot"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
-    },
-    "name": "gclient recurse (git config user.name)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE[depot_tools]/gclient.py",
-      "recurse",
-      "git",
-      "config",
-      "user.email",
-      "local_bot@example.com"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
-    },
-    "name": "gclient recurse (git config user.email)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE[depot_tools]/gclient.py",
-      "runhooks"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
-    },
-    "name": "gclient runhooks"
   },
   {
     "cmd": [
@@ -188,7 +148,7 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_1/artifacts.zip",
-      "gs://flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/linux-x64/artifacts.zip"
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/linux-x64/artifacts.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -196,7 +156,7 @@
     },
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/linux-x64/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/linux-x64/artifacts.zip@@@"
     ]
   },
   {
@@ -287,7 +247,7 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_2/artifacts.zip",
-      "gs://flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/android-arm/artifacts.zip"
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm/artifacts.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -295,7 +255,7 @@
     },
     "name": "gsutil upload (2)",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/android-arm/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm/artifacts.zip@@@"
     ]
   },
   {
@@ -330,7 +290,7 @@
       "----",
       "cp",
       "[SLAVE_BUILD]/src/out/android_Release/gen/sky/services/gcm/gcm_lib.dex.jar",
-      "gs://flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/gcm/gcm_lib.dex.jar"
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/gcm/gcm_lib.dex.jar"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -338,7 +298,7 @@
     },
     "name": "gsutil upload (3)",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/gcm/gcm_lib.dex.jar@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/gcm/gcm_lib.dex.jar@@@"
     ]
   },
   {
@@ -351,7 +311,7 @@
       "----",
       "cp",
       "[SLAVE_BUILD]/src/out/android_Release/gen/sky/services/gcm/interfaces_java.dex.jar",
-      "gs://flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/gcm/interfaces_java.dex.jar"
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/gcm/interfaces_java.dex.jar"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -359,7 +319,7 @@
     },
     "name": "gsutil upload (4)",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/gcm/interfaces_java.dex.jar@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/gcm/interfaces_java.dex.jar@@@"
     ]
   },
   {
@@ -372,7 +332,7 @@
       "----",
       "cp",
       "[SLAVE_BUILD]/src/out/android_Release/gen/sky/services/firebase/firebase_lib.dex.jar",
-      "gs://flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/firebase/firebase_lib.dex.jar"
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/firebase/firebase_lib.dex.jar"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -380,7 +340,7 @@
     },
     "name": "gsutil upload (5)",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/firebase/firebase_lib.dex.jar@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/firebase/firebase_lib.dex.jar@@@"
     ]
   },
   {
@@ -393,7 +353,7 @@
       "----",
       "cp",
       "[SLAVE_BUILD]/src/out/android_Release/gen/sky/services/firebase/interfaces_java.dex.jar",
-      "gs://flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/firebase/interfaces_java.dex.jar"
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/firebase/interfaces_java.dex.jar"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -401,7 +361,7 @@
     },
     "name": "gsutil upload (6)",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/380d5353cb47d2cfd84ff8f31a4dc0b5919b0167/firebase/interfaces_java.dex.jar@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/firebase/interfaces_java.dex.jar@@@"
     ]
   },
   {
