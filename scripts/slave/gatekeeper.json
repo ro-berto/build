@@ -567,6 +567,16 @@
               "Mozilla"
             ]
           },
+          "V8 Win32": {
+            "excluded_steps": [
+              "Test262 - no variants"
+            ]
+          },
+          "V8 Win32 - debug": {
+            "excluded_steps": [
+              "Test262 - no variants"
+            ]
+          },
           "V8 Win64": {
             "excluded_steps": [
               "Test262 - no variants"
