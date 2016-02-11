@@ -749,6 +749,9 @@ class Bisector(object):
 
   def get_builder_bot_for_this_platform(self):
     """Returns the name of the builder bot to use."""
+    if self.api.builder_bot:  # pragma: no cover
+      return self.api.builder_bot
+
     # TODO(prasadv): Refactor this code to remove hard coded values.
     bot_name = self.get_perf_tester_name()
     if 'win' in bot_name:
@@ -774,6 +777,9 @@ class Bisector(object):
     that includes the revision and the file extension to form the
     full GS URL.
     """
+    if self.api.buildurl_gs_prefix:  # pragma: no cover
+      return self.api.buildurl_gs_prefix
+
     # TODO(prasadv): Refactor this code to remove hard coded values.
     bot_name = self.get_perf_tester_name()
     if 'win' in bot_name:

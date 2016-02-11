@@ -39,6 +39,9 @@ class AutoBisectApi(recipe_api.RecipeApi):
     super(AutoBisectApi, self).__init__(*args, **kwargs)
     self.override_poll_interval = None
     self.bot_db = None
+    # These two variable values are set and used for the internal bisects.
+    self.buildurl_gs_prefix = None
+    self.builder_bot = None
 
   def perform_bisect(self):
     return local_bisect.perform_bisect(self)
@@ -62,6 +65,15 @@ class AutoBisectApi(recipe_api.RecipeApi):
     revision_class = self._get_revision_class()
     return bisector.Bisector(self, bisect_config_dict, revision_class,
                              init_revisions=not dummy_mode)
+
+  def set_platform_gs_prefix(self, gs_url):
+    """Sets GS path for the platform."""
+    self.buildurl_gs_prefix = gs_url  # pragma: no cover
+
+  def set_builder_bot(self, builder_bot):
+    """Sets builder name for building binaries.""" 
+    self.builder_bot = builder_bot  # pragma: no cover
+  
 
   def _get_revision_class(self):
     """Gets the particular subclass of Revision."""
