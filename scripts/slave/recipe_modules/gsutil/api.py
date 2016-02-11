@@ -8,7 +8,8 @@ from recipe_engine import recipe_api
 
 class GSUtilApi(recipe_api.RecipeApi):
   def __call__(self, cmd, name=None, use_retry_wrapper=True, version=None,
-               parallel_upload=False, timeout=None, **kwargs):
+               parallel_upload=False, timeout=None, multithreaded=False,
+               **kwargs):
     """A step to run arbitrary gsutil commands.
 
     Note that this assumes that gsutil authentication environment variables
@@ -47,6 +48,9 @@ class GSUtilApi(recipe_api.RecipeApi):
           '-o',
           'GSUtil:parallel_composite_upload_threshold=50M'
       ])
+
+    if multithreaded:
+      cmd_prefix.extend(['-m'])
 
     if use_retry_wrapper:
       # The -- argument for the wrapped gsutil.py is escaped as ---- as python

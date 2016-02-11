@@ -54,7 +54,7 @@ def linux_dr_steps(api):
     cwd=api.path["slave_build"], ok_ret="all")
   # upload dynamorio docs step
   api.gsutil.upload(api.path["slave_build"].join("install", "docs", "html"),
-      "chromium-dynamorio", "dr_docs/", ["-r"], parallel_upload=True)
+      "chromium-dynamorio", "dr_docs/", ["-r"], multithreaded=True)
 
 
 def win_7_dr_steps(api):
