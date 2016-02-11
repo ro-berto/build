@@ -243,7 +243,6 @@
       "sync_unit_tests_apk",
       "ui_android_unittests_apk",
       "ui_base_unittests_apk",
-      "ui_junit_tests",
       "ui_touch_selection_unittests_apk",
       "unit_tests_apk"
     ],

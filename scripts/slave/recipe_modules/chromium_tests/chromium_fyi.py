@@ -1808,7 +1808,6 @@ SPEC = {
       'root_devices': True,
       'tests': [
         steps.GTestTest('gfx_unittests'),
-        steps.AndroidJunitTest('ui_junit_tests'),
       ],
       'test_generators': [
         steps.generate_gtest,

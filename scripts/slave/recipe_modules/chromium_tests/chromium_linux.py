@@ -172,6 +172,7 @@ SPEC = {
         steps.AndroidJunitTest('content_junit_tests'),
         steps.AndroidJunitTest('junit_unittests'),
         steps.AndroidJunitTest('net_junit_tests'),
+        steps.AndroidJunitTest('ui_junit_tests'),
       ],
       'testing': {
         'platform': 'linux',
@@ -255,6 +256,7 @@ SPEC = {
         steps.AndroidJunitTest('content_junit_tests'),
         steps.AndroidJunitTest('junit_unit_tests'),
         steps.AndroidJunitTest('net_junit_tests'),
+        steps.AndroidJunitTest('ui_junit_tests'),
       ],
       'test_generators': [
         steps.generate_gtest,
@@ -308,6 +310,7 @@ SPEC = {
         steps.AndroidJunitTest('content_junit_tests'),
         steps.AndroidJunitTest('junit_unit_tests'),
         steps.AndroidJunitTest('net_junit_tests'),
+        steps.AndroidJunitTest('ui_junit_tests'),
       ],
       'test_generators': [
         steps.generate_gtest,

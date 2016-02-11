@@ -233,7 +233,8 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"junit_unit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"net_junit_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"system_webview_apk\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"system_webview_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"ui_junit_tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"base_junit_tests\", @@@",
@@ -242,7 +243,8 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"junit_unit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"net_junit_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"system_webview_apk\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"system_webview_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"ui_junit_tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"base_junit_tests\", @@@",
@@ -250,7 +252,8 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"components_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"junit_unit_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"net_junit_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"net_junit_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"ui_junit_tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"base_junit_tests\", @@@",
@@ -258,7 +261,8 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"components_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"content_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"junit_unit_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"net_junit_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"net_junit_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"ui_junit_tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
@@ -337,7 +341,8 @@
       "content_junit_tests",
       "junit_unit_tests",
       "net_junit_tests",
-      "system_webview_apk"
+      "system_webview_apk",
+      "ui_junit_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -671,6 +676,28 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "junit",
+      "-s",
+      "ui_junit_tests",
+      "--verbose",
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "ui_junit_tests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
       "tryserver.chromium.android",
@@ -795,7 +822,8 @@
       "components_junit_tests",
       "content_junit_tests",
       "junit_unit_tests",
-      "net_junit_tests"
+      "net_junit_tests",
+      "ui_junit_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -943,6 +971,28 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "junit",
+      "-s",
+      "ui_junit_tests",
+      "--verbose",
+      "--release",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "ui_junit_tests (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "import sys; sys.exit(0)"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1012,6 +1062,19 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "net_junit_tests (retry summary)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ui_junit_tests (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
       "@@@STEP_WARNINGS@@@"
