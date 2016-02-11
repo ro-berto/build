@@ -59,6 +59,19 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/src/sky/tools/gn",
       "--debug"
     ],
@@ -126,7 +139,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "Zip Artifacts",
+    "name": "Zip darwin-x64 Artifacts",
     "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/Release/sky_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_1/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\", \"use_python_zip\": false}"
   },
   {
@@ -145,7 +158,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gsutil upload",
+    "name": "gsutil upload darwin-x64/artifacts.zip",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/darwin-x64/artifacts.zip@@@"
     ]
@@ -302,7 +315,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gsutil upload (2)",
+    "name": "gsutil upload ios/FlutterXcode.zip",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/ios/FlutterXcode.zip@@@"
     ]

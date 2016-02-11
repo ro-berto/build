@@ -25,12 +25,6 @@ def GetCloudPath(api, path):
   return 'flutter/%s/%s' % (git_hash, path)
 
 
-# TODO(eseidel): This belongs as api.zip.ZipPackage.add_files
-def AddFiles(pkg, relative_paths):
-  for path in relative_paths:
-    pkg.add_file(pkg.root.join(path))
-
-
 def Build(api, config, *targets):
   checkout = api.path['checkout']
   build_dir = checkout.join('out/%s' % config)
@@ -44,6 +38,25 @@ def RunGN(api, *args):
   gn_cmd = [checkout.join('sky/tools/gn')]
   gn_cmd.extend(args)
   api.step('gn %s' % ' '.join(args), gn_cmd)
+
+
+# TODO(eseidel): This belongs as api.zip.ZipPackage.add_files
+def AddFiles(pkg, relative_paths):
+  for path in relative_paths:
+    pkg.add_file(pkg.root.join(path))
+
+
+def UploadArtifacts(api, platform, file_paths):
+  with MakeTempDir(api) as temp_dir:
+    local_zip = temp_dir.join('artifacts.zip')
+    remote_name = '%s/artifacts.zip' % platform
+    remote_zip = GetCloudPath(api, remote_name)
+    pkg = api.zip.make_package(api.path['checkout'], local_zip)
+    AddFiles(pkg, file_paths)
+
+    pkg.zip('Zip %s Artifacts' % platform)
+    api.gsutil.upload(local_zip, BUCKET_NAME, remote_zip,
+        name='upload %s' % remote_name)
 
 
 # TODO(eseidel): Would be nice to have this on api.path or api.file.
@@ -68,39 +81,28 @@ def BuildLinuxAndroid(api):
   RunGN(api, '--release', '--android', '--enable-firebase', '--enable-gcm')
   Build(api, 'android_Release', 'apks/SkyShell.apk', 'flutter.mojo',
       'sky/services/gcm', 'sky/services/firebase')
-
-  with MakeTempDir(api) as tmp_dir:
-    local_zip = tmp_dir.join('artifacts.zip')
-    remote_zip = GetCloudPath(api, 'android-arm/artifacts.zip')
-    checkout = api.path['checkout']
-    pkg = api.zip.make_package(checkout, local_zip)
-
-    AddFiles(pkg, [
-      'build/android/ant/chromium-debug.keystore',
-      'out/android_Release/apks/SkyShell.apk',
-      'out/android_Release/flutter.mojo',
-      # Unclear if this is the right way to work around draconian 80c rule:
-      'out/android_Release/gen/sky/shell/shell/shell/libs/armeabi-v7a/' +
-      'libsky_shell.so',
-      'out/android_Release/icudtl.dat',
-    ])
+  UploadArtifacts(api, 'android-arm', [
+    'build/android/ant/chromium-debug.keystore',
+    'out/android_Release/apks/SkyShell.apk',
+    'out/android_Release/flutter.mojo',
+    # Unclear if this is the right way to work around draconian 80c rule:
+    'out/android_Release/gen/sky/shell/shell/shell/libs/armeabi-v7a/' +
+    'libsky_shell.so',
+    'out/android_Release/icudtl.dat',
 
     # TODO(mpcomplete): stop bundling classes.dex once
     # https://github.com/flutter/flutter/pull/1263 lands.
-    AddFiles(pkg, [
-      'out/android_Release/gen/sky/shell/shell/classes.dex.jar',
-      'out/android_Release/gen/sky/shell/shell/classes.dex',
-    ])
-
-    pkg.zip('Zip Android Artifacts')
-    api.gsutil.upload(local_zip, BUCKET_NAME, remote_zip)
-
+    'out/android_Release/gen/sky/shell/shell/classes.dex.jar',
+    'out/android_Release/gen/sky/shell/shell/classes.dex',
+  ])
 
   def UploadService(name):
     def Upload(from_path, to_path):
-      api.gsutil.upload(from_path, BUCKET_NAME, GetCloudPath(api, to_path))
+      api.gsutil.upload(from_path, BUCKET_NAME, GetCloudPath(api, to_path),
+          name='upload %s' % to_path)
 
     def ServicesOut(path):
+      checkout = api.path['checkout']
       return checkout.join('out/android_Release/gen/sky/services/%s' % path)
 
     dex_jar = '%s/%s_lib.dex.jar' % (name, name)
@@ -115,20 +117,12 @@ def BuildLinuxAndroid(api):
 def BuildLinux(api):
   RunGN(api, '--release')
   Build(api, 'Release')
-
-  with MakeTempDir(api) as temp_dir:
-    local_zip = temp_dir.join('artifacts.zip')
-    remote_zip = GetCloudPath(api, 'linux-x64/artifacts.zip')
-    pkg = api.zip.make_package(api.path['checkout'], local_zip)
-    AddFiles(pkg, [
-      'out/Release/flutter.mojo',
-      'out/Release/icudtl.dat',
-      'out/Release/sky_shell',
-      'out/Release/sky_snapshot',
-    ])
-
-    pkg.zip('Zip Linux Artifacts')
-    api.gsutil.upload(local_zip, BUCKET_NAME, remote_zip)
+  UploadArtifacts(api, 'linux-x64', [
+    'out/Release/flutter.mojo',
+    'out/Release/icudtl.dat',
+    'out/Release/sky_shell',
+    'out/Release/sky_snapshot',
+  ])
 
 
 def TestObservatory(api):
@@ -144,14 +138,9 @@ def TestObservatory(api):
 def BuildMac(api):
   RunGN(api, '--release')
   Build(api, 'Release', 'sky_snapshot')
-
-  with MakeTempDir(api) as temp_dir:
-    local_zip = temp_dir.join('artifacts.zip')
-    remote_zip = GetCloudPath(api, 'darwin-x64/artifacts.zip')
-    pkg = api.zip.make_package(api.path['checkout'], local_zip)
-    pkg.add_file(pkg.root.join('out/Release/sky_snapshot'))
-    pkg.zip('Zip Artifacts')
-    api.gsutil.upload(pkg.output, BUCKET_NAME, remote_zip)
+  UploadArtifacts(api, 'darwin-x64', [
+    'out/Release/sky_snapshot'
+  ])
 
 
 def GenerateXcodeProject(api):
@@ -180,8 +169,10 @@ def GenerateXcodeProject(api):
   flutter_zip = out_dir.join('FlutterXcode.zip')
   api.zip.directory('make FlutterXcode.zip', deploy_dir, flutter_zip)
 
-  cloud_path =  GetCloudPath(api, 'ios/FlutterXcode.zip')
-  api.gsutil.upload(flutter_zip, BUCKET_NAME, cloud_path)
+  remote_name = 'ios/FlutterXcode.zip'
+  cloud_path =  GetCloudPath(api, remote_name)
+  api.gsutil.upload(flutter_zip, BUCKET_NAME, cloud_path,
+      name='upload %s' % remote_name)
 
 
 def GetCheckout(api):
@@ -198,6 +189,7 @@ def GetCheckout(api):
   # TODO(eseidel): According to iannucci force=True is required.
   # See https://codereview.chromium.org/1690713003#msg6
   api.bot_update.ensure_checkout(force=True)
+  api.gclient.runhooks()
 
 
 def RunSteps(api):
