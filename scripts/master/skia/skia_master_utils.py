@@ -39,7 +39,7 @@ MASTER_ONLY_SCHEDULER_NAME = 'skia_master_only'
 PERIODIC_15MINS_SCHEDULER_NAME = 'skia_periodic_15mins'
 NIGHTLY_SCHEDULER_NAME = 'skia_nightly'
 WEEKLY_SCHEDULER_NAME = 'skia_weekly'
-INFRA_PERCOMMIT_SCHEDULER_NAME = 'infra_percommit'
+FAKE_TRY_SCHEDULER_NAME = 'skia_trybots'
 MASTER_BRANCH = 'master'
 POLLING_BRANCH = re.compile('refs/heads/(?!infra/config).+')
 SLAVE_WORKDIR = 'workdir'
@@ -49,8 +49,8 @@ SCHEDULERS = [
   PERIODIC_15MINS_SCHEDULER_NAME,
   NIGHTLY_SCHEDULER_NAME,
   WEEKLY_SCHEDULER_NAME,
-  INFRA_PERCOMMIT_SCHEDULER_NAME,
   BUILDBUCKET_SCHEDULER_NAME,
+  FAKE_TRY_SCHEDULER_NAME,
 ]
 
 KEYWORD_NO_MERGE_BUILDS = 'NO_MERGE_BUILDS'
@@ -158,6 +158,8 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       if is_trybot:
         parent_builder = builder_name_schema.TrybotName(parent_builder)
       triggered_builders[parent_builder].append(builder_name)
+    elif is_trybot:
+      builders_by_scheduler[FAKE_TRY_SCHEDULER_NAME].append(builder_name)
     else:
       scheduler = builder.get('scheduler', BUILDBUCKET_SCHEDULER_NAME)
       # Setting the scheduler to BUILDBUCKET_SCHEDULER_NAME indicates that
@@ -178,18 +180,17 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       process_builder(builder, is_trybot=True)
 
   # Verify that all parent builders exist.
-  all_nontriggered_builders = set(
+  buildbucket_builders = set(
       builders_by_scheduler[BUILDBUCKET_SCHEDULER_NAME]
   )
+  trybots = set(builders_by_scheduler[FAKE_TRY_SCHEDULER_NAME])
   trigger_parents = set(triggered_builders.keys())
-  nonexistent_parents = trigger_parents - all_nontriggered_builders
+  nonexistent_parents = trigger_parents - buildbucket_builders - trybots
   if nonexistent_parents:
     raise Exception('Could not find parent builders: %s' %
                     ', '.join(nonexistent_parents))
 
   # Create the schedulers.
-  infra_change_filter = change_filter.ChangeFilter(
-      project='buildbot', repository=global_constants.INFRA_REPO)
   skia_master_only_change_filter = change_filter.ChangeFilter(
       project='skia', repository=ActiveMaster.repo_url, branch=MASTER_BRANCH)
 
@@ -235,13 +236,6 @@ def SetupBuildersAndSchedulers(c, builders, slaves, ActiveMaster):
       dayOfWeek=6) # Sunday (Monday = 0).
   c['schedulers'].append(s)
 
-  s = AnyBranchScheduler(
-      name=INFRA_PERCOMMIT_SCHEDULER_NAME,
-      treeStableTimer=0,
-      change_filter=infra_change_filter,
-      builderNames=builders_by_scheduler[INFRA_PERCOMMIT_SCHEDULER_NAME])
-  c['schedulers'].append(s)
-
   # Don't add triggerable schedulers for triggered_builders; triggers are now
   # handled on the slave-side through buildbucket.
 
@@ -274,13 +268,7 @@ def SetupMaster(ActiveMaster):
       pollInterval=10,
       revlinktmpl='https://skia.googlesource.com/skia/+/%s')
 
-  infra_poller = GitilesPoller(
-      repo_url=global_constants.INFRA_REPO,
-      branches=[POLLING_BRANCH],
-      pollInterval=10,
-      revlinktmpl='https://skia.googlesource.com/buildbot/+/%s')
-
-  c['change_source'] = [poller, infra_poller]
+  c['change_source'] = [poller]
 
   ####### SLAVES
 
