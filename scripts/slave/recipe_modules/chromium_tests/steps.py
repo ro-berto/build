@@ -1521,16 +1521,28 @@ class AndroidJunitTest(AndroidTest):
         step_test_data=lambda: api.json.test_api.output(mock_test_results))
 
 
+# Provide a 1:1 mapping between CamelCase and snake_case instrumentation test
+# names. This provides a migration path to using swarming+isolates, which
+# specify additional build targets in src/ instead of here.
+ANDROID_INSTRUMENTATION_TARGET_MAP = {
+    'AndroidWebViewTest': 'android_webview_test_apk',
+    'ChromePublicTest': 'chrome_public_test_apk',
+    'ChromeSyncShellTest': 'chrome_sync_shell_test_apk',
+    'ChromotingTest': 'remoting_test_apk',
+    'ContentShellTest': 'content_shell_test_apk',
+    'MojoTest': 'mojo_test_apk',
+    'SystemWebViewShellLayoutTest': 'system_webview_shell_layout_test_apk',
+}
+
+
 class AndroidInstrumentationTest(AndroidTest):
   _DEFAULT_SUITES = {
     'AndroidWebViewTest': {
-      'compile_targets': ['android_webview_test_apk'],
       'isolate_file_path': 'android_webview/android_webview_test_apk.isolate',
       'apk_under_test': 'AndroidWebView.apk',
       'test_apk': 'AndroidWebViewTest.apk',
     },
     'ChromePublicTest': {
-      'compile_targets': ['chrome_public_test_apk'],
       'isolate_file_path': 'chrome/chrome_public_test_apk.isolate',
       'apk_under_test': 'ChromePublic.apk',
       'test_apk': 'ChromePublicTest.apk',
@@ -1540,28 +1552,24 @@ class AndroidInstrumentationTest(AndroidTest):
       ],
     },
     'ChromeSyncShellTest': {
-      'compile_targets': ['chrome_sync_shell_test_apk'],
       'isolate_file_path': None,
       'apk_under_test': 'ChromeSyncShell.apk',
       'test_apk': 'ChromeSyncShellTest.apk',
     },
     'ChromotingTest': {
-      'compile_targets': ['remoting_test_apk'],
       'isolate_file_path': None,
       'apk_under_test': 'Chromoting.apk',
       'test_apk': 'ChromotingTest.apk',
     },
     'ContentShellTest': {
-      'compile_targets': ['content_shell_test_apk'],
       'isolate_file_path': 'content/content_shell_test_apk.isolate',
       'apk_under_test': 'ContentShell.apk',
       'test_apk': 'ContentShellTest.apk',
     },
     'SystemWebViewShellLayoutTest': {
-      'compile_targets': ['system_webview_apk',
-                          'system_webview_shell_apk',
-                          'system_webview_shell_layout_test_apk',
-                          'android_tools'],
+      'extra_compile_targets': ['system_webview_apk',
+                                'system_webview_shell_apk',
+                                'android_tools'],
       'isolate_file_path': ('android_webview/'
                             'system_webview_shell_test_apk.isolate'),
       'apk_under_test': 'SystemWebViewShell.apk',
@@ -1569,7 +1577,6 @@ class AndroidInstrumentationTest(AndroidTest):
       'additional_apks': ['SystemWebView.apk'],
     },
     'MojoTest': {
-      'compile_targets': ['mojo_test_apk'],
       'isolate_file_path': None,
       'apk_under_test': None,
       'test_apk': 'MojoTest.apk',
@@ -1583,9 +1590,16 @@ class AndroidInstrumentationTest(AndroidTest):
                verbose=True, tool=None, host_driven_root=None,
                additional_apks=None):
     suite_defaults = AndroidInstrumentationTest._DEFAULT_SUITES.get(name, {})
+    if not compile_targets:
+      compile_targets = []
+      main_target = ANDROID_INSTRUMENTATION_TARGET_MAP.get(name)
+      if main_target:
+        compile_targets.append(main_target)
+      compile_targets.extend(suite_defaults.get('extra_compile_targets', []))
+
     super(AndroidInstrumentationTest, self).__init__(
         name,
-        compile_targets or suite_defaults.get('compile_targets'),
+        compile_targets,
         isolate_file_path or suite_defaults.get('isolate_file_path'))
     self._additional_apks = (
         additional_apks or suite_defaults.get('additional_apks'))
