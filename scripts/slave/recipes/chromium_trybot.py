@@ -216,7 +216,9 @@ def _RunStepsInternal(api):
     if any([is_source_file(api, f) for f in affected_files]):
       tests = [t for t in tests if not t.compile_targets(api)]
     else:
-      return
+      tests = []
+
+  api.python.succeeding_step('mark: before_tests', '')
 
   if not tests:
     return

@@ -274,6 +274,15 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "mark: before_tests"
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

@@ -300,21 +300,21 @@
     "cmd": [
       "python",
       "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "mark: before_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
       "--target",
       "Release"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "start_crash_service"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "mark: before_tests"
   },
   {
     "cmd": [

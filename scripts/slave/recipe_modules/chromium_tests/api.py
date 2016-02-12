@@ -562,8 +562,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.platform.is_win:
       self.m.chromium.crash_handler()
 
-    self.m.python.succeeding_step('mark: before_tests', '')
-
     try:
       yield
     finally:

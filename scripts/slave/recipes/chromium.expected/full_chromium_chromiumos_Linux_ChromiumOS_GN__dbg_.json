@@ -307,15 +307,6 @@
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "mark: before_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
       "browser_tests"
     ],
