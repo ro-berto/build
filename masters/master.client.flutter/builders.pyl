@@ -21,11 +21,13 @@
       "recipe": "flutter/engine",
       "scheduler": "engine_commits",
       "slave_pools": ["linux"],
+      "mergeRequests": False, # Build every revision.
     },
     "Mac Engine": {
       "recipe": "flutter/engine",
       "scheduler": "engine_commits",
       "slave_pools": ["mac"],
+      "mergeRequests": False, # Build every revision.
     },
   },
 
