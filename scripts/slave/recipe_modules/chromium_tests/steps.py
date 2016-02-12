@@ -466,7 +466,7 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
     else:
       yield AndroidInstrumentationTest(
           test_name,
-          compile_targets=test.get('override_compile_targets', test_name),
+          compile_targets=test.get('override_compile_targets', None),
           isolate_file_path=test.get('isolate_file_path', None),
           apk_under_test=test.get('apk_under_test', None),
           test_apk=test.get('test_apk', None),
