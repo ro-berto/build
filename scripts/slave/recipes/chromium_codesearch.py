@@ -194,6 +194,7 @@ def RunSteps(api):
     # errors for now. At least this means we can already have cross references
     # support for the files where it works.
     api.step.active_result.presentation.step_text = f.reason_message()
+    api.step.active_result.presentation.status = api.step.WARNING
 
   # Create the index pack
   got_revision_cp = api.chromium.build_properties.get('got_revision_cp')
