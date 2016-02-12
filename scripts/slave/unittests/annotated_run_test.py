@@ -77,6 +77,7 @@ class _AnnotatedRunExecTestBase(unittest.TestCase):
     self._patchers = []
     map(self._patch, (
         mock.patch('slave.annotated_run._run_command'),
+        mock.patch('slave.annotated_run.get_platform'),
         mock.patch('os.path.exists'),
         mock.patch('os.getcwd'),
         ))
@@ -90,11 +91,6 @@ class _AnnotatedRunExecTestBase(unittest.TestCase):
         logdog_butler_path=None,
         logdog_verbose=False,
         logdog_service_account_json=None)
-    self.config = annotated_run.Config(
-        run_cmd=['run.py'],
-        logdog_pubsub_topic=None,
-        logdog_platform=None,
-    )
     self.properties = {
       'recipe': 'example/recipe',
       'mastername': 'master.random',
@@ -112,6 +108,9 @@ class _AnnotatedRunExecTestBase(unittest.TestCase):
     os.getcwd.return_value = self.cwd
     os.path.exists.return_value = False
 
+    # Pretend we're 64-bit Linux by default.
+    annotated_run.get_platform.return_value = ('Linux', 'x86_64')
+
   def tearDown(self):
     self.rt.close()
     for p in reversed(self._patchers):
@@ -125,6 +124,9 @@ class _AnnotatedRunExecTestBase(unittest.TestCase):
     patcher.start()
     return patcher
 
+  def _config(self):
+    return annotated_run.get_config()
+
   def _assertRecipeProperties(self, value):
     # Double-translate "value", since JSON converts strings to unicode.
     value = json.loads(json.dumps(value))
@@ -137,8 +139,8 @@ class AnnotatedRunExecTest(_AnnotatedRunExecTestBase):
   def test_exec_successful(self):
     annotated_run._run_command.return_value = (0, '')
 
-    rv = annotated_run._exec_recipe(self.rt, self.opts, self.tdir, self.config,
-                                    self.properties)
+    rv = annotated_run._exec_recipe(self.rt, self.opts, self.tdir,
+                                    self._config(), self.properties)
     self.assertEqual(rv, 0)
     self._assertRecipeProperties(self.properties)
 
@@ -165,15 +167,6 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
       'buildername': 'nobuilder',
       'buildnumber': 1337,
     })
-    self.config = self.config._replace(
-        logdog_pubsub_topic='projects/test/topics/logs',
-        logdog_platform=annotated_run.LogDogPlatform(
-            butler=annotated_run.CipdBinary('cipd/butler', 'head', 'butler'),
-            annotee=annotated_run.CipdBinary('cipd/annotee', 'head', 'annotee'),
-            credential_path=os.path.join('path', 'to', 'creds.json'),
-            streamserver='unix',
-        ),
-    )
     self.is_gce = False
 
     def is_gce():
@@ -207,23 +200,24 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
   def test_exec_with_whitelist_builder_runs_logdog(self, service_account):
     self.properties['buildername'] = 'yesbuilder'
 
-    butler_path = self._tp('logdog_bootstrap', 'cipd', 'butler')
-    annotee_path = self._tp('logdog_bootstrap', 'cipd', 'annotee')
+    butler_path = self._tp('logdog_bootstrap', 'cipd', 'logdog_butler')
+    annotee_path = self._tp('logdog_bootstrap', 'cipd', 'logdog_annotee')
     service_account.return_value = 'creds.json'
     annotated_run._run_command.return_value = (0, '')
 
     self._patch(mock.patch('tempfile.mkdtemp', return_value='foo'))
-    rv = annotated_run._exec_recipe(self.rt, self.opts, self.tdir, self.config,
+    config = self._config()
+    rv = annotated_run._exec_recipe(self.rt, self.opts, self.tdir, config,
                                     self.properties)
     self.assertEqual(rv, 0)
 
     streamserver_uri = 'unix:%s' % (os.path.join('foo', 'butler.sock'),)
     service_account.assert_called_once_with(
-        self.opts, self.config.logdog_platform.credential_path)
+        self.opts, config.logdog_platform.credential_path)
     annotated_run._run_command.assert_called_with(
         [butler_path,
             '-prefix', 'bb/master.some/yesbuilder/1337',
-            '-output', 'pubsub,topic="projects/test/topics/logs"',
+            '-output', 'pubsub,topic="projects/luci-logdog/topics/logs"',
             '-service-account-json', 'creds.json',
             'run',
             '-stdout', 'tee=stdout',
@@ -246,7 +240,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
   @mock.patch('slave.annotated_run._logdog_bootstrap', return_value=0)
   def test_runs_bootstrap_when_forced(self, lb):
     opts = self.opts._replace(logdog_force=True)
-    rv = annotated_run._exec_recipe(self.rt, opts, self.tdir, self.config,
+    rv = annotated_run._exec_recipe(self.rt, opts, self.tdir, self._config(),
                                     self.properties)
     self.assertEqual(rv, 0)
     lb.assert_called_once()
@@ -256,7 +250,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
   def test_forwards_error_code(self, lb):
     opts = self.opts._replace(
         logdog_force=True)
-    rv = annotated_run._exec_recipe(self.rt, opts, self.tdir, self.config,
+    rv = annotated_run._exec_recipe(self.rt, opts, self.tdir, self._config(),
                                     self.properties)
     self.assertEqual(rv, 2)
     lb.assert_called_once()
@@ -266,8 +260,8 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
   def test_runs_directly_if_bootstrap_fails(self, lb):
     annotated_run._run_command.return_value = (123, '')
 
-    rv = annotated_run._exec_recipe(self.rt, self.opts, self.tdir, self.config,
-                                    self.properties)
+    rv = annotated_run._exec_recipe(self.rt, self.opts, self.tdir,
+                                    self._config(), self.properties)
     self.assertEqual(rv, 123)
 
     lb.assert_called_once()
@@ -279,34 +273,39 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
   def test_runs_directly_if_logdog_error(self, service_account, cipd):
     self.properties['buildername'] = 'yesbuilder'
 
-    cipd.return_value = ('butler', 'annotee')
+    # Test Windows builder this time.
+    annotated_run.get_platform.return_value = ('Windows', 'x86_64')
+
+    cipd.return_value = ('logdog_butler.exe', 'logdog_annotee.exe')
     service_account.return_value = 'creds.json'
     def error_for_logdog(args, **kw):
-      if len(args) > 0 and args[0] == 'butler':
+      if len(args) > 0 and args[0] == 'logdog_butler.exe':
         return (250, '')
       return (4, '')
     annotated_run._run_command.side_effect = error_for_logdog
 
+    config = self._config()
+
     self._patch(mock.patch('tempfile.mkdtemp', return_value='foo'))
-    rv = annotated_run._exec_recipe(self.rt, self.opts, self.tdir, self.config,
+    rv = annotated_run._exec_recipe(self.rt, self.opts, self.tdir, config,
                                     self.properties)
     self.assertEqual(rv, 4)
 
-    streamserver_uri = 'unix:%s' % (os.path.join('foo', 'butler.sock'),)
+    streamserver_uri = 'net.pipe:LUCILogDogButler'
     service_account.assert_called_once_with(
-        self.opts, self.config.logdog_platform.credential_path)
+        self.opts, config.logdog_platform.credential_path)
     annotated_run._run_command.assert_has_calls([
         mock.call([
-            'butler',
+            'logdog_butler.exe',
             '-prefix', 'bb/master.some/yesbuilder/1337',
-            '-output', 'pubsub,topic="projects/test/topics/logs"',
+            '-output', 'pubsub,topic="projects/luci-logdog/topics/logs"',
             '-service-account-json', 'creds.json',
             'run',
             '-stdout', 'tee=stdout',
             '-stderr', 'tee=stderr',
             '-streamserver-uri', streamserver_uri,
             '--',
-            'annotee',
+            'logdog_annotee.exe',
                 '-butler-stream-server', streamserver_uri,
                 '-annotate', 'tee',
                 '-name-base', 'recipes',

@@ -48,27 +48,7 @@ WHITELIST_ALL = '*'
 # and builders for experimental LogDog/Annotee export.
 LOGDOG_WHITELIST_MASTER_BUILDERS = {
     'chromium.infra': {
-      # Linux / x86_64
-      'luci-go-trusty64',
-      'luci-gae-trusty64',
-      'infra-continuous-trusty-64',
-      'infra-continuous-precise-64',
-      'conda-cipd-pkg-trusty-64',
-
-      # Linux / 386
-      'luci-go-precise32',
-      'infra-continuous-trusty-32',
-      'infra-continuous-precise-32',
-
-      # Mac / x86_64
-      'luci-go-osx',
-      'infra-continuous-mac-10.6-64',
-      'infra-continuous-mac-10.7-64',
-      'infra-continuous-mac-10.8-64',
-      'infra-continuous-mac-10.9-64',
-      'infra-continuous-mac-10.10-64',
-      'infra-continuous-mac-10.11-64',
-      'conda-cipd-pkg-mac-10.9-64',
+      WHITELIST_ALL,
     },
 }
 
@@ -85,17 +65,30 @@ CipdBinary = collections.namedtuple('CipdBinary',
     ('package', 'version', 'relpath'))
 
 # RecipeRuntime will probe this for values.
-# - First, (system, platform)
+# - First, (),
 # - Then, (system,)
-# - Finally, (),
+# - Finally, (system, platform)
 PLATFORM_CONFIG = {
   # All systems.
   (): {
     'logdog_pubsub_topic': 'projects/luci-logdog/topics/logs',
   },
 
-  ('Linux', 'x86_64'): {
+  ('Linux',): {
     'run_cmd': ['/opt/infra-python/run.py'],
+  },
+  ('Linux', 'i386'): {
+    'logdog_platform': LogDogPlatform(
+        butler=CipdBinary('infra/tools/luci/logdog/butler/linux-386',
+                          'latest', 'logdog_butler'),
+        annotee=CipdBinary('infra/tools/luci/logdog/annotee/linux-386',
+                          'latest', 'logdog_annotee'),
+        credential_path=('/creds/service_accounts/'
+                         'service-account-luci-logdog-publisher.json'),
+        streamserver='unix',
+    ),
+  },
+  ('Linux', 'x86_64'): {
     'logdog_platform': LogDogPlatform(
         butler=CipdBinary('infra/tools/luci/logdog/butler/linux-amd64',
                           'latest', 'logdog_butler'),
@@ -107,21 +100,10 @@ PLATFORM_CONFIG = {
     ),
   },
 
-  ('Linux', 'i386'): {
+  ('Darwin',): {
     'run_cmd': ['/opt/infra-python/run.py'],
-    'logdog_platform': LogDogPlatform(
-        butler=CipdBinary('infra/tools/luci/logdog/butler/linux-386',
-                          'latest', 'logdog_butler'),
-        annotee=CipdBinary('infra/tools/luci/logdog/annotee/linux-386',
-                          'latest', 'logdog_annotee'),
-        credential_path=('/creds/service_accounts/'
-                         'service-account-luci-logdog-publisher.json'),
-        streamserver='unix',
-    ),
   },
-
   ('Darwin', 'x86_64'): {
-    'run_cmd': ['/opt/infra-python/run.py'],
     'logdog_platform': LogDogPlatform(
         butler=CipdBinary('infra/tools/luci/logdog/butler/mac-amd64',
                           'latest', 'logdog_butler'),
@@ -137,6 +119,28 @@ PLATFORM_CONFIG = {
   ('Windows',): {
     'run_cmd': ['C:\\infra-python\\ENV\\Scripts\\python.exe',
                 'C:\\infra-python\\run.py'],
+  },
+  ('Windows', 'i386'): {
+    'logdog_platform': LogDogPlatform(
+        butler=CipdBinary('infra/tools/luci/logdog/butler/windows-386',
+                          'latest', 'logdog_butler.exe'),
+        annotee=CipdBinary('infra/tools/luci/logdog/annotee/windows-386',
+                          'latest', 'logdog_annotee.exe'),
+        credential_path=('c:\\creds\\service_accounts\\'
+                         'service-account-luci-logdog-publisher.json'),
+        streamserver='net.pipe',
+    ),
+  },
+  ('Windows', 'x86_64'): {
+    'logdog_platform': LogDogPlatform(
+        butler=CipdBinary('infra/tools/luci/logdog/butler/windows-amd64',
+                          'latest', 'logdog_butler.exe'),
+        annotee=CipdBinary('infra/tools/luci/logdog/annotee/windows-amd64',
+                          'latest', 'logdog_annotee.exe'),
+        credential_path=('c:\\creds\\service_accounts\\'
+                         'service-account-luci-logdog-publisher.json'),
+        streamserver='net.pipe',
+    ),
   },
 }
 
@@ -210,6 +214,12 @@ class Runtime(object):
     del(self._tempdirs[:])
 
 
+def get_platform():
+  """Returns (system, machine): Values for the current platform.
+  """
+  return (platform.system(), platform.machine())
+
+
 def get_config():
   """Returns (Config): The constructed Config object.
 
@@ -221,7 +231,7 @@ def get_config():
     KeyError: if a required configuration key/parameter is not available.
   """
   # Cascade the platform configuration.
-  p = (platform.system(), platform.machine())
+  p = get_platform()
   platform_config = {}
   for i in xrange(len(p)+1):
     platform_config.update(PLATFORM_CONFIG.get(p[:i], {}))
@@ -261,7 +271,10 @@ def _logdog_get_streamserver_uri(rt, typ):
       raise LogDogBootstrapError('Generated URI exceeds UNIX domain socket '
                                  'name size: %s' % (uri,))
     return uri
-  raise LogDogBootstrapError('No streamserver URI generator.')
+  elif typ == 'net.pipe':
+    return 'net.pipe:LUCILogDogButler'
+  else:
+    raise LogDogBootstrapError('No streamserver URI generator.')
 
 
 def _run_command(cmd, **kwargs):
