@@ -207,30 +207,6 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"win_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"win_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
-      "--test-type=libjingle_media_unittest",
-      "--step-name=libjingle_media_unittest",
-      "--builder-name=win_x64_rel",
-      "--slave-name=slavename",
-      "--run-python-script",
-      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[SLAVE_BUILD]\\src\\out\\Release_x64\\libjingle_media_unittest",
-      "--"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "libjingle_media_unittest"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Release_x64",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"win_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"win_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--test-type=libjingle_p2p_unittest",
       "--step-name=libjingle_p2p_unittest",
       "--builder-name=win_x64_rel",
@@ -315,6 +291,30 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "peerconnection_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"win_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"win_x64_rel\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--test-type=rtc_media_unittests",
+      "--step-name=rtc_media_unittests",
+      "--builder-name=win_x64_rel",
+      "--slave-name=slavename",
+      "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64\\rtc_media_unittests",
+      "--"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rtc_media_unittests"
   },
   {
     "cmd": [

@@ -202,31 +202,6 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--test-type=libjingle_media_unittest",
-      "--step-name=libjingle_media_unittest",
-      "--builder-name=Win32 Release",
-      "--slave-name=slavename",
-      "--build-number=1337",
-      "--run-python-script",
-      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[SLAVE_BUILD]\\src\\out\\Release\\libjingle_media_unittest",
-      "--"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "libjingle_media_unittest"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Release",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--test-type=libjingle_p2p_unittest",
       "--step-name=libjingle_p2p_unittest",
       "--builder-name=Win32 Release",
@@ -315,6 +290,31 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "peerconnection_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--test-type=rtc_media_unittests",
+      "--step-name=rtc_media_unittests",
+      "--builder-name=Win32 Release",
+      "--slave-name=slavename",
+      "--build-number=1337",
+      "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "[SLAVE_BUILD]\\src\\third_party\\gtest-parallel\\gtest-parallel",
+      "[SLAVE_BUILD]\\src\\out\\Release\\rtc_media_unittests",
+      "--"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rtc_media_unittests"
   },
   {
     "cmd": [

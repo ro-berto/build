@@ -231,31 +231,6 @@
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"linux_ubsan_vptr\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"linux_ubsan_vptr\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
-      "--test-type=libjingle_media_unittest",
-      "--step-name=libjingle_media_unittest",
-      "--builder-name=linux_ubsan_vptr",
-      "--slave-name=slavename",
-      "--run-python-script",
-      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Release/libjingle_media_unittest",
-      "--"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "libjingle_media_unittest"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--xvfb",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"linux_ubsan_vptr\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"linux_ubsan_vptr\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
       "--test-type=libjingle_p2p_unittest",
       "--step-name=libjingle_p2p_unittest",
       "--builder-name=linux_ubsan_vptr",
@@ -343,6 +318,31 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "peerconnection_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"linux_ubsan_vptr\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"linux_ubsan_vptr\", \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"slavename\"}",
+      "--test-type=rtc_media_unittests",
+      "--step-name=rtc_media_unittests",
+      "--builder-name=linux_ubsan_vptr",
+      "--slave-name=slavename",
+      "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Release/rtc_media_unittests",
+      "--"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rtc_media_unittests"
   },
   {
     "cmd": [
