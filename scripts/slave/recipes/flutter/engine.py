@@ -193,6 +193,9 @@ def GetCheckout(api):
 
 
 def RunSteps(api):
+  if api.properties.get('clobber'):
+    api.file.rmcontents('everything', api.path['slave_build'])
+
   GetCheckout(api)
 
   checkout = api.path['checkout']
@@ -221,4 +224,4 @@ def GenTests(api):
     yield (api.test(platform) + api.platform(platform, 64)
         + api.properties(mastername='client.flutter',
               buildername='%s Engine' % platform.capitalize(),
-              slavename='fake-m1'))
+              slavename='fake-m1', clobber=True))

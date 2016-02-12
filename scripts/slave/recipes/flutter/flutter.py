@@ -10,6 +10,7 @@ DEPS = [
   'gsutil',
   'recipe_engine/path',
   'recipe_engine/platform',
+  'recipe_engine/properties',
   'recipe_engine/step',
 ]
 
@@ -108,6 +109,9 @@ def GenerateDocs(api, pub_cache):
 
 
 def RunSteps(api):
+  if api.properties.get('clobber'):
+    api.file.rmcontents('everything', api.path['slave_build'])
+
   api.git.checkout(
       'https://chromium.googlesource.com/external/github.com/flutter/flutter',
       recursive=True)
@@ -149,4 +153,5 @@ def RunSteps(api):
 
 def GenTests(api):
   for platform in ('mac', 'linux'):
-    yield api.test(platform) + api.platform(platform, 64)
+    yield (api.test(platform) + api.platform(platform, 64) +
+        api.properties(clobber=True))
