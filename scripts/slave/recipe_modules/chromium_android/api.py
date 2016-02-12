@@ -981,8 +981,9 @@ class AndroidApi(recipe_api.RecipeApi):
                      output=cts_extract_dir)
 
     cts_path = cts_extract_dir.join('android-cts', 'tools', 'cts-tradefed')
-    env = {'PATH': self.m.path.pathsep.join([str(self.m.adb.adb_path()),
-                                             '%(PATH)s'])}
+    adb_path = self.m.path['slave_build'].join(
+        'src', 'third_party', 'android_tools', 'sdk', 'platform-tools')
+    env = {'PATH': self.m.path.pathsep.join([str(adb_path), '%(PATH)s'])}
 
     try:
       result = self.m.step(
