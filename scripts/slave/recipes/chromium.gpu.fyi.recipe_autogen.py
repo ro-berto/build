@@ -65,7 +65,8 @@ def Win7_Audio_steps(api):
   # compile.py step
   args = ['--solution', 'all.sln', '--project', 'chromium_builder_tests',
       '--target', 'Release']
-  if api.properties.get("clobber"):
+  # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
+  if 'clobber' in api.properties:
     args.append("--clobber")
   api.step("compile", ["python_slave",
     api.path["build"].join("scripts", "slave", "compile.py")] + args)
@@ -149,7 +150,9 @@ def Linux_Audio_steps(api):
   api.chromium.cleanup_temp()
   # compile.py step
   args = ['--target', 'Release', 'content_unittests', 'media_unittests']
-  if api.properties.get("clobber"):
+
+  # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
+  if 'clobber' in api.properties:
     args.append("--clobber")
   api.python("compile",
       api.path["build"].join("scripts", "slave", "compile.py"), args=args)

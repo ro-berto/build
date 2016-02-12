@@ -193,7 +193,8 @@ def GetCheckout(api):
 
 
 def RunSteps(api):
-  if api.properties.get('clobber'):
+  # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
+  if 'clobber' in api.properties:
     api.file.rmcontents('everything', api.path['slave_build'])
 
   GetCheckout(api)
@@ -224,4 +225,4 @@ def GenTests(api):
     yield (api.test(platform) + api.platform(platform, 64)
         + api.properties(mastername='client.flutter',
               buildername='%s Engine' % platform.capitalize(),
-              slavename='fake-m1', clobber=True))
+              slavename='fake-m1', clobber=''))

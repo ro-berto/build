@@ -21,6 +21,7 @@ def RunSteps(api):
   api.gclient.set_config('crashpad')
   api.gclient.checkout()
 
+  # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
     api.file.rmtree('out', api.path['checkout'].join('out'))
 

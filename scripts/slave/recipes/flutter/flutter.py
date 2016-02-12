@@ -109,7 +109,8 @@ def GenerateDocs(api, pub_cache):
 
 
 def RunSteps(api):
-  if api.properties.get('clobber'):
+  # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
+  if 'clobber' in api.properties:
     api.file.rmcontents('everything', api.path['slave_build'])
 
   api.git.checkout(
@@ -154,4 +155,4 @@ def RunSteps(api):
 def GenTests(api):
   for platform in ('mac', 'linux'):
     yield (api.test(platform) + api.platform(platform, 64) +
-        api.properties(clobber=True))
+        api.properties(clobber=''))

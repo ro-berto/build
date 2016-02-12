@@ -53,7 +53,8 @@ def full_checkout(api):
   api.repo.sync()
 
 def clobber(api):
-  if api.properties.get("clobber"):
+  # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
+  if 'clobber' in api.properties:
     api.file.rmtree('clobber', api.path['slave_build'].join('out'))
 
 def warn_only_step(api):
@@ -413,8 +414,11 @@ def GenTests(api):
                 mastername=mastername,
                 buildername=buildername,
                 slavename='TestSlave',
-                clobber=clb,
-              )
+                # Buildbot uses clobber='' to mean clobber, however
+                # api.properties(clobber=None) will set clobber=None!
+                # so we have to not even mention it to avoid our
+                # 'clobber' in api.properties logic triggering above.
+              ) + (api.properties(clobber='') if clb else api.properties())
             )
   yield (
       api.test('x86_32_test_failure') +
