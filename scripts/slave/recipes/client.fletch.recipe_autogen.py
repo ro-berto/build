@@ -23,7 +23,7 @@ def target_dartino_linux_debug_arm_dev_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -63,7 +63,7 @@ def dartino_mac_debug_asan_x86_dev_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -99,7 +99,7 @@ def target_dartino_linux_release_arm_dev_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -138,7 +138,7 @@ def dartino_lk_debug_arm_qemu_dev_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -177,7 +177,7 @@ def dartino_linux_release_asan_x86_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -216,7 +216,7 @@ def dartino_mac_release_x86_dev_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -252,7 +252,7 @@ def cross_dartino_linux_arm_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -295,7 +295,7 @@ def dartino_mac_release_asan_x86_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -331,7 +331,7 @@ def cross_dartino_linux_arm_dev_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -374,7 +374,7 @@ def dartino_free_rtos_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -413,7 +413,7 @@ def dartino_mac_release_x64_sdk_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -449,7 +449,7 @@ def dartino_free_rtos_dev_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -488,7 +488,7 @@ def dartino_mac_debug_asan_x86_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -524,7 +524,7 @@ def dartino_mac_debug_x86_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -560,7 +560,7 @@ def target_dartino_linux_debug_arm_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -603,7 +603,7 @@ def dartino_win_debug_x86_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -639,7 +639,7 @@ def dartino_linux_release_x86_dev_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -678,7 +678,7 @@ def dartino_mac_debug_x86_dev_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -714,7 +714,7 @@ def dartino_linux_release_x64_sdk_dev_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -756,7 +756,7 @@ def dartino_linux_debug_asan_x86_dev_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -795,7 +795,7 @@ def dartino_linux_debug_asan_x86_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -834,7 +834,7 @@ def dartino_mac_release_asan_x86_dev_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -870,7 +870,7 @@ def target_dartino_linux_release_arm_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -909,7 +909,7 @@ def dartino_mac_release_x86_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -945,7 +945,7 @@ def dartino_linux_release_x64_sdk_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -987,7 +987,7 @@ def dartino_lk_debug_arm_qemu_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -1026,7 +1026,7 @@ def dartino_mac_release_x64_sdk_dev_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -1062,7 +1062,7 @@ def dartino_linux_release_asan_x86_dev_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -1101,7 +1101,7 @@ def dartino_linux_debug_x86_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -1140,7 +1140,7 @@ def dartino_linux_release_x86_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -1179,7 +1179,7 @@ def dartino_linux_debug_x86_dev_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update
@@ -1222,7 +1222,7 @@ def dartino_win_debug_x86_dev_steps(api):
   soln.custom_deps = {}
   soln.custom_vars = {}
   api.gclient.c = src_cfg
-  result = api.bot_update.ensure_checkout(force=True)
+  result = api.bot_update.ensure_checkout(force=True, no_shallow=True)
   build_properties.update(result.json.output.get("properties", {}))
   # gclient revert step; made unnecessary by bot_update
   # gclient update step; made unnecessary by bot_update

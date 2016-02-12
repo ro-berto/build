@@ -23,6 +23,7 @@
       "--revision",
       "sdk@123456789abcdef",
       "--force",
+      "--no_shallow",
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
