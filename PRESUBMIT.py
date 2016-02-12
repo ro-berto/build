@@ -173,9 +173,7 @@ def BuildInternalCheck(output, input_api, output_api):
 
 
 def CheckChangeOnUpload(input_api, output_api):
-  output = CommonChecks(input_api, output_api)
-  output.extend(BuildInternalCheck(output, input_api, output_api))
-  return output
+  return [] # Try-jobs/commit-queue do a better job of testing, faster.
 
 
 def CheckChangeOnCommit(input_api, output_api):
