@@ -110,9 +110,9 @@ PLATFORM_CONFIG = {
   ('Linux', 'i386'): {
     'run_cmd': ['/opt/infra-python/run.py'],
     'logdog_platform': LogDogPlatform(
-        butler=CipdBinary('infra/tools/luci/logdog/butler/linux-i386',
+        butler=CipdBinary('infra/tools/luci/logdog/butler/linux-386',
                           'latest', 'logdog_butler'),
-        annotee=CipdBinary('infra/tools/luci/logdog/annotee/linux-i386',
+        annotee=CipdBinary('infra/tools/luci/logdog/annotee/linux-386',
                           'latest', 'logdog_annotee'),
         credential_path=('/creds/service_accounts/'
                          'service-account-luci-logdog-publisher.json'),
