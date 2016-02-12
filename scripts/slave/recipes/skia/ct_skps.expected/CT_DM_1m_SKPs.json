@@ -245,16 +245,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "zip skps dir",
-    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/skps/slave1\", \"type\": \"dir\"}], \"output\": \"[SLAVE_BUILD]/skps/slave1.zip\", \"root\": \"[SLAVE_BUILD]/skps/slave1\", \"use_python_zip\": false}"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/swarming_temp_dir",
       "511"
@@ -325,16 +315,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil rsync (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "zip skps dir (2)",
-    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/skps/slave2\", \"type\": \"dir\"}], \"output\": \"[SLAVE_BUILD]/skps/slave2.zip\", \"root\": \"[SLAVE_BUILD]/skps/slave2\", \"use_python_zip\": false}"
   },
   {
     "cmd": [
@@ -415,16 +395,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "zip skps dir (3)",
-    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/skps/slave3\", \"type\": \"dir\"}], \"output\": \"[SLAVE_BUILD]/skps/slave3.zip\", \"root\": \"[SLAVE_BUILD]/skps/slave3\", \"use_python_zip\": false}"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/swarming_temp_dir",
       "511"
@@ -500,16 +470,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "zip skps dir (4)",
-    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/skps/slave4\", \"type\": \"dir\"}], \"output\": \"[SLAVE_BUILD]/skps/slave4.zip\", \"root\": \"[SLAVE_BUILD]/skps/slave4\", \"use_python_zip\": false}"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
       "[SLAVE_BUILD]/swarming_temp_dir",
       "511"
@@ -580,16 +540,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil rsync (5)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "zip skps dir (5)",
-    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/skps/slave5\", \"type\": \"dir\"}], \"output\": \"[SLAVE_BUILD]/skps/slave5.zip\", \"root\": \"[SLAVE_BUILD]/skps/slave5\", \"use_python_zip\": false}"
   },
   {
     "cmd": [

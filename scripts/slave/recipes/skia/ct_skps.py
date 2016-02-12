@@ -17,7 +17,6 @@ DEPS = [
   'swarming',
   'swarming_client',
   'depot_tools/tryserver',
-  'zip',
 ]
 
 
@@ -102,7 +101,6 @@ def RunSteps(api):
   skps_chromium_build = api.properties.get(
       'skps_chromium_build', DEFAULT_SKPS_CHROMIUM_BUILD)
   ct_num_slaves = api.properties.get('ct_num_slaves', DEFAULT_CT_NUM_SLAVES)
-  skps_dir = api.path['slave_build'].join('skps')
 
   # Set build property to make finding SKPs convenient.
   api.step.active_result.presentation.properties['Location of SKPs'] = (
@@ -115,12 +113,8 @@ def RunSteps(api):
   for slave_num in range(1, ct_num_slaves + 1):
     # Download SKPs.
     api.ct_swarming.download_skps(
-        ct_page_type, slave_num, skps_chromium_build, skps_dir)
-
-    # Zip up the SKPs due to https://github.com/luci/luci-go/issues/9
-    api.zip.directory(step_name='zip skps dir',
-                      directory=skps_dir.join('slave%s' % slave_num),
-                      output=skps_dir.join('slave%s.zip' % slave_num))
+        ct_page_type, slave_num, skps_chromium_build,
+        api.path['slave_build'].join('skps'))
 
     # Create this slave's isolated.gen.json file to use for batcharchiving.
     isolate_dir = chromium_checkout.join('chrome')
