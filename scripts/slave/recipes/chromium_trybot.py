@@ -218,13 +218,7 @@ def _RunStepsInternal(api):
     else:
       tests = []
 
-  api.python.succeeding_step('mark: before_tests', '')
-
-  if not tests:
-    return
-
-  api.chromium_tests.run_tests_on_tryserver(
-      bot_config_object, api, tests, bot_update_step, affected_files)
+  return bot_config_object, bot_update_step, affected_files, tests
 
 
 def RunSteps(api):
@@ -237,7 +231,15 @@ def RunSteps(api):
     return
 
   with api.tryserver.set_failure_hash():
-    return _RunStepsInternal(api)
+    try:
+      bot_config_object, bot_update_step, affected_files, tests = \
+          _RunStepsInternal(api)
+    finally:
+      api.python.succeeding_step('mark: before_tests', '')
+
+    if tests:
+      api.chromium_tests.run_tests_on_tryserver(
+          bot_config_object, api, tests, bot_update_step, affected_files)
 
 
 def _sanitize_nonalpha(text):

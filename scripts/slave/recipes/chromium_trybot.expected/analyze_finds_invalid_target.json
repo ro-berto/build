@@ -258,7 +258,18 @@
       "@@@STEP_LOG_LINE@json.output@    \"another one\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "mark: before_tests",
+    "~followup_annotations": [
       "@@@SET_BUILD_PROPERTY@failure_hash@\"3908b365fae78e6b96f5e3b38db5b33131cde606\"@@@"
     ]
   },

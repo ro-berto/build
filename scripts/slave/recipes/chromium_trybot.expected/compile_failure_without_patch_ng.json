@@ -470,7 +470,18 @@
       "@@@STEP_LOG_LINE@exception@TypeError(\"'NoneType' object has no attribute '__getitem__'\",)@@@",
       "@@@STEP_LOG_END@exception@@@",
       "@@@STEP_WARNINGS@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"COMPILE_FAILURE\"@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"COMPILE_FAILURE\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "mark: before_tests",
+    "~followup_annotations": [
       "@@@SET_BUILD_PROPERTY@failure_hash@\"5efacf6fa93d551b32a0023e205679db72d8ac1f\"@@@"
     ]
   },
