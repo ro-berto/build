@@ -545,6 +545,14 @@ def clang_tot(c):
   if c.TARGET_PLATFORM != 'win':
     c.gyp_env.GYP_DEFINES['clang_use_chrome_plugins'] = 0
 
+@config_ctx(includes=['ninja', 'clang', 'asan', 'static_library'])
+def win_asan(c):
+  # These are set on the lkgr bot, and the fyi bots should match the lkgr bot.
+  # TODO(thakis): Once the lkgr bot uses recipes, the lkgr and the fyi bots
+  # should use the same context to ensure they use the same gyp defines.
+  c.gyp_env.GYP_DEFINES['enable_ipc_fuzzer'] = 1
+  c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
+
 #### 'Full' configurations
 @config_ctx(includes=['ninja', 'default_compiler'])
 def chromium_no_goma(c):
@@ -555,40 +563,28 @@ def chromium(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
   c.cros_sdk.external = True
 
-@config_ctx(includes=['ninja', 'clang'])  # Intentionally no goma yet.
+@config_ctx(includes=['ninja', 'clang', 'goma'])
 def chromium_win_clang(c):
   fastbuild(c, final=False)  # final=False so win_clang_asan can override it.
 
-@config_ctx(includes=['chromium_win_clang', 'clang_tot'])
+@config_ctx(includes=['ninja', 'clang', 'clang_tot'])  # No goma.
 def chromium_win_clang_tot(c):
-  pass
+  fastbuild(c)
 
 @config_ctx(includes=['chromium_win_clang', 'official'])
 def chromium_win_clang_official(c):
   pass
 
-@config_ctx(includes=['chromium_win_clang', 'official', 'clang_tot'])
+@config_ctx(includes=['chromium_win_clang_tot', 'official'])
 def chromium_win_clang_official_tot(c):
   pass
 
-@config_ctx(includes=['chromium_win_clang', 'asan', 'static_library'])
-def chromium_win_clang_asan(c):
-  # These are set on the lkgr bot, and the fyi bots should match the lkgr bot.
-  # TODO(thakis): Once the lkgr bot uses recipes, the lkgr and the fyi bots
-  # should use the same context to ensure they use the same gyp defines.
-  c.gyp_env.GYP_DEFINES['enable_ipc_fuzzer'] = 1
-  c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
-
-@config_ctx(includes=['chromium_win_clang_asan', 'clang_tot'])
+@config_ctx(includes=['win_asan', 'clang_tot'])  # No goma.
 def chromium_win_clang_asan_tot(c):
   pass
 
 @config_ctx(includes=['chromium_win_clang_asan_tot', 'sanitizer_coverage'])
 def chromium_win_clang_asan_tot_coverage(c):
-  pass
-
-@config_ctx(includes=['chromium_win_clang', 'goma'])
-def chromium_win_clang_goma(c):
   pass
 
 @config_ctx(includes=['ninja', 'clang', 'clang_tot'])  # No goma.
@@ -597,7 +593,7 @@ def clang_tot_linux(c):
 
 @config_ctx(includes=['ninja', 'clang', 'clang_tot'])  # No goma.
 def clang_tot_mac(c):
-  c.gyp_env.GYP_DEFINES['fastbuild'] = 1
+  fastbuild(c, final=False)  # final=False so clang_tot_mac_asan can override.
 
 @config_ctx()
 def asan_test_batch(c):

@@ -1083,7 +1083,7 @@ SPEC = {
       }
     },
     'CrWinClangGoma': {
-      'chromium_config': 'chromium_win_clang_goma',
+      'chromium_config': 'chromium_win_clang',
       'chromium_apply_config': ['goma_canary', 'clobber', 'shared_library'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
