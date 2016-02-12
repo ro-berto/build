@@ -116,7 +116,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "build Debug"
+    "name": "build Debug generate_dart_ui"
   },
   {
     "cmd": [
@@ -259,7 +259,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "build android_Release"
+    "name": "build android_Release apks/SkyShell.apk flutter.mojo sky/services/gcm sky/services/firebase"
   },
   {
     "cmd": [

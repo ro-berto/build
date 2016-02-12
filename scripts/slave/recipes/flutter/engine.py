@@ -30,7 +30,7 @@ def Build(api, config, *targets):
   build_dir = checkout.join('out/%s' % config)
   ninja_args = ['ninja', '-C', build_dir]
   ninja_args.extend(targets)
-  api.step('build %s' % config, ninja_args)
+  api.step('build %s' % ' '.join([config] + list(targets)), ninja_args)
 
 
 def RunGN(api, *args):
