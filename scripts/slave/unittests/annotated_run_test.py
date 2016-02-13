@@ -23,6 +23,7 @@ from common import chromium_utils
 from common import env
 from slave import annotated_run
 from slave import gce
+from slave import infra_platform
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -77,7 +78,7 @@ class _AnnotatedRunExecTestBase(unittest.TestCase):
     self._patchers = []
     map(self._patch, (
         mock.patch('slave.annotated_run._run_command'),
-        mock.patch('slave.annotated_run.get_platform'),
+        mock.patch('slave.infra_platform.get'),
         mock.patch('os.path.exists'),
         mock.patch('os.getcwd'),
         ))
@@ -109,7 +110,7 @@ class _AnnotatedRunExecTestBase(unittest.TestCase):
     os.path.exists.return_value = False
 
     # Pretend we're 64-bit Linux by default.
-    annotated_run.get_platform.return_value = ('Linux', 'x86_64')
+    infra_platform.get.return_value = ('linux', 64)
 
   def tearDown(self):
     self.rt.close()
@@ -274,7 +275,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
     self.properties['buildername'] = 'yesbuilder'
 
     # Test Windows builder this time.
-    annotated_run.get_platform.return_value = ('Windows', 'x86_64')
+    infra_platform.get.return_value = ('win', 64)
 
     cipd.return_value = ('logdog_butler.exe', 'logdog_annotee.exe')
     service_account.return_value = 'creds.json'
