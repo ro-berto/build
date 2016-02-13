@@ -78,9 +78,9 @@ def AnalyzeDartUI(api):
 
 
 def BuildLinuxAndroid(api):
-  RunGN(api, '--release', '--android', '--enable-firebase', '--enable-gcm')
+  RunGN(api, '--release', '--android', '--enable-firebase')
   Build(api, 'android_Release', 'apks/SkyShell.apk', 'flutter.mojo',
-      'sky/services/gcm', 'sky/services/firebase')
+      'sky/services/firebase')
   UploadArtifacts(api, 'android-arm', [
     'build/android/ant/chromium-debug.keystore',
     'out/android_Release/apks/SkyShell.apk',
@@ -110,7 +110,6 @@ def BuildLinuxAndroid(api):
     Upload(ServicesOut(dex_jar), dex_jar)
     Upload(ServicesOut(interfaces_jar), interfaces_jar)
 
-  UploadService('gcm')
   UploadService('firebase')
 
 

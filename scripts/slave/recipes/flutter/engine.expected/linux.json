@@ -236,14 +236,13 @@
       "[SLAVE_BUILD]/src/sky/tools/gn",
       "--release",
       "--android",
-      "--enable-firebase",
-      "--enable-gcm"
+      "--enable-firebase"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gn --release --android --enable-firebase --enable-gcm"
+    "name": "gn --release --android --enable-firebase"
   },
   {
     "cmd": [
@@ -252,14 +251,13 @@
       "[SLAVE_BUILD]/src/out/android_Release",
       "apks/SkyShell.apk",
       "flutter.mojo",
-      "sky/services/gcm",
       "sky/services/firebase"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "build android_Release apks/SkyShell.apk flutter.mojo sky/services/gcm sky/services/firebase"
+    "name": "build android_Release apks/SkyShell.apk flutter.mojo sky/services/firebase"
   },
   {
     "cmd": [
@@ -315,48 +313,6 @@
       "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
       "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
       "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cp",
-      "[SLAVE_BUILD]/src/out/android_Release/gen/sky/services/gcm/gcm_lib.dex.jar",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/gcm/gcm_lib.dex.jar"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
-    },
-    "name": "gsutil upload gcm/gcm_lib.dex.jar",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/gcm/gcm_lib.dex.jar@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cp",
-      "[SLAVE_BUILD]/src/out/android_Release/gen/sky/services/gcm/interfaces_java.dex.jar",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/gcm/interfaces_java.dex.jar"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
-    },
-    "name": "gsutil upload gcm/interfaces_java.dex.jar",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/gcm/interfaces_java.dex.jar@@@"
     ]
   },
   {
