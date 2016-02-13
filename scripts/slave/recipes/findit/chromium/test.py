@@ -5,6 +5,7 @@
 import json
 
 from recipe_engine.config import Dict
+from recipe_engine.config import Single
 from recipe_engine.recipe_api import Property
 
 
@@ -48,6 +49,9 @@ PROPERTIES = {
              '    "suite.test1", "suite.test2"'
              '  ]'
              '}'),
+    'use_analyze': Property(
+        kind=Single(bool, empty_val=False, required=False), default=True,
+        help='Use analyze to skip commits that do not affect tests.'),
 }
 
 
@@ -58,7 +62,8 @@ class TestResult(object):
 
 
 def _compile_and_test_at_revision(api, target_mastername, target_buildername,
-                                  target_testername, revision, requested_tests):
+                                  target_testername, revision, requested_tests,
+                                  use_analyze):
   results = {}
   with api.step.nest('test %s' % str(revision)):
     # Checkout code at the given revision to recompile.
@@ -69,29 +74,62 @@ def _compile_and_test_at_revision(api, target_mastername, target_buildername,
 
     # Figure out which test steps to run.
     _, all_tests = api.chromium_tests.get_tests(bot_config, bot_db)
-    tests_to_run = [test for test in all_tests if test.name in requested_tests]
+    requested_tests_to_run = [
+        test for test in all_tests if test.name in requested_tests]
 
-    # Figure out which targets to compile.
-    compile_targets = []
-    for test in tests_to_run:
-      compile_targets.extend(test.compile_targets(api))
-    compile_targets = sorted(set(compile_targets))
+    # Figure out the test targets to be compiled.
+    requested_test_targets = []
+    for test in requested_tests_to_run:
+      requested_test_targets.extend(test.compile_targets(api))
+    requested_test_targets = sorted(set(requested_test_targets))
 
-    if compile_targets:
+    actual_tests_to_run = requested_tests_to_run
+    actual_compile_targets = requested_test_targets
+    # Use dependency "analyze" to reduce tests to be run.
+    if use_analyze:
+      changed_files = api.findit.files_changed_by_revision(revision)
+
+      affected_test_targets, actual_compile_targets = (
+          api.chromium_tests.analyze(
+              changed_files,
+              test_targets=requested_test_targets,
+              additional_compile_targets=[],
+              config_file_name='trybot_analyze_config.json',
+              mb_mastername=target_mastername,
+              mb_buildername=target_buildername,
+              additional_names=None))
+
+      actual_tests_to_run = []
+      for test in requested_tests_to_run:
+        targets = test.compile_targets(api)
+        if not targets:
+          # No compile is needed for the test. Eg: checkperms.
+          actual_tests_to_run.append(test)
+          continue
+
+        # Check if the test is affected by the given revision.
+        for target in targets:
+          if target in affected_test_targets:
+            actual_tests_to_run.append(test)
+            break
+
+    if actual_compile_targets:
       api.chromium_tests.compile_specific_targets(
           bot_config,
           bot_update_step,
           bot_db,
-          compile_targets,
-          tests_including_triggered=tests_to_run,
+          actual_compile_targets,
+          tests_including_triggered=actual_tests_to_run,
           mb_mastername=target_mastername,
           mb_buildername=target_buildername,
           override_bot_type='builder_tester')
 
     # Run the tests.
-    with api.chromium_tests.wrap_chromium_tests(bot_config, tests_to_run):
+    with api.chromium_tests.wrap_chromium_tests(
+        bot_config, actual_tests_to_run):
       failed_tests = api.test_utils.run_tests(
-          api, tests_to_run, suffix=revision, test_filters=requested_tests)
+          api, actual_tests_to_run,
+          suffix=revision, test_filters=requested_tests)
 
     # Process failed tests.
     for failed_test in failed_tests:
@@ -105,14 +143,16 @@ def _compile_and_test_at_revision(api, target_mastername, target_buildername,
             failed_test.failures(api, suffix=revision))
 
     # Process passed tests.
-    for test in tests_to_run:
+    for test in actual_tests_to_run:
       if test not in failed_tests:
         results[test.name] = {
             'status': TestResult.PASSED,
             'valid': True,
         }
 
-    # Process skipped tests.
+    # Process skipped tests in two scenarios:
+    # 1. Skipped by "analyze": tests are not affected by the given revision.
+    # 2. Skipped because the requested tests don't exist at the given revision.
     for test_name in requested_tests.keys():
       if test_name not in results:
         results[test_name] = {
@@ -124,7 +164,7 @@ def _compile_and_test_at_revision(api, target_mastername, target_buildername,
 
 
 def RunSteps(api, target_mastername, target_testername,
-             good_revision, bad_revision, requested_tests):
+             good_revision, bad_revision, requested_tests, use_analyze):
   assert requested_tests, 'No failed tests were specified.'
 
   # Figure out which builder configuration we should match for compile config.
@@ -176,7 +216,7 @@ def RunSteps(api, target_mastername, target_testername,
     for current_revision in revisions_to_check:
       test_results[current_revision] = _compile_and_test_at_revision(
           api, target_mastername, target_buildername, target_testername,
-          current_revision, requested_tests)
+          current_revision, requested_tests, use_analyze)
       # TODO(http://crbug.com/566975): check whether culprits for all failed
       # tests are found and stop running tests at later revisions if so.
   finally:
@@ -192,7 +232,7 @@ def RunSteps(api, target_mastername, target_testername,
 
 
 def GenTests(api):
-  def props(tests, platform_name, tester_name):
+  def props(tests, platform_name, tester_name, use_analyze=False):
     properties = {
         'mastername': 'tryserver.chromium.%s' % platform_name,
         'buildername': '%s_chromium_variable' % platform_name,
@@ -203,6 +243,7 @@ def GenTests(api):
         'good_revision': 'r0',
         'bad_revision': 'r1',
         'tests': tests,
+        'use_analyze': use_analyze,
     }
     return api.properties(**properties)
 
@@ -242,6 +283,68 @@ def GenTests(api):
               ],
           },
       }))
+  )
+
+  yield (
+      api.test('unaffected_test_skipped_by_analyze') +
+      props({'affected_tests': ['Test.One'], 'unaffected_tests': ['Test.Two']},
+            'win', 'Win7 Tests (1)', use_analyze=True) +
+      api.override_step_data('test r1.read test spec', api.json.output({
+          'Win7 Tests (1)': {
+              'gtest_tests': [
+                  {
+                    'test': 'affected_tests',
+                    'swarming': {'can_use_on_swarming_builders': True},
+                  },
+                  {
+                    'test': 'unaffected_tests',
+                    'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+          },
+      })) +
+      api.override_step_data(
+          'test r1.analyze',
+          api.json.output({
+              'status': 'Found dependency',
+              'compile_targets': ['affected_tests', 'affected_tests_run'],
+              'test_targets': ['affected_tests', 'affected_tests_run'],
+          })
+      ) +
+      api.override_step_data(
+          'test r1.affected_tests (r1)',
+          simulated_gtest_output(passed_test_names=['Test.One'])
+      )
+  )
+
+  yield (
+      api.test('test_without_targets_not_skipped') +
+      props({'unaffected_tests': ['Test.One'], 'checkperms': []},
+            'win', 'Win7 Tests (1)', use_analyze=True) +
+      api.override_step_data('test r1.read test spec', api.json.output({
+          'Win7 Tests (1)': {
+              'gtest_tests': [
+                  {
+                    'test': 'unaffected_tests',
+                    'swarming': {'can_use_on_swarming_builders': True},
+                  },
+              ],
+              'scripts': [
+                  {
+                      'name': 'checkperms',
+                      'script': 'checkperms.py'
+                  },
+              ]
+          },
+      })) +
+      api.override_step_data(
+          'test r1.analyze',
+          api.json.output({
+              'status': 'No dependencies',
+              'compile_targets': [],
+              'test_targets': [],
+          })
+      )
   )
 
   yield (
