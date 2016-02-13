@@ -9,7 +9,6 @@ import contextlib
 import json
 import logging
 import os
-import platform
 import shutil
 import socket
 import subprocess
@@ -27,6 +26,7 @@ from common import chromium_utils
 from common import env
 from common import master_cfg_utils
 from slave import gce
+from slave import infra_platform
 
 # Logging instance.
 LOGGER = logging.getLogger('annotated_run')
@@ -74,10 +74,11 @@ PLATFORM_CONFIG = {
     'logdog_pubsub_topic': 'projects/luci-logdog/topics/logs',
   },
 
-  ('Linux',): {
+  # Linux
+  ('linux',): {
     'run_cmd': ['/opt/infra-python/run.py'],
   },
-  ('Linux', 'i386'): {
+  ('linux', 32): {
     'logdog_platform': LogDogPlatform(
         butler=CipdBinary('infra/tools/luci/logdog/butler/linux-386',
                           'latest', 'logdog_butler'),
@@ -88,7 +89,7 @@ PLATFORM_CONFIG = {
         streamserver='unix',
     ),
   },
-  ('Linux', 'x86_64'): {
+  ('linux', 64): {
     'logdog_platform': LogDogPlatform(
         butler=CipdBinary('infra/tools/luci/logdog/butler/linux-amd64',
                           'latest', 'logdog_butler'),
@@ -100,10 +101,11 @@ PLATFORM_CONFIG = {
     ),
   },
 
-  ('Darwin',): {
+  # Mac
+  ('mac',): {
     'run_cmd': ['/opt/infra-python/run.py'],
   },
-  ('Darwin', 'x86_64'): {
+  ('mac', 64): {
     'logdog_platform': LogDogPlatform(
         butler=CipdBinary('infra/tools/luci/logdog/butler/mac-amd64',
                           'latest', 'logdog_butler'),
@@ -116,11 +118,11 @@ PLATFORM_CONFIG = {
   },
 
   # Windows
-  ('Windows',): {
+  ('win',): {
     'run_cmd': ['C:\\infra-python\\ENV\\Scripts\\python.exe',
                 'C:\\infra-python\\run.py'],
   },
-  ('Windows', 'i386'): {
+  ('win', 32): {
     'logdog_platform': LogDogPlatform(
         butler=CipdBinary('infra/tools/luci/logdog/butler/windows-386',
                           'latest', 'logdog_butler.exe'),
@@ -131,7 +133,7 @@ PLATFORM_CONFIG = {
         streamserver='net.pipe',
     ),
   },
-  ('Windows', 'x86_64'): {
+  ('win', 64): {
     'logdog_platform': LogDogPlatform(
         butler=CipdBinary('infra/tools/luci/logdog/butler/windows-amd64',
                           'latest', 'logdog_butler.exe'),
@@ -214,24 +216,17 @@ class Runtime(object):
     del(self._tempdirs[:])
 
 
-def get_platform():
-  """Returns (system, machine): Values for the current platform.
-  """
-  return (platform.system(), platform.machine())
-
-
 def get_config():
   """Returns (Config): The constructed Config object.
 
-  The Config object is constructed from:
-  - Cascading the PLATFORM_CONFIG fields together based on current
-        OS/Architecture.
+  The Config object is constructed by cascading the PLATFORM_CONFIG fields
+  together based on current OS/Architecture.
 
   Raises:
     KeyError: if a required configuration key/parameter is not available.
   """
   # Cascade the platform configuration.
-  p = get_platform()
+  p = infra_platform.get()
   platform_config = {}
   for i in xrange(len(p)+1):
     platform_config.update(PLATFORM_CONFIG.get(p[:i], {}))
