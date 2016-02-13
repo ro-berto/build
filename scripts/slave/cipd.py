@@ -12,6 +12,7 @@ import collections
 import json
 import logging
 import os
+import platform
 import subprocess
 import sys
 import tempfile
@@ -22,7 +23,6 @@ BUILD_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(
 sys.path.insert(0, os.path.join(BUILD_ROOT, 'scripts'))
 
 import common.env
-import slave.infra_platform
 
 # Instance-wide logger.
 LOGGER = logging.getLogger('cipd')
@@ -31,12 +31,31 @@ LOGGER = logging.getLogger('cipd')
 CipdPackage = collections.namedtuple('CipdPackage', ('name', 'version'))
 
 
+def get_normalized_platform(plat, machine):
+  if plat.startswith('linux'):
+    plat = 'linux'
+  elif plat.startswith(('win', 'cygwin')):
+    plat = 'win'
+  elif plat.startswith(('darwin', 'mac')):
+    plat = 'mac'
+  else:  # pragma: no cover
+    raise ValueError("Don't understand platform [%s]" % (plat,))
+
+  if machine == 'x86_64':
+    bits = 64
+  elif machine == 'i386':
+    bits = 32
+  else:  # pragma: no cover
+    raise ValueError("Don't understand machine [%s]" % (machine,))
+
+  return plat, bits
+
 def bootstrap(path):
   bootstrap_path = os.path.join(common.env.Build, 'scripts', 'slave',
                                 'recipe_modules', 'cipd', 'resources',
                                 'bootstrap.py')
 
-  plat, bits = slave.infra_platform.get()
+  plat, bits = get_normalized_platform(sys.platform, platform.machine())
   plat = '%s-%s' % (
       plat.replace('win', 'windows'),
       {
