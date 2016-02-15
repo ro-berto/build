@@ -1,0 +1,125 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--master",
+      "client.dart",
+      "--builder",
+      "cross-arm-vm-linux-release-recipe-be",
+      "--slave",
+      "TestSlavename",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://chromium.googlesource.com/external/github.com/dart-lang/sdk.git'}]",
+      "--root",
+      "sdk",
+      "--revision_mapping_file",
+      "{}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "sdk@abcd1234efef5656",
+      "--force",
+      "--output_manifest"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+    },
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"abcd1234efef5656\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"sdk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"sdk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/sdk/tools/build.py",
+      "-mrelease",
+      "--arch=arm",
+      "runtime"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "name": "build dart"
+  },
+  {
+    "cmd": [
+      "tar",
+      "-cjf",
+      "cross_recipe_build_arm_release_abcd1234efef5656.tar.bz2",
+      "--exclude=**/obj",
+      "--exclude=**/obj.host",
+      "--exclude=**/obj.target",
+      "--exclude=**/*analyzer*",
+      "out/",
+      "tools/testing/bin/"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "name": "create tarball"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "cross_recipe_build_arm_release_abcd1234efef5656.tar.bz2",
+      "gs://dart-cross-compiled-binaries/cross_recipe_build_arm_release_abcd1234efef5656.tar.bz2"
+    ],
+    "cwd": "[SLAVE_BUILD]/sdk",
+    "name": "gsutil upoad tarball"
+  },
+  {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "target-arm-vm-linux-release-recipe-be"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@target-arm-vm-linux-release-recipe-be@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
