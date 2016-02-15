@@ -36,6 +36,7 @@ _BENCHMARKS_TO_RUN = {
   'smoothness.top_25_smooth',
   'speedometer',
   'sunspider',
+  'v8.infinite_scroll',
 }
 
 
