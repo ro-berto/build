@@ -207,31 +207,6 @@
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"linux_dbg\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"linux_dbg\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--test-type=libjingle_p2p_unittest",
-      "--step-name=libjingle_p2p_unittest",
-      "--builder-name=linux_dbg",
-      "--slave-name=slavename",
-      "--run-python-script",
-      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
-      "[SLAVE_BUILD]/src/out/Debug/libjingle_p2p_unittest",
-      "--"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "libjingle_p2p_unittest"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--xvfb",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"linux_dbg\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"linux_dbg\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--test-type=modules_tests",
       "--step-name=modules_tests",
       "--builder-name=linux_dbg",
@@ -319,6 +294,31 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "rtc_media_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"linux_dbg\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"linux_dbg\", \"mastername\": \"tryserver.webrtc\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--test-type=rtc_pc_unittests",
+      "--step-name=rtc_pc_unittests",
+      "--builder-name=linux_dbg",
+      "--slave-name=slavename",
+      "--run-python-script",
+      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "[SLAVE_BUILD]/src/third_party/gtest-parallel/gtest-parallel",
+      "[SLAVE_BUILD]/src/out/Debug/rtc_pc_unittests",
+      "--"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rtc_pc_unittests"
   },
   {
     "cmd": [
