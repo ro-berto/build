@@ -305,6 +305,11 @@ class V8Api(recipe_api.RecipeApi):
       # Find tests to isolate on builder_testers.
       add_tests_to_isolate(self.bot_config.get('tests', []))
 
+      # Add the performance-tests isolate everywhere, where the perf-bot proxy
+      # is triggered.
+      if self.bot_config.get('triggers_proxy', False):
+        tests_to_isolate.append('perf')
+
       if tests_to_isolate:
         self.m.isolate.isolate_tests(
             self.m.chromium.output_dir,
