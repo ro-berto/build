@@ -23,6 +23,13 @@ from slave import slave_utils
 # The Google Cloud Storage bucket to store logs related to goma.
 GOMA_LOG_GS_BUCKET = 'chrome-goma-log'
 
+# Platform dependent location of run command.
+PLATFORM_RUN_CMD = {
+    # os.name: run_cmd to use.
+    'nt': 'C:\\infra-python\\run.py',
+    'posix': '/opt/infra-python/run.py',
+}
+
 
 def GetShortHostname():
   """Get this machine's short hostname in lower case."""
@@ -161,54 +168,56 @@ def SendGomaStats(goma_stats_file, goma_crash_report, build_data_dir):
 
   Note: this function also removes goma_stats_file.
   """
-  # TODO(pgervais): remove this hacky partial-rollout system.
   try:
-    if not chromium_utils.IsWindows():
-      goma_options = []
-      if goma_stats_file and os.path.exists(goma_stats_file):
-        # send GomaStats.
-        goma_options = [
-            '--build-event-goma-stats-path',
-            goma_stats_file,
-        ]
-      elif goma_crash_report and os.path.exists(goma_crash_report):
-        # crash report.
-        goma_options = [
-            '--build-event-goma-error',
-            'GOMA_ERROR_CRASHED',
-            '--build-event-goma-crash-report-id-path',
-            goma_crash_report,
-        ]
-      elif IsCompilerProxyKilledByFatalError():
-        goma_options = [
-            '--build-event-goma-error',
-            'GOMA_ERROR_LOG_FATAL',
-        ]
-      else:
-        # unknown error.
-        goma_options = [
-            '--build-event-goma-error',
-            'GOMA_ERROR_UNKNOWN',
-        ]
-      send_monitoring_event_cmd = [
-          sys.executable,
-          '/opt/infra-python/run.py',
-          'infra.tools.send_monitoring_event',
-          '--event-mon-run-type', 'prod',
-          '--build-event-type', 'BUILD',
-          '--event-mon-timestamp-kind', 'POINT',
-          '--event-logrequest-path',
-          '%s/log_request_proto' % build_data_dir
-      ] + goma_options
-      cmd_filter = chromium_utils.FilterCapture()
-      retcode = chromium_utils.RunCommand(
-        send_monitoring_event_cmd,
-        filter_obj=cmd_filter,
-        max_time=30)
-      if retcode:
-        print('Execution of send_monitoring_event failed with code %s'
-              % retcode)
-        print '\n'.join(cmd_filter.text)
+    goma_options = []
+    if goma_stats_file and os.path.exists(goma_stats_file):
+      # send GomaStats.
+      goma_options = [
+          '--build-event-goma-stats-path',
+          goma_stats_file,
+      ]
+    elif goma_crash_report and os.path.exists(goma_crash_report):
+      # crash report.
+      goma_options = [
+          '--build-event-goma-error',
+          'GOMA_ERROR_CRASHED',
+          '--build-event-goma-crash-report-id-path',
+          goma_crash_report,
+      ]
+    elif IsCompilerProxyKilledByFatalError():
+      goma_options = [
+          '--build-event-goma-error',
+          'GOMA_ERROR_LOG_FATAL',
+      ]
+    else:
+      # unknown error.
+      goma_options = [
+          '--build-event-goma-error',
+          'GOMA_ERROR_UNKNOWN',
+      ]
+    run_cmd = PLATFORM_RUN_CMD.get(os.name)
+    if not run_cmd:
+      print 'Unknown os.name: %s' % os.name
+      return
+    send_monitoring_event_cmd = [
+        sys.executable,
+        run_cmd,
+        'infra.tools.send_monitoring_event',
+        '--event-mon-run-type', 'prod',
+        '--build-event-type', 'BUILD',
+        '--event-mon-timestamp-kind', 'POINT',
+        '--event-logrequest-path',
+        os.path.join(build_data_dir, 'log_request_proto')
+    ] + goma_options
+    cmd_filter = chromium_utils.FilterCapture()
+    retcode = chromium_utils.RunCommand(
+      send_monitoring_event_cmd,
+      filter_obj=cmd_filter,
+      max_time=30)
+    if retcode:
+      print('Execution of send_monitoring_event failed with code %s'
+            % retcode)
+      print '\n'.join(cmd_filter.text)
   except Exception, inst:  # safety net
     print('send_monitoring_event for goma failed: %s' % inst)
   finally:
