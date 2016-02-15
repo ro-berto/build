@@ -78,8 +78,8 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "gs://dart-cross-compiled-binaries/cross_recipe_build_arm_release_abcd1234efef5656.tar.bz2",
-      "cross_recipe_build_arm_release_abcd1234efef5656.tar.bz2"
+      "gs://dart-cross-compiled-binaries/cross_build_arm_release_abcd1234efef5656.tar.bz2",
+      "cross_build_arm_release_abcd1234efef5656.tar.bz2"
     ],
     "cwd": "[SLAVE_BUILD]/sdk",
     "name": "gsutil download tarball"
@@ -88,7 +88,7 @@
     "cmd": [
       "tar",
       "-xjf",
-      "cross_recipe_build_arm_release_abcd1234efef5656.tar.bz2"
+      "cross_build_arm_release_abcd1234efef5656.tar.bz2"
     ],
     "cwd": "[SLAVE_BUILD]/sdk",
     "name": "untar tarball"
@@ -134,7 +134,7 @@
   {
     "cmd": [
       "rm",
-      "cross_recipe_build_arm_release_abcd1234efef5656.tar.bz2"
+      "cross_build_arm_release_abcd1234efef5656.tar.bz2"
     ],
     "cwd": "[SLAVE_BUILD]/sdk",
     "name": "delete tarball"

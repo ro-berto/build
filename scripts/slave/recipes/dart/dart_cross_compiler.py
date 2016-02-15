@@ -28,9 +28,8 @@ builders = {
     'clobber': True},
 }
 
-# TODO: remove "recipe"
 def tarball_name(arch, mode, revision):
-  return 'cross_recipe_build_%s_%s_%s.tar.bz2' % (arch, mode, revision)
+  return 'cross_build_%s_%s_%s.tar.bz2' % (arch, mode, revision)
 
 def RunSteps(api):
   api.gclient.set_config('dart')
@@ -61,7 +60,7 @@ def RunSteps(api):
   api.step('create tarball',
            ['tar', '-cjf', tarball, '--exclude=**/obj',
              '--exclude=**/obj.host', '--exclude=**/obj.target',
-             '--exclude=**/*analyzer*', 'out/', 'tools/testing/bin/'],
+             '--exclude=**/*analyzer*', 'out/'],
            cwd=api.path['checkout'])
 
   uri = "%s/%s" % (GCS_BUCKET, tarball)
@@ -71,8 +70,7 @@ def RunSteps(api):
 
   # Trigger slaves
   trigger_spec = [{
-    # TODO: Remove "recipe"
-    'builder_name': 'target-arm-vm-linux-release-recipe-%s' % channel
+    'builder_name': 'target-arm-vm-linux-release-%s' % channel
   }]
   api.trigger(*trigger_spec)
 

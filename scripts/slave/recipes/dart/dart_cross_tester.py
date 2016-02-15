@@ -23,9 +23,8 @@ builders = {
     'target_arch': 'arm'},
 }
 
-# TODO: remove "recipe"
 def tarball_name(arch, mode, revision):
-  return 'cross_recipe_build_%s_%s_%s.tar.bz2' % (arch, mode, revision)
+  return 'cross_build_%s_%s_%s.tar.bz2' % (arch, mode, revision)
 
 def RunSteps(api):
   api.gclient.set_config('dart')

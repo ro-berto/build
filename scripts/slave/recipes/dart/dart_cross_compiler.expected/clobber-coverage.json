@@ -85,13 +85,12 @@
     "cmd": [
       "tar",
       "-cjf",
-      "cross_recipe_build_x64_release_abcd1234efef5656.tar.bz2",
+      "cross_build_x64_release_abcd1234efef5656.tar.bz2",
       "--exclude=**/obj",
       "--exclude=**/obj.host",
       "--exclude=**/obj.target",
       "--exclude=**/*analyzer*",
-      "out/",
-      "tools/testing/bin/"
+      "out/"
     ],
     "cwd": "[SLAVE_BUILD]/sdk",
     "name": "create tarball"
@@ -107,8 +106,8 @@
       "cp",
       "-a",
       "public-read",
-      "cross_recipe_build_x64_release_abcd1234efef5656.tar.bz2",
-      "gs://dart-cross-compiled-binaries/cross_recipe_build_x64_release_abcd1234efef5656.tar.bz2"
+      "cross_build_x64_release_abcd1234efef5656.tar.bz2",
+      "gs://dart-cross-compiled-binaries/cross_build_x64_release_abcd1234efef5656.tar.bz2"
     ],
     "cwd": "[SLAVE_BUILD]/sdk",
     "name": "gsutil upoad tarball"
@@ -119,11 +118,11 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "target-arm-vm-linux-release-recipe-stable"
+        "builder_name": "target-arm-vm-linux-release-stable"
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@target-arm-vm-linux-release-recipe-stable@@@"
+      "@@@STEP_TEXT@target-arm-vm-linux-release-stable@@@"
     ]
   },
   {
