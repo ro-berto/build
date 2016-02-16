@@ -100,8 +100,6 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=False):
     api.step('test gtest',
         ['make', '-j8', 'test-art-host-gtest%d' % bitness],
         env=env)
-    api.step('test quick', ['make', '-j8', 'test-art-host-run-test-default',
-      'dist'], env=env)
 
     optimizing_env = env.copy()
     optimizing_env.update({ 'ART_TEST_RUN_TEST_DEBUGGABLE': 'true' })
@@ -211,10 +209,6 @@ def setup_target(api,
     api.step('test gtest', ['make', '-j%d' % (make_jobs),
       'test-art-target-gtest%d' % bitness], env=test_env)
     test_logging(api, 'test gtest')
-
-    api.step('test quick', ['make', '-j%d' % (make_jobs),
-      'test-art-target-run-test-default', 'dist'], env=test_env)
-    test_logging(api, 'test quick')
 
     optimizing_env = test_env.copy()
     optimizing_env.update({ 'ART_TEST_RUN_TEST_DEBUGGABLE': 'true' })
