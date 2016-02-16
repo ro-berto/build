@@ -355,7 +355,15 @@ class V8Presubmit(BaseTest):
     return TestResults.empty()
 
 
-class V8CheckInitializers(BaseTest):
+class V8GenericSwarmingTest(BaseTest):
+  @property
+  def title(self):
+    raise NotImplementedError()  # pragma: no cover
+
+  @property
+  def extra_args(self):
+    raise NotImplementedError()  # pragma: no cover
+
   @property
   def uses_swarming(self):
     """Returns true if the test uses swarming."""
@@ -364,17 +372,12 @@ class V8CheckInitializers(BaseTest):
   def pre_run(self, test=None, **kwargs):
     self.test = test or TEST_CONFIGS[self.name]
     self.task = self.api.swarming.task(
-        title='Static-Initializers',
+        title=self.title,
         isolated_hash=self._get_isolated_hash(self.test),
-        extra_args=[
-          self.api.path.join(
-              self.api.path.basename(self.api.chromium.c.build_dir),
-              self.api.chromium.c.build_config_fs,
-              'd8'),
-        ],
+        extra_args=self.extra_args,
     )
+
     # Set default value.
-    # TODO(machenbach): Merge this code with other swarming tests.
     if 'os' not in self.task.dimensions:
       self.task.dimensions['os'] = self.api.swarming.prefered_os_dimension(
           self.api.platform.name)
@@ -386,6 +389,16 @@ class V8CheckInitializers(BaseTest):
     return TestResults.empty()
 
 
+class V8CheckInitializers(V8GenericSwarmingTest):
+  @property
+  def title(self):
+    return 'Static-Initializers'
+
+  @property
+  def extra_args(self):
+    return [self.v8.relative_path_to_d8]
+
+
 class V8Fuzzer(BaseTest):
   def run(self, **kwargs):
     assert self.api.chromium.c.HOST_PLATFORM == 'linux'
@@ -394,10 +407,7 @@ class V8Fuzzer(BaseTest):
         'Fuzz',
         ['bash',
          self.api.path['checkout'].join('tools', 'fuzz-harness.sh'),
-         self.api.path.join(
-             self.api.path.basename(self.api.chromium.c.build_dir),
-             self.api.chromium.c.build_config_fs,
-             'd8'),
+         self.v8.relative_path_to_d8,
         ],
         cwd=self.api.path['checkout'],
         stdout=self.api.raw_io.output(),
@@ -461,38 +471,14 @@ class V8GCMole(BaseTest):
     return TestResults.empty()
 
 
-# TODO(machenbach): Make a generic non-standard swarming test.
-class V8SimpleLeakCheck(BaseTest):
+class V8SimpleLeakCheck(V8GenericSwarmingTest):
   @property
-  def uses_swarming(self):
-    """Returns true if the test uses swarming."""
-    return True
+  def title(self):
+    return 'Simple Leak Check'
 
-  def pre_run(self, test=None, **kwargs):
-    self.test = test or TEST_CONFIGS[self.name]
-    self.task = self.api.swarming.task(
-        title='Simple Leak Check',
-        isolated_hash=self._get_isolated_hash(self.test),
-        extra_args=[
-          self.api.path.join(
-              self.api.path.basename(self.api.chromium.c.build_dir),
-              self.api.chromium.c.build_config_fs,
-              'd8'),
-          '-e',
-          'print(1+2)',
-        ],
-    )
-    # Set default value.
-    # TODO(machenbach): Merge this code with other swarming tests.
-    if 'os' not in self.task.dimensions:
-      self.task.dimensions['os'] = self.api.swarming.prefered_os_dimension(
-          self.api.platform.name)
-    self.api.swarming.trigger_task(self.task)
-
-  def run(self, **kwargs):
-    assert self.task
-    self.api.swarming.collect_task(self.task)
-    return TestResults.empty()
+  @property
+  def extra_args(self):
+    return [self.v8.relative_path_to_d8, '-e', 'print(1+2)']
 
 
 V8_NON_STANDARD_TESTS = freeze({

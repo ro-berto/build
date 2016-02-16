@@ -279,6 +279,14 @@ class V8Api(recipe_api.RecipeApi):
   def should_download_build(self):
     return self.bot_type == 'tester'
 
+  @property
+  def relative_path_to_d8(self):
+    return self.m.path.join(
+        self.m.path.basename(self.m.chromium.c.build_dir),
+        self.m.chromium.c.build_config_fs,
+        'd8',
+    )
+
   def isolate_tests(self):
     if self.bot_config.get('enable_swarming'):
       buildername = self.m.properties['buildername']
