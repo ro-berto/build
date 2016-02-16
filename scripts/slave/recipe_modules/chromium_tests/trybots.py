@@ -400,6 +400,35 @@ TRYBOTS = freeze({
           },
         ],
       },
+      'linux_valgrind': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.memory.fyi',
+            'buildername': 'Chromium Linux Builder (valgrind)',
+            'tester': 'Linux Tests (valgrind)(1)',
+          },
+          {
+            'mastername': 'chromium.memory.fyi',
+            'buildername': 'Chromium Linux Builder (valgrind)',
+            'tester': 'Linux Tests (valgrind)(2)',
+          },
+          {
+            'mastername': 'chromium.memory.fyi',
+            'buildername': 'Chromium Linux Builder (valgrind)',
+            'tester': 'Linux Tests (valgrind)(3)',
+          },
+          {
+            'mastername': 'chromium.memory.fyi',
+            'buildername': 'Chromium Linux Builder (valgrind)',
+            'tester': 'Linux Tests (valgrind)(4)',
+          },
+          {
+            'mastername': 'chromium.memory.fyi',
+            'buildername': 'Chromium Linux Builder (valgrind)',
+            'tester': 'Linux Tests (valgrind)(5)',
+          },
+        ],
+      },
     },
   },
   'tryserver.chromium.mac': {
