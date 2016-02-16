@@ -30,8 +30,7 @@ Mozilla = TestStepConfig('mozilla')
 OptimizeForSize = TestStepConfig('optimize_for_size')
 Presubmit = TestStepConfig('presubmit')
 SimdJs = TestStepConfig('simdjs')
-SimpleLeak = TestStepConfig('simpleleak', swarming=False)
-SimpleLeakSwarming = TestStepConfig('simpleleak')
+SimpleLeak = TestStepConfig('simpleleak')
 Test262 = TestStepConfig('test262')
 Test262_2 = TestStepConfig('test262', shards=2)
 Test262Ignition = TestStepConfig('test262_ignition')
@@ -172,7 +171,7 @@ BUILDERS = {
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 - debug builder',
         'tests': [
-          SimpleLeakSwarming,
+          SimpleLeak,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -440,8 +439,6 @@ BUILDERS = {
           'V8 Linux64 - debug - avx2',
           'V8 Linux64 - debug - greedy allocator',
           'V8 Linux64 - memcheck',
-          # TODO(machenbach): Remove temporary staging bot.
-          'V8 Linux - swarming staging',
         ],
       },
       'V8 Linux64 - custom snapshot - debug builder': {
@@ -1419,14 +1416,13 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - memcheck': {
-        'gclient_apply_config': ['v8_valgrind'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
+        'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 - debug builder',
-        'build_gs_archive': 'linux64_dbg_archive',
         'tests': [SimpleLeak],
         'testing': {'platform': 'linux'},
       },

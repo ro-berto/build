@@ -461,25 +461,8 @@ class V8GCMole(BaseTest):
     return TestResults.empty()
 
 
-# TODO(machenbach): Remove after the swarming version below is staged.
-class V8SimpleLeakCheck(BaseTest):
-  def run(self, **kwargs):
-    relative_d8_path = self.api.path.join(
-        self.api.path.basename(self.api.chromium.c.build_dir),
-        self.api.chromium.c.build_config_fs,
-        'd8')
-    tool = self.api.path['checkout'].join('tools', 'run-valgrind.py')
-    step_result = self.api.python(
-      'Simple Leak Check',
-      tool,
-      [relative_d8_path, '-e', 'print(1+2)'],
-      cwd=self.api.path['checkout'],
-    )
-    return TestResults.empty()
-
-
 # TODO(machenbach): Make a generic non-standard swarming test.
-class V8SimpleLeakCheckSwarming(BaseTest):
+class V8SimpleLeakCheck(BaseTest):
   @property
   def uses_swarming(self):
     """Returns true if the test uses swarming."""
@@ -522,13 +505,12 @@ V8_NON_STANDARD_TESTS = freeze({
 
 TOOL_TO_TEST = freeze({
   'run-tests': V8Test,
-  'run-valgrind': V8SimpleLeakCheck,
 })
 
 
 TOOL_TO_TEST_SWARMING = freeze({
   'check-static-initializers': V8CheckInitializers,
-  'run-valgrind': V8SimpleLeakCheckSwarming,
+  'run-valgrind': V8SimpleLeakCheck,
   'run-tests': V8SwarmingTest,
 })
 
