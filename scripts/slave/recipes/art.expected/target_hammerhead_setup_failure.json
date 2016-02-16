@@ -86,7 +86,7 @@
     "name": "setup device",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -902,7 +902,7 @@
   },
   {
     "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "reason": "1 out of 25 aggregated steps failed. Failures: Step('setup device') failed with return_code 1",
+    "status_code": 1
   }
 ]
