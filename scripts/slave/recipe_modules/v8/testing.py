@@ -42,6 +42,10 @@ TEST_CONFIGS = freeze({
     'tests': ['simdjs'],
     'test_args': ['--download-data'],
   },
+  'simpleleak': {
+    'tool': 'run-valgrind',
+    'isolated_target': 'run-valgrind',
+  },
   'test262': {
     'name': 'Test262 - no variants',
     'tests': ['test262'],
@@ -457,6 +461,7 @@ class V8GCMole(BaseTest):
     return TestResults.empty()
 
 
+# TODO(machenbach): Remove after the swarming version below is staged.
 class V8SimpleLeakCheck(BaseTest):
   def run(self, **kwargs):
     relative_d8_path = self.api.path.join(
@@ -473,22 +478,57 @@ class V8SimpleLeakCheck(BaseTest):
     return TestResults.empty()
 
 
+# TODO(machenbach): Make a generic non-standard swarming test.
+class V8SimpleLeakCheckSwarming(BaseTest):
+  @property
+  def uses_swarming(self):
+    """Returns true if the test uses swarming."""
+    return True
+
+  def pre_run(self, test=None, **kwargs):
+    self.test = test or TEST_CONFIGS[self.name]
+    self.task = self.api.swarming.task(
+        title='Simple Leak Check',
+        isolated_hash=self._get_isolated_hash(self.test),
+        extra_args=[
+          self.api.path.join(
+              self.api.path.basename(self.api.chromium.c.build_dir),
+              self.api.chromium.c.build_config_fs,
+              'd8'),
+          '-e',
+          'print(1+2)',
+        ],
+    )
+    # Set default value.
+    # TODO(machenbach): Merge this code with other swarming tests.
+    if 'os' not in self.task.dimensions:
+      self.task.dimensions['os'] = self.api.swarming.prefered_os_dimension(
+          self.api.platform.name)
+    self.api.swarming.trigger_task(self.task)
+
+  def run(self, **kwargs):
+    assert self.task
+    self.api.swarming.collect_task(self.task)
+    return TestResults.empty()
+
+
 V8_NON_STANDARD_TESTS = freeze({
   'deopt': V8DeoptFuzzer,
   'fuzz': V8Fuzzer,
   'gcmole': V8GCMole,
   'presubmit': V8Presubmit,
-  'simpleleak': V8SimpleLeakCheck,
 })
 
 
 TOOL_TO_TEST = freeze({
   'run-tests': V8Test,
+  'run-valgrind': V8SimpleLeakCheck,
 })
 
 
 TOOL_TO_TEST_SWARMING = freeze({
   'check-static-initializers': V8CheckInitializers,
+  'run-valgrind': V8SimpleLeakCheckSwarming,
   'run-tests': V8SwarmingTest,
 })
 

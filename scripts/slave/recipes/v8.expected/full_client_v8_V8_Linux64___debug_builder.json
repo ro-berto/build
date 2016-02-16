@@ -11,7 +11,7 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = None\nsolutions = [{'custom_deps': {'v8/third_party/valgrind': 'https://chromium.googlesource.com/chromium/deps/valgrind/binaries.git'}, 'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--root",
       "v8",
       "--revision_mapping_file",
@@ -166,6 +166,7 @@
       "[SLAVE_BUILD]/v8/out/Debug/ignition.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Debug/mjsunit.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Debug/mozilla.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Debug/run-valgrind.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Debug/simdjs.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Debug/test262.isolated.gen.json"
     ],
@@ -178,6 +179,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"ignition\": \"[dummy hash for ignition]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"run-valgrind\": \"[dummy hash for run-valgrind]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"simdjs\": \"[dummy hash for simdjs]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -195,7 +197,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"ignition\": \"[dummy hash for ignition]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"simdjs\": \"[dummy hash for simdjs]\", \"test262\": \"[dummy hash for test262]\"}",
+      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"ignition\": \"[dummy hash for ignition]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"run-valgrind\": \"[dummy hash for run-valgrind]\", \"simdjs\": \"[dummy hash for simdjs]\", \"test262\": \"[dummy hash for test262]\"}",
       "gs://chromium-v8/v8-linux64-dbg/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -242,6 +244,7 @@
             "ignition": "[dummy hash for ignition]",
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
+            "run-valgrind": "[dummy hash for run-valgrind]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
           }
@@ -260,6 +263,7 @@
             "ignition": "[dummy hash for ignition]",
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
+            "run-valgrind": "[dummy hash for run-valgrind]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
           }
@@ -278,6 +282,7 @@
             "ignition": "[dummy hash for ignition]",
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
+            "run-valgrind": "[dummy hash for run-valgrind]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
           }
@@ -296,6 +301,7 @@
             "ignition": "[dummy hash for ignition]",
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
+            "run-valgrind": "[dummy hash for run-valgrind]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
           }
@@ -314,6 +320,26 @@
             "ignition": "[dummy hash for ignition]",
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
+            "run-valgrind": "[dummy hash for run-valgrind]",
+            "simdjs": "[dummy hash for simdjs]",
+            "test262": "[dummy hash for test262]"
+          }
+        }
+      },
+      {
+        "builder_name": "V8 Linux - swarming staging",
+        "properties": {
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "swarm_hashes": {
+            "benchmarks": "[dummy hash for benchmarks]",
+            "bot_default": "[dummy hash for bot_default]",
+            "ignition": "[dummy hash for ignition]",
+            "mjsunit": "[dummy hash for mjsunit]",
+            "mozilla": "[dummy hash for mozilla]",
+            "run-valgrind": "[dummy hash for run-valgrind]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
           }
@@ -321,7 +347,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@V8 Fuzzer<br />V8 Linux64 - debug<br />V8 Linux64 - debug - avx2<br />V8 Linux64 - debug - greedy allocator<br />V8 Linux64 - memcheck@@@"
+      "@@@STEP_TEXT@V8 Fuzzer<br />V8 Linux - swarming staging<br />V8 Linux64 - debug<br />V8 Linux64 - debug - avx2<br />V8 Linux64 - debug - greedy allocator<br />V8 Linux64 - memcheck@@@"
     ]
   },
   {

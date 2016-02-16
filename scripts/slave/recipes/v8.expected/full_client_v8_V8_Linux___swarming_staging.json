@@ -3,73 +3,88 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
-      "--master",
-      "client.v8",
-      "--builder",
-      "V8 Linux - swarming staging",
-      "--slave",
-      "TestSlavename",
-      "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
-      "--root",
-      "v8",
-      "--revision_mapping_file",
-      "{\"v8\": \"got_revision\", \"v8/tools/swarming_client\": \"got_swarming_client_revision\"}",
-      "--git-cache-dir",
-      "[GIT_CACHE]",
-      "--output_json",
-      "/path/to/tmp/json",
-      "--revision",
-      "v8@20123",
-      "--no_shallow",
-      "--output_manifest"
+      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
+      "--path",
+      "[SLAVE_BUILD]/swarming.client",
+      "--url",
+      "https://chromium.googlesource.com/external/swarming.client.git"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
-    },
-    "name": "bot_update",
+    "name": "git setup (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "retry",
+      "fetch",
+      "origin",
+      "[dummy swarming client hash]"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "git fetch (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "FETCH_HEAD"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "git checkout (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "read revision",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Some step text@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"v8\": \"20123\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"v8\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"v8/tools/swarming_client\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8/tools/swarming_client.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"e4fee0b18f8163be6097c9c571640038896debc4\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"v8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#50110}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision\": \"e4fee0b18f8163be6097c9c571640038896debc4\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision_cp\": \"refs/heads/master@{#108913}\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"root\": \"v8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision@\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#50110}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_swarming_client_revision_cp@\"refs/heads/master@{#108913}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_swarming_client_revision@\"e4fee0b18f8163be6097c9c571640038896debc4\"@@@"
+      "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "git clean (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "sync"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "submodule sync (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "update",
+      "--init",
+      "--recursive"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "submodule update (swarming_client)",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@got_revision@\"20123\"@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
       "--version"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -83,100 +98,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[depot_tools]/gclient.py",
-      "runhooks"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
-      "GYP_GENERATORS": "ninja",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
-    },
-    "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/cleanup_temp.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "cleanup_temp"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/v8",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/v8",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma-clang",
-      "--goma-jsonstatus",
-      "/path/to/tmp/json",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "compile",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--verbose",
-      "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "isolate tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -187,7 +109,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Check/Ubuntu-12.04/[dummy has/V8 Linux - swarming staging/571",
+      "Simple Leak Check/Ubuntu-12.04/[dummy has/V8 Linux - swarming staging/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -213,11 +135,11 @@
       "--tag",
       "buildnumber:571",
       "--tag",
-      "data:[dummy hash for bot_default]",
+      "data:[dummy hash for run-valgrind]",
       "--tag",
       "master:client.v8",
       "--tag",
-      "name:Check",
+      "name:Simple Leak Check",
       "--tag",
       "os:Ubuntu-12.04",
       "--tag",
@@ -229,34 +151,21 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check",
+      "stepname:Simple Leak Check",
       "--idempotent",
-      "[dummy hash for bot_default]",
+      "[dummy hash for run-valgrind]",
       "--",
-      "--progress=verbose",
-      "--mode",
-      "Release",
-      "--arch",
-      "x64",
-      "--outdir",
-      "out",
-      "--buildbot",
-      "--timeout=200",
-      "--random-seed=-976563914",
-      "bot_default",
-      "--exhaustive-variants",
-      "--rerun-failures-count=2",
-      "--swarming",
-      "--json-test-results",
-      "${ISOLATED_OUTDIR}/output.json"
+      "out/Debug/d8",
+      "-e",
+      "print(1+2)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Check",
+    "name": "[trigger] Simple Leak Check",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/V8 Linux - swarming staging/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Simple Leak Check/Ubuntu-12.04/[dummy has/V8 Linux - swarming staging/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check/Ubuntu-12.04/[dummy has/V8 Linux - swarming staging/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Simple Leak Check/Ubuntu-12.04/[dummy has/V8 Linux - swarming staging/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -268,18 +177,10 @@
     ]
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
-      "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -287,25 +188,50 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "Check/Ubuntu-12.04/[dummy has/V8 Linux - swarming staging/571"
+      "Simple Leak Check/Ubuntu-12.04/[dummy has/V8 Linux - swarming staging/571",
+      "--task-summary-json",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Check",
+    "name": "Simple Leak Check",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
-      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
-      "@@@STEP_LOG_LINE@durations@@@@",
-      "@@@STEP_LOG_LINE@durations@Details:@@@",
-      "@@@STEP_LOG_LINE@durations@@@@",
-      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
-      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
-      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
-      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
-      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
-      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
-      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
-      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
-      "@@@STEP_LOG_END@durations@@@"
+      "@@@STEP_TEXT@swarming pending 71s@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"abandoned_ts\": null, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"completed_ts\": \"2014-09-25T01:42:00.123\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"durations\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        5.7, @@@",
+      "@@@STEP_LOG_LINE@json.output@        31.5@@@",
+      "@@@STEP_LOG_LINE@json.output@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"exit_codes\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        0, @@@",
+      "@@@STEP_LOG_LINE@json.output@        0@@@",
+      "@@@STEP_LOG_LINE@json.output@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"id\": \"148aa78d7aa0000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"isolated_out\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"view_url\": \"blah\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"outputs\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"Heart beat succeeded on win32.\\n\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"Foo\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"state\": 112, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"try_number\": 1, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"user\": \"unknown\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
   {
