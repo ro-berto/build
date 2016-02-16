@@ -298,10 +298,8 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def authorize_adb_devices(self):
     script = self.m.path['build'].join('scripts', 'slave', 'android',
-                                    'authorize_adb_devices.py')
-    adb_path = self.m.path['checkout'].join(
-        'third_party', 'android_tools', 'sdk', 'platform-tools', 'adb')
-    args = ['--verbose', '--adb-path', adb_path]
+                                       'authorize_adb_devices.py')
+    args = ['--verbose', '--adb-path', self.m.adb.adb_path()]
     return self.m.python('authorize_adb_devices', script, args, infra_step=True,
                          env=self.m.chromium.get_env())
 
@@ -981,9 +979,7 @@ class AndroidApi(recipe_api.RecipeApi):
                      output=cts_extract_dir)
 
     cts_path = cts_extract_dir.join('android-cts', 'tools', 'cts-tradefed')
-    adb_path = self.m.path['slave_build'].join(
-        'src', 'third_party', 'android_tools', 'sdk', 'platform-tools')
-    env = {'PATH': self.m.path.pathsep.join([str(adb_path), '%(PATH)s'])}
+    env = {'PATH': self.m.path.pathsep.join([self.m.adb.adb_dir(), '%(PATH)s'])}
 
     try:
       result = self.m.step(
