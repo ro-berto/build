@@ -49,7 +49,7 @@
     "name": "build x86",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -141,7 +141,7 @@
   },
   {
     "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "reason": "1 out of 8 aggregated steps failed. Failures: Step('build x86') failed with return_code 1",
+    "status_code": 1
   }
 ]

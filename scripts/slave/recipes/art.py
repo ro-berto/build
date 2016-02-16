@@ -263,19 +263,18 @@ def setup_aosp_builder(api):
   full_checkout(api)
   clobber(api)
 
-  warn_step = warn_only_step(api)
-
   builds = ['x86', 'x86_64', 'arm', 'arm64']
   # TODO: adds mips and mips64 once we have enough storage on the bot.
   # ['mips', 'mips64']
-  for build in builds:
-    env = { 'ART_USE_OPTIMIZING_COMPILER': 'true',
-            'TARGET_PRODUCT': 'aosp_%s' % build,
-            'TARGET_BUILD_VARIANT': 'eng',
-            'TARGET_BUILD_TYPE': 'release'}
-    warn_step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'],
-        env=env)
-    warn_step('build %s' % build, ['make', '-j8'], env=env)
+  with api.step.defer_results():
+    for build in builds:
+      env = { 'ART_USE_OPTIMIZING_COMPILER': 'true',
+              'TARGET_PRODUCT': 'aosp_%s' % build,
+              'TARGET_BUILD_VARIANT': 'eng',
+              'TARGET_BUILD_TYPE': 'release'}
+      api.step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'],
+          env=env)
+      api.step('build %s' % build, ['make', '-j8'], env=env)
 
 _CONFIG_MAP = {
   'client.art': {
