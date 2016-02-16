@@ -1,5 +1,6 @@
 agable@chromium.org
 iannucci@chromium.org
+per-file art.py=ngeoffray@google.com
 per-file boringssl.py=davidben@chromium.org
 per-file boringssl_docs.py=davidben@chromium.org
 per-file cronet.py=mef@chromium.org
