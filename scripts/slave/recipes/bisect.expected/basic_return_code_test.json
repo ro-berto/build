@@ -509,8 +509,9 @@
         "properties": {
           "bisect_config": {
             "command": "tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he",
+            "max_time_minutes": "5",
             "metric": "warm_times/page_load_time",
-            "repeat_count": 5,
+            "repeat_count": "2",
             "test_type": "return_code"
           },
           "job_name": "e28dc0d49c331def2a3bbf3ddd0096eb51551155-test",
@@ -551,8 +552,9 @@
         "properties": {
           "bisect_config": {
             "command": "tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he",
+            "max_time_minutes": "5",
             "metric": "warm_times/page_load_time",
-            "repeat_count": 5,
+            "repeat_count": "2",
             "test_type": "return_code"
           },
           "job_name": "a6298e4afedbf2cd461755ea6f45b0ad64222222-test",
@@ -802,8 +804,9 @@
         "properties": {
           "bisect_config": {
             "command": "tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he",
+            "max_time_minutes": "5",
             "metric": "warm_times/page_load_time",
-            "repeat_count": 5,
+            "repeat_count": "2",
             "test_type": "return_code"
           },
           "job_name": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test",
@@ -867,42 +870,6 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::auto_bisect]/resources/significantly_different.py",
-      "[]",
-      "[]",
-      "0.01"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.Checking sample difference",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::auto_bisect]/resources/significantly_different.py",
-      "[]",
-      "[]",
-      "0.01"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.Checking sample difference (2)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
   },
   {
@@ -1033,8 +1000,9 @@
         "properties": {
           "bisect_config": {
             "command": "tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he",
+            "max_time_minutes": "5",
             "metric": "warm_times/page_load_time",
-            "repeat_count": 5,
+            "repeat_count": "2",
             "test_type": "return_code"
           },
           "job_name": "fc6dfc7ff5b1073408499478969261b826441144-test",
@@ -1098,42 +1066,6 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::auto_bisect]/resources/significantly_different.py",
-      "[]",
-      "[]",
-      "0.01"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.Checking sample difference",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::auto_bisect]/resources/significantly_different.py",
-      "[]",
-      "[]",
-      "0.01"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.Checking sample difference (2)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
   },
   {

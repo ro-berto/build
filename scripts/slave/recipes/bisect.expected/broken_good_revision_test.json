@@ -509,8 +509,9 @@
         "properties": {
           "bisect_config": {
             "command": "tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he",
+            "max_time_minutes": "5",
             "metric": "warm_times/page_load_time",
-            "repeat_count": 5,
+            "repeat_count": "2",
             "test_type": "perf"
           },
           "job_name": "e28dc0d49c331def2a3bbf3ddd0096eb51551155-test",
@@ -551,8 +552,9 @@
         "properties": {
           "bisect_config": {
             "command": "tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he",
+            "max_time_minutes": "5",
             "metric": "warm_times/page_load_time",
-            "repeat_count": 5,
+            "repeat_count": "2",
             "test_type": "perf"
           },
           "job_name": "a6298e4afedbf2cd461755ea6f45b0ad64222222-test",

@@ -4,7 +4,6 @@
 
 import json
 import re
-import time
 
 from . import bisect_results
 from . import depot_config
@@ -43,17 +42,6 @@ VALID_RESULT_CODES = (
 # to move *too* far from the original revision, we'll cap the search at 25%.
 DEFAULT_SEARCH_RANGE_PERCENTAGE = 0.25
 
-# How long to re-test the initial good-bad range for until significant
-# difference is established.
-REGRESSION_CHECK_TIMEOUT = 2 * 60 * 60
-# If we reach this number of samples on the reference range and have not
-# achieved statistical significance, bail.
-MAX_REQUIRED_SAMPLES = 50
-
-# Significance level to use for determining difference between revisions via
-# hypothesis testing.
-SIGNIFICANCE_LEVEL = 0.01
-
 
 class Bisector(object):
   """This class abstracts an ongoing bisect (or n-sect) job."""
@@ -71,7 +59,6 @@ class Bisector(object):
     self.config_step()
     self.revision_class = revision_class
     self.result_codes = set()
-    self.last_tested_revision = None
 
     # Test-only properties.
     # TODO: Replace these with proper mod_test_data.
@@ -126,38 +113,6 @@ class Bisector(object):
       self.lkgr = self.good_rev
     if init_revisions:
       self._expand_chromium_revision_range()
-
-  def significantly_different(
-      self, list_a, list_b,
-      significance_level=SIGNIFICANCE_LEVEL): # pragma: no cover
-    """Uses an external script to run hypothesis testing with scipy.
-
-    The reason why we need an external script is that scipy is not available to
-    the default python installed in all platforms. We instead rely on an
-    anaconda environment to provide those packages.
-
-    Args:
-      list_a, list_b: Two lists representing samples to be compared.
-      significance_level: Self-describing. As a decimal fraction.
-
-    Returns:
-      A boolean indicating whether the null hypothesis ~(that the lists are
-      samples from the same population) can be rejected at the specified
-      significance level.
-    """
-    step_result = self.api.m.python(
-        'Checking sample difference',
-        self.api.resource('significantly_different.py'),
-        [json.dumps(list_a), json.dumps(list_b), str(significance_level)],
-        stdout=self.api.m.json.output())
-    results = step_result.stdout
-    if results is None:
-      assert self.dummy_builds
-      return True
-    significantly_different = results['significantly_different']
-    step_result.presentation.logs[str(significantly_different)] = [
-        'See json.output for details']
-    return significantly_different
 
   def config_step(self):
     """Yields a simple echo step that outputs the bisect config."""
@@ -457,7 +412,7 @@ class Bisector(object):
                          'an improvement rather than a regression, given the '
                          'expected direction of improvement.')
 
-  def check_initial_confidence(self):  # pragma: no cover
+  def check_initial_confidence(self):
     """Checks that the initial range presents a clear enough regression.
 
     We calculate the confidence of the results of the given 'good'
@@ -473,53 +428,41 @@ class Bisector(object):
     if self.required_initial_confidence is None:
       return True  # pragma: no cover
 
-    # TODO(robertocn): Remove all uses of "confidence".
     if self.dummy_initial_confidence is not None:
       self.initial_confidence = float(
           self.dummy_initial_confidence)
-      if (float(self.initial_confidence) <
-          float(self.required_initial_confidence)):
-        self._set_insufficient_confidence_warning()
-        return False
-      return True
 
-    if self.dummy_builds:
-      dummy_result = self.good_rev.values != self.bad_rev.values
-      if not dummy_result:
-        self._set_insufficient_confidence_warning()
-      return dummy_result
-
-    with self.api.m.step.nest('Re-testing reference range'):
-      expiration_time = time.time() + REGRESSION_CHECK_TIMEOUT
-      while time.time() < expiration_time:
-        if len(self.good_rev.values) >= 5 and len(self.bad_rev.values) >= 5:
-          if self.significantly_different(self.good_rev.values,
-                                          self.bad_rev.values):
-            return True
-        if len(self.good_rev.values) == len(self.bad_rev.values):
-          revision_to_retest = self.last_tested_revision
-        else:
-          revision_to_retest = min(self.good_rev, self.bad_rev,
-                                   key=lambda x: len(x.values))
-        if len(revision_to_retest.values) < MAX_REQUIRED_SAMPLES:
-          revision_to_retest.retest()
-        else:
-          break
-      self._set_insufficient_confidence_warning()
+    else:  # pragma: no cover
+      if len(self.good_rev.values) < 5 or len(self.bad_rev.values) < 5:
+        # If there are too few values, the confidence score is not a good way to
+        # determine whether the regression is reproducible.
+        # TODO(robertocn): Investigate a straightforward approach to deal with
+        # these cases. Such as the mean of one group lying within the range of
+        # the other.
+        return True
+      self.initial_confidence = (
+          self.api.m.math_utils.confidence_score(
+              self.good_rev.values,
+              self.bad_rev.values))
+    if (self.initial_confidence <
+        self.required_initial_confidence):  # pragma: no cover
+      self._set_insufficient_confidence_warning(self.initial_confidence)
       return False
-
+    return True
 
   def get_exception(self):
     raise NotImplementedError()  # pragma: no cover
     # TODO: should return an exception with the details of the failure.
 
   def _set_insufficient_confidence_warning(
-      self):  # pragma: no cover
+      self, actual_confidence):  # pragma: no cover
     """Adds a warning about the lack of initial regression confidence."""
     self.failed_initial_confidence = True
     self.surface_result('LO_INIT_CONF')
     self.warnings.append(
-        'Bisect failed to reproduce the regression with enough confidence.')
+        ('Bisect failed to reproduce the regression with enough confidence. '
+         'Needed {:.2f}%, got {:.2f}%.').format(
+             self.required_initial_confidence, actual_confidence))
 
   def _results_debug_message(self):
     """Returns a string with values used to debug a bisect result."""

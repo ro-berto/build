@@ -189,7 +189,7 @@ def _get_ref_range_only_test_data():
           'commit_pos': '314017',
           'test_results': {
               'results': {
-                  'values': [12, 13, 14, 15, 16],
+                  'values': [14, 15, 16],
               },
               'retcodes': [0],
           }
@@ -231,8 +231,8 @@ def _get_basic_test_data():
           'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
           'commit_pos': '314015',
           'test_results': {
-              'results':{
-                  'values': [19, 20, 21, 22, 23],
+              'results': {
+                  'values': [19, 20, 21],
               },
               'retcodes': [0],
           },
@@ -257,7 +257,7 @@ def _get_basic_test_data():
           'commit_pos': '314016',
           'test_results': {
               'results': {
-                  'values': [12, 13, 14, 15, 16],
+                  'values': [14, 15, 16],
               },
               'retcodes': [0],
           },
@@ -273,7 +273,7 @@ def _get_basic_test_data():
           'commit_pos': '314017',
           'test_results': {
               'results': {
-                  'values': [12, 13, 14, 15, 16],
+                  'values': [14, 15, 16],
               },
               'retcodes': [0],
           }
@@ -289,7 +289,7 @@ def _get_reversed_basic_test_data():
           'commit_pos': '314015',
           'test_results': {
               'results': {
-                  'values': [19, 20, 21, 22, 23],
+                  'values': [19, 20, 21],
               },
               'retcodes': [0],
           },
@@ -307,7 +307,7 @@ def _get_reversed_basic_test_data():
           'commit_pos': '314016',
           'test_results': {
               'results': {
-                  'values': [19, 20, 21, 22, 23],
+                  'values': [19, 20, 21],
               },
               'retcodes': [0],
           },
@@ -325,7 +325,7 @@ def _get_reversed_basic_test_data():
           'commit_pos': '314017',
           'test_results': {
               'results': {
-                  'values': [12, 13, 14, 15, 16],
+                  'values': [14, 15, 16],
               },
               'retcodes': [0],
           },

@@ -31,8 +31,7 @@ class BisectTesterApi(recipe_api.RecipeApi):
         'command': bisect_config['command'],
         'metric': bisect_config.get('metric'),
         'repeat_count': int(bisect_config.get('repeat_count', 20)),
-        # The default is to NOT timeout, hence 0.
-        'max_time_minutes': float(bisect_config.get('max_time_minutes', 0)),
+        'max_time_minutes': float(bisect_config.get('max_time_minutes', 25)),
         'test_type': bisect_config.get('test_type', 'perf')
     }
 
