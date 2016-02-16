@@ -130,9 +130,9 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
 
   def test_check_initial_confidence_one_hundred(self):
     # A confidence score of 100 should satisfy any default.
-    mock_score = self.dummy_api.m.math_utils.confidence_score
-    mock_score.return_value = 100
     bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
+    bisector.good_rev.values = [3, 3, 3, 3, 3, 3]
+    bisector.bad_rev.values = [9, 9, 9, 9, 9, 9]
     self.assertTrue(bisector.check_initial_confidence())
     self.assertFalse(bisector.failed_initial_confidence)
 
@@ -155,18 +155,6 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
     bisector.bad_rev.values = [3, 3, 3, 3, 3, 3]
     self.assertFalse(bisector.check_initial_confidence())
     self.assertTrue(bisector.failed_initial_confidence)
-
-  def test_check_initial_confidence_pass(self):
-    mock_score = self.dummy_api.m.math_utils.confidence_score
-    self.bisect_config['required_initial_confidence'] = 99
-    # A confidence score of 99.5 should satisfy the required 99.
-    mock_score.return_value = 99.5
-    bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
-    # The initial confidence check may only apply if there are some values.
-    bisector.good_rev.values = [3, 3, 3, 3, 3, 3]
-    bisector.bad_rev.values = [3, 3, 3, 3, 3, 3]
-    self.assertTrue(bisector.check_initial_confidence())
-    self.assertFalse(bisector.failed_initial_confidence)
 
 
 if __name__ == '__main__':

@@ -285,9 +285,8 @@
         "properties": {
           "bisect_config": {
             "command": "src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases",
-            "max_time_minutes": "5",
             "metric": "mean_input_event_latency/mean_input_event_latency",
-            "repeat_count": "2",
+            "repeat_count": 5,
             "test_type": "perf"
           },
           "job_name": "a6298e4afedbf2cd461755ea6f45b0ad64222222-test",
@@ -322,9 +321,8 @@
         "properties": {
           "bisect_config": {
             "command": "src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases",
-            "max_time_minutes": "5",
             "metric": "mean_input_event_latency/mean_input_event_latency",
-            "repeat_count": "2",
+            "repeat_count": 5,
             "test_type": "perf"
           },
           "job_name": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test",
@@ -500,9 +498,8 @@
         "properties": {
           "bisect_config": {
             "command": "src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases",
-            "max_time_minutes": "5",
             "metric": "mean_input_event_latency/mean_input_event_latency",
-            "repeat_count": "2",
+            "repeat_count": 5,
             "test_type": "perf"
           },
           "job_name": "dcdcdc0ff1122212323134879ddceeb1240b0988-test",
