@@ -58,8 +58,8 @@ B('WebKit Win x64 Builder', 'f_webkit_win_rel_x64',
   auto_reboot=False)
 F('f_webkit_win_rel_x64', m_annotator.BaseFactory('chromium'))
 
-B('WebKit Win Oilpan', 'f_webkit_win_oilpan_rel', scheduler='global_scheduler',
-    category='oilpan')
+B('WebKit Win non-Oilpan', 'f_webkit_win_oilpan_rel',
+  scheduler='global_scheduler', category='oilpan')
 F('f_webkit_win_oilpan_rel', m_annotator.BaseFactory('chromium'))
 
 
@@ -88,7 +88,7 @@ B('WebKit Win7 (dbg)', 'f_webkit_dbg_tests',
     scheduler='s4_webkit_dbg_trigger')
 F('f_webkit_dbg_tests', m_annotator.BaseFactory('chromium'))
 
-B('WebKit Win Oilpan (dbg)', 'f_webkit_win_oilpan_dbg',
+B('WebKit Win non-Oilpan (dbg)', 'f_webkit_win_oilpan_dbg',
   scheduler='global_scheduler', category='oilpan')
 F('f_webkit_win_oilpan_dbg', m_annotator.BaseFactory('chromium'))
 

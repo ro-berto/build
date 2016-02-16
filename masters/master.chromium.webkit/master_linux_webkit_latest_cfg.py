@@ -44,11 +44,11 @@ F('f_webkit_linux_rel_trusty', m_annotator.BaseFactory('chromium'))
 B('WebKit Linux 32', 'f_webkit_linux_rel_32', scheduler='global_scheduler')
 F('f_webkit_linux_rel_32', m_annotator.BaseFactory('chromium'))
 
-B('WebKit Linux Oilpan Builder', 'f_webkit_linux_oilpan_builder_rel',
+B('WebKit Linux non-Oilpan Builder', 'f_webkit_linux_oilpan_builder_rel',
     scheduler='global_scheduler', category='oilpan')
 F('f_webkit_linux_oilpan_builder_rel', m_annotator.BaseFactory('chromium'))
 
-B('WebKit Linux Oilpan', 'f_webkit_linux_oilpan_rel',
+B('WebKit Linux non-Oilpan', 'f_webkit_linux_oilpan_rel',
     scheduler='webkit_linux_oilpan_rel_trigger', category='oilpan')
 F('f_webkit_linux_oilpan_rel', m_annotator.BaseFactory('chromium'))
 
@@ -56,7 +56,7 @@ B('WebKit Linux ASAN', 'f_webkit_linux_rel_asan', scheduler='global_scheduler',
     auto_reboot=True)
 F('f_webkit_linux_rel_asan', m_annotator.BaseFactory('chromium'))
 
-B('WebKit Linux Oilpan ASAN', 'f_webkit_linux_oilpan_rel_asan',
+B('WebKit Linux non-Oilpan ASAN', 'f_webkit_linux_oilpan_rel_asan',
     scheduler='global_scheduler', auto_reboot=True, category='oilpan')
 F('f_webkit_linux_oilpan_rel_asan', m_annotator.BaseFactory('chromium'))
 
@@ -68,7 +68,7 @@ B('WebKit Linux Leak', 'f_webkit_linux_leak_rel', scheduler='global_scheduler',
     category='oilpan')
 F('f_webkit_linux_leak_rel', m_annotator.BaseFactory('chromium'))
 
-B('WebKit Linux Oilpan Leak', 'f_webkit_linux_oilpan_leak_rel',
+B('WebKit Linux non-Oilpan Leak', 'f_webkit_linux_oilpan_leak_rel',
     scheduler='global_scheduler', category='oilpan')
 F('f_webkit_linux_oilpan_leak_rel', m_annotator.BaseFactory('chromium'))
 
@@ -85,7 +85,7 @@ B('WebKit Linux (dbg)', 'f_webkit_dbg_tests', scheduler='global_scheduler',
     auto_reboot=False)
 F('f_webkit_dbg_tests', m_annotator.BaseFactory('chromium'))
 
-B('WebKit Linux Oilpan (dbg)', 'f_webkit_linux_oilpan_dbg',
+B('WebKit Linux non-Oilpan (dbg)', 'f_webkit_linux_oilpan_dbg',
     scheduler='global_scheduler', category='oilpan')
 F('f_webkit_linux_oilpan_dbg', m_annotator.BaseFactory('chromium'))
 

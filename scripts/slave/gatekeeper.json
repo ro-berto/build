@@ -365,17 +365,17 @@
         "comment": ["Would be nice to use a regexp  here: /Oilpan/i, etc."],
         "excluded_builders" : [
             "WebKit Linux (deps)",
-            "WebKit Linux Oilpan (dbg)",
-            "WebKit Linux Oilpan",
-            "WebKit Linux Oilpan Leak",
-            "WebKit Linux Oilpan ASAN",
+            "WebKit Linux non-Oilpan (dbg)",
+            "WebKit Linux non-Oilpan",
+            "WebKit Linux non-Oilpan Leak",
+            "WebKit Linux non-Oilpan ASAN",
             "WebKit Mac Builder (deps)",
-            "WebKit Mac Oilpan (dbg)",
-            "WebKit Mac Oilpan",
+            "WebKit Mac non-Oilpan (dbg)",
+            "WebKit Mac non-Oilpan",
             "WebKit Mac10.6 (deps)",
             "WebKit Win Builder (deps)",
-            "WebKit Win Oilpan (dbg)",
-            "WebKit Win Oilpan"
+            "WebKit Win non-Oilpan (dbg)",
+            "WebKit Win non-Oilpan"
         ],
 
         "builders": {

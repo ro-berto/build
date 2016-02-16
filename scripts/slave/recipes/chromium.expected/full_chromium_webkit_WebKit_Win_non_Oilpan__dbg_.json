@@ -3,11 +3,20 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "[BUILD]\\scripts\\slave\\kill_processes.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "taskkill"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--master",
       "chromium.webkit",
       "--builder",
-      "WebKit Mac Oilpan",
+      "WebKit Win non-Oilpan (dbg)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -28,7 +37,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -103,7 +112,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -117,14 +126,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE[depot_tools]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 component=static_library enable_oilpan=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library enable_oilpan=0 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -132,16 +141,16 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
+      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Release",
+      "Debug",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
-      "{\"buildername\": \"WebKit Mac Oilpan\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
+      "{\"buildername\": \"WebKit Win non-Oilpan (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -155,15 +164,15 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium.webkit.json",
+      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.webkit.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.webkit.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.webkit.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"WebKit Mac Oilpan\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"WebKit Win non-Oilpan (dbg)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -181,7 +190,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/cleanup_temp.py"
+      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
@@ -190,9 +199,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]\\src\\out\\Debug",
       "--clean-isolated-files"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -202,64 +211,45 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "chromium.webkit",
       "-b",
-      "WebKit Mac Oilpan",
+      "WebKit Win non-Oilpan (dbg)",
       "--config-file",
-      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[BUILD]\\goma",
       "--swarming-targets-file",
       "browser_tests\n",
-      "//out/Release"
+      "//out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "generate_build_files"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
+      "[BUILD]\\scripts\\slave\\compile.py",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]\\src",
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[BUILD]\\goma",
       "--",
       "blink_tests",
       "browser_tests",
-      "browser_tests_run"
+      "browser_tests_run",
+      "crash_service"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile",
@@ -272,11 +262,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
+      "RECIPE_MODULE[build::isolate]\\resources\\remove_build_metadata.py",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]\\src\\out\\Debug",
       "--src-dir",
-      "[SLAVE_BUILD]/src"
+      "[SLAVE_BUILD]\\src"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "remove_build_metadata"
@@ -285,15 +275,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/src/tools/swarming_client",
+      "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/src/out/Release/browser_tests.isolated.gen.json"
+      "[SLAVE_BUILD]\\src\\out\\Debug\\browser_tests.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
@@ -308,9 +298,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]\\src\\out\\Debug",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -324,6 +314,17 @@
       "@@@STEP_LOG_END@json.output@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
+      "--target",
+      "Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "start_crash_service"
   },
   {
     "cmd": [
@@ -346,25 +347,25 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "[BUILD]\\scripts\\slave\\runtest.py",
       "--target",
-      "Release",
+      "Debug",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Mac Oilpan\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Win non-Oilpan (dbg)\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Mac Oilpan\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Win non-Oilpan (dbg)\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests",
-      "--builder-name=WebKit Mac Oilpan",
+      "--builder-name=WebKit Win non-Oilpan (dbg)",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
-      "[BUILD]/scripts/slave/chromium/layout_test_wrapper.py",
+      "[BUILD]\\scripts\\slave\\chromium\\layout_test_wrapper.py",
       "--target",
-      "Release",
+      "Debug",
       "-o",
-      "[SLAVE_BUILD]/layout-test-results",
+      "[SLAVE_BUILD]\\layout-test-results",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out",
+      "[SLAVE_BUILD]\\src\\out",
       "--json-test-results",
       "/path/to/tmp/json",
       "--test-results-server",
@@ -372,9 +373,9 @@
       "--build-number",
       "571",
       "--builder-name",
-      "WebKit Mac Oilpan",
+      "WebKit Win non-Oilpan (dbg)",
       "--additional-expectations",
-      "src/third_party/WebKit/LayoutTests/OilpanExpectations"
+      "src\\third_party\\WebKit\\LayoutTests\\OilpanExpectations"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests",
@@ -386,15 +387,15 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/chromium/archive_layout_test_results.py",
+      "[BUILD]\\scripts\\slave\\chromium\\archive_layout_test_results.py",
       "--results-dir",
-      "[SLAVE_BUILD]/layout-test-results",
+      "[SLAVE_BUILD]\\layout-test-results",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out",
+      "[SLAVE_BUILD]\\src\\out",
       "--build-number",
       "571",
       "--builder-name",
-      "WebKit Mac Oilpan",
+      "WebKit Win non-Oilpan (dbg)",
       "--gs-bucket",
       "gs://chromium-layout-test-archives",
       "--gs-acl",
@@ -403,8 +404,8 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Mac_Oilpan/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Mac_Oilpan/571/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Win_non-Oilpan__dbg_/571/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Win_non-Oilpan__dbg_/571/layout-test-results.zip@@@"
     ]
   },
   {
@@ -423,6 +424,17 @@
       "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\process_dumps.py",
+      "--target",
+      "Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "process_dumps"
   },
   {
     "name": "$result",

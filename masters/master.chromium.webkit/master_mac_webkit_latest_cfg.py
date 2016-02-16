@@ -81,8 +81,8 @@ B('WebKit Mac10.10', 'f_webkit_rel_tests_1010',
   scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_1010', m_annotator.BaseFactory('chromium'))
 
-B('WebKit Mac Oilpan', 'f_webkit_mac_oilpan_rel', scheduler='global_scheduler',
-    category='oilpan')
+B('WebKit Mac non-Oilpan', 'f_webkit_mac_oilpan_rel',
+  scheduler='global_scheduler', category='oilpan')
 F('f_webkit_mac_oilpan_rel', m_annotator.BaseFactory('chromium'))
 
 
@@ -115,7 +115,7 @@ B('WebKit Mac10.7 (dbg)', 'f_webkit_dbg_tests',
     scheduler='s5_webkit_dbg_trigger')
 F('f_webkit_dbg_tests', m_annotator.BaseFactory('chromium'))
 
-B('WebKit Mac Oilpan (dbg)', 'f_webkit_mac_oilpan_dbg',
+B('WebKit Mac non-Oilpan (dbg)', 'f_webkit_mac_oilpan_dbg',
     scheduler='global_scheduler', category='oilpan')
 F('f_webkit_mac_oilpan_dbg', m_annotator.BaseFactory('chromium'))
 

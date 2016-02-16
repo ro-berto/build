@@ -7,7 +7,7 @@
       "--master",
       "chromium.webkit",
       "--builder",
-      "WebKit Linux Oilpan ASAN",
+      "WebKit Mac non-Oilpan",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -123,7 +123,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library enable_oilpan=1 gomadir='[BUILD]/goma' lsan=1 target_arch=x64 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "clang=1 component=static_library enable_oilpan=0 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -141,7 +141,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"WebKit Linux Oilpan ASAN\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"WebKit Mac non-Oilpan\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -163,7 +163,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.webkit.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"WebKit Linux Oilpan ASAN\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"WebKit Mac non-Oilpan\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -207,7 +207,7 @@
       "-m",
       "chromium.webkit",
       "-b",
-      "WebKit Linux Oilpan ASAN",
+      "WebKit Mac non-Oilpan",
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -349,17 +349,15 @@
       "[BUILD]/scripts/slave/runtest.py",
       "--target",
       "Release",
-      "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Linux Oilpan ASAN\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Mac non-Oilpan\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Linux Oilpan ASAN\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WebKit Mac non-Oilpan\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests",
-      "--builder-name=WebKit Linux Oilpan ASAN",
+      "--builder-name=WebKit Mac non-Oilpan",
       "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
-      "--enable-asan",
       "[BUILD]/scripts/slave/chromium/layout_test_wrapper.py",
       "--target",
       "Release",
@@ -374,12 +372,9 @@
       "--build-number",
       "571",
       "--builder-name",
-      "WebKit Linux Oilpan ASAN",
+      "WebKit Mac non-Oilpan",
       "--additional-expectations",
-      "src/third_party/WebKit/LayoutTests/ASANExpectations",
-      "--time-out-ms",
-      "48000",
-      "--options=--enable-sanitizer"
+      "src/third_party/WebKit/LayoutTests/OilpanExpectations"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests",
@@ -399,7 +394,7 @@
       "--build-number",
       "571",
       "--builder-name",
-      "WebKit Linux Oilpan ASAN",
+      "WebKit Mac non-Oilpan",
       "--gs-bucket",
       "gs://chromium-layout-test-archives",
       "--gs-acl",
@@ -408,8 +403,8 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux_Oilpan_ASAN/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux_Oilpan_ASAN/571/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Mac_non-Oilpan/571/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Mac_non-Oilpan/571/layout-test-results.zip@@@"
     ]
   },
   {

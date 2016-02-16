@@ -179,7 +179,7 @@ def non_device_wipe_provisioning(c):
 @CONFIG_CTX(includes=['main_builder'])
 def oilpan_builder(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['enable_oilpan'] = 1
+  gyp_defs['enable_oilpan'] = 0
 
 # TODO(zty): figure out what perf builder really wants and use that instead.
 # e.g. official

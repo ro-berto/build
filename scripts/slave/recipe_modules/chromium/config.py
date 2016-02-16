@@ -385,7 +385,7 @@ def ozone(c):
 
 @config_ctx()
 def oilpan(c):
-  c.gyp_env.GYP_DEFINES['enable_oilpan'] = 1
+  c.gyp_env.GYP_DEFINES['enable_oilpan'] = 0
 
 @config_ctx()
 def clobber(c):

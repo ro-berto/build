@@ -585,7 +585,7 @@ SPEC['builders'].update({
       'platform': 'linux',
     },
   },
-  'WebKit Win Oilpan': {
+  'WebKit Win non-Oilpan': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
@@ -616,7 +616,7 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
-  'WebKit Win Oilpan (dbg)': {
+  'WebKit Win non-Oilpan (dbg)': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb', 'oilpan'],
     'gclient_config': 'chromium',
@@ -646,7 +646,7 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
-  'WebKit Mac Oilpan': {
+  'WebKit Mac non-Oilpan': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb', 'oilpan'],
     'gclient_config': 'chromium',
@@ -671,7 +671,7 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
-  'WebKit Mac Oilpan (dbg)': {
+  'WebKit Mac non-Oilpan (dbg)': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb', 'oilpan'],
     'gclient_config': 'chromium',
@@ -696,7 +696,7 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
-  'WebKit Linux Oilpan Builder': {
+  'WebKit Linux non-Oilpan Builder': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb', 'oilpan'],
     'gclient_config': 'chromium',
@@ -715,7 +715,7 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
-  'WebKit Linux Oilpan': {
+  'WebKit Linux non-Oilpan': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb', 'oilpan'],
     'gclient_config': 'chromium',
@@ -725,7 +725,7 @@ SPEC['builders'].update({
       'TARGET_BITS': 64,
     },
     'bot_type': 'tester',
-    'parent_buildername': 'WebKit Linux Oilpan Builder',
+    'parent_buildername': 'WebKit Linux non-Oilpan Builder',
     'test_generators': [
       steps.generate_gtest,
       steps.generate_script,
@@ -742,7 +742,7 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
-  'WebKit Linux Oilpan ASAN': {
+  'WebKit Linux non-Oilpan ASAN': {
     'chromium_config': 'chromium_clang',
     'chromium_apply_config': ['asan', 'mb', 'oilpan'],
     'gclient_config': 'chromium',
@@ -802,7 +802,7 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
-  'WebKit Linux Oilpan Leak': {
+  'WebKit Linux non-Oilpan Leak': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb', 'oilpan'],
     'gclient_config': 'chromium',
@@ -835,7 +835,7 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
-  'WebKit Linux Oilpan (dbg)': {
+  'WebKit Linux non-Oilpan (dbg)': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb', 'oilpan'],
     'gclient_config': 'chromium',
