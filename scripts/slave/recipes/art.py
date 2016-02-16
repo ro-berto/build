@@ -259,6 +259,7 @@ def setup_aosp_builder(api):
     for build in builds:
       env = { 'ART_USE_OPTIMIZING_COMPILER': 'true',
               'TARGET_PRODUCT': 'aosp_%s' % build,
+              'LEGACY_USE_JAVA7': 'true',
               'TARGET_BUILD_VARIANT': 'eng',
               'TARGET_BUILD_TYPE': 'release'}
       api.step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'],
