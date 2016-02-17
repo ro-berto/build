@@ -953,12 +953,14 @@ class AndroidApi(recipe_api.RecipeApi):
       'android.webkit.cts.WebSettingsTest': [
         'testUserAgentString_default',
       ],
-      # crbug.com/534643, crbug.com/514474, crbug.com/563493
+      # crbug.com/534643, crbug.com/514474, crbug.com/563493, crbug.com/587179
       'android.webkit.cts.WebViewTest': [
         'testPageScroll',
         'testStopLoading',
         'testJavascriptInterfaceForClientPopup',
         'testRequestImageRef',
+        'testSetDownloadListener',
+        'testSetInitialScale',
       ],
       # crbug.com/514473
       'android.webkit.cts.WebViewSslTest': [
