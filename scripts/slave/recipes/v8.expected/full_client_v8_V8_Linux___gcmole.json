@@ -66,7 +66,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "target_arch=ia32 v8_target_arch=ia32",
+      "GYP_DEFINES": "gcmole=1 target_arch=ia32 v8_target_arch=ia32",
       "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -120,54 +120,42 @@
   },
   {
     "cmd": [
-      "lua",
-      "tools/gcmole/gcmole.lua",
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/gcmole/run-gcmole.py",
       "ia32"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "env": {
-      "CLANG_BIN": "../../../../../gcmole/bin",
-      "CLANG_PLUGINS": "../../../../../gcmole"
-    },
+    "cwd": "[SLAVE_BUILD]",
     "name": "GCMole ia32"
   },
   {
     "cmd": [
-      "lua",
-      "tools/gcmole/gcmole.lua",
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/gcmole/run-gcmole.py",
       "x64"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "env": {
-      "CLANG_BIN": "../../../../../gcmole/bin",
-      "CLANG_PLUGINS": "../../../../../gcmole"
-    },
+    "cwd": "[SLAVE_BUILD]",
     "name": "GCMole x64"
   },
   {
     "cmd": [
-      "lua",
-      "tools/gcmole/gcmole.lua",
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/gcmole/run-gcmole.py",
       "arm"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "env": {
-      "CLANG_BIN": "../../../../../gcmole/bin",
-      "CLANG_PLUGINS": "../../../../../gcmole"
-    },
+    "cwd": "[SLAVE_BUILD]",
     "name": "GCMole arm"
   },
   {
     "cmd": [
-      "lua",
-      "tools/gcmole/gcmole.lua",
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/gcmole/run-gcmole.py",
       "arm64"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
-    "env": {
-      "CLANG_BIN": "../../../../../gcmole/bin",
-      "CLANG_PLUGINS": "../../../../../gcmole"
-    },
+    "cwd": "[SLAVE_BUILD]",
     "name": "GCMole arm64"
   },
   {

@@ -451,22 +451,11 @@ class V8DeoptFuzzer(BaseTest):
 
 class V8GCMole(BaseTest):
   def run(self, **kwargs):
-    # TODO(machenbach): Make gcmole work with absolute paths. Currently, a
-    # particular clang version is installed on one slave in '/b'.
-    env = {
-      'CLANG_BIN': (
-        self.api.path.join('..', '..', '..', '..', '..', 'gcmole', 'bin')
-      ),
-      'CLANG_PLUGINS': (
-        self.api.path.join('..', '..', '..', '..', '..', 'gcmole')
-      ),
-    }
     for arch in ['ia32', 'x64', 'arm', 'arm64']:
-      self.api.step(
+      self.api.python(
         'GCMole %s' % arch,
-        ['lua', self.api.path.join('tools', 'gcmole', 'gcmole.lua'), arch],
-        cwd=self.api.path['checkout'],
-        env=env,
+        self.api.path['checkout'].join('tools', 'gcmole', 'run-gcmole.py'),
+        [arch],
       )
     return TestResults.empty()
 

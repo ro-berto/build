@@ -346,6 +346,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - gcmole': {
+        'chromium_apply_config': ['gcmole'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
