@@ -91,7 +91,7 @@ def merge_shard_results(output_dir):
     'arch': archs[0],
     'mode': modes[0],
     'slowest_tests': sorted(
-        slowest_tests, key=lambda t: t['duration'], reverse=True),
+        slowest_tests, key=lambda t: t['duration'], reverse=True)[:10],
     'results': results,
   }]
 
