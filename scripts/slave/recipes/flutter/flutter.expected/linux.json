@@ -278,9 +278,9 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil upload",
+    "name": "gsutil upload Stocks.apk",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/deadbeef/examples/Stocks.apk@@@"
+      "@@@STEP_LINK@Stocks.apk@https://storage.cloud.google.com/flutter_infra/flutter/deadbeef/examples/Stocks.apk@@@"
     ]
   },
   {
@@ -314,9 +314,9 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil upload (2)",
+    "name": "gsutil upload Gallery.apk",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/deadbeef/examples/Gallery.apk@@@"
+      "@@@STEP_LINK@Gallery.apk@https://storage.cloud.google.com/flutter_infra/flutter/deadbeef/examples/Gallery.apk@@@"
     ]
   },
   {
@@ -418,7 +418,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil rsync"
+    "name": "gsutil rsync packages/flutter/doc/api"
   },
   {
     "cmd": [
@@ -455,7 +455,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil rsync (2)"
+    "name": "gsutil rsync packages/playfair/doc/api"
   },
   {
     "cmd": [
@@ -492,7 +492,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil rsync (3)"
+    "name": "gsutil rsync packages/cassowary/doc/api"
   },
   {
     "cmd": [
@@ -529,7 +529,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil rsync (4)"
+    "name": "gsutil rsync packages/flutter_test/doc/api"
   },
   {
     "cmd": [
@@ -566,7 +566,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil rsync (5)"
+    "name": "gsutil rsync packages/flutter_sprites/doc/api"
   },
   {
     "cmd": [
@@ -586,7 +586,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil upload (3)",
+    "name": "gsutil upload doc/index.html",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/docs.flutter.io/index.html@@@"
     ]

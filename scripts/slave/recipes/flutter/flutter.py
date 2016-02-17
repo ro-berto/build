@@ -109,10 +109,12 @@ def GenerateDocs(api, pub_cache):
         api_path = package_path.join('doc', 'api')
         remote_path = 'gs://docs.flutter.io/%s' % package_path.pieces[-1]
         # Use rsync instead of copy to delete any obsolete docs.
-        api.gsutil(['-m', 'rsync', '-d', '-r', api_path, remote_path])
+        api.gsutil(['-m', 'rsync', '-d', '-r', api_path, remote_path],
+            name='rsync %s/doc/api' % package)
 
     index_path = checkout.join('doc', 'index.html')
-    api.gsutil.upload(index_path, 'docs.flutter.io', 'index.html')
+    api.gsutil.upload(index_path, 'docs.flutter.io', 'index.html',
+        name='upload doc/index.html')
 
 
 def BuildExamples(api, git_hash):
@@ -122,7 +124,8 @@ def BuildExamples(api, git_hash):
     # This is linux just to have only one bot archive at once.
     if api.platform.is_linux:
       cloud_path = GetCloudPath(api, git_hash, 'examples/%s' % apk_name)
-      api.gsutil.upload(app_path.join('build/app.apk'), BUCKET_NAME, cloud_path)
+      api.gsutil.upload(app_path.join('build/app.apk'), BUCKET_NAME, cloud_path,
+          link_name=apk_name, name='upload %s' % apk_name)
 
   # TODO(eseidel): We should not have to hard-code the desired apk name here.
   ArchiveAPK(api, 'examples/stocks', 'Stocks.apk')
