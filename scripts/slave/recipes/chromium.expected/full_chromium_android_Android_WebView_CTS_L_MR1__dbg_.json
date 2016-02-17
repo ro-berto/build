@@ -449,7 +449,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Extract CTS",
-    "stdin": "{\"output\": \"[TMP_BASE]/cts_tmp_1/cts-extracted\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/cts_tmp_1/android-cts-5.1_r1-linux_x86-arm.zip\"}"
+    "stdin": "{\"output\": \"[TMP_BASE]/cts_tmp_1/cts-extracted\", \"zip_file\": \"[TMP_BASE]/cts_tmp_1/android-cts-5.1_r1-linux_x86-arm.zip\"}"
   },
   {
     "cmd": [

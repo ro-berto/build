@@ -57,7 +57,6 @@ class ZipApi(recipe_api.RecipeApi):
     # TODO(vadimsh): Use 7zip on Windows if available?
     script_input = {
       'output': str(output),
-      'use_python_zip': self.m.platform.is_win,
       'zip_file': str(zip_file),
     }
     self.m.python(
@@ -83,16 +82,18 @@ class ZipPackage(object):
   def output(self):
     return self._output
 
-  def add_file(self, path):
+  def add_file(self, path, archive_name=None):
     """Stages single file to be added to the package.
 
     Args:
       path: absolute path to a file, should be in |root| subdirectory.
+      archive_name: name of the file in the archive, if non-None
     """
     assert self._root.is_parent_of(path), path
     self._entries.append({
       'type': 'file',
       'path': str(path),
+      'archive_name': archive_name
     })
 
   def add_directory(self, path):
@@ -114,7 +115,6 @@ class ZipPackage(object):
       'entries': self._entries,
       'output': str(self._output),
       'root': str(self._root),
-      'use_python_zip': self._module.m.platform.is_win,
     }
     step_result = self._module.m.python(
         name=step_name,

@@ -164,7 +164,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip darwin-x64 Artifacts",
-    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/Release/sky_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_1/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\", \"use_python_zip\": false}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"sky_snapshot\", \"path\": \"[SLAVE_BUILD]/src/out/Release/sky_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_1/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
@@ -321,7 +321,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "make FlutterXcode.zip",
-    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/FlutterXcode\", \"type\": \"dir\"}], \"output\": \"[SLAVE_BUILD]/src/out/FlutterXcode.zip\", \"root\": \"[SLAVE_BUILD]/src/out/FlutterXcode\", \"use_python_zip\": false}"
+    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/FlutterXcode\", \"type\": \"dir\"}], \"output\": \"[SLAVE_BUILD]/src/out/FlutterXcode.zip\", \"root\": \"[SLAVE_BUILD]/src/out/FlutterXcode\"}"
   },
   {
     "cmd": [

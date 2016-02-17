@@ -70,27 +70,38 @@ def zip_with_python(root, output, entries):
   """
   with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED,
                        allowZip64=True) as zip_file:
-    def add(path):
+    def add(path, archive_name):
       assert path.startswith(root), path
       # Do not add itself to archive.
       if path == output:
         return
-      archive_name = path[len(root):]
+      if archive_name is None:
+        archive_name = path[len(root):]
       print 'Adding %s' % archive_name
       zip_file.write(path, archive_name)
 
     for entry in entries:
       tp = entry['type']
       path = entry['path']
+      archive_name = entry['archive_name']
       if tp == 'file':
-        add(path)
+        add(path, archive_name)
       elif tp == 'dir':
         for cur, _, files in os.walk(path):
           for name in files:
-            add(os.path.join(cur, name))
+            add(os.path.join(cur, name), None)
       else:
         raise AssertionError('Invalid entry type: %s' % (tp,))
   return 0
+
+
+def use_python_zip(entries):
+  if sys.platform == 'win32':
+    return True
+  for entry in entries:
+    if entry['archive_name'] is not None:
+      return True
+  return False
 
 
 def main():
@@ -99,7 +110,6 @@ def main():
   entries = data['entries']
   output = data['output']
   root = data['root'].rstrip(os.path.sep) + os.path.sep
-  use_python_zip = data['use_python_zip']
 
   # Archive root directory should exist and be an absolute path.
   assert os.path.exists(root), root
@@ -111,8 +121,10 @@ def main():
   print 'Zipping %s...' % output
   exit_code = -1
   try:
-    if use_python_zip:
-      # Used on Windows, since there's no builtin 'zip' utility there.
+    if use_python_zip(entries):
+      # Used on Windows, since there's no builtin 'zip' utility there, and when
+      # an explicit archive_name is set, since there's no way to do that with
+      # the native zip utility without filesystem shenanigans
       exit_code = zip_with_python(root, output, entries)
     else:
       # On mac and linux 'zip' utility handles symlink and file modes.

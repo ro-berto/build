@@ -40,10 +40,9 @@ def RunGN(api, *args):
   api.step('gn %s' % ' '.join(args), gn_cmd)
 
 
-# TODO(eseidel): This belongs as api.zip.ZipPackage.add_files
-def AddFiles(pkg, relative_paths):
+def AddFiles(api, pkg, relative_paths):
   for path in relative_paths:
-    pkg.add_file(pkg.root.join(path))
+    pkg.add_file(pkg.root.join(path), archive_name=api.path.basename(path))
 
 
 def UploadArtifacts(api, platform, file_paths):
@@ -52,9 +51,22 @@ def UploadArtifacts(api, platform, file_paths):
     remote_name = '%s/artifacts.zip' % platform
     remote_zip = GetCloudPath(api, remote_name)
     pkg = api.zip.make_package(api.path['checkout'], local_zip)
-    AddFiles(pkg, file_paths)
+    AddFiles(api, pkg, file_paths)
 
     pkg.zip('Zip %s Artifacts' % platform)
+    api.gsutil.upload(local_zip, BUCKET_NAME, remote_zip,
+        name='upload %s' % remote_name)
+
+
+def UploadDartPackage(api, package_name):
+  with MakeTempDir(api) as temp_dir:
+    local_zip = temp_dir.join('%s.zip' % package_name)
+    remote_name = '%s.zip' % package_name
+    remote_zip = GetCloudPath(api, remote_name)
+    dart_pkg_dir = api.path['checkout'].join('out/Release/gen/dart-pkg')
+    pkg = api.zip.make_package(dart_pkg_dir, local_zip)
+    pkg.add_file(dart_pkg_dir.join(package_name))
+    pkg.zip('Zip %s Package' % package_name)
     api.gsutil.upload(local_zip, BUCKET_NAME, remote_zip,
         name='upload %s' % remote_name)
 
@@ -89,11 +101,7 @@ def BuildLinuxAndroid(api):
     'out/android_Release/gen/sky/shell/shell/shell/libs/armeabi-v7a/' +
     'libsky_shell.so',
     'out/android_Release/icudtl.dat',
-
-    # TODO(mpcomplete): stop bundling classes.dex once
-    # https://github.com/flutter/flutter/pull/1263 lands.
     'out/android_Release/gen/sky/shell/shell/classes.dex.jar',
-    'out/android_Release/gen/sky/shell/shell/classes.dex',
   ])
 
   def UploadService(name):
@@ -122,6 +130,8 @@ def BuildLinux(api):
     'out/Release/sky_shell',
     'out/Release/sky_snapshot',
   ])
+  UploadDartPackage(api, 'sky_engine')
+  UploadDartPackage(api, 'sky_services')
 
 
 def TestObservatory(api):

@@ -135,7 +135,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Zip Large Profile",
-    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]/large-profile_tmp_1\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/zipped-profile_tmp_2/large_profile.zip\", \"root\": \"[TMP_BASE]/large-profile_tmp_1\", \"use_python_zip\": false}"
+    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]/large-profile_tmp_1\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/zipped-profile_tmp_2/large_profile.zip\", \"root\": \"[TMP_BASE]/large-profile_tmp_1\"}"
   },
   {
     "cmd": [

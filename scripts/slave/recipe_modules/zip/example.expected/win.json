@@ -54,7 +54,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "zipping",
-    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output.zip\", \"root\": \"[TMP_BASE]\\\\zip-example_tmp_1\", \"use_python_zip\": true}"
+    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output.zip\", \"root\": \"[TMP_BASE]\\\\zip-example_tmp_1\"}"
   },
   {
     "cmd": [
@@ -64,7 +64,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "zipping more",
-    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\a\", \"type\": \"file\"}, {\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\b\", \"type\": \"file\"}, {\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\sub\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\more.zip\", \"root\": \"[TMP_BASE]\\\\zip-example_tmp_1\", \"use_python_zip\": true}"
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\a\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\b\", \"type\": \"file\"}, {\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\sub\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\more.zip\", \"root\": \"[TMP_BASE]\\\\zip-example_tmp_1\"}"
   },
   {
     "cmd": [
@@ -82,7 +82,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "unzipping",
-    "stdin": "{\"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output\", \"use_python_zip\": true, \"zip_file\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output.zip\"}"
+    "stdin": "{\"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output\", \"zip_file\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output.zip\"}"
   },
   {
     "cmd": [

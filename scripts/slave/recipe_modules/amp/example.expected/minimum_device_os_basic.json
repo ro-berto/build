@@ -309,7 +309,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for example_gtest_suite",
-    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
   },
   {
     "cmd": [
@@ -416,7 +416,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for example_instrumentation_suite",
-    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
   },
   {
     "cmd": [
@@ -521,7 +521,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[upload logcat] unzip results for example_uirobot_suite",
-    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"use_python_zip\": false, \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
+    "stdin": "{\"output\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/unzipped_results\", \"zip_file\": \"[TMP_BASE]/amp_results_tmp_2/T35TRUN1D/results.zip\"}"
   },
   {
     "cmd": [
