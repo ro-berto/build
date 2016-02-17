@@ -285,9 +285,8 @@
         "properties": {
           "bisect_config": {
             "command": "src/tools/perf/run_benchmark -v --browser=android-chromium smoothness.tough_scrolling_cases",
-            "max_time_minutes": "5",
             "metric": "mean_input_event_latency/mean_input_event_latency",
-            "repeat_count": "2",
+            "repeat_count": 5,
             "test_type": "perf"
           },
           "job_name": "a6298e4afedbf2cd461755ea6f45b0ad64222222-test",
@@ -322,9 +321,8 @@
         "properties": {
           "bisect_config": {
             "command": "src/tools/perf/run_benchmark -v --browser=android-chromium smoothness.tough_scrolling_cases",
-            "max_time_minutes": "5",
             "metric": "mean_input_event_latency/mean_input_event_latency",
-            "repeat_count": "2",
+            "repeat_count": 5,
             "test_type": "perf"
           },
           "job_name": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test",
@@ -507,9 +505,8 @@
         "properties": {
           "bisect_config": {
             "command": "src/tools/perf/run_benchmark -v --browser=android-chromium smoothness.tough_scrolling_cases",
-            "max_time_minutes": "5",
             "metric": "mean_input_event_latency/mean_input_event_latency",
-            "repeat_count": "2",
+            "repeat_count": 5,
             "test_type": "perf"
           },
           "job_name": "dcdcdc0ff1122212323134879ddceeb1240b0988-test",
@@ -564,6 +561,40 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil Get test results for build dcdcdc0ff1122212323134879ddceeb1240b0988",
     "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::auto_bisect]/resources/significantly_different.py",
+      "[19, 20, 21, 22, 23]",
+      "[12, 13, 14, 15, 16]",
+      "0.01"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Checking sample difference",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::auto_bisect]/resources/significantly_different.py",
+      "[12, 13, 14, 15, 16]",
+      "[12, 13, 14, 15, 16]",
+      "0.01"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Checking sample difference (2)",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
+    ]
   },
   {
     "cmd": [

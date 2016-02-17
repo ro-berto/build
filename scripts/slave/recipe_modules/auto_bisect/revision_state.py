@@ -31,7 +31,10 @@ class RevisionState(object):
       SKIPPED,  # A revision that was not built or tested for a special reason,
                 # such as those ranges that we know are broken, or when nudging
                 # revisions.
-  ) = xrange(7)
+      NEED_MORE_DATA,  # Current number of test values is too small to establish
+                       # a statistically significant difference between this
+                       # revision and the revisions known to be good and bad.
+  ) = xrange(8)
 
   def __init__(self, revision_string, bisector,
                dependency_depot_name=None, base_revision=None,
@@ -111,11 +114,12 @@ class RevisionState(object):
 
   @property
   def tested(self):
-    return self.status in [RevisionState.TESTED]
+    return self.status in (RevisionState.TESTED,)
 
   @property
   def in_progress(self):
-    return self.status in (RevisionState.BUILDING, RevisionState.TESTING)
+    return self.status in (RevisionState.BUILDING, RevisionState.TESTING,
+                           RevisionState.NEED_MORE_DATA)
 
   @property
   def failed(self):
@@ -148,8 +152,9 @@ class RevisionState(object):
       self.status = RevisionState.BUILDING
       return
 
-    if self._is_build_archived() and self.status in [RevisionState.NEW,
-                                                     RevisionState.BUILDING]:
+    if self._is_build_archived() and self.status in (
+        RevisionState.NEW, RevisionState.BUILDING,
+        RevisionState.NEED_MORE_DATA):
       self._do_test()
       self.status = RevisionState.TESTING
 
@@ -247,11 +252,16 @@ class RevisionState(object):
     """
     if self.status == RevisionState.BUILDING and self._is_build_archived():
       self.start_job()
-    elif self.status == RevisionState.TESTING and self._results_available():
-      self._read_test_results()
+    elif (self.status in (RevisionState.TESTING, RevisionState.NEED_MORE_DATA)
+          and self._results_available()):
+      # If we have already decided whether the revision is good or bad we
+      # shouldn't check again
+      check_revision_goodness = not(self.good or self.bad)
+      self._read_test_results(
+          check_revision_goodness=check_revision_goodness)
       # We assume _read_test_results may have changed the status to a broken
       # state such as FAILED or ABORTED.
-      if self.status == RevisionState.TESTING:
+      if self.status in (RevisionState.TESTING, RevisionState.NEED_MORE_DATA):
         self.status = RevisionState.TESTED
 
   def _is_build_archived(self):

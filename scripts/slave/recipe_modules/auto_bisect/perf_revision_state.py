@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import json
+import math
 import tempfile
 import os
 import uuid
@@ -12,6 +13,9 @@ from . import revision_state
 if 'CACHE_TEST_RESULTS' in os.environ:  # pragma: no cover
   from . import test_results_cache
 
+# These relate to how to increase the number of repetitions during re-test
+MINIMUM_SAMPLE_SIZE = 5
+INCREASE_FACTOR = 1.5
 
 class PerfRevisionState(revision_state.RevisionState):
   """Contains the state and results for one revision in a perf bisect job."""
@@ -21,9 +25,10 @@ class PerfRevisionState(revision_state.RevisionState):
     self.values = []
     self.mean_value = None
     self.std_dev = None
+    self.repeat_count = MINIMUM_SAMPLE_SIZE
     self._test_config = None
 
-  def _read_test_results(self):
+  def _read_test_results(self, check_revision_goodness=True):
     """Gets the test results from GS and checks if the rev is good or bad."""
     test_results = self._get_test_results()
     # Results will contain the keys 'results' and 'output' where output is the
@@ -36,7 +41,7 @@ class PerfRevisionState(revision_state.RevisionState):
       if 'MISSING_METRIC' in results.get('errors'):  # pragma: no cover
         self.bisector.surface_result('MISSING_METRIC')
       return
-    self.values = results['values']
+    self.values += results['values']
     if self.bisector.is_return_code_mode():
       retcodes = test_results['retcodes']
       overall_return_code = 0 if all(v == 0 for v in retcodes) else 1
@@ -50,8 +55,13 @@ class PerfRevisionState(revision_state.RevisionState):
       self.status = PerfRevisionState.FAILED
       self.bisector.surface_result('MISSING_METRIC')
       return
+    # If we have already decided on the goodness of this revision, we shouldn't
+    # recheck it.
+    if self.good or self.bad:
+      check_revision_goodness = False
     # We cannot test the goodness of the initial rev range.
-    if self.bisector.good_rev != self and self.bisector.bad_rev != self:
+    if (self.bisector.good_rev != self and self.bisector.bad_rev != self and
+        check_revision_goodness):
       if self._check_revision_good():
         self.good = True
       else:
@@ -113,14 +123,13 @@ class PerfRevisionState(revision_state.RevisionState):
     required_test_properties = {
         'truncate_percent',
         'metric',
-        'max_time_minutes',
         'command',
-        'repeat_count',
         'test_type'
     }
     for k, v in self.bisector.bisect_config.iteritems():
       if k in required_test_properties:
         result[k] = v
+    result['repeat_count'] = self.repeat_count
     self._test_config = result
     return result
 
@@ -155,8 +164,10 @@ class PerfRevisionState(revision_state.RevisionState):
     self.test_results_url = (self.bisector.api.GS_RESULTS_URL +
                              self.job_name + '.results')
     if api.m.bisect_tester.local_test_enabled():  # pragma: no cover
+      skip_download = self.bisector.last_tested_revision == self
+      self.bisector.last_tested_revision = self
       overrides = perf_test_properties['properties']
-      api.run_local_test_run(api.m, overrides)
+      api.run_local_test_run(api.m, overrides, skip_download=skip_download)
     else:
       step_name = 'Triggering test job for ' + str(self.revision_string)
       api.m.trigger(perf_test_properties, name=step_name)
@@ -191,6 +202,15 @@ class PerfRevisionState(revision_state.RevisionState):
         'job_name': self.job_name,
     }
 
+  def retest(self):  # pragma: no cover
+    # We need at least 5 samples for applying Mann-Whitney U test
+    # with P < 0.01, two-tailed .
+    target_sample_size =  max(5, math.ceil(len(self.values) * 1.5))
+    self.status = PerfRevisionState.NEED_MORE_DATA
+    self.repeat_count = target_sample_size - len(self.values)
+    self.start_job()
+    self.bisector.wait_for_any([self])
+
   def _get_test_results(self):
     """Tries to get the results of a test job from cloud storage."""
     api = self.bisector.api
@@ -208,20 +228,64 @@ class PerfRevisionState(revision_state.RevisionState):
   def _check_revision_good(self):
     """Determines if a revision is good or bad.
 
-    Note that our current approach is to determine whether it is closer to
-    either the 'good' and 'bad' revisions given for the bisect job.
+    Iteratively increment the sample size of the revision being tested, the last
+    known good revision, and the first known bad revision until a relationship
+    of significant difference can be established betweeb the results of the
+    revision being tested and one of the other two.
+
+    If the results do not converge towards finding a significant difference in
+    either direction, this is expected to timeout eventually. This scenario
+    should be rather rare, since it is expected that the fkbr and lkgr are
+    significantly different as a precondition.
 
     Returns:
-      True if this revision is closer to the initial good revision's value than
-      to the initial bad revision's value. False otherwise.
+      True if the results of testing this revision are significantly different
+      from those of testing the earliest known bad revision.
+      False if they are instead significantly different form those of testing
+      the latest knwon good revision.
     """
-    # TODO: Reevaluate this approach
-    bisector = self.bisector
-    distance_to_good = abs(self.mean_value - bisector.good_rev.mean_value)
-    distance_to_bad = abs(self.mean_value - bisector.bad_rev.mean_value)
-    if distance_to_good < distance_to_bad:
-      return True
-    return False
+    if self.bisector.is_return_code_mode():
+      return self.mean_value == 0
+
+    while True:
+      diff_from_good = self.bisector.significantly_different(
+          self.bisector.lkgr.values, self.values)
+      diff_from_bad = self.bisector.significantly_different(
+          self.bisector.fkbr.values, self.values)
+
+      if diff_from_good and diff_from_bad:
+        # Multiple regressions.
+        # For now, proceed bisecting the biggest difference of the means.
+        dist_from_good = abs(self.mean_value - self.bisector.lkgr.mean_value)
+        dist_from_bad = abs(self.mean_value - self.bisector.fkbr.mean_value)
+        if dist_from_good > dist_from_bad:
+          # TODO(robertocn): Add way to handle the secondary regression
+          #self.bisector.handle_secondary_regression(self, self.bisector.fkbr)
+          return False
+        else:
+          #self.bisector.handle_secondary_regression(self.bisector.lkgr, self)
+          return True
+
+      if diff_from_good or diff_from_bad:  # pragma: no cover
+        return diff_from_bad
+
+      self._next_retest()  # pragma: no cover
+
+
+  def _next_retest(self):  # pragma: no cover
+    """Chooses one of current, lkgr, fkbr to retest.
+
+    Look for the smallest sample and retest that. If the last tested revision
+    is tied for the smallest sample, use that to take advantage of the fact
+    that it is already downloaded and unzipped.
+    """
+    next_revision_to_test = min(self.bisector.lkgr, self, self.bisector.fkbr,
+        key=lambda x: len(x.values))
+    if (len(self.bisector.last_tested_revision.values) ==
+        next_revision_to_test.values):
+      self.bisector.last_tested_revision.retest()
+    else:
+      next_revision_to_test.retest()
 
   def __repr__(self):
     return ('PerfRevisionState(cp=%s, values=%r, mean_value=%r, std_dev=%r)' %

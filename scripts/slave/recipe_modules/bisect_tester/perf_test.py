@@ -93,7 +93,8 @@ def run_perf_test(api, test_config, **kwargs):
   start_time = time.time()
   for i in range(repeat_cnt):
     elapsed_minutes = (time.time() - start_time) / 60.0
-    if elapsed_minutes >= limit:  # pragma: no cover
+    # A limit of 0 means 'no timeout set'.
+    if limit and elapsed_minutes >= limit:  # pragma: no cover
       break
     if is_telemetry:
       if i == 0 and kwargs.get('reset_on_first_run'):
