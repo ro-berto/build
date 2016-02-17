@@ -68,7 +68,8 @@
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
+      "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"deadbeef\"@@@"
     ]
   },
   {
@@ -111,11 +112,19 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/flutter/tools/android/download_android_tools.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "download android tools"
+  },
+  {
+    "cmd": [
       "dart",
       "[SLAVE_BUILD]/flutter/dev/update_packages.dart"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
@@ -129,6 +138,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/flutter",
     "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
@@ -145,6 +155,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/flutter",
     "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
@@ -159,6 +170,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/cassowary",
     "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
@@ -173,6 +185,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/flutter_tools",
     "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
@@ -187,6 +200,7 @@
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/flx",
     "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
@@ -201,10 +215,37 @@
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/newton",
     "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "test packages/newton"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "apk"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/examples/stocks",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "flutter apk examples/stocks"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "apk"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/examples/material_gallery",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "flutter apk examples/material_gallery"
   },
   {
     "name": "$result",

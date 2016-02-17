@@ -14,6 +14,13 @@ DEPS = [
   'recipe_engine/step',
 ]
 
+BUCKET_NAME = 'flutter_infra'
+
+
+def GetCloudPath(api, git_hash, path):
+  return 'flutter/%s/%s' % (git_hash, path)
+
+
 def UpdatePackages(api):
   update_packages = api.path['checkout'].join('dev', 'update_packages.dart')
   api.step('update packages', ['dart', update_packages])
@@ -108,18 +115,36 @@ def GenerateDocs(api, pub_cache):
     api.gsutil.upload(index_path, 'docs.flutter.io', 'index.html')
 
 
+def BuildExamples(api, git_hash):
+  def ArchiveAPK(api, app_dir, apk_name):
+    app_path = api.path['checkout'].join(app_dir)
+    api.step('flutter apk %s' % app_dir, ['flutter', 'apk'], cwd=app_path)
+    # This is linux just to have only one bot archive at once.
+    if api.platform.is_linux:
+      cloud_path = GetCloudPath(api, git_hash, 'examples/%s' % apk_name)
+      api.gsutil.upload(app_path.join('build/app.apk'), BUCKET_NAME, cloud_path)
+
+  # TODO(eseidel): We should not have to hard-code the desired apk name here.
+  ArchiveAPK(api, 'examples/stocks', 'Stocks.apk')
+  ArchiveAPK(api, 'examples/material_gallery', 'Gallery.apk')
+
+
 def RunSteps(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
     api.file.rmcontents('everything', api.path['slave_build'])
 
-  api.git.checkout(
+  git_hash = api.git.checkout(
       'https://chromium.googlesource.com/external/github.com/flutter/flutter',
-      recursive=True)
+      recursive=True, set_got_revision=True)
   checkout = api.path['checkout']
 
   download_sdk = checkout.join('infra', 'download_dart_sdk.py')
   api.step('download dart sdk', [download_sdk])
+
+  api.step('download android tools',
+      [checkout.join('tools/android/download_android_tools.py')])
+
 
   dart_bin = checkout.join('infra', 'dart-sdk', 'dart-sdk', 'bin')
   flutter_bin = checkout.join('bin')
@@ -132,6 +157,7 @@ def RunSteps(api):
         '%(PATH)s')),
     # Setup our own pub_cache to not affect other slaves on this machine.
     'PUB_CACHE': pub_cache,
+    'ANDROID_HOME': checkout.join('infra', 'android_tools'),
   }
 
   # The context adds dart-sdk tools to PATH sets PUB_CACHE.
@@ -140,6 +166,7 @@ def RunSteps(api):
     PopulateFlutterCache(api)
     AnalyzeFlutter(api)
     TestFlutterPackagesAndExamples(api)
+    BuildExamples(api, git_hash)
 
     # TODO(eseidel): We only want to generate one copy of the docs at a time
     # otherwise multiple rsyncs could race, causing badness. We'll eventually
