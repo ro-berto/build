@@ -481,18 +481,7 @@ class V8DeoptFuzzer(BaseTest):
     return TestResults.empty()
 
 
-class V8GCMole(BaseTest):
-  def run(self, **kwargs):
-    for arch in ['ia32', 'x64', 'arm', 'arm64']:
-      self.api.python(
-        'GCMole %s' % arch,
-        self.api.path['checkout'].join('tools', 'gcmole', 'run-gcmole.py'),
-        [arch],
-      )
-    return TestResults.empty()
-
-
-class V8GCMoleSwarming(V8CompositeSwarmingTest):
+class V8GCMole(V8CompositeSwarmingTest):
   @property
   def composite_tests(self):
     return [
@@ -522,14 +511,13 @@ V8_NON_STANDARD_TESTS = freeze({
 
 
 TOOL_TO_TEST = freeze({
-  'run-gcmole': V8GCMole,
   'run-tests': V8Test,
 })
 
 
 TOOL_TO_TEST_SWARMING = freeze({
   'check-static-initializers': V8CheckInitializers,
-  'run-gcmole': V8GCMoleSwarming,
+  'run-gcmole': V8GCMole,
   'run-valgrind': V8SimpleLeakCheck,
   'run-tests': V8SwarmingTest,
 })

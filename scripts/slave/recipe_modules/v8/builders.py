@@ -20,8 +20,7 @@ class TestStepConfig(object):
 Benchmarks = TestStepConfig('benchmarks')
 Deopt = TestStepConfig('deopt')
 Fuzz = TestStepConfig('fuzz')
-GCMole = TestStepConfig('gcmole', swarming=False)
-GCMoleSwarming = TestStepConfig('gcmole')
+GCMole = TestStepConfig('gcmole')
 Mjsunit = TestStepConfig('mjsunit')
 Mjsunit_2 = TestStepConfig('mjsunit', shards=2)
 Mjsunit_3 = TestStepConfig('mjsunit', shards=3)
@@ -74,8 +73,6 @@ BUILDERS = {
           'V8 Linux - nosse3',
           'V8 Linux - nosse4',
           'V8 Linux - presubmit',
-          # TODO(machenbach): Remove after staging gcmole.
-          'V8 Linux - swarming staging'
         ],
         'triggers_proxy': True,
       },
@@ -173,7 +170,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux - builder',
-        'tests': [GCMoleSwarming],
+        'tests': [GCMole],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug': {
@@ -354,6 +351,7 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - builder',
+        'enable_swarming': True,
         'build_gs_archive': 'linux_rel_archive',
         'tests': [GCMole],
         'testing': {'platform': 'linux'},
