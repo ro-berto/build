@@ -12,6 +12,10 @@ TEST_CONFIGS = freeze({
     'tests': ['benchmarks'],
     'test_args': ['--download-data'],
   },
+  'gcmole': {
+    'tool': 'run-gcmole',
+    'isolated_target': 'run-gcmole',
+  },
   'ignition': {
     'name': 'Ignition',
     'tests': ['ignition'],
@@ -356,13 +360,19 @@ class V8Presubmit(BaseTest):
 
 
 class V8GenericSwarmingTest(BaseTest):
+  def __init__(self, test_step_config, api, v8,
+               title='Generic test', extra_args=None):
+    super(V8GenericSwarmingTest, self).__init__(test_step_config, api, v8)
+    self._extra_args = extra_args or []
+    self._title = title
+
   @property
   def title(self):
-    raise NotImplementedError()  # pragma: no cover
+    return self._title  # pragma: no cover
 
   @property
   def extra_args(self):
-    raise NotImplementedError()  # pragma: no cover
+    return self._extra_args  # pragma: no cover
 
   @property
   def uses_swarming(self):
@@ -386,6 +396,28 @@ class V8GenericSwarmingTest(BaseTest):
   def run(self, **kwargs):
     assert self.task
     self.api.swarming.collect_task(self.task)
+    return TestResults.empty()
+
+
+class V8CompositeSwarmingTest(BaseTest):
+  @property
+  def composite_tests(self):
+    """Returns: An iterable of V8GenericSwarmingTest instances."""
+    raise NotImplementedError()  # pragma: no cover
+
+  @property
+  def uses_swarming(self):
+    """Returns true if the test uses swarming."""
+    return True
+
+  def pre_run(self, test=None, **kwargs):
+    self.composites = list(self.composite_tests)
+    for c in self.composites:
+      c.pre_run(test, **kwargs)
+
+  def run(self, **kwargs):
+    for c in self.composites:
+      c.run(**kwargs)
     return TestResults.empty()
 
 
@@ -460,6 +492,18 @@ class V8GCMole(BaseTest):
     return TestResults.empty()
 
 
+class V8GCMoleSwarming(V8CompositeSwarmingTest):
+  @property
+  def composite_tests(self):
+    return [
+      V8GenericSwarmingTest(
+          self.test_step_config, self.api, self.v8,
+          title='GCMole %s' % arch,
+          extra_args=[arch],
+      ) for arch in ['ia32', 'x64', 'arm', 'arm64']
+    ]
+
+
 class V8SimpleLeakCheck(V8GenericSwarmingTest):
   @property
   def title(self):
@@ -473,18 +517,19 @@ class V8SimpleLeakCheck(V8GenericSwarmingTest):
 V8_NON_STANDARD_TESTS = freeze({
   'deopt': V8DeoptFuzzer,
   'fuzz': V8Fuzzer,
-  'gcmole': V8GCMole,
   'presubmit': V8Presubmit,
 })
 
 
 TOOL_TO_TEST = freeze({
+  'run-gcmole': V8GCMole,
   'run-tests': V8Test,
 })
 
 
 TOOL_TO_TEST_SWARMING = freeze({
   'check-static-initializers': V8CheckInitializers,
+  'run-gcmole': V8GCMoleSwarming,
   'run-valgrind': V8SimpleLeakCheck,
   'run-tests': V8SwarmingTest,
 })

@@ -20,7 +20,8 @@ class TestStepConfig(object):
 Benchmarks = TestStepConfig('benchmarks')
 Deopt = TestStepConfig('deopt')
 Fuzz = TestStepConfig('fuzz')
-GCMole = TestStepConfig('gcmole')
+GCMole = TestStepConfig('gcmole', swarming=False)
+GCMoleSwarming = TestStepConfig('gcmole')
 Mjsunit = TestStepConfig('mjsunit')
 Mjsunit_2 = TestStepConfig('mjsunit', shards=2)
 Mjsunit_3 = TestStepConfig('mjsunit', shards=3)
@@ -53,7 +54,7 @@ BUILDERS = {
     'builders': {
 ####### Category: Linux
       'V8 Linux - builder': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'gcmole'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -73,6 +74,8 @@ BUILDERS = {
           'V8 Linux - nosse3',
           'V8 Linux - nosse4',
           'V8 Linux - presubmit',
+          # TODO(machenbach): Remove after staging gcmole.
+          'V8 Linux - swarming staging'
         ],
         'triggers_proxy': True,
       },
@@ -164,15 +167,13 @@ BUILDERS = {
       },
       'V8 Linux - swarming staging': {
         'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
         'enable_swarming': True,
-        'parent_buildername': 'V8 Linux64 - debug builder',
-        'tests': [
-          SimpleLeak,
-        ],
+        'parent_buildername': 'V8 Linux - builder',
+        'tests': [GCMoleSwarming],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug': {
