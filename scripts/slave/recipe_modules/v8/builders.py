@@ -68,7 +68,6 @@ BUILDERS = {
           'V8 Deopt Fuzzer',
           'V8 Linux',
           'V8 Linux - deadcode',
-          'V8 Linux - gcmole',
           'V8 Linux - isolates',
           'V8 Linux - nosse3',
           'V8 Linux - nosse4',
@@ -344,19 +343,6 @@ BUILDERS = {
         'tests': [V8Testing, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - gcmole': {
-        'chromium_apply_config': ['gcmole'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux - builder',
-        'enable_swarming': True,
-        'build_gs_archive': 'linux_rel_archive',
-        'tests': [GCMole],
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux - interpreted regexp': {
         'chromium_apply_config': [
           'clang', 'v8_ninja', 'goma', 'interpreted_regexp'],
@@ -439,7 +425,6 @@ BUILDERS = {
           'V8 Linux64 - debug',
           'V8 Linux64 - debug - avx2',
           'V8 Linux64 - debug - greedy allocator',
-          'V8 Linux64 - memcheck',
         ],
       },
       'V8 Linux64 - custom snapshot - debug builder': {
@@ -1415,17 +1400,6 @@ BUILDERS = {
           Mozilla,
           SimdJs,
         ],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux64 - memcheck': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'enable_swarming': True,
-        'parent_buildername': 'V8 Linux64 - debug builder',
-        'tests': [SimpleLeak],
         'testing': {'platform': 'linux'},
       },
       'V8 Mac64 ASAN': {
