@@ -112,7 +112,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/flutter/tools/android/download_android_tools.py"
+      "[SLAVE_BUILD]/flutter/infra/download_android_tools.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "download android tools"

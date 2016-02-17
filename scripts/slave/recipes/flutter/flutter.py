@@ -143,7 +143,7 @@ def RunSteps(api):
   api.step('download dart sdk', [download_sdk])
 
   api.step('download android tools',
-      [checkout.join('tools/android/download_android_tools.py')])
+      [checkout.join('infra', 'download_android_tools.py')])
 
 
   dart_bin = checkout.join('infra', 'dart-sdk', 'dart-sdk', 'bin')
