@@ -146,7 +146,8 @@
   },
   {
     "cmd": [
-      "flutter doctor"
+      "flutter",
+      "doctor"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
