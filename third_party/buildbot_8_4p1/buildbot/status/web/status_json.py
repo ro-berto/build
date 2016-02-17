@@ -22,7 +22,7 @@ import fnmatch
 import os
 import re
 
-from twisted.internet import defer
+from twisted.internet import defer, reactor
 from twisted.python import log as twlog
 from twisted.web import html, resource, server
 
@@ -1051,7 +1051,6 @@ class VarzResource(JsonResource):
     @defer.deferredGenerator
     def asDict(self, request):
         builders = {}
-        twlog.msg('VarzResource: populating builder list')
         for builder_name in self.status.getBuilderNames():
             builder = self.status.getBuilder(builder_name)
             slaves = builder.getSlaves()
@@ -1065,21 +1064,34 @@ class VarzResource(JsonResource):
 
         # Get pending build requests directly from the db for all builders at
         # once.
-        twlog.msg('VarzResource: fetching build requests')
         d = self.status.master.db.buildrequests.getBuildRequests(claimed=False)
-        def pending_builds_callback(brdicts):
-            twlog.msg('VarzResource: pending_builds_callback')
+
+        # Timeout the database request after 5 seconds.
+        def timeout():
+            if not d.called:
+                d.cancel()
+        reactor.callLater(5, timeout)
+
+        wfd = defer.waitForDeferred(d)
+        yield wfd
+        try:
+            brdicts = wfd.getResult()
+        except Exception as ex:
+            twlog.err(ex, 'getBuildRequests failed responding to /json/varz')
+        else:
             for brdict in brdicts:
                 if brdict['buildername'] in builders:
                     builders[brdict['buildername']]['pending_builds'] += 1
-            twlog.msg('VarzResource: pending_builds_callback finished')
-        d.addCallback(pending_builds_callback)
-        yield defer.waitForDeferred(d)
 
-        twlog.msg('VarzResource: finished')
+        pool = self.status.master.db.pool
         yield {
             'accepting_builds': bool(self.status.master.botmaster.brd.running),
             'builders': builders,
+            'db_thread_pool': {
+                'queue': pool.q.qsize(),
+                'waiting': len(pool.waiters),
+                'working': len(pool.working),
+            },
             'server_uptime': (
                     get_timeblock()['utc_ts'] - SERVER_STARTED['utc_ts']),
         }
