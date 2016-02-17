@@ -167,6 +167,7 @@ def RunSteps(api):
   with api.step.context({'env': env}):
     UpdatePackages(api)
     PopulateFlutterCache(api)
+    api.step('flutter doctor', ['flutter doctor'])
     AnalyzeFlutter(api)
     TestFlutterPackagesAndExamples(api)
     BuildExamples(api, git_hash)

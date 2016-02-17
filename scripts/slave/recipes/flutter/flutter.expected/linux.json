@@ -146,6 +146,18 @@
   },
   {
     "cmd": [
+      "flutter doctor"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "flutter doctor"
+  },
+  {
+    "cmd": [
       "flutter",
       "analyze",
       "--flutter-repo",
