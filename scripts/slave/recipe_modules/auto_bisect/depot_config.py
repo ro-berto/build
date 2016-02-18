@@ -43,3 +43,8 @@ DEPOT_DEPS_NAME = {
         'deps_var': 'skia_revision'
     }
 }
+
+def add_addition_depot_into(depot_info):
+  global DEPOT_DEPS_NAME
+  DEPOT_DEPS_NAME = dict(DEPOT_DEPS_NAME.items() +
+                         depot_info.items())  # pragma: no cover

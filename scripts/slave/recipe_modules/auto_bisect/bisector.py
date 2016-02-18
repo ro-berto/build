@@ -104,6 +104,11 @@ class Bisector(object):
     self.culprit = None
     self.bisect_over = False
     self.relative_change = None
+    
+    self.internal_bisect = api.internal_bisect
+    self.base_depot = 'chromium'
+    if self.internal_bisect:
+      self.base_depot = 'android-chrome'  # pragma: no cover
 
     # Initial revision range
     with api.m.step.nest('Resolving reference range'):

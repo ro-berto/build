@@ -77,7 +77,7 @@ class RevisionState(object):
     self.job_name = None
     self.patch_file = None
     self.deps_revision = None
-    self.depot_name = dependency_depot_name or 'chromium'
+    self.depot_name = dependency_depot_name or self.bisector.base_depot
     self.depot = depot_config.DEPOT_DEPS_NAME[self.depot_name]
     if not self.revision_string:
       assert base_revision

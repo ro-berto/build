@@ -12,6 +12,7 @@ import os
 
 from recipe_engine import recipe_api
 from . import bisector
+from . import depot_config
 from . import perf_revision_state
 from . import local_bisect
 
@@ -39,8 +40,9 @@ class AutoBisectApi(recipe_api.RecipeApi):
     super(AutoBisectApi, self).__init__(*args, **kwargs)
     self.override_poll_interval = None
     self.bot_db = None
-    # These two variable values are set and used for the internal bisects.
+    # The variable below are set and used for the internal bisects.
     self.buildurl_gs_prefix = None
+    self.internal_bisect = False
     self.builder_bot = None
 
   def perform_bisect(self):
@@ -73,7 +75,14 @@ class AutoBisectApi(recipe_api.RecipeApi):
   def set_builder_bot(self, builder_bot):
     """Sets builder name for building binaries.""" 
     self.builder_bot = builder_bot  # pragma: no cover
-  
+
+  def set_internal(self):
+    """Sets bisector as internal only to process android-chrome."""
+    self.internal_bisect = True  # pragma: no cover
+
+  def set_additional_depot_info(self, depot_info):
+    """Adds additional depot info to the global depot variables."""
+    depot_config.add_addition_depot_into(depot_info)  # pragma: no cover
 
   def _get_revision_class(self):
     """Gets the particular subclass of Revision."""
