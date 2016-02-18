@@ -28,9 +28,6 @@ class AndroidApi(recipe_api.RecipeApi):
       'REVISION': self.m.properties.get('revision', '')
     }
 
-  def get_env(self):
-    return self.m.chromium.get_env()
-
   @property
   def devices(self):
     assert self._devices is not None,\
@@ -795,18 +792,26 @@ class AndroidApi(recipe_api.RecipeApi):
     target_arch = self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch']
     # gyp converts ia32 to x86, bot needs to do the same
     target_arch = {'ia32': 'x86'}.get(target_arch) or target_arch
+
+    # --output-directory hasn't always exited on these scripts, so use the
+    # CHROMIUM_OUTPUT_DIR environment variable to avoid unrecognized flag
+    # failures on older script versions (e.g. when doing bisects).
+    # TODO(agrieve): Switch to --output-directory once we don't need bisects
+    #     to be able to try revisions that happened before Feb 2016.
+    env = self.m.chromium.get_env()
+    env['CHROMIUM_OUTPUT_DIR'] = str(build_dir)
     self.m.step(
         'stack_tool_with_logcat_dump',
         [self.m.path['checkout'].join('third_party', 'android_platform',
                               'development', 'scripts', 'stack'),
-         '--arch', target_arch, '--output-directory', build_dir,
-         '--more-info', log_file],
-        env=self.m.chromium.get_env(),
+         '--arch', target_arch, '--more-info', log_file],
+        env=env,
         infra_step=True)
     self.m.step(
         'stack_tool_for_tombstones',
         [self.m.path['checkout'].join('build', 'android', 'tombstones.py'),
-         '--output-directory', build_dir, '-a', '-s', '-w'], env=self.get_env(),
+         '-a', '-s', '-w'],
+        env=env,
         infra_step=True)
     if self.c.asan_symbolize:
       self.m.step(
@@ -814,8 +819,9 @@ class AndroidApi(recipe_api.RecipeApi):
           [self.m.path['checkout'].join('build',
                                         'android',
                                         'asan_symbolize.py'),
-           '--output-directory', build_dir, '-l', log_file],
-          env=self.m.chromium.get_env(), infra_step=True)
+           '-l', log_file],
+          env=env,
+          infra_step=True)
 
   def test_report(self):
     self.m.python.inline(
