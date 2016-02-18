@@ -55,7 +55,6 @@ def main():
   data = json.load(sys.stdin)
   output = data['output']
   zip_file = data['zip_file']
-  use_python_zip = data['use_python_zip']
 
   # Archive path should exist and be an absolute path to a file.
   assert os.path.exists(zip_file), zip_file
@@ -69,7 +68,7 @@ def main():
   exit_code = -1
   try:
     os.makedirs(output)
-    if use_python_zip:
+    if sys.platform == 'win32':
       # Used on Windows, since there's no builtin 'unzip' utility there.
       exit_code = unzip_with_python(zip_file, output)
     else:
