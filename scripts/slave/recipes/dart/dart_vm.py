@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.recipe_api import Property
-
 DEPS = [
   'depot_tools/bot_update',
   'file',
@@ -19,44 +17,20 @@ DEPS = [
 linux_clang_env = {'CC': 'third_party/clang/linux/bin/clang',
                    'CXX': 'third_party/clang/linux/bin/clang++'}
 clang_asan = 'third_party/clang/linux/bin/clang++ -fsanitize=address -fPIC'
-linux_asan_env_64 = {'CXX': clang_asan,
-                     'ASAN_OPTIONS':
-                     'handle_segv=0:detect_stack_use_after_return=1'}
-linux_asan_env_32 = {'CXX': clang_asan,
-                     'ASAN_OPTIONS':
-                     'handle_segv=0:detect_stack_use_after_return=0'}
+linux_asan_env = {
+  'x64': {'CXX': clang_asan,
+          'ASAN_OPTIONS': 'handle_segv=0:detect_stack_use_after_return=1'},
+  'ia32': {'CXX': clang_asan,
+           'ASAN_OPTIONS': 'handle_segv=0:detect_stack_use_after_return=0'},
+}
+windows_env = {'LOGONSERVER': '\\\\AD1'}
+default_envs = {
+  'linux': linux_clang_env,
+  'mac': {},
+  'win': windows_env,
+}
 
 builders = {
-  'vm-linux-release-ia32-asan': {
-    'mode': 'release',
-    'target_arch': 'ia32',
-    'test_args': ['--exclude-suite=pkg', '--builder-tag=asan', '--timeout=240'],
-    'env': linux_asan_env_32},
-  'vm-linux-release-x64-asan': {
-    'mode': 'release',
-    'target_arch': 'x64',
-    'test_args': ['--exclude-suite=pkg', '--builder-tag=asan', '--timeout=240'],
-    'env': linux_asan_env_64},
-  'vm-linux-debug-ia32': {
-    'mode': 'debug',
-    'target_arch': 'ia32',
-    'test_args': ['--exclude-suite=pkg'],
-    'env': linux_clang_env},
-  'vm-linux-debug-x64': {
-    'mode': 'debug',
-    'target_arch': 'x64',
-    'test_args': ['--exclude-suite=pkg'],
-    'env': linux_clang_env},
-  'vm-linux-release-ia32': {
-    'mode': 'release',
-    'target_arch': 'ia32',
-    'test_args': ['--exclude-suite=pkg'],
-    'env': linux_clang_env},
-  'vm-linux-release-x64': {
-    'mode': 'release',
-    'target_arch': 'x64',
-    'test_args': ['--exclude-suite=pkg'],
-    'env': linux_clang_env},
   # This is used by recipe coverage tests, not by any actual master.
   'test-coverage': {
     'mode': 'release',
@@ -64,6 +38,41 @@ builders = {
     'env': linux_clang_env,
     'clobber': True},
 }
+
+for platform in ['linux', 'mac', 'win']:
+  for arch in ['x64', 'ia32']:
+    for mode in ['debug', 'release']:
+      builders['vm-%s-%s-%s' % (platform, mode, arch)] = {
+        'mode': mode,
+        'target_arch': arch,
+        'env': default_envs[platform],
+        'test_args': ['--exclude-suite=pkg'],
+      }
+
+for arch in ['simmips', 'simarm', 'simarm64']:
+  for mode in ['debug', 'release']:
+    builders['vm-linux-%s-%s' % (mode, arch)] = {
+      'mode': mode,
+      'target_arch': arch,
+      'env': {},
+      'test_args': ['--exclude-suite=pkg'],
+    }
+
+for arch in ['x64', 'ia32']:
+  asan = builders['vm-linux-release-%s' % arch].copy()
+  asan_args = ['--builder-tag=asan', '--timeout=240']
+  asan_args.extend(asan['test_args'])
+  asan['test_args'] = asan_args
+  asan['env'] = linux_asan_env[arch]
+  builders['vm-linux-release-%s-asan' % arch] = asan
+
+  opt = builders['vm-linux-release-%s' % arch].copy()
+  opt_args = ['--vm-options=--optimization-counter-threshold=5']
+  opt_args.extend(opt['test_args'])
+  opt['test_args'] = opt_args
+  builders['vm-linux-release-%s-optcounter-threshold' % arch] = opt
+
+builders['vm-win-debug-ia32-russian'] = builders['vm-win-debug-ia32']
 
 def RunSteps(api):
   api.gclient.set_config('dart')
@@ -73,7 +82,6 @@ def RunSteps(api):
   buildername = api.properties.get('buildername')
   (buildername, _, channel) = buildername.rpartition('-')
   assert channel in ['be', 'dev', 'stable', 'integration']
-  buildername = buildername.replace('-recipe', '')
   b = builders[buildername]
 
 
@@ -117,6 +125,7 @@ def RunSteps(api):
              args=test_args,
              cwd=api.path['checkout'],
              ok_ret='any')
+  # TODO(whesse): Add archive coredumps step from dart_factory.py.
 
   api.python('taskkill after testing',
              api.path['checkout'].join('tools', 'task_kill.py'),

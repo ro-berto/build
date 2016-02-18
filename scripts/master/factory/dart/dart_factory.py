@@ -10,7 +10,7 @@ Based on gclient_factory.py.
 
 import random
 
-from buildbot.changes import svnpoller, gitpoller
+from buildbot.changes import gitpoller
 from buildbot.process.buildstep import RemoteShellCommand
 from buildbot.status.mail import MailNotifier
 from buildbot.status.status_push import HttpStatusPush
@@ -47,9 +47,8 @@ else:
 
 # We set these paths relative to the dart root, the scripts need to
 # fix these to be absolute if they don't run from there.
-linux_env = {'BUILDBOT_JAVA_HOME': 'third_party/java/linux/j2sdk'}
-linux_clang_env = {'BUILDBOT_JAVA_HOME': 'third_party/java/linux/j2sdk',
-                   'CC': 'third_party/clang/linux/bin/clang',
+linux_env = {}
+linux_clang_env = {'CC': 'third_party/clang/linux/bin/clang',
                    'CXX': 'third_party/clang/linux/bin/clang++'}
 clang_asan = 'third_party/clang/linux/bin/clang++ -fsanitize=address -fPIC'
 linux_asan_env_64 = {'CXX': clang_asan,
@@ -59,10 +58,7 @@ linux_asan_env_32 = {'CXX': clang_asan,
                      'ASAN_OPTIONS':
                      'handle_segv=0:detect_stack_use_after_return=0'}
 
-windows_env = {'BUILDBOT_JAVA_HOME': 'third_party\\java\\windows\\j2sdk',
-               'LOGONSERVER': '\\\\AD1'}
-
-dart_revision_url = "http://code.google.com/p/dart/source/detail?r=%s"
+windows_env = {'LOGONSERVER': '\\\\AD1'}
 
 # gclient custom vars
 CUSTOM_VARS_SOURCEFORGE_URL = ('sourceforge_url', config.Master.sourceforge_url)
@@ -523,27 +519,6 @@ class DartUtils(object):
                                                          48*60*60, {},
                                                          'slave-config',
                                                          True)
-
-  @staticmethod
-  def get_svn_poller():
-    def dart_tree_file_splitter(path):
-      pieces = path.split('/')
-      if pieces[0] == 'branches':
-        return ('/'.join(pieces[0:2]),
-                '/'.join(pieces[2:]))
-      elif pieces[0] == 'experimental':
-        return ('/'.join(pieces[0:2]),
-                '/'.join(pieces[2:]))
-      else:
-        return None
-
-    # Polls config.Master.dart_url for changes
-    return svnpoller.SVNPoller(svnurl=config.Master.dart_url,
-                               svnbin=chromium_utils.SVN_BIN,
-                               split_file=dart_tree_file_splitter,
-                               pollinterval=10,
-                               revlinktmpl=dart_revision_url)
-
 
   @staticmethod
   def get_git_poller(repo, project, name, revlink, branch=None, master=None,

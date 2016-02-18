@@ -100,9 +100,9 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
-      "--exclude-suite=pkg",
       "--builder-tag=asan",
-      "--timeout=240"
+      "--timeout=240",
+      "--exclude-suite=pkg"
     ],
     "cwd": "[SLAVE_BUILD]/sdk",
     "name": "vm tests"
@@ -121,9 +121,9 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
-      "--exclude-suite=pkg",
       "--builder-tag=asan",
       "--timeout=240",
+      "--exclude-suite=pkg",
       "--checked"
     ],
     "cwd": "[SLAVE_BUILD]/sdk",
