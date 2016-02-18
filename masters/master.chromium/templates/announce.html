@@ -477,11 +477,15 @@
                 HTMLBaseBar(c.status_memory_fyi, c.bar_memory_fyi, c.memory_fyi,
                            'Memory<br>FYI', 'width="100%" colspan=6', '')));
 
-            document.write(tr(
-                HTMLBaseBar(c.status_gpu, c.bar_gpu, c.gpu,
-                           'GPU', 'width="50%"', '') +
-                HTMLBaseBar(c.status_gpu_fyi, c.bar_gpu_fyi, c.gpu_fyi,
-                           'GPU FYI', 'width="50%"', '')));
+            document.write(tr(td(
+                'colspan=4',
+                table(
+                    'width="100%"',
+                    tr(
+                        HTMLBaseBar(c.status_gpu, c.bar_gpu, c.gpu,
+                                    'GPU', 'width="50%"', '') +
+                        HTMLBaseBar(c.status_gpu_fyi, c.bar_gpu_fyi, c.gpu_fyi,
+                                    'GPU FYI', 'width="50%"', ''))))));
 
             setTimeout('DisplayLKGR()', 100);
           </script>
