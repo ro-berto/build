@@ -128,7 +128,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library enable_ipc_fuzzer=1 fastbuild=0 sanitizer_coverage=3 target_arch=ia32 test_isolation_mode=prepare v8_enable_verify_heap=1",
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library enable_ipc_fuzzer=1 fastbuild=0 sanitizer_coverage=edge target_arch=ia32 test_isolation_mode=prepare v8_enable_verify_heap=1",
       "LLVM_FORCE_HEAD_REVISION": "YES",
       "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
