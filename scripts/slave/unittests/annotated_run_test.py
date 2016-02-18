@@ -81,6 +81,7 @@ class _AnnotatedRunExecTestBase(unittest.TestCase):
         mock.patch('slave.infra_platform.get'),
         mock.patch('os.path.exists'),
         mock.patch('os.getcwd'),
+        mock.patch('os.environ', {}),
         ))
 
     self.rt = annotated_run.Runtime()
@@ -359,6 +360,12 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
         annotated_run.CipdBinary('infra/foo', 'v0', 'foo'),
         annotated_run.CipdBinary('infra/bar', 'v1', 'baz'),
     )
+
+  def test_will_not_bootstrap_if_recursive(self):
+    os.environ['LOGDOG_STREAM_PREFIX'] = 'foo'
+    self.assertRaises(annotated_run.LogDogNotBootstrapped,
+        annotated_run._logdog_bootstrap, self.rt, self.opts, self.tdir,
+        self._config(), self.properties, [])
 
 
 if __name__ == '__main__':

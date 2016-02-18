@@ -433,6 +433,15 @@ def _logdog_bootstrap(rt, opts, tempdir, config, properties, cmd):
     LogDogBootstrapError: if there was an error bootstrapping the recipe runner
         through LogDog.
   """
+  # If we have LOGDOG_STREAM_PREFIX defined, we are already bootstrapped. Don't
+  # start a new instance.
+  #
+  # LOGDOG_STREAM_PREFIX is set by the Butler when it bootstraps a process, so
+  # it should be set for all child processes of the initial bootstrap.
+  if os.environ.get('LOGDOG_STREAM_PREFIX', None) is not None:
+   raise LogDogNotBootstrapped(
+       'LOGDOG_STREAM_PREFIX in enviornment, refusing to nest bootstraps.')
+
   bootstrap_dir = ensure_directory(tempdir, 'logdog_bootstrap')
 
   plat = config.logdog_platform
