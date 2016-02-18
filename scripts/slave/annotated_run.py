@@ -412,7 +412,7 @@ def _build_logdog_prefix(properties):
   return 'bb/%(mastername)s/%(buildername)s/%(buildnumber)s' % components
 
 
-def _logdog_bootstrap(rt, opts, tempdir, config, properties, cmd):
+def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
   """Executes the recipe engine, bootstrapping it through LogDog/Annotee.
 
   This method executes the recipe engine, bootstrapping it through
@@ -426,6 +426,7 @@ def _logdog_bootstrap(rt, opts, tempdir, config, properties, cmd):
   Args:
     rt (Runtime): Process-wide runtime.
     opts (argparse.Namespace): Command-line options.
+    basedir (str): The base (non-temporary) recipe directory.
     tempdir (str): The path to the session temporary directory.
     config (Config): Recipe runtime configuration.
     properties (dict): Build properties.
@@ -448,8 +449,6 @@ def _logdog_bootstrap(rt, opts, tempdir, config, properties, cmd):
    raise LogDogNotBootstrapped(
        'LOGDOG_STREAM_PREFIX in enviornment, refusing to nest bootstraps.')
 
-  bootstrap_dir = ensure_directory(tempdir, 'logdog_bootstrap')
-
   plat = config.logdog_platform
   if not plat:
     raise LogDogNotBootstrapped('LogDog platform is not configured.')
@@ -459,7 +458,7 @@ def _logdog_bootstrap(rt, opts, tempdir, config, properties, cmd):
 
   # TODO(dnj): Consider moving this to a permanent directory on the bot so we
   #            don't CIPD-refresh each time.
-  cipd_path = os.path.join(bootstrap_dir, 'cipd')
+  cipd_path = os.path.join(basedir, '.recipe_logdog_cipd')
   butler, annotee = _logdog_install_cipd(cipd_path, plat.butler, plat.annotee)
   if opts.logdog_butler_path:
     butler = opts.logdog_butler_path
@@ -491,7 +490,7 @@ def _logdog_bootstrap(rt, opts, tempdir, config, properties, cmd):
   # Annotee can run accept bootstrap parameters through either JSON or
   # command-line, but using JSON effectively steps around any sort of command-
   # line length limits such as those experienced on Windows.
-  cmd_json = os.path.join(bootstrap_dir, 'annotee_cmd.json')
+  cmd_json = os.path.join(tempdir, 'logdog_annotee_cmd.json')
   with open(cmd_json, 'w') as fd:
     json.dump(cmd, fd)
 
@@ -851,7 +850,7 @@ def write_monitoring_event(config, datadir, build_properties):
     LOGGER.warning("Failed to send monitoring event.", exc_info=True)
 
 
-def _exec_recipe(rt, opts, tdir, config, properties):
+def _exec_recipe(rt, opts, basedir, tdir, config, properties):
   # Find out if the recipe we intend to run is in build_internal's recipes. If
   # so, use recipes.py from there, otherwise use the one from build.
   recipe_file = properties['recipe'].replace('/', os.path.sep) + '.py'
@@ -882,7 +881,8 @@ def _exec_recipe(rt, opts, tdir, config, properties):
   status = None
   try:
     if opts.logdog_force or _should_run_logdog(properties):
-      status = _logdog_bootstrap(rt, opts, tdir, config, properties, cmd)
+      status = _logdog_bootstrap(rt, opts, basedir, tdir, config, properties,
+                                 cmd)
   except LogDogNotBootstrapped as e:
     LOGGER.info('Not bootstrapped: %s', e.message)
   except LogDogBootstrapError as e:
@@ -909,8 +909,9 @@ def main(argv):
   clean_old_recipe_engine()
 
   # Enter our runtime environment.
+  basedir = os.getcwd()
   with Runtime(leak=opts.leak) as rt:
-    tdir = rt.tempdir(os.getcwd())
+    tdir = rt.tempdir(base=basedir)
     LOGGER.debug('Using temporary directory: [%s].', tdir)
 
     # Load factory properties and configuration.
@@ -932,7 +933,7 @@ def main(argv):
     write_monitoring_event(config, build_data_dir, properties)
 
     # Execute our recipe.
-    return _exec_recipe(rt, opts, tdir, config, properties)
+    return _exec_recipe(rt, opts, basedir, tdir, config, properties)
 
 
 def shell_main(argv):
