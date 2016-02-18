@@ -50,12 +50,6 @@ LOGDOG_WHITELIST_MASTER_BUILDERS = {
     'chromium.infra': {
       WHITELIST_ALL,
     },
-    'chromium.infra.cron': {
-      WHITELIST_ALL,
-    },
-    'tryserver.infra': {
-      WHITELIST_ALL,
-    },
 }
 
 # LogDogPlatform is the set of platform-specific LogDog bootstrapping
