@@ -187,7 +187,7 @@ FAKE_SPECS = {
       'role': 'Perf',
     },
     'configuration': 'Release',
-    'device_cfg': 'arm_v7',
+    'device_cfg': 'arm_v7_neon',
     'dm_flags': [
       '--dummy-flags',
     ],
@@ -219,7 +219,7 @@ FAKE_SPECS = {
       'role': 'Perf',
     },
     'configuration': 'Release',
-    'device_cfg': 'arm_v7',
+    'device_cfg': 'arm_v7_neon',
     'dm_flags': [
       '--dummy-flags',
     ],
@@ -251,7 +251,7 @@ FAKE_SPECS = {
       'role': 'Perf',
     },
     'configuration': 'Release',
-    'device_cfg': 'nexus_7',
+    'device_cfg': 'arm_v7_neon',
     'dm_flags': [
       '--dummy-flags',
     ],
@@ -350,7 +350,7 @@ FAKE_SPECS = {
       'role': 'Test',
     },
     'configuration': 'Debug',
-    'device_cfg': 'nexus_7',
+    'device_cfg': 'arm_v7_neon',
     'dm_flags': [
       '--dummy-flags',
     ],
@@ -443,6 +443,39 @@ FAKE_SPECS = {
       'configuration': 'Debug',
       'cpu_or_gpu': 'CPU',
       'cpu_or_gpu_value': 'AVX2',
+      'is_trybot': False,
+      'model': 'GCE',
+      'os': 'Ubuntu',
+      'role': 'Test',
+    },
+    'configuration': 'Debug',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': True,
+    'do_test_steps': True,
+    'env': {
+      'GYP_DEFINES':
+          'skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0',
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': False,
+  },
+  'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming': {
+    'build_targets': [
+      'dm',
+      'nanobench',
+    ],
+    'builder_cfg': {
+      'arch': 'x86_64',
+      'compiler': 'GCC',
+      'configuration': 'Debug',
+      'cpu_or_gpu': 'CPU',
+      'cpu_or_gpu_value': 'AVX2',
+      'extra_config': 'Swarming',
       'is_trybot': False,
       'model': 'GCE',
       'os': 'Ubuntu',

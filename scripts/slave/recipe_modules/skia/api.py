@@ -226,8 +226,51 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def compile_steps(self, clobber=False):
     """Run the steps to build Skia."""
-    for target in self.build_targets:
-      self.flavor.compile(target)
+    if self.builder_cfg.get('extra_config') == 'Swarming':
+      # Swarming setup.
+      self.m.swarming_client.checkout(revision='')
+      self.m.swarming.check_client_version()
+      self.m.skia_swarming.setup_go_isolate(
+          self.skia_dir.join('infra', 'bots', 'tools', 'luci-go'))
+
+      # Swarm the compile.
+      isolate_dir = self.skia_dir.join('infra', 'bots')
+      isolate_path = isolate_dir.join('compile_skia.isolate')
+      isolate_vars = {'BUILDER_NAME': self.builder_name}
+      self.m.skia_swarming.create_isolated_gen_json(
+          isolate_path, isolate_dir, 'linux', 'compile_skia', isolate_vars)
+      self.m.skia_swarming.batcharchive(['compile_skia'])
+      props = self.m.step.active_result.presentation.properties
+      hashes = props['swarm_hashes'].items()
+      dimensions = {
+        'pool': 'Skia',
+      }
+      if self.role in ('Build', 'Test', 'Perf'):
+        dimensions['os'] = self.builder_cfg['os']
+      else:  # pragma: no cover
+        dimensions['os'] = 'Ubuntu'
+      if self.role in ('Test', 'Perf'):
+        if self.builder_cfg['cpu_or_gpu'] == 'CPU':
+          dimensions['gpu'] = 'none'
+          #dimensions['cpu'] = self.builder_cfg['cpu_or_gpu_value']
+        else:  # pragma: no cover
+          #dimensions['cpu'] = 'none'
+          dimensions['gpu'] = self.builder_cfg['cpu_or_gpu_value']
+        
+      tasks = self.m.skia_swarming.trigger_swarming_tasks(hashes, dimensions)
+
+      # Wait for compile to finish, download the results.
+      for task in tasks:
+        self.m.file.rmtree('results_dir', task.task_output_dir, infra_step=True)
+        self.m.skia_swarming.collect_swarming_task(task)
+
+      out_src = tasks[0].task_output_dir.join('0', 'out')
+      self.m.file.rmtree('out_dir', self.out_dir, infra_step=True)
+      self.m.file.copytree('out_dir', out_src, self.out_dir, infra_step=True)
+
+    else:
+      for target in self.build_targets:
+        self.flavor.compile(target)
 
   def _readfile(self, filename, *args, **kwargs):
     """Convenience function for reading files."""

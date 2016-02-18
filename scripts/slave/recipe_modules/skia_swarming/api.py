@@ -20,17 +20,25 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
     return self.swarming_temp_dir.join('outputs')
 
   # TODO(rmistry): Remove once the Go binaries are moved to recipes or buildbot.
-  def setup_go_isolate(self, chromium_checkout_path):
+  def setup_go_isolate(self, luci_go_dir):
     """Generates and puts in place the isolate Go binary."""
-    # Run 'gclient runhooks' on the chromium checkout to generate the binary.
-    self.m.step('gclient runhooks', ['gclient', 'runhooks'],
-                cwd=chromium_checkout_path)
+    self.m.step('download luci-go linux',
+                ['download_from_google_storage', '--no_resume',
+                 '--platform=linux*', '--no_auth', '--bucket', 'chromium-luci',
+                 '-d', luci_go_dir.join('linux64')])
+    self.m.step('download luci-go mac',
+                ['download_from_google_storage', '--no_resume',
+                 '--platform=darwin', '--no_auth', '--bucket', 'chromium-luci',
+                 '-d', luci_go_dir.join('mac64')])
+    self.m.step('download luci-go win',
+                ['download_from_google_storage', '--no_resume',
+                 '--platform=win32', '--no_auth', '--bucket', 'chromium-luci',
+                 '-d', luci_go_dir.join('win64')])
     # Copy binaries to the expected location.
     dest = self.m.path['slave_build'].join('luci-go')
     self.m.file.rmtree('Go binary dir', dest)
     self.m.file.copytree('Copy Go binary',
-                         source=self.m.path['slave_build'].join(
-                             'src', 'tools', 'luci-go'),
+                         source=luci_go_dir,
                          dest=dest)
 
   def create_isolated_gen_json(self, isolate_path, base_dir, os_type,

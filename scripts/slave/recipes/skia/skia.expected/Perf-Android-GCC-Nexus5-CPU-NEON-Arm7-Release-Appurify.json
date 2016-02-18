@@ -102,7 +102,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"role\": \"Perf\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"device_cfg\": \"arm_v7\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"device_cfg\": \"arm_v7_neon\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"dm_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
@@ -331,7 +331,7 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
       "VisualBenchTest_APK",
       "-d",
-      "arm_v7"
+      "arm_v7_neon"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {

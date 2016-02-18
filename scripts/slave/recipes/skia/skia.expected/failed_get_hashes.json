@@ -102,7 +102,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"role\": \"Test\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"device_cfg\": \"nexus_7\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"device_cfg\": \"arm_v7_neon\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"dm_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
@@ -157,7 +157,7 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
       "dm",
       "-d",
-      "nexus_7"
+      "arm_v7_neon"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
@@ -175,7 +175,7 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
       "nanobench",
       "-d",
-      "nexus_7"
+      "arm_v7_neon"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
@@ -617,7 +617,7 @@
       "--verbose",
       "--logcat",
       "-d",
-      "nexus_7",
+      "arm_v7_neon",
       "-s",
       "015d210a13480604",
       "-t",
@@ -722,7 +722,7 @@
       "--verbose",
       "--logcat",
       "-d",
-      "nexus_7",
+      "arm_v7_neon",
       "-s",
       "015d210a13480604",
       "-t",

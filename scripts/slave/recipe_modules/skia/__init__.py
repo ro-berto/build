@@ -7,6 +7,7 @@ DEPS = [
   'file',
   'depot_tools/gclient',
   'depot_tools/git',
+  'depot_tools/tryserver',
   'gsutil',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -16,5 +17,7 @@ DEPS = [
   'recipe_engine/raw_io',
   'recipe_engine/step',
   'recipe_engine/time',
-  'depot_tools/tryserver',
+  'skia_swarming',
+  'swarming',
+  'swarming_client',
 ]
