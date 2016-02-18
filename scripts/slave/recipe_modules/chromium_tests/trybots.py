@@ -509,6 +509,11 @@ TRYBOTS = freeze({
             'buildername': 'GPU Mac Builder',
             'tester': 'Optional Mac Retina Release',
           },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Mac Builder',
+            'tester': 'Optional Mac 10.10 Retina Release (AMD)',
+          },
         ],
       },
     },
