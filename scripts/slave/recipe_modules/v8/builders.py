@@ -18,7 +18,8 @@ class TestStepConfig(object):
 
 # Top-level test configs for convenience.
 Benchmarks = TestStepConfig('benchmarks')
-Deopt = TestStepConfig('deopt')
+Deopt = TestStepConfig('deopt', swarming=False)
+DeoptSwarming = TestStepConfig('deopt')
 Fuzz = TestStepConfig('fuzz')
 GCMole = TestStepConfig('gcmole')
 Mjsunit = TestStepConfig('mjsunit')
@@ -72,6 +73,8 @@ BUILDERS = {
           'V8 Linux - nosse3',
           'V8 Linux - nosse4',
           'V8 Linux - presubmit',
+          # TODO(machenbach): Remove after staging the deopt fuzzer.
+          'V8 Linux - swarming staging',
         ],
         'triggers_proxy': True,
       },
@@ -163,6 +166,7 @@ BUILDERS = {
         },
       },
       'V8 Linux - swarming staging': {
+        'v8_apply_config': ['deopt_fuzz_normal', 'no_exhaustive_variants'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -170,7 +174,8 @@ BUILDERS = {
         'bot_type': 'tester',
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux - builder',
-        'tests': [GCMole],
+        'build_gs_archive': 'linux_rel_archive',
+        'tests': [DeoptSwarming],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug': {

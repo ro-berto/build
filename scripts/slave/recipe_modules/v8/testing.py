@@ -12,6 +12,10 @@ TEST_CONFIGS = freeze({
     'tests': ['benchmarks'],
     'test_args': ['--download-data'],
   },
+  'deopt': {
+    'tool': 'run-deopt-fuzzer',
+    'isolated_target': 'run-deopt-fuzzer',
+  },
   'gcmole': {
     'tool': 'run-gcmole',
     'isolated_target': 'run-gcmole',
@@ -460,6 +464,7 @@ class V8Fuzzer(BaseTest):
     return TestResults.empty()
 
 
+# TODO(machenbach): Remove after staging the swarming version below.
 class V8DeoptFuzzer(BaseTest):
   def run(self, **kwargs):
     full_args = [
@@ -479,6 +484,21 @@ class V8DeoptFuzzer(BaseTest):
       cwd=self.api.path['checkout'],
     )
     return TestResults.empty()
+
+
+class V8DeoptFuzzerSwarming(V8GenericSwarmingTest):
+  @property
+  def title(self):
+    return 'Deopt Fuzz'
+
+  @property
+  def extra_args(self):
+    return [
+      '--mode', self.api.chromium.c.build_config_fs,
+      '--arch', self.api.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
+      '--progress', 'verbose',
+      '--buildbot',
+    ] + self.v8.c.testing.test_args
 
 
 class V8GCMole(V8CompositeSwarmingTest):
@@ -504,19 +524,20 @@ class V8SimpleLeakCheck(V8GenericSwarmingTest):
 
 
 V8_NON_STANDARD_TESTS = freeze({
-  'deopt': V8DeoptFuzzer,
   'fuzz': V8Fuzzer,
   'presubmit': V8Presubmit,
 })
 
 
 TOOL_TO_TEST = freeze({
+  'run-deopt-fuzzer': V8DeoptFuzzer,
   'run-tests': V8Test,
 })
 
 
 TOOL_TO_TEST_SWARMING = freeze({
   'check-static-initializers': V8CheckInitializers,
+  'run-deopt-fuzzer': V8DeoptFuzzerSwarming,
   'run-gcmole': V8GCMole,
   'run-valgrind': V8SimpleLeakCheck,
   'run-tests': V8SwarmingTest,
