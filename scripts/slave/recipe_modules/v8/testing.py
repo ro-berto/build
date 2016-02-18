@@ -437,30 +437,27 @@ class V8CheckInitializers(V8GenericSwarmingTest):
 
 class V8Fuzzer(BaseTest):
   def run(self, **kwargs):
-    assert self.api.chromium.c.HOST_PLATFORM == 'linux'
+    archive = self.api.path['slave_build'].join(
+        'fuzz-results-%s.tar.bz2' % self.v8.revision)
     try:
       self.api.step(
         'Fuzz',
         ['bash',
          self.api.path['checkout'].join('tools', 'fuzz-harness.sh'),
          self.v8.relative_path_to_d8,
+         archive,
         ],
-        cwd=self.api.path['checkout'],
-        stdout=self.api.raw_io.output(),
       )
     except self.api.step.StepFailure as e:
-      e.result.presentation.logs['stdout'] = e.result.stdout.splitlines()
-      # Check if the fuzzer left a fuzz archive and upload to GS.
-      match = re.search(r'^Creating archive (.*)$', e.result.stdout, re.M)
-      if match:
-        self.api.gsutil.upload(
-            self.api.path['checkout'].join(match.group(1)),
-            'chromium-v8',
-            self.api.path.join('fuzzer-archives', match.group(1)),
-        )
-      else:  # pragma: no cover
-        self.api.step('No fuzzer archive found.', cmd=None)
+      self.api.gsutil.upload(
+          archive,
+          'chromium-v8',
+          self.api.path.join(
+              'fuzzer-archives', self.api.path.basename(archive)),
+      )
       raise e
+    finally:
+      self.api.file.remove('remove archive', archive)
     return TestResults.empty()
 
 

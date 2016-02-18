@@ -122,17 +122,13 @@
     "cmd": [
       "bash",
       "[SLAVE_BUILD]/v8/tools/fuzz-harness.sh",
-      "out/Debug/d8"
+      "out/Debug/d8",
+      "[SLAVE_BUILD]/fuzz-results-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.tar.bz2"
     ],
-    "cwd": "[SLAVE_BUILD]/v8",
+    "cwd": "[SLAVE_BUILD]",
     "name": "Fuzz",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@stdout@foo@@@",
-      "@@@STEP_LOG_LINE@stdout@Creating archive bar@@@",
-      "@@@STEP_LOG_LINE@stdout@baz@@@",
-      "@@@STEP_LOG_END@stdout@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -145,13 +141,30 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "[SLAVE_BUILD]/v8/bar",
-      "gs://chromium-v8/fuzzer-archives/bar"
+      "[SLAVE_BUILD]/fuzz-results-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.tar.bz2",
+      "gs://chromium-v8/fuzzer-archives/fuzz-results-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.tar.bz2"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/fuzzer-archives/bar@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/fuzzer-archives/fuzz-results-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.tar.bz2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
+      "[SLAVE_BUILD]/fuzz-results-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.tar.bz2"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "remove archive",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@os.remove(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {

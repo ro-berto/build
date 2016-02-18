@@ -1131,7 +1131,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
-          'HOST_BITS': 64,
         },
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - debug builder',

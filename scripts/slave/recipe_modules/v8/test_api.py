@@ -384,13 +384,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     return self.override_step_data(
         step_name, self.failures_example())
 
-  def stdout(self, step_name, output, retcode=0):
-    return self.override_step_data(
-        step_name,
-        self.m.raw_io.stream_output(output, stream='stdout'),
-        retcode=retcode,
-    )
-
   @recipe_test_api.mod_test_data
   @staticmethod
   def test_failures(has_failures):
