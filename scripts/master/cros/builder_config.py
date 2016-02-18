@@ -83,7 +83,7 @@ class BuilderConfig(object):
   @property
   def slave_type(self):
     """Returns (str): A SlaveType enumeration value."""
-    return self._GetSlaveType()
+    return self.config.get('buildslave_type', self._GetLegacySlaveType())
 
   @property
   def slave_class(self):
@@ -159,11 +159,14 @@ class BuilderConfig(object):
     """
     return self.config.name
 
-  def _GetSlaveType(self):
+  def _GetLegacySlaveType(self):
     """Returns (str): Returns the generated builder name.
 
     Unless overloaded, the builder name will default to the target configuration
     name.
+
+    TODO(dnj): Deprecate this when release waterfall no longer uses old Chromite
+               configurations that don't supply the 'buildslave_type' parameter.
     """
     return self.SLAVE_TYPE
 
@@ -251,15 +254,13 @@ class PfqBuilderConfig(BuilderConfig):
 
   CONFIG_BUILDERNAME_MAP = {
       'master-chromium-pfq': 'Chrome PFQ master',
+      'master-android-pfq': 'Android PFQ master',
   }
 
   def _GetBuilderName(self):
-    if self.config.suffix == 'chrome-pfq':
-      project = 'chrome'
-    elif self.config.suffix == 'chromium-pfq':
-      project = 'chromium'
-    else:
-      raise ValueError("Unknown PFQ builder sufifx: %s" % (self.config.suffix,))
+    project = self.config.suffix
+    if project.endswith('-pfq'):
+      project = project[:-4]
     return '%s %s PFQ' % (self.config.base, project)
 
 
@@ -281,11 +282,13 @@ class CanaryBuilderConfig(BuilderConfig):
     parts = [self.config.base]
     if self.config.children:
       parts.append('group')
+    if self.config.category == ChromiteTarget.CANARY_TOOLCHAIN:
+      parts.append('toolchain')
     parts.append('canary' if self.config.get('active_waterfall') == 'chromeos'
                  else 'full')
     return ' '.join(parts)
 
-  def _GetSlaveType(self):
+  def _GetLegacySlaveType(self):
     if self.config.is_master and not self.config['boards']:
       # For boardless release masters, use a wimpy builder.
       #
@@ -348,7 +351,9 @@ CONFIG_MAP = OrderedDict((
     (ChromiteTarget.PRE_FLIGHT_BRANCH, PreFlightBranchBuilderConfig),
     (ChromiteTarget.CANARY, CanaryBuilderConfig),
     (ChromiteTarget.SDK, SdkBuilderConfig),
+    (ChromiteTarget.CANARY_TOOLCHAIN, CanaryBuilderConfig),
     (ChromiteTarget.TOOLCHAIN, ToolchainBuilderConfig),
+    (ChromiteTarget.ANDROID_PFQ, PfqBuilderConfig),
     (None, BuilderConfig),
 ))
 

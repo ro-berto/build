@@ -17,7 +17,7 @@
         "build263-m2"
       ], 
       "chromiumos-sdk": [
-        "build162-m2"
+        "cros199-c2"
       ], 
       "daisy-full": [
         "build91-m2"
@@ -59,6 +59,7 @@
   "unallocated": [
     "build326-m2", 
     "build182-m2", 
+    "build162-m2", 
     "build327-m2", 
     "build93-m2", 
     "build94-m2"

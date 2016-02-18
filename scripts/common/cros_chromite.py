@@ -59,13 +59,13 @@ class ChromiteError(RuntimeError):
   pass
 
 
-# Slave pool allocation types.
+# Slave pool allocation types. This mirrors the VALID_BUILD_SLAVE_TYPES in:
+# https://chromium.googlesource.com/chromiumos/chromite/+/master/cbuildbot/constants.py
 class SlaveType(object):
   """Slave configuration expression enumeration."""
   BAREMETAL = 'baremetal'
   VM = 'vm'
   GCE = 'gce'
-  # A wimpy GCE instance well suited to run cbuildbot's master build-types.
   GCE_WIMPY = 'gce_wimpy'
 
 
@@ -76,8 +76,10 @@ class ChromiteTarget(object):
   various configuration parameters.
   """
 
+  ANDROID_PFQ = 'android_pfq'
   ASAN = 'asan'
   CANARY = 'canary'
+  CANARY_TOOLCHAIN = 'canary_toolchain'
   FACTORY = 'factory'
   FIRMWARE = 'firmware'
   FULL = 'full'
@@ -99,6 +101,7 @@ class ChromiteTarget(object):
     'priest': PRE_CQ_LAUNCHER,
     'paladin': PALADIN,
     'canary': CANARY,
+    'toolchain': CANARY_TOOLCHAIN,
     'chrome': PFQ,
   }
 
@@ -109,7 +112,9 @@ class ChromiteTarget(object):
   # Maps configuration name suffixes to target type constants.
   # (see Categorize)
   SUFFIX_MAP = collections.OrderedDict((
+    (ANDROID_PFQ, ('android-pfq',)),
     (ASAN, ('asan',)),
+    (CANARY_TOOLCHAIN, ('toolchain-release',)),
     (CANARY, ('release', 'release-group',)),
     (FACTORY, ('factory',)),
     (FIRMWARE, ('firmware',)),
