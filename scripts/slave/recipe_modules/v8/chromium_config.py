@@ -96,6 +96,11 @@ def interpreted_regexp(c):
   c.gyp_env.GYP_DEFINES['v8_interpreted_regexp'] = 1
 
 
+@CONFIG_CTX(includes=['v8'])
+def jsfunfuzz(c):
+  c.gyp_env.GYP_DEFINES['jsfunfuzz'] = 1
+
+
 @CONFIG_CTX(includes=['v8'], group='builder')
 def make(c):
   c.build_dir = Path('[CHECKOUT]', 'out')

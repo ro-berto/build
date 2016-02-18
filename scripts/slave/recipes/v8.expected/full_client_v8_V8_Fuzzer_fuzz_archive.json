@@ -66,7 +66,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "target_arch=x64 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=x64",
+      "GYP_DEFINES": "jsfunfuzz=1 target_arch=x64 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=x64",
       "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
