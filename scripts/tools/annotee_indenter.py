@@ -94,7 +94,7 @@ def communicate_win(proc, queue):
   threads = []
   for stream_name in ['stdout', 'stderr']:
     t = threading.Thread(target=reader, args=(stream_name, ))
-    t.set_deamon(True)
+    t.set_daemon(True)
     t.start()
     threads.append(t)
 
