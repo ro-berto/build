@@ -23,6 +23,25 @@ class classproperty(object):
     return self.getter(owner)
 
 
+class PortRange(object):
+  def __init__(self, start, end):
+    self.start = start
+    self.end = end
+
+  def compose_port(self, offset):
+    ret = self.start + offset
+    if not self.contains(ret):
+      raise ValueError("Port offset %d must fit within range %d-%d" % (
+          offset, self.start, self.end))
+    return ret
+
+  def contains(self, port):
+    return port >= self.start and port <= self.end
+
+  def offset_of(self, port):
+    return port - self.start
+
+
 class Master(object):
   # Repository URLs used by the SVNPoller and 'gclient config'.
   server_url = 'http://src.chromium.org'
@@ -71,13 +90,13 @@ class Master(object):
     Contains stubs for variables that all masters must define."""
 
     # Base service offset for 'master_port'
-    MASTER_PORT = 2
+    MASTER_PORT_RANGE = PortRange(20000, 24999)
     # Base service offset for 'slave_port'
-    SLAVE_PORT = 3
+    SLAVE_PORT_RANGE = PortRange(30000, 34999)
     # Base service offset for 'master_port_alt'
-    MASTER_PORT_ALT = 4
+    MASTER_PORT_ALT_RANGE = PortRange(25000, 29999)
     # Base service offset for 'try_job_port'
-    TRY_JOB_PORT = 5
+    TRY_JOB_PORT_RANGE = PortRange(50000, 54999)
 
     # A BuildBucket bucket to poll.
     buildbucket_bucket = None
@@ -105,38 +124,39 @@ class Master(object):
 
     @classproperty
     def master_port(cls):
-      return cls._compose_port(cls.MASTER_PORT)
+      return cls._compose_port(cls.MASTER_PORT_RANGE)
 
     @classproperty
     def slave_port(cls):
       # Which port slaves use to connect to the master.
-      return cls._compose_port(cls.SLAVE_PORT)
+      return cls._compose_port(cls.SLAVE_PORT_RANGE)
 
     @classproperty
     def master_port_alt(cls):
       # The alternate read-only page. Optional.
-      return cls._compose_port(cls.MASTER_PORT_ALT)
+      return cls._compose_port(cls.MASTER_PORT_ALT_RANGE)
 
     @classproperty
     def try_job_port(cls):
-      return cls._compose_port(cls.TRY_JOB_PORT)
+      return cls._compose_port(cls.TRY_JOB_PORT_RANGE)
 
     @classmethod
-    def _compose_port(cls, service):
+    def _compose_port(cls, service_range):
       """Returns: The port number for 'service' from the master's static config.
 
       Port numbers are mapped of the form:
-      XYYZZ
-      || \__The last two digits identify the master, e.g. master.chromium
-      |\____The second and third digits identify the master host, e.g.
-      |     master1.golo
-      \_____The first digit identifies the port type, e.g. master_port
+      offset + YYZZ
+      |        | \__The last two digits identify the master, e.g.
+      |        |    master.chromium
+      |        \____The second and third digits identify the master host, e.g.
+      |             master1.golo
+      \_____________The offset determines the port type, eg. master_port.  It
+                    comes from the service_range.
 
       If any configuration is missing (incremental migration), this method will
       return '0' for that query, indicating no port.
       """
-      return (
-          (service * 10000) + # X
+      return service_range.compose_port(
           (cls.master_port_base * 100) + # YY
           cls.master_port_id) # ZZ
 

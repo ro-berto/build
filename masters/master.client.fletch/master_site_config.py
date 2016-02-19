@@ -14,5 +14,5 @@ class Dartino(Master.Master3):
   master_port = 20316
   slave_port = 30316
   # Enable when there's a public waterfall.
-  master_port_alt = 40316
+  master_port_alt = 25316
   buildbot_url = 'http://build.chromium.org/p/client.fletch/'

@@ -16,7 +16,7 @@ class ClientFlutter(Master.Master3):
   project_name = 'ClientFlutter'
   master_port = 20307
   slave_port = 30307
-  master_port_alt = 40307
+  master_port_alt = 25307
   buildbot_url = 'https://build.chromium.org/p/client.flutter/'
   buildbucket_bucket = None
   service_account_file = None

@@ -16,7 +16,7 @@ class WasmLlvm(Master.Master3):
   project_name = 'WasmLlvm'
   master_port = 20305
   slave_port = 30305
-  master_port_alt = 40305
+  master_port_alt = 25305
   buildbot_url = 'https://build.chromium.org/p/client.wasm.llvm/'
   buildbucket_bucket = None
   service_account_file = None

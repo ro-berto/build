@@ -16,7 +16,7 @@ class GYP(Master.Master3):
   project_name = 'GYP'
   master_port = 20302
   slave_port = 30302
-  master_port_alt = 40302
+  master_port_alt = 25302
   buildbot_url = 'https://build.chromium.org/p/client.gyp/'
   buildbucket_bucket = 'master.client.gyp'
   service_account_file = 'service-account-gyp.json'

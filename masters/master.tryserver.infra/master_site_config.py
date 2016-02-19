@@ -16,7 +16,7 @@ class InfraTryServer(Master.Master4a):
   project_name = 'InfraTryServer'
   master_port = 21402
   slave_port = 31402
-  master_port_alt = 41402
+  master_port_alt = 26402
   buildbot_url = 'https://build.chromium.org/p/tryserver.infra/'
   buildbucket_bucket = 'master.tryserver.infra'
   service_account_file = 'service-account-chromium-tryserver.json'

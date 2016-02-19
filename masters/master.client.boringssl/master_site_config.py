@@ -11,5 +11,5 @@ class Boringssl(Master.Master3):
   project_url = 'https://boringssl.googlesource.com/boringssl/'
   master_port = 20311
   slave_port = 30311
-  master_port_alt = 40311
+  master_port_alt = 25311
   buildbot_url = 'http://build.chromium.org/p/client.boringssl/'

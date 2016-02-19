@@ -16,7 +16,7 @@ class ClientLegion(Master.Master3):
   project_name = 'ClientLegion'
   master_port = 20315
   slave_port = 30315
-  master_port_alt = 40315
+  master_port_alt = 25315
   buildbot_url = 'https://build.chromium.org/p/client.legion/'
   buildbucket_bucket = None
   service_account_file = None

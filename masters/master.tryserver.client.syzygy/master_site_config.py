@@ -16,7 +16,7 @@ class SyzygyTryserver(Master.Master4a):
   project_name = 'SyzygyTryserver'
   master_port = 21404
   slave_port = 31404
-  master_port_alt = 41404
+  master_port_alt = 26404
   buildbot_url = 'https://build.chromium.org/p/tryserver.client.syzygy/'
   buildbucket_bucket = 'master.tryserver.client.syzygy'
   service_account_file = 'service-account-chromium-tryserver.json'

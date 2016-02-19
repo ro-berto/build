@@ -16,7 +16,7 @@ class ChromiumToolsBuild(Master.Master1):
   project_name = 'ChromiumToolsBuild'
   master_port = 20103
   slave_port = 30103
-  master_port_alt = 40103
+  master_port_alt = 25103
   buildbot_url = 'https://build.chromium.org/p/chromium.tools.build/'
   buildbucket_bucket = None
   service_account_file = None

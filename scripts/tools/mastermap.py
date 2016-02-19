@@ -69,10 +69,10 @@ PORT_BLACKLIST = set([
 ])
 
 
-PORT_TYPE_MAP = {
-  'port': Master.Base.MASTER_PORT,
-  'slave_port': Master.Base.SLAVE_PORT,
-  'alt_port': Master.Base.MASTER_PORT_ALT,
+PORT_RANGE_MAP = {
+  'port': Master.Base.MASTER_PORT_RANGE,
+  'slave_port': Master.Base.SLAVE_PORT_RANGE,
+  'alt_port': Master.Base.MASTER_PORT_ALT_RANGE,
 }
 
 
@@ -246,8 +246,8 @@ def master_audit(masters, output, opts):
   # Look for masters using the wrong ports for their port types.
   bad_port_masters = []
   for master in masters:
-    for port_type, port_digit in PORT_TYPE_MAP.iteritems():
-      if not str(master[port_type]).startswith(str(port_digit)):
+    for port_type, port_range in PORT_RANGE_MAP.iteritems():
+      if not port_range.contains(master[port_type]):
         ret = 1
         bad_port_masters.append(master)
         break
@@ -260,8 +260,8 @@ def master_audit(masters, output, opts):
   for master in masters:
     digits = get_master_port(master)
     if digits:
-      for port in PORT_TYPE_MAP.iterkeys():
-        if str(master[port])[1:3] != digits:
+      for port_type, port_range in PORT_RANGE_MAP.iteritems():
+        if ('%04d' % port_range.offset_of(master[port_type]))[0:2] != digits:
           ret = 1
           bad_host_masters.append(master)
           break
@@ -334,11 +334,11 @@ def master_audit(masters, output, opts):
            ('Host', field('host')) ],
          conflicting_alt_ports)
 
-  # Look for masters whose port, slave_port, alt_port aren't separated by 10000.
+  # Look for masters whose port, slave_port, alt_port aren't separated by 5000.
   bad_sep_masters = []
   for master in masters:
-    if (getint(master['slave_port']) - getint(master['port']) != 10000 or
-        getint(master['alt_port']) - getint(master['slave_port']) != 10000):
+    if (getint(master['slave_port']) - getint(master['alt_port']) != 5000 or
+        getint(master['alt_port']) - getint(master['port']) != 5000):
       ret = 1
       bad_sep_masters.append(master)
   output([ ('Master', field('name')),
@@ -352,8 +352,9 @@ def master_audit(masters, output, opts):
 
 
 def build_port_str(master_class, port_type, digits):
-  port_base = PORT_TYPE_MAP[port_type]
-  port = '%d%02d%02d' % (port_base, master_class.master_port_base, digits)
+  port_range = PORT_RANGE_MAP[port_type]
+  port = str(port_range.compose_port(
+      master_class.master_port_base * 100 + digits))
   assert len(port) == 5, "Invalid port generated (%s)" % (port,)
   return port
 

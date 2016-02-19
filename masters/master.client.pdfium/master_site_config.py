@@ -16,7 +16,7 @@ class Pdfium(Master.Master3):
   project_name = 'Pdfium'
   master_port = 20310
   slave_port = 30310
-  master_port_alt = 40310
+  master_port_alt = 25310
   buildbot_url = 'https://build.chromium.org/p/client.pdfium/'
   buildbucket_bucket = None
   service_account_file = None

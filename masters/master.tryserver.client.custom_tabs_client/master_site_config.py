@@ -16,7 +16,7 @@ class CustomTabsClientTryserver(Master.Master4a):
   project_name = 'CustomTabsClientTryserver'
   master_port = 20400
   slave_port = 30400
-  master_port_alt = 40400
+  master_port_alt = 25400
   buildbot_url = 'https://build.chromium.org/p/tryserver.client.custom_tabs_client/'
   buildbucket_bucket = 'master.tryserver.client.custom_tabs_client'
   service_account_file = 'service-account-chromium-tryserver.json'

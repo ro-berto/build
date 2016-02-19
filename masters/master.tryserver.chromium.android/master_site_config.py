@@ -16,7 +16,7 @@ class TryserverChromiumAndroid(Master.Master4a):
   project_name = 'TryserverChromiumAndroid'
   master_port = 21401
   slave_port = 31401
-  master_port_alt = 41401
+  master_port_alt = 26401
   buildbot_url = 'https://build.chromium.org/p/tryserver.chromium.android/'
   buildbucket_bucket = 'master.tryserver.chromium.android'
   service_account_file = 'service-account-chromium-tryserver.json'

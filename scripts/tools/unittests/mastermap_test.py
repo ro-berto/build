@@ -105,7 +105,7 @@ class FindPortTest(unittest.TestCase):
     self.assertEquals(output.data, [ {
         u'master_base_class': u'Master1',
         u'master_port': u'20105',
-        u'master_port_alt': u'40105',
+        u'master_port_alt': u'25105',
         u'slave_port': u'30105',
     } ])
 
@@ -115,7 +115,7 @@ class FindPortTest(unittest.TestCase):
     output = FakeOutput()
     _real_blacklist = mastermap.PORT_BLACKLIST
     try:
-      mastermap.PORT_BLACKLIST = set(xrange(40000, 50000))  # All alt_ports
+      mastermap.PORT_BLACKLIST = set(xrange(25000, 30000))  # All alt_ports
       self.assertRaises(RuntimeError, mastermap.find_port,
                         master_class_name, masters, output, FakeOpts())
     finally:

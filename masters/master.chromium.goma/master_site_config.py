@@ -16,7 +16,7 @@ class ChromiumGoma(Master.Master1):
   project_name = 'ChromiumGoma'
   master_port = 20104
   slave_port = 30104
-  master_port_alt = 40104
+  master_port_alt = 25104
   buildbot_url = 'https://build.chromium.org/p/chromium.goma/'
   buildbucket_bucket = None
   service_account_file = None

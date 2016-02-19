@@ -16,7 +16,7 @@ class NDK(Master.Master3):
   project_name = 'NDK'
   master_port = 20304
   slave_port = 30304
-  master_port_alt = 40304
+  master_port_alt = 25304
   buildbot_url = 'https://build.chromium.org/p/client.ndk/'
   buildbucket_bucket = None
   service_account_file = None

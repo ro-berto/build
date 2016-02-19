@@ -16,7 +16,7 @@ class ChromiumMojo(Master.Master1):
   project_name = 'ChromiumMojo'
   master_port = 20100
   slave_port = 30100
-  master_port_alt = 40100
+  master_port_alt = 25100
   buildbot_url = 'https://build.chromium.org/p/chromium.mojo/'
   buildbucket_bucket = None
   service_account_file = None

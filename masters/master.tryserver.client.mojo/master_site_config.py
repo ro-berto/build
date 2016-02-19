@@ -10,7 +10,7 @@ class MojoTryServer(Master.Master4a):
   project_name = 'Mojo Try Server'
   master_port = 21410
   slave_port = 31410
-  master_port_alt = 41410
+  master_port_alt = 26410
   buildbot_url = 'https://build.chromium.org/p/tryserver.client.mojo/'
   service_account_file = 'service-account-mojo.json'
   buildbucket_bucket = 'master.tryserver.client.mojo'
