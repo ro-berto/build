@@ -117,6 +117,15 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::webrtc]/resources/ensure_webcam_is_running.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "webcam_check"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -187,46 +196,6 @@
     "name": "isac_fix_test"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::webrtc]/resources/ensure_webcam_is_running.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "webcam_check"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--xvfb",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Linux64 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
-      "--annotate=gtest",
-      "--test-type=libjingle_peerconnection_java_unittest",
-      "--step-name=libjingle_peerconnection_java_unittest",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/libjingle_peerconnection_java_unittest",
-      "--builder-name=Linux64 Release [large tests]",
-      "--slave-name=slavename",
-      "--build-number=1337",
-      "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "libjingle_peerconnection_java_unittest"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "LD_PRELOAD": "/usr/lib/x86_64-linux-gnu/libpulse.so.0"
-    },
-    "name": "libjingle_peerconnection_java_unittest"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -282,15 +251,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "voe_auto_test"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::webrtc]/resources/ensure_webcam_is_running.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "webcam_check (2)"
   },
   {
     "allow_subannotations": true,

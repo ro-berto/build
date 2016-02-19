@@ -35,14 +35,13 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
                         args=['32000', f('resources', 'speech_and_misc_wb.pcm'),
                               'isac_speech_and_misc_wb.pcm'],
                         perf_test=True),
-          WebCamTest('libjingle_peerconnection_java_unittest', revision,
-              env={'LD_PRELOAD': '/usr/lib/x86_64-linux-gnu/libpulse.so.0'}),
       ])
 
+    api.virtual_webcam_check()  # Needed for video_capture_tests below.
     tests.extend([
         BaremetalTest('audio_device_tests', revision),
         BaremetalTest('voe_auto_test', revision, args=['--automated']),
-        WebCamTest('video_capture_tests', revision),
+        BaremetalTest('video_capture_tests', revision),
         BaremetalTest('webrtc_perf_tests', revision, perf_test=True),
     ])
   elif test_suite == 'android':
@@ -107,17 +106,6 @@ class BaremetalTest(WebRTCTest):
     # Tests accessing hardware devices shouldn't be run in parallel.
     super(BaremetalTest, self).__init__(name, revision, parallel=False,
                                         perf_test=perf_test, **runtest_kwargs)
-
-
-class WebCamTest(WebRTCTest):
-  def __init__(self, name, revision, **runtest_kwargs):
-    # Tests accessing the Webcam shouldn't be run in parallel.
-    super(WebCamTest, self).__init__(name, revision, parallel=False,
-                                     **runtest_kwargs)
-
-  def run(self, api, suffix):
-    api.virtual_webcam_check()
-    super(WebCamTest, self).run(api, suffix)
 
 
 def get_android_tool(api):

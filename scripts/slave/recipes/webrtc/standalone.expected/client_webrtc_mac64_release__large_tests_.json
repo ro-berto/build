@@ -137,6 +137,15 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::webrtc]/resources/ensure_webcam_is_running.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "webcam_check"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -190,15 +199,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "voe_auto_test"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::webrtc]/resources/ensure_webcam_is_running.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "webcam_check"
   },
   {
     "allow_subannotations": true,
