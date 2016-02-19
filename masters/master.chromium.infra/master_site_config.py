@@ -12,3 +12,6 @@ class Infra(Master.Master1):
   buildbot_url = 'https://build.chromium.org/p/chromium.infra/'
   service_account_file = 'service-account-infra.json'
   buildbucket_bucket = 'master.chromium.infra'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic_url = 'projects/luci-milo/topics/public-buildbot'
+  name = 'chromium.infra'
