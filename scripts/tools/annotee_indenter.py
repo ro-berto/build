@@ -29,7 +29,7 @@ def main(argv):
                       default=os.getcwd())
   parser.add_argument('--base-level', help='The base level for indents.',
                       type=int, required=True)
-  parser.add_argument('--use-python-executable', default=False,
+  parser.add_argument('--use-python-executable', action='store_true',
                       help='execute python command using same executbale, '
                            'as running this one.')
   parser.add_argument('sub', nargs='+')
