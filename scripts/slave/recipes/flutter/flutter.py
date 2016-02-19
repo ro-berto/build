@@ -104,13 +104,14 @@ def GenerateDocs(api, pub_cache):
     ]
     for package in DOCUMENTED_PACKAGES:
         package_path = checkout.join(package)
-        api.step('dartdoc %s' % package, [dartdoc, '--header', header],
+        package_name = api.path.basename(package)
+        api.step('dartdoc %s' % package_name, [dartdoc, '--header', header],
             cwd=package_path)
         api_path = package_path.join('doc', 'api')
-        remote_path = 'gs://docs.flutter.io/%s' % package_path.pieces[-1]
+        remote_path = 'gs://docs.flutter.io/%s' % package
         # Use rsync instead of copy to delete any obsolete docs.
         api.gsutil(['-m', 'rsync', '-d', '-r', api_path, remote_path],
-            name='rsync %s/doc/api' % package)
+            name='rsync %s/doc/api' % package_name)
 
     index_path = checkout.join('doc', 'index.html')
     api.gsutil.upload(index_path, 'docs.flutter.io', 'index.html',

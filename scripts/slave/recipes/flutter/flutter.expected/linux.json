@@ -408,7 +408,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "dartdoc packages/flutter"
+    "name": "dartdoc flutter"
   },
   {
     "cmd": [
@@ -431,7 +431,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil rsync packages/flutter/doc/api"
+    "name": "gsutil rsync flutter/doc/api"
   },
   {
     "cmd": [
@@ -445,7 +445,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "dartdoc packages/playfair"
+    "name": "dartdoc playfair"
   },
   {
     "cmd": [
@@ -468,7 +468,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil rsync packages/playfair/doc/api"
+    "name": "gsutil rsync playfair/doc/api"
   },
   {
     "cmd": [
@@ -482,7 +482,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "dartdoc packages/cassowary"
+    "name": "dartdoc cassowary"
   },
   {
     "cmd": [
@@ -505,7 +505,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil rsync packages/cassowary/doc/api"
+    "name": "gsutil rsync cassowary/doc/api"
   },
   {
     "cmd": [
@@ -519,7 +519,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "dartdoc packages/flutter_test"
+    "name": "dartdoc flutter_test"
   },
   {
     "cmd": [
@@ -542,7 +542,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil rsync packages/flutter_test/doc/api"
+    "name": "gsutil rsync flutter_test/doc/api"
   },
   {
     "cmd": [
@@ -556,7 +556,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "dartdoc packages/flutter_sprites"
+    "name": "dartdoc flutter_sprites"
   },
   {
     "cmd": [
@@ -579,7 +579,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/infra/dart-sdk/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil rsync packages/flutter_sprites/doc/api"
+    "name": "gsutil rsync flutter_sprites/doc/api"
   },
   {
     "cmd": [
