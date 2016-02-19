@@ -35,16 +35,38 @@
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "build_try_recipe_test",
     },
-    "Build Experimental Try Recipe": {
-      "category": "Build",
-      "recipe": "infra/experimental_try_recipe",
+    "Try Recipe Mac": {
+      "category": "Try Recipe",
+      "recipe": "infra/try_recipe",
+      "properties": {
+        "repo_name": "build",
+        "runhooks": True,
+      },
+      "scheduler": None,
+      "slave_pools": ["mac_slave_pool"],
+      "slavebuilddir": "try_recipe",
+    },
+    "Try Recipe Trusty 64": {
+      "category": "Try Recipe",
+      "recipe": "infra/try_recipe",
       "properties": {
         "repo_name": "build",
         "runhooks": True,
       },
       "scheduler": None,
       "slave_pools": ["trusty64_slave_pool"],
-      "slavebuilddir": "experimental_try_recipe",
+      "slavebuilddir": "try_recipe",
+    },
+    "Try Recipe Win 64": {
+      "category": "Try Recipe",
+      "recipe": "infra/try_recipe",
+      "properties": {
+        "repo_name": "build",
+        "runhooks": True,
+      },
+      "scheduler": None,
+      "slave_pools": ["win64_slave_pool"],
+      "slavebuilddir": "try_recipe",
     },
     "Infra Presubmit": {
       "category": "Infra",
