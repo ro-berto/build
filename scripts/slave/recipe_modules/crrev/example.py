@@ -2,25 +2,32 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import re
+
 from recipe_engine import recipe_api
 
 DEPS = [
     'crrev',
     'recipe_engine/properties',
     'recipe_engine/step',
-    'recipe_engine/raw_io',
+    'recipe_engine/json',
 ]
 
-def RunSteps(api):
-  # Try to resolve a commit position to a hash
-  if 'commit_position' in api.properties.keys():
-    api.crrev.chromium_hash_from_commit_position(
-        api.properties['commit_position'])
 
-  # Try to resolve a hash to a commit_position
+def RunSteps(api):
+  if 'commit_position' in api.properties.keys():
+    cp = api.properties['commit_position']
+    try:
+      api.crrev.to_commit_hash(cp)
+    except ValueError:
+      raise recipe_api.StepFailure('Invalid commit position: %s' % cp)
+
   if 'commit_hash' in api.properties.keys():
-    api.crrev.chromium_commit_position_from_hash(
-        api.properties['commit_hash'])
+    sha = api.properties['commit_hash']
+    try:
+      api.crrev.to_commit_position(sha)
+    except ValueError:
+      raise recipe_api.StepFailure('Invalid commit hash: %s' % sha)
 
 
 def GenTests(api):
@@ -34,28 +41,47 @@ def GenTests(api):
 
   yield (
       api.test('valid_hash') +
-      api.properties(commit_hash='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') +
+      api.properties(commit_hash='abcdeabcde0123456789abcdeabcde0123456789') +
       api.step_data(
-          name='resolving hash aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-          stdout=api.raw_io.output('11111')))
+          name='crrev get commit position for '
+               'abcdeabcde0123456789abcdeabcde0123456789',
+          stdout=api.json.output({
+              'numberings': [
+                  {
+                      'number': '111',
+                      'numbering_identifier': 'refs/heads/master',
+                      'numbering_type': 'COMMIT_POSITION',
+                  }
+              ]})))
 
   yield (
-      api.test('valid_comit_position') +
-      api.properties(commit_position='11111') +
+      api.test('valid_commit_position') +
+      api.properties(commit_position='refs/heads/master@{#111}') +
       api.step_data(
-          name='resolving commit_pos 11111',
-          stdout=api.raw_io.output('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')))
+          name='crrev get commit hash for refs/heads/master@{#111}',
+          stdout=api.json.output({
+              'git_sha': 'abcdeabcde0123456789abcdeabcde0123456789'
+          })))
 
   yield (
-      api.test('invalid_commit_hash_output') +
-      api.properties(commit_position='11111') +
+      api.test('empty_commit_hash_output') +
+      api.properties(commit_position='refs/heads/master@{#111}') +
       api.step_data(
-          name='resolving commit_pos 11111',
-          stdout=api.raw_io.output('not a sha1 hash')))
+          name='crrev get commit hash for refs/heads/master@{#111}',
+          stdout=api.json.output({})))
 
   yield (
-      api.test('invalid_commit_position_output') +
-      api.properties(commit_hash='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') +
+      api.test('empty_commit_position_output') +
+      api.properties(commit_hash='abcdeabcde0123456789abcdeabcde0123456789') +
       api.step_data(
-          name='resolving hash aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-          stdout=api.raw_io.output('not an integer')))
+          name='crrev get commit position for '
+               'abcdeabcde0123456789abcdeabcde0123456789',
+          stdout=api.json.output({})))
+
+  yield (
+      api.test('no_numberings') +
+      api.properties(commit_hash='abcdeabcde0123456789abcdeabcde0123456789') +
+      api.step_data(
+          name='crrev get commit position for '
+               'abcdeabcde0123456789abcdeabcde0123456789',
+          stdout=api.json.output({'numberings': []})))

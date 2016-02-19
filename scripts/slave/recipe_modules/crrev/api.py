@@ -4,45 +4,57 @@
 
 from recipe_engine import recipe_api
 
+import re
+
 
 class CrrevApi(recipe_api.RecipeApi):
   """Recipe module for making requests to crrev.com."""
 
-  def chromium_hash_from_commit_position(self, commit_pos):
-    """Resolve a commit position in the chromium repo to its commit hash."""
-    try:
-      int_pos = int(commit_pos)
-    except (ValueError, TypeError):
-      raise self.m.step.StepFailure('Invalid commit position (%s).'
-                                    % (commit_pos,))
-    try:
-      step_result = self.m.python(
-          'resolving commit_pos ' + str(commit_pos),
-          self.resource('crrev.py'),
-          ['commit_hash', commit_pos],
-          stdout=self.m.raw_io.output())
-    except self.m.step.StepFailure:  # pragma: no cover
-      raise self.m.step.StepFailure(
-          'Could not get commit hash for commit position: ' + str(commit_pos))
+  def __call__(self, step_name, request_path, request_params=None, attempts=3):
+    step_result = self.m.python(
+        step_name,
+        self.resource('crrev_client.py'),
+        [
+            request_path,
+            '--params-file', self.m.json.input(request_params or {}),
+            '--attempts', str(attempts),
+        ],
+        stdout=self.m.json.output())
     return step_result.stdout
 
-  def chromium_commit_position_from_hash(self, sha):
-    """Resolve a chromium commit hash to its commit position."""
+  def to_commit_hash(
+      self, commit_position, project='chromium', repo='chromium/src',
+      attempts=3, step_name=None):
+    """Fetches the corresponding commit hash for a commit position."""
+    branch, number = self.m.commit_position.parse(commit_position)
+    params = {
+        'numbering_type': 'COMMIT_POSITION',
+        'numbering_identifier': branch,
+        'number': number,
+        'project': project,
+        'repo': repo,
+    }
+    step_name = step_name or 'crrev get commit hash for ' + commit_position
     try:
-      assert int(sha, 16)
-      sha = str(sha)  # Unicode would break the step when passed in the name
-    except (AssertionError, ValueError, TypeError):
-      raise self.m.step.StepFailure('Invalid commit hash: ' + sha)
+      result = self(step_name, 'get_numbering', params, attempts)
+      return result['git_sha']
+    except (self.m.step.StepFailure, KeyError):
+      raise self.m.step.StepFailure('Could not resolve ' + commit_position)
 
+  def to_commit_position(self, commit_hash, attempts=3, step_name=None):
+    """Fetches a commit position string given a commit hash."""
+    if not re.match(r'^[0-9a-zA-Z]{40}$', commit_hash):
+      raise ValueError('Not a full 40-digit SHA1 hash (%s)' % commit_hash)
+    step_name = step_name or 'crrev get commit position for ' + commit_hash
     try:
-      step_result = self.m.python(
-          'resolving hash ' + sha,
-          self.resource('crrev.py'),
-          ['commit_hash', sha],
-          stdout=self.m.raw_io.output())
-      result = int(step_result.stdout)
-    except (self.m.step.StepFailure, ValueError, TypeError):
-      raise self.m.step.StepFailure(
-          'Could not fetch commit position for hash: ' + sha)
-    return result
+      result = self(step_name, 'commit_path/' + commit_hash, attempts=attempts)
+      numberings = result['numberings']
+    except (self.m.step.StepFailure, KeyError):
+      raise self.m.step.StepFailure('Could not resolve ' + commit_hash)
+    for numbering in numberings:
+      if numbering['numbering_type'] == 'COMMIT_POSITION':
+        branch = numbering['numbering_identifier']
+        number = numbering['number']
+        return self.m.commit_position.construct(branch, number)
+    raise self.m.step.StepFailure('No commit position for ' + commit_hash)
 

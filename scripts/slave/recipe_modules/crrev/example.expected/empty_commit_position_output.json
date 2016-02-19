@@ -1,0 +1,26 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::crrev]/resources/crrev_client.py",
+      "commit_path/abcdeabcde0123456789abcdeabcde0123456789",
+      "--params-file",
+      "{}",
+      "--attempts",
+      "3"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "crrev get commit position for abcdeabcde0123456789abcdeabcde0123456789",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "reason": "Could not resolve abcdeabcde0123456789abcdeabcde0123456789",
+    "status_code": 1
+  }
+]

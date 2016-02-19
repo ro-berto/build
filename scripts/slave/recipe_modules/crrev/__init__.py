@@ -1,5 +1,6 @@
 DEPS = [
+    'commit_position',
     'recipe_engine/python',
-    'recipe_engine/raw_io',
+    'recipe_engine/json',
     'recipe_engine/step',
 ]
