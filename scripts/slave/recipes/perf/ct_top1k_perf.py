@@ -23,6 +23,10 @@ CT_ISOLATE = 'ct_top1k.isolate'
 # Number of slaves to shard CT runs to.
 DEFAULT_CT_NUM_SLAVES = 100
 
+# Only upload results to chromeperf if the number of reported webpages is equal
+# to or more than the threshold.
+NUM_WEBPAGES_REPORTED_THRESHOLD = 940
+
 
 def _DownloadAndExtractBinary(api):
   """Downloads the binary from the revision passed to the recipe."""
@@ -193,9 +197,13 @@ def RunSteps(api):
     }
   }
 
-  # Upload results_json to the perf dashboard.
-  api.perf_dashboard.set_default_config()
-  api.perf_dashboard.post(results_json)
+  # Upload results_json to the perf dashboard only if the number of reported
+  # webpages matches the threshold.
+  num_webpages_reported_threshold = api.properties.get(
+      'num_webpages_reported_threshold', NUM_WEBPAGES_REPORTED_THRESHOLD)
+  if num_webpages_reported >= num_webpages_reported_threshold:
+    api.perf_dashboard.set_default_config()
+    api.perf_dashboard.post(results_json)
 
   # Set build property that displays how many webpages reported results.
   api.step.active_result.presentation.properties['Number of webpages'] = (
@@ -253,6 +261,7 @@ def GenTests(api):
   parent_got_swarming_client_revision = '12345'
   git_revision = 'xy12z43'
   ct_num_slaves = 3
+  num_webpages_reported_threshold = 3  # set threshold low for tests.
 
   # Slave1 file1 and file2.
   json_output_slave1_file1 = _GetTestJsonOutput('http://www.google.com',
@@ -293,6 +302,7 @@ def GenTests(api):
         parent_got_swarming_client_revision=parent_got_swarming_client_revision,
         git_revision=git_revision,
         ct_num_slaves=ct_num_slaves,
+        num_webpages_reported_threshold=num_webpages_reported_threshold,
     )
   )
 
@@ -318,6 +328,7 @@ def GenTests(api):
         parent_got_swarming_client_revision=parent_got_swarming_client_revision,
         git_revision=git_revision,
         ct_num_slaves=ct_num_slaves,
+        num_webpages_reported_threshold=num_webpages_reported_threshold,
     )
   )
 
@@ -327,12 +338,39 @@ def GenTests(api):
         buildername='Linux CT Top1k Unsupported Perf',
         mastername=mastername,
         slavename=slavename,
+         parent_build_archive_url=parent_build_archive_url,
+        parent_got_swarming_client_revision=parent_got_swarming_client_revision,
+        git_revision=git_revision,
+        ct_num_slaves=ct_num_slaves,
+        num_webpages_reported_threshold=num_webpages_reported_threshold,
+    ) +
+    api.expect_exception('Exception')
+  )
+
+  yield(
+    api.test('CT_Top1k_less_than_threshold') +
+    api.override_step_data(
+        'read output json', api.json.output(json_output_slave1_file1)) +
+    api.override_step_data(
+        'read output json (2)', api.json.output(json_output_slave1_file2)) +
+    api.override_step_data(
+        'read output json (3)', api.json.output(json_output_slave2_file1)) +
+    api.override_step_data(
+        'read output json (4)', api.json.output(json_output_slave2_file2)) +
+    api.override_step_data(
+        'read output json (5)', api.json.output(json_output_slave3_file1)) +
+    api.override_step_data(
+        'read output json (6)', api.json.output(json_output_slave3_file2)) +
+    api.properties(
+        buildername='Linux CT Top1k Repaint Perf',
+        mastername=mastername,
+        slavename=slavename,
         parent_build_archive_url=parent_build_archive_url,
         parent_got_swarming_client_revision=parent_got_swarming_client_revision,
         git_revision=git_revision,
         ct_num_slaves=ct_num_slaves,
-    ) +
-    api.expect_exception('Exception')
+        num_webpages_reported_threshold=6,
+    )
   )
 
   yield(
@@ -346,6 +384,7 @@ def GenTests(api):
         parent_got_swarming_client_revision=parent_got_swarming_client_revision,
         git_revision=git_revision,
         ct_num_slaves=ct_num_slaves,
+        num_webpages_reported_threshold=num_webpages_reported_threshold,
     )
   )
 
@@ -363,6 +402,7 @@ def GenTests(api):
         parent_got_swarming_client_revision=parent_got_swarming_client_revision,
         git_revision=git_revision,
         ct_num_slaves=ct_num_slaves,
+        num_webpages_reported_threshold=num_webpages_reported_threshold,
     )
   )
 
@@ -381,5 +421,6 @@ def GenTests(api):
         parent_got_swarming_client_revision=parent_got_swarming_client_revision,
         git_revision=git_revision,
         ct_num_slaves=ct_num_slaves,
+        num_webpages_reported_threshold=num_webpages_reported_threshold,
     )
   )
