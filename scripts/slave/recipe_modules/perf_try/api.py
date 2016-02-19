@@ -9,9 +9,9 @@ platform for any test that can be run via buildbot, perf or otherwise.
 """
 
 import re
+import urllib
 
 from recipe_engine import recipe_api
-
 
 PERF_CONFIG_FILE = 'tools/run-perf-test.cfg'
 WEBKIT_PERF_CONFIG_FILE = 'third_party/WebKit/Tools/run-perf-test.cfg'
@@ -89,8 +89,17 @@ class PerfTryJobApi(recipe_api.RecipeApi):
         'profiler_link2': ('%s - Profiler Data' % 'Without Patch'
                            if r[1] is None else r[1])
     }
+
+    # TODO(chrisphan): Deprecate this.  perf_dashboard.post_bisect_results below
+    # already outputs data in json format.
     self._compare_and_present_results(
         test_cfg, results_without_patch, results_with_patch, labels)
+
+    bisect_results = self.get_result(
+        test_cfg, results_without_patch, results_with_patch, labels)
+    self.m.perf_dashboard.set_default_config()
+    self.m.perf_dashboard.post_bisect_results(
+        bisect_results, halt_on_failure=True)
 
   def run_cq_job(self, update_step, bot_db, files_in_patch):
     """Runs benchmarks affected by a CL on CQ."""
@@ -278,8 +287,8 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     values_with_patch = results_with_patch.get('results').get('values')
     values_without_patch = results_without_patch.get('results').get('values')
 
-    cloud_links_without_patch = _parse_cloud_links(output_without_patch)
-    cloud_links_with_patch = _parse_cloud_links(output_with_patch)
+    cloud_links_without_patch = self.parse_cloud_links(output_without_patch)
+    cloud_links_with_patch = self.parse_cloud_links(output_with_patch)
 
     results_link = (cloud_links_without_patch['html'][0]
                     if cloud_links_without_patch['html'] else '')
@@ -348,17 +357,99 @@ class PerfTryJobApi(recipe_api.RecipeApi):
                 labels.get('profiler_link2'), i): profiler_without_patch[i]
         })
 
+  def parse_cloud_links(self, output):
+    html_results_pattern = re.compile(CLOUD_RESULTS_LINK, re.MULTILINE)
+    profiler_pattern = re.compile(PROFILER_RESULTS_LINK, re.MULTILINE)
 
-def _parse_cloud_links(output):
-  html_results_pattern = re.compile(CLOUD_RESULTS_LINK, re.MULTILINE)
-  profiler_pattern = re.compile(PROFILER_RESULTS_LINK, re.MULTILINE)
+    results = {
+        'html': html_results_pattern.findall(output),
+        'profiler': profiler_pattern.findall(output),
+    }
+    return results
 
-  results = {
-      'html': html_results_pattern.findall(output),
-      'profiler': profiler_pattern.findall(output),
-  }
 
-  return results
+  def get_result(self, config, results_without_patch, results_with_patch,
+                 labels):
+    """Returns the results as a dict."""
+    output_with_patch = results_with_patch.get('output')
+    output_without_patch = results_without_patch.get('output')
+    values_with_patch = results_with_patch.get('results').get('values')
+    values_without_patch = results_without_patch.get('results').get('values')
+
+    cloud_links_without_patch = self.parse_cloud_links(output_without_patch)
+    cloud_links_with_patch = self.parse_cloud_links(output_with_patch)
+
+    cloud_link = (cloud_links_without_patch['html'][0]
+                  if cloud_links_without_patch['html'] else '')
+
+    results = {
+        'try_job_id': config.get('try_job_id'),
+        'status': 'completed',  # TODO(chrisphan) Get partial results state.
+        'buildbot_log_url': self._get_build_url(),
+        'bisect_bot': self.m.properties.get('buildername', 'Not found'),
+        'command': config.get('command'),
+        'metric': config.get('metric'),
+        'cloud_link': cloud_link,
+    }
+
+    if not values_with_patch or not values_without_patch:
+      results['warnings'] = ['No values from test with patch, or none '
+          'from test without patch.\n Output with patch:\n%s\n\nOutput without '
+          'patch:\n%s' % (output_with_patch, output_without_patch)]
+      return results
+
+    mean_with_patch = self.m.math_utils.mean(values_with_patch)
+    mean_without_patch = self.m.math_utils.mean(values_without_patch)
+
+    stderr_with_patch = self.m.math_utils.standard_error(values_with_patch)
+    stderr_without_patch = self.m.math_utils.standard_error(
+        values_without_patch)
+
+    profiler_with_patch = cloud_links_with_patch['profiler']
+    profiler_without_patch = cloud_links_without_patch['profiler']
+
+    # Calculate the % difference in the means of the 2 runs.
+    relative_change = None
+    std_err = None
+    if mean_with_patch and values_with_patch:
+      relative_change = self.m.math_utils.relative_change(
+          mean_without_patch, mean_with_patch) * 100
+      std_err = self.m.math_utils.pooled_standard_error(
+          [values_with_patch, values_without_patch])
+
+    if relative_change is not None and std_err is not None:
+      data = [
+          ['Revision', 'Mean', 'Std.Error'],
+          ['Patch', str(mean_with_patch), str(stderr_with_patch)],
+          ['No Patch', str(mean_without_patch), str(stderr_without_patch)]
+      ]
+      results['change'] = relative_change
+      results['std_err'] = std_err
+      results['result'] = _pretty_table(data)
+
+    profiler_links = []
+    if profiler_with_patch and profiler_without_patch:
+      for i in xrange(len(profiler_with_patch)):  # pragma: no cover
+        profiler_links.append({
+          'title': '%s[%d]' % (labels.get('profiler_link1'), i),
+          'link': profiler_with_patch[i]
+        })
+      for i in xrange(len(profiler_without_patch)):  # pragma: no cover
+        profiler_links.append({
+          'title': '%s[%d]' % (labels.get('profiler_link2'), i),
+          'link': profiler_without_patch[i]
+        })
+    results['profiler_links'] = profiler_links
+
+    return results
+
+  def _get_build_url(self):
+    properties = self.m.properties
+    bot_url = properties.get('buildbotURL',
+                             'http://build.chromium.org/p/chromium/')
+    builder_name = urllib.quote(properties.get('buildername', ''))
+    builder_number = str(properties.get('buildnumber', ''))
+    return '%sbuilders/%s/builds/%s' % (bot_url, builder_name, builder_number)
 
 
 def _validate_perf_config(config_contents, required_parameters):
@@ -407,32 +498,11 @@ def _is_benchmark_match(benchmark, affected_benchmarks):
   return False
 
 
-# TODO(prasadv): This method already exists in auto_bisect module,
-# we need to identify a common location move this there, so that recipe modules
-# share them.
 def _pretty_table(data):
-  """Arrange a matrix of strings into an ascii table.
-
-  This function was ripped off directly from somewhere in skia. It is
-  inefficient and so, should be avoided for large data sets.
-
-  Args:
-    data (list): A list of lists of strings containing the data to tabulate. It
-      is expected to be rectangular.
-
-  Returns:
-    A multi-line string containing the data arranged in a tabular manner.
-  """
-  result = ''
-  column_widths = [0] * len(data[0])
-  for line in data:
-    column_widths = [max(longest_len, len(prop)) for
-                     longest_len, prop in zip(column_widths, line)]
-  for line in data:
-    for prop, width in zip(line, column_widths):
-      result += prop.ljust(width + 1)
-    result += '\n'
-  return result
+  results = []
+  for row in data:
+    results.append(('%-12s' * len(row) % tuple(row)).rstrip())
+  return '\n'.join(results)
 
 
 def _prepend_src_to_path_in_command(test_cfg):

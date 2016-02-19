@@ -9,6 +9,7 @@ DEPS = [
     'depot_tools/gclient',
     'depot_tools/git',
     'gsutil',
+    'perf_dashboard',
     'recipe_engine/json',
     'halt',
     'math_utils',

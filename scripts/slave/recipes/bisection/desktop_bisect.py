@@ -74,7 +74,9 @@ results-without_patch
          api.step_data('Performance Test (Without Patch) 1 of 1',
                        stdout=api.raw_io.output(str(results_without_patch))) +
          api.step_data('Performance Test (With Patch) 1 of 1',
-                       stdout=api.raw_io.output(str(results_with_patch))))
+                       stdout=api.raw_io.output(str(results_with_patch))) +
+         api.step_data('Post bisect results',
+                       stdout=api.json.output({'status_code': 200})))
 
   config_json.update({'metric': 'dummy/dummy'})
 
@@ -87,7 +89,10 @@ results-without_patch
          api.step_data('Performance Test (Without Patch) 1 of 1',
                        stdout=api.raw_io.output(results_without_patch)) +
          api.step_data('Performance Test (With Patch) 1 of 1',
-                       stdout=api.raw_io.output(results_with_patch)))
+                       stdout=api.raw_io.output(results_with_patch)) +
+         api.step_data('Post bisect results',
+                       stdout=api.json.output({'status_code': 200})))
+
 
   yield (api.test('perf_tryjob_failed_test') + api.properties.tryserver(
       mastername='tryserver.chromium.perf',
@@ -117,7 +122,9 @@ results-without_patch
           'Performance Test (d49c331def2a3bbf3ddd0096eb51551155) 1 of 1',
           stdout=api.raw_io.output(results_without_patch)) + api.step_data(
               'Performance Test (bad49c331def2a3bbf3ddd0096eb51551155) 1 of 1',
-              stdout=api.raw_io.output(results_with_patch)))
+              stdout=api.raw_io.output(results_with_patch)) +
+      api.step_data('Post bisect results',
+                    stdout=api.json.output({'status_code': 200})))
 
   config_json = {
       'max_time_minutes': '25',

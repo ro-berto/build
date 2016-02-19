@@ -26,7 +26,7 @@ def perform_bisect(api):  # pragma: no cover
   else:
     bisector.bisect_over = True
   bisector.print_result_debug_info()
-  bisector.print_result()
+  bisector.post_result(halt_on_failure=True)
 
 
 def _gather_reference_range(api, bisector):  # pragma: no cover
@@ -65,9 +65,7 @@ def _bisect_main_loop(bisector):  # pragma: no cover
     completed_revisions = []
     with bisector.api.m.step.nest(str('Working on revision ' +
                                       revisions_to_check[0].revision_string)):
-      nest_step_result = bisector.api.m.step.active_result
-      partial_results = bisector.partial_results().splitlines()
-      nest_step_result.presentation.logs['Partial Results'] = partial_results
+      bisector.post_result(halt_on_failure=False)
       for r in revisions_to_check:
         r.start_job()
       completed_revisions = _wait_for_revisions(bisector, revisions_to_check)

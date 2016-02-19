@@ -150,6 +150,7 @@ def GenTests(api):
     for step_data in _get_step_data_for_revision(api, revision_data):
       basic_test += step_data
   basic_test += _get_revision_range_step_data(api, basic_test_data)
+  basic_test += _get_post_bisect_step_data(api)
   yield basic_test
 
   broken_test_data = test_data()
@@ -166,6 +167,7 @@ def GenTests(api):
                                                  skip_results=skip_results):
       broken_bad_rev_test += step_data
   broken_bad_rev_test += _get_revision_range_step_data(api, doctored_data)
+  broken_bad_rev_test += _get_post_bisect_step_data(api)
   yield broken_bad_rev_test
 
   doctored_data = test_data()
@@ -177,6 +179,7 @@ def GenTests(api):
                                                  skip_results=skip_results):
       broken_good_rev_test += step_data
   broken_good_rev_test += _get_revision_range_step_data(api, doctored_data)
+  broken_good_rev_test += _get_post_bisect_step_data(api)
   yield broken_good_rev_test
 
   def return_code_test_data():
@@ -249,6 +252,7 @@ def GenTests(api):
     for step_data in _get_step_data_for_revision(api, revision_data):
       return_code_test += step_data
   return_code_test += _get_revision_range_step_data(api, return_code_test_data)
+  return_code_test += _get_post_bisect_step_data(api)
   yield return_code_test
 
 
@@ -285,13 +289,21 @@ def _get_step_data_for_revision(api, revision_data, broken_cp=None,
   if not skip_results:
     step_name = 'gsutil Get test results for build ' + commit_hash
     if 'refrange' in revision_data:
-      step_name = 'Gathering reference values.' + step_name
+      parent_step = 'Gathering reference values.'
     else:
-      step_name = 'Working on revision %s.' % commit_hash + step_name
-    yield api.step_data(step_name, stdout=api.raw_io.output(json.dumps(
-        test_results)))
+      parent_step = 'Working on revision %s.' % commit_hash
+      yield _get_post_bisect_step_data(api, parent_step)
+    yield api.step_data(parent_step + step_name,
+                        stdout=api.raw_io.output(json.dumps(test_results)))
 
     if 'cl_info' in revision_data:
       step_name = 'Reading culprit cl information.'
       stdout = api.json.output(revision_data['cl_info'])
       yield api.step_data(step_name, stdout=stdout)
+
+
+def _get_post_bisect_step_data(api, parent_step=''):
+  """Gets step data for perf_dashboard/resource/post_json.py."""
+  response = {'status_code': 200}
+  return api.step_data(parent_step + 'Post bisect results',
+                       stdout=api.json.output(response))

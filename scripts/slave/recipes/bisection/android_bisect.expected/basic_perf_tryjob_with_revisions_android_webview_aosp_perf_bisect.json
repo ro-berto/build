@@ -816,11 +816,28 @@
       "Test Metric: dummy/dummy",
       "Relative Change: 0.00000%",
       "Standard Error: +- 0.18047 delta",
-      "Revision Mean          Std.Error      ",
-      "Patch    5.80533333333 0.127614436662 ",
-      "No Patch 5.80533333333 0.127614436662 ",
+      "Revision    Mean        Std.Error",
+      "Patch       5.805333333330.127614436662",
+      "No Patch    5.805333333330.127614436662",
       "@@@",
       "@@@STEP_LINK@HTML Results@http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Post bisect results",
+    "stdin": "{\"data\": {\"bisect_bot\": \"android_webview_aosp_perf_bisect\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_webview_aosp_perf_bisect/builds/571\", \"change\": 0.0, \"cloud_link\": \"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\", \"command\": \"src/tools/perf/run_benchmark -v --browser=android-chrome sunspider\", \"metric\": \"dummy/dummy\", \"profiler_links\": [], \"result\": \"Revision    Mean        Std.Error\\nPatch       5.805333333330.127614436662\\nNo Patch    5.805333333330.127614436662\", \"status\": \"completed\", \"std_err\": 0.1804740670813644, \"try_job_id\": null}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Failed to upload result to Perf Dashboard. Error response: None@@@",
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -900,7 +917,7 @@
   },
   {
     "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "reason": "Failed to upload result to Perf Dashboard. Error response: None",
+    "status_code": 1
   }
 ]

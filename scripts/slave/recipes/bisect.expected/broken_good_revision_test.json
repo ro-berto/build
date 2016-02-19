@@ -693,11 +693,11 @@
       "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: PerfRevisionState(cp=306475, values=[], mean_value=None, std_dev=None)@@@",
       "@@@STEP_LOG_LINE@Debug Info@bisector.fkbr: PerfRevisionState(cp=306478, values=[19, 20, 21], mean_value=20.0, std_dev=1.0)@@@",
       "@@@STEP_LOG_LINE@Debug Info@@@@",
-      "@@@STEP_LOG_LINE@Debug Info@Revision Values       @@@",
-      "@@@STEP_LOG_LINE@Debug Info@306475   []           @@@",
-      "@@@STEP_LOG_LINE@Debug Info@306476   []           @@@",
-      "@@@STEP_LOG_LINE@Debug Info@306477   []           @@@",
-      "@@@STEP_LOG_LINE@Debug Info@306478   [19, 20, 21] @@@",
+      "@@@STEP_LOG_LINE@Debug Info@Revision       Values         @@@",
+      "@@@STEP_LOG_LINE@Debug Info@306475         []             @@@",
+      "@@@STEP_LOG_LINE@Debug Info@306476         []             @@@",
+      "@@@STEP_LOG_LINE@Debug Info@306477         []             @@@",
+      "@@@STEP_LOG_LINE@Debug Info@306478         [19, 20, 21]   @@@",
       "@@@STEP_LOG_END@Debug Info@@@"
     ]
   },
@@ -705,17 +705,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copyfileobj(open(sys.argv[1]), sys.stdout)\n",
-      "---bisect results start here---\n\n===== BISECT JOB RESULTS =====\nStatus: Negative: Failed to bisect.\n\nTest Command: tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\nTest Metric: warm_times/page_load_time\nRelative Change: None\nScore: None\nRetested CL with revert: Not Implemented.\n\n\n===== TESTED REVISIONS =====\nDepot    Revision Mean Value Std. Dev. Num Values Good?  \nchromium r306478  20.0       1.0       3          bad    \n\n\n\n| O O | Visit http://www.chromium.org/developers/speed-infra/perf-bug-faq\n|  X  | for more information addressing perf regression bugs. For feedback,\n| / \\ | file a bug with label Cr-Tests-AutoBisect.  Thank you!"
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Results",
+    "name": "Post bisect results",
+    "stdin": "{\"data\": {\"bad_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/linux_perf_bisector/builds/571\", \"change\": null, \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \"culprit_data\": null, \"fail_reason\": null, \"good_revision\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"commit_pos\": 306478, \"depot_name\": \"chromium\", \"deps_revision\": null, \"mean_value\": 20.0, \"result\": \"bad\", \"std_dev\": 1.0, \"values\": [19, 20, 21]}], \"score\": 0, \"status\": \"failed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.copyfileobj(open(sys.argv[1]), sys.stdout)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

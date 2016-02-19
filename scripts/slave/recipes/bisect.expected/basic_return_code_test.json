@@ -678,18 +678,24 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Working on revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.Post bisect results",
+    "stdin": "{\"data\": {\"bad_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/linux_perf_bisector/builds/571\", \"change\": \"Zero to non-zero\", \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \"culprit_data\": null, \"fail_reason\": null, \"good_revision\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"commit_pos\": 306475, \"depot_name\": \"chromium\", \"deps_revision\": null, \"mean_value\": 0, \"result\": \"good\", \"std_dev\": null, \"values\": []}, {\"commit_pos\": 306478, \"depot_name\": \"chromium\", \"deps_revision\": null, \"mean_value\": 1, \"result\": \"bad\", \"std_dev\": null, \"values\": []}], \"score\": 0, \"status\": \"started\", \"test_type\": \"return_code\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@Partial Results@---partial bisect results start here---@@@",
-      "@@@STEP_LOG_LINE@Partial Results@@@@",
-      "@@@STEP_LOG_LINE@Partial Results@===== TESTED REVISIONS =====@@@",
-      "@@@STEP_LOG_LINE@Partial Results@Depot    Revision Exit Code Std. Dev. Num Values Good?  @@@",
-      "@@@STEP_LOG_LINE@Partial Results@chromium r306475  0         N/A       0          good   @@@",
-      "@@@STEP_LOG_LINE@Partial Results@chromium r306478  1         N/A       0          bad    @@@",
-      "@@@STEP_LOG_LINE@Partial Results@@@@",
-      "@@@STEP_LOG_LINE@Partial Results@@@@",
-      "@@@STEP_LOG_LINE@Partial Results@----End of partial results----@@@",
-      "@@@STEP_LOG_END@Partial Results@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -872,19 +878,24 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144",
+    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Working on revision fc6dfc7ff5b1073408499478969261b826441144.Post bisect results",
+    "stdin": "{\"data\": {\"bad_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/linux_perf_bisector/builds/571\", \"change\": \"Zero to non-zero\", \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \"culprit_data\": null, \"fail_reason\": null, \"good_revision\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"commit_pos\": 306475, \"depot_name\": \"chromium\", \"deps_revision\": null, \"mean_value\": 0, \"result\": \"good\", \"std_dev\": null, \"values\": []}, {\"commit_pos\": \"306477\", \"depot_name\": \"chromium\", \"deps_revision\": null, \"mean_value\": 1, \"result\": \"bad\", \"std_dev\": null, \"values\": []}, {\"commit_pos\": 306478, \"depot_name\": \"chromium\", \"deps_revision\": null, \"mean_value\": 1, \"result\": \"bad\", \"std_dev\": null, \"values\": []}], \"score\": 0, \"status\": \"started\", \"test_type\": \"return_code\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@Partial Results@---partial bisect results start here---@@@",
-      "@@@STEP_LOG_LINE@Partial Results@@@@",
-      "@@@STEP_LOG_LINE@Partial Results@===== TESTED REVISIONS =====@@@",
-      "@@@STEP_LOG_LINE@Partial Results@Depot    Revision Exit Code Std. Dev. Num Values Good?  @@@",
-      "@@@STEP_LOG_LINE@Partial Results@chromium r306475  0         N/A       0          good   @@@",
-      "@@@STEP_LOG_LINE@Partial Results@chromium r306477  1         N/A       0          bad    @@@",
-      "@@@STEP_LOG_LINE@Partial Results@chromium r306478  1         N/A       0          bad    @@@",
-      "@@@STEP_LOG_LINE@Partial Results@@@@",
-      "@@@STEP_LOG_LINE@Partial Results@@@@",
-      "@@@STEP_LOG_LINE@Partial Results@----End of partial results----@@@",
-      "@@@STEP_LOG_END@Partial Results@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -1092,11 +1103,11 @@
       "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: PerfRevisionState(cp=306475, values=[], mean_value=0, std_dev=None)@@@",
       "@@@STEP_LOG_LINE@Debug Info@bisector.fkbr: PerfRevisionState(cp=306476, values=[], mean_value=1, std_dev=None)@@@",
       "@@@STEP_LOG_LINE@Debug Info@@@@",
-      "@@@STEP_LOG_LINE@Debug Info@Revision Values @@@",
-      "@@@STEP_LOG_LINE@Debug Info@306475   []     @@@",
-      "@@@STEP_LOG_LINE@Debug Info@306476   []     @@@",
-      "@@@STEP_LOG_LINE@Debug Info@306477   []     @@@",
-      "@@@STEP_LOG_LINE@Debug Info@306478   []     @@@",
+      "@@@STEP_LOG_LINE@Debug Info@Revision       Values         @@@",
+      "@@@STEP_LOG_LINE@Debug Info@306475         []             @@@",
+      "@@@STEP_LOG_LINE@Debug Info@306476         []             @@@",
+      "@@@STEP_LOG_LINE@Debug Info@306477         []             @@@",
+      "@@@STEP_LOG_LINE@Debug Info@306478         []             @@@",
       "@@@STEP_LOG_END@Debug Info@@@"
     ]
   },
@@ -1119,25 +1130,24 @@
       "@@@STEP_LOG_LINE@json.output@  \"email\": \"dummy@nowhere.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"subject\": \"Some random CL\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"B4T_LO_FINAL_CONF\"]@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copyfileobj(open(sys.argv[1]), sys.stdout)\n",
-      "---bisect results start here---\n\n===== BISECT JOB RESULTS =====\nStatus: Negative: Completed, but no culprit was found with high confidence.\n\nTest Command: tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\nTest Metric: warm_times/page_load_time\nRelative Change: Zero to non-zero\nScore: 0.0\nRetested CL with revert: Not Implemented.\n\n\n===== SUSPECTED CL(s) =====\nSubject : Some random CL\nAuthor  : DummyAuthor, dummy@nowhere.com\nCommit description:\n  A long description for a CL.\nContaining multiple lines\nCommit  : fc6dfc7ff5b1073408499478969261b826441144\nDate    : 01/01/2015\n\n\n===== TESTED REVISIONS =====\nDepot    Revision Exit Code Std. Dev. Num Values Good?    \nchromium r306475  0         N/A       0          good     \n\nchromium r306476  1         N/A       0          bad   <- \n\nchromium r306477  1         N/A       0          bad      \nchromium r306478  1         N/A       0          bad      \n\n\n\n| O O | Visit http://www.chromium.org/developers/speed-infra/perf-bug-faq\n|  X  | for more information addressing perf regression bugs. For feedback,\n| / \\ | file a bug with label Cr-Tests-AutoBisect.  Thank you!"
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Results",
+    "name": "Post bisect results",
+    "stdin": "{\"data\": {\"bad_revision\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"425582\", \"buildbot_log_url\": \"http://c.org/p/cr/builders/linux_perf_bisector/builds/571\", \"change\": \"Zero to non-zero\", \"command\": \"tools/perf/run_benchmark -v --browser=release page_cycler.intl_ar_fa_he\", \"culprit_data\": {\"author\": \"DummyAuthor\", \"cl\": \"fc6dfc7ff5b1073408499478969261b826441144\", \"cl_date\": \"01/01/2015\", \"commit_info\": \"A long description for a CL.\\nContaining multiple lines\", \"email\": \"dummy@nowhere.com\", \"revisions_links\": [], \"subject\": \"Some random CL\"}, \"fail_reason\": null, \"good_revision\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", \"metric\": \"warm_times/page_load_time\", \"revision_data\": [{\"commit_pos\": 306475, \"depot_name\": \"chromium\", \"deps_revision\": null, \"mean_value\": 0, \"result\": \"good\", \"std_dev\": null, \"values\": []}, {\"commit_pos\": \"306476\", \"depot_name\": \"chromium\", \"deps_revision\": null, \"mean_value\": 1, \"result\": \"bad\", \"std_dev\": null, \"values\": []}, {\"commit_pos\": \"306477\", \"depot_name\": \"chromium\", \"deps_revision\": null, \"mean_value\": 1, \"result\": \"bad\", \"std_dev\": null, \"values\": []}, {\"commit_pos\": 306478, \"depot_name\": \"chromium\", \"deps_revision\": null, \"mean_value\": 1, \"result\": \"bad\", \"std_dev\": null, \"values\": []}], \"score\": 0.0, \"status\": \"completed\", \"test_type\": \"return_code\", \"try_job_id\": null, \"warnings\": []}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.copyfileobj(open(sys.argv[1]), sys.stdout)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

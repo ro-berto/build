@@ -70,7 +70,8 @@ def RunSteps(api):
     bisector.culprit = bisector.bad_rev
   set_attributes(bisector, dummy_bisector_attributes)
 
-  bisector.print_result()
+  bisector.post_result()
+
 
 def set_attributes(target, attributes):
   """Sets values to the attributes of an object based on a dict.
@@ -86,6 +87,7 @@ def set_attributes(target, attributes):
     else:
       setattr(target, k, v)
 
+
 def add_revision_mapping(api, test, pos, sha):
   step_name = 'Resolving reference range.resolving commit_pos ' + pos
   stdout = api.raw_io.output('hash:' + sha)
@@ -95,6 +97,7 @@ def add_revision_mapping(api, test, pos, sha):
   stdout = api.raw_io.output(pos)
   test += api.step_data(step_name, stdout=stdout)
   return test
+
 
 def add_revision_info(api, test):
   step_name = 'Reading culprit cl information.'
@@ -108,8 +111,17 @@ def add_revision_info(api, test):
   }
   return test + api.step_data(step_name, stdout=api.json.output(rev_info))
 
+
+def get_post_bisect_step_data(api, test):
+  """Gets step data for perf_dashboard/resource/post_json.py."""
+  response = {'status_code': 200}
+  return test + api.step_data('Post bisect results',
+                              stdout=api.json.output(response))
+
+
 def GenTests(api):
   basic_test = api.test('basic_test')
+  basic_test = get_post_bisect_step_data(api, basic_test)
   basic_test = add_revision_mapping(api, basic_test, '314015', 'c001c0de')
   basic_test = add_revision_mapping(api, basic_test, '314017', 'deadbeef')
   basic_test = add_revision_info(api, basic_test)
@@ -119,6 +131,7 @@ def GenTests(api):
   yield basic_test
 
   deps_culprit_test = api.test('deps_culprit_test')
+  deps_culprit_test = get_post_bisect_step_data(api, deps_culprit_test)
   deps_culprit_test = add_revision_mapping(
       api, deps_culprit_test, '314015', 'c001c0de')
   deps_culprit_test = add_revision_mapping(
@@ -130,6 +143,7 @@ def GenTests(api):
   yield deps_culprit_test
 
   failed_test = api.test('failed_test')
+  failed_test = get_post_bisect_step_data(api, failed_test)
   failed_test = add_revision_mapping(api, failed_test, '314015', 'c001c0de')
   failed_test = add_revision_mapping(api, failed_test, '314017', 'deadbeef')
   failed_test += api.properties(
@@ -138,6 +152,8 @@ def GenTests(api):
   yield failed_test
 
   failed_direction_test = api.test('failed_direction_test')
+  failed_direction_test = get_post_bisect_step_data(api,
+                                                    failed_direction_test)
   failed_direction_test = add_revision_mapping(api, failed_direction_test,
                                                '314015', 'c001c0de')
   failed_direction_test = add_revision_mapping(api, failed_direction_test,
@@ -148,6 +164,7 @@ def GenTests(api):
   yield failed_direction_test
 
   aborted_bisect_test = api.test('aborted_non_telemetry_test')
+  aborted_bisect_test = get_post_bisect_step_data(api, aborted_bisect_test)
   aborted_bisect_test = add_revision_mapping(api, aborted_bisect_test, '314015',
                                              'c001c0de')
   aborted_bisect_test = add_revision_mapping(api, aborted_bisect_test, '314017',
@@ -156,4 +173,3 @@ def GenTests(api):
       bisect_config = NON_TELEMETRY_TEST_CONFIG,
       dummy_bisector_attributes = ABORTED_BISECT_ATTRIBUTES)
   yield aborted_bisect_test
-

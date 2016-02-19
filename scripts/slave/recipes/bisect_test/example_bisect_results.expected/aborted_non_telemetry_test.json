@@ -144,25 +144,24 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Debug Good Revision DEPS@v8: None@@@",
       "@@@STEP_LOG_LINE@Debug Good Revision DEPS@skia: None@@@",
-      "@@@STEP_LOG_END@Debug Good Revision DEPS@@@",
-      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"B4T_LO_FINAL_CONF\"]@@@"
+      "@@@STEP_LOG_END@Debug Good Revision DEPS@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copyfileobj(open(sys.argv[1]), sys.stdout)\n",
-      "---bisect results start here---\n\n===== BISECTION ABORTED =====\nThe bisect was aborted because The metric values for the initial \"good\" and \"bad\" revisions do not represent a clear regression.\nPlease contact the the team (see below) if you believe this is in error.\n\nBug ID: \n\nTest Command: src/tools/dummy_command\nTest Metric: mean_input_event_latency/mean_input_event_latency\nGood revision: c001c0de\nBad revision: deadbeef\n\n\n===== WARNINGS =====\nThe following warnings were raised by the bisect job:\n\n * This is a demo warning\n\n\n===== TESTED REVISIONS =====\nDepot Revision Mean Value Std. Dev. Num Values Good?  \n\n\n\n| O O | Visit http://www.chromium.org/developers/speed-infra/perf-bug-faq\n|  X  | for more information addressing perf regression bugs. For feedback,\n| / \\ | file a bug with label Cr-Tests-AutoBisect.  Thank you!"
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Results",
+    "name": "Post bisect results",
+    "stdin": "{\"data\": {\"bad_revision\": \"deadbeef\", \"bisect_bot\": \"linux_perf_tester\", \"bug_id\": \"\", \"buildbot_log_url\": \"http://build.chromium.org/p/chromium/builders//builds/\", \"change\": null, \"command\": \"src/tools/dummy_command\", \"culprit_data\": null, \"fail_reason\": \"The metric values for the initial \\\"good\\\" and \\\"bad\\\" revisions do not represent a clear regression.\", \"good_revision\": \"c001c0de\", \"metric\": \"mean_input_event_latency/mean_input_event_latency\", \"revision_data\": [], \"score\": 0, \"status\": \"completed\", \"test_type\": \"perf\", \"try_job_id\": null, \"warnings\": [\"This is a demo warning\"]}, \"url\": \"https://chromeperf.appspot.com/post_bisect_results\"}",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.copyfileobj(open(sys.argv[1]), sys.stdout)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

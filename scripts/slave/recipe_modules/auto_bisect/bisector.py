@@ -5,8 +5,8 @@
 import json
 import re
 import time
+import urllib
 
-from . import bisect_results
 from . import depot_config
 from . import revision_state
 
@@ -53,6 +53,15 @@ MAX_REQUIRED_SAMPLES = 50
 # Significance level to use for determining difference between revisions via
 # hypothesis testing.
 SIGNIFICANCE_LEVEL = 0.01
+
+_FAILED_INITIAL_CONFIDENCE_ABORT_REASON = (
+    'The metric values for the initial "good" and "bad" revisions '
+    'do not represent a clear regression.')
+
+_DIRECTION_OF_IMPROVEMENT_ABORT_REASON = (
+    'The metric values for the initial "good" and "bad" revisions match the '
+    'expected direction of improvement. Thus, likely represent an improvement '
+    'and not a regression.')
 
 
 class Bisector(object):
@@ -539,7 +548,13 @@ class Bisector(object):
     """Returns a string table showing revisions and their values."""
     header = [['Revision', 'Values']]
     rows = [[str(r.commit_pos), str(r.values)] for r in self.revisions]
-    return bisect_results.pretty_table(header + rows)
+    return self._pretty_table(header + rows)
+
+  def _pretty_table(self, data):
+    results = []
+    for row in data:
+      results.append('%-15s' * len(row) % tuple(row))
+    return '\n'.join(results)
 
   def _t_test_results(self):
     """Returns a string showing t-test results for lkgr and fkbr."""
@@ -555,9 +570,6 @@ class Bisector(object):
     ]
     return '\n'.join(lines)
 
-  def partial_results(self):
-    return bisect_results.BisectResults(self, partial=True).as_string()
-
   def print_result_debug_info(self):
     """Prints extra debug info at the end of the bisect process."""
     lines = self._results_debug_message().splitlines()
@@ -566,16 +578,11 @@ class Bisector(object):
     self.api.m.step('Debug Info', [])
     self.api.m.step.active_result.presentation.logs['Debug Info'] = lines
 
-  def print_result(self):
-    results = bisect_results.BisectResults(self).as_string()
-    self.api.m.python.inline(
-        'Results',
-        """
-        import shutil
-        import sys
-        shutil.copyfileobj(open(sys.argv[1]), sys.stdout)
-        """,
-        args=[self.api.m.raw_io.input(data=results)])
+  def post_result(self, halt_on_failure=False):
+    """Posts bisect results to Perf Dashboard."""
+    self.api.m.perf_dashboard.set_default_config()
+    self.api.m.perf_dashboard.post_bisect_results(
+        self.get_result(), halt_on_failure)
 
   def get_revision_to_eval(self):
     """Gets the next RevisionState object in the candidate range.
@@ -885,3 +892,84 @@ class Bisector(object):
       self.result_codes.add(result_code)
       properties = self.api.m.step.active_result.presentation.properties
       properties['extra_result_code'] = sorted(self.result_codes)
+
+  def get_result(self):
+    """Returns the results as a jsonable object."""
+    config = self.bisect_config
+    results_confidence = 0
+    if self.culprit:
+      results_confidence = self.api.m.math_utils.confidence_score(
+          self.lkgr.values, self.fkbr.values)
+
+    if self.failed:
+      status = 'failed'
+    elif self.bisect_over:
+      status = 'completed'
+    else:
+      status = 'started'
+
+    fail_reason = None
+    if self.failed_initial_confidence:
+      fail_reason = _FAILED_INITIAL_CONFIDENCE_ABORT_REASON
+    elif self.failed_direction:
+      fail_reason = _DIRECTION_OF_IMPROVEMENT_ABORT_REASON
+    return {
+        'try_job_id': config.get('try_job_id'),
+        'bug_id': config.get('bug_id'),
+        'status': status,
+        'buildbot_log_url': self._get_build_url(),
+        'bisect_bot': self.get_perf_tester_name(),
+        'command': config['command'],
+        'test_type': config['test_type'],
+        'metric': config['metric'],
+        'change': self.relative_change,
+        'score': results_confidence,
+        'good_revision': self.good_rev.commit_hash,
+        'bad_revision': self.bad_rev.commit_hash,
+        'warnings': self.warnings,
+        'fail_reason': fail_reason,
+        'culprit_data': self._culprit_data(),
+        'revision_data': self._revision_data()
+    }
+
+  def _culprit_data(self):
+    culprit = self.culprit
+    api = self.api
+    if not culprit:
+      return None
+    culprit_cl_hash = culprit.deps_revision or culprit.commit_hash
+    culprit_info = api.query_revision_info(
+        culprit_cl_hash, culprit.depot_name)
+
+    return {
+        'subject': culprit_info['subject'],
+        'author': culprit_info['author'],
+        'email': culprit_info['email'],
+        'cl_date': culprit_info['date'],
+        'commit_info': culprit_info['body'],
+        'revisions_links': [],
+        'cl': culprit.deps_revision or culprit.commit_hash
+    }
+
+  def _revision_data(self):
+    revision_rows = []
+    for r in self.revisions:
+      if r.tested or r.aborted:
+        revision_rows.append({
+            'depot_name': r.depot_name,
+            'deps_revision': r.deps_revision,
+            'commit_pos': r.commit_pos,
+            'mean_value': r.mean_value,
+            'std_dev': r.std_dev,
+            'values': r.values,
+            'result': 'good' if r.good else 'bad' if r.bad else 'unknown',
+        })
+    return revision_rows
+
+  def _get_build_url(self):
+    properties = self.api.m.properties
+    bot_url = properties.get('buildbotURL',
+                             'http://build.chromium.org/p/chromium/')
+    builder_name = urllib.quote(properties.get('buildername', ''))
+    builder_number = str(properties.get('buildnumber', ''))
+    return '%sbuilders/%s/builds/%s' % (bot_url, builder_name, builder_number)
