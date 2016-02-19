@@ -42,17 +42,19 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
                          dest=dest)
 
   def create_isolated_gen_json(self, isolate_path, base_dir, os_type,
-                               task_name, extra_variables):
+                               task_name, extra_variables, blacklist=None):
     """Creates an isolated.gen.json file (used by the isolate recipe module).
 
     Args:
       isolate_path: path obj. Path to the isolate file.
       base_dir: path obj. Dir that is the base of all paths in the isolate file.
       os_type: str. The OS type to use when archiving the isolate file.
-               Eg: linux.
+          Eg: linux.
       task_name: str. The isolated.gen.json file will be suffixed by this str.
       extra_variables: dict of str to str. The extra vars to pass to isolate.
-                       Eg: {'SLAVE_NUM': '1', 'MASTER': 'ChromiumPerfFYI'}
+          Eg: {'SLAVE_NUM': '1', 'MASTER': 'ChromiumPerfFYI'}
+      blacklist: list of regular expressions indicating which files/directories
+          not to archive.
     """
     self.m.file.makedirs('swarming tmp dir', self.swarming_temp_dir)
     isolated_path = self.swarming_temp_dir.join(
@@ -62,6 +64,9 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
       '--isolated', isolated_path,
       '--config-variable', 'OS', os_type,
     ]
+    if blacklist:
+      for b in blacklist:
+        isolate_args.extend(['--blacklist', b])
     for k, v in extra_variables.iteritems():
       isolate_args.extend(['--extra-variable', k, v])
     isolated_gen_dict = {

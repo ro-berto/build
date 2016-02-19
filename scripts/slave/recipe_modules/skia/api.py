@@ -238,7 +238,8 @@ class SkiaApi(recipe_api.RecipeApi):
       isolate_path = isolate_dir.join('compile_skia.isolate')
       isolate_vars = {'BUILDER_NAME': self.builder_name}
       self.m.skia_swarming.create_isolated_gen_json(
-          isolate_path, isolate_dir, 'linux', 'compile_skia', isolate_vars)
+          isolate_path, isolate_dir, 'linux', 'compile_skia', isolate_vars,
+          blacklist=['.git', 'out'])
       self.m.skia_swarming.batcharchive(['compile_skia'])
       props = self.m.step.active_result.presentation.properties
       hashes = props['swarm_hashes'].items()
