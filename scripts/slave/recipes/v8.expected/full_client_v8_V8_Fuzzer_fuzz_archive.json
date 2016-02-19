@@ -169,7 +169,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 tests failed: ['fuzz']",
+    "reason": "1 tests failed: ['jsfunfuzz']",
     "status_code": 1
   }
 ]

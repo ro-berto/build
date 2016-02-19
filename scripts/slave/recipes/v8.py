@@ -204,6 +204,16 @@ def GenTests(api):
     api.override_step_data('Fuzz', retcode=1)
   )
 
+  # TODO(machenbach): Remove after staging the fuzzer on swarming.
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Linux - swarming staging',
+        'fuzz_archive',
+    ) +
+    api.override_step_data('Fuzz', retcode=1)
+  )
+
   # Bisect over range a1, a2, a3. Assume a2 is the culprit. Steps:
   # Bisect a0 -> no failures.
   # Bisect a2 -> failures.

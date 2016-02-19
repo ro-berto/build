@@ -20,7 +20,8 @@ class TestStepConfig(object):
 Benchmarks = TestStepConfig('benchmarks')
 Deopt = TestStepConfig('deopt', swarming=False)
 DeoptSwarming = TestStepConfig('deopt')
-Fuzz = TestStepConfig('fuzz')
+Fuzz = TestStepConfig('jsfunfuzz', swarming=False)
+FuzzSwarming = TestStepConfig('jsfunfuzz')
 GCMole = TestStepConfig('gcmole')
 Mjsunit = TestStepConfig('mjsunit')
 Mjsunit_2 = TestStepConfig('mjsunit', shards=2)
@@ -73,8 +74,6 @@ BUILDERS = {
           'V8 Linux - nosse3',
           'V8 Linux - nosse4',
           'V8 Linux - presubmit',
-          # TODO(machenbach): Remove after staging the deopt fuzzer.
-          'V8 Linux - swarming staging',
         ],
         'triggers_proxy': True,
       },
@@ -166,16 +165,15 @@ BUILDERS = {
         },
       },
       'V8 Linux - swarming staging': {
-        'v8_apply_config': ['deopt_fuzz_normal', 'no_exhaustive_variants'],
         'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
         'enable_swarming': True,
-        'parent_buildername': 'V8 Linux - builder',
-        'build_gs_archive': 'linux_rel_archive',
-        'tests': [DeoptSwarming],
+        'parent_buildername': 'V8 Linux64 - debug builder',
+        'build_gs_archive': 'linux64_dbg_archive',
+        'tests': [FuzzSwarming],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug': {
@@ -416,7 +414,7 @@ BUILDERS = {
       },
       'V8 Linux64 - debug builder': {
         'gclient_apply_config': ['v8_valgrind'],
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'jsfunfuzz'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -430,6 +428,8 @@ BUILDERS = {
           'V8 Linux64 - debug',
           'V8 Linux64 - debug - avx2',
           'V8 Linux64 - debug - greedy allocator',
+          # TODO(machenbach): Remove after staging the fuzzer.
+          'V8 Linux - swarming staging',
         ],
       },
       'V8 Linux64 - custom snapshot - debug builder': {

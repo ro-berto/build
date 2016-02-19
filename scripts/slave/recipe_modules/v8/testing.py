@@ -16,6 +16,10 @@ TEST_CONFIGS = freeze({
     'tool': 'run-deopt-fuzzer',
     'isolated_target': 'run-deopt-fuzzer',
   },
+  'jsfunfuzz': {
+    'tool': 'jsfunfuzz',
+    'isolated_target': 'jsfunfuzz',
+  },
   'gcmole': {
     'tool': 'run-gcmole',
     'isolated_target': 'run-gcmole',
@@ -379,6 +383,10 @@ class V8GenericSwarmingTest(BaseTest):
     return self._extra_args  # pragma: no cover
 
   @property
+  def task_output_dir(self):
+    return None  # pragma: no cover
+
+  @property
   def uses_swarming(self):
     """Returns true if the test uses swarming."""
     return True
@@ -389,6 +397,7 @@ class V8GenericSwarmingTest(BaseTest):
         title=self.title,
         isolated_hash=self._get_isolated_hash(self.test),
         extra_args=self.extra_args,
+        task_output_dir=self.task_output_dir,
     )
 
     # Set default value.
@@ -435,6 +444,7 @@ class V8CheckInitializers(V8GenericSwarmingTest):
     return [self.v8.relative_path_to_d8]
 
 
+# TODO(machenbach): Remove after staging the swarming version below.
 class V8Fuzzer(BaseTest):
   def run(self, **kwargs):
     archive = self.api.path['slave_build'].join(
@@ -461,6 +471,38 @@ class V8Fuzzer(BaseTest):
     return TestResults.empty()
 
 
+class V8FuzzerSwarming(V8GenericSwarmingTest):
+  def __init__(self, test_step_config, api, v8,
+               title='Generic test', extra_args=None):
+    self.output_dir = api.path.mkdtemp('swarming_output')
+    self.archive = 'fuzz-results-%s.tar.bz2' % (
+        api.properties['parent_got_revision'])
+    super(V8FuzzerSwarming, self).__init__(
+        test_step_config, api, v8,
+        title='Fuzz',
+        extra_args=[
+          v8.relative_path_to_d8,
+          '${ISOLATED_OUTDIR}/%s' % self.archive,
+        ],
+    )
+
+  @property
+  def task_output_dir(self):
+    return self.output_dir
+
+  def run(self, **kwargs):
+    try:
+      super(V8FuzzerSwarming, self).run(**kwargs)
+    except self.api.step.StepFailure as e:
+      self.api.gsutil.upload(
+          self.output_dir.join('0', self.archive),
+          'chromium-v8',
+          self.api.path.join('fuzzer-archives', self.archive),
+      )
+      raise e
+    return TestResults.empty()
+
+
 # TODO(machenbach): Remove after staging the swarming version below.
 class V8DeoptFuzzer(BaseTest):
   def run(self, **kwargs):
@@ -483,7 +525,8 @@ class V8DeoptFuzzer(BaseTest):
     return TestResults.empty()
 
 
-class V8DeoptFuzzerSwarming(V8GenericSwarmingTest):
+# TODO(machenbach): No cover as this is unstaged at the moment.
+class V8DeoptFuzzerSwarming(V8GenericSwarmingTest):  # pragma: no cover
   @property
   def title(self):
     return 'Deopt Fuzz'
@@ -521,12 +564,12 @@ class V8SimpleLeakCheck(V8GenericSwarmingTest):
 
 
 V8_NON_STANDARD_TESTS = freeze({
-  'fuzz': V8Fuzzer,
   'presubmit': V8Presubmit,
 })
 
 
 TOOL_TO_TEST = freeze({
+  'jsfunfuzz': V8Fuzzer,
   'run-deopt-fuzzer': V8DeoptFuzzer,
   'run-tests': V8Test,
 })
@@ -534,6 +577,7 @@ TOOL_TO_TEST = freeze({
 
 TOOL_TO_TEST_SWARMING = freeze({
   'check-static-initializers': V8CheckInitializers,
+  'jsfunfuzz': V8FuzzerSwarming,
   'run-deopt-fuzzer': V8DeoptFuzzerSwarming,
   'run-gcmole': V8GCMole,
   'run-valgrind': V8SimpleLeakCheck,
