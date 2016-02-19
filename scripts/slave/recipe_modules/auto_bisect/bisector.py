@@ -908,11 +908,11 @@ class Bisector(object):
     else:
       status = 'started'
 
-    fail_reason = None
+    aborted_reason = None
     if self.failed_initial_confidence:
-      fail_reason = _FAILED_INITIAL_CONFIDENCE_ABORT_REASON
+      aborted_reason = _FAILED_INITIAL_CONFIDENCE_ABORT_REASON
     elif self.failed_direction:
-      fail_reason = _DIRECTION_OF_IMPROVEMENT_ABORT_REASON
+      aborted_reason = _DIRECTION_OF_IMPROVEMENT_ABORT_REASON
     return {
         'try_job_id': config.get('try_job_id'),
         'bug_id': config.get('bug_id'),
@@ -927,7 +927,7 @@ class Bisector(object):
         'good_revision': self.good_rev.commit_hash,
         'bad_revision': self.bad_rev.commit_hash,
         'warnings': self.warnings,
-        'fail_reason': fail_reason,
+        'aborted_reason': aborted_reason,
         'culprit_data': self._culprit_data(),
         'revision_data': self._revision_data()
     }
