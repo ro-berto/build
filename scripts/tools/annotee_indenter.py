@@ -29,9 +29,15 @@ def main(argv):
                       default=os.getcwd())
   parser.add_argument('--base-level', help='The base level for indents.',
                       type=int, required=True)
+  parser.add_argument('--use-python-executable', default=False,
+                      help='execute python command using same executbale, '
+                           'as running this one.')
   parser.add_argument('sub', nargs='+')
   opts = parser.parse_args(argv)
-  return run(opts.sub, opts.cwd, opts.base_level, process_output)
+  cmd = opts.sub
+  if opts.use_python_executable:
+    cmd = [sys.executable] + cmd
+  return run(cmd, opts.cwd, opts.base_level, process_output)
 
 
 def run(args, cwd, base_level, target):
