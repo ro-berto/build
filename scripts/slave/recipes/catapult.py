@@ -108,21 +108,18 @@ def RunSteps(api):
              ['--browser=reference',
               '--start-xvfb'],
               env=sandbox_env)
+  api.python('Vinn Tests',
+             api.path['checkout'].join('third_party', 'vinn', 'run_test'))
+  api.python('Tracing D8 Tests',
+             api.path['checkout'].join('tracing', 'bin', 'run_vinn_tests'))
+  api.python('Perf Vinn Insights Tests',
+             api.path['checkout'].join(
+                 'perf_insights', 'bin', 'run_vinn_tests'))
+  api.python('Perf Insights Python Tests',
+             api.path['checkout'].join(
+                 'perf_insights', 'bin', 'run_py_tests'),
+             ['--no-install-hooks'])
   if not api.platform.is_win:
-    # D8/vinn currently unavailable on Windows.
-    # TODO(sullivan): Add these tests on Windows when available.
-    api.python('Vinn Tests',
-               api.path['checkout'].join('third_party', 'vinn', 'run_test'))
-    api.python('Tracing D8 Tests',
-               api.path['checkout'].join('tracing', 'bin', 'run_vinn_tests'))
-    api.python('Perf Vinn Insights Tests',
-               api.path['checkout'].join(
-                   'perf_insights', 'bin', 'run_vinn_tests'))
-    # TODO(nduca): re-enable these if they should be working on Windows.
-    api.python('Perf Insights Python Tests',
-               api.path['checkout'].join(
-                   'perf_insights', 'bin', 'run_py_tests'),
-               ['--no-install-hooks'])
     # Test failing on Windows:
     # https://github.com/catapult-project/catapult/issues/1816
     api.python('Tracing Dev Server Tests Canary',
