@@ -229,7 +229,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip sky_engine Package",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[SLAVE_BUILD]/src/out/Release/gen/dart-pkg/sky_engine\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_2/sky_engine.zip\", \"root\": \"[SLAVE_BUILD]/src/out/Release/gen/dart-pkg\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/Release/gen/dart-pkg/sky_engine\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/tmp_tmp_2/sky_engine.zip\", \"root\": \"[SLAVE_BUILD]/src/out/Release/gen/dart-pkg\"}"
   },
   {
     "cmd": [
@@ -285,7 +285,7 @@
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip sky_services Package",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[SLAVE_BUILD]/src/out/Release/gen/dart-pkg/sky_services\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_3/sky_services.zip\", \"root\": \"[SLAVE_BUILD]/src/out/Release/gen/dart-pkg\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/Release/gen/dart-pkg/sky_services\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/tmp_tmp_3/sky_services.zip\", \"root\": \"[SLAVE_BUILD]/src/out/Release/gen/dart-pkg\"}"
   },
   {
     "cmd": [

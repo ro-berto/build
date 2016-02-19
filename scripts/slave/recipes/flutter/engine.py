@@ -65,7 +65,7 @@ def UploadDartPackage(api, package_name):
     remote_zip = GetCloudPath(api, remote_name)
     dart_pkg_dir = api.path['checkout'].join('out/Release/gen/dart-pkg')
     pkg = api.zip.make_package(dart_pkg_dir, local_zip)
-    pkg.add_file(dart_pkg_dir.join(package_name))
+    pkg.add_directory(dart_pkg_dir.join(package_name))
     pkg.zip('Zip %s Package' % package_name)
     api.gsutil.upload(local_zip, BUCKET_NAME, remote_zip,
         name='upload %s' % remote_name)
