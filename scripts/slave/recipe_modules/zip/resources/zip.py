@@ -83,9 +83,8 @@ def zip_with_python(root, output, entries):
     for entry in entries:
       tp = entry['type']
       path = entry['path']
-      archive_name = entry['archive_name']
       if tp == 'file':
-        add(path, archive_name)
+        add(path, entry.get('archive_name'))
       elif tp == 'dir':
         for cur, _, files in os.walk(path):
           for name in files:
@@ -99,7 +98,7 @@ def use_python_zip(entries):
   if sys.platform == 'win32':
     return True
   for entry in entries:
-    if entry['archive_name'] is not None:
+    if entry.get('archive_name') is not None:
       return True
   return False
 
