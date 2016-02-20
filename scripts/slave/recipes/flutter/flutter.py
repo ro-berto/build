@@ -26,12 +26,6 @@ def UpdatePackages(api):
   api.step('update packages', ['dart', update_packages])
 
 
-def PopulateFlutterCache(api):
-  flutter_package = api.path['checkout'].join('packages', 'flutter')
-  populate_cmd = ['flutter', 'cache', 'populate']
-  api.step('populate flutter cache', populate_cmd, cwd=flutter_package)
-
-
 def AnalyzeFlutter(api):
   analyze_cmd = [
     'flutter',
@@ -143,14 +137,10 @@ def RunSteps(api):
       recursive=True, set_got_revision=True)
   checkout = api.path['checkout']
 
-  download_sdk = checkout.join('infra', 'download_dart_sdk.py')
-  api.step('download dart sdk', [download_sdk])
-
   api.step('download android tools',
       [checkout.join('infra', 'download_android_tools.py')])
 
-
-  dart_bin = checkout.join('infra', 'dart-sdk', 'dart-sdk', 'bin')
+  dart_bin = checkout.join('bin', 'cache', 'dart-sdk', 'bin')
   flutter_bin = checkout.join('bin')
   # TODO(eseidel): This is named exactly '.pub-cache' as a hack around
   # a regexp in flutter_tools analyze.dart which is in turn a hack around:
@@ -166,9 +156,9 @@ def RunSteps(api):
 
   # The context adds dart-sdk tools to PATH sets PUB_CACHE.
   with api.step.context({'env': env}):
-    UpdatePackages(api)
-    PopulateFlutterCache(api)
+    # Must be first to download dependencies for later steps.
     api.step('flutter doctor', ['flutter', 'doctor'])
+    UpdatePackages(api)
     AnalyzeFlutter(api)
     TestFlutterPackagesAndExamples(api)
     BuildExamples(api, git_hash)
