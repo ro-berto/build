@@ -63,9 +63,10 @@ def UploadDartPackage(api, package_name):
     local_zip = temp_dir.join('%s.zip' % package_name)
     remote_name = '%s.zip' % package_name
     remote_zip = GetCloudPath(api, remote_name)
-    dart_pkg_dir = api.path['checkout'].join('out/Release/gen/dart-pkg')
-    pkg = api.zip.make_package(dart_pkg_dir, local_zip)
-    pkg.add_directory(dart_pkg_dir.join(package_name))
+    parent_dir = api.path['checkout'].join(
+        'out/android_Release/dist/packages/%s' % package_name)
+    pkg = api.zip.make_package(parent_dir, local_zip)
+    pkg.add_directory(parent_dir.join(package_name))
     pkg.zip('Zip %s Package' % package_name)
     api.gsutil.upload(local_zip, BUCKET_NAME, remote_zip,
         name='upload %s' % remote_name)
@@ -91,8 +92,7 @@ def AnalyzeDartUI(api):
 
 def BuildLinuxAndroid(api):
   RunGN(api, '--release', '--android', '--enable-firebase')
-  Build(api, 'android_Release', 'apks/SkyShell.apk', 'flutter.mojo',
-      'sky/services/firebase')
+  Build(api, 'android_Release', ':dist', 'sky/services/firebase')
   UploadArtifacts(api, 'android-arm', [
     'build/android/ant/chromium-debug.keystore',
     'out/android_Release/apks/SkyShell.apk',
@@ -103,6 +103,9 @@ def BuildLinuxAndroid(api):
     'out/android_Release/icudtl.dat',
     'out/android_Release/gen/sky/shell/shell/classes.dex.jar',
   ])
+
+  UploadDartPackage(api, 'sky_engine')
+  UploadDartPackage(api, 'sky_services')
 
   def UploadService(name):
     def Upload(from_path, to_path):
@@ -130,8 +133,6 @@ def BuildLinux(api):
     'out/Release/sky_shell',
     'out/Release/sky_snapshot',
   ])
-  UploadDartPackage(api, 'sky_engine')
-  UploadDartPackage(api, 'sky_services')
 
 
 def TestObservatory(api):

@@ -220,6 +220,46 @@
   },
   {
     "cmd": [
+      "dart",
+      "[SLAVE_BUILD]/src/sky/shell/testing/observatory/test.dart",
+      "[SLAVE_BUILD]/src/out/Release/sky_shell",
+      "[SLAVE_BUILD]/src/sky/shell/testing/observatory/empty_main.dart"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "test observatory and service protocol"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/sky/tools/gn",
+      "--release",
+      "--android",
+      "--enable-firebase"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "gn --release --android --enable-firebase"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[SLAVE_BUILD]/src/out/android_Release",
+      ":dist",
+      "sky/services/firebase"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "build android_Release :dist sky/services/firebase"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
@@ -228,8 +268,8 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "Zip sky_engine Package",
-    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/Release/gen/dart-pkg/sky_engine\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/tmp_tmp_2/sky_engine.zip\", \"root\": \"[SLAVE_BUILD]/src/out/Release/gen/dart-pkg\"}"
+    "name": "Zip android-arm Artifacts",
+    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"SkyShell.apk\", \"path\": \"[SLAVE_BUILD]/src/out/android_Release/apks/SkyShell.apk\", \"type\": \"file\"}, {\"archive_name\": \"flutter.mojo\", \"path\": \"[SLAVE_BUILD]/src/out/android_Release/flutter.mojo\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_Release/gen/sky/shell/shell/shell/libs/armeabi-v7a/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_Release/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_Release/gen/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_2/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
     "cmd": [
@@ -240,16 +280,16 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_2/sky_engine.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/sky_engine.zip"
+      "[TMP_BASE]/tmp_tmp_2/artifacts.zip",
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm/artifacts.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gsutil upload sky_engine.zip",
+    "name": "gsutil upload android-arm/artifacts.zip",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/sky_engine.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm/artifacts.zip@@@"
     ]
   },
   {
@@ -284,8 +324,8 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "Zip sky_services Package",
-    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/Release/gen/dart-pkg/sky_services\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/tmp_tmp_3/sky_services.zip\", \"root\": \"[SLAVE_BUILD]/src/out/Release/gen/dart-pkg\"}"
+    "name": "Zip sky_engine Package",
+    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/android_Release/dist/packages/sky_engine/sky_engine\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/tmp_tmp_3/sky_engine.zip\", \"root\": \"[SLAVE_BUILD]/src/out/android_Release/dist/packages/sky_engine\"}"
   },
   {
     "cmd": [
@@ -296,16 +336,16 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_3/sky_services.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/sky_services.zip"
+      "[TMP_BASE]/tmp_tmp_3/sky_engine.zip",
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/sky_engine.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gsutil upload sky_services.zip",
+    "name": "gsutil upload sky_engine.zip",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/sky_services.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/sky_engine.zip@@@"
     ]
   },
   {
@@ -332,47 +372,6 @@
   },
   {
     "cmd": [
-      "dart",
-      "[SLAVE_BUILD]/src/sky/shell/testing/observatory/test.dart",
-      "[SLAVE_BUILD]/src/out/Release/sky_shell",
-      "[SLAVE_BUILD]/src/sky/shell/testing/observatory/empty_main.dart"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
-    },
-    "name": "test observatory and service protocol"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/sky/tools/gn",
-      "--release",
-      "--android",
-      "--enable-firebase"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
-    },
-    "name": "gn --release --android --enable-firebase"
-  },
-  {
-    "cmd": [
-      "ninja",
-      "-C",
-      "[SLAVE_BUILD]/src/out/android_Release",
-      "apks/SkyShell.apk",
-      "flutter.mojo",
-      "sky/services/firebase"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
-    },
-    "name": "build android_Release apks/SkyShell.apk flutter.mojo sky/services/firebase"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
@@ -381,8 +380,8 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "Zip android-arm Artifacts",
-    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"SkyShell.apk\", \"path\": \"[SLAVE_BUILD]/src/out/android_Release/apks/SkyShell.apk\", \"type\": \"file\"}, {\"archive_name\": \"flutter.mojo\", \"path\": \"[SLAVE_BUILD]/src/out/android_Release/flutter.mojo\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_Release/gen/sky/shell/shell/shell/libs/armeabi-v7a/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_Release/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_Release/gen/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_4/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
+    "name": "Zip sky_services Package",
+    "stdin": "{\"entries\": [{\"path\": \"[SLAVE_BUILD]/src/out/android_Release/dist/packages/sky_services/sky_services\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/tmp_tmp_4/sky_services.zip\", \"root\": \"[SLAVE_BUILD]/src/out/android_Release/dist/packages/sky_services\"}"
   },
   {
     "cmd": [
@@ -393,16 +392,16 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_4/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm/artifacts.zip"
+      "[TMP_BASE]/tmp_tmp_4/sky_services.zip",
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/sky_services.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gsutil upload android-arm/artifacts.zip",
+    "name": "gsutil upload sky_services.zip",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/sky_services.zip@@@"
     ]
   },
   {
