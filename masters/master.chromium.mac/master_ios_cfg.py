@@ -17,12 +17,16 @@ def Update(config, active_master, c):
           'iOS_Device',
           'iOS_Simulator_(dbg)',
           'iOS_Device_(ninja)',
+          'iOS_Device_GN',
+          'iOS_Simulator_GN_(dbg)',
       ]),
   ])
   specs = [
     {'name': 'iOS_Device'},
     {'name': 'iOS_Simulator_(dbg)'},
     {'name': 'iOS_Device_(ninja)'},
+    {'name': 'iOS_Device_GN'},
+    {'name': 'iOS_Simulator_GN_(dbg)'},
   ]
 
   c['builders'].extend([
