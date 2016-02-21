@@ -1,6 +1,29 @@
 [
   {
     "cmd": [
+      "[BUILD]/scripts/slave/ios/host_info.py",
+      "--json-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "host and tools info",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br />OS X 1.2.3, Xcode 6.7.8 (5D342509a)@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac OS X Version\": \"1.2.3\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Xcode Build Version\": \"5D342509a\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Xcode SDKs\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake sdk 1.0\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake sdk 1.1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake sdk 2.0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Xcode Version\": \"6.7.8\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
