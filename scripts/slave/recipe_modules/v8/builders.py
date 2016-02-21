@@ -20,8 +20,7 @@ class TestStepConfig(object):
 Benchmarks = TestStepConfig('benchmarks')
 Deopt = TestStepConfig('deopt', swarming=False)
 DeoptSwarming = TestStepConfig('deopt')
-Fuzz = TestStepConfig('jsfunfuzz', swarming=False)
-FuzzSwarming = TestStepConfig('jsfunfuzz')
+Fuzz = TestStepConfig('jsfunfuzz')
 GCMole = TestStepConfig('gcmole')
 Mjsunit = TestStepConfig('mjsunit')
 Mjsunit_2 = TestStepConfig('mjsunit', shards=2)
@@ -173,7 +172,7 @@ BUILDERS = {
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 - debug builder',
         'build_gs_archive': 'linux64_dbg_archive',
-        'tests': [FuzzSwarming],
+        'tests': [Fuzz],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug': {
@@ -428,8 +427,6 @@ BUILDERS = {
           'V8 Linux64 - debug',
           'V8 Linux64 - debug - avx2',
           'V8 Linux64 - debug - greedy allocator',
-          # TODO(machenbach): Remove after staging the fuzzer.
-          'V8 Linux - swarming staging',
         ],
       },
       'V8 Linux64 - custom snapshot - debug builder': {
@@ -1127,12 +1124,12 @@ BUILDERS = {
       },
 ####### Category: Misc
       'V8 Fuzzer': {
-        'chromium_apply_config': ['jsfunfuzz'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
+        'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 - debug builder',
         'build_gs_archive': 'linux64_dbg_archive',
         'tests': [Fuzz],

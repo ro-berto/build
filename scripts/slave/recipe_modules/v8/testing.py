@@ -444,40 +444,13 @@ class V8CheckInitializers(V8GenericSwarmingTest):
     return [self.v8.relative_path_to_d8]
 
 
-# TODO(machenbach): Remove after staging the swarming version below.
-class V8Fuzzer(BaseTest):
-  def run(self, **kwargs):
-    archive = self.api.path['slave_build'].join(
-        'fuzz-results-%s.tar.bz2' % self.v8.revision)
-    try:
-      self.api.step(
-        'Fuzz',
-        ['bash',
-         self.api.path['checkout'].join('tools', 'fuzz-harness.sh'),
-         self.v8.relative_path_to_d8,
-         archive,
-        ],
-      )
-    except self.api.step.StepFailure as e:
-      self.api.gsutil.upload(
-          archive,
-          'chromium-v8',
-          self.api.path.join(
-              'fuzzer-archives', self.api.path.basename(archive)),
-      )
-      raise e
-    finally:
-      self.api.file.remove('remove archive', archive)
-    return TestResults.empty()
-
-
-class V8FuzzerSwarming(V8GenericSwarmingTest):
+class V8Fuzzer(V8GenericSwarmingTest):
   def __init__(self, test_step_config, api, v8,
                title='Generic test', extra_args=None):
     self.output_dir = api.path.mkdtemp('swarming_output')
     self.archive = 'fuzz-results-%s.tar.bz2' % (
         api.properties['parent_got_revision'])
-    super(V8FuzzerSwarming, self).__init__(
+    super(V8Fuzzer, self).__init__(
         test_step_config, api, v8,
         title='Fuzz',
         extra_args=[
@@ -492,7 +465,7 @@ class V8FuzzerSwarming(V8GenericSwarmingTest):
 
   def run(self, **kwargs):
     try:
-      super(V8FuzzerSwarming, self).run(**kwargs)
+      super(V8Fuzzer, self).run(**kwargs)
     except self.api.step.StepFailure as e:
       self.api.gsutil.upload(
           self.output_dir.join('0', self.archive),
@@ -569,7 +542,6 @@ V8_NON_STANDARD_TESTS = freeze({
 
 
 TOOL_TO_TEST = freeze({
-  'jsfunfuzz': V8Fuzzer,
   'run-deopt-fuzzer': V8DeoptFuzzer,
   'run-tests': V8Test,
 })
@@ -577,7 +549,7 @@ TOOL_TO_TEST = freeze({
 
 TOOL_TO_TEST_SWARMING = freeze({
   'check-static-initializers': V8CheckInitializers,
-  'jsfunfuzz': V8FuzzerSwarming,
+  'jsfunfuzz': V8Fuzzer,
   'run-deopt-fuzzer': V8DeoptFuzzerSwarming,
   'run-gcmole': V8GCMole,
   'run-valgrind': V8SimpleLeakCheck,
