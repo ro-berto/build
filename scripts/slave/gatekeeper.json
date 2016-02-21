@@ -547,11 +547,8 @@
           "V8 Linux - x87 - nosnap - debug",
           "V8 Linux - full debug",
           "V8 Linux - interpreted regexp",
-          "V8 Linux - arm - sim - novfp3",
-          "V8 Linux - arm - sim - debug - novfp3",
-          "V8 Linux - arm64 - sim - nosnap - debug - 1",
-          "V8 Linux - arm64 - sim - nosnap - debug - 2",
-          "V8 Linux - arm64 - sim - gc stress",
+          "V8 Arm",
+          "V8 Arm - debug",
           "V8 Arm GC Stress",
           "V8 Mips - big endian - nosnap - 1",
           "V8 Mips - big endian - nosnap - 2",
@@ -567,26 +564,6 @@
               "Mozilla"
             ]
           },
-          "V8 Win32": {
-            "excluded_steps": [
-              "Test262 - no variants"
-            ]
-          },
-          "V8 Win32 - debug": {
-            "excluded_steps": [
-              "Test262 - no variants"
-            ]
-          },
-          "V8 Win64": {
-            "excluded_steps": [
-              "Test262 - no variants"
-            ]
-          },
-          "V8 Win64 - debug": {
-            "excluded_steps": [
-              "Test262 - no variants"
-            ]
-          },
           "*": {}
         }
       }
@@ -600,7 +577,8 @@
           "Linux Snapshot Builder",
           "Chrome Win7 Perf",
           "Chrome Mac10.9 Perf",
-          "Chrome Linux Perf"
+          "Chrome Linux Perf",
+          "Chromium Win SyzyASAN"
         ],
         "builders": {
           "*": {}
@@ -867,6 +845,7 @@
       ],
       "forgiving_optional": [
         "bot_update",
+        "isolate tests",
         "package build",
         "extract build",
         "cleanup_temp",
