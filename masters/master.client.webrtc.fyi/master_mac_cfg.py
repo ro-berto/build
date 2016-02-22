@@ -32,6 +32,11 @@ def Update(c):
       'recipe': 'webrtc/ios',
     },
     {
+      'name': 'iOS32 Simulator Debug',
+      'slavebuilddir': 'mac32',
+      'recipe': 'webrtc/ios',
+    },
+    {
       'name': 'iOS64 Simulator Debug',
       'slavebuilddir': 'mac64',
       'recipe': 'webrtc/ios',
