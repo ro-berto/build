@@ -1711,21 +1711,6 @@ SPEC = {
       'testing': { 'platform': 'win' },
       'enable_swarming': True,
     },
-    'Linux Builder (clobber)': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_apply_config': ['clobber', 'ninja_confirm_noop'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [
-        'chromium_builder_tests',
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'Win Builder (ANGLE)': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',

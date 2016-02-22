@@ -320,8 +320,8 @@ TRYBOTS = freeze({
         'buildername': 'Linux x64',
       }),
       'linux_chromium_clobber_rel_ng': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'Linux Builder (clobber)',
+        'mastername': 'chromium',
+        'buildername': 'Linux x64',
       }, analyze_mode='compile'),
       'linux_chromium_chromeos_dbg_ng': simple_bot({
         'mastername': 'chromium.chromiumos',
