@@ -14,15 +14,17 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
-          'Android32 Builder (dbg)',
+          'Android32 Builder',
           'Android32 ASan (L Nexus6)',
       ]),
   ])
 
   specs = [
-    {'name': 'Android32 Builder (dbg)'},
+    {'name': 'Android32 Builder'},
     {'name': 'Android32 ASan (L Nexus6)'},
-    {'name': 'Android32 Tests (L Nexus6)(dbg)'},
+    {'name': 'Android32 Tests (J Nexus4)'},
+    {'name': 'Android32 Tests (K Nexus5)'},
+    {'name': 'Android32 Tests (L Nexus6)'},
   ]
 
   c['builders'].extend([

@@ -7,7 +7,7 @@
       "--master",
       "client.webrtc.fyi",
       "--builder",
-      "Android32 Builder (dbg)",
+      "Android32 Builder",
       "--slave",
       "slavename",
       "--spec",
@@ -71,8 +71,8 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[SLAVE_BUILD]/src/out/Debug/debug_info_dumps",
-      "[SLAVE_BUILD]/src/out/Debug/test_logs",
+      "[SLAVE_BUILD]/src/out/Release/debug_info_dumps",
+      "[SLAVE_BUILD]/src/out/Release/test_logs",
       "[SLAVE_BUILD]/src/out/build_product.zip",
       "[SLAVE_BUILD]/src"
     ],
@@ -115,7 +115,7 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Debug",
+      "Release",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",
@@ -145,15 +145,15 @@
       "-u",
       "[BUILD]/scripts/slave/zip_build.py",
       "--target",
-      "Debug",
+      "Release",
       "--build-url",
-      "gs://chromium-webrtc/client.webrtc.fyi/Android32 Builder (dbg)",
+      "gs://chromium-webrtc/client.webrtc.fyi/Android32 Builder",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android32 Builder (dbg)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Builder\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android32 Builder (dbg)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}"
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Builder\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.fyi\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
@@ -164,7 +164,23 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Android32 Tests (L Nexus6)(dbg)",
+        "builder_name": "Android32 Tests (J Nexus4)",
+        "properties": {
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+        }
+      },
+      {
+        "builder_name": "Android32 Tests (K Nexus5)",
+        "properties": {
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+        }
+      },
+      {
+        "builder_name": "Android32 Tests (L Nexus6)",
         "properties": {
           "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
           "parent_got_revision_cp": "refs/heads/master@{#170242}",
@@ -173,7 +189,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android32 Tests (L Nexus6)(dbg)@@@"
+      "@@@STEP_TEXT@Android32 Tests (J Nexus4)<br />Android32 Tests (K Nexus5)<br />Android32 Tests (L Nexus6)@@@"
     ]
   },
   {

@@ -728,10 +728,10 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
-      'Android32 Builder (dbg)': {
+      'Android32 Builder': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
+          'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
@@ -739,19 +739,45 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
         'triggers': [
-          'Android32 Tests (L Nexus6)(dbg)',
+          'Android32 Tests (J Nexus4)',
+          'Android32 Tests (K Nexus5)',
+          'Android32 Tests (L Nexus6)',
         ],
       },
-      'Android32 Tests (L Nexus6)(dbg)': {
+      'Android32 Tests (J Nexus4)': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
+          'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
-        'parent_buildername': 'Android32 Builder (dbg)',
+        'parent_buildername': 'Android32 Builder',
+        'testing': {'platform': 'linux'},
+      },
+      'Android32 Tests (K Nexus5)': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android32 Builder',
+        'testing': {'platform': 'linux'},
+      },
+      'Android32 Tests (L Nexus6)': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android32 Builder',
         'testing': {'platform': 'linux'},
       },
     },
