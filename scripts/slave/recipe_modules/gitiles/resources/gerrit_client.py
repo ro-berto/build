@@ -5,10 +5,9 @@
 
 """Simple client for the Gerrit REST API.
 
-Usage:
-  ./gerrit_client.py \
-    -j /tmp/out.json \
-    -u https://chromium.googlesource.com/chromium/src/+log?format=json \
+Example usage:
+  ./gerrit_client.py -j /tmp/out.json -f json \
+    -u https://chromium.googlesource.com/chromium/src/+log
 """
 
 import argparse
@@ -23,15 +22,14 @@ from common import find_depot_tools
 from gerrit_util import CreateHttpConn, ReadHttpResponse, ReadHttpJsonResponse
 
 
-def reparse_url(parsed_url, qdict):
+def reparse_url(parsed_url, query_params):
   return urlparse.ParseResult(
       scheme=parsed_url.scheme,
       netloc=parsed_url.netloc,
       path=parsed_url.path,
       params=parsed_url.params,
       fragment=parsed_url.fragment,
-      query=urllib.urlencode(qdict),
-  )
+      query=urllib.urlencode(query_params))
 
 
 def gitiles_get(parsed_url, handler, attempts):
@@ -53,32 +51,45 @@ def gitiles_get(parsed_url, handler, attempts):
 
     # Retry from previous loop.
     logging.error('Sleeping %d seconds before retry (%d/%d)...',
-        retry_delay_seconds, attempt, attempts)
+                  retry_delay_seconds, attempt, attempts)
     time.sleep(retry_delay_seconds)
     retry_delay_seconds *= 2
     attempt += 1
 
 
-def fetch_log_with_paging(qdict, limit, fetch):
-  # Log api returns {'log':[list of commits], 'next': hash}.
-  last_result = fetch(qdict)
+def fetch_log_with_paging(query_params, limit, fetch):
+  """Fetches log, possibly requesting multiple pages to do so.
+
+  Args:
+    query_params (dict): Parameters to use in the request.
+    limit (int): Page size.
+    fetch (function): Function to use to make the requests.
+
+  Returns:
+    Dict with key "log", whose value is a list of commits.
+  """
+  # Log api returns {'log': [list of commits], 'next': hash}.
+  last_result = fetch(query_params)
   commits = last_result['log']
   while last_result.get('next') and len(commits) < limit:
-    qdict['s'] = last_result.get('next')
-    last_result = fetch(qdict)
+    query_params['s'] = last_result.get('next')
+    last_result = fetch(query_params)
     # The first commit in `last_result` is not necessarily the parent of the
     # last commit in result so far!  This is because log command can be done on
-    # one file object (for example,
-    # https://gerrit.googlesource.com/gitiles/+log/1c21279f337da813062950959ac3d39d262883ae/COPYING)
+    # one file object, for example:
+    #   https://gerrit.googlesource.com/gitiles/+log/1c21279f337da8130/COPYING
     # Even when getting log for the whole repository, there could be merge
     # commits.
     commits.extend(last_result['log'])
-  # Use 'next' field (if any) from last_result, but commits aggregated from
-  # all the results. This essentially imitates paging with at least
+  # Use 'next' field (if any) from `last_result`, but commits aggregated
+  # from all the results. This essentially imitates paging with at least
   # `limit` page size.
   last_result['log'] = commits
-  logging.debug('fetched %d commits, next: %s.', len(commits), last_result.get('next'))
+  logging.debug(
+      'fetched %d commits, next: %s.', len(commits),
+      last_result.get('next'))
   return last_result
+
 
 def main(arguments):
   parser = create_argparser()
@@ -88,14 +99,14 @@ def main(arguments):
   if not parsed_url.scheme.startswith('http'):
     parser.error('Invalid URI scheme (expected http or https): %s' % args.url)
 
-  qdict = {}
+  query_params = {}
   if parsed_url.query:
-    qdict.update(urlparse.parse_qs(parsed_url.query))
+    query_params.update(urlparse.parse_qs(parsed_url.query))
   # Force the format specified on command-line.
-  if qdict.get('format'):
+  if query_params.get('format'):
     parser.error('URL must not contain format; use --format command line flag '
                  'instead.')
-  qdict['format'] = args.format
+  query_params['format'] = args.format
 
   # Choose handler.
   if args.format == 'json':
@@ -109,14 +120,14 @@ def main(arguments):
         return None
       # Wrap in a structured JSON for export to recipe module.
       return {
-        'value': result,
+          'value': result,
       }
 
   if args.log_start:
-    qdict['s'] = args.log_start
+    query_params['s'] = args.log_start
 
-  def fetch(qdict):
-    parsed_url_with_query = reparse_url(parsed_url, qdict)
+  def fetch(query_params):
+    parsed_url_with_query = reparse_url(parsed_url, query_params)
     result = gitiles_get(parsed_url_with_query, handler, args.attempts)
     if not args.quiet:
       logging.info('Read from %s: %s', parsed_url_with_query.geturl(), result)
@@ -125,11 +136,11 @@ def main(arguments):
   if args.log_limit:
     if args.format != 'json':
       parser.error('--log-limit works with json format only')
-    result = fetch_log_with_paging(qdict, args.log_limit, fetch)
+    result = fetch_log_with_paging(query_params, args.log_limit, query_params)
   else:
     # Either not a log request, or don't care about paging.
     # So, just return whatever is fetched the first time.
-    result = fetch(qdict)
+    result = fetch(query_params)
 
   with open(args.json_file, 'w') as json_file:
     json.dump(result, json_file)
@@ -138,25 +149,31 @@ def main(arguments):
 
 def create_argparser():
   parser = argparse.ArgumentParser()
-  parser.add_argument('-j', '--json-file', required=True,
+  parser.add_argument(
+      '-j', '--json-file', required=True,
       help='Path to json file for output.')
-  parser.add_argument('-f', '--format', required=True,
-      choices=('json', 'text'))
-  parser.add_argument('-u', '--url', required=True,
+  parser.add_argument(
+      '-f', '--format', required=True, choices=('json', 'text'))
+  parser.add_argument(
+      '-u', '--url', required=True,
       help='Url of gitiles. For example, '
            'https://chromium.googlesource.com/chromium/src/+refs. '
            'Insert a/ after domain for authenticated access.')
-  parser.add_argument('-a', '--attempts', type=int, default=1,
+  parser.add_argument(
+      '-a', '--attempts', type=int, default=1,
       help='The number of attempts to make (with exponential backoff) before '
            'failing. If several requests are to be made, applies per each '
            'request separately.')
-  parser.add_argument('-q', '--quiet', action='store_true',
+  parser.add_argument(
+      '-q', '--quiet', action='store_true',
       help='Suppress file contents logging output.')
-  parser.add_argument('--log-limit', type=int, default=None,
+  parser.add_argument(
+      '--log-limit', type=int, default=None,
       help='Follow gitiles pages to fetch at least this many commits. By '
            'default, first page with unspecified number of commits is fetched. '
            'Only for https://<hostname>/<repo>/+log/... gitiles request.')
-  parser.add_argument('--log-start',
+  parser.add_argument(
+      '--log-start',
       help='If given, continue fetching log by paging from this commit hash. '
            'This value can be typically be taken from json result of previous '
            'call to log, which returns next page start commit as "next" key. '
