@@ -28,7 +28,7 @@ def RunSteps(api):
   api.chromium_android.c.revision = revision
   api.chromium_android.c.revisions['src/dart'] = revision
 
-  api.chromium_android.init_and_sync()
+  api.chromium_android.init_and_sync(use_bot_update=False)
   # TODO(iannucci): Remove when dartium syncs chromium to >= crrev.com/252649
   api.chromium.runhooks(env={'GYP_CROSSCOMPILE': "1"})
   api.chromium.compile(targets=['content_shell_apk'])
