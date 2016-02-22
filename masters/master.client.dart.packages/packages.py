@@ -86,12 +86,13 @@ class Package(object):
 #     this to the name as well.
 PACKAGES = [
   # Packages in the 'dart-lang' project which are published.
-  Package(github_repo='analyzer_cli', published=False),
   Package(github_repo='args'),
   Package(github_repo='async'),
   Package(github_repo='barback'),
+  Package(github_repo='boolean_selector'),
   Package(github_repo='code-transformers'),
   Package(github_repo='collection'),
+  Package(github_repo='convert'),
   Package(github_repo='core-elements'),
   Package(github_repo='csslib'),
   Package(github_repo='crypto'),
@@ -123,18 +124,24 @@ PACKAGES = [
   Package(github_repo='polymer-expressions'),
   Package(github_repo='pool'),
   Package(github_repo='pub'),
+  Package(github_repo='pub_semver'),
   Package(github_repo='reflectable'),
+  Package(github_repo='rpc'),
   Package(github_repo='scheduled_test'),
   Package(github_repo='shelf'),
+  Package(github_repo='shelf_proxy'),
+  Package(github_repo='shelf_static'),
   Package(github_repo='shelf_web_socket'),
   Package(github_repo='smoke'),
   Package(github_repo='source_maps'),
+  Package(github_repo='source_map_stack_trace'),
   Package(github_repo='source_span'),
   Package(github_repo='stack_trace'),
   Package(github_repo='string_scanner'),
   Package(github_repo='template-binding'),
   Package(github_repo='test'),
   Package(github_repo='typed_data'),
+  Package(github_repo='vm_service_client'),
   Package(github_repo='watcher'),
   Package(github_repo='web-components'),
   Package(github_repo='yaml'),
@@ -155,6 +162,7 @@ PACKAGES = [
   Package(name="analysis_services", dart_repo_package=True),
   Package(name="analysis_testing", dart_repo_package=True),
   Package(name="analyzer", dart_repo_package=True),
+  Package(name="analyzer_cli", dart_repo_package=True),
   Package(name="browser", dart_repo_package=True),
   Package(name="compiler_unsupported", dart_repo_package=True),
   Package(name="custom_element", dart_repo_package=True),
@@ -165,9 +173,6 @@ PACKAGES = [
   Package(name="mutation_observer", dart_repo_package=True),
   Package(name="typed_mock", dart_repo_package=True),
   Package(name="utf", dart_repo_package=True),
-
-  # Packages in the dart-lang project which are not published.
-  Package(github_repo='rpc', published=False),
 
   # Github samples which are not published on pub.dartlang.org
   Package(github_repo='sample-pop_pop_win', sample=True, published=False),
