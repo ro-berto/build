@@ -42,18 +42,43 @@ def Update(c):
     {'name': 'Mac64 Debug (GN)', 'slavebuilddir': 'mac64_gn'},
     {'name': 'Mac64 Release (GN)', 'slavebuilddir': 'mac64_gn'},
     {'name': 'Mac Asan', 'slavebuilddir': 'mac_asan'},
-    {'name': 'iOS32 Debug', 'slavebuilddir': 'mac32'},
-    {'name': 'iOS32 Release', 'slavebuilddir': 'mac32'},
-    {'name': 'iOS64 Debug', 'slavebuilddir': 'mac64'},
-    {'name': 'iOS64 Release', 'slavebuilddir': 'mac64'},
-    {'name': 'iOS32 Simulator Debug','slavebuilddir': 'mac32'},
-    {'name': 'iOS64 Simulator Debug', 'slavebuilddir': 'mac64'},
+    {
+      'name': 'iOS32 Debug',
+      'slavebuilddir': 'mac32',
+      'recipe': 'webrtc/ios',
+    },
+    {
+      'name': 'iOS32 Release',
+      'slavebuilddir': 'mac32',
+      'recipe': 'webrtc/ios',
+    },
+    {
+      'name': 'iOS64 Debug',
+      'slavebuilddir': 'mac64',
+      'recipe': 'webrtc/ios',
+    },
+    {
+      'name': 'iOS64 Release',
+      'slavebuilddir': 'mac64',
+      'recipe': 'webrtc/ios',
+    },
+    {
+      'name': 'iOS32 Simulator Debug',
+      'slavebuilddir': 'mac32',
+      'recipe': 'webrtc/ios',
+    },
+    {
+      'name': 'iOS64 Simulator Debug',
+      'slavebuilddir': 'mac64',
+      'recipe': 'webrtc/ios',
+    },
   ]
 
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory('webrtc/standalone'),
+        'factory': m_annotator.BaseFactory(spec.get('recipe',
+                                                    'webrtc/standalone')),
         'notify_on_missing': True,
         'category': spec.get('category', 'compile|testers'),
         'slavebuilddir': spec['slavebuilddir'],
