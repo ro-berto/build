@@ -180,7 +180,11 @@
       "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
-      "--"
+      "--",
+      "android_tools",
+      "cc_perftests",
+      "chrome_public_apk",
+      "gpu_perftests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

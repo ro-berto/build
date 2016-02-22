@@ -70,6 +70,12 @@ BUILDERS = freeze({
                              % api.properties['revision']),
       },
       'run_mb': True,
+      'targets': [
+        'android_tools',
+        'cc_perftests',
+        'chrome_public_apk',
+        'gpu_perftests',
+      ],
     },
     'Android arm64 Builder': {
       'recipe_config': 'arm64_builder_rel_mb',
@@ -84,6 +90,12 @@ BUILDERS = freeze({
             % api.properties['revision']),
       },
       'run_mb': True,
+      'targets': [
+        'android_tools',
+        'cc_perftests',
+        'chrome_public_apk',
+        'gpu_perftests',
+      ],
     }
   },
   'tryserver.chromium.perf': {
@@ -183,7 +195,7 @@ def _RunStepsInternal(api, mastername, buildername, revision):
   if bot_config.get('check_licenses'):
     with bot_config['check_licenses']():
       droid.check_webview_licenses()
-  api.chromium.compile()
+  api.chromium.compile(bot_config.get('targets'))
 
   upload_config = bot_config.get('upload')
   if upload_config:
