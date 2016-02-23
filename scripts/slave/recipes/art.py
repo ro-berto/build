@@ -188,6 +188,9 @@ def setup_target(api,
                               '-j8', '--target'],
              env=env)
 
+    if device == 'mips32' or device == 'mips64-emulator':
+      return
+
     api.step('setup device', [art_tools.join('setup-buildbot-device.sh')],
              env=env)
 
