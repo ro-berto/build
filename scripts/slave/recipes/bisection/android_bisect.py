@@ -34,6 +34,11 @@ BUILDERS = freeze({
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
             },
+            'android_nexus5X_perf_bisect': {
+                'recipe_config': 'perf',
+                'gclient_apply_config': ['android', 'perf'],
+                'bucket': 'chrome-perf',
+            },
             'android_nexus6_perf_bisect': {
                 'recipe_config': 'perf',
                 'gclient_apply_config': ['android', 'perf'],
