@@ -154,7 +154,7 @@
       "https://codereview.chromium.org",
       "--rietveld_fetch",
       "--upstream",
-      "170242",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--trybot-json",
       "/path/to/tmp/json",
       "--rietveld_email",

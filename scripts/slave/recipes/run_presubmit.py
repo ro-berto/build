@@ -35,6 +35,12 @@ def _RunStepsInternal(api):
   got_revision_property = api.gclient.c.got_revision_mapping[relative_root]
   upstream = bot_update_step.json.output['properties'].get(
       got_revision_property)
+  if (not upstream or
+      isinstance(upstream, int) or
+      (upstream.isdigit() and len(upstream) < 40)):
+    # If got_revision is an svn revision, then use got_revision_git.
+    upstream = bot_update_step.json.output['properties'].get(
+        '%s_git' % got_revision_property) or ''
 
   # TODO(hinoka): Extract email/name from issue?
   api.git('-c', 'user.email=commit-bot@chromium.org',

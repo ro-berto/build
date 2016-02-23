@@ -27,6 +27,44 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--master",
+      "chromium.testing.master",
+      "--builder",
+      "dartium-builder",
+      "--slave",
+      "TestSlavename",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'deps_file': 'tools/deps/dartium.deps/DEPS', 'managed': True, 'name': 'src/dart', 'url': 'https://github.com/dart-lang/sdk.git'}]\ntarget_os = ['android']",
+      "--root",
+      "src/dart",
+      "--revision_mapping_file",
+      "{}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "src/dart@478695f60c28b5b8a951ce1d4fd60f53d80b21fb",
+      "--output_manifest"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+    },
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE[depot_tools]/gclient.py",
       "config",
       "--spec",

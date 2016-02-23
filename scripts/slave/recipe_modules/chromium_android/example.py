@@ -109,7 +109,7 @@ def RunSteps(api, buildername):
     api.chromium.c.env.ADB_VENDOR_KEYS = api.path['build'].join(
       'site_config', '.adb_key')
 
-  api.chromium_android.init_and_sync(use_bot_update=False)
+  api.chromium_android.init_and_sync()
 
   api.chromium.runhooks()
   api.chromium_android.run_tree_truth(additional_repos=['foo'])
@@ -318,7 +318,7 @@ def GenTests(api):
                           </TestPackage>
                         </TestResult>  """
   yield (api.test('webview_cts_unexpected_class_failure') +
-         properties_for('webview_cts') +
+         properties_for('webview_cts') +         
          api.override_step_data('Run CTS', api.raw_io.stream_output(
              'Created xml report file at file:///path/to/testResult.xml',
              stream='stdout')) +
