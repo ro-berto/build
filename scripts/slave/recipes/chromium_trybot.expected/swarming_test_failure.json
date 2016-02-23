@@ -455,7 +455,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:gl_tests (with patch)",
+      "stepname:gl_tests (with patch) on Ubuntu-12.04",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -464,7 +464,7 @@
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] gl_tests (with patch)",
+    "name": "[trigger] gl_tests (with patch) on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gl_tests (with patch)/Ubuntu-12.04/[dummy has/linux_chromium_rel_ng/571\", @@@",
@@ -503,7 +503,7 @@
       "gl_tests (with patch)/Ubuntu-12.04/[dummy has/linux_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gl_tests (with patch)",
+    "name": "gl_tests (with patch) on Ubuntu-12.04",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
@@ -524,14 +524,14 @@
       "--build-number",
       "571",
       "--test-type",
-      "gl_tests (with patch)",
+      "gl_tests (with patch) on Ubuntu-12.04",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Upload to test-results [gl_tests (with patch)]"
+    "name": "Upload to test-results [gl_tests (with patch) on Ubuntu-12.04]"
   },
   {
     "cmd": [
@@ -798,7 +798,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:gl_tests (without patch)",
+      "stepname:gl_tests (without patch) on Ubuntu-12.04",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -808,7 +808,7 @@
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] gl_tests (without patch)",
+    "name": "[trigger] gl_tests (without patch) on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gl_tests (without patch)/Ubuntu-12.04/[dummy has/linux_chromium_rel_ng/571\", @@@",
@@ -847,7 +847,7 @@
       "gl_tests (without patch)/Ubuntu-12.04/[dummy has/linux_chromium_rel_ng/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "gl_tests (without patch)",
+    "name": "gl_tests (without patch) on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
@@ -866,14 +866,14 @@
       "--build-number",
       "571",
       "--test-type",
-      "gl_tests (without patch)",
+      "gl_tests (without patch) on Ubuntu-12.04",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Upload to test-results [gl_tests (without patch)]"
+    "name": "Upload to test-results [gl_tests (without patch) on Ubuntu-12.04]"
   },
   {
     "cmd": [

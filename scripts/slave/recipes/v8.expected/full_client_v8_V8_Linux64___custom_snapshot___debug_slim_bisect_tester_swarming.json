@@ -151,7 +151,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit",
+      "stepname:Mjsunit on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for mjsunit]",
       "--",
@@ -174,7 +174,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Mjsunit",
+    "name": "[trigger] Mjsunit on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mjsunit/Ubuntu-12.04/[dummy has/V8 Linux64 - custom snapshot - debug/571\", @@@",
@@ -463,7 +463,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Retry",
+      "stepname:Retry on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for bisection]",
       "--",
@@ -489,7 +489,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Bisect a0.[trigger] Retry",
+    "name": "Bisect a0.[trigger] Retry on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -641,7 +641,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Retry",
+      "stepname:Retry on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for bisection]",
       "--",
@@ -667,7 +667,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Bisect a1.[trigger] Retry",
+    "name": "Bisect a1.[trigger] Retry on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

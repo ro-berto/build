@@ -234,7 +234,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check",
+      "stepname:Check on Windows-7-SP1",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -259,7 +259,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Check",
+    "name": "[trigger] Check on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Windows-7-SP1/[dummy has/v8_win64_dbg/571\", @@@",
@@ -342,7 +342,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:SimdJs - all",
+      "stepname:SimdJs - all on Windows-7-SP1",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -368,7 +368,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] SimdJs - all",
+    "name": "[trigger] SimdJs - all on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"SimdJs - all/Windows-7-SP1/[dummy has/v8_win64_dbg/571\", @@@",

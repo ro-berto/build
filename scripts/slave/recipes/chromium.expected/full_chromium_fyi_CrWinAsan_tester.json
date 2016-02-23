@@ -316,14 +316,14 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:browser_tests",
+      "stepname:browser_tests on Windows-7-SP1",
       "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] browser_tests",
+    "name": "[trigger] browser_tests on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Windows-7-SP1/ffffffffff/CrWinAsan tester/571\", @@@",
@@ -362,7 +362,7 @@
       "browser_tests/Windows-7-SP1/ffffffffff/CrWinAsan tester/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "browser_tests",
+    "name": "browser_tests on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
@@ -381,14 +381,14 @@
       "--build-number",
       "571",
       "--test-type",
-      "browser_tests",
+      "browser_tests on Windows-7-SP1",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Upload to test-results [browser_tests]"
+    "name": "Upload to test-results [browser_tests on Windows-7-SP1]"
   },
   {
     "cmd": [

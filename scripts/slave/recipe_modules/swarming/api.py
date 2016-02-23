@@ -750,26 +750,22 @@ class SwarmingApi(recipe_api.RecipeApi):
   def _get_step_name(self, prefix, task):
     """SwarmingTask -> name of a step of a waterfall.
 
-    Will take a task title (+ step name prefix) and optionally append
-    OS dimension to it in case the task is triggered on OS that is different
-    from OS this recipe is running on. It shortens step names for the most
-    common case of triggering a task on the same OS as one that recipe
-    is running on.
+    Will take a task title (+ step name prefix) and append OS dimension to it.
 
     Args:
       prefix: prefix to append to task title, like 'trigger'.
       task: SwarmingTask instance.
 
     Returns:
-      '[<prefix>] <task title> (on <OS>)' where <OS> is optional.
+      '[<prefix>] <task title> on <OS>'
     """
     prefix = '[%s] ' % prefix if prefix else ''
-
     task_os = task.dimensions['os']
-    bot_os = self.prefered_os_dimension(self.m.platform.name)
-    suffix = '' if task_os == bot_os else ' on %s' % task_os
-
-    return ''.join((prefix, task.title, suffix))
+    # Note: properly detecting dimensions of the bot the recipe is running
+    # on is somewhat non-trivial. It is not safe to assume it uses default
+    # or preferred dimensions for its OS. For example, the version of the OS
+    # can differ.
+    return ''.join((prefix, task.title, ' on %s' % task_os))
 
   def get_collect_cmd_args(self, task):
     """SwarmingTask -> argument list for 'swarming.py' command."""

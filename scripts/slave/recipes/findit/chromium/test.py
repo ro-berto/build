@@ -245,7 +245,7 @@ def GenTests(api):
         'tests': tests,
         'use_analyze': use_analyze,
     }
-    return api.properties(**properties)
+    return api.properties(**properties) + api.platform.name(platform_name)
 
   def simulated_gtest_output(failed_test_names=(), passed_test_names=()):
     cur_iteration_data = {}
@@ -312,7 +312,7 @@ def GenTests(api):
           })
       ) +
       api.override_step_data(
-          'test r1.affected_tests (r1)',
+          'test r1.affected_tests (r1) on Windows-7-SP1',
           simulated_gtest_output(passed_test_names=['Test.One'])
       )
   )
@@ -362,7 +362,7 @@ def GenTests(api):
           },
       })) +
       api.override_step_data(
-          'test r1.gl_tests (r1)',
+          'test r1.gl_tests (r1) on Windows-7-SP1',
           simulated_gtest_output(
               failed_test_names=['Test.One', 'Test.Two', 'Test.Three'])
       )
@@ -383,7 +383,7 @@ def GenTests(api):
           },
       })) +
       api.override_step_data(
-          'test r1.gl_tests (r1)',
+          'test r1.gl_tests (r1) on Windows-7-SP1',
           simulated_gtest_output(
               passed_test_names=['Test.One', 'Test.Two', 'Test.Three'])
       )
@@ -404,7 +404,7 @@ def GenTests(api):
           },
       })) +
       api.override_step_data(
-          'test r1.gl_tests (r1)',
+          'test r1.gl_tests (r1) on Windows-7-SP1',
           simulated_gtest_output(
               failed_test_names=['Test.One', 'Test.Two'],
               passed_test_names=['Test.Three'])

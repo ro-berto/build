@@ -151,7 +151,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit",
+      "stepname:Mjsunit on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for mjsunit]",
       "--",
@@ -175,7 +175,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Mjsunit",
+    "name": "[trigger] Mjsunit on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mjsunit/Ubuntu-12.04/[dummy has/V8 Linux - debug - code serializer/571\", @@@",
@@ -248,7 +248,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla",
+      "stepname:Mozilla on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -272,7 +272,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Mozilla",
+    "name": "[trigger] Mozilla on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla/Ubuntu-12.04/[dummy has/V8 Linux - debug - code serializer/571\", @@@",
@@ -345,7 +345,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - no variants",
+      "stepname:Test262 - no variants on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -371,7 +371,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Test262 - no variants",
+    "name": "[trigger] Test262 - no variants on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - no variants/Ubuntu-12.04/[dummy has/V8 Linux - debug - code serializer/571\", @@@",
@@ -444,7 +444,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Benchmarks",
+      "stepname:Benchmarks on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for benchmarks]",
       "--",
@@ -469,7 +469,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Benchmarks",
+    "name": "[trigger] Benchmarks on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Benchmarks/Ubuntu-12.04/[dummy has/V8 Linux - debug - code serializer/571\", @@@",
@@ -542,7 +542,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:SimdJs - all",
+      "stepname:SimdJs - all on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for simdjs]",
       "--",
@@ -567,7 +567,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] SimdJs - all",
+    "name": "[trigger] SimdJs - all on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux - debug - code serializer/571\", @@@",

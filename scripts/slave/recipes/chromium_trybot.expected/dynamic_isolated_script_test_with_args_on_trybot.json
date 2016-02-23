@@ -462,7 +462,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:telemetry_gpu_unittests (with patch)",
+      "stepname:telemetry_gpu_unittests (with patch) on Ubuntu-12.04",
       "--user",
       "commit-bot@chromium.org",
       "[dummy hash for telemetry_gpu_unittests]",
@@ -474,7 +474,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] telemetry_gpu_unittests (with patch)",
+    "name": "[trigger] telemetry_gpu_unittests (with patch) on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"telemetry_gpu_unittests (with patch)/Ubuntu-12.04/[dummy has/linux_chromium_rel_ng/571\", @@@",
@@ -507,7 +507,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "telemetry_gpu_unittests (with patch)",
+    "name": "telemetry_gpu_unittests (with patch) on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"failures\\\": [], \\\"valid\\\": true}\", @@@",

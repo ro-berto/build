@@ -276,7 +276,7 @@
       "--tag",
       "rietveld:https://codereview.chromium.org/123/#ps1001",
       "--tag",
-      "stepname:hello_world",
+      "stepname:hello_world on Ubuntu-12.04",
       "--verbose",
       "--idempotent",
       "--user",
@@ -284,7 +284,7 @@
       "hash_for_linux"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] hello_world",
+    "name": "[trigger] hello_world on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"hello_world/Ubuntu-12.04/hash_for_l\", @@@",
@@ -465,7 +465,7 @@
       "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "hello_world",
+    "name": "hello_world on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

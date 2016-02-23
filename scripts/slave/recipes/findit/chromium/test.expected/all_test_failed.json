@@ -3,7 +3,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "[BUILD]\\scripts\\slave\\kill_processes.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "taskkill"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--master",
       "tryserver.chromium.win",
       "--builder",
@@ -26,7 +35,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -100,7 +109,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -114,13 +123,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE[depot_tools]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "archive_gpu_tests=1 component=static_library ffmpeg_branding=Chrome gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+      "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -128,7 +137,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
+      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
@@ -136,9 +145,9 @@
       "Release",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
-      "{\"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"build1-a1\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"build1-a1\", \"target_platform\": \"win\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -152,25 +161,25 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium.win.json",
+      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.win.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
     "cmd": [
-      "git",
+      "[DEPOT_TOOLS]\\git.bat",
       "log",
       "--format=%H",
       "r0..r1"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
+    "cwd": "[SLAVE_BUILD]\\src",
     "name": "git commits in range",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -187,7 +196,19 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "[BUILD]\\scripts\\slave\\kill_processes.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "test r1.taskkill",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--master",
       "tryserver.chromium.win",
       "--builder",
@@ -210,7 +231,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "test r1.bot_update",
     "~followup_annotations": [
@@ -285,13 +306,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE[depot_tools]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "archive_gpu_tests=1 component=static_library ffmpeg_branding=Chrome gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+      "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "test r1.gclient runhooks",
     "~followup_annotations": [
@@ -302,7 +323,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
+      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
@@ -310,9 +331,9 @@
       "Release",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
-      "{\"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"build1-a1\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"build1-a1\", \"target_platform\": \"win\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "test r1.get compile targets for scripts",
@@ -327,14 +348,14 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium.win.json",
+      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "test r1.read test spec",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.win.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Win7 Tests (1)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
@@ -354,7 +375,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/cleanup_temp.py"
+      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "test r1.cleanup_temp",
@@ -366,9 +387,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--clean-isolated-files"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -381,11 +402,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
+      "[BUILD]\\scripts\\slave\\compile.py",
       "--target",
       "Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]\\src",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -393,7 +414,7 @@
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[BUILD]\\goma",
       "--ninja-ensure-up-to-date",
       "--",
       "gl_tests",
@@ -411,11 +432,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/remove_build_metadata.py",
+      "RECIPE_MODULE[build::isolate]\\resources\\remove_build_metadata.py",
       "--build-dir",
-      "[SLAVE_BUILD]/src/out/Release",
+      "[SLAVE_BUILD]\\src\\out\\Release",
       "--src-dir",
-      "[SLAVE_BUILD]/src"
+      "[SLAVE_BUILD]\\src"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "test r1.remove_build_metadata",
@@ -427,15 +448,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/src/tools/swarming_client",
+      "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/src/out/Release/gl_tests.isolated.gen.json"
+      "[SLAVE_BUILD]\\src\\out\\Release\\gl_tests.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "test r1.isolate tests",
@@ -451,7 +472,21 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
+      "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
+      "--target",
+      "Release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "test r1.start_crash_service",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -462,7 +497,7 @@
       "--shards",
       "1",
       "--task-name",
-      "gl_tests (r1)/Ubuntu-12.04/[dummy has/win_chromium_variable/1",
+      "gl_tests (r1)/Windows-7-SP1/[dummy has/win_chromium_variable/1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -479,7 +514,7 @@
       "none",
       "--dimension",
       "os",
-      "Ubuntu-12.04",
+      "Windows-7-SP1",
       "--dimension",
       "pool",
       "Chrome",
@@ -494,7 +529,7 @@
       "--tag",
       "name:gl_tests (r1)",
       "--tag",
-      "os:Ubuntu-12.04",
+      "os:Windows-7-SP1",
       "--tag",
       "project:chromium",
       "--tag",
@@ -504,7 +539,7 @@
       "--tag",
       "slavename:build1-a1",
       "--tag",
-      "stepname:gl_tests (r1)",
+      "stepname:gl_tests (r1) on Windows-7-SP1",
       "--idempotent",
       "[dummy hash for gl_tests]",
       "--",
@@ -512,13 +547,13 @@
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "test r1.[trigger] gl_tests (r1)",
+    "name": "test r1.[trigger] gl_tests (r1) on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gl_tests (r1)/Ubuntu-12.04/[dummy has/win_chromium_variable/1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gl_tests (r1)/Windows-7-SP1/[dummy has/win_chromium_variable/1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gl_tests (r1)/Ubuntu-12.04/[dummy has/win_chromium_variable/1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gl_tests (r1)/Windows-7-SP1/[dummy has/win_chromium_variable/1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -534,9 +569,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
+      "RECIPE_MODULE[build::swarming]\\resources\\collect_gtest_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/src/tools/swarming_client",
+      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -549,10 +584,10 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "gl_tests (r1)/Ubuntu-12.04/[dummy has/win_chromium_variable/1"
+      "gl_tests (r1)/Windows-7-SP1/[dummy has/win_chromium_variable/1"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "test r1.gl_tests (r1)",
+    "name": "test r1.gl_tests (r1) on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
@@ -564,7 +599,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "RECIPE_MODULE[build::test_results]\\resources\\upload_gtest_test_results.py",
       "--input-gtest-json",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"FAILURE\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"FAILURE\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"FAILURE\"}]}]}",
       "--master-name",
@@ -574,14 +609,28 @@
       "--build-number",
       "1",
       "--test-type",
-      "test r1.gl_tests (r1)",
+      "test r1.gl_tests (r1) on Windows-7-SP1",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "test r1.Upload to test-results [test r1.gl_tests (r1)]",
+    "name": "test r1.Upload to test-results [test r1.gl_tests (r1) on Windows-7-SP1]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\process_dumps.py",
+      "--target",
+      "Release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "test r1.process_dumps",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

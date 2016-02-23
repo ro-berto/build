@@ -251,7 +251,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check",
+      "stepname:Check on Ubuntu-12.04",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -276,7 +276,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Check",
+    "name": "[trigger] Check on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/v8_linux_arm64_rel/571\", @@@",
@@ -365,7 +365,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - no variants",
+      "stepname:Test262 - no variants on Ubuntu-12.04",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -392,7 +392,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Test262 - no variants",
+    "name": "[trigger] Test262 - no variants on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - no variants/Ubuntu-12.04/[dummy has/v8_linux_arm64_rel/571\", @@@",
@@ -469,7 +469,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla",
+      "stepname:Mozilla on Ubuntu-12.04",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -494,7 +494,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Mozilla",
+    "name": "[trigger] Mozilla on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla/Ubuntu-12.04/[dummy has/v8_linux_arm64_rel/571\", @@@",
@@ -571,7 +571,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:SimdJs - all",
+      "stepname:SimdJs - all on Ubuntu-12.04",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -597,7 +597,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] SimdJs - all",
+    "name": "[trigger] SimdJs - all on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"SimdJs - all/Ubuntu-12.04/[dummy has/v8_linux_arm64_rel/571\", @@@",
@@ -674,7 +674,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Ignition",
+      "stepname:Ignition on Ubuntu-12.04",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -701,7 +701,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Ignition",
+    "name": "[trigger] Ignition on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Ignition/Ubuntu-12.04/[dummy has/v8_linux_arm64_rel/571\", @@@",
@@ -778,7 +778,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit - sp frame access",
+      "stepname:Mjsunit - sp frame access on Ubuntu-12.04",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -805,7 +805,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Mjsunit - sp frame access",
+    "name": "[trigger] Mjsunit - sp frame access on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/v8_linux_arm64_rel/571\", @@@",
@@ -882,7 +882,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - ignition",
+      "stepname:Test262 - ignition on Ubuntu-12.04",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -909,7 +909,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Test262 - ignition",
+    "name": "[trigger] Test262 - ignition on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - ignition/Ubuntu-12.04/[dummy has/v8_linux_arm64_rel/571\", @@@",

@@ -251,7 +251,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check",
+      "stepname:Check on Ubuntu-12.04",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -275,7 +275,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Check",
+    "name": "[trigger] Check on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/v8_linux_nodcheck_rel/571\", @@@",
@@ -352,7 +352,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262",
+      "stepname:Test262 on Ubuntu-12.04",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -377,7 +377,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Test262",
+    "name": "[trigger] Test262 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262/Ubuntu-12.04/[dummy has/v8_linux_nodcheck_rel/571\", @@@",
@@ -460,7 +460,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - ignition",
+      "stepname:Test262 - ignition on Ubuntu-12.04",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -486,7 +486,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Test262 - ignition",
+    "name": "[trigger] Test262 - ignition on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - ignition/Ubuntu-12.04/[dummy has/v8_linux_nodcheck_rel/571\", @@@",
@@ -563,7 +563,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Ignition",
+      "stepname:Ignition on Ubuntu-12.04",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -589,7 +589,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Ignition",
+    "name": "[trigger] Ignition on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Ignition/Ubuntu-12.04/[dummy has/v8_linux_nodcheck_rel/571\", @@@",
@@ -666,7 +666,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla",
+      "stepname:Mozilla on Ubuntu-12.04",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -690,7 +690,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Mozilla",
+    "name": "[trigger] Mozilla on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla/Ubuntu-12.04/[dummy has/v8_linux_nodcheck_rel/571\", @@@",
@@ -767,7 +767,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Benchmarks",
+      "stepname:Benchmarks on Ubuntu-12.04",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -792,7 +792,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Benchmarks",
+    "name": "[trigger] Benchmarks on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Benchmarks/Ubuntu-12.04/[dummy has/v8_linux_nodcheck_rel/571\", @@@",
@@ -869,7 +869,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:SimdJs - all",
+      "stepname:SimdJs - all on Ubuntu-12.04",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -894,7 +894,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] SimdJs - all",
+    "name": "[trigger] SimdJs - all on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"SimdJs - all/Ubuntu-12.04/[dummy has/v8_linux_nodcheck_rel/571\", @@@",

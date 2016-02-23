@@ -151,7 +151,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Fuzz",
+      "stepname:Fuzz on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for jsfunfuzz]",
       "--",
@@ -159,7 +159,7 @@
       "${ISOLATED_OUTDIR}/fuzz-results-54321.tar.bz2"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Fuzz",
+    "name": "[trigger] Fuzz on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Fuzz/Ubuntu-12.04/[dummy has/V8 Fuzzer/571\", @@@",
@@ -194,7 +194,7 @@
       "[TMP_BASE]/swarming_output_tmp_1"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Fuzz",
+    "name": "Fuzz on Ubuntu-12.04",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",

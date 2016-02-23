@@ -559,7 +559,7 @@ def GenTests(api):
         ],
       },
     })) +
-    api.override_step_data('telemetry_gpu_unittests',
+    api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
             isolated_script_passing=False, valid=True),
@@ -586,7 +586,7 @@ def GenTests(api):
         ],
       },
     })) +
-    api.override_step_data('telemetry_gpu_unittests',
+    api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
             isolated_script_passing=True, valid=True),
@@ -614,7 +614,7 @@ def GenTests(api):
         ],
       },
     })) +
-    api.override_step_data('telemetry_gpu_unittests',
+    api.override_step_data('telemetry_gpu_unittests on Ubuntu-12.04',
         api.test_utils.canned_isolated_script_output(
             passing=False, is_win=False, swarming=True,
             swarming_internal_failure=True, isolated_script_passing=True,

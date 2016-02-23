@@ -226,7 +226,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check",
+      "stepname:Check on Windows-7-SP1",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -248,7 +248,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Check",
+    "name": "[trigger] Check on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\", @@@",
@@ -327,7 +327,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:SimdJs - all",
+      "stepname:SimdJs - all on Windows-7-SP1",
       "--idempotent",
       "[dummy hash for simdjs]",
       "--",
@@ -350,7 +350,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] SimdJs - all",
+    "name": "[trigger] SimdJs - all on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"SimdJs - all/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\", @@@",
@@ -423,7 +423,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - no variants",
+      "stepname:Test262 - no variants on Windows-7-SP1",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -447,7 +447,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Test262 - no variants",
+    "name": "[trigger] Test262 - no variants on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - no variants/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\", @@@",
@@ -520,7 +520,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla",
+      "stepname:Mozilla on Windows-7-SP1",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -542,7 +542,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Mozilla",
+    "name": "[trigger] Mozilla on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\", @@@",

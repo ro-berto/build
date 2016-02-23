@@ -151,7 +151,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check",
+      "stepname:Check on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -175,7 +175,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Check",
+    "name": "[trigger] Check on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/V8 Linux - nosse4/571\", @@@",
@@ -248,7 +248,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla",
+      "stepname:Mozilla on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -272,7 +272,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Mozilla",
+    "name": "[trigger] Mozilla on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla/Ubuntu-12.04/[dummy has/V8 Linux - nosse4/571\", @@@",
@@ -345,7 +345,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:SimdJs - all",
+      "stepname:SimdJs - all on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for simdjs]",
       "--",
@@ -370,7 +370,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] SimdJs - all",
+    "name": "[trigger] SimdJs - all on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux - nosse4/571\", @@@",

@@ -151,7 +151,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check",
+      "stepname:Check on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -173,7 +173,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Check",
+    "name": "[trigger] Check on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/V8 Linux64 - debug/571\", @@@",
@@ -246,7 +246,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262",
+      "stepname:Test262 on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -269,7 +269,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Test262",
+    "name": "[trigger] Test262 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262/Ubuntu-12.04/[dummy has/V8 Linux64 - debug/571\", @@@",
@@ -354,7 +354,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla",
+      "stepname:Mozilla on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -376,7 +376,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Mozilla",
+    "name": "[trigger] Mozilla on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla/Ubuntu-12.04/[dummy has/V8 Linux64 - debug/571\", @@@",
@@ -449,7 +449,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:SimdJs - all",
+      "stepname:SimdJs - all on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for simdjs]",
       "--",
@@ -472,7 +472,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] SimdJs - all",
+    "name": "[trigger] SimdJs - all on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux64 - debug/571\", @@@",
@@ -545,7 +545,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Ignition",
+      "stepname:Ignition on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for ignition]",
       "--",
@@ -569,7 +569,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Ignition",
+    "name": "[trigger] Ignition on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Ignition/Ubuntu-12.04/[dummy has/V8 Linux64 - debug/571\", @@@",
@@ -642,7 +642,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit - sp frame access",
+      "stepname:Mjsunit - sp frame access on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for mjsunit]",
       "--",
@@ -666,7 +666,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Mjsunit - sp frame access",
+    "name": "[trigger] Mjsunit - sp frame access on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/V8 Linux64 - debug/571\", @@@",
@@ -739,7 +739,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - ignition",
+      "stepname:Test262 - ignition on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -763,7 +763,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Test262 - ignition",
+    "name": "[trigger] Test262 - ignition on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - ignition/Ubuntu-12.04/[dummy has/V8 Linux64 - debug/571\", @@@",
@@ -836,7 +836,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Simple Leak Check",
+      "stepname:Simple Leak Check on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for run-valgrind]",
       "--",
@@ -845,7 +845,7 @@
       "print(1+2)"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Simple Leak Check",
+    "name": "[trigger] Simple Leak Check on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Simple Leak Check/Ubuntu-12.04/[dummy has/V8 Linux64 - debug/571\", @@@",
@@ -1165,7 +1165,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Simple Leak Check",
+    "name": "Simple Leak Check on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

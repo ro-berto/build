@@ -151,7 +151,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit",
+      "stepname:Mjsunit on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for mjsunit]",
       "--",
@@ -174,7 +174,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Mjsunit",
+    "name": "[trigger] Mjsunit on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mjsunit/Ubuntu-12.04/[dummy has/V8 Linux - gc stress/571\", @@@",
@@ -259,7 +259,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Webkit",
+      "stepname:Webkit on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for webkit]",
       "--",
@@ -282,7 +282,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Webkit",
+    "name": "[trigger] Webkit on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Webkit/Ubuntu-12.04/[dummy has/V8 Linux - gc stress/571\", @@@",

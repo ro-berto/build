@@ -151,14 +151,14 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Static-Initializers",
+      "stepname:Static-Initializers on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for check-static-initializers]",
       "--",
       "out/Release/d8"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Static-Initializers",
+    "name": "[trigger] Static-Initializers on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Static-Initializers/Ubuntu-12.04/[dummy has/V8 Linux/571\", @@@",
@@ -231,7 +231,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check",
+      "stepname:Check on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -253,7 +253,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Check",
+    "name": "[trigger] Check on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/V8 Linux/571\", @@@",
@@ -326,7 +326,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:OptimizeForSize",
+      "stepname:OptimizeForSize on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for optimize_for_size]",
       "--",
@@ -350,7 +350,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] OptimizeForSize",
+    "name": "[trigger] OptimizeForSize on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"OptimizeForSize/Ubuntu-12.04/[dummy has/V8 Linux/571\", @@@",
@@ -423,7 +423,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Benchmarks",
+      "stepname:Benchmarks on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for benchmarks]",
       "--",
@@ -446,7 +446,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Benchmarks",
+    "name": "[trigger] Benchmarks on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Benchmarks/Ubuntu-12.04/[dummy has/V8 Linux/571\", @@@",
@@ -519,7 +519,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:SimdJs - all",
+      "stepname:SimdJs - all on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for simdjs]",
       "--",
@@ -542,7 +542,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] SimdJs - all",
+    "name": "[trigger] SimdJs - all on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"SimdJs - all/Ubuntu-12.04/[dummy has/V8 Linux/571\", @@@",
@@ -615,7 +615,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262",
+      "stepname:Test262 on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -638,7 +638,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Test262",
+    "name": "[trigger] Test262 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262/Ubuntu-12.04/[dummy has/V8 Linux/571\", @@@",
@@ -717,7 +717,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla",
+      "stepname:Mozilla on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -739,7 +739,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Mozilla",
+    "name": "[trigger] Mozilla on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla/Ubuntu-12.04/[dummy has/V8 Linux/571\", @@@",
@@ -812,7 +812,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Ignition",
+      "stepname:Ignition on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for ignition]",
       "--",
@@ -836,7 +836,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Ignition",
+    "name": "[trigger] Ignition on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Ignition/Ubuntu-12.04/[dummy has/V8 Linux/571\", @@@",
@@ -909,7 +909,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit - sp frame access",
+      "stepname:Mjsunit - sp frame access on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for mjsunit]",
       "--",
@@ -933,7 +933,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Mjsunit - sp frame access",
+    "name": "[trigger] Mjsunit - sp frame access on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/V8 Linux/571\", @@@",
@@ -1006,7 +1006,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - ignition",
+      "stepname:Test262 - ignition on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -1030,7 +1030,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] Test262 - ignition",
+    "name": "[trigger] Test262 - ignition on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - ignition/Ubuntu-12.04/[dummy has/V8 Linux/571\", @@@",
@@ -1103,14 +1103,14 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:GCMole ia32",
+      "stepname:GCMole ia32 on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for run-gcmole]",
       "--",
       "ia32"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] GCMole ia32",
+    "name": "[trigger] GCMole ia32 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"GCMole ia32/Ubuntu-12.04/[dummy has/V8 Linux/571\", @@@",
@@ -1183,14 +1183,14 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:GCMole x64",
+      "stepname:GCMole x64 on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for run-gcmole]",
       "--",
       "x64"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] GCMole x64",
+    "name": "[trigger] GCMole x64 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"GCMole x64/Ubuntu-12.04/[dummy has/V8 Linux/571\", @@@",
@@ -1263,14 +1263,14 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:GCMole arm",
+      "stepname:GCMole arm on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for run-gcmole]",
       "--",
       "arm"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] GCMole arm",
+    "name": "[trigger] GCMole arm on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"GCMole arm/Ubuntu-12.04/[dummy has/V8 Linux/571\", @@@",
@@ -1343,14 +1343,14 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:GCMole arm64",
+      "stepname:GCMole arm64 on Ubuntu-12.04",
       "--idempotent",
       "[dummy hash for run-gcmole]",
       "--",
       "arm64"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] GCMole arm64",
+    "name": "[trigger] GCMole arm64 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"GCMole arm64/Ubuntu-12.04/[dummy has/V8 Linux/571\", @@@",
@@ -1383,7 +1383,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Static-Initializers",
+    "name": "Static-Initializers on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1810,7 +1810,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "GCMole ia32",
+    "name": "GCMole ia32 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1868,7 +1868,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "GCMole x64",
+    "name": "GCMole x64 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1926,7 +1926,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "GCMole arm",
+    "name": "GCMole arm on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1984,7 +1984,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "GCMole arm64",
+    "name": "GCMole arm64 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
