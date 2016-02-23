@@ -306,7 +306,7 @@ class iOSApi(recipe_api.RecipeApi):
                              name='generate_build_files' + suffix,
                              build_dir='//out/' + build_sub_path)
 
-    use_analyze = self.__config['use_analyze']
+    use_analyze = self.__config['use_analyze'] == True
     if (use_analyze and
         self.compiler == 'ninja' and
         self.m.tryserver.is_tryserver and
