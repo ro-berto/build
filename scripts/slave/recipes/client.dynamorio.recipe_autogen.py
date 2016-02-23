@@ -24,7 +24,8 @@ def win_xp_dr_nightly_steps(api):
   result = api.bot_update.ensure_checkout(force=True)
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
-  api.step("unpack tools", ['unpack.bat'], env={},
+  api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
+    'bot_tools', 'unpack.bat')], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # dynamorio win nightly suite step
   api.step("nightly suite",
@@ -68,7 +69,8 @@ def win_7_dr_steps(api):
   result = api.bot_update.ensure_checkout(force=True)
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
-  api.step("unpack tools", ['unpack.bat'], env={},
+  api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
+    'bot_tools', 'unpack.bat')], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # build_env step
   api.step("pre-commit suite", [api.path["build"].join("scripts", "slave",
@@ -113,7 +115,8 @@ def win_8_dr_steps(api):
   result = api.bot_update.ensure_checkout(force=True)
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
-  api.step("unpack tools", ['unpack.bat'], env={},
+  api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
+    'bot_tools', 'unpack.bat')], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # build_env step
   api.step("pre-commit suite",
@@ -137,7 +140,8 @@ def win_xp_dr_steps(api):
   result = api.bot_update.ensure_checkout(force=True)
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
-  api.step("unpack tools", ['unpack.bat'], env={},
+  api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
+    'bot_tools', 'unpack.bat')], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # build_env step
   api.step("pre-commit suite", [api.path["build"].join("scripts", "slave",
@@ -160,7 +164,8 @@ def win_7_dr_nightly_steps(api):
   result = api.bot_update.ensure_checkout(force=True)
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
-  api.step("unpack tools", ['unpack.bat'], env={},
+  api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
+    'bot_tools', 'unpack.bat')], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # dynamorio win nightly suite step
   api.step("nightly suite", [api.path["build"].join("scripts", "slave",
@@ -184,7 +189,8 @@ def win_8_dr_nightly_steps(api):
   result = api.bot_update.ensure_checkout(force=True)
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
-  api.step("unpack tools", ['unpack.bat'], env={},
+  api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
+    'bot_tools', 'unpack.bat')], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # dynamorio win nightly suite step
   api.step("nightly suite", [api.path["build"].join("scripts", "slave",
@@ -208,7 +214,8 @@ def win_dr_package_steps(api):
   result = api.bot_update.ensure_checkout(force=True)
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
-  api.step("unpack tools", ['unpack.bat'], env={},
+  api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
+    'bot_tools', 'unpack.bat')], env={},
       cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
   # get buildnumber step; no longer needed
   # Package DynamoRIO step

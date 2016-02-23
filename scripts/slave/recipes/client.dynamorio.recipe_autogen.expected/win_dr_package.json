@@ -49,7 +49,7 @@
   },
   {
     "cmd": [
-      "unpack.bat"
+      "[SLAVE_BUILD]/dynamorio/tools/buildbot/bot_tools/unpack.bat"
     ],
     "cwd": "[SLAVE_BUILD]/dynamorio/tools/buildbot/bot_tools",
     "name": "unpack tools"
