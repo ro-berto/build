@@ -188,7 +188,12 @@ def setup_target(api,
                               '-j8', '--target'],
              env=env)
 
-    if device == 'mips32' or device == 'mips64-emulator':
+    # Mips testing is broken.
+    if device == 'mips32' or device == 'mips64_emulator':
+      return
+
+    # Device is flaky, so disable running tests on it.
+    if serial == '0FF57BB6':
       return
 
     api.step('setup device', [art_tools.join('setup-buildbot-device.sh')],
@@ -332,12 +337,11 @@ _CONFIG_MAP = {
         'device': 'fugu',
         'debug': False,
       },
-# Disable: the device is currently faulty.
-#      'fugu-debug': {
-#        'serial': '0FF57BB6',
-#        'device': 'fugu',
-#        'debug': True,
-#      },
+      'fugu-debug': {
+        'serial': '0FF57BB6',
+        'device': 'fugu',
+        'debug': True,
+      },
       'hammerhead-concurrent-collector': {
         'serial': '0713a1b8005a0076',
         'device': 'hammerhead',
