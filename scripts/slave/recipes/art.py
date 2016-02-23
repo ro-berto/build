@@ -245,20 +245,31 @@ def setup_target(api,
 def setup_aosp_builder(api):
   full_checkout(api)
   clobber(api)
+  # Build the static version of dex2oat
+  env = { 'ART_USE_OPTIMIZING_COMPILER': 'true',
+          'TARGET_PRODUCT': 'aosp_x86_64',
+          'LEGACY_USE_JAVA7': 'true',
+          'ART_BUILD_HOST_STATIC': 'true',
+          'TARGET_BUILD_VARIANT': 'eng',
+          'TARGET_BUILD_TYPE': 'release'}
+  api.step('build dex2oats',
+           ['make', '-j8', 'out/host/linux-x86/bin/dex2oats'],
+           env=env)
 
-  builds = ['x86', 'x86_64', 'arm', 'arm64']
+  # Re-enable when we have Java8 jdk on the slave
+  #builds = ['x86', 'x86_64', 'arm', 'arm64']
   # TODO: adds mips and mips64 once we have enough storage on the bot.
   # ['mips', 'mips64']
-  with api.step.defer_results():
-    for build in builds:
-      env = { 'ART_USE_OPTIMIZING_COMPILER': 'true',
-              'TARGET_PRODUCT': 'aosp_%s' % build,
-              'LEGACY_USE_JAVA7': 'true',
-              'TARGET_BUILD_VARIANT': 'eng',
-              'TARGET_BUILD_TYPE': 'release'}
-      api.step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'],
-          env=env)
-      api.step('build %s' % build, ['make', '-j8'], env=env)
+  #with api.step.defer_results():
+  #  for build in builds:
+  #    env = { 'ART_USE_OPTIMIZING_COMPILER': 'true',
+  #            'TARGET_PRODUCT': 'aosp_%s' % build,
+  #            'LEGACY_USE_JAVA7': 'true',
+  #            'TARGET_BUILD_VARIANT': 'eng',
+  #            'TARGET_BUILD_TYPE': 'release'}
+  #    api.step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'],
+  #        env=env)
+  #    api.step('build %s' % build, ['make', '-j8'], env=env)
 
 _CONFIG_MAP = {
   'client.art': {
@@ -318,11 +329,12 @@ _CONFIG_MAP = {
         'device': 'fugu',
         'debug': False,
       },
-      'fugu-debug': {
-        'serial': '0FF57BB6',
-        'device': 'fugu',
-        'debug': False,
-      },
+# Disable: the device is currently faulty.
+#      'fugu-debug': {
+#        'serial': '0FF57BB6',
+#        'device': 'fugu',
+#        'debug': True,
+#      },
       'hammerhead-concurrent-collector': {
         'serial': '0713a1b8005a0076',
         'device': 'hammerhead',
@@ -442,7 +454,7 @@ def GenTests(api):
         buildername='aosp-builder',
         slavename='TestSlave',
       ) +
-      api.step_data('build x86', retcode=1))
+      api.step_data('build dex2oats', retcode=1))
 #  These tests *should* exist, but can't be included as they cause the recipe
 #  simulation to error out, instead of showing that the build should become
 #  purple instead. This may need to be fixed in the simulation test script.

@@ -23,133 +23,26 @@
     "cmd": [
       "make",
       "-j8",
-      "clean-oat-host"
+      "out/host/linux-x86/bin/dex2oats"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "ART_BUILD_HOST_STATIC": "true",
       "ART_USE_OPTIMIZING_COMPILER": "true",
       "LEGACY_USE_JAVA7": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_x86"
+      "TARGET_PRODUCT": "aosp_x86_64"
     },
-    "name": "Clean oat x86"
-  },
-  {
-    "cmd": [
-      "make",
-      "-j8"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "ART_USE_OPTIMIZING_COMPILER": "true",
-      "LEGACY_USE_JAVA7": "true",
-      "TARGET_BUILD_TYPE": "release",
-      "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_x86"
-    },
-    "name": "build x86",
+    "name": "build dex2oats",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
     ]
   },
   {
-    "cmd": [
-      "make",
-      "-j8",
-      "clean-oat-host"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "ART_USE_OPTIMIZING_COMPILER": "true",
-      "LEGACY_USE_JAVA7": "true",
-      "TARGET_BUILD_TYPE": "release",
-      "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_x86_64"
-    },
-    "name": "Clean oat x86_64"
-  },
-  {
-    "cmd": [
-      "make",
-      "-j8"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "ART_USE_OPTIMIZING_COMPILER": "true",
-      "LEGACY_USE_JAVA7": "true",
-      "TARGET_BUILD_TYPE": "release",
-      "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_x86_64"
-    },
-    "name": "build x86_64"
-  },
-  {
-    "cmd": [
-      "make",
-      "-j8",
-      "clean-oat-host"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "ART_USE_OPTIMIZING_COMPILER": "true",
-      "LEGACY_USE_JAVA7": "true",
-      "TARGET_BUILD_TYPE": "release",
-      "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_arm"
-    },
-    "name": "Clean oat arm"
-  },
-  {
-    "cmd": [
-      "make",
-      "-j8"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "ART_USE_OPTIMIZING_COMPILER": "true",
-      "LEGACY_USE_JAVA7": "true",
-      "TARGET_BUILD_TYPE": "release",
-      "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_arm"
-    },
-    "name": "build arm"
-  },
-  {
-    "cmd": [
-      "make",
-      "-j8",
-      "clean-oat-host"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "ART_USE_OPTIMIZING_COMPILER": "true",
-      "LEGACY_USE_JAVA7": "true",
-      "TARGET_BUILD_TYPE": "release",
-      "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_arm64"
-    },
-    "name": "Clean oat arm64"
-  },
-  {
-    "cmd": [
-      "make",
-      "-j8"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "ART_USE_OPTIMIZING_COMPILER": "true",
-      "LEGACY_USE_JAVA7": "true",
-      "TARGET_BUILD_TYPE": "release",
-      "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_arm64"
-    },
-    "name": "build arm64"
-  },
-  {
     "name": "$result",
-    "reason": "1 out of 8 aggregated steps failed. Failures: Step('build x86') failed with return_code 1",
+    "reason": "Step('build dex2oats') failed with return_code 1",
     "status_code": 1
   }
 ]
