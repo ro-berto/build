@@ -865,7 +865,7 @@ def compile_py_converter(step):
     if isinstance(x, buildbot.process.properties.WithProperties) and\
        x.fmtstring == '%s' and\
        x.args == ('clobber:+--clobber',):
-      rc.steps.append('if api.properties.get("clobber"):')
+      rc.steps.append('if "clobber" in api.properties:')
       rc.steps.append(['args.append("--clobber")'])
   rc.steps.append(fmtstr % compile_command)
   return rc
@@ -874,6 +874,7 @@ def win_compile_py_converter(step):
   rc = recipe_chunk()
   rc.steps.append('# compile.py step')
   rc.deps.add('recipe_engine/path')
+  rc.deps.add('recipe_engine/properties')
   fmtstr = 'api.step("compile", ["%s", %s] + args)'
   compile_command = 'api.path["build"].join("scripts", "slave", "compile.py")'
   args = [x for x in step[1]['command'].items[2:] if isinstance(x, str)]
@@ -882,7 +883,7 @@ def win_compile_py_converter(step):
     if isinstance(x, buildbot.process.properties.WithProperties) and\
        x.fmtstring == '%s' and\
        x.args == ('clobber:+--clobber',):
-      rc.steps.append('if api.properties.get("clobber"):')
+      rc.steps.append('if "clobber" in api.properties:')
       rc.steps.append(['args.append("--clobber")'])
   rc.steps.append(fmtstr % ('python_slave', compile_command))
   return rc
