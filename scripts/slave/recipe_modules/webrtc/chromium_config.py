@@ -29,24 +29,6 @@ def webrtc_gcc(c):
 def webrtc_clang(c):
   _compiler_defaults(c)
 
-@CONFIG_CTX(includes=['chromium', 'dcheck', 'static_library'])
-def webrtc_ios(c):
-  if c.HOST_PLATFORM != 'mac':
-    raise BadConf('Only "mac" host platform is supported for iOS (got: "%s")' %
-                  c.HOST_PLATFORM)  # pragma: no cover
-  if c.TARGET_PLATFORM != 'ios':
-    raise BadConf('Only "ios" target platform is supported (got: "%s")' %
-                  c.TARGET_PLATFORM)  # pragma: no cover
-  if c.TARGET_ARCH == 'arm':
-    c.build_config_fs = c.BUILD_CONFIG + '-iphoneos'
-  if c.TARGET_ARCH == 'intel':
-    c.build_config_fs = c.BUILD_CONFIG + '-iphonesimulator'
-
-  gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['chromium_ios_signing'] = 0
-  gyp_defs['OS'] = c.TARGET_PLATFORM
-  _compiler_defaults(c)
-
 @CONFIG_CTX(includes=['gn'])
 def webrtc_gn(c):
   c.compile_py.default_targets = ['all']
