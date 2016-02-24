@@ -249,6 +249,38 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_SERIAL": "0713a1b8005a0076",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "true",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "ART_USE_READ_BARRIER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "arm_krait",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test gtest: crashes"
+  },
+  {
+    "cmd": [
       "adb",
       "logcat",
       "-c"
@@ -353,6 +385,38 @@
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test optimizing: adb logcat"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_SERIAL": "0713a1b8005a0076",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "true",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "ART_USE_READ_BARRIER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "arm_krait",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test optimizing: crashes"
   },
   {
     "cmd": [
@@ -462,6 +526,38 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_SERIAL": "0713a1b8005a0076",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "true",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "ART_USE_READ_BARRIER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "arm_krait",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test interpreter: crashes"
+  },
+  {
+    "cmd": [
       "adb",
       "logcat",
       "-c"
@@ -565,6 +661,38 @@
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jit: adb logcat"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_SERIAL": "0713a1b8005a0076",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "true",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "ART_USE_READ_BARRIER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "arm_krait",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test jit: crashes"
   },
   {
     "cmd": [
@@ -674,6 +802,38 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_SERIAL": "0713a1b8005a0076",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "true",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "ART_USE_READ_BARRIER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "arm_krait",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test libcore: crashes"
+  },
+  {
+    "cmd": [
       "adb",
       "logcat",
       "-c"
@@ -777,6 +937,38 @@
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jdwp: adb logcat"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_SERIAL": "0713a1b8005a0076",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "true",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "ART_USE_READ_BARRIER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "arm_krait",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test jdwp: crashes"
   },
   {
     "cmd": [

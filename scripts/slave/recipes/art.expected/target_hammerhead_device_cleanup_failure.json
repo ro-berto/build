@@ -233,6 +233,38 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_SERIAL": "073038cf006ae3bb",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_TEST_RUN_TEST_DEBUG": "false",
+      "ART_TEST_RUN_TEST_NDEBUG": "true",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "arm_krait",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test gtest: crashes"
+  },
+  {
+    "cmd": [
       "adb",
       "logcat",
       "-c"
@@ -337,6 +369,38 @@
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test optimizing: adb logcat"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_SERIAL": "073038cf006ae3bb",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_TEST_RUN_TEST_DEBUG": "false",
+      "ART_TEST_RUN_TEST_NDEBUG": "true",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "arm_krait",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test optimizing: crashes"
   },
   {
     "cmd": [
@@ -446,6 +510,38 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_SERIAL": "073038cf006ae3bb",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_TEST_RUN_TEST_DEBUG": "false",
+      "ART_TEST_RUN_TEST_NDEBUG": "true",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "arm_krait",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test interpreter: crashes"
+  },
+  {
+    "cmd": [
       "adb",
       "logcat",
       "-c"
@@ -549,6 +645,38 @@
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jit: adb logcat"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_SERIAL": "073038cf006ae3bb",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_TEST_RUN_TEST_DEBUG": "false",
+      "ART_TEST_RUN_TEST_NDEBUG": "true",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "arm_krait",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test jit: crashes"
   },
   {
     "cmd": [
@@ -657,6 +785,38 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_SERIAL": "073038cf006ae3bb",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_TEST_RUN_TEST_DEBUG": "false",
+      "ART_TEST_RUN_TEST_NDEBUG": "true",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "arm_krait",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test libcore: crashes"
+  },
+  {
+    "cmd": [
       "adb",
       "logcat",
       "-c"
@@ -762,6 +922,38 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/art/tools/symbolize-buildbot-crashes.sh"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_BUILD_TOP": "[SLAVE_BUILD]",
+      "ANDROID_PRODUCT_OUT": "[SLAVE_BUILD]/out/target/product/arm_krait",
+      "ANDROID_SERIAL": "073038cf006ae3bb",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_INTERPRETER": "true",
+      "ART_TEST_JIT": "true",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_OPTIMIZING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_TEST_RUN_TEST_DEBUG": "false",
+      "ART_TEST_RUN_TEST_NDEBUG": "true",
+      "ART_USE_OPTIMIZING_COMPILER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[SLAVE_BUILD]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "LEGACY_USE_JAVA7": "true",
+      "PATH": "[SLAVE_BUILD]/out/host/linux-x86/bin:%(PATH)s",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "arm_krait",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test jdwp: crashes"
+  },
+  {
+    "cmd": [
       "adb",
       "logcat",
       "-c"
@@ -796,7 +988,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 out of 22 aggregated steps failed. Failures: Step('device cleanup') failed with return_code 1",
+    "reason": "1 out of 28 aggregated steps failed. Failures: Step('device cleanup') failed with return_code 1",
     "status_code": 1
   }
 ]

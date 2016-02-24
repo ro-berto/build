@@ -209,6 +209,9 @@ def setup_target(api,
       api.step(test_name + ': adb logcat',
                ['adb', 'logcat', '-d', '-v', 'threadtime'],
                env=env)
+      api.step(test_name + ': crashes',
+               [art_tools.join('symbolize-buildbot-crashes.sh')],
+               env=env)
       api.step(test_name + ': adb clear log', ['adb', 'logcat', '-c'], env=env)
 
     test_env = env.copy()
