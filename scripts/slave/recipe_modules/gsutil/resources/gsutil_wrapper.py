@@ -16,10 +16,9 @@ import logging
 import argparse
 import os
 import shutil
+import subprocess
 import sys
 
-from common import find_depot_tools
-import subprocess2
 
 def main(argv):
   parser = argparse.ArgumentParser()
@@ -32,7 +31,6 @@ def main(argv):
   parser.add_argument('--hard-retries',
                       metavar='N', nargs=1, default=2, type=int,
                       help='number of times to retry, with deleting trackers ')
-  parser.add_argument('--timeout', default=None, type=int)
   args = parser.parse_args()
 
   # The -- argument for the wrapped gsutil.py is escaped as ---- as python
@@ -44,12 +42,10 @@ def main(argv):
 
   for hard in range(args.hard_retries):
     for soft in range(args.soft_retries):
-      retcode = subprocess2.call(cmd, timeout=args.timeout)
+      retcode = subprocess.call(cmd)
 
       if retcode == 0: return 0
-      if retcode == subprocess2.TIMED_OUT:
-        logging.error('Command %s timed out, aborting upload.' % ' '.join(cmd))
-        return retcode
+
       logging.warning('Command %s failed with retcode %d, try %d.%d.' % (
           ' '.join(cmd), retcode, hard+1, soft+1))
 
