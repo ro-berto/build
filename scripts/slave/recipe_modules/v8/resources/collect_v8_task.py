@@ -20,6 +20,7 @@ MISSING_SHARDS_MSG = r"""Missing results from the following shard(s): %s
 It can happen in following cases:
   * Test failed to start (missing *.dll/*.so dependency for example)
   * Test crashed or hung
+  * Task expired because there are not enough bots available and are all used
   * Swarming service experiences problems
 
 Please examine logs to figure out what happened.
