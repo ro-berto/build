@@ -92,7 +92,8 @@ F('win_asan_rel_cov', win_out().ChromiumASANFactory(
        'cf_archive_name': 'asan-coverage',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': asan_win_gyp + ' sanitizer_coverage=3'}}))
+       'gclient_env': {
+           'GYP_DEFINES': asan_win_gyp + ' sanitizer_coverage=edge'}}))
 
 
 # ASan/Win supports neither the component build nor NaCL at the moment.
@@ -183,7 +184,7 @@ F('linux64_full', linux().ChromiumFactory(
         'gs_acl': 'public-read',
         'gclient_env': {'GYP_DEFINES':'target_arch=x64'}}))
 
-asan_rel_gyp = ('asan=1 lsan=1 sanitizer_coverage=3 '
+asan_rel_gyp = ('asan=1 lsan=1 sanitizer_coverage=edge '
                 'v8_enable_verify_heap=1 enable_ipc_fuzzer=1 ')
 
 B('ASAN Release', 'linux_asan_rel', 'compile', 'chromium_lkgr')
@@ -212,7 +213,7 @@ F('linux_asan_rel_media', linux().ChromiumASANFactory(
        'gclient_env': {'GYP_DEFINES': asan_rel_gyp +
                        linux_media_gyp}}))
 
-asan_rel_sym_gyp = ('asan=1 lsan=1 sanitizer_coverage=3 '
+asan_rel_sym_gyp = ('asan=1 lsan=1 sanitizer_coverage=edge '
                     'v8_enable_verify_heap=1 enable_ipc_fuzzer=1 '
                     'release_extra_cflags="-O1 -fno-inline-functions '
                     '-fno-inline" ')
@@ -228,7 +229,7 @@ F('linux_asan_rel_sym', linux().ChromiumASANFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_rel_sym_gyp}}))
 
-asan_debug_gyp = ('asan=1 lsan=1 sanitizer_coverage=3 enable_ipc_fuzzer=1 ')
+asan_debug_gyp = ('asan=1 lsan=1 sanitizer_coverage=edge enable_ipc_fuzzer=1 ')
 
 B('ASAN Debug', 'linux_asan_dbg', 'compile', 'chromium_lkgr')
 F('linux_asan_dbg', linux().ChromiumASANFactory(
@@ -258,7 +259,7 @@ F('linux_chromiumos_asan_rel', linux().ChromiumASANFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_chromiumos_rel_gyp}}))
 
-asan_ia32_v8_arm = ('asan=1 sanitizer_coverage=3 disable_nacl=1 '
+asan_ia32_v8_arm = ('asan=1 sanitizer_coverage=edge disable_nacl=1 '
                     'v8_target_arch=arm host_arch=x86_64 target_arch=ia32 '
                     'v8_enable_verify_heap=1 enable_ipc_fuzzer=1 ')
 
@@ -357,7 +358,7 @@ F('linux_tsan_dbg', linux().ChromiumFactory(
 
 # The build process for MSan is described at
 # http://dev.chromium.org/developers/testing/memorysanitizer
-msan_gyp = ('msan=1 sanitizer_coverage=3 '
+msan_gyp = ('msan=1 sanitizer_coverage=edge '
             'use_prebuilt_instrumented_libraries=1 ')
 
 B('MSAN Release (no origins)', 'linux_msan_rel_no_origins', 'compile',
@@ -408,7 +409,7 @@ F('linux_ubsan_rel', linux().ChromiumFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': ubsan_gyp}}))
 
-ubsan_vptr_gyp = ('ubsan_vptr=1 sanitizer_coverage=3 ')
+ubsan_vptr_gyp = ('ubsan_vptr=1 sanitizer_coverage=edge ')
 
 B('UBSan vptr Release', 'linux_ubsan_vptr_rel', 'compile', 'chromium_lkgr')
 F('linux_ubsan_vptr_rel', linux().ChromiumFactory(
