@@ -23,8 +23,6 @@ def Update(config, active_master, c):
   ])
   specs = [
     {'name': 'Mac Builder'},
-    {'name': 'Mac10.6 Tests'},
-    {'name': 'Mac10.8 Tests'},
     {'name': 'Mac10.9 Tests'},
     {'name': 'Mac10.10 Tests'},
     {'name': 'Mac10.11 Tests'},

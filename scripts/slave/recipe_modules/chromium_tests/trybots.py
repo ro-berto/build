@@ -473,11 +473,6 @@ TRYBOTS = freeze({
           },
         ],
       },
-      'mac_chromium_10.6_rel_ng': simple_bot({
-        'mastername': 'chromium.mac',
-        'buildername': 'Mac Builder',
-        'tester': 'Mac10.6 Tests',
-      }),
       'mac_chromium_10.10_rel_ng': simple_bot({
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder',

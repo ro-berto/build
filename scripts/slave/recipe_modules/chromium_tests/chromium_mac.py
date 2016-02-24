@@ -35,52 +35,6 @@ SPEC = {
       'enable_swarming': True,
       'use_isolate': True,
     },
-    'Mac10.6 Tests': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
-      'bot_type': 'tester',
-      'parent_buildername': 'Mac Builder',
-      'testing': {
-        'platform': 'mac',
-      },
-      'enable_swarming': True,
-      'swarming_dimensions': {
-        'os': 'Mac-10.6',
-      },
-    },
-    'Mac10.8 Tests': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
-      'bot_type': 'tester',
-      'parent_buildername': 'Mac Builder',
-      'testing': {
-        'platform': 'mac',
-      },
-      'enable_swarming': True,
-      'swarming_dimensions': {
-        'os': 'Mac-10.8',
-      },
-    },
     'Mac10.9 Tests': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
