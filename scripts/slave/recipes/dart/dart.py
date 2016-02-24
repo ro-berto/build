@@ -31,22 +31,22 @@ def RunSteps(api):
              args=build_args,
              cwd=api.path['checkout'])
 
-  extra_test_args = api.properties.get('test_args', [])
-  test_args = ['-m%s' % mode,
-               '--arch=%s' % target_arch,
-               '--progress=line',
-               '--report',
-               '--time',
-               '--failure-summary',
-               '--write-debug-log',
-               '--write-test-outcome-log',
-               '--copy-coredumps']
-  test_args.extend(extra_test_args)
-  api.python('test vm',
-             api.path['checkout'].join('tools', 'test.py'),
-             args=test_args,
-             cwd=api.path['checkout'],
-             ok_ret='any')
+  with api.step.defer_results():
+    extra_test_args = api.properties.get('test_args', [])
+    test_args = ['-m%s' % mode,
+                 '--arch=%s' % target_arch,
+                 '--progress=line',
+                 '--report',
+                 '--time',
+                 '--failure-summary',
+                 '--write-debug-log',
+                 '--write-test-outcome-log',
+                 '--copy-coredumps']
+    test_args.extend(extra_test_args)
+    api.python('test vm',
+               api.path['checkout'].join('tools', 'test.py'),
+               args=test_args,
+               cwd=api.path['checkout'])
 
 def GenTests(api):
    yield (

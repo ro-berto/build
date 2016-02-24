@@ -104,33 +104,32 @@ def RunSteps(api):
              cwd=api.path['checkout'],
              env=b['env'])
 
-  test_args = ['-m%s' % b['mode'],
-               '--arch=%s' % b['target_arch'],
-               '--progress=line',
-               '--report',
-               '--time',
-               '--failure-summary',
-               '--write-debug-log',
-               '--write-test-outcome-log',
-               '--copy-coredumps']
-  test_args.extend(b.get('test_args', []))
-  api.python('vm tests',
-             api.path['checkout'].join('tools', 'test.py'),
-             args=test_args,
-             cwd=api.path['checkout'],
-             ok_ret='any')
-  test_args.append('--checked')
-  api.python('checked vm tests',
-             api.path['checkout'].join('tools', 'test.py'),
-             args=test_args,
-             cwd=api.path['checkout'],
-             ok_ret='any')
-  # TODO(whesse): Add archive coredumps step from dart_factory.py.
+  with api.step.defer_results():
+    test_args = ['-m%s' % b['mode'],
+                 '--arch=%s' % b['target_arch'],
+                 '--progress=line',
+                 '--report',
+                 '--time',
+                 '--failure-summary',
+                 '--write-debug-log',
+                 '--write-test-outcome-log',
+                 '--copy-coredumps']
+    test_args.extend(b.get('test_args', []))
+    api.python('vm tests',
+               api.path['checkout'].join('tools', 'test.py'),
+               args=test_args,
+               cwd=api.path['checkout'])
+    test_args.append('--checked')
+    api.python('checked vm tests',
+               api.path['checkout'].join('tools', 'test.py'),
+               args=test_args,
+               cwd=api.path['checkout'])
+    # TODO(whesse): Add archive coredumps step from dart_factory.py.
 
-  api.python('taskkill after testing',
-             api.path['checkout'].join('tools', 'task_kill.py'),
-             args=['--kill_browsers=True'],
-             cwd=api.path['checkout'])
+    api.python('taskkill after testing',
+               api.path['checkout'].join('tools', 'task_kill.py'),
+               args=['--kill_browsers=True'],
+               cwd=api.path['checkout'])
 
 def GenTests(api):
    yield (
