@@ -12,19 +12,19 @@ class Gitiles(recipe_api.RecipeApi):
 
   def _fetch(self, url, step_name, fmt, attempts=None, add_json_log=True,
              log_limit=None, log_start=None, **kwargs):
-    """Fetches information from Gitiles.
+    """Fetch information from Gitiles.
 
     Arguments:
-      log_limit: for log URLs, limit number of results. None implies 1 page,
+      log_limit: for log URls, limit number of results. None implies 1 page,
         as returned by Gitiles.
       log_start: for log URLs, the start cursor for paging.
       add_json_log: if True, will spill out json into log.
     """
     assert fmt in ('json', 'text')
     args = [
-        '--json-file', self.m.json.output(add_json_log=add_json_log),
-        '--url', url,
-        '--format', fmt,
+      '--json-file', self.m.json.output(add_json_log=add_json_log),
+      '--url', url,
+      '--format', fmt,
     ]
     if attempts:
       args.extend(['--attempts', attempts])
@@ -39,10 +39,10 @@ class Gitiles(recipe_api.RecipeApi):
   def refs(self, url, step_name='refs', attempts=None):
     """Returns a list of refs in the remote repository."""
     step_result = self._fetch(
-        self.m.url.join(url, '+refs'),
-        step_name,
-        fmt='json',
-        attempts=attempts)
+      self.m.url.join(url, '+refs'),
+      step_name,
+      fmt='json',
+      attempts=attempts)
 
     refs = sorted(str(ref) for ref in step_result.json.output)
     step_result.presentation.logs['refs'] = refs
@@ -53,15 +53,15 @@ class Gitiles(recipe_api.RecipeApi):
     """Returns the most recent commits under the given ref with properties.
 
     Args:
-      url (str): URL of the remote repository.
-      ref (str): Name of the desired ref (see Gitiles.refs).
-      limit (int): Number of commits to limit the fetching to.
-        Gitiles does not return all commits in one call; instead paging is
-        used. 0 implies to return whatever first gerrit responds with.
-        Otherwise, paging will be used to fetch at least this many
-        commits, but all fetched commits will be returned.
-      cursor (str or None): The paging cursor used to fetch the next page.
-      step_name (str): Custom name for this step (optional).
+      url: URL of the remote repository.
+      ref: Name of the desired ref (see Gitiles.refs).
+      limit: Number of commits to limit the fetching to. Default is 0.
+             Gitiles do not return all commits in 1 call, instead paging is
+             used.  0 implies to return whatever first gerrit responds with.
+             Otherwise, paging will be used to fetch at least this many commits,
+             but all fetched commits will be returned.
+      cursor: The paging cursor from previous calls for fetching more.
+      step_name: Custom name for this step. Will use the default if unspecified.
 
     Returns:
       A tuple of (commits, cursor).
@@ -90,8 +90,7 @@ class Gitiles(recipe_api.RecipeApi):
     commits = step_result.json.output['log']
     cursor = step_result.json.output.get('next')
 
-    step_result.presentation.step_text = (
-        '<br />%d commits fetched' % len(commits))
+    step_result.presentation.step_text = '<br />%d commits fetched' % len(commits)
     return commits, cursor
 
   def commit_log(self, url, commit, step_name=None, attempts=None):
@@ -101,7 +100,6 @@ class Gitiles(recipe_api.RecipeApi):
       url (str): The base repository URL.
       commit (str): The commit hash.
       step_name (str): If not None, override the step name.
-      attempts (int): Number of times to try the request before failing.
     """
     step_name = step_name or 'commit log: %s' % commit
 
@@ -115,11 +113,9 @@ class Gitiles(recipe_api.RecipeApi):
     """Downloads raw file content from a Gitiles repository.
 
     Args:
-      repository_url (str): Full URL to the repository.
-      branch (str): Branch of the repository.
-      file_path (str): Relative path to the file from the repository root.
-      step_name (str): Custom name for this step (optional).
-      attempts (int): Number of times to try the request before failing.
+      repository_url: Full URL to the repository.
+      file_path: Relative path to the file from the repository root.
+      step_name: (str) If not None, override the step name.
 
     Returns:
       Raw file content.

@@ -3,8 +3,8 @@
 # found in the LICENSE file.
 
 DEPS = [
-    'gitiles',
-    'recipe_engine/properties',
+  'gitiles',
+  'recipe_engine/properties',
 ]
 
 
@@ -22,40 +22,40 @@ def RunSteps(api):
 
 def GenTests(api):
   yield (
-      api.test('basic')
-      + api.properties(
-          commit_log_hash=api.gitiles.make_hash('commit'),
-      )
-      + api.step_data('refs', api.gitiles.make_refs_test_data(
-          'HEAD',
-          'refs/heads/A',
-          'refs/tags/B',
-      ))
-      + api.step_data(
-          'gitiles log: HEAD',
-          api.gitiles.make_log_test_data('HEAD', cursor='deadbeaf'),
-      )
-      + api.step_data(
-          'gitiles log: HEAD from deadbeaf',
-          api.gitiles.make_log_test_data('HEAD'),
-      )
-      + api.step_data(
-          'gitiles log: refs/heads/A',
-          api.gitiles.make_log_test_data('A'),
-      )
-      + api.step_data(
-          'gitiles log: refs/tags/B',
-          api.gitiles.make_log_test_data('B')
-      )
-      + api.step_data(
-          'commit log: %s' % (api.gitiles.make_hash('commit')),
-          api.gitiles.make_commit_test_data('commit', 'C', new_files=[
-              'foo/bar',
-              'baz/qux',
-          ])
-      )
-      + api.step_data(
-          'fetch master:OWNERS',
-          api.gitiles.make_encoded_file('foobar')
-      )
+    api.test('basic')
+    + api.properties(
+      commit_log_hash=api.gitiles.make_hash('commit'),
+    )
+    + api.step_data('refs', api.gitiles.make_refs_test_data(
+      'HEAD',
+      'refs/heads/A',
+      'refs/tags/B',
+    ))
+    + api.step_data(
+      'gitiles log: HEAD',
+      api.gitiles.make_log_test_data('HEAD', cursor='deadbeaf'),
+    )
+    + api.step_data(
+      'gitiles log: HEAD from deadbeaf',
+      api.gitiles.make_log_test_data('HEAD'),
+    )
+    + api.step_data(
+      'gitiles log: refs/heads/A',
+      api.gitiles.make_log_test_data('A'),
+    )
+    + api.step_data(
+      'gitiles log: refs/tags/B',
+      api.gitiles.make_log_test_data('B')
+    )
+    + api.step_data(
+      'commit log: %s' % (api.gitiles.make_hash('commit')),
+      api.gitiles.make_commit_test_data('commit', 'C', new_files=[
+          'foo/bar',
+          'baz/qux',
+      ])
+    )
+    + api.step_data(
+      'fetch master:OWNERS',
+      api.gitiles.make_encoded_file('foobar')
+    )
   )
