@@ -96,7 +96,7 @@ def GenTests(api):
   # reflect reality (cosmetical problem only).
   for repo_name in ['chromium', 'v8', 'nacl', 'webports', 'gyp',
                     'build', 'build_internal', 'build_internal_scripts_slave',
-                    'slave_deps', 'internal_deps',
+                    'master_deps', 'slave_deps', 'internal_deps',
                     'depot_tools', 'skia', 'chrome_golo', 'webrtc', 'catapult']:
     yield (
       api.test(repo_name) +
