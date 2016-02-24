@@ -322,7 +322,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     return {
       'linux': 'Ubuntu-12.04',
-      'mac': 'Mac-10.8',
+      'mac': 'Mac-10.9',
       'win': 'Windows-7-SP1',
     }[platform]
 
