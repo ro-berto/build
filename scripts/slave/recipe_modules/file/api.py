@@ -137,6 +137,8 @@ class FileApi(recipe_api.RecipeApi):
     )
     self.m.path.mock_add_paths(path)
 
+  # NOTE: this will not work in client repositories; it depends on path
+  # assumptions to import common. See https://crbug.com/584783
   def rmtree(self, name, path, **kwargs):
     """Wrapper for chromium_utils.RemoveDirectory."""
     self.m.path.assert_absolute(path)
@@ -144,7 +146,8 @@ class FileApi(recipe_api.RecipeApi):
       'rmtree ' + name,
       """
       import os, sys
-      from common import chromium_utils
+      from common import chromium_utils # Error? See https://crbug.com/584783.
+
 
       if os.path.exists(sys.argv[1]):
         chromium_utils.RemoveDirectory(sys.argv[1])
@@ -153,6 +156,8 @@ class FileApi(recipe_api.RecipeApi):
       **kwargs
     )
 
+  # NOTE: this will not work in client repositories; it depends on path
+  # assumptions to import common. See https://crbug.com/584783
   def rmcontents(self, name, path, **kwargs):
     """
     Similar to rmtree, but removes only contents not the directory.
@@ -167,7 +172,7 @@ class FileApi(recipe_api.RecipeApi):
       'rmcontents ' + name,
       """
       import os, sys
-      from common import chromium_utils
+      from common import chromium_utils # Error? See https://crbug.com/584783.
 
       path = sys.argv[1]
       if os.path.exists(path):
@@ -181,6 +186,8 @@ class FileApi(recipe_api.RecipeApi):
       **kwargs
     )
 
+  # NOTE: this will not work in client repositories; it depends on path
+  # assumptions to import common. See https://crbug.com/584783
   def rmwildcard(self, pattern, path, **kwargs):
     """
     Removes all files in the subtree of path matching the glob pattern.
@@ -190,7 +197,7 @@ class FileApi(recipe_api.RecipeApi):
       'rmwildcard %s in %s' % (pattern, path),
       """
       import sys
-      from common import chromium_utils
+      from common import chromium_utils # Error? See https://crbug.com/584783.
 
       chromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])
       """,

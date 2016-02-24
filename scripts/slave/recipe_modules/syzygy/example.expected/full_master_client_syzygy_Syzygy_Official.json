@@ -110,7 +110,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nfrom common import chromium_utils\n\nchromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])\n",
+      "\nimport sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\nchromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])\n",
       "metrics.csv",
       "[SLAVE_BUILD]\\src\\out\\Release"
     ],
@@ -119,7 +119,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@chromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])@@@",
       "@@@STEP_LOG_END@python.inline@@@"
