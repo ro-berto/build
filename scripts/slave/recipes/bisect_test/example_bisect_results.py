@@ -95,7 +95,6 @@ def add_revision_mapping(api, test, pos, sha):
   step_name = 'Resolving reference range.resolving hash ' + sha
   pos = 'refs/heads/master@{#%s}' % pos
   stdout = api.raw_io.output(pos)
-  test += api.step_data(step_name, stdout=stdout)
   return test
 
 

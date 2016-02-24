@@ -121,8 +121,29 @@ class Bisector(object):
 
     # Initial revision range
     with api.m.step.nest('Resolving reference range'):
+
+      if len(bisect_config['bad_revision']) == 40:  # pragma: no cover
+        # Must be hex.
+        int (bisect_config['bad_revision'], 16)
+        bad_hash = bisect_config['bad_revision']
+      else:
+        # Must be decimal.
+        int(bisect_config['bad_revision'], 10)
+        bad_hash = api.m.commit_position.chromium_hash_from_commit_position(
+            bisect_config['bad_revision'])
+
+      if len(bisect_config['good_revision']) == 40:  # pragma: no cover
+        # Must be hex.
+        int (bisect_config['good_revision'], 16)
+        good_hash = bisect_config['good_revision']
+      else:
+        # Must be decimal.
+        int(bisect_config['good_revision'], 10)
+        good_hash = api.m.commit_position.chromium_hash_from_commit_position(
+            bisect_config['good_revision'])
+
       self.revisions = []
-      self.bad_rev = revision_class(bisect_config['bad_revision'], self)
+      self.bad_rev = revision_class(self, bad_hash)
       self.bad_rev.bad = True
       self.bad_rev.read_deps(self.get_perf_tester_name())
       api.m.step.active_result.presentation.logs['Debug Bad Revision DEPS'] = [
@@ -130,7 +151,7 @@ class Bisector(object):
           self.bad_rev.deps.iteritems()]
       self.bad_rev.deps = {}
       self.fkbr = self.bad_rev
-      self.good_rev = revision_class(bisect_config['good_revision'], self)
+      self.good_rev = revision_class(self, good_hash)
       self.good_rev.good = True
       self.good_rev.read_deps(self.get_perf_tester_name())
       api.m.step.active_result.presentation.logs['Debug Good Revision DEPS'] = [
@@ -329,8 +350,8 @@ class Bisector(object):
     with self.api.m.step.nest('Expanding revision range'):
       rev_list = self._get_chromium_rev_range(
           self.good_rev.commit_hash, self.bad_rev.commit_hash)
-      intervening_revs = [self.revision_class(str(x), self, cp=y)
-                          for x, y in rev_list]
+      intervening_revs = [self.revision_class(self, commit_hash)
+                          for commit_hash, _ in rev_list]
       self.revisions = [self.good_rev] + intervening_revs + [self.bad_rev]
       self._update_revision_list_indexes()
 
@@ -388,7 +409,7 @@ class Bisector(object):
             return True
     except RuntimeError:  # pragma: no cover
       warning_text = ('Could not expand dependency revisions for ' +
-                      revision_to_expand.revision_string)
+                      revision_to_expand.commit_hash)
       self.surface_result('BAD_REV')
       if warning_text not in self.warnings:
         self.warnings.append(warning_text)
@@ -417,11 +438,10 @@ class Bisector(object):
     results = []
     for git_hash, _ in step_result.stdout:
       revision_object = self.revision_class(
-          None,
           self,
-          base_revision=base_revision,
-          deps_revision=git_hash,
-          dependency_depot_name=depot_name)
+          git_hash,
+          depot_name,
+          base_revision)
       results.append(revision_object)
     return results
 
@@ -547,7 +567,7 @@ class Bisector(object):
   def _revision_value_table(self):
     """Returns a string table showing revisions and their values."""
     header = [['Revision', 'Values']]
-    rows = [[str(r.commit_pos), str(r.values)] for r in self.revisions]
+    rows = [[r.revision_string(), str(r.values)] for r in self.revisions]
     return self._pretty_table(header + rows)
 
   def _pretty_table(self, data):
@@ -601,7 +621,7 @@ class Bisector(object):
     default_revision = candidate_range[len(candidate_range) / 2]
 
     with self.api.m.step.nest(
-        'Wiggling revision ' + str(default_revision.revision_string)):
+        'Wiggling revision ' + default_revision.revision_string()):
       # We'll search up to 25% of the range (in either direction) to try and
       # find a nearby commit that's already been built.
       max_wiggle = int(len(candidate_range) * DEFAULT_SEARCH_RANGE_PERCENTAGE)
@@ -685,7 +705,7 @@ class Bisector(object):
     args_list = [api.m.gsutil.get_gsutil_path()] if gs_jobs else []
 
     try:
-      step_name = 'Waiting for revision ' + revision_list[0].revision_string
+      step_name = 'Waiting for revision ' + revision_list[0].commit_hash
       if len(revision_list) > 1:
         step_name += ' and %d other revision(s).' % (len(revision_list) - 1)
       api.m.python(
@@ -937,9 +957,7 @@ class Bisector(object):
     api = self.api
     if not culprit:
       return None
-    culprit_cl_hash = culprit.deps_revision or culprit.commit_hash
-    culprit_info = api.query_revision_info(
-        culprit_cl_hash, culprit.depot_name)
+    culprit_info = api.query_revision_info(self.culprit)
 
     return {
         'subject': culprit_info['subject'],
@@ -948,7 +966,7 @@ class Bisector(object):
         'cl_date': culprit_info['date'],
         'commit_info': culprit_info['body'],
         'revisions_links': [],
-        'cl': culprit.deps_revision or culprit.commit_hash
+        'cl': culprit.commit_hash
     }
 
   def _revision_data(self):
@@ -957,8 +975,8 @@ class Bisector(object):
       if r.tested or r.aborted:
         revision_rows.append({
             'depot_name': r.depot_name,
-            'deps_revision': r.deps_revision,
-            'commit_pos': r.commit_pos,
+            'commit_hash': r.commit_hash,
+            'revision_string': r.revision_string(),
             'mean_value': r.mean_value,
             'std_dev': r.std_dev,
             'values': r.values,

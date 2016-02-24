@@ -13,7 +13,7 @@ import os
 from recipe_engine import recipe_api
 from . import bisector
 from . import depot_config
-from . import perf_revision_state
+from . import revision_state
 from . import local_bisect
 
 BISECT_CONFIG_FILE = 'tools/auto_bisect/bisect.cfg'
@@ -64,8 +64,8 @@ class AutoBisectApi(recipe_api.RecipeApi):
       An instance of bisector.Bisector.
     """
     self.override_poll_interval = bisect_config_dict.get('poll_sleep')
-    revision_class = self._get_revision_class()
-    return bisector.Bisector(self, bisect_config_dict, revision_class,
+    return bisector.Bisector(self, bisect_config_dict,
+                             revision_state.RevisionState,
                              init_revisions=not dummy_mode)
 
   def set_platform_gs_prefix(self, gs_url):
@@ -73,7 +73,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
     self.buildurl_gs_prefix = gs_url  # pragma: no cover
 
   def set_builder_bot(self, builder_bot):
-    """Sets builder name for building binaries.""" 
+    """Sets builder name for building binaries."""
     self.builder_bot = builder_bot  # pragma: no cover
 
   def set_internal(self):
@@ -84,10 +84,6 @@ class AutoBisectApi(recipe_api.RecipeApi):
     """Adds additional depot info to the global depot variables."""
     depot_config.add_addition_depot_into(depot_info)  # pragma: no cover
 
-  def _get_revision_class(self):
-    """Gets the particular subclass of Revision."""
-    return perf_revision_state.PerfRevisionState
-
   def gsutil_file_exists(self, path):
     """Returns True if a file exists at the given GS path."""
     try:
@@ -96,7 +92,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
       return False
     return True
 
-  def query_revision_info(self, revision, depot_name='chromium'):
+  def query_revision_info(self, revision):
     """Gathers information on a particular revision.
 
     Args:
@@ -109,7 +105,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
     result = self.m.python(
         'Reading culprit cl information.',
         self.resource('fetch_revision_info.py'),
-        [revision, depot_name],
+        [revision.commit_hash, revision.depot_name],
         stdout=self.m.json.output())
     return result.stdout
 

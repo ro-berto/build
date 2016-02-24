@@ -32,8 +32,6 @@ def GenTests(api):
   basic_test = api.test('basic')
   broken_bad_rev_test = api.test('broken_bad_revision_test')
   broken_good_rev_test = api.test('broken_good_revision_test')
-  broken_cp_test = api.test('broken_cp_test')
-  broken_hash_test = api.test('broken_hash_test')
   return_code_test = api.test('basic_return_code_test')
   basic_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
@@ -42,12 +40,6 @@ def GenTests(api):
       mastername='tryserver.chromium.perf',
       buildername='linux_perf_bisector')
   broken_good_rev_test += api.properties.generic(
-      mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisector')
-  broken_cp_test += api.properties.generic(
-      mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisector')
-  broken_hash_test += api.properties.generic(
       mastername='tryserver.chromium.perf',
       buildername='linux_perf_bisector')
   return_code_test += api.properties.generic(
@@ -59,7 +51,7 @@ def GenTests(api):
       'command': ('tools/perf/run_benchmark -v '
                   '--browser=release page_cycler.intl_ar_fa_he'),
       'good_revision': '306475',
-      'bad_revision': 'src@a6298e4afedbf2cd461755ea6f45b0ad64222222',
+      'bad_revision': '306478',
       'metric': 'warm_times/page_load_time',
       'repeat_count': '2',
       'max_time_minutes': '5',
@@ -77,8 +69,6 @@ def GenTests(api):
   basic_test += api.properties(bisect_config=bisect_config)
   broken_bad_rev_test += api.properties(bisect_config=bisect_config)
   broken_good_rev_test += api.properties(bisect_config=bisect_config)
-  broken_cp_test += api.properties(bisect_config=bisect_config)
-  broken_hash_test += api.properties(bisect_config=bisect_config)
 
   # This data represents fake results for a basic scenario, the items in it are
   # passed to the `_gen_step_data_for_revision` that patches the necessary steps
@@ -155,8 +145,6 @@ def GenTests(api):
 
   broken_test_data = test_data()
   broken_test_data[0].pop('cl_info')
-  yield broken_hash_test
-  yield broken_cp_test
 
   doctored_data = test_data()
   doctored_data[0]['test_results']['results']['errors'] = ['Dummy error.']
@@ -261,14 +249,13 @@ def _get_revision_range_step_data(api, range_data):
   range_data.sort(key=lambda r: r['commit_pos'])
   min_rev = range_data[0]['hash']
   max_rev = range_data[-1]['hash']
-  output = [[r['hash'], r['commit_pos']] for r in range_data[1:-1]]
+  output = [[r['hash'], 'ignored'] for r in range_data[1:-1]]
   step_name = ('Expanding revision range.for revisions %s:%s' %
                (min_rev, max_rev))
   return api.step_data(step_name, stdout=api.json.output(output))
 
 
-def _get_step_data_for_revision(api, revision_data, broken_cp=None,
-                                broken_hash=None, skip_results=False):
+def _get_step_data_for_revision(api, revision_data, skip_results=False):
   """Generator that produces step patches for fake results."""
   commit_pos = revision_data['commit_pos']
   commit_hash = revision_data['hash']
@@ -277,24 +264,19 @@ def _get_step_data_for_revision(api, revision_data, broken_cp=None,
   if 'refrange' in revision_data:
     parent_step = 'Resolving reference range.'
     step_name = parent_step + 'resolving commit_pos ' + commit_pos
-    if broken_cp is None:
-      yield api.step_data(step_name, stdout=api.raw_io.output('hash:' +
+    yield api.step_data(step_name, stdout=api.raw_io.output('hash:' +
                                                             commit_hash))
-
-    step_name = parent_step + 'resolving hash ' + commit_hash
-    if broken_hash is None:
-      commit_pos_str = 'refs/heads/master@{#%s}' % commit_pos
-      yield api.step_data(step_name, stdout=api.raw_io.output(commit_pos_str))
 
   if not skip_results:
     step_name = 'gsutil Get test results for build ' + commit_hash
     if 'refrange' in revision_data:
       parent_step = 'Gathering reference values.'
     else:
-      parent_step = 'Working on revision %s.' % commit_hash
+      parent_step = 'Working on revision %s.' % ('chromium@' + commit_hash[:10])
       yield _get_post_bisect_step_data(api, parent_step)
-    yield api.step_data(parent_step + step_name,
-                        stdout=api.raw_io.output(json.dumps(test_results)))
+    step_name = parent_step + step_name
+    yield api.step_data(step_name, stdout=api.raw_io.output(json.dumps(
+        test_results)))
 
     if 'cl_info' in revision_data:
       step_name = 'Reading culprit cl information.'

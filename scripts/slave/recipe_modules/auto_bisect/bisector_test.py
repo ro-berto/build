@@ -21,15 +21,13 @@ from auto_bisect.bisector import Bisector
 
 class MockRevisionClass(object):  # pragma: no cover
 
-  def __init__(self, rev_string, bisector):
-    self.commit_pos = int(rev_string)
-    self.revision_string = rev_string
+  def __init__(self, bisector, commit_hash):
     self.bisector = bisector
     self.previous_revision = None
     self.next_revision = None
     self.values = []
     self.deps = {}
-    self.commit_hash = ''
+    self.commit_hash = commit_hash
     self.status = ''
 
   def get_next_url(self):
@@ -52,8 +50,8 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
         'test_type': 'perf',
         'command': ('tools/perf/run_benchmark -v '
                     '--browser=release page_cycler.intl_ar_fa_he'),
-        'good_revision': '306475',
-        'bad_revision': '306478',
+        'good_revision': 'abcd5678abcd5678abcd5678abcd5678abcd5678',
+        'bad_revision': 'def05678def05678def05678def05678def05678',
         'metric': 'warm_times/page_load_time',
         'repeat_count': '2',
         'max_time_minutes': '5',

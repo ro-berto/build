@@ -6,7 +6,9 @@ from recipe_engine import recipe_api
 
 DEPS = [
     'commit_position',
+    'recipe_engine/path',
     'recipe_engine/properties',
+    'recipe_engine/raw_io',
     'recipe_engine/step',
     ]
 
@@ -15,6 +17,9 @@ INVALID_CP_BAD_FORMAT = 'foo/var@{missing-hash}'
 INVALID_CP_NON_NUMERIC = 'refs/heads/master@{#foo}'
 
 def RunSteps(api):
+  fake_checkout_path = api.path.mkdtemp('fake_checkout')
+  api.path['checkout'] = fake_checkout_path
+
   # Try to resolve a commit position to a hash
   if 'revision_to_resolve' in api.properties.keys():
     api.commit_position.chromium_hash_from_commit_position(
@@ -50,12 +55,16 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  valid_hash = '01234567890abcdef01234567890abcdef01234567'
   yield (
       api.test('valid') +
       api.properties(
         cp=VALID_CP,
         revision=12345,
-        branch='refs/heads/master',))
+        branch='refs/heads/master',
+        hash_to_resolve=valid_hash) +
+      api.step_data('resolving hash ' + valid_hash,
+                    stdout=api.raw_io.output(VALID_CP)))
 
   yield (
       api.test('invalid_bad_format') +

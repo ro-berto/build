@@ -67,12 +67,15 @@
   {
     "cmd": [
       "git",
-      "footers",
-      "--position",
-      "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
+      "log",
+      "--format=hash:%H",
+      "--grep",
+      "^Cr-Commit-Position: refs/heads/master@{#314015}",
+      "-1",
+      "origin/master"
     ],
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Resolving reference range.resolving hash 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+    "name": "Resolving reference range.resolving commit_pos 314015",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -95,37 +98,6 @@
       "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@v8: None@@@",
       "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@skia: None@@@",
       "@@@STEP_LOG_END@Debug Bad Revision DEPS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "log",
-      "--format=hash:%H",
-      "--grep",
-      "^Cr-Commit-Position: refs/heads/master@{#314015}",
-      "-1",
-      "origin/master"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Resolving reference range.resolving commit_pos 314015",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "a6298e4afedbf2cd461755ea6f45b0ad64222222"
-    ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
-    "name": "Resolving reference range.resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -248,7 +220,7 @@
       "[DEPOT_TOOLS]/gsutil.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision 314015 and 1 other revision(s).",
+    "name": "Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 and 1 other revision(s).",
     "stdin": "{\"jobs\": [{\"builder\": \"linux_perf_bisect_builder\", \"job_name\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222-build\", \"master\": \"tryserver.chromium.perf\", \"type\": \"buildbot\"}, {\"builder\": \"linux_perf_bisect_builder\", \"job_name\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-build\", \"master\": \"tryserver.chromium.perf\", \"type\": \"buildbot\"}, {\"location\": \"gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip\", \"type\": \"gs\"}, {\"location\": \"gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip\", \"type\": \"gs\"}]}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -273,7 +245,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Triggering test job for 314015",
+    "name": "Triggering test job for a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "trigger_specs": [
       {
         "builder_name": "linux_perf_tester",
@@ -309,7 +281,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Triggering test job for 314017",
+    "name": "Triggering test job for 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "trigger_specs": [
       {
         "builder_name": "linux_perf_tester",
@@ -336,7 +308,7 @@
       "[DEPOT_TOOLS]/gsutil.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision 314015 and 1 other revision(s). (2)",
+    "name": "Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 and 1 other revision(s). (2)",
     "stdin": "{\"jobs\": [{\"builder\": \"linux_perf_tester\", \"job_name\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222-test\", \"master\": \"tryserver.chromium.perf\", \"type\": \"buildbot\"}, {\"builder\": \"linux_perf_tester\", \"job_name\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test\", \"master\": \"tryserver.chromium.perf\", \"type\": \"buildbot\"}, {\"location\": \"gs://chrome-perf/bisect-results/a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results\", \"type\": \"gs\"}, {\"location\": \"gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results\", \"type\": \"gs\"}]}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -391,7 +363,7 @@
       "[DEPOT_TOOLS]/gsutil.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Waiting for revision 314017",
+    "name": "Waiting for revision 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdin": "{\"jobs\": [{\"builder\": \"linux_perf_tester\", \"job_name\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test\", \"master\": \"tryserver.chromium.perf\", \"type\": \"buildbot\"}, {\"location\": \"gs://chrome-perf/bisect-results/00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test.results\", \"type\": \"gs\"}]}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [

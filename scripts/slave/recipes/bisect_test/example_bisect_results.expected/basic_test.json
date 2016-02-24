@@ -67,12 +67,15 @@
   {
     "cmd": [
       "git",
-      "footers",
-      "--position",
-      "deadbeef"
+      "log",
+      "--format=hash:%H",
+      "--grep",
+      "^Cr-Commit-Position: refs/heads/master@{#314015}",
+      "-1",
+      "origin/master"
     ],
     "cwd": "[TMP_BASE]/bogus_tmp_1",
-    "name": "Resolving reference range.resolving hash deadbeef",
+    "name": "Resolving reference range.resolving commit_pos 314015",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -95,37 +98,6 @@
       "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@v8: None@@@",
       "@@@STEP_LOG_LINE@Debug Bad Revision DEPS@skia: None@@@",
       "@@@STEP_LOG_END@Debug Bad Revision DEPS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "log",
-      "--format=hash:%H",
-      "--grep",
-      "^Cr-Commit-Position: refs/heads/master@{#314015}",
-      "-1",
-      "origin/master"
-    ],
-    "cwd": "[TMP_BASE]/bogus_tmp_1",
-    "name": "Resolving reference range.resolving commit_pos 314015",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "footers",
-      "--position",
-      "c001c0de"
-    ],
-    "cwd": "[TMP_BASE]/bogus_tmp_1",
-    "name": "Resolving reference range.resolving hash c001c0de",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {

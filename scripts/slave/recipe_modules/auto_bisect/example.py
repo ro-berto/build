@@ -47,7 +47,7 @@ def RunSteps(api):
     revisions_to_check[0].start_job()
     # Only added for coverage.
     revisions_to_check[0].read_deps(bisector.get_perf_tester_name())
-    api.auto_bisect.query_revision_info(revisions_to_check[0].commit_hash)
+    api.auto_bisect.query_revision_info(revisions_to_check[0])
   else:
     raise api.step.StepFailure('Expected revisions to check.')
   # TODO(robertocn): Add examples for the following operations:
@@ -82,7 +82,8 @@ def GenTests(api):
 
   basic_test = _make_test(api, _get_basic_test_data(), 'basic')
   basic_test += api.step_data(
-      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
+      'and 1 other revision(s). (2)',
       stdout=api.json.output(wait_for_any_output))
   yield basic_test
 
@@ -101,7 +102,8 @@ def GenTests(api):
       ],
   }
   failed_build_test += api.step_data(
-      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
+      'and 1 other revision(s). (2)',
       stdout=api.json.output(failed_build_test_step_data), retcode=1)
   yield failed_build_test
 
@@ -109,35 +111,40 @@ def GenTests(api):
       api, _get_ref_range_only_missing_metric_test_data(),
       'missing_metric_test')
   missing_metric_test += api.step_data(
-      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
+      'and 1 other revision(s). (2)',
       stdout=api.json.output(wait_for_any_output))
   yield missing_metric_test
 
   windows_test = _make_test(
       api, _get_basic_test_data(), 'windows_bisector', platform='windows')
   windows_test += api.step_data(
-      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
+      'and 1 other revision(s). (2)',
       stdout=api.json.output(wait_for_any_output))
   yield windows_test
 
   winx64_test = _make_test(
       api, _get_basic_test_data(), 'windows_x64_bisector', platform='win_x64')
   winx64_test += api.step_data(
-      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
+      'and 1 other revision(s). (2)',
       stdout=api.json.output(wait_for_any_output))
   yield winx64_test
 
   mac_test = _make_test(
       api, _get_basic_test_data(), 'mac_bisector', platform='mac')
   mac_test += api.step_data(
-      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
+      'and 1 other revision(s). (2)',
       stdout=api.json.output(wait_for_any_output))
   yield mac_test
 
   android_test = _make_test(
       api, _get_basic_test_data(), 'android_bisector', platform='android')
   android_test += api.step_data(
-      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
+      'and 1 other revision(s). (2)',
       stdout=api.json.output(wait_for_any_output))
   yield android_test
 
@@ -145,7 +152,8 @@ def GenTests(api):
       api, _get_basic_test_data(), 'android_arm64_bisector',
       platform='android_arm64')
   android_arm64_test += api.step_data(
-      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
+      'and 1 other revision(s). (2)',
       stdout=api.json.output(wait_for_any_output))
   yield android_arm64_test
 
@@ -167,7 +175,8 @@ def GenTests(api):
   bisect_script_test = _make_test(
       api, _get_basic_test_data(), 'basic_bisect_script')
   bisect_script_test += api.step_data(
-      'Waiting for revision 314015 and 1 other revision(s). (2)',
+      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
+      'and 1 other revision(s). (2)',
       stdout=api.json.output(wait_for_any_output))
 
   bisect_script_test += api.properties(mastername='tryserver.chromium.perf',
@@ -374,7 +383,7 @@ def _get_revision_range_step_data(api, range_data):
   """Adds canned output for fetch_intervening_revisions.py."""
   min_rev = range_data[0]['hash']
   max_rev = range_data[-1]['hash']
-  output = [[r['hash'], r['commit_pos']] for r in range_data[1:-1]]
+  output = [[r['hash'], 'ignored'] for r in range_data[1:-1]]
   step_name = ('Expanding revision range.for revisions %s:%s' %
                (min_rev, max_rev))
   return api.step_data(step_name, stdout=api.json.output(output))
@@ -417,9 +426,6 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
     yield api.step_data(step_name,
                         stdout=api.raw_io.output('hash:' + commit_hash))
 
-    step_name = parent_step + 'resolving hash ' + commit_hash
-    commit_pos_str = 'refs/heads/master@{#%s}' % commit_pos
-    yield api.step_data(step_name, stdout=api.raw_io.output(commit_pos_str))
 
   if include_build_steps:
     if test_results:
