@@ -20,6 +20,61 @@
         }
       }
     ],
+    "https://build.chromium.org/p/chromium.android": [
+      {
+        "categories": [
+          "chromium_android"
+        ],
+        "builders": {
+          "Android Cronet ARM64 Builder": {
+            "tree_notify": [
+              "cronet-team+build@google.com"
+            ]
+          },
+          "Android Cronet ARM64 Builder (dbg)": {
+            "tree_notify": [
+              "cronet-team+build@google.com"
+            ]
+          },
+          "Android Cronet ARMv6 Builder": {
+            "tree_notify": [
+              "cronet-team+build@google.com"
+            ]
+          },
+          "Android Cronet Builder": {
+            "tree_notify": [
+              "cronet-team+build@google.com"
+            ]
+          },
+          "Android Cronet Builder (dbg)": {
+            "tree_notify": [
+              "cronet-team+build@google.com"
+            ]
+          },
+          "Android Cronet Data Reduction Proxy Builder": {
+            "tree_notify": [
+              "cronet-team+build@google.com"
+            ]
+          },
+          "Android Cronet MIPS Builder": {
+            "tree_notify": [
+              "cronet-team+build@google.com"
+            ]
+          },
+          "Android Cronet x86 Builder": {
+            "tree_notify": [
+              "cronet-team+build@google.com"
+            ]
+          },
+          "Android Cronet x86 Builder (dbg)": {
+            "tree_notify": [
+              "cronet-team+build@google.com"
+            ]
+          },
+          "*": {}
+        }
+      }
+    ],
     "https://build.chromium.org/p/chromium.chrome": [
       {
         "categories": [

@@ -111,6 +111,7 @@
     },
     "non-closers": {
         "masters": [
+            "https://build.chromium.org/p/chromium.android",
             "https://build.chromium.org/p/chromium.fyi",
             "https://build.chromium.org/p/chromium.lkgr",
             "https://build.chromium.org/p/chromium.memory.fyi",
