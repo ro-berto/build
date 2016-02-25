@@ -80,12 +80,15 @@ def RunSteps(api, mastername, buildername):
 
   provision_settings = builder.get('provision_provision_settings', {})
 
+  default_emulator_amount = 1
   with api.emulator.launch_emulator(
       abi=builder.get('abi'),
       api_level=builder.get('api_level'),
-      amount=builder.get('amount', 1),
+      amount=builder.get('amount', default_emulator_amount),
       partition_size=builder.get('partition_size'),
       sdcard_size=builder.get('sdcard_size')):
+    api.emulator.wait_for_emulator(builder.get('amount',
+                                               default_emulator_amount))
     api.chromium_android.spawn_logcat_monitor()
     api.chromium_android.provision_devices(emulators=True, **provision_settings)
 

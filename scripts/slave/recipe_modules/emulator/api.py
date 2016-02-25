@@ -16,11 +16,19 @@ class EmulatorApi(recipe_api.RecipeApi):
     return self.m.python('[emulator] installing emulator deps',
                          self.c.install_emulator_deps_path, args, **kwargs)
 
+  def wait_for_emulator(self, num, **kwargs):
+    args = ['wait', '-n', num]
+    self.m.python(
+        '[emulator] wait for %d emulators to complete booting' % num,
+        self.c.avd_script_path,
+        args,
+        **kwargs)
+
   @contextlib.contextmanager
   def launch_emulator(self, abi, api_level, amount=1, partition_size=None,
                       sdcard_size=None, **kwargs):
     launch_step_name = (
-        '[emulator] launching %s %s (abi %s, api_level %s)'
+        '[emulator] spawn %s %s (abi %s, api_level %s)'
          % (amount, "emulator" if amount == 1 else "emulators", abi, api_level))
     args = [
         'run',
@@ -35,7 +43,12 @@ class EmulatorApi(recipe_api.RecipeApi):
     if sdcard_size:
       args += ['--sdcard-size', sdcard_size]
 
-    self.m.python(launch_step_name, self.c.avd_script_path, args, **kwargs)
+    self.m.step(
+        launch_step_name,
+        [self.m.path['build'].join('scripts', 'slave', 'daemonizer.py'), '--',
+         self.c.avd_script_path] + args,
+        **kwargs)
+
     try:
       yield
     finally:

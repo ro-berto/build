@@ -192,8 +192,8 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
       "[SLAVE_BUILD]/src/build/android/avd.py",
       "run",
       "--abi",
@@ -208,7 +208,19 @@
       "500M"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[emulator] launching 1 emulator (abi x86, api_level 23)"
+    "name": "[emulator] spawn 1 emulator (abi x86, api_level 23)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/avd.py",
+      "wait",
+      "-n",
+      "1"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "[emulator] wait for 1 emulators to complete booting"
   },
   {
     "cmd": [

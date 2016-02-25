@@ -69,6 +69,7 @@ def RunSteps(api, mastername, buildername):
       amount=builder.get('amount', 1),
       partition_size=builder.get('partition_size'),
       sdcard_size=builder.get('sdcard_size')):
+    api.emulator.wait_for_emulator(num=1)
     suite, isolate_file = builder.get('sample_gtest_suite')
     api.chromium_android.provision_devices(emulators=True, **provision_settings)
     api.chromium_android.run_test_suite(suite, isolate_file_path=isolate_file)
