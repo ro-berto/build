@@ -297,6 +297,35 @@ SPEC = {
       },
       'enable_swarming': True,
     },
+    'GPU Win Clang Builder (dbg)': {
+      # This bot is on the chromium.gpu.fyi waterfall to help ensure
+      # that ANGLE rolls aren't reverted due to Clang build failures
+      # on Windows. We don't run the binaries that are built on this
+      # bot, at least not yet.
+      'chromium_config': 'chromium_win_clang',
+      'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
+                                'chrome_with_codecs',
+                                'internal_gles2_conform_tests'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
+      },
+      'compile_targets': [
+        'all',
+      ],
+      # Recipes builds Debug builds with component=shared_library by default.
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'use_isolate': True,
+      'enable_swarming': True,
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
     'GPU Linux Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
