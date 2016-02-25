@@ -112,7 +112,7 @@ class AndroidApi(recipe_api.RecipeApi):
       refs = [refs]
     if use_bot_update:
       result = self.m.bot_update.ensure_checkout(
-          spec, refs=refs, with_branch_heads=with_branch_heads)
+          spec, refs=refs, with_branch_heads=with_branch_heads, force=True)
     else:
       result = self.m.gclient.checkout(spec, with_branch_heads=with_branch_heads)
 
