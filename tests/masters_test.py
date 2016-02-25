@@ -217,7 +217,7 @@ def main(argv):
       'master.chromium.android': 'ChromiumAndroid',
       'master.chromium.chrome': 'ChromiumChrome',
       'master.chromium.chromedriver': 'ChromiumChromeDriver',
-      'master.chromium.chromiumos': 'ChromiumChromiumOS',
+      'master.chromium.chromiumos': 'ChromiumChromiumos',
       'master.chromium.fyi': 'ChromiumFYI',
       'master.chromium.gatekeeper': 'Gatekeeper',
       'master.chromium.goma': 'ChromiumGoma',
