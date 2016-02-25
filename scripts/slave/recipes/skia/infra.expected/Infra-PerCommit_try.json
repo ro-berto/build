@@ -174,7 +174,7 @@
     "cmd": [
       "go",
       "get",
-      "code.google.com/p/go.tools/cmd/goimports"
+      "golang.org/x/tools/cmd/goimports"
     ],
     "cwd": "[SLAVE_BUILD]/go/src/go.skia.org/infra",
     "env": {

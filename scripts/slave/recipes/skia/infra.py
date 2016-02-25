@@ -95,7 +95,7 @@ def RunSteps(api):
   # More prerequisites.
   api.step(
       'install goimports',
-      cmd=['go', 'get', 'code.google.com/p/go.tools/cmd/goimports'],
+      cmd=['go', 'get', 'golang.org/x/tools/cmd/goimports'],
       cwd=infra_dir,
       env=env)
   api.step(
