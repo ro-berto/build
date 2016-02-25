@@ -752,27 +752,19 @@ class AndroidApi(recipe_api.RecipeApi):
           [ '--output-path', log_path,
             self.m.path['checkout'].join('out', 'logcat') ],
           infra_step=True)
-      try:
-        if self.m.tryserver.is_tryserver and not self.c.INTERNAL:
-          args = ['-a', 'public-read']
-        else:
-          args = []
-        self.m.gsutil.upload(
-            log_path,
-            gs_bucket,
-            'logcat_dumps/%s/%s' % (self.m.properties['buildername'],
-                                    self.m.properties['buildnumber']),
-            args=args,
-            link_name='logcat dump',
-            version='4.7',
-            parallel_upload=True,
-            timeout=300)
-      except self.m.step.StepFailure:
-        # TODO(bpastene): Remove the following if the blab gs issue is resolved
-        # If the upload fails, change it to a warning and continue on with
-        # the build. We don't want a failed logcat upload crashing a tryjob
-        step_result = self.m.step.active_result
-        step_result.presentation.status = self.m.step.WARNING
+      if self.m.tryserver.is_tryserver and not self.c.INTERNAL:
+        args = ['-a', 'public-read']
+      else:
+        args = []
+      self.m.gsutil.upload(
+          log_path,
+          gs_bucket,
+          'logcat_dumps/%s/%s' % (self.m.properties['buildername'],
+                                  self.m.properties['buildnumber']),
+          args=args,
+          link_name='logcat dump',
+          version='4.7',
+          parallel_upload=True)
 
     else:
       self.m.python(

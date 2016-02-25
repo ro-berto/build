@@ -1008,15 +1008,3 @@ def GenTests(api):
     ) +
     api.override_step_data('[collect] base_unittests', retcode=1)
   )
-
-  yield (
-    api.test('chromium_linux_Android_Tests_logcat_upload_timeout') +
-    api.properties(
-        mastername='chromium.linux',
-        buildername='Android Tests',
-        slavename='build1-a1',
-        buildnumber='77457',
-        parent_buildername='Android Builder',
-    ) +
-    api.override_step_data('gsutil upload', retcode=-2001)
-  )

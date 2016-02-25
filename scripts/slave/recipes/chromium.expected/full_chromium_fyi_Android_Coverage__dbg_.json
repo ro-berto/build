@@ -831,8 +831,6 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--timeout",
-      "300",
       "--",
       "[DEPOT_TOOLS]/gsutil.py",
       "--force-version",
