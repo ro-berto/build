@@ -54,6 +54,12 @@ def _RunApptests(api):
   api.python('app_tests', runner, [api.chromium.output_dir, '--verbose'])
 
 
+@recipe_api.composite_step
+def _RunUnittests(api):
+  if api.chromium.c.TARGET_PLATFORM != 'android':
+    api.chromium.runtest('views_mus_unittests')
+
+
 def RunSteps(api):
   api.chromium.configure_bot(BUILDERS, ['gn'])
 
@@ -71,6 +77,7 @@ def RunSteps(api):
     api.chromium_android.detect_and_setup_devices()
 
   with api.step.defer_results():
+    _RunUnittests(api)
     _RunApptests(api)
 
 
