@@ -17,7 +17,8 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
                                 'chrome_with_codecs',
-                                'internal_gles2_conform_tests'],
+                                'internal_gles2_conform_tests',
+                                'build_angle_deqp_tests'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -201,7 +202,8 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
                                 'chrome_with_codecs',
-                                'internal_gles2_conform_tests'],
+                                'internal_gles2_conform_tests',
+                                'build_angle_deqp_tests'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -310,7 +312,8 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
                                 'archive_gpu_tests', 'chrome_with_codecs',
-                                'internal_gles2_conform_tests'],
+                                'internal_gles2_conform_tests',
+                                'build_angle_deqp_tests'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
