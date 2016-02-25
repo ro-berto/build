@@ -65,14 +65,11 @@ class TryMailNotifier(mail.MailNotifier):
         status_text_html = (
             'TRY FAILED<p>'
             '<strong>If the failure is unrelated to your change, the test may'
-            ' be flaky. Contact the sheriffs via irc or gchat, or email the'
-            ' team mailing list.<br> If you think the system is broken,'
-            ' please reply to this email.</strong><br>'
-            ' Common examples of system issues: sync or compile failures'
-            ' on a specific machine, or failures that only affect trybots.<br>'
-            'Please use "rich text" replies so the links aren\'t lost.'
-            ' If you do not receive a reply, don\'t worry. The reply address'
-            ' isn\'t a blackhole.<p>Thanks!')
+            ' be flaky. Consider retrying the job (e.g. with git cl try).<br>'
+            ' If you think the system is broken,'
+            ' please <a href="https://bugs.chromium.org/p/chromium/issues/'
+            'entry?labels=Infra-CommitQueue">file an Infra bug report</a>.'
+            '</strong><br>')
       res = "failure"
 
     info = {

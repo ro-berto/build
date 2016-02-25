@@ -23,15 +23,13 @@ tests @ r177980</title>
   <a href=3D"http://build.chromium.org/p/tryserver.chromium/">http://build.=
 chromium.org/p/tryserver.chromium/</a><p>
   TRY FAILED<p><strong>If the failure is unrelated to your change, the test=
- may be flaky. Contact the sheriffs via irc or gchat, or email the team mai=
-ling list.<br> If you think the system is broken, please reply to this emai=
-l.</strong><br> Common examples of system issues: sync or compile failures =
-on a specific machine, or failures that only affect trybots.<br>Please use =
-"rich text" replies so the links aren't lost. If you do not receive a reply=
-, don't worry. The reply address isn't a blackhole.<p>Thanks!<p> <br>Parent=
- build: <a href=3D"http://build.chromium.org/p/tryserver.chromium/builders/=
-android_dbg/builds/29441">29441</a> on <a href=3D"http://build.chromium.org=
-/p/tryserver.chromium/builders/android_dbg">android_dbg</a><br>
+ may be flaky. Consider retrying the job (e.g. with git cl try).<br> If you=
+ think the system is broken, please <a href=3D"https://bugs.chromium.org/p/=
+chromium/issues/entry?labels=3DInfra-CommitQueue">file an Infra bug report<=
+/a>.</strong><br><p> <br>Parent build: <a href=3D"http://build.chromium.org=
+/p/tryserver.chromium/builders/android_dbg/builds/29441">29441</a> on <a hr=
+ef=3D"http://build.chromium.org/p/tryserver.chromium/builders/android_dbg">=
+android_dbg</a><br>
   Build: <a href=3D"http://build.chromium.org/p/tryserver.chromium/builders=
 /android_dbg_triggered_tests/builds/25183">25183</a> on
          <a href=3D"http://build.chromium.org/p/tryserver.chromium/builders=
