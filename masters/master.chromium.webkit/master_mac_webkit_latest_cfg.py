@@ -59,10 +59,6 @@ F('f_webkit_mac_rel', m_annotator.BaseFactory(
 # Mac Rel WebKit testers
 #
 
-B('WebKit Mac10.9 (retina)', 'f_webkit_rel_tests_109_retina',
-  scheduler='s5_webkit_rel_trigger')
-F('f_webkit_rel_tests_109_retina', m_annotator.BaseFactory('chromium'))
-
 B('WebKit Mac10.9', 'f_webkit_rel_tests_109',
   scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_109', m_annotator.BaseFactory('chromium'))
@@ -70,6 +66,14 @@ F('f_webkit_rel_tests_109', m_annotator.BaseFactory('chromium'))
 B('WebKit Mac10.10', 'f_webkit_rel_tests_1010',
   scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_1010', m_annotator.BaseFactory('chromium'))
+
+B('WebKit Mac10.11', 'f_webkit_rel_tests_1011',
+  scheduler='s5_webkit_rel_trigger')
+F('f_webkit_rel_tests_1011', m_annotator.BaseFactory('chromium'))
+
+B('WebKit Mac10.11 (retina)', 'f_webkit_rel_tests_1011_retina',
+  scheduler='s5_webkit_rel_trigger')
+F('f_webkit_rel_tests_1011_retina', m_annotator.BaseFactory('chromium'))
 
 B('WebKit Mac non-Oilpan', 'f_webkit_mac_oilpan_rel',
   scheduler='global_scheduler', category='oilpan')
@@ -101,7 +105,7 @@ F('f_webkit_mac_dbg', m_annotator.BaseFactory(
 # Mac Dbg WebKit testers
 #
 
-B('WebKit Mac10.7 (dbg)', 'f_webkit_dbg_tests',
+B('WebKit Mac10.11 (dbg)', 'f_webkit_dbg_tests',
     scheduler='s5_webkit_dbg_trigger')
 F('f_webkit_dbg_tests', m_annotator.BaseFactory('chromium'))
 
