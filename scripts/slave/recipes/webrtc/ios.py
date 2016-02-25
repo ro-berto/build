@@ -36,7 +36,12 @@ def RunSteps(api):
   api.ios.read_build_config(build_config_dir=build_config_dir,
                             include_dir=include_dir,
                             buildername=buildername)
-  api.ios.build()
+  mb_config_path = api.path['checkout'].join(
+      'webrtc',
+      'build',
+      'mb_config.pyl',
+  )
+  api.ios.build(mb_config_path=mb_config_path)
   api.ios.test()
 
 
@@ -71,6 +76,31 @@ def GenTests(api):
           'device type': 'fake device',
           'os': '7.1',
         },
+      ],
+    })
+  )
+
+  yield (
+    api.test('gn_build')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios',
+      buildnumber='0',
+      mastername='chromium.fake',
+      slavename='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': 'fake xcode version',
+      'GYP_DEFINES': {
+      },
+      "gn_args": [
+        "is_debug=true"
+      ],
+      "mb_type": "gn",
+      'compiler': 'ninja',
+      'configuration': 'Debug',
+      'sdk': 'iphoneos8.0',
+      'tests': [
       ],
     })
   )

@@ -232,7 +232,7 @@ class iOSApi(recipe_api.RecipeApi):
       cfg.gyp_env.GYP_DEFINES = copy.deepcopy(self.__config['GYP_DEFINES'])
     self.m.chromium.c = cfg
 
-  def build(self, suffix=None):
+  def build(self, mb_config_path=None, suffix=None):
     """Builds from this bot's build config."""
     assert self.__config is not None
 
@@ -304,6 +304,7 @@ class iOSApi(recipe_api.RecipeApi):
       self.m.chromium.run_mb(self.m.properties['mastername'],
                              self.m.properties['buildername'],
                              name='generate_build_files' + suffix,
+                             mb_config_path=mb_config_path,
                              build_dir='//out/' + build_sub_path)
 
     use_analyze = self.__config['use_analyze']

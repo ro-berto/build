@@ -1,0 +1,167 @@
+[
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/ios/host_info.py",
+      "--json-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "host and tools info",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br />OS X 1.2.3, Xcode 6.7.8 (5D342509a)@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac OS X Version\": \"1.2.3\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Xcode Build Version\": \"5D342509a\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Xcode SDKs\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake sdk 1.0\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake sdk 1.1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake sdk 2.0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Xcode Version\": \"6.7.8\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--master",
+      "chromium.fake",
+      "--builder",
+      "ios",
+      "--slave",
+      "fake-vm",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]\ntarget_os = ['ios', 'mac']",
+      "--root",
+      "src",
+      "--revision_mapping_file",
+      "{\"src\": \"got_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "src@HEAD",
+      "--output_manifest"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+    },
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/webrtc/build/ios/chromium.fake/ios.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "read build config",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"GYP_DEFINES\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compiler\": \"ninja\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"gn_args\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"is_debug=true\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"mb_type\": \"gn\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphoneos8.0\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tests\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"xcode version\": \"fake xcode version\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "echo",
+      "-e",
+      "{\n  \"GYP_DEFINES\": {\n    \"OS\": \"ios\", \n    \"component\": \"static_library\"\n  }, \n  \"additional_compile_targets\": [\n    \"All\"\n  ], \n  \"compiler\": \"ninja\", \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [\n    \"is_debug=true\"\n  ], \n  \"mb_type\": \"gn\", \n  \"sdk\": \"iphoneos8.0\", \n  \"tests\": [], \n  \"triggered bots\": {}, \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "finalize build config"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/ios/find_xcode.py",
+      "--json-file",
+      "/path/to/tmp/json",
+      "--version",
+      "fake xcode version"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "find xcode",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GYP_CHROMIUM_NO_ACTION": "1",
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "component=static_library OS=ios",
+      "GYP_GENERATORS": "ninja",
+      "LANDMINES_VERBOSE": "1",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+    },
+    "name": "gclient runhooks",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br />GYP_DEFINES:<br />component=static_library<br />OS=ios<br />GYP_CHROMIUM_NO_ACTION=1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.fake",
+      "-b",
+      "ios",
+      "--config-file",
+      "[SLAVE_BUILD]/src/webrtc/build/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Debug-iphoneos"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[SLAVE_BUILD]/src/out/Debug-iphoneos"
+    ],
+    "cwd": "[SLAVE_BUILD]/src/out/Debug-iphoneos",
+    "name": "compile"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
