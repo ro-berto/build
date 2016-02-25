@@ -50,7 +50,7 @@ TRYBOTS = freeze({
       }, analyze_mode='compile'),
       'mac_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac10.7 (dbg)',
+        'buildername': 'WebKit Mac10.11 (dbg)',
       }),
       'mac_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
@@ -58,7 +58,7 @@ TRYBOTS = freeze({
       }),
       'mac_blink_compile_dbg': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac10.7 (dbg)',
+        'buildername': 'WebKit Mac10.11 (dbg)',
       }, analyze_mode='compile'),
       'mac_blink_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',

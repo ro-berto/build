@@ -201,7 +201,7 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
-  'WebKit Mac10.9 (retina)': {
+  'WebKit Mac10.11 (retina)': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
@@ -274,6 +274,30 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
+  'WebKit Mac10.11': {
+    'chromium_config': 'chromium',
+    'chromium_apply_config': ['mb'],
+    'gclient_config': 'chromium',
+    'gclient_apply_config': ['blink_or_chromium'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 64,
+    },
+    'bot_type': 'tester',
+    'parent_buildername': 'WebKit Mac Builder',
+    'test_generators': [
+      steps.generate_gtest,
+      steps.generate_script,
+    ],
+    'tests': [
+      steps.BlinkTest(),
+    ],
+    'testing': {
+      'platform': 'mac',
+    },
+    'enable_swarming': True,
+    'use_isolate': True,
+  },
   'WebKit Mac Builder (dbg)': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb'],
@@ -290,7 +314,7 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
-  'WebKit Mac10.7 (dbg)': {
+  'WebKit Mac10.11 (dbg)': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',

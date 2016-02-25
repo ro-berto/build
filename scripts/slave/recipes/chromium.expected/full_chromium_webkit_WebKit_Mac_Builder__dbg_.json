@@ -163,7 +163,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.webkit.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"WebKit Mac10.7 (dbg)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"WebKit Mac10.11 (dbg)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -332,7 +332,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "WebKit Mac10.7 (dbg)",
+        "builder_name": "WebKit Mac10.11 (dbg)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -350,7 +350,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@WebKit Mac10.7 (dbg)@@@"
+      "@@@STEP_TEXT@WebKit Mac10.11 (dbg)@@@"
     ]
   },
   {
