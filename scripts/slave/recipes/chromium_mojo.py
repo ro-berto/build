@@ -57,7 +57,7 @@ def _RunApptests(api):
 @recipe_api.composite_step
 def _RunUnittests(api):
   if api.chromium.c.TARGET_PLATFORM != 'android':
-    api.chromium.runtest('views_mus_unittests')
+    api.chromium.runtest('views_mus_unittests', xvfb=True)
 
 
 def RunSteps(api):
