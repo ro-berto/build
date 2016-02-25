@@ -513,7 +513,7 @@
       "--tag",
       "master:tryserver.chromium.mac",
       "--tag",
-      "name:gl_tests (r1)",
+      "name:gl_tests",
       "--tag",
       "os:Mac-10.9",
       "--tag",

@@ -326,7 +326,7 @@
       "--tag",
       "master:tryserver.v8",
       "--tag",
-      "name:SimdJs - all",
+      "name:SimdJs",
       "--tag",
       "os:Windows-7-SP1",
       "--tag",

@@ -527,7 +527,7 @@
       "--tag",
       "master:tryserver.chromium.win",
       "--tag",
-      "name:gl_tests (r1)",
+      "name:gl_tests",
       "--tag",
       "os:Windows-7-SP1",
       "--tag",

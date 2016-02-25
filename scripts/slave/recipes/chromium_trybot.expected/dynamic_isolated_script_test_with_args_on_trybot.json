@@ -446,7 +446,7 @@
       "--tag",
       "master:tryserver.chromium.linux",
       "--tag",
-      "name:telemetry_gpu_unittests (with patch)",
+      "name:telemetry_gpu_unittests",
       "--tag",
       "os:Ubuntu-12.04",
       "--tag",

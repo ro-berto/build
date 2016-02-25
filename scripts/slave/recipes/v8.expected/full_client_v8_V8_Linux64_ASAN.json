@@ -321,7 +321,7 @@
       "--tag",
       "master:client.v8",
       "--tag",
-      "name:Test262 - no variants",
+      "name:Test262",
       "--tag",
       "os:Ubuntu-14.04",
       "--tag",

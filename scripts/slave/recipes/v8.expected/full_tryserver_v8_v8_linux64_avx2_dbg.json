@@ -329,7 +329,7 @@
       "--tag",
       "master:tryserver.v8",
       "--tag",
-      "name:SimdJs - all",
+      "name:SimdJs",
       "--tag",
       "os:Ubuntu-14.04",
       "--tag",

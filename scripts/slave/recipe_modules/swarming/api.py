@@ -476,7 +476,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     tags = set(task.tags)
     tags.update(self._default_tags)
     tags.add('data:' + task.isolated_hash)
-    tags.add('name:' + task.title)
+    tags.add('name:' + task.title.split(' ')[0])
     mastername = self.m.properties.get('mastername')
     if mastername:
       tags.add('master:' + mastername)

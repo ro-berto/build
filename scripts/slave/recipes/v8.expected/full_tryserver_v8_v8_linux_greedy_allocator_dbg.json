@@ -444,7 +444,7 @@
       "--tag",
       "master:tryserver.v8",
       "--tag",
-      "name:SimdJs - all",
+      "name:SimdJs",
       "--tag",
       "os:Ubuntu-12.04",
       "--tag",

@@ -631,7 +631,7 @@
       "--tag",
       "master:tryserver.chromium.win",
       "--tag",
-      "name:affected_tests (r1)",
+      "name:affected_tests",
       "--tag",
       "os:Windows-7-SP1",
       "--tag",
