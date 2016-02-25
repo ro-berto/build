@@ -6,6 +6,9 @@
 # Recipe for Skia Infra.
 
 
+import re
+
+
 DEPS = [
   'file',
   'recipe_engine/path',
@@ -110,6 +113,12 @@ def RunSteps(api):
       env=env)
 
   # Run tests.
+  buildslave = api.properties['slavename']
+  m = re.search('^[a-zA-Z-]*(\d+)$', buildslave)
+  karma_port = '9876'
+  if m and len(m.groups()) > 0:
+    karma_port = '9%s' % m.groups()[0]
+  env['KARMA_PORT'] = karma_port
   api.python('run_unittests', 'run_unittests', cwd=infra_dir, env=env)
 
 
@@ -117,15 +126,18 @@ def GenTests(api):
   yield (
       api.test('Infra-PerCommit') +
       api.path.exists(api.path['slave_build'].join('go', 'src', INFRA_GO,
-                                                   '.git'))
+                                                   '.git')) +
+      api.properties(slavename='skiabot-linux-infra-001')
   )
   yield (
-      api.test('Infra-PerCommit_initialcheckout')
+      api.test('Infra-PerCommit_initialcheckout') +
+      api.properties(slavename='skiabot-linux-infra-001')
   )
   yield (
       api.test('Infra-PerCommit_try') +
       api.properties(rietveld='https://codereview.chromium.org',
                      issue=1234,
                      patchset=1,
-                     revision=REF_HEAD)
+                     revision=REF_HEAD,
+                     slavename='skiabot-linux-infra-001')
   )
