@@ -178,7 +178,7 @@
     "env": {
       "GIT_USER_AGENT": "git/1.9.1",
       "GOPATH": "[SLAVE_BUILD]/go",
-      "KARMA_PORT": "9001",
+      "KARMA_PORT": "15001",
       "PATH": "[SLAVE_BUILD]/go/bin:%(PATH)s"
     },
     "name": "run_unittests"

@@ -117,7 +117,7 @@ def RunSteps(api):
   m = re.search('^[a-zA-Z-]*(\d+)$', buildslave)
   karma_port = '9876'
   if m and len(m.groups()) > 0:
-    karma_port = '9%s' % m.groups()[0]
+    karma_port = '15%s' % m.groups()[0]
   env['KARMA_PORT'] = karma_port
   api.python('run_unittests', 'run_unittests', cwd=infra_dir, env=env)
 
