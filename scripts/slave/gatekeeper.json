@@ -85,6 +85,17 @@
         }
       }
     ],
+    "https://build.chromium.org/p/chromiumos": [
+      {
+        "comment": ["master.chromiumos"],
+        "forgive_all": true,
+        "builders": {
+          "*": {
+          }
+        },
+        "excluded_builders": [ "*" ]
+      }
+    ],
     "https://build.chromium.org/p/chromium.chromiumos": [
       {
         "categories": [

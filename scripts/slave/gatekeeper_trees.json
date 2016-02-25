@@ -1,5 +1,11 @@
 {
-    "build": {
+    "chromiumos": {
+        "masters": [
+            "https://build.chromium.org/p/chromiumos",
+            "https://build.chromium.org/p/chromium.chromiumos"
+        ]
+   },
+   "build": {
         "build-db": "build_db.json",
         "masters": [
             "https://build.chromium.org/p/chromium.tools.build"
