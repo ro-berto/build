@@ -388,28 +388,6 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
-  'WebKit Linux 32': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
-    'gclient_config': 'chromium',
-    'gclient_apply_config': ['blink_or_chromium'],
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': 32,
-    },
-    'test_generators': [
-      steps.generate_gtest,
-      steps.generate_script,
-    ],
-    'tests': [
-      steps.BlinkTest(),
-    ],
-    'testing': {
-      'platform': 'linux',
-    },
-    'enable_swarming': True,
-    'use_isolate': True,
-  },
   'WebKit Linux ASAN': {
     'chromium_config': 'chromium_clang',
     'chromium_apply_config': ['asan', 'mb'],
