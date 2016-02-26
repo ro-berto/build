@@ -199,6 +199,9 @@ SPEC['builders'].update({
       'platform': 'mac',
     },
     'enable_swarming': True,
+    'swarming_dimensions': {
+      'os': 'Mac-10.11',
+    },
     'use_isolate': True,
   },
   'WebKit Mac10.11 (retina)': {
@@ -224,6 +227,10 @@ SPEC['builders'].update({
       'platform': 'mac',
     },
     'enable_swarming': True,
+    'swarming_dimensions': {
+      'os': 'Mac-10.11',
+      'hidpi': '1',
+    },
     'use_isolate': True,
   },
   'WebKit Mac10.9': {
@@ -248,6 +255,9 @@ SPEC['builders'].update({
       'platform': 'mac',
     },
     'enable_swarming': True,
+    'swarming_dimensions': {
+      'os': 'Mac-10.9',
+    },
     'use_isolate': True,
   },
   'WebKit Mac10.10': {
@@ -272,6 +282,9 @@ SPEC['builders'].update({
       'platform': 'mac',
     },
     'enable_swarming': True,
+    'swarming_dimensions': {
+      'os': 'Mac-10.10',
+    },
     'use_isolate': True,
   },
   'WebKit Mac10.11': {
@@ -296,6 +309,9 @@ SPEC['builders'].update({
       'platform': 'mac',
     },
     'enable_swarming': True,
+    'swarming_dimensions': {
+      'os': 'Mac-10.11',
+    },
     'use_isolate': True,
   },
   'WebKit Mac Builder (dbg)': {
@@ -312,6 +328,9 @@ SPEC['builders'].update({
       'platform': 'mac',
     },
     'enable_swarming': True,
+    'swarming_dimensions': {
+      'os': 'Mac-10.11',
+    },
     'use_isolate': True,
   },
   'WebKit Mac10.11 (dbg)': {
@@ -336,6 +355,9 @@ SPEC['builders'].update({
       'platform': 'mac',
     },
     'enable_swarming': True,
+    'swarming_dimensions': {
+      'os': 'Mac-10.11',
+    },
     'use_isolate': True,
   },
   'WebKit Linux': {
