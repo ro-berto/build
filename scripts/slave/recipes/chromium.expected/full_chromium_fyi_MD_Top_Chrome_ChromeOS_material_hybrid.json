@@ -7,7 +7,7 @@
       "--master",
       "chromium.fyi",
       "--builder",
-      "MD Top Chrome ChromeOS non-material",
+      "MD Top Chrome ChromeOS material-hybrid",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -124,7 +124,7 @@
       "--paths",
       "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
-      "{\"buildername\": \"MD Top Chrome ChromeOS non-material\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"chromeos\"}"
+      "{\"buildername\": \"MD Top Chrome ChromeOS material-hybrid\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"chromeos\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",

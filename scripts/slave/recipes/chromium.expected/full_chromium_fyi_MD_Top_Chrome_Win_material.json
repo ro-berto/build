@@ -3,11 +3,20 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "[BUILD]\\scripts\\slave\\kill_processes.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "taskkill"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--master",
       "chromium.fyi",
       "--builder",
-      "MD Top Chrome ChromeOS non-material",
+      "MD Top Chrome Win material",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -26,7 +35,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -100,14 +109,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE[depot_tools]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "chromeos=1 component=shared_library ffmpeg_branding=ChromeOS gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 use_goma=1",
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -115,16 +123,16 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
+      "[SLAVE_BUILD]\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Debug",
+      "Debug_x64",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
-      "{\"buildername\": \"MD Top Chrome ChromeOS non-material\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"chromeos\"}"
+      "{\"buildername\": \"MD Top Chrome Win material\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -138,13 +146,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json",
+      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.fyi.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -153,7 +161,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/cleanup_temp.py"
+      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
@@ -162,11 +170,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
+      "[BUILD]\\scripts\\slave\\compile.py",
       "--target",
-      "Debug",
+      "Debug_x64",
       "--src-dir",
-      "[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]\\src",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -174,7 +182,7 @@
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[BUILD]\\goma",
       "--",
       "All",
       "chromium_builder_tests"
