@@ -351,6 +351,16 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
+       'Linux UBSan': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['ubsan'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
       'Linux UBSan vptr': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['ubsan_vptr'],
@@ -611,16 +621,6 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Linux UBSan': {
-        'recipe_config': 'webrtc_clang',
-        'chromium_apply_config': ['ubsan'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'Android32 ASan (L Nexus6)': {

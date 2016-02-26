@@ -18,7 +18,6 @@ def Update(c):
                                 'Linux32 ARM',
                                 'Linux64 GCC',
                                 'Linux64 Release (swarming)',
-                                'Linux UBSan',
       ]),
       # Run WebRTC DEPS roller at CET hours: 4am, 12pm and 8pm.
       Nightly(
@@ -41,10 +40,6 @@ def Update(c):
     {
       'name': 'Linux64 Release (swarming)',
       'slavebuilddir': 'linux_swarming',
-    },
-    {
-      'name': 'Linux UBSan',
-      'slavebuilddir': 'linux_ubsan',
     },
     {
       'name': 'Auto-roll - WebRTC DEPS',
