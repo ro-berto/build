@@ -21,11 +21,6 @@ def GetCloudPath(api, git_hash, path):
   return 'flutter/%s/%s' % (git_hash, path)
 
 
-def UpdatePackages(api):
-  update_packages = api.path['checkout'].join('dev', 'update_packages.dart')
-  api.step('update packages', ['dart', update_packages])
-
-
 def AnalyzeFlutter(api):
   analyze_cmd = [
     'flutter',
@@ -158,7 +153,7 @@ def RunSteps(api):
   with api.step.context({'env': env}):
     # Must be first to download dependencies for later steps.
     api.step('flutter doctor', ['flutter', 'doctor'])
-    UpdatePackages(api)
+    api.step('update packages', ['flutter', 'update-packages'])
     AnalyzeFlutter(api)
     TestFlutterPackagesAndExamples(api)
     BuildExamples(api, git_hash)

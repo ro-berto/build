@@ -125,8 +125,8 @@
   },
   {
     "cmd": [
-      "dart",
-      "[SLAVE_BUILD]/flutter/dev/update_packages.dart"
+      "flutter",
+      "update-packages"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
