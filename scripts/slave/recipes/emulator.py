@@ -73,7 +73,7 @@ def RunSteps(api, mastername, buildername):
 
   targets = []
   for target, _ in builder.get('unittests', []):
-    targets.append(target)
+    targets.append(target + '_apk')
   api.chromium.compile(targets=targets)
 
   api.emulator.install_emulator_deps(api_level=builder.get('api_level'))
