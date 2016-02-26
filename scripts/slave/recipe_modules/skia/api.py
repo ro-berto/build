@@ -45,16 +45,20 @@ def is_android(builder_cfg):
   return ('Android' in builder_cfg.get('extra_config', '') or
           builder_cfg.get('os') == 'Android')
 
+
 def is_appurify(builder_cfg):
   """Determine whether the builder is an Android bot running in Appurify."""
   return 'Appurify' in builder_cfg.get('extra_config', '')
+
 
 def is_chromeos(builder_cfg):
   return ('CrOS' in builder_cfg.get('extra_config', '') or
           builder_cfg.get('os') == 'ChromeOS')
 
+
 def is_cmake(builder_cfg):
   return 'CMake' in builder_cfg.get('extra_config', '')
+
 
 def is_ios(builder_cfg):
   return ('iOS' in builder_cfg.get('extra_config', '') or
@@ -69,6 +73,27 @@ def is_xsan(builder_cfg):
   return (builder_cfg.get('extra_config') == 'ASAN' or
           builder_cfg.get('extra_config') == 'MSAN' or
           builder_cfg.get('extra_config') == 'TSAN')
+
+
+def derive_compile_bot_name(builder_name, builder_cfg):
+  if builder_cfg['role'] in ('Test', 'Perf'):
+    os = builder_cfg['os']
+    extra_config = builder_cfg.get('extra_config')
+    if os in ('Android', 'ChromeOS'):  # pragma:nocover
+      extra_config = os
+      os = 'Ubuntu'
+    elif os == 'iOS':  # pragma: nocover
+      extra_config = os
+      os = 'OSX'
+    builder_name = 'Build-%s-%s-%s-%s' % (
+      os,
+      builder_cfg['compiler'],
+      builder_cfg['arch'],
+      builder_cfg['configuration']
+    )
+    if extra_config:
+      builder_name += '-%s' % extra_config
+  return builder_name
 
 
 class SkiaApi(recipe_api.RecipeApi):
@@ -234,9 +259,11 @@ class SkiaApi(recipe_api.RecipeApi):
           self.skia_dir.join('infra', 'bots', 'tools', 'luci-go'))
 
       # Swarm the compile.
+      builder_name = derive_compile_bot_name(self.builder_name,
+                                             self.builder_cfg)
       isolate_dir = self.skia_dir.join('infra', 'bots')
       isolate_path = isolate_dir.join('compile_skia.isolate')
-      isolate_vars = {'BUILDER_NAME': self.builder_name}
+      isolate_vars = {'BUILDER_NAME': builder_name}
       self.m.skia_swarming.create_isolated_gen_json(
           isolate_path, isolate_dir, 'linux', 'compile_skia', isolate_vars,
           blacklist=['.git', 'out'])
@@ -258,7 +285,8 @@ class SkiaApi(recipe_api.RecipeApi):
           #dimensions['cpu'] = 'none'
           dimensions['gpu'] = self.builder_cfg['cpu_or_gpu_value']
         
-      tasks = self.m.skia_swarming.trigger_swarming_tasks(hashes, dimensions)
+      tasks = self.m.skia_swarming.trigger_swarming_tasks(hashes, dimensions,
+                                                          idempotent=True)
 
       # Wait for compile to finish, download the results.
       for task in tasks:

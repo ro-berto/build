@@ -94,13 +94,14 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
         build_dir=self.swarming_temp_dir,
         targets=targets)
 
-  def trigger_swarming_tasks(self, swarm_hashes, dimensions):
+  def trigger_swarming_tasks(self, swarm_hashes, dimensions, idempotent=False):
     """Triggers swarming tasks using swarm hashes.
 
     Args:
       swarm_hashes: list of str. List of swarm hashes from the isolate server.
       dimensions: dict of str to str. The dimensions to run the task on.
                   Eg: {'os': 'Ubuntu', 'gpu': '10de', 'pool': 'Skia'}
+      idempotent: whether or not to de-duplicate tasks.
     Returns:
       List of swarming.SwarmingTask instances.
     """
@@ -111,6 +112,7 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
           isolated_hash=swarm_hash,
           task_output_dir=self.tasks_output_dir.join(task_name))
       swarming_task.dimensions = dimensions
+      swarming_task.idempotent = idempotent
       swarming_task.priority = 90
       swarming_task.expiration = 4*60*60
       swarming_tasks.append(swarming_task)
