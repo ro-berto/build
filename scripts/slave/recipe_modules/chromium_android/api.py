@@ -983,9 +983,13 @@ class AndroidApi(recipe_api.RecipeApi):
     env = {'PATH': self.m.path.pathsep.join([self.m.adb.adb_dir(), '%(PATH)s'])}
 
     try:
-      result = self.m.step(
-          'Run CTS', [cts_path, 'run', 'cts', '-p', 'android.webkit'],
-          env=env, stdout=self.m.raw_io.output())
+      try:
+        self.m.step('Run CTS', [cts_path, 'run', 'cts', '-p', 'android.webkit'],
+                    env=env, stdout=self.m.raw_io.output())
+      finally:
+        result = self.m.step.active_result
+        if result.stdout:
+          result.presentation.logs['stdout'] = result.stdout.splitlines()
 
       from xml.etree import ElementTree
 
