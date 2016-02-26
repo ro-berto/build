@@ -34,6 +34,28 @@ BUILDERS = freeze({
       },
     },
   },
+  'tryserver.chromium.mac': {
+    'builders': {
+      'mac_chromium_clang_upload': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'mac',
+          'TARGET_BITS': 64,
+        },
+      },
+    },
+  },
+  'tryserver.chromium.win': {
+    'builders': {
+      'win8_chromium_clang_upload': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'win',
+          'TARGET_BITS': 32,
+        },
+      },
+    },
+  },
 })
 
 
