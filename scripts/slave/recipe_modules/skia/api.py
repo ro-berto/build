@@ -284,6 +284,8 @@ class SkiaApi(recipe_api.RecipeApi):
         else:  # pragma: no cover
           #dimensions['cpu'] = 'none'
           dimensions['gpu'] = self.builder_cfg['cpu_or_gpu_value']
+      elif self.role == 'Build':
+        dimensions['gpu'] = 'none'
         
       tasks = self.m.skia_swarming.trigger_swarming_tasks(hashes, dimensions,
                                                           idempotent=True)

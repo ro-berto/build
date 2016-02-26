@@ -58,6 +58,7 @@ TEST_BUILDERS = {
   },
   'client.skia.fyi': {
     'skiabot-linux-housekeeper-003': [
+      'Build-Ubuntu-GCC-x86_64-Debug-Swarming',
       'Housekeeper-PerCommit',
       'Housekeeper-PerCommit-Trybot',
       'Perf-Android-GCC-Nexus5-CPU-NEON-Arm7-Release-Appurify',
