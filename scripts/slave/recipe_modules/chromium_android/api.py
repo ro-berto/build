@@ -859,7 +859,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
       self.spawn_device_monitor()
 
-  def common_tests_final_steps(self, logcat_gs_bucket=None):
+  def common_tests_final_steps(self, logcat_gs_bucket='chromium-android'):
     if not self.c.gce_setup:
       self.shutdown_device_monitor()
     self.logcat_dump(gs_bucket=logcat_gs_bucket)

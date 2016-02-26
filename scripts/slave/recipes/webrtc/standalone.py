@@ -100,8 +100,7 @@ def GenTests(api):
       else:
         test += api.properties(issue=666666, patchset=1,
                                rietveld='https://fake.rietveld.url')
-    else:
-      test += api.properties(buildnumber=1337)
+    test += api.properties(buildnumber=1337)
     return test
 
   for mastername in ('client.webrtc', 'client.webrtc.fyi', 'tryserver.webrtc'):

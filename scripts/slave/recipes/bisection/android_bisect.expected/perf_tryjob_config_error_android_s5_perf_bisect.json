@@ -396,14 +396,37 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/tee.py",
-      "[SLAVE_BUILD]/src/out/Release/full_log",
-      "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[SLAVE_BUILD]/src/out/Release/full_log",
       "[SLAVE_BUILD]/src/out/logcat"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "logcat_dump"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[SLAVE_BUILD]/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/android_s5_perf_bisect/571"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_s5_perf_bisect/571@@@"
+    ]
   },
   {
     "cmd": [
