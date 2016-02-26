@@ -1,0 +1,154 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--master",
+      "client.drmemory",
+      "--builder",
+      "win-builder",
+      "--slave",
+      "TestSlave",
+      "--spec",
+      "cache_dir = '[ROOT]/git_cache'\nsolutions = [{'custom_deps': {'drmemory/dynamorio': 'https://github.com/DynamoRIO/dynamorio.git', 'tools/buildbot': 'https://github.com/DynamoRIO/buildbot.git'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'drmemory', 'url': 'https://github.com/DynamoRIO/drmemory.git'}]",
+      "--root",
+      "drmemory",
+      "--revision_mapping_file",
+      "{}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "drmemory@123456789abcdef",
+      "--force",
+      "--output_manifest"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+    },
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"drmemory\": \"123456789abcdef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"drmemory\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"drmemory\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/tools/buildbot/bot_tools/unpack.bat"
+    ],
+    "cwd": "[SLAVE_BUILD]/tools/buildbot/bot_tools",
+    "name": "unpack tools"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/drmemory/build_env.bat",
+      "ctest",
+      "-VV",
+      "-S",
+      "[SLAVE_BUILD]/drmemory/package.cmake,build=0x1234567;drmem_only"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
+    },
+    "name": "Package Dr. Memory"
+  },
+  {
+    "cmd": [
+      "dir",
+      "/B",
+      "DrMemory-Windows-*0x1234567.zip"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Find package basename",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "del",
+      "DrMemory-Windows-1.2.3-0x1234567-sfx.exe"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Delete prior sfx archive"
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/drmemory/build_env.bat",
+      "7z",
+      "a",
+      "-sfx",
+      "DrMemory-Windows-1.2.3-0x1234567-sfx.exe",
+      "build_drmemory-debug-32\\_CPack_Packages\\Windows\\ZIP\\DrMemory-Windows-1.2.3-0x1234567\\*"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BOTTOOLS": "[SLAVE_BUILD]/tools/buildbot/bot_tools"
+    },
+    "name": "create sfx archive"
+  },
+  {
+    "cmd": [
+      "copy",
+      "DrMemory-Windows-1.2.3-0x1234567-sfx.exe",
+      "drmemory-windows-latest-sfx.exe"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "copy locally"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "drmemory-windows-latest-sfx.exe",
+      "gs://chromium-drmemory-builds/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-drmemory-builds/@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "DrMemory-Windows-*1234567.zip",
+      "gs://chromium-drmemory-builds/builds/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-drmemory-builds/builds/@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

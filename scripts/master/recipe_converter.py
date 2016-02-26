@@ -23,6 +23,24 @@ import datetime
 _GLOBAL_BUILDMASTER_CONFIG = None
 
 _master_builder_map = {
+    'DrMemory':   ['linux-builder',
+                   'win-builder',
+                   'win-xp-drm',
+                   'win-vista_x64-drm',
+                   'win-7_x64-drm',
+                   'win-8_x64-drm',
+                   'linux-lucid_x64-drm',
+                   'mac-builder',
+                   'mac-mavericks_x64-drm',
+                   'mac-builder-DR',
+                   'mac-mavericks_x64-DR',
+                   'win7-cr-builder',
+                   'win7-cr',
+                   'win8-cr-builder',
+                   'win8-cr',
+                   'linux-cr-builder',
+                   'linux-cr',
+                  ],
     'Chromium GPU': ['Android Debug (Nexus 5)',
                      'Android Debug (Nexus 6)',
                      'Android Debug (Nexus 9)',
@@ -87,6 +105,7 @@ _master_name_map = {
     'Chromium GPU FYI': 'chromium.gpu.fyi',
     'DynamoRIO': 'client.dynamorio',
     'Dart': 'client.fletch',
+    'DrMemory': 'client.drmemory',
 }
 
 # Used like a structure.
@@ -288,6 +307,14 @@ _step_signatures = {
         'repourl': 'https://github.com/DynamoRIO/dynamorio.git',
       }
     ),
+  'checkout_drmemory': (buildbot.steps.source.Git,
+      {
+        'branch': 'master',
+        'name': 'Checkout Dr. Memory',
+        'workdir': 'drmemory',
+        'repourl': 'https://github.com/DynamoRIO/drmemory.git',
+      }
+    ),
   'checkout_dynamorio_tools': (buildbot.steps.shell.ShellCommand,
       {
         'command': ['git', 'clone',
@@ -338,6 +365,13 @@ _step_signatures = {
         'descriptionDone': 'pre-commit suite',
       }
     ),
+  'drmemory_ctest': (master.factory.drmemory_factory.CTest,
+      {
+        'command': ['ctest', '--timeout', '60', '-VV', '-S'],
+        'name': 'Dr. Memory ctest',
+        'descriptionDone': 'runsuite',
+      }
+    ),
   'upload_dynamorio_docs': (buildbot.steps.transfer.DirectoryUpload,
       {
         'blocksize': 16384,
@@ -359,6 +393,13 @@ _step_signatures = {
         'name': 'Package DynamoRIO',
       }
     ),
+  'package_drmemory': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['ctest', '-VV', '-S'],
+        'description': 'Package Dr. Memory',
+        'name': 'Package Dr. Memory',
+      }
+    ),
   'find_dynamorio_package': (buildbot.steps.shell.SetProperty,
       {
         'description': 'find package file',
@@ -370,6 +411,12 @@ _step_signatures = {
       {
         'blocksize': 16384,
         'name': 'Upload DR package',
+      }
+    ),
+  'upload_drmemory_package': (buildbot.steps.transfer.FileUpload,
+      {
+        'blocksize': 16384,
+        'name': 'upload revision build',
       }
     ),
   'win_package_dynamorio': (buildbot.steps.shell.ShellCommand,
@@ -417,6 +464,235 @@ _step_signatures = {
         'env': {'BUILDBOT_ANNOTATED_STEPS_RUN': '1'},
         'name': 'annotated_steps',
         'workdir': 'build\\sdk',
+      }
+    ),
+  'drmemory_pack_results': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['7z', 'a', '-xr!*.pdb', 'testlogs.7z'],
+        'description': 'pack results',
+        'name': 'Pack test results',
+      }
+    ),
+  'drmemory_pack_results_win': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat',
+                    '7z', 'a', '-xr!*.pdb', 'testlogs.7z'],
+        'description': 'pack results',
+        'name': 'Pack test results',
+      }
+    ),
+  'upload_drmemory_test_logs': (buildbot.steps.transfer.FileUpload,
+      {
+        'blocksize': 16384,
+        'name': 'Upload test logs to the master',
+        'slavesrc': 'testlogs.7z',
+      }
+    ),
+  'win_drmemory_ctest': (master.factory.drmemory_factory.CTest,
+      {
+        'command': ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat',
+                    'ctest',
+                    '--timeout',
+                    '60',
+                    '-VV',
+                    '-S',
+                   ],
+        'descriptionDone': 'runsuite',
+        'name': 'Dr. Memory ctest',
+      }
+    ),
+  'config_release_dynamorio': (buildbot.steps.shell.Configure,
+      {
+        'command': ['cmake', '..', '-DDEBUG=OFF'],
+        'name': 'Configure release DynamoRIO',
+        'workdir': 'dynamorio/build',
+      }
+    ),
+  'compile_release_dynamorio': (buildbot.steps.shell.Compile,
+      {
+        'command': ['make', '-j5'],
+        'name': 'Compile release DynamoRIO',
+        'workdir': 'dynamorio/build',
+      }
+    ),
+  'dont_follow_python': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['bin64/drconfig', '-reg', 'python', '-norun', '-v'],
+        'description': "don't follow python",
+        'descriptionDone': "don't follow python",
+        'workdir': 'dynamorio/build',
+      }
+    ),
+  'drmemory_tests': (buildbot.steps.shell.Test,
+      {
+        'command': [ 'xvfb-run',
+          '-a',
+          '../dynamorio/build/bin64/drrun',
+          '-stderr_mask',
+          '12',
+          '--'],
+        'env': { 'CHROME_DEVEL_SANDBOX': '/opt/chromium/chrome_sandbox' },
+      }
+    ),
+  'checkout_tsan': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['svn', 'checkout', '--force',
+          'http://data-race-test.googlecode.com/svn/trunk/', '../tsan'],
+        'description': 'checkout tsan tests',
+        'name': 'Checkout TSan tests',
+      }
+    ),
+  'build_tsan_tests': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat',
+                    'make',
+                    '-C',
+                    '../tsan/unittest'
+          ],
+        'description': 'build tsan tests',
+        'descriptionDone': 'build tsan tests',
+        'env': {'CYGWIN': 'nodosfilewarning'},
+        'name': 'Build TSan tests',
+      }
+    ),
+  'drmemory_tsan_test_dbg': (master.factory.drmemory_factory.DrMemoryTest,
+      {
+        'command': ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat',
+                    'build_drmemory-dbg-32\\bin\\drmemory',
+                    '-dr_ops',
+                    '-msgbox_mask 0 -stderr_mask 15',
+                    '-results_to_stderr',
+                    '-batch',
+                    '-suppress',
+                    '..\\drmemory\\tests\\app_suite\\default-suppressions.txt',
+                    '--']
+      }
+    ),
+  'drmemory_tsan_test_rel': (master.factory.drmemory_factory.DrMemoryTest,
+      {
+        'command': ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat',
+                    'build_drmemory-rel-32\\bin\\drmemory',
+                    '-dr_ops',
+                    '-msgbox_mask 0 -stderr_mask 15',
+                    '-results_to_stderr',
+                    '-batch',
+                    '-suppress',
+                    '..\\drmemory\\tests\\app_suite\\default-suppressions.txt',
+                    '--']
+      }
+    ),
+  'drmemory_tsan_test_dbg_light': (master.factory.drmemory_factory.DrMemoryTest,
+      {
+        'command': ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat',
+                    'build_drmemory-dbg-32\\bin\\drmemory',
+                    '-dr_ops',
+                    '-msgbox_mask 0 -stderr_mask 15',
+                    '-results_to_stderr',
+                    '-batch',
+                    '-suppress',
+                    '..\\drmemory\\tests\\app_suite\\default-suppressions.txt',
+                    '-light',
+                    '--']
+      }
+    ),
+  'drmemory_tsan_test_rel_light': (master.factory.drmemory_factory.DrMemoryTest,
+      {
+        'command': ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat',
+                    'build_drmemory-rel-32\\bin\\drmemory',
+                    '-dr_ops',
+                    '-msgbox_mask 0 -stderr_mask 15',
+                    '-results_to_stderr',
+                    '-batch',
+                    '-suppress',
+                    '..\\drmemory\\tests\\app_suite\\default-suppressions.txt',
+                    '-light',
+                    '--']
+      }
+    ),
+  'drmemory_win7_tests': (buildbot.steps.shell.Test,
+      {
+        'command': ['..\\..\\win7-cr-builder\\build\\src\\tools\\valgrind'
+          '\\chrome_tests.bat', '-t'],
+      }
+    ),
+  'drmemory_win8_tests': (buildbot.steps.shell.Test,
+      {
+        'command': ['..\\..\\win8-cr-builder\\build\\src\\tools\\valgrind'
+          '\\chrome_tests.bat', '-t'],
+      }
+    ),
+  'drmemory_unpack_build': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['drm-sfx', '-ounpacked', '-y'],
+        'description': 'unpack the build',
+        'name': 'Unpack the build',
+      }
+    ),
+  'drmemory_get_revision': (buildbot.steps.shell.SetProperty,
+      {
+        'command': ['unpacked\\bin\\drmemory', '-version'],
+        'description': 'get revision',
+        'descriptionDone': 'get revision',
+        'name': 'Get the revision number',
+      }
+    ),
+  'drmemory_download_build': (buildbot.steps.transfer.FileDownload,
+      {
+        'blocksize': 16384,
+        'mastersrc': 'public_html/builds/drmemory-windows-latest-sfx.exe',
+        'name': 'Download the latest build',
+        'slavedest': 'drm-sfx.exe',
+      }
+    ),
+  'drmemory_prepare_pack_win': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['del', 'testlogs.7z'],
+        'description': 'cleanup',
+        'name': 'Prepare to pack test results',
+      }
+    ),
+  'drmemory_prepare_pack': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['rm', '-f', 'testlogs.7z'],
+        'description': 'cleanup',
+        'name': 'Prepare to pack test results',
+      }
+    ),
+  'package_drmemory_win': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat',
+          'ctest', '-VV', '-S'],
+        'description': 'Package Dr. Memory',
+        'name': 'Package Dr. Memory',
+      }
+    ),
+  'drmemory_find_package_basename': (buildbot.steps.shell.SetProperty,
+      {
+        'command': 'dir /B DrMemory-Windows-*%(pkg_buildnum)s.zip',
+        'description': 'find package basename',
+        'name': 'find package basename',
+      }
+    ),
+  'delete_prior_sfx_archive': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['del'],
+        'description': 'delete prior sfx archive',
+        'name': 'delete prior sfx archive',
+      }
+    ),
+  'drmemory_create_sfx_archive': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat',
+          '7z', 'a', '-sfx'],
+        'description': 'create sfx archive',
+        'name': 'create sfx archive',
+      }
+    ),
+  'upload_drmemory_latest': (buildbot.steps.transfer.FileUpload,
+      {
+        'blocksize': 16384,
+        'masterdest': 'public_html/builds/drmemory-windows-latest-sfx.exe',
+        'name': 'upload latest build',
       }
     ),
 }
@@ -474,6 +750,306 @@ def dump_converter(step, comment="dump converter"):
 def null_converter(step):
   rc = recipe_chunk()
   rc.steps.append('# %s step; null converted' % step[1]['name'])
+  return rc
+
+def dynamorio_unpack_tools_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  fmtstr = 'api.step("%s", %s, env=%s, cwd=%s)'
+  cmdstr = 'api.path["slave_build"].join(' +\
+      repr(step[1]['workdir'].split('/') + ['unpack.bat'])[1:-1] + ')'
+  cwd = 'api.path["slave_build"]'
+  if step[1].get('workdir', ''):
+    cwd += '.join(%s)' % repr(step[1]['workdir'].split('/'))[1:-1]
+  env = "{}"
+  if step[1].get('env', {}):
+    env = repr(step[1]['env'])
+  rc.steps.append('# %s step; generic ShellCommand converted' % step[1]['name'])
+  rc.steps.append(fmtstr % (step[1]['name'], cmdstr, env,
+    cwd))
+  return rc
+
+def upload_drmemory_latest_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.deps.add('gsutil')
+  rc.steps.append('# upload latest build step')
+  local_file = 'drmemory-windows-latest-sfx.exe'
+  bucket = 'chromium-drmemory-builds'
+  remote_dir = '""'
+  rc.steps.append('api.step("copy locally", ["copy", basename + "-sfx.exe",'
+      ' "drmemory-windows-latest-sfx.exe"], cwd=api.path["slave_build"])')
+  rc.steps.append('api.gsutil.upload("%s", "%s", %s,'
+      ' cwd=api.path["slave_build"])' % (local_file, bucket,
+    remote_dir))
+  return rc
+
+def drmemory_create_sfx_archive_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.steps.append('# Create sfx archive step')
+  build_env = 'api.path["build"].join("scripts", "slave", "drmemory",'+\
+      '"build_env.bat")'
+  env = ('{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '
+      '"bot_tools")}')
+  archive_name = 'basename + "-sfx.exe"'
+  archive_source = ('"build_drmemory-debug-32\\\\_CPack_Packages\\\\Windows\\\\'
+      'ZIP\\\\" + basename + "\\\\*"')
+  rc.steps.append('api.step("create sfx archive", [%s, "7z", "a"' % build_env +\
+      ', "-sfx", %s, %s], cwd=api.path["slave_build"], env=%s)' % (archive_name,
+        archive_source, env))
+  return rc
+
+def drmemory_find_package_basename_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.deps.add('recipe_engine/raw_io')
+  rc.steps.append('# Find package basename step')
+  rc.steps.append('step_result = api.step("Find package basename", ["dir",'
+      ' "/B", '
+      '"DrMemory-Windows-*0x" + build_properties["got_revision"][:7] + '
+      '".zip"], stdout=api.raw_io.output(), cwd=api.path["slave_build"])')
+  rc.steps.append('basename = step_result.stdout[:-4]')
+  return rc
+
+def delete_prior_sfx_archive_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.steps.append('# Delete prior sfx archive step')
+  rc.steps.append('api.step("Delete prior sfx archive", '
+      '["del", basename + "-sfx.exe"], cwd=api.path["slave_build"])')
+  return rc
+
+def package_drmemory_win_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  build_env = 'api.path["build"].join("scripts", "slave", "drmemory",'+\
+      '"build_env.bat")'
+  env = ('{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '
+      '"bot_tools")}')
+  confstr = ('str(api.path["checkout"].join("package.cmake")) + ",build=0x"'
+      ' + build_properties["got_revision"][:7] + ";drmem_only"')
+  rc.steps.append('# Package dynamorio step')
+  rc.steps.append('api.step("Package Dr. Memory", [%s, %s, %s],' % (build_env,
+        repr(step[1]['command'][1:4])[1:-1], confstr) +\
+      'env=%s, cwd=api.path["slave_build"])' % env)
+  return rc
+
+def drmemory_get_revision_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/raw_io')
+  rc.steps.append('# Dr. Memory get revision step')
+  rc.steps.append('step_result = api.step("Get the revision number", '
+      '%s, stdout=api.raw_io.output())' % repr(step[1]['command']))
+  rc.steps.append('build_properties["got_revision"] = '
+      'step_result.stdout.split()[3].split(".")[2]')
+  return rc
+
+def drmemory_download_build_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('gsutil')
+  rc.deps.add('recipe_engine/path')
+  rc.steps.append('# Download build step')
+  rc.steps.append('api.gsutil.download("chromium-drmemory-builds", '
+      '"drmemory-windows-latest-sfx.exe", "drm-sfx.exe", '
+      'cwd=api.path["slave_build"])')
+  return rc
+
+def drmemory_tsan_test_light_converter(step):
+  rc = recipe_chunk()
+  rc.steps.append('# Dr. Memory TSan test step')
+  env = '{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '+\
+      '"bot_tools")}'
+  rc.steps.append('api.step("%s", [' % step[1]['name'] +\
+      'api.path["build"].join("scripts", "slave", "drmemory", ' +\
+      '"build_env.bat"), '+\
+      repr(step[1]['command'][1:7])[1:-1] +\
+      ', api.path["checkout"].join("tests", "app_suite", '+\
+      '"default-suppressions.txt"), "-light", "--", ' +\
+      'api.path["slave_build"].join("tsan", '+\
+      '%s), ' % repr(step[1]['command'][10].split('\\')[2:])[1:-1] +\
+      '%s], ' % repr(step[1]['command'][-2:])[1:-1] +\
+      'env=%s)' % env)
+  return rc
+
+def drmemory_tsan_test_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/path')
+  rc.deps.add('recipe_engine/step')
+  rc.steps.append('# Dr. Memory TSan test step')
+  env = '{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '+\
+      '"bot_tools")}'
+  rc.steps.append('api.step("%s", [' % step[1]['name'] +\
+      'api.path["build"].join("scripts", "slave", "drmemory", ' +\
+      '"build_env.bat"), '+\
+      repr(step[1]['command'][1:7])[1:-1] +\
+      ', api.path["checkout"].join("tests", "app_suite", '+\
+      '"default-suppressions.txt"), "--", ' +\
+      'api.path["slave_build"].join("tsan", '+\
+      '%s), ' % repr(step[1]['command'][9].split('\\')[2:])[1:-1] +\
+      '%s], ' % repr(step[1]['command'][-2:])[1:-1] +\
+      'env=%s)' % env)
+  return rc
+
+def build_tsan_tests_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  env = '{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '+\
+      '"bot_tools"), "CYGWIN": "nodosfilewarning"}'
+  rc.steps.append("# Build TSan tests step")
+  rc.steps.append('api.step("Build TSan Tests", ' +\
+      '[%s, ' % repr(step[1]['command'][:-1])[1:-1] +\
+      '%s], ' % 'api.path["slave_build"].join("tsan", "unittest")' +\
+      "env=%s)" % env)
+  return rc
+
+def checkout_tsan_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.steps.append('# Checkout TSan tests step')
+  rc.steps.append('api.step("Checkout TSan tests",' +\
+      ' [%s, ' % repr(step[1]['command'][:-1])[1:-1] +\
+      'api.path["slave_build"].join("tsan")])')
+  return rc
+
+def drmemory_tests_converter(step):
+  rc = recipe_chunk()
+  env = "{}"
+  if step[1].get('env', {}):
+    env = repr(step[1]['env'])
+  rc.steps.append("# drmemory test step")
+  rc.steps.append('api.step("%s", [%s, '%(step[1]['name'],
+                                          repr(step[1]['command'][:2])[1:-1])+\
+      'api.path["checkout"].join("build",' +\
+      '"bin64", "drrun"), %s], ' % repr(step[1]['command'][3:])[1:-1] +\
+      'env=%s, cwd=api.path["checkout"])' % env)
+  return rc
+
+def config_release_dynamorio_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('file')
+  rc.deps.add('recipe_engine/path')
+  rc.steps.append("# Make the build directory step")
+  rc.steps.append('api.file.makedirs("makedirs", api.path["slave_build"].'
+      'join("dynamorio"))')
+  rc.steps.append('api.file.makedirs("makedirs", api.path["slave_build"].'
+      'join("dynamorio", "build"))')
+  rc = rc + generic_shellcommand_converter(step)
+  return rc
+
+def win_drmemory_ctest_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.steps.append('# windows Dr. Memory ctest step')
+  script = ('api.path["build"].join("scripts", "slave", "drmemory",'
+      ' "build_env.bat")')
+  confstr = ('str(api.path["checkout"].join("tests", "runsuite.cmake")) + '
+      '",drmemory_only;long;build=" + build_properties["buildnumber"]')
+  rc.steps.append('api.step("Dr. Memory ctest", [%s, %s, %s])' % (script,
+    repr(step[1]['command'][1:6])[1:-1], confstr))
+  return rc
+
+def drmemory_pack_results_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.steps.append("# Pack test results step")
+  zipname = ('"testlogs_r" + build_properties["got_revision"] + "_b" +'
+  ' build_properties["buildnumber"] + ".7z"')
+  rc.steps.append('api.step("Pack test results", '
+      '[%s, %s, %s])' % (repr(step[1]['command'][:3])[1:-1], zipname,
+        repr(step[1]['command'][4:])[1:-1]))
+  return rc
+
+def drmemory_pack_results_win_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.steps.append("# Pack test results step")
+  build_env = 'api.path["build"].join("scripts", "slave", "drmemory",'+\
+      '"build_env.bat")'
+  env = ('{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '
+      '"bot_tools")}')
+  zipname = ('"testlogs_r" + build_properties["got_revision"] + "_b" +'
+  ' build_properties["buildnumber"] + ".7z"')
+  rc.steps.append('api.step("Pack test results", '
+      '[%s, %s, %s, %s], env=%s)' % (build_env,
+        repr(step[1]['command'][1:4])[1:-1], zipname,
+        repr(step[1]['command'][5:])[1:-1], env))
+  return rc
+
+def drmemory_ctest_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.steps.append('# Dr. Memory ctest step')
+  rc.steps.append('api.step("Dr. Memory ctest", ["ctest", "--timeout", "60", '
+      '"-VV", "-S", str(api.path["checkout"].join("tests", "runsuite.cmake"))'
+      ' + ",drmemory_only;long;build=0x"'
+      ' + build_properties["got_revision"][:7]])')
+  return rc
+
+def upload_drmemory_package_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('gsutil')
+  rc.steps.append('# upload drmemory build step')
+  local_file = '"DrMemory-TODO-*" + build_properties["got_revision"][:7]'+\
+      ' + ".TODO"'
+  bucket = 'chromium-drmemory-builds'
+  remote_dir = '"builds/"'
+  rc.steps.append('api.gsutil.upload(%s, "%s", %s)' % (local_file, bucket,
+    remote_dir))
+  return rc
+
+def upload_drmemory_test_logs_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('gsutil')
+  rc.steps.append('# upload drmemory test logs step')
+  zipname = ('"testlogs_r" + build_properties["got_revision"] + "_b" +'
+  ' str(api.properties["buildnumber"]) + ".7z"')
+  bucket = 'chromium-drmemory-builds'
+  remote_dir = '"testlogs/from_%s" % api.properties["buildername"]'
+  rc.steps.append('api.gsutil.upload(%s, "%s", %s)' % (zipname, bucket,
+    remote_dir))
+  return rc
+
+def package_drmemory_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.deps.add('recipe_engine/properties')
+  rc.steps.append('# Package DrMemory step')
+  confstr = 'str(api.path["checkout"].join("package.cmake")) + '+\
+      '",build=0x" + build_properties["got_revision"][:7] + ";drmem_only"'
+  rc.steps.append('api.step("Package Dr. Memory", ["ctest", "-VV", "-S", %s])'%\
+      confstr)
+  return rc
+
+def checkout_drmemory_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('depot_tools/bot_update')
+  rc.deps.add('depot_tools/gclient')
+  rc.steps.append('# checkout DrMemory step')
+  rc.steps.append('src_cfg = api.gclient.make_config(GIT_MODE=True)')
+  rc.steps.append('soln = src_cfg.solutions.add()')
+  rc.steps.append('soln.name = "%s"' % 'drmemory')
+  rc.steps.append('soln.url = "%s"' % step[1]['repourl'])
+  rc.steps.append('soln.custom_deps = {"drmemory/dynamorio":'
+      ' "https://github.com/DynamoRIO/dynamorio.git", "tools/buildbot": '
+      '"https://github.com/DynamoRIO/buildbot.git"}')
+  rc.steps.append('api.gclient.c = src_cfg')
+  rc.steps.append('result = api.bot_update.ensure_checkout(force=True)')
+  rc.steps.append(
+      'build_properties.update(result.json.output.get("properties", {}))')
   return rc
 
 def trigger_converter(step):
@@ -577,14 +1153,10 @@ def upload_dynamorio_package_converter(step):
   rc.deps.add('recipe_engine/properties')
   rc.deps.add('gsutil')
   rc.steps.append('# upload dynamorio package')
-  local_file = '"DynamoRIO-Linux-*" + str(api.properties["revision"])[:7]'+\
-      ' + ".tar.gz"'
+  local_file = '"DynamoRIO-TODO-*" + build_properties["got_revision"][:7]'+\
+      ' + ".TODO"'
   bucket = 'chromium-dynamorio'
   remote_dir = '"builds/"'
-  rc.steps.append('api.gsutil.upload(%s, "%s", %s)' % (local_file, bucket,
-    remote_dir))
-  local_file = '"DynamoRIO-Windows-*" + str(api.properties["revision"])'+\
-      '[:7] + ".zip"'
   rc.steps.append('api.gsutil.upload(%s, "%s", %s)' % (local_file, bucket,
     remote_dir))
   return rc
@@ -680,7 +1252,7 @@ def generic_shellcommand_converter(step):
   rc = recipe_chunk()
   rc.deps.add('recipe_engine/step')
   fmtstr = 'api.step("%s", %s, env=%s, cwd=%s)'
-  cwd = 'api.path["checkout"]'
+  cwd = 'api.path["slave_build"]'
   if step[1].get('workdir', ''):
     cwd += '.join(%s)' % repr(step[1]['workdir'].split('/'))[1:-1]
   env = "{}"
@@ -911,8 +1483,8 @@ _step_converters_map = {
     'win_runtest': win_runtest_converter,
     'clear_tools': null_converter,
     'checkout_dynamorio': checkout_dynamorio_converter,
-    'checkout_dynamorio_tools': generic_shellcommand_converter,
-    'dynamorio_unpack_tools': generic_shellcommand_converter,
+    'checkout_dynamorio_tools': null_converter,
+    'dynamorio_unpack_tools': dynamorio_unpack_tools_converter,
     'win_dynamorio_nightly_suite': win_dynamorio_nightly_suite_converter,
     'win_dynamorio_precommit': win_dynamorio_precommit_converter,
     'dynamorio_precommit': dynamorio_precommit_converter,
@@ -928,6 +1500,36 @@ _step_converters_map = {
     'trigger': trigger_converter,
     'win_dart_taskkill': win_dart_taskkill_converter,
     'win_dartino': win_dartino_converter,
+    'package_drmemory': package_drmemory_converter,
+    'checkout_drmemory': checkout_drmemory_converter,
+    'upload_drmemory_package': upload_drmemory_package_converter,
+    'drmemory_ctest': drmemory_ctest_converter,
+    'drmemory_prepare_pack_win': null_converter,
+    'drmemory_prepare_pack': null_converter,
+    'drmemory_pack_results': drmemory_pack_results_converter,
+    'upload_drmemory_test_logs': upload_drmemory_test_logs_converter,
+    'win_drmemory_ctest': win_drmemory_ctest_converter,
+    'config_release_dynamorio': config_release_dynamorio_converter,
+    'compile_release_dynamorio': generic_shellcommand_converter,
+    'dont_follow_python': generic_shellcommand_converter,
+    'drmemory_tests': drmemory_tests_converter,
+    'checkout_tsan': checkout_tsan_converter,
+    'build_tsan_tests': build_tsan_tests_converter,
+    'drmemory_tsan_test_dbg': drmemory_tsan_test_converter,
+    'drmemory_tsan_test_rel': drmemory_tsan_test_converter,
+    'drmemory_tsan_test_dbg_light': drmemory_tsan_test_light_converter,
+    'drmemory_tsan_test_rel_light': drmemory_tsan_test_light_converter,
+    'drmemory_pack_results_win': drmemory_pack_results_win_converter,
+    'drmemory_download_build': drmemory_download_build_converter,
+    'drmemory_unpack_build': generic_shellcommand_converter,
+    'drmemory_win7_tests': generic_shellcommand_converter,
+    'drmemory_win8_tests': generic_shellcommand_converter,
+    'drmemory_get_revision': drmemory_get_revision_converter,
+    'package_drmemory_win': package_drmemory_win_converter,
+    'drmemory_find_package_basename': drmemory_find_package_basename_converter,
+    'delete_prior_sfx_archive': delete_prior_sfx_archive_converter,
+    'drmemory_create_sfx_archive': drmemory_create_sfx_archive_converter,
+    'upload_drmemory_latest': upload_drmemory_latest_converter,
 }
 
 def signature_match(step, signature):
@@ -942,6 +1544,8 @@ def signature_match(step, signature):
                        'branch',
                        'blocksize',
                        'masterdest',
+                       'slavedest',
+                       'mastersrc',
                        'slavesrc',
                        'strip'}
   subset_dictionary_attributes = {'env'}
@@ -964,6 +1568,8 @@ def signature_match(step, signature):
       return list_startswith(base_command, command_signature)
     if isinstance(base_command, master.optional_arguments.ListProperties):
       return list_startswith(base_command.items, command_signature)
+    if isinstance(base_command, buildbot.process.properties.WithProperties):
+      return base_command.fmtstring == command_signature
     return False
 
   def is_subdictionary(containing_dict, subdict):
@@ -1197,6 +1803,8 @@ class recipe_skeleton(object):
       test_properties = ["api.properties(mastername='%s') +" % self.master_name,
                          "api.properties(buildername='%s') +" % builder_name,
                          "api.properties(revision='123456789abcdef') +",
+                         "api.properties(got_revision='123456789abcdef') +",
+                         "api.properties(buildnumber='42') +",
                          "api.properties(slavename='%s')" % "TestSlave",]
       test = ["yield (api.test('%s') +" % sbn(builder_name)] +\
              [test_properties] +\
@@ -1240,7 +1848,8 @@ def step_to_recipe_chunk(step):
     return ret
   step_type = matches.pop()
   if step_type not in _step_converters_map:
-    return dump_converter(step, 'step recognised, no converter found')
+    return dump_converter(step,
+        'step recognised as "%s", no converter found' % step_type)
   return _step_converters_map[step_type](step)
 
 def write_recipe(c, ActiveMaster, filename=None):

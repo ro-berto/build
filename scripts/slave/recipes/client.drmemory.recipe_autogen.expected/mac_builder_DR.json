@@ -1,0 +1,83 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--master",
+      "client.drmemory",
+      "--builder",
+      "mac-builder-DR",
+      "--slave",
+      "TestSlave",
+      "--spec",
+      "cache_dir = '[ROOT]/git_cache'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'dynamorio', 'url': 'https://github.com/DynamoRIO/dynamorio.git'}]",
+      "--root",
+      "dynamorio",
+      "--revision_mapping_file",
+      "{}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "dynamorio@123456789abcdef",
+      "--force",
+      "--output_manifest"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+    },
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dynamorio\": \"123456789abcdef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"dynamorio\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"dynamorio\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "ctest",
+      "-VV",
+      "-S",
+      "[SLAVE_BUILD]/dynamorio/make/package.cmake,build=0x1234567"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Package DynamoRIO"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "DynamoRIO-MacOS-*1234567.tar.gz",
+      "gs://chromium-dynamorio/builds/"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-dynamorio/builds/@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
