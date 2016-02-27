@@ -1064,10 +1064,14 @@ class AndroidApi(recipe_api.RecipeApi):
         **kwargs)
 
     if upload:
+      output_zip = self.coverage_dir.join('coverage_html.zip')
+      self.m.zip.directory(step_name='Zip generated coverage report files',
+                           directory=self.coverage_dir.join('coverage_html'),
+                           output=output_zip)
       gs_dest = 'java/%s/%s' % (
           self.m.properties['buildername'], self.m.properties['revision'])
       self.m.gsutil.upload(
-          source=self.coverage_dir.join('coverage_html'),
+          source=output_zip,
           bucket='chrome-code-coverage',
           dest=gs_dest,
           args=['-R'],
