@@ -120,6 +120,13 @@
       "scheduler": None,
       "slave_pools": ["ccompute_bots_cq"],
     },
+    "android_chromium_variable": {
+      "builder_timeout_s": 6900,  # 60 * 115
+      "recipe": "findit/chromium/compile",
+      "scheduler": None,
+      "slavebuilddir": "android_chromium_variable",
+      "slave_pools": ["ccompute_bots_cq"],
+    }
   },
 
   "schedulers": { },
