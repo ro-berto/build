@@ -447,7 +447,9 @@
       "--apk-under-test",
       "[SLAVE_BUILD]/src/out/Release/apks/CronetSample.apk",
       "--verbose",
-      "--release"
+      "--release",
+      "--num-retries",
+      "0"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test CronetSampleTest"
@@ -482,7 +484,9 @@
       "--apk-under-test",
       "[SLAVE_BUILD]/src/out/Release/apks/CronetTest.apk",
       "--verbose",
-      "--release"
+      "--release",
+      "--num-retries",
+      "0"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test CronetTestInstrumentation"

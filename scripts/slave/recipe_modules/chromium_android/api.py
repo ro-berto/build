@@ -657,7 +657,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                 apk_package=None, host_driven_root=None,
                                 official_build=False, json_results_file=None,
                                 timeout_scale=None, strict_mode=None,
-                                suffix=None, **kwargs):
+                                suffix=None, num_retries=None, **kwargs):
     if apk_under_test:
       # TODO(jbudorick): Remove this once the test runner handles installation
       # of the APK under test.
@@ -701,6 +701,8 @@ class AndroidApi(recipe_api.RecipeApi):
       args.extend(['--timeout-scale', timeout_scale])
     if strict_mode:
       args.extend(['--strict-mode', strict_mode])
+    if num_retries is not None:
+      args.extend(['--num-retries', str(num_retries)])
 
     step_result = self.test_runner(
         'Instrumentation test %s%s' % (annotation or name,

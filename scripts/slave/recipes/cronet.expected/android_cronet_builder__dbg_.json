@@ -443,7 +443,9 @@
       "/path/to/tmp/",
       "--apk-under-test",
       "[SLAVE_BUILD]/src/out/Debug/apks/CronetSample.apk",
-      "--verbose"
+      "--verbose",
+      "--num-retries",
+      "0"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test CronetSampleTest"
@@ -476,7 +478,9 @@
       "/path/to/tmp/",
       "--apk-under-test",
       "[SLAVE_BUILD]/src/out/Debug/apks/CronetTest.apk",
-      "--verbose"
+      "--verbose",
+      "--num-retries",
+      "0"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test CronetTestInstrumentation"

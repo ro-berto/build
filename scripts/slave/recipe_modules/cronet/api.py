@@ -103,6 +103,7 @@ class CronetApi(recipe_api.RecipeApi):
             apk_under_test=droid.apk_path(suite.get('apk_under_test')),
             test_apk=droid.apk_path(suite.get('test_apk')),
             verbose=True,
+            num_retries=0,
             **suite.get('kwargs', {}))
       droid.common_tests_final_steps()
 
