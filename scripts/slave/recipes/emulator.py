@@ -92,15 +92,18 @@ def RunSteps(api, mastername, buildername):
     api.chromium_android.spawn_logcat_monitor()
     api.chromium_android.provision_devices(emulators=True, **provision_settings)
 
-    for suite, isolate_file in builder.get('unittests', []):
-      isolate_file_path = (
-          api.path['checkout'].join(*isolate_file) if isolate_file else None)
-      api.chromium_android.run_test_suite(suite,
-                                          isolate_file_path=isolate_file_path)
-
-    api.chromium_android.logcat_dump()
-    api.chromium_android.stack_tool_steps()
-    api.chromium_android.test_report()
+    try:
+      with api.step.defer_results():
+        for suite, isolate_file in builder.get('unittests', []):
+          isolate_file_path = (
+              api.path['checkout'].join(*isolate_file)
+              if isolate_file else None)
+          api.chromium_android.run_test_suite(
+              suite, isolate_file_path=isolate_file_path)
+    finally:
+      api.chromium_android.logcat_dump()
+      api.chromium_android.stack_tool_steps()
+      api.chromium_android.test_report()
 
 def GenTests(api):
   sanitize = lambda s: ''.join(c if c.isalnum() else '_' for c in s)
@@ -113,3 +116,11 @@ def GenTests(api):
           api.properties.generic(
               buildername=buildername,
               mastername=mastername))
+
+  yield (
+      api.test('Android_Tests__x86_emulator__test_fail') +
+      api.properties.generic(
+        buildername='Android Tests (x86 emulator)',
+        mastername='chromium.fyi') +
+      api.step_data('android_webview_unittests', retcode=2)
+  )
