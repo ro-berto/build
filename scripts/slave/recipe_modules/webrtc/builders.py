@@ -424,6 +424,17 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
+      'Android32 Builder MIPS (dbg)': {
+        'recipe_config': 'webrtc_android_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'mipsel',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
       'Android64 Builder': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
@@ -1154,6 +1165,17 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'intel',
           'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
+      'android_compile_mips_dbg': {
+        'recipe_config': 'webrtc_android_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'mipsel',
+          'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
