@@ -174,7 +174,7 @@
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
+      "RECIPE_PACKAGE[depot_tools]\\git.bat",
       "log",
       "--format=%H",
       "r0..r1"
@@ -379,7 +379,7 @@
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
+      "RECIPE_PACKAGE[depot_tools]\\git.bat",
       "diff",
       "r1~1",
       "r1",

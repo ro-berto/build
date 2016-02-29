@@ -295,7 +295,7 @@
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
+      "RECIPE_PACKAGE[depot_tools]\\git.bat",
       "show",
       "HEAD",
       "--format=%at",
