@@ -66,8 +66,7 @@ def MakeTempDir(api):
 
 
 def GenerateDocs(api, pub_cache):
-  # TODO(abarth): Do we still need a specific dartdoc version?
-  activate_cmd = ['pub', 'global', 'activate', 'dartdoc', '0.8.4']
+  activate_cmd = ['pub', 'global', 'activate', 'dartdoc', '0.9.1']
   api.step('pub global activate dartdoc', activate_cmd)
   dartdoc = pub_cache.join('bin', 'dartdoc')
 

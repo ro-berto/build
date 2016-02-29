@@ -317,7 +317,7 @@
       "global",
       "activate",
       "dartdoc",
-      "0.8.4"
+      "0.9.1"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
