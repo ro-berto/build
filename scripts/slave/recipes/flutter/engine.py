@@ -91,8 +91,8 @@ def AnalyzeDartUI(api):
 
 
 def BuildLinuxAndroid(api):
-  RunGN(api, '--release', '--android', '--enable-firebase')
-  Build(api, 'android_Release', ':dist', 'sky/services/firebase')
+  RunGN(api, '--release', '--android', '--enable-gcm', '--enable-firebase')
+  Build(api, 'android_Release', ':dist', 'gcm', 'sky/services/firebase')
   UploadArtifacts(api, 'android-arm', [
     'build/android/ant/chromium-debug.keystore',
     'out/android_Release/apks/SkyShell.apk',
@@ -107,21 +107,22 @@ def BuildLinuxAndroid(api):
   UploadDartPackage(api, 'sky_engine')
   UploadDartPackage(api, 'sky_services')
 
-  def UploadService(name):
+  def UploadService(name, out_dir):
     def Upload(from_path, to_path):
       api.gsutil.upload(from_path, BUCKET_NAME, GetCloudPath(api, to_path),
           name='upload %s' % to_path)
 
     def ServicesOut(path):
       checkout = api.path['checkout']
-      return checkout.join('out/android_Release/gen/sky/services/%s' % path)
+      return checkout.join('%s/%s' % (out_dir, path))
 
     dex_jar = '%s/%s_lib.dex.jar' % (name, name)
     interfaces_jar = '%s/interfaces_java.dex.jar' % (name)
     Upload(ServicesOut(dex_jar), dex_jar)
     Upload(ServicesOut(interfaces_jar), interfaces_jar)
 
-  UploadService('firebase')
+  UploadService('firebase', 'out/android_Release/gen/sky/services')
+  UploadService('gcm', 'out/android_Release/gen/third_party')
 
 
 def BuildLinux(api):
