@@ -506,6 +506,9 @@ class RevisionState(object):
       the latest knwon good revision.
     """
 
+    if self.bisector.is_return_code_mode():
+      return self.mean_value == self.bisector.lkgr.mean_value
+
     while True:
       diff_from_good = self.bisector.significantly_different(
           self.bisector.lkgr.values, self.values)

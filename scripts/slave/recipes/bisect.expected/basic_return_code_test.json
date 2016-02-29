@@ -888,42 +888,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::auto_bisect]/resources/significantly_different.py",
-      "[]",
-      "[]",
-      "0.01"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision chromium@00316c9ddf.Checking sample difference",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::auto_bisect]/resources/significantly_different.py",
-      "[]",
-      "[]",
-      "0.01"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision chromium@00316c9ddf.Checking sample difference (2)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
       "git",
       "footers",
       "--position",
@@ -1131,42 +1095,6 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::auto_bisect]/resources/significantly_different.py",
-      "[]",
-      "[]",
-      "0.01"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision chromium@fc6dfc7ff5.Checking sample difference",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::auto_bisect]/resources/significantly_different.py",
-      "[]",
-      "[]",
-      "0.01"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Working on revision chromium@fc6dfc7ff5.Checking sample difference (2)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
   },
   {
