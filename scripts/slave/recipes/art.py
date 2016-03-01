@@ -35,7 +35,7 @@ _TARGET_DEVICE_MAP = {
     'mips32': {
       'bitness': 32,
       'make_jobs': 2,
-      'product': 'mips32r2_fp',
+      'product': 'mips32r2_fp_xburst',
       },
     }
 
@@ -189,7 +189,7 @@ def setup_target(api,
              env=env)
 
     # Mips testing is broken.
-    if device == 'mips32' or device == 'mips64_emulator':
+    if device == 'mips64_emulator':
       return
 
     # Device is flaky, so disable running tests on it.
@@ -358,12 +358,12 @@ _CONFIG_MAP = {
         'concurrent_collector': True,
       },
       'mips32-ndebug': {
-        'serial': '5163bae65fe0f8c8',
+        'serial': 'CI20-8d58221d-1381a803-11ee0000-8a61aa4f',
         'device': 'mips32',
         'debug': False,
       },
       'mips32-debug': {
-        'serial': '9163bae65fe0f880',
+        'serial': 'CI20-d5d90f0a-12810803-0ae90000-8a61aa4f',
         'device': 'mips32',
         'debug': True,
       },
