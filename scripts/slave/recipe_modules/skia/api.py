@@ -396,25 +396,36 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def download_and_copy_images(self):
     """Download test images if needed."""
-    self._download_and_copy_dir(
-        VERSION_FILE_SK_IMAGE,
-        GS_SUBDIR_TMPL_SK_IMAGE,
-        self.images_dir,
-        self.device_dirs.images_dir,
-        test_expected_version=TEST_EXPECTED_SK_IMAGE_VERSION,
-        test_actual_version=self.m.properties.get(
-            'test_downloaded_sk_image_version', TEST_EXPECTED_SK_IMAGE_VERSION))
+    if 'Swarming' in self.builder_name:
+      self.run(self.m.python, 'Download images',
+               script=self.skia_dir.join('infra', 'bots', 'download_images.py'),
+               env=self.gsutil_env_chromium_skia_gm)
+    else:
+      self._download_and_copy_dir(
+          VERSION_FILE_SK_IMAGE,
+          GS_SUBDIR_TMPL_SK_IMAGE,
+          self.images_dir,
+          self.device_dirs.images_dir,
+          test_expected_version=TEST_EXPECTED_SK_IMAGE_VERSION,
+          test_actual_version=self.m.properties.get(
+              'test_downloaded_sk_image_version',
+              TEST_EXPECTED_SK_IMAGE_VERSION))
 
   def download_and_copy_skps(self):
     """Download the SKPs if needed."""
-    self._download_and_copy_dir(
-        VERSION_FILE_SKP,
-        GS_SUBDIR_TMPL_SKP,
-        self.local_skp_dir,
-        self.device_dirs.skp_dir,
-        test_expected_version=TEST_EXPECTED_SKP_VERSION,
-        test_actual_version=self.m.properties.get(
-            'test_downloaded_skp_version', TEST_EXPECTED_SKP_VERSION))
+    if 'Swarming' in self.builder_name:
+      self.run(self.m.python, 'Download SKPs',
+               script=self.skia_dir.join('infra', 'bots', 'download_skps.py'),
+               env=self.gsutil_env_chromium_skia_gm)
+    else:
+      self._download_and_copy_dir(
+          VERSION_FILE_SKP,
+          GS_SUBDIR_TMPL_SKP,
+          self.local_skp_dir,
+          self.device_dirs.skp_dir,
+          test_expected_version=TEST_EXPECTED_SKP_VERSION,
+          test_actual_version=self.m.properties.get(
+              'test_downloaded_skp_version', TEST_EXPECTED_SKP_VERSION))
 
   def install(self):
     """Copy the required executables and files to the device."""
@@ -470,6 +481,70 @@ print json.dumps({'ccache': ccache})
     self._run_once(self.install)
     self._run_once(self.download_and_copy_skps)
     self._run_once(self.download_and_copy_images)
+
+    if self.builder_cfg.get('extra_config') == 'Swarming':
+      # Swarm the tests.
+      isolate_dir = self.skia_dir.join('infra', 'bots')
+      isolate_path = isolate_dir.join('test_skia.isolate')
+      isolate_vars = {
+          'MASTER_NAME': self.master_name,
+          'BUILDER_NAME': self.builder_name,
+          'BUILD_NUMBER': str(self.m.properties['buildnumber']),
+          'SLAVE_NAME': self.slave_name,
+          'REVISION': self.got_revision,
+      }
+      self.m.skia_swarming.create_isolated_gen_json(
+          isolate_path, isolate_dir, 'linux', 'test_skia', isolate_vars,
+          blacklist=['.git'])
+      self.m.skia_swarming.batcharchive(['test_skia'])
+      props = self.m.step.active_result.presentation.properties
+      hashes = props['swarm_hashes'].items()
+      dimensions = {
+        'pool': 'Skia',
+      }
+      dimensions['os'] = self.builder_cfg['os']
+      if self.builder_cfg['cpu_or_gpu'] == 'CPU':
+        dimensions['gpu'] = 'none'
+        # TODO(borenet): Add appropriate CPU dimension(s).
+        #dimensions['cpu'] = self.builder_cfg['cpu_or_gpu_value']
+      else:  # pragma: no cover
+        dimensions['gpu'] = self.builder_cfg['cpu_or_gpu_value']
+
+      tasks = self.m.skia_swarming.trigger_swarming_tasks(hashes, dimensions,
+                                                          idempotent=True)
+
+      # Wait for compile to finish, download the results.
+      for task in tasks:
+        self.m.file.rmtree('results_dir', task.task_output_dir, infra_step=True)
+        self.m.skia_swarming.collect_swarming_task(task)
+
+      # Upload the results.
+      if self.upload_dm_results:
+        host_dm_dir = self.m.path['slave_build'].join('dm')
+        self.flavor.create_clean_host_dir(host_dm_dir)
+        dm_src = tasks[0].task_output_dir.join('0', 'dm')
+        self.m.file.rmtree('dm_dir', host_dm_dir, infra_step=True)
+        self.m.file.copytree('dm_dir', dm_src, host_dm_dir, infra_step=True)
+
+        # Upload them to Google Storage.
+        self.run(
+            self.m.python,
+            'Upload DM Results',
+            script=self.resource('upload_dm_results.py'),
+            args=[
+              host_dm_dir,
+              self.got_revision,
+              self.builder_name,
+              self.m.properties['buildnumber'],
+              self.m.properties['issue'] if self.is_trybot else '',
+              self.m.path['slave_build'].join('skia', 'common', 'py', 'utils'),
+            ],
+            cwd=self.m.path['checkout'],
+            env=self.gsutil_env_chromium_skia_gm,
+            abort_on_failure=False,
+            infra_step=True)
+
+      return
 
     use_hash_file = False
     if self.upload_dm_results:
@@ -577,21 +652,22 @@ print json.dumps({'ccache': ccache})
       self.flavor.copy_directory_contents_to_host(self.device_dirs.dm_dir,
                                                   host_dm_dir)
       # Upload them to Google Storage.
-      self.run(self.m.python,
-               'Upload DM Results',
-               script=self.resource('upload_dm_results.py'),
-               args=[
-                 host_dm_dir,
-                 self.got_revision,
-                 self.builder_name,
-                 self.m.properties['buildnumber'],
-                 self.m.properties['issue'] if self.is_trybot else '',
-                 self.m.path['slave_build'].join("skia", "common", "py", "utils"),
-               ],
-               cwd=self.m.path['checkout'],
-               env=self.gsutil_env_chromium_skia_gm,
-               abort_on_failure=False,
-               infra_step=True)
+      self.run(
+          self.m.python,
+          'Upload DM Results',
+          script=self.resource('upload_dm_results.py'),
+          args=[
+              host_dm_dir,
+              self.got_revision,
+              self.builder_name,
+              self.m.properties['buildnumber'],
+              self.m.properties['issue'] if self.is_trybot else '',
+              self.m.path['slave_build'].join('skia', 'common', 'py', 'utils'),
+          ],
+          cwd=self.m.path['checkout'],
+          env=self.gsutil_env_chromium_skia_gm,
+          abort_on_failure=False,
+          infra_step=True)
 
     # See skia:2789.
     if ('Valgrind' in self.builder_name and

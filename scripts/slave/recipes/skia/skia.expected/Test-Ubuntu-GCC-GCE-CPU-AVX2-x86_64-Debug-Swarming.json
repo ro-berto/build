@@ -529,12 +529,44 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/skia/infra/bots/download_skps.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
+      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
+      "BUILDTYPE": "Debug",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming"
+    },
+    "name": "Download SKPs"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/skia/infra/bots/download_images.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
+      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
+      "BUILDTYPE": "Debug",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming"
+    },
+    "name": "Download images"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/tmp",
+      "[SLAVE_BUILD]/swarming_temp_dir",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "makedirs tmp_dir",
+    "name": "makedirs swarming tmp dir (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -553,44 +585,184 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/SKP_VERSION",
-      "/path/to/tmp/"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/test_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--blacklist\", \n        \".git\", \n        \"--extra-variable\", \n        \"REVISION\", \n        164710, \n        \"--extra-variable\", \n        \"MASTER_NAME\", \n        \"client.skia.fyi\", \n        \"--extra-variable\", \n        \"BUILD_NUMBER\", \n        \"5\", \n        \"--extra-variable\", \n        \"BUILDER_NAME\", \n        \"Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming\", \n        \"--extra-variable\", \n        \"SLAVE_NAME\", \n        \"skiabot-linux-housekeeper-003\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/skia/infra/bots\", \n    \"version\": 1\n}",
+      "[SLAVE_BUILD]/swarming_temp_dir/test_skia.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Get expected SKP_VERSION"
+    "name": "Write test_skia.isolated.gen.json"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SKP_VERSION",
-      "/path/to/tmp/"
+      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
+      "[SLAVE_BUILD]/swarming.client",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "[SLAVE_BUILD]/swarming_temp_dir/test_skia.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Get downloaded SKP_VERSION"
+    "name": "isolate tests (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_skia\": \"[dummy hash for test_skia]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"test_skia\": \"[dummy hash for test_skia]\"}@@@"
+    ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skia/SK_IMAGE_VERSION",
-      "/path/to/tmp/"
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "trigger",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--priority",
+      "90",
+      "--shards",
+      "1",
+      "--task-name",
+      "test_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--expiration",
+      "14400",
+      "--io-timeout",
+      "1200",
+      "--hard-timeout",
+      "3600",
+      "--dimension",
+      "gpu",
+      "none",
+      "--dimension",
+      "os",
+      "Ubuntu",
+      "--dimension",
+      "pool",
+      "Skia",
+      "--tag",
+      "buildername:Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming",
+      "--tag",
+      "buildnumber:5",
+      "--tag",
+      "data:[dummy hash for test_skia]",
+      "--tag",
+      "master:client.skia.fyi",
+      "--tag",
+      "name:test_skia",
+      "--tag",
+      "os:Ubuntu",
+      "--tag",
+      "slavename:skiabot-linux-housekeeper-003",
+      "--tag",
+      "stepname:test_skia on Ubuntu",
+      "--idempotent",
+      "[dummy hash for test_skia]"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Get expected SK_IMAGE_VERSION"
+    "name": "[trigger] test_skia on Ubuntu",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+    ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
-      "/path/to/tmp/"
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Get downloaded SK_IMAGE_VERSION"
+    "name": "rmtree results_dir (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "collect",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--decorate",
+      "--print-status-updates",
+      "--shards",
+      "1",
+      "test_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5",
+      "--task-summary-json",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "test_skia on Ubuntu",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@swarming pending 71s@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"abandoned_ts\": null, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"completed_ts\": \"2014-09-25T01:42:00.123\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"durations\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        5.7, @@@",
+      "@@@STEP_LOG_LINE@json.output@        31.5@@@",
+      "@@@STEP_LOG_LINE@json.output@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"exit_codes\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        0, @@@",
+      "@@@STEP_LOG_LINE@json.output@        0@@@",
+      "@@@STEP_LOG_LINE@json.output@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"id\": \"148aa78d7aa0000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"isolated_out\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"view_url\": \"blah\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"outputs\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"Heart beat succeeded on win32.\\n\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"Foo\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"state\": 112, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"try_number\": 1, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"user\": \"unknown\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
   },
   {
     "cmd": [
@@ -639,102 +811,33 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport contextlib\nimport math\nimport socket\nimport sys\nimport time\nimport urllib2\n\nHASHES_URL = 'https://gold.skia.org/_/hashes'\nRETRIES = 5\nTIMEOUT = 60\nWAIT_BASE = 15\n\nsocket.setdefaulttimeout(TIMEOUT)\nfor retry in range(RETRIES):\n  try:\n    with contextlib.closing(\n        urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:\n      hashes = w.read()\n      with open(sys.argv[1], 'w') as f:\n        f.write(hashes)\n        break\n  except:\n    print 'Failed to get uninteresting hashes from %s' % HASHES_URL\n    if retry == RETRIES:\n      raise\n    waittime = WAIT_BASE * math.pow(2, retry)\n    print 'Retry in %d seconds.' % waittime\n    time.sleep(waittime)\n",
-      "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt"
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/dm"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "env": {
-      "BUILDTYPE": "Debug",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming"
-    },
-    "name": "get uninteresting hashes",
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rmtree dm_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import contextlib@@@",
-      "@@@STEP_LOG_LINE@python.inline@import math@@@",
-      "@@@STEP_LOG_LINE@python.inline@import socket@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@import urllib2@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@HASHES_URL = 'https://gold.skia.org/_/hashes'@@@",
-      "@@@STEP_LOG_LINE@python.inline@RETRIES = 5@@@",
-      "@@@STEP_LOG_LINE@python.inline@TIMEOUT = 60@@@",
-      "@@@STEP_LOG_LINE@python.inline@WAIT_BASE = 15@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@socket.setdefaulttimeout(TIMEOUT)@@@",
-      "@@@STEP_LOG_LINE@python.inline@for retry in range(RETRIES):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  try:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    with contextlib.closing(@@@",
-      "@@@STEP_LOG_LINE@python.inline@        urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:@@@",
-      "@@@STEP_LOG_LINE@python.inline@      hashes = w.read()@@@",
-      "@@@STEP_LOG_LINE@python.inline@      with open(sys.argv[1], 'w') as f:@@@",
-      "@@@STEP_LOG_LINE@python.inline@        f.write(hashes)@@@",
-      "@@@STEP_LOG_LINE@python.inline@        break@@@",
-      "@@@STEP_LOG_LINE@python.inline@  except:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print 'Failed to get uninteresting hashes from %s' % HASHES_URL@@@",
-      "@@@STEP_LOG_LINE@python.inline@    if retry == RETRIES:@@@",
-      "@@@STEP_LOG_LINE@python.inline@      raise@@@",
-      "@@@STEP_LOG_LINE@python.inline@    waittime = WAIT_BASE * math.pow(2, retry)@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print 'Retry in %d seconds.' % waittime@@@",
-      "@@@STEP_LOG_LINE@python.inline@    time.sleep(waittime)@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
     "cmd": [
-      "catchsegv",
-      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/Debug/dm",
-      "--undefok",
-      "--verbose",
-      "--resourcePath",
-      "[SLAVE_BUILD]/skia/resources",
-      "--skps",
-      "[SLAVE_BUILD]/playback/skps",
-      "--images",
-      "[SLAVE_BUILD]/images/dm",
-      "--nameByHash",
-      "--properties",
-      "gitHash",
-      "164710",
-      "master",
-      "client.skia.fyi",
-      "builder",
-      "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming",
-      "build_number",
-      "5",
-      "--key",
-      "arch",
-      "x86_64",
-      "compiler",
-      "GCC",
-      "configuration",
-      "Debug",
-      "cpu_or_gpu",
-      "CPU",
-      "cpu_or_gpu_value",
-      "AVX2",
-      "extra_config",
-      "Swarming",
-      "model",
-      "GCE",
-      "os",
-      "Ubuntu",
-      "--uninterestingHashesFile",
-      "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt",
-      "--writePath",
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia/0/dm",
       "[SLAVE_BUILD]/dm",
-      "--nogpu",
-      "--dummy-flags"
+      "0"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "BUILDTYPE": "Debug",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming"
-    },
-    "name": "dm"
+    "name": "dm_dir"
   },
   {
     "cmd": [
