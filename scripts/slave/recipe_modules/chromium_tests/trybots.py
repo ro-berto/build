@@ -108,14 +108,6 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.android': {
     'builders': {
-      'android_blink_rel': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Android (Nexus4)',
-      }, analyze_mode='compile'),
-      'android_chromium_gn_rel': simple_bot({
-        'mastername': 'chromium.linux',
-        'buildername': 'Android GN',
-      }),
       'android_amp': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Android Tests (amp split)',
@@ -128,10 +120,18 @@ TRYBOTS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'Android Arm64 Builder (dbg)',
       }, analyze_mode='compile'),
+      'android_blink_rel': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Android (Nexus4)',
+      }, analyze_mode='compile'),
       'android_clang_dbg_recipe': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Android Clang Builder (dbg)',
       }, analyze_mode='compile'),
+      'android_chromium_gn_rel': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'Android GN',
+      }),
       'android_chromium_gn_compile_dbg': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Android GN (dbg)',
@@ -143,6 +143,18 @@ TRYBOTS = freeze({
       'android_compile_dbg': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Android Builder (dbg)',
+      }, analyze_mode='compile'),
+      'android_compile_mips_dbg': simple_bot({
+        'mastername': 'chromium.android',
+        'buildername': 'Android MIPS Builder (dbg)',
+      }, analyze_mode='compile'),
+      'android_compile_x64_dbg': simple_bot({
+        'mastername': 'chromium.android',
+        'buildername': 'Android x64 Builder (dbg)',
+      }, analyze_mode='compile'),
+      'android_compile_x86_dbg': simple_bot({
+        'mastername': 'chromium.android',
+        'buildername': 'Android x86 Builder (dbg)',
       }, analyze_mode='compile'),
       'android_compile_rel': simple_bot({
         'mastername': 'chromium.linux',
