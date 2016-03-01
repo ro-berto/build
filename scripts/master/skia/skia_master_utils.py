@@ -334,4 +334,12 @@ def SetupMaster(ActiveMaster):
         serverUrl='https://grandcentral.skia.org/buildbot'))
 
   c['mergeRequests'] = CanMergeBuildRequests
+
+  ###### LOGS
+
+  # Skia bots have been known to have run away builds continously dumping to
+  # stdout and creating ~100GB logs. See crbug.com/589654 for context.
+  c['logMaxSize'] = 1024 * 1024 * 100 # 100MB
+  c['logMaxTailSize'] = 1024 * 32 # 32KB
+
   return c
