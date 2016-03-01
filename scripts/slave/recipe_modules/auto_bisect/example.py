@@ -35,21 +35,20 @@ def RunSteps(api):
 
   assert bisector.check_improvement_direction()
   assert bisector.check_initial_confidence()
-  revisions_to_check = bisector.get_revision_to_eval()
-  assert len(revisions_to_check) == 1
-  revisions_to_check[0].start_job()
-  bisector.wait_for_any(revisions_to_check)
-  bisector.check_bisect_finished(revisions_to_check[0])
+  revision_to_check = bisector.get_revision_to_eval()
+  revision_to_check.start_job()
+  bisector.wait_for(revision_to_check)
+  bisector.check_bisect_finished(revision_to_check)
 
   # Evaluate inserted DEPS-modified revisions.
-  revisions_to_check = bisector.get_revision_to_eval()
-  if revisions_to_check:
-    revisions_to_check[0].start_job()
+  revision_to_check = bisector.get_revision_to_eval()
+  if revision_to_check:
+    revision_to_check.start_job()
     # Only added for coverage.
-    revisions_to_check[0].read_deps(bisector.get_perf_tester_name())
-    api.auto_bisect.query_revision_info(revisions_to_check[0])
+    revision_to_check.read_deps(bisector.get_perf_tester_name())
+    api.auto_bisect.query_revision_info(revision_to_check)
   else:
-    raise api.step.StepFailure('Expected revisions to check.')
+    raise api.step.StepFailure('Expected revision to check.')
   # TODO(robertocn): Add examples for the following operations:
   #  Abort unnecessary jobs
   #  Print results (may be done in a unit test)
@@ -71,90 +70,37 @@ def RunSteps(api):
 def GenTests(api):
   dummy_gs_location = ('gs://chrome-perf/bisect-results/'
                        'a6298e4afedbf2cd461755ea6f45b0ad64222222-test.results')
-  wait_for_any_output = {
-      'completed': [
-          {
-              'type': 'gs',
-              'location': dummy_gs_location
-          }
-      ]
-  }
-
   basic_test = _make_test(api, _get_basic_test_data(), 'basic')
-  basic_test += api.step_data(
-      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
-      'and 1 other revision(s). (2)',
-      stdout=api.json.output(wait_for_any_output))
   yield basic_test
 
   failed_build_test = _make_test(
       api, _get_ref_range_only_test_data(), 'failed_build_test')
-  failed_build_test_step_data = {
-      'failed':
-      [
-          {
-              'builder': 'linux_perf_tester',
-              'job_name': 'a6298e4afedbf2cd461755ea6f45b0ad64222222-test',
-              'master': 'tryserver.chromium.perf',
-              'type': 'buildbot',
-              'job_url': 'http://tempuri.org/log',
-          }
-      ],
-  }
-  failed_build_test += api.step_data(
-      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
-      'and 1 other revision(s). (2)',
-      stdout=api.json.output(failed_build_test_step_data), retcode=1)
   yield failed_build_test
 
   missing_metric_test = _make_test(
       api, _get_ref_range_only_missing_metric_test_data(),
       'missing_metric_test')
-  missing_metric_test += api.step_data(
-      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
-      'and 1 other revision(s). (2)',
-      stdout=api.json.output(wait_for_any_output))
   yield missing_metric_test
 
   windows_test = _make_test(
       api, _get_basic_test_data(), 'windows_bisector', platform='windows')
-  windows_test += api.step_data(
-      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
-      'and 1 other revision(s). (2)',
-      stdout=api.json.output(wait_for_any_output))
   yield windows_test
 
   winx64_test = _make_test(
       api, _get_basic_test_data(), 'windows_x64_bisector', platform='win_x64')
-  winx64_test += api.step_data(
-      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
-      'and 1 other revision(s). (2)',
-      stdout=api.json.output(wait_for_any_output))
   yield winx64_test
 
   mac_test = _make_test(
       api, _get_basic_test_data(), 'mac_bisector', platform='mac')
-  mac_test += api.step_data(
-      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
-      'and 1 other revision(s). (2)',
-      stdout=api.json.output(wait_for_any_output))
   yield mac_test
 
   android_test = _make_test(
       api, _get_basic_test_data(), 'android_bisector', platform='android')
-  android_test += api.step_data(
-      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
-      'and 1 other revision(s). (2)',
-      stdout=api.json.output(wait_for_any_output))
   yield android_test
 
   android_arm64_test = _make_test(
       api, _get_basic_test_data(), 'android_arm64_bisector',
       platform='android_arm64')
-  android_arm64_test += api.step_data(
-      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
-      'and 1 other revision(s). (2)',
-      stdout=api.json.output(wait_for_any_output))
   yield android_arm64_test
 
   failed_data = _get_basic_test_data()
@@ -174,10 +120,6 @@ def GenTests(api):
 
   bisect_script_test = _make_test(
       api, _get_basic_test_data(), 'basic_bisect_script')
-  bisect_script_test += api.step_data(
-      'Waiting for revision a6298e4afedbf2cd461755ea6f45b0ad64222222 '
-      'and 1 other revision(s). (2)',
-      stdout=api.json.output(wait_for_any_output))
 
   bisect_script_test += api.properties(mastername='tryserver.chromium.perf',
                                        buildername='linux_perf_bisect',
@@ -406,6 +348,7 @@ def _get_config(params=None):
       'builder_host': 'master4.golo.chromium.org',
       'builder_port': '8341',
       'dummy_builds': 'True',
+      'bypass_stats_check': 'True',
       'skip_gclient_ops': 'True',
       'recipe_tester_name': 'linux_perf_tester'
   }
@@ -429,7 +372,9 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
 
   if include_build_steps:
     if test_results:
-      step_name = 'gsutil Get test results for build ' + commit_hash
+      step_name = ('Waiting for chromium@%s.gsutil '
+                   'Get test results for build %s') % (commit_hash[:10],
+                                                       commit_hash)
       yield api.step_data(step_name, stdout=api.json.output(test_results))
 
     if revision_data.get('DEPS', False):

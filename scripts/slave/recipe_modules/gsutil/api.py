@@ -61,9 +61,6 @@ class GSUtilApi(recipe_api.RecipeApi):
     return self.m.python(full_name, gsutil_path, cmd_prefix + cmd,
                          infra_step=True, **kwargs)
 
-  def get_gsutil_path(self):
-    return self.m.path['depot_tools'].join('gsutil.py')
-
   def upload(self, source, bucket, dest, args=None, link_name='gsutil.upload',
              metadata=None, unauthenticated_url=False, **kwargs):
     args = [] if args is None else args[:]

@@ -20,9 +20,6 @@ import uuid
 
 from . import depot_config
 
-if 'CACHE_TEST_RESULTS' in os.environ:  # pragma: no cover
-  from . import test_results_cache
-
 # These relate to how to increase the number of repetitions during re-test
 MINIMUM_SAMPLE_SIZE = 5
 INCREASE_FACTOR = 1.5
@@ -63,7 +60,6 @@ class RevisionState(object):
     self.bisector = bisector
     self._good = None
     self.deps = None
-    self.build_status_url = None
     self.test_results_url = None
     self.build_archived = False
     self.status = RevisionState.NEW
@@ -141,17 +137,6 @@ class RevisionState(object):
         RevisionState.NEED_MORE_DATA):
       self._do_test()
       self.status = RevisionState.TESTING
-
-  def abort(self):  # pragma: no cover
-    """Aborts the job.
-
-    This method is typically called when the bisect no longer requires it. Such
-    as when a later good revision or an earlier bad revision have been found in
-    parallel.
-    """
-    assert self.in_progress
-    # TODO: actually kill buildbot job if it's the test step.
-    self.status = RevisionState.ABORTED
 
   def deps_change(self):
     """Uses `git show` to see if a given commit contains a DEPS change."""
@@ -400,9 +385,6 @@ class RevisionState(object):
     """
     if self.bisector.dummy_builds:
       self.job_name = self.commit_hash + '-test'
-    elif 'CACHE_TEST_RESULTS' in os.environ:  # pragma: no cover
-      self.job_name = test_results_cache.make_id(
-          self.commit_hash, self._get_bisect_config_for_tester())
     else:  # pragma: no cover
       self.job_name = uuid.uuid4().hex
     api = self.bisector.api
@@ -419,49 +401,16 @@ class RevisionState(object):
             'job_name': self.job_name,
         },
     }
-    if 'CACHE_TEST_RESULTS' in os.environ and test_results_cache.has_results(
-        self.job_name):  # pragma: no cover
-      return
     self.test_results_url = (self.bisector.api.GS_RESULTS_URL +
                              self.job_name + '.results')
     if api.m.bisect_tester.local_test_enabled():  # pragma: no cover
       skip_download = self.bisector.last_tested_revision == self
       self.bisector.last_tested_revision = self
       overrides = perf_test_properties['properties']
-      api.run_local_test_run(api.m, overrides, skip_download=skip_download)
+      api.run_local_test_run(overrides, skip_download=skip_download)
     else:
       step_name = 'Triggering test job for ' + self.commit_hash
       api.m.trigger(perf_test_properties, name=step_name)
-
-  def get_next_url(self):
-    """Returns a GS URL for checking progress of a build or test."""
-    if self.status == RevisionState.BUILDING:
-      return self.build_url
-    if self.status == RevisionState.TESTING:
-      return self.test_results_url
-
-  def get_buildbot_locator(self):
-    """Returns information about the buildbot job that we're waiting for.
-
-    This is used to check on the progress of a build or test that we're
-    waiting for. If we're not waiting for a build or test job, this should
-    return None.
-    """
-    if self.status not in (RevisionState.BUILDING,
-                           RevisionState.TESTING):  # pragma: no cover
-      return None
-    # TODO(robertocn): Remove hardcoded master.
-    master = 'tryserver.chromium.perf'
-    if self.status == RevisionState.BUILDING:
-      builder = self.bisector.get_builder_bot_for_this_platform()
-    if self.status == RevisionState.TESTING:
-      builder = self.bisector.get_perf_tester_name()
-    return {
-        'type': 'buildbot',
-        'master': master,
-        'builder': builder,
-        'job_name': self.job_name,
-    }
 
   def retest(self):  # pragma: no cover
     # We need at least 5 samples for applying Mann-Whitney U test
@@ -470,7 +419,7 @@ class RevisionState(object):
     self.status = RevisionState.NEED_MORE_DATA
     self.repeat_count = target_sample_size - len(self.values)
     self.start_job()
-    self.bisector.wait_for_any([self])
+    self.bisector.wait_for(self)
 
   def _get_test_results(self):
     """Tries to get the results of a test job from cloud storage."""
@@ -480,9 +429,12 @@ class RevisionState(object):
       name = 'Get test results for build ' + self.commit_hash
       step_result = api.m.gsutil.cat(self.test_results_url, stdout=stdout,
                                      name=name)
-    except api.m.step.StepFailure:  # pragma: no cover
+      if not step_result.stdout:
+        raise api.m.step.StepFailure('Test for build %s failed' %
+                                     self.revision_string())
+    except api.m.step.StepFailure as sf:  # pragma: no cover
       self.bisector.surface_result('TEST_FAILURE')
-      return None
+      return {'results': {'errors': str(sf)}}
     else:
       return json.loads(step_result.stdout)
 

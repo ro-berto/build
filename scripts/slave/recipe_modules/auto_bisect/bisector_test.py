@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.path.pardir))
 
 import mock
 
-from auto_bisect.bisector import Bisector
+import auto_bisect.bisector
 
 
 class MockRevisionClass(object):  # pragma: no cover
@@ -30,19 +30,16 @@ class MockRevisionClass(object):  # pragma: no cover
     self.commit_hash = commit_hash
     self.status = ''
 
-  def get_next_url(self):
-    if self.in_progress:
-      return 'mockurl'
-    return None
-
   def read_deps(self, tester_name):
     pass
 
-  def get_buildbot_locator(self):
-    return {}
+  def retest(self):
+    self.bisector.last_tested_revision = self
+    self.values.append(3)
 
 
-@mock.patch.object(Bisector, 'ensure_sync_master_branch', mock.MagicMock())
+@mock.patch.object(auto_bisect.bisector.Bisector, 'ensure_sync_master_branch',
+                   mock.MagicMock())
 class BisectorTest(unittest.TestCase):  # pragma: no cover
 
   def setUp(self):
@@ -65,13 +62,15 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
 
   def test_improvement_direction_default(self):
     # By default, no improvement direction should be set
-    bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
+    bisector = auto_bisect.bisector.Bisector(self.dummy_api, self.bisect_config,
+                                             MockRevisionClass)
     self.assertIsNone(bisector.improvement_direction)
 
   def test_improvement_direction_greater_is_better_fail(self):
     # Improvement up, bad > good: should fail
     self.bisect_config['improvement_direction'] = 1
-    bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
+    bisector = auto_bisect.bisector.Bisector(self.dummy_api, self.bisect_config,
+                                             MockRevisionClass)
     bisector.good_rev.mean_value = 10
     bisector.bad_rev.mean_value = 100
     self.assertFalse(bisector.check_improvement_direction())
@@ -80,7 +79,8 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
   def test_improvement_direction_greater_is_better_pass(self):
     # Improvement up, bad < good: should not fail
     self.bisect_config['improvement_direction'] = 1
-    bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
+    bisector = auto_bisect.bisector.Bisector(self.dummy_api, self.bisect_config,
+                                             MockRevisionClass)
     bisector.good_rev.mean_value = 100
     bisector.bad_rev.mean_value = 10
     self.assertTrue(bisector.check_improvement_direction())
@@ -89,7 +89,8 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
   def test_improvement_direction_lower_is_better_fail(self):
     # Improvement down, bad < good: should fail
     self.bisect_config['improvement_direction'] = -1
-    bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
+    bisector = auto_bisect.bisector.Bisector(self.dummy_api, self.bisect_config,
+                                             MockRevisionClass)
     bisector.good_rev.mean_value = 100
     bisector.bad_rev.mean_value = 10
     self.assertFalse(bisector.check_improvement_direction())
@@ -98,7 +99,8 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
   def test_improvement_direction_lower_is_better_pass(self):
     # Improvement down, bad > good: should not fail
     self.bisect_config['improvement_direction'] = -1
-    bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
+    bisector = auto_bisect.bisector.Bisector(self.dummy_api, self.bisect_config,
+                                             MockRevisionClass)
     bisector.good_rev.mean_value = 10
     bisector.bad_rev.mean_value = 100
     self.assertTrue(bisector.check_improvement_direction())
@@ -108,51 +110,49 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
     # Good revision is bad or bad revision is good, should fail.
     bisect_config = copy.deepcopy(self.bisect_config)
     bisect_config['test_type'] = 'return_code'
-    bisector = Bisector(self.dummy_api, bisect_config, MockRevisionClass)
+    bisector = auto_bisect.bisector.Bisector(self.dummy_api, bisect_config,
+                                             MockRevisionClass)
     bisector.good_rev.mean_value = 1
     bisector.bad_rev.mean_value = 0
     self.assertTrue(bisector.is_return_code_mode())
     self.assertFalse(bisector.check_improvement_direction())
     self.assertIn('return code', ''.join(bisector.warnings))
 
-  def test_check_initial_confidence_zero(self):
-    # A confidence score of 0 should not satisfy any default.
-    mock_score = self.dummy_api.m.math_utils.confidence_score
-    mock_score.return_value = 0
-    bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
-    # The initial confidence check may only apply if there are some values.
+  @mock.patch.object(auto_bisect.bisector.Bisector, 'significantly_different',
+                     mock.MagicMock(return_value=True))
+  def test_check_initial_confidence_pass(self):
+    # patch bisector.significantly_different with true
+    # assert both revisions have > 5 samples
+    bisector = auto_bisect.bisector.Bisector(self.dummy_api, self.bisect_config,
+                                             MockRevisionClass)
     bisector.good_rev.values = [3, 3, 3, 3, 3, 3]
-    bisector.bad_rev.values = [3, 3, 3, 3, 3, 3]
-    self.assertFalse(bisector.check_initial_confidence())
-    self.assertTrue(bisector.failed_initial_confidence)
-
-  def test_check_initial_confidence_one_hundred(self):
-    # A confidence score of 100 should satisfy any default.
-    bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
-    bisector.good_rev.values = [3, 3, 3, 3, 3, 3]
-    bisector.bad_rev.values = [9, 9, 9, 9, 9, 9]
+    bisector.bad_rev.values = [3, 3, 3, 3]
     self.assertTrue(bisector.check_initial_confidence())
-    self.assertFalse(bisector.failed_initial_confidence)
+    self.assertTrue(len(bisector.bad_rev.values) >= 5)
 
+  @mock.patch.object(auto_bisect.bisector.Bisector, 'significantly_different',
+                     mock.MagicMock(return_value=False))
+  def test_check_initial_confidence_non_diverging(self):
+    bisector = auto_bisect.bisector.Bisector(self.dummy_api, self.bisect_config,
+                                             MockRevisionClass)
+    bisector.good_rev.values = [3, 3, 3, 3, 3, 3]
+    bisector.bad_rev.values = [3, 3, 3, 3]
+    self.assertFalse(bisector.check_initial_confidence())
+    self.assertTrue(len(bisector.bad_rev.values) >=
+                    auto_bisect.bisector.MAX_REQUIRED_SAMPLES or
+                    len(bisector.good_rev.values) >=
+                    auto_bisect.bisector.MAX_REQUIRED_SAMPLES)
+
+  @mock.patch.object(auto_bisect.bisector.Bisector, 'significantly_different',
+                     mock.MagicMock())
   def test_check_initial_confidence_not_required(self):
+    return_code_config = self.bisect_config
+    return_code_config['test_type'] = 'return_code'
     # When confidence is not required, confidence_score should not be called.
-    mock_score = self.dummy_api.m.math_utils.confidence_score
-    self.bisect_config['required_initial_confidence'] = None
-    bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
+    bisector = auto_bisect.bisector.Bisector(self.dummy_api, return_code_config,
+                                             MockRevisionClass)
     self.assertTrue(bisector.check_initial_confidence())
-    self.assertFalse(mock_score.called)
-
-  def test_check_initial_confidence_fail(self):
-    mock_score = self.dummy_api.m.math_utils.confidence_score
-    self.bisect_config['required_initial_confidence'] = 99
-    # A confidence score of 98.5 should not satisfy the required 99.
-    mock_score.return_value = 98.5
-    bisector = Bisector(self.dummy_api, self.bisect_config, MockRevisionClass)
-    # The initial confidence check may only apply if there are some values.
-    bisector.good_rev.values = [3, 3, 3, 3, 3, 3]
-    bisector.bad_rev.values = [3, 3, 3, 3, 3, 3]
-    self.assertFalse(bisector.check_initial_confidence())
-    self.assertTrue(bisector.failed_initial_confidence)
+    self.assertFalse(bisector.significantly_different.called)
 
 
 if __name__ == '__main__':

@@ -84,27 +84,17 @@ class Bisector(object):
 
     # Test-only properties.
     # TODO: Replace these with proper mod_test_data.
-    self.dummy_initial_confidence = bisect_config.get(
-        'dummy_initial_confidence')
     self.dummy_builds = bisect_config.get('dummy_builds', False)
+    self.bypass_stats_check = bool(bisect_config.get('bypass_stats_check'))
 
     # Load configuration items.
     self.test_type = bisect_config.get('test_type', 'perf')
     self.improvement_direction = int(bisect_config.get(
         'improvement_direction', 0)) or None
-    # Required initial confidence might be explicitly set to None,
-    # which means that no initial confidence check should be done.
-    if ('required_initial_confidence' in bisect_config and
-        bisect_config['required_initial_confidence'] is None):
-      self.required_initial_confidence = None  # pragma: no cover
-    else:
-      self.required_initial_confidence = float(bisect_config.get(
-          'required_initial_confidence', 80))
 
     self.warnings = []
 
     # Status flags
-    self.initial_confidence = None
     self.failed_initial_confidence = False
     self.failed = False
     self.failed_direction = False
@@ -113,7 +103,6 @@ class Bisector(object):
     self.culprit = None
     self.bisect_over = False
     self.relative_change = None
-    
     self.internal_bisect = api.internal_bisect
     self.base_depot = 'chromium'
     if self.internal_bisect:
@@ -494,30 +483,18 @@ class Bisector(object):
   def check_initial_confidence(self):  # pragma: no cover
     """Checks that the initial range presents a clear enough regression.
 
-    We calculate the confidence of the results of the given 'good'
-    and 'bad' revisions and compare it against the required confidence
-    set for the bisector.
+    We ensure that the good and bad revisions produce significantly different
+    results, increasing the sample size until MAX_REQUIRED_SAMPLES is reached
+    or REGRESSION_CHECK_TIMEOUT seconds have elapsed.
 
-    Note that when a dummy regression confidence value has been set, that
-    is used instead.
+    Returns: True if the revisions produced results that differ from each
+    other in a statistically significant manner. False if such difference could
+    not be established in the time or sample size allowed.
     """
     if self.test_type != 'perf':
       return True
 
-    if self.required_initial_confidence is None:
-      return True  # pragma: no cover
-
-    # TODO(robertocn): Remove all uses of "confidence".
-    if self.dummy_initial_confidence is not None:
-      self.initial_confidence = float(
-          self.dummy_initial_confidence)
-      if (float(self.initial_confidence) <
-          float(self.required_initial_confidence)):
-        self._set_insufficient_confidence_warning()
-        return False
-      return True
-
-    if self.dummy_builds:
+    if self.bypass_stats_check:
       dummy_result = self.good_rev.values != self.bad_rev.values
       if not dummy_result:
         self._set_insufficient_confidence_warning()
@@ -615,8 +592,10 @@ class Bisector(object):
                        self.revisions[self.lkgr.list_index + 1:
                                       self.fkbr.list_index]
                        if not revision.tested and not revision.failed]
-    if len(candidate_range) <= 1:
-      return candidate_range
+    if len(candidate_range) == 1:
+      return candidate_range[0]
+    if len(candidate_range) == 0:
+      return None
 
     default_revision = candidate_range[len(candidate_range) / 2]
 
@@ -628,10 +607,10 @@ class Bisector(object):
       for _ in xrange(max_wiggle):  # pragma: no cover
         index = len(candidate_range) / 2
         if candidate_range[index]._is_build_archived():
-          return [candidate_range[index]]
+          return candidate_range[index]
         del candidate_range[index]
 
-      return [default_revision]
+      return default_revision
 
   def check_reach_adjacent_revision(self, revision):
     """Checks if this revision reaches its adjacent revision.
@@ -671,140 +650,30 @@ class Bisector(object):
 
   def wait_for_all(self, revision_list):
     """Waits for all revisions in list to finish."""
-    # TODO(simonhatch): Simplify these (and callers) since
-    # get_revision_to_eval() no longer returns multiple revisions.
-    # See http://crbug.com/546695.
-    while any([r.in_progress for r in revision_list]):
-      revision_list.remove(self.wait_for_any(revision_list))
+    for r in revision_list:
+      self.wait_for(r)
 
-  def sleep_until_next_revision_ready(self, revision_list):
-    """Produces a single step that sleeps until any revision makes progress.
-
-    A revision is considered to make progress when a build file is uploaded to
-    the appropriate bucket, or when buildbot test job is complete.
-    """
-    api = self.api
-
-    revision_mapping = {}
-    gs_jobs = []
-    buildbot_jobs = []
-
-    for revision in revision_list:
-      url = revision.get_next_url()
-      buildbot_job = revision.get_buildbot_locator()
-      if url:
-        gs_jobs.append({'type': 'gs', 'location': url})
-        revision_mapping[url] = revision
-      if buildbot_job:
-        buildbot_jobs.append(buildbot_job)
-        revision_mapping[buildbot_job['job_name']] = revision
-
-    jobs_config = {'jobs': buildbot_jobs + gs_jobs}
-
-    script = api.resource('wait_for_any.py')
-    args_list = [api.m.gsutil.get_gsutil_path()] if gs_jobs else []
-
-    try:
-      step_name = 'Waiting for revision ' + revision_list[0].commit_hash
-      if len(revision_list) > 1:
-        step_name += ' and %d other revision(s).' % (len(revision_list) - 1)
-      api.m.python(
-          str(step_name),
-          script,
-          args_list,
-          stdout=api.m.json.output(),
-          stdin=api.m.json.input(jobs_config),
-          ok_ret={0, 1})
-    except api.m.step.StepFailure as sf:  # pragma: no cover
-      if sf.retcode == 2:  # 6 days and no builds finished.
-        for revision in revision_list:
-          revision.status = revision_state.RevisionState.FAILED
-        for revision in revision_list:
-          if revision.status == revision.TESTING:
-            self.surface_result('TEST_TIMEOUT')
-          if revision.status == revision.BUILDING:
-            self.surface_result('BUILD_TIMEOUT')
-        return None  # All builds are failed, no point in returning one.
-      else:  # Something else went wrong.
-        raise
-
-    step_results = api.m.step.active_result.stdout
-    build_failed = api.m.step.active_result.retcode
-
-    if build_failed:
-      # Explicitly make the step red.
-      api.m.step.active_result.presentation.status = api.m.step.FAILURE
-
-    if not step_results:
-      # For most recipe_simulation_test cases.
-      return None
-
-    failed_jobs = step_results.get('failed', [])
-    completed_jobs = step_results.get('completed', [])
-    last_failed_revision = None
-    assert failed_jobs or completed_jobs
-
-    # Marked all failed builds as failed
-    for job in failed_jobs:
-      last_failed_revision = revision_mapping[str(job.get(
-          'location', job.get('job_name')))]
-      if 'job_url' in job:
-        url = job['job_url']
-        api.m.step.active_result.presentation.links['Failed build'] = url
-      last_failed_revision.status = revision_state.RevisionState.FAILED
-
-    # Return a completed job if available.
-    for job in completed_jobs:
-      if 'job_url' in job:  # pragma: no cover
-        url = job['job_url']
-        api.m.step.active_result.presentation.links['Completed build'] = url
-      return revision_mapping[str(job.get(
-          'location', job.get('job_name')))]
-
-    # Or return any of the failed revisions.
-    return last_failed_revision
-
-  def wait_for_any(self, revision_list):
+  def wait_for(self, revision):
     """Waits for any of the revisions in the list to finish its job(s)."""
-    # TODO(simonhatch): Simplify these (and callers) since
-    # get_revision_to_eval() no longer returns multiple revisions.
-    # See http://crbug.com/546695.
-    while True:
-      if not revision_list or any(r.status == revision_state.RevisionState.NEW
-                                  for r in revision_list):  # pragma: no cover
-        # We want to avoid waiting forever for revisions that are not started,
-        # or for an empty list, hence we fail fast.
-        assert False
-
-      finished_revision = self.sleep_until_next_revision_ready(revision_list)
-
-      # On recipe simulation, sleep_until_next_revision_ready will by default
-      # return nothing.
-      revisions = [finished_revision] if finished_revision else revision_list
-      for revision in revisions:
-        if revision:
-          revision.update_status()
-          if not revision.in_progress:
-            return revision
-
-  def abort_unnecessary_jobs(self):
-    """Checks if any of the pending evaluations is no longer necessary.
-
-    It assumes the candidate range (lkgr, fkbr) has already been set.
-    """
-    self._update_candidate_range()
-    for r in self.revisions:
-      if r == self.lkgr:
-        break
-      if not r.tested or r.failed:
-        r.good = True  # pragma: no cover
-      if r.in_progress:
-        r.abort()  # pragma: no cover
-    for r in self.revisions[self.fkbr.list_index + 1:]:
-      if not r.tested or r.failed:
-        r.bad = True  # pragma: no cover
-      if r.in_progress:
-        r.abort()  # pragma: no cover
+    with self.api.m.step.nest('Waiting for ' + revision.revision_string()):
+      start_time = time.time()
+      while True:
+        revision.update_status()
+        if revision.in_progress:
+          self.api.m.python.inline(
+              'sleeping',
+              """
+              import sys
+              import time
+              time.sleep(300)
+              sys.exit(0)
+              """)
+          elapsed_time = time.time() - start_time
+          if elapsed_time > 3 * 60 * 60:  # pragma: no cover
+            # Timed out waiting for build
+            revision.status = revision.FAILED
+        else:
+          break
 
   def _update_candidate_range(self):
     """Updates lkgr and fkbr (last known good/first known bad) revisions.

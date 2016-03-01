@@ -145,7 +145,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
         name='Running Bisection',
         xvfb=True, **kwargs)
 
-  def run_local_test_run(self, api, test_config_params,
+  def run_local_test_run(self, test_config_params,
                          skip_download=False):  # pragma: no cover
     """Starts a test run on the same machine.
 
@@ -157,23 +157,23 @@ class AutoBisectApi(recipe_api.RecipeApi):
     if skip_download:
       update_step = None
     else:
-      update_step = api.bot_update.ensure_checkout(
+      update_step = self.m.bot_update.ensure_checkout(
           root_solution_revision=test_config_params['revision'])
-    self.start_test_run_for_bisect(api, update_step, self.bot_db,
+    self.start_test_run_for_bisect(update_step, self.bot_db,
                                    test_config_params, run_locally=True,
                                    skip_download=skip_download)
 
-  def start_test_run_for_bisect(self, api, update_step, bot_db,
+  def start_test_run_for_bisect(self, update_step, bot_db,
                                 test_config_params, run_locally=False,
                                 skip_download=False):
-    mastername = api.properties.get('mastername')
-    buildername = api.properties.get('buildername')
+    mastername = self.m.properties.get('mastername')
+    buildername = self.m.properties.get('buildername')
     bot_config = bot_db.get_bot_config(mastername, buildername)
     build_archive_url = test_config_params['parent_build_archive_url']
     if not run_locally:
-      api.bisect_tester.upload_job_url()
+      self.m.bisect_tester.upload_job_url()
     if not skip_download:
-      if api.chromium.c.TARGET_PLATFORM == 'android':
+      if self.m.chromium.c.TARGET_PLATFORM == 'android':
         # The best way to ensure the old build directory is not used is to
         # remove it.
         build_dir = self.m.chromium.c.build_dir.join(
@@ -190,7 +190,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
 
         gs_bucket = 'gs://%s/' % bot_config['bucket']
         archive_path = build_archive_url[len(gs_bucket):]
-        api.chromium_android.download_build(
+        self.m.chromium_android.download_build(
             bucket=bot_config['bucket'],
             path=archive_path)
 
@@ -208,29 +208,29 @@ class AutoBisectApi(recipe_api.RecipeApi):
               """,
               args=[zip_dir, build_dir])
       else:
-        api.chromium_tests.download_and_unzip_build(
+        self.m.chromium_tests.download_and_unzip_build(
             mastername, buildername, update_step, bot_db,
             build_archive_url=build_archive_url,
             build_revision=test_config_params['parent_got_revision'],
             override_bot_type='tester')
 
-    tests = [api.chromium_tests.steps.BisectTest(test_config_params)]
+    tests = [self.m.chromium_tests.steps.BisectTest(test_config_params)]
 
     if not tests:  # pragma: no cover
       return
-    api.chromium_tests.configure_swarming(  # pragma: no cover
+    self.m.chromium_tests.configure_swarming(  # pragma: no cover
         'chromium', precommit=False, mastername=mastername)
-    test_runner = api.chromium_tests.create_test_runner(api, tests)
+    test_runner = self.m.chromium_tests.create_test_runner(self.m, tests)
 
-    bot_config_object = api.chromium_tests.create_bot_config_object(
+    bot_config_object = self.m.chromium_tests.create_bot_config_object(
         mastername, buildername)
-    with api.chromium_tests.wrap_chromium_tests(bot_config_object, tests):
-      if api.chromium.c.TARGET_PLATFORM == 'android' and not skip_download:
+    with self.m.chromium_tests.wrap_chromium_tests(bot_config_object, tests):
+      if self.m.chromium.c.TARGET_PLATFORM == 'android' and not skip_download:
         if bot_config.get('webview'):
-          api.chromium_android.adb_install_apk('SystemWebView.apk')
-          api.chromium_android.adb_install_apk('SystemWebViewShell.apk')
+          self.m.chromium_android.adb_install_apk('SystemWebView.apk')
+          self.m.chromium_android.adb_install_apk('SystemWebViewShell.apk')
         else:
-          api.chromium_android.adb_install_apk('ChromePublic.apk')
+          self.m.chromium_android.adb_install_apk('ChromePublic.apk')
       test_runner()
 
   def start_try_job(self, api, update_step=None, bot_db=None, **kwargs):
@@ -273,7 +273,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
         if api.properties.get('bisect_config').get('good_revision'):
           local_bisect.perform_bisect(self)  # pragma: no cover
         else:
-          self.start_test_run_for_bisect(api, update_step, self.bot_db,
+          self.start_test_run_for_bisect(update_step, self.bot_db,
                                          api.properties)
       else:
         self.m.perf_try.start_perf_try_job(

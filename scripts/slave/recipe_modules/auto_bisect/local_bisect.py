@@ -53,54 +53,21 @@ def _bisect_main_loop(bisector):  # pragma: no cover
   then it starts them in parallel and waits for them to finish.
   """
   while not bisector.bisect_over:
-    # TODO(simonhatch): Refactor this since get_revision_to_eval() returns a
-    # a single revision now.
-    # crbug.com/546695
-    revisions_to_check = bisector.get_revision_to_eval()
-    # TODO: Add a test case to remove this pragma
-    if not revisions_to_check:
+    revision_to_check = bisector.get_revision_to_eval()
+    if not revision_to_check:
       bisector.bisect_over = True
       break
 
-    completed_revisions = []
     with bisector.api.m.step.nest(str('Working on revision ' +
-                                      revisions_to_check[0].revision_string())):
+                                      revision_to_check.revision_string())):
       bisector.post_result(halt_on_failure=False)
-      for r in revisions_to_check:
-        r.start_job()
-      completed_revisions = _wait_for_revisions(bisector, revisions_to_check)
+      revision_to_check.start_job()
+      bisector.wait_for(revision_to_check)
 
-    for completed_revision in completed_revisions:
-      if not bisector.check_reach_adjacent_revision(completed_revision):
-        continue
+    if bisector.check_reach_adjacent_revision(revision_to_check):
       # Only show this step if bisect has reached adjacent revisions.
       with bisector.api.m.step.nest(
           str('Check bisect finished on revision ' +
-              completed_revisions[0].revision_string())):
-        if bisector.check_bisect_finished(completed_revision):
-          bisector.bisect_over = True
-
-
-def _wait_for_revisions(bisector, revisions_to_check):  # pragma: no cover
-  """Wait for possibly multiple revision evaluations.
-
-  Waits for the first of such revisions to finish, it then checks if any of the
-  other revisions in progress has become superfluous and has them aborted.
-
-  If such revision completes the bisect process it sets the flag so that the
-  main loop stops.
-  """
-  completed_revisions = []
-  while revisions_to_check:
-    completed_revision = bisector.wait_for_any(revisions_to_check)
-    if completed_revision in revisions_to_check:
-      revisions_to_check.remove(completed_revision)
-    else:
-      bisector.api.m.step.active_result.presentation.status = (
-          bisector.api.m.step.WARNING)
-      bisector.api.m.step.active_result.presentation.logs['WARNING'] = (
-          ['Tried to remove revision not in list'])
-    if not (completed_revision.aborted or completed_revision.failed):
-      completed_revisions.append(completed_revision)
-      bisector.abort_unnecessary_jobs()
-  return completed_revisions
+              revision_to_check.revision_string())):
+        if bisector.check_bisect_finished(revision_to_check):
+            bisector.bisect_over = True

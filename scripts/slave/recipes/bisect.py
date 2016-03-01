@@ -62,6 +62,7 @@ def GenTests(api):
       'dummy_initial_confidence': '95',
       'poll_sleep': 0,
       'dummy_builds': True,
+      'bypass_stats_check': True,
   }
   invalid_cp_bisect_config = dict(bisect_config)
   invalid_cp_bisect_config['good_revision'] = 'XXX'
@@ -268,7 +269,9 @@ def _get_step_data_for_revision(api, revision_data, skip_results=False):
                                                             commit_hash))
 
   if not skip_results:
-    step_name = 'gsutil Get test results for build ' + commit_hash
+    step_name = ('Waiting for chromium@%s.gsutil '
+                 'Get test results for build %s') % (commit_hash[:10],
+                                                     commit_hash)
     if 'refrange' in revision_data:
       parent_step = 'Gathering reference values.'
     else:
