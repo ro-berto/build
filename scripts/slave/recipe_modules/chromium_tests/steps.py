@@ -1797,8 +1797,7 @@ class WebViewCTSTest(Test):
 
   def run(self, api, suffix, test_filter=None):
     api.chromium_android.adb_install_apk(
-        api.chromium_android.apk_path('SystemWebView.apk'),
-        allow_downgrade=True)
+        api.chromium_android.apk_path('SystemWebView.apk'))
     api.chromium_android.run_webview_cts()
 
 

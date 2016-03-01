@@ -418,8 +418,7 @@
       "[SLAVE_BUILD]/src/out/Debug/apks/SystemWebView.apk",
       "-v",
       "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--downgrade"
+      "[SLAVE_BUILD]/src/out/bad_devices.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
