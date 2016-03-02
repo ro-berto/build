@@ -63,6 +63,7 @@ TEST_BUILDERS = {
       'Housekeeper-PerCommit-Trybot',
       'Perf-Android-GCC-Nexus5-CPU-NEON-Arm7-Release-Appurify',
       'Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify',
+      'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot',
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming',
     ],
   },

@@ -295,6 +295,38 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': True,
   },
+  'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot': {
+    'build_targets': [
+      'nanobench',
+    ],
+    'builder_cfg': {
+      'arch': 'x86_64',
+      'compiler': 'GCC',
+      'configuration': 'Release',
+      'cpu_or_gpu': 'CPU',
+      'cpu_or_gpu_value': 'AVX2',
+      'extra_config': 'Swarming',
+      'is_trybot': True,
+      'model': 'GCE',
+      'os': 'Ubuntu',
+      'role': 'Perf',
+    },
+    'configuration': 'Release',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': True,
+    'do_test_steps': False,
+    'env': {
+      'GYP_DEFINES':
+          'skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0',
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': True,
+  },
   'Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench': {
     'build_targets': [
       'visualbench',
