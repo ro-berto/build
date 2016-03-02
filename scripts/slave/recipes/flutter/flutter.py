@@ -54,6 +54,12 @@ def TestFlutterPackagesAndExamples(api):
 
   _flutter_test('examples/stocks')
 
+def TestCreateAndLaunch(api):
+  with MakeTempDir(api) as temp_dir:
+    api.step('test create', ['flutter', 'create', '--with-driver-test',
+        'sample_app'], cwd=temp_dir)
+    app_path = temp_dir.join('sample_app')
+    api.step('drive sample_app', ['flutter', 'drive'], cwd=app_path)
 
 # TODO(eseidel): Would be nice to have this on api.path or api.file.
 @contextlib.contextmanager
@@ -156,6 +162,11 @@ def RunSteps(api):
     AnalyzeFlutter(api)
     TestFlutterPackagesAndExamples(api)
     BuildExamples(api, git_hash)
+
+    # TODO(yjbanov): we do not yet have Android devices hooked up, nor do we
+    # support the Android emulator. For now, only run on iOS Simulator.
+    if api.platform.is_mac:
+      TestCreateAndLaunch(api)
 
     # TODO(eseidel): We only want to generate one copy of the docs at a time
     # otherwise multiple rsyncs could race, causing badness. We'll eventually

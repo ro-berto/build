@@ -240,6 +240,59 @@
     "name": "flutter apk examples/material_gallery"
   },
   {
+    "cmd": [
+      "flutter",
+      "create",
+      "--with-driver-test",
+      "sample_app"
+    ],
+    "cwd": "[TMP_BASE]/tmp_tmp_1",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "test create"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "drive"
+    ],
+    "cwd": "[TMP_BASE]/tmp_tmp_1/sample_app",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "drive sample_app"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[TMP_BASE]/tmp_tmp_1"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "rmtree temp dir",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0
