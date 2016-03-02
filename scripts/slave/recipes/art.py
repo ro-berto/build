@@ -352,7 +352,7 @@ _CONFIG_MAP = {
         'concurrent_collector': True,
       },
       'armv8-concurrent-collector': {
-        'serial': 'HT4CTJT03586',
+        'serial': 'HT591JT00381',
         'device': 'volantis',
         'debug': True,
         'concurrent_collector': True,
