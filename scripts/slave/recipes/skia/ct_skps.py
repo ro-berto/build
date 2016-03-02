@@ -57,6 +57,14 @@ def RunSteps(api):
   else:
     raise Exception('Do not recognise the buildername %s.' % buildername)
 
+  ct_num_slaves = api.properties.get('ct_num_slaves', DEFAULT_CT_NUM_SLAVES)
+
+  # Optimize 10k DM runs by not sharding to 100 swarming bots. Shard to
+  # only 1, sharding to more than that ends up taking more time due to overhead.
+  if ct_page_type == '10k' and skia_tool == 'dm':
+    ct_num_slaves = 1
+    ct_page_type = 'All'
+
   # Checkout Skia and Chromium.
   gclient_cfg = api.gclient.make_config()
 
@@ -100,7 +108,6 @@ def RunSteps(api):
 
   skps_chromium_build = api.properties.get(
       'skps_chromium_build', DEFAULT_SKPS_CHROMIUM_BUILD)
-  ct_num_slaves = api.properties.get('ct_num_slaves', DEFAULT_CT_NUM_SLAVES)
 
   # Set build property to make finding SKPs convenient.
   api.step.active_result.presentation.properties['Location of SKPs'] = (
@@ -149,7 +156,7 @@ def RunSteps(api):
     # Run on GPU bots for nanobench.
     dimensions['gpu'] = '10de:104a'
   tasks = api.ct_swarming.trigger_swarming_tasks(
-      swarm_hashes, task_name_prefix='ct-10k-%s' % skia_tool,
+      swarm_hashes, task_name_prefix='ct-%s' % skia_tool,
       dimensions=dimensions)
 
   # Now collect all tasks.
@@ -164,8 +171,8 @@ def RunSteps(api):
         output_dir = api.ct_swarming.tasks_output_dir.join(
             'slave%s' % slave_num).join('0')
         utc = api.time.utcnow()
-        gs_dest_dir = 'ct/10k/%d/%02d/%02d/%02d/' % (
-            utc.year, utc.month, utc.day, utc.hour)
+        gs_dest_dir = 'ct/%s/%d/%02d/%02d/%02d/' % (
+            ct_page_type, utc.year, utc.month, utc.day, utc.hour)
         for json_output in api.file.listdir('output dir', output_dir):
           # TODO(rmistry): Use api.skia.gsutil_upload once the skia recipe
           #                is usable without needing to call gen_steps first.
@@ -241,21 +248,21 @@ def GenTests(api):
   )
 
   yield(
-    api.test('CT_DM_10k_SKPs_slave3_failure') +
-    api.step_data('ct-10k-dm-3 on Ubuntu-14.04', retcode=1) +
+    api.test('CT_DM_1m_SKPs_slave3_failure') +
+    api.step_data('ct-dm-3 on Ubuntu-14.04', retcode=1) +
     api.properties(
-        buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_10k_SKPs',
+        buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_1m_SKPs',
         ct_num_slaves=ct_num_slaves,
         revision=skia_revision,
     )
   )
 
   yield(
-    api.test('CT_DM_10k_SKPs_2slaves_failure') +
-    api.step_data('ct-10k-dm-1 on Ubuntu-14.04', retcode=1) +
-    api.step_data('ct-10k-dm-3 on Ubuntu-14.04', retcode=1) +
+    api.test('CT_DM_1m_SKPs_2slaves_failure') +
+    api.step_data('ct-dm-1 on Ubuntu-14.04', retcode=1) +
+    api.step_data('ct-dm-3 on Ubuntu-14.04', retcode=1) +
     api.properties(
-        buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_10k_SKPs',
+        buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_1m_SKPs',
         ct_num_slaves=ct_num_slaves,
         revision=skia_revision,
     )
