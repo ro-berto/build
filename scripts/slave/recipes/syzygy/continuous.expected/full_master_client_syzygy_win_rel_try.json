@@ -232,34 +232,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\syzygy\\internal\\build\\randomize_chrome.py",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out",
-      "--target",
-      "Release",
-      "--verbose"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "randomly_reorder_chrome"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\syzygy\\internal\\build\\benchmark_chrome.py",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out",
-      "--target",
-      "Release",
-      "--verbose"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "benchmark_chrome"
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

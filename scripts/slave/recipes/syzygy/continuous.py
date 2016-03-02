@@ -77,7 +77,7 @@ def RunSteps(api, buildername, blamelist, revision):
   s.archive_metrics()
 
   build_config = api.chromium.c.BUILD_CONFIG
-  if build_config == 'Release':
+  if build_config == 'Release' and not buildername.endswith('_try'):
     s.randomly_reorder_chrome()
     s.benchmark_chrome()
 
