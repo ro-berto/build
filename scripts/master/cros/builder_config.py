@@ -48,7 +48,6 @@ class BuilderConfig(object):
   FLOATING = None
   UNIQUE = False
   COLLAPSE = True
-  CONFIG_BUILDERNAME_MAP = {}
   SLAVE_TYPE = SlaveType.BAREMETAL
   SLAVE_CLASS = None
   CBB_VARIANT = None
@@ -143,8 +142,7 @@ class BuilderConfig(object):
     """Returns (str): The waterfall builder name for this configuration."""
     if self.config.get('buildbot_waterfall_name'):
       return self.config['buildbot_waterfall_name']
-    return str(self.CONFIG_BUILDERNAME_MAP.get(self.config.name) or
-               self._GetBuilderName())
+    return str(self._GetBuilderName())
 
   @property
   def is_experimental(self):
@@ -186,21 +184,12 @@ class PreCqLauncherBuilderConfig(BuilderConfig):
   CLOSER = True
   SLAVE_TYPE = SlaveType.GCE_WIMPY
 
-  def _GetBuilderName(self):
-    return 'Pre-CQ Launcher'
-
 
 class PaladinBuilderConfig(BuilderConfig):
   """BuilderConfig for Paladin launcher targets."""
 
   UNIQUE = True
   FLOATING = 'paladin'
-  CONFIG_BUILDERNAME_MAP = {
-      'master-paladin': 'CQ master',
-  }
-
-  def _GetBuilderName(self):
-    return '%s paladin' % (self.config.base,)
 
 
 class IncrementalBuilderConfig(BuilderConfig):
@@ -208,9 +197,6 @@ class IncrementalBuilderConfig(BuilderConfig):
 
   CLOSER = True
   COLLAPSE = AlwaysCollapseFunc
-
-  def _GetBuilderName(self):
-    return '%s incremental' % (self.config.base,)
 
   def _IsExperimental(self):
     return False
@@ -222,9 +208,6 @@ class FullBuilderConfig(BuilderConfig):
   CLOSER = True
   COLLAPSE = AlwaysCollapseFunc
 
-  def _GetBuilderName(self):
-    return '%s full' % (self.config.base,)
-
   def _IsExperimental(self):
     return False
 
@@ -235,58 +218,12 @@ class AsanBuilderConfig(BuilderConfig):
   CLOSER = True
   COLLAPSE = AlwaysCollapseFunc
 
-  def _GetBuilderName(self):
-    return '%s ASAN' % (self.config.base,)
-
   def _IsExperimental(self):
     return False
 
 
-class FirmwareBuilderConfig(BuilderConfig):
-  """BuilderConfig for Firmware launcher targets."""
-
-  def _GetBuilderName(self):
-    return '%s firmware' % (self.config.base,)
-
-
-class PfqBuilderConfig(BuilderConfig):
-  """BuilderConfig for PFQ launcher targets."""
-
-  CONFIG_BUILDERNAME_MAP = {
-      'master-chromium-pfq': 'Chrome PFQ master',
-      'master-android-pfq': 'Android PFQ master',
-  }
-
-  def _GetBuilderName(self):
-    project = self.config.suffix
-    if project.endswith('-pfq'):
-      project = project[:-4]
-    return '%s %s PFQ' % (self.config.base, project)
-
-
-class PreFlightBranchBuilderConfig(BuilderConfig):
-  """BuilderConfig for pre-flight branch targets."""
-
-  def _GetBuilderName(self):
-    return '%s pre-flight' % (self.config.base,)
-
-
 class CanaryBuilderConfig(BuilderConfig):
   """BuilderConfig for canary/release launcher targets."""
-
-  CONFIG_BUILDERNAME_MAP = {
-      'master-release': 'Canary master',
-  }
-
-  def _GetBuilderName(self):
-    parts = [self.config.base]
-    if self.config.children:
-      parts.append('group')
-    if self.config.category == ChromiteTarget.CANARY_TOOLCHAIN:
-      parts.append('toolchain')
-    parts.append('canary' if self.config.get('active_waterfall') == 'chromeos'
-                 else 'full')
-    return ' '.join(parts)
 
   def _GetLegacySlaveType(self):
     if self.config.is_master and not self.config['boards']:
@@ -305,10 +242,6 @@ class SdkBuilderConfig(BuilderConfig):
   COLLAPSE = AlwaysCollapseFunc
   TIMEOUT = 22 * 3600 # 22 Hours.
 
-  def _GetBuilderName(self):
-    # Return 'major/minor' (end of toolchain name).
-    return '%s sdk' % (self.config.base,)
-
   def _IsExperimental(self):
     return False
 
@@ -321,17 +254,6 @@ class ToolchainBuilderConfig(BuilderConfig):
   """
 
   SLAVE_CLASS = 'toolchain'
-
-  def _GetBuilderName(self):
-    # Expected toolchain names are:
-    # - internal-toolchain-VERSION (base='internal', suffix='toolchain-VERSION')
-    # - toolchain-VERSION (base='', suffix='toolchain-VERSION')
-    frags = self.config.suffix.split('-')
-    assert len(frags) == 2, (
-        "Unsupported toolchain suffix: %s" % (self.config.suffix,))
-    if self.config.name:
-      return '%s %s (%s)' % (frags[0], frags[1], self.config.base)
-    return '%s %s' % (frags[0], frags[1])
 
 
 # Map of cbuildbot target type to configuration class.
@@ -346,14 +268,14 @@ CONFIG_MAP = OrderedDict((
     (ChromiteTarget.INCREMENTAL, IncrementalBuilderConfig),
     (ChromiteTarget.FULL, FullBuilderConfig),
     (ChromiteTarget.ASAN, AsanBuilderConfig),
-    (ChromiteTarget.FIRMWARE, FirmwareBuilderConfig),
-    (ChromiteTarget.PFQ, PfqBuilderConfig),
-    (ChromiteTarget.PRE_FLIGHT_BRANCH, PreFlightBranchBuilderConfig),
+    (ChromiteTarget.FIRMWARE, BuilderConfig),
+    (ChromiteTarget.PFQ, BuilderConfig),
+    (ChromiteTarget.PRE_FLIGHT_BRANCH, BuilderConfig),
     (ChromiteTarget.CANARY, CanaryBuilderConfig),
     (ChromiteTarget.SDK, SdkBuilderConfig),
     (ChromiteTarget.CANARY_TOOLCHAIN, CanaryBuilderConfig),
     (ChromiteTarget.TOOLCHAIN, ToolchainBuilderConfig),
-    (ChromiteTarget.ANDROID_PFQ, PfqBuilderConfig),
+    (ChromiteTarget.ANDROID_PFQ, BuilderConfig),
     (None, BuilderConfig),
 ))
 
