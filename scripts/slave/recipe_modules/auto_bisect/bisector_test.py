@@ -21,13 +21,17 @@ import auto_bisect.bisector
 
 class MockRevisionClass(object):  # pragma: no cover
 
-  def __init__(self, bisector, commit_hash):
+  def __init__(
+      self, bisector, commit_hash,
+      depot_name='chromium', base_revision=None):
     self.bisector = bisector
+    self.commit_hash = commit_hash
+    self.depot_name = depot_name
+    self.base_revision = base_revision
     self.previous_revision = None
     self.next_revision = None
     self.values = []
     self.deps = {}
-    self.commit_hash = commit_hash
     self.status = ''
 
   def read_deps(self, tester_name):
@@ -59,6 +63,7 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
         'dummy_builds': True,
     }
     self.dummy_api = mock.MagicMock()
+    self.dummy_api.internal_bisect = False
 
   def test_improvement_direction_default(self):
     # By default, no improvement direction should be set

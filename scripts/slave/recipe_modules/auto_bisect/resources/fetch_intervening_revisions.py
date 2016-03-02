@@ -7,11 +7,12 @@
 """Gets list of revisions between two commits and their commit positions.
 
 Example usage:
-  ./fetch_intervening_revisions.py 343b531d31 7b43807df3 chromium
-  ./fetch_intervening_revisions.py 235eff9574 1e4681c33f v8
+  ./fetch_intervening_revisions.py 343b531d31 7b43807df3 \
+    https://chromium.googlesource.com/chromium/src
 
 Note: Another implementation of this functionality can be found in
-findit/common/git_repository.py (https://goo.gl/Rr8j9O).
+findit/common/git_repository.py (https://goo.gl/Rr8j9O) and in the
+gitiles recipe module.
 """
 
 import argparse
@@ -20,8 +21,6 @@ import os
 import re
 import sys
 import urllib2
-
-import depot_map  # pylint: disable=relative-import
 
 _GITILES_PADDING = ')]}\'\n'
 _URL_TEMPLATE = ('https://chromium.googlesource.com/%s/+log/%s..%s'
@@ -33,13 +32,13 @@ _URL_TEMPLATE = ('https://chromium.googlesource.com/%s/+log/%s..%s'
 _PAGE_SIZE = 512
 
 
-def fetch_intervening_revisions(start, end, depot_name):
+def fetch_intervening_revisions(start, end, base_url):
   """Fetches a list of revision in between two commits.
 
   Args:
     start (str): A git commit hash in the Chromium src repository.
     end (str): Another git commit hash, after start.
-    depot_name (str): A repository name.
+    base_url (str): A repository gitiles URL.
 
   Returns:
     A list of pairs (commit hash, commit position), from earliest to latest,
@@ -51,20 +50,19 @@ def fetch_intervening_revisions(start, end, depot_name):
     ValueError: The response wasn't valid JSON.
     KeyError: The JSON didn't contain the expected data.
   """
-  revisions = _fetch_range_from_gitiles(start, end, depot_name)
+  revisions = _fetch_range_from_gitiles(start, end, base_url)
   # The response from gitiles includes the end revision and is ordered
   # from latest to earliest.
   return [_commit_pair(r) for r in reversed(revisions[1:])]
 
 
-def _fetch_range_from_gitiles(start, end, depot_name):
+def _fetch_range_from_gitiles(start, end, base_url):
   """Fetches a list of revision dicts from gitiles.
 
   Make multiple requests to get multiple pages, if necessary.
   """
   revisions = []
-  url = _URL_TEMPLATE % (depot_map.DEPOT_PATH_MAP[depot_name],
-                         start, end, _PAGE_SIZE)
+  url = '%s/+log/%s..%s?format=json&n=%d' % (base_url, start, end, _PAGE_SIZE)
   current_page_url = url
   while True:
     response = urllib2.urlopen(current_page_url).read()
@@ -93,10 +91,10 @@ def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('start')
   parser.add_argument('end')
-  parser.add_argument('depot', choices=list(depot_map.DEPOT_PATH_MAP))
+  parser.add_argument('url')
   args = parser.parse_args()
   revision_pairs = fetch_intervening_revisions(
-      args.start, args.end, args.depot)
+      args.start, args.end, args.url)
   print json.dumps(revision_pairs)
 
 

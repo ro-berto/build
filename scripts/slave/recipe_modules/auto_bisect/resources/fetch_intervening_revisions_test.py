@@ -27,7 +27,7 @@ class FetchInterveningRevisionsTest(unittest.TestCase):
       revs = fetch_intervening_revisions.fetch_intervening_revisions(
           '53fc07eb478520a80af6bf8b62be259bb55db0f1',
           'c89130e28fd01062104e1be7f3a6fc3abbb80ca9',
-          depot_name='chromium')
+          'https://chromium.googlesource.com/chromium/src')
     self.assertEqual(
         revs, [
             ('32ce3b13924d84004a3e05c35942626cbe93cbbd', '356382'),
@@ -61,7 +61,8 @@ class FetchInterveningRevisionsTest(unittest.TestCase):
       revs = fetch_intervening_revisions.fetch_intervening_revisions(
           '7bd1741893bd4e233b5562a6926d7e395d558343',
           '3861789af25e2d3502f0fb7080da5785d31308aa',
-          depot_name='chromium')
+          'https://chromium.googlesource.com/chromium/src')
+
     self.assertEqual(
         revs, [
             ('ee261f306c3c66e96339aa1026d62a6d953302fe', '356394'),

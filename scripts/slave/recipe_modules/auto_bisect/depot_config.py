@@ -15,7 +15,7 @@ DEPOT_DEPS_NAME = {
         'src': 'src',
         'recurse': True,
         'from': ['android-chrome'],
-        'viewvc': 'https://chromium.googlesource.com/chromium/src/+/',
+        'url': 'https://chromium.googlesource.com/chromium/src',
         'deps_var': 'chromium_rev'
     },
     'angle': {
@@ -24,7 +24,7 @@ DEPOT_DEPS_NAME = {
         'recurse': True,
         'from': ['chromium'],
         'platform': 'win',
-        'viewvc': 'https://chromium.googlesource.com/angle/angle/+/',
+        'url': 'https://chromium.googlesource.com/angle/angle',
         'deps_var': 'angle_revision'
     },
     'v8': {
@@ -32,14 +32,14 @@ DEPOT_DEPS_NAME = {
         'recurse': True,
         'from': ['chromium'],
         'custom_deps': GCLIENT_CUSTOM_DEPS_V8,
-        'viewvc': 'https://chromium.googlesource.com/v8/v8.git/+/',
+        'url': 'https://chromium.googlesource.com/v8/v8.git',
         'deps_var': 'v8_revision'
     },
     'skia': {
         'src': 'src/third_party/skia',
         'recurse': True,
         'from': ['chromium'],
-        'viewvc': 'https://chromium.googlesource.com/skia/+/',
+        'url': 'https://chromium.googlesource.com/skia',
         'deps_var': 'skia_revision'
     }
 }

@@ -148,8 +148,9 @@ class Bisector(object):
           self.good_rev.deps.iteritems()]
       self.good_rev.deps = {}
       self.lkgr = self.good_rev
+
     if init_revisions:
-      self._expand_chromium_revision_range()
+      self._expand_initial_revision_range()
 
   def significantly_different(
       self, list_a, list_b,
@@ -330,35 +331,51 @@ class Bisector(object):
                                       deps_rev=new_commit_hash)
     return patch_text, patched_contents
 
-  def _expand_chromium_revision_range(self):
-    """Populates the revisions attribute.
-
-    After running this method, self.revisions should contain all the chromium
-    revisions between the good and bad revisions.
-    """
+  def _expand_initial_revision_range(self):
+    """Sets the initial contents of |self.revisions|."""
     with self.api.m.step.nest('Expanding revision range'):
-      rev_list = self._get_chromium_rev_range(
-          self.good_rev.commit_hash, self.bad_rev.commit_hash)
-      intervening_revs = [self.revision_class(self, commit_hash)
-                          for commit_hash, _ in rev_list]
-      self.revisions = [self.good_rev] + intervening_revs + [self.bad_rev]
+      good_hash = self.good_rev.commit_hash
+      bad_hash = self.bad_rev.commit_hash
+      step_name = 'for revisions %s:%s' % (good_hash, bad_hash)
+      revisions = self._revision_range(
+          start=good_hash,
+          end=bad_hash,
+          depot_name=self.base_depot,
+          step_name=step_name)
+      self.revisions = [self.good_rev] + revisions + [self.bad_rev]
       self._update_revision_list_indexes()
 
-  def _get_chromium_rev_range(self, min_rev, max_rev):
-    """Returns a list of Chromium commit (hash, position) pairs in a range.
+  def _revision_range(self, start, end, depot_name, base_revision=None,
+                      step_name=None):
+    """Returns a list of RevisionState objects between |start| and |end|.
 
-    The returned range does not include the given |min_rev| or |max_rev|.
+    Args:
+      start (str): Start commit hash.
+      end (str): End commit hash.
+      depot_name (str): Short string name of repo, e.g. chromium or v8.
+      base_revision (str): Base revision in the downstream repo (e.g. chromium).
+      step_name (str): Optional step name.
+
+    Returns:
+      A list of RevisionState objects, not including the given start or end.
     """
     try:
       step_result = self.api.m.python(
-          'for revisions %s:%s' % (min_rev, max_rev),
+          step_name,
           self.api.resource('fetch_intervening_revisions.py'),
-          [min_rev, max_rev, 'chromium'],
+          [start, end, depot_config.DEPOT_DEPS_NAME[depot_name]['url']],
           stdout=self.api.m.json.output())
-      return step_result.stdout
     except self.api.m.step.StepFailure:  # pragma: no cover
       self.surface_result('BAD_REV')
       raise
+    revisions = []
+    for commit_hash, _ in step_result.stdout:
+      revisions.append(self.revision_class(
+          bisector=self,
+          commit_hash=commit_hash,
+          depot_name=depot_name,
+          base_revision=base_revision))
+    return revisions
 
   def _expand_deps_revisions(self, revision_to_expand):
     """Populates the revisions attribute with additional deps revisions.
@@ -386,10 +403,14 @@ class Bisector(object):
           dep_revision_max = max_revision.deps[depot_name]
           if (dep_revision_min and dep_revision_max and
               dep_revision_min != dep_revision_max):
-            rev_list = self._get_rev_range_for_depot(depot_name,
-                                                     dep_revision_min,
-                                                     dep_revision_max,
-                                                     min_revision)
+            step_name = ('Expanding revision range for revision %s'
+                         ' on depot %s' % (dep_revision_max, depot_name))
+            rev_list = self._revision_range(
+                start=dep_revision_min,
+                end=dep_revision_max,
+                depot_name=depot_name,
+                base_revision=min_revision,
+                step_name=step_name)
             new_revisions = self.revisions[:max_revision.list_index]
             new_revisions += rev_list
             new_revisions += self.revisions[max_revision.list_index:]
@@ -403,36 +424,6 @@ class Bisector(object):
       if warning_text not in self.warnings:
         self.warnings.append(warning_text)
       return False
-
-  def _get_rev_range_for_depot(self, depot_name, min_rev, max_rev,
-                               base_revision):
-    """Returns a list of revision objects in a range for a non-Chromium repo.
-
-    Args:
-      depot_name: Short string name of repo, e.g. chromium or v8.
-      min_rev: Start commit hash (not included).
-      max_rev: End commit hash (not included).
-      base_revision: Base revision in the downstream repo (e.g. chromium).
-    """
-    try:
-      step_result = self.api.m.python(
-          ('Expanding revision range for revision %s on depot %s'
-           % (max_rev, depot_name)),
-          self.api.resource('fetch_intervening_revisions.py'),
-          [min_rev, max_rev, depot_name],
-          stdout=self.api.m.json.output())
-    except self.api.m.step.StepFailure:  # pragma: no cover
-      self.surface_result('BAD_REV')
-      raise
-    results = []
-    for git_hash, _ in step_result.stdout:
-      revision_object = self.revision_class(
-          self,
-          git_hash,
-          depot_name,
-          base_revision)
-      results.append(revision_object)
-    return results
 
   def _update_revision_list_indexes(self):
     """Sets list_index, next and previous properties for each revision."""

@@ -132,7 +132,7 @@
       "RECIPE_MODULE[build::auto_bisect]/resources/fetch_intervening_revisions.py",
       "a6298e4afedbf2cd461755ea6f45b0ad64222222",
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
-      "chromium"
+      "https://chromium.googlesource.com/chromium/src"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Expanding revision range.for revisions a6298e4afedbf2cd461755ea6f45b0ad64222222:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
@@ -667,7 +667,7 @@
       "RECIPE_MODULE[build::auto_bisect]/resources/fetch_intervening_revisions.py",
       "001",
       "004",
-      "v8"
+      "https://chromium.googlesource.com/v8/v8.git"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Expanding revision range for revision 004 on depot v8",
