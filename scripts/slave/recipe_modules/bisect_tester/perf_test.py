@@ -202,5 +202,8 @@ def _run_command(api, command, step_name):
   except api.m.step.StepFailure as sf:
     sf.result.presentation.logs['Failure Output'] = (
         sf.result.stdout or '').splitlines()
+    if sf.result.stderr:  # pragma: no cover
+      sf.result.presentation.logs['stderr'] = (
+        sf.result.stderr).splitlines()
     return sf.result.stdout, sf.result.stderr, sf.result.retcode
   return step_result.stdout, step_result.stderr, step_result.retcode
