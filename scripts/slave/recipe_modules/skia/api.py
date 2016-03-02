@@ -194,11 +194,22 @@ class SkiaApi(recipe_api.RecipeApi):
     self.compile_steps()
 
     # Run tests, perf, etc.
-    if self.do_test_steps:
-      self.test_steps()
-
-    if self.do_perf_steps:
-      self.perf_steps()
+    if 'Swarming' in self.builder_name:
+      test_task = None
+      perf_task = None
+      if self.do_test_steps:
+        test_task = self.test_steps_trigger()
+      if self.do_perf_steps:
+        perf_task = self.perf_steps_trigger()
+      if test_task:
+        self.test_steps_collect(test_task)
+      if perf_task:
+        self.perf_steps_collect(perf_task)
+    else:
+      if self.do_test_steps:
+        self.test_steps()
+      if self.do_perf_steps:
+        self.perf_steps()
 
     if self.do_test_steps or self.do_perf_steps:
       self.cleanup_steps()
@@ -476,75 +487,81 @@ print json.dumps({'ccache': ccache})
         cwd=self.skia_dir,
         infra_step=True).json.output
 
+  def test_steps_trigger(self):
+    """Trigger DM via Swarming."""
+    self._run_once(self.install)
+    self._run_once(self.download_and_copy_skps)
+    self._run_once(self.download_and_copy_images)
+
+    # Swarm the tests.
+    isolate_dir = self.skia_dir.join('infra', 'bots')
+    isolate_path = isolate_dir.join('test_skia.isolate')
+    isolate_vars = {
+        'MASTER_NAME': self.master_name,
+        'BUILDER_NAME': self.builder_name,
+        'BUILD_NUMBER': str(self.m.properties['buildnumber']),
+        'SLAVE_NAME': self.slave_name,
+        'REVISION': self.got_revision,
+    }
+    self.m.skia_swarming.create_isolated_gen_json(
+        isolate_path, isolate_dir, 'linux', 'test_skia', isolate_vars,
+        blacklist=['.git'])
+    self.m.skia_swarming.batcharchive(['test_skia'])
+    props = self.m.step.active_result.presentation.properties
+    hashes = props['swarm_hashes'].items()
+    dimensions = {
+      'pool': 'Skia',
+    }
+    dimensions['os'] = self.builder_cfg['os']
+    if self.builder_cfg['cpu_or_gpu'] == 'CPU':
+      dimensions['gpu'] = 'none'
+      # TODO(borenet): Add appropriate CPU dimension(s).
+      #dimensions['cpu'] = self.builder_cfg['cpu_or_gpu_value']
+    else:  # pragma: no cover
+      dimensions['gpu'] = self.builder_cfg['cpu_or_gpu_value']
+
+    tasks = self.m.skia_swarming.trigger_swarming_tasks(hashes, dimensions,
+                                                        idempotent=True)
+    assert len(tasks) == 1
+    return tasks[0]
+
+  def test_steps_collect(self, task):
+    """Collect the DM results from Swarming."""
+    # Wait for tests to finish, download the results.
+    self.m.file.rmtree('results_dir', task.task_output_dir, infra_step=True)
+    self.m.skia_swarming.collect_swarming_task(task)
+
+    # Upload the results.
+    if self.upload_dm_results:
+      host_dm_dir = self.m.path['slave_build'].join('dm')
+      self.flavor.create_clean_host_dir(host_dm_dir)
+      dm_src = task.task_output_dir.join('0', 'dm')
+      self.m.file.rmtree('dm_dir', host_dm_dir, infra_step=True)
+      self.m.file.copytree('dm_dir', dm_src, host_dm_dir, infra_step=True)
+
+      # Upload them to Google Storage.
+      self.run(
+          self.m.python,
+          'Upload DM Results',
+          script=self.resource('upload_dm_results.py'),
+          args=[
+            host_dm_dir,
+            self.got_revision,
+            self.builder_name,
+            self.m.properties['buildnumber'],
+            self.m.properties['issue'] if self.is_trybot else '',
+            self.m.path['slave_build'].join('skia', 'common', 'py', 'utils'),
+          ],
+          cwd=self.m.path['checkout'],
+          env=self.gsutil_env_chromium_skia_gm,
+          abort_on_failure=False,
+          infra_step=True)
+
   def test_steps(self):
     """Run the DM test."""
     self._run_once(self.install)
     self._run_once(self.download_and_copy_skps)
     self._run_once(self.download_and_copy_images)
-
-    if self.builder_cfg.get('extra_config') == 'Swarming':
-      # Swarm the tests.
-      isolate_dir = self.skia_dir.join('infra', 'bots')
-      isolate_path = isolate_dir.join('test_skia.isolate')
-      isolate_vars = {
-          'MASTER_NAME': self.master_name,
-          'BUILDER_NAME': self.builder_name,
-          'BUILD_NUMBER': str(self.m.properties['buildnumber']),
-          'SLAVE_NAME': self.slave_name,
-          'REVISION': self.got_revision,
-      }
-      self.m.skia_swarming.create_isolated_gen_json(
-          isolate_path, isolate_dir, 'linux', 'test_skia', isolate_vars,
-          blacklist=['.git'])
-      self.m.skia_swarming.batcharchive(['test_skia'])
-      props = self.m.step.active_result.presentation.properties
-      hashes = props['swarm_hashes'].items()
-      dimensions = {
-        'pool': 'Skia',
-      }
-      dimensions['os'] = self.builder_cfg['os']
-      if self.builder_cfg['cpu_or_gpu'] == 'CPU':
-        dimensions['gpu'] = 'none'
-        # TODO(borenet): Add appropriate CPU dimension(s).
-        #dimensions['cpu'] = self.builder_cfg['cpu_or_gpu_value']
-      else:  # pragma: no cover
-        dimensions['gpu'] = self.builder_cfg['cpu_or_gpu_value']
-
-      tasks = self.m.skia_swarming.trigger_swarming_tasks(hashes, dimensions,
-                                                          idempotent=True)
-
-      # Wait for tests to finish, download the results.
-      for task in tasks:
-        self.m.file.rmtree('results_dir', task.task_output_dir, infra_step=True)
-        self.m.skia_swarming.collect_swarming_task(task)
-
-      # Upload the results.
-      if self.upload_dm_results:
-        host_dm_dir = self.m.path['slave_build'].join('dm')
-        self.flavor.create_clean_host_dir(host_dm_dir)
-        dm_src = tasks[0].task_output_dir.join('0', 'dm')
-        self.m.file.rmtree('dm_dir', host_dm_dir, infra_step=True)
-        self.m.file.copytree('dm_dir', dm_src, host_dm_dir, infra_step=True)
-
-        # Upload them to Google Storage.
-        self.run(
-            self.m.python,
-            'Upload DM Results',
-            script=self.resource('upload_dm_results.py'),
-            args=[
-              host_dm_dir,
-              self.got_revision,
-              self.builder_name,
-              self.m.properties['buildnumber'],
-              self.m.properties['issue'] if self.is_trybot else '',
-              self.m.path['slave_build'].join('skia', 'common', 'py', 'utils'),
-            ],
-            cwd=self.m.path['checkout'],
-            env=self.gsutil_env_chromium_skia_gm,
-            abort_on_failure=False,
-            infra_step=True)
-
-      return
 
     use_hash_file = False
     if self.upload_dm_results:
@@ -682,6 +699,81 @@ print json.dumps({'ccache': ccache})
                cmd=preAbandonGpuContext, abort_on_failure=False,
                env=self.default_env)
 
+  def perf_steps_trigger(self):
+    """Trigger perf tests via Swarming."""
+    self._run_once(self.install)
+    self._run_once(self.download_and_copy_skps)
+    self._run_once(self.download_and_copy_images)
+
+    # Swarm the tests.
+    isolate_dir = self.skia_dir.join('infra', 'bots')
+    isolate_path = isolate_dir.join('perf_skia.isolate')
+    isolate_vars = {
+        'MASTER_NAME': self.master_name,
+        'BUILDER_NAME': self.builder_name,
+        'BUILD_NUMBER': str(self.m.properties['buildnumber']),
+        'SLAVE_NAME': self.slave_name,
+        'REVISION': self.got_revision,
+    }
+    self.m.skia_swarming.create_isolated_gen_json(
+        isolate_path, isolate_dir, 'linux', 'perf_skia', isolate_vars,
+        blacklist=['.git'])
+    self.m.skia_swarming.batcharchive(['perf_skia'])
+    props = self.m.step.active_result.presentation.properties
+    hashes = props['swarm_hashes'].items()
+    dimensions = {
+      'pool': 'Skia',
+    }
+    dimensions['os'] = self.builder_cfg['os']
+    if self.builder_cfg['cpu_or_gpu'] == 'CPU':
+      dimensions['gpu'] = 'none'
+      # TODO(borenet): Add appropriate CPU dimension(s).
+      #dimensions['cpu'] = self.builder_cfg['cpu_or_gpu_value']
+    else:  # pragma: no cover
+      dimensions['gpu'] = self.builder_cfg['cpu_or_gpu_value']
+
+    tasks = self.m.skia_swarming.trigger_swarming_tasks(hashes, dimensions,
+                                                        idempotent=True)
+    assert len(tasks) == 1
+    return tasks[0]
+
+  def perf_steps_collect(self, task):
+    """Wait for perf steps to finish and upload results."""
+    # Wait for nanobench to finish, download the results.
+    self.m.file.rmtree('results_dir', task.task_output_dir, infra_step=True)
+    self.m.skia_swarming.collect_swarming_task(task)
+
+    # Upload the results.
+    if self.upload_perf_results:
+      git_timestamp = self.m.git.get_timestamp(test_data='1408633190',
+                                               infra_step=True)
+      self.m.file.rmtree('perf_dir', self.perf_data_dir, infra_step=True)
+      self.m.file.makedirs('perf_dir', self.perf_data_dir, infra_step=True)
+      src_results_file = task.task_output_dir.join(
+          '0', 'perfdata', self.builder_name, 'data',
+          'nanobench_%s.json' % self.got_revision)
+      dst_results_file = self.perf_data_dir.join(
+          'nanobench_%s_%s.json' % (self.got_revision, git_timestamp))
+      self.m.file.copy('perf_results', src_results_file, dst_results_file,
+                       infra_step=True)
+
+      self.flavor.copy_directory_contents_to_host(
+          self.device_dirs.perf_data_dir, self.perf_data_dir)
+      gsutil_path = self.m.path['depot_tools'].join(
+          'third_party', 'gsutil', 'gsutil')
+      upload_args = [self.builder_name, self.m.properties['buildnumber'],
+                     self.perf_data_dir, self.got_revision, gsutil_path]
+      if self.is_trybot:
+        upload_args.append(self.m.properties['issue'])
+      self.run(self.m.python,
+               'Upload perf results',
+               script=self.resource('upload_bench_results.py'),
+               args=upload_args,
+               cwd=self.m.path['checkout'],
+               env=self.gsutil_env_chromium_skia_gm,
+               abort_on_failure=False,
+               infra_step=True)
+
   def perf_steps(self):
     """Run Skia benchmarks."""
     if 'ZeroGPUCache' in self.builder_name:
@@ -690,75 +782,6 @@ print json.dumps({'ccache': ccache})
     self._run_once(self.install)
     self._run_once(self.download_and_copy_skps)
     self._run_once(self.download_and_copy_images)
-
-    if self.builder_cfg.get('extra_config') == 'Swarming':
-      # Swarm the tests.
-      isolate_dir = self.skia_dir.join('infra', 'bots')
-      isolate_path = isolate_dir.join('perf_skia.isolate')
-      isolate_vars = {
-          'MASTER_NAME': self.master_name,
-          'BUILDER_NAME': self.builder_name,
-          'BUILD_NUMBER': str(self.m.properties['buildnumber']),
-          'SLAVE_NAME': self.slave_name,
-          'REVISION': self.got_revision,
-      }
-      self.m.skia_swarming.create_isolated_gen_json(
-          isolate_path, isolate_dir, 'linux', 'perf_skia', isolate_vars,
-          blacklist=['.git'])
-      self.m.skia_swarming.batcharchive(['perf_skia'])
-      props = self.m.step.active_result.presentation.properties
-      hashes = props['swarm_hashes'].items()
-      dimensions = {
-        'pool': 'Skia',
-      }
-      dimensions['os'] = self.builder_cfg['os']
-      if self.builder_cfg['cpu_or_gpu'] == 'CPU':
-        dimensions['gpu'] = 'none'
-        # TODO(borenet): Add appropriate CPU dimension(s).
-        #dimensions['cpu'] = self.builder_cfg['cpu_or_gpu_value']
-      else:  # pragma: no cover
-        dimensions['gpu'] = self.builder_cfg['cpu_or_gpu_value']
-
-      tasks = self.m.skia_swarming.trigger_swarming_tasks(hashes, dimensions,
-                                                          idempotent=True)
-
-      # Wait for nanobench to finish, download the results.
-      for task in tasks:
-        self.m.file.rmtree('results_dir', task.task_output_dir, infra_step=True)
-        self.m.skia_swarming.collect_swarming_task(task)
-
-      # Upload the results.
-      if self.upload_perf_results:
-        git_timestamp = self.m.git.get_timestamp(test_data='1408633190',
-                                                 infra_step=True)
-        self.m.file.rmtree('perf_dir', self.perf_data_dir, infra_step=True)
-        self.m.file.makedirs('perf_dir', self.perf_data_dir, infra_step=True)
-        src_results_file = tasks[0].task_output_dir.join(
-            '0', 'perfdata', self.builder_name, 'data',
-            'nanobench_%s.json' % self.got_revision)
-        dst_results_file = self.perf_data_dir.join(
-            'nanobench_%s_%s.json' % (self.got_revision, git_timestamp))
-        self.m.file.copy('perf_results', src_results_file, dst_results_file,
-                         infra_step=True)
-
-        self.flavor.copy_directory_contents_to_host(
-            self.device_dirs.perf_data_dir, self.perf_data_dir)
-        gsutil_path = self.m.path['depot_tools'].join(
-            'third_party', 'gsutil', 'gsutil')
-        upload_args = [self.builder_name, self.m.properties['buildnumber'],
-                       self.perf_data_dir, self.got_revision, gsutil_path]
-        if self.is_trybot:
-          upload_args.append(self.m.properties['issue'])
-        self.run(self.m.python,
-                 'Upload perf results',
-                 script=self.resource('upload_bench_results.py'),
-                 args=upload_args,
-                 cwd=self.m.path['checkout'],
-                 env=self.gsutil_env_chromium_skia_gm,
-                 abort_on_failure=False,
-                 infra_step=True)
-
-      return
 
     if self.upload_perf_results:
       self.flavor.create_clean_device_dir(self.device_dirs.perf_data_dir)
