@@ -220,7 +220,7 @@ class LocalGTestTest(Test):
   def __init__(self, name, args=None, target_name=None, use_isolate=False,
                revision=None, webkit_revision=None, android_isolate_path=None,
                android_shard_timeout=None, android_tool=None,
-               override_compile_targets=None, **runtest_kwargs):
+               override_compile_targets=None, use_xvfb=True, **runtest_kwargs):
     """Constructs an instance of LocalGTestTest.
 
     Args:
@@ -233,7 +233,11 @@ class LocalGTestTest(Test):
       webkit_revision: Revision of the WebKit checkout.
       override_compile_targets: List of compile targets for this test
           (for tests that don't follow target naming conventions).
+      use_xvfb: whether to use the X virtual frame buffer. Only has an
+          effect on Linux. Defaults to True. Mostly harmless to
+          specify this, except on GPU bots.
       runtest_kwargs: Additional keyword args forwarded to the runtest.
+
     """
     super(LocalGTestTest, self).__init__()
     self._name = name
@@ -246,6 +250,7 @@ class LocalGTestTest(Test):
     self._android_shard_timeout = android_shard_timeout
     self._android_tool = android_tool
     self._override_compile_targets = override_compile_targets
+    self._use_xvfb = use_xvfb
     self._runtest_kwargs = runtest_kwargs
 
   @property
@@ -307,7 +312,7 @@ class LocalGTestTest(Test):
       kwargs['shard_timeout'] = self._android_shard_timeout
       kwargs['tool'] = self._android_tool
     else:
-      kwargs['xvfb'] = True
+      kwargs['xvfb'] = self._use_xvfb
       kwargs['test_type'] = self.name
       kwargs['annotate'] = 'gtest'
       kwargs['test_launcher_summary_output'] = gtest_results_file
@@ -424,6 +429,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
     target_name = str(test['test'])
     name = str(test.get('name', target_name))
     swarming_dimensions = swarming_dimensions or {}
+    use_xvfb = test.get('use_xvfb', True)
     if use_swarming and swarming_dimension_sets:
       for dimensions in swarming_dimension_sets:
         # Yield potentially multiple invocations of the same test, on
@@ -435,14 +441,16 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                         enable_swarming=True,
                         swarming_shards=swarming_shards,
                         swarming_dimensions=new_dimensions,
-                        override_compile_targets=override_compile_targets)
+                        override_compile_targets=override_compile_targets,
+                        use_xvfb=use_xvfb)
     else:
       yield GTestTest(name, args=args, target_name=target_name,
                       flakiness_dash=True,
                       enable_swarming=use_swarming,
                       swarming_dimensions=swarming_dimensions,
                       swarming_shards=swarming_shards,
-                      override_compile_targets=override_compile_targets)
+                      override_compile_targets=override_compile_targets,
+                      use_xvfb=use_xvfb)
 
 
 def generate_instrumentation_test(api, chromium_tests_api, mastername,

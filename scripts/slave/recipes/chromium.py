@@ -182,7 +182,11 @@ def GenTests(api):
         'gtest_tests': [
           'base_unittests',
           {'test': 'browser_tests', 'shard_index': 0, 'total_shards': 2},
-          {'test': 'content_unittests', 'name': 'renamed_content_unittests'},
+          {
+              'test': 'content_unittests',
+              'name': 'renamed_content_unittests',
+              'use_xvfb': False,
+          },
         ],
       },
     }))
