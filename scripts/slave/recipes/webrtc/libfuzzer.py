@@ -65,9 +65,7 @@ def RunSteps(api):
            [api.path.sep.join(['tools', 'clang', 'scripts', 'update.py']),
             '--force-local-build',
             '--without-android'],
-           cwd=api.path['checkout'],
-           # TODO(kjellander): Remove when crbug.com/591008 is fixed.
-           env={'LLVM_FORCE_HEAD_REVISION': 'YES'})
+           cwd=api.path['checkout'])
 
   api.chromium.run_gn(use_goma=False)
 
