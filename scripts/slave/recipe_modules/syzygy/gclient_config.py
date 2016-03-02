@@ -17,7 +17,7 @@ def syzygy(c):
   s.name = 'src'
   s.url = ('https://chromium.googlesource.com/external/' +
            'github.com/google/syzygy.git/')
-  s.deps_file = 'DEPS.syzygy'
+  s.deps_file = 'DEPS'
   s.managed = False
 
   # Configure the src-internal checkout.
