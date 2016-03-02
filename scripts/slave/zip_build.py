@@ -120,6 +120,7 @@ def _MojomFiles(build_dir, suffixes):
     directory.
   """
   walk_dirs = [
+    'gen/components',
     'gen/content/test/data',
     'gen/device',
     'gen/mojo',
