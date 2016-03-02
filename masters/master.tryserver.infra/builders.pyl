@@ -24,7 +24,18 @@
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "presubmit_build",
     },
-    "Build Try Recipe Test": {
+    "Build Try Recipe Test Mac": {
+      "category": "Build",
+      "recipe": "infra/build_repo_real_try",
+      "properties": {
+        "repo_name": "build",
+        "runhooks": True,
+      },
+      "scheduler": None,
+      "slave_pools": ["mac_slave_pool"],
+      "slavebuilddir": "build_try_recipe_test",
+    },
+    "Build Try Recipe Test Trusty64": {
       "category": "Build",
       "recipe": "infra/build_repo_real_try",
       "properties": {
@@ -35,6 +46,18 @@
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "build_try_recipe_test",
     },
+    "Build Try Recipe Test Win64": {
+      "category": "Build",
+      "recipe": "infra/build_repo_real_try",
+      "properties": {
+        "repo_name": "build",
+        "runhooks": True,
+      },
+      "scheduler": None,
+      "slave_pools": ["win64_slave_pool"],
+      "slavebuilddir": "build_try_recipe_test",
+    },
+
     "Try Recipe Mac": {
       "category": "Try Recipe",
       "recipe": "infra/try_recipe",
@@ -68,6 +91,7 @@
       "slave_pools": ["win64_slave_pool"],
       "slavebuilddir": "try_recipe",
     },
+
     "Infra Presubmit": {
       "category": "Infra",
       "recipe": "run_presubmit",
@@ -107,6 +131,7 @@
       "slave_pools": ["win64_slave_pool"],
       "slavebuilddir": "infra",
     },
+
     "Luci-py Presubmit": {
       "category": "Luci-py",
       "recipe": "run_presubmit",
@@ -118,6 +143,7 @@
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "presubmit_lucipy",
     },
+
     "Luci-GAE Presubmit": {
       "category": "Luci-GAE",
       "recipe": "infra/luci_gae",
@@ -125,6 +151,7 @@
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "presubmit_lucigae",
     },
+
     "Luci-GAE Linux Trusty 64 Tester": {
       "category": "Luci-GAE",
       "recipe": "infra/luci_gae",
@@ -167,6 +194,7 @@
       "slave_pools": ["win64_slave_pool"],
       "slavebuilddir": "luci-go",
     },
+
     "Recipes-py Presubmit": {
       "category": "Recipes-py",
       "recipe": "run_presubmit",
@@ -178,6 +206,7 @@
       "slave_pools": ["trusty64_slave_pool"],
       "slavebuilddir": "presubmit_recipespy",
     },
+
     "gerrit-test-cq-normal": {
       "category": "Gerrit CQ",
       "recipe": "infra/gerrit_cq_test",
