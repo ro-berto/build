@@ -24,6 +24,7 @@
       "src@HEAD",
       "--revision",
       "src/third_party/angle@HEAD",
+      "--force",
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",

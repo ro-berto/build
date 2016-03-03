@@ -33,6 +33,7 @@
       "src@7496f63cbefd34b2d791022fbad64a82838a3f3f",
       "--revision",
       "src/third_party/WebKit@191275",
+      "--force",
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",

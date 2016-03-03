@@ -24,6 +24,7 @@
       "src@1111111",
       "--revision",
       "src/third_party/WebKit@HEAD",
+      "--force",
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",

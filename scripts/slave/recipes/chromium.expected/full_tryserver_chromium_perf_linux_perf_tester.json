@@ -51,6 +51,7 @@
       "/path/to/tmp/json",
       "--revision",
       "src@1111111",
+      "--force",
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",

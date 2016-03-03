@@ -23,6 +23,7 @@
       "--revision",
       "src@HEAD",
       "--clobber",
+      "--force",
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
