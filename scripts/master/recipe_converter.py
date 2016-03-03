@@ -954,7 +954,7 @@ def win_drmemory_ctest_converter(step):
   script = ('api.path["build"].join("scripts", "slave", "drmemory",'
       ' "build_env.bat")')
   confstr = ('str(api.path["checkout"].join("tests", "runsuite.cmake")) + '
-      '",drmemory_only;long;build=" + build_properties["buildnumber"]')
+      '",drmemory_only;long;build=" + str(build_properties["buildnumber"])')
   rc.steps.append('api.step("Dr. Memory ctest", [%s, %s, %s])' % (script,
     repr(step[1]['command'][1:6])[1:-1], confstr))
   return rc
@@ -964,7 +964,7 @@ def drmemory_pack_results_converter(step):
   rc.deps.add('recipe_engine/step')
   rc.steps.append("# Pack test results step")
   zipname = ('"testlogs_r" + build_properties["got_revision"] + "_b" +'
-  ' build_properties["buildnumber"] + ".7z"')
+  ' str(build_properties["buildnumber"]) + ".7z"')
   rc.steps.append('api.step("Pack test results", '
       '[%s, %s, %s])' % (repr(step[1]['command'][:3])[1:-1], zipname,
         repr(step[1]['command'][4:])[1:-1]))
@@ -980,7 +980,7 @@ def drmemory_pack_results_win_converter(step):
   env = ('{"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot", '
       '"bot_tools")}')
   zipname = ('"testlogs_r" + build_properties["got_revision"] + "_b" +'
-  ' build_properties["buildnumber"] + ".7z"')
+  ' str(build_properties["buildnumber"]) + ".7z"')
   rc.steps.append('api.step("Pack test results", '
       '[%s, %s, %s, %s], env=%s)' % (build_env,
         repr(step[1]['command'][1:4])[1:-1], zipname,

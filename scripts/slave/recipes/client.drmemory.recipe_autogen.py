@@ -68,7 +68,7 @@ def linux_lucid_x64_drm_steps(api):
     api.step("Pack test results",
              ['7z', 'a', '-xr!*.pdb',
               "testlogs_r" + build_properties["got_revision"] + "_b" +
-              build_properties["buildnumber"] + ".7z",
+              str(build_properties["buildnumber"]) + ".7z",
               'build_drmemory-dbg-32/logs',
               'build_drmemory-dbg-32/Testing/Temporary',
               'build_drmemory-rel-32/logs',
@@ -113,7 +113,8 @@ def win_vista_x64_drm_steps(api):
                                      "build_env.bat"), 'ctest', '--timeout',
               '60', '-VV', '-S',
               str(api.path["checkout"].join("tests", "runsuite.cmake")) +
-              ",drmemory_only;long;build=" + build_properties["buildnumber"]])
+              ",drmemory_only;long;build=" +
+              str(build_properties["buildnumber"])])
     # Checkout TSan tests step
     api.step("Checkout TSan tests",
              ['svn', 'checkout', '--force',
@@ -212,7 +213,7 @@ def win_vista_x64_drm_steps(api):
              [api.path["build"].join("scripts", "slave", "drmemory",
                "build_env.bat"),'7z', 'a', '-xr!*.pdb',
               "testlogs_r" + build_properties["got_revision"] + "_b" +
-              build_properties["buildnumber"] + ".7z",
+              str(build_properties["buildnumber"]) + ".7z",
               'build_drmemory-dbg-32/logs',
               'build_drmemory-dbg-32/Testing/Temporary',
               'build_drmemory-rel-32/logs',
@@ -350,7 +351,8 @@ def win_xp_drm_steps(api):
                                      "build_env.bat"), 'ctest', '--timeout',
               '60', '-VV', '-S',
               str(api.path["checkout"].join("tests", "runsuite.cmake")) +
-              ",drmemory_only;long;build=" + build_properties["buildnumber"]])
+              ",drmemory_only;long;build=" +
+              str(build_properties["buildnumber"])])
     # Checkout TSan tests step
     api.step("Checkout TSan tests",
              ['svn', 'checkout', '--force',
@@ -449,7 +451,7 @@ def win_xp_drm_steps(api):
              [api.path["build"].join("scripts", "slave", "drmemory",
                "build_env.bat"), '7z', 'a', '-xr!*.pdb',
               "testlogs_r" + build_properties["got_revision"] + "_b" +
-              build_properties["buildnumber"] + ".7z",
+              str(build_properties["buildnumber"]) + ".7z",
               'build_drmemory-dbg-32/logs',
               'build_drmemory-dbg-32/Testing/Temporary',
               'build_drmemory-rel-32/logs',
@@ -493,7 +495,7 @@ def mac_mavericks_x64_drm_steps(api):
     api.step("Pack test results",
              ['7z', 'a', '-xr!*.pdb',
               "testlogs_r" + build_properties["got_revision"] + "_b" +
-              build_properties["buildnumber"] + ".7z",
+              str(build_properties["buildnumber"]) + ".7z",
               'build_drmemory-dbg-32/logs',
               'build_drmemory-dbg-32/Testing/Temporary',
               'build_drmemory-rel-32/logs',
@@ -912,7 +914,8 @@ def win_8_x64_drm_steps(api):
                                      "build_env.bat"), 'ctest', '--timeout',
               '60', '-VV', '-S',
               str(api.path["checkout"].join("tests", "runsuite.cmake")) +
-              ",drmemory_only;long;build=" + build_properties["buildnumber"]])
+              ",drmemory_only;long;build=" +
+              str(build_properties["buildnumber"])])
     # Checkout TSan tests step
     api.step("Checkout TSan tests",
              ['svn', 'checkout', '--force',
@@ -1011,7 +1014,7 @@ def win_8_x64_drm_steps(api):
              [api.path["build"].join("scripts", "slave", "drmemory",
                "build_env.bat"), '7z', 'a', '-xr!*.pdb',
               "testlogs_r" + build_properties["got_revision"] + "_b" +
-              build_properties["buildnumber"] + ".7z",
+              str(build_properties["buildnumber"]) + ".7z",
               'build_drmemory-dbg-32/logs',
               'build_drmemory-dbg-32/Testing/Temporary',
               'build_drmemory-rel-32/logs',
@@ -1108,7 +1111,8 @@ def win_7_x64_drm_steps(api):
                                      "build_env.bat"), 'ctest', '--timeout',
               '60', '-VV', '-S',
               str(api.path["checkout"].join("tests", "runsuite.cmake")) +
-              ",drmemory_only;long;build=" + build_properties["buildnumber"]])
+              ",drmemory_only;long;build=" +
+              str(build_properties["buildnumber"])])
     # Checkout TSan tests step
     api.step("Checkout TSan tests",
              ['svn', 'checkout', '--force',
@@ -1207,7 +1211,7 @@ def win_7_x64_drm_steps(api):
              [api.path["build"].join("scripts", "slave", "drmemory",
                "build_env.bat"), '7z', 'a', '-xr!*.pdb',
               "testlogs_r" + build_properties["got_revision"] + "_b" +
-              build_properties["buildnumber"] + ".7z",
+              str(build_properties["buildnumber"]) + ".7z",
               'build_drmemory-dbg-32/logs',
               'build_drmemory-dbg-32/Testing/Temporary',
               'build_drmemory-rel-32/logs',
@@ -1356,7 +1360,7 @@ def GenTests(api):
     api.properties(buildername='linux-builder') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('linux_lucid_x64_drm') +
@@ -1364,7 +1368,7 @@ def GenTests(api):
     api.properties(buildername='linux-lucid_x64-drm') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('win_vista_x64_drm') +
@@ -1372,7 +1376,7 @@ def GenTests(api):
     api.properties(buildername='win-vista_x64-drm') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('mac_mavericks_x64_DR') +
@@ -1380,7 +1384,7 @@ def GenTests(api):
     api.properties(buildername='mac-mavericks_x64-DR') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('linux_cr_builder') +
@@ -1388,7 +1392,7 @@ def GenTests(api):
     api.properties(buildername='linux-cr-builder') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('linux_cr_builder_clobber') +
@@ -1396,7 +1400,7 @@ def GenTests(api):
     api.properties(buildername='linux-cr-builder') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave') +
     api.properties(clobber='')
         )
@@ -1405,7 +1409,7 @@ def GenTests(api):
     api.properties(buildername='mac-builder-DR') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('win_xp_drm') +
@@ -1413,7 +1417,7 @@ def GenTests(api):
     api.properties(buildername='win-xp-drm') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('mac_mavericks_x64_drm') +
@@ -1421,7 +1425,7 @@ def GenTests(api):
     api.properties(buildername='mac-mavericks_x64-drm') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('linux_cr') +
@@ -1429,7 +1433,7 @@ def GenTests(api):
     api.properties(buildername='linux-cr') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('win8_cr_builder') +
@@ -1437,7 +1441,7 @@ def GenTests(api):
     api.properties(buildername='win8-cr-builder') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('win8_cr_builder_clobber') +
@@ -1445,7 +1449,7 @@ def GenTests(api):
     api.properties(buildername='win8-cr-builder') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave') +
     api.properties(clobber='')
         )
@@ -1454,7 +1458,7 @@ def GenTests(api):
     api.properties(buildername='win8-cr') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave') +
     api.step_data("Get the revision number",
       stdout=api.raw_io.output("Dr. Memory version 1.9.16845"
@@ -1465,7 +1469,7 @@ def GenTests(api):
     api.properties(buildername='win7-cr') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave') +
     api.step_data("Get the revision number",
       stdout=api.raw_io.output("Dr. Memory version 1.9.16845"
@@ -1476,7 +1480,7 @@ def GenTests(api):
     api.properties(buildername='win-8_x64-drm') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('win7_cr_builder') +
@@ -1484,7 +1488,7 @@ def GenTests(api):
     api.properties(buildername='win7-cr-builder') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('win7_cr_builder_clobber') +
@@ -1492,7 +1496,7 @@ def GenTests(api):
     api.properties(buildername='win7-cr-builder') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave') +
     api.properties(clobber='')
         )
@@ -1501,7 +1505,7 @@ def GenTests(api):
     api.properties(buildername='win-7_x64-drm') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('mac_builder') +
@@ -1509,7 +1513,7 @@ def GenTests(api):
     api.properties(buildername='mac-builder') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('win_builder') +
@@ -1517,7 +1521,7 @@ def GenTests(api):
     api.properties(buildername='win-builder') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(buildnumber='42') +
+    api.properties(buildnumber=42) +
     api.properties(slavename='TestSlave') +
     api.step_data("Find package basename",
       stdout=api.raw_io.output("DrMemory-Windows-1.2.3-0x1234567.zip")
