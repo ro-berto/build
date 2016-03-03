@@ -7,7 +7,9 @@ import hashlib
 
 from recipe_engine import recipe_test_api
 
+
 class GitilesTestApi(recipe_test_api.RecipeTestApi):
+
   def _make_gitiles_response_json(self, data):
     return self.m.json.output(data)
 
@@ -16,15 +18,15 @@ class GitilesTestApi(recipe_test_api.RecipeTestApi):
 
   def make_log_test_data(self, s, n=3, cursor=None):
     result = {
-      'log': [
-        self.make_commit_gitiles_dict(
-            commit='fake %s hash %d' % (s, i),
-            msg='fake %s msg %d' % (s, i),
-            new_files=['%s.py' % (chr(i + ord('a')))],
-            email='fake_%s@fake_%i.email.com' % (s, i),
-        )
-        for i in xrange(n)
-      ],
+        'log': [
+            self.make_commit_gitiles_dict(
+                commit='fake %s hash %d' % (s, i),
+                msg='fake %s msg %d' % (s, i),
+                new_files=['%s.py' % (chr(i + ord('a')))],
+                email='fake_%s@fake_%i.email.com' % (s, i),
+            )
+            for i in xrange(n)
+        ],
     }
     if cursor:
       result['next'] = cursor
@@ -57,30 +59,30 @@ class GitilesTestApi(recipe_test_api.RecipeTestApi):
       assert '@' in email
       name = email.split('@')[0]
     d = {
-      'commit': self.make_hash(commit),
-      'tree': self.make_hash('tree', commit),
-      'parents': [self.make_hash('parent', commit)],
-      'author': {
-        'name': name,
-        'email': email,
-        'time': 'Mon Jan 01 00:00:00 2015',
-      },
-      'committer': {
-        'name': name,
-        'email': email,
-        'time': 'Mon Jan 01 00:00:00 2015',
-      },
-      'message': msg,
-      'tree_diff': [],
+        'commit': self.make_hash(commit),
+        'tree': self.make_hash('tree', commit),
+        'parents': [self.make_hash('parent', commit)],
+        'author': {
+            'name': name,
+            'email': email,
+            'time': 'Mon Jan 01 00:00:00 2015',
+        },
+        'committer': {
+            'name': name,
+            'email': email,
+            'time': 'Mon Jan 01 00:00:00 2015',
+        },
+        'message': msg,
+        'tree_diff': [],
     }
     if new_files:
       d['tree_diff'].extend({
-        'type': 'add',
-        'old_id': 40*'0',
-        'old_mode': 0,
-        'new_id': self.make_hash('file', f, commit),
-        'new_mode': 33188,
-        'new_path': f,
+          'type': 'add',
+          'old_id': 40 * '0',
+          'old_mode': 0,
+          'new_id': self.make_hash('file', f, commit),
+          'new_mode': 33188,
+          'new_path': f,
       } for f in new_files)
     return d
 
@@ -89,5 +91,5 @@ class GitilesTestApi(recipe_test_api.RecipeTestApi):
 
   def make_encoded_file(self, data):
     return self.m.json.output({
-      'value': base64.b64encode(data),
+        'value': base64.b64encode(data),
     })
