@@ -184,15 +184,13 @@ def RunSteps(api):
 
   # Now collect all tasks.
   failed_tasks = []
-  slave_num = 0
   for task in tasks:
     try:
-      slave_num += 1
       api.skia_swarming.collect_swarming_task(task)
 
       if skia_tool == 'nanobench':
         output_dir = api.skia_swarming.tasks_output_dir.join(
-            'skia-task-ct-%s-%s' % (skia_tool, slave_num)).join('0')
+            'skia-task-%s' % task.title).join('0')
         utc = api.time.utcnow()
         gs_dest_dir = 'ct/%s/%d/%02d/%02d/%02d/' % (
             ct_page_type, utc.year, utc.month, utc.day, utc.hour)
