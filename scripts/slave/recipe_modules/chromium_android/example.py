@@ -82,6 +82,10 @@ BUILDERS = freeze({
     },
     'webview_cts': {
         'run_webview_cts': True,
+    },
+    'last_known_devices': {
+      'perf_config': 'sharded_perf_tests.json',
+      'last_known_devices': '.last_devices',
     }
 })
 
@@ -163,7 +167,8 @@ def RunSteps(api, buildername):
       api.chromium_android.run_sharded_perf_tests(
           config='fake_config.json',
           flaky_config='flake_fakes.json',
-          upload_archives_to_bucket='archives-bucket')
+          upload_archives_to_bucket='archives-bucket',
+          known_devices_file=config.get('last_known_devices', None))
   except api.step.StepFailure as f:
     failure = f
 

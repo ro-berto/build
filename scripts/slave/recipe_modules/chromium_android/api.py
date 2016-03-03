@@ -532,6 +532,7 @@ class AndroidApi(recipe_api.RecipeApi):
                          flaky_config=None,
                          chartjson_output=False,
                          max_battery_temp=None,
+                         known_devices_file=None,
                          **kwargs):
     args = [
         'perf',
@@ -546,6 +547,8 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--collect-chartjson-data')
     if max_battery_temp:
       args.extend(['--max-battery-temp', max_battery_temp])
+    if known_devices_file:
+      args.extend(['--known-devices-file', known_devices_file])
 
     self.test_runner(
         'Sharded Perf Tests',
@@ -558,7 +561,7 @@ class AndroidApi(recipe_api.RecipeApi):
                              test_type_transform=lambda x: x,
                              chartjson_file=False, max_battery_temp=None,
                              upload_archives_to_bucket=None,
-                             **kwargs):
+                             known_devices_file=None, **kwargs):
     """Run the perf tests from the given config file.
 
     config: the path of the config file containing perf tests.
@@ -566,11 +569,13 @@ class AndroidApi(recipe_api.RecipeApi):
     perf_id: the id of the builder running these tests
     test_type_transform: a lambda transforming the test name to the
       test_type to upload to.
+    known_devices_file: Path to file containing serial numbers of known devices.
     """
     # test_runner.py actually runs the tests and records the results
     self._run_sharded_tests(config=config, flaky_config=flaky_config,
                             chartjson_output=chartjson_file,
-                            max_battery_temp=max_battery_temp, **kwargs)
+                            max_battery_temp=max_battery_temp,
+                            known_devices_file=known_devices_file, **kwargs)
 
     # now obtain the list of tests that were executed.
     result = self.m.step(
