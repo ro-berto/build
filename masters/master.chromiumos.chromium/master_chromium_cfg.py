@@ -7,11 +7,11 @@ from master.factory import annotator_factory, chromeos_factory
 
 from buildbot.schedulers.basic import SingleBranchScheduler as Scheduler
 
-def Builder(factory_obj, dname, sname, flavor, board):
-  cbb_name = '%s-tot-chromium-pfq-informational' % (board,)
+def Builder(factory_obj, board):
+  config = '%s-tot-chromium-pfq-informational' % (board,)
   builder = {
-      'name': '%s (%s)' % (dname, flavor),
-      'builddir': '%s-tot-chromeos-%s' % (flavor, sname),
+      'name': config,
+      'builddir': config,
       'category': '2chromium',
       'factory': chromeos_factory.ChromiteRecipeFactory(
           factory_obj, 'cros/cbuildbot'),
@@ -19,7 +19,7 @@ def Builder(factory_obj, dname, sname, flavor, board):
       'scheduler': 'chromium_cros',
       'notify_on_missing': True,
       'properties': {
-          'cbb_config': cbb_name,
+          'cbb_config': config,
       },
   }
   return builder
@@ -30,9 +30,9 @@ def Update(_config, active_master, c):
       active_master=active_master)
 
   builders = [
-      Builder(factory_obj, 'X86', 'x86', 'chromium', 'x86-generic'),
-      Builder(factory_obj, 'AMD64', 'amd64', 'chromium', 'amd64-generic'),
-      Builder(factory_obj, 'Daisy', 'daisy', 'chromium', 'daisy'),
+      Builder(factory_obj, 'x86-generic'),
+      Builder(factory_obj, 'amd64-generic'),
+      Builder(factory_obj, 'daisy'),
   ]
 
   c['schedulers'] += [

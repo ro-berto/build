@@ -17,23 +17,23 @@ defaults['category'] = '4chromeos asan'
 _ASAN_SCHEDULER_NAME = 'chromium_src_asan'
 helper.Scheduler(_ASAN_SCHEDULER_NAME, branch='master', treeStableTimer=60)
 
-def Builder(dname, sname, flavor, root, board):
-  fname = '%s-%s' % (sname, flavor)
-  B('%s (%s) Asan' % (dname, sname),
-    factory=fname,
+def Builder(board, root):
+  config = '%s-tot-asan-informational' % (board,)
+  B(config,
+    factory=config,
     gatekeeper='crosasantest',
-    builddir='%s-tot-chromeos-%s-asan' % (flavor, board),
+    builddir=config,
     scheduler=_ASAN_SCHEDULER_NAME,
     notify_on_missing=True)
-  F(fname,
+  F(config,
     chromeos_factory.CbuildbotFactory(
       buildroot='/b/cbuild/%s' % root,
       pass_revision=True,
-      params='%s-tot-asan-informational' % board).get_factory())
+      params=config).get_factory())
 
 
-Builder('Chromium OS', 'x86', 'chromium', 'shared_external', 'x86-generic')
-Builder('Chromium OS', 'amd64', 'chromium', 'shared_external', 'amd64-generic')
+Builder('x86-generic', 'shared_external')
+Builder('amd64-generic', 'shared_external')
 
 def Update(_config, _active_master, c):
   return helper.Update(c)

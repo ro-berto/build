@@ -17,23 +17,23 @@ defaults['category'] = '5chromiumos perf'
 _PERF_SCHEDULER_NAME = 'chromium_src_perf'
 helper.Scheduler(_PERF_SCHEDULER_NAME, branch='master', treeStableTimer=60)
 
-def Builder(sname, flavor, root, board):
-  fname = '%s-%s' % (sname, flavor)
-  B('Chromium OS (%s) Perf' % sname,
-    factory=fname,
+def Builder(board, root):
+  config = '%s-telemetry' % (board,)
+  B(config,
+    factory=config,
     gatekeeper='crosperf',
-    builddir='%s-%s-telemetry' % (flavor, board),
+    builddir=config,
     scheduler=_PERF_SCHEDULER_NAME,
     notify_on_missing=True)
-  F(fname,
+  F(config,
     chromeos_factory.CbuildbotFactory(
       buildroot='/b/cbuild/%s' % root,
       pass_revision=True,
-      params='%s-telemetry' % board).get_factory())
+      params=config).get_factory())
 
 
-Builder('x86', 'chromium', 'shared_external', 'x86-generic')
-Builder('amd64', 'chromium', 'shared_external', 'amd64-generic')
+Builder('x86-generic', 'shared_external')
+Builder('amd64-generic', 'shared_external')
 
 def Update(_config, _active_master, c):
   return helper.Update(c)
