@@ -56,8 +56,7 @@ def _Populate(BuildmasterConfig, builders, active_master_cls):
   # slaves registered to a builder. Remove dupes.
   c['slaves'] = master_utils.AutoSetupSlaves(
       c['builders'],
-      Master.GetBotPassword(),
-      missing_recipients=['buildbot@chromium-build-health.appspotmail.com'])
+      Master.GetBotPassword())
 
   # This does some sanity checks on the configuration.
   slaves = slaves_list.BaseSlavesList(

@@ -80,6 +80,8 @@ def AutoSetupSlaves(builders, bot_password, max_builds=1,
                     preferred_builder_dict=None,
                     missing_timeout=300):
   """Helper function for master.cfg to quickly setup c['slaves']."""
+  missing_recipients = missing_recipients or []
+
   slaves_dict = {}
   for builder in builders:
     auto_reboot = builder.get('auto_reboot', True)
