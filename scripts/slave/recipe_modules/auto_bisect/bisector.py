@@ -111,25 +111,8 @@ class Bisector(object):
     # Initial revision range
     with api.m.step.nest('Resolving reference range'):
 
-      if len(bisect_config['bad_revision']) == 40:  # pragma: no cover
-        # Must be hex.
-        int (bisect_config['bad_revision'], 16)
-        bad_hash = bisect_config['bad_revision']
-      else:
-        # Must be decimal.
-        int(bisect_config['bad_revision'], 10)
-        bad_hash = api.m.commit_position.chromium_hash_from_commit_position(
-            bisect_config['bad_revision'])
-
-      if len(bisect_config['good_revision']) == 40:  # pragma: no cover
-        # Must be hex.
-        int (bisect_config['good_revision'], 16)
-        good_hash = bisect_config['good_revision']
-      else:
-        # Must be decimal.
-        int(bisect_config['good_revision'], 10)
-        good_hash = api.m.commit_position.chromium_hash_from_commit_position(
-            bisect_config['good_revision'])
+      bad_hash = self._get_hash(bisect_config['bad_revision'])
+      good_hash = self._get_hash(bisect_config['good_revision'])
 
       self.revisions = []
       self.bad_rev = revision_class(self, bad_hash)
@@ -152,9 +135,30 @@ class Bisector(object):
     if init_revisions:
       self._expand_initial_revision_range()
 
+  def _get_hash(self, rev):
+    """Returns a commit hash given either a commit hash or commit position.
+
+    Args:
+      rev (str): A commit hash or commit position number.
+
+    Returns:
+      A 40-digit git commit hash string.
+    """
+    if self._is_sha1(rev):  # pragma: no cover
+      return rev
+    if rev.isdigit():
+      return self._api.m.commit_position.chromium_hash_from_commit_position(rev)
+    self.surface_result('BAD_REV')  # pragma: no cover
+    raise self.api.m.step.StepFailure(
+        'Invalid input revision: %r' % (rev,))  # pragma: no cover
+
+  @staticmethod
+  def _is_sha1(s):
+    return bool(re.match('^[0-9A-Fa-f]{40}$', s))
+
   def significantly_different(
       self, list_a, list_b,
-      significance_level=SIGNIFICANCE_LEVEL): # pragma: no cover
+      significance_level=SIGNIFICANCE_LEVEL):  # pragma: no cover
     """Uses an external script to run hypothesis testing with scipy.
 
     The reason why we need an external script is that scipy is not available to
