@@ -402,7 +402,7 @@
       "-d",
       "-r",
       "[SLAVE_BUILD]/flutter/packages/flutter/doc/api",
-      "gs://docs.flutter.io/packages/flutter"
+      "gs://docs.flutter.io/flutter"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -439,7 +439,7 @@
       "-d",
       "-r",
       "[SLAVE_BUILD]/flutter/packages/playfair/doc/api",
-      "gs://docs.flutter.io/packages/playfair"
+      "gs://docs.flutter.io/playfair"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -476,7 +476,7 @@
       "-d",
       "-r",
       "[SLAVE_BUILD]/flutter/packages/cassowary/doc/api",
-      "gs://docs.flutter.io/packages/cassowary"
+      "gs://docs.flutter.io/cassowary"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -513,7 +513,7 @@
       "-d",
       "-r",
       "[SLAVE_BUILD]/flutter/packages/flutter_test/doc/api",
-      "gs://docs.flutter.io/packages/flutter_test"
+      "gs://docs.flutter.io/flutter_test"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -550,7 +550,7 @@
       "-d",
       "-r",
       "[SLAVE_BUILD]/flutter/packages/flutter_sprites/doc/api",
-      "gs://docs.flutter.io/packages/flutter_sprites"
+      "gs://docs.flutter.io/flutter_sprites"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
