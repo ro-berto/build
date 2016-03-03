@@ -255,6 +255,12 @@ def MakeDashboardJsonV1(chart_json, revision_dict, test_name, bot, buildername,
   supplemental.update(
       _GetStdioUriColumn(test_name, buildername, buildnumber))
 
+  # TODO(sullivan): The android recipe sends "test_name.reference"
+  # while the desktop one just sends "test_name" for ref builds. Need
+  # to figure out why.
+  # https://github.com/catapult-project/catapult/issues/2046
+  test_name = test_name.replace('.reference', '')
+
   fields = {
       'master': master,
       'bot': bot,
