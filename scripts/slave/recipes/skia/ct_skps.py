@@ -190,7 +190,7 @@ def RunSteps(api):
 
       if skia_tool == 'nanobench':
         output_dir = api.skia_swarming.tasks_output_dir.join(
-            'skia-task-%s' % task.title).join('0')
+            task.title).join('0')
         utc = api.time.utcnow()
         gs_dest_dir = 'ct/%s/%d/%02d/%02d/%02d/' % (
             ct_page_type, utc.year, utc.month, utc.day, utc.hour)

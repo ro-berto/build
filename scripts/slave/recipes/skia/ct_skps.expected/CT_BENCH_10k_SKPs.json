@@ -1046,7 +1046,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/skia-task-ct-nanobench-1/0",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-1/0",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1075,7 +1075,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/skia-task-ct-nanobench-1/0/file 1",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-1/0/file 1",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1098,7 +1098,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/skia-task-ct-nanobench-1/0/file 2",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-1/0/file 2",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1176,7 +1176,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/skia-task-ct-nanobench-2/0",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-2/0",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1205,7 +1205,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/skia-task-ct-nanobench-2/0/file 1",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-2/0/file 1",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1228,7 +1228,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/skia-task-ct-nanobench-2/0/file 2",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-2/0/file 2",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1306,7 +1306,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/skia-task-ct-nanobench-3/0",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-3/0",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1335,7 +1335,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/skia-task-ct-nanobench-3/0/file 1",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-3/0/file 1",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1358,7 +1358,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/skia-task-ct-nanobench-3/0/file 2",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-3/0/file 2",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1436,7 +1436,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/skia-task-ct-nanobench-4/0",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-4/0",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1465,7 +1465,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/skia-task-ct-nanobench-4/0/file 1",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-4/0/file 1",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1488,7 +1488,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/skia-task-ct-nanobench-4/0/file 2",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-4/0/file 2",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1566,7 +1566,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/skia-task-ct-nanobench-5/0",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-5/0",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1595,7 +1595,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/skia-task-ct-nanobench-5/0/file 1",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-5/0/file 1",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1618,7 +1618,7 @@
       "----",
       "cp",
       "-R",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/skia-task-ct-nanobench-5/0/file 2",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-nanobench-5/0/file 2",
       "gs://skia-perf/ct/10k/2012/05/14/12/"
     ],
     "cwd": "[SLAVE_BUILD]",
