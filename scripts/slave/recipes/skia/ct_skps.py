@@ -6,7 +6,6 @@ from common.skia import global_constants
 
 
 DEPS = [
-  'ct_swarming',
   'file',
   'depot_tools/gclient',
   'gsutil',
@@ -14,11 +13,14 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/step',
   'recipe_engine/time',
+  'skia_swarming',
   'swarming',
   'swarming_client',
   'depot_tools/tryserver',
 ]
 
+
+CT_GS_BUCKET = 'cluster-telemetry'
 
 CT_SKPS_ISOLATE = 'ct_skps.isolate'
 
@@ -31,6 +33,27 @@ DEFAULT_CT_NUM_SLAVES = 100
 
 # The SKP repository to use.
 DEFAULT_SKPS_CHROMIUM_BUILD = '57259e0-05dcb4c'
+
+
+def download_skps(api, page_type, slave_num, skps_chromium_build, dest_dir):
+  """Downloads SKPs corresponding to the specified page type, slave and build.
+
+  The SKPs are downloaded into subdirectories in the downloads_dir.
+
+  Args:
+    api: RecipeApi instance.
+    page_type: str. The CT page type. Eg: 1k, 10k.
+    slave_num: int. The number of the slave used to determine which GS
+               directory to download from. Eg: for the top 1k, slave1 will
+               contain SKPs from webpages 1-10, slave2 will contain 11-20.
+    skps_chromium_build: str. The build the SKPs were captured from.
+    dest_dir: path obj. The directory to download SKPs into.
+  """
+  skps_dir = dest_dir.join('slave%s' % slave_num)
+  api.file.makedirs('SKPs dir', skps_dir)
+  full_source = 'gs://%s/skps/%s/%s/slave%s' % (
+      CT_GS_BUCKET, page_type, skps_chromium_build, slave_num)
+  api.gsutil(['-m', 'rsync', '-d', '-r', full_source, skps_dir])
 
 
 def RunSteps(api):
@@ -94,9 +117,8 @@ def RunSteps(api):
   # Ensure swarming_client is compatible with what recipes expect.
   api.swarming.check_client_version()
   # Setup Go isolate binary.
-  api.ct_swarming.setup_go_isolate()
-
   chromium_checkout = api.path['slave_build'].join('src')
+  api.skia_swarming.setup_go_isolate(chromium_checkout.join('tools', 'luci-go'))
 
   # Apply issue to the Skia checkout if this is a trybot run.
   api.tryserver.maybe_apply_issue()
@@ -112,16 +134,15 @@ def RunSteps(api):
   # Set build property to make finding SKPs convenient.
   api.step.active_result.presentation.properties['Location of SKPs'] = (
       'https://pantheon.corp.google.com/storage/browser/%s/skps/%s/%s/' % (
-          api.ct_swarming.CT_GS_BUCKET, ct_page_type, skps_chromium_build))
+          CT_GS_BUCKET, ct_page_type, skps_chromium_build))
 
   # Delete swarming_temp_dir to ensure it starts from a clean slate.
-  api.file.rmtree('swarming temp dir', api.ct_swarming.swarming_temp_dir)
+  api.file.rmtree('swarming temp dir', api.skia_swarming.swarming_temp_dir)
 
   for slave_num in range(1, ct_num_slaves + 1):
     # Download SKPs.
-    api.ct_swarming.download_skps(
-        ct_page_type, slave_num, skps_chromium_build,
-        api.path['slave_build'].join('skps'))
+    download_skps(api, ct_page_type, slave_num, skps_chromium_build,
+                  api.path['slave_build'].join('skps'))
 
     # Create this slave's isolated.gen.json file to use for batcharchiving.
     isolate_dir = chromium_checkout.join('chrome')
@@ -132,8 +153,9 @@ def RunSteps(api):
         'GIT_HASH': skia_hash,
         'CONFIGURATION': configuration,
     }
-    api.ct_swarming.create_isolated_gen_json(
-        isolate_path, isolate_dir, 'linux', slave_num, extra_variables)
+    api.skia_swarming.create_isolated_gen_json(
+        isolate_path, isolate_dir, 'linux', 'ct-%s-%s' % (skia_tool, slave_num),
+        extra_variables)
 
   # Batcharchive everything on the isolate server for efficiency.
   max_slaves_to_batcharchive = MAX_SLAVES_TO_BATCHARCHIVE
@@ -141,23 +163,24 @@ def RunSteps(api):
     # Break up the "isolate tests" step into batches with <100k files due to
     # https://github.com/luci/luci-go/issues/9
     max_slaves_to_batcharchive = 5
-  swarm_hashes = []
+  tasks_to_swarm_hashes = []
   for slave_start_num in xrange(1, ct_num_slaves+1, max_slaves_to_batcharchive):
-    api.ct_swarming.batcharchive(
-        num_slaves=min(
-            max_slaves_to_batcharchive + slave_start_num - 1, ct_num_slaves),
-        slave_start_num=slave_start_num)
-    swarm_hashes.extend(
-        api.step.active_result.presentation.properties['swarm_hashes'].values())
+    m = min(max_slaves_to_batcharchive + slave_start_num - 1, ct_num_slaves)
+    api.skia_swarming.batcharchive(
+        targets=['ct-' + skia_tool + '-%s' % num for num in range(
+            slave_start_num, slave_start_num + m)])
+    tasks_to_swarm_hashes.extend(
+        api.step.active_result.presentation.properties['swarm_hashes'].items())
+  # Sort the list to go through tasks in order.
+  tasks_to_swarm_hashes.sort()
 
   # Trigger all swarming tasks.
   dimensions={'os': 'Ubuntu-14.04', 'cpu': 'x86-64', 'pool': 'Chrome'}
   if skia_tool == 'nanobench':
     # Run on GPU bots for nanobench.
     dimensions['gpu'] = '10de:104a'
-  tasks = api.ct_swarming.trigger_swarming_tasks(
-      swarm_hashes, task_name_prefix='ct-%s' % skia_tool,
-      dimensions=dimensions)
+  tasks = api.skia_swarming.trigger_swarming_tasks(
+      tasks_to_swarm_hashes, dimensions=dimensions)
 
   # Now collect all tasks.
   failed_tasks = []
@@ -165,11 +188,11 @@ def RunSteps(api):
   for task in tasks:
     try:
       slave_num += 1
-      api.ct_swarming.collect_swarming_task(task)
+      api.skia_swarming.collect_swarming_task(task)
 
       if skia_tool == 'nanobench':
-        output_dir = api.ct_swarming.tasks_output_dir.join(
-            'slave%s' % slave_num).join('0')
+        output_dir = api.skia_swarming.tasks_output_dir.join(
+            'skia-task-ct-%s-%s' % (skia_tool, slave_num)).join('0')
         utc = api.time.utcnow()
         gs_dest_dir = 'ct/%s/%d/%02d/%02d/%02d/' % (
             ct_page_type, utc.year, utc.month, utc.day, utc.hour)

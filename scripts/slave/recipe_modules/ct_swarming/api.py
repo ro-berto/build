@@ -98,25 +98,6 @@ os.chmod('%s', os.stat('%s').st_mode | stat.S_IEXEC)
                                                            slave_num),
         dest=wpr_dir)
 
-  def download_skps(self, page_type, slave_num, skps_chromium_build, dest_dir):
-    """Downloads SKPs corresponding to the specified page type, slave and build.
-
-    The SKPs are downloaded into subdirectories in the downloads_dir.
-
-    Args:
-      page_type: str. The CT page type. Eg: 1k, 10k.
-      slave_num: int. The number of the slave used to determine which GS
-                 directory to download from. Eg: for the top 1k, slave1 will
-                 contain SKPs from webpages 1-10, slave2 will contain 11-20.
-      skps_chromium_build: str. The build the SKPs were captured from.
-      dest_dir: path obj. The directory to download SKPs into.
-    """
-    skps_dir = dest_dir.join('slave%s' % slave_num)
-    self.m.file.makedirs('SKPs dir', skps_dir)
-    full_source = 'gs://%s/skps/%s/%s/slave%s' % (
-        self.CT_GS_BUCKET, page_type, skps_chromium_build, slave_num)
-    self.m.gsutil(['-m', 'rsync', '-d', '-r', full_source, skps_dir])
-
   def create_isolated_gen_json(self, isolate_path, base_dir, os_type,
                                slave_num, extra_variables):
     """Creates an isolated.gen.json file.
