@@ -191,11 +191,45 @@
   },
   {
     "cmd": [
-      "gclient",
-      "runhooks"
+      "download_from_google_storage",
+      "--no_resume",
+      "--platform=linux*",
+      "--no_auth",
+      "--bucket",
+      "chromium-luci",
+      "-d",
+      "[SLAVE_BUILD]/src/tools/luci-go/linux64"
     ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "gclient runhooks"
+    "cwd": "[SLAVE_BUILD]",
+    "name": "download luci-go linux"
+  },
+  {
+    "cmd": [
+      "download_from_google_storage",
+      "--no_resume",
+      "--platform=darwin",
+      "--no_auth",
+      "--bucket",
+      "chromium-luci",
+      "-d",
+      "[SLAVE_BUILD]/src/tools/luci-go/mac64"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "download luci-go mac"
+  },
+  {
+    "cmd": [
+      "download_from_google_storage",
+      "--no_resume",
+      "--platform=win32",
+      "--no_auth",
+      "--bucket",
+      "chromium-luci",
+      "-d",
+      "[SLAVE_BUILD]/src/tools/luci-go/win64"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "download luci-go win"
   },
   {
     "cmd": [
@@ -400,11 +434,11 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/ct-task-1.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"rasterize_and_record_micro\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"1\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
-      "[SLAVE_BUILD]/swarming_temp_dir/slave1.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-1.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"rasterize_and_record_micro\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"1\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "[SLAVE_BUILD]/swarming_temp_dir/ct-1.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Write slave1.isolated.gen.json"
+    "name": "Write ct-1.isolated.gen.json"
   },
   {
     "cmd": [
@@ -510,11 +544,11 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/ct-task-2.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"rasterize_and_record_micro\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"2\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
-      "[SLAVE_BUILD]/swarming_temp_dir/slave2.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-2.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"rasterize_and_record_micro\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"2\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "[SLAVE_BUILD]/swarming_temp_dir/ct-2.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Write slave2.isolated.gen.json"
+    "name": "Write ct-2.isolated.gen.json"
   },
   {
     "cmd": [
@@ -620,11 +654,11 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/ct-task-3.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"rasterize_and_record_micro\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"3\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
-      "[SLAVE_BUILD]/swarming_temp_dir/slave3.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/src/chrome/ct_top1k.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-ct-3.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--extra-variable\", \n        \"BENCHMARK\", \n        \"rasterize_and_record_micro\", \n        \"--extra-variable\", \n        \"SLAVE_NUM\", \n        \"3\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/src/chrome\", \n    \"version\": 1\n}",
+      "[SLAVE_BUILD]/swarming_temp_dir/ct-3.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Write slave3.isolated.gen.json"
+    "name": "Write ct-3.isolated.gen.json"
   },
   {
     "cmd": [
@@ -638,20 +672,20 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/swarming_temp_dir/slave1.isolated.gen.json",
-      "[SLAVE_BUILD]/swarming_temp_dir/slave2.isolated.gen.json",
-      "[SLAVE_BUILD]/swarming_temp_dir/slave3.isolated.gen.json"
+      "[SLAVE_BUILD]/swarming_temp_dir/ct-1.isolated.gen.json",
+      "[SLAVE_BUILD]/swarming_temp_dir/ct-2.isolated.gen.json",
+      "[SLAVE_BUILD]/swarming_temp_dir/ct-3.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"slave1\": \"[dummy hash for slave1]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"slave2\": \"[dummy hash for slave2]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"slave3\": \"[dummy hash for slave3]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"ct-1\": \"[dummy hash for ct-1]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"ct-2\": \"[dummy hash for ct-2]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"ct-3\": \"[dummy hash for ct-3]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"slave1\": \"[dummy hash for slave1]\", \"slave2\": \"[dummy hash for slave2]\", \"slave3\": \"[dummy hash for slave3]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"ct-1\": \"[dummy hash for ct-1]\", \"ct-2\": \"[dummy hash for ct-2]\", \"ct-3\": \"[dummy hash for ct-3]\"}@@@"
     ]
   },
   {
@@ -669,7 +703,7 @@
       "--shards",
       "1",
       "--task-name",
-      "ct-1k-task-1/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1",
+      "ct-1/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -693,26 +727,26 @@
       "--tag",
       "buildername:Linux CT Top1k RR Perf",
       "--tag",
-      "data:[dummy hash for slave1]",
+      "data:[dummy hash for ct-1]",
       "--tag",
       "master:chromium.perf.fyi",
       "--tag",
-      "name:ct-1k-task-1",
+      "name:ct-1",
       "--tag",
       "os:Ubuntu-14.04",
       "--tag",
       "slavename:slave50-c1",
       "--tag",
-      "stepname:ct-1k-task-1 on Ubuntu-14.04",
-      "[dummy hash for slave1]"
+      "stepname:ct-1 on Ubuntu-14.04",
+      "[dummy hash for ct-1]"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] ct-1k-task-1 on Ubuntu-14.04",
+    "name": "[trigger] ct-1 on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"ct-1k-task-1/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"ct-1/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"ct-1k-task-1/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ct-1/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -738,7 +772,7 @@
       "--shards",
       "1",
       "--task-name",
-      "ct-1k-task-2/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1",
+      "ct-2/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -762,26 +796,26 @@
       "--tag",
       "buildername:Linux CT Top1k RR Perf",
       "--tag",
-      "data:[dummy hash for slave3]",
+      "data:[dummy hash for ct-2]",
       "--tag",
       "master:chromium.perf.fyi",
       "--tag",
-      "name:ct-1k-task-2",
+      "name:ct-2",
       "--tag",
       "os:Ubuntu-14.04",
       "--tag",
       "slavename:slave50-c1",
       "--tag",
-      "stepname:ct-1k-task-2 on Ubuntu-14.04",
-      "[dummy hash for slave3]"
+      "stepname:ct-2 on Ubuntu-14.04",
+      "[dummy hash for ct-2]"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] ct-1k-task-2 on Ubuntu-14.04",
+    "name": "[trigger] ct-2 on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"ct-1k-task-2/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"ct-2/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"ct-1k-task-2/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ct-2/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -807,7 +841,7 @@
       "--shards",
       "1",
       "--task-name",
-      "ct-1k-task-3/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1",
+      "ct-3/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -831,26 +865,26 @@
       "--tag",
       "buildername:Linux CT Top1k RR Perf",
       "--tag",
-      "data:[dummy hash for slave2]",
+      "data:[dummy hash for ct-3]",
       "--tag",
       "master:chromium.perf.fyi",
       "--tag",
-      "name:ct-1k-task-3",
+      "name:ct-3",
       "--tag",
       "os:Ubuntu-14.04",
       "--tag",
       "slavename:slave50-c1",
       "--tag",
-      "stepname:ct-1k-task-3 on Ubuntu-14.04",
-      "[dummy hash for slave2]"
+      "stepname:ct-3 on Ubuntu-14.04",
+      "[dummy hash for ct-3]"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] ct-1k-task-3 on Ubuntu-14.04",
+    "name": "[trigger] ct-3 on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"ct-1k-task-3/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"ct-3/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"ct-1k-task-3/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ct-3/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -873,14 +907,14 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "ct-1k-task-1/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1",
+      "ct-1/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1",
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/slave1"
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-1"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "ct-1k-task-1 on Ubuntu-14.04",
+    "name": "ct-1 on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -929,7 +963,7 @@
       "python",
       "-u",
       "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/slave1/0",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-1/0",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -953,7 +987,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/slave1/0/file 1",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-1/0/file 1",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1007,7 +1041,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/slave1/0/file 2",
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-1/0/file 2",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -1068,14 +1102,14 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "ct-1k-task-2/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1",
+      "ct-2/Ubuntu-14.04/[dummy has/Linux CT Top1k RR Perf/-1",
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/slave2"
+      "[SLAVE_BUILD]/swarming_temp_dir/outputs/ct-2"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "ct-1k-task-2 on Ubuntu-14.04",
+    "name": "ct-2 on Ubuntu-14.04",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@swarming pending 71s@@@",
@@ -1123,7 +1157,7 @@
   },
   {
     "name": "$result",
-    "reason": "Step('ct-1k-task-2 on Ubuntu-14.04') failed with return_code 1",
+    "reason": "Step('ct-2 on Ubuntu-14.04') failed with return_code 1",
     "status_code": 1
   }
 ]

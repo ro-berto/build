@@ -13,6 +13,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/step',
   'recipe_engine/time',
+  'skia_swarming',
 ]
 
 
@@ -58,7 +59,8 @@ def RunSteps(api):
   # Checkout chromium and swarming.
   api.ct_swarming.checkout_dependencies()
   # Setup Go isolate binary.
-  api.ct_swarming.setup_go_isolate()
+  api.skia_swarming.setup_go_isolate(
+      api.path['checkout'].join('tools', 'luci-go'))
 
   # Download the prebuilt chromium binary.
   _DownloadAndExtractBinary(api)
@@ -67,7 +69,7 @@ def RunSteps(api):
   api.ct_swarming.download_CT_binary(CT_BINARY)
 
   # Delete swarming_temp_dir to ensure it starts from a clean slate.
-  api.file.rmtree('swarming temp dir', api.ct_swarming.swarming_temp_dir)
+  api.file.rmtree('swarming temp dir', api.skia_swarming.swarming_temp_dir)
 
   ct_num_slaves = api.properties.get('ct_num_slaves', DEFAULT_CT_NUM_SLAVES)
   for slave_num in range(1, ct_num_slaves + 1):
@@ -81,17 +83,21 @@ def RunSteps(api):
         'SLAVE_NUM': str(slave_num),
         'BENCHMARK': benchmark,
     }
-    api.ct_swarming.create_isolated_gen_json(
-        isolate_path, isolate_dir, 'linux', slave_num, extra_variables)
+    api.skia_swarming.create_isolated_gen_json(
+        isolate_path, isolate_dir, 'linux', 'ct-%s' % slave_num,
+        extra_variables)
 
   # Batcharchive everything on the isolate server for efficiency.
-  api.ct_swarming.batcharchive(ct_num_slaves)
-  swarm_hashes = (
-      api.step.active_result.presentation.properties['swarm_hashes']).values()
+  api.skia_swarming.batcharchive(
+      targets=['ct-%s' % num for num in range(1, ct_num_slaves+1)])
+  tasks_to_swarm_hashes = (
+      api.step.active_result.presentation.properties['swarm_hashes']).items()
+  # Sort the list to go through tasks in order.
+  tasks_to_swarm_hashes.sort()
 
   # Trigger all swarming tasks.
-  tasks = api.ct_swarming.trigger_swarming_tasks(
-      swarm_hashes, task_name_prefix='ct-1k-task',
+  tasks = api.skia_swarming.trigger_swarming_tasks(
+      tasks_to_swarm_hashes,
       dimensions={'os': 'Ubuntu-14.04',
                   'gpu': '10de:104a',
                   'cpu': 'x86-64',
@@ -112,10 +118,9 @@ def RunSteps(api):
   num_webpages_reported = 0
   for task in tasks:
     slave_num += 1
-    api.ct_swarming.collect_swarming_task(task)
+    api.skia_swarming.collect_swarming_task(task)
 
-    output_dir = api.ct_swarming.tasks_output_dir.join(
-        'slave%s' % slave_num).join('0')
+    output_dir = api.skia_swarming.tasks_output_dir.join(task.title).join('0')
     output_files = api.file.listdir('output dir', output_dir)
     if not output_files:
       raise api.step.StepFailure(
@@ -412,7 +417,7 @@ def GenTests(api):
         'read output json', api.json.output(json_output_slave1_file1)) +
     api.override_step_data(
         'read output json (2)', api.json.output(json_output_slave1_file2)) +
-    api.step_data('ct-1k-task-2 on Ubuntu-14.04', retcode=1) +
+    api.step_data('ct-2 on Ubuntu-14.04', retcode=1) +
     api.properties(
         buildername='Linux CT Top1k RR Perf',
         mastername=mastername,
