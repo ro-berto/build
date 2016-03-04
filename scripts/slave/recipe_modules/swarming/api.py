@@ -824,6 +824,9 @@ class SwarmingApi(recipe_api.RecipeApi):
           'id': '148aa78d7aa%02d00' % i,
           'internal_failure': False,
           'isolated_out': {
+            'isolated': 'abc123',
+            'isolatedserver': 'https://isolateserver.appspot.com',
+            'namespace': 'default-gzip',
             'view_url': 'blah',
           },
           'modified_ts': '2014-09-25 01:42:00',
