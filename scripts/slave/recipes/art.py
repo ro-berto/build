@@ -192,8 +192,8 @@ def setup_target(api,
     if device == 'mips64_emulator':
       return
 
-    # Device is flaky, so disable running tests on it.
-    if serial == '0FF57BB6':
+    # Both our fugus are flaky, so disable running tests on them.
+    if device == 'fugu':
       return
 
     api.step('setup device', [art_tools.join('setup-buildbot-device.sh')],
