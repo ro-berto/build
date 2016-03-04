@@ -67,6 +67,7 @@ class SlaveType(object):
   VM = 'vm'
   GCE = 'gce'
   GCE_WIMPY = 'gce_wimpy'
+  GCE_BEEFY = 'gce_beefy'
 
 
 class ChromiteTarget(object):
