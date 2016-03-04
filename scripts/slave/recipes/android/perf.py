@@ -26,15 +26,15 @@ REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
 def _ChromiumPerfTesters():
   def _AddTestSpec(name, perf_id, num_device_shards=1, num_host_shards=1,
-                   target_bits=64):
+                   target_bits=64, known_devices_file='.known_devices'):
     for shard_index in xrange(num_host_shards):
       builder_name = '%s (%d)' % (name, shard_index + 1)
       testers[builder_name] = _TestSpec(
           name, perf_id, num_device_shards, num_host_shards, shard_index,
-          target_bits)
+          target_bits, known_devices_file)
 
   def _TestSpec(name, perf_id, num_device_shards, num_host_shards, shard_index,
-                target_bits):
+                target_bits, known_devices_file):
     spec = {
       'perf_id': perf_id,
       'bucket': 'chrome-perf',
@@ -43,6 +43,7 @@ def _ChromiumPerfTesters():
       'shard_index': shard_index,
       'test_spec_file': 'chromium.perf.json',
       'max_battery_temp': 350,
+      'known_devices_file': known_devices_file,
     }
 
     if target_bits == 32:
@@ -183,7 +184,8 @@ def RunSteps(api):
         max_battery_temp=builder.get('max_battery_temp'),
         num_device_shards=builder['num_device_shards'],
         num_host_shards=builder.get('num_host_shards', 1),
-        shard_index=builder.get('shard_index', 0))
+        shard_index=builder.get('shard_index', 0),
+        known_devices_file=builder.get('known_devices_file', None))
     dynamic_perf_tests.run(api, None)
 
     if failures:

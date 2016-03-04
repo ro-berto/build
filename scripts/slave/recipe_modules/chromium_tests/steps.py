@@ -551,11 +551,10 @@ class DynamicPerfTests(Test):
     return tests
 
   def _run_sharded(self, api, tests):
-    if self._known_devices_file:
-      known_devices_file = api.path['build'].join(
-          'site_config', self._known_devices_file)
-    else:
-      known_devices_file = None
+    known_devices_file = (
+        api.path['build'].join(
+            'site_config', self._known_devices_file) if self._known_devices_file
+        else None)
     api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=tests),
       perf_id=self._perf_id,

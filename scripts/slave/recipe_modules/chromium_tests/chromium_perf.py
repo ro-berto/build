@@ -95,7 +95,7 @@ def _AddBuildSpec(name, platform, target_bits=64):
 
 def _AddTestSpec(name, perf_id, platform, target_bits=64,
                  max_battery_temp=350, num_host_shards=1, num_device_shards=1,
-                 known_devices_file=None):
+                 known_devices_file='.known_devices'):
   parent_builder = _builders[platform][target_bits]
   for shard_index in xrange(num_host_shards):
     builder_name = '%s (%d)' % (name, shard_index + 1)
@@ -113,26 +113,19 @@ _AddBuildSpec('Linux Builder', 'linux')
 
 
 _AddTestSpec('Android Galaxy S5 Perf', 'android-galaxy-s5', 'android',
-             target_bits=32, num_device_shards=7, num_host_shards=3,
-             known_devices_file='.known_devices')
+             target_bits=32, num_device_shards=7, num_host_shards=3)
 _AddTestSpec('Android Nexus5 Perf', 'android-nexus5', 'android',
-             target_bits=32, num_device_shards=7, num_host_shards=3,
-             known_devices_file='.known_devices')
+             target_bits=32, num_device_shards=7, num_host_shards=3)
 _AddTestSpec('Android Nexus5X Perf', 'android-nexus5X', 'android',
-             target_bits=32, num_device_shards=7, num_host_shards=3,
-             known_devices_file='.known_devices')
+             target_bits=32, num_device_shards=7, num_host_shards=3)
 _AddTestSpec('Android Nexus6 Perf', 'android-nexus6', 'android',
-             target_bits=32, num_device_shards=7, num_host_shards=3,
-             known_devices_file='.known_devices')
+             target_bits=32, num_device_shards=7, num_host_shards=3)
 _AddTestSpec('Android Nexus7v2 Perf', 'android-nexus7v2', 'android',
-             target_bits=32, num_device_shards=7, num_host_shards=3,
-             known_devices_file='.known_devices')
+             target_bits=32, num_device_shards=7, num_host_shards=3)
 _AddTestSpec('Android Nexus9 Perf', 'android-nexus9', 'android',
-             num_device_shards=7, num_host_shards=3,
-             known_devices_file='.known_devices')
+             num_device_shards=7, num_host_shards=3)
 _AddTestSpec('Android One Perf', 'android-one', 'android',
-             target_bits=32, num_device_shards=7, num_host_shards=3,
-             known_devices_file='.known_devices')
+             target_bits=32, num_device_shards=7, num_host_shards=3)
 
 
 _AddTestSpec('Win Zenbook Perf', 'win-zenbook', 'win',

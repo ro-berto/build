@@ -450,7 +450,9 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--collect-chartjson-data",
       "--max-battery-temp",
-      "350"
+      "350",
+      "--known-devices-file",
+      "[BUILD]/site_config/.known_devices"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "env": {
