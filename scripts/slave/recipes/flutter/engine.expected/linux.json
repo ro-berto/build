@@ -517,6 +517,88 @@
     ]
   },
   {
+    "cmd": [
+      "[SLAVE_BUILD]/src/sky/tools/gn",
+      "--release",
+      "--android",
+      "--simulator"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "gn --release --android --simulator"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[SLAVE_BUILD]/src/out/android_sim_Release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "build android_sim_Release"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "Zip android-x64 Artifacts",
+    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"SkyShell.apk\", \"path\": \"[SLAVE_BUILD]/src/out/android_sim_Release/apks/SkyShell.apk\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_sim_Release/gen/sky/shell/shell/shell/libs/x86_64/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_sim_Release/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_sim_Release/gen/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_5/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]/tmp_tmp_5/artifacts.zip",
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-x64/artifacts.zip"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "gsutil upload android-x64/artifacts.zip",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-x64/artifacts.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[TMP_BASE]/tmp_tmp_5"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "rmtree temp dir (5)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

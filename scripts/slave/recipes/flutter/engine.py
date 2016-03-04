@@ -90,14 +90,26 @@ def AnalyzeDartUI(api):
   api.step('analyze dart_ui', ['/bin/sh', 'travis/analyze.sh'], cwd=checkout)
 
 
-def BuildLinuxAndroid(api):
+def BuildLinuxAndroidx64(api):
+  RunGN(api, '--release', '--android', '--simulator')
+  Build(api, 'android_sim_Release')
+  UploadArtifacts(api, 'android-x64', [
+    'build/android/ant/chromium-debug.keystore',
+    'out/android_sim_Release/apks/SkyShell.apk',
+    'out/android_sim_Release/gen/sky/shell/shell/shell/libs/x86_64/' +
+    'libsky_shell.so',
+    'out/android_sim_Release/icudtl.dat',
+    'out/android_sim_Release/gen/sky/shell/shell/classes.dex.jar',
+  ])
+
+
+def BuildLinuxAndroidArm(api):
   RunGN(api, '--release', '--android', '--enable-gcm', '--enable-firebase')
   Build(api, 'android_Release', ':dist', 'gcm', 'sky/services/firebase')
   UploadArtifacts(api, 'android-arm', [
     'build/android/ant/chromium-debug.keystore',
     'out/android_Release/apks/SkyShell.apk',
     'out/android_Release/flutter.mojo',
-    # Unclear if this is the right way to work around draconian 80c rule:
     'out/android_Release/gen/sky/shell/shell/shell/libs/armeabi-v7a/' +
     'libsky_shell.so',
     'out/android_Release/icudtl.dat',
@@ -223,7 +235,8 @@ def RunSteps(api):
         [checkout.join('tools/android/download_android_tools.py')])
       BuildLinux(api)
       TestObservatory(api)
-      BuildLinuxAndroid(api)
+      BuildLinuxAndroidArm(api)
+      BuildLinuxAndroidx64(api)
 
     if api.platform.is_mac:
       BuildMac(api)
