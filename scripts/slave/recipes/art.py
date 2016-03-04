@@ -196,6 +196,10 @@ def setup_target(api,
     if device == 'fugu':
       return
 
+    # Device is flaky, so disable running tests on it.
+    if serial == 'HT591JT00381':
+      return
+
     api.step('setup device', [art_tools.join('setup-buildbot-device.sh')],
              env=env)
 
