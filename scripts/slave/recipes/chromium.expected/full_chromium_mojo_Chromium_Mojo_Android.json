@@ -7,11 +7,11 @@
       "--master",
       "chromium.mojo",
       "--builder",
-      "Chromium Mojo Linux",
+      "Chromium Mojo Android",
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
+      "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']",
       "--root",
       "src",
       "--revision_mapping_file",
@@ -107,10 +107,96 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/testing/scripts/get_compile_targets.py",
+      "--output",
+      "/path/to/tmp/json",
+      "--",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "--properties",
+      "{\"buildername\": \"Chromium Mojo Android\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "get compile targets for scripts",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.mojo.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "read test spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.mojo.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/cleanup_temp.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
+      "[SLAVE_BUILD]/src/out/Release/debug_info_dumps",
+      "[SLAVE_BUILD]/src/out/Release/test_logs",
+      "[SLAVE_BUILD]/src/out/build_product.zip",
+      "[SLAVE_BUILD]/src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "clean local files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil, sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1], True)@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[2], True)@@@",
+      "@@@STEP_LOG_LINE@python.inline@try:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.remove(sys.argv[3])@@@",
+      "@@@STEP_LOG_LINE@python.inline@except OSError:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  pass@@@",
+      "@@@STEP_LOG_LINE@python.inline@for base, _dirs, files in os.walk(sys.argv[4]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for f in files:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    if f.endswith('.pyc'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@      os.remove(os.path.join(base, f))@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "allow_subannotations": false,
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/tree_truth.sh",
+      "[SLAVE_BUILD]/src",
+      "src"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "tree truth steps"
   },
   {
     "cmd": [
@@ -121,7 +207,7 @@
       "-m",
       "chromium.mojo",
       "-b",
-      "Chromium Mojo Linux",
+      "Chromium Mojo Android",
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -148,47 +234,17 @@
       "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
-      "--",
-      "mojo_apptests"
+      "--"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
     "name": "compile",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Mojo Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"recipe\": \"chromium_mojo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Chromium Mojo Linux\", \"buildnumber\": 571, \"mastername\": \"chromium.mojo\", \"recipe\": \"chromium_mojo\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--step-name=views_mus_unittests",
-      "--builder-name=Chromium Mojo Linux",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "views_mus_unittests"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "views_mus_unittests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/mojo/tools/apptest_runner.py",
-      "[SLAVE_BUILD]/src/out/Release",
-      "--verbose"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "app_tests"
   },
   {
     "name": "$result",

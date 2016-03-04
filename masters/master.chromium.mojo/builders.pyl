@@ -7,25 +7,19 @@
 
   "builders": {
     "Chromium Mojo Linux": {
-      "recipe": "chromium_mojo",
+      "recipe": "chromium",
       "scheduler": "chromium_commits",
       "slave_pools": ["linux_precise"],
-
-      "slavebuilddir": "chromium_mojo",
     },
     "Chromium Mojo Android": {
-      "recipe": "chromium_mojo",
+      "recipe": "chromium",
       "scheduler": "chromium_commits",
       "slave_pools": ["linux_precise_android"],
-
-      "slavebuilddir": "chromium_mojo",
     },
     "Chromium Mojo Windows": {
-      "recipe": "chromium_mojo",
+      "recipe": "chromium",
       "scheduler": "chromium_commits",
       "slave_pools": ["windows_7"],
-
-      "slavebuilddir": "chromium_mojo",
     },
   },
 

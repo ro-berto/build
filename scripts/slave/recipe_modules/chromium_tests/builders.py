@@ -17,6 +17,7 @@ from . import chromium_lkgr
 from . import chromium_mac
 from . import chromium_memory
 from . import chromium_memory_fyi
+from . import chromium_mojo
 from . import chromium_perf
 from . import chromium_perf_fyi
 from . import chromium_webkit
@@ -43,6 +44,7 @@ BUILDERS = freeze({
   'chromium.mac': chromium_mac.SPEC,
   'chromium.memory': chromium_memory.SPEC,
   'chromium.memory.fyi': chromium_memory_fyi.SPEC,
+  'chromium.mojo': chromium_mojo.SPEC,
   'chromium.perf': chromium_perf.SPEC,
   'chromium.perf.fyi': chromium_perf_fyi.SPEC,
   'chromium.webkit': chromium_webkit.SPEC,
