@@ -190,22 +190,25 @@ class SkiaApi(recipe_api.RecipeApi):
 
     self.flavor = self.get_flavor(self.builder_cfg)
 
-    # Compile.
-    self.compile_steps()
-
-    # Run tests, perf, etc.
+    # Compile, run tests, perf, etc.
     if 'Swarming' in self.builder_name:
+      self.m.skia_swarming.setup(
+          self.skia_dir.join('infra', 'bots', 'tools', 'luci-go'))
+
+      compile_hash = self.compile_steps_swarm()
+
       test_task = None
       perf_task = None
       if self.do_test_steps:
-        test_task = self.test_steps_trigger()
+        test_task = self.test_steps_trigger(compile_hash)
       if self.do_perf_steps:
-        perf_task = self.perf_steps_trigger()
+        perf_task = self.perf_steps_trigger(compile_hash)
       if test_task:
         self.test_steps_collect(test_task)
       if perf_task:
         self.perf_steps_collect(perf_task)
     else:
+      self.compile_steps()
       if self.do_test_steps:
         self.test_steps()
       if self.do_perf_steps:
@@ -262,57 +265,31 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def compile_steps(self, clobber=False):
     """Run the steps to build Skia."""
-    if self.builder_cfg.get('extra_config') == 'Swarming':
-      # Swarming setup.
-      self.m.swarming_client.checkout(revision='')
-      self.m.swarming.check_client_version()
-      self.m.skia_swarming.setup_go_isolate(
-          self.skia_dir.join('infra', 'bots', 'tools', 'luci-go'))
+    for target in self.build_targets:
+      self.flavor.compile(target)
 
-      # Swarm the compile.
-      builder_name = derive_compile_bot_name(self.builder_name,
-                                             self.builder_cfg)
-      isolate_dir = self.skia_dir.join('infra', 'bots')
-      isolate_path = isolate_dir.join('compile_skia.isolate')
-      isolate_vars = {'BUILDER_NAME': builder_name}
-      self.m.skia_swarming.create_isolated_gen_json(
-          isolate_path, isolate_dir, 'linux', 'compile_skia', isolate_vars,
-          blacklist=['.git', 'out'])
-      self.m.skia_swarming.batcharchive(['compile_skia'])
-      props = self.m.step.active_result.presentation.properties
-      hashes = props['swarm_hashes'].items()
-      dimensions = {
-        'pool': 'Skia',
-      }
-      if self.role in ('Build', 'Test', 'Perf'):
-        dimensions['os'] = self.builder_cfg['os']
-      else:  # pragma: no cover
-        dimensions['os'] = 'Ubuntu'
-      if self.role in ('Test', 'Perf'):
-        if self.builder_cfg['cpu_or_gpu'] == 'CPU':
-          dimensions['gpu'] = 'none'
-          #dimensions['cpu'] = self.builder_cfg['cpu_or_gpu_value']
-        else:  # pragma: no cover
-          #dimensions['cpu'] = 'none'
-          dimensions['gpu'] = self.builder_cfg['cpu_or_gpu_value']
-      elif self.role == 'Build':
-        dimensions['gpu'] = 'none'
-        
-      tasks = self.m.skia_swarming.trigger_swarming_tasks(hashes, dimensions,
-                                                          idempotent=True)
+  def compile_steps_swarm(self):
+    # Swarm the compile.
+    builder_name = derive_compile_bot_name(self.builder_name,
+                                           self.builder_cfg)
+    isolate_dir = self.skia_dir.join('infra', 'bots')
+    isolate_path = isolate_dir.join('compile_skia.isolate')
+    isolate_vars = {'BUILDER_NAME': builder_name}
+    dimensions = {
+      'gpu': 'none',
+      'pool': 'Skia',
+    }
+    if self.role in ('Build', 'Test', 'Perf'):
+      dimensions['os'] = self.builder_cfg['os']
+    else:  # pragma: no cover
+      dimensions['os'] = 'Ubuntu'
+    task = self.m.skia_swarming.isolate_and_trigger_task(
+        isolate_path, isolate_dir, 'compile_skia', isolate_vars,
+        dimensions, idempotent=True, store_output=False,
+        isolate_blacklist=['.git', 'out'])
 
-      # Wait for compile to finish, download the results.
-      for task in tasks:
-        self.m.file.rmtree('results_dir', task.task_output_dir, infra_step=True)
-        self.m.skia_swarming.collect_swarming_task(task)
-
-      out_src = tasks[0].task_output_dir.join('0', 'out')
-      self.m.file.rmtree('out_dir', self.out_dir, infra_step=True)
-      self.m.file.copytree('out_dir', out_src, self.out_dir, infra_step=True)
-
-    else:
-      for target in self.build_targets:
-        self.flavor.compile(target)
+    # Wait for compile to finish, record the results hash.
+    return self.m.skia_swarming.collect_swarming_task_isolate_hash(task)
 
   def _readfile(self, filename, *args, **kwargs):
     """Convenience function for reading files."""
@@ -487,15 +464,16 @@ print json.dumps({'ccache': ccache})
         cwd=self.skia_dir,
         infra_step=True).json.output
 
-  def test_steps_trigger(self):
+  def test_steps_trigger(self, compile_hash):
     """Trigger DM via Swarming."""
     self._run_once(self.install)
     self._run_once(self.download_and_copy_skps)
     self._run_once(self.download_and_copy_images)
 
     # Swarm the tests.
+    task_name = 'test_skia'
     isolate_dir = self.skia_dir.join('infra', 'bots')
-    isolate_path = isolate_dir.join('test_skia.isolate')
+    isolate_path = isolate_dir.join('%s.isolate' % task_name)
     isolate_vars = {
         'MASTER_NAME': self.master_name,
         'BUILDER_NAME': self.builder_name,
@@ -503,12 +481,7 @@ print json.dumps({'ccache': ccache})
         'SLAVE_NAME': self.slave_name,
         'REVISION': self.got_revision,
     }
-    self.m.skia_swarming.create_isolated_gen_json(
-        isolate_path, isolate_dir, 'linux', 'test_skia', isolate_vars,
-        blacklist=['.git'])
-    self.m.skia_swarming.batcharchive(['test_skia'])
-    props = self.m.step.active_result.presentation.properties
-    hashes = props['swarm_hashes'].items()
+
     dimensions = {
       'pool': 'Skia',
     }
@@ -520,10 +493,9 @@ print json.dumps({'ccache': ccache})
     else:  # pragma: no cover
       dimensions['gpu'] = self.builder_cfg['cpu_or_gpu_value']
 
-    tasks = self.m.skia_swarming.trigger_swarming_tasks(hashes, dimensions,
-                                                        idempotent=True)
-    assert len(tasks) == 1
-    return tasks[0]
+    return self.m.skia_swarming.isolate_and_trigger_task(
+        isolate_path, isolate_dir, task_name, isolate_vars, dimensions,
+        isolate_blacklist=['.git'], extra_isolate_hashes=[compile_hash])
 
   def test_steps_collect(self, task):
     """Collect the DM results from Swarming."""
@@ -699,15 +671,16 @@ print json.dumps({'ccache': ccache})
                cmd=preAbandonGpuContext, abort_on_failure=False,
                env=self.default_env)
 
-  def perf_steps_trigger(self):
+  def perf_steps_trigger(self, compile_hash):
     """Trigger perf tests via Swarming."""
     self._run_once(self.install)
     self._run_once(self.download_and_copy_skps)
     self._run_once(self.download_and_copy_images)
 
     # Swarm the tests.
+    task_name = 'perf_skia'
     isolate_dir = self.skia_dir.join('infra', 'bots')
-    isolate_path = isolate_dir.join('perf_skia.isolate')
+    isolate_path = isolate_dir.join('%s.isolate' % task_name)
     isolate_vars = {
         'MASTER_NAME': self.master_name,
         'BUILDER_NAME': self.builder_name,
@@ -715,12 +688,6 @@ print json.dumps({'ccache': ccache})
         'SLAVE_NAME': self.slave_name,
         'REVISION': self.got_revision,
     }
-    self.m.skia_swarming.create_isolated_gen_json(
-        isolate_path, isolate_dir, 'linux', 'perf_skia', isolate_vars,
-        blacklist=['.git'])
-    self.m.skia_swarming.batcharchive(['perf_skia'])
-    props = self.m.step.active_result.presentation.properties
-    hashes = props['swarm_hashes'].items()
     dimensions = {
       'pool': 'Skia',
     }
@@ -732,10 +699,9 @@ print json.dumps({'ccache': ccache})
     else:  # pragma: no cover
       dimensions['gpu'] = self.builder_cfg['cpu_or_gpu_value']
 
-    tasks = self.m.skia_swarming.trigger_swarming_tasks(hashes, dimensions,
-                                                        idempotent=True)
-    assert len(tasks) == 1
-    return tasks[0]
+    return self.m.skia_swarming.isolate_and_trigger_task(
+        isolate_path, isolate_dir, task_name, isolate_vars, dimensions,
+        isolate_blacklist=['.git'], extra_isolate_hashes=[compile_hash])
 
   def perf_steps_collect(self, task):
     """Wait for perf steps to finish and upload results."""

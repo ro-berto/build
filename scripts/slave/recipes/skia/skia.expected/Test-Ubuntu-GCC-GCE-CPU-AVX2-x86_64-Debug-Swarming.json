@@ -417,26 +417,6 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/compile_skia"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree results_dir",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]/swarming.client/swarming.py",
       "collect",
       "--swarming",
@@ -447,9 +427,7 @@
       "1",
       "compile_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5",
       "--task-summary-json",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/compile_skia"
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile_skia on Ubuntu",
@@ -495,38 +473,6 @@
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree out_dir",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/compile_skia/0/out",
-      "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming",
-      "0"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "out_dir"
   },
   {
     "cmd": [
@@ -622,6 +568,43 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nfor h in sys.argv[2:]:\n  isolated['includes'].append(sys.argv[2])\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
+      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated",
+      "abc123"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "add_isolated_input",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import json@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1]) as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  isolated = json.load(f)@@@",
+      "@@@STEP_LOG_LINE@python.inline@for h in sys.argv[2:]:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  isolated['includes'].append(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  json.dump(isolated, f, sort_keys=True)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/swarming.client/isolateserver.py",
+      "archive",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "upload new .isolated file for test_skia",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
@@ -633,7 +616,7 @@
       "--shards",
       "1",
       "--task-name",
-      "test_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5",
+      "test_skia/Ubuntu/def456/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -656,7 +639,7 @@
       "--tag",
       "buildnumber:5",
       "--tag",
-      "data:[dummy hash for test_skia]",
+      "data:def456",
       "--tag",
       "master:client.skia.fyi",
       "--tag",
@@ -667,16 +650,15 @@
       "slavename:skiabot-linux-housekeeper-003",
       "--tag",
       "stepname:test_skia on Ubuntu",
-      "--idempotent",
-      "[dummy hash for test_skia]"
+      "def456"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] test_skia on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test_skia/Ubuntu/def456/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_skia/Ubuntu/def456/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -749,6 +731,43 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nfor h in sys.argv[2:]:\n  isolated['includes'].append(sys.argv[2])\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
+      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-perf_skia.isolated",
+      "abc123"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "add_isolated_input (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import json@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1]) as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  isolated = json.load(f)@@@",
+      "@@@STEP_LOG_LINE@python.inline@for h in sys.argv[2:]:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  isolated['includes'].append(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  json.dump(isolated, f, sort_keys=True)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/swarming.client/isolateserver.py",
+      "archive",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-perf_skia.isolated"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "upload new .isolated file for perf_skia",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
@@ -760,7 +779,7 @@
       "--shards",
       "1",
       "--task-name",
-      "perf_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5",
+      "perf_skia/Ubuntu/def456/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -783,7 +802,7 @@
       "--tag",
       "buildnumber:5",
       "--tag",
-      "data:[dummy hash for perf_skia]",
+      "data:def456",
       "--tag",
       "master:client.skia.fyi",
       "--tag",
@@ -794,16 +813,15 @@
       "slavename:skiabot-linux-housekeeper-003",
       "--tag",
       "stepname:perf_skia on Ubuntu",
-      "--idempotent",
-      "[dummy hash for perf_skia]"
+      "def456"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] perf_skia on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"perf_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"perf_skia/Ubuntu/def456/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"perf_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"perf_skia/Ubuntu/def456/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -822,7 +840,7 @@
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/test_skia"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree results_dir (2)",
+    "name": "rmtree results_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -846,7 +864,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "test_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5",
+      "test_skia/Ubuntu/def456/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5",
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
@@ -1002,7 +1020,7 @@
       "[SLAVE_BUILD]/swarming_temp_dir/outputs/perf_skia"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree results_dir (3)",
+    "name": "rmtree results_dir (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -1026,7 +1044,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "perf_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5",
+      "perf_skia/Ubuntu/def456/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5",
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",

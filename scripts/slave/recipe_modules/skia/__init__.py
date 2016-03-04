@@ -18,6 +18,4 @@ DEPS = [
   'recipe_engine/step',
   'recipe_engine/time',
   'skia_swarming',
-  'swarming',
-  'swarming_client',
 ]

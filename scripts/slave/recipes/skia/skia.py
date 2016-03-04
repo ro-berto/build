@@ -135,6 +135,16 @@ def GenTests(api):
         if 'Win' in builder:
           test += api.platform('win', 64)
 
+        if 'Swarming' in builder:
+          if 'Test' in builder:
+            test += api.step_data(
+                'upload new .isolated file for test_skia',
+                stdout=api.raw_io.output('def456 XYZ.isolated'))
+          if ('Test' in builder and 'Debug' in builder) or 'Perf' in builder:
+            test += api.step_data(
+                'upload new .isolated file for perf_skia',
+                stdout=api.raw_io.output('def456 XYZ.isolated'))
+
         yield test
 
   builder = 'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug'

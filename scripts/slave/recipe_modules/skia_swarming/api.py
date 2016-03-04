@@ -4,6 +4,7 @@
 
 
 from recipe_engine import recipe_api
+import shlex
 
 
 class SkiaSwarmingApi(recipe_api.RecipeApi):
@@ -18,6 +19,16 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
   def tasks_output_dir(self):
     """Directory where the outputs of the swarming tasks will be stored."""
     return self.swarming_temp_dir.join('outputs')
+
+  def isolated_file_path(self, task_name):
+    """Get the path to the given task's .isolated file."""
+    return self.swarming_temp_dir.join('skia-task-%s.isolated' % task_name)
+
+  def setup(self, luci_go_dir):
+    """Performs setup steps for swarming."""
+    self.m.swarming_client.checkout(revision='')
+    self.m.swarming.check_client_version()
+    self.setup_go_isolate(luci_go_dir)
 
   # TODO(rmistry): Remove once the Go binaries are moved to recipes or buildbot.
   def setup_go_isolate(self, luci_go_dir):
@@ -41,6 +52,35 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
                          source=luci_go_dir,
                          dest=dest)
 
+  def isolate_and_trigger_task(self, isolate_path, isolate_base_dir, task_name,
+                               isolate_vars, swarm_dimensions,
+                               isolate_blacklist=None,
+                               extra_isolate_hashes=None, idempotent=False,
+                               store_output=True):
+    """Isolate inputs and trigger the task to run."""
+    isolated_hash = self.isolate_task(isolate_path, isolate_base_dir, task_name,
+                                      isolate_vars, blacklist=isolate_blacklist,
+                                      extra_hashes=extra_isolate_hashes)
+    tasks = self.trigger_swarming_tasks([(task_name, isolated_hash)],
+                                        swarm_dimensions,
+                                        idempotent=idempotent,
+                                        store_output=store_output)
+    assert len(tasks) == 1
+    return tasks[0]
+
+  def isolate_task(self, isolate_path, base_dir, task_name,
+                   isolate_vars, blacklist=None, extra_hashes=None):
+    """Isolate inputs for the given task."""
+    self.create_isolated_gen_json(isolate_path, base_dir, 'linux',
+                                  task_name, isolate_vars,
+                                  blacklist=blacklist)
+    hashes = self.batcharchive([task_name])
+    assert len(hashes) == 1
+    isolated_hash = hashes[0][1]
+    if extra_hashes:
+      isolated_hash = self.add_isolated_includes(task_name, extra_hashes)
+    return isolated_hash
+
   def create_isolated_gen_json(self, isolate_path, base_dir, os_type,
                                task_name, extra_variables, blacklist=None):
     """Creates an isolated.gen.json file (used by the isolate recipe module).
@@ -57,8 +97,7 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
           not to archive.
     """
     self.m.file.makedirs('swarming tmp dir', self.swarming_temp_dir)
-    isolated_path = self.swarming_temp_dir.join(
-        'skia-task-%s.isolated' % task_name)
+    isolated_path = self.isolated_file_path(task_name)
     isolate_args = [
       '--isolate', isolate_path,
       '--isolated', isolated_path,
@@ -88,13 +127,45 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
     Args:
       targets: list of str. The suffixes of the isolated.gen.json files to
                archive.
+
+    Returns:
+      list of swarming hashes.
     """
-    self.m.isolate.isolate_tests(
+    return self.m.isolate.isolate_tests(
         verbose=True,  # To avoid no output timeouts.
         build_dir=self.swarming_temp_dir,
-        targets=targets)
+        targets=targets).presentation.properties['swarm_hashes'].items()
 
-  def trigger_swarming_tasks(self, swarm_hashes, dimensions, idempotent=False):
+  def add_isolated_includes(self, task_name, include_hashes):
+    """Add the hashes to the task's .isolated file, return new .isolated hash.
+
+    Args:
+      task: str. Name of the task to which to add the given hash.
+      include_hashes: list of str. Hashes of the new includes.
+    Returns:
+      Updated hash of the .isolated file.
+    """
+    isolated_file = self.isolated_file_path(task_name)
+    self.m.python.inline('add_isolated_input', program="""
+      import json
+      import sys
+      with open(sys.argv[1]) as f:
+        isolated = json.load(f)
+      for h in sys.argv[2:]:
+        isolated['includes'].append(sys.argv[2])
+      with open(sys.argv[1], 'w') as f:
+        json.dump(isolated, f, sort_keys=True)
+    """, args=[isolated_file] + include_hashes)
+    isolateserver = self.m.swarming_client.path.join('isolateserver.py')
+    r = self.m.python('upload new .isolated file for %s' % task_name,
+                      script=isolateserver,
+                      args=['archive', '--isolate-server',
+                            self.m.isolate.isolate_server, isolated_file],
+                      stdout=self.m.raw_io.output())
+    return shlex.split(r.stdout)[0]
+
+  def trigger_swarming_tasks(self, swarm_hashes, dimensions, idempotent=False,
+                             store_output=True):
     """Triggers swarming tasks using swarm hashes.
 
     Args:
@@ -109,8 +180,9 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
     for task_name, swarm_hash in swarm_hashes:
       swarming_task = self.m.swarming.task(
           title=task_name,
-          isolated_hash=swarm_hash,
-          task_output_dir=self.tasks_output_dir.join(task_name))
+          isolated_hash=swarm_hash)
+      if store_output:
+        swarming_task.task_output_dir = self.tasks_output_dir.join(task_name)
       swarming_task.dimensions = dimensions
       swarming_task.idempotent = idempotent
       swarming_task.priority = 90
@@ -127,3 +199,13 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
     """
     return self.m.swarming.collect_task(swarming_task)
 
+  def collect_swarming_task_isolate_hash(self, swarming_task):
+    """Wait for the given swarming task to finish and return its output hash.
+
+    Args:
+      swarming_task: An instance of swarming.SwarmingTask.
+    Returns:
+      the hash of the isolate output of the task.
+    """
+    res = self.collect_swarming_task(swarming_task)
+    return res.json.output['shards'][0]['isolated_out']['isolated']
