@@ -27,7 +27,6 @@ def Update(c):
           'Linux64 Release [large tests]',
           'Linux64 Debug (GN)',
           'Linux64 Release (GN)',
-          'Linux64 Release (Libfuzzer)',
       ]),
   ])
 
@@ -51,11 +50,6 @@ def Update(c):
     },
     {'name': 'Linux64 Debug (GN)', 'slavebuilddir': 'linux64_gn'},
     {'name': 'Linux64 Release (GN)', 'slavebuilddir': 'linux64_gn'},
-    {
-      'name': 'Linux64 Release (Libfuzzer)',
-      'recipe': 'webrtc/libfuzzer',
-      'slavebuilddir': 'linux64_libfuzzer',
-    },
   ]
 
   c['builders'].extend([

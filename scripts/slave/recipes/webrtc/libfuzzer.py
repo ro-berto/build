@@ -22,7 +22,7 @@ DEPS = [
 
 
 BUILDERS = freeze({
-  'client.webrtc': {
+  'client.webrtc.fyi': {
     'builders': {
       'Linux64 Release (Libfuzzer)': {
         'recipe_config': 'webrtc',
