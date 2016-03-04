@@ -6,6 +6,7 @@ from common.skia import global_constants
 
 
 DEPS = [
+  'ct_swarming',
   'file',
   'depot_tools/gclient',
   'gsutil',
@@ -20,8 +21,6 @@ DEPS = [
 ]
 
 
-CT_GS_BUCKET = 'cluster-telemetry'
-
 CT_SKPS_ISOLATE = 'ct_skps.isolate'
 
 # Do not batch archive more slaves than this value. This is used to prevent
@@ -33,27 +32,6 @@ DEFAULT_CT_NUM_SLAVES = 100
 
 # The SKP repository to use.
 DEFAULT_SKPS_CHROMIUM_BUILD = '57259e0-05dcb4c'
-
-
-def download_skps(api, page_type, slave_num, skps_chromium_build, dest_dir):
-  """Downloads SKPs corresponding to the specified page type, slave and build.
-
-  The SKPs are downloaded into subdirectories in the downloads_dir.
-
-  Args:
-    api: RecipeApi instance.
-    page_type: str. The CT page type. Eg: 1k, 10k.
-    slave_num: int. The number of the slave used to determine which GS
-               directory to download from. Eg: for the top 1k, slave1 will
-               contain SKPs from webpages 1-10, slave2 will contain 11-20.
-    skps_chromium_build: str. The build the SKPs were captured from.
-    dest_dir: path obj. The directory to download SKPs into.
-  """
-  skps_dir = dest_dir.join('slave%s' % slave_num)
-  api.file.makedirs('SKPs dir', skps_dir)
-  full_source = 'gs://%s/skps/%s/%s/slave%s' % (
-      CT_GS_BUCKET, page_type, skps_chromium_build, slave_num)
-  api.gsutil(['-m', 'rsync', '-d', '-r', full_source, skps_dir])
 
 
 def RunSteps(api):
@@ -134,15 +112,16 @@ def RunSteps(api):
   # Set build property to make finding SKPs convenient.
   api.step.active_result.presentation.properties['Location of SKPs'] = (
       'https://pantheon.corp.google.com/storage/browser/%s/skps/%s/%s/' % (
-          CT_GS_BUCKET, ct_page_type, skps_chromium_build))
+          api.ct_swarming.CT_GS_BUCKET, ct_page_type, skps_chromium_build))
 
   # Delete swarming_temp_dir to ensure it starts from a clean slate.
   api.file.rmtree('swarming temp dir', api.skia_swarming.swarming_temp_dir)
 
   for slave_num in range(1, ct_num_slaves + 1):
     # Download SKPs.
-    download_skps(api, ct_page_type, slave_num, skps_chromium_build,
-                  api.path['slave_build'].join('skps'))
+    api.ct_swarming.download_skps(
+        ct_page_type, slave_num, skps_chromium_build,
+        api.path['slave_build'].join('skps'))
 
     # Create this slave's isolated.gen.json file to use for batcharchiving.
     isolate_dir = chromium_checkout.join('chrome')
