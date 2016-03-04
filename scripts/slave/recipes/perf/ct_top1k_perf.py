@@ -5,7 +5,7 @@
 
 DEPS = [
   'archive',
-  'ct_swarming',
+  'ct',
   'file',
   'perf_dashboard',
   'recipe_engine/json',
@@ -56,17 +56,16 @@ def RunSteps(api):
   else:
     raise Exception('Do not recognise the buildername %s.' % buildername)
 
-  # Checkout chromium and swarming.
-  api.ct_swarming.checkout_dependencies()
-  # Setup Go isolate binary.
-  api.skia_swarming.setup_go_isolate(
-      api.path['checkout'].join('tools', 'luci-go'))
+  # Checkout CT deps.
+  api.ct.checkout_dependencies()
+  # Setup swarming.
+  api.skia_swarming.setup(api.path['checkout'].join('tools', 'luci-go'))
 
   # Download the prebuilt chromium binary.
   _DownloadAndExtractBinary(api)
 
   # Download Cluster Telemetry binary.
-  api.ct_swarming.download_CT_binary(CT_BINARY)
+  api.ct.download_CT_binary(CT_BINARY)
 
   # Delete swarming_temp_dir to ensure it starts from a clean slate.
   api.file.rmtree('swarming temp dir', api.skia_swarming.swarming_temp_dir)
@@ -74,7 +73,7 @@ def RunSteps(api):
   ct_num_slaves = api.properties.get('ct_num_slaves', DEFAULT_CT_NUM_SLAVES)
   for slave_num in range(1, ct_num_slaves + 1):
     # Download page sets and archives.
-    api.ct_swarming.download_page_artifacts(CT_PAGE_TYPE, slave_num)
+    api.ct.download_page_artifacts(CT_PAGE_TYPE, slave_num)
 
     # Create this slave's isolated.gen.json file to use for batcharchiving.
     isolate_dir = api.path['checkout'].join('chrome')

@@ -7,8 +7,8 @@ from recipe_engine import recipe_api
 
 
 
-class CTSwarmingApi(recipe_api.RecipeApi):
-  """Provides steps to run CT tasks on swarming bots."""
+class CTApi(recipe_api.RecipeApi):
+  """Provides steps to run CT tasks."""
 
   CT_GS_BUCKET = 'cluster-telemetry'
 
@@ -18,14 +18,10 @@ class CTSwarmingApi(recipe_api.RecipeApi):
     return self.m.path['slave_build'].join('src', 'content', 'test', 'ct')
 
   def checkout_dependencies(self):
-    """Checks out all repositories required for CT to run on swarming bots."""
-    # Checkout chromium and swarming.
+    """Checks out all repositories required for CT to run."""
     self.m.chromium.set_config('chromium')
     self.m.gclient.set_config('chromium')
     self.m.bot_update.ensure_checkout(force=True)
-    self.m.swarming_client.checkout()
-    # Ensure swarming_client is compatible with what recipes expect.
-    self.m.swarming.check_client_version()
 
   def download_skps(self, page_type, slave_num, skps_chromium_build, dest_dir):
     """Downloads SKPs corresponding to the specified page type, slave and build.

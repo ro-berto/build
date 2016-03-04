@@ -24,9 +24,9 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
     """Get the path to the given task's .isolated file."""
     return self.swarming_temp_dir.join('skia-task-%s.isolated' % task_name)
 
-  def setup(self, luci_go_dir):
+  def setup(self, luci_go_dir, swarming_rev=None):
     """Performs setup steps for swarming."""
-    self.m.swarming_client.checkout(revision='')
+    self.m.swarming_client.checkout(revision=swarming_rev)
     self.m.swarming.check_client_version()
     self.setup_go_isolate(luci_go_dir)
 

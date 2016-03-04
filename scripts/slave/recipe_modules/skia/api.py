@@ -193,7 +193,8 @@ class SkiaApi(recipe_api.RecipeApi):
     # Compile, run tests, perf, etc.
     if 'Swarming' in self.builder_name:
       self.m.skia_swarming.setup(
-          self.skia_dir.join('infra', 'bots', 'tools', 'luci-go'))
+          self.skia_dir.join('infra', 'bots', 'tools', 'luci-go'),
+          swarming_rev='')
 
       compile_hash = self.compile_steps_swarm()
 

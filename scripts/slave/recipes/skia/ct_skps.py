@@ -6,7 +6,7 @@ from common.skia import global_constants
 
 
 DEPS = [
-  'ct_swarming',
+  'ct',
   'file',
   'depot_tools/gclient',
   'gsutil',
@@ -112,14 +112,14 @@ def RunSteps(api):
   # Set build property to make finding SKPs convenient.
   api.step.active_result.presentation.properties['Location of SKPs'] = (
       'https://pantheon.corp.google.com/storage/browser/%s/skps/%s/%s/' % (
-          api.ct_swarming.CT_GS_BUCKET, ct_page_type, skps_chromium_build))
+          api.ct.CT_GS_BUCKET, ct_page_type, skps_chromium_build))
 
   # Delete swarming_temp_dir to ensure it starts from a clean slate.
   api.file.rmtree('swarming temp dir', api.skia_swarming.swarming_temp_dir)
 
   for slave_num in range(1, ct_num_slaves + 1):
     # Download SKPs.
-    api.ct_swarming.download_skps(
+    api.ct.download_skps(
         ct_page_type, slave_num, skps_chromium_build,
         api.path['slave_build'].join('skps'))
 

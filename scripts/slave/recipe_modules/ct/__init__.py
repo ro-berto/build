@@ -8,11 +8,6 @@ DEPS = [
   'file',
   'depot_tools/gclient',
   'gsutil',
-  'isolate',
-  'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/python',
-  'recipe_engine/step',
-  'swarming',
-  'swarming_client',
 ]
