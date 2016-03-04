@@ -131,6 +131,30 @@
     "name": "compile"
   },
   {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/gyp_chromium",
+      "[SLAVE_BUILD]/src/third_party/closure_compiler/compiled_resources2.gyp"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_v2_gyp_files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Release",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "compile_v2"
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

@@ -34,6 +34,15 @@ def RunSteps(api):
 
   api.chromium.compile()
 
+  api.step(
+      'generate_v2_gyp_files',
+      [api.path['checkout'].join('build', 'gyp_chromium'),
+       api.path['checkout'].join('third_party', 'closure_compiler',
+                                 'compiled_resources2.gyp')],
+  )
+
+  api.chromium.compile(name='compile_v2')
+
 
 def GenTests(api):
   yield (
