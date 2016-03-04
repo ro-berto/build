@@ -135,6 +135,11 @@ def goma_setup(options, env):
     # as error.
     env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
 
+  # Allow to wait initial ping 30 seconds.
+  # Since retrying should cost more than 30 seconds, it should be better
+  # to wait initial ping longer than default (10 seconds).
+  env['GOMA_PING_TIMEOUT_SEC'] = '30'
+
   # Caches CRLs in GOMA_CACHE_DIR.
   # Since downloading CRLs is usually slow, caching them may improves
   # compiler_proxy start time.
