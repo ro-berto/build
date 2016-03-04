@@ -145,11 +145,10 @@ def RunSteps(api):
   tasks_to_swarm_hashes = []
   for slave_start_num in xrange(1, ct_num_slaves+1, max_slaves_to_batcharchive):
     m = min(max_slaves_to_batcharchive + slave_start_num - 1, ct_num_slaves)
-    api.skia_swarming.batcharchive(
+    batcharchive_output = api.skia_swarming.batcharchive(
         targets=['ct-' + skia_tool + '-%s' % num for num in range(
             slave_start_num, slave_start_num + m)])
-    tasks_to_swarm_hashes.extend(
-        api.step.active_result.presentation.properties['swarm_hashes'].items())
+    tasks_to_swarm_hashes.extend(batcharchive_output)
   # Sort the list to go through tasks in order.
   tasks_to_swarm_hashes.sort()
 

@@ -129,7 +129,7 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
                archive.
 
     Returns:
-      list of swarming hashes.
+      list of tuples containing (task_name, swarming_hash).
     """
     return self.m.isolate.isolate_tests(
         verbose=True,  # To avoid no output timeouts.

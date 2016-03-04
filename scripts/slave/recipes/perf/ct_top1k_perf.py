@@ -87,10 +87,8 @@ def RunSteps(api):
         extra_variables)
 
   # Batcharchive everything on the isolate server for efficiency.
-  api.skia_swarming.batcharchive(
+  tasks_to_swarm_hashes = api.skia_swarming.batcharchive(
       targets=['ct-%s' % num for num in range(1, ct_num_slaves+1)])
-  tasks_to_swarm_hashes = (
-      api.step.active_result.presentation.properties['swarm_hashes']).items()
   # Sort the list to go through tasks in order.
   tasks_to_swarm_hashes.sort()
 
