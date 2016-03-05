@@ -75,6 +75,8 @@ BUILDERS = freeze({
         'cc_perftests',
         'chrome_public_apk',
         'gpu_perftests',
+        'system_webview_apk',
+        'system_webview_shell_apk',
       ],
     },
     'Android arm64 Builder': {
@@ -95,6 +97,8 @@ BUILDERS = freeze({
         'cc_perftests',
         'chrome_public_apk',
         'gpu_perftests',
+        'system_webview_apk',
+        'system_webview_shell_apk',
       ],
     }
   },
