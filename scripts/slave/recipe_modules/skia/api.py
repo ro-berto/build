@@ -96,6 +96,26 @@ def derive_compile_bot_name(builder_name, builder_cfg):
   return builder_name
 
 
+def swarm_dimensions(builder_cfg):
+  """Return a dict of keys and values to be used as Swarming bot dimensions."""
+  dimensions = {
+    'pool': 'Skia',
+  }
+  dimensions['os'] = builder_cfg['os']
+  if 'Win' in builder_cfg['os']:
+    dimensions['os'] = 'Windows'
+  if builder_cfg['role'] in ('Test', 'Perf'):
+    if builder_cfg['cpu_or_gpu'] == 'CPU':
+      dimensions['gpu'] = 'none'
+      # TODO(borenet): Add appropriate CPU dimension(s).
+      #dimensions['cpu'] = builder_cfg['cpu_or_gpu_value']
+    else:  # pragma: no cover
+      dimensions['gpu'] = builder_cfg['cpu_or_gpu_value']
+  else:
+    dimensions['gpu'] = 'none'
+  return dimensions
+
+
 class SkiaApi(recipe_api.RecipeApi):
 
   def get_flavor(self, builder_cfg):
@@ -276,14 +296,7 @@ class SkiaApi(recipe_api.RecipeApi):
     isolate_dir = self.skia_dir.join('infra', 'bots')
     isolate_path = isolate_dir.join('compile_skia.isolate')
     isolate_vars = {'BUILDER_NAME': builder_name}
-    dimensions = {
-      'gpu': 'none',
-      'pool': 'Skia',
-    }
-    if self.role in ('Build', 'Test', 'Perf'):
-      dimensions['os'] = self.builder_cfg['os']
-    else:  # pragma: no cover
-      dimensions['os'] = 'Ubuntu'
+    dimensions = swarm_dimensions(self.builder_cfg)
     task = self.m.skia_swarming.isolate_and_trigger_task(
         isolate_path, isolate_dir, 'compile_skia', isolate_vars,
         dimensions, idempotent=True, store_output=False,
@@ -483,17 +496,7 @@ print json.dumps({'ccache': ccache})
         'REVISION': self.got_revision,
     }
 
-    dimensions = {
-      'pool': 'Skia',
-    }
-    dimensions['os'] = self.builder_cfg['os']
-    if self.builder_cfg['cpu_or_gpu'] == 'CPU':
-      dimensions['gpu'] = 'none'
-      # TODO(borenet): Add appropriate CPU dimension(s).
-      #dimensions['cpu'] = self.builder_cfg['cpu_or_gpu_value']
-    else:  # pragma: no cover
-      dimensions['gpu'] = self.builder_cfg['cpu_or_gpu_value']
-
+    dimensions = swarm_dimensions(self.builder_cfg)
     return self.m.skia_swarming.isolate_and_trigger_task(
         isolate_path, isolate_dir, task_name, isolate_vars, dimensions,
         isolate_blacklist=['.git'], extra_isolate_hashes=[compile_hash])
@@ -689,17 +692,7 @@ print json.dumps({'ccache': ccache})
         'SLAVE_NAME': self.slave_name,
         'REVISION': self.got_revision,
     }
-    dimensions = {
-      'pool': 'Skia',
-    }
-    dimensions['os'] = self.builder_cfg['os']
-    if self.builder_cfg['cpu_or_gpu'] == 'CPU':
-      dimensions['gpu'] = 'none'
-      # TODO(borenet): Add appropriate CPU dimension(s).
-      #dimensions['cpu'] = self.builder_cfg['cpu_or_gpu_value']
-    else:  # pragma: no cover
-      dimensions['gpu'] = self.builder_cfg['cpu_or_gpu_value']
-
+    dimensions = swarm_dimensions(self.builder_cfg)
     return self.m.skia_swarming.isolate_and_trigger_task(
         isolate_path, isolate_dir, task_name, isolate_vars, dimensions,
         isolate_blacklist=['.git'], extra_isolate_hashes=[compile_hash])
