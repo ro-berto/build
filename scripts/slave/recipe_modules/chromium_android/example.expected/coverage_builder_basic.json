@@ -746,14 +746,13 @@
       "4.7",
       "----",
       "cp",
-      "-R",
       "[SLAVE_BUILD]/src/out/Release/coverage/coverage_html.zip",
-      "gs://chrome-code-coverage/java/coverage_builder/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
+      "gs://chrome-code-coverage/java/coverage_builder/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00/"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload coverage report",
     "~followup_annotations": [
-      "@@@STEP_LINK@Coverage report@https://storage.cloud.google.com/chrome-code-coverage/java/coverage_builder/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00@@@"
+      "@@@STEP_LINK@Coverage report@https://storage.cloud.google.com/chrome-code-coverage/java/coverage_builder/4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00/@@@"
     ]
   },
   {
