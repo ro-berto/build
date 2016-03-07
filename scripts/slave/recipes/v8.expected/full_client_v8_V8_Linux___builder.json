@@ -169,6 +169,7 @@
       "[SLAVE_BUILD]/v8/out/Release/mozilla.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/optimize_for_size.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/perf.isolated.gen.json",
+      "[SLAVE_BUILD]/v8/out/Release/run-deopt-fuzzer.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/run-gcmole.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/simdjs.isolated.gen.json",
       "[SLAVE_BUILD]/v8/out/Release/test262.isolated.gen.json"
@@ -185,6 +186,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"perf\": \"[dummy hash for perf]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"run-deopt-fuzzer\": \"[dummy hash for run-deopt-fuzzer]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"run-gcmole\": \"[dummy hash for run-gcmole]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"simdjs\": \"[dummy hash for simdjs]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
@@ -203,7 +205,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"check-static-initializers\": \"[dummy hash for check-static-initializers]\", \"ignition\": \"[dummy hash for ignition]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"perf\": \"[dummy hash for perf]\", \"run-gcmole\": \"[dummy hash for run-gcmole]\", \"simdjs\": \"[dummy hash for simdjs]\", \"test262\": \"[dummy hash for test262]\"}",
+      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"check-static-initializers\": \"[dummy hash for check-static-initializers]\", \"ignition\": \"[dummy hash for ignition]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"perf\": \"[dummy hash for perf]\", \"run-deopt-fuzzer\": \"[dummy hash for run-deopt-fuzzer]\", \"run-gcmole\": \"[dummy hash for run-gcmole]\", \"simdjs\": \"[dummy hash for simdjs]\", \"test262\": \"[dummy hash for test262]\"}",
       "gs://chromium-v8/v8-linux-rel/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -253,6 +255,7 @@
             "mozilla": "[dummy hash for mozilla]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
             "perf": "[dummy hash for perf]",
+            "run-deopt-fuzzer": "[dummy hash for run-deopt-fuzzer]",
             "run-gcmole": "[dummy hash for run-gcmole]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
@@ -275,6 +278,7 @@
             "mozilla": "[dummy hash for mozilla]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
             "perf": "[dummy hash for perf]",
+            "run-deopt-fuzzer": "[dummy hash for run-deopt-fuzzer]",
             "run-gcmole": "[dummy hash for run-gcmole]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
@@ -297,6 +301,7 @@
             "mozilla": "[dummy hash for mozilla]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
             "perf": "[dummy hash for perf]",
+            "run-deopt-fuzzer": "[dummy hash for run-deopt-fuzzer]",
             "run-gcmole": "[dummy hash for run-gcmole]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
@@ -319,6 +324,7 @@
             "mozilla": "[dummy hash for mozilla]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
             "perf": "[dummy hash for perf]",
+            "run-deopt-fuzzer": "[dummy hash for run-deopt-fuzzer]",
             "run-gcmole": "[dummy hash for run-gcmole]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
@@ -341,6 +347,7 @@
             "mozilla": "[dummy hash for mozilla]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
             "perf": "[dummy hash for perf]",
+            "run-deopt-fuzzer": "[dummy hash for run-deopt-fuzzer]",
             "run-gcmole": "[dummy hash for run-gcmole]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
@@ -363,6 +370,7 @@
             "mozilla": "[dummy hash for mozilla]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
             "perf": "[dummy hash for perf]",
+            "run-deopt-fuzzer": "[dummy hash for run-deopt-fuzzer]",
             "run-gcmole": "[dummy hash for run-gcmole]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
@@ -385,6 +393,7 @@
             "mozilla": "[dummy hash for mozilla]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
             "perf": "[dummy hash for perf]",
+            "run-deopt-fuzzer": "[dummy hash for run-deopt-fuzzer]",
             "run-gcmole": "[dummy hash for run-gcmole]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
@@ -425,6 +434,7 @@
             "mozilla": "[dummy hash for mozilla]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
             "perf": "[dummy hash for perf]",
+            "run-deopt-fuzzer": "[dummy hash for run-deopt-fuzzer]",
             "run-gcmole": "[dummy hash for run-gcmole]",
             "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"

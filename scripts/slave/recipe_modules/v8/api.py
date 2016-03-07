@@ -221,8 +221,9 @@ class V8Api(recipe_api.RecipeApi):
       self.m.swarming.add_default_tag('purpose:CI')
 
     # Overwrite defaults with per-bot settings.
-    self.m.swarming.default_priority = self.bot_config.get(
-        'swarming_priority', self.m.swarming.default_priority)
+    for key, value in self.bot_config.get(
+        'swarming_properties', {}).iteritems():
+      setattr(self.m.swarming, key, value)
 
   def runhooks(self, **kwargs):
     env = {}

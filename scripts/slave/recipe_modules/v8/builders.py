@@ -18,8 +18,7 @@ class TestStepConfig(object):
 
 # Top-level test configs for convenience.
 Benchmarks = TestStepConfig('benchmarks')
-Deopt = TestStepConfig('deopt', swarming=False)
-DeoptSwarming = TestStepConfig('deopt')
+Deopt = TestStepConfig('deopt')
 Fuzz = TestStepConfig('jsfunfuzz')
 GCMole = TestStepConfig('gcmole')
 Mjsunit = TestStepConfig('mjsunit')
@@ -852,6 +851,10 @@ BUILDERS = {
           Test262Ignition,
         ],
         'enable_swarming': True,
+        'swarming_properties': {
+          'default_hard_timeout': 60 * 60,
+          'default_expiration': 6 * 60 * 60,
+        },
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'armv7l',
@@ -873,6 +876,10 @@ BUILDERS = {
           SimdJs,
         ],
         'enable_swarming': True,
+        'swarming_properties': {
+          'default_hard_timeout': 60 * 60,
+          'default_expiration': 6 * 60 * 60,
+        },
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'armv7l',
@@ -1001,7 +1008,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'swarming_priority': 35,
+        'swarming_properties': {'default_priority': 35},
         'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
@@ -1015,7 +1022,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'swarming_priority': 35,
+        'swarming_properties': {'default_priority': 35},
         'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
@@ -1067,7 +1074,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'swarming_priority': 35,
+        'swarming_properties': {'default_priority': 35},
         'tests': [V8Testing_4, Test262_2, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
       },
@@ -1081,7 +1088,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'swarming_priority': 35,
+        'swarming_properties': {'default_priority': 35},
         'tests': [Mjsunit_3, Webkit],
         'testing': {'platform': 'linux'},
       },
@@ -1142,6 +1149,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'enable_swarming': True,
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'tests': [Deopt],
@@ -1187,6 +1195,10 @@ BUILDERS = {
         'parent_buildername': 'V8 Arm - debug builder',
         'tests': [Mjsunit_2, Webkit],
         'enable_swarming': True,
+        'swarming_properties': {
+          'default_hard_timeout': 60 * 60,
+          'default_expiration': 6 * 60 * 60,
+        },
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'armv7l',
@@ -1523,6 +1535,10 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'swarming_properties': {
+          'default_hard_timeout': 4 * 60 * 60,
+        },
         'tests': [Deopt],
         'testing': {'platform': 'linux'},
       },

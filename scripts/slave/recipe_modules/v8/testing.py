@@ -271,12 +271,6 @@ class V8SwarmingTest(V8Test):
     args.append('--')
     args.extend(self.api.swarming.get_collect_cmd_args(task))
 
-    # We need to wait longer for tasks on arm as there the hard
-    # timeout and expiration are also higher.
-    if (self.task.dimensions.get('cpu') and
-        self.task.dimensions['cpu'].startswith('arm')):
-      args.extend(['--timeout', '%d' % (7 * 60 * 60)])
-
     return self.api.python(
         name=self.test['name'],
         script=self.v8.resource('collect_v8_task.py'),
@@ -322,17 +316,9 @@ class V8SwarmingTest(V8Test):
       self.task.dimensions.update(self.v8.bot_config['swarming_dimensions'])
 
     # Set default value.
-    if 'os' not in self.task.dimensions:  # pragma: no cover
-      # TODO(machenbach): Remove pragma as soon as there's a builder without
-      # default value.
+    if 'os' not in self.task.dimensions:
       self.task.dimensions['os'] = self.api.swarming.prefered_os_dimension(
           self.api.platform.name)
-
-    # Increase default timeout and expiration on arm.
-    if (self.task.dimensions.get('cpu') and
-        self.task.dimensions['cpu'].startswith('arm')):
-      self.task.hard_timeout = 60 * 60
-      self.task.expiration = 6 * 60 * 60
 
     self.api.swarming.trigger_task(self.task)
 
@@ -476,30 +462,7 @@ class V8Fuzzer(V8GenericSwarmingTest):
     return TestResults.empty()
 
 
-# TODO(machenbach): Remove after staging the swarming version below.
-class V8DeoptFuzzer(BaseTest):
-  def run(self, **kwargs):
-    full_args = [
-      '--mode', self.api.chromium.c.build_config_fs,
-      '--arch', self.api.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
-      '--progress', 'verbose',
-      '--buildbot',
-    ]
-
-    # Add builder-specific test arguments.
-    full_args += self.v8.c.testing.test_args
-
-    self.api.python(
-      'Deopt Fuzz',
-      self.api.path['checkout'].join('tools', 'run-deopt-fuzzer.py'),
-      full_args,
-      cwd=self.api.path['checkout'],
-    )
-    return TestResults.empty()
-
-
-# TODO(machenbach): No cover as this is unstaged at the moment.
-class V8DeoptFuzzerSwarming(V8GenericSwarmingTest):  # pragma: no cover
+class V8DeoptFuzzer(V8GenericSwarmingTest):
   @property
   def title(self):
     return 'Deopt Fuzz'
@@ -542,7 +505,6 @@ V8_NON_STANDARD_TESTS = freeze({
 
 
 TOOL_TO_TEST = freeze({
-  'run-deopt-fuzzer': V8DeoptFuzzer,
   'run-tests': V8Test,
 })
 
@@ -550,7 +512,7 @@ TOOL_TO_TEST = freeze({
 TOOL_TO_TEST_SWARMING = freeze({
   'check-static-initializers': V8CheckInitializers,
   'jsfunfuzz': V8Fuzzer,
-  'run-deopt-fuzzer': V8DeoptFuzzerSwarming,
+  'run-deopt-fuzzer': V8DeoptFuzzer,
   'run-gcmole': V8GCMole,
   'run-valgrind': V8SimpleLeakCheck,
   'run-tests': V8SwarmingTest,

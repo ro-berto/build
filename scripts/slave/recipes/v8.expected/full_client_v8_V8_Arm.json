@@ -692,9 +692,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "Check/Ubuntu-14.04/[dummy has/V8 Arm/571",
-      "--timeout",
-      "25200"
+      "Check/Ubuntu-14.04/[dummy has/V8 Arm/571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Check",
@@ -735,9 +733,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "Benchmarks/Ubuntu-14.04/[dummy has/V8 Arm/571",
-      "--timeout",
-      "25200"
+      "Benchmarks/Ubuntu-14.04/[dummy has/V8 Arm/571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Benchmarks",
@@ -778,9 +774,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Arm/571",
-      "--timeout",
-      "25200"
+      "OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Arm/571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "OptimizeForSize",
@@ -821,9 +815,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "SimdJs - all/Ubuntu-14.04/[dummy has/V8 Arm/571",
-      "--timeout",
-      "25200"
+      "SimdJs - all/Ubuntu-14.04/[dummy has/V8 Arm/571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "SimdJs - all",
@@ -864,9 +856,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "Ignition/Ubuntu-14.04/[dummy has/V8 Arm/571",
-      "--timeout",
-      "25200"
+      "Ignition/Ubuntu-14.04/[dummy has/V8 Arm/571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Ignition",
@@ -907,9 +897,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "Test262 - ignition/Ubuntu-14.04/[dummy has/V8 Arm/571",
-      "--timeout",
-      "25200"
+      "Test262 - ignition/Ubuntu-14.04/[dummy has/V8 Arm/571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Test262 - ignition",
