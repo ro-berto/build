@@ -117,12 +117,23 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::goma]/resources/ensure_goma.py",
+      "--target-dir",
+      "[SLAVE_BUILD]/src/build/goma/client"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ensure_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE[depot_tools]/gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "blink_logging_always_on=1 component=static_library dcheck_always_on=1 ffmpeg_branding=Chrome gomadir='[BUILD]/goma' proprietary_codecs=1 target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "blink_logging_always_on=1 component=static_library dcheck_always_on=1 ffmpeg_branding=Chrome gomadir='[SLAVE_BUILD]/src/build/goma/client' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -190,7 +201,7 @@
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[SLAVE_BUILD]/src/build/goma/client",
       "--",
       "browser_tests",
       "chromium_builder_webrtc",

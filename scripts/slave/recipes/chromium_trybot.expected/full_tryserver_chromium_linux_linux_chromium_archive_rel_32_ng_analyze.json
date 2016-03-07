@@ -106,12 +106,23 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::goma]/resources/ensure_goma.py",
+      "--target-dir",
+      "[SLAVE_BUILD]/src/build/goma/client"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ensure_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE[depot_tools]/gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' linux_dump_symbols=0 target_arch=ia32 test_isolation_mode=noop use_goma=1",
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[SLAVE_BUILD]/src/build/goma/client' linux_dump_symbols=0 target_arch=ia32 test_isolation_mode=noop use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks (with patch)"
@@ -207,7 +218,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' linux_dump_symbols=0 target_arch=ia32 test_isolation_mode=noop use_goma=1"
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[SLAVE_BUILD]/src/build/goma/client' linux_dump_symbols=0 target_arch=ia32 test_isolation_mode=noop use_goma=1"
     },
     "name": "analyze",
     "~followup_annotations": [

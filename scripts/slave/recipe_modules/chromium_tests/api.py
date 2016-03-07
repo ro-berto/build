@@ -201,6 +201,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     update_step = self.ensure_checkout(
         bot_config, root_solution_revision, force=force)
 
+    self.m.goma.ensure_goma()
+
     # TODO(robertocn): Remove this hack by the end of Q1/2016.
     if (bot_config.matches_any_bot_id(
             lambda bot_id: bot_id['mastername'] == 'tryserver.chromium.perf' and
