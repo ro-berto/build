@@ -8,10 +8,12 @@ DEPS = [
   'depot_tools/git',
   'file',
   'gsutil',
+  'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/step',
+  'recipe_engine/python',
 ]
 
 BUCKET_NAME = 'flutter_infra'
@@ -127,6 +129,37 @@ def BuildExamples(api, git_hash):
   ArchiveAPK(api, 'examples/material_gallery', 'Gallery.apk')
 
 
+def RunFindXcode(api, step_name, target_version=None):
+  """Runs the `build/scripts/slave/ios/find_xcode.py` utility.
+
+     Retrieves information about xcode installations and to activate a specific
+     version of Xcode.
+  """
+  args = ['--json-file', api.json.output()]
+
+  if target_version is not None:
+    args.extend(['--version', target_version])
+
+  result = api.python(step_name, api.path['build'].join('scripts', 'slave',
+    'ios', 'find_xcode.py'), args)
+
+  return result.json.output
+
+
+def SetupXcode(api):
+  xcode_json = RunFindXcode(api, 'enumerate_xcode_installations')
+  installations = xcode_json["installations"]
+  activate_version = None
+  for key in installations:
+    version = installations[key].split()[0]
+    if version.startswith('7.'):
+      activate_version = version
+      break
+  if not activate_version:
+    raise api.step.StepFailure('Xcode version 7 or above not found')
+  RunFindXcode(api, 'set_xcode_version', target_version=activate_version)
+
+
 def RunSteps(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
@@ -156,6 +189,9 @@ def RunSteps(api):
 
   # The context adds dart-sdk tools to PATH sets PUB_CACHE.
   with api.step.context({'env': env}):
+    if api.platform.is_mac:
+      SetupXcode(api)
+
     # Must be first to download dependencies for later steps.
     api.step('flutter doctor', ['flutter', 'doctor'])
     api.step('update packages', ['flutter', 'update-packages'])
@@ -181,5 +217,26 @@ def RunSteps(api):
 
 def GenTests(api):
   for platform in ('mac', 'linux'):
-    yield (api.test(platform) + api.platform(platform, 64) +
+    test = (api.test(platform) + api.platform(platform, 64) +
         api.properties(clobber=''))
+
+    if platform == 'mac':
+      test += (
+        api.step_data('enumerate_xcode_installations', api.json.output({
+          'installations': {
+            '/some/path': '7.2.1 build_number'
+          }
+        })) +
+        api.step_data('set_xcode_version', api.json.output({}))
+      )
+
+    yield test
+
+  yield (
+    api.test('mac_cannot_find_xcode') +
+    api.platform('mac', 64) +
+    api.properties(clobber='') +
+    api.step_data('enumerate_xcode_installations', api.json.output({
+      'installations': {}
+    }))
+  )
