@@ -212,6 +212,13 @@ class SkiaApi(recipe_api.RecipeApi):
 
     # Compile, run tests, perf, etc.
     if 'Swarming' in self.builder_name:
+      # We don't have a Mac swarming bot yet. When we request a task for a bot
+      # which doesn't exist, the task just hangs until it expires (hours). This
+      # is tying up our buildslaves. Just skip the rest of the steps in this
+      # case.
+      if 'Mac' in self.builder_cfg.get('os', ''):
+        return
+
       self.m.skia_swarming.setup(
           self.skia_dir.join('infra', 'bots', 'tools', 'luci-go'),
           swarming_rev='')

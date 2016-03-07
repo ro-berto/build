@@ -63,6 +63,7 @@ TEST_BUILDERS = {
       'Housekeeper-PerCommit-Trybot',
       'Perf-Android-GCC-Nexus5-CPU-NEON-Arm7-Release-Appurify',
       'Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify',
+      'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release-Swarming',
       'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot',
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming',
       'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming',
@@ -136,7 +137,7 @@ def GenTests(api):
         if 'Win' in builder:
           test += api.platform('win', 64)
 
-        if 'Swarming' in builder:
+        if 'Swarming' in builder and not 'Mac' in builder:
           if 'Test' in builder:
             test += api.step_data(
                 'upload new .isolated file for test_skia',

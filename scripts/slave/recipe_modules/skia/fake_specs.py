@@ -458,6 +458,41 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
+  'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release-Swarming': {
+    'build_targets': [
+      'dm',
+    ],
+    'builder_cfg': {
+      'arch': 'x86_64',
+      'compiler': 'Clang',
+      'configuration': 'Release',
+      'cpu_or_gpu': 'CPU',
+      'cpu_or_gpu_value': 'AVX',
+      'extra_config': 'Swarming',
+      'is_trybot': False,
+      'model': 'MacMini6.2',
+      'os': 'Mac',
+      'role': 'Test',
+    },
+    'configuration': 'Release',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': False,
+    'do_test_steps': True,
+    'env': {
+      'CC': '/usr/bin/clang',
+      'CXX': '/usr/bin/clang++',
+      'GYP_DEFINES':
+          ('skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings'
+           '_as_errors=0'),
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': False,
+  },
   'Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot': {
     'build_targets': [
       'dm',
