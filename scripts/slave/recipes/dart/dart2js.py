@@ -115,10 +115,10 @@ def RunSteps(api):
               "--checked", "try"]
       if sharded:
         args.extend(["--shards=%s" % num_shards, "--shard=%s" % shard])
-      api.python('none drt try tests',
-                 api.path['checkout'].join('tools', 'test.py'),
-                 args=args,
-                 cwd=api.path['checkout'])
+      xvfb_cmd = ['xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
+      xvfb_cmd.extend(['python', '-u', './tools/test.py'])
+      xvfb_cmd.extend(args)
+      api.step('none drt try tests', xvfb_cmd, cwd=api.path['checkout'])
 
     # Standard test steps, run on all runtimes.
     runtimes = multiple_runtimes.get(runtime, [runtime])
