@@ -655,6 +655,40 @@ FAKE_SPECS = {
     'upload_dm_results': False,
     'upload_perf_results': False,
   },
+  'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming': {
+    'build_targets': [
+      'dm',
+    ],
+    'builder_cfg': {
+      'arch': 'x86_64',
+      'compiler': 'MSVC',
+      'configuration': 'Release',
+      'cpu_or_gpu': 'CPU',
+      'cpu_or_gpu_value': 'AVX2',
+      'extra_config': 'Swarming',
+      'is_trybot': False,
+      'model': 'ShuttleB',
+      'os': 'Win8',
+      'role': 'Test',
+    },
+    'configuration': 'Release_x64',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': False,
+    'do_test_steps': True,
+    'env': {
+      'GYP_DEFINES':
+          ('qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 ski'
+           'a_gpu=0 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgH'
+           'elp'),
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': False,
+  },
   'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug': {
     'build_targets': [
       'iOSShell',

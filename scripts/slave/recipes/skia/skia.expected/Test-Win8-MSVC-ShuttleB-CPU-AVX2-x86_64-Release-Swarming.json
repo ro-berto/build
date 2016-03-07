@@ -4,7 +4,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[SLAVE_BUILD]\\skia",
     "name": "git fetch"
   },
   {
@@ -14,7 +14,7 @@
       "--hard",
       "abc123"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[SLAVE_BUILD]\\skia",
     "name": "git reset"
   },
   {
@@ -24,21 +24,21 @@
       "-d",
       "-f"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[SLAVE_BUILD]\\skia",
     "name": "git clean"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE[depot_tools]\\gclient.py",
       "config",
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient setup"
   },
@@ -46,18 +46,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/gclient_safe_revert.py",
-      ".",
-      "[DEPOT_TOOLS]/gclient"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "gclient revert"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE[depot_tools]\\gclient.py",
       "sync",
       "--nohooks",
       "--force",
@@ -70,7 +59,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient sync",
     "~followup_annotations": [
@@ -89,109 +78,97 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/apply_issue.py",
-      "-r",
-      "[SLAVE_BUILD]/skia",
-      "-i",
-      "500",
-      "-p",
-      "1",
-      "-s",
-      "https://codereview.chromium.org",
-      "--no-auth"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "apply_issue",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Applied issue 500@https://codereview.chromium.org/500@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
+      "[SLAVE_BUILD]\\skia\\tools\\buildbot_spec.py",
       "/path/to/tmp/json",
-      "Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot"
+      "Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[SLAVE_BUILD]\\skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"nanobench\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dm\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"arch\": \"x86_64\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"GCC\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"MSVC\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Release\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu\": \"CPU\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"cpu_or_gpu_value\": \"AVX2\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"extra_config\": \"Swarming\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"model\": \"GCE\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Ubuntu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"role\": \"Perf\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"model\": \"ShuttleB\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Win8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"role\": \"Test\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release_x64\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"dm_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"upload_dm_results\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"upload_perf_results\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"upload_perf_results\": false@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
     "cmd": [
+      "RECIPE_PACKAGE[depot_tools]\\bootstrap\\win\\win_tools.bat"
+    ],
+    "cwd": "RECIPE_PACKAGE[depot_tools]",
+    "name": "ensure git tooling on windows"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
+      "RECIPE_MODULE[depot_tools::git]\\resources\\git_setup.py",
       "--path",
-      "[SLAVE_BUILD]/swarming.client",
+      "[SLAVE_BUILD]\\swarming.client",
       "--url",
-      "https://chromium.googlesource.com/external/swarming.client.git"
+      "https://chromium.googlesource.com/external/swarming.client.git",
+      "--git_cmd_path",
+      "RECIPE_PACKAGE[depot_tools]\\git.bat"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "git setup (swarming_client)"
   },
   {
     "cmd": [
-      "git",
+      "RECIPE_PACKAGE[depot_tools]\\git.bat",
       "retry",
       "fetch",
       "origin",
       "master"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]\\swarming.client",
     "name": "git fetch (swarming_client)"
   },
   {
     "cmd": [
-      "git",
+      "RECIPE_PACKAGE[depot_tools]\\git.bat",
       "checkout",
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]\\swarming.client",
     "name": "git checkout (swarming_client)"
   },
   {
     "cmd": [
-      "git",
+      "RECIPE_PACKAGE[depot_tools]\\git.bat",
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]\\swarming.client",
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -200,40 +177,40 @@
   },
   {
     "cmd": [
-      "git",
+      "RECIPE_PACKAGE[depot_tools]\\git.bat",
       "clean",
       "-f",
       "-d",
       "-x"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]\\swarming.client",
     "name": "git clean (swarming_client)"
   },
   {
     "cmd": [
-      "git",
+      "RECIPE_PACKAGE[depot_tools]\\git.bat",
       "submodule",
       "sync"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]\\swarming.client",
     "name": "submodule sync (swarming_client)"
   },
   {
     "cmd": [
-      "git",
+      "RECIPE_PACKAGE[depot_tools]\\git.bat",
       "submodule",
       "update",
       "--init",
       "--recursive"
     ],
-    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "cwd": "[SLAVE_BUILD]\\swarming.client",
     "name": "submodule update (swarming_client)"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[SLAVE_BUILD]\\swarming.client\\swarming.py",
       "--version"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -252,7 +229,7 @@
       "--bucket",
       "chromium-luci",
       "-d",
-      "[SLAVE_BUILD]/skia/infra/bots/tools/luci-go/linux64"
+      "[SLAVE_BUILD]\\skia\\infra\\bots\\tools\\luci-go\\linux64"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "download luci-go linux"
@@ -266,7 +243,7 @@
       "--bucket",
       "chromium-luci",
       "-d",
-      "[SLAVE_BUILD]/skia/infra/bots/tools/luci-go/mac64"
+      "[SLAVE_BUILD]\\skia\\infra\\bots\\tools\\luci-go\\mac64"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "download luci-go mac"
@@ -280,7 +257,7 @@
       "--bucket",
       "chromium-luci",
       "-d",
-      "[SLAVE_BUILD]/skia/infra/bots/tools/luci-go/win64"
+      "[SLAVE_BUILD]\\skia\\infra\\bots\\tools\\luci-go\\win64"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "download luci-go win"
@@ -290,7 +267,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/luci-go"
+      "[SLAVE_BUILD]\\luci-go"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "rmtree Go binary dir",
@@ -310,8 +287,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
-      "[SLAVE_BUILD]/skia/infra/bots/tools/luci-go",
-      "[SLAVE_BUILD]/luci-go",
+      "[SLAVE_BUILD]\\skia\\infra\\bots\\tools\\luci-go",
+      "[SLAVE_BUILD]\\luci-go",
       "0"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -322,7 +299,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir",
+      "[SLAVE_BUILD]\\swarming_temp_dir",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -345,8 +322,8 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/compile_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \".pyc\", \n        \"--extra-variable\", \n        \"BUILDER_NAME\", \n        \"Build-Ubuntu-GCC-x86_64-Release-Swarming\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/skia/infra/bots\", \n    \"version\": 1\n}",
-      "[SLAVE_BUILD]/swarming_temp_dir/compile_skia.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]\\\\skia\\\\infra\\\\bots\\\\compile_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]\\\\swarming_temp_dir\\\\skia-task-compile_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \".pyc\", \n        \"--extra-variable\", \n        \"BUILDER_NAME\", \n        \"Build-Win8-MSVC-x86_64-Release-Swarming\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\\\\skia\\\\infra\\\\bots\", \n    \"version\": 1\n}",
+      "[SLAVE_BUILD]\\swarming_temp_dir\\compile_skia.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Write compile_skia.isolated.gen.json"
@@ -355,15 +332,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/swarming.client",
+      "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
+      "[SLAVE_BUILD]\\swarming.client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/swarming_temp_dir/compile_skia.isolated.gen.json"
+      "[SLAVE_BUILD]\\swarming_temp_dir\\compile_skia.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
@@ -379,7 +356,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[SLAVE_BUILD]\\swarming.client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -390,7 +367,7 @@
       "--shards",
       "1",
       "--task-name",
-      "compile_skia/Ubuntu/[dummy has/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot/5",
+      "compile_skia/Win8/[dummy has/Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming/5",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -404,12 +381,12 @@
       "none",
       "--dimension",
       "os",
-      "Ubuntu",
+      "Win8",
       "--dimension",
       "pool",
       "Skia",
       "--tag",
-      "buildername:Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot",
+      "buildername:Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming",
       "--tag",
       "buildnumber:5",
       "--tag",
@@ -419,23 +396,21 @@
       "--tag",
       "name:compile_skia",
       "--tag",
-      "os:Ubuntu",
-      "--tag",
-      "rietveld:https://codereview.chromium.org/500/#ps1",
+      "os:Win8",
       "--tag",
       "slavename:skiabot-linux-housekeeper-003",
       "--tag",
-      "stepname:compile_skia on Ubuntu",
+      "stepname:compile_skia on Win8",
       "--idempotent",
       "[dummy hash for compile_skia]"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] compile_skia on Ubuntu",
+    "name": "[trigger] compile_skia on Win8",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"compile_skia/Ubuntu/[dummy has/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot/5\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"compile_skia/Win8/[dummy has/Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"compile_skia/Ubuntu/[dummy has/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot/5\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"compile_skia/Win8/[dummy has/Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming/5\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -450,7 +425,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[SLAVE_BUILD]\\swarming.client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -458,12 +433,12 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "compile_skia/Ubuntu/[dummy has/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot/5",
+      "compile_skia/Win8/[dummy has/Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming/5",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile_skia on Ubuntu",
+    "name": "compile_skia on Win8",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -511,15 +486,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/infra/bots/download_skps.py"
+      "[SLAVE_BUILD]\\skia\\infra\\bots\\download_skps.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
-      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
-      "BUILDTYPE": "Release",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot"
+      "AWS_CREDENTIAL_FILE": "[HOME]\\chromium-skia-gm.boto",
+      "BOTO_CONFIG": "[HOME]\\chromium-skia-gm.boto",
+      "BUILDTYPE": "Release_x64",
+      "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
+      "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming"
     },
     "name": "Download SKPs"
   },
@@ -527,15 +502,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/skia/infra/bots/download_images.py"
+      "[SLAVE_BUILD]\\skia\\infra\\bots\\download_images.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
-      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
-      "BUILDTYPE": "Release",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot"
+      "AWS_CREDENTIAL_FILE": "[HOME]\\chromium-skia-gm.boto",
+      "BOTO_CONFIG": "[HOME]\\chromium-skia-gm.boto",
+      "BUILDTYPE": "Release_x64",
+      "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
+      "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming"
     },
     "name": "Download images"
   },
@@ -544,7 +519,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir",
+      "[SLAVE_BUILD]\\swarming_temp_dir",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -567,34 +542,34 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/perf_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-perf_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--blacklist\", \n        \".git\", \n        \"--extra-variable\", \n        \"REVISION\", \n        164710, \n        \"--extra-variable\", \n        \"MASTER_NAME\", \n        \"client.skia.fyi\", \n        \"--extra-variable\", \n        \"BUILD_NUMBER\", \n        \"5\", \n        \"--extra-variable\", \n        \"BUILDER_NAME\", \n        \"Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot\", \n        \"--extra-variable\", \n        \"SLAVE_NAME\", \n        \"skiabot-linux-housekeeper-003\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/skia/infra/bots\", \n    \"version\": 1\n}",
-      "[SLAVE_BUILD]/swarming_temp_dir/perf_skia.isolated.gen.json"
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]\\\\skia\\\\infra\\\\bots\\\\test_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]\\\\swarming_temp_dir\\\\skia-task-test_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--blacklist\", \n        \".git\", \n        \"--extra-variable\", \n        \"REVISION\", \n        164710, \n        \"--extra-variable\", \n        \"MASTER_NAME\", \n        \"client.skia.fyi\", \n        \"--extra-variable\", \n        \"BUILD_NUMBER\", \n        \"5\", \n        \"--extra-variable\", \n        \"BUILDER_NAME\", \n        \"Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming\", \n        \"--extra-variable\", \n        \"SLAVE_NAME\", \n        \"skiabot-linux-housekeeper-003\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\\\\skia\\\\infra\\\\bots\", \n    \"version\": 1\n}",
+      "[SLAVE_BUILD]\\swarming_temp_dir\\test_skia.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Write perf_skia.isolated.gen.json"
+    "name": "Write test_skia.isolated.gen.json"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/swarming.client",
+      "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
+      "[SLAVE_BUILD]\\swarming.client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/swarming_temp_dir/perf_skia.isolated.gen.json"
+      "[SLAVE_BUILD]\\swarming_temp_dir\\test_skia.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"perf_skia\": \"[dummy hash for perf_skia]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_skia\": \"[dummy hash for test_skia]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"perf_skia\": \"[dummy hash for perf_skia]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"test_skia\": \"[dummy hash for test_skia]\"}@@@"
     ]
   },
   {
@@ -602,7 +577,7 @@
       "python",
       "-u",
       "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nfor h in sys.argv[2:]:\n  isolated['includes'].append(sys.argv[2])\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-perf_skia.isolated",
+      "[SLAVE_BUILD]\\swarming_temp_dir\\skia-task-test_skia.isolated",
       "abc123"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -624,21 +599,21 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/isolateserver.py",
+      "[SLAVE_BUILD]\\swarming.client\\isolateserver.py",
       "archive",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-perf_skia.isolated"
+      "[SLAVE_BUILD]\\swarming_temp_dir\\skia-task-test_skia.isolated"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "upload new .isolated file for perf_skia",
+    "name": "upload new .isolated file for test_skia",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[SLAVE_BUILD]\\swarming.client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -649,7 +624,7 @@
       "--shards",
       "1",
       "--task-name",
-      "perf_skia/Ubuntu/def456/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot/5",
+      "test_skia/Win8/def456/Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming/5",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -663,12 +638,12 @@
       "none",
       "--dimension",
       "os",
-      "Ubuntu",
+      "Win8",
       "--dimension",
       "pool",
       "Skia",
       "--tag",
-      "buildername:Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot",
+      "buildername:Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming",
       "--tag",
       "buildnumber:5",
       "--tag",
@@ -676,24 +651,22 @@
       "--tag",
       "master:client.skia.fyi",
       "--tag",
-      "name:perf_skia",
+      "name:test_skia",
       "--tag",
-      "os:Ubuntu",
-      "--tag",
-      "rietveld:https://codereview.chromium.org/500/#ps1",
+      "os:Win8",
       "--tag",
       "slavename:skiabot-linux-housekeeper-003",
       "--tag",
-      "stepname:perf_skia on Ubuntu",
+      "stepname:test_skia on Win8",
       "def456"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] perf_skia on Ubuntu",
+    "name": "[trigger] test_skia on Win8",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"perf_skia/Ubuntu/def456/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot/5\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test_skia/Win8/def456/Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"perf_skia/Ubuntu/def456/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot/5\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_skia/Win8/def456/Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming/5\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -709,7 +682,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/perf_skia"
+      "[SLAVE_BUILD]\\swarming_temp_dir\\outputs\\test_skia"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "rmtree results_dir",
@@ -728,7 +701,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/swarming.client/swarming.py",
+      "[SLAVE_BUILD]\\swarming.client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -736,14 +709,14 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "perf_skia/Ubuntu/def456/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot/5",
+      "test_skia/Win8/def456/Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming/5",
       "--task-summary-json",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/perf_skia"
+      "[SLAVE_BUILD]\\swarming_temp_dir\\outputs\\test_skia"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "perf_skia on Ubuntu",
+    "name": "test_skia on Win8",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -789,25 +762,13 @@
   },
   {
     "cmd": [
-      "git",
-      "show",
-      "HEAD",
-      "--format=%at",
-      "-s"
-    ],
-    "cwd": "[SLAVE_BUILD]/skia",
-    "name": "git show",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/perfdata/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot/data"
+      "[SLAVE_BUILD]\\dm"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree perf_dir",
+    "name": "rmtree dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -824,11 +785,11 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD]/perfdata/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot/data",
+      "[SLAVE_BUILD]\\dm",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "makedirs perf_dir",
+    "name": "makedirs dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -846,34 +807,55 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/swarming_temp_dir/outputs/perf_skia/0/perfdata/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot/data/nanobench_164710.json",
-      "[SLAVE_BUILD]/perfdata/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot/data/nanobench_164710_1408633190.json"
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]\\dm"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "perf_results"
+    "name": "rmtree dm_dir",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::skia]/resources/upload_bench_results.py",
-      "Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot",
-      "5",
-      "[SLAVE_BUILD]/perfdata/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot/data",
-      "164710",
-      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
-      "500"
+      "\nimport shutil\nimport sys\nshutil.copytree(sys.argv[1], sys.argv[2], symlinks=bool(sys.argv[3]))\n",
+      "[SLAVE_BUILD]\\swarming_temp_dir\\outputs\\test_skia\\0\\dm",
+      "[SLAVE_BUILD]\\dm",
+      "0"
     ],
-    "cwd": "[SLAVE_BUILD]/skia",
+    "cwd": "[SLAVE_BUILD]",
+    "name": "dm_dir"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::skia]\\resources\\upload_dm_results.py",
+      "[SLAVE_BUILD]\\dm",
+      "164710",
+      "Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming",
+      "5",
+      "",
+      "[SLAVE_BUILD]\\skia\\common\\py\\utils"
+    ],
+    "cwd": "[SLAVE_BUILD]\\skia",
     "env": {
-      "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
-      "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
-      "BUILDTYPE": "Release",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot"
+      "AWS_CREDENTIAL_FILE": "[HOME]\\chromium-skia-gm.boto",
+      "BOTO_CONFIG": "[HOME]\\chromium-skia-gm.boto",
+      "BUILDTYPE": "Release_x64",
+      "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
+      "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming"
     },
-    "name": "Upload perf results"
+    "name": "Upload DM Results"
   },
   {
     "name": "$result",

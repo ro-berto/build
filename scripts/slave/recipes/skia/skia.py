@@ -65,6 +65,7 @@ TEST_BUILDERS = {
       'Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify',
       'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot',
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming',
+      'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming',
     ],
   },
 }

@@ -231,7 +231,7 @@ class SkiaApi(recipe_api.RecipeApi):
     """Run the steps to obtain a checkout of Skia."""
     # Initial cleanup.
     if self.m.path.exists(self.skia_dir):
-      if 'Win' in self.builder_name:
+      if 'Win' in self.builder_name and 'Swarming' not in self.builder_name:
         git = 'git.bat'
       else:
         git = 'git'
@@ -287,7 +287,7 @@ class SkiaApi(recipe_api.RecipeApi):
     task = self.m.skia_swarming.isolate_and_trigger_task(
         isolate_path, isolate_dir, 'compile_skia', isolate_vars,
         dimensions, idempotent=True, store_output=False,
-        isolate_blacklist=['.git', 'out'])
+        isolate_blacklist=['.git', 'out', '.pyc'])
 
     # Wait for compile to finish, record the results hash.
     return self.m.skia_swarming.collect_swarming_task_isolate_hash(task)
