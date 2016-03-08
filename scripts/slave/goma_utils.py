@@ -46,14 +46,31 @@ def GetGomaTmpDirectory():
   return '/tmp'
 
 
-def GetLatestGomaCompilerProxyInfo():
-  """Get a filename of the latest goma comiler_proxy.INFO."""
+def GetLatestGlogInfoFile(pattern):
+  """Get a filename of the latest google glog INFO file.
+
+  Args:
+    pattern: a string of INFO file pattern.
+
+  Returns:
+    the latest glog INFO filename in fullpath.
+  """
   dirname = GetGomaTmpDirectory()
-  info_pattern = os.path.join(dirname, 'compiler_proxy.*.INFO.*')
+  info_pattern = os.path.join(dirname, '%s.*.INFO.*' % pattern)
   candidates = glob.glob(info_pattern)
   if not candidates:
     return None
   return sorted(candidates, reverse=True)[0]
+
+
+def GetLatestGomaCompilerProxyInfo():
+  """Get a filename of the latest goma comiler_proxy.INFO."""
+  return GetLatestGlogInfoFile('compiler_proxy')
+
+
+def GetLatestGomaCompilerProxySubprocInfo():
+  """Get a filename of the latest goma comiler_proxy-subproc.INFO."""
+  return GetLatestGlogInfoFile('compiler_proxy-subproc')
 
 
 def UploadToGomaLogGS(file_path, gs_filename, text_to_append=None):
@@ -91,6 +108,12 @@ def UploadToGomaLogGS(file_path, gs_filename, text_to_append=None):
 
 def UploadGomaCompilerProxyInfo():
   """Upload goma compiler_proxy.INFO to Google Storage."""
+  latest_subproc_info = GetLatestGomaCompilerProxySubprocInfo()
+  if latest_subproc_info:
+    UploadToGomaLogGS(latest_subproc_info,
+                      os.path.basename(latest_subproc_info))
+  else:
+    print 'No compiler_proxy-subproc.INFO to upload'
   latest_info = GetLatestGomaCompilerProxyInfo()
   if not latest_info:
     print 'No compiler_proxy.INFO to upload'
