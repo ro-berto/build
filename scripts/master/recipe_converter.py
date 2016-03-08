@@ -4,6 +4,7 @@
 
 import master.chromium_step
 import master.log_parser.retcode_command
+import master.log_parser.webkit_test_command
 import master.factory.commands
 import master.factory.drmemory_factory
 import master.master_utils
@@ -96,7 +97,29 @@ _master_builder_map = {
              'dartino-lk-debug-arm-qemu-dev',
              'dartino-linux-release-x64-sdk-dev',
              'dartino-mac-release-x64-sdk-dev',
-            ]
+            ],
+    'Chromium FYI': ['Chromium Builder',
+                     'Win8 Tests (1)',
+                     'Win8 Tests (2)',
+                     'Windows 8 App Certification',
+                     'Chromium Win x64 Clobber',
+                     'Chromium Builder (dbg)',
+                     'Vista Tests (dbg)(1)',
+                     'Vista Tests (dbg)(2)',
+                     'Chromium Windows Instant Extended',
+                     'Chromium Linux Buildrunner',
+                     'Chromium Windows Buildrunner',
+                     'ChromiumOS Linux Tests',
+                     'Android ChromeDriver Tests (dbg)',
+                     'Android Asan Builder Tests (dbg)',
+                     'Blink Linux LSan ASan',
+                     'Chromium Win MiniInstaller Tests',
+                     'CFI Linux CF',
+                     'Windows Browser (DrMemory light) (1)',
+                     'Windows Browser (DrMemory light) (2)',
+                     'Windows Builder (DrMemory)',
+                     'Windows Tests (DrMemory)',
+                    ]
 }
 
 _master_name_map = {
@@ -106,6 +129,7 @@ _master_name_map = {
     'DynamoRIO': 'client.dynamorio',
     'Dart': 'client.fletch',
     'DrMemory': 'client.drmemory',
+    'Chromium FYI': 'chromium.fyi',
 }
 
 # Used like a structure.
@@ -283,6 +307,11 @@ _step_signatures = {
       }
     ),
   'runtest': (master.chromium_step.AnnotatedCommand,
+      {
+        'command': ['python', '../../../scripts/slave/runtest.py'],
+      }
+    ),
+  'runtest2': (master.log_parser.webkit_test_command.WebKitCommand,
       {
         'command': ['python', '../../../scripts/slave/runtest.py'],
       }
@@ -695,6 +724,90 @@ _step_signatures = {
         'name': 'upload latest build',
       }
     ),
+  'start_crash_handler': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['python_slave',
+          '..\\..\\..\\scripts\\slave\\chromium\\run_crash_handler.py',
+          '--target'],
+        'description': 'running start_crash_handler',
+        'descriptionDone': 'start_crash_handler',
+        'name': 'start_crash_handler',
+      }
+    ),
+  'process_dumps': (master.log_parser.retcode_command.ReturnCodeCommand,
+      {
+        'command': ['python_slave',
+                    '..\\..\\..\\scripts\\slave\\process_dumps.py',
+                    '--target'],
+        'description': 'running process_dumps',
+        'descriptionDone': 'process_dumps',
+        'name': 'process_dumps',
+      }
+    ),
+  'extract_build': (master.log_parser.retcode_command.ReturnCodeCommand,
+      {
+        'command': ['python_slave',
+          '..\\..\\..\\scripts\\slave\\extract_build.py',
+          '--target'],
+        'description': 'running extract_build',
+        'descriptionDone': 'extract_build',
+        'name': 'extract_build',
+      }
+    ),
+  'runbuild_win': (master.chromium_step.AnnotatedCommand,
+      {
+        'command': ['python_slave', '..\\..\\..\\scripts\\slave\\runbuild.py',
+          '--annotate'],
+        'description': 'buildrunner_tests',
+        'name': 'buildrunner_tests',
+      }
+    ),
+  'runbuild': (master.chromium_step.AnnotatedCommand,
+      {
+        'command': ['python', '../../../scripts/slave/runbuild.py',
+          '--annotate'],
+        'description': 'buildrunner_tests',
+        'name': 'buildrunner_tests',
+      }
+    ),
+  'zip_build_win': (master.chromium_step.AnnotatedCommand,
+      {
+        'command': ['python_slave', '..\\..\\..\\scripts\\slave\\zip_build.py',
+          '--target'],
+        'description': 'packaging build',
+        'descriptionDone': 'packaged build',
+        'name': 'package_build',
+      }
+    ),
+  'test_mini_installer_win': (master.chromium_step.AnnotatedCommand,
+      {
+        'command': ['python_slave',
+          '..\\..\\..\\scripts\\slave\\chromium' +\
+          '\\test_mini_installer_wrapper.py', '--target'],
+        'description': 'running test_installer',
+        'descriptionDone': 'test_installer',
+        'name': 'test_installer',
+      }
+    ),
+  'update_clang': (buildbot.steps.shell.ShellCommand,
+      {
+        'command': ['python', 'src/tools/clang/scripts/update.py'],
+        'description': 'Updating and building clang and plugins',
+        'descriptionDone': 'clang updated',
+        'env': { 'LLVM_URL': 'http://llvm.org/svn/llvm-project' },
+        'name': 'update_clang',
+      }
+    ),
+  'nacl_integration': (master.chromium_step.AnnotatedCommand,
+      {
+        'command': ['python_slave',
+          'src\\chrome\\test\\nacl_test_injection\\' +\
+              'buildbot_nacl_integration.py'],
+        'description': 'running nacl_integration',
+        'descriptionDone': 'nacl_integration',
+        'name': 'nacl_integration',
+      }
+    ),
 }
 
 # Conversion functions for specific step types.
@@ -706,7 +819,10 @@ def convert_arguments(args):
                          'api.properties["buildnumber"]'),
       '--builder-name': ("'%s', %s", '--builder-name',
                          'api.properties["buildername"]'),
-
+      '../../../scripts/slave/chromium/layout_test_wrapper.py': (
+        '%s', 'api.path["build"].join("scripts", "slave", "chromium", '+\
+            '"layout_test_wrapper.py")'
+        )
   }
   fmtstr = ''
   fmtlist = []
@@ -752,6 +868,82 @@ def null_converter(step):
   rc.steps.append('# %s step; null converted' % step[1]['name'])
   return rc
 
+def test_mini_installer_win_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.deps.add('recipe_engine/python')
+  rc.steps.append('# test mini installer wrapper step')
+  rc.steps.append('api.python("test installer", ' +\
+      'api.path["build"].join("scripts", "slave", "chromium", '+\
+      '"test_mini_installer_wrapper.py"), args=[' +\
+      '"--target", "%s"])' % step[1]['command'][3])
+  return rc
+
+def zip_build_win_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/json')
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.deps.add('recipe_engine/python')
+  build_properties = "'--build-properties=%s' % " +\
+      "api.json.dumps(build_properties, separators=(',', ':'))"
+  rc.steps.append('# zip_build step')
+  rc.steps.append('api.python("zip build", ' +\
+      'api.path["build"].join("scripts", "slave", "zip_build.py"), ' +\
+      'args=["--target", "%s", ' % step[1]['command'][3] +\
+      repr(step[1]['command'][4:6])[1:-1] +\
+      ', %s, ' % build_properties +\
+      '\'%s\'])' % step[1]['command'][7])
+  return rc
+
+def runbuild_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/json')
+  rc.deps.add('recipe_engine/python')
+  rc.deps.add('recipe_engine/path')
+  build_properties = "'--build-properties=%s' % " +\
+      "api.json.dumps(build_properties, separators=(',', ':'))"
+  rc.steps.append('# runbuild step')
+  rc.steps.append('api.python("runbuild", ' +\
+      'api.path["build"].join("scripts", "slave", "runbuild.py"), args=[' +\
+      '"--annotate", ' +\
+      '%s, ' % build_properties +\
+      '\'%s\'])' % step[1]['command'][4])
+  return rc
+
+def runbuild_win_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/json')
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.deps.add('recipe_engine/python')
+  build_properties = "'--build-properties=%s' % " +\
+      "api.json.dumps(build_properties, separators=(',', ':'))"
+  rc.steps.append('# runbuild step')
+  rc.steps.append('api.python("runbuild", ' +\
+      'api.path["build"].join("scripts", "slave", "runbuild.py"), ' +\
+      'args=["--annotate", ' +\
+      '%s, ' % build_properties +\
+      '\'%s\'])' % step[1]['command'][4])
+  return rc
+
+def extract_build_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/path')
+  rc.deps.add('recipe_engine/python')
+  rc.deps.add('recipe_engine/json')
+  build_properties = "'--build-properties=%s' % " +\
+      "api.json.dumps(build_properties, separators=(',', ':'))"
+  rc.steps.append('# extract build step')
+  rc.steps.append('api.python("extract build", ' +\
+      'api.path["build"].join("scripts", "slave", "extract_build.py"), ' +\
+      'args=["--target", "%s", ' % step[1]['command'][3] +\
+      '"--build-archive-url", ' +\
+      'build_properties["parent_build_archive_url"], ' +\
+      '%s])' % build_properties)
+  return rc
+
 def dynamorio_unpack_tools_converter(step):
   rc = recipe_chunk()
   rc.deps.add('recipe_engine/step')
@@ -768,6 +960,29 @@ def dynamorio_unpack_tools_converter(step):
   rc.steps.append('# %s step; generic ShellCommand converted' % step[1]['name'])
   rc.steps.append(fmtstr % (step[1]['name'], cmdstr, env,
     cwd))
+  return rc
+
+def process_dumps_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.deps.add('recipe_engine/python')
+  rc.steps.append('# process dumps step')
+  rc.steps.append('api.python("process dumps", '
+      'api.path["build"].join("scripts", "slave", "process_dumps.py"), '
+      'args=["--target", "%s"])' % step[1]['command'][3])
+  return rc
+
+def start_crash_handler_converter(step):
+  rc = recipe_chunk()
+  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/path')
+  rc.deps.add('recipe_engine/python')
+  rc.steps.append('# start crash handler step')
+  rc.steps.append('api.python("start crash handler", '
+      'api.path["build"].join("scripts", "slave", "chromium", '
+      '"run_crash_handler.py"), '
+      'args=["--target", "%s"])' % step[1]['command'][3])
   return rc
 
 def upload_drmemory_latest_converter(step):
@@ -1055,11 +1270,27 @@ def checkout_drmemory_converter(step):
 def trigger_converter(step):
   rc = recipe_chunk()
   rc.deps.add('trigger')
+  rc.deps.add('recipe_engine/properties')
+  prop_set = step[1].get('set_properties', {})
+  propstr = '{'
+  for prop in prop_set.keys():
+    if isinstance(prop_set[prop], str):
+      propstr += '"%s": "%s", ' % (prop, prop_set[prop])
+    elif isinstance(prop_set[prop],
+        buildbot.process.properties.WithProperties):
+      propstr += '"%s": build_properties.get("%s", ""), ' % (prop,
+          prop_set[prop].fmtstring[2:-4])
+  propstr += '}'
   trigger_spec = []
   for sched in step[1]['schedulerNames']:
     trigger_spec.extend(sched_to_triggerspec(sched))
   rc.steps.append('# trigger step')
-  rc.steps.append('trigger_spec = %s' % repr(trigger_spec))
+  rc.steps.append('trigger_spec = [')
+  triggers = []
+  for trigger in trigger_spec:
+    triggers.append(repr(trigger)[:-1] + ', "properties": %s},' % propstr)
+  rc.steps.append(triggers)
+  rc.steps.append(']')
   rc.steps.append('api.trigger(*trigger_spec)')
   return rc
 
@@ -1108,10 +1339,11 @@ def win_dartino_converter(step):
   rc = recipe_chunk()
   rc.deps.add('recipe_engine/step')
   rc.deps.add('recipe_engine/path')
+  rc.deps.add('recipe_engine/python')
   rc.steps.append("# dartino annotated steps step")
   env_add = ', "BUILDBOT_BUILDERNAME": api.properties["buildername"]'
-  rc.steps.append('api.step("annotated steps", ["python_slave", '+\
-      'api.path["checkout"].join("tools", "bots", "dartino.py")], '+\
+  rc.steps.append('api.python("annotated steps", '+\
+      'api.path["checkout"].join("tools", "bots", "dartino.py"), '+\
       'allow_subannotations=True, env={%s%s}, ' % (repr(step[1]['env'])[1:-1],
         env_add) +\
       'cwd=api.path["checkout"])')
@@ -1269,10 +1501,14 @@ def runtest_converter(step):
   rc.deps.add('recipe_engine/path')
   rc.deps.add('recipe_engine/json')
   rc.steps.append('# runtest step')
+  if isinstance(step[1]['command'], master.optional_arguments.ListProperties):
+    args = step[1]['command'].items[2:]
+  else:
+    args = step[1]['command'][2:]
   fmtstr = 'api.python("%s", api.path["build"].join("scripts", "slave",'+\
       '"runtest.py"), args=[%s])'
   rc.steps.append(fmtstr % (step[1]['name'],
-    convert_arguments(step[1]['command'].items[2:])))
+    convert_arguments(args)))
   return rc
 
 def win_runtest_converter(step):
@@ -1280,10 +1516,14 @@ def win_runtest_converter(step):
   rc.deps.add('recipe_engine/python')
   rc.deps.add('recipe_engine/path')
   rc.steps.append('# runtest step')
-  fmtstr = 'api.step("%s", ["python_slave", '+\
-      'api.path["build"].join("scripts", "slave", "runtest.py"), %s])'
+  if not isinstance(step[1]['command'],  list):
+    args = step[1]['command'].items[2:]
+  else:
+    args = step[1]['command'][2:]
+  fmtstr = 'api.python("%s", '+\
+      'api.path["build"].join("scripts", "slave", "runtest.py"), args=[%s])'
   rc.steps.append(fmtstr % (step[1]['name'],
-    convert_arguments(step[1]['command'].items[2:])))
+    convert_arguments(args)))
   return rc
 
 def win_taskkill_converter(step):
@@ -1411,13 +1651,14 @@ def chromedriver_buildbot_run_converter(step):
 def win_chromedriver_buildbot_run_converter(step):
   rc = recipe_chunk()
   rc.steps.append('# annotated_steps step')
-  rc.deps.add('recipe_engine/step')
+  rc.deps.add('recipe_engine/python')
   rc.deps.add('recipe_engine/json')
+  rc.deps.add('recipe_engine/path')
   build_properties = "'--build-properties=%s' % " +\
       "api.json.dumps(build_properties, separators=(',', ':'))"
   cdbbrun_command = 'api.path["build"].join("scripts", "slave", "chromium", '+\
       '"chromedriver_buildbot_run.py")'
-  fmtstr = 'api.step("annotated_steps", ["python_slave", %s, %s, \'%s\'],' +\
+  fmtstr = 'api.python("annotated_steps", %s, args=[%s, \'%s\'],' +\
       ' allow_subannotations=True)'
   rc.steps.append(fmtstr % (cdbbrun_command, build_properties,
                             step[1]['command'][3]))
@@ -1447,7 +1688,7 @@ def win_compile_py_converter(step):
   rc.steps.append('# compile.py step')
   rc.deps.add('recipe_engine/path')
   rc.deps.add('recipe_engine/properties')
-  fmtstr = 'api.step("compile", ["%s", %s] + args)'
+  fmtstr = 'api.python("compile", %s, args=args)'
   compile_command = 'api.path["build"].join("scripts", "slave", "compile.py")'
   args = [x for x in step[1]['command'].items[2:] if isinstance(x, str)]
   rc.steps.append('args = %s' % repr(args))
@@ -1457,7 +1698,7 @@ def win_compile_py_converter(step):
        x.args == ('clobber:+--clobber',):
       rc.steps.append('if "clobber" in api.properties:')
       rc.steps.append(['args.append("--clobber")'])
-  rc.steps.append(fmtstr % ('python_slave', compile_command))
+  rc.steps.append(fmtstr % compile_command)
   return rc
 
 _step_converters_map = {
@@ -1480,6 +1721,7 @@ _step_converters_map = {
     'win_update_scripts': update_scripts_converter,
     'win_taskkill': win_taskkill_converter,
     'runtest': runtest_converter,
+    'runtest2': runtest_converter,
     'win_runtest': win_runtest_converter,
     'clear_tools': null_converter,
     'checkout_dynamorio': checkout_dynamorio_converter,
@@ -1530,6 +1772,16 @@ _step_converters_map = {
     'delete_prior_sfx_archive': delete_prior_sfx_archive_converter,
     'drmemory_create_sfx_archive': drmemory_create_sfx_archive_converter,
     'upload_drmemory_latest': upload_drmemory_latest_converter,
+    'start_crash_handler': start_crash_handler_converter,
+    'process_dumps': process_dumps_converter,
+    'extract_build': extract_build_converter,
+    'runbuild_win': runbuild_win_converter,
+    'runbuild': runbuild_converter,
+    'zip_build_win': zip_build_win_converter,
+    'test_mini_installer_win': test_mini_installer_win_converter,
+    'update_clang': generic_shellcommand_converter, #TODO(aneeshm): convert to
+    # use the path module?
+    'nacl_integration': generic_shellcommand_converter, #TODO(aneeshm): as above
 }
 
 def signature_match(step, signature):
