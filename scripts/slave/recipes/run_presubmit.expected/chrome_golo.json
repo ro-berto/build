@@ -11,7 +11,7 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'chrome_golo', 'url': 'https://chrome-internal.googlesource.com/chrome-golo/chrome-golo.git'}]",
+      "cache_dir = '[ROOT]/git_cache'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'chrome_golo', 'url': 'https://chrome-internal.googlesource.com/chrome-golo/chrome-golo.git'}]",
       "--root",
       "chrome_golo",
       "--revision_mapping_file",

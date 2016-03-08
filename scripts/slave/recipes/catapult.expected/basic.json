@@ -11,7 +11,7 @@
       "--slave",
       "windows_slave",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'catapult', 'url': 'https://chromium.googlesource.com/external/github.com/catapult-project/catapult.git'}]",
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'catapult', 'url': 'https://chromium.googlesource.com/external/github.com/catapult-project/catapult.git'}]",
       "--root",
       "catapult",
       "--revision_mapping_file",

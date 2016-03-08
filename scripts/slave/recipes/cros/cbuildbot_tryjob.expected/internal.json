@@ -11,7 +11,7 @@
       "--slave",
       "test",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'chromite', 'url': 'https://chromium.googlesource.com/chromiumos/chromite.git'}]",
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'chromite', 'url': 'https://chromium.googlesource.com/chromiumos/chromite.git'}]",
       "--root",
       "chromite",
       "--revision_mapping_file",
