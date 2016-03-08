@@ -38,5 +38,7 @@ class GomaApi(recipe_api.RecipeApi):
       script=self.resource('ensure_goma.py'),
       args=[
         '--target-dir', goma_dir,
+        '--download-from-google-storage-path',
+        self.m.depot_tools.download_from_google_storage_path
       ],
       infra_step=True)

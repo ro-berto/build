@@ -1,5 +1,6 @@
 DEPS = [
   'chromium',
+  'depot_tools/depot_tools',
   'depot_tools/gclient',
   'recipe_engine/step',
   'recipe_engine/path',

@@ -107,7 +107,9 @@
       "-u",
       "RECIPE_MODULE[build::goma]/resources/ensure_goma.py",
       "--target-dir",
-      "[SLAVE_BUILD]/src/build/goma/client"
+      "[SLAVE_BUILD]/src/build/goma/client",
+      "--download-from-google-storage-path",
+      "RECIPE_PACKAGE[depot_tools]/download_from_google_storage.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma"

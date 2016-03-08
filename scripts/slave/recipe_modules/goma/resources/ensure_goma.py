@@ -29,6 +29,7 @@ def get_platform():
 def main(argv):
   parser = argparse.ArgumentParser()
   parser.add_argument('--target-dir', required=True)
+  parser.add_argument('--download-from-google-storage-path', required=True)
 
   args = parser.parse_args()
 
@@ -48,7 +49,8 @@ def main(argv):
   subprocess.check_call(
       ['git', 'reset', '--hard', config['revision']], cwd=client_dir)
 
-  subprocess.check_call(['download_from_google_storage',
+  subprocess.check_call([sys.executable,
+                         args.download_from_google_storage_path,
                          '--directory',
                          '--recursive',
                          '--bucket', 'chrome-goma',

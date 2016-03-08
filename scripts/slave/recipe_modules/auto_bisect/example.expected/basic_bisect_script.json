@@ -933,7 +933,9 @@
       "-u",
       "RECIPE_MODULE[build::goma]/resources/ensure_goma.py",
       "--target-dir",
-      "[TMP_BASE]/fake_checkout_tmp_1/build/goma/client"
+      "[TMP_BASE]/fake_checkout_tmp_1/build/goma/client",
+      "--download-from-google-storage-path",
+      "RECIPE_PACKAGE[depot_tools]/download_from_google_storage.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma"
