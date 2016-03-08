@@ -758,6 +758,12 @@
             ],
             "forgive_all": "true",
             "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
+          },
+          "Chromium Win 10": {
+            "tree_notify": [
+              "wfh@chromium.org"
+            ],
+            "forgive_all": "true"
           }
         }
       }
