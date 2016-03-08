@@ -303,7 +303,8 @@
   {
     "cmd": [
       "flutter",
-      "drive"
+      "drive",
+      "--verbose"
     ],
     "cwd": "[TMP_BASE]/tmp_tmp_1/sample_app",
     "env": {

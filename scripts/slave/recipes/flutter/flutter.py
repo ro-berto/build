@@ -61,7 +61,8 @@ def TestCreateAndLaunch(api):
     api.step('test create', ['flutter', 'create', '--with-driver-test',
         'sample_app'], cwd=temp_dir)
     app_path = temp_dir.join('sample_app')
-    api.step('drive sample_app', ['flutter', 'drive'], cwd=app_path)
+    api.step('drive sample_app', ['flutter', 'drive', '--verbose'],
+        cwd=app_path, ok_ret=(0, 1))
 
 # TODO(eseidel): Would be nice to have this on api.path or api.file.
 @contextlib.contextmanager
