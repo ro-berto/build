@@ -254,44 +254,43 @@ class SkiaApi(recipe_api.RecipeApi):
       self._already_ran[fn.__name__] = True
       fn(*args, **kwargs)
 
-  def checkout_steps(self):
-    """Run the steps to obtain a checkout of Skia."""
-    # Initial cleanup.
-    if self.m.path.exists(self.skia_dir):
-      if 'Win' in self.builder_name and 'Swarming' not in self.builder_name:
+  def update_repo(self, repo):
+    """Update an existing repo. This is safe to call without gen_steps."""
+    repo_path = self.m.path['slave_build'].join(repo.name)
+    if self.m.path.exists(repo_path):
+      if self.m.platform.is_win:
         git = 'git.bat'
       else:
         git = 'git'
-      self.run(self.m.step,
-               'git remote set-url',
-               cmd=[git, 'remote', 'set-url', 'origin',
-                    global_constants.SKIA_REPO],
-               cwd=self.skia_dir,
-               infra_step=True)
-      self.run(self.m.step,
-               'git fetch',
-               cmd=[git, 'fetch'],
-               cwd=self.skia_dir,
-               infra_step=True)
-      target_rev = self.m.properties.get('revision')
-      if target_rev:
-        self.run(self.m.step,
-                 'git reset',
-                 cmd=[git, 'reset', '--hard', target_rev],
-                 cwd=self.skia_dir,
-                 infra_step=True)
-      self.run(self.m.step,
-               'git clean',
-               cmd=[git, 'clean', '-d', '-f'],
-               cwd=self.skia_dir,
-               infra_step=True)
+      self.m.step('git remote set-url',
+                  cmd=[git, 'remote', 'set-url', 'origin', repo.url],
+                  cwd=repo_path,
+                  infra_step=True)
+      self.m.step('git fetch',
+                  cmd=[git, 'fetch'],
+                  cwd=repo_path,
+                  infra_step=True)
+      self.m.step('git reset',
+                  cmd=[git, 'reset', '--hard', repo.revision],
+                  cwd=repo_path,
+                  infra_step=True)
+      self.m.step('git clean',
+                  cmd=[git, 'clean', '-d', '-f'],
+                  cwd=repo_path,
+                  infra_step=True)
 
-    # Run 'gclient sync'.
+  def checkout_steps(self):
+    """Run the steps to obtain a checkout of Skia."""
+    # Initial cleanup.
     gclient_cfg = self.m.gclient.make_config()
     skia = gclient_cfg.solutions.add()
     skia.name = 'skia'
     skia.managed = False
     skia.url = global_constants.SKIA_REPO
+    skia.revision = self.m.properties.get('revision') or 'origin/master'
+    self.update_repo(skia)
+
+    # Run 'gclient sync'.
     gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
     update_step = self.m.gclient.checkout(gclient_config=gclient_cfg)
 

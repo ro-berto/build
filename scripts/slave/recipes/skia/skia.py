@@ -134,7 +134,7 @@ def GenTests(api):
           test += api.properties(issue=500,
                                  patchset=1,
                                  rietveld='https://codereview.chromium.org')
-        if 'Win' in builder:
+        if 'Win' in builder and 'Swarming' not in builder:
           test += api.platform('win', 64)
 
         if 'Swarming' in builder and not 'Mac' in builder:

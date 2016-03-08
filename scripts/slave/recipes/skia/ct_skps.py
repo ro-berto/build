@@ -14,6 +14,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/step',
   'recipe_engine/time',
+  'skia',
   'skia_swarming',
   'swarming',
   'swarming_client',
@@ -71,6 +72,7 @@ def RunSteps(api):
 
   skia = gclient_cfg.solutions.add()
   skia.name = 'skia'
+  skia.managed = False
   skia.url = global_constants.SKIA_REPO
   skia.revision = (api.properties.get('parent_got_revision') or
                    api.properties.get('orig_revision') or
@@ -80,8 +82,12 @@ def RunSteps(api):
 
   src = gclient_cfg.solutions.add()
   src.name = 'src'
+  src.managed = False
   src.url = 'https://chromium.googlesource.com/chromium/src.git'
   src.revision = 'origin/master'  # Always checkout Chromium at ToT.
+
+  for repo in (skia, src):
+    api.skia.update_repo(repo)
 
   update_step = api.gclient.checkout(gclient_config=gclient_cfg)
   skia_hash = update_step.presentation.properties['got_revision']
@@ -212,6 +218,10 @@ def GenTests(api):
             'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-CT_BENCH_10k_SKPs',
         ct_num_slaves=ct_num_slaves,
         revision=skia_revision,
+    ) +
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('src')
     )
   )
 

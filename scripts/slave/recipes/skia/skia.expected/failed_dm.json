@@ -24,6 +24,8 @@
       "--force",
       "--verbose",
       "--delete_unversioned_trees",
+      "--revision",
+      "skia@origin/master",
       "--output-json",
       "/path/to/tmp/json"
     ],
