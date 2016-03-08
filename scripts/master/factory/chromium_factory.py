@@ -393,8 +393,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBuildrunnerGTest('mojo_common_unittests', fp)
     if R('mojo_public_bindings_unittests'):
       f.AddBuildrunnerGTest('mojo_public_bindings_unittests', fp)
-    if R('mojo_public_environment_unittests'):
-      f.AddBuildrunnerGTest('mojo_public_environment_unittests', fp)
     if R('mojo_public_system_unittests'):
       f.AddBuildrunnerGTest('mojo_public_system_unittests', fp)
     if R('mojo_public_utility_unittests'):
