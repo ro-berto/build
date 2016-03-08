@@ -263,6 +263,12 @@ class SkiaApi(recipe_api.RecipeApi):
       else:
         git = 'git'
       self.run(self.m.step,
+               'git remote set-url',
+               cmd=[git, 'remote', 'set-url', 'origin',
+                    global_constants.SKIA_REPO],
+               cwd=self.skia_dir,
+               infra_step=True)
+      self.run(self.m.step,
                'git fetch',
                cmd=[git, 'fetch'],
                cwd=self.skia_dir,
@@ -284,6 +290,7 @@ class SkiaApi(recipe_api.RecipeApi):
     gclient_cfg = self.m.gclient.make_config()
     skia = gclient_cfg.solutions.add()
     skia.name = 'skia'
+    skia.managed = False
     skia.url = global_constants.SKIA_REPO
     gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
     update_step = self.m.gclient.checkout(gclient_config=gclient_cfg)

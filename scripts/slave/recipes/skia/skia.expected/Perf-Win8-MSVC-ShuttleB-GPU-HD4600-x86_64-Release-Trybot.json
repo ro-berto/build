@@ -2,6 +2,17 @@
   {
     "cmd": [
       "git.bat",
+      "remote",
+      "set-url",
+      "origin",
+      "https://skia.googlesource.com/skia.git"
+    ],
+    "cwd": "[SLAVE_BUILD]\\skia",
+    "name": "git remote set-url"
+  },
+  {
+    "cmd": [
+      "git.bat",
       "fetch"
     ],
     "cwd": "[SLAVE_BUILD]\\skia",
@@ -34,7 +45,7 @@
       "RECIPE_PACKAGE[depot_tools]\\gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
