@@ -116,7 +116,7 @@ class JSONResultsGenerator(object):
         repositories that tests rely on.  The SVN revision will be
         included in the JSON with the given json_field_name.
       test_results_server: server that hosts test results json.
-      test_type: test type string (e.g. 'layout-tests').
+      test_type: test type string (e.g. 'webkit_tests').
       master_name: the name of the buildbot master.
       file_writer: if given the parameter is used to write JSON data to a file.
         The parameter must be the function that takes two arguments, 'file_path'

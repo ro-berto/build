@@ -15,7 +15,7 @@ class TestResultsApi(recipe_api.RecipeApi):
 
     Args:
       gtest_results_file: Path to file containing gtest json.
-      test_type: Test type string, e.g. layout-tests.
+      test_type: Test type string, e.g. webkit_tests.
       test_results_server: Server where results should be uploaded.
       downgrade_error_to_warning: If True, treat a failure to upload as a
           warning.
