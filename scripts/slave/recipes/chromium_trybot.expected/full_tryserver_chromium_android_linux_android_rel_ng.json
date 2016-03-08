@@ -139,7 +139,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[SLAVE_BUILD]/src/build/goma/client' target_arch=arm test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[SLAVE_BUILD]/src/build/goma/client' proprietary_codecs=1 target_arch=arm test_isolation_mode=prepare use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks (with patch)"
@@ -805,7 +805,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[SLAVE_BUILD]/src/build/goma/client' target_arch=arm test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[SLAVE_BUILD]/src/build/goma/client' proprietary_codecs=1 target_arch=arm test_isolation_mode=prepare use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks (without patch)"

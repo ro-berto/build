@@ -12,6 +12,7 @@ SPEC = {
   'builders': {
     'Android arm Builder (dbg)': {
       'chromium_config': 'android',
+      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -28,6 +29,7 @@ SPEC = {
 
     'Android arm64 Builder (dbg)': {
       'chromium_config': 'android',
+      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -44,6 +46,7 @@ SPEC = {
 
     'Android MIPS Builder (dbg)': {
       'chromium_config': 'android',
+      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -60,6 +63,7 @@ SPEC = {
 
     'Android x64 Builder (dbg)': {
       'chromium_config': 'android',
+      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -76,6 +80,7 @@ SPEC = {
 
     'Android x86 Builder (dbg)': {
       'chromium_config': 'android',
+      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -92,6 +97,7 @@ SPEC = {
 
     'Android GN Builder (dbg)': {
       'chromium_config': 'android',
+      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -292,6 +298,7 @@ SPEC = {
       'use_isolate': True,
       'enable_swarming': True,
       'chromium_config': 'android',
+      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
