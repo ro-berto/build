@@ -24,6 +24,14 @@ import datetime
 _GLOBAL_BUILDMASTER_CONFIG = None
 
 _master_builder_map = {
+    'NativeClientSDK': ['windows-sdk-multi',
+                        'mac-sdk-multi',
+                        'linux-sdk-multi',
+                        'linux-sdk-asan-multi',
+                        'windows-sdk-multirel',
+                        'mac-sdk-multirel',
+                        'linux-sdk-multirel',
+                       ],
     'DrMemory':   ['linux-builder',
                    'win-builder',
                    'win-xp-drm',
@@ -123,6 +131,7 @@ _master_builder_map = {
 }
 
 _master_name_map = {
+    'NativeClientSDK': 'client.nacl.sdk',
     'Chromium GPU': 'chromium.gpu',
     'Chromium ChromeDriver': 'chromium.chromedriver',
     'Chromium GPU FYI': 'chromium.gpu.fyi',
@@ -808,6 +817,27 @@ _step_signatures = {
         'name': 'nacl_integration',
       }
     ),
+  'nacl_sdk_buildbot_run': (master.chromium_step.AnnotatedCommand,
+      {
+        'command': ['python',
+          '../../../scripts/slave/chromium/nacl_sdk_buildbot_run.py'],
+        'description': 'annotated_steps',
+        'name': 'annotated_steps',
+      }
+    ),
+  'gclient_clobber': (master.chromium_step.GClient,
+      {
+        'mode': 'clobber',
+      }
+    ),
+  'nacl_sdk_buildbot_run_win': (master.chromium_step.AnnotatedCommand,
+      {
+        'command': ['python_slave',
+          '..\\..\\..\\scripts\\slave\\chromium\\nacl_sdk_buildbot_run.py'],
+        'description': 'annotated_steps',
+        'name': 'annotated_steps',
+      }
+    ),
 }
 
 # Conversion functions for specific step types.
@@ -865,7 +895,23 @@ def dump_converter(step, comment="dump converter"):
 
 def null_converter(step):
   rc = recipe_chunk()
-  rc.steps.append('# %s step; null converted' % step[1]['name'])
+  rc.steps.append('# %s step; null converted' % step[1].get('name', 'unnamed'))
+  return rc
+
+def nacl_sdk_buildbot_run_converter(step):
+  rc = recipe_chunk()
+  rc.steps.append('# annotated_steps step')
+  rc.deps.add('recipe_engine/python')
+  rc.deps.add('recipe_engine/json')
+  rc.deps.add('recipe_engine/path')
+  build_properties = "'--build-properties=%s' % " +\
+      "api.json.dumps(build_properties, separators=(',', ':'))"
+  nsdk_command = 'api.path["build"].join("scripts", "slave", "chromium", '+\
+      '"nacl_sdk_buildbot_run.py")'
+  fmtstr = 'api.python("annotated_steps", %s, args=[%s, \'%s\'],' +\
+      ' allow_subannotations=True)'
+  rc.steps.append(fmtstr % (nsdk_command, build_properties,
+                            step[1]['command'][3]))
   return rc
 
 def test_mini_installer_win_converter(step):
@@ -1782,6 +1828,9 @@ _step_converters_map = {
     'update_clang': generic_shellcommand_converter, #TODO(aneeshm): convert to
     # use the path module?
     'nacl_integration': generic_shellcommand_converter, #TODO(aneeshm): as above
+    'nacl_sdk_buildbot_run': nacl_sdk_buildbot_run_converter,
+    'nacl_sdk_buildbot_run_win': nacl_sdk_buildbot_run_converter,
+    'gclient_clobber': null_converter,
 }
 
 def signature_match(step, signature):
