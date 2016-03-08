@@ -11,7 +11,7 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'build_internal/master.DEPS', 'url': 'https://chrome-internal.googlesource.com/chrome/tools/build/master.DEPS.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'build_internal/master.DEPS', 'url': 'https://chrome-internal.googlesource.com/chrome/tools/build/master.DEPS.git'}]",
       "--root",
       "build_internal/master.DEPS",
       "--revision_mapping_file",
