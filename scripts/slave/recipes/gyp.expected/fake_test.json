@@ -11,7 +11,7 @@
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'gyp', 'url': 'https://chromium.googlesource.com/external/gyp.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'gyp', 'url': 'https://chromium.googlesource.com/external/gyp.git'}]",
       "--root",
       "gyp",
       "--revision_mapping_file",

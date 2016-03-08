@@ -11,7 +11,7 @@
       "--slave",
       "linux_slave",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'custom_tabs_client', 'url': 'https://chromium.googlesource.com/external/github.com/GoogleChrome/custom-tabs-client.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'custom_tabs_client', 'url': 'https://chromium.googlesource.com/external/github.com/GoogleChrome/custom-tabs-client.git'}]",
       "--root",
       "custom_tabs_client",
       "--revision_mapping_file",

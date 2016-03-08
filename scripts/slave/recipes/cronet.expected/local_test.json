@@ -30,7 +30,7 @@
       "RECIPE_PACKAGE[depot_tools]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android']"
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android']"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

@@ -20,7 +20,7 @@
       "--slave",
       "vm331-m3",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/google/syzygy.git/'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/syzygy/internal.DEPS.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/google/syzygy.git/'}, {'deps_file': 'DEPS', 'managed': False, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/syzygy/internal.DEPS.git'}]",
       "--root",
       "src",
       "--revision_mapping_file",
