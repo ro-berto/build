@@ -285,6 +285,7 @@ def main(argv):
       'master.tryserver.client.catapult': 'CatapultTryserver',
       'master.tryserver.client.custom_tabs_client': 'CustomTabsClientTryserver',
       'master.tryserver.client.mojo': 'MojoTryServer',
+      'master.tryserver.client.pdfium': 'PDFiumTryserver',
       'master.tryserver.client.syzygy': 'SyzygyTryserver',
       'master.tryserver.blink': 'BlinkTryServer',
       'master.tryserver.infra': 'InfraTryServer',
