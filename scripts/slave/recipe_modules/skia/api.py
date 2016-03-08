@@ -495,12 +495,16 @@ print json.dumps({'ccache': ccache})
     task_name = 'test_skia'
     isolate_dir = self.skia_dir.join('infra', 'bots')
     isolate_path = isolate_dir.join('%s.isolate' % task_name)
+    issue = str(self.m.properties['issue']) if self.is_trybot else ''
+    patchset = str(self.m.properties['patchset']) if self.is_trybot else ''
     isolate_vars = {
         'MASTER_NAME': self.master_name,
         'BUILDER_NAME': self.builder_name,
         'BUILD_NUMBER': str(self.m.properties['buildnumber']),
         'SLAVE_NAME': self.slave_name,
         'REVISION': self.got_revision,
+        'ISSUE': issue,
+        'PATCHSET': patchset,
     }
 
     dimensions = swarm_dimensions(self.builder_cfg)
@@ -692,12 +696,16 @@ print json.dumps({'ccache': ccache})
     task_name = 'perf_skia'
     isolate_dir = self.skia_dir.join('infra', 'bots')
     isolate_path = isolate_dir.join('%s.isolate' % task_name)
+    issue = str(self.m.properties['issue']) if self.is_trybot else ''
+    patchset = str(self.m.properties['patchset']) if self.is_trybot else ''
     isolate_vars = {
         'MASTER_NAME': self.master_name,
         'BUILDER_NAME': self.builder_name,
         'BUILD_NUMBER': str(self.m.properties['buildnumber']),
         'SLAVE_NAME': self.slave_name,
         'REVISION': self.got_revision,
+        'ISSUE': issue,
+        'PATCHSET': patchset,
     }
     dimensions = swarm_dimensions(self.builder_cfg)
     return self.m.skia_swarming.isolate_and_trigger_task(
