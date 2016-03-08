@@ -144,7 +144,7 @@ def RunSteps(api):
     max_slaves_to_batcharchive = 5
   tasks_to_swarm_hashes = []
   for slave_start_num in xrange(1, ct_num_slaves+1, max_slaves_to_batcharchive):
-    m = min(max_slaves_to_batcharchive + slave_start_num - 1, ct_num_slaves)
+    m = min(max_slaves_to_batcharchive, ct_num_slaves)
     batcharchive_output = api.skia_swarming.batcharchive(
         targets=['ct-' + skia_tool + '-%s' % num for num in range(
             slave_start_num, slave_start_num + m)])
