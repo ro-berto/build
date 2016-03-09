@@ -147,7 +147,7 @@
       "Release_x64",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
+      "{\"build\": \"RECIPE_PACKAGE[build]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
       "{\"buildername\": \"Win x64 GN\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],

@@ -145,7 +145,7 @@
       "Release",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "{\"build\": \"RECIPE_PACKAGE[build]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"mac_optional_gpu_tests_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.mac\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],

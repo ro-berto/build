@@ -137,7 +137,7 @@
       "--build-config-fs",
       "Debug",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "{\"build\": \"RECIPE_PACKAGE[build]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"Lollipop Consumer Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],

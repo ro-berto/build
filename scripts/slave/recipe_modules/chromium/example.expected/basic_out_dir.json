@@ -150,7 +150,7 @@
       "Debug",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "{\"build\": \"RECIPE_PACKAGE[build]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"Android Builder (dbg)\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.linux\", \"slavename\": \"build1-a1\", \"target_platform\": \"android\"}"
     ],

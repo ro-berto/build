@@ -142,7 +142,7 @@
       "Debug",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "{\"build\": \"RECIPE_PACKAGE[build]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"android_clang_dbg_recipe\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],

@@ -157,7 +157,7 @@
       "Release",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
+      "{\"build\": \"RECIPE_PACKAGE[build]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
       "{\"buildername\": \"Win7 Tests (1)\", \"buildnumber\": 571, \"mastername\": \"client.skia\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],

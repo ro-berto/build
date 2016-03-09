@@ -156,7 +156,7 @@
       "Release",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "{\"build\": \"RECIPE_PACKAGE[build]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"linux_android_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],

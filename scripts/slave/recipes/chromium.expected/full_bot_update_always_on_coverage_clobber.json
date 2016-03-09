@@ -136,7 +136,7 @@
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "{\"build\": \"RECIPE_PACKAGE[build]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"coverage_clobber\", \"buildnumber\": 571, \"mastername\": \"bot_update.always_on\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
