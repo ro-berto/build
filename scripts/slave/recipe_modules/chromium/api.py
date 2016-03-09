@@ -367,7 +367,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.runtest_py.src_side and not disable_src_side_runtest_py:
       runtest_path = self.m.path['checkout'].join(
           'infra', 'scripts', 'runtest_wrapper.py')
-      full_args = ['--path-build', self.m.path['build'], '--'] + full_args
     return self.m.python(
       step_name,
       runtest_path,
