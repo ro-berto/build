@@ -196,10 +196,6 @@ def setup_target(api,
     if device == 'fugu':
       return
 
-    # Device is flaky, so disable running tests on it.
-    if serial == 'HT591JT00381':
-      return
-
     api.step('setup device', [art_tools.join('setup-buildbot-device.sh')],
              env=env)
 
@@ -356,7 +352,7 @@ _CONFIG_MAP = {
         'concurrent_collector': True,
       },
       'armv8-concurrent-collector': {
-        'serial': 'HT591JT00381',
+        'serial': 'HT591JT00517',
         'device': 'volantis',
         'debug': True,
         'concurrent_collector': True,
