@@ -7,6 +7,8 @@ import re
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
+
+
 class TestLauncherFilterFileInputPlaceholder(recipe_util.Placeholder):
   def __init__(self, api, tests):
     self.raw = api.m.raw_io.input('\n'.join(tests))
@@ -539,9 +541,14 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--goma-dir', self.m.path['build'].join('goma')]
 
     if isolated_targets:
-      data = '\n'.join(sorted(set(isolated_targets))) + '\n'
+      sorted_isolated_targets = sorted(set(isolated_targets))
+      result = self.m.step.active_result
+      if result:
+        result.presentation.logs['swarming-targets-file.txt'] = (
+            sorted_isolated_targets)
 
       # TODO(dpranke): Change the MB flag to '--isolate-targets-file', maybe?
+      data = '\n'.join(sorted_isolated_targets) + '\n'
       args += ['--swarming-targets-file', self.m.raw_io.input(data)]
 
     args += [build_dir]
