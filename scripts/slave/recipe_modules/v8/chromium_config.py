@@ -47,6 +47,11 @@ def arm_hard_float(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def sanitizer_bb_coverage(c):
+  c.gyp_env.GYP_DEFINES['sanitizer_coverage'] = 'bb'
+
+
+@CONFIG_CTX(includes=['v8'])
 def cfi(c):
   c.gyp_env.GYP_DEFINES['cfi_vptr'] = 1
   c.gyp_env.GYP_DEFINES['cfi_diag'] = 1
@@ -81,8 +86,8 @@ def gcmole(c):
   c.gyp_env.GYP_DEFINES['gcmole'] = 1
 
 
-@CONFIG_CTX(includes=['v8', 'gcc'])
-def gcov_coverage(c):
+@CONFIG_CTX(includes=['v8'])
+def coverage(c):
   c.gyp_env.GYP_DEFINES['coverage'] = 1
 
 

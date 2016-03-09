@@ -1435,7 +1435,7 @@ BUILDERS = {
       'V8 Linux64 - gcov coverage': {
       'v8_apply_config': ['gcov_coverage'],
         'chromium_apply_config': [
-          'clobber', 'v8_ninja', 'gcov_coverage', 'goma', 
+          'clobber', 'v8_ninja', 'gcc', 'coverage', 'goma', 
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -1929,6 +1929,26 @@ BUILDERS = {
           'os': 'Ubuntu-14.04',
         },
         'tests': [V8Testing_2, Test262_2],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_sanitizer_coverage_rel': {
+        'gclient_apply_config': ['llvm_compiler_rt'],
+        'chromium_apply_config': [
+          'v8_ninja',
+          'clang',
+          'coverage',
+          'asan',
+          'goma',
+          'no_dcheck',
+          'sanitizer_bb_coverage',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'sanitizer_coverage_folder': 'linux64',
+        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'v8_win_rel': {

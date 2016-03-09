@@ -43,6 +43,12 @@ def dynamorio(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def llvm_compiler_rt(c):
+  c.solutions[0].custom_deps['v8/third_party/llvm/projects/compiler-rt'] = (
+    'https://chromium.googlesource.com/external/llvm.org/compiler-rt.git')
+
+
+@CONFIG_CTX(includes=['v8'])
 def mozilla_tests(c):
   c.solutions[0].custom_deps['v8/test/mozilla/data'] = ChromiumSvnSubURL(
       c, 'chrome', 'trunk', 'deps', 'third_party', 'mozilla-tests')

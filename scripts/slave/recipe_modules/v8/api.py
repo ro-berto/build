@@ -477,6 +477,16 @@ class V8Api(recipe_api.RecipeApi):
     result.presentation.links['report'] = (
       'https://storage.googleapis.com/chromium-v8/%s/index.html' % dest)
 
+  @property
+  def generate_sanitizer_coverage(self):
+    return bool(self.bot_config.get('sanitizer_coverage_folder'))
+
+  def create_coverage_context(self):
+    if self.generate_sanitizer_coverage:
+      return testing.SanitizerCoverageContext(self.m, self)
+    else:
+      return testing.NULL_COVERAGE
+
   def create_test(self, test):
     """Wrapper that allows to shortcut common tests with their names.
 
@@ -511,25 +521,34 @@ class V8Api(recipe_api.RecipeApi):
     non_swarming_tests = [t for t in tests if not t.uses_swarming]
     failed_tests = []
 
+    # Creates a coverage context if coverage is tracked. Null object otherwise.
+    coverage_context = self.create_coverage_context()
+
     # Make sure swarming triggers come first.
     # TODO(machenbach): Port this for rerun for bisection.
     for t in swarming_tests + non_swarming_tests:
       try:
-        t.pre_run()
+        t.pre_run(coverage_context=coverage_context)
       except self.m.step.InfraFailure:  # pragma: no cover
         raise
       except self.m.step.StepFailure:  # pragma: no cover
         failed_tests.append(t)
 
+    # Setup initial zero coverage after all swarming jobs are triggered.
+    coverage_context.setup()
+
     # Make sure non-swarming tests are run before swarming results are
     # collected.
     for t in non_swarming_tests + swarming_tests:
       try:
-        test_results += t.run()
+        test_results += t.run(coverage_context=coverage_context)
       except self.m.step.InfraFailure:  # pragma: no cover
         raise
       except self.m.step.StepFailure:  # pragma: no cover
         failed_tests.append(t)
+
+    # Upload accumulated coverage data.
+    coverage_context.maybe_upload()
 
     if failed_tests:
       failed_tests_names = [t.name for t in failed_tests]

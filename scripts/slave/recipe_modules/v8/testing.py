@@ -94,6 +94,94 @@ TEST_CONFIGS = freeze({
 })
 
 
+class NullCoverageContext(object):
+  """Null object to represent testing without collecting coverage."""
+  def get_test_runner_args(self):
+    return []
+
+  def setup(self):
+    pass
+
+  def post_run(self):
+    pass
+
+  def maybe_upload(self):
+    pass
+
+NULL_COVERAGE = NullCoverageContext()
+
+
+class SanitizerCoverageContext(object):
+  """Context during testing to collect coverage data."""
+  def __init__(self, api, v8):
+    self.api = api
+    self.v8 = v8
+    self.coverage_dir = api.path.mkdtemp('coverage_output')
+
+  def get_test_runner_args(self):
+    """Returns the test runner arguments for collecting coverage data."""
+    # TODO(machenbach): Support swarming. On swarming, the data must end up
+    # in the isolated output folder.
+    return ['--sancov-dir', self.coverage_dir]
+
+  def setup(self):
+    """Build data file with initial zero coverage data.
+
+    To be called before any coverage data from testing is merged in.
+    """
+    self.api.python(
+        'Initialize coverage data',
+        self.api.path['checkout'].join(
+            'tools', 'sanitizers', 'sancov_formatter.py'),
+        [
+          'all',
+          '--json-output', self.coverage_dir.join('data.json'),
+        ],
+    )
+
+  def post_run(self):
+    """Merge coverage data from one test run.
+
+    To be called after every test step. Requires existing initial zero
+    coverage data, obtained by calling setup().
+    """
+    self.api.python(
+        'Merge coverage data',
+        self.api.path['checkout'].join(
+            'tools', 'sanitizers', 'sancov_formatter.py'),
+        [
+          'merge',
+          '--json-input', self.coverage_dir.join('data.json'),
+          '--json-output', self.coverage_dir.join('data.json'),
+          '--coverage-dir', self.coverage_dir,
+        ],
+    )
+
+  def maybe_upload(self):
+    """Uploads coverage data to google storage if on tryserver."""
+    if self.api.tryserver.is_tryserver:
+      assert self.api.properties['issue']
+      assert self.api.properties['patchset']
+
+      # TODO(machenbach): Support splitting the data file into multiple files
+      # per covered c++ file and upload multiple files to speed up the coverage
+      # extension.
+      results_path = '/'.join([
+        'tryserver',
+        'sanitizer_coverage',
+        str(self.api.properties['issue']),
+        str(self.api.properties['patchset']),
+        self.v8.bot_config.get('sanitizer_coverage_folder'),
+        'data.json',
+      ])
+
+      self.api.gsutil.upload(
+          self.coverage_dir.join('data.json'),
+          'chromium-v8',
+          results_path,
+      )
+
+
 class BaseTest(object):
   def __init__(self, test_step_config, api, v8):
     self.test_step_config = test_step_config
@@ -125,11 +213,11 @@ class BaseTest(object):
     # Run all tests by default.
     return True
 
-  def pre_run(self, test=None, **kwargs):  # pragma: no cover
-    pass
+  def pre_run(self, test=None, coverage_context=NULL_COVERAGE, **kwargs):
+    pass  # pragma: no cover
 
-  def run(self, test=None, **kwargs):  # pragma: no cover
-    raise NotImplementedError()
+  def run(self, test=None, coverage_context=NULL_COVERAGE, **kwargs):
+    raise NotImplementedError()  # pragma: no cover
 
   def rerun(self, failure_dict, **kwargs):  # pragma: no cover
     raise NotImplementedError()
@@ -144,7 +232,7 @@ class V8Test(BaseTest):
       return False
     return True
 
-  def run(self, test=None, **kwargs):
+  def run(self, test=None, coverage_context=NULL_COVERAGE, **kwargs):
     test = test or TEST_CONFIGS[self.name]
 
     def step_test_data():
@@ -166,15 +254,15 @@ class V8Test(BaseTest):
     self.api.python(
       test['name'],
       self.api.path['checkout'].join('tools', 'run-tests.py'),
-      full_args,
+      full_args + coverage_context.get_test_runner_args(),
       cwd=self.api.path['checkout'],
       env=env,
       step_test_data=step_test_data,
       **kwargs
     )
-    return self.post_run(test)
+    return self.post_run(test, coverage_context)
 
-  def post_run(self, test):
+  def post_run(self, test, coverage_context=NULL_COVERAGE):
     # The active step was either a local test run or the swarming collect step.
     step_result = self.api.step.active_result
     json_output = step_result.json.output
@@ -206,6 +294,8 @@ class V8Test(BaseTest):
       step_result.presentation.status = self.api.step.WARNING
       self.v8._update_failure_presentation(
             flake_log, flakes, step_result.presentation)
+
+    coverage_context.post_run()
 
     return TestResults(failures, flakes, [])
 
