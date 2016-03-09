@@ -224,6 +224,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/infra/scripts/runtest_wrapper.py",
+      "--",
       "--target",
       "Release",
       "--factory-properties",
