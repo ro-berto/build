@@ -116,7 +116,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\tools\\clang\\scripts\\package.py"
+      "[SLAVE_BUILD]\\src\\tools\\clang\\scripts\\package.py\\--upload"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package clang"
