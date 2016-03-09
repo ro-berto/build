@@ -93,7 +93,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/pdfium/testing/tools/run_javascript_tests.py"
+      "[SLAVE_BUILD]/pdfium/testing/tools/run_javascript_tests.py",
+      "--build-dir",
+      "out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
@@ -105,7 +107,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/pdfium/testing/tools/run_pixel_tests.py"
+      "[SLAVE_BUILD]/pdfium/testing/tools/run_pixel_tests.py",
+      "--build-dir",
+      "out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {
@@ -117,7 +121,9 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/pdfium/testing/tools/run_corpus_tests.py"
+      "[SLAVE_BUILD]/pdfium/testing/tools/run_corpus_tests.py",
+      "--build-dir",
+      "out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]/pdfium",
     "env": {

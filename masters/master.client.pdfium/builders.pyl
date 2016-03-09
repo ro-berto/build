@@ -98,6 +98,16 @@
         "xfa": True,
       },
     },
+    "windows_xfa_x64": {
+      "recipe": "pdfium",
+      "scheduler": "pdfium_commits",
+      "slave_pools": ["windows"],
+      "category": "1xfa",
+      "properties": {
+        "xfa": True,
+        "win64": True,
+      },
+    },
     "drm_win_xfa": {
       "recipe": "pdfium",
       "scheduler": "pdfium_commits",

@@ -18,6 +18,7 @@ PROPERTIES = {
   'xfa': Property(default=False, kind=bool),
   'memory_tool': Property(default=None, kind=str),
   'v8': Property(default=True, kind=bool),
+  "win64": Property(default=False, kind=bool),
 }
 
 
@@ -26,7 +27,7 @@ def _MakeGypDefines(gyp_defines):
                    gyp_defines.iteritems()])
 
 
-def _CheckoutSteps(api, memory_tool, xfa, v8):
+def _CheckoutSteps(api, memory_tool, xfa, v8, win64):
   # Checkout pdfium and its dependencies (specified in DEPS) using gclient
   api.gclient.set_config('pdfium')
   api.bot_update.ensure_checkout()
@@ -39,15 +40,18 @@ def _CheckoutSteps(api, memory_tool, xfa, v8):
   if memory_tool == 'asan':
     gyp_defines['asan'] = 1
 
+  if win64:
+    gyp_defines['target_arch'] = 'x64'
+
   env = {
       'GYP_DEFINES': _MakeGypDefines(gyp_defines)
   }
   api.gclient.runhooks(env=env)
 
 
-def _BuildSteps(api):
+def _BuildSteps(api, out_dir):
   # Build sample file using Ninja
-  debug_path = api.path['checkout'].join('out', 'Debug')
+  debug_path = api.path['checkout'].join('out', out_dir)
   api.step('compile with ninja', ['ninja', '-C', debug_path])
 
 
@@ -74,7 +78,7 @@ def _RunDrMemoryTests(api, v8):
              cwd=api.path['checkout'])
 
 
-def _RunTests(api, memory_tool, v8):
+def _RunTests(api, memory_tool, v8, out_dir):
   if memory_tool == 'drmemory':
     _RunDrMemoryTests(api, v8)
     return
@@ -85,13 +89,13 @@ def _RunTests(api, memory_tool, v8):
     env.update({
         'ASAN_OPTIONS': 'detect_leaks=0:allocator_may_return_null=1'})
 
-  unittests_path = str(api.path['checkout'].join('out', 'Debug',
+  unittests_path = str(api.path['checkout'].join('out', out_dir,
                                                  'pdfium_unittests'))
   if api.platform.is_win:
     unittests_path += '.exe'
   api.step('unittests', [unittests_path], cwd=api.path['checkout'], env=env)
 
-  embeddertests_path = str(api.path['checkout'].join('out', 'Debug',
+  embeddertests_path = str(api.path['checkout'].join('out', out_dir,
                                                      'pdfium_embeddertests'))
   if api.platform.is_win:
     embeddertests_path += '.exe'
@@ -99,28 +103,36 @@ def _RunTests(api, memory_tool, v8):
            cwd=api.path['checkout'],
            env=env)
 
+  script_args = ['--build-dir', api.path.join('out', out_dir)]
+
   if v8:
     javascript_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_javascript_tests.py'))
-    api.python('javascript tests', javascript_path,
+    api.python('javascript tests', javascript_path, script_args,
                cwd=api.path['checkout'], env=env)
 
   pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                    'run_pixel_tests.py'))
-  api.python('pixel tests', pixel_tests_path,
+  api.python('pixel tests', pixel_tests_path, script_args,
              cwd=api.path['checkout'], env=env)
 
   corpus_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_corpus_tests.py'))
-  api.python('corpus tests', corpus_tests_path,
+  api.python('corpus tests', corpus_tests_path, script_args,
              cwd=api.path['checkout'], env=env)
 
 
-def RunSteps(api, memory_tool, xfa, v8):
-  _CheckoutSteps(api, memory_tool, xfa, v8)
-  _BuildSteps(api)
+def RunSteps(api, memory_tool, xfa, v8, win64):
+  _CheckoutSteps(api, memory_tool, xfa, v8, win64)
+
+  if win64:
+    out_dir = 'Debug_x64'
+  else:
+    out_dir = 'Debug'
+
+  _BuildSteps(api, out_dir)
   with api.step.defer_results():
-    _RunTests(api, memory_tool, v8)
+    _RunTests(api, memory_tool, v8, out_dir)
 
 
 def GenTests(api):
@@ -177,6 +189,16 @@ def GenTests(api):
       api.properties(xfa=True,
                      mastername="client.pdfium",
                      buildername='windows_xfa',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('win_xfa_64') +
+      api.platform('win', 64) +
+      api.properties(xfa=True,
+                     win64=True,
+                     mastername="client.pdfium",
+                     buildername='windows_xfa_64',
                      slavename="test_slave")
   )
 
