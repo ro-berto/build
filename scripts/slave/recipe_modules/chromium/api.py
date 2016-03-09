@@ -207,19 +207,13 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.TARGET_CROS_BOARD:
       args += ['--cros-board', self.c.TARGET_CROS_BOARD]
 
-    if (self.c.compile_py.build_tool == 'vs' and
-        self.c.compile_py.solution):
-      args.extend(['--solution', self.c.compile_py.solution])
-      for target in targets:
-        args.extend(['--project', target])
+    assert not self.c.compile_py.solution
+    args.append('--')
+    if self.c.compile_py.build_tool == 'xcode':
+      if self.c.compile_py.xcode_project:  # pragma: no cover
+        args.extend(['-project', self.c.compile_py.xcode_project])
     else:
-      assert not self.c.compile_py.solution
-      args.append('--')
-      if self.c.compile_py.build_tool == 'xcode':
-        if self.c.compile_py.xcode_project:  # pragma: no cover
-          args.extend(['-project', self.c.compile_py.xcode_project])
-      else:
-        args.extend(targets)
+      args.extend(targets)
 
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'compile' through 'cros chrome-sdk'

@@ -54,8 +54,6 @@ PATCH=1
   def build_dir(self):
     """Returns the build directory for the project."""
     build_tool = self.m.chromium.c.compile_py.build_tool
-    if build_tool == 'vs':
-      return self.m.path['checkout'].join('build')
     if build_tool == 'ninja':
       return self.m.path['checkout'].join('out')
 

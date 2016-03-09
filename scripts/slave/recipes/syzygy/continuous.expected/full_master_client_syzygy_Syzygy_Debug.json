@@ -77,8 +77,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "target_arch=ia32",
-      "GYP_GENERATORS": "msvs",
-      "GYP_MSVS_VERSION": "2013",
+      "GYP_GENERATORS": "msvs-ninja,ninja",
       "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -93,10 +92,9 @@
       "--src-dir",
       "[SLAVE_BUILD]\\src",
       "--build-tool",
-      "vs",
-      "--solution",
-      "[SLAVE_BUILD]\\src\\syzygy\\syzygy.sln",
-      "--project",
+      "ninja",
+      "--ninja-ensure-up-to-date",
+      "--",
       "build_all"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -108,10 +106,10 @@
       "-u",
       "\nimport sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\nchromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])\n",
       "metrics.csv",
-      "[SLAVE_BUILD]\\src\\build\\Debug"
+      "[SLAVE_BUILD]\\src\\out\\Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "rmwildcard metrics.csv in [SLAVE_BUILD]\\src\\build\\Debug",
+    "name": "rmwildcard metrics.csv in [SLAVE_BUILD]\\src\\out\\Debug",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
@@ -151,7 +149,7 @@
       "--run-python-script",
       "[SLAVE_BUILD]\\src\\syzygy\\build\\app_verifier.py",
       "--on-waterfall",
-      "[SLAVE_BUILD]\\src\\build\\Debug\\bar_unittests.exe",
+      "[SLAVE_BUILD]\\src\\out\\Debug\\bar_unittests.exe",
       "--",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
@@ -179,7 +177,7 @@
       "--run-python-script",
       "[SLAVE_BUILD]\\src\\syzygy\\build\\app_verifier.py",
       "--on-waterfall",
-      "[SLAVE_BUILD]\\src\\build\\Debug\\baz_unittests.exe",
+      "[SLAVE_BUILD]\\src\\out\\Debug\\baz_unittests.exe",
       "--",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
@@ -207,7 +205,7 @@
       "--run-python-script",
       "[SLAVE_BUILD]\\src\\syzygy\\build\\app_verifier.py",
       "--on-waterfall",
-      "[SLAVE_BUILD]\\src\\build\\Debug\\foo_unittests.exe",
+      "[SLAVE_BUILD]\\src\\out\\Debug\\foo_unittests.exe",
       "--",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
@@ -223,7 +221,7 @@
       "-t",
       "-a",
       "public-read",
-      "[SLAVE_BUILD]\\src\\build\\Debug\\metrics.csv",
+      "[SLAVE_BUILD]\\src\\out\\Debug\\metrics.csv",
       "gs://syzygy-archive/builds/metrics/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/debug.csv"
     ],
     "cwd": "[SLAVE_BUILD]",

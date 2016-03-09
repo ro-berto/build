@@ -233,17 +233,6 @@ def ninja(c):
     out_path += '_%s' % (c.TARGET_CROS_BOARD,)
   c.build_dir = Path('[CHECKOUT]', out_path)
 
-@config_ctx(group='builder')
-def msvs(c):
-  if c.HOST_PLATFORM != 'win':  # pragma: no cover
-    raise BadConf('can not use msvs on "%s"' % c.HOST_PLATFORM)
-  # If compile.py is invoking devenv it needs to refer to a solution file.
-  # For chrome this defaults to ['CHECKOUT']/build/all.sln.
-  c.compile_py.solution = Path('[CHECKOUT]', 'build', 'all.sln')
-  c.gyp_env.GYP_GENERATORS.add('msvs')
-  c.compile_py.build_tool = 'vs'
-  c.build_dir = Path('[CHECKOUT]', 'build')
-
 @config_ctx()
 def msvs2010(c):
   c.gyp_env.GYP_MSVS_VERSION = '2010'
