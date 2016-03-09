@@ -107,35 +107,10 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[depot_tools]\\gclient.py",
-      "runhooks"
+      "[SLAVE_BUILD]\\src\\third_party\\binutils\\download.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1",
-      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
-    },
-    "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
-      "gen",
-      "-m",
-      "tryserver.chromium.win",
-      "-b",
-      "win8_chromium_clang_upload",
-      "--config-file",
-      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
-      "--goma-dir",
-      "[BUILD]\\goma",
-      "//out/Release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "generate_build_files"
+    "name": "download binutils"
   },
   {
     "cmd": [

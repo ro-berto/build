@@ -60,15 +60,13 @@ BUILDERS = freeze({
 
 
 def RunSteps(api):
-  mastername = api.m.properties['mastername']
-  buildername, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
+  _, bot_config = api.chromium.configure_bot(BUILDERS)
 
   api.bot_update.ensure_checkout(
       force=True, patch_root=bot_config.get('root_override'))
 
-  api.chromium.runhooks()
-
-  api.chromium.run_mb(mastername, buildername)
+  api.python('download binutils',
+      api.path['checkout'].join('third_party', 'binutils', 'download.py'))
 
   api.python(
       'package clang',
