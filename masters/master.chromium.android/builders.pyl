@@ -245,7 +245,7 @@
         "version": "precise",
         "bits": "64",
       },
-      "slaves": ["build29-a1"],
+      "slaves": ["build69-b1"],
     },
     "gn_builders": {
       "slave_data": {
