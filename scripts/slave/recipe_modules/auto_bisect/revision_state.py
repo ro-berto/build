@@ -70,7 +70,7 @@ class RevisionState(object):
     self.deps_revision = None
     self.depot_name = depot_name or self.bisector.base_depot
     self.depot = depot_config.DEPOT_DEPS_NAME[self.depot_name]
-    self.commit_hash = commit_hash
+    self.commit_hash = str(commit_hash)
     self._rev_str = None
     self.base_revision = base_revision
     if self.base_revision:
