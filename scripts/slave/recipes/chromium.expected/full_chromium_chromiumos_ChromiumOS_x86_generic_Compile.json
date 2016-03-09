@@ -144,7 +144,7 @@
       "Release",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"build\": \"RECIPE_PACKAGE[build]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"ChromiumOS x86-generic Compile\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"slavename\": \"TestSlavename\", \"target_platform\": \"chromeos\"}"
     ],

@@ -800,10 +800,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.chromium.c.runtest_py.src_side:
       args.append('--use-src-side-runtest-py')
 
-    paths = {
-      'build': self._module.PACKAGE_DIRECTORY,
-      'checkout': self.m.path['checkout'],
-    }
+    paths = {}
+    for path in ('build', 'checkout'):
+      paths[path] = self.m.path[path]
     args.extend(['--paths', self.m.json.input(paths)])
 
     properties = {}

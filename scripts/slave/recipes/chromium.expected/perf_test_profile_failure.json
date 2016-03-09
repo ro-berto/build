@@ -135,7 +135,7 @@
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"build\": \"RECIPE_PACKAGE[build]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"Linux Perf (1)\", \"buildnumber\": 0, \"mastername\": \"chromium.perf\", \"perf-id\": \"linux-release\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],

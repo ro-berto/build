@@ -123,7 +123,7 @@
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"build\": \"RECIPE_PACKAGE[build]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\"}",
       "--properties",
       "{\"buildername\": \"Google Chrome Mac\", \"buildnumber\": 571, \"mastername\": \"chromium.chrome\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],

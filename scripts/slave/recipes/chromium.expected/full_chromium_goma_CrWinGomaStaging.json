@@ -132,7 +132,7 @@
       "--build-config-fs",
       "Release_x64",
       "--paths",
-      "{\"build\": \"RECIPE_PACKAGE[build]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
+      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\"}",
       "--properties",
       "{\"buildername\": \"CrWinGomaStaging\", \"buildnumber\": 571, \"mastername\": \"chromium.goma\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
