@@ -79,14 +79,16 @@ def main():
   if options.staging:
     swarming_server = 'https://chromium-swarm-dev.appspot.com'
     isolate_server = 'https://isolateserver-dev.appspot.com'
+    pool = 'default'
   else:
     swarming_server = 'https://chromium-swarm.appspot.com'
     isolate_server = 'https://isolateserver.appspot.com'
+    pool = 'Chrome'
 
   dimensions_to_test = (
-    {'os': 'Linux'},
-    {'os': 'Mac'},
-    {'os': 'Windows'},
+    {'os': 'Linux', 'pool': pool},
+    {'os': 'Mac', 'pool': pool},
+    {'os': 'Windows', 'pool': pool},
   )
 
   # Even under 100% load, a very high priority task should complete within 10
