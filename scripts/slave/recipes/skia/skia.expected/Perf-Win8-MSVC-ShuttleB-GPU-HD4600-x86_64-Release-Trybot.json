@@ -42,14 +42,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[depot_tools]\\gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "config",
       "--spec",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'skia', 'url': 'https://skia.googlesource.com/skia.git'}]"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
+      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient setup"
   },
@@ -68,7 +68,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[depot_tools]\\gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "sync",
       "--nohooks",
       "--force",
@@ -81,7 +81,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
+      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient sync",
     "~followup_annotations": [
@@ -306,14 +306,14 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE[depot_tools]\\bootstrap\\win\\win_tools.bat"
+      "RECIPE_PACKAGE_REPO[depot_tools]\\bootstrap\\win\\win_tools.bat"
     ],
-    "cwd": "RECIPE_PACKAGE[depot_tools]",
+    "cwd": "RECIPE_PACKAGE_REPO[depot_tools]",
     "name": "ensure git tooling on windows"
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE[depot_tools]\\git.bat",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
       "show",
       "HEAD",
       "--format=%at",

@@ -36,7 +36,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
+      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -126,13 +126,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[depot_tools]\\gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' proprietary_codecs=1 target_arch=ia32 use_goma=1",
-      "PATH": "%(PATH)s;RECIPE_PACKAGE[depot_tools]"
+      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },

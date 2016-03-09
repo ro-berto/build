@@ -32,7 +32,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -89,7 +89,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[depot_tools]/presubmit_support.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/presubmit_support.py",
       "--root",
       "[SLAVE_BUILD]/build_internal",
       "--commit",
@@ -117,7 +117,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": ""
     },
     "name": "presubmit",

@@ -32,7 +32,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -106,13 +106,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' linux_dump_symbols=0 target_arch=x64 test_isolation_mode=noop use_goma=1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (with patch)"
   },

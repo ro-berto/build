@@ -27,7 +27,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -85,7 +85,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -96,7 +96,7 @@
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
       "LINK": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE[depot_tools]",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
       "RANLIB": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
     },
     "name": "gclient runhooks"
