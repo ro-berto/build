@@ -248,3 +248,73 @@ def SendGomaStats(goma_stats_file, goma_crash_report, build_data_dir):
       os.remove(goma_stats_file)
     except OSError:  # file does not exist, for ex.
       pass
+
+
+def SendGomaTsMon(json_file, exit_status):
+  """Send latest Goma status to ts_mon.
+
+  Args:
+    json_file: json filename string that has goma_ctl.py jsonstatus.
+    exit_status: integer exit status of the build.
+  """
+  json_statuses = {}
+  try:
+    with open(json_file) as f:
+      json_statuses = json.load(f)
+
+    if not json_statuses:
+      print('no json status is recorded in %s' % json_file)
+      return
+
+    if len(json_statuses.get('notice', [])) != 1:
+      print('unknown json statuses style: %s' % json_statuses)
+      return
+
+    json_status = json_statuses['notice'][0]
+    if json_status['version'] != 1:
+      print('unknown version: %s' % json_status)
+      return
+
+    infra_status = json_status.get('infra_status')
+
+    result = 'success'
+    if exit_status != 0:
+      result = 'failure'
+      if (not infra_status or
+          infra_status['ping_status_code'] != 200 or
+          infra_status.get('num_user_error', 0) > 0):
+        result = 'exception'
+
+    num_failure = 0
+    if infra_status:
+      num_failure = infra_status['num_exec_compiler_proxy_failure']
+
+    clobber = 0
+    if os.environ.get('BUILDBOT_CLOBBER'):
+      clobber = 1
+
+    counter = {
+        'name': 'goma/failure',
+        'value': num_failure,
+        'builder': os.environ.get('BUILDBOT_BUILDERNAME', 'unknown'),
+        'master': os.environ.get('BUILDBOT_MASTERNAME', 'unknown'),
+        'slave': os.environ.get('BUILDBOT_SLAVENAME', 'unknown'),
+        'clobber': clobber,
+        'os': os.name,
+        'result': result}
+    cmd = [PLATFORM_RUN_CMD.get(os.name),
+           'infra.tools.send_ts_mon_values', '--verbose',
+           '--ts-mon-target-type', 'task',
+           '--ts-mon-task-service-name', 'goma-client',
+           '--counter', json.dumps(counter)]
+    cmd_filter = chromium_utils.FilterCapture()
+    retcode = chromium_utils.RunCommand(
+      cmd, filter_obj=cmd_filter,
+      max_time=30)
+    if retcode:
+      print('Execution of send_ts_mon_values failed with code %s'
+            % retcode)
+      print '\n'.join(cmd_filter.text)
+
+  except Exception as ex:
+    print('error while sending ts mon json_file=%s: %s' % (json_file, ex))

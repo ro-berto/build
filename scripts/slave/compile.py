@@ -235,7 +235,7 @@ def goma_setup(options, env):
   return False
 
 
-def goma_teardown(options, env):
+def goma_teardown(options, env, exit_status):
   """Tears down goma if necessary. """
   if (options.compiler in ('goma', 'goma-clang') and
       options.goma_dir):
@@ -249,6 +249,7 @@ def goma_teardown(options, env):
     if options.goma_jsonstatus:
       chromium_utils.RunCommand(
           goma_ctl_cmd + ['jsonstatus', options.goma_jsonstatus], env=env)
+      goma_utils.SendGomaTsMon(options.goma_jsonstatus, exit_status)
     # Always stop the proxy for now to allow in-place update.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
     goma_utils.UploadGomaCompilerProxyInfo()
@@ -600,7 +601,7 @@ def main_xcode(options, args):
   result = chromium_utils.RunCommand(command, env=env,
                                      filter_obj=xcodebuild_filter)
 
-  goma_teardown(options, env)
+  goma_teardown(options, env, result)
 
   return result
 
@@ -703,7 +704,7 @@ def main_make(options, args):
   if result and not options.clobber:
     clobber()
 
-  goma_teardown(options, env)
+  goma_teardown(options, env, result)
 
   return result
 
@@ -773,7 +774,7 @@ def main_make_android(options, args):
 
   result = chromium_utils.RunCommand(command, env=env)
 
-  goma_teardown(options, env)
+  goma_teardown(options, env, result)
 
   return result
 
@@ -969,7 +970,7 @@ def main_ninja(options, args):
         return 1
     return exit_status
   finally:
-    goma_teardown(options, env)
+    goma_teardown(options, env, exit_status)
     goma_utils.UploadNinjaLog(
         options.target_output_dir, options.compiler, command, exit_status)
 
