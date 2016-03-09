@@ -48,11 +48,11 @@ DEFAULT_SEARCH_RANGE_PERCENTAGE = 0.25
 REGRESSION_CHECK_TIMEOUT = 2 * 60 * 60
 # If we reach this number of samples on the reference range and have not
 # achieved statistical significance, bail.
-MAX_REQUIRED_SAMPLES = 50
+MAX_REQUIRED_SAMPLES = 25
 
 # Significance level to use for determining difference between revisions via
 # hypothesis testing.
-SIGNIFICANCE_LEVEL = 0.01
+SIGNIFICANCE_LEVEL = 0.005
 
 _FAILED_INITIAL_CONFIDENCE_ABORT_REASON = (
     'The metric values for the initial "good" and "bad" revisions '
