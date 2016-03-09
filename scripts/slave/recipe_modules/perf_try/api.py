@@ -183,13 +183,6 @@ class PerfTryJobApi(recipe_api.RecipeApi):
       self.m.chromium.cleanup_temp()
 
     if 'With Patch' in name:
-      # We've had some cases where a stale build directory was used on perf
-      # try job leading to unwanted cache and temp data. The best way to
-      # ensure the old build directory is removed before doing any
-      # compilation.
-      self.m.file.rmtree(
-          'build directory',
-          self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
       self.m.chromium_tests.transient_check(
           update_step,
           lambda transform_name: self.m.chromium_tests.run_mb_and_compile(
@@ -207,6 +200,9 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     if (not kwargs.get('allow_flakes', True) and
         cfg.get('test_type', 'perf') != 'return_code'):
       overall_success = all(v == 0 for v in retcodes)
+    if not overall_success:  # pragma: no cover
+      raise self.m.step.StepFailure(
+          'Patched version failed to run performance test.')
     return {
         'results': all_values,
         'ret_code': overall_success,
