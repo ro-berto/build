@@ -651,7 +651,6 @@ class Bisector(object):
   def wait_for(self, revision):
     """Waits for any of the revisions in the list to finish its job(s)."""
     with self.api.m.step.nest('Waiting for ' + revision.revision_string()):
-      start_time = time.time()
       while True:
         revision.update_status()
         if revision.in_progress:
@@ -663,10 +662,6 @@ class Bisector(object):
               time.sleep(300)
               sys.exit(0)
               """)
-          elapsed_time = time.time() - start_time
-          if elapsed_time > 3 * 60 * 60:  # pragma: no cover
-            # Timed out waiting for build
-            revision.status = revision.FAILED
         else:
           break
 
