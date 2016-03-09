@@ -70,8 +70,8 @@ def RunSteps(api):
 
   api.python(
       'package clang',
-      api.path['checkout'].join('tools', 'clang', 'scripts',
-                                'package.py', '--upload'))
+      api.path['checkout'].join('tools', 'clang', 'scripts', 'package.py'),
+      args=['--upload'])
 
 
 def GenTests(api):
