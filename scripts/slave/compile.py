@@ -239,14 +239,16 @@ def goma_teardown(options, env):
   """Tears down goma if necessary. """
   if (options.compiler in ('goma', 'goma-clang') and
       options.goma_dir):
+    # If goma compiler_proxy crashes during the build, there could be crash
+    # dump.
+    if options.build_data_dir:
+      env['GOMACTL_CRASH_REPORT_ID_FILE'] = os.path.join(options.build_data_dir,
+                                                         'crash_report_id_file')
     goma_ctl_cmd = [sys.executable,
                     os.path.join(options.goma_dir, 'goma_ctl.py')]
     if options.goma_jsonstatus:
       chromium_utils.RunCommand(
           goma_ctl_cmd + ['jsonstatus', options.goma_jsonstatus], env=env)
-    if options.build_data_dir:
-      env['GOMACTL_CRASH_REPORT_ID_FILE'] = os.path.join(options.build_data_dir,
-                                                         'crash_report_id_file')
     # Always stop the proxy for now to allow in-place update.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
     goma_utils.UploadGomaCompilerProxyInfo()
