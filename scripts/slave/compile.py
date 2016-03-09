@@ -135,6 +135,26 @@ def goma_setup(options, env):
     # as error.
     env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
 
+  # HACK(yyanagisawa): reduce GOMA_BURST_MAX_PROCS crbug.com/592306
+  # Recently, I sometimes see buildbot slave time out, one possibility I come
+  # up with is burst mode use up resource.
+  # Let me temporary set small values to GOMA_BURST_MAX_PROCS to confirm
+  # the possibility is true or false.
+  max_subprocs = '3'
+  max_heavy_subprocs = '1'
+  number_of_processors = 0
+  try:
+    number_of_processors = multiprocessing.cpu_count()
+  except NotImplementedError:
+    print 'cpu_count() is not implemented, using default value.'
+    number_of_processors = 1
+  if number_of_processors > 3:
+    max_subprocs = str(number_of_processors - 1)
+    max_heavy_subprocs = str(number_of_processors / 2)
+  env['GOMA_BURST_MAX_SUBPROCS'] = max_subprocs
+  env['GOMA_BURST_MAX_SUBPROCS_LOW'] = max_subprocs
+  env['GOMA_BURST_MAX_SUBPROCS_HEAVY'] = max_heavy_subprocs
+
   # Allow to wait initial ping 30 seconds.
   # Since retrying should cost more than 30 seconds, it should be better
   # to wait initial ping longer than default (10 seconds).
