@@ -19,6 +19,7 @@ PROPERTIES = {
   'memory_tool': Property(default=None, kind=str),
   'v8': Property(default=True, kind=bool),
   "win64": Property(default=False, kind=bool),
+  "clang": Property(default=False, kind=bool),
 }
 
 
@@ -27,7 +28,7 @@ def _MakeGypDefines(gyp_defines):
                    gyp_defines.iteritems()])
 
 
-def _CheckoutSteps(api, memory_tool, xfa, v8, win64):
+def _CheckoutSteps(api, memory_tool, xfa, v8, win64, clang):
   # Checkout pdfium and its dependencies (specified in DEPS) using gclient
   api.gclient.set_config('pdfium')
   api.bot_update.ensure_checkout()
@@ -39,6 +40,9 @@ def _CheckoutSteps(api, memory_tool, xfa, v8, win64):
 
   if memory_tool == 'asan':
     gyp_defines['asan'] = 1
+
+  if clang:
+    gyp_defines['clang'] = 1
 
   if win64:
     gyp_defines['target_arch'] = 'x64'
@@ -122,8 +126,8 @@ def _RunTests(api, memory_tool, v8, out_dir):
              cwd=api.path['checkout'], env=env)
 
 
-def RunSteps(api, memory_tool, xfa, v8, win64):
-  _CheckoutSteps(api, memory_tool, xfa, v8, win64)
+def RunSteps(api, memory_tool, xfa, v8, win64, clang):
+  _CheckoutSteps(api, memory_tool, xfa, v8, win64, clang)
 
   if win64:
     out_dir = 'Debug_x64'
@@ -199,6 +203,27 @@ def GenTests(api):
                      win64=True,
                      mastername="client.pdfium",
                      buildername='windows_xfa_64',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('win_xfa_clang') +
+      api.platform('win', 64) +
+      api.properties(xfa=True,
+                     clang=True,
+                     mastername="client.pdfium",
+                     buildername='windows_xfa_clang',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('win_xfa_clang_x64') +
+      api.platform('win', 64) +
+      api.properties(xfa=True,
+                     clang=True,
+                     win64=True,
+                     mastername="client.pdfium",
+                     buildername='windows_xfa_clang_x64',
                      slavename="test_slave")
   )
 

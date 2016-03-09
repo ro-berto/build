@@ -108,6 +108,27 @@
         "win64": True,
       },
     },
+    "windows_xfa_clang": {
+      "recipe": "pdfium",
+      "scheduler": "pdfium_commits",
+      "slave_pools": ["windows"],
+      "category": "1xfa",
+      "properties": {
+        "xfa": True,
+        "clang": True,
+      },
+    },
+    "windows_xfa_clang_x64": {
+      "recipe": "pdfium",
+      "scheduler": "pdfium_commits",
+      "slave_pools": ["windows"],
+      "category": "1xfa",
+      "properties": {
+        "xfa": True,
+        "clang": True,
+        "win64": True,
+      },
+    },
     "drm_win_xfa": {
       "recipe": "pdfium",
       "scheduler": "pdfium_commits",
