@@ -800,9 +800,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.chromium.c.runtest_py.src_side:
       args.append('--use-src-side-runtest-py')
 
-    paths = {}
-    for path in ('build', 'checkout'):
-      paths[path] = self.m.path[path]
+    paths = {
+      # TODO(phajdan.jr): Remove build path, http://crbug.com/593420 .
+      'build': self.m.path['build'],
+      'checkout': self.m.path['checkout'],
+      'runit.py': self.package_repo_resource('scripts', 'tools', 'runit.py'),
+      'runtest.py': self.package_repo_resource(
+          'scripts', 'slave', 'runtest.py'),
+    }
     args.extend(['--paths', self.m.json.input(paths)])
 
     properties = {}
