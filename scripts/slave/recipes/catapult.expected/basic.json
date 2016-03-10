@@ -103,37 +103,202 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/catapult/catapult_build/build_steps.py",
-      "--api-path-checkout",
-      "[SLAVE_BUILD]/catapult",
-      "--app-engine-sdk-pythonpath",
-      "%(PYTHONPATH)s:[SLAVE_BUILD]/google_appengine",
-      "--platform",
-      "linux",
-      "--output-json",
-      "/path/to/tmp/json"
+      "[SLAVE_BUILD]/catapult/catapult_build/bin/run_py_tests"
     ],
-    "cwd": "[SLAVE_BUILD]/catapult",
-    "name": "gen step(build_steps.py)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"cmd\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"run_py_tests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"--no-hooks\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"name\": \"Dashboard Tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Build Python Tests"
   },
   {
     "cmd": [
-      "run_py_tests",
-      "--no-hooks"
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/catapult_base/bin/run_tests"
     ],
-    "name": "Dashboard Tests"
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Catapult Base Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/dependency_manager/bin/run_tests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Dependency Manager Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/dashboard/bin/run_dev_server_tests",
+      "--no-install-hooks",
+      "--no-use-local-chrome",
+      "--channel=stable"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Dashboard Dev Server Tests Stable"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/dashboard/bin/run_dev_server_tests",
+      "--no-install-hooks",
+      "--no-use-local-chrome",
+      "--channel=canary"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Dashboard Dev Server Tests Canary"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/dashboard/bin/run_py_tests",
+      "--no-install-hooks"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PYTHONPATH": "%(PYTHONPATH)s:[SLAVE_BUILD]/google_appengine"
+    },
+    "name": "Dashboard Python Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/tracing/bin/run_py_tests",
+      "--no-install-hooks"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Tracing Python Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/tracing/bin/run_dev_server_tests",
+      "--no-install-hooks",
+      "--no-use-local-chrome",
+      "--channel=stable"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Tracing Dev Server Tests Stable"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/third_party/py_vulcanize/bin/run_py_tests",
+      "--no-install-hooks"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Py-vulcanize Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/perf_insights/bin/run_dev_server_tests",
+      "--no-install-hooks",
+      "--no-use-local-chrome",
+      "--channel=stable"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Perf Insights Dev Server Tests Stable"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/perf_insights/bin/run_dev_server_tests",
+      "--no-install-hooks",
+      "--no-use-local-chrome",
+      "--channel=canary"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Perf Insights Dev Server Tests Canary"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/systrace/bin/run_tests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Systrace Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/telemetry/bin/run_tests",
+      "--browser=reference",
+      "--start-xvfb"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
+    },
+    "name": "Telemetry Tests with Stable Browser"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/third_party/vinn/run_test"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Vinn Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/tracing/bin/run_vinn_tests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Tracing D8 Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/perf_insights/bin/run_vinn_tests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Perf Vinn Insights Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/perf_insights/bin/run_py_tests",
+      "--no-install-hooks"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Perf Insights Python Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/tracing/bin/run_dev_server_tests",
+      "--no-install-hooks",
+      "--no-use-local-chrome",
+      "--channel=canary"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Tracing Dev Server Tests Canary"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/catapult/devil/bin/run_py_tests"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Devil Python Tests"
   },
   {
     "name": "$result",
