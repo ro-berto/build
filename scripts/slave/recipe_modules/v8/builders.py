@@ -1948,6 +1948,9 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+        },
         'sanitizer_coverage_folder': 'linux64',
         'tests': [V8Testing_3],
         'testing': {'platform': 'linux'},
