@@ -42,8 +42,8 @@ PROPERTIES = {
         kind=str, help='The last known good revision.'),
     'bad_revision': Property(
         kind=str, help='The first known good revision.'),
-    'requested_tests': Property(
-        kind=Dict(value_type=list), param_name='tests',
+    'tests': Property(
+        kind=Dict(value_type=list),
         help='The failed tests, the test name should be full name, e.g.: {'
              '  "browser_tests": ['
              '    "suite.test1", "suite.test2"'
@@ -164,8 +164,8 @@ def _compile_and_test_at_revision(api, target_mastername, target_buildername,
 
 
 def RunSteps(api, target_mastername, target_testername,
-             good_revision, bad_revision, requested_tests, use_analyze):
-  assert requested_tests, 'No failed tests were specified.'
+             good_revision, bad_revision, tests, use_analyze):
+  assert tests, 'No failed tests were specified.'
 
   # Figure out which builder configuration we should match for compile config.
   # Sometimes, the builder itself runs the tests and there is no tester. In
@@ -216,7 +216,7 @@ def RunSteps(api, target_mastername, target_testername,
     for current_revision in revisions_to_check:
       test_results[current_revision] = _compile_and_test_at_revision(
           api, target_mastername, target_buildername, target_testername,
-          current_revision, requested_tests, use_analyze)
+          current_revision, tests, use_analyze)
       # TODO(http://crbug.com/566975): check whether culprits for all failed
       # tests are found and stop running tests at later revisions if so.
   finally:

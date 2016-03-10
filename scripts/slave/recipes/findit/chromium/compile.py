@@ -31,8 +31,8 @@ PROPERTIES = {
         kind=str, help='The last known good chromium revision.'),
     'bad_revision': Property(
         kind=str, help='The first known bad chromium revision.'),
-    'requested_compile_targets': Property(
-        kind=List(basestring), default=None, param_name='compile_targets',
+    'compile_targets': Property(
+        kind=List(basestring), default=None,
         help='The failed compile targets, eg: browser_tests'),
     'use_analyze': Property(
         kind=Single(bool, empty_val=False, required=False), default=True,
@@ -100,7 +100,7 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
 
 def RunSteps(api, target_mastername, target_buildername,
              good_revision, bad_revision,
-             requested_compile_targets, use_analyze):
+             compile_targets, use_analyze):
   bot_config = api.chromium_tests.create_bot_config_object(
       target_mastername, target_buildername)
   api.chromium_tests.configure_build(
@@ -126,7 +126,7 @@ def RunSteps(api, target_mastername, target_buildername,
       last_revision = None
       compile_result = _run_compile_at_revision(
           api, target_mastername, target_buildername,
-          current_revision, requested_compile_targets, use_analyze)
+          current_revision, compile_targets, use_analyze)
 
       compile_results[current_revision] = compile_result
       last_revision = current_revision
@@ -140,7 +140,7 @@ def RunSteps(api, target_mastername, target_buildername,
     step_result = api.python.inline(
         'report', 'import sys; sys.exit(0)', add_python_log=False)
 
-    if (not requested_compile_targets and
+    if (not compile_targets and
         compile_results and
         last_revision and
         compile_results.get(last_revision) == CompileResult.FAILED):
