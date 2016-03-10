@@ -275,7 +275,6 @@ def main(argv):
       'master.client.wasm.llvm': 'WasmLlvm',
       'master.client.webrtc': 'WebRTC',
       'master.client.webrtc.fyi': 'WebRTCFYI',
-      'master.experimental': 'Experimental',
       'master.tryserver.chromium.android': 'TryserverChromiumAndroid',
       'master.tryserver.chromium.angle': 'TryServerANGLE',
       'master.tryserver.chromium.linux': 'TryServerChromiumLinux',
