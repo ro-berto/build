@@ -584,7 +584,8 @@
           "pdfium_all"
         ],
         "excluded_builders" : [
-          "drm_win_xfa"
+          "drm_win_xfa",
+          "windows_xfa_clang"
         ],
         "builders": {
           "*": {}
