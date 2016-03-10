@@ -292,6 +292,7 @@ class SkiaApi(recipe_api.RecipeApi):
 
     # Run 'gclient sync'.
     gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
+    gclient_cfg.deps_os['skia'] = 'all'
     update_step = self.m.gclient.checkout(gclient_config=gclient_cfg)
 
     self.got_revision = update_step.presentation.properties['got_revision']
