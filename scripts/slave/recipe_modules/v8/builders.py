@@ -1947,8 +1947,9 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'sanitizer_coverage_folder': 'linux64',
-        'tests': [V8Testing],
+        'tests': [V8Testing_3],
         'testing': {'platform': 'linux'},
       },
       'v8_win_rel': {

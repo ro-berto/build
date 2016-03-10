@@ -99,6 +99,9 @@ class NullCoverageContext(object):
   def get_test_runner_args(self):
     return []
 
+  def get_swarming_collect_args(self):
+    return []
+
   def setup(self):
     pass
 
@@ -112,7 +115,10 @@ NULL_COVERAGE = NullCoverageContext()
 
 
 class SanitizerCoverageContext(object):
-  """Context during testing to collect coverage data."""
+  """Context during testing to collect coverage data.
+
+  Only testing on swarming is supported.
+  """
   def __init__(self, api, v8):
     self.api = api
     self.v8 = v8
@@ -120,9 +126,15 @@ class SanitizerCoverageContext(object):
 
   def get_test_runner_args(self):
     """Returns the test runner arguments for collecting coverage data."""
-    # TODO(machenbach): Support swarming. On swarming, the data must end up
-    # in the isolated output folder.
-    return ['--sancov-dir', self.coverage_dir]
+    return ['--sancov-dir', '${ISOLATED_OUTDIR}']
+
+  def get_swarming_collect_args(self):
+    """Returns the swarming collect step's arguments for merging."""
+    return [
+      '--coverage-dir', self.coverage_dir,
+      '--sancov-merger', self.api.path['checkout'].join(
+          'tools', 'sanitizers', 'sancov_merger.py'),
+    ]
 
   def setup(self):
     """Build data file with initial zero coverage data.
@@ -155,6 +167,16 @@ class SanitizerCoverageContext(object):
           '--json-output', self.coverage_dir.join('data.json'),
           '--coverage-dir', self.coverage_dir,
         ],
+    )
+
+    self.api.python.inline(
+        'Purge sancov files',
+        """
+        import glob
+        import os
+        for f in glob.glob('%s'):
+          os.remove(f)
+        """ % self.coverage_dir.join('*.sancov'),
     )
 
   def maybe_upload(self):
@@ -254,13 +276,13 @@ class V8Test(BaseTest):
     self.api.python(
       test['name'],
       self.api.path['checkout'].join('tools', 'run-tests.py'),
-      full_args + coverage_context.get_test_runner_args(),
+      full_args,
       cwd=self.api.path['checkout'],
       env=env,
       step_test_data=step_test_data,
       **kwargs
     )
-    return self.post_run(test, coverage_context)
+    return self.post_run(test)
 
   def post_run(self, test, coverage_context=NULL_COVERAGE):
     # The active step was either a local test run or the swarming collect step.
@@ -345,7 +367,7 @@ class V8SwarmingTest(V8Test):
     """Returns true if the test uses swarming."""
     return True
 
-  def _v8_collect_step(self, task, **kwargs):
+  def _v8_collect_step(self, task, coverage_context=NULL_COVERAGE, **kwargs):
     """Produces a step that collects and processes a result of a v8 task."""
     # Placeholder for the merged json output.
     json_output = self.api.json.output(add_json_log=False)
@@ -355,7 +377,7 @@ class V8SwarmingTest(V8Test):
       '--swarming-client-dir', self.api.swarming_client.path,
       '--temp-root-dir', self.api.path['tmp_base'],
       '--merged-test-output', json_output,
-    ]
+    ] + coverage_context.get_swarming_collect_args()
 
     # Arguments for actual 'collect' command.
     args.append('--')
@@ -369,7 +391,7 @@ class V8SwarmingTest(V8Test):
         step_test_data=kwargs.pop('step_test_data', None),
         **kwargs)
 
-  def pre_run(self, test=None, **kwargs):
+  def pre_run(self, test=None, coverage_context=NULL_COVERAGE, **kwargs):
     # Set up arguments for test runner.
     self.test = test or TEST_CONFIGS[self.name]
     extra_args, _ = self.v8._setup_test_runner(
@@ -381,7 +403,7 @@ class V8SwarmingTest(V8Test):
       '--swarming',
       '--json-test-results',
       '${ISOLATED_OUTDIR}/output.json',
-    ]
+    ] + coverage_context.get_test_runner_args()
 
     # Initialize number of shards, either per test or per builder.
     shards = 1
@@ -399,7 +421,7 @@ class V8SwarmingTest(V8Test):
         extra_args=extra_args,
     )
     self.task.collect_step = lambda task, **kw: (
-        self._v8_collect_step(task, **kw))
+        self._v8_collect_step(task, coverage_context, **kw))
 
     # Add custom dimensions.
     if self.v8.bot_config.get('swarming_dimensions'):
@@ -412,7 +434,7 @@ class V8SwarmingTest(V8Test):
 
     self.api.swarming.trigger_task(self.task)
 
-  def run(self, **kwargs):
+  def run(self, coverage_context=NULL_COVERAGE, **kwargs):
     # TODO(machenbach): Soften this when softening 'assert isolated_hash'
     # above.
     assert self.task
@@ -426,7 +448,7 @@ class V8SwarmingTest(V8Test):
     finally:
       # Note: Exceptions from post_run might hide a pending exception from the
       # try block.
-      return self.post_run(self.test)
+      return self.post_run(self.test, coverage_context)
 
   def rerun(self, failure_dict, **kwargs):
     self.pre_run(test=self._setup_rerun_config(failure_dict), **kwargs)

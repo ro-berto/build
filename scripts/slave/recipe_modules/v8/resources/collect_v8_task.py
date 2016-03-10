@@ -34,8 +34,11 @@ def emit_warning(title, log=None):
     slave_utils.WriteLogLines(title, log.split('\n'))
 
 
-def merge_shard_results(output_dir):
+def merge_shard_results(
+    output_dir, sancov_merger=None, coverage_dir=None):
   """Reads JSON test output from all shards and combines them into one.
+
+  Also merges sancov coverage data if coverage_dir is spefied.
 
   Returns dict with merged test output on success or None on failure. Emits
   annotations.
@@ -88,6 +91,16 @@ def merge_shard_results(output_dir):
     # TODO(machenbach): Implement using a tag in the test results that makes
     # the step know they're incomplete.
 
+  # Merge coverage data if specified.
+  if coverage_dir:
+    for index, _ in enumerate(summary['shards']):
+      exit_code = subprocess.call([
+        sys.executable, '-u', sancov_merger,
+        '--coverage-dir', coverage_dir,
+        '--swarming-output-dir', os.path.join(output_dir, str(index))])
+      if exit_code:
+        emit_warning('error when merging coverage data of shard %d' % index)
+
   return [{
     'arch': archs[0],
     'mode': modes[0],
@@ -117,11 +130,13 @@ def main(args):
   else:
     shim_args, swarming_args = args, []
 
-  # Parse shim own's options.
+  # Parse shim's own options.
   parser = optparse.OptionParser()
   parser.add_option('--swarming-client-dir')
   parser.add_option('--temp-root-dir', default=tempfile.gettempdir())
   parser.add_option('--merged-test-output')
+  parser.add_option('--coverage-dir')
+  parser.add_option('--sancov-merger')
   options, extra_args = parser.parse_args(shim_args)
 
   # Validate options.
@@ -129,6 +144,8 @@ def main(args):
     parser.error('Unexpected command line arguments')
   if not options.swarming_client_dir:
     parser.error('--swarming-client-dir is required')
+  if options.coverage_dir and not options.sancov_merger:
+    parser.error('--sancov-merger is required for merging coverage data')
 
   # Prepare a directory to store JSON files fetched from isolate.
   task_output_dir = tempfile.mkdtemp(
@@ -155,8 +172,12 @@ def main(args):
     # exceptions and just log them.
     try:
       with open(options.merged_test_output, 'wb') as f:
-        json.dump(merge_shard_results(task_output_dir),
-                  f, separators=(',', ':'))
+        json.dump(
+            merge_shard_results(
+                task_output_dir,
+                options.sancov_merger,
+                options.coverage_dir),
+            f, separators=(',', ':'))
     except Exception:
       emit_warning(
           'failed to process v8 output JSON', traceback.format_exc())
