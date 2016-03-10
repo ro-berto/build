@@ -103,7 +103,7 @@ def swarm_dimensions(builder_cfg):
   }
   dimensions['os'] = builder_cfg['os']
   if 'Win' in builder_cfg['os']:
-    dimensions['os'] = 'Windows'
+    dimensions['os'] = 'Windows'  # pragma: no cover
   if builder_cfg['role'] in ('Test', 'Perf'):
     if builder_cfg['cpu_or_gpu'] == 'CPU':
       dimensions['gpu'] = 'none'
@@ -216,7 +216,8 @@ class SkiaApi(recipe_api.RecipeApi):
       # which doesn't exist, the task just hangs until it expires (hours). This
       # is tying up our buildslaves. Just skip the rest of the steps in this
       # case.
-      if 'Mac' in self.builder_cfg.get('os', ''):
+      if ('Mac' in self.builder_cfg.get('os', '') or
+          'Win' in self.builder_cfg.get('os', '')):
         return
 
       self.m.skia_swarming.setup(

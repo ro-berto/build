@@ -137,7 +137,9 @@ def GenTests(api):
         if 'Win' in builder and 'Swarming' not in builder:
           test += api.platform('win', 64)
 
-        if 'Swarming' in builder and not 'Mac' in builder:
+        if ('Swarming' in builder and
+            not 'Mac' in builder and
+            not 'Win' in builder):
           if 'Test' in builder:
             test += api.step_data(
                 'upload new .isolated file for test_skia',
