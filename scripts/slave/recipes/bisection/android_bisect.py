@@ -25,52 +25,52 @@ BUILDERS = freeze({
     'tryserver.chromium.perf': {
         'builders': {
             'android_one_perf_bisect': {
-                'recipe_config': 'perf',
+                'recipe_config': 'main_builder_rel_mb',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
             },
             'android_nexus5_perf_bisect': {
-                'recipe_config': 'perf',
+                'recipe_config': 'main_builder_rel_mb',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
             },
             'android_nexus5X_perf_bisect': {
-                'recipe_config': 'perf',
+                'recipe_config': 'main_builder_rel_mb',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
             },
             'android_nexus6_perf_bisect': {
-                'recipe_config': 'perf',
+                'recipe_config': 'main_builder_rel_mb',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
             },
             'android_nexus7_perf_bisect': {
-                'recipe_config': 'perf',
+                'recipe_config': 'main_builder_rel_mb',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
             },
             'android_nexus9_perf_bisect': {
-                'recipe_config': 'arm64_builder',
+                'recipe_config': 'arm64_builder_rel_mb',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
             },
             'android_s5_perf_bisect': {
-                'recipe_config': 'perf',
+                'recipe_config': 'main_builder_rel_mb',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
             },
             'android_s5_perf_cq': {
-                'recipe_config': 'perf',
+                'recipe_config': 'main_builder_rel_mb',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
             },
             'android_fyi_perf_bisect': {
-                'recipe_config': 'perf',
+                'recipe_config': 'main_builder_rel_mb',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
             },
             'android_webview_aosp_perf_bisect': {
-                'recipe_config': 'perf',
+                'recipe_config': 'main_builder_rel_mb',
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
                 'webview': True,

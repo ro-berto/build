@@ -104,7 +104,7 @@ BUILDERS = freeze({
   },
   'tryserver.chromium.perf': {
     'android_perf_bisect_builder': {
-      'recipe_config': 'perf',
+      'recipe_config': 'main_builder_rel_mb',
       'gclient_apply_config': ['android', 'perf'],
       'kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -113,10 +113,11 @@ BUILDERS = freeze({
       # DEPS changes, and the logic for this is in zip_build.py.
       'zip_and_upload': {
         'bucket': 'chrome-perf',
-      }
+      },
+      'run_mb': True,
     },
     'android_arm64_perf_bisect_builder': {
-      'recipe_config': 'arm64_builder',
+      'recipe_config': 'arm64_builder_rel_mb',
       'gclient_apply_config': ['android', 'perf'],
       'kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -125,7 +126,8 @@ BUILDERS = freeze({
       # DEPS changes, and the logic for this is in zip_build.py.
       'zip_and_upload': {
         'bucket': 'chrome-perf',
-      }
+      },
+      'run_mb': True,
     },
   },
   'client.v8.fyi': {
