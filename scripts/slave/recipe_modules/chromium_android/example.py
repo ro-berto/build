@@ -86,6 +86,9 @@ BUILDERS = freeze({
     'last_known_devices': {
       'perf_config': 'sharded_perf_tests.json',
       'last_known_devices': '.last_devices',
+    },
+    'device_flags_builder': {
+      'device_flags': 'device_flags_file',
     }
 })
 
@@ -186,7 +189,8 @@ def RunSteps(api, buildername):
       timeout_scale=config.get('timeout_scale'),
       strict_mode=config.get('strict_mode'),
       step_test_data=lambda: api.raw_io.test_api.output(
-          'logging...\nbeep\nboop\bbop'))
+          'logging...\nbeep\nboop\bbop'),
+      device_flags=config.get('device_flags'))
   api.chromium_android.run_test_suite(
       'unittests',
       isolate_file_path=api.path['checkout'].join('some_file.isolate'),
