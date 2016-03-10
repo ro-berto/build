@@ -21,8 +21,9 @@ class AnnotatorFactory(object):
     self._factory_properties = None
     self.active_master = active_master
 
+  # TODO(nodir): restore timeout=1200, https://crbug.com/593891
   def BaseFactory(self, recipe=None, factory_properties=None, triggers=None,
-                  timeout=1200, max_time=None):
+                  timeout=2400, max_time=None):
     """The primary input for the factory is the |recipe|, which specifies the
     name of a recipe file to search for. The recipe file will fill in the rest
     of the |factory_properties|. This setup allows for major changes to factory
