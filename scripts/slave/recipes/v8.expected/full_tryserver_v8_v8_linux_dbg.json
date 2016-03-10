@@ -1000,6 +1000,7 @@
       "test262",
       "--variants=ignition",
       "--ignition",
+      "--download-data",
       "--exhaustive-variants",
       "--dcheck-always-on",
       "--rerun-failures-count=2",

@@ -66,7 +66,7 @@ TEST_CONFIGS = freeze({
   'test262_ignition': {
     'name': 'Test262 - ignition',
     'tests': ['test262'],
-    'test_args': ['--variants=ignition', '--ignition'],
+    'test_args': ['--variants=ignition', '--ignition', '--download-data'],
   },
   'test262_variants': {
     'name': 'Test262',

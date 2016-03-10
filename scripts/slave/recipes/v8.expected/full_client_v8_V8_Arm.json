@@ -649,6 +649,7 @@
       "test262",
       "--variants=ignition",
       "--ignition",
+      "--download-data",
       "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--swarming",

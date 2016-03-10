@@ -729,6 +729,7 @@
       "test262/bar",
       "--variants=ignition",
       "--ignition",
+      "--download-data",
       "--exhaustive-variants",
       "--extra-flags",
       "--trace_gc --turbo_stats",
