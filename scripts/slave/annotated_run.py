@@ -47,15 +47,10 @@ WHITELIST_ALL = '*'
 # Whitelist of {master}=>[{builder}|WHITELIST_ALL] whitelisting specific masters
 # and builders for experimental LogDog/Annotee export.
 LOGDOG_WHITELIST_MASTER_BUILDERS = {
-    'chromium.infra': {
-      WHITELIST_ALL,
-    },
-    'chromium.infra.cron': {
-      WHITELIST_ALL,
-    },
-    'tryserver.infra': {
-      WHITELIST_ALL,
-    },
+    'chromium.infra': { WHITELIST_ALL },
+    'chromium.infra.cron': { WHITELIST_ALL },
+    'tryserver.infra': { WHITELIST_ALL },
+    'chromium.fyi': { WHITELIST_ALL },
 }
 
 # LogDogPlatform is the set of platform-specific LogDog bootstrapping
