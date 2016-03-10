@@ -3,8 +3,11 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'chromium',
   'depot_tools/git',
+  'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
+  'recipe_engine/python',
   'recipe_engine/raw_io',
 ]

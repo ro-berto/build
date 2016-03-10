@@ -16,6 +16,7 @@ DEPS = [
     'depot_tools/gclient',
     'recipe_engine/json',
     'recipe_engine/path',
+    'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/step',
@@ -33,7 +34,8 @@ PROPERTIES = {
         kind=str, help='The first known bad chromium revision.'),
     'compile_targets': Property(
         kind=List(basestring), default=None,
-        help='The failed compile targets, eg: browser_tests'),
+        help='The failed compile targets, eg: browser_tests, '
+             'obj/path/to/source.o, gen/path/to/generated.cc, etc.'),
     'use_analyze': Property(
         kind=Single(bool, empty_val=False, required=False), default=True,
         help='Use analyze to filter out affected targets.'),
@@ -55,16 +57,17 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
     bot_update_step, bot_db = api.chromium_tests.prepare_checkout(
         bot_config, root_solution_revision=revision)
 
-    # TODO(http://crbug.com/560991): if compile targets are provided, check
-    # whether they exist and then use analyze to compile the impacted ones by
-    # the given revision.
     compile_targets = sorted(set(compile_targets or []))
     if not compile_targets:
+      # If compile targets are not specified, retrieve them from the build spec.
       _, tests_including_triggered = api.chromium_tests.get_tests(
           bot_config, bot_db)
       compile_targets = api.chromium_tests.get_compile_targets(
           bot_config, bot_db, tests_including_triggered)
 
+      # Use dependency "analyze" to filter out those that are not impacted by
+      # the given revision. This is to reduce the number of targets to be
+      # compiled.
       if use_analyze:
         changed_files = api.findit.files_changed_by_revision(revision)
 
@@ -76,10 +79,14 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
             mb_mastername=target_mastername,
             mb_buildername=target_buildername,
             additional_names=None)
+    else:
+      # Use ninja to filter out none-existing targets.
+      compile_targets = api.findit.existing_targets(
+          compile_targets, target_mastername, target_buildername)
 
-        if not compile_targets:
-          # No compile target is impacted by the given revision.
-          return CompileResult.SKIPPED
+    if not compile_targets:
+      # No compile target exists, or is impacted by the given revision.
+      return CompileResult.SKIPPED
 
     try:
       api.chromium_tests.compile_specific_targets(
@@ -131,23 +138,15 @@ def RunSteps(api, target_mastername, target_buildername,
       compile_results[current_revision] = compile_result
       last_revision = current_revision
       if compile_result == CompileResult.FAILED:
-        # TODO(http://crbug.com/560991): if compile targets are specified,
-        # compile may fail because those targets are added in a later revision.
         break  # Found the culprit, no need to check later revisions.
   finally:
     # Report the result.
-    # TODO(http://crbug.com/563807): use api.python.succeeding_step instead.
-    step_result = api.python.inline(
-        'report', 'import sys; sys.exit(0)', add_python_log=False)
+    step_result = api.python.succeeding_step(
+        'report', [json.dumps(report, indent=2)], as_log='report')
 
-    if (not compile_targets and
-        compile_results and
-        last_revision and
+    if (last_revision and
         compile_results.get(last_revision) == CompileResult.FAILED):
       step_result.presentation.step_text = '<br/>Culprit: %s' % last_revision
-
-    step_result.presentation.logs.setdefault('report', []).append(
-        json.dumps(report, indent=2))
 
     # Set the report as a build property too, so that it will be reported back
     # to Buildbucket and Findit will pull from there instead of buildbot master.
@@ -171,12 +170,28 @@ def GenTests(api):
     }
     if compile_targets:
       properties['compile_targets'] = compile_targets
-    return api.properties(**properties)
+    return api.properties(**properties) + api.platform.name('linux')
 
   yield (
       api.test('compile_specified_targets') +
-      props(compile_targets=['target_name'])
+      props(compile_targets=['target_name']) +
+      api.override_step_data('test r1.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             }))
   )
+
+  yield (
+      api.test('compile_none_existing_targets') +
+      props(compile_targets=['gen/a/b/source.cc']) +
+      api.override_step_data('test r1.check_targets',
+                             api.json.output({
+                                 'found': [],
+                                 'not_found': ['gen/a/b/source.cc'],
+                             }))
+  )
+
 
   yield (
       api.test('compile_default_targets') +
@@ -206,6 +221,11 @@ def GenTests(api):
   yield (
       api.test('failed_compile_upon_infra_failure') +
       props(compile_targets=['target_name']) +
+      api.override_step_data('test r1.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             })) +
       api.override_step_data(
           'test r1.compile',
           api.json.output({

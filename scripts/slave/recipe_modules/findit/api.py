@@ -78,3 +78,34 @@ class FinditApi(recipe_api.RecipeApi):
 
     step_result.presentation.logs['revisions'] = revisions
     return revisions
+
+  def existing_targets(self, targets, mb_mastername, mb_buildername):
+    """Returns a sublist of the given targets that exist in the build graph.
+
+    We test whether a target exists or not by ninja.
+
+    A "target" here is actually a node in ninja's build graph. For example:
+      1. An executable target like browser_tests
+      2. An object file like obj/path/to/Source.o
+      3. An action like build/linux:gio_loader
+      4. An generated header file like gen/library_loaders/libgio.h
+      5. and so on
+
+    Args:
+     targets (list): A list of targets to be tested for existence.
+     mb_mastername (str): The mastername to run MB with.
+     mb_buildername (str): The buildername to run MB with.
+    """
+    # Run mb to generate or update ninja build files.
+    if self.m.chromium.c.project_generator.tool == 'mb':
+      self.m.chromium.run_mb(mb_mastername, mb_buildername,
+                             name='generate_build_files')
+
+    # Run ninja to check existences of targets.
+    args = ['--target-build-dir', self.m.chromium.output_dir]
+    for target in targets:
+      args.extend(['--target', target])
+    args.extend(['--json-output', self.m.json.output()])
+    step = self.m.python(
+        'check_targets', self.resource('check_target_existence.py'), args=args)
+    return step.json.output['found']

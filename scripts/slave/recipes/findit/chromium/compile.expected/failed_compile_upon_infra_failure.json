@@ -374,6 +374,53 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.linux",
+      "-b",
+      "Linux Builder",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "//out/Release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "test r1.generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::findit]/resources/check_target_existence.py",
+      "--target-build-dir",
+      "[SLAVE_BUILD]/src/out/Release",
+      "--target",
+      "target_name",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "test r1.check_targets",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"found\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"target_name\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"not_found\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -399,7 +446,7 @@
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "test r1.generate_build_files",
+    "name": "test r1.generate_build_files (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
