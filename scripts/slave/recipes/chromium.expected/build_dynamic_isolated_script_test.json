@@ -206,11 +206,7 @@
       "--clean-isolated-files"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "clean isolated files",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@telemetry_gpu_unittests@@@",
-      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
-    ]
+    "name": "clean isolated files"
   },
   {
     "cmd": [
@@ -231,7 +227,11 @@
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "generate_build_files"
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@telemetry_gpu_unittests@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+    ]
   },
   {
     "cmd": [

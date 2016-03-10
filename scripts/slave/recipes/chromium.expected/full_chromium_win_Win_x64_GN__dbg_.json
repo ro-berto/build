@@ -204,11 +204,7 @@
       "--clean-isolated-files"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "clean isolated files",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
-      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
-    ]
+    "name": "clean isolated files"
   },
   {
     "cmd": [
@@ -229,7 +225,11 @@
       "//out/Debug_x64"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "generate_build_files"
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+    ]
   },
   {
     "cmd": [

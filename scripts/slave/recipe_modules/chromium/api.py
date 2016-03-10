@@ -7,8 +7,6 @@ import re
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
-
-
 class TestLauncherFilterFileInputPlaceholder(recipe_util.Placeholder):
   def __init__(self, api, tests):
     self.raw = api.m.raw_io.input('\n'.join(tests))
@@ -544,11 +542,6 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     if isolated_targets:
       sorted_isolated_targets = sorted(set(isolated_targets))
-      result = self.m.step.active_result
-      if result:
-        result.presentation.logs['swarming-targets-file.txt'] = (
-            sorted_isolated_targets)
-
       # TODO(dpranke): Change the MB flag to '--isolate-targets-file', maybe?
       data = '\n'.join(sorted_isolated_targets) + '\n'
       args += ['--swarming-targets-file', self.m.raw_io.input(data)]
@@ -560,6 +553,13 @@ class ChromiumApi(recipe_api.RecipeApi):
     self.m.python(name=name or 'generate_build_files',
                   script=self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
                   args=args)
+
+    # Comes after self.m.python so the log appears in the correct step result.
+    result = self.m.step.active_result
+    if isolated_targets and result:
+      result.presentation.logs['swarming-targets-file.txt'] = (
+          sorted_isolated_targets)
+
 
   def update_clang(self):
     # The hooks in DEPS call `update.py --if-needed`, which updates clang by

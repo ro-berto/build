@@ -212,11 +212,7 @@
       "[SLAVE_BUILD]\\src\\tools\\clang\\scripts\\update.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "update_clang",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
-      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
-    ]
+    "name": "update_clang"
   },
   {
     "cmd": [
@@ -237,7 +233,11 @@
       "//out/Debug_x64"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "generate_build_files"
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+    ]
   },
   {
     "allow_subannotations": true,
