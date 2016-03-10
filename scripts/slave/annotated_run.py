@@ -469,13 +469,12 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
     raise LogDogNotBootstrapped('No Pub/Sub configured.')
 
   # Determine LogDog verbosity.
-  logdog_verbose = []
   if opts.logdog_verbose == 0:
-    pass
+    log_level = 'warning'
   elif opts.logdog_verbose == 1:
-    logdog_verbose.append('-log_level=info')
+    log_level = 'info'
   else:
-    logdog_verbose.append('-log_level=debug')
+    log_level = 'debug'
 
   service_account_args = []
   service_account_json = _get_service_account_json(opts, plat.credential_path)
@@ -497,10 +496,10 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
   # Butler Command.
   cmd = [
       butler,
+      '-log-level', log_level,
       '-prefix', prefix,
       '-output', 'pubsub,topic="%s"' % (config.logdog_pubsub_topic,),
   ]
-  cmd += logdog_verbose
   cmd += service_account_args
   cmd += [
       'run',
@@ -513,6 +512,7 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
   # Annotee Command.
   cmd += [
       annotee,
+      '-log-level', log_level,
       '-butler-stream-server', streamserver_uri,
       '-annotate', 'tee',
       '-name-base', 'recipes',
@@ -520,7 +520,6 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
       '-tee',
       '-json-args-path', cmd_json,
   ]
-  cmd += logdog_verbose
 
   rv, _ = _run_command(cmd, dry_run=opts.dry_run)
   if rv in LOGDOG_ERROR_RETURNCODES:

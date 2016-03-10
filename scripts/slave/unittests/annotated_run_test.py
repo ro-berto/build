@@ -222,6 +222,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
         self.opts, config.logdog_platform.credential_path)
     annotated_run._run_command.assert_called_with(
         [butler_path,
+            '-log-level', 'warning',
             '-prefix', 'bb/master.some/yesbuilder/1337',
             '-output', 'pubsub,topic="projects/luci-logdog/topics/logs"',
             '-service-account-json', 'creds.json',
@@ -231,6 +232,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
             '-streamserver-uri', streamserver_uri,
             '--',
             annotee_path,
+                '-log-level', 'warning',
                 '-butler-stream-server', streamserver_uri,
                 '-annotate', 'tee',
                 '-name-base', 'recipes',
@@ -302,6 +304,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
     annotated_run._run_command.assert_has_calls([
         mock.call([
             'logdog_butler.exe',
+            '-log-level', 'warning',
             '-prefix', 'bb/master.some/yesbuilder/1337',
             '-output', 'pubsub,topic="projects/luci-logdog/topics/logs"',
             '-service-account-json', 'creds.json',
@@ -311,6 +314,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
             '-streamserver-uri', streamserver_uri,
             '--',
             'logdog_annotee.exe',
+                '-log-level', 'warning',
                 '-butler-stream-server', streamserver_uri,
                 '-annotate', 'tee',
                 '-name-base', 'recipes',
