@@ -149,23 +149,32 @@ def RunSteps(api, libvpx_git_url, buildername):
       # Two data points for encoder tests, FPS and minPsnr
       testname = "libvpx/encode/perf_test/fps/" + device + "/"
       testname = testname + i["videoName"] + "_" + str(i["speed"])
-      p = api.perf_dashboard.get_skeleton_point(testname,
-              libvpx_revision_number, i["framesPerSecond"])
+      p = api.perf_dashboard.get_skeleton_point(
+          testname,
+          libvpx_revision_number,
+          i["framesPerSecond"],
+          bot=api.m.properties["slavename"])
       p['units'] = "fps"
       points.append(p)
 
       #minPsnr
       testname = "libvpx/encode/perf_test/minPsnr/" + device + "/"
       testname = testname + i["videoName"] + "_" + str(i["speed"])
-      p = api.perf_dashboard.get_skeleton_point(testname,
-              libvpx_revision_number, i["minPsnr"])
+      p = api.perf_dashboard.get_skeleton_point(
+          testname,
+          libvpx_revision_number,
+          i["minPsnr"],
+          bot=api.m.properties["slavename"])
       p['units'] = "dB"
       points.append(p)
     else:
       testname = "libvpx/decode/perf_test/" + device + "/"
       testname = testname + i["videoName"] + "_" + str(i["threadCount"])
-      p = api.perf_dashboard.get_skeleton_point(testname,
-              libvpx_revision_number, i["framesPerSecond"])
+      p = api.perf_dashboard.get_skeleton_point(
+          testname,
+          libvpx_revision_number,
+          i["framesPerSecond"],
+          bot=api.m.properties["slavename"])
       p['units'] = "fps"
       points.append(p)
 
