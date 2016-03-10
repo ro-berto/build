@@ -138,7 +138,7 @@
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[SLAVE_BUILD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"buildername\": \"Mac Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],

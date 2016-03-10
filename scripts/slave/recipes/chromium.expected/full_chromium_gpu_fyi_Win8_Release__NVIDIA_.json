@@ -146,7 +146,7 @@
       "Release",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"build\": \"[BUILD]\", \"checkout\": \"[SLAVE_BUILD]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "{\"checkout\": \"[SLAVE_BUILD]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
       "{\"buildername\": \"Win8 Release (NVIDIA)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
