@@ -10,6 +10,7 @@
 import csv
 import fnmatch
 import glob
+import json
 import optparse
 import os
 import re
@@ -363,21 +364,22 @@ def Archive(options):
   # without downloading tarballs.
   revision_file = WriteRevisionFile(staging_dir, build_revision)
 
+  urls = {}
   if options.build_url.startswith('gs://'):
     zip_url = UploadToGoogleStorage(
         versioned_file, revision_file, options.build_url, options.gs_acl)
 
     storage_url = ('https://storage.googleapis.com/%s/%s' %
         (options.build_url[len('gs://'):], os.path.basename(versioned_file)))
-    print '@@@STEP_LINK@download@%s@@@' % storage_url
+    urls['storage_url'] = storage_url
   else:
     staging_path = (
         os.path.splitdrive(versioned_file)[1].replace(os.path.sep, '/'))
     zip_url = 'http://' + options.slave_name + staging_path
 
-  print '@@@SET_BUILD_PROPERTY@build_archive_url@"%s"@@@' % zip_url
+  urls['zip_url'] = zip_url
 
-  return 0
+  return urls
 
 
 def main(argv):
@@ -424,6 +426,11 @@ def main(argv):
                            default=False, help='Add also dSYM files.')
   option_parser.add_option('--append-deps-patch-sha', action='store_true')
   option_parser.add_option('--gs-acl')
+  option_parser.add_option('--json-urls',
+                           help=('Path to json file containing uploaded '
+                                 'archive urls. If this is omitted then '
+                                 'the urls will be emitted as buildbot '
+                                 'annotations.'))
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args(argv)
@@ -453,8 +460,16 @@ def main(argv):
   if args[1:]:
     print 'Warning -- unknown arguments' % args[1:]
 
-  return Archive(options)
-
+  urls = Archive(options)
+  if options.json_urls:  # we need to dump json
+    with open(options.json_urls, 'w') as json_file:
+      json.dump(urls, json_file)
+  else:  # we need to print buildbot annotations
+    if 'storage_url' in urls:
+      print '@@@STEP_LINK@download@%s@@@' % urls['storage_url']
+    if 'zip_url' in urls:
+      print '@@@SET_BUILD_PROPERTY@build_archive_url@"%s"@@@' %  urls['zip_url']
+  return 0
 
 if '__main__' == __name__:
   sys.exit(main(sys.argv))
