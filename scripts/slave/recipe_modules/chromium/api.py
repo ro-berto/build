@@ -580,7 +580,11 @@ class ChromiumApi(recipe_api.RecipeApi):
   def cleanup_temp(self):
     self.m.python(
       'cleanup_temp',
-      self.package_repo_resource('scripts', 'slave', 'cleanup_temp.py'))
+      self.package_repo_resource('scripts', 'tools', 'runit.py'),
+      ['--show-path',
+       'python',
+       self.package_repo_resource('scripts', 'slave', 'cleanup_temp.py')],
+      infra_step=True)
 
   def crash_handler(self):
     self.m.python(
