@@ -46,7 +46,7 @@ categories_steps = {
     'memory test: sync_unit_tests',
     'memory test: ui_base_unittests',
     'memory test: unit',
-    'memory test: unit_1',  # it's sharded on Mac Valgrind and TSan Linux
+    'memory test: unit_1',  # it's sharded on TSan Linux
     'memory test: url',
     'memory test: views',
    ],
