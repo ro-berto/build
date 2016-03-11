@@ -139,6 +139,8 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/zip_build.py",
+      "--json-urls",
+      "/path/to/tmp/json",
       "--target",
       "Release",
       "--build-url",
@@ -147,7 +149,15 @@
       "--factory-properties={\"blink_config\":\"chromium\",\"build_url\":\"gs://chromium-build-transfer/drm-cr\",\"gclient_env\":{\"CHROMIUM_GYP_SYNTAX_CHECK\":\"1\",\"DEPOT_TOOLS_UPDATE\":\"0\",\"GYP_DEFINES\":\"build_for_tool=drmemory component=shared_library\",\"GYP_GENERATORS\":\"ninja\",\"LANDMINES_VERBOSE\":\"1\"},\"package_pdb_files\":true,\"trigger\":\"chromium_windows_drmemory\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "zip build"
+    "name": "zip build",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"storage_url\": \"abc\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"zip_url\": \"abc\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@download@abc@@@"
+    ]
   },
   {
     "cmd": [],
@@ -159,7 +169,7 @@
         "properties": {
           "issue": "",
           "parent_branch": "",
-          "parent_build_archive_url": "",
+          "parent_build_archive_url": "abc",
           "parent_builddir": "",
           "parent_buildername": "Windows Builder (DrMemory)",
           "parent_buildnumber": "42",
@@ -191,7 +201,7 @@
         "properties": {
           "issue": "",
           "parent_branch": "",
-          "parent_build_archive_url": "",
+          "parent_build_archive_url": "abc",
           "parent_builddir": "",
           "parent_buildername": "Windows Builder (DrMemory)",
           "parent_buildnumber": "42",
@@ -223,7 +233,7 @@
         "properties": {
           "issue": "",
           "parent_branch": "",
-          "parent_build_archive_url": "",
+          "parent_build_archive_url": "abc",
           "parent_builddir": "",
           "parent_buildername": "Windows Builder (DrMemory)",
           "parent_buildnumber": "42",
