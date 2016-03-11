@@ -45,6 +45,11 @@ def RunSteps(api):
       api.chromium.taskkill()
 
     update_step = v8.checkout()
+    if v8.generate_sanitizer_coverage:
+      # When collecting code coverage, we need to resync to the revision that
+      # fits to the patch for the line numbers to match.
+      revision = v8.calculate_patch_base()
+      update_step = v8.checkout(revision=revision, suffix='with patch base')
     update_properties = update_step.json.output['properties']
 
     if update_properties.get('got_swarming_client_revision'):

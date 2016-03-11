@@ -180,6 +180,27 @@ class V8Api(recipe_api.RecipeApi):
 
     return update_step
 
+  def calculate_patch_base(self):
+    """Calculates the latest commit hash that fits the patch."""
+    url = ('https://codereview.chromium.org/download/issue%s_%s.diff' %
+           (self.m.properties['issue'], self.m.properties['patchset']))
+    step_result = self.m.python(
+        'Download patch',
+        self.m.path['build'].join('scripts', 'tools', 'pycurl.py'),
+        [url, '--outfile', self.m.raw_io.output()],
+        step_test_data=lambda: self.m.raw_io.test_api.output('some patch'),
+    )
+    return self.m.python(
+        name='Calculate patch base',
+        script=self.resource('calculate_patch_base.py'),
+        args=[
+          self.m.raw_io.input(step_result.raw_io.output),
+          self.m.path['checkout'],
+          self.m.raw_io.output(),
+        ],
+        step_test_data=lambda: self.m.raw_io.test_api.output('[fitting hsh]'),
+    ).raw_io.output
+
   def set_up_swarming(self):
     if self.bot_config.get('enable_swarming'):
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
