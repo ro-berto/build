@@ -605,7 +605,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--no-xvfb",
@@ -644,7 +644,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--no-xvfb",

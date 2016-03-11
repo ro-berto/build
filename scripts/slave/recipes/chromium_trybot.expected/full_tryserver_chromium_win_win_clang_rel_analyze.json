@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\kill_processes.py"
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"

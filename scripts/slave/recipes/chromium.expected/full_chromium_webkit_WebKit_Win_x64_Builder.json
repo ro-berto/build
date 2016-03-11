@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\kill_processes.py"
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
@@ -191,7 +191,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
@@ -237,7 +237,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\compile.py",
       "--target",
       "Release_x64",
       "--src-dir",
@@ -324,7 +324,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\run_crash_handler.py",
       "--target",
       "Release_x64"
     ],
@@ -369,7 +369,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\process_dumps.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\process_dumps.py",
       "--target",
       "Release_x64"
     ],

@@ -167,7 +167,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/cleanup_temp.py"
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
@@ -195,7 +195,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
       "--target",
       "Release",
       "--src-dir",
@@ -227,7 +227,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--no-xvfb",
@@ -244,7 +244,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=sizes",
       "--perf-id=Google Chrome Linux x64",
-      "[BUILD]/scripts/slave/chromium/sizes.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/sizes.py",
       "--target",
       "Release",
       "--platform",

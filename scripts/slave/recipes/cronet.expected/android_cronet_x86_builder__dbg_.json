@@ -136,7 +136,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
       "--target",
       "Debug",
       "--src-dir",
@@ -171,7 +171,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/runtest.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Debug",
       "--no-xvfb",
@@ -188,7 +188,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=sizes",
       "--perf-id=android_cronet_x86_builder_dbg",
-      "[BUILD]/scripts/slave/chromium/sizes.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/sizes.py",
       "--target",
       "Debug",
       "--platform",

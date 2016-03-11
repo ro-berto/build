@@ -168,7 +168,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
       "--target",
       "Release",
       "--src-dir",
@@ -252,7 +252,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/compile.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
       "--target",
       "Release",
       "--src-dir",

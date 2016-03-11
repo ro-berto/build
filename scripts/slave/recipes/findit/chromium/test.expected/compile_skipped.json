@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\kill_processes.py"
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
@@ -203,7 +203,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\kill_processes.py"
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "test r1.taskkill",
@@ -380,7 +380,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\run_crash_handler.py",
       "--target",
       "Release"
     ],
@@ -421,7 +421,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\process_dumps.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\process_dumps.py",
       "--target",
       "Release"
     ],

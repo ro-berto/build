@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\kill_processes.py"
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "taskkill"
@@ -266,7 +266,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\cleanup_temp.py"
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
@@ -294,7 +294,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\compile.py",
       "--target",
       "Debug",
       "--src-dir",
@@ -333,7 +333,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\run_crash_handler.py",
       "--target",
       "Debug"
     ],
@@ -344,7 +344,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\runtest.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py",
       "--target",
       "Debug",
       "--factory-properties",
@@ -409,7 +409,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\kill_processes.py"
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "taskkill (2)"
@@ -543,7 +543,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\compile.py",
       "--target",
       "Debug",
       "--src-dir",
@@ -572,7 +572,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\runtest.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py",
       "--target",
       "Debug",
       "--factory-properties",
@@ -631,7 +631,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\process_dumps.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\process_dumps.py",
       "--target",
       "Debug"
     ],
