@@ -80,12 +80,10 @@ class ChromiteTarget(object):
   ANDROID_PFQ = 'android_pfq'
   ASAN = 'asan'
   CANARY = 'canary'
-  CANARY_TOOLCHAIN = 'canary_toolchain'
   FACTORY = 'factory'
   FIRMWARE = 'firmware'
   FULL = 'full'
   INCREMENTAL = 'incremental'
-  LLVM = 'llvm'
   PALADIN = 'paladin'
   PFQ = 'pfq'
   PRE_CQ = 'pre-cq'
@@ -102,7 +100,6 @@ class ChromiteTarget(object):
     'priest': PRE_CQ_LAUNCHER,
     'paladin': PALADIN,
     'canary': CANARY,
-    'toolchain': CANARY_TOOLCHAIN,
     'chrome': PFQ,
   }
 
@@ -115,19 +112,18 @@ class ChromiteTarget(object):
   SUFFIX_MAP = collections.OrderedDict((
     (ANDROID_PFQ, ('android-pfq',)),
     (ASAN, ('asan',)),
-    (CANARY_TOOLCHAIN, ('toolchain-release',)),
     (CANARY, ('release', 'release-group',)),
     (FACTORY, ('factory',)),
     (FIRMWARE, ('firmware',)),
     (FULL, ('full',)),
     (INCREMENTAL, ('incremental',)),
-    (LLVM, ('llvm',)),
     (PALADIN, ('paladin',)),
     (PFQ, ('chrome-pfq', 'chromium-pfq',)),
     (PRE_CQ, ('pre-cq',)),
     (PRE_FLIGHT_BRANCH, ('pre-flight-branch',)),
     (SDK, ('sdk',)),
-    (TOOLCHAIN, ('toolchain-major', 'toolchain-minor',)),
+    (TOOLCHAIN, ('toolchain', 'toolchain-group', 'toolchain-major',
+                 'toolchain-minor',)),
   ))
 
   # Sentinel value to indicate a missing key.

@@ -34,9 +34,6 @@
       "panther_embedded-minimal-paladin": [
         "build203-m2"
       ], 
-      "toolchain-llvm": [
-        "build112-m2"
-      ], 
       "x86-generic-full": [
         "build89-m2"
       ], 
@@ -57,6 +54,7 @@
     }
   }, 
   "unallocated": [
+    "build112-m2", 
     "build326-m2", 
     "build182-m2", 
     "build162-m2", 

@@ -49,7 +49,6 @@ class BuilderConfig(object):
   UNIQUE = False
   COLLAPSE = True
   SLAVE_TYPE = SlaveType.BAREMETAL
-  SLAVE_CLASS = None
   CBB_VARIANT = None
   TIMEOUT = None
 
@@ -83,11 +82,6 @@ class BuilderConfig(object):
   def slave_type(self):
     """Returns (str): A SlaveType enumeration value."""
     return self.config.get('buildslave_type', self._GetLegacySlaveType())
-
-  @property
-  def slave_class(self):
-    """Returns (str): The slave class for this enumeration, or None."""
-    return self.SLAVE_CLASS
 
   @property
   def cbb_variant(self):
@@ -253,7 +247,10 @@ class ToolchainBuilderConfig(BuilderConfig):
   them.
   """
 
-  SLAVE_CLASS = 'toolchain'
+  def _GetLegacySlaveType(self):
+    if self.config.is_master and not self.config['boards']:
+      return SlaveType.GCE_WIMPY
+    return SlaveType.BAREMETAL
 
 
 # Map of cbuildbot target type to configuration class.
@@ -273,7 +270,6 @@ CONFIG_MAP = OrderedDict((
     (ChromiteTarget.PRE_FLIGHT_BRANCH, BuilderConfig),
     (ChromiteTarget.CANARY, CanaryBuilderConfig),
     (ChromiteTarget.SDK, SdkBuilderConfig),
-    (ChromiteTarget.CANARY_TOOLCHAIN, CanaryBuilderConfig),
     (ChromiteTarget.TOOLCHAIN, ToolchainBuilderConfig),
     (ChromiteTarget.ANDROID_PFQ, BuilderConfig),
     (None, BuilderConfig),

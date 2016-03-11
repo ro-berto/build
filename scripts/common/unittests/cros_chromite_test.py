@@ -168,8 +168,10 @@ class ChromiteConfigTestCase(unittest.TestCase):
           'my-board', 'toolchain-major', 'TOOLCHAIN'),
       ('my-board-toolchain-minor', None,
           'my-board', 'toolchain-minor', 'TOOLCHAIN'),
-      ('master-toolchain-release', None,
-          'master', 'toolchain-release', 'CANARY_TOOLCHAIN'),
+      ('master-toolchain', None,
+          'master', 'toolchain', 'TOOLCHAIN'),
+      ('llvm-toolchain-group', None,
+          'llvm', 'toolchain-group', 'TOOLCHAIN'),
     )
 
     for name, build_type, exp_base, exp_suffix, exp_cat_attr in expectations:
