@@ -137,6 +137,8 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/zip_build.py",
+      "--json-urls",
+      "/path/to/tmp/json",
       "--target",
       "Release",
       "--build-url",
@@ -145,7 +147,15 @@
       "--factory-properties={\"blink_config\":\"chromium\",\"gclient_env\":{\"CHROMIUM_GYP_SYNTAX_CHECK\":\"1\",\"DEPOT_TOOLS_UPDATE\":\"0\",\"GYP_DEFINES\":\"fastbuild=1 component=static_library\",\"GYP_MSVS_VERSION\":\"2015\",\"LANDMINES_VERBOSE\":\"1\"},\"trigger\":\"win_rel\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "zip build"
+    "name": "zip build",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"storage_url\": \"abc\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"zip_url\": \"abc\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@download@abc@@@"
+    ]
   },
   {
     "cmd": [],
@@ -157,7 +167,7 @@
         "properties": {
           "issue": "",
           "parent_branch": "",
-          "parent_build_archive_url": "",
+          "parent_build_archive_url": "abc",
           "parent_builddir": "",
           "parent_buildername": "Chromium Builder",
           "parent_buildnumber": "42",
@@ -189,7 +199,7 @@
         "properties": {
           "issue": "",
           "parent_branch": "",
-          "parent_build_archive_url": "",
+          "parent_build_archive_url": "abc",
           "parent_builddir": "",
           "parent_buildername": "Chromium Builder",
           "parent_buildnumber": "42",
@@ -221,7 +231,7 @@
         "properties": {
           "issue": "",
           "parent_branch": "",
-          "parent_build_archive_url": "",
+          "parent_build_archive_url": "abc",
           "parent_builddir": "",
           "parent_buildername": "Chromium Builder",
           "parent_buildnumber": "42",

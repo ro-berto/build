@@ -935,12 +935,18 @@ def zip_build_win_converter(step):
   build_properties = "'--build-properties=%s' % " +\
       "api.json.dumps(build_properties, separators=(',', ':'))"
   rc.steps.append('# zip_build step')
-  rc.steps.append('api.python("zip build", ' +\
+  rc.steps.append('step_result = api.python("zip build", ' +\
       'api.path["build"].join("scripts", "slave", "zip_build.py"), ' +\
-      'args=["--target", "%s", ' % step[1]['command'][3] +\
+      'args=["--json-urls", api.json.output(), '
+      '"--target", "%s", ' % step[1]['command'][3] +\
       repr(step[1]['command'][4:6])[1:-1] +\
       ', %s, ' % build_properties +\
       '\'%s\'])' % step[1]['command'][7])
+  rc.steps.append('if "storage_url" in step_result.json.output:')
+  rc.steps.append(['step_result.presentation.links["download"] = '
+    'step_result.json.output["storage_url"]'])
+  rc.steps.append('build_properties["build_archive_url"] = '
+      'step_result.json.output["zip_url"]')
   return rc
 
 def runbuild_converter(step):

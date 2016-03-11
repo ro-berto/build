@@ -158,11 +158,12 @@ def Chromium_Builder_steps(api):
                api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
     # zip_build step
-    api.python(
+    step_result = api.python(
         "zip build",
         api.path["build"].join("scripts", "slave", "zip_build.py"),
         args=
-        ["--target", "Release", '--build-url',
+        ["--json-urls", api.json.output(),
+          "--target", "Release", '--build-url',
          'gs://chromium-build-transfer/Chromium FYI Builder',
          '--build-properties=%s' % api.json.dumps(build_properties,
                                                   separators=(',', ':')),
@@ -172,6 +173,10 @@ def Chromium_Builder_steps(api):
              '"GYP_MSVS_VERSION":"2015","LANDMINES_VERBOSE":"1"},'+\
              '"trigger":"win_rel"}'
          ])
+    if 'storage_url' in step_result.json.output:
+      step_result.presentation.links['download'] =\
+          step_result.json.output['storage_url']
+    build_properties['build_archive_url'] = step_result.json.output['zip_url']
     # trigger step
     trigger_spec = [
         {'builder_name': 'Chromium Win MiniInstaller Tests',
@@ -899,6 +904,8 @@ def GenTests(api):
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
     api.properties(buildnumber='42') +
+    api.step_data('zip build', api.json.output({'storage_url': 'abc',
+      'zip_url': 'abc'})) +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('Chromium_Builder_clobber') +
@@ -908,6 +915,8 @@ def GenTests(api):
     api.properties(got_revision='123456789abcdef') +
     api.properties(buildnumber='42') +
     api.properties(clobber='') +
+    api.step_data('zip build', api.json.output({'storage_url': 'abc',
+      'zip_url': 'abc'})) +
     api.properties(slavename='TestSlave')
         )
   yield (api.test('Chromium_Win_MiniInstaller_Tests') +
