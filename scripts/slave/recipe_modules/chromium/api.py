@@ -163,6 +163,9 @@ class ChromiumApi(recipe_api.RecipeApi):
       self._clang_version = self.get_clang_version()
 
     args = [
+      '--show-path',
+      'python',
+      self.package_repo_resource('scripts', 'slave', 'compile.py'),
       '--target', target or self.c.build_config_fs,
       '--src-dir', self.m.path['checkout'],
     ]
@@ -225,7 +228,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     try:
       self.m.python(
           name or 'compile',
-          self.package_repo_resource('scripts', 'slave', 'compile.py'),
+          self.package_repo_resource('scripts', 'tools', 'runit.py'),
           args,
           env=env,
           **kwargs)
