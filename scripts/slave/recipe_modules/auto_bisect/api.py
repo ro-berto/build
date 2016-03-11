@@ -134,6 +134,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
       args = args + ['--path_to_config', path_to_config]
 
     if self.m.chromium.c.TARGET_PLATFORM != 'android':
+      # TODO(phajdan.jr): update for swarming, http://crbug.com/585401 .
       args += ['--path_to_goma', self.m.path['build'].join('goma')]
     args += [
         '--build-properties',

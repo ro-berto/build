@@ -32,7 +32,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/tools/pycurl.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
       "https://codereview.chromium.org/search?owner=v8-autoroll%40chromium.org&limit=30&closed=3&format=json",
       "--outfile",
       "/path/to/tmp/"

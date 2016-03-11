@@ -51,6 +51,6 @@ class UrlApi(recipe_api.RecipeApi):
       args.extend(['--attempts', attempts])
     return self.m.python(
         name=step_name,
-        script=self.m.path['build'].join('scripts', 'tools', 'pycurl.py'),
+        script=self.package_repo_resource('scripts', 'tools', 'pycurl.py'),
         args=args,
         **kwargs)

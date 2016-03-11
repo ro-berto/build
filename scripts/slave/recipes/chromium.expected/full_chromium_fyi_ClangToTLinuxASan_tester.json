@@ -223,7 +223,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/extract_build.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/extract_build.py",
       "--target",
       "Release",
       "--build-archive-url",

@@ -11,6 +11,7 @@ class GomaApi(recipe_api.RecipeApi):
     """Returns a step for updating goma canary."""
     # for git checkout, should use @refs/heads/master to use head.
     head = 'refs/heads/master'
+    # TODO(phajdan.jr): Remove path['build'] usage, http://crbug.com/437264 .
     self.m.gclient('update goma canary',
                    ['sync', '--verbose', '--force',
                     '--revision', 'build/goma@%s' % head],

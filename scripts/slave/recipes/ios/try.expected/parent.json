@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "[BUILD]/scripts/slave/ios/host_info.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/host_info.py",
       "--json-file",
       "/path/to/tmp/json"
     ],
@@ -184,7 +184,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/ios/find_xcode.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/find_xcode.py",
       "--json-file",
       "/path/to/tmp/json",
       "--version",
@@ -232,7 +232,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/ios/run.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
       "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake tests.app",
       "--json_file",

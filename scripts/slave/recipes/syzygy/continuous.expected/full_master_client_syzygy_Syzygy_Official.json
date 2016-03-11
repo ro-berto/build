@@ -217,7 +217,7 @@
   },
   {
     "cmd": [
-      "[BUILD]\\scripts\\slave\\gsutil.bat",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\gsutil.bat",
       "cp",
       "-t",
       "-a",
@@ -274,7 +274,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]\\scripts\\slave\\syzygy\\gsutil_cp_dir.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\syzygy\\gsutil_cp_dir.py",
       "--public-read",
       "[SLAVE_BUILD]\\src\\out\\Release\\archive",
       "gs://syzygy-archive/builds/official/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"

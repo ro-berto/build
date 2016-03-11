@@ -142,7 +142,7 @@ class GSUtilApi(recipe_api.RecipeApi):
       timeout: How long, in seconds, to poll for the file before giving up.
       name: The name of the step.
     """
-    gsutil_download_path = self.m.path['build'].join(
+    gsutil_download_path = self.package_repo_resource(
         'scripts', 'slave', 'gsutil_download.py')
     args = ['--poll',
             '--url', url,

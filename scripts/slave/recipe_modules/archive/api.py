@@ -118,7 +118,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     kwargs['allow_subannotations'] = True
     self.m.python(
       step_name,
-      self.m.path['build'].join('scripts', 'slave', 'zip_build.py'),
+      self.package_repo_resource('scripts', 'slave', 'zip_build.py'),
       args,
       infra_step=True,
       **kwargs
@@ -328,7 +328,7 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     self.m.python(
       step_name,
-      self.m.path['build'].join('scripts', 'slave', 'extract_build.py'),
+      self.package_repo_resource('scripts', 'slave', 'extract_build.py'),
       args,
       infra_step=True,
       **kwargs
@@ -404,9 +404,8 @@ class ArchiveApi(recipe_api.RecipeApi):
     """Returns a step invoking archive_dependencies.py to zip up and upload
        build dependency information for the build."""
     try:
-      script = self.m.path['build'].join('scripts',
-                                         'slave',
-                                         'archive_dependencies.py')
+      script = self.package_repo_resource(
+          'scripts', 'slave', 'archive_dependencies.py')
       args = []
       args.extend(['--src-dir', self.m.path['checkout']])
       args.extend(['--target', target])

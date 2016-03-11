@@ -83,7 +83,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     self.m.python(
       step_name,
-      str(self.m.path['build'].join(
+      str(self.package_repo_resource(
           'scripts', 'slave', 'android', 'archive_build.py')),
       archive_args,
       infra_step=True,
@@ -266,14 +266,14 @@ class AndroidApi(recipe_api.RecipeApi):
   def spawn_logcat_monitor(self):
     self.m.step(
         'spawn_logcat_monitor',
-        [self.m.path['build'].join('scripts', 'slave', 'daemonizer.py'),
+        [self.package_repo_resource('scripts', 'slave', 'daemonizer.py'),
          '--', self.c.cr_build_android.join('adb_logcat_monitor.py'),
          self.m.chromium.c.build_dir.join('logcat')],
         env=self.m.chromium.get_env(),
         infra_step=True)
 
   def spawn_device_monitor(self):
-    script = self.m.path['build'].join('scripts', 'slave', 'daemonizer.py')
+    script = self.package_repo_resource('scripts', 'slave', 'daemonizer.py')
     args = [
         '--action', 'restart',
         '--pid-file-path', '/tmp/device_monitor.pid',
@@ -287,7 +287,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.m.python('spawn_device_monitor', script, args, infra_step=True)
 
   def shutdown_device_monitor(self):
-    script = self.m.path['build'].join('scripts', 'slave', 'daemonizer.py')
+    script = self.package_repo_resource('scripts', 'slave', 'daemonizer.py')
     args = [
         '--action', 'stop',
         '--pid-file-path', '/tmp/device_monitor.pid',
@@ -295,8 +295,8 @@ class AndroidApi(recipe_api.RecipeApi):
     self.m.python('shutdown_device_monitor', script, args, infra_step=True)
 
   def authorize_adb_devices(self):
-    script = self.m.path['build'].join('scripts', 'slave', 'android',
-                                       'authorize_adb_devices.py')
+    script = self.package_repo_resource(
+        'scripts', 'slave', 'android', 'authorize_adb_devices.py')
     args = ['--verbose', '--adb-path', self.m.adb.adb_path()]
     return self.m.python('authorize_adb_devices', script, args, infra_step=True,
                          env=self.m.chromium.get_env())
@@ -318,6 +318,7 @@ class AndroidApi(recipe_api.RecipeApi):
     return self.out_path.join('bad_devices.json')
 
   def device_status_check(self, restart_usb=False, **kwargs):
+    # TODO(phajdan.jr): Remove path['build'] usage, http://crbug.com/437264 .
     devices_path = self.m.path['build'].join('site_config', '.known_devices')
     args = [
         '--json-output', self.m.json.output(),
@@ -779,7 +780,7 @@ class AndroidApi(recipe_api.RecipeApi):
     else:
       self.m.python(
           'logcat_dump',
-          self.m.path['build'].join('scripts', 'slave', 'tee.py'),
+          self.package_repo_resource('scripts', 'slave', 'tee.py'),
           [self.m.chromium.output_dir.join('full_log'),
            '--',
            self.m.path['checkout'].join('build', 'android',

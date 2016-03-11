@@ -120,7 +120,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/gsutil_download.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gsutil_download.py",
       "--poll",
       "--url",
       "gs://chromium-recipe-test/foo/bar",

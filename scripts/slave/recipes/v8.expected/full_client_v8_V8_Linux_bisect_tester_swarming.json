@@ -2086,7 +2086,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/tools/pycurl.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
       "http://c.org/p/cr/json/builders/V8%20Linux/builds/571/source_stamp",
       "--outfile",
       "/path/to/tmp/json"

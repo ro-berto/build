@@ -186,7 +186,7 @@ class V8Api(recipe_api.RecipeApi):
            (self.m.properties['issue'], self.m.properties['patchset']))
     step_result = self.m.python(
         'Download patch',
-        self.m.path['build'].join('scripts', 'tools', 'pycurl.py'),
+        self.package_repo_resource('scripts', 'tools', 'pycurl.py'),
         [url, '--outfile', self.m.raw_io.output()],
         step_test_data=lambda: self.m.raw_io.test_api.output('some patch'),
     )
@@ -970,7 +970,7 @@ class V8Api(recipe_api.RecipeApi):
       )
       step_result = self.m.python(
           'Fetch changes',
-          self.m.path['build'].join('scripts', 'tools', 'pycurl.py'),
+          self.package_repo_resource('scripts', 'tools', 'pycurl.py'),
           [
             url,
             '--outfile',

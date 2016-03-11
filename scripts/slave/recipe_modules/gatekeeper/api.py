@@ -48,7 +48,7 @@ class Gatekeeper(recipe_api.RecipeApi):
       try:
         self.m.python(
           'gatekeeper: %s' % str(tree_name),
-          self.m.path['build'].join('scripts', 'slave', 'gatekeeper_ng.py'),
+          self.package_repo_resource('scripts', 'slave', 'gatekeeper_ng.py'),
           args,
         )
       except self.m.step.StepFailure:

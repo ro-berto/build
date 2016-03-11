@@ -173,7 +173,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/zip_build.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/zip_build.py",
       "--target",
       "Release",
       "--build-url",

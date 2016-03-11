@@ -15,12 +15,8 @@ class iOSApi(recipe_api.RecipeApi):
   def host_info(self):
     """Emits information about the current host and available tools."""
     step_result = self.m.step('host and tools info', [
-      self.m.path['build'].join(
-        'scripts',
-        'slave',
-        'ios',
-        'host_info.py',
-      ),
+      self.package_repo_resource(
+        'scripts', 'slave', 'ios', 'host_info.py'),
       '--json-file', self.m.json.output(),
     ], infra_step=True, step_test_data=self.test_api.host_info)
 
@@ -215,12 +211,8 @@ class iOSApi(recipe_api.RecipeApi):
 
     step_result = self.m.step(
       'find xcode', [
-      self.m.path['build'].join(
-        'scripts',
-        'slave',
-        'ios',
-        'find_xcode.py',
-      ),
+      self.package_repo_resource(
+        'scripts', 'slave', 'ios', 'find_xcode.py'),
       '--json-file', self.m.json.output(),
       '--version', self.__config['xcode version'],
     ], step_test_data=lambda: self.m.json.test_api.output({}))
@@ -362,12 +354,8 @@ class iOSApi(recipe_api.RecipeApi):
 
     for test in self.__config['tests']:
       cmd = [
-        self.m.path['build'].join(
-          'scripts',
-          'slave',
-          'ios',
-          'run.py',
-        ),
+        self.package_repo_resource(
+          'scripts', 'slave', 'ios', 'run.py'),
         '--app', self.m.path['slave_build'].join(
           self.most_recent_app_dir,
           '%s.app' % test['app'],

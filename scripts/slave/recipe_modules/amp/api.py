@@ -43,11 +43,13 @@ class AmpApi(recipe_api.RecipeApi):
         'appurify_results', 'logcat.txt')
 
   def _get_api_key_file(self):
+    # TODO(phajdan.jr): Remove path['build'] usage, http://crbug.com/437264 .
     local_api_key_file = self.m.path['build'].join(
         'site_config', '.amp_%s_key' % self.c.pool)
     return local_api_key_file
 
   def _get_api_secret_file(self):
+    # TODO(phajdan.jr): Remove path['build'] usage, http://crbug.com/437264 .
     local_api_secret_file = self.m.path['build'].join(
         'site_config', '.amp_%s_secret' % self.c.pool)
     return local_api_secret_file

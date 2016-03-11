@@ -35,7 +35,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/tools/pycurl.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
       "fake://foo/bar",
       "--outfile",
       "/path/to/tmp/",

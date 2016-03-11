@@ -175,7 +175,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/ios/find_xcode.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/find_xcode.py",
       "--json-file",
       "/path/to/tmp/json",
       "--version",
@@ -223,7 +223,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/ios/run.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
       "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake test 1.app",
       "--json_file",
@@ -258,7 +258,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/ios/run.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
       "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake included test 1.app",
       "--json_file",
@@ -293,7 +293,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/ios/run.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
       "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake included test 2.app",
       "--json_file",
@@ -328,7 +328,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/ios/run.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
       "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake test 2.app",
       "--json_file",
@@ -363,7 +363,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/ios/run.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
       "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake included test 1.app",
       "--json_file",
@@ -398,7 +398,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/ios/run.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/run.py",
       "--app",
       "[SLAVE_BUILD]/src/xcodebuild/Debug-iphonesimulator/fake included test 2.app",
       "--json_file",

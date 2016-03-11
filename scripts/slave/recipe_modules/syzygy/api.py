@@ -121,7 +121,7 @@ PATCH=1
     Returns:
       The generated python step.
     """
-    gsutil_cp_dir_py = self.m.path['build'].join(
+    gsutil_cp_dir_py = self.package_repo_resource(
         'scripts', 'slave', 'syzygy', 'gsutil_cp_dir.py')
     dst_dir = '%s/%s' % (self._SYZYGY_GS, dst_rel_path)
     args = ['--public-read', src_dir, dst_dir]
@@ -140,7 +140,7 @@ PATCH=1
     Returns:
       The generated python step.
     """
-    gsutil_bat = self.m.path['build'].join(
+    gsutil_bat = self.package_repo_resource(
         'scripts', 'slave', 'gsutil.bat')
     dst_dir = '%s/%s' % (self._SYZYGY_GS, dst_rel_path)
     args = ['cp', '-t', '-a', 'public-read', src_path, dst_dir]

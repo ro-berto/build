@@ -75,7 +75,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/tools/pycurl.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
       "https://codereview.chromium.org/download/issue12853011_1.diff",
       "--outfile",
       "/path/to/tmp/"

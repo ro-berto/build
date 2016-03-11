@@ -216,7 +216,7 @@
   },
   {
     "cmd": [
-      "[BUILD]\\scripts\\slave\\gsutil.bat",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\gsutil.bat",
       "cp",
       "-t",
       "-a",

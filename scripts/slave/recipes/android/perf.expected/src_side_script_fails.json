@@ -199,7 +199,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/daemonizer.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
       "[SLAVE_BUILD]/src/out/logcat"
@@ -214,7 +214,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/android/authorize_adb_devices.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb"
@@ -363,7 +363,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/daemonizer.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
       "--action",
       "restart",
       "--pid-file-path",
@@ -624,7 +624,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/daemonizer.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
       "--action",
       "stop",
       "--pid-file-path",

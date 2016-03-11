@@ -36,7 +36,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/gatekeeper_ng.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
       "-v",
       "--json",
       "[BUILD]/scripts/slave/gatekeeper.json"
@@ -52,7 +52,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/gatekeeper_ng.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
       "-v",
       "--json",
       "[BUILD]/scripts/slave/gatekeeper.json",

@@ -174,7 +174,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/daemonizer.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
       "[SLAVE_BUILD]/src/out/logcat"
@@ -560,7 +560,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/tee.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
       "[SLAVE_BUILD]/src/out/Release/full_log",
       "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",

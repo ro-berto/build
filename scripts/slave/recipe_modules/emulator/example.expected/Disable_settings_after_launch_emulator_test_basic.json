@@ -123,7 +123,7 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/daemonizer.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
       "--",
       "[SLAVE_BUILD]/src/build/android/avd.py",
       "run",

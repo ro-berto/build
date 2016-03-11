@@ -310,7 +310,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/archive_dependencies.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/archive_dependencies.py",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--target",
@@ -330,7 +330,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/zip_build.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/zip_build.py",
       "--target",
       "Release",
       "--build-url",
