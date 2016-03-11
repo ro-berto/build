@@ -457,6 +457,25 @@ class ChromiumApi(recipe_api.RecipeApi):
     wrapper += ['--']
     return wrapper
 
+  def ensure_goma(self):
+    # Return early if goma is configured off for this build.
+    if (not self.c.compile_py.compiler or
+        'goma' not in self.c.compile_py.compiler):
+      return
+
+    # New code is only enabled on whitelisted platforms for now.
+    # Other platforms continue to use DEPS-ed goma.
+    if not self.m.platform.is_linux:
+      return
+
+    # TODO(phajdan.jr): Move goma out of src checkout.
+    goma_dir = self.m.path['checkout'].join('build', 'goma', 'client')
+
+    self.c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
+    self.c.compile_py.goma_dir = goma_dir
+
+    self.m.goma.ensure_goma(goma_dir)
+
   def runhooks(self, **kwargs):
     """Run the build-configuration hooks for chromium."""
     env = self.get_env()

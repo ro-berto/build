@@ -2,6 +2,7 @@ DEPS = [
   'depot_tools/bot_update',
   'commit_position',
   'file',
+  'goma',
   'depot_tools/gclient',  # in order to have set_config automatically populate gclient
   'recipe_engine/json',
   'recipe_engine/path',
