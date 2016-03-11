@@ -306,6 +306,7 @@ def SendGomaTsMon(json_file, exit_status):
            'infra.tools.send_ts_mon_values', '--verbose',
            '--ts-mon-target-type', 'task',
            '--ts-mon-task-service-name', 'goma-client',
+           '--ts-mon-task-job-name', 'default',
            '--counter', json.dumps(counter)]
     cmd_filter = chromium_utils.FilterCapture()
     retcode = chromium_utils.RunCommand(
