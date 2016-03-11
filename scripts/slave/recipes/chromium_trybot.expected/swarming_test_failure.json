@@ -325,7 +325,7 @@
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[SLAVE_BUILD]/src/build/goma/client",
       "--swarming-targets-file",
       "gl_tests\n",
       "//out/Release"
@@ -681,7 +681,7 @@
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[SLAVE_BUILD]/src/build/goma/client",
       "--swarming-targets-file",
       "gl_tests\n",
       "//out/Release"

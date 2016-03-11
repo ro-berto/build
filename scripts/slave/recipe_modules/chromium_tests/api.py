@@ -201,7 +201,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     update_step = self.ensure_checkout(
         bot_config, root_solution_revision, force=force)
 
-    self.m.chromium.ensure_goma()
+    if (self.m.chromium.c.compile_py.compiler and
+        'goma' in self.m.chromium.c.compile_py.compiler):
+      self.m.chromium.ensure_goma()
 
     # TODO(robertocn): Remove this hack by the end of Q1/2016.
     if (bot_config.matches_any_bot_id(

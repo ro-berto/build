@@ -205,6 +205,19 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::goma]/resources/ensure_goma.py",
+      "--target-dir",
+      "[SLAVE_BUILD]/src/build/goma/client",
+      "--download-from-google-storage-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ensure_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/tools/mb/mb.py",
       "gen",
       "-m",
@@ -214,7 +227,7 @@
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[SLAVE_BUILD]/src/build/goma/client",
       "//out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -231,6 +244,8 @@
       "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
+      "--goma-dir",
+      "[SLAVE_BUILD]/src/build/goma/client",
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",

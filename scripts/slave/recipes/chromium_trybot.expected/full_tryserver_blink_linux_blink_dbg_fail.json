@@ -280,7 +280,7 @@
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[SLAVE_BUILD]/src/build/goma/client",
       "//out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -507,7 +507,7 @@
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[SLAVE_BUILD]/src/build/goma/client",
       "//out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",

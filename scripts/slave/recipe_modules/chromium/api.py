@@ -458,11 +458,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     return wrapper
 
   def ensure_goma(self):
-    # Return early if goma is configured off for this build.
-    if (not self.c.compile_py.compiler or
-        'goma' not in self.c.compile_py.compiler):
-      return
-
     # New code is only enabled on whitelisted platforms for now.
     # Other platforms continue to use DEPS-ed goma.
     if not self.m.platform.is_linux:
@@ -527,8 +522,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     # what args to use.
     if use_goma:
       gn_args.append('use_goma=true')
-      # TODO(phajdan.jr): update for swarming, http://crbug.com/585401 .
-      gn_args.append('goma_dir="%s"' % self.m.path['build'].join('goma'))
+      gn_args.append('goma_dir="%s"' % self.c.compile_py.goma_dir)
     gn_args.extend(self.c.project_generator.args)
 
     self.m.python(
@@ -558,8 +552,17 @@ class ChromiumApi(recipe_api.RecipeApi):
     ]
 
     if use_goma:
-      # TODO(phajdan.jr): update for swarming, http://crbug.com/585401 .
-      args += ['--goma-dir', self.m.path['build'].join('goma')]
+      goma_dir = self.c.compile_py.goma_dir
+      if not goma_dir:
+        # This method defaults to use_goma=True, which doesn't necessarily
+        # match build-side configuration. However, MB is configured
+        # src-side, and so it might be actually using goma.
+        self.ensure_goma()
+        goma_dir = self.c.compile_py.goma_dir
+      if not goma_dir:
+        # TODO(phajdan.jr): update for swarming, http://crbug.com/585401 .
+        goma_dir = self.m.path['build'].join('goma')
+      args += ['--goma-dir', goma_dir]
 
     if isolated_targets:
       sorted_isolated_targets = sorted(set(isolated_targets))
