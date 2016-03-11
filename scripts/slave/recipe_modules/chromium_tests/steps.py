@@ -1681,6 +1681,7 @@ class BlinkTest(Test):
   def run(self, api, suffix, test_filter=None):
     results_dir = api.path['slave_build'].join('layout-test-results')
 
+    step_name = self._step_name(suffix)
     args = [
         '--target', api.chromium.c.BUILD_CONFIG,
         '-o', results_dir,
@@ -1689,6 +1690,7 @@ class BlinkTest(Test):
         '--test-results-server', 'test-results.appspot.com',
         '--build-number', str(api.properties['buildnumber']),
         '--builder-name', api.properties['buildername'],
+        '--step-name', step_name,
     ]
     if api.chromium.c.TARGET_PLATFORM == 'android':
       args.extend(['--platform', 'android'])
@@ -1703,7 +1705,7 @@ class BlinkTest(Test):
       step_result = api.chromium.runtest(
           api.path['build'].join('scripts', 'slave', 'chromium',
                                  'layout_test_wrapper.py'),
-          args, name=self._step_name(suffix),
+          args, name=step_name,
           # TODO(phajdan.jr): Clean up the runtest.py mess.
           disable_src_side_runtest_py=True,
           step_test_data=lambda: api.test_utils.test_api.canned_test_output(

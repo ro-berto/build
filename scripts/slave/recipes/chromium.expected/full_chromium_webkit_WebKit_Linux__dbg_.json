@@ -377,7 +377,9 @@
       "--build-number",
       "571",
       "--builder-name",
-      "WebKit Linux (dbg)"
+      "WebKit Linux (dbg)",
+      "--step-name",
+      "webkit_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests",

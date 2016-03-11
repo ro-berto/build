@@ -358,7 +358,9 @@
       "--build-number",
       "571",
       "--builder-name",
-      "WebKit Mac10.10"
+      "WebKit Mac10.10",
+      "--step-name",
+      "webkit_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests",

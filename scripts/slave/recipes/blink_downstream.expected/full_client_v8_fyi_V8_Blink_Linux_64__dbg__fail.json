@@ -197,6 +197,8 @@
       "571",
       "--builder-name",
       "V8-Blink Linux 64 (dbg)",
+      "--step-name",
+      "webkit_tests (with patch)",
       "--no-pixel-tests",
       "--additional-expectations",
       "[SLAVE_BUILD]/src/v8/tools/blink_tests/TestExpectations"
@@ -394,6 +396,8 @@
       "571",
       "--builder-name",
       "V8-Blink Linux 64 (dbg)",
+      "--step-name",
+      "webkit_tests (without patch)",
       "--no-pixel-tests",
       "--additional-expectations",
       "[SLAVE_BUILD]/src/v8/tools/blink_tests/TestExpectations",

@@ -352,6 +352,8 @@
       "571",
       "--builder-name",
       "linux_site_isolation",
+      "--step-name",
+      "webkit_tests (with patch)",
       "--additional-driver-flag",
       "--site-per-process",
       "--additional-expectations",

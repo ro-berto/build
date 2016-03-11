@@ -359,6 +359,8 @@
       "571",
       "--builder-name",
       "linux_blink_oilpan_rel",
+      "--step-name",
+      "webkit_tests (with patch)",
       "--additional-expectations",
       "src/third_party/WebKit/LayoutTests/OilpanExpectations"
     ],

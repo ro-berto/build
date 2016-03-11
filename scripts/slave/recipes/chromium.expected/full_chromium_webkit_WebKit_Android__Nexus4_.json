@@ -549,6 +549,8 @@
       "571",
       "--builder-name",
       "WebKit Android (Nexus4)",
+      "--step-name",
+      "webkit_tests",
       "--platform",
       "android"
     ],

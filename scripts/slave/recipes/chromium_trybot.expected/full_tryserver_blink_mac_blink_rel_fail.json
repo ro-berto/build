@@ -364,7 +364,9 @@
       "--build-number",
       "571",
       "--builder-name",
-      "mac_blink_rel"
+      "mac_blink_rel",
+      "--step-name",
+      "webkit_tests (with patch)"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests (with patch)",
@@ -605,6 +607,8 @@
       "571",
       "--builder-name",
       "mac_blink_rel",
+      "--step-name",
+      "webkit_tests (without patch)",
       "--test-list",
       "bad/totally-bad-probably.html\ntricky/totally-maybe-not-awesome.html",
       "--skipped",

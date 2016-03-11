@@ -399,6 +399,8 @@
       "571",
       "--builder-name",
       "WebKit Linux ASAN",
+      "--step-name",
+      "webkit_tests",
       "--additional-expectations",
       "src/third_party/WebKit/LayoutTests/ASANExpectations",
       "--time-out-ms",

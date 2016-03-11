@@ -385,6 +385,8 @@
       "571",
       "--builder-name",
       "WebKit Win non-Oilpan (dbg)",
+      "--step-name",
+      "webkit_tests",
       "--additional-expectations",
       "src\\third_party\\WebKit\\LayoutTests\\OilpanExpectations"
     ],

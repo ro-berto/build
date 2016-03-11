@@ -373,6 +373,8 @@
       "571",
       "--builder-name",
       "WebKit Linux non-Oilpan",
+      "--step-name",
+      "webkit_tests",
       "--additional-expectations",
       "src/third_party/WebKit/LayoutTests/OilpanExpectations"
     ],

@@ -359,7 +359,9 @@
       "--build-number",
       "571",
       "--builder-name",
-      "v8_linux_blink_rel"
+      "v8_linux_blink_rel",
+      "--step-name",
+      "webkit_tests (with patch)"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests (with patch)",

@@ -331,6 +331,8 @@
       "571",
       "--builder-name",
       "linux_chromium_browser_side_navigation_rel",
+      "--step-name",
+      "webkit_tests (with patch)",
       "--additional-driver-flag=--enable-browser-side-navigation"
     ],
     "cwd": "[SLAVE_BUILD]",

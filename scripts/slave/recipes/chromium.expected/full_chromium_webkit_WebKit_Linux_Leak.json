@@ -378,6 +378,8 @@
       "571",
       "--builder-name",
       "WebKit Linux Leak",
+      "--step-name",
+      "webkit_tests",
       "--additional-expectations",
       "src/third_party/WebKit/LayoutTests/LeakExpectations",
       "--options=--enable-leak-detection"

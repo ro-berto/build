@@ -431,7 +431,9 @@
       "--build-number",
       "571",
       "--builder-name",
-      "win_chromium_rel_ng"
+      "win_chromium_rel_ng",
+      "--step-name",
+      "webkit_tests (with patch)"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests (with patch)",

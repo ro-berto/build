@@ -377,6 +377,8 @@
       "571",
       "--builder-name",
       "win_blink_oilpan_dbg",
+      "--step-name",
+      "webkit_tests (with patch)",
       "--additional-expectations",
       "src\\third_party\\WebKit\\LayoutTests\\OilpanExpectations"
     ],
@@ -608,6 +610,8 @@
       "571",
       "--builder-name",
       "win_blink_oilpan_dbg",
+      "--step-name",
+      "webkit_tests (without patch)",
       "--additional-expectations",
       "src\\third_party\\WebKit\\LayoutTests\\OilpanExpectations",
       "--test-list",

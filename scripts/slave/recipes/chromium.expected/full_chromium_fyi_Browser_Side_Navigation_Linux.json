@@ -238,6 +238,8 @@
       "571",
       "--builder-name",
       "Browser Side Navigation Linux",
+      "--step-name",
+      "webkit_tests",
       "--additional-driver-flag=--enable-browser-side-navigation"
     ],
     "cwd": "[SLAVE_BUILD]",

@@ -105,6 +105,8 @@ def layout_test(options, args):
     command.extend(['--build-number', options.build_number])
   command.extend(['--master-name', slave_utils.GetActiveMaster() or ''])
   command.extend(['--build-name', slave_name])
+  if options.step_name:
+    command.extend(['--step-name', options.step_name])
   # On Windows, look for the target in an exact location.
   if sys.platform == 'win32':
     command.extend(['--build-directory', build_dir])
@@ -209,6 +211,9 @@ def main():
   option_parser.add_option('--builder-name',
                            default=None,
                            help='The name of the builder running this script.')
+  option_parser.add_option('--step-name',
+                           default=None,
+                           help='The name of the step running this script.')
   option_parser.add_option('--build-number',
                            default=None,
                            help=('The build number of the builder running'

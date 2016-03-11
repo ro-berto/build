@@ -237,7 +237,9 @@
       "--build-number",
       "571",
       "--builder-name",
-      "ChromiumPracticeFullTester"
+      "ChromiumPracticeFullTester",
+      "--step-name",
+      "webkit_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests",

@@ -377,7 +377,9 @@
       "--build-number",
       "571",
       "--builder-name",
-      "WebKit Linux Trusty"
+      "WebKit Linux Trusty",
+      "--step-name",
+      "webkit_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests",

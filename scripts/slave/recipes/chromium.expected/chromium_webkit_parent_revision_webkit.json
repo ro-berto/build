@@ -268,7 +268,9 @@
       "--build-number",
       "571",
       "--builder-name",
-      "WebKit Win7"
+      "WebKit Win7",
+      "--step-name",
+      "webkit_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests",

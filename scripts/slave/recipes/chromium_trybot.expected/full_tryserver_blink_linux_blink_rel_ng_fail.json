@@ -359,7 +359,9 @@
       "--build-number",
       "571",
       "--builder-name",
-      "linux_blink_rel_ng"
+      "linux_blink_rel_ng",
+      "--step-name",
+      "webkit_tests (with patch)"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "webkit_tests (with patch)",
@@ -582,6 +584,8 @@
       "571",
       "--builder-name",
       "linux_blink_rel_ng",
+      "--step-name",
+      "webkit_tests (without patch)",
       "--test-list",
       "bad/totally-bad-probably.html\ntricky/totally-maybe-not-awesome.html",
       "--skipped",
