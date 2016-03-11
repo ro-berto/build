@@ -1516,6 +1516,9 @@ def _MainAndroid(options, args, extra_env):
   Returns:
     Exit status code.
   """
+  if not os.environ.get('CHROMIUM_OUTPUT_DIR') and options.target:
+    extra_env['CHROMIUM_OUTPUT_DIR'] = (
+        os.path.abspath(os.path.join(options.build_dir, options.target)))
   if options.run_python_script:
     return _MainLinux(options, args, extra_env)
 
