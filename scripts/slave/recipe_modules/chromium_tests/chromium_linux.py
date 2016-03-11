@@ -180,7 +180,7 @@ SPEC = {
     },
     'Android Arm64 Builder (dbg)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
+      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -198,7 +198,7 @@ SPEC = {
     },
     'Android Builder (dbg)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
+      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -240,7 +240,7 @@ SPEC = {
     },
     'Android Tests (dbg)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
+      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -275,7 +275,7 @@ SPEC = {
 
     'Android Builder': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
+      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -296,6 +296,7 @@ SPEC = {
     },
     'Android Tests': {
       'chromium_config': 'android',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -330,7 +331,7 @@ SPEC = {
 
     'Android Clang Builder (dbg)': {
       'chromium_config': 'android_clang',
-      'chromium_apply_config': ['chrome_with_codecs', 'errorprone'],
+      'chromium_apply_config': ['chrome_with_codecs', 'errorprone', 'mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
