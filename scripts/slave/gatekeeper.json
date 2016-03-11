@@ -449,34 +449,11 @@
     ],
     "https://build.chromium.org/p/chromium.webkit": [
       {
-        "sheriff_classes": ["sheriff_webkit"],
-
-        "forgive_all": "true",
-
-        "subject_template": "%(project_name)s %(builder_name)s %(result)s",
-
-        "comment": ["Would be nice to use a regexp  here: /Oilpan/i, etc."],
-        "excluded_builders" : [
-            "WebKit Linux (deps)",
-            "WebKit Linux non-Oilpan (dbg)",
-            "WebKit Linux non-Oilpan",
-            "WebKit Linux non-Oilpan Leak",
-            "WebKit Linux non-Oilpan ASAN",
-            "WebKit Mac Builder (deps)",
-            "WebKit Mac non-Oilpan (dbg)",
-            "WebKit Mac non-Oilpan",
-            "WebKit Mac10.6 (deps)",
-            "WebKit Win Builder (deps)",
-            "WebKit Win non-Oilpan (dbg)",
-            "WebKit Win non-Oilpan"
+        "categories": [
+          "chromium_tree_closer"
         ],
-
         "builders": {
-          "*": {
-            "categories": [
-              "chromium_tree_closer"
-            ]
-          }
+          "*": {}
         }
       }
     ],
