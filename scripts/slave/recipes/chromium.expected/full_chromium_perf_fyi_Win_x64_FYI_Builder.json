@@ -141,7 +141,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\compile.py",
       "--ninja-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "--target",
       "Release_x64",
       "--src-dir",
