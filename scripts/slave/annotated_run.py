@@ -278,7 +278,7 @@ def _run_command(cmd, **kwargs):
     LOGGER.info('(Dry Run) Would have executed command: %s', cmd)
     return 0, ''
 
-  LOGGER.info('Executing command (subprocess kwargs: %s): %s', kwargs, cmd)
+  LOGGER.debug('Executing command: %s', cmd)
   kwargs.setdefault('stderr', subprocess.STDOUT)
   proc = subprocess.Popen(cmd, **kwargs)
   stdout, _ = proc.communicate()
