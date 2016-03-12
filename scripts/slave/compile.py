@@ -38,7 +38,7 @@ CURRENT_DIR = os.path.abspath(os.getcwd())
 BUILDER_DIR = os.path.dirname(CURRENT_DIR)
 SLAVE_DIR = os.path.dirname(BUILDER_DIR)
 # GOMA_CACHE_DIR used for caching long-term data.
-GOMA_CACHE_DIR = os.path.join(SLAVE_DIR, 'goma_cache')
+DEFAULT_GOMA_CACHE_DIR = os.path.join(SLAVE_DIR, 'goma_cache')
 
 # Path of the scripts/slave/ checkout on the slave, found by looking at the
 # current compile.py script's path's dirname().
@@ -163,9 +163,9 @@ def goma_setup(options, env):
   # Caches CRLs in GOMA_CACHE_DIR.
   # Since downloading CRLs is usually slow, caching them may improves
   # compiler_proxy start time.
-  if not os.path.exists(GOMA_CACHE_DIR):
-    os.mkdir(GOMA_CACHE_DIR, 0700)
-  env['GOMA_CACHE_DIR'] = GOMA_CACHE_DIR
+  if not os.path.exists(options.goma_cache_dir):
+    os.mkdir(options.goma_cache_dir, 0700)
+  env['GOMA_CACHE_DIR'] = options.goma_cache_dir
 
   # Enable DepsCache. DepsCache caches the list of files to send goma server.
   # This will greatly improve build speed when cache is warmed.
@@ -1247,6 +1247,9 @@ def real_main():
   option_parser.add_option('--goma-dir',
                            default=os.path.join(BUILD_DIR, 'goma'),
                            help='specify goma directory')
+  option_parser.add_option('--goma-cache-dir',
+                           default=DEFAULT_GOMA_CACHE_DIR,
+                           help='specify goma cache directory')
   option_parser.add_option('--goma-hermetic', default='error',
                            help='Set goma hermetic mode')
   option_parser.add_option('--goma-enable-remote-link', default=None,

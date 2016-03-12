@@ -96,6 +96,8 @@
       "Debug",
       "--src-dir",
       "[SLAVE_BUILD]/v8",
+      "--goma-cache-dir",
+      "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
       "--compiler",

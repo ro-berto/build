@@ -168,6 +168,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       self.package_repo_resource('scripts', 'slave', 'compile.py'),
       '--target', target or self.c.build_config_fs,
       '--src-dir', self.m.path['checkout'],
+      '--goma-cache-dir', self.m.path['goma_cache'],
     ]
     if self.c.compile_py.build_args:
       args += ['--build-args', self.c.compile_py.build_args]

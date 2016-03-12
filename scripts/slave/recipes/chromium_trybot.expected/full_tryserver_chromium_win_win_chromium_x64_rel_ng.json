@@ -283,6 +283,8 @@
       "Release_x64",
       "--src-dir",
       "[SLAVE_BUILD]\\src",
+      "--goma-cache-dir",
+      "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
       "--compiler",

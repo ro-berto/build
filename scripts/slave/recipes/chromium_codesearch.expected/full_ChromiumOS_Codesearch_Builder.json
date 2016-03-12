@@ -189,6 +189,8 @@
       "Debug",
       "--src-dir",
       "[SLAVE_BUILD]/src",
+      "--goma-cache-dir",
+      "[GOMA_CACHE]",
       "--build-args",
       "-k 0",
       "--build-tool",
