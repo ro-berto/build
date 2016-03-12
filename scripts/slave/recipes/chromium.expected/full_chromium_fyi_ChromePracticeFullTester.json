@@ -166,6 +166,8 @@
       "--show-path",
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
+      "--ninja-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "--target",
       "Release",
       "--src-dir",

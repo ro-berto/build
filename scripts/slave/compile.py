@@ -879,7 +879,7 @@ def main_ninja(options, args):
     print 'chdir to %s' % options.src_dir
     os.chdir(options.src_dir)
 
-    command = ['ninja', '-C', options.target_output_dir]
+    command = [options.ninja_path, '-C', options.target_output_dir]
 
     # HACK(yyanagisawa): update environment files on |env| update.
     # For compiling on Windows, environment in environment files are used.
@@ -1264,6 +1264,8 @@ def real_main():
   option_parser.add_option('--goma-jsonstatus',
                            help='Specify a file to dump goma_ctl jsonstatus.')
   option_parser.add_option('--verbose', action='store_true')
+  option_parser.add_option('--ninja-path', default='ninja',
+                           help='Specify path to the ninja tool.')
   option_parser.add_option('--ninja-ensure-up-to-date', action='store_true',
                            help='Checks the output of the ninja builder to '
                                 'confirm that a second compile immediately '

@@ -166,6 +166,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       '--show-path',
       'python',
       self.package_repo_resource('scripts', 'slave', 'compile.py'),
+      '--ninja-path', self.m.depot_tools.ninja_path,
       '--target', target or self.c.build_config_fs,
       '--src-dir', self.m.path['checkout'],
       '--goma-cache-dir', self.m.path['goma_cache'],
