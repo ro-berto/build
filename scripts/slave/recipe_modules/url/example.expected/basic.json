@@ -46,6 +46,20 @@
     "name": "fetch fake://foo/bar"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
+      "fake://foo/bar (w/ auth)",
+      "--outfile",
+      "/path/to/tmp/",
+      "--headers-json",
+      "{\"Authorization\": \"thing\"}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "fetch fake://foo/bar (w/ auth)"
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

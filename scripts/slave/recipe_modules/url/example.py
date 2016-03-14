@@ -17,6 +17,7 @@ def RunSteps(api):
   api.step('step4',
            ['/bin/echo', api.url.join('//foo/bar//', '//baz//')])
   api.url.fetch('fake://foo/bar', attempts=5)
+  api.url.fetch('fake://foo/bar (w/ auth)', headers={'Authorization': 'thing'})
 
 def GenTests(api):
   yield api.test('basic')

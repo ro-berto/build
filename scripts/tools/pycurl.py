@@ -4,6 +4,7 @@
 # found in the LICENSE file.
 
 import argparse
+import json
 import logging
 import sys
 import time
@@ -20,7 +21,14 @@ def main():
   parser.add_argument('--attempts', type=int, default=1,
       help='The number of attempts make (with exponential backoff) before '
            'failing.')
+  parser.add_argument('--headers-json', type=str,
+      help='A json file containing any headers to include with the request.')
   args = parser.parse_args()
+
+  headers = None
+  if args.headers_json:
+    with open(args.headers_json, 'r') as json_file:
+      headers = json.load(json_file)
 
   if args.attempts < 1:
     args.attempts = 1
@@ -28,7 +36,7 @@ def main():
   logging.info('Connecting...')
   retry_delay_seconds = 2
   for i in xrange(args.attempts):
-    r = requests.get(args.url)
+    r = requests.get(args.url, headers=headers)
     if r.status_code == requests.codes.ok:
       break
     logging.error('(%d/%d) Request returned status code: %d',

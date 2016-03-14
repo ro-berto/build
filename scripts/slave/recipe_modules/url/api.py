@@ -13,22 +13,25 @@ class UrlApi(recipe_api.RecipeApi):
   def join(self, *parts):
     return '/'.join(str(x).strip('/') for x in parts)
 
-  def fetch(self, url, step_name=None, attempts=None, **kwargs):
+  def fetch(self, url, step_name=None, attempts=None, headers=None, **kwargs):
     """Fetches data at given URL and returns it as str.
 
     Args:
       url: URL to fetch.
       step_name: optional step name, 'fetch <url>' by default.
       attempts: how many attempts to make (1 by default).
+      headers: a {header_name: value} dictionary for HTTP headers.
 
     Returns:
       Fetched data as string.
     """
     fetch_result = self.fetch_to_file(
-        url, None, step_name=step_name, attempts=attempts, **kwargs)
+        url, None, step_name=step_name, attempts=attempts, headers=headers,
+        **kwargs)
     return fetch_result.raw_io.output
 
-  def fetch_to_file(self, url, path, step_name=None, attempts=None, **kwargs):
+  def fetch_to_file(self, url, path, step_name=None, attempts=None,
+                    headers=None, **kwargs):
     """Fetches data at given URL and writes it to file.
 
     Args:
@@ -37,6 +40,7 @@ class UrlApi(recipe_api.RecipeApi):
             it later if not needed.
       step_name: optional step name, 'fetch <url>' by default.
       attempts: how many attempts to make (1 by default).
+      headers: a {header_name: value} dictionary for HTTP headers.
 
     Returns:
       Step.
@@ -47,6 +51,10 @@ class UrlApi(recipe_api.RecipeApi):
         url,
         '--outfile', self.m.raw_io.output(leak_to=path),
     ]
+
+    if headers:
+      args.extend(['--headers-json', self.m.json.input(headers)])
+
     if attempts:
       args.extend(['--attempts', attempts])
     return self.m.python(
