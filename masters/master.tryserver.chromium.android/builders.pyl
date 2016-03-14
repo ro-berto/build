@@ -11,14 +11,6 @@
   # This is sorted first alphabetically by slave pool, and then alphabetically
   # by builder name
   "builders": {
-    "android_amp_rel_tests_recipe": {
-      "builder_timeout_s": 6900,  # 60 * 115
-      "recipe": "android/appurify",
-      "scheduler": None,
-      "slavebuilddir": "android",
-      "slave_pools": ["amp"],
-    },
-
     "android_compile_mips_dbg": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
@@ -156,19 +148,6 @@
   "schedulers": { },
 
   "slave_pools": {
-    "amp": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": [
-        "build225-a4",
-        "build226-a4",
-        "build227-a4",
-        "build228-a4",
-      ],
-    },
     "slaves_with_devices_cq": {
       "slave_data": {
         "os": "linux",

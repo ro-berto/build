@@ -940,17 +940,6 @@ class AndroidApi(recipe_api.RecipeApi):
         env=self.m.chromium.get_env(),
         **kwargs)
 
-  def run_python_unit_test_suite(self, suite, verbose=True, **kwargs):
-    args = []
-    if verbose:
-      args.append('--verbose')
-
-    self.test_runner(
-        str(suite),
-        ['python', '-s', suite] + args,
-        env=self.m.chromium.get_env(),
-        **kwargs)
-
   def run_webview_cts(self):
 
     _CTS_FILE_NAME = 'android-cts-5.1_r1-linux_x86-arm.zip'

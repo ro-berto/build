@@ -243,6 +243,10 @@ def GenTests(api):
          properties_for('tester') +
          api.step_data('device_status_check', retcode=2))
 
+  yield (api.test('tester_with_step_warning') +
+         properties_for('tester') +
+         api.step_data('unittests', retcode=88))
+
   yield (api.test('tester_blacklisted_devices') +
          properties_for('tester') +
          api.override_step_data('provision_devices',
