@@ -21,6 +21,10 @@ import os
 import subprocess
 import sys
 
+# The revision from which v8 coverage is supported.
+# TODO(machenbach): Remove this as soon as it's supported for 1000+ revisions. 
+V8_COVERAGE_SUPPORT_COMMIT = '8fcee2146121482b7fa7827b83477f51e0127d3d'
+
 assert len(sys.argv) == 4
 
 # Read the raw patch.
@@ -70,10 +74,14 @@ for i in xrange(1000):
       break
   else:
     # Loop terminated gracefully, all file hashes matched.
-    print "Found a match: %s" % commit_hsh
+    print 'Found a match: %s' % commit_hsh
     with open(sys.argv[3], 'w') as out_file:
       out_file.write(commit_hsh)
     sys.exit(0)
 
-print "Reached commit limit. Couldn't find an appropriate commit."
+  if commit_hsh == V8_COVERAGE_SUPPORT_COMMIT:
+    print 'The CL is too old, code coverage is not supported. Please rebase.'
+    sys.exit(1)
+
+print 'Reached commit limit. Couldn\'t find an appropriate commit.'
 sys.exit(1)
