@@ -258,17 +258,15 @@ def _get_revision_range_step_data(api, range_data):
 
 def _get_step_data_for_revision(api, revision_data, skip_results=False):
   """Generator that produces step patches for fake results."""
-  commit_pos_number = revision_data['commit_pos']
+  commit_pos = revision_data['commit_pos']
   commit_hash = revision_data['hash']
   test_results = revision_data['test_results']
 
   if 'refrange' in revision_data:
     parent_step = 'Resolving reference range.'
-    commit_pos = 'refs/heads/master@{#%s}' % commit_pos_number
-    step_name = parent_step + 'crrev get commit hash for ' + commit_pos
-    yield api.step_data(
-        step_name,
-        stdout=api.json.output({'git_sha': commit_hash}))
+    step_name = parent_step + 'resolving commit_pos ' + commit_pos
+    yield api.step_data(step_name, stdout=api.raw_io.output('hash:' +
+                                                            commit_hash))
 
   if not skip_results:
     step_name = ('Waiting for chromium@%s.gsutil '

@@ -50,46 +50,36 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::crrev]/resources/crrev_client.py",
-      "get_numbering",
-      "--params-file",
-      "{\"number\": 314017, \"numbering_identifier\": \"refs/heads/master\", \"numbering_type\": \"COMMIT_POSITION\", \"project\": \"chromium\", \"repo\": \"chromium/src\"}",
-      "--attempts",
-      "3"
+      "git",
+      "log",
+      "--format=hash:%H",
+      "--grep",
+      "^Cr-Commit-Position: refs/heads/master@{#314017}",
+      "-1",
+      "origin/master"
     ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#314017}",
-    "stdout": "/path/to/tmp/json",
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
+    "name": "Resolving reference range.resolving commit_pos 314017",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"git_sha\": \"00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::crrev]/resources/crrev_client.py",
-      "get_numbering",
-      "--params-file",
-      "{\"number\": 314015, \"numbering_identifier\": \"refs/heads/master\", \"numbering_type\": \"COMMIT_POSITION\", \"project\": \"chromium\", \"repo\": \"chromium/src\"}",
-      "--attempts",
-      "3"
+      "git",
+      "log",
+      "--format=hash:%H",
+      "--grep",
+      "^Cr-Commit-Position: refs/heads/master@{#314015}",
+      "-1",
+      "origin/master"
     ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Resolving reference range.crrev get commit hash for refs/heads/master@{#314015}",
-    "stdout": "/path/to/tmp/json",
+    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
+    "name": "Resolving reference range.resolving commit_pos 314015",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"git_sha\": \"a6298e4afedbf2cd461755ea6f45b0ad64222222\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
