@@ -203,6 +203,7 @@ def goma_setup(options, env):
   if options.goma_jsonstatus:
     chromium_utils.RunCommand(
         goma_ctl_cmd + ['jsonstatus', options.goma_jsonstatus], env=env)
+    goma_utils.SendGomaTsMon(options.goma_jsonstatus, -1)
 
   # Try to stop compiler_proxy so that it flushes logs and stores
   # GomaStats.

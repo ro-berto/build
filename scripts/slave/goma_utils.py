@@ -280,7 +280,8 @@ def SendGomaTsMon(json_file, exit_status):
     result = 'success'
     if exit_status != 0:
       result = 'failure'
-      if (not infra_status or
+      if (exit_status < 0 or
+          not infra_status or
           infra_status['ping_status_code'] != 200 or
           infra_status.get('num_user_error', 0) > 0):
         result = 'exception'
