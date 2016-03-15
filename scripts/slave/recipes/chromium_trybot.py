@@ -58,6 +58,7 @@ CHROMIUM_BLINK_TESTS_PATHS = freeze([
   'content/renderer/service_worker',
   'content/shell/browser/layout_test',
   'device/bluetooth',
+  'device/usb/public/interfaces',
   'third_party/WebKit',
   'third_party/harfbuzz-ng',
   'v8',
