@@ -33,6 +33,11 @@ TEST_CONFIGS = freeze({
     'name': 'Mjsunit',
     'tests': ['mjsunit'],
   },
+  'mjsunit_ignition': {
+    'name': 'Mjsunit - ignition',
+    'tests': ['mjsunit'],
+    'test_args': ['--variants=ignition', '--ignition'],
+  },
   'mjsunit_sp_frame_access': {
     'name': 'Mjsunit - sp frame access',
     'tests': ['mjsunit'],

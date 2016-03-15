@@ -26,6 +26,7 @@ Mjsunit_2 = TestStepConfig('mjsunit', shards=2)
 Mjsunit_3 = TestStepConfig('mjsunit', shards=3)
 Ignition = TestStepConfig('ignition')
 MjsunitSPFrameAccess = TestStepConfig('mjsunit_sp_frame_access')
+MjsunitIgnition_2 = TestStepConfig('mjsunit_ignition', shards=2)
 Mozilla = TestStepConfig('mozilla')
 OptimizeForSize = TestStepConfig('optimize_for_size')
 Presubmit = TestStepConfig('presubmit')
@@ -1165,7 +1166,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'enable_swarming': True,
-        'tests': [Mjsunit_3, Webkit],
+        'tests': [Mjsunit_3, Webkit, MjsunitIgnition_2],
         'testing': {'platform': 'linux'},
       },
       'V8 Mac GC Stress': {
@@ -1863,7 +1864,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [Mjsunit_3, Webkit],
+        'tests': [Mjsunit_3, Webkit, MjsunitIgnition_2],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_asan_rel': {
