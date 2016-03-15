@@ -171,6 +171,7 @@
       "https://isolateserver.appspot.com",
       "--verbose",
       "[SLAVE_BUILD]\\v8\\out\\Release_x64\\bot_default.isolated.gen.json",
+      "[SLAVE_BUILD]\\v8\\out\\Release_x64\\ignition.isolated.gen.json",
       "[SLAVE_BUILD]\\v8\\out\\Release_x64\\simdjs.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -178,6 +179,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"ignition\": \"[dummy hash for ignition]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"simdjs\": \"[dummy hash for simdjs]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -206,6 +208,7 @@
           "rietveld": "https://codereview.chromium.org",
           "swarm_hashes": {
             "bot_default": "[dummy hash for bot_default]",
+            "ignition": "[dummy hash for ignition]",
             "simdjs": "[dummy hash for simdjs]"
           }
         }
