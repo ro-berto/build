@@ -1239,7 +1239,7 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
         },
-        'tests': [V8Testing_2, Test262],
+        'tests': [V8Testing_2, Test262, Ignition],
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux64 ASAN no inline - release builder',
@@ -1370,7 +1370,7 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
         },
-        'tests': [V8Testing, Test262_2],
+        'tests': [V8Testing, Test262_2, Ignition],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - MSAN': {
@@ -1392,7 +1392,7 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
         },
-        'tests': [V8Testing, Test262_2],
+        'tests': [V8Testing, Test262_2, Ignition],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - cfi': {
@@ -1413,6 +1413,7 @@ BUILDERS = {
           Test262,
           Mozilla,
           SimdJs,
+          Ignition,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1424,7 +1425,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_4],
+        'tests': [V8Testing_4, Ignition],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -1885,7 +1886,7 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
         },
-        'tests': [V8Testing_2, Test262_2],
+        'tests': [V8Testing_2, Test262_2, Ignition],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_msan_rel': {
@@ -1908,7 +1909,7 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
         },
-        'tests': [V8Testing_2, Test262_2],
+        'tests': [V8Testing_2, Test262_2, Ignition],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_tsan_rel': {
@@ -1928,7 +1929,7 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
         },
-        'tests': [V8Testing_2, Test262_2],
+        'tests': [V8Testing_2, Test262_2, Ignition],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_sanitizer_coverage_rel': {
