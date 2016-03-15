@@ -95,7 +95,12 @@ class ArchiveApi(recipe_api.RecipeApi):
       exclude_files=None, **kwargs):
     """Returns a step invoking zip_build.py to zip up a Chromium build.
        If build_url is specified, also uploads the build."""
-    args = ['--target', target]
+    args = [
+        '--show-path',
+        'python',
+        self.package_repo_resource('scripts', 'slave', 'zip_build.py'),
+        '--target', target,
+    ]
     if build_url:
       args.extend(['--build-url', build_url])
     if build_revision:
@@ -118,7 +123,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     kwargs['allow_subannotations'] = True
     self.m.python(
       step_name,
-      self.package_repo_resource('scripts', 'slave', 'zip_build.py'),
+      self.package_repo_resource('scripts', 'tools', 'runit.py'),
       args,
       infra_step=True,
       **kwargs
@@ -298,7 +303,12 @@ class ArchiveApi(recipe_api.RecipeApi):
       build_revision=None, build_archive_url=None, **kwargs):
     """Returns a step invoking extract_build.py to download and unzip
        a Chromium build."""
-    args = ['--target', target]
+    args = [
+        '--show-path',
+        'python',
+        self.package_repo_resource('scripts', 'slave', 'extract_build.py'),
+        '--target', target,
+    ]
     if build_archive_url:
       args.extend(['--build-archive-url', build_archive_url])
     else:
@@ -328,7 +338,7 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     self.m.python(
       step_name,
-      self.package_repo_resource('scripts', 'slave', 'extract_build.py'),
+      self.package_repo_resource('scripts', 'tools', 'runit.py'),
       args,
       infra_step=True,
       **kwargs
@@ -405,8 +415,13 @@ class ArchiveApi(recipe_api.RecipeApi):
        build dependency information for the build."""
     try:
       script = self.package_repo_resource(
-          'scripts', 'slave', 'archive_dependencies.py')
-      args = []
+          'scripts', 'tools', 'runit.py')
+      args = [
+          '--show-path',
+          'python',
+          self.package_repo_resource(
+              'scripts', 'slave', 'archive_dependencies.py'),
+      ]
       args.extend(['--src-dir', self.m.path['checkout']])
       args.extend(['--target', target])
       args.extend(['--master', master])

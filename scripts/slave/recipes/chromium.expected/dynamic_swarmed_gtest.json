@@ -315,6 +315,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/archive_dependencies.py",
       "--src-dir",
       "[SLAVE_BUILD]/src",
@@ -335,6 +338,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/zip_build.py",
       "--target",
       "Release",
