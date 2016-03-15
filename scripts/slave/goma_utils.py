@@ -30,6 +30,9 @@ PLATFORM_RUN_CMD = {
     'posix': '/opt/infra-python/run.py',
 }
 
+TIMESTAMP_PATTERN = re.compile('(\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})')
+TIMESTAMP_FORMAT = '%Y/%m/%d %H:%M:%S'
+
 
 def GetShortHostname():
   """Get this machine's short hostname in lower case."""
@@ -250,6 +253,14 @@ def SendGomaStats(goma_stats_file, goma_crash_report, build_data_dir):
       pass
 
 
+def GetCompilerProxyStartTime():
+  """Returns datetime instance of the latest compiler_proxy start time."""
+  with open(GetLatestGomaCompilerProxyInfo()) as f:
+    matched = TIMESTAMP_PATTERN.search(f.readline())
+    if matched:
+      return datetime.datetime.strptime(matched.group(1), TIMESTAMP_FORMAT)
+
+
 def SendGomaTsMon(json_file, exit_status):
   """Send latest Goma status to ts_mon.
 
@@ -303,6 +314,10 @@ def SendGomaTsMon(json_file, exit_status):
         'clobber': clobber,
         'os': os.name,
         'result': result}
+    start_time = GetCompilerProxyStartTime()
+    if start_time:
+      counter['start_time'] = int(
+          (start_time - datetime.datetime.fromtimestamp(0)).total_seconds())
     cmd = [PLATFORM_RUN_CMD.get(os.name),
            'infra.tools.send_ts_mon_values', '--verbose',
            '--ts-mon-target-type', 'task',
