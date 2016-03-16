@@ -312,7 +312,7 @@ def SendGomaTsMon(json_file, exit_status):
         'master': os.environ.get('BUILDBOT_MASTERNAME', 'unknown'),
         'slave': os.environ.get('BUILDBOT_SLAVENAME', 'unknown'),
         'clobber': clobber,
-        'os': os.name,
+        'os': chromium_utils.PlatformName(),
         'result': result}
     start_time = GetCompilerProxyStartTime()
     if start_time:
