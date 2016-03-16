@@ -24,10 +24,7 @@ can't remove a property by inheriting or overwriting it). Builders can inherit
 categories from their master.
 
 A master consists of zero or more sections, which specify which builders are
-watched by the section and what action should be taken. A section can specify
-tree_closing to be false, which causes the section to only send out emails
-instead of closing the tree. A section or builder can also specify to respect
-a build's failure status with respect_build_status.
+watched by the section and what action should be taken.
 
 The 'excluded_builders' key is a list of builder names that will not be
 processed even if they match a configuration. This is useful when the builder
@@ -59,6 +56,21 @@ people. It is enabled by providing the string 'true'.
 and 'closing_steps', but they won't close if the step is missing. This is like
 previous gatekeeper behavior. They can be set to '*', which will match all
 steps in the builder.
+
+'respect_build_status' means to use the buildbot result of the entire build
+as an additional way to close the tree. As an example, if a build's closing
+steps succeeded but the overall build result was FAILURE, the tree would
+close if respect_build_status is set to True. respect_build_status only checks
+for FAILURE, not any of the other statuses (including EXCEPTION). A build
+status of SUCCESS will not override failing closing or forgiving steps.
+respect_build_status is a boolean (true or false in JSON) and defaults to
+False.
+
+'close_tree' allows masters or builders to disable the --set-status option
+set in gatekeeper_trees.json. In particular, this would be useful for a specific
+builder on a tree-closing master which should notify the blamelist about
+failures but should not close the tree. close_tree is a boolean (true or false
+in JSON) and defaults to True.
 
 Note that if a builder sets something as forgiving_optional which is set as
 closing_optional in the master config, this value will be removed from
@@ -130,6 +142,7 @@ DEFAULTS = {
                         '"%(builder_name)s" %(blamelist)s)'),
     'subject_template': ('buildbot %(result)s in %(project_name)s on '
                          '%(builder_name)s, revision %(revision)s'),
+    'respect_build_status': False,
 }
 
 
@@ -172,22 +185,26 @@ def load_gatekeeper_config(filename):
   """Loads and verifies config json, constructs builder config dict."""
 
   # Keys which are allowed in a master or builder section.
-  master_keys = ['excluded_builders',
+  master_keys = ['close_tree',
+                 'excluded_builders',
                  'excluded_steps',
                  'forgive_all',
+                 'respect_build_status',
                  'sheriff_classes',
                  'status_template',
                  'subject_template',
                  'tree_notify',
   ]
 
-  builder_keys = ['closing_optional',
+  builder_keys = ['close_tree',
+                  'closing_optional',
                   'closing_steps',
                   'excluded_builders',
                   'excluded_steps',
                   'forgive_all',
                   'forgiving_optional',
                   'forgiving_steps',
+                  'respect_build_status',
                   'sheriff_classes',
                   'status_template',
                   'subject_template',
@@ -198,6 +215,9 @@ def load_gatekeeper_config(filename):
   # so more specific (master -> category -> builder) strings clobber
   # more generic ones.
   strings = ['forgive_all', 'status_template', 'subject_template']
+
+  # Bools also share the 'strings' clobbering logic.
+  bools = ['close_tree', 'respect_build_status']
 
   with open(filename) as f:
     raw_gatekeeper_config = json.load(f)
@@ -214,8 +234,7 @@ def load_gatekeeper_config(filename):
   for master_url, master_sections in masters.iteritems():
     for master_section in master_sections:
       gatekeeper_config.setdefault(master_url, []).append({})
-      allowed_keys(master_section, 'builders', 'categories', 'close_tree',
-                   'respect_build_status', *master_keys)
+      allowed_keys(master_section, 'builders', 'categories', *master_keys)
 
       builders = master_section.get('builders', {})
       for buildername, builder in builders.iteritems():
@@ -223,6 +242,8 @@ def load_gatekeeper_config(filename):
         for key, item in builder.iteritems():
           if key in strings:
             assert isinstance(item, basestring)
+          elif key in bools:
+            assert isinstance(item, bool)
           else:
             assert isinstance(item, list)
             assert all(isinstance(elem, basestring) for elem in item)
@@ -236,26 +257,23 @@ def load_gatekeeper_config(filename):
             gatekeeper_builder.setdefault(k, DEFAULTS[k])
           elif k in strings:
             gatekeeper_builder.setdefault(k, '')
+          elif k in bools:
+            gatekeeper_builder.setdefault(k, True)
           else:
             gatekeeper_builder.setdefault(k, set())
 
         # Inherit any values from the master.
         for k in master_keys:
-          if k in strings:
+          if k in strings or k in bools:
             if k in master_section:
               gatekeeper_builder[k] = master_section[k]
           else:
             gatekeeper_builder[k] |= set(master_section.get(k, []))
 
-        gatekeeper_builder['close_tree'] = master_section.get('close_tree',
-                                                              True)
-        gatekeeper_builder['respect_build_status'] = master_section.get(
-            'respect_build_status', False)
-
         # Inherit any values from the categories.
         for c in master_section.get('categories', []):
           for k in builder_keys:
-            if k in strings:
+            if k in strings or k in bools:
               if k in categories[c]:
                 gatekeeper_builder[k] = categories[c][k]
             else:
@@ -271,7 +289,7 @@ def load_gatekeeper_config(filename):
 
         for c in builder.get('categories', []):
           for k in builder_keys:
-            if k in strings:
+            if k in strings or k in bools:
               if k in categories[c]:
                 gatekeeper_builder[k] = categories[c][k]
             else:
@@ -287,7 +305,7 @@ def load_gatekeeper_config(filename):
 
         # Add in any builder-specific values.
         for k in builder_keys:
-          if k in strings:
+          if k in strings or k in bools:
             if k in builder:
               gatekeeper_builder[k] = builder[k]
           else:
