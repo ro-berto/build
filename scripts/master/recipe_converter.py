@@ -112,9 +112,9 @@ _master_builder_map = {
                      # 'Chromium Win MiniInstaller Tests',
                      # 'Windows 8 App Certification',
                      # 'Chromium Win x64 Clobber',
-                     # 'Chromium Builder (dbg)',
-                     # 'Vista Tests (dbg)(1)',
-                     # 'Vista Tests (dbg)(2)',
+                     'Chromium Builder (dbg)',
+                     'Vista Tests (dbg)(1)',
+                     'Vista Tests (dbg)(2)',
                      # 'Chromium Windows Instant Extended',
                      # 'Chromium Linux Buildrunner',
                      # 'Chromium Windows Buildrunner',
@@ -123,10 +123,10 @@ _master_builder_map = {
                      # 'Android Asan Builder Tests (dbg)',
                      # 'Blink Linux LSan ASan',
                      # 'CFI Linux CF',
-                     'Windows Browser (DrMemory light) (1)',
-                     'Windows Browser (DrMemory light) (2)',
-                     'Windows Builder (DrMemory)',
-                     'Windows Tests (DrMemory)',
+                     # 'Windows Browser (DrMemory light) (1)',
+                     # 'Windows Browser (DrMemory light) (2)',
+                     # 'Windows Builder (DrMemory)',
+                     # 'Windows Tests (DrMemory)',
                     ]
 }
 
