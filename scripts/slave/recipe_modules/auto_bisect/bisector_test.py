@@ -112,7 +112,7 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
     self.assertNotIn('direction of improvement', ''.join(bisector.warnings))
 
   def test_improvement_direction_return_code(self):
-    # Good revision is bad or bad revision is good, should fail.
+    # The improvement direction check doesn't apply for return code bisects.
     bisect_config = copy.deepcopy(self.bisect_config)
     bisect_config['test_type'] = 'return_code'
     bisector = auto_bisect.bisector.Bisector(self.dummy_api, bisect_config,
@@ -120,8 +120,7 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
     bisector.good_rev.mean_value = 1
     bisector.bad_rev.mean_value = 0
     self.assertTrue(bisector.is_return_code_mode())
-    self.assertFalse(bisector.check_improvement_direction())
-    self.assertIn('return code', ''.join(bisector.warnings))
+    self.assertTrue(bisector.check_improvement_direction())
 
   @mock.patch.object(auto_bisect.bisector.Bisector, 'significantly_different',
                      mock.MagicMock(return_value=True))

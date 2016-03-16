@@ -446,14 +446,15 @@ class Bisector(object):
     'bad' revisions is expected to be considered a regression. The
     `improvement_direction` attribute is positive if a larger number is
     considered better, and negative if a smaller number is considered better.
+
+    Returns:
+      True if the check passes (i.e. no problem), False if the change is not
+      a regression according to the improvement direction.
     """
     good = self.good_rev.mean_value
     bad = self.bad_rev.mean_value
 
     if self.is_return_code_mode():
-      if good == 1 or bad == 0:
-        self._set_failed_return_code_direction_results()
-        return False
       return True
 
     direction = self.improvement_direction
