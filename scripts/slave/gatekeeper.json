@@ -689,7 +689,9 @@
             ],
             "closing_steps": [
               "generate_gyp_files",
-              "compile"
+              "compile",
+              "generate_v2_gyp_files",
+              "compile_v2"
             ]
           },
           "Linux V8 API Stability": {
