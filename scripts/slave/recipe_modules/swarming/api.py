@@ -483,7 +483,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task.buildername:
       tags.add('buildername:' + task.buildername)
     if task.buildnumber:
-      tags.add('buildnumber:%d' % task.buildnumber)
+      tags.add('buildnumber:%s' % task.buildnumber)
     if task.dimensions.get('os'):
       tags.add('os:' + task.dimensions['os'])
     if self.m.properties.get('slavename'):
