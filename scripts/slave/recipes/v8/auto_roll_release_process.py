@@ -20,7 +20,7 @@ DEPS = [
 
 REPO = 'https://chromium.googlesource.com/v8/v8'
 CLUSTERFUZZ = 'https://cluster-fuzz.appspot.com/testcase?key=%d'
-SHOW_MAX_ISSUES = 5
+SHOW_MAX_ISSUES = 10
 CANDIDATE_REF = 'refs/heads/candidate'
 LKGR_REF = 'refs/heads/lkgr'
 ROLL_REF = 'refs/heads/roll'
