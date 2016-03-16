@@ -173,8 +173,9 @@ class V8Api(recipe_api.RecipeApi):
 
     # Bot_update maintains the properties independent of the UI
     # presentation.
-    self.revision = self.m.bot_update.properties['got_revision']
-    self.revision_cp = self.m.bot_update.properties['got_revision_cp']
+    self.revision = self.m.bot_update.last_returned_properties['got_revision']
+    self.revision_cp = (
+        self.m.bot_update.last_returned_properties['got_revision_cp'])
     self.revision_number = str(self.m.commit_position.parse_revision(
         self.revision_cp))
 

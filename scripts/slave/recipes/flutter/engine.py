@@ -19,9 +19,9 @@ DEPS = [
 BUCKET_NAME = 'flutter_infra'
 
 def GetCloudPath(api, path):
-  # TODO(eseidel): api.bot_update.properties is supposedly a known api wart.
-  # iannucci says it will be improved at some point.
-  git_hash = api.bot_update.properties['got_engine_revision']
+  # TODO(eseidel): api.bot_update.last_returned_properties is supposedly a known
+  # api wart. iannucci says it will be improved at some point.
+  git_hash = api.bot_update.last_returned_properties['got_engine_revision']
   return 'flutter/%s/%s' % (git_hash, path)
 
 

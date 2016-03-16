@@ -845,7 +845,7 @@ class SwarmingGTestTest(SwarmingTest):
         gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
         if gtest_results and gtest_results.raw:
           parsed_gtest_data = gtest_results.raw
-          chrome_revision_cp = api.bot_update.properties.get(
+          chrome_revision_cp = api.bot_update.last_returned_properties.get(
               'got_revision_cp', 'x@{#0}')
           chrome_revision = str(api.commit_position.parse_revision(
               chrome_revision_cp))
