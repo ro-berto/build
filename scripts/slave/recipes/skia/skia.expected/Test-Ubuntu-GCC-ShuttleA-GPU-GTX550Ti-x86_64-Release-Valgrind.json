@@ -133,31 +133,13 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport os\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write(os.path.join(os.path.expanduser('~'), 'src'))\n",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "get CHROME_PATH",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  f.write(os.path.join(os.path.expanduser('~'), 'src'))@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
       "make",
       "dm"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Release",
-      "CHROME_PATH": "/home/chrome-bot/src",
+      "CHROME_PATH": "[HOME]/src",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
     },
@@ -171,7 +153,7 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Release",
-      "CHROME_PATH": "/home/chrome-bot/src",
+      "CHROME_PATH": "[HOME]/src",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_release_optimization_level=1 skia_warnings_as_errors=0",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind"
     },

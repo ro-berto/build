@@ -159,6 +159,7 @@ class SkiaApi(recipe_api.RecipeApi):
     self.default_env = {}
     self.slave_dir = self.m.path['slave_build']
     self.skia_dir = self.slave_dir.join('skia')
+    self.infrabots_dir = self.skia_dir.join('infra', 'bots')
 
     # Check out the Skia code.
     self.checkout_steps()
@@ -221,7 +222,7 @@ class SkiaApi(recipe_api.RecipeApi):
         return
 
       self.m.skia_swarming.setup(
-          self.skia_dir.join('infra', 'bots', 'tools', 'luci-go'),
+          self.infrabots_dir.join('tools', 'luci-go'),
           swarming_rev='')
 
       compile_hash = self.compile_steps_swarm()
@@ -308,12 +309,11 @@ class SkiaApi(recipe_api.RecipeApi):
     # Swarm the compile.
     builder_name = derive_compile_bot_name(self.builder_name,
                                            self.builder_cfg)
-    isolate_dir = self.skia_dir.join('infra', 'bots')
-    isolate_path = isolate_dir.join('compile_skia.isolate')
+    isolate_path = self.infrabots_dir.join('compile_skia.isolate')
     isolate_vars = {'BUILDER_NAME': builder_name}
     dimensions = swarm_dimensions(self.builder_cfg)
     task = self.m.skia_swarming.isolate_and_trigger_task(
-        isolate_path, isolate_dir, 'compile_skia', isolate_vars,
+        isolate_path, self.infrabots_dir, 'compile_skia', isolate_vars,
         dimensions, idempotent=True, store_output=False,
         isolate_blacklist=['.git', 'out', '.pyc'])
 
@@ -415,7 +415,7 @@ class SkiaApi(recipe_api.RecipeApi):
     """Download test images if needed."""
     if 'Swarming' in self.builder_name:
       self.run(self.m.python, 'Download images',
-               script=self.skia_dir.join('infra', 'bots', 'download_images.py'),
+               script=self.infrabots_dir.join('download_images.py'),
                env=self.gsutil_env_chromium_skia_gm)
     else:
       self._download_and_copy_dir(
@@ -432,7 +432,7 @@ class SkiaApi(recipe_api.RecipeApi):
     """Download the SKPs if needed."""
     if 'Swarming' in self.builder_name:
       self.run(self.m.python, 'Download SKPs',
-               script=self.skia_dir.join('infra', 'bots', 'download_skps.py'),
+               script=self.infrabots_dir.join('download_skps.py'),
                env=self.gsutil_env_chromium_skia_gm)
     else:
       self._download_and_copy_dir(
@@ -501,8 +501,7 @@ print json.dumps({'ccache': ccache})
 
     # Swarm the tests.
     task_name = 'test_skia'
-    isolate_dir = self.skia_dir.join('infra', 'bots')
-    isolate_path = isolate_dir.join('%s.isolate' % task_name)
+    isolate_path = self.infrabots_dir.join('%s.isolate' % task_name)
     issue = str(self.m.properties['issue']) if self.is_trybot else ''
     patchset = str(self.m.properties['patchset']) if self.is_trybot else ''
     isolate_vars = {
@@ -517,7 +516,7 @@ print json.dumps({'ccache': ccache})
 
     dimensions = swarm_dimensions(self.builder_cfg)
     return self.m.skia_swarming.isolate_and_trigger_task(
-        isolate_path, isolate_dir, task_name, isolate_vars, dimensions,
+        isolate_path, self.infrabots_dir, task_name, isolate_vars, dimensions,
         isolate_blacklist=['.git'], extra_isolate_hashes=[compile_hash])
 
   def test_steps_collect(self, task):
@@ -702,8 +701,7 @@ print json.dumps({'ccache': ccache})
 
     # Swarm the tests.
     task_name = 'perf_skia'
-    isolate_dir = self.skia_dir.join('infra', 'bots')
-    isolate_path = isolate_dir.join('%s.isolate' % task_name)
+    isolate_path = self.infrabots_dir.join('%s.isolate' % task_name)
     issue = str(self.m.properties['issue']) if self.is_trybot else ''
     patchset = str(self.m.properties['patchset']) if self.is_trybot else ''
     isolate_vars = {
@@ -717,7 +715,7 @@ print json.dumps({'ccache': ccache})
     }
     dimensions = swarm_dimensions(self.builder_cfg)
     return self.m.skia_swarming.isolate_and_trigger_task(
-        isolate_path, isolate_dir, task_name, isolate_vars, dimensions,
+        isolate_path, self.infrabots_dir, task_name, isolate_vars, dimensions,
         isolate_blacklist=['.git'], extra_isolate_hashes=[compile_hash])
 
   def perf_steps_collect(self, task):

@@ -150,6 +150,36 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
+  'Build-Win-MSVC-x86-Debug-VS2015': {
+    'build_targets': [
+      'most',
+    ],
+    'builder_cfg': {
+      'compiler': 'MSVC',
+      'configuration': 'Debug',
+      'extra_config': 'VS2015',
+      'is_trybot': False,
+      'os': 'Win',
+      'role': 'Build',
+      'target_arch': 'x86',
+    },
+    'configuration': 'Debug',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': False,
+    'do_test_steps': False,
+    'env': {
+      'GYP_DEFINES':
+          ('qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_warnings_as_errors=1 '
+           'skia_win_debuggers_path=c:/DbgHelp skia_win_ltcg=0'),
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': False,
+  },
   'Housekeeper-PerCommit': {
     'build_targets': [
       'most',

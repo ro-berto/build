@@ -6,6 +6,9 @@
 """Default flavor utils class, used for desktop builders."""
 
 
+import json
+
+
 class DeviceDirs(object):
   def __init__(self,
                dm_dir,
@@ -82,20 +85,73 @@ class DefaultFlavorUtils(object):
   def chrome_path(self):
     """Path to a checkout of Chrome on this machine."""
     if self._chrome_path is None:
-      test_data = lambda: self._skia_api.m.raw_io.test_api.output(
-          '/home/chrome-bot/src')
-      self._chrome_path = self._skia_api.m.python.inline(
-          'get CHROME_PATH',
-          """
-          import os
-          import sys
-          with open(sys.argv[1], 'w') as f:
-            f.write(os.path.join(os.path.expanduser('~'), 'src'))
-          """,
-          args=[self._skia_api.m.raw_io.output()],
-          step_test_data=test_data,
-          infra_step=True,
-      ).raw_io.output
+      toolchain_hash_file = self._skia_api.skia_dir.join(
+          'infra', 'bots', 'win_toolchain_hash.json')
+      if (self._skia_api.m.path.exists(toolchain_hash_file) and
+          self._skia_api.builder_cfg.get('extra_config') == 'VS2015'):
+        # Find the desired toolchain version.
+        test_data = '''{
+    "2013": "705384d88f80da637eb367e5acc6f315c0e1db2f",
+    "2015": "38380d77eec9164e5818ae45e2915a6f22d60e85"
+}'''
+        j = self._skia_api._readfile(toolchain_hash_file,
+                                     name='Read win_toolchain_hash.json',
+                                     test_data=test_data).rstrip()
+        hashes = json.loads(j)
+        desired_vs_version = '2013'
+        if 'VS2015' in self._skia_api.builder_cfg.get('extra_config', ''):
+          desired_vs_version = '2015'
+        desired_hash = hashes[desired_vs_version]
+
+        # Find the actually-downloaded toolchain version.
+        self._skia_api._run_once(self._skia_api.m.file.makedirs,
+                       'tmp_dir',
+                       self._skia_api.tmp_dir,
+                       infra_step=True)
+        version_file = 'WIN_TOOLCHAIN_HASH'
+        actual_hash_file = self._skia_api.m.path.join(self._skia_api.tmp_dir,
+                                                      version_file)
+        test_expected_version = 'abc123'
+        try:
+          actual_hash = self._skia_api._readfile(
+              actual_hash_file,
+              name='Get downloaded %s' % version_file,
+              test_data=test_expected_version).rstrip()
+        except self._skia_api.m.step.StepFailure:
+          actual_hash = None
+        toolchain_dir = self._skia_api.slave_dir.join('win')
+        toolchain_src_dir = toolchain_dir.join('src')
+
+        # Download the toolchain if necessary.
+        if actual_hash != desired_hash:
+          self._skia_api.m.file.rmtree('win_toolchain', toolchain_dir,
+                                       infra_step=True)
+          self._skia_api.m.swarming_client.checkout(revision='')
+          self._skia_api.m.swarming.check_client_version()
+          isolateserver = (
+              self._skia_api.m.swarming_client.path.join('isolateserver.py'))
+          isolate_cache_dir = self._skia_api.m.path.join(
+              self._skia_api.home_dir, '.isolate_cache')
+          self._skia_api.m.python(
+              'Download Win Toolchain',
+              script=isolateserver,
+              args=['-I', 'https://isolateserver.appspot.com',
+                    '-s', desired_hash,
+                    '-t', toolchain_dir,
+                    '--cache', isolate_cache_dir])
+          bootstrap_script = self._skia_api.infrabots_dir.join(
+              'bootstrap_win_toolchain_json.py')
+          win_toolchain_json = toolchain_src_dir.join(
+              'src', 'build', 'win_toolchain.json')
+          self._skia_api.m.python(
+              'Bootstrap Win Toolchain',
+              script=bootstrap_script,
+              args=['--win_toolchain_json', win_toolchain_json,
+                    '--depot_tools_parent_dir', toolchain_dir])
+        self._chrome_path = toolchain_src_dir
+      else:
+        self._chrome_path = self._skia_api.m.path.join(
+            self._skia_api.home_dir, 'src')
     return self._chrome_path
 
   def compile(self, target):
