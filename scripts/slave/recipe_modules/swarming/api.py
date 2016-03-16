@@ -917,7 +917,7 @@ class SwarmingTask(object):
     out = '%s/%s/%s' % (
         self.title, self.dimensions['os'], self.isolated_hash[:10])
     if self.buildername:
-      out += '/%s/%d' % (self.buildername, self.buildnumber or -1)
+      out += '/%s/%s' % (self.buildername, self.buildnumber or -1)
     return out
 
   @property
