@@ -284,16 +284,21 @@ def GenTests(api):
   # of the configs so we can see when and how they change.
   for mastername, master_config in api.chromium_tests.trybots.iteritems():
     for buildername, bot_config in master_config['builders'].iteritems():
-      for analyze in ['', '_analyze']:
-        test_name = 'full_%s_%s%s' % (_sanitize_nonalpha(mastername),
-                                      _sanitize_nonalpha(buildername),
-                                      analyze)
-        yield (
-          api.test(test_name) +
-          api.chromium_tests.platform(bot_config['bot_ids']) +
-          (api.empty_test_data() if analyze else suppress_analyze()) +
-          props(mastername=mastername, buildername=buildername)
-        )
+      test_name = 'full_%s_%s' % (_sanitize_nonalpha(mastername),
+                                  _sanitize_nonalpha(buildername))
+      yield (
+        api.test(test_name) +
+        api.chromium_tests.platform(bot_config['bot_ids']) +
+        suppress_analyze() +
+        props(mastername=mastername, buildername=buildername)
+      )
+
+  yield (
+    api.test('chromeos_analyze') +
+    api.platform.name('linux') +
+    props(mastername='tryserver.chromium.linux',
+          buildername='chromeos_amd64-generic_chromium_compile_only_ng')
+  )
 
   # Additional tests for blink trybots.
   blink_trybots = api.chromium_tests.trybots['tryserver.blink']['builders']
