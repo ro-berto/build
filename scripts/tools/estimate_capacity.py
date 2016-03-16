@@ -126,6 +126,13 @@ def launch_and_collect(iterable, get_process, collect_result):
         os.remove(p['file'])
 
 
+def parse_datetime(date_string):
+  try:
+    return datetime.datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S.%f')
+  except ValueError:
+    return datetime.datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S')
+
+
 def estimate_swarming_capacity(swarming_py, builds):
   """Estimates swarming capacity needs based on a list of builds.
 
@@ -175,8 +182,7 @@ def estimate_swarming_capacity(swarming_py, builds):
           'id': id_and_durations['id'],
           'total_duration': id_and_durations['duration'],
           'dimensions': dimensions,
-          'created_ts': datetime.datetime.strptime(
-              data['created_ts'], '%Y-%m-%dT%H:%M:%S.%f'),
+          'created_ts': parse_datetime(data['created_ts']),
       })
     launch_and_collect(ids_and_durations, get_process, collect_result)
     pools = {}
