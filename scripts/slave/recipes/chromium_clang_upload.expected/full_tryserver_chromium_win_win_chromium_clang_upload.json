@@ -7,7 +7,7 @@
       "--master",
       "tryserver.chromium.win",
       "--builder",
-      "win8_chromium_clang_upload",
+      "win_chromium_clang_upload",
       "--slave",
       "TestSlavename",
       "--spec",
