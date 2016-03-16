@@ -318,7 +318,12 @@ def SendGomaTsMon(json_file, exit_status):
     if start_time:
       counter['start_time'] = int(
           (start_time - datetime.datetime.fromtimestamp(0)).total_seconds())
-    cmd = [PLATFORM_RUN_CMD.get(os.name),
+    run_cmd = PLATFORM_RUN_CMD.get(os.name)
+    if not run_cmd:
+      print 'Unknown os.name: %s' % os.name
+      return
+    cmd = [sys.executable,
+           run_cmd,
            'infra.tools.send_ts_mon_values', '--verbose',
            '--ts-mon-target-type', 'task',
            '--ts-mon-task-service-name', 'goma-client',
