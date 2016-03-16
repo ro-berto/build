@@ -54,6 +54,15 @@ def mozilla_tests(c):
       c, 'chrome', 'trunk', 'deps', 'third_party', 'mozilla-tests')
 
 
+@CONFIG_CTX()
+def node_js(c):
+  soln = c.solutions.add()
+  soln.name = 'node.js'
+  soln.url = 'https://chromium.googlesource.com/external/github.com/v8/node'
+  soln.revision = 'vee-eight-lkgr:HEAD'
+  c.got_revision_mapping[soln.name] = 'got_node_js_revision'
+
+
 @CONFIG_CTX(includes=['v8'])
 def v8_valgrind(c):
   c.solutions[0].custom_deps['v8/third_party/valgrind'] = (

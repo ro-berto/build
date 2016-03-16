@@ -1,0 +1,155 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--master",
+      "client.v8.fyi",
+      "--builder",
+      "V8 - node.js integration - lkgr",
+      "--slave",
+      "TestSlavename",
+      "--spec",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'node.js', 'url': 'https://chromium.googlesource.com/external/github.com/v8/node'}]",
+      "--root",
+      "v8",
+      "--revision_mapping_file",
+      "{\"node.js\": \"got_node_js_revision\", \"v8\": \"got_revision\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "node.js@vee-eight-lkgr:HEAD",
+      "--revision",
+      "v8@deadbeef",
+      "--no_shallow",
+      "--output_manifest"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"node.js\": \"vee-eight-lkgr:HEAD\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"v8\": \"deadbeef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"node.js\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/node.js.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"90de35a5800eedc8663e14a38711548194d75364\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_node_js_revision\": \"90de35a5800eedc8663e14a38711548194d75364\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_node_js_revision_cp\": \"refs/heads/master@{#181829}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#50110}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#50110}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_node_js_revision_cp@\"refs/heads/master@{#181829}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_node_js_revision@\"90de35a5800eedc8663e14a38711548194d75364\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/node.js/configure"
+    ],
+    "cwd": "[SLAVE_BUILD]/node.js",
+    "name": "configure node.js - baseline"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "test"
+    ],
+    "cwd": "[SLAVE_BUILD]/node.js",
+    "name": "build and test node.js - baseline"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[SLAVE_BUILD]/node.js/deps/v8"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "rmtree v8",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::v8]/resources/copy_v8.py",
+      "[SLAVE_BUILD]/v8",
+      "[SLAVE_BUILD]/node.js/deps/v8",
+      "[SLAVE_BUILD]/v8/.git",
+      "[SLAVE_BUILD]/v8/buildtools",
+      "[SLAVE_BUILD]/v8/out",
+      "[SLAVE_BUILD]/v8/third_party"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "copy v8 tree"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/node.js/configure"
+    ],
+    "cwd": "[SLAVE_BUILD]/node.js",
+    "name": "configure node.js"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "test"
+    ],
+    "cwd": "[SLAVE_BUILD]/node.js",
+    "name": "build and test node.js"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
