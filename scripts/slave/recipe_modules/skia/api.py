@@ -284,7 +284,10 @@ class SkiaApi(recipe_api.RecipeApi):
   def checkout_steps(self):
     """Run the steps to obtain a checkout of Skia."""
     # Initial cleanup.
-    gclient_cfg = self.m.gclient.make_config()
+    if 'Swarming' in self.builder_name:
+      gclient_cfg = self.m.gclient.make_config(CACHE_DIR=None)
+    else:
+      gclient_cfg = self.m.gclient.make_config()
     skia = gclient_cfg.solutions.add()
     skia.name = 'skia'
     skia.managed = False
