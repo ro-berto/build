@@ -147,8 +147,11 @@ def GenTests(api):
                                   retcode=1)
 
         if ('Swarming' in builder and
-            not 'Mac' in builder and
-            not 'Win' in builder):
+            not 'Mac' in builder):
+          if 'Win' in builder:
+            test += api.step_data(
+                'upload new .isolated file for compile_skia',
+                stdout=api.raw_io.output('def456 XYZ.isolated'))
           if 'Test' in builder:
             test += api.step_data(
                 'upload new .isolated file for test_skia',

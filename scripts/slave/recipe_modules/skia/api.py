@@ -3,8 +3,9 @@
 # found in the LICENSE file.
 
 
-import re
+import json
 import os
+import re
 import sys
 
 from recipe_engine import recipe_api
@@ -217,8 +218,7 @@ class SkiaApi(recipe_api.RecipeApi):
       # which doesn't exist, the task just hangs until it expires (hours). This
       # is tying up our buildslaves. Just skip the rest of the steps in this
       # case.
-      if ('Mac' in self.builder_cfg.get('os', '') or
-          'Win' in self.builder_cfg.get('os', '')):
+      if 'Mac' in self.builder_cfg.get('os', ''):
         return
 
       self.m.skia_swarming.setup(
@@ -306,16 +306,31 @@ class SkiaApi(recipe_api.RecipeApi):
       self.flavor.compile(target)
 
   def compile_steps_swarm(self):
-    # Swarm the compile.
     builder_name = derive_compile_bot_name(self.builder_name,
                                            self.builder_cfg)
+    # Windows bots require a toolchain.
+    extra_hashes = None
+    if 'Win' in builder_name:
+      test_data = '''{
+    "2013": "705384d88f80da637eb367e5acc6f315c0e1db2f",
+    "2015": "38380d77eec9164e5818ae45e2915a6f22d60e85"
+}'''
+      hash_file = self.infrabots_dir.join('win_toolchain_hash.json')
+      j = self._readfile(hash_file,
+                         name='Read win_toolchain_hash.json',
+                         test_data=test_data).rstrip()
+      hashes = json.loads(j)
+      extra_hashes = [hashes['2013']]
+
+    # Isolate the inputs and trigger the task.
     isolate_path = self.infrabots_dir.join('compile_skia.isolate')
     isolate_vars = {'BUILDER_NAME': builder_name}
     dimensions = swarm_dimensions(self.builder_cfg)
     task = self.m.skia_swarming.isolate_and_trigger_task(
         isolate_path, self.infrabots_dir, 'compile_skia', isolate_vars,
         dimensions, idempotent=True, store_output=False,
-        isolate_blacklist=['.git', 'out', '.pyc'])
+        isolate_blacklist=['.git', 'out', '*.pyc'],
+        extra_isolate_hashes=extra_hashes)
 
     # Wait for compile to finish, record the results hash.
     return self.m.skia_swarming.collect_swarming_task_isolate_hash(task)
