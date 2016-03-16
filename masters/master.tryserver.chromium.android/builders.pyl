@@ -15,21 +15,23 @@
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
       "scheduler": None,
-      "slave_pools": ["ccompute_compile_mips_bots"],
+      "slave_pools": ["ccompute_optional_bots"],
+      "slavebuilddir": "android_compile_mips_dbg",
     },
     "android_compile_x64_dbg": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
       "scheduler": None,
-      "slave_pools": ["ccompute_compile_x64_bots"],
+      "slave_pools": ["ccompute_optional_bots"],
+      "slavebuilddir": "android_compile_x64_dbg",
     },
     "android_compile_x86_dbg": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
       "scheduler": None,
-      "slave_pools": ["ccompute_compile_x86_bots"],
+      "slave_pools": ["ccompute_optional_bots"],
+      "slavebuilddir": "android_compile_x86_dbg",
     },
-
     "android_archive_rel_ng": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
@@ -223,7 +225,7 @@
         "build96-b4",
       ],
     },
-    "ccompute_compile_mips_bots": {
+    "ccompute_optional_bots": {
       "slave_data": {
         "os": "linux",
         "version": "precise",
@@ -231,28 +233,10 @@
       },
       "slaves": [
         "slave131-c4",
-      ]
-    },
-    "ccompute_compile_x64_bots": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": [
         "slave132-c4",
-      ]
-    },
-    "ccompute_compile_x86_bots": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": [
         "slave133-c4",
         "slave134-c4",
-      ]
+      ],
     },
     "ccompute_bots_cq": {
       "slave_data": {
