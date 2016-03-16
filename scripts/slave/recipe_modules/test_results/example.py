@@ -2,14 +2,21 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.recipe_api import Property
+
 DEPS = [
   'recipe_engine/json',
   'recipe_engine/properties',
   'test_results',
 ]
 
+PROPERTIES = {
+    'warning': Property(
+        default=False, kind=bool,
+        help='Whether a failure should be treated as a warning.'),
+}
 
-def RunSteps(api):
+def RunSteps(api, warning):
   gtest_results = {
       'disabled_tests': [
           'Disabled.Test',
@@ -25,7 +32,7 @@ def RunSteps(api):
       chrome_revision=2,
       test_type='example-test-type',
       test_results_server='localhost',
-      downgrade_error_to_warning=api.properties.get('warning'))
+      downgrade_error_to_warning=warning)
 
 
 def GenTests(api):
