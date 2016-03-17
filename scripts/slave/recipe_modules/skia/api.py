@@ -220,9 +220,6 @@ class SkiaApi(recipe_api.RecipeApi):
       # case.
       if 'Mac' in self.builder_cfg.get('os', ''):
         return
-      # Temporarily turn off the Win swarming bot, since it always fails.
-      if 'Win' in self.builder_cfg.get('os', ''):
-        return
 
       self.m.skia_swarming.setup(
           self.infrabots_dir.join('tools', 'luci-go'),
@@ -316,7 +313,7 @@ class SkiaApi(recipe_api.RecipeApi):
                                            self.builder_cfg)
     # Windows bots require a toolchain.
     extra_hashes = None
-    if 'Win' in builder_name:  # pragma: no cover
+    if 'Win' in builder_name:
       test_data = '''{
     "2013": "705384d88f80da637eb367e5acc6f315c0e1db2f",
     "2015": "38380d77eec9164e5818ae45e2915a6f22d60e85"
