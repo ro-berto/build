@@ -218,6 +218,14 @@
       "slavebuilddir": "presubmit_recipespy",
     },
 
+    "Recipe Roll Downstream Tester": {
+      "category": "Recipe Roll Tryjob",
+      "recipe": "infra/recipe_roll_tryjob",
+      "scheduler": None,
+      "slave_pools": ["trusty64_slave_pool"],
+      "slavebuilddir": "recipe_roll_tryjob",
+    },
+
     "gerrit-test-cq-normal": {
       "category": "Gerrit CQ",
       "recipe": "infra/gerrit_cq_test",
