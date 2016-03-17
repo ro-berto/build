@@ -1954,7 +1954,15 @@ BUILDERS = {
           'os': 'Ubuntu-14.04',
         },
         'sanitizer_coverage_folder': 'linux64',
-        'tests': [V8Testing_3],
+        'tests': [
+          V8Testing_3,
+          OptimizeForSize,
+          Test262Variants_3,
+          SimdJs,
+          Ignition,
+          MjsunitSPFrameAccess,
+          Test262Ignition_2,
+        ],
         'testing': {'platform': 'linux'},
       },
       'v8_win_rel': {
