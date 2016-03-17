@@ -650,7 +650,6 @@
       "root@192.168.1.123",
       "/usr/local/skiabot/bin/dm",
       "--undefok",
-      "--verbose",
       "--resourcePath",
       "/usr/local/skiabot/skia_resources",
       "--skps",

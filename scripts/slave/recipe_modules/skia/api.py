@@ -648,7 +648,6 @@ print json.dumps({'ccache': ccache})
     args = [
       'dm',
       '--undefok',   # This helps branches that may not know new flags.
-      '--verbose',
       '--resourcePath', self.device_dirs.resource_dir,
       '--skps', self.device_dirs.skp_dir,
       '--images', self.flavor.device_path_join(

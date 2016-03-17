@@ -571,7 +571,6 @@
       "[SLAVE_BUILD]/skia/platform_tools/ios/bin/ios_run_skia",
       "--dm",
       "--undefok",
-      "--verbose",
       "--resourcePath",
       "skiabot/skia_resources",
       "--skps",

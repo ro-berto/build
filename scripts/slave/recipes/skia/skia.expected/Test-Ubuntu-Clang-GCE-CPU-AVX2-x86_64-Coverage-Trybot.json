@@ -294,7 +294,6 @@
       "[SLAVE_BUILD]/skia/tools/llvm_coverage_run.py",
       "dm",
       "--undefok",
-      "--verbose",
       "--resourcePath",
       "[SLAVE_BUILD]/skia/resources",
       "--skps",

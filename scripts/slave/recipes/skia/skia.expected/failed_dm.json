@@ -281,7 +281,6 @@
       "catchsegv",
       "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug/Debug/dm",
       "--undefok",
-      "--verbose",
       "--resourcePath",
       "[SLAVE_BUILD]/skia/resources",
       "--skps",

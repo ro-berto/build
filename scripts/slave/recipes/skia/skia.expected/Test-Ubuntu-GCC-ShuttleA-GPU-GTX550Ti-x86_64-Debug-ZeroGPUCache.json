@@ -321,7 +321,6 @@
       "catchsegv",
       "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache/Debug/dm",
       "--undefok",
-      "--verbose",
       "--resourcePath",
       "[SLAVE_BUILD]/skia/resources",
       "--skps",
