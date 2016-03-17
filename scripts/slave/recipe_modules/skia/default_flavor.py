@@ -162,6 +162,8 @@ class DefaultFlavorUtils(object):
     env = {'CHROME_PATH': self.chrome_path}
     if self._skia_api.m.platform.is_win:
       make_cmd = ['python', 'make.py']
+      if 'VS2015' in self._skia_api.builder_cfg.get('extra_config', ''):
+        env['PATH'] = self._skia_api.slave_dir.join('win', 'depot_tools')
     else:
       make_cmd = ['make']
     cmd = make_cmd + [target]
