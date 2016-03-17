@@ -190,24 +190,43 @@ class SanitizerCoverageContext(object):
       assert self.api.properties['issue']
       assert self.api.properties['patchset']
 
-      # TODO(machenbach): Support splitting the data file into multiple files
-      # per covered c++ file and upload multiple files to speed up the coverage
-      # extension.
       results_path = '/'.join([
         'tryserver',
         'sanitizer_coverage',
         str(self.api.properties['issue']),
         str(self.api.properties['patchset']),
         self.v8.bot_config.get('sanitizer_coverage_folder'),
-        'data.json',
       ])
 
       self.api.gsutil.upload(
           self.coverage_dir.join('data.json'),
           'chromium-v8',
-          results_path,
+          results_path + '/data.json',
       )
 
+      data_dir = self.api.path.mkdtemp('coverage_data')
+      self.api.python(
+          'Split coverage data',
+          self.api.path['checkout'].join(
+              'tools', 'sanitizers', 'sancov_formatter.py'),
+          [
+            'split',
+            '--json-input', self.coverage_dir.join('data.json'),
+            '--output-dir', data_dir,
+          ],
+          # Allow to work with older v8 revisions that don't have the split
+          # function in which case the directory will stay empty.
+          # TODO(machenbach): Remove this when v8's passed CP 34834 + 1000.
+          ok_ret='any',
+      )
+
+      self.api.gsutil(
+          [
+            '-m', 'cp', '-a', 'public-read', '-R', data_dir,
+            'gs://chromium-v8/' + results_path,
+          ],
+          'coverage data',
+      )
 
 class BaseTest(object):
   def __init__(self, test_step_config, api, v8):

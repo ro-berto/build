@@ -507,6 +507,39 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/v8/tools/sanitizers/sancov_formatter.py",
+      "split",
+      "--json-input",
+      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "--output-dir",
+      "[TMP_BASE]/coverage_data_tmp_2"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Split coverage data"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "-m",
+      "cp",
+      "-a",
+      "public-read",
+      "-R",
+      "[TMP_BASE]/coverage_data_tmp_2",
+      "gs://chromium-v8/tryserver/sanitizer_coverage/12853011/1/linux64"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil coverage data"
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0
