@@ -321,7 +321,7 @@
       "-u",
       "[SLAVE_BUILD]\\skia\\infra\\bots\\bootstrap_win_toolchain_json.py",
       "--win_toolchain_json",
-      "[SLAVE_BUILD]\\win\\src\\src\\build\\win_toolchain.json",
+      "[SLAVE_BUILD]\\win\\src\\build\\win_toolchain.json",
       "--depot_tools_parent_dir",
       "[SLAVE_BUILD]\\win"
     ],

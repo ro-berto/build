@@ -143,7 +143,7 @@ class DefaultFlavorUtils(object):
           bootstrap_script = self._skia_api.infrabots_dir.join(
               'bootstrap_win_toolchain_json.py')
           win_toolchain_json = toolchain_src_dir.join(
-              'src', 'build', 'win_toolchain.json')
+              'build', 'win_toolchain.json')
           self._skia_api.m.python(
               'Bootstrap Win Toolchain',
               script=bootstrap_script,
