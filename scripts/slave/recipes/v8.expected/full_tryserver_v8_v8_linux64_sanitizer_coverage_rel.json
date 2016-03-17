@@ -533,8 +533,8 @@
       "-a",
       "public-read",
       "-R",
-      "[TMP_BASE]/coverage_data_tmp_2",
-      "gs://chromium-v8/tryserver/sanitizer_coverage/12853011/1/linux64"
+      "[TMP_BASE]/coverage_data_tmp_2/*",
+      "gs://chromium-v8/tryserver/sanitizer_coverage/12853011/1/linux64/"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil coverage data"

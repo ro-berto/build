@@ -222,8 +222,8 @@ class SanitizerCoverageContext(object):
 
       self.api.gsutil(
           [
-            '-m', 'cp', '-a', 'public-read', '-R', data_dir,
-            'gs://chromium-v8/' + results_path,
+            '-m', 'cp', '-a', 'public-read', '-R', data_dir.join('*'),
+            'gs://chromium-v8/%s/' % results_path,
           ],
           'coverage data',
           # Same as in the step above.
