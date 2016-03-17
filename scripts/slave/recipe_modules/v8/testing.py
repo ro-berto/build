@@ -226,6 +226,8 @@ class SanitizerCoverageContext(object):
             'gs://chromium-v8/' + results_path,
           ],
           'coverage data',
+          # Same as in the step above.
+          ok_ret='any',
       )
 
 class BaseTest(object):
