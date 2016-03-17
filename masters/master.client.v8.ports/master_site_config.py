@@ -15,3 +15,4 @@ class V8Ports(Master.Master3):
   master_port_id = 17
   project_url = 'https://developers.google.com/v8/'
   buildbot_url = 'http://build.chromium.org/p/client.v8.ports/'
+  service_account_file = 'service-account-v8.json'
