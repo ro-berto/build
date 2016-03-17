@@ -364,6 +364,21 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'LTO Linux Perf': {
+      'chromium_config': 'chromium_official',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [ 'chromium_builder_perf' ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Mac OpenSSL': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
