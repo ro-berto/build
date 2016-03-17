@@ -7,6 +7,7 @@ from recipe_engine import recipe_api
 import urllib
 
 class UrlApi(recipe_api.RecipeApi):
+  quote = staticmethod(urllib.quote)
   urlencode = staticmethod(urllib.urlencode)
 
   @recipe_api.non_step
