@@ -149,6 +149,7 @@ class DefaultFlavorUtils(object):
               script=bootstrap_script,
               args=['--win_toolchain_json', win_toolchain_json,
                     '--depot_tools_parent_dir', toolchain_dir])
+          self._skia_api._writefile(actual_hash_file, desired_hash)
         self._chrome_path = toolchain_src_dir
       else:
         self._chrome_path = self._skia_api.m.path.join(
@@ -166,6 +167,7 @@ class DefaultFlavorUtils(object):
         env['PATH'] = self._skia_api.m.path.pathsep.join([
             str(self._skia_api.slave_dir.join('win', 'depot_tools')),
             '%(PATH)s'])
+        env['GYP_MSVS_VERSION'] = '2015'
     else:
       make_cmd = ['make']
     cmd = make_cmd + [target]
