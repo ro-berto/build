@@ -382,6 +382,8 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "python",
       "RECIPE_MODULE[build::swarming]\\resources\\collect_gtest_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]\\src\\tools\\swarming_client",
@@ -434,6 +436,8 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "python",
       "RECIPE_MODULE[build::swarming]\\resources\\collect_gtest_task.py",
       "--swarming-client-dir",
       "[SLAVE_BUILD]\\src\\tools\\swarming_client",

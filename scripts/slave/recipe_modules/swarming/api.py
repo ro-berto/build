@@ -633,8 +633,9 @@ class SwarmingApi(recipe_api.RecipeApi):
 
   def _gtest_collect_step(self, merged_test_output, task, **kwargs):
     """Produces a step that collects and processes a result of gtest task."""
-    # Shim script's own arguments.
     args = [
+      'python',
+      self.resource('collect_gtest_task.py'),
       '--swarming-client-dir', self.m.swarming_client.path,
       '--temp-root-dir', self.m.path['tmp_base'],
     ]
@@ -667,7 +668,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     try:
       return self.m.python(
           name=self._get_step_name('', task),
-          script=self.resource('collect_gtest_task.py'),
+          script=self.package_repo_resource('scripts', 'tools', 'runit.py'),
           args=args,
           allow_subannotations=True,
           step_test_data=step_test_data,
