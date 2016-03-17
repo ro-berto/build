@@ -53,9 +53,11 @@ def main(dm_dir, git_hash, builder_name, build_number, try_issue, import_path):
 
   # Only images are left in dm_dir.  Upload any new ones.
   gs = gs_utils.GSUtils()
+  bucket, image_dest_dir = 'chromium-skia-gm', 'dm-images-v1'
+  print 'Uploading images to gs://' + bucket + '/' + image_dest_dir
   gs.upload_dir_contents(dm_dir,
-                         'chromium-skia-gm',
-                         'dm-images-v1',
+                         bucket,
+                         image_dest_dir,
                          upload_if = gs.UploadIf.ALWAYS,
                          predefined_acl = ACL,
                          fine_grained_acl_list = FINE_ACLS)
@@ -76,9 +78,10 @@ def main(dm_dir, git_hash, builder_name, build_number, try_issue, import_path):
   if try_issue:
     summary_dest_dir = '/'.join(['trybot', summary_dest_dir, str(try_issue)])
 
-  # Upload the JSON summary.
+  # Upload the JSON summary and verbose.log.
+  print 'Uploading logs to gs://' + bucket + '/' + summary_dest_dir
   gs.upload_dir_contents(tmp,
-                         'chromium-skia-gm',
+                         bucket,
                          summary_dest_dir,
                          predefined_acl = ACL,
                          fine_grained_acl_list = FINE_ACLS)
