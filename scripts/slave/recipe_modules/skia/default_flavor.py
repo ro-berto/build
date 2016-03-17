@@ -135,7 +135,8 @@ class DefaultFlavorUtils(object):
           self._skia_api.m.python(
               'Download Win Toolchain',
               script=isolateserver,
-              args=['-I', 'https://isolateserver.appspot.com',
+              args=['download',
+                    '-I', 'https://isolateserver.appspot.com',
                     '-s', desired_hash,
                     '-t', toolchain_dir,
                     '--cache', isolate_cache_dir])

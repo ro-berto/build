@@ -302,6 +302,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]\\swarming.client\\isolateserver.py",
+      "download",
       "-I",
       "https://isolateserver.appspot.com",
       "-s",
