@@ -34,10 +34,12 @@ def main(dm_dir, git_hash, builder_name, build_number, try_issue, import_path):
     gs_utils.GSUtils.Permission.READ
   )]
 
-  # Move dm.json to its own directory to make uploading it easier.
+  # Move dm.json and verbose.log to their own directory for easy upload.
   tmp = tempfile.mkdtemp()
   shutil.move(os.path.join(dm_dir, 'dm.json'),
               os.path.join(tmp,    'dm.json'))
+  shutil.move(os.path.join(dm_dir, 'verbose.log'),
+              os.path.join(tmp,    'verbose.log'))
 
   # Make sure the JSON file parses correctly.
   json_file_name = os.path.join(tmp, 'dm.json')
@@ -82,9 +84,11 @@ def main(dm_dir, git_hash, builder_name, build_number, try_issue, import_path):
                          fine_grained_acl_list = FINE_ACLS)
 
 
-  # Just for hygiene, put dm.json back.
+  # Just for hygiene, put dm.json and verbose.log back.
   shutil.move(os.path.join(tmp,    'dm.json'),
               os.path.join(dm_dir, 'dm.json'))
+  shutil.move(os.path.join(tmp,    'verbose.log'),
+              os.path.join(dm_dir, 'verbose.log'))
   os.rmdir(tmp)
 
 if '__main__' == __name__:
