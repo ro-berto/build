@@ -123,7 +123,7 @@
       "RECIPE_MODULE[build::v8]/resources/copy_v8.py",
       "[SLAVE_BUILD]/v8",
       "[SLAVE_BUILD]/node.js/deps/v8",
-      "[SLAVE_BUILD]/v8/.git",
+      ".git",
       "[SLAVE_BUILD]/v8/buildtools",
       "[SLAVE_BUILD]/v8/out",
       "[SLAVE_BUILD]/v8/third_party"

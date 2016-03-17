@@ -70,7 +70,7 @@ def RunSteps(api):
         # Destination.
         api.path['slave_build'].join('node.js', 'deps', 'v8'),
         # Paths to ignore.
-        api.path['slave_build'].join('v8', '.git'),
+        '.git',
         api.path['slave_build'].join('v8', 'buildtools'),
         api.path['slave_build'].join('v8', 'out'),
         api.path['slave_build'].join('v8', 'third_party'),
