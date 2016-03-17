@@ -118,7 +118,8 @@ def GenerateDocs(api, pub_cache):
 def BuildExamples(api, git_hash):
   def ArchiveAPK(api, app_dir, apk_name):
     app_path = api.path['checkout'].join(app_dir)
-    api.step('flutter apk %s' % app_dir, ['flutter', 'apk'], cwd=app_path)
+    api.step('flutter build apk %s' % app_dir, ['flutter', 'build', 'apk'],
+        cwd=app_path)
     # This is linux just to have only one bot archive at once.
     if api.platform.is_linux:
       cloud_path = GetCloudPath(api, git_hash, 'examples/%s' % apk_name)

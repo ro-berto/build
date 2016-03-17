@@ -262,6 +262,7 @@
   {
     "cmd": [
       "flutter",
+      "build",
       "apk"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/examples/stocks",
@@ -270,11 +271,12 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "flutter apk examples/stocks"
+    "name": "flutter build apk examples/stocks"
   },
   {
     "cmd": [
       "flutter",
+      "build",
       "apk"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/examples/material_gallery",
@@ -283,7 +285,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "flutter apk examples/material_gallery"
+    "name": "flutter build apk examples/material_gallery"
   },
   {
     "cmd": [
