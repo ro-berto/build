@@ -63,8 +63,15 @@ ifndef NO_REVISION_AUDIT
    || echo 'Running send_monitoring_event failed, skipping sending events.' \
   ) 2>&1 | tee -a actions.log
 endif
+	# There is a race condition between startup and when twistd.pid is written.
+	# Anyone issuing a second `make start` before the twistd.pid is written will
+	# spawn two masters. This is hopefully unlikely, but a proper solution would
+	# be to use flock (not available on OSX). The critical section contains BOTH
+	# the twistd start and the wait for the twistd.pid.
 	@echo 'Now running Buildbot master.'
 	PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/common/twistd --no_save -y buildbot.tac
+	@echo 'Waiting for creation of twistd.pid...'
+	while `test ! -f twistd.pid`; do sleep 1; done;
 
 ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
 start-prof: bootstrap
@@ -110,6 +117,9 @@ last-restart:
 
 wait:
 	while `test -f twistd.pid`; do sleep 1; done;
+
+waitforstart:
+	while `test ! -f twistd.pid`; do sleep 1; done;
 
 restart: notify stop wait start log
 
