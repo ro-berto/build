@@ -52,7 +52,7 @@ MAX_REQUIRED_SAMPLES = 15
 
 # Significance level to use for determining difference between revisions via
 # hypothesis testing.
-SIGNIFICANCE_LEVEL = 0.005
+SIGNIFICANCE_LEVEL = 0.01
 
 _FAILED_INITIAL_CONFIDENCE_ABORT_REASON = (
     'The metric values for the initial "good" and "bad" revisions '
