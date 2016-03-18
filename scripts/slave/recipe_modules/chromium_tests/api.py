@@ -131,7 +131,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if bot_config.get_master_setting('src_side_runtest_py'):
       self.m.chromium.c.runtest_py.src_side = True
 
-    # TODO(ukai): switch to ensure_goma in chromium/api.py
     if bot_config.get('goma_canary'):
       self.m.goma.update_goma_canary()
 

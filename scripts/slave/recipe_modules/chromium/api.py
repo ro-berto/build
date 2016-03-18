@@ -474,7 +474,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     self.c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
     self.c.compile_py.goma_dir = goma_dir
 
-    self.m.goma.ensure_goma(goma_dir, canary=self.c.compile_py.goma_canary)
+    self.m.goma.ensure_goma(goma_dir)
 
   def runhooks(self, **kwargs):
     """Run the build-configuration hooks for chromium."""
