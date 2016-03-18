@@ -18,12 +18,9 @@ B = helper.Builder
 F = helper.Factory
 S = helper.Scheduler
 
-def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 def win_out(): return chromium_factory.ChromiumFactory('src/out', 'win32')
 def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
-def linux_android(): return chromium_factory.ChromiumFactory(
-    'src/out', 'linux2', nohooks_on_update=True, target_os='android')
 
 m_annotator = annotator_factory.AnnotatorFactory()
 
@@ -35,34 +32,6 @@ S(name='chromium_lkgr', branch='lkgr')
 ################################################################################
 ## Windows
 ################################################################################
-
-B('Win', 'win_full', 'compile|windows', 'chromium_lkgr')
-F('win_full', win().ChromiumFactory(
-    clobber=True,
-    project='all.sln',
-    factory_properties={'archive_build': ActiveMaster.is_production_host,
-                        'gs_bucket': 'gs://chromium-browser-continuous',
-                        'gs_acl': 'public-read',
-                        'gclient_env': {
-                          'GYP_LINK_CONCURRENCY_MAX': '4',
-                        },
-                       }))
-
-B('Win x64', 'win_x64_full', 'windows', 'chromium_lkgr')
-F('win_x64_full', win_out().ChromiumFactory(
-    clobber=True,
-    compile_timeout=9600,  # Release build is LOOONG
-    target='Release_x64',
-    options=['--build-tool=ninja', '--', 'all'],
-    factory_properties={
-      'archive_build': ActiveMaster.is_production_host,
-      'gclient_env': {
-        'GYP_DEFINES': 'component=static_library target_arch=x64',
-        'GYP_LINK_CONCURRENCY_MAX': '4',
-      },
-      'gs_bucket': 'gs://chromium-browser-continuous',
-      'gs_acl': 'public-read',
-    }))
 
 # ASan/Win supports neither the component build nor NaCL at the moment.
 asan_win_gyp = ('asan=1 component=static_library enable_ipc_fuzzer=1 '
@@ -123,13 +92,6 @@ F('win_syzyasan_lkgr', m_annotator.BaseFactory(recipe='chromium', timeout=7200))
 
 asan_mac_gyp = 'asan=1 v8_enable_verify_heap=1 '
 
-B('Mac', 'mac_full', 'compile|testers', 'chromium_lkgr')
-F('mac_full', mac().ChromiumFactory(
-    clobber=True,
-    factory_properties={'archive_build': ActiveMaster.is_production_host,
-                        'gs_bucket': 'gs://chromium-browser-continuous',
-                        'gs_acl': 'public-read',}))
-
 B('Mac ASAN Release', 'mac_asan_rel', 'compile', 'chromium_lkgr')
 F('mac_asan_rel', linux().ChromiumASANFactory(
     clobber=True,
@@ -167,22 +129,6 @@ F('mac_asan_dbg', linux().ChromiumASANFactory(
 ################################################################################
 ## Linux
 ################################################################################
-
-B('Linux', 'linux_full', 'compile|testers', 'chromium_lkgr')
-F('linux_full', linux().ChromiumFactory(
-    clobber=True,
-    factory_properties={'archive_build': ActiveMaster.is_production_host,
-                        'gs_bucket': 'gs://chromium-browser-continuous',
-                        'gs_acl': 'public-read',}))
-
-B('Linux x64', 'linux64_full', 'compile|testers', 'chromium_lkgr')
-F('linux64_full', linux().ChromiumFactory(
-    clobber=True,
-    factory_properties={
-        'archive_build': ActiveMaster.is_production_host,
-        'gs_bucket': 'gs://chromium-browser-continuous',
-        'gs_acl': 'public-read',
-        'gclient_env': {'GYP_DEFINES':'target_arch=x64'}}))
 
 asan_rel_gyp = ('asan=1 lsan=1 sanitizer_coverage=edge '
                 'v8_enable_verify_heap=1 enable_ipc_fuzzer=1 ')
@@ -423,26 +369,6 @@ F('linux_ubsan_vptr_rel', linux().ChromiumFactory(
        'gs_bucket': 'gs://chromium-browser-ubsan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': ubsan_vptr_gyp}}))
-
-################################################################################
-## Android
-################################################################################
-
-B('Android', 'android', None, 'chromium_lkgr')
-F('android', linux_android().ChromiumAnnotationFactory(
-    clobber=True,
-    target='Release',
-    factory_properties={
-      'android_bot_id': 'lkgr-clobber-rel',
-      'archive_build': True,
-      'gs_acl': 'public-read',
-      'gs_bucket': 'gs://chromium-browser-continuous',
-      'perf_id': 'android-release',
-      'show_perf_results': True,
-    },
-    annotation_script='src/build/android/buildbot/bb_run_bot.py',
-    ))
-
 
 def Update(_config, active_master, c):
   lkgr_poller = gitiles_poller.GitilesPoller(
