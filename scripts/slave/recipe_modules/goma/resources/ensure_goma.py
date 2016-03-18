@@ -46,8 +46,11 @@ def main(argv):
     subprocess.check_call(['git', 'clone', config['repo'], client_dir])
 
   subprocess.check_call(['git', 'fetch'], cwd=client_dir)
+  rev = config['revision']
+  if args.canary:
+    rev = 'refs/heads/master'
   subprocess.check_call(
-      ['git', 'reset', '--hard', config['revision']], cwd=client_dir)
+      ['git', 'reset', '--hard', rev], cwd=client_dir)
 
   subprocess.check_call([sys.executable,
                          args.download_from_google_storage_path,
