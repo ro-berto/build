@@ -288,6 +288,8 @@ def CFI_Linux_CF_steps(api):
                api.path["build"].join("scripts", "slave", "compile.py"),
                args=args)
     # ClusterFuzz Archive step
+    # HACK(aneeshm): chromium_utils fails without this.
+    build_properties["primary_repo"] = ""
     api.python(
         'ClusterFuzz Archive',
         api.path["build"].join("scripts", "slave", "chromium",
