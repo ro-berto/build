@@ -30,6 +30,7 @@ def main(argv):
   parser = argparse.ArgumentParser()
   parser.add_argument('--target-dir', required=True)
   parser.add_argument('--download-from-google-storage-path', required=True)
+  parser.add_argument('--canary', action='store_true')
 
   args = parser.parse_args()
 
@@ -46,8 +47,11 @@ def main(argv):
     subprocess.check_call(['git', 'clone', config['repo'], client_dir])
 
   subprocess.check_call(['git', 'fetch'], cwd=client_dir)
+  rev = config['revision']
+  if arg.canary:
+    rev = 'refs/heads/master'
   subprocess.check_call(
-      ['git', 'reset', '--hard', config['revision']], cwd=client_dir)
+      ['git', 'reset', '--hard', rev], cwd=client_dir)
 
   subprocess.check_call([sys.executable,
                          args.download_from_google_storage_path,
