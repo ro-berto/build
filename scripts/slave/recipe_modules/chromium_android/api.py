@@ -965,6 +965,10 @@ class AndroidApi(recipe_api.RecipeApi):
       'android.webkit.cts.WebViewSslTest': [
         'testSslErrorProceedResponseNotReusedForDifferentHost',
       ],
+      # crbug.com/594573
+      'android.webkit.cts.WebChromeClientTest': [
+        'testOnJsBeforeUnload',
+      ],
     }
 
     cts_base_dir = self.m.path.mkdtemp('cts')
