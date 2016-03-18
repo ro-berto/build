@@ -181,6 +181,7 @@
       "--goma-hermetic",
       "fallback",
       "--",
+      "chrome",
       "chromium_builder_perf",
       "crash_service"
     ],
@@ -211,6 +212,56 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\run_crash_handler.py",
+      "--target",
+      "Release_x64"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "start_crash_service"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release_x64",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"winx64intel_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"winx64intel_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=graphing",
+      "--test-type=sizes",
+      "--builder-name=winx64intel_perf_bisect",
+      "--slave-name=TestSlavename",
+      "--build-number=571",
+      "--run-python-script",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\sizes.py",
+      "--target",
+      "Release_x64",
+      "--platform",
+      "win"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "sizes"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\process_dumps.py",
+      "--target",
+      "Release_x64"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "process_dumps"
   },
   {
     "name": "$result",
