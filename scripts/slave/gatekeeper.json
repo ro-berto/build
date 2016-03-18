@@ -351,6 +351,11 @@
         "categories": [
           "chromium_tree_closer"
         ],
+        "comment": [
+          "TODO(dpranke): crbug.com/486089, crbug.com/439402",
+          "Until the Mac GN (dbg) bot is in the CQ, it should not close the",
+          "tree."
+        ],
         "builders": {
           "iOS_Device": {
             "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"]
@@ -363,17 +368,11 @@
           "iOS_Device_(ninja)": {
             "sheriff_classes": ["sheriff_ios_europe", "sheriff_ios_us"]
           },
+          "Mac GN (dbg)": {
+            "close_tree": false
+          },
           "*": {}
-        },
-
-        "comment": [
-          "TODO(dpranke): crbug.com/486089, crbug.com/439402",
-          "Until these are in the CQ, they should not close the tree."
-        ],
-        "excluded_builders": [
-          "Mac GN (dbg)"
-        ]
-
+        }
       }
     ],
     "https://build.chromium.org/p/chromium.memory": [
@@ -462,19 +461,23 @@
         "categories": [
           "chromium_tree_closer"
         ],
-        "builders": {
-          "*": {}
-        },
 
         "comment": [
           "TODO(dpranke): crbug.com/486089, crbug.com/439402",
-          "Until these are in the CQ, they should not close the tree."
+          "Until the GN bots are in the CQ, they should not close the tree."
         ],
-        "excluded_builders": [
-          "Win x64 GN",
-          "Win x64 GN (dbg)",
-          "Win8 GN (dbg)"
-        ]
+        "builders": {
+          "Win x64 GN": {
+            "close_tree": false
+          },
+          "Win x64 GN (dbg)": {
+            "close_tree": false
+          },
+          "Win8 GN (dbg)": {
+            "close_tree": false
+          },
+          "*": {}
+        }
       }
     ],
     "https://build.chromium.org/p/client.boringssl": [
