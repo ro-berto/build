@@ -16,6 +16,7 @@ import shutil
 import socket
 import sys
 import tempfile
+import time
 
 from common import chromium_utils
 from slave import slave_utils
@@ -316,8 +317,7 @@ def SendGomaTsMon(json_file, exit_status):
         'result': result}
     start_time = GetCompilerProxyStartTime()
     if start_time:
-      counter['start_time'] = int(
-          (start_time - datetime.datetime.fromtimestamp(0)).total_seconds())
+      counter['start_time'] = int(time.mktime(start_time.timetuple()))
     run_cmd = PLATFORM_RUN_CMD.get(os.name)
     if not run_cmd:
       print 'Unknown os.name: %s' % os.name
