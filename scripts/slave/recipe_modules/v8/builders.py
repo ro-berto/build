@@ -39,7 +39,7 @@ Test262Ignition_2 = TestStepConfig('test262_ignition', shards=2)
 Test262Variants = TestStepConfig('test262_variants')
 Test262Variants_2 = TestStepConfig('test262_variants', shards=2)
 Test262Variants_3 = TestStepConfig('test262_variants', shards=3)
-Test262Variants_5 = TestStepConfig('test262_variants', shards=5)
+Test262Variants_6 = TestStepConfig('test262_variants', shards=6)
 Unittests = TestStepConfig('unittests')
 V8Initializers = TestStepConfig('v8initializers')
 V8Testing = TestStepConfig('v8testing')
@@ -1958,7 +1958,7 @@ BUILDERS = {
         'tests': [
           V8Testing_3,
           OptimizeForSize,
-          Test262Variants_5,
+          Test262Variants_6,
           SimdJs,
           Ignition,
           MjsunitSPFrameAccess,
