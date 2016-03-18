@@ -27,23 +27,6 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Google Chrome Linux': {
-      'chromium_config': 'chromium_official',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'compile_targets': [
-        'linux_packages_all'
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-      # TODO(hans): Figure why sizes doesn't work on this bot, and fix it.
-    },
     'Google Chrome Linux x64': {
       'chromium_config': 'chromium_official',
       'chromium_apply_config': ['mb'],

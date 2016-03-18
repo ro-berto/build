@@ -108,52 +108,12 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Linux Trusty (32)': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'builder_tester',
-      'compile_targets': [
-        'all',
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'Linux Trusty (dbg)': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder_tester',
-      'compile_targets': [
-        'all',
-      ],
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Linux Trusty (dbg)(32)': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
       },
       'bot_type': 'builder_tester',
       'compile_targets': [

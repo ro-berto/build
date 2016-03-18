@@ -323,10 +323,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder',
       }, analyze_mode='compile'),
-      'linux_chromium_archive_rel_32_ng': simple_bot({
-        'mastername': 'chromium',
-        'buildername': 'Linux',
-      }),
       'linux_chromium_archive_rel_ng': simple_bot({
         'mastername': 'chromium',
         'buildername': 'Linux x64',

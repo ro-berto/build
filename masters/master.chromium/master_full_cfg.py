@@ -45,10 +45,6 @@ F('mac_clobber', m_annotator.BaseFactory('chromium'))
 ## Linux
 ################################################################################
 
-B('Linux', 'linux_clobber', 'compile|testers', 'chromium',
-  notify_on_missing=True)
-F('linux_clobber', m_annotator.BaseFactory('chromium'))
-
 B('Linux x64', 'linux64_clobber', 'compile|testers', 'chromium',
   notify_on_missing=True)
 F('linux64_clobber', m_annotator.BaseFactory('chromium'))

@@ -37,7 +37,6 @@ TRYSERVER_MASTERS = [
 SUPPRESSIONS = {
     'master.chromium.chrome': [
         'Google Chrome ChromeOS',
-        'Google Chrome Linux',
         'Google Chrome Linux x64',
         'Google Chrome Mac',
         'Google Chrome Win',
