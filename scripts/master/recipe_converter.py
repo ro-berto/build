@@ -106,15 +106,11 @@ _master_builder_map = {
              'dartino-linux-release-x64-sdk-dev',
              'dartino-mac-release-x64-sdk-dev',
             ],
-    'Chromium FYI': ['Windows 8 App Certification',
-                     'Chromium Win x64 Clobber',
-                     # 'Chromium Linux Buildrunner',
-                     # 'Chromium Windows Buildrunner',
-                     # 'ChromiumOS Linux Tests',
-                     # 'Android ChromeDriver Tests (dbg)',
-                     # 'Android Asan Builder Tests (dbg)',
-                     # 'Blink Linux LSan ASan',
-                     # 'CFI Linux CF',
+    'Chromium FYI': ['ChromiumOS Linux Tests',
+                     'Android ChromeDriver Tests (dbg)',
+                     'Android Asan Builder Tests (dbg)',
+                     'Blink Linux LSan ASan',
+                     'CFI Linux CF',
                     ]
 }
 
