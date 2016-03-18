@@ -121,6 +121,13 @@ class StatusResourceBuild(HtmlResource):
             step['urls'] = map(lambda x:dict(url=x[1],logname=x[0]), s.getURLs().items())
             step['nest_level'] = s.getNestLevel()
 
+            step['aliases'] = {}
+            for base, aliases in s.getAliases().iteritems():
+                step['aliases'][base] = [{
+                    'text': a[0],
+                    'url': a[1],
+                } for a in aliases]
+
             step['logs']= []
 
             for l in s.getLogs():

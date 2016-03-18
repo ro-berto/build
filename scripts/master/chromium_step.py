@@ -505,6 +505,10 @@ class AnnotationObserver(buildstep.LogLineObserver):
   @@@STEP_LINK@<label>@<url>@@@
   Add a link with label <label> linking to <url> to the current stage.
 
+  If the label value is of the form "text-->base", this is considered an alias
+  link, and will add an alias named "text" with the value "url" to the log or
+  link named "base".
+
   @@@STEP_STARTED@@@
   Start the step at the cursor location.
 
@@ -1024,8 +1028,16 @@ class AnnotationObserver(buildstep.LogLineObserver):
     os.chmod(graph_filename, EXECUTABLE_FILE_PERMISSIONS)
 
   def addLinkToCursor(self, link_label, link_url):
-    self.cursor['links'].append((link_label, link_url))
-    self.cursor['step'].addURL(link_label, link_url)
+    parts = link_label.split('-->', 1)
+    link_alias = None
+    if len(parts) == 2:
+      link_alias, link_label = parts
+
+    self.cursor['links'].append((link_label, link_url, link_alias))
+    if not link_alias:
+      self.cursor['step'].addURL(link_label, link_url)
+    else:
+      self.cursor['step'].addAlias(link_label, link_url, text=link_alias)
 
   def handleOutputLine(self, line):
     """This is called once with each line of the test log."""

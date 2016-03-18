@@ -71,6 +71,7 @@ class FakeBuildstepStatus(mock.Mock):
     mock.Mock.__init__(self)
     self.name = name
     self.urls = {}
+    self.aliases = {}
     self.build = build
     self.text = None
     self.step = None
@@ -96,8 +97,14 @@ class FakeBuildstepStatus(mock.Mock):
   def getURLs(self):
     return self.urls.copy()
 
+  def getAliases(self):
+    return self.aliases.copy()
+
   def addURL(self, label, url):
     self.urls[label] = url
+
+  def addAlias(self, label, url, text=None):
+    self.aliases.setdefault(label, []).append((text, url))
 
   def addLog(self, log):
     l = FakeLog(log)
@@ -217,7 +224,7 @@ class AnnotatorCommandsTest(unittest.TestCase):
 
   def testStepLink(self):
     self.handleOutputLine('@@@STEP_LINK@label@http://localhost/@@@')
-    testurls = [('label', 'http://localhost/')]
+    testurls = [('label', 'http://localhost/', None)]
     testurl_hash = {'label': 'http://localhost/'}
 
     annotatedLinks = [x['links'] for x in self.step.script_observer.sections]
@@ -226,6 +233,18 @@ class AnnotatorCommandsTest(unittest.TestCase):
 
     self.assertEquals(annotatedLinks, [testurls])
     self.assertEquals(stepLinks, [testurl_hash])
+
+  def testStepAlias(self):
+    self.handleOutputLine('@@@STEP_LINK@alias-->label@http://localhost/@@@')
+    testurls = [('label', 'http://localhost/', 'alias')]
+    testalias_hash = {'label': [('alias', 'http://localhost/')]}
+
+    annotatedLinks = [x['links'] for x in self.step.script_observer.sections]
+    stepAliases = [x['step'].getAliases() for x in
+                   self.step.script_observer.sections]
+
+    self.assertEquals(annotatedLinks, [testurls])
+    self.assertEquals(stepAliases, [testalias_hash])
 
   def testStepWarning(self):
     self.handleOutputLine('@@@STEP_WARNINGS@@@')

@@ -78,6 +78,7 @@ class BuildStepStatus(styles.Versioned):
         self.hidden = False
         self.logs = []
         self.urls = collections.OrderedDict()
+        self.aliases = {}
         self.watchers = []
         self.updates = {}
         self.finishedWatchers = []
@@ -120,6 +121,9 @@ class BuildStepStatus(styles.Versioned):
 
     def getURLs(self):
         return self.urls.copy()
+
+    def getAliases(self):
+        return getattr(self, 'aliases', {}).copy()
 
     def isStarted(self):
         return (self.started is not None)
@@ -276,8 +280,19 @@ class BuildStepStatus(styles.Versioned):
         for w in self.watchers:
             w.logFinished(build, self, log)
 
-    def addURL(self, name, url):
+    def addURL(self, name, url, alias_text=None):
         self.urls[name] = url
+
+    def addAlias(self, name, url, text=None):
+        # "name" already exists as a URL. Add this as an alias.
+        aliases = getattr(self, 'aliases', None)
+        if aliases is None:
+            aliases = self.aliases = {}
+
+        value = aliases.setdefault(name, [])
+        if not text:
+            text = str(len(value))
+        value.append((text, url))
 
     def setText(self, text):
         self.text = text
