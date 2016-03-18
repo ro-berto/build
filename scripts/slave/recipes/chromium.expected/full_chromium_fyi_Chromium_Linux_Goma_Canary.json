@@ -122,8 +122,7 @@
       "--target-dir",
       "[SLAVE_BUILD]/src/build/goma/client",
       "--download-from-google-storage-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py",
-      "--canary"
+      "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "ensure_goma"
