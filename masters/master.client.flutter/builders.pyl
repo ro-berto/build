@@ -11,23 +11,27 @@
       "recipe": "flutter/flutter",
       "scheduler": "flutter_commits",
       "slave_pools": ["linux"],
+      "builder_timeout_s": 7200, # 2 hours max
     },
     "Mac": {
       "recipe": "flutter/flutter",
       "scheduler": "flutter_commits",
       "slave_pools": ["mac"],
+      "builder_timeout_s": 7200, # 2 hours max
     },
     "Linux Engine": {
       "recipe": "flutter/engine",
       "scheduler": "engine_commits",
       "slave_pools": ["linux"],
       "mergeRequests": False, # Build every revision.
+      "builder_timeout_s": 7200, # 2 hours max
     },
     "Mac Engine": {
       "recipe": "flutter/engine",
       "scheduler": "engine_commits",
       "slave_pools": ["mac"],
       "mergeRequests": False, # Build every revision.
+      "builder_timeout_s": 7200, # 2 hours max
     },
   },
 
