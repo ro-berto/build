@@ -213,7 +213,7 @@ class StatusEventLogger(StatusReceiverMultiService):
   def send_build_event(self, timestamp_kind, timestamp, build_event_type,
                        bot_name, builder_name, build_number, build_scheduled_ts,
                        step_name=None, step_number=None, result=None,
-                       extra_result_code=None):
+                       extra_result_code=None, patch_url=None):
     """Log a build/step event for event_mon."""
 
     if self.active and self._event_logging:
@@ -235,6 +235,8 @@ class StatusEventLogger(StatusReceiverMultiService):
         d['build-event-result'] = result.upper()
       if extra_result_code:
         d['build-event-extra-result-code'] = extra_result_code
+      if patch_url:
+        d['build-event-patch-url'] = patch_url
 
       self.event_logger.info(json.dumps(d))
 
@@ -490,11 +492,20 @@ class StatusEventLogger(StatusReceiverMultiService):
 
     properties = build.getProperties()
     extra_result_code = properties.getProperty('extra_result_code')
+
+    # TODO(sergiyb): Add support for Gerrit.
+    patch_url = None
+    if ('issue' in properties and 'patchset' in properties and
+        'rietveld' in properties):
+      patch_url = '%s/%s#%s' % (
+          properties.getProperty('rietveld'), properties.getProperty('issue'),
+          properties.getProperty('patchset'))
+
     self.send_build_event(
         'END', finished * 1000, 'BUILD', bot, builderName, build_number,
         self._get_requested_at_millis(build),
         result=buildbot.status.results.Results[results],
-        extra_result_code=extra_result_code)
+        extra_result_code=extra_result_code, patch_url=patch_url)
 
     pre_test_time_s = None
     for step in build.getSteps():

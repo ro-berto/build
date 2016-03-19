@@ -22,6 +22,9 @@ class Builder(object):
 
 
 class Properties(object):
+  def __contains__(self, _name):
+    return True
+
   def getProperty(self, _name):
     return 'whatever'
 
