@@ -3,12 +3,12 @@
 # See https://goto.google.com/vpegg for context.
 
 set noparent
+dpranke@chromium.org
 phajdan.jr@chromium.org
 sergeyberezin@chromium.org
 sergiyb@chromium.org
 tandrii@chromium.org
 
-per-file chromium*.py=dpranke@chromium.org
 per-file chromium_android.py=jbudorick@chromium.org
 per-file chromium_android.py=stip@chromium.org
 per-file chromium_gpu*=kbr@chromium.org
@@ -16,7 +16,5 @@ per-file chromium_perf*=dtu@chromium.org
 per-file chromium_perf*=eakuefner@chromium.org
 per-file chromium_perf*=fmeawad@chromium.org
 per-file chromium_webrtc*.py=kjellander@chromium.org
-per-file trybots.py=dpranke@chromium.org
-per-file tryserver_chromium*.py=dpranke@chromium.org
 per-file tryserver_chromium_perf.py=prasadv@chromium.org
 per-file tryserver_chromium_perf.py=robertocn@chromium.org
