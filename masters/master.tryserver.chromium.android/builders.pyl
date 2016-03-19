@@ -138,6 +138,13 @@
       "slavebuilddir": "android",
       "slave_pools": ["slaves_with_devices_cq"],
     },
+    "android_swarming_rel": {
+      "builder_timeout_s": 6900,  # 60 * 115
+      "recipe": "chromium_trybot",
+      "scheduler": None,
+      "slavebuilddir": "android",
+      "slave_pools": ["ccompute_android_launch"],
+    },
     "android_chromium_variable": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "findit/chromium/compile",
@@ -221,6 +228,16 @@
         "build94-b4",
         "build95-b4",
         "build96-b4",
+      ],
+    },
+    "ccompute_android_launch": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": 64,
+      },
+      "slaves": [
+        "slave-138-c4",
       ],
     },
     "ccompute_optional_bots": {

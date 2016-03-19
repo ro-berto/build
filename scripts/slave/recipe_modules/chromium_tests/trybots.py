@@ -164,6 +164,11 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'Android Coverage (dbg)'
       }),
+      'android_swarming_rel': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'Android Builder',
+        'tester': 'Android Tests',
+      }),
       'cast_shell_android': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Cast Android (dbg)',
