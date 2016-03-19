@@ -72,6 +72,7 @@ CipdBinary = collections.namedtuple('CipdBinary',
 PLATFORM_CONFIG = {
   # All systems.
   (): {
+    'logdog_host': 'luci-logdog',
     'logdog_pubsub_topic': 'projects/luci-logdog/topics/logs',
   },
 
@@ -152,6 +153,7 @@ PLATFORM_CONFIG = {
 # the recipe engine.
 Config = collections.namedtuple('Config', (
     'run_cmd',
+    'logdog_host',
     'logdog_pubsub_topic',
     'logdog_platform',
 ))
@@ -235,6 +237,7 @@ def get_config():
   # Construct runtime configuration.
   return Config(
       run_cmd=platform_config.get('run_cmd'),
+      logdog_host=platform_config.get('logdog_host'),
       logdog_pubsub_topic=platform_config.get('logdog_pubsub_topic'),
       logdog_platform=platform_config.get('logdog_platform'),
       )
@@ -451,17 +454,30 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
   # Determine LogDog prefix.
   prefix = _build_logdog_prefix(properties)
 
+
+  def var(title, v, dflt):
+    v = v or dflt
+    if not v:
+      raise LogDogNotBootstrapped('No value for [%s]' % (title,))
+    return v
+
+
   # TODO(dnj): Consider moving this to a permanent directory on the bot so we
   #            don't CIPD-refresh each time.
   cipd_path = os.path.join(basedir, '.recipe_logdog_cipd')
   butler, annotee = _logdog_install_cipd(cipd_path, plat.butler, plat.annotee)
-  if opts.logdog_butler_path:
-    butler = opts.logdog_butler_path
-  if opts.logdog_annotee_path:
-    annotee = opts.logdog_annotee_path
 
-  if not config.logdog_pubsub_topic:
-    raise LogDogNotBootstrapped('No Pub/Sub configured.')
+  butler = var('butler', opts.logdog_butler_path, butler)
+  if not os.path.isfile(butler):
+    raise LogDogNotBootstrapped('Invalid Butler path: %s' % (butler,))
+
+  annotee = var('annotee', opts.logdog_annotee_path, annotee)
+  if not os.path.isfile(annotee):
+    raise LogDogNotBootstrapped('Invalid Annotee path: %s' % (annotee,))
+
+  host = var('host', opts.logdog_host, config.logdog_host)
+  pubsub_topic = var('pubsub topic', opts.logdog_pubsub_topic,
+                     config.logdog_pubsub_topic)
 
   # Determine LogDog verbosity.
   if opts.logdog_verbose == 0:
@@ -493,7 +509,7 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
       butler,
       '-log-level', log_level,
       '-prefix', prefix,
-      '-output', 'pubsub,topic="%s"' % (config.logdog_pubsub_topic,),
+      '-output', 'pubsub,topic="%s"' % (pubsub_topic,),
   ]
   cmd += service_account_args
   cmd += [
@@ -509,6 +525,7 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
       annotee,
       '-log-level', log_level,
       '-butler-stream-server', streamserver_uri,
+      '-logdog-host', host,
       '-annotate', 'tee',
       '-name-base', 'recipes',
       '-print-summary',
@@ -516,6 +533,7 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
       '-json-args-path', cmd_json,
   ]
 
+  LOGGER.info('Bootstrapping through LogDog: %s', cmd)
   rv, _ = _run_command(cmd, dry_run=opts.dry_run)
   if rv in LOGDOG_ERROR_RETURNCODES:
     raise LogDogBootstrapError('LogDog Error (%d)' % (rv,))
@@ -716,6 +734,10 @@ def get_args(argv):
   group.add_argument('--logdog-service-account-json',
       help='Path to the service account JSON. If one is not provided, the '
            'local system credentials will be used.')
+  group.add_argument('--logdog-pubsub-topic',
+      help='Override the LogDog Pub/Sub topic to write to.')
+  group.add_argument('--logdog-host',
+      help='Override the LogDog Coordinator host.')
 
   return parser.parse_args(argv)
 

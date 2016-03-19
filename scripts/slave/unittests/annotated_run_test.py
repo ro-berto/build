@@ -30,7 +30,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 MockOptions = collections.namedtuple('MockOptions',
     ('dry_run', 'logdog_force', 'logdog_butler_path', 'logdog_annotee_path',
-     'logdog_verbose', 'logdog_service_account_json'))
+     'logdog_verbose', 'logdog_service_account_json', 'logdog_pubsub_topic',
+     'logdog_host'))
 
 
 class AnnotatedRunTest(unittest.TestCase):
@@ -93,7 +94,9 @@ class _AnnotatedRunExecTestBase(unittest.TestCase):
         logdog_annotee_path=None,
         logdog_butler_path=None,
         logdog_verbose=False,
-        logdog_service_account_json=None)
+        logdog_service_account_json=None,
+        logdog_pubsub_topic=None,
+        logdog_host=None)
     self.properties = {
       'recipe': 'example/recipe',
       'mastername': 'master.random',
@@ -202,10 +205,13 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
     self.assertTrue(annotated_run._should_run_logdog({
       'mastername': 'master.all', 'buildername': 'anybuilder'}))
 
+  @mock.patch('os.path.isfile')
   @mock.patch('slave.annotated_run._get_service_account_json')
-  def test_exec_with_whitelist_builder_runs_logdog(self, service_account):
+  def test_exec_with_whitelist_builder_runs_logdog(self, service_account,
+                                                   isfile):
     self.properties['buildername'] = 'yesbuilder'
 
+    isfile.return_value = True
     butler_path = self._bp('.recipe_logdog_cipd', 'logdog_butler')
     annotee_path = self._bp('.recipe_logdog_cipd', 'logdog_annotee')
     service_account.return_value = 'creds.json'
@@ -234,6 +240,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
             annotee_path,
                 '-log-level', 'warning',
                 '-butler-stream-server', streamserver_uri,
+                '-logdog-host', 'luci-logdog',
                 '-annotate', 'tee',
                 '-name-base', 'recipes',
                 '-print-summary',
@@ -275,14 +282,16 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
     annotated_run._run_command.assert_called_once_with(self.recipe_args,
                                                        dry_run=False)
 
+  @mock.patch('os.path.isfile')
   @mock.patch('slave.annotated_run._logdog_install_cipd')
   @mock.patch('slave.annotated_run._get_service_account_json')
-  def test_runs_directly_if_logdog_error(self, service_account, cipd):
+  def test_runs_directly_if_logdog_error(self, service_account, cipd, isfile):
     self.properties['buildername'] = 'yesbuilder'
 
     # Test Windows builder this time.
     infra_platform.get.return_value = ('win', 64)
 
+    isfile.return_value = True
     cipd.return_value = ('logdog_butler.exe', 'logdog_annotee.exe')
     service_account.return_value = 'creds.json'
     def error_for_logdog(args, **kw):
@@ -316,6 +325,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
             'logdog_annotee.exe',
                 '-log-level', 'warning',
                 '-butler-stream-server', streamserver_uri,
+                '-logdog-host', 'luci-logdog',
                 '-annotate', 'tee',
                 '-name-base', 'recipes',
                 '-print-summary',
