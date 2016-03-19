@@ -237,7 +237,7 @@
         "bits": 64,
       },
       "slaves": [
-        "slave-138-c4",
+        "slave138-c4",
       ],
     },
     "ccompute_optional_bots": {
