@@ -146,8 +146,7 @@ def GenTests(api):
             test += api.step_data('Get downloaded WIN_TOOLCHAIN_HASH',
                                   retcode=1)
 
-        if ('Swarming' in builder and
-            not 'Mac' in builder):
+        if 'Swarming' in builder:
           if 'Win' in builder:
             test += api.step_data(
                 'upload new .isolated file for compile_skia',
