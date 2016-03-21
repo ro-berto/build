@@ -31,7 +31,7 @@ def _MakeGypDefines(gyp_defines):
 def _CheckoutSteps(api, memory_tool, xfa, v8, win64, clang):
   # Checkout pdfium and its dependencies (specified in DEPS) using gclient
   api.gclient.set_config('pdfium')
-  api.bot_update.ensure_checkout()
+  api.bot_update.ensure_checkout(force=True)
 
   gyp_defines = {
       'pdf_enable_v8': int(v8),
@@ -272,4 +272,11 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='linux_xfa_asan',
                      slavename="test_slave")
+  )
+
+  yield (
+      api.test('try-linux_xfa_asan') +
+      api.platform('linux', 64) +
+      api.properties.tryserver(mastername='tryserver.client.pdfium',
+                               buildername='linux_xfa_asan')
   )
