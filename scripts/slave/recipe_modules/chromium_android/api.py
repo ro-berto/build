@@ -263,6 +263,14 @@ class AndroidApi(recipe_api.RecipeApi):
         src_dir=self.m.path['slave_build'].join('src'),
         exclude_files='lib.target,gen,android_webview,jingle_unittests')
 
+  def create_adb_symlink(self):
+    # Creates a sym link to the adb executable in the home dir
+    self.m.python(
+        'create adb symlink',
+        self.m.path['checkout'].join('build', 'symlink.py'),
+        ['-f', self.m.adb.adb_path(), os.path.join('~', 'adb')],
+        infra_step=True)
+
   def spawn_logcat_monitor(self):
     self.m.step(
         'spawn_logcat_monitor',
@@ -846,6 +854,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def common_tests_setup_steps(self, perf_setup=False,
                                remove_system_webview=False):
+    self.create_adb_symlink()
     if self.c.gce_setup:
       self.launch_gce_instances(snapshot=self.c.gce_snapshot, count=self.c.gce_count)
       self.spawn_logcat_monitor()
