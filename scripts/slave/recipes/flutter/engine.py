@@ -192,10 +192,9 @@ def GenerateXcodeProject(api):
   flutter_zip = out_dir.join('FlutterXcode.zip')
   api.zip.directory('make FlutterXcode.zip', deploy_dir, flutter_zip)
 
-  remote_name = 'ios/FlutterXcode.zip'
-  cloud_path =  GetCloudPath(api, remote_name)
-  api.gsutil.upload(flutter_zip, BUCKET_NAME, cloud_path,
-      name='upload %s' % remote_name)
+  UploadArtifacts(api, 'ios', [
+    'out/FlutterXcode.zip'
+  ])
 
 
 def GetCheckout(api):
