@@ -49,9 +49,10 @@ def RunSteps(api):
   api.chromium.runhooks()
 
   # Build the WebView apk, WebView shell and Android testing tools.
-  api.chromium.compile(targets=['system_webview_apk',
-                                'system_webview_shell_apk',
-                                'android_tools'])
+  api.chromium.compile(targets=['android_tools',
+                                'push_apps_to_background_apk',
+                                'system_webview_apk',
+                                'system_webview_shell_apk'])
 
   api.chromium_android.spawn_logcat_monitor()
   api.chromium_android.device_status_check()

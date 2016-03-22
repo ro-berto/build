@@ -165,9 +165,10 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
+      "android_tools",
+      "push_apps_to_background_apk",
       "system_webview_apk",
-      "system_webview_shell_apk",
-      "android_tools"
+      "system_webview_shell_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
