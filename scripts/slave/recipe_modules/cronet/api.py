@@ -18,12 +18,18 @@ class CronetApi(recipe_api.RecipeApi):
       'gyp_target': 'cronet_sample_test_apk',
       'apk_under_test': 'CronetSample.apk',
       'test_apk': 'CronetSampleTest.apk',
+      'additional_apks': [
+        'ChromiumNetTestSupport.apk',
+      ],
     },
     {
       'test': 'CronetTestInstrumentation',
       'gyp_target': 'cronet_test_instrumentation_apk',
       'apk_under_test': 'CronetTest.apk',
       'test_apk': 'CronetTestInstrumentation.apk',
+      'additional_apks': [
+        'ChromiumNetTestSupport.apk',
+      ],
     },
   ])
 
@@ -102,6 +108,8 @@ class CronetApi(recipe_api.RecipeApi):
             name=suite['test'],
             apk_under_test=droid.apk_path(suite.get('apk_under_test')),
             test_apk=droid.apk_path(suite.get('test_apk')),
+            additional_apks=[
+                droid.apk_path(a) for a in suite.get('additional_apks') or ()],
             verbose=True,
             num_retries=0,
             **suite.get('kwargs', {}))

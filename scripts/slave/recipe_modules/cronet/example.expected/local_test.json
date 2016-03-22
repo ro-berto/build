@@ -467,6 +467,8 @@
       "/path/to/tmp/",
       "--apk-under-test",
       "[SLAVE_BUILD]/src/out/Debug/apks/CronetSample.apk",
+      "--additional-apk",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ChromiumNetTestSupport.apk",
       "--verbose",
       "--num-retries",
       "0"
@@ -502,6 +504,8 @@
       "/path/to/tmp/",
       "--apk-under-test",
       "[SLAVE_BUILD]/src/out/Debug/apks/CronetTest.apk",
+      "--additional-apk",
+      "[SLAVE_BUILD]/src/out/Debug/apks/ChromiumNetTestSupport.apk",
       "--verbose",
       "--num-retries",
       "0"
