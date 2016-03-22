@@ -53,9 +53,6 @@ def _BuildSpec(platform, target_bits):
     spec['compile_targets'] = ['chromium_builder_perf']
     spec['gclient_apply_config'] = ['chrome_internal']
 
-  if platform == 'win':
-    spec['tests'] = { steps.SizesStep(results_url=None, perf_id=None) }
-
   return spec
 
 

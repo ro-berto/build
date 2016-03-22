@@ -181,7 +181,6 @@
       "--goma-hermetic",
       "fallback",
       "--",
-      "chrome",
       "chromium_builder_perf",
       "crash_service"
     ],
@@ -403,56 +402,6 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Win 7 Perf (5)@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\run_crash_handler.py",
-      "--target",
-      "Release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "start_crash_service"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Release",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Win Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=graphing",
-      "--test-type=sizes",
-      "--builder-name=Win Builder",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "--run-python-script",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\sizes.py",
-      "--target",
-      "Release",
-      "--platform",
-      "win"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "sizes"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\process_dumps.py",
-      "--target",
-      "Release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "process_dumps"
   },
   {
     "name": "$result",
