@@ -660,9 +660,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                        verbose=True)
 
     deapply_patch = True
+    deapply_patch_reason = 'unknown reason'
     for path in RECIPE_CONFIG_PATHS:
       if any([f.startswith(path) for f in affected_files]):
         deapply_patch = False
+        deapply_patch_reason = 'build config changes detected'
         break
 
     with self.wrap_chromium_tests(bot_config, tests):
@@ -671,7 +673,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       else:
         failing_tests = self.m.test_utils.run_tests_with_patch(api, tests)
         if failing_tests:
-          self.m.python.failing_step('test results', 'TESTS FAILED')
+          self.m.python.failing_step(
+              'test results',
+              'TESTS FAILED; retries without patch disabled (%s)'
+                  % deapply_patch_reason)
 
   def analyze(self, affected_files, test_targets, additional_compile_targets,
               config_file_name, mb_mastername=None, mb_buildername=None,

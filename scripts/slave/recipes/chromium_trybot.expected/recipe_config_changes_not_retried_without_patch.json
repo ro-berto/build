@@ -367,7 +367,7 @@
     "name": "test results",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@TESTS FAILED@@@",
+      "@@@STEP_TEXT@TESTS FAILED; retries without patch disabled (build config changes detected)@@@",
       "@@@STEP_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_hash@\"97d4f978f1755cc6c7d015306e35e48525ba2702\"@@@"
     ]
