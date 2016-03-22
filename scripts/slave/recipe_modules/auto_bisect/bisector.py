@@ -650,7 +650,7 @@ class Bisector(object):
       self.wait_for(r)
 
   def wait_for(self, revision):
-    """Waits for any of the revisions in the list to finish its job(s)."""
+    """Waits for the revision to finish its job."""
     with self.api.m.step.nest('Waiting for ' + revision.revision_string()):
       while True:
         revision.update_status()
@@ -660,7 +660,7 @@ class Bisector(object):
               """
               import sys
               import time
-              time.sleep(300)
+              time.sleep(20*60)
               sys.exit(0)
               """)
         else:

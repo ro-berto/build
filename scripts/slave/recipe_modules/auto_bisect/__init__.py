@@ -22,4 +22,5 @@ DEPS = [
     'recipe_engine/step',
     'trigger',
     'depot_tools/tryserver',
+    'url',
 ]

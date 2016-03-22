@@ -23,7 +23,9 @@ from . import depot_config
 # These relate to how to increase the number of repetitions during re-test
 MINIMUM_SAMPLE_SIZE = 5
 INCREASE_FACTOR = 1.5
-
+# Buildbot job result codes.
+# See http://docs.buildbot.net/current/developer/results.html
+SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION = range(5)
 
 class RevisionState(object):
   """Abstracts the state of a single revision on a bisect job."""
@@ -91,6 +93,7 @@ class RevisionState(object):
     self.std_dev = None
     self.repeat_count = MINIMUM_SAMPLE_SIZE
     self._test_config = None
+    self.build_number = None
 
   @property
   def tested(self):
@@ -219,8 +222,11 @@ class RevisionState(object):
     To wait for the test we try to get the buildbot job url from GS, and if
     available, we query the status of such job.
     """
-    if self.status == RevisionState.BUILDING and self._is_build_archived():
-      self.start_job()
+    if self.status == RevisionState.BUILDING:
+      if self._is_build_archived():
+        self.start_job()
+      elif self._is_build_failed():
+        self.status = RevisionState.FAILED
     elif (self.status in (RevisionState.TESTING, RevisionState.NEED_MORE_DATA)
           and self._results_available()):
       # If we have already decided whether the revision is good or bad we
@@ -243,6 +249,49 @@ class RevisionState(object):
       self.build_archived = self.in_progress
 
     return self.build_archived
+
+  def _fetch_build_info(self, base_url, build_number):
+    api = self.bisector.api
+    build_url = '%s/builds/%s?as_text=1' % (base_url, build_number)
+    fetch_result = api.m.url.fetch_to_file(
+       build_url, None, step_name='fetch build details',
+       stdout=api.m.raw_io.output())
+    return json.loads(fetch_result.stdout or '{}')
+
+  def _is_build_failed(self):
+    api = self.bisector.api
+    current_build = None
+    base_url = '%sjson/builders/%s'% (
+        # If this variable is not set assume local dev master.
+        os.environ.get('BUILDBOT_URL', 'http://localhost:8041/'),
+        self.bisector.get_builder_bot_for_this_platform())
+    if self.build_number is None:
+      try:
+        # Get all the current builds.
+        builder_state_url = base_url + '?as_text=1'
+        fetch_step = api.m.url.fetch_to_file(
+            builder_state_url, None,
+            step_name='fetch builder state',
+            stdout=api.m.raw_io.output())
+        builder_state = fetch_step.stdout
+        builder_state = json.loads(builder_state or '{}')
+        for build_number in builder_state.get('cachedBuilds', []):
+          build = self._fetch_build_info(base_url, build_number)
+          build_properties = dict(build.get('properties', []))
+          if build_properties.get('build_archive_url') == self.build_url:
+            self.build_number = build_number
+            current_build = build
+            break
+      except api.m.step.StepFailure:  # pragma: no cover
+        # If we cannot get json from buildbot, we cannot determine if a build is
+        # failed, hence we consider it in progress until it times out.
+        return False
+    if self.build_number is None:
+      # The build hasn't started yet, therefore it's not failed.
+      return False
+    if not current_build:
+      current_build = self._fetch_build_info(base_url, self.build_number)
+    return current_build.get('results') in [FAILURE, SKIPPED, EXCEPTION]
 
   def _results_available(self):
     """Checks if the results for the test job have been uploaded."""
@@ -317,7 +366,7 @@ class RevisionState(object):
     # TODO: Rewrite using the trigger module.
     api = self.bisector.api
     bot_name = self.bisector.get_builder_bot_for_this_platform()
-    if self.bisector.dummy_builds:
+    if self.bisector.bisect_config.get('dummy_job_names'):
       self.job_name = self.commit_hash + '-build'
     else:  # pragma: no cover
       self.job_name = uuid.uuid4().hex
@@ -383,7 +432,7 @@ class RevisionState(object):
     the test will be run on the same machine. Otherwise, this posts
     a request to buildbot to download and perf-test this build.
     """
-    if self.bisector.dummy_builds:
+    if self.bisector.bisect_config.get('dummy_job_names'):
       self.job_name = self.commit_hash + '-test'
     else:  # pragma: no cover
       self.job_name = uuid.uuid4().hex

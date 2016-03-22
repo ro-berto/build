@@ -62,6 +62,7 @@ def GenTests(api):
       'dummy_initial_confidence': '95',
       'poll_sleep': 0,
       'dummy_builds': True,
+      'dummy_job_names': True,
       'bypass_stats_check': True,
   }
   invalid_cp_bisect_config = dict(bisect_config)

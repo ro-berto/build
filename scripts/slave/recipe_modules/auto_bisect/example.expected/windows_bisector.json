@@ -31,6 +31,7 @@
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"bypass_stats_check\": \"True\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"command\": \"src/tools/perf/run_benchmark -v --browser=release smoothness.tough_scrolling_cases\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"dummy_builds\": \"True\", @@@",
+      "@@@STEP_LOG_LINE@Bisect job configuration@  \"dummy_job_names\": \"True\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"good_revision\": \"314015\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"gs_bucket\": \"chrome-perf\", @@@",
       "@@@STEP_LOG_LINE@Bisect job configuration@  \"max_time_minutes\": \"5\", @@@",
@@ -282,7 +283,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(300)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for chromium@a6298e4afe.sleeping",
@@ -291,7 +292,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(300)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -393,7 +394,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(300)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for chromium@00316c9ddf.sleeping",
@@ -402,7 +403,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(300)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
@@ -539,7 +540,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport time\ntime.sleep(300)\nsys.exit(0)\n"
+      "\nimport sys\nimport time\ntime.sleep(20*60)\nsys.exit(0)\n"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for chromium@dcdcdc0ff1.sleeping",
@@ -548,7 +549,7 @@
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@time.sleep(300)@@@",
+      "@@@STEP_LOG_LINE@python.inline@time.sleep(20*60)@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]

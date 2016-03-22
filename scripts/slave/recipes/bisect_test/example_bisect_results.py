@@ -28,6 +28,7 @@ BASIC_CONFIG = {
     'builder_host': 'master4.golo.chromium.org',
     'builder_port': '8341',
     'dummy_builds': 'True',
+    'dummy_job_names': 'True',
     'bypass_stats_check': 'True',
     'skip_gclient_ops': 'True',
 }

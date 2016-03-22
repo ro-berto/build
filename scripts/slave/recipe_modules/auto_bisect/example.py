@@ -74,8 +74,57 @@ def GenTests(api):
   yield basic_test
 
   failed_build_test = _make_test(
-      api, _get_ref_range_only_test_data(), 'failed_build_test')
+      api, _get_ref_range_only_test_data(), 'failed_build_test',
+      extra_config={'dummy_builds': None})
+  failed_build_test += api.step_data('gsutil ls', retcode=1)
+  failed_build_test += api.step_data(
+      'Waiting for chromium@a6298e4afe.gsutil ls' , retcode=1)
+  failed_build_test += api.step_data(
+      'Waiting for chromium@a6298e4afe.fetch builder state',
+      stdout=api.raw_io.output('{"cachedBuilds": ["2106"]}'))
+  failed_build_test += api.step_data(
+      'Waiting for chromium@a6298e4afe.fetch build details',
+      stdout=api.raw_io.output(json.dumps({
+          'results': 2,
+          'properties': [('build_archive_url',
+                          ('gs://chrome-perf/Linux Builder/full-build-linux_'
+                           'a6298e4afedbf2cd461755ea6f45b0ad64222222.zip'))],
+          })))
   yield failed_build_test
+
+
+  delayed_build_test = _make_test(
+      api, _get_ref_range_only_test_data(), 'delayed_build_test',
+      extra_config={'dummy_builds': None})
+  delayed_build_test += api.step_data('gsutil ls', retcode=1)
+  delayed_build_test += api.step_data(
+      'Waiting for chromium@a6298e4afe.gsutil ls' , retcode=1)
+  delayed_build_test += api.step_data(
+      'Waiting for chromium@a6298e4afe.gsutil ls (2)' , retcode=1)
+  delayed_build_test += api.step_data(
+      'Waiting for chromium@a6298e4afe.gsutil ls (3)' , retcode=1)
+  delayed_build_test += api.step_data(
+      'Waiting for chromium@a6298e4afe.fetch builder state',
+      stdout=api.raw_io.output('{"cachedBuilds": []}'))
+  delayed_build_test += api.step_data(
+      'Waiting for chromium@a6298e4afe.fetch builder state (2)',
+      stdout=api.raw_io.output('{"cachedBuilds": ["2106"]}'))
+  delayed_build_test += api.step_data(
+      'Waiting for chromium@a6298e4afe.fetch build details',
+      stdout=api.raw_io.output(json.dumps({
+          'properties': [('build_archive_url',
+                          ('gs://chrome-perf/Linux Builder/full-build-linux_'
+                           'a6298e4afedbf2cd461755ea6f45b0ad64222222.zip'))],
+          })))
+  delayed_build_test += api.step_data(
+      'Waiting for chromium@a6298e4afe.fetch build details (2)',
+      stdout=api.raw_io.output(json.dumps({
+          'results': 2,
+          'properties': [('build_archive_url',
+                          ('gs://chrome-perf/Linux Builder/full-build-linux_'
+                           'a6298e4afedbf2cd461755ea6f45b0ad64222222.zip'))],
+          })))
+  yield delayed_build_test
 
   missing_metric_test = _make_test(
       api, _get_ref_range_only_missing_metric_test_data(),
@@ -133,17 +182,12 @@ def _get_ref_range_only_test_data():
           'refrange': True,
           'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
           'commit_pos': '314015',
+          'fail_to_build': True,
       },
       {
           'refrange': True,
           'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
           'commit_pos': '314017',
-          'test_results': {
-              'results': {
-                  'values': [12, 13, 14, 15, 16],
-              },
-              'retcodes': [0],
-          }
       },
   ]
 
@@ -289,7 +333,7 @@ def _get_reversed_basic_test_data():
   ]
 
 
-def _make_test(api, test_data, test_name, platform='linux'):
+def _make_test(api, test_data, test_name, platform='linux', extra_config=None):
   basic_test = api.test(test_name)
   basic_test += _get_revision_range_step_data(api, test_data)
   for revision_data in test_data:
@@ -317,7 +361,7 @@ def _make_test(api, test_data, test_name, platform='linux'):
                     ' smoothness.tough_scrolling_cases'),
         'recipe_tester_name': 'android-nexus7'}))
   else:
-    basic_test += api.properties(bisect_config=_get_config())
+    basic_test += api.properties(bisect_config=_get_config(extra_config))
   return basic_test
 
 
@@ -348,6 +392,7 @@ def _get_config(params=None):
       'builder_host': 'master4.golo.chromium.org',
       'builder_port': '8341',
       'dummy_builds': 'True',
+      'dummy_job_names': 'True',
       'bypass_stats_check': 'True',
       'skip_gclient_ops': 'True',
       'recipe_tester_name': 'linux_perf_tester'
@@ -368,7 +413,6 @@ def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
     step_name = parent_step + 'resolving commit_pos ' + commit_pos
     yield api.step_data(step_name,
                         stdout=api.raw_io.output('hash:' + commit_hash))
-
 
   if include_build_steps:
     if test_results:
