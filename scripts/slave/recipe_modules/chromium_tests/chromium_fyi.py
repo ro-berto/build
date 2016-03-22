@@ -1958,6 +1958,9 @@ SPEC = {
     'Chromium Win 10': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
+      'GYP_DEFINES': {
+        'dcheck_always_on': '1',
+      },
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
