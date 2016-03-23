@@ -209,7 +209,7 @@ def GenTests(api):
   yield (
       api.test('compile_succeeded') +
       props() +
-      api.override_step_data('test r1.compile', retcode=1)
+      api.override_step_data('test r1.compile', retcode=0)
   )
 
   yield (
