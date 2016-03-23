@@ -223,8 +223,7 @@
       "[SLAVE_BUILD]/src/build/goma/client",
       "--ninja-ensure-up-to-date",
       "--",
-      "All",
-      "chromium_builder_tests"
+      "blink_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile",
