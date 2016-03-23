@@ -24,7 +24,7 @@ BUILDERS = {
 
 
 def RunSteps(api):
-  api.chromium.configure_bot(BUILDERS, ['win_analyze'])
+  api.chromium.configure_bot(BUILDERS, ['win_analyze', 'mb'])
 
   api.bot_update.ensure_checkout(force=True)
 
@@ -33,6 +33,9 @@ def RunSteps(api):
   # This is needed to disable building with goma
   api.chromium.c.compile_py.compiler = None
   api.chromium.c.compile_py.goma_dir = None
+
+  api.chromium.run_mb('chromium.fyi', 'Chromium Windows Analyze',
+                      use_goma=False)
 
   api.chromium.compile(targets=['chrome'], force_clobber=True)
 
