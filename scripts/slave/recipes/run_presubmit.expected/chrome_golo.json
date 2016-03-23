@@ -102,8 +102,6 @@
       "--rietveld_fetch",
       "--upstream",
       "d2571c8b2d27c5e5a14fd061581e46e802f1566a",
-      "--trybot-json",
-      "/path/to/tmp/json",
       "--rietveld_email",
       ""
     ],
@@ -111,18 +109,7 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "presubmit",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chrome_golo_presubmit\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"compile\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "presubmit"
   },
   {
     "name": "$result",

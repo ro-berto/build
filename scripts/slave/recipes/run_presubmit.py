@@ -63,7 +63,6 @@ def _RunStepsInternal(api):
     '--rietveld_url', api.properties['rietveld'],
     '--rietveld_fetch',
     '--upstream', upstream,  # '' if not in bot_update mode.
-    '--trybot-json', api.json.output(),
   ]
 
   if codereview_auth:
