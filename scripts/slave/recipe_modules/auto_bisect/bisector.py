@@ -376,6 +376,9 @@ class Bisector(object):
     Returns:
       A list of RevisionState objects, not including the given start or end.
     """
+    if self.internal_bisect:  # pragma: no cover
+      return self._revision_range_with_gitiles(
+          start, end, depot_name, base_revision, step_name)
     try:
       step_result = self.api.m.python(
           step_name,
@@ -393,6 +396,66 @@ class Bisector(object):
           depot_name=depot_name,
           base_revision=base_revision))
     return revisions
+
+  def _revision_range_with_gitiles(self, start, end, depot_name,
+       base_revision=None, step_name=None):   # pragma: no cover
+    """Returns a list of RevisionState objects between |start| and |end|.
+
+    Args:
+      start (str): Start commit hash.
+      end (str): End commit hash.
+      depot_name (str): Short string name of repo, e.g. chromium or v8.
+      base_revision (str): Base revision in the downstream repo (e.g. chromium).
+      step_name (str): Optional step name.
+
+    Returns:
+      A list of RevisionState objects, not including the given start or end.
+    """
+    try:
+      url = depot_config.DEPOT_DEPS_NAME[depot_name]['url']
+      commits = self._commit_log(start, end, url, step_name)
+
+    except self.api.m.step.StepFailure:  # pragma: no cover
+      self.surface_result('BAD_REV')
+      raise
+    revisions = []
+    for c in commits[:-1]:
+      revisions.append(self.revision_class(
+          bisector=self,
+          commit_hash=c['commit'],
+          depot_name=depot_name,
+          base_revision=base_revision))
+    return revisions
+
+  def _commit_log(self, start, end, url, step_name=None):  # pragma: no cover
+    """Fetches information about a range of commits.
+
+    Args:
+      start (str): The starting commit hash.
+      end (str): The ending commit hash.
+      url (str): The URL of a repository, e.g.
+	  "https://chromium.googlesource.com/chromium/src".
+      step_name (str): Optional step name.
+
+    Returns:
+     A list of dicts for commits in chronological order, including the
+     end commit, but not including the start. Each dict will contain
+     a commit hash (key: "commit") and a commit message (key: "message").
+
+    Raises:
+     StepFailure: Failed to fetch the commit log.
+    """
+    try:
+     ref = '%s..%s' % (start, end)
+     step_name = step_name or 'gitiles log: %s' % ref
+     commits, cursor = self.api.m.gitiles.log(
+         url, ref, limit=2048, step_name=step_name)
+     if cursor:  # pragma: no cover
+       raise self.api.m.step.StepFailure('Revision range too large')
+     return list(reversed(commits))
+    except self.api.m.step.StepFailure:  # pragma: no cover
+     self.surface_result('BAD_REV')
+     raise
 
   def _expand_deps_revisions(self, revision_to_expand):
     """Populates the revisions attribute with additional deps revisions.

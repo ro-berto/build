@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.path.pardir))
 import mock
 
 import auto_bisect.bisector
+import auto_bisect.depot_config
 
 
 class MockRevisionClass(object):  # pragma: no cover
@@ -170,6 +171,30 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
     bisector.bad_rev.overall_return_code = 1
     self.assertFalse(bisector.check_initial_confidence())
 
+  def test_commit_log_from_gitiles(self):
+    self.dummy_api.internal_bisect = True
+    commits = [
+        {'commit': 'def05678def05678def05678def05678def05678'},  # bad revision
+        {'commit': 'bbbbb'},
+        {'commit': 'ccccc'},
+    ]
+    self.dummy_api.m.gitiles.log = mock.MagicMock(return_value=(commits, None))
+    auto_bisect.depot_config.DEPOT_DEPS_NAME['android-chrome'] = {
+        'src' : 'src/internal',
+        'recurse' : True,
+        'depends' : None,
+        'from' : [],
+        'deps_file': '.DEPS.git',
+        'url': 'https://dummy-internal-url'
+    }
+    bisector = auto_bisect.bisector.Bisector(
+        self.dummy_api, self.bisect_config, MockRevisionClass)
+    for r in bisector.revisions:
+      self.assertIn(r.commit_hash,
+                    [bisector.good_rev.commit_hash,
+                     'bbbbb',
+                     'ccccc',
+                     bisector.bad_rev.commit_hash])
 
 if __name__ == '__main__':
   unittest.main()  # pragma: no cover

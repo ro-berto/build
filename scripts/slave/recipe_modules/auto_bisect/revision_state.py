@@ -46,7 +46,7 @@ class RevisionState(object):
                        # revision and the revisions known to be good and bad.
   ) = xrange(8)
 
-  def __init__(self, bisector, commit_hash, depot_name='chromium',
+  def __init__(self, bisector, commit_hash, depot_name=None,
                base_revision=None):
     """Creates a new instance to track the state of a revision.
 
@@ -175,12 +175,18 @@ class RevisionState(object):
     api = self.bisector.api
     if self.deps:
       return
-    step_result = api.m.python(
-        'fetch file %s:%s' % (self.commit_hash, depot_config.DEPS_FILENAME),
-        api.resource('fetch_file.py'),
-        [depot_config.DEPS_FILENAME, '--commit', self.commit_hash],
-        stdout=api.m.raw_io.output())
-    self.deps_file_contents = step_result.stdout
+    if self.bisector.internal_bisect:  # pragma: no cover
+      self.deps_file_contents = api.m.gitiles.download_file(
+          repository_url=depot_config.DEPOT_DEPS_NAME[self.depot_name]['url'],
+          file_path= depot_config.DEPOT_DEPS_NAME[self.depot_name]['deps_file'],
+          branch=self.commit_hash)
+    else:
+      step_result = api.m.python(
+          'fetch file %s:%s' % (self.commit_hash, depot_config.DEPS_FILENAME),
+          api.resource('fetch_file.py'),
+          [depot_config.DEPS_FILENAME, '--commit', self.commit_hash],
+          stdout=api.m.raw_io.output())
+      self.deps_file_contents = step_result.stdout
     try:
       deps_data = self._gen_deps_local_scope()
       exec(self.deps_file_contents or 'deps = {}', {}, deps_data)
