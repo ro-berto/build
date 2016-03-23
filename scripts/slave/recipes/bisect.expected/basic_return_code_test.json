@@ -1122,8 +1122,8 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Debug Info",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: RevisionState(rev=chromium@e28dc0d49c, values=[], mean_value=0, std_dev=None)@@@",
-      "@@@STEP_LOG_LINE@Debug Info@bisector.fkbr: RevisionState(rev=chromium@00316c9ddf, values=[], mean_value=1, std_dev=None)@@@",
+      "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: RevisionState(rev=chromium@e28dc0d49c, values=[], overall_return_code=0, std_dev=None)@@@",
+      "@@@STEP_LOG_LINE@Debug Info@bisector.fkbr: RevisionState(rev=chromium@00316c9ddf, values=[], overall_return_code=1, std_dev=None)@@@",
       "@@@STEP_LOG_LINE@Debug Info@@@@",
       "@@@STEP_LOG_LINE@Debug Info@Revision       Values         @@@",
       "@@@STEP_LOG_LINE@Debug Info@chromium@e28dc0d49c[]             @@@",

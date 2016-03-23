@@ -31,6 +31,7 @@ class MockRevisionClass(object):  # pragma: no cover
     self.previous_revision = None
     self.next_revision = None
     self.values = []
+    self.overall_return_code = None
     self.deps = {}
     self.status = ''
 
@@ -147,16 +148,27 @@ class BisectorTest(unittest.TestCase):  # pragma: no cover
                     len(bisector.good_rev.values) >=
                     auto_bisect.bisector.MAX_REQUIRED_SAMPLES)
 
-  @mock.patch.object(auto_bisect.bisector.Bisector, 'significantly_different',
-                     mock.MagicMock())
-  def test_check_initial_confidence_not_required(self):
+  def test_check_initial_confidence_return_code_pass(self):
     return_code_config = self.bisect_config
     return_code_config['test_type'] = 'return_code'
-    # When confidence is not required, confidence_score should not be called.
     bisector = auto_bisect.bisector.Bisector(self.dummy_api, return_code_config,
                                              MockRevisionClass)
+    bisector.good_rev.overall_return_code = 0
+    bisector.bad_rev.overall_return_code = 1
     self.assertTrue(bisector.check_initial_confidence())
-    self.assertFalse(bisector.significantly_different.called)
+
+  def test_check_initial_confidence_return_code_fail(self):
+    return_code_config = self.bisect_config
+    return_code_config['test_type'] = 'return_code'
+    bisector = auto_bisect.bisector.Bisector(self.dummy_api, return_code_config,
+                                             MockRevisionClass)
+    bisector.good_rev.overall_return_code = 0
+    bisector.bad_rev.overall_return_code = 0
+    self.assertFalse(bisector.check_initial_confidence())
+
+    bisector.good_rev.overall_return_code = 1
+    bisector.bad_rev.overall_return_code = 1
+    self.assertFalse(bisector.check_initial_confidence())
 
 
 if __name__ == '__main__':

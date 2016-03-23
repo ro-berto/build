@@ -500,8 +500,9 @@ class Bisector(object):
     other in a statistically significant manner. False if such difference could
     not be established in the time or sample size allowed.
     """
-    if self.test_type != 'perf':
-      return True
+    if self.test_type == 'return_code':
+      return (self.good_rev.overall_return_code !=
+              self.bad_rev.overall_return_code)
 
     if self.bypass_stats_check:
       dummy_result = self.good_rev.values != self.bad_rev.values

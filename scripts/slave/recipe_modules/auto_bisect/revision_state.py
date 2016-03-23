@@ -90,6 +90,7 @@ class RevisionState(object):
     self.build_url = self.bisector.get_platform_gs_prefix() + self._gs_suffix()
     self.values = []
     self.mean_value = None
+    self.overall_return_code = None
     self.std_dev = None
     self.repeat_count = MINIMUM_SAMPLE_SIZE
     self._test_config = None
@@ -330,8 +331,11 @@ class RevisionState(object):
     self.values += results['values']
     if self.bisector.is_return_code_mode():
       retcodes = test_results['retcodes']
-      overall_return_code = 0 if all(v == 0 for v in retcodes) else 1
-      self.mean_value = overall_return_code
+      self.overall_return_code = 0 if all(v == 0 for v in retcodes) else 1
+      # Keeping mean_value for compatibility with dashboard.
+      # TODO(robertocn): refactor mean_value, specially when uploading results
+      # to dashboard.
+      self.mean_value = self.overall_return_code
     elif self.values:
       api = self.bisector.api
       self.mean_value = api.m.math_utils.mean(self.values)
@@ -508,7 +512,7 @@ class RevisionState(object):
     """
 
     if self.bisector.is_return_code_mode():
-      return self.mean_value == self.bisector.lkgr.mean_value
+      return self.overall_return_code == self.bisector.lkgr.overall_return_code
 
     while True:
       diff_from_good = self.bisector.significantly_different(
@@ -567,5 +571,9 @@ class RevisionState(object):
       next_revision_to_test.retest()
 
   def __repr__(self):
+    if self.overall_return_code is not None:
+      return ('RevisionState(rev=%s, values=%r, overall_return_code=%r, '
+              'std_dev=%r)') % (self.revision_string(), self.values,
+                                self.overall_return_code, self.std_dev)
     return ('RevisionState(rev=%s, values=%r, mean_value=%r, std_dev=%r)' % (
         self.revision_string(), self.values, self.mean_value, self.std_dev))
