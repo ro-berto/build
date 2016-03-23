@@ -7,7 +7,7 @@ import re
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
-class TestLauncherFilterFileInputPlaceholder(recipe_util.Placeholder):
+class TestLauncherFilterFileInputPlaceholder(recipe_util.InputPlaceholder):
   def __init__(self, api, tests):
     self.raw = api.m.raw_io.input('\n'.join(tests))
     super(TestLauncherFilterFileInputPlaceholder, self).__init__()
@@ -18,8 +18,8 @@ class TestLauncherFilterFileInputPlaceholder(recipe_util.Placeholder):
       result[0] = '--test-launcher-filter-file=%s' % result[0]
     return result
 
-  def result(self, presentation, test):
-    return self.raw.result(presentation, test)
+  def cleanup(self, test_enabled):
+    self.raw.cleanup(test_enabled)
 
 
 class ChromiumApi(recipe_api.RecipeApi):

@@ -144,7 +144,8 @@
       "task_path.isolated"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Running test for Test Controller"
+    "name": "Running test for Test Controller",
+    "stdout": "/path/to/tmp/"
   },
   {
     "name": "$result",

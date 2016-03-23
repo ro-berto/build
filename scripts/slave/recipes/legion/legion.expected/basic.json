@@ -160,7 +160,8 @@
       "[SLAVE_BUILD]/src/testing/legion/examples/hello_world/task_test.isolated"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Running test for hello_world_test"
+    "name": "Running test for hello_world_test",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
@@ -225,7 +226,8 @@
       "[SLAVE_BUILD]/src/testing/legion/examples/subprocess/task.isolated"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Running test for subprocess_test"
+    "name": "Running test for subprocess_test",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
@@ -312,7 +314,8 @@
       "[SLAVE_BUILD]/src/testing/legion/examples/http_example/http_server.isolated"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Running test for http_test"
+    "name": "Running test for http_test",
+    "stdout": "/path/to/tmp/"
   },
   {
     "name": "$result",
