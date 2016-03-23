@@ -556,6 +556,24 @@ def GenTests(api):
     api.step_data('compile (with patch)', retcode=1)
   )
 
+  # Test that the component rev for v8 is correctly applied
+  # both on the initial checkout and after deapplying the patch.
+  yield (
+    api.test('compile_failure_with_component_rev') +
+    api.platform('linux', 64) +
+    props(mastername='tryserver.v8',
+          buildername='v8_linux_chromium_gn_rel') +
+    api.properties(revision='22135') +
+    api.override_step_data('read test spec', api.json.output({
+        'V8 Linux GN': {
+          'additional_compile_targets': ['base_unittests'],
+        },
+      })
+    ) +
+    suppress_analyze() +
+    api.step_data('compile (with patch)', retcode=1)
+  )
+
   yield (
     api.test('compile_failure_without_patch_ng') +
     api.platform('linux', 64) +

@@ -523,10 +523,6 @@ def trybot_flavor(c):
   dcheck(c, optional=True)
 
 @config_ctx()
-def gn_minimal_symbols(c):
-  c.gn_args.append('symbol_level=1')
-
-@config_ctx()
 def clang_tot(c):
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
   # Plugin flags often need to be changed when using a plugin newer than

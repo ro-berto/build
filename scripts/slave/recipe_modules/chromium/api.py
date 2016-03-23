@@ -138,18 +138,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     for c in bot_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
 
-    if bot_config.get('set_component_rev'):
-      # If this is a component build and the main revision is e.g. blink,
-      # webrtc, or v8, the custom deps revision of this component must be
-      # dynamically set to either:
-      # (1) 'revision' from the waterfall, or
-      # (2) 'HEAD' for forced builds with unspecified 'revision'.
-      # TODO(machenbach): If this method is used on testers it also needs case
-      # (3) parent_got_revision.
-      component_rev = self.m.properties.get('revision') or 'HEAD'
-      dep = bot_config.get('set_component_rev')
-      self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
-
     return (buildername, bot_config)
 
   def compile(self, targets=None, name=None, force_clobber=False, out_dir=None,

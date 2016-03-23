@@ -5,31 +5,25 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
-      "tryserver.v8",
+      "client.v8.fyi",
       "--builder",
-      "v8_linux_chromium_gn_rel",
+      "V8 Linux GN",
       "--slave",
       "TestSlavename",
       "--spec",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'v8_branch': 'branches/bleeding_edge', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'safesync_url': 'https://build.chromium.org/p/chromium/lkcr-status/lkgr', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]",
       "--root",
-      "src/v8",
+      "src",
       "--revision_mapping_file",
       "{\"src\": \"got_cr_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_revision\"}",
       "--git-cache-dir",
       "[GIT_CACHE]",
-      "--issue",
-      "12853011",
-      "--patchset",
-      "1",
-      "--rietveld_server",
-      "https://codereview.chromium.org",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "src@origin/lkcr",
       "--revision",
-      "src/v8@HEAD",
+      "src/v8@22135",
       "--force",
       "--output_manifest"
     ],
@@ -44,7 +38,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": \"origin/lkcr\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": \"22135\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -73,7 +67,7 @@
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src/v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", @@@",
@@ -110,38 +104,29 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::goma]/resources/ensure_goma.py",
+      "--target-dir",
+      "[SLAVE_BUILD]/src/build/goma/client",
+      "--download-from-google-storage-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ensure_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "component=static_library gomadir='[SLAVE_BUILD]/src/build/goma/client' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/tryserver.v8.json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "read test spec",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/tryserver.v8.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"v8_linux_chromium_gn_rel\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [
@@ -156,7 +141,7 @@
       "--paths",
       "{\"checkout\": \"[SLAVE_BUILD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"v8_linux_chromium_gn_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.v8\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"buildername\": \"V8 Linux GN\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -167,42 +152,17 @@
   },
   {
     "cmd": [
-      "git",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[SLAVE_BUILD]/src/v8",
-    "name": "git diff to analyze patch",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@v8/foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/trybot_analyze_config.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "read filter exclusion spec",
+    "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"ios\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -210,49 +170,13 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
-      "analyze",
-      "-m",
-      "tryserver.v8",
-      "-b",
-      "v8_linux_chromium_gn_rel",
-      "-v",
-      "//out/Release",
-      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"v8/foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
-      "/path/to/tmp/json"
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "analyze",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@analyze_details@{@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"all\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
-      "@@@STEP_LOG_LINE@analyze_details@}@@@",
-      "@@@STEP_LOG_END@analyze_details@@@"
-    ]
+    "name": "cleanup_temp"
   },
   {
     "cmd": [
@@ -261,13 +185,13 @@
       "[SLAVE_BUILD]/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "tryserver.v8",
+      "client.v8.fyi",
       "-b",
-      "v8_linux_chromium_gn_rel",
+      "V8 Linux GN",
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[SLAVE_BUILD]/src/build/goma/client",
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -296,11 +220,11 @@
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-dir",
-      "[BUILD]/goma",
-      "--goma-fail-fast",
-      "--goma-disable-local-fallback",
+      "[SLAVE_BUILD]/src/build/goma/client",
+      "--ninja-ensure-up-to-date",
       "--",
-      "base_unittests"
+      "All",
+      "chromium_builder_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile",
@@ -314,29 +238,23 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/zip_build.py",
       "--target",
       "Release",
-      "--xvfb",
+      "--build-url",
+      "gs://chromium-v8/client.v8.fyi/V8 Linux GN",
+      "--build_revision",
+      "801ada225ddc271c132c3a35f03975671d43e399",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"v8_linux_chromium_gn_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.v8\", \"patch_project\": \"v8\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_gn\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux GN\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"v8_linux_chromium_gn_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.v8\", \"patch_project\": \"v8\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_gn\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--annotate=gtest",
-      "--test-type=base_unittests",
-      "--step-name=base_unittests (with patch)",
-      "--test-launcher-summary-output",
-      "/path/to/tmp/json",
-      "--generate-json-file",
-      "-o",
-      "gtest-results/base_unittests",
-      "--builder-name=v8_linux_chromium_gn_rel",
-      "--slave-name=TestSlavename",
-      "--build-number=571",
-      "base_unittests"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"V8 Linux GN\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "base_unittests (with patch)"
+    "name": "package build"
   },
   {
     "name": "$result",

@@ -29,6 +29,46 @@ SPEC = {
         'test_spec_file': 'chromium.linux.json',
       },
     },
+    'V8 Linux GN': {
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': [
+        'v8_bleeding_edge_git',
+        'chromium_lkcr',
+        'show_v8_revision',
+      ],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      'testing': {
+        'platform': 'linux',
+        'test_spec_file': 'chromium.linux.json',
+      },
+    },
+    'V8 Android GN (dbg)': {
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': [
+        'v8_bleeding_edge_git',
+        'chromium_lkcr',
+        'show_v8_revision',
+      ],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      'testing': {
+        'platform': 'linux',
+        'test_spec_file': 'chromium.linux.json',
+      },
+    },
     # Bot names should be in sync with chromium.linux's names to retrieve the
     # same test configuration files.
     'Linux Tests (dbg)(1)': {
