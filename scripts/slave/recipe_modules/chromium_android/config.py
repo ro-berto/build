@@ -93,7 +93,7 @@ def mipsel_base(c):
   pass
 
 @config_ctx(includes=['mipsel_base'])
-def mipsel_builder(c):
+def mipsel_builder(c):  # pragma: no cover
   pass
 
 @config_ctx(includes=['mipsel_base'])

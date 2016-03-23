@@ -13,7 +13,7 @@ DEPS = [
 
 BUILDERS = freeze({
   'local_test': {
-    'recipe_config': 'main_builder',
+    'recipe_config': 'main_builder_mb',
     'run_tests': True,
     'kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -28,7 +28,7 @@ BUILDERS = freeze({
     }
   },
   'Android Cronet Builder (dbg)': {
-    'recipe_config': 'main_builder',
+    'recipe_config': 'main_builder_mb',
     'run_tests': True,
     'kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -38,7 +38,7 @@ BUILDERS = freeze({
     },
   },
   'Android Cronet Builder': {
-    'recipe_config': 'main_builder',
+    'recipe_config': 'main_builder_mb',
     'run_tests': True,
     'kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -49,7 +49,7 @@ BUILDERS = freeze({
     },
   },
   'Android Cronet ARMv6 Builder': {
-    'recipe_config': 'main_builder',
+    'recipe_config': 'main_builder_mb',
     'run_tests': True,
     'kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -62,7 +62,7 @@ BUILDERS = freeze({
     }
   },
   'Android Cronet ARM64 Builder': {
-    'recipe_config': 'arm64_builder',
+    'recipe_config': 'arm64_builder_mb',
     'run_tests': False,
     'cronet_kwargs': {
       'PERF_ID': 'android_cronet_arm64_builder',
@@ -72,7 +72,7 @@ BUILDERS = freeze({
     },
   },
   'Android Cronet ARM64 Builder (dbg)': {
-    'recipe_config': 'arm64_builder',
+    'recipe_config': 'arm64_builder_mb',
     'run_tests': False,
     'cronet_kwargs': {
       'PERF_ID': 'android_cronet_arm64_builder_dbg',
@@ -82,7 +82,7 @@ BUILDERS = freeze({
     },
   },
   'Android Cronet x86 Builder': {
-    'recipe_config': 'x86_builder',
+    'recipe_config': 'x86_builder_mb',
     'run_tests': False,
     'cronet_kwargs': {
       'PERF_ID': 'android_cronet_x86_builder',
@@ -92,7 +92,7 @@ BUILDERS = freeze({
     },
   },
   'Android Cronet x86 Builder (dbg)': {
-    'recipe_config': 'x86_builder',
+    'recipe_config': 'x86_builder_mb',
     'run_tests': False,
     'cronet_kwargs': {
       'PERF_ID': 'android_cronet_x86_builder_dbg',
@@ -102,7 +102,7 @@ BUILDERS = freeze({
     },
   },
   'Android Cronet MIPS Builder': {
-    'recipe_config': 'mipsel_builder',
+    'recipe_config': 'mipsel_builder_mb',
     'run_tests': False,
     'cronet_kwargs': {
       'PERF_ID': 'android_cronet_mips_builder',
@@ -112,7 +112,7 @@ BUILDERS = freeze({
     },
   },
   'android_cronet_tester': {
-    'recipe_config': 'main_builder',
+    'recipe_config': 'main_builder_mb',
     'run_tests': True,
     'kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -122,7 +122,7 @@ BUILDERS = freeze({
     }
   },
   'Android Cronet Data Reduction Proxy Builder': {
-    'recipe_config': 'main_builder',
+    'recipe_config': 'main_builder_mb',
     'run_tests': True,
     'cronet_kwargs': {
       'PERF_ID': 'android_cronet_data_reduction_proxy_builder',
