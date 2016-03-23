@@ -396,8 +396,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     properties_json = self.m.json.dumps(self.m.properties.legacy())
     run_tests_args.extend(['--factory-properties', properties_json,
                            '--build-properties', properties_json])
-    run_tests_args.extend(['--annotate=graphing',
-                           '--test-type=sizes',
+    run_tests_args.extend(['--test-type=sizes',
                            '--builder-name=%s' % self.m.properties['buildername'],
                            '--slave-name=%s' % self.m.properties['slavename'],
                            '--build-number=%s' % self.m.properties['buildnumber'],
@@ -405,7 +404,8 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     if perf_id:
       assert results_url is not None
-      run_tests_args.extend(['--results-url=%s' % results_url,
+      run_tests_args.extend(['--annotate=graphing',
+                             '--results-url=%s' % results_url,
                              '--perf-dashboard-id=sizes',
                              '--perf-id=%s' % perf_id])
 
