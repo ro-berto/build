@@ -53,19 +53,25 @@ SPEC = {
       },
     },
     'V8 Android GN (dbg)': {
-      'chromium_config': 'chromium',
+      'chromium_config': 'android',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
+        'android',
         'v8_bleeding_edge_git',
         'chromium_lkcr',
         'show_v8_revision',
       ],
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'android',
+        'TARGET_ARCH': 'arm',
       },
+      'android_config': 'main_builder',
       'bot_type': 'builder',
+      'compile_targets': [
+        'blink_tests',
+      ],
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {
         'platform': 'linux',
