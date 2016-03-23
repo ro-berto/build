@@ -73,6 +73,11 @@ def GenTests(api):
   basic_test = _make_test(api, _get_basic_test_data(), 'basic')
   yield basic_test
 
+  invalid_config_test = api.test('invalid_config')
+  invalid_config_test += api.properties(
+      bisect_config=_get_config({'good_revision': 'not a valid revision'}))
+  yield invalid_config_test
+
   failed_build_test = _make_test(
       api, _get_ref_range_only_test_data(), 'failed_build_test',
       extra_config={'dummy_builds': None})
@@ -386,8 +391,8 @@ def _get_config(params=None):
       'bad_revision': '314017',
       'metric': 'mean_input_event_latency/mean_input_event_latency',
       'repeat_count': '2',
+      'bug_id': '-1',
       'max_time_minutes': '5',
-      'bug_id': '',
       'gs_bucket': 'chrome-perf',
       'builder_host': 'master4.golo.chromium.org',
       'builder_port': '8341',
@@ -395,7 +400,7 @@ def _get_config(params=None):
       'dummy_job_names': 'True',
       'bypass_stats_check': 'True',
       'skip_gclient_ops': 'True',
-      'recipe_tester_name': 'linux_perf_tester'
+      'recipe_tester_name': 'linux_perf_tester',
   }
   if params:
     example_config.update(params)

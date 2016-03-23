@@ -7,6 +7,7 @@ import re
 import time
 import urllib
 
+from . import config_validation
 from . import depot_config
 from . import revision_state
 
@@ -75,11 +76,12 @@ class Bisector(object):
     """
     super(Bisector, self).__init__()
     self._api = api
+    self.result_codes = set()
     self.ensure_sync_master_branch()
     self.bisect_config = bisect_config
     self.config_step()
+    self._validate_config()
     self.revision_class = revision_class
-    self.result_codes = set()
     self.last_tested_revision = None
 
     # Test-only properties.
@@ -189,8 +191,9 @@ class Bisector(object):
     return significantly_different
 
   def config_step(self):
-    """Yields a simple echo step that outputs the bisect config."""
+    """Yields a step that prints the bisect config."""
     api = self.api
+
     # bisect_config may come as a FrozenDict (which is not serializable).
     bisect_config = dict(self.bisect_config)
 
@@ -201,12 +204,22 @@ class Bisector(object):
     for k, v in bisect_config.iteritems():
       if isinstance(v, basestring):
         bisect_config[k] = fix_windows_backslashes(v)
+
     # We sort the keys to prevent problems with orders changing when
     # recipe_simulation_test compares against expectation files.
     config_string = json.dumps(bisect_config, indent=2, sort_keys=True)
-    result = api.m.step('config', [])
+    step = api.m.step('config', [])
     config_lines = config_string.splitlines()
-    result.presentation.logs['Bisect job configuration'] = config_lines
+    step.presentation.logs['Bisect job configuration'] = config_lines
+
+  def _validate_config(self):
+    """Raises an error and halts the bisect job if the config is invalid."""
+    try:
+      config_validation.validate_bisect_config(self.bisect_config)
+    except config_validation.ValidationFail as error:
+      self.surface_result('BAD_CONFIG')
+      self.api.m.halt(error.message)
+      raise self.api.m.step.StepFailure(error.message)
 
   @property
   def api(self):
