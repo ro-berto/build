@@ -316,12 +316,12 @@ _CONFIG_MAP = {
 
     'target': {
       'hammerhead-ndebug': {
-        'serial': '073038cf006ae3bb',
+        'serial': '03a79ae90ae5889b',
         'device': 'hammerhead',
         'debug': False,
       },
       'hammerhead-debug': {
-        'serial': '03848d73f0e944cb',
+        'serial': '06ad123b003ba37b',
         'device': 'hammerhead',
         'debug': True,
       },
