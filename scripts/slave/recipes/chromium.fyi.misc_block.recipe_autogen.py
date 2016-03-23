@@ -88,7 +88,7 @@ def Android_ChromeDriver_Tests__dbg__steps(api):
     soln.url = "https://chromium.googlesource.com/chromium/src.git"
     soln.custom_deps = {
         'src/chrome/test/chromedriver/third_party/java_tests':
-        'http://src.chromium.org/svn/trunk/deps/third_party/webdriver',
+        'https://chromium.googlesource.com/chromium/deps/webdriver.git',
         'src/third_party/WebKit/LayoutTests': None
     }
     soln.custom_vars = {'webkit_trunk': 'http://src.chromium.org/blink/trunk',
