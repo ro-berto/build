@@ -261,7 +261,9 @@
       "--goma-dir",
       "[SLAVE_BUILD]/src/build/goma/client",
       "--",
-      "blink_tests"
+      "blink_tests",
+      "gin_unittests",
+      "net_unittests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

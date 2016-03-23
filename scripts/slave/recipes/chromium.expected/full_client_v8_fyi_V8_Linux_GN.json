@@ -223,7 +223,11 @@
       "[SLAVE_BUILD]/src/build/goma/client",
       "--ninja-ensure-up-to-date",
       "--",
-      "blink_tests"
+      "blink_tests",
+      "extensions_browsertests",
+      "gin_unittests",
+      "net_unittests",
+      "pdfium_test"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile",

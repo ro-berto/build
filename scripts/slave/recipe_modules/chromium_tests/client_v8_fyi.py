@@ -45,6 +45,10 @@ SPEC = {
       'bot_type': 'builder',
       'compile_targets': [
         'blink_tests',
+        'extensions_browsertests',
+        'gin_unittests',
+        'pdfium_test',
+        'net_unittests',
       ],
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {
@@ -71,6 +75,8 @@ SPEC = {
       'bot_type': 'builder',
       'compile_targets': [
         'blink_tests',
+        'gin_unittests',
+        'net_unittests',
       ],
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {
