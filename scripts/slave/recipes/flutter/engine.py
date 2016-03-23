@@ -64,7 +64,7 @@ def UploadDartPackage(api, package_name):
     remote_name = '%s.zip' % package_name
     remote_zip = GetCloudPath(api, remote_name)
     parent_dir = api.path['checkout'].join(
-        'out/android_Release/dist/packages/%s' % package_name)
+        'out/android_Release/dist/packages')
     pkg = api.zip.make_package(parent_dir, local_zip)
     pkg.add_directory(parent_dir.join(package_name))
     pkg.zip('Zip %s Package' % package_name)
