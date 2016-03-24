@@ -54,7 +54,7 @@ LOGDOG_WHITELIST_MASTER_BUILDERS = {
 
     # Chromium tryservers.
     'tryserver.chromium.android': { WHITELIST_ALL },
-    #'tryserver.chromium.mac': { WHITELIST_ALL },
+    'tryserver.chromium.mac': { WHITELIST_ALL },
     #'tryserver.chromium.linux': { WHITELIST_ALL },
     #'tryserver.chromium.windows': { WHITELIST_ALL },
 }
