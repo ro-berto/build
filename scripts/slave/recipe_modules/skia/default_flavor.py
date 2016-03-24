@@ -85,6 +85,10 @@ class DefaultFlavorUtils(object):
   def chrome_path(self):
     """Path to a checkout of Chrome on this machine."""
     if self._chrome_path is None:
+      if self._skia_api.running_in_swarming:
+        self._chrome_path = self._skia_api.slave_dir.join('src')
+        return self._chrome_path
+
       toolchain_hash_file = self._skia_api.skia_dir.join(
           'infra', 'bots', 'win_toolchain_hash.json')
       if (self._skia_api.m.path.exists(toolchain_hash_file) and
@@ -156,6 +160,18 @@ class DefaultFlavorUtils(object):
             self._skia_api.home_dir, 'src')
     return self._chrome_path
 
+  def bootstrap_win_toolchain(self):
+    """Run bootstrapping script for the Windows toolchain."""
+    bootstrap_script = self._skia_api.infrabots_dir.join(
+        'bootstrap_win_toolchain_json.py')
+    win_toolchain_json = self._skia_api.slave_dir.join(
+        'src', 'build', 'win_toolchain.json')
+    self._skia_api.m.python(
+        'bootstrap win toolchain',
+        script=bootstrap_script,
+        args=['--win_toolchain_json', win_toolchain_json,
+              '--depot_tools_parent_dir', self._skia_api.slave_dir])
+
   def compile(self, target):
     """Build the given target."""
     # The CHROME_PATH environment variable is needed for builders that use
@@ -163,11 +179,14 @@ class DefaultFlavorUtils(object):
     env = {'CHROME_PATH': self.chrome_path}
     if self._skia_api.m.platform.is_win:
       make_cmd = ['python', 'make.py']
-      if 'VS2015' in self._skia_api.builder_cfg.get('extra_config', ''):
-        env['PATH'] = self._skia_api.m.path.pathsep.join([
-            str(self._skia_api.slave_dir.join('win', 'depot_tools')),
-            '%(PATH)s'])
-        env['GYP_MSVS_VERSION'] = '2015'
+      if self._skia_api.running_in_swarming:
+        self._skia_api._run_once(self.bootstrap_win_toolchain)
+      else:
+        if 'VS2015' in self._skia_api.builder_cfg.get('extra_config', ''):
+          env['PATH'] = self._skia_api.m.path.pathsep.join([
+              str(self._skia_api.slave_dir.join('win', 'depot_tools')),
+              '%(PATH)s'])
+          env['GYP_MSVS_VERSION'] = '2015'
     else:
       make_cmd = ['make']
     cmd = make_cmd + [target]
@@ -190,7 +209,7 @@ class DefaultFlavorUtils(object):
       raise ValueError('For builders who do not have attached devices, copying '
                        'from host to device is undefined and only allowed if '
                        'host_path and device_path are the same (%s vs %s).' % (
-                       str(host_path), str(device_path)))  # pragma: no cover
+                       str(host_dir), str(device_dir)))  # pragma: no cover
 
   def copy_directory_contents_to_host(self, device_dir, host_dir):
     """Like shutil.copytree(), but for copying from a connected device."""
@@ -200,7 +219,7 @@ class DefaultFlavorUtils(object):
       raise ValueError('For builders who do not have attached devices, copying '
                        'from device to host is undefined and only allowed if '
                        'host_path and device_path are the same (%s vs %s).' % (
-                       str(host_path), str(device_path)))  # pragma: no cover
+                       str(host_dir), str(device_dir)))  # pragma: no cover
 
   def copy_file_to_device(self, host_path, device_path):
     """Like shutil.copyfile, but for copying to a connected device."""
@@ -241,7 +260,7 @@ class DefaultFlavorUtils(object):
     pardir = self._skia_api.m.path.pardir
     join = self._skia_api.m.path['slave_build'].join
     return DeviceDirs(
-        dm_dir=join('dm'),
+        dm_dir=self._skia_api.dm_dir,
         perf_data_dir=self._skia_api.perf_data_dir,
         resource_dir=self._skia_api.resource_dir,
         images_dir=join('images'),

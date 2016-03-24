@@ -40,6 +40,17 @@ TEST_EXPECTED_SK_IMAGE_VERSION = '42'
 VERSION_FILE_SK_IMAGE = 'SK_IMAGE_VERSION'
 VERSION_FILE_SKP = 'SKP_VERSION'
 
+BUILD_PRODUCTS_ISOLATE_WHITELIST = [
+  'dm',
+  'dm.exe',
+  'nanobench',
+  'nanobench.exe',
+  '*.so',
+  '*.dll',
+  'skia_launcher',
+  'lib/*.so',
+]
+
 
 def is_android(builder_cfg):
   """Determine whether the given builder is an Android builder."""
@@ -150,6 +161,11 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def gen_steps(self):
     """Generate all build steps."""
+    self.setup()
+    self.run_steps()
+
+  def setup(self, running_in_swarming=False):
+    """Prepare the bot to run."""
     # Setup
     self.failed = []
 
@@ -162,6 +178,15 @@ class SkiaApi(recipe_api.RecipeApi):
     self.skia_dir = self.slave_dir.join('skia')
     self.infrabots_dir = self.skia_dir.join('infra', 'bots')
 
+    # We run through this recipe in several different ways:
+    # 1. Normal bot: run all of the steps.
+    # 2. Swarm trigger: sync Skia, trigger Swarming tasks for build/test/perf.
+    # 3. Running as a Swarming task: perform the given task only, with
+    #    adaptations for running within Swarming, eg. copying build results
+    #    into the correct output directory.
+    self.is_swarming_trigger = 'Swarming' in self.builder_name
+    self.running_in_swarming = running_in_swarming
+
     # Check out the Skia code.
     self.checkout_steps()
 
@@ -173,6 +198,9 @@ class SkiaApi(recipe_api.RecipeApi):
     self.builder_spec = self.json_from_file(
       self.skia_dir.join('tools', 'buildbot_spec.py'), fake_spec)
 
+    self.builder_cfg = self.builder_spec['builder_cfg']
+    self.role = self.builder_cfg['role']
+
     # Set some important variables.
     self.home_dir = os.path.expanduser('~')
     if self._test_data.enabled:
@@ -181,7 +209,11 @@ class SkiaApi(recipe_api.RecipeApi):
     self.resource_dir = self.skia_dir.join('resources')
     self.images_dir = self.slave_dir.join('images')
     self.local_skp_dir = self.slave_dir.join('playback', 'skps')
-    self.out_dir = self.m.path['checkout'].join('out', self.builder_name)
+    if self.running_in_swarming:
+      self.swarming_out_dir = self.m.properties['swarm_out_dir']
+      self.out_dir = self.slave_dir.join('out')
+    else:
+      self.out_dir = self.m.path['checkout'].join('out', self.builder_name)
     self.tmp_dir = self.m.path['slave_build'].join('tmp')
 
     self.gsutil_env_chromium_skia_gm = self.gsutil_env(BOTO_CHROMIUM_SKIA_GM)
@@ -198,22 +230,28 @@ class SkiaApi(recipe_api.RecipeApi):
                              'BUILDTYPE': self.configuration})
     self.default_env.update(self.builder_spec['env'])
     self.build_targets = [str(t) for t in self.builder_spec['build_targets']]
-    self.builder_cfg = self.builder_spec['builder_cfg']
-    self.role = self.builder_cfg['role']
     self.do_test_steps = self.builder_spec['do_test_steps']
     self.do_perf_steps = self.builder_spec['do_perf_steps']
     self.is_trybot = self.builder_cfg['is_trybot']
     self.upload_dm_results = self.builder_spec['upload_dm_results']
     self.upload_perf_results = self.builder_spec['upload_perf_results']
-    self.perf_data_dir = self.slave_dir.join('perfdata', self.builder_name,
-                                             'data')
+    if self.running_in_swarming:
+      self.dm_dir = self.m.path.join(
+          self.swarming_out_dir, 'dm')
+      self.perf_data_dir = self.m.path.join(self.swarming_out_dir, 
+          'perfdata', self.builder_name, 'data')
+    else:
+      self.dm_dir = self.slave_dir.join('dm')
+      self.perf_data_dir = self.slave_dir.join('perfdata', self.builder_name,
+                                               'data')
     self.dm_flags = self.builder_spec['dm_flags']
     self.nanobench_flags = self.builder_spec['nanobench_flags']
 
     self.flavor = self.get_flavor(self.builder_cfg)
 
-    # Compile, run tests, perf, etc.
-    if 'Swarming' in self.builder_name:
+  def run_steps(self):
+    """Compile, run tests, perf, etc."""
+    if self.is_swarming_trigger:
       self.m.skia_swarming.setup(
           self.infrabots_dir.join('tools', 'luci-go'),
           swarming_rev='')
@@ -276,8 +314,15 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def checkout_steps(self):
     """Run the steps to obtain a checkout of Skia."""
+    if self.running_in_swarming:
+      # We should've obtained the Skia checkout through isolates, so we don't
+      # need to perform the checkout ourselves.
+      self.m.path['checkout'] = self.m.path['slave_build'].join('skia')
+      self.got_revision = self.m.properties['revision']
+      return
+
     # Initial cleanup.
-    if 'Swarming' in self.builder_name:
+    if self.is_swarming_trigger:
       gclient_cfg = self.m.gclient.make_config(CACHE_DIR=None)
     else:
       gclient_cfg = self.m.gclient.make_config()
@@ -300,6 +345,34 @@ class SkiaApi(recipe_api.RecipeApi):
     """Run the steps to build Skia."""
     for target in self.build_targets:
       self.flavor.compile(target)
+    if self.running_in_swarming:
+      self.m.python.inline(
+          name='copy build products',
+          program='''import errno
+import glob
+import os
+import shutil
+import sys
+
+src = sys.argv[1]
+dst = sys.argv[2]
+build_products_whitelist = %s
+
+try:
+  os.makedirs(dst)
+except OSError as e:
+  if e.errno != errno.EEXIST:
+    raise
+
+for pattern in build_products_whitelist:
+  path = os.path.join(src, pattern)
+  for f in glob.glob(path):
+    print 'Copying build product %%s' %% f
+    shutil.copy(f, dst)
+''' % str(BUILD_PRODUCTS_ISOLATE_WHITELIST),
+          args=[self.m.path.join(self.out_dir, self.configuration),
+                self.m.path.join(self.swarming_out_dir, 'out', self.configuration)],
+          infra_step=True)
 
   def compile_steps_swarm(self):
     builder_name = derive_compile_bot_name(self.builder_name,
@@ -424,7 +497,7 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def download_and_copy_images(self):
     """Download test images if needed."""
-    if 'Swarming' in self.builder_name:
+    if self.is_swarming_trigger:
       self.run(self.m.python, 'Download images',
                script=self.infrabots_dir.join('download_images.py'),
                env=self.gsutil_env_chromium_skia_gm)
@@ -441,7 +514,7 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def download_and_copy_skps(self):
     """Download the SKPs if needed."""
-    if 'Swarming' in self.builder_name:
+    if self.is_swarming_trigger:
       self.run(self.m.python, 'Download SKPs',
                script=self.infrabots_dir.join('download_skps.py'),
                env=self.gsutil_env_chromium_skia_gm)
@@ -538,11 +611,10 @@ print json.dumps({'ccache': ccache})
 
     # Upload the results.
     if self.upload_dm_results:
-      host_dm_dir = self.m.path['slave_build'].join('dm')
-      self.flavor.create_clean_host_dir(host_dm_dir)
+      self.flavor.create_clean_host_dir(self.dm_dir)
       dm_src = task.task_output_dir.join('0', 'dm')
-      self.m.file.rmtree('dm_dir', host_dm_dir, infra_step=True)
-      self.m.file.copytree('dm_dir', dm_src, host_dm_dir, infra_step=True)
+      self.m.file.rmtree('dm_dir', self.dm_dir, infra_step=True)
+      self.m.file.copytree('dm_dir', dm_src, self.dm_dir, infra_step=True)
 
       # Upload them to Google Storage.
       self.run(
@@ -550,7 +622,7 @@ print json.dumps({'ccache': ccache})
           'Upload DM Results',
           script=self.resource('upload_dm_results.py'),
           args=[
-            host_dm_dir,
+            self.dm_dir,
             self.got_revision,
             self.builder_name,
             self.m.properties['buildnumber'],
@@ -572,9 +644,8 @@ print json.dumps({'ccache': ccache})
     if self.upload_dm_results:
       # This must run before we write anything into self.device_dirs.dm_dir
       # or we may end up deleting our output on machines where they're the same.
-      host_dm_dir = self.m.path['slave_build'].join('dm')
-      self.flavor.create_clean_host_dir(host_dm_dir)
-      if str(host_dm_dir) != str(self.device_dirs.dm_dir):
+      self.flavor.create_clean_host_dir(self.dm_dir)
+      if str(self.dm_dir) != str(self.device_dirs.dm_dir):
         self.flavor.create_clean_device_dir(self.device_dirs.dm_dir)
 
       # Obtain the list of already-generated hashes.
@@ -671,14 +742,20 @@ print json.dumps({'ccache': ccache})
     if self.upload_dm_results:
       # Copy images and JSON to host machine if needed.
       self.flavor.copy_directory_contents_to_host(self.device_dirs.dm_dir,
-                                                  host_dm_dir)
+                                                  self.dm_dir)
+
+      if self.running_in_swarming:
+        # If we're running in Swarming, we wrote the output to the swarm out dir
+        # so we don't need to upload.
+        return
+
       # Upload them to Google Storage.
       self.run(
           self.m.python,
           'Upload DM Results',
           script=self.resource('upload_dm_results.py'),
           args=[
-              host_dm_dir,
+              self.dm_dir,
               self.got_revision,
               self.builder_name,
               self.m.properties['buildnumber'],
@@ -811,11 +888,16 @@ print json.dumps({'ccache': ccache})
     args.extend(self.nanobench_flags)
 
     if self.upload_perf_results:
-      git_timestamp = self.m.git.get_timestamp(test_data='1408633190',
-                                               infra_step=True)
-      json_path = self.flavor.device_path_join(
-          self.device_dirs.perf_data_dir,
-          'nanobench_%s_%s.json' % (self.got_revision, git_timestamp))
+      if self.running_in_swarming:
+        json_path = self.flavor.device_path_join(
+            self.device_dirs.perf_data_dir,
+            'nanobench_%s.json' % self.got_revision)
+      else:
+        git_timestamp = self.m.git.get_timestamp(test_data='1408633190',
+                                                 infra_step=True)
+        json_path = self.flavor.device_path_join(
+            self.device_dirs.perf_data_dir,
+            'nanobench_%s_%s.json' % (self.got_revision, git_timestamp))
       args.extend(['--outResultsFile', json_path])
       args.extend(properties)
 
@@ -842,6 +924,12 @@ print json.dumps({'ccache': ccache})
       self.m.file.makedirs('perf_dir', self.perf_data_dir)
       self.flavor.copy_directory_contents_to_host(
           self.device_dirs.perf_data_dir, self.perf_data_dir)
+
+      if self.running_in_swarming:
+        # If we're running in Swarming, we wrote the results into the Swarming
+        # out dir, so we don't need to upload.
+        return
+
       gsutil_path = self.m.path['depot_tools'].join(
           'third_party', 'gsutil', 'gsutil')
       upload_args = [self.builder_name, self.m.properties['buildnumber'],
@@ -859,6 +947,19 @@ print json.dumps({'ccache': ccache})
 
   def cleanup_steps(self):
     """Run any cleanup steps."""
+    if self.running_in_swarming and 'Win' in self.builder_cfg['os']:
+      self.m.python.inline(
+          name='cleanup',
+          program='''import psutil
+for p in psutil.process_iter():
+  try:
+    if p.name == 'mspdbsrv.exe':
+      p.kill()
+  except psutil._error.AccessDenied:
+    pass
+''',
+          infra_step=True)
+
     self.flavor.cleanup_steps()
 
   def _KeyParams(self):
