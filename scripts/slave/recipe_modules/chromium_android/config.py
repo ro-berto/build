@@ -231,4 +231,4 @@ def cast_builder(c):
 def gce_builder(c):
   c.gce_setup = True
   c.gce_snapshot = 'clean-20-l-phone-snapshot'
-  c.gce_count = 10
+  c.gce_count = 6

@@ -275,7 +275,7 @@
       "TestSlavename",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--n",
-      "10",
+      "6",
       "launch",
       "--snapshot",
       "clean-20-l-phone-snapshot"
@@ -518,7 +518,7 @@
       "TestSlavename",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--n",
-      "10",
+      "6",
       "shutdown"
     ],
     "cwd": "[SLAVE_BUILD]",
