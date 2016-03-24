@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\skia\\tools\\buildbot_spec.py",
+      "[SLAVE_BUILD]/skia/tools/buildbot_spec.py",
       "/path/to/tmp/json",
-      "Build-Win-MSVC-x86-Debug-VS2015"
+      "Build-Ubuntu-GCC-Arm7-Debug-Android-Trybot"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -15,22 +15,23 @@
       "@@@STEP_LOG_LINE@json.output@    \"most\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"builder_cfg\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"MSVC\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"compiler\": \"GCC\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"configuration\": \"Debug\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"extra_config\": \"VS2015\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Win\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"extra_config\": \"Android\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"is_trybot\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"os\": \"Ubuntu\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"role\": \"Build\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"target_arch\": \"x86\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"target_arch\": \"Arm7\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"device_cfg\": \"arm_v7_neon\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"dm_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"do_perf_steps\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"do_test_steps\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_warnings_as_errors=1 skia_win_debuggers_path=c:/DbgHelp skia_win_ltcg=0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"GYP_DEFINES\": \"skia_arch_type=arm skia_warnings_as_errors=1\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
@@ -45,27 +46,49 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\skia\\infra\\bots\\bootstrap_win_toolchain_json.py",
-      "--win_toolchain_json",
-      "[SLAVE_BUILD]\\src\\build\\win_toolchain.json",
-      "--depot_tools_parent_dir",
-      "[SLAVE_BUILD]"
+      "import json\nimport subprocess\nimport sys\n\nccache = None\ntry:\n  ccache = subprocess.check_output(['which', 'ccache']).rstrip()\nexcept:\n  pass\nprint json.dumps({'ccache': ccache})\n"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "bootstrap win toolchain"
+    "env": {
+      "BUILDTYPE": "Debug",
+      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=1",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
+    },
+    "name": "has ccache?",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"ccache\": null@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@python.inline@import json@@@",
+      "@@@STEP_LOG_LINE@python.inline@import subprocess@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@ccache = None@@@",
+      "@@@STEP_LOG_LINE@python.inline@try:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  ccache = subprocess.check_output(['which', 'ccache']).rstrip()@@@",
+      "@@@STEP_LOG_LINE@python.inline@except:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  pass@@@",
+      "@@@STEP_LOG_LINE@python.inline@print json.dumps({'ccache': ccache})@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "cmd": [
-      "python",
-      "make.py",
-      "most"
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
+      "most",
+      "-d",
+      "arm_v7_neon"
     ],
-    "cwd": "[SLAVE_BUILD]\\skia",
+    "cwd": "[SLAVE_BUILD]/skia",
     "env": {
+      "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Debug",
-      "CHROME_PATH": "[SLAVE_BUILD]\\src",
-      "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_warnings_as_errors=1 skia_win_debuggers_path=c:/DbgHelp skia_win_ltcg=0",
-      "SKIA_OUT": "[SLAVE_BUILD]\\out"
+      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=1",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "build most"
   },
@@ -74,8 +97,8 @@
       "python",
       "-u",
       "import errno\nimport glob\nimport os\nimport shutil\nimport sys\n\nsrc = sys.argv[1]\ndst = sys.argv[2]\nbuild_products_whitelist = ['dm', 'dm.exe', 'nanobench', 'nanobench.exe', '*.so', '*.dll', 'skia_launcher', 'lib/*.so']\n\ntry:\n  os.makedirs(dst)\nexcept OSError as e:\n  if e.errno != errno.EEXIST:\n    raise\n\nfor pattern in build_products_whitelist:\n  path = os.path.join(src, pattern)\n  for f in glob.glob(path):\n    print 'Copying build product %s' % f\n    shutil.copy(f, dst)\n",
-      "[SLAVE_BUILD]\\out\\Debug",
-      "[SWARM_OUT_DIR]\\out\\Debug"
+      "[SLAVE_BUILD]/out/Debug",
+      "[SWARM_OUT_DIR]/out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "copy build products",

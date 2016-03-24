@@ -18,6 +18,14 @@ import sys
 import tempfile
 
 
+SKIA_RECIPES = [
+  'skia.py',
+  'swarm_compile.py',
+  'swarm_perf.py',
+  'swarm_test.py',
+]
+
+
 def prettier_print(obj, indent, stream=sys.stdout, max_line_length=80):
   """Pretty-print the object, in a nicer format than pprint."""
 
@@ -101,17 +109,24 @@ def prettier_print(obj, indent, stream=sys.stdout, max_line_length=80):
   s.flush()
 
 
+def get_bots():
+  """Find all of the bots referenced in Skia recipes."""
+  cwd = os.path.realpath(os.path.dirname(__file__))
+  bots = []
+  for skia_recipe in SKIA_RECIPES:
+    skia_recipe = os.path.join(cwd, os.pardir, 'recipes', 'skia', skia_recipe)
+    skia = imp.load_source('skia', skia_recipe)
+    for _, slaves in skia.TEST_BUILDERS.iteritems():
+      for _, builders in slaves.iteritems():
+        bots.extend(builders)
+  bots.sort()
+  return bots
+
+
 def main(buildbot_spec_path):
   """Generate a spec for each of the above bots. Dump them all to a file."""
   # Get the list of bots.
-  cwd = os.path.realpath(os.path.dirname(__file__))
-  skia_recipe = os.path.join(cwd, os.pardir, 'recipes', 'skia', 'skia.py')
-  skia = imp.load_source('skia', skia_recipe)
-  bots = []
-  for _, slaves in skia.TEST_BUILDERS.iteritems():
-    for _, builders in slaves.iteritems():
-      bots.extend(builders)
-  bots.sort()
+  bots = get_bots()
 
   # Create the fake specs.
   specs = {}

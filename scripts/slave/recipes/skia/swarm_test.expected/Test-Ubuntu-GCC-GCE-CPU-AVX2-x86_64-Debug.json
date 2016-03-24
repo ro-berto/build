@@ -116,7 +116,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SWARM_OUT]/dm"
+      "[SWARM_OUT_DIR]/dm"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "rmtree dm",
@@ -136,7 +136,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SWARM_OUT]/dm",
+      "[SWARM_OUT_DIR]/dm",
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -221,7 +221,7 @@
       "builder",
       "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug",
       "build_number",
-      "2",
+      "5",
       "--key",
       "arch",
       "x86_64",
@@ -237,8 +237,10 @@
       "GCE",
       "os",
       "Ubuntu",
+      "--uninterestingHashesFile",
+      "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt",
       "--writePath",
-      "[SWARM_OUT]/dm",
+      "[SWARM_OUT_DIR]/dm",
       "--nogpu",
       "--dummy-flags"
     ],

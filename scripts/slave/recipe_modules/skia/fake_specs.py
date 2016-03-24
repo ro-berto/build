@@ -94,6 +94,35 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
+  'Build-Ubuntu-GCC-Arm7-Debug-Android-Trybot': {
+    'build_targets': [
+      'most',
+    ],
+    'builder_cfg': {
+      'compiler': 'GCC',
+      'configuration': 'Debug',
+      'extra_config': 'Android',
+      'is_trybot': True,
+      'os': 'Ubuntu',
+      'role': 'Build',
+      'target_arch': 'Arm7',
+    },
+    'configuration': 'Debug',
+    'device_cfg': 'arm_v7_neon',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': False,
+    'do_test_steps': False,
+    'env': {
+      'GYP_DEFINES': 'skia_arch_type=arm skia_warnings_as_errors=1',
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': False,
+  },
   'Build-Ubuntu-GCC-x86_64-Debug-Swarming': {
     'build_targets': [
       'most',
@@ -423,6 +452,37 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': True,
   },
+  'Test-Android-GCC-Nexus6-GPU-Adreno420-Arm7-Release': {
+    'build_targets': [
+      'dm',
+    ],
+    'builder_cfg': {
+      'arch': 'Arm7',
+      'compiler': 'GCC',
+      'configuration': 'Release',
+      'cpu_or_gpu': 'GPU',
+      'cpu_or_gpu_value': 'Adreno420',
+      'is_trybot': False,
+      'model': 'Nexus6',
+      'os': 'Android',
+      'role': 'Test',
+    },
+    'configuration': 'Release',
+    'device_cfg': 'arm_v7_neon',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': False,
+    'do_test_steps': True,
+    'env': {
+      'GYP_DEFINES': 'skia_arch_type=arm skia_warnings_as_errors=0',
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': False,
+  },
   'Test-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Debug': {
     'build_targets': [
       'dm',
@@ -732,6 +792,39 @@ FAKE_SPECS = {
       'cpu_or_gpu_value': 'AVX2',
       'extra_config': 'Swarming',
       'is_trybot': False,
+      'model': 'ShuttleB',
+      'os': 'Win8',
+      'role': 'Test',
+    },
+    'configuration': 'Release_x64',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': False,
+    'do_test_steps': True,
+    'env': {
+      'GYP_DEFINES':
+          ('qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 ski'
+           'a_gpu=0 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgH'
+           'elp'),
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': False,
+  },
+  'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Trybot': {
+    'build_targets': [
+      'dm',
+    ],
+    'builder_cfg': {
+      'arch': 'x86_64',
+      'compiler': 'MSVC',
+      'configuration': 'Release',
+      'cpu_or_gpu': 'CPU',
+      'cpu_or_gpu_value': 'AVX2',
+      'is_trybot': True,
       'model': 'ShuttleB',
       'os': 'Win8',
       'role': 'Test',
