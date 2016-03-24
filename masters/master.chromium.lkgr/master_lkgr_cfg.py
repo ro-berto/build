@@ -90,7 +90,7 @@ F('win_syzyasan_lkgr', m_annotator.BaseFactory(recipe='chromium', timeout=7200))
 ## Mac
 ################################################################################
 
-asan_mac_gyp = 'asan=1 v8_enable_verify_heap=1 '
+asan_mac_gyp = 'asan=1 v8_enable_verify_heap=1 enable_ipc_fuzzer=1 '
 
 B('Mac ASAN Release', 'mac_asan_rel', 'compile', 'chromium_lkgr')
 F('mac_asan_rel', linux().ChromiumASANFactory(
