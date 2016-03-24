@@ -51,6 +51,12 @@ LOGDOG_WHITELIST_MASTER_BUILDERS = {
     'chromium.infra.cron': { WHITELIST_ALL },
     'tryserver.infra': { WHITELIST_ALL },
     'chromium.fyi': { WHITELIST_ALL },
+
+    # Chromium tryservers.
+    'tryserver.chromium.android': { WHITELIST_ALL },
+    #'tryserver.chromium.mac': { WHITELIST_ALL },
+    #'tryserver.chromium.linux': { WHITELIST_ALL },
+    #'tryserver.chromium.windows': { WHITELIST_ALL },
 }
 
 # LogDogPlatform is the set of platform-specific LogDog bootstrapping
@@ -74,6 +80,7 @@ PLATFORM_CONFIG = {
   (): {
     'logdog_host': 'luci-logdog',
     'logdog_pubsub_topic': 'projects/luci-logdog/topics/logs',
+    'logdog_max_buffer_age': '15s',
   },
 
   # Linux
@@ -155,6 +162,7 @@ Config = collections.namedtuple('Config', (
     'run_cmd',
     'logdog_host',
     'logdog_pubsub_topic',
+    'logdog_max_buffer_age',
     'logdog_platform',
 ))
 
@@ -239,6 +247,7 @@ def get_config():
       run_cmd=platform_config.get('run_cmd'),
       logdog_host=platform_config.get('logdog_host'),
       logdog_pubsub_topic=platform_config.get('logdog_pubsub_topic'),
+      logdog_max_buffer_age=platform_config.get('logdog_max_buffer_age'),
       logdog_platform=platform_config.get('logdog_platform'),
       )
 
@@ -454,7 +463,6 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
   # Determine LogDog prefix.
   prefix = _build_logdog_prefix(properties)
 
-
   def var(title, v, dflt):
     v = v or dflt
     if not v:
@@ -487,10 +495,7 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
   else:
     log_level = 'debug'
 
-  service_account_args = []
   service_account_json = _get_service_account_json(opts, plat.credential_path)
-  if service_account_json:
-    service_account_args += ['-service-account-json', service_account_json]
 
   # Generate our Butler stream server URI.
   streamserver_uri = _logdog_get_streamserver_uri(rt, plat.streamserver)
@@ -511,7 +516,10 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
       '-prefix', prefix,
       '-output', 'pubsub,topic="%s"' % (pubsub_topic,),
   ]
-  cmd += service_account_args
+  if service_account_json:
+    cmd += ['-service-account-json', service_account_json]
+  if config.logdog_max_buffer_age:
+    cmd += ['-output-max-buffer-age', config.logdog_max_buffer_age]
   cmd += [
       'run',
       '-stdout', 'tee=stdout',
