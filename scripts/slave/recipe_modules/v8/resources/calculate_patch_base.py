@@ -49,7 +49,10 @@ for line in patch.splitlines():
     # index <base hash>..<hash after patch> <mode>
     assert current_file
     hsh = line.split(' ')[1].split('..')[0]
-    base_hashes.append((current_file, hsh))
+    if len(hsh) * '0' != hsh:
+      # We only care for existing files. New ones have a sequence of zeros as
+      # hash.
+      base_hashes.append((current_file, hsh))
     current_file = None
 
 # Make sure we found something.
