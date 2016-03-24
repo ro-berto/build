@@ -343,6 +343,17 @@ class StatusEventLogger(StatusReceiverMultiService):
     logger.addHandler(handler)
     self.logger = logger
 
+  def _get_patch_url(self, build_properties):
+    # TODO(sergiyb): Add support for Gerrit.
+    patch_url = None
+    if ('issue' in build_properties and 'patchset' in build_properties and
+        'rietveld' in build_properties):
+      patch_url = '%s/%s#%s' % (
+          build_properties.getProperty('rietveld'),
+          build_properties.getProperty('issue'),
+          build_properties.getProperty('patchset'))
+    return patch_url
+
   def startService(self):
     """Start the service and subscribe for updates."""
     self._create_logger()
@@ -388,7 +399,8 @@ class StatusEventLogger(StatusReceiverMultiService):
     started, _ = build.getTimes()
     self.send_build_event(
         'BEGIN', started * 1000, 'BUILD', bot, builderName, build_number,
-        self._get_requested_at_millis(build))
+        self._get_requested_at_millis(build),
+        patch_url=self._get_patch_url(build.getProperties()))
     # Must return self in order to subscribe to stepStarted/Finished events.
     return self
 
@@ -409,7 +421,8 @@ class StatusEventLogger(StatusReceiverMultiService):
     self.send_build_event(
         'BEGIN', started * 1000, 'STEP', bot, builder_name, build_number,
         self._get_requested_at_millis(build),
-        step_name=step_name, step_number=step.step_number)
+        step_name=step_name, step_number=step.step_number,
+        patch_url=self._get_patch_url(build.getProperties()))
     # Must return self in order to subscribe to logStarted/Finished events.
     return self
 
@@ -474,7 +487,8 @@ class StatusEventLogger(StatusReceiverMultiService):
         'END', finished * 1000, 'STEP', bot, builder_name, build_number,
         self._get_requested_at_millis(build),
         step_name=step_name, step_number=step.step_number,
-        result=buildbot.status.results.Results[results[0]])
+        result=buildbot.status.results.Results[results[0]],
+        patch_url=self._get_patch_url(build.getProperties()))
 
   def buildFinished(self, builderName, build, results):
     build_number = build.getNumber()
@@ -493,19 +507,12 @@ class StatusEventLogger(StatusReceiverMultiService):
     properties = build.getProperties()
     extra_result_code = properties.getProperty('extra_result_code')
 
-    # TODO(sergiyb): Add support for Gerrit.
-    patch_url = None
-    if ('issue' in properties and 'patchset' in properties and
-        'rietveld' in properties):
-      patch_url = '%s/%s#%s' % (
-          properties.getProperty('rietveld'), properties.getProperty('issue'),
-          properties.getProperty('patchset'))
-
     self.send_build_event(
         'END', finished * 1000, 'BUILD', bot, builderName, build_number,
         self._get_requested_at_millis(build),
         result=buildbot.status.results.Results[results],
-        extra_result_code=extra_result_code, patch_url=patch_url)
+        extra_result_code=extra_result_code,
+        patch_url=self._get_patch_url(properties))
 
     pre_test_time_s = None
     for step in build.getSteps():
