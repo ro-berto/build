@@ -53,7 +53,7 @@ class CronetApi(recipe_api.RecipeApi):
         **dict(default_kwargs.items() + kwargs.items()))
     self.m.chromium.apply_config('cronet_builder')
     self.m.chromium.c.gyp_env.GYP_DEFINES.update(gyp_defs)
-    droid.init_and_sync(use_bot_update=False)
+    droid.init_and_sync(use_bot_update=True)
 
 
   def build(self, use_revision=True):

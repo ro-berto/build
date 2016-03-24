@@ -172,3 +172,8 @@ def GenTests(api):
       project='src',
     )
     yield api.test(_sanitize_nonalpha(bot_id)) + props
+
+  yield (
+      api.test('cronet_try') +
+      api.properties.tryserver(buildername="android_cronet_tester")
+  )
