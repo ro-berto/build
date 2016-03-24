@@ -14,7 +14,7 @@ We're going to walkthrough an example of wanting to add a builder to the
 `chromium.linux` master.
 
 *** note
-Make sure to read the [following](#Getting-your-builder-on-the-main-waterfall)
+Make sure to read the [following](#Getting-your-bot-on-the-main-waterfall)
 section once you have read this section.
 ***
 
