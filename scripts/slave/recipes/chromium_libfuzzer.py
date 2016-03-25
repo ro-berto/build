@@ -46,6 +46,17 @@ BUILDERS = freeze({
         'upload_bucket': 'chromium-browser-libfuzzer',
         'upload_directory': 'msan',
       },
+      'Libfuzzer Upload Linux UBSan': {
+        'chromium_config': 'chromium_clang',
+        'chromium_apply_config': [ 'proprietary_codecs' ],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
+        },
+        'upload_bucket': 'chromium-browser-libfuzzer',
+        'upload_directory': 'ubsan',
+      },
     },
   },
 })
