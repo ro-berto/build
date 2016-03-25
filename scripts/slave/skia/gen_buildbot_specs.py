@@ -23,6 +23,7 @@ SKIA_RECIPES = [
   'swarm_compile.py',
   'swarm_perf.py',
   'swarm_test.py',
+  'swarm_trigger.py'
 ]
 
 

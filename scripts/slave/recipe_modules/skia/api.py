@@ -87,47 +87,6 @@ def is_xsan(builder_cfg):
           builder_cfg.get('extra_config') == 'TSAN')
 
 
-def derive_compile_bot_name(builder_name, builder_cfg):
-  if builder_cfg['role'] in ('Test', 'Perf'):
-    os = builder_cfg['os']
-    extra_config = builder_cfg.get('extra_config')
-    if os in ('Android', 'ChromeOS'):  # pragma:nocover
-      extra_config = os
-      os = 'Ubuntu'
-    elif os == 'iOS':  # pragma: nocover
-      extra_config = os
-      os = 'OSX'
-    builder_name = 'Build-%s-%s-%s-%s' % (
-      os,
-      builder_cfg['compiler'],
-      builder_cfg['arch'],
-      builder_cfg['configuration']
-    )
-    if extra_config:
-      builder_name += '-%s' % extra_config
-  return builder_name
-
-
-def swarm_dimensions(builder_cfg):
-  """Return a dict of keys and values to be used as Swarming bot dimensions."""
-  dimensions = {
-    'pool': 'Skia',
-  }
-  dimensions['os'] = builder_cfg['os']
-  if 'Win' in builder_cfg['os']:
-    dimensions['os'] = 'Windows'  # pragma: no cover
-  if builder_cfg['role'] in ('Test', 'Perf'):
-    if builder_cfg['cpu_or_gpu'] == 'CPU':
-      dimensions['gpu'] = 'none'
-      # TODO(borenet): Add appropriate CPU dimension(s).
-      #dimensions['cpu'] = builder_cfg['cpu_or_gpu_value']
-    else:  # pragma: no cover
-      dimensions['gpu'] = builder_cfg['cpu_or_gpu_value']
-  else:
-    dimensions['gpu'] = 'none'
-  return dimensions
-
-
 class SkiaApi(recipe_api.RecipeApi):
 
   def get_flavor(self, builder_cfg):
@@ -151,6 +110,14 @@ class SkiaApi(recipe_api.RecipeApi):
     else:
       return default_flavor.DefaultFlavorUtils(self)
 
+  @property
+  def home_dir(self):
+    """Find the home directory."""
+    home_dir = os.path.expanduser('~')
+    if self._test_data.enabled:
+      home_dir = '[HOME]'
+    return home_dir
+
   def gsutil_env(self, boto_file):
     """Environment variables for gsutil."""
     boto_path = None
@@ -163,6 +130,18 @@ class SkiaApi(recipe_api.RecipeApi):
     """Generate all build steps."""
     self.setup()
     self.run_steps()
+
+  def get_builder_spec(self, skia_dir, builder_name):
+    """Obtain the buildbot spec for the given builder."""
+    fake_spec = None
+    if self._test_data.enabled:
+      fake_spec = fake_specs.FAKE_SPECS[builder_name]
+    builder_spec = self.json_from_file(
+      skia_dir.join('tools', 'buildbot_spec.py'),
+      skia_dir,
+      builder_name,
+      fake_spec)
+    return builder_spec
 
   def setup(self, running_in_swarming=False):
     """Prepare the bot to run."""
@@ -178,13 +157,11 @@ class SkiaApi(recipe_api.RecipeApi):
     self.skia_dir = self.slave_dir.join('skia')
     self.infrabots_dir = self.skia_dir.join('infra', 'bots')
 
-    # We run through this recipe in several different ways:
+    # We run through this recipe in one of two ways:
     # 1. Normal bot: run all of the steps.
-    # 2. Swarm trigger: sync Skia, trigger Swarming tasks for build/test/perf.
-    # 3. Running as a Swarming task: perform the given task only, with
+    # 2. Running as a Swarming task: perform the given task only, with
     #    adaptations for running within Swarming, eg. copying build results
     #    into the correct output directory.
-    self.is_swarming_trigger = 'Swarming' in self.builder_name
     self.running_in_swarming = running_in_swarming
 
     # Check out the Skia code.
@@ -192,19 +169,12 @@ class SkiaApi(recipe_api.RecipeApi):
 
     # Obtain the spec for this builder from the Skia repo. Use it to set more
     # properties.
-    fake_spec = None
-    if self._test_data.enabled:
-      fake_spec = fake_specs.FAKE_SPECS[self.builder_name]
-    self.builder_spec = self.json_from_file(
-      self.skia_dir.join('tools', 'buildbot_spec.py'), fake_spec)
+    self.builder_spec = self.get_builder_spec(self.skia_dir, self.builder_name)
 
     self.builder_cfg = self.builder_spec['builder_cfg']
     self.role = self.builder_cfg['role']
 
     # Set some important variables.
-    self.home_dir = os.path.expanduser('~')
-    if self._test_data.enabled:
-      self.home_dir = '[HOME]'
     self.perf_data_dir = None
     self.resource_dir = self.skia_dir.join('resources')
     self.images_dir = self.slave_dir.join('images')
@@ -251,29 +221,11 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def run_steps(self):
     """Compile, run tests, perf, etc."""
-    if self.is_swarming_trigger:
-      self.m.skia_swarming.setup(
-          self.infrabots_dir.join('tools', 'luci-go'),
-          swarming_rev='')
-
-      compile_hash = self.compile_steps_swarm()
-
-      test_task = None
-      perf_task = None
-      if self.do_test_steps:
-        test_task = self.test_steps_trigger(compile_hash)
-      if self.do_perf_steps:
-        perf_task = self.perf_steps_trigger(compile_hash)
-      if test_task:
-        self.test_steps_collect(test_task)
-      if perf_task:
-        self.perf_steps_collect(perf_task)
-    else:
-      self.compile_steps()
-      if self.do_test_steps:
-        self.test_steps()
-      if self.do_perf_steps:
-        self.perf_steps()
+    self.compile_steps()
+    if self.do_test_steps:
+      self.test_steps()
+    if self.do_perf_steps:
+      self.perf_steps()
 
     if self.do_test_steps or self.do_perf_steps:
       self.cleanup_steps()
@@ -322,10 +274,7 @@ class SkiaApi(recipe_api.RecipeApi):
       return
 
     # Initial cleanup.
-    if self.is_swarming_trigger:
-      gclient_cfg = self.m.gclient.make_config(CACHE_DIR=None)
-    else:
-      gclient_cfg = self.m.gclient.make_config()
+    gclient_cfg = self.m.gclient.make_config()
     skia = gclient_cfg.solutions.add()
     skia.name = 'skia'
     skia.managed = False
@@ -373,36 +322,6 @@ for pattern in build_products_whitelist:
           args=[self.m.path.join(self.out_dir, self.configuration),
                 self.m.path.join(self.swarming_out_dir, 'out', self.configuration)],
           infra_step=True)
-
-  def compile_steps_swarm(self):
-    builder_name = derive_compile_bot_name(self.builder_name,
-                                           self.builder_cfg)
-    # Windows bots require a toolchain.
-    extra_hashes = None
-    if 'Win' in builder_name:
-      test_data = '''{
-    "2013": "705384d88f80da637eb367e5acc6f315c0e1db2f",
-    "2015": "38380d77eec9164e5818ae45e2915a6f22d60e85"
-}'''
-      hash_file = self.infrabots_dir.join('win_toolchain_hash.json')
-      j = self._readfile(hash_file,
-                         name='Read win_toolchain_hash.json',
-                         test_data=test_data).rstrip()
-      hashes = json.loads(j)
-      extra_hashes = [hashes['2013']]
-
-    # Isolate the inputs and trigger the task.
-    isolate_path = self.infrabots_dir.join('compile_skia.isolate')
-    isolate_vars = {'BUILDER_NAME': builder_name}
-    dimensions = swarm_dimensions(self.builder_cfg)
-    task = self.m.skia_swarming.isolate_and_trigger_task(
-        isolate_path, self.infrabots_dir, 'compile_skia', isolate_vars,
-        dimensions, idempotent=True, store_output=False,
-        isolate_blacklist=['.git', 'out', '*.pyc'],
-        extra_isolate_hashes=extra_hashes)
-
-    # Wait for compile to finish, record the results hash.
-    return self.m.skia_swarming.collect_swarming_task_isolate_hash(task)
 
   def _readfile(self, filename, *args, **kwargs):
     """Convenience function for reading files."""
@@ -497,36 +416,26 @@ for pattern in build_products_whitelist:
 
   def download_and_copy_images(self):
     """Download test images if needed."""
-    if self.is_swarming_trigger:
-      self.run(self.m.python, 'Download images',
-               script=self.infrabots_dir.join('download_images.py'),
-               env=self.gsutil_env_chromium_skia_gm)
-    else:
-      self._download_and_copy_dir(
-          VERSION_FILE_SK_IMAGE,
-          GS_SUBDIR_TMPL_SK_IMAGE,
-          self.images_dir,
-          self.device_dirs.images_dir,
-          test_expected_version=TEST_EXPECTED_SK_IMAGE_VERSION,
-          test_actual_version=self.m.properties.get(
-              'test_downloaded_sk_image_version',
-              TEST_EXPECTED_SK_IMAGE_VERSION))
+    self._download_and_copy_dir(
+        VERSION_FILE_SK_IMAGE,
+        GS_SUBDIR_TMPL_SK_IMAGE,
+        self.images_dir,
+        self.device_dirs.images_dir,
+        test_expected_version=TEST_EXPECTED_SK_IMAGE_VERSION,
+        test_actual_version=self.m.properties.get(
+            'test_downloaded_sk_image_version',
+            TEST_EXPECTED_SK_IMAGE_VERSION))
 
   def download_and_copy_skps(self):
     """Download the SKPs if needed."""
-    if self.is_swarming_trigger:
-      self.run(self.m.python, 'Download SKPs',
-               script=self.infrabots_dir.join('download_skps.py'),
-               env=self.gsutil_env_chromium_skia_gm)
-    else:
-      self._download_and_copy_dir(
-          VERSION_FILE_SKP,
-          GS_SUBDIR_TMPL_SKP,
-          self.local_skp_dir,
-          self.device_dirs.skp_dir,
-          test_expected_version=TEST_EXPECTED_SKP_VERSION,
-          test_actual_version=self.m.properties.get(
-              'test_downloaded_skp_version', TEST_EXPECTED_SKP_VERSION))
+    self._download_and_copy_dir(
+        VERSION_FILE_SKP,
+        GS_SUBDIR_TMPL_SKP,
+        self.local_skp_dir,
+        self.device_dirs.skp_dir,
+        test_expected_version=TEST_EXPECTED_SKP_VERSION,
+        test_actual_version=self.m.properties.get(
+            'test_downloaded_skp_version', TEST_EXPECTED_SKP_VERSION))
 
   def install(self):
     """Copy the required executables and files to the device."""
@@ -567,72 +476,15 @@ print json.dumps({'ccache': ccache})
 
     return self._ccache
 
-  def json_from_file(self, filename, test_data):
+  def json_from_file(self, filename, cwd, builder_name, test_data):
     """Execute the given script to obtain JSON data."""
     return self.m.python(
         'exec %s' % self.m.path.basename(filename),
         filename,
-        args=[self.m.json.output(), self.builder_name],
+        args=[self.m.json.output(), builder_name],
         step_test_data=lambda: self.m.json.test_api.output(test_data),
-        cwd=self.skia_dir,
+        cwd=cwd,
         infra_step=True).json.output
-
-  def test_steps_trigger(self, compile_hash):
-    """Trigger DM via Swarming."""
-    self._run_once(self.install)
-    self._run_once(self.download_and_copy_skps)
-    self._run_once(self.download_and_copy_images)
-
-    # Swarm the tests.
-    task_name = 'test_skia'
-    isolate_path = self.infrabots_dir.join('%s.isolate' % task_name)
-    issue = str(self.m.properties['issue']) if self.is_trybot else ''
-    patchset = str(self.m.properties['patchset']) if self.is_trybot else ''
-    isolate_vars = {
-        'MASTER_NAME': self.master_name,
-        'BUILDER_NAME': self.builder_name,
-        'BUILD_NUMBER': str(self.m.properties['buildnumber']),
-        'SLAVE_NAME': self.slave_name,
-        'REVISION': self.got_revision,
-        'ISSUE': issue,
-        'PATCHSET': patchset,
-    }
-
-    dimensions = swarm_dimensions(self.builder_cfg)
-    return self.m.skia_swarming.isolate_and_trigger_task(
-        isolate_path, self.infrabots_dir, task_name, isolate_vars, dimensions,
-        isolate_blacklist=['.git'], extra_isolate_hashes=[compile_hash])
-
-  def test_steps_collect(self, task):
-    """Collect the DM results from Swarming."""
-    # Wait for tests to finish, download the results.
-    self.m.file.rmtree('results_dir', task.task_output_dir, infra_step=True)
-    self.m.skia_swarming.collect_swarming_task(task)
-
-    # Upload the results.
-    if self.upload_dm_results:
-      self.flavor.create_clean_host_dir(self.dm_dir)
-      dm_src = task.task_output_dir.join('0', 'dm')
-      self.m.file.rmtree('dm_dir', self.dm_dir, infra_step=True)
-      self.m.file.copytree('dm_dir', dm_src, self.dm_dir, infra_step=True)
-
-      # Upload them to Google Storage.
-      self.run(
-          self.m.python,
-          'Upload DM Results',
-          script=self.resource('upload_dm_results.py'),
-          args=[
-            self.dm_dir,
-            self.got_revision,
-            self.builder_name,
-            self.m.properties['buildnumber'],
-            self.m.properties['issue'] if self.is_trybot else '',
-            self.m.path['slave_build'].join('skia', 'common', 'py', 'utils'),
-          ],
-          cwd=self.m.path['checkout'],
-          env=self.gsutil_env_chromium_skia_gm,
-          abort_on_failure=False,
-          infra_step=True)
 
   def test_steps(self):
     """Run the DM test."""
@@ -779,68 +631,6 @@ print json.dumps({'ccache': ccache})
       self.run(self.flavor.step, 'dm --preAbandonGpuContext',
                cmd=preAbandonGpuContext, abort_on_failure=False,
                env=self.default_env)
-
-  def perf_steps_trigger(self, compile_hash):
-    """Trigger perf tests via Swarming."""
-    self._run_once(self.install)
-    self._run_once(self.download_and_copy_skps)
-    self._run_once(self.download_and_copy_images)
-
-    # Swarm the tests.
-    task_name = 'perf_skia'
-    isolate_path = self.infrabots_dir.join('%s.isolate' % task_name)
-    issue = str(self.m.properties['issue']) if self.is_trybot else ''
-    patchset = str(self.m.properties['patchset']) if self.is_trybot else ''
-    isolate_vars = {
-        'MASTER_NAME': self.master_name,
-        'BUILDER_NAME': self.builder_name,
-        'BUILD_NUMBER': str(self.m.properties['buildnumber']),
-        'SLAVE_NAME': self.slave_name,
-        'REVISION': self.got_revision,
-        'ISSUE': issue,
-        'PATCHSET': patchset,
-    }
-    dimensions = swarm_dimensions(self.builder_cfg)
-    return self.m.skia_swarming.isolate_and_trigger_task(
-        isolate_path, self.infrabots_dir, task_name, isolate_vars, dimensions,
-        isolate_blacklist=['.git'], extra_isolate_hashes=[compile_hash])
-
-  def perf_steps_collect(self, task):
-    """Wait for perf steps to finish and upload results."""
-    # Wait for nanobench to finish, download the results.
-    self.m.file.rmtree('results_dir', task.task_output_dir, infra_step=True)
-    self.m.skia_swarming.collect_swarming_task(task)
-
-    # Upload the results.
-    if self.upload_perf_results:
-      git_timestamp = self.m.git.get_timestamp(test_data='1408633190',
-                                               infra_step=True)
-      self.m.file.rmtree('perf_dir', self.perf_data_dir, infra_step=True)
-      self.m.file.makedirs('perf_dir', self.perf_data_dir, infra_step=True)
-      src_results_file = task.task_output_dir.join(
-          '0', 'perfdata', self.builder_name, 'data',
-          'nanobench_%s.json' % self.got_revision)
-      dst_results_file = self.perf_data_dir.join(
-          'nanobench_%s_%s.json' % (self.got_revision, git_timestamp))
-      self.m.file.copy('perf_results', src_results_file, dst_results_file,
-                       infra_step=True)
-
-      self.flavor.copy_directory_contents_to_host(
-          self.device_dirs.perf_data_dir, self.perf_data_dir)
-      gsutil_path = self.m.path['depot_tools'].join(
-          'third_party', 'gsutil', 'gsutil')
-      upload_args = [self.builder_name, self.m.properties['buildnumber'],
-                     self.perf_data_dir, self.got_revision, gsutil_path]
-      if self.is_trybot:
-        upload_args.append(self.m.properties['issue'])
-      self.run(self.m.python,
-               'Upload perf results',
-               script=self.resource('upload_bench_results.py'),
-               args=upload_args,
-               cwd=self.m.path['checkout'],
-               env=self.gsutil_env_chromium_skia_gm,
-               abort_on_failure=False,
-               infra_step=True)
 
   def perf_steps(self):
     """Run Skia benchmarks."""

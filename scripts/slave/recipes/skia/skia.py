@@ -61,15 +61,10 @@ TEST_BUILDERS = {
   },
   'client.skia.fyi': {
     'skiabot-linux-housekeeper-003': [
-      'Build-Ubuntu-GCC-x86_64-Debug-Swarming',
       'Housekeeper-PerCommit',
       'Housekeeper-PerCommit-Trybot',
       'Perf-Android-GCC-Nexus5-CPU-NEON-Arm7-Release-Appurify',
       'Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify',
-      'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release-Swarming',
-      'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot',
-      'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming',
-      'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming',
     ],
   },
 }
@@ -145,20 +140,6 @@ def GenTests(api):
                                              'win_toolchain_hash.json'))
             test += api.step_data('Get downloaded WIN_TOOLCHAIN_HASH',
                                   retcode=1)
-
-        if 'Swarming' in builder:
-          if 'Win' in builder:
-            test += api.step_data(
-                'upload new .isolated file for compile_skia',
-                stdout=api.raw_io.output('def456 XYZ.isolated'))
-          if 'Test' in builder:
-            test += api.step_data(
-                'upload new .isolated file for test_skia',
-                stdout=api.raw_io.output('def456 XYZ.isolated'))
-          if ('Test' in builder and 'Debug' in builder) or 'Perf' in builder:
-            test += api.step_data(
-                'upload new .isolated file for perf_skia',
-                stdout=api.raw_io.output('def456 XYZ.isolated'))
 
         yield test
 
