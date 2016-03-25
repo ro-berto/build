@@ -30,6 +30,8 @@ class CronetApi(recipe_api.RecipeApi):
       'additional_apks': [
         'ChromiumNetTestSupport.apk',
       ],
+      'isolate_file_path':
+        'components/cronet/android/cronet_test_instrumentation_apk.isolate',
     },
   ])
 
@@ -114,6 +116,7 @@ class CronetApi(recipe_api.RecipeApi):
             test_apk=droid.apk_path(suite.get('test_apk')),
             additional_apks=[
                 droid.apk_path(a) for a in suite.get('additional_apks') or ()],
+            isolate_file_path=suite.get('isolate_file_path'),
             verbose=True,
             num_retries=0,
             **suite.get('kwargs', {}))

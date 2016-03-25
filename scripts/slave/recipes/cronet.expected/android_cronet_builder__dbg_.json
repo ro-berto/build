@@ -552,6 +552,8 @@
       "[SLAVE_BUILD]/src/out/Debug/apks/CronetTest.apk",
       "--additional-apk",
       "[SLAVE_BUILD]/src/out/Debug/apks/ChromiumNetTestSupport.apk",
+      "--isolate-file-path",
+      "components/cronet/android/cronet_test_instrumentation_apk.isolate",
       "--verbose",
       "--num-retries",
       "0"
