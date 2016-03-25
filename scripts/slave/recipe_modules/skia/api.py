@@ -175,15 +175,15 @@ class SkiaApi(recipe_api.RecipeApi):
     self.role = self.builder_cfg['role']
 
     # Set some important variables.
-    self.perf_data_dir = None
     self.resource_dir = self.skia_dir.join('resources')
     self.images_dir = self.slave_dir.join('images')
-    self.local_skp_dir = self.slave_dir.join('playback', 'skps')
     if self.running_in_swarming:
       self.swarming_out_dir = self.m.properties['swarm_out_dir']
       self.out_dir = self.slave_dir.join('out')
+      self.local_skp_dir = self.slave_dir.join('skps')
     else:
       self.out_dir = self.m.path['checkout'].join('out', self.builder_name)
+      self.local_skp_dir = self.slave_dir.join('playback', 'skps')
     self.tmp_dir = self.m.path['slave_build'].join('tmp')
 
     self.gsutil_env_chromium_skia_gm = self.gsutil_env(BOTO_CHROMIUM_SKIA_GM)
@@ -361,51 +361,66 @@ for pattern in build_products_whitelist:
   def _download_and_copy_dir(self, version_file, gs_path_tmpl, host_path,
                              device_path, test_expected_version,
                              test_actual_version):
-    # Ensure that the tmp_dir exists.
-    self._run_once(self.m.file.makedirs,
-                   'tmp_dir',
-                   self.tmp_dir,
-                   infra_step=True)
+    # If we're running as a Swarming task, we should've received the test inputs
+    # via the isolate server. Only download if we're not running in Swarming.
+    if self.running_in_swarming:
+      actual_version_file = self.m.path.join(host_path, version_file)
+    else:
+      # Ensure that the tmp_dir exists.
+      self._run_once(self.m.file.makedirs,
+                     'tmp_dir',
+                     self.tmp_dir,
+                     infra_step=True)
+      actual_version_file = self.m.path.join(self.tmp_dir, version_file)
 
-    expected_version_file = self.m.path['checkout'].join(version_file)
-    expected_version = self._readfile(expected_version_file,
-                                      name='Get expected %s' % version_file,
-                                      test_data=test_expected_version).rstrip()
-
-    actual_version_file = self.m.path.join(self.tmp_dir, version_file)
+    # Find the actually-downloaded version.
     try:
       actual_version = self._readfile(actual_version_file,
                                       name='Get downloaded %s' % version_file,
                                       test_data=test_actual_version).rstrip()
     except self.m.step.StepFailure:
+      if self.running_in_swarming:
+        raise  # pragma: no cover
       actual_version = -1
 
-    # If we don't have the desired version, download it.
-    if actual_version != expected_version:
-      if actual_version != -1:
-        self.m.file.remove('remove actual %s' % version_file,
-                           actual_version_file,
-                           infra_step=True)
+    if not self.running_in_swarming:
+      # Find the expected version and download if needed.
+      expected_version_file = self.m.path['checkout'].join(version_file)
+      expected_version = self._readfile(expected_version_file,
+                                        name='Get expected %s' % version_file,
+                                        test_data=test_expected_version).rstrip()
 
-      self.flavor.create_clean_host_dir(host_path)
-      self.m.gsutil.download(
-          global_constants.GS_GM_BUCKET,
-          (gs_path_tmpl % expected_version) + '/*',
-          host_path,
-          name='download %s' % self.m.path.basename(host_path),
-          args=['-R'],
-          env=self.gsutil_env_chromium_skia_gm)
-      self._writefile(actual_version_file, expected_version)
+      # If we don't have the desired version, download it.
+      if actual_version != expected_version:
+        if actual_version != -1:
+          self.m.file.remove('remove actual %s' % version_file,
+                             actual_version_file,
+                             infra_step=True)
+
+        self.flavor.create_clean_host_dir(host_path)
+        self.m.gsutil.download(
+            global_constants.GS_GM_BUCKET,
+            (gs_path_tmpl % expected_version) + '/*',
+            host_path,
+            name='download %s' % self.m.path.basename(host_path),
+            args=['-R'],
+            env=self.gsutil_env_chromium_skia_gm)
+        self._writefile(actual_version_file, expected_version)
+        actual_version = expected_version
 
     # Copy to device.
-    device_version_file = self.flavor.device_path_join(
-        self.device_dirs.tmp_dir, version_file)
+    if self.running_in_swarming:
+      device_version_file = self.flavor.device_path_join(
+          device_path, version_file)
+    else:
+      device_version_file = self.flavor.device_path_join(
+          self.device_dirs.tmp_dir, version_file)
     if str(actual_version_file) != str(device_version_file):
       try:
         device_version = self.flavor.read_file_on_device(device_version_file)
       except self.m.step.StepFailure:
         device_version = -1
-      if device_version != expected_version:
+      if device_version != actual_version:
         self.flavor.remove_file_on_device(device_version_file)
         self.flavor.create_clean_device_dir(device_path)
         self.flavor.copy_directory_contents_to_device(host_path, device_path)
