@@ -414,6 +414,27 @@ def GenTests(api):
   )
 
   yield (
+    api.test('swarming_test_with_priority_and_expiration') +
+    props(extra_swarmed_tests=['gl_tests']) +
+    api.platform.name('linux') +
+    api.override_step_data('read test spec (2)', api.json.output({
+        'Linux Tests': {
+            'gtest_tests': [
+                {
+                  'test': 'gl_tests',
+                  'swarming': {
+                    'can_use_on_swarming_builders': True,
+                    'priority_adjustment': 'higher',
+                    'expiration': 7200,
+                  },
+                },
+            ],
+        },
+    })) +
+    suppress_analyze()
+  )
+
+  yield (
     api.test('swarming_trigger_failure') +
     props() +
     api.platform.name('linux') +
