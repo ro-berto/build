@@ -47,13 +47,14 @@ WHITELIST_ALL = '*'
 # Whitelist of {master}=>[{builder}|WHITELIST_ALL] whitelisting specific masters
 # and builders for experimental LogDog/Annotee export.
 LOGDOG_WHITELIST_MASTER_BUILDERS = {
-    'chromium.infra': { WHITELIST_ALL },
-    'chromium.infra.cron': { WHITELIST_ALL },
-    'tryserver.infra': { WHITELIST_ALL },
-    'chromium.fyi': { WHITELIST_ALL },
+    ## Infra Waterfalls.
+    #'chromium.infra': { WHITELIST_ALL },
+    #'chromium.infra.cron': { WHITELIST_ALL },
+    #'tryserver.infra': { WHITELIST_ALL },
+    #'chromium.fyi': { WHITELIST_ALL },
 
-    # Chromium tryservers.
-    'tryserver.chromium.android': { WHITELIST_ALL },
+    ## Chromium tryservers.
+    #'tryserver.chromium.android': { WHITELIST_ALL },
     #'tryserver.chromium.mac': { WHITELIST_ALL },
     #'tryserver.chromium.linux': { WHITELIST_ALL },
     #'tryserver.chromium.windows': { WHITELIST_ALL },
