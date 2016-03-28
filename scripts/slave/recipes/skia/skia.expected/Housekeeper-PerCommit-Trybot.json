@@ -165,6 +165,7 @@
       "BUILDTYPE": "Release",
       "CHROME_PATH": "[HOME]/src",
       "GYP_DEFINES": "skia_shared_lib=1 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Housekeeper-PerCommit-Trybot"
     },
     "name": "build most"

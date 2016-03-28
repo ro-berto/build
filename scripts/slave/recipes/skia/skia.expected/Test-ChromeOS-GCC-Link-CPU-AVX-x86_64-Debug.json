@@ -143,6 +143,7 @@
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
       "PATH": "%(PATH)s:/home/chrome-bot/depot_tools/third_party/gsutil",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "build dm"
@@ -159,6 +160,7 @@
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
       "PATH": "%(PATH)s:/home/chrome-bot/depot_tools/third_party/gsutil",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "build nanobench"
@@ -177,6 +179,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "rmdir bin"
@@ -195,6 +198,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "mkdir bin"
@@ -209,6 +213,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp resources"
@@ -271,6 +276,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "read SKP_VERSION",
@@ -290,6 +296,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "rm SKP_VERSION"
@@ -308,6 +315,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "rmdir skps"
@@ -326,6 +334,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "mkdir skps"
@@ -340,6 +349,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp skps"
@@ -356,6 +366,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp SKP_VERSION"
@@ -395,6 +406,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "read SK_IMAGE_VERSION",
@@ -414,6 +426,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "rm SK_IMAGE_VERSION"
@@ -432,6 +445,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "rmdir skia_images"
@@ -450,6 +464,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "mkdir skia_images"
@@ -464,6 +479,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp images"
@@ -480,6 +496,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp SK_IMAGE_VERSION"
@@ -492,6 +509,12 @@
       "[SLAVE_BUILD]/dm"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
+    },
     "name": "rmtree dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -541,6 +564,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "rmdir skia_dm_out"
@@ -559,6 +583,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "mkdir skia_dm_out"
@@ -567,13 +592,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport contextlib\nimport math\nimport socket\nimport sys\nimport time\nimport urllib2\n\nHASHES_URL = 'https://gold.skia.org/_/hashes'\nRETRIES = 5\nTIMEOUT = 60\nWAIT_BASE = 15\n\nsocket.setdefaulttimeout(TIMEOUT)\nfor retry in range(RETRIES):\n  try:\n    with contextlib.closing(\n        urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:\n      hashes = w.read()\n      with open(sys.argv[1], 'w') as f:\n        f.write(hashes)\n        break\n  except:\n    print 'Failed to get uninteresting hashes from %s' % HASHES_URL\n    if retry == RETRIES:\n      raise\n    waittime = WAIT_BASE * math.pow(2, retry)\n    print 'Retry in %d seconds.' % waittime\n    time.sleep(waittime)\n",
+      "\nimport contextlib\nimport math\nimport socket\nimport sys\nimport time\nimport urllib2\n\nHASHES_URL = 'https://gold.skia.org/_/hashes'\nRETRIES = 5\nTIMEOUT = 60\nWAIT_BASE = 15\n\nsocket.setdefaulttimeout(TIMEOUT)\nfor retry in range(RETRIES):\n  try:\n    with contextlib.closing(\n        urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:\n      hashes = w.read()\n      with open(sys.argv[1], 'w') as f:\n        f.write(hashes)\n        break\n  except Exception as e:\n    print 'Failed to get uninteresting hashes from %s:' % HASHES_URL\n    print e\n    if retry == RETRIES:\n      raise\n    waittime = WAIT_BASE * math.pow(2, retry)\n    print 'Retry in %d seconds.' % waittime\n    time.sleep(waittime)\n",
       "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "get uninteresting hashes",
@@ -600,8 +626,9 @@
       "@@@STEP_LOG_LINE@python.inline@      with open(sys.argv[1], 'w') as f:@@@",
       "@@@STEP_LOG_LINE@python.inline@        f.write(hashes)@@@",
       "@@@STEP_LOG_LINE@python.inline@        break@@@",
-      "@@@STEP_LOG_LINE@python.inline@  except:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print 'Failed to get uninteresting hashes from %s' % HASHES_URL@@@",
+      "@@@STEP_LOG_LINE@python.inline@  except Exception as e:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print 'Failed to get uninteresting hashes from %s:' % HASHES_URL@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print e@@@",
       "@@@STEP_LOG_LINE@python.inline@    if retry == RETRIES:@@@",
       "@@@STEP_LOG_LINE@python.inline@      raise@@@",
       "@@@STEP_LOG_LINE@python.inline@    waittime = WAIT_BASE * math.pow(2, retry)@@@",
@@ -622,6 +649,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp uninteresting_hashes.txt"
@@ -638,6 +666,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp dm"
@@ -692,6 +721,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "dm"
@@ -706,6 +736,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp skia_dm_out"
@@ -728,6 +759,7 @@
       "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "Upload DM Results"
@@ -744,6 +776,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "scp nanobench"
@@ -769,6 +802,7 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug"
     },
     "name": "nanobench"

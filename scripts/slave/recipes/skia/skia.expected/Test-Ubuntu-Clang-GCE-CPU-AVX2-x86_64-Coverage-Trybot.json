@@ -174,6 +174,7 @@
       "CC": "/usr/bin/clang-3.6",
       "CXX": "/usr/bin/clang++-3.6",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     },
     "name": "build dm"
@@ -253,6 +254,14 @@
       "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/coverage_results"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Coverage",
+      "CC": "/usr/bin/clang-3.6",
+      "CXX": "/usr/bin/clang++-3.6",
+      "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
+    },
     "name": "rmtree coverage_results",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -340,6 +349,7 @@
       "CC": "/usr/bin/clang-3.6",
       "CXX": "/usr/bin/clang++-3.6",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     },
     "name": "dm"
@@ -401,6 +411,7 @@
       "CC": "/usr/bin/clang-3.6",
       "CXX": "/usr/bin/clang++-3.6",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     },
     "name": "Generate Coverage Data"
@@ -426,6 +437,7 @@
       "CC": "/usr/bin/clang-3.6",
       "CXX": "/usr/bin/clang++-3.6",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     },
     "name": "gsutil upload raw coverage data",
@@ -451,6 +463,7 @@
       "CC": "/usr/bin/clang-3.6",
       "CXX": "/usr/bin/clang++-3.6",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     },
     "name": "upload nanobench coverage results"
@@ -476,6 +489,7 @@
       "CC": "/usr/bin/clang-3.6",
       "CXX": "/usr/bin/clang++-3.6",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_clang_build=1 skia_gpu=0 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     },
     "name": "gsutil upload line-by-line coverage data",

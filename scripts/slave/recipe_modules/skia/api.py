@@ -40,6 +40,8 @@ TEST_EXPECTED_SK_IMAGE_VERSION = '42'
 VERSION_FILE_SK_IMAGE = 'SK_IMAGE_VERSION'
 VERSION_FILE_SKP = 'SKP_VERSION'
 
+VERSION_NONE = -1
+
 BUILD_PRODUCTS_ISOLATE_WHITELIST = [
   'dm',
   'dm.exe',
@@ -196,8 +198,12 @@ class SkiaApi(recipe_api.RecipeApi):
     self._checked_for_ccache = False
     self._already_ran = {}
     self.configuration = self.builder_spec['configuration']
-    self.default_env.update({'SKIA_OUT': self.out_dir,
-                             'BUILDTYPE': self.configuration})
+    self.default_env.update({
+        'SKIA_OUT': self.out_dir,
+        'BUILDTYPE': self.configuration,
+        'PYTHONPATH': ('%(PYTHONPATH)s:' +
+                       str(self.m.path['build'].join('scripts'))),
+    })
     self.default_env.update(self.builder_spec['env'])
     self.build_targets = [str(t) for t in self.builder_spec['build_targets']]
     self.do_test_steps = self.builder_spec['do_test_steps']
@@ -381,18 +387,19 @@ for pattern in build_products_whitelist:
     except self.m.step.StepFailure:
       if self.running_in_swarming:
         raise  # pragma: no cover
-      actual_version = -1
+      actual_version = VERSION_NONE
 
     if not self.running_in_swarming:
       # Find the expected version and download if needed.
       expected_version_file = self.m.path['checkout'].join(version_file)
-      expected_version = self._readfile(expected_version_file,
-                                        name='Get expected %s' % version_file,
-                                        test_data=test_expected_version).rstrip()
+      expected_version = self._readfile(
+          expected_version_file,
+          name='Get expected %s' % version_file,
+          test_data=test_expected_version).rstrip()
 
       # If we don't have the desired version, download it.
       if actual_version != expected_version:
-        if actual_version != -1:
+        if actual_version != VERSION_NONE:
           self.m.file.remove('remove actual %s' % version_file,
                              actual_version_file,
                              infra_step=True)
@@ -419,7 +426,7 @@ for pattern in build_products_whitelist:
       try:
         device_version = self.flavor.read_file_on_device(device_version_file)
       except self.m.step.StepFailure:
-        device_version = -1
+        device_version = VERSION_NONE
       if device_version != actual_version:
         self.flavor.remove_file_on_device(device_version_file)
         self.flavor.create_clean_device_dir(device_path)
@@ -545,8 +552,9 @@ print json.dumps({'ccache': ccache})
                 with open(sys.argv[1], 'w') as f:
                   f.write(hashes)
                   break
-            except:
-              print 'Failed to get uninteresting hashes from %s' % HASHES_URL
+            except Exception as e:
+              print 'Failed to get uninteresting hashes from %s:' % HASHES_URL
+              print e
               if retry == RETRIES:
                 raise
               waittime = WAIT_BASE * math.pow(2, retry)

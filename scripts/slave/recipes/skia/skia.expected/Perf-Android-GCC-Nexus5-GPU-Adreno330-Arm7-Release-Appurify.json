@@ -220,6 +220,7 @@
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
     },
     "name": "has ccache?",
@@ -250,6 +251,12 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/apps/visualbench/build/outputs/apk"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Release",
+      "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
+    },
     "name": "rmtree apk",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -293,6 +300,12 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/apps/visualbench/src/main/assets"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Release",
+      "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
+    },
     "name": "rmtree assets",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -353,6 +366,7 @@
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
     },
@@ -385,6 +399,7 @@
       "APPURIFY_API_PROTO": "http",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
     },
@@ -402,6 +417,7 @@
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
     },
     "name": "unzip_results"
@@ -437,6 +453,12 @@
       "[SLAVE_BUILD]/perfdata/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify/data"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Release",
+      "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
+    },
     "name": "rmtree data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -478,6 +500,7 @@
       "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release-Appurify"
     },
     "name": "Upload nanobench Results"

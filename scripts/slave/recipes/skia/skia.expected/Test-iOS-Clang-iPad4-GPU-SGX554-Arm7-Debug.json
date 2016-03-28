@@ -141,6 +141,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "build iOSShell"
@@ -155,6 +156,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "install iOSShell"
@@ -171,6 +173,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "push resources to skia_resources"
@@ -231,6 +234,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "read SKP_VERSION",
@@ -247,6 +251,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "rm skiabot/skia_tmp_dir/SKP_VERSION"
@@ -262,6 +267,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "rmdir skiabot/skia_skp/skps"
@@ -277,6 +283,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "mkdir skiabot/skia_skp/skps"
@@ -293,6 +300,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "push skps to skps"
@@ -309,6 +317,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "push [SLAVE_BUILD]/tmp/SKP_VERSION"
@@ -346,6 +355,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "read SK_IMAGE_VERSION",
@@ -362,6 +372,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "rm skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
@@ -377,6 +388,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "rmdir skiabot/skia_images"
@@ -392,6 +404,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "mkdir skiabot/skia_images"
@@ -408,6 +421,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "push images to skia_images"
@@ -424,6 +438,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "push [SLAVE_BUILD]/tmp/SK_IMAGE_VERSION"
@@ -436,6 +451,14 @@
       "[SLAVE_BUILD]/dm"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "BUILDTYPE": "Debug",
+      "CC": "/usr/bin/clang",
+      "CXX": "/usr/bin/clang++",
+      "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
+      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
+    },
     "name": "rmtree dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -482,6 +505,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "rmdir skiabot/skia_dm"
@@ -497,6 +521,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "mkdir skiabot/skia_dm"
@@ -505,7 +530,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport contextlib\nimport math\nimport socket\nimport sys\nimport time\nimport urllib2\n\nHASHES_URL = 'https://gold.skia.org/_/hashes'\nRETRIES = 5\nTIMEOUT = 60\nWAIT_BASE = 15\n\nsocket.setdefaulttimeout(TIMEOUT)\nfor retry in range(RETRIES):\n  try:\n    with contextlib.closing(\n        urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:\n      hashes = w.read()\n      with open(sys.argv[1], 'w') as f:\n        f.write(hashes)\n        break\n  except:\n    print 'Failed to get uninteresting hashes from %s' % HASHES_URL\n    if retry == RETRIES:\n      raise\n    waittime = WAIT_BASE * math.pow(2, retry)\n    print 'Retry in %d seconds.' % waittime\n    time.sleep(waittime)\n",
+      "\nimport contextlib\nimport math\nimport socket\nimport sys\nimport time\nimport urllib2\n\nHASHES_URL = 'https://gold.skia.org/_/hashes'\nRETRIES = 5\nTIMEOUT = 60\nWAIT_BASE = 15\n\nsocket.setdefaulttimeout(TIMEOUT)\nfor retry in range(RETRIES):\n  try:\n    with contextlib.closing(\n        urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:\n      hashes = w.read()\n      with open(sys.argv[1], 'w') as f:\n        f.write(hashes)\n        break\n  except Exception as e:\n    print 'Failed to get uninteresting hashes from %s:' % HASHES_URL\n    print e\n    if retry == RETRIES:\n      raise\n    waittime = WAIT_BASE * math.pow(2, retry)\n    print 'Retry in %d seconds.' % waittime\n    time.sleep(waittime)\n",
       "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
@@ -514,6 +539,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "get uninteresting hashes",
@@ -540,8 +566,9 @@
       "@@@STEP_LOG_LINE@python.inline@      with open(sys.argv[1], 'w') as f:@@@",
       "@@@STEP_LOG_LINE@python.inline@        f.write(hashes)@@@",
       "@@@STEP_LOG_LINE@python.inline@        break@@@",
-      "@@@STEP_LOG_LINE@python.inline@  except:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print 'Failed to get uninteresting hashes from %s' % HASHES_URL@@@",
+      "@@@STEP_LOG_LINE@python.inline@  except Exception as e:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print 'Failed to get uninteresting hashes from %s:' % HASHES_URL@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print e@@@",
       "@@@STEP_LOG_LINE@python.inline@    if retry == RETRIES:@@@",
       "@@@STEP_LOG_LINE@python.inline@      raise@@@",
       "@@@STEP_LOG_LINE@python.inline@    waittime = WAIT_BASE * math.pow(2, retry)@@@",
@@ -562,6 +589,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "push [SLAVE_BUILD]/tmp/uninteresting_hashes.txt"
@@ -615,6 +643,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "dm"
@@ -631,6 +660,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "pull skia_dm"
@@ -655,6 +685,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "Upload DM Results"
@@ -679,6 +710,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "nanobench"
@@ -693,6 +725,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "reboot"
@@ -708,6 +741,7 @@
       "CC": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_os=ios skia_warnings_as_errors=0",
+      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     },
     "name": "wait for reboot"
