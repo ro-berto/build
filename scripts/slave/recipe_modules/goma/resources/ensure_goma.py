@@ -4,6 +4,7 @@
 # found in the LICENSE file.
 
 import argparse
+import datetime
 import os
 import shutil
 import subprocess
@@ -36,6 +37,7 @@ def main(argv):
 
   config = CONFIG[get_platform()]
 
+  start = datetime.datetime.utcnow()
   client_dir = args.target_dir
   if not os.path.exists(client_dir):
     os.makedirs(client_dir)
@@ -43,16 +45,21 @@ def main(argv):
   current_repo = subprocess.check_output(
       ['git', 'ls-remote', '--get-url'], cwd=client_dir).strip()
   if current_repo != config['repo']:
+    print '[%s]: repo mismatch. initial clone' % (
+        datetime.datetime.utcnow() - start)
     shutil.rmtree(client_dir)
     subprocess.check_call(['git', 'clone', config['repo'], client_dir])
 
+  print '[%s]: fetch' % (datetime.datetime.utcnow() - start)
   subprocess.check_call(['git', 'fetch'], cwd=client_dir)
   rev = config['revision']
   if args.canary:
     rev = 'refs/remotes/origin/HEAD'
+  print '[%s]: reset %s' % (datetime.datetime.utcnow() - start, rev)
   subprocess.check_call(
       ['git', 'reset', '--hard', rev], cwd=client_dir)
 
+  print '[%s]: download binaries' % (datetime.datetime.utcnow() - start)
   subprocess.check_call([sys.executable,
                          args.download_from_google_storage_path,
                          '--directory',
@@ -63,6 +70,7 @@ def main(argv):
   subprocess.check_call(
       [sys.executable, os.path.join(client_dir, 'fix_file_modes.py')])
 
+  print '[%s]: done' % (datetime.datetime.utcnow() - start)
   return 0
 
 
