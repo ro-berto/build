@@ -141,7 +141,6 @@
       "BUILDTYPE": "Debug",
       "CHROME_PATH": "[HOME]/src",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=0",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache"
     },
     "name": "build dm"
@@ -156,7 +155,6 @@
       "BUILDTYPE": "Debug",
       "CHROME_PATH": "[HOME]/src",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=0",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache"
     },
     "name": "build nanobench"
@@ -237,10 +235,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "BUILDTYPE": "Debug",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=0",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache"
+      "PYTHONPATH": "[BUILD]/scripts"
     },
     "name": "rmtree dm",
     "~followup_annotations": [
@@ -288,7 +283,6 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=0",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache"
     },
     "name": "get uninteresting hashes",
@@ -375,7 +369,6 @@
     "env": {
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=0",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache"
     },
     "name": "dm"
@@ -398,7 +391,6 @@
       "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
       "BUILDTYPE": "Debug",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=0",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache"
     },
     "name": "Upload DM Results"

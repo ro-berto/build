@@ -128,9 +128,7 @@ class DefaultFlavorUtils(object):
 
         # Download the toolchain if necessary.
         if actual_hash != desired_hash:
-          self._skia_api.m.file.rmtree('win_toolchain', toolchain_dir,
-                                       env=self._skia_api.default_env,
-                                       infra_step=True)
+          self._skia_api.rmtree(toolchain_dir)
           self._skia_api.m.swarming_client.checkout(revision='')
           self._skia_api.m.swarming.check_client_version()
           isolateserver = (
@@ -238,11 +236,7 @@ class DefaultFlavorUtils(object):
 
   def create_clean_host_dir(self, path):
     """Convenience function for creating a clean directory."""
-    self._skia_api.m.file.rmtree(
-        self._skia_api.m.path.basename(path),
-        path,
-        env=self._skia_api.default_env,
-        infra_step=True)
+    self._skia_api.rmtree(path)
     self._skia_api.m.file.makedirs(
         self._skia_api.m.path.basename(path), path, infra_step=True)
 

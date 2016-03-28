@@ -172,7 +172,6 @@
       "BUILDTYPE": "Release_x64",
       "CHROME_PATH": "[HOME]\\src",
       "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_dump_stats=1 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]\\scripts",
       "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot"
     },
     "name": "build nanobench"
@@ -253,10 +252,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "BUILDTYPE": "Release_x64",
-      "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_dump_stats=1 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]\\scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot"
+      "PYTHONPATH": "[BUILD]\\scripts"
     },
     "name": "rmtree data",
     "~followup_annotations": [
@@ -353,7 +349,6 @@
     "env": {
       "BUILDTYPE": "Release_x64",
       "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_dump_stats=1 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]\\scripts",
       "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot"
     },
     "name": "nanobench"
@@ -399,7 +394,6 @@
       "BOTO_CONFIG": "[HOME]\\chromium-skia-gm.boto",
       "BUILDTYPE": "Release_x64",
       "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_dump_stats=1 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]\\scripts",
       "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot"
     },
     "name": "Upload nanobench Results"

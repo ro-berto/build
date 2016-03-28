@@ -115,9 +115,7 @@ class AppurifyFlavorUtils(default_flavor.DefaultFlavorUtils):
         'appurify_results', 'artifacts_directory',
         'sdcard-skia_results')
     # shutil.copytree requires that the dest dir does not exist.
-    self._skia_api.m.file.rmtree(self._skia_api.m.path.basename(host_dir),
-                                 host_dir,
-                                 env=self._skia_api.default_env)
+    self._skia_api.rmtree(host_dir)
     self._skia_api.m.file.copytree('copy dir', device_dir, host_dir)
 
   def copy_file_to_device(self, h, d):

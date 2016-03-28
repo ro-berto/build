@@ -140,7 +140,6 @@
       "BUILDTYPE": "Release",
       "CHROME_PATH": "[HOME]/src",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_dump_stats=1 skia_use_sdl=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench"
     },
     "name": "build visualbench"
@@ -221,10 +220,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "BUILDTYPE": "Release",
-      "GYP_DEFINES": "skia_arch_type=x86_64 skia_dump_stats=1 skia_use_sdl=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench"
+      "PYTHONPATH": "[BUILD]/scripts"
     },
     "name": "rmtree data",
     "~followup_annotations": [
@@ -313,7 +309,6 @@
     "env": {
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_dump_stats=1 skia_use_sdl=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench"
     },
     "name": "visualbench"
@@ -358,7 +353,6 @@
       "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto",
       "BUILDTYPE": "Release",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_dump_stats=1 skia_use_sdl=1 skia_warnings_as_errors=0",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]/scripts",
       "SKIA_OUT": "[SLAVE_BUILD]/skia/out/Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench"
     },
     "name": "Upload visualbench Results"

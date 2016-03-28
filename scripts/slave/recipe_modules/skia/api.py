@@ -198,12 +198,8 @@ class SkiaApi(recipe_api.RecipeApi):
     self._checked_for_ccache = False
     self._already_ran = {}
     self.configuration = self.builder_spec['configuration']
-    self.default_env.update({
-        'SKIA_OUT': self.out_dir,
-        'BUILDTYPE': self.configuration,
-        'PYTHONPATH': ('%(PYTHONPATH)s:' +
-                       str(self.m.path['build'].join('scripts'))),
-    })
+    self.default_env.update({'SKIA_OUT': self.out_dir,
+                             'BUILDTYPE': self.configuration})
     self.default_env.update(self.builder_spec['env'])
     self.build_targets = [str(t) for t in self.builder_spec['build_targets']]
     self.do_test_steps = self.builder_spec['do_test_steps']
@@ -338,6 +334,13 @@ for pattern in build_products_whitelist:
     """Convenience function for writing files."""
     return self.m.file.write('write %s' % self.m.path.basename(filename),
                              filename, contents, infra_step=True)
+
+  def rmtree(self, path):
+    """Wrapper around api.file.rmtree with environment fix."""
+    self.m.file.rmtree(self.m.path.basename(path),
+                       path,
+                       env={'PYTHONPATH': self.m.path['build'].join('scripts')},
+                       infra_step=True)
 
   def run(self, steptype, name, abort_on_failure=True,
           fail_build_on_failure=True, env=None, **kwargs):

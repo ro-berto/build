@@ -65,7 +65,6 @@
       "BUILDTYPE": "Debug",
       "CHROME_PATH": "[SLAVE_BUILD]\\src",
       "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_warnings_as_errors=1 skia_win_debuggers_path=c:/DbgHelp skia_win_ltcg=0",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]\\scripts",
       "SKIA_OUT": "[SLAVE_BUILD]\\out"
     },
     "name": "build most"

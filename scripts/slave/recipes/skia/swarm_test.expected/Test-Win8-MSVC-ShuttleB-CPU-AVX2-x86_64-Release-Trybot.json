@@ -74,10 +74,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "BUILDTYPE": "Release_x64",
-      "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]\\scripts",
-      "SKIA_OUT": "[SLAVE_BUILD]\\out"
+      "PYTHONPATH": "[BUILD]\\scripts"
     },
     "name": "rmtree dm",
     "~followup_annotations": [
@@ -125,7 +122,6 @@
     "env": {
       "BUILDTYPE": "Release_x64",
       "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]\\scripts",
       "SKIA_OUT": "[SLAVE_BUILD]\\out"
     },
     "name": "get uninteresting hashes",
@@ -213,7 +209,6 @@
     "env": {
       "BUILDTYPE": "Release_x64",
       "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
-      "PYTHONPATH": "%(PYTHONPATH)s:[BUILD]\\scripts",
       "SKIA_OUT": "[SLAVE_BUILD]\\out"
     },
     "name": "dm"
