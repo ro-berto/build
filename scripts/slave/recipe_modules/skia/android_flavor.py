@@ -39,6 +39,17 @@ class _ADBWrapper(object):
         env=self._android_flavor._default_env,
         infra_step=True)
 
+    cmd = [
+        self._android_flavor.android_bin.join('adb_wait_for_charge'),
+        '-s', self._serial,
+    ]
+    self._android_flavor._skia_api.run(
+        self._android_flavor._skia_api.m.step,
+        name='wait for charge (%d)' % self._wait_count,
+        cmd=cmd,
+        env=self._android_flavor._default_env,
+        infra_step=True)
+
   def maybe_wait_for_device(self):
     """Run 'adb wait-for-device' if it hasn't already been run."""
     if self._wait_count == 0:

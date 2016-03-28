@@ -63,6 +63,23 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge",
+      "-s",
+      "noserial"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "BUILDTYPE": "Release",
+      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
+    },
+    "name": "wait for charge (1)"
+  },
+  {
+    "cmd": [
       "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
       "-s",
       "noserial",
@@ -503,6 +520,23 @@
       "SKIA_OUT": "[SLAVE_BUILD]/out"
     },
     "name": "wait for device (2)"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge",
+      "-s",
+      "noserial"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
+      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "BUILDTYPE": "Release",
+      "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=0",
+      "SKIA_ANDROID_VERBOSE_SETUP": "1",
+      "SKIA_OUT": "[SLAVE_BUILD]/out"
+    },
+    "name": "wait for charge (2)"
   },
   {
     "name": "$result",
