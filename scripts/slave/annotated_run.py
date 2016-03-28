@@ -50,7 +50,7 @@ LOGDOG_WHITELIST_MASTER_BUILDERS = {
     'chromium.infra': { WHITELIST_ALL },
     'chromium.infra.cron': { WHITELIST_ALL },
     'tryserver.infra': { WHITELIST_ALL },
-    'chromium.fyi': { WHITELIST_ALL },
+    'chromium.fyi': { WHITELIST_ALL, 'Android ChromeDriver Tests (dbg)' },
 
     # Chromium tryservers.
     'tryserver.chromium.android': { WHITELIST_ALL },
@@ -563,8 +563,11 @@ def _should_run_logdog(properties):
   # Key on mastername.
   bdict = LOGDOG_WHITELIST_MASTER_BUILDERS.get(mastername)
   if bdict is not None:
-    # Key on buildername.
-    if WHITELIST_ALL in bdict or buildername in bdict:
+    # Key on buildername. If WHITELIST_ALL is present, other builders are
+    # blacklisted.
+    if (
+        (WHITELIST_ALL in bdict and buildername not in bdict) or
+        (WHITELIST_ALL not in bdict and buildername in bdict)):
       LOGGER.info('Whitelisted master %s, builder %s.',
                   mastername, buildername)
       return True

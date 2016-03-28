@@ -169,6 +169,7 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
 
       'master.all': [
         annotated_run.WHITELIST_ALL,
+        'blacklisted',
       ],
     }
     self.properties.update({
@@ -204,6 +205,8 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
       'mastername': 'master.some', 'buildername': 'yesbuilder'}))
     self.assertTrue(annotated_run._should_run_logdog({
       'mastername': 'master.all', 'buildername': 'anybuilder'}))
+    self.assertFalse(annotated_run._should_run_logdog({
+      'mastername': 'master.all', 'buildername': 'blacklisted'}))
 
   @mock.patch('os.path.isfile')
   @mock.patch('slave.annotated_run._get_service_account_json')
