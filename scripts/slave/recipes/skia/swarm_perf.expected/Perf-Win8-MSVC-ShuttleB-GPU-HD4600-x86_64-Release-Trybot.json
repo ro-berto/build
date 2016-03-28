@@ -74,7 +74,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PYTHONPATH": "[SLAVE_BUILD]\\skia\\infra\\bots\\build"
+      "PYTHONPATH": "[SLAVE_BUILD]\\skia\\infra\\bots\\build\\scripts"
     },
     "name": "rmtree data",
     "~followup_annotations": [
