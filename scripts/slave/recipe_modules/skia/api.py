@@ -531,6 +531,13 @@ print json.dumps({'ccache': ccache})
 
       # Obtain the list of already-generated hashes.
       hash_filename = 'uninteresting_hashes.txt'
+
+      # Ensure that the tmp_dir exists.
+      self._run_once(self.m.file.makedirs,
+                     'tmp_dir',
+                     self.tmp_dir,
+                     infra_step=True)
+
       host_hashes_file = self.tmp_dir.join(hash_filename)
       hashes_file = self.flavor.device_path_join(
           self.device_dirs.tmp_dir, hash_filename)
