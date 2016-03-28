@@ -250,9 +250,6 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/apps/visualbench/build/outputs/apk"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": "[BUILD]/scripts"
-    },
     "name": "rmtree apk",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -296,9 +293,6 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/apps/visualbench/src/main/assets"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": "[BUILD]/scripts"
-    },
     "name": "rmtree assets",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -443,9 +437,6 @@
       "[SLAVE_BUILD]/perfdata/Perf-Android-GCC-Nexus5-CPU-NEON-Arm7-Release-Appurify/data"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": "[BUILD]/scripts"
-    },
     "name": "rmtree data",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

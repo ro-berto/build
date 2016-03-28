@@ -218,7 +218,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PYTHONPATH": "[BUILD]/scripts"
+      "PYTHONPATH": "[SLAVE_BUILD]/skia/infra/bots/build"
     },
     "name": "rmtree dm",
     "~followup_annotations": [

@@ -253,9 +253,6 @@
       "[SLAVE_BUILD]/skia/out/Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot/coverage_results"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": "[BUILD]/scripts"
-    },
     "name": "rmtree coverage_results",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

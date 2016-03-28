@@ -337,9 +337,12 @@ for pattern in build_products_whitelist:
 
   def rmtree(self, path):
     """Wrapper around api.file.rmtree with environment fix."""
+    env = {}
+    if self.running_in_swarming:
+      env['PYTHONPATH'] = str(self.skia_dir.join('infra', 'bots', 'build'))
     self.m.file.rmtree(self.m.path.basename(path),
                        path,
-                       env={'PYTHONPATH': self.m.path['build'].join('scripts')},
+                       env=env,
                        infra_step=True)
 
   def run(self, steptype, name, abort_on_failure=True,

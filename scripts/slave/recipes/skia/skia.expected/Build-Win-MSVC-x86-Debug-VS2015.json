@@ -184,9 +184,6 @@
       "[SLAVE_BUILD]\\win"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": "[BUILD]\\scripts"
-    },
     "name": "rmtree win",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

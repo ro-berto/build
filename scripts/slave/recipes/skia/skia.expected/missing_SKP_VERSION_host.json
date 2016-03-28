@@ -215,9 +215,6 @@
       "[SLAVE_BUILD]/playback/skps"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": "[BUILD]/scripts"
-    },
     "name": "rmtree skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -314,9 +311,6 @@
       "[SLAVE_BUILD]/dm"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PYTHONPATH": "[BUILD]/scripts"
-    },
     "name": "rmtree dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
