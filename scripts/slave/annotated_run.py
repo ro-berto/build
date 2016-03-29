@@ -48,14 +48,14 @@ WHITELIST_ALL = '*'
 # and builders for experimental LogDog/Annotee export.
 LOGDOG_WHITELIST_MASTER_BUILDERS = {
     'chromium.infra': { WHITELIST_ALL },
-    'chromium.infra.cron': { WHITELIST_ALL },
-    'tryserver.infra': { WHITELIST_ALL },
-    'chromium.fyi': { WHITELIST_ALL, 'Android ChromeDriver Tests (dbg)' },
+    #'chromium.infra.cron': { WHITELIST_ALL },
+    #'tryserver.infra': { WHITELIST_ALL },
+    #'chromium.fyi': { WHITELIST_ALL, 'Android ChromeDriver Tests (dbg)' },
 
     # Chromium tryservers.
-    'tryserver.chromium.android': { WHITELIST_ALL },
-    'tryserver.chromium.mac': { WHITELIST_ALL },
-    'tryserver.chromium.linux': { WHITELIST_ALL },
+    #'tryserver.chromium.android': { WHITELIST_ALL },
+    #'tryserver.chromium.mac': { WHITELIST_ALL },
+    #'tryserver.chromium.linux': { WHITELIST_ALL },
     #'tryserver.chromium.windows': { WHITELIST_ALL },
 }
 
