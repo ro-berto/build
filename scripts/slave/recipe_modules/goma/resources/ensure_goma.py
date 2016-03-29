@@ -48,10 +48,10 @@ def main(argv):
     print '[%s]: repo mismatch. initial clone' % (
         datetime.datetime.utcnow() - start)
     shutil.rmtree(client_dir)
-    subprocess.check_call(['git', 'clone', config['repo'], client_dir])
+    subprocess.check_call(['git', 'retry', 'clone', config['repo'], client_dir])
 
   print '[%s]: fetch' % (datetime.datetime.utcnow() - start)
-  subprocess.check_call(['git', 'fetch'], cwd=client_dir)
+  subprocess.check_call(['git', 'retry', 'fetch'], cwd=client_dir)
   rev = config['revision']
   if args.canary:
     rev = 'refs/remotes/origin/HEAD'
