@@ -123,7 +123,7 @@ TRYBOTS = freeze({
       'android_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Android (Nexus4)',
-      }, analyze_mode='compile'),
+      }),
       'android_clang_dbg_recipe': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Android Clang Builder (dbg)',
