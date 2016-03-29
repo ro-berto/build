@@ -64,6 +64,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.env.GOMA_STUBBY_PROXY_IP_ADDRESS:
       ret['GOMA_STUBBY_PROXY_IP_ADDRESS'] = \
         self.c.env.GOMA_STUBBY_PROXY_IP_ADDRESS
+    if self.c.env.FORCE_MAC_TOOLCHAIN:
+      ret['FORCE_MAC_TOOLCHAIN'] = self.c.env.FORCE_MAC_TOOLCHAIN
     return ret
 
   @property
