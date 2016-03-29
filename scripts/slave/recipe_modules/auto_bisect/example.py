@@ -404,15 +404,17 @@ def _get_config(params=None):
 
 def _get_step_data_for_revision(api, revision_data, include_build_steps=True):
   """Generator that produces step patches for fake results."""
-  commit_pos = revision_data['commit_pos']
+  commit_pos_number = revision_data['commit_pos']
   commit_hash = revision_data['hash']
   test_results = revision_data.get('test_results')
 
   if 'refrange' in revision_data:
     parent_step = 'Resolving reference range.'
-    step_name = parent_step + 'resolving commit_pos ' + commit_pos
-    yield api.step_data(step_name,
-                        stdout=api.raw_io.output('hash:' + commit_hash))
+    commit_pos = 'refs/heads/master@{#%s}' % commit_pos_number
+    step_name = parent_step + 'crrev get commit hash for ' + commit_pos
+    yield api.step_data(
+        step_name,
+        stdout=api.json.output({'git_sha': commit_hash}))
 
   if include_build_steps:
     if test_results:

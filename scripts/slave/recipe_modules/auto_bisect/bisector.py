@@ -147,7 +147,13 @@ class Bisector(object):
     if self._is_sha1(rev):  # pragma: no cover
       return rev
     if rev.isdigit():
-      return self._api.m.commit_position.chromium_hash_from_commit_position(rev)
+      commit_position = self._api.m.commit_position.construct(
+          branch='refs/heads/master', value=rev)
+      try:
+        return self._api.m.crrev.to_commit_hash(commit_position)
+      except self.api.m.step.StepFailure:  # pragma: no cover
+        self.surface_result('BAD_REV')
+        raise
     self.surface_result('BAD_REV')  # pragma: no cover
     raise self.api.m.step.StepFailure(
         'Invalid input revision: %r' % (rev,))  # pragma: no cover
