@@ -22,6 +22,21 @@ import crrev_client  # pylint: disable=relative-import
 @mock.patch('requests.get')
 class CrrevClientTest(unittest.TestCase):
 
+  def test_main(self, mock_get):
+    mock_response = mock.MagicMock()
+    response_data = {
+        'git_sha': 'e91f8875e590ddf00af267062fc1a9ec48658373',
+        'numbering_type': 'COMMIT_POSITION'
+    }
+    mock_response.text = json.dumps(response_data)
+    mock_get.return_value = mock_response
+    output = crrev_client.main([
+        'get_numbering',
+        '--params-file=test_params_file.json',
+    ])
+    self.assertEqual(json.dumps(response_data, indent=2), output)
+    self.assertEqual(mock_get.call_count, 1)
+
   def test_simple_get(self, mock_get):
     mock_response = mock.MagicMock()
     response_data = {

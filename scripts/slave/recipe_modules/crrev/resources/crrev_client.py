@@ -61,17 +61,17 @@ def crrev_get(path, params, attempts):
     retry_delay_seconds *= 2
 
 
-def main():
+def main(args):
   parser = argparse.ArgumentParser()
   parser.add_argument('path', help='Path + query to add onto the base URL.')
   parser.add_argument('--params-file', help='Request parameter JSON file.')
   parser.add_argument('--attempts', default=1, help='Number of times to retry.')
-  args = parser.parse_args()
+  args = parser.parse_args(args)
   params = {}
   if args.params_file:
-    params = json.lad(args.params_file)
-  print json.dumps(crrev_get(args.path, params, args.attempts), indent=2)
+    params = json.load(open(args.params_file))
+  return json.dumps(crrev_get(args.path, params, args.attempts), indent=2)
 
 
 if __name__ == '__main__':
-  main()
+  print main(sys.argv[1:])
