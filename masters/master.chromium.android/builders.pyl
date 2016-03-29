@@ -328,7 +328,7 @@
         "version": "precise",
         "bits": 64,
       },
-      "slaves": ["build137-a1"],
+      "slaves": ["build68-b1"],
     },
     "webview_l": {
       "slave_data": {
@@ -336,7 +336,7 @@
         "version": "precise",
         "bits": 64,
       },
-      "slaves": ["build36-a1"],
+      "slaves": ["build62-b1"],
     },
     "webview_m": {
       "slave_data": {
