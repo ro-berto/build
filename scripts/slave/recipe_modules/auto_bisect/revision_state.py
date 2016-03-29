@@ -92,9 +92,14 @@ class RevisionState(object):
     self.mean_value = None
     self.overall_return_code = None
     self.std_dev = None
-    self.repeat_count = MINIMUM_SAMPLE_SIZE
     self._test_config = None
     self.build_number = None
+
+    if self.bisector.test_type == 'perf':
+      self.repeat_count = MINIMUM_SAMPLE_SIZE
+    else:
+      self.repeat_count = self.bisector.bisect_config.get(
+          'repeat_count', MINIMUM_SAMPLE_SIZE)
 
   @property
   def tested(self):
