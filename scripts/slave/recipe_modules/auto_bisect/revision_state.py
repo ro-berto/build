@@ -462,7 +462,8 @@ class RevisionState(object):
     }
     self.test_results_url = (self.bisector.api.GS_RESULTS_URL +
                              self.job_name + '.results')
-    if api.m.bisect_tester.local_test_enabled():  # pragma: no cover
+    if (api.m.bisect_tester.local_test_enabled() or
+        self.bisector.internal_bisect):  # pragma: no cover
       skip_download = self.bisector.last_tested_revision == self
       self.bisector.last_tested_revision = self
       overrides = perf_test_properties['properties']

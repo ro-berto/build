@@ -258,7 +258,9 @@ class AutoBisectApi(recipe_api.RecipeApi):
     else:
       self.bot_db = bot_db
     affected_files = self.m.tryserver.get_files_affected_by_patch()
-    if api.chromium.c.TARGET_PLATFORM == 'android':
+    # Skip device setup for internal bisect as it is taken care in
+    # internal recipes.
+    if api.chromium.c.TARGET_PLATFORM == 'android' and not self.internal_bisect:
       api.chromium_android.common_tests_setup_steps(
           perf_setup=True, remove_system_webview=True)
       api.chromium.runhooks()
