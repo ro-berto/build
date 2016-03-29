@@ -152,6 +152,13 @@
       "slavebuilddir": "android_chromium_variable",
       "slave_pools": ["ccompute_optional_bots"],
     },
+    "android_chromium_variable_nexus4": {
+      "builder_timeout_s": 6900,  # 60 * 115
+      "recipe": "findit/chromium/compile",
+      "scheduler": None,
+      "slavebuilddir": "android_chromium_variable_nexus4",
+      "slave_pools": ["ccompute_optional_bots"],
+    },
     "android_chromium_variable_archive": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "findit/chromium/compile",
