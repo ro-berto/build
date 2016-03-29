@@ -224,7 +224,10 @@
           "job_name": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111-test",
           "parent_build_archive_url": "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip",
           "parent_got_revision": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
-          "revision": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
+          "revision": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+          "revision_ladder": {
+            "chromium": "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
+          }
         }
       }
     ]

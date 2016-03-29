@@ -452,8 +452,12 @@ class RevisionState(object):
     else:  # pragma: no cover
       self.job_name = uuid.uuid4().hex
     api = self.bisector.api
+    # Stores revision map for different repos eg, android-chrome, src, v8 etc.
+    revision_ladder = {}
     top_revision = self
+    revision_ladder[top_revision.depot_name] = top_revision.commit_hash
     while top_revision.base_revision:  # pragma: no cover
+      revision_ladder[top_revision.depot_name] = top_revision.commit_hash
       top_revision = top_revision.base_revision
     perf_test_properties = {
         'builder_name': self.bisector.get_perf_tester_name(),
@@ -463,6 +467,7 @@ class RevisionState(object):
             'parent_build_archive_url': self.build_url,
             'bisect_config': self._get_bisect_config_for_tester(),
             'job_name': self.job_name,
+            'revision_ladder': revision_ladder,
         },
     }
     self.test_results_url = (self.bisector.api.GS_RESULTS_URL +

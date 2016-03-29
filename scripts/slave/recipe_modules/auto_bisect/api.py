@@ -158,11 +158,30 @@ class AutoBisectApi(recipe_api.RecipeApi):
     if skip_download:
       update_step = None
     else:
-      update_step = self.m.bot_update.ensure_checkout(
-          root_solution_revision=test_config_params['revision'])
+      update_step = self._SyncRevisionToTest(test_config_params)
     self.start_test_run_for_bisect(update_step, self.bot_db,
                                    test_config_params, run_locally=True,
                                    skip_download=skip_download)
+
+  def _SyncRevisionToTest(self, test_config_params):  # pragma: no cover
+    if not self.internal_bisect:
+      return self.m.bot_update.ensure_checkout(
+          root_solution_revision=test_config_params['revision'])
+    else:
+      return self._SyncRevisionsForAndroidChrome(
+          test_config_params['revision_ladder'])
+
+  def _SyncRevisionsForAndroidChrome(self, revision_ladder):  # pragma: no cover
+    """Syncs android-chrome and chromium repos to particular revision."""
+    revisions = []
+    for d, r in revision_ladder.iteritems():
+      revisions.append('%s@%s' % (depot_config.DEPOT_DEPS_NAME[d]['src'], r))
+    params = ['sync', '--verbose', '--nohooks', '--force',
+              '--delete_unversioned_trees']
+    for revision in revisions:
+      params.extend(['--revision', revision])
+    self.m.gclient('sync %s' % '-'.join(revisions), params)
+    return None
 
   def start_test_run_for_bisect(self, update_step, bot_db,
                                 test_config_params, run_locally=False,
