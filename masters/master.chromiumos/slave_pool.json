@@ -35,7 +35,7 @@
         "build203-m2"
       ], 
       "x86-generic-full": [
-        "build89-m2"
+        "build182-m2"
       ], 
       "x86-generic-incremental": [
         "build85-m2"
@@ -54,11 +54,10 @@
     }
   }, 
   "unallocated": [
-    "build326-m2", 
-    "build182-m2", 
     "build327-m2", 
     "build93-m2", 
     "cros199-c2", 
+    "build326-m2", 
     "build94-m2"
   ]
 }
