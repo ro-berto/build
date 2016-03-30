@@ -473,25 +473,19 @@ def tsan2(c):
   gyp_defs['disable_nacl'] = 1
 
 @config_ctx()
-def separate_mspdbsrv(c):
-  c.gyp_env.GYP_USE_SEPARATE_MSPDBSRV = 1
-
-@config_ctx()
 def syzyasan_compile_only(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['syzyasan'] = 1
   gyp_defs['win_z7'] = 0
 
 @config_ctx(
-    deps=['compiler'], group='memory_tool', includes=['syzyasan_compile_only',
-                                                      'separate_mspdbsrv'])
+    deps=['compiler'], group='memory_tool', includes=['syzyasan_compile_only'])
 def syzyasan(c):
   if c.gyp_env.GYP_DEFINES['component'] != 'static_library':  # pragma: no cover
     raise BadConf('SyzyASan requires component=static_library')
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['win_z7'] = 1
   gyp_defs['chromium_win_pch'] = 0
-  c.gyp_env.GYP_USE_SEPARATE_MSPDBSRV = 1
 
 @config_ctx(group='memory_tool')
 def drmemory_full(c):
