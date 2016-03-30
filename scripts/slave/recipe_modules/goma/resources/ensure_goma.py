@@ -32,6 +32,8 @@ def main(argv):
   parser.add_argument('--target-dir', required=True)
   parser.add_argument('--download-from-google-storage-path', required=True)
   parser.add_argument('--canary', action='store_true')
+  parser.add_argument('--depth', default=50,
+                      help='number of depth for shallow clone')
 
   args = parser.parse_args()
 
@@ -48,7 +50,8 @@ def main(argv):
     print '[%s]: repo mismatch. initial clone' % (
         datetime.datetime.utcnow() - start)
     shutil.rmtree(client_dir)
-    subprocess.check_call(['git', 'retry', 'clone', config['repo'], client_dir])
+    subprocess.check_call(['git', 'retry', 'clone', '--depth', str(args.depth),
+                           config['repo'], client_dir])
 
   print '[%s]: fetch' % (datetime.datetime.utcnow() - start)
   subprocess.check_call(['git', 'retry', 'fetch'], cwd=client_dir)
