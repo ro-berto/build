@@ -48,9 +48,9 @@ WHITELIST_ALL = '*'
 # and builders for experimental LogDog/Annotee export.
 LOGDOG_WHITELIST_MASTER_BUILDERS = {
     'chromium.infra': { WHITELIST_ALL },
-    #'chromium.infra.cron': { WHITELIST_ALL },
-    #'tryserver.infra': { WHITELIST_ALL },
-    #'chromium.fyi': { WHITELIST_ALL, 'Android ChromeDriver Tests (dbg)' },
+    'chromium.infra.cron': { WHITELIST_ALL },
+    'tryserver.infra': { WHITELIST_ALL },
+    'chromium.fyi': { WHITELIST_ALL, 'Android ChromeDriver Tests (dbg)' },
 
     # Chromium tryservers.
     #'tryserver.chromium.android': { WHITELIST_ALL },
@@ -273,7 +273,15 @@ def _logdog_get_streamserver_uri(rt, typ):
     # length limitation on UNIX domain sockets, which is generally 104-108
     # characters. We can't make that assumption about our standard recipe
     # temporary directory.
-    sockdir = rt.tempdir()
+    #
+    # Bots run `annotated_run.py` out of "/b/build", so this will form a path
+    # starting at "/b/build/.recipe_runtime/tmp-<random>/butler.sock", which is
+    # well below the socket name size limit.
+    #
+    # We don't drop this in "/tmp" because several build scripts assume
+    # ownership of that directory and blindly clear it as part of cleanup, and
+    # this socket is too important to risk.
+    sockdir = rt.tempdir(BUILD_ROOT)
     uri = 'unix:%s' % (os.path.join(sockdir, 'butler.sock'),)
     if len(uri) > 104:
       raise LogDogBootstrapError('Generated URI exceeds UNIX domain socket '
