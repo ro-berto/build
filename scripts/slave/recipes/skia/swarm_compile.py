@@ -30,6 +30,7 @@ TEST_BUILDERS = {
 def RunSteps(api):
   api.skia.setup(running_in_swarming=True)
   api.skia.compile_steps()
+  api.skia.cleanup_steps()
 
 
 def GenTests(api):

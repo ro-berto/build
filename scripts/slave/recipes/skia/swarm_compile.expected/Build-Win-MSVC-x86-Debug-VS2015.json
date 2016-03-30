@@ -63,6 +63,7 @@
     "cwd": "[SLAVE_BUILD]\\skia",
     "env": {
       "BUILDTYPE": "Debug",
+      "CHROME_HEADLESS": "1",
       "CHROME_PATH": "[SLAVE_BUILD]\\src",
       "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86 skia_warnings_as_errors=1 skia_win_debuggers_path=c:/DbgHelp skia_win_ltcg=0",
       "PATH": "[SLAVE_BUILD]\\depot_tools:%(PATH)s",
@@ -102,6 +103,25 @@
       "@@@STEP_LOG_LINE@python.inline@  for f in glob.glob(path):@@@",
       "@@@STEP_LOG_LINE@python.inline@    print 'Copying build product %s' % f@@@",
       "@@@STEP_LOG_LINE@python.inline@    shutil.copy(f, dst)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import psutil\nfor p in psutil.process_iter():\n  try:\n    if p.name == 'mspdbsrv.exe':\n      p.kill()\n  except psutil._error.AccessDenied:\n    pass\n"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "cleanup",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@import psutil@@@",
+      "@@@STEP_LOG_LINE@python.inline@for p in psutil.process_iter():@@@",
+      "@@@STEP_LOG_LINE@python.inline@  try:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    if p.name == 'mspdbsrv.exe':@@@",
+      "@@@STEP_LOG_LINE@python.inline@      p.kill()@@@",
+      "@@@STEP_LOG_LINE@python.inline@  except psutil._error.AccessDenied:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    pass@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
   },

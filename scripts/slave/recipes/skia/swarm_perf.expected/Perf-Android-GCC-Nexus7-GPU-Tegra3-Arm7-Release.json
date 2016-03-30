@@ -55,6 +55,7 @@
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
@@ -73,6 +74,7 @@
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
@@ -92,6 +94,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -109,6 +112,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -123,6 +127,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -140,6 +145,7 @@
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
@@ -158,6 +164,7 @@
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
@@ -177,6 +184,7 @@
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
@@ -195,6 +203,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -213,6 +222,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -233,6 +243,7 @@
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
@@ -263,6 +274,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -293,6 +305,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -313,6 +326,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -338,6 +352,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -358,6 +373,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -411,6 +427,7 @@
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
@@ -455,6 +472,7 @@
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
@@ -474,6 +492,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -490,6 +509,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -504,6 +524,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -521,6 +542,7 @@
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
@@ -539,6 +561,7 @@
       "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
       "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
       "BUILDTYPE": "Release",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_ANDROID_VERBOSE_SETUP": "1",

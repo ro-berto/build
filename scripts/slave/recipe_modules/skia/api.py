@@ -160,6 +160,7 @@ class SkiaApi(recipe_api.RecipeApi):
 
     self.default_env = {}
     if running_in_swarming:
+      self.default_env['CHROME_HEADLESS'] = '1'
       depot_tools = self.slave_dir.join('depot_tools')
       self.default_env['PATH'] = '%s:%%(PATH)s' % depot_tools
 

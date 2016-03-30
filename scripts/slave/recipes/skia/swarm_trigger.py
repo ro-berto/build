@@ -113,10 +113,11 @@ def trigger_task(api, task_name, builder, builder_cfg, got_revision,
     properties['rietveld'] = api.properties['rietveld']
 
   extra_args = [
-      '--properties', json.dumps(properties),
       '--workdir', '../../..',
       'skia/swarm_%s' % task_name,
   ]
+  for k, v in properties.iteritems():
+    extra_args.append('%s=%s' % (k, v))
 
   isolate_base_dir = api.path['slave_build']
   dimensions = swarm_dimensions(builder_cfg)

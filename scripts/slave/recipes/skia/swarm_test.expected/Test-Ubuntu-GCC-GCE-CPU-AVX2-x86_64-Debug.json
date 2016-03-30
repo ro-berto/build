@@ -145,6 +145,7 @@
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
       "BUILDTYPE": "Debug",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_OUT": "[SLAVE_BUILD]/out"
@@ -230,6 +231,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "BUILDTYPE": "Debug",
+      "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_gpu=0 skia_warnings_as_errors=0",
       "PATH": "[SLAVE_BUILD]/depot_tools:%(PATH)s",
       "SKIA_OUT": "[SLAVE_BUILD]/out"

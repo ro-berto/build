@@ -211,20 +211,21 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def cleanup_steps(self):
     """Run any device-specific cleanup steps."""
-    self._adb(name='final battery stats',
-              serial=self.serial,
-              cmd=['shell', 'dumpsys', 'batteryproperties'],
-              infra_step=True)
-    self._adb(name='reboot',
-              serial=self.serial,
-              cmd=['reboot'],
-              infra_step=True)
-    self._skia_api.run(
-        self._skia_api.m.step,
-        name='wait for reboot',
-        cmd=['sleep', '10'],
-        infra_step=True)
-    self._adb.wait_for_device()
+    if self._skia_api.do_test_steps or self._skia_api.do_perf_steps:
+      self._adb(name='final battery stats',
+                serial=self.serial,
+                cmd=['shell', 'dumpsys', 'batteryproperties'],
+                infra_step=True)
+      self._adb(name='reboot',
+                serial=self.serial,
+                cmd=['reboot'],
+                infra_step=True)
+      self._skia_api.run(
+          self._skia_api.m.step,
+          name='wait for reboot',
+          cmd=['sleep', '10'],
+          infra_step=True)
+      self._adb.wait_for_device()
 
   def read_file_on_device(self, path, *args, **kwargs):
     """Read the given file."""
