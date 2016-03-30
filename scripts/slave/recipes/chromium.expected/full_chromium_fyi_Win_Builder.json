@@ -168,18 +168,7 @@
     "name": "read test spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.fyi.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win10 Tests (1)\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -194,18 +183,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
-      "--clean-isolated-files"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clean isolated files"
   },
   {
     "cmd": [
@@ -233,53 +210,14 @@
       "[BUILD]\\goma",
       "--ninja-ensure-up-to-date",
       "--",
-      "browser_tests",
-      "browser_tests_run",
       "chromium_builder_tests",
-      "crash_service",
-      "mini_installer"
+      "crash_service"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]\\resources\\remove_build_metadata.py",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
-      "--src-dir",
-      "[SLAVE_BUILD]\\src"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "remove_build_metadata"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
-      "[SLAVE_BUILD]\\src\\tools\\swarming_client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--verbose",
-      "[SLAVE_BUILD]\\src\\out\\Release\\browser_tests.isolated.gen.json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "isolate tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -304,33 +242,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
-  },
-  {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "trigger",
-    "trigger_specs": [
-      {
-        "builder_name": "Win10 Tests (1)",
-        "properties": {
-          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
-          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
-          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
-          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
-          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-          "parent_got_revision_cp": "refs/heads/master@{#170242}",
-          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
-          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
-          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
-          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
-          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
-          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}"
-        }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Win10 Tests (1)@@@"
-    ]
   },
   {
     "name": "$result",

@@ -40,13 +40,6 @@ WIN_ISOLATE_ENABLED_TESTS = set((
   'unit_tests',
 ))
 
-# http://crbug.com/260311
-# They are missing files for an unknown reason.
-BUG_260311 = set((
-  'browser_tests',
-  'interactive_ui_tests',
-))
-
 ISOLATE_ENABLED_BUILDERS = {
   # CI linux
   'Linux Tests': LINUX_ISOLATE_ENABLED_TESTS,
@@ -54,15 +47,8 @@ ISOLATE_ENABLED_BUILDERS = {
   'Mac10.6 Tests (1)': MAC_ISOLATE_ENABLED_TESTS,
   'Mac10.7 Tests (1)': MAC_ISOLATE_ENABLED_TESTS,
   # CI win
-  'Vista Tests (1)': WIN_ISOLATE_ENABLED_TESTS - BUG_260311,
-  'Vista Tests (2)': WIN_ISOLATE_ENABLED_TESTS - BUG_260311,
-  'Vista Tests (3)': WIN_ISOLATE_ENABLED_TESTS - BUG_260311,
   'Win7 Tests (1)': WIN_ISOLATE_ENABLED_TESTS,
-  'Win7 Tests (2)': WIN_ISOLATE_ENABLED_TESTS,
-  'Win7 Tests (3)': WIN_ISOLATE_ENABLED_TESTS,
-  'XP Tests (1)': WIN_ISOLATE_ENABLED_TESTS - BUG_260311,
-  'XP Tests (2)': WIN_ISOLATE_ENABLED_TESTS - BUG_260311,
-  'XP Tests (3)': WIN_ISOLATE_ENABLED_TESTS - BUG_260311,
+  'Win10 Tests x64': WIN_ISOLATE_ENABLED_TESTS,
 
   # Try Server
   'linux_rel': LINUX_ISOLATE_ENABLED_TESTS,

@@ -14,9 +14,9 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--master",
-      "chromium.fyi",
+      "chromium.win",
       "--builder",
-      "Win10 Tests (1)",
+      "Win10 Tests x64",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -129,7 +129,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "GYP_CHROMIUM_NO_ACTION": "1",
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -143,11 +144,12 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Release",
+      "Release_x64",
+      "--use-src-side-runtest-py",
       "--paths",
       "{\"checkout\": \"[SLAVE_BUILD]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Win10 Tests (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"buildername\": \"Win10 Tests x64\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -161,15 +163,15 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.fyi.json",
+      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win10 Tests (1)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Win10 Tests x64\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -200,7 +202,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]\\src\\out\\Release"
+      "[SLAVE_BUILD]\\src\\out\\Release_x64"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "rmtree build directory",
@@ -224,11 +226,11 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\extract_build.py",
       "--target",
-      "Release",
+      "Release_x64",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--master-name",
-      "chromium.fyi",
+      "chromium.win",
       "--build-number",
       "571"
     ],
@@ -241,7 +243,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[SLAVE_BUILD]\\src\\out\\Release",
+      "[SLAVE_BUILD]\\src\\out\\Release_x64",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -262,7 +264,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\run_crash_handler.py",
       "--target",
-      "Release"
+      "Release_x64"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "start_crash_service"
@@ -278,11 +280,11 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--priority",
-      "35",
+      "25",
       "--shards",
       "1",
       "--task-name",
-      "browser_tests/Windows-10-SP0/ffffffffff/Win10 Tests (1)/571",
+      "browser_tests/Windows-10-10240/ffffffffff/Win10 Tests x64/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -299,22 +301,22 @@
       "none",
       "--dimension",
       "os",
-      "Windows-10-SP0",
+      "Windows-10-10240",
       "--dimension",
       "pool",
       "Chrome",
       "--tag",
-      "buildername:Win10 Tests (1)",
+      "buildername:Win10 Tests x64",
       "--tag",
       "buildnumber:571",
       "--tag",
       "data:ffffffffffffffffffffffffffffffffffffffff",
       "--tag",
-      "master:chromium.fyi",
+      "master:chromium.win",
       "--tag",
       "name:browser_tests",
       "--tag",
-      "os:Windows-10-SP0",
+      "os:Windows-10-10240",
       "--tag",
       "project:chromium",
       "--tag",
@@ -324,19 +326,19 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:browser_tests on Windows-10-SP0",
+      "stepname:browser_tests on Windows-10-10240",
       "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "[trigger] browser_tests on Windows-10-SP0",
+    "name": "[trigger] browser_tests on Windows-10-10240",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Windows-10-SP0/ffffffffff/Win10 Tests (1)/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Windows-10-10240/ffffffffff/Win10 Tests x64/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Windows-10-SP0/ffffffffff/Win10 Tests (1)/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Windows-10-10240/ffffffffff/Win10 Tests x64/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -355,7 +357,7 @@
       "--build-dir",
       "[SLAVE_BUILD]\\src\\out",
       "--target",
-      "Release",
+      "Release_x64",
       "--force-clean",
       "--config",
       "[SLAVE_BUILD]\\src\\chrome\\test\\mini_installer\\config\\config.config",
@@ -387,10 +389,10 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "browser_tests/Windows-10-SP0/ffffffffff/Win10 Tests (1)/571"
+      "browser_tests/Windows-10-10240/ffffffffff/Win10 Tests x64/571"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "browser_tests on Windows-10-SP0",
+    "name": "browser_tests on Windows-10-10240",
     "~followup_annotations": [
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
@@ -403,20 +405,20 @@
       "--input-gtest-json",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
-      "chromium.fyi",
+      "chromium.win",
       "--builder-name",
-      "Win10 Tests (1)",
+      "Win10 Tests x64",
       "--build-number",
       "571",
       "--test-type",
-      "browser_tests on Windows-10-SP0",
+      "browser_tests on Windows-10-10240",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Upload to test-results [browser_tests on Windows-10-SP0]"
+    "name": "Upload to test-results [browser_tests on Windows-10-10240]"
   },
   {
     "cmd": [
@@ -424,7 +426,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\process_dumps.py",
       "--target",
-      "Release"
+      "Release_x64"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "process_dumps"

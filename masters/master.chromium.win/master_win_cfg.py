@@ -38,6 +38,7 @@ def Update(config, active_master, c):
     {'name': 'Win x64 GN', 'timeout': 3600},
     {'name': 'Win x64 GN (dbg)'},
     {'name': 'Win8 GN (dbg)'},
+    {'name': 'Win10 Tests x64'},
   ]
 
   c['builders'].extend([
