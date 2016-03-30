@@ -569,16 +569,7 @@ TRYBOTS = freeze({
         'buildername': 'Win Builder',
         'tester': 'Win10 Tests (1)',
       }),
-      'win_chromium_rel_ng_exp': simple_bot({
-        'mastername': 'chromium.win',
-        'buildername': 'Win Builder',
-        'tester': 'Win7 Tests (1)',
-      }),
       'win_chromium_compile_dbg_ng': simple_bot({
-        'mastername': 'chromium.win',
-        'buildername': 'Win Builder (dbg)',
-      }, analyze_mode='compile'),
-      'win_chromium_compile_dbg_ng_exp': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win Builder (dbg)',
       }, analyze_mode='compile'),
@@ -587,11 +578,6 @@ TRYBOTS = freeze({
         'buildername': 'Win Builder',
       }, analyze_mode='compile'),
       'win_chromium_x64_rel_ng': simple_bot({
-        'mastername': 'chromium.win',
-        'buildername': 'Win x64 Builder',
-        'tester': 'Win 7 Tests x64 (1)',
-      }),
-      'win_chromium_x64_rel_ng_exp': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win x64 Builder',
         'tester': 'Win 7 Tests x64 (1)',
