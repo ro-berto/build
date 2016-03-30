@@ -339,8 +339,7 @@ for pattern in build_products_whitelist:
     """Wrapper around api.file.rmtree with environment fix."""
     env = {}
     if self.running_in_swarming:
-      env['PYTHONPATH'] = str(self.skia_dir.join('infra', 'bots', 'build',
-                                                 'scripts'))
+      env['PYTHONPATH'] = str(self.m.path.join('build', 'scripts'))
     self.m.file.rmtree(self.m.path.basename(path),
                        path,
                        env=env,
@@ -374,17 +373,15 @@ for pattern in build_products_whitelist:
   def _download_and_copy_dir(self, version_file, gs_path_tmpl, host_path,
                              device_path, test_expected_version,
                              test_actual_version):
+    actual_version_file = self.m.path.join(self.tmp_dir, version_file)
     # If we're running as a Swarming task, we should've received the test inputs
     # via the isolate server. Only download if we're not running in Swarming.
-    if self.running_in_swarming:
-      actual_version_file = self.m.path.join(host_path, version_file)
-    else:
+    if not self.running_in_swarming:
       # Ensure that the tmp_dir exists.
       self._run_once(self.m.file.makedirs,
                      'tmp_dir',
                      self.tmp_dir,
                      infra_step=True)
-      actual_version_file = self.m.path.join(self.tmp_dir, version_file)
 
     # Find the actually-downloaded version.
     try:
@@ -423,12 +420,8 @@ for pattern in build_products_whitelist:
         actual_version = expected_version
 
     # Copy to device.
-    if self.running_in_swarming:
-      device_version_file = self.flavor.device_path_join(
-          device_path, version_file)
-    else:
-      device_version_file = self.flavor.device_path_join(
-          self.device_dirs.tmp_dir, version_file)
+    device_version_file = self.flavor.device_path_join(
+        self.device_dirs.tmp_dir, version_file)
     if str(actual_version_file) != str(device_version_file):
       try:
         device_version = self.flavor.read_file_on_device(device_version_file)

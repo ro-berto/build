@@ -325,7 +325,65 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/compile_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"BUILDER_NAME\", \n        \"Build-Ubuntu-GCC-x86_64-Debug-Swarming\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]/skia/infra/bots\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[BUILD]/scripts/slave/recipes/skia/recipes.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-isolate_recipes.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\"\n    ], \n    \"dir\": \"[BUILD]/scripts/slave/recipes/skia\", \n    \"version\": 1\n}",
+      "[SLAVE_BUILD]/swarming_temp_dir/isolate_recipes.isolated.gen.json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Write isolate_recipes.isolated.gen.json"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
+      "[SLAVE_BUILD]/swarming.client",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "[SLAVE_BUILD]/swarming_temp_dir/isolate_recipes.isolated.gen.json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"isolate_recipes\": \"[dummy hash for isolate_recipes]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"isolate_recipes\": \"[dummy hash for isolate_recipes]\"}@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD]/swarming_temp_dir",
+      "511"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "makedirs swarming tmp dir (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/compile_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[SLAVE_BUILD]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\", \n    \"version\": 1\n}",
       "[SLAVE_BUILD]/swarming_temp_dir/compile_skia.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -346,7 +404,7 @@
       "[SLAVE_BUILD]/swarming_temp_dir/compile_skia.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "isolate tests",
+    "name": "isolate tests (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"compile_skia\": \"[dummy hash for compile_skia]\"@@@",
@@ -354,6 +412,43 @@
       "@@@STEP_LOG_END@json.output@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"compile_skia\": \"[dummy hash for compile_skia]\"}@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
+      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated",
+      "[dummy hash for isolate_recipes]"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "add_isolated_input",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import json@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1]) as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  isolated = json.load(f)@@@",
+      "@@@STEP_LOG_LINE@python.inline@for h in sys.argv[2:]:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  isolated['includes'].append(h)@@@",
+      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  json.dump(isolated, f, sort_keys=True)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/swarming.client/isolateserver.py",
+      "archive",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "upload new .isolated file for compile_skia",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
@@ -370,7 +465,7 @@
       "--shards",
       "1",
       "--task-name",
-      "compile_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5",
+      "compile_skia/Ubuntu/def456/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -393,7 +488,7 @@
       "--tag",
       "buildnumber:5",
       "--tag",
-      "data:[dummy hash for compile_skia]",
+      "data:def456",
       "--tag",
       "master:client.skia.fyi",
       "--tag",
@@ -405,15 +500,21 @@
       "--tag",
       "stepname:compile_skia on Ubuntu",
       "--idempotent",
-      "[dummy hash for compile_skia]"
+      "def456",
+      "--",
+      "--properties",
+      "{\"buildername\": \"Build-Ubuntu-GCC-x86_64-Debug-Swarming\", \"mastername\": \"client.skia.fyi\", \"buildnumber\": 5, \"slavename\": \"skiabot-linux-housekeeper-003\", \"reason\": \"Triggered by Skia swarm_trigger Recipe\", \"swarm_out_dir\": \"${ISOLATED_OUTDIR}\", \"revision\": 164710}",
+      "--workdir",
+      "../../..",
+      "skia/swarm_compile"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] compile_skia on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"compile_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"compile_skia/Ubuntu/def456/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"compile_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"compile_skia/Ubuntu/def456/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -436,7 +537,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "compile_skia/Ubuntu/[dummy has/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5",
+      "compile_skia/Ubuntu/def456/Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming/5",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -520,7 +621,7 @@
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "makedirs swarming tmp dir (2)",
+    "name": "makedirs swarming tmp dir (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -539,7 +640,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/test_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--blacklist\", \n        \".git\", \n        \"--extra-variable\", \n        \"BUILD_NUMBER\", \n        \"5\", \n        \"--extra-variable\", \n        \"MASTER_NAME\", \n        \"client.skia.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NAME\", \n        \"skiabot-linux-housekeeper-003\", \n        \"--extra-variable\", \n        \"BUILDER_NAME\", \n        \"Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming\", \n        \"--extra-variable\", \n        \"PATCHSET\", \n        \"\", \n        \"--extra-variable\", \n        \"ISSUE\", \n        \"\", \n        \"--extra-variable\", \n        \"REVISION\", \n        164710\n    ], \n    \"dir\": \"[SLAVE_BUILD]/skia/infra/bots\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/test_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[SLAVE_BUILD]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\", \n    \"version\": 1\n}",
       "[SLAVE_BUILD]/swarming_temp_dir/test_skia.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -560,7 +661,7 @@
       "[SLAVE_BUILD]/swarming_temp_dir/test_skia.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "isolate tests (2)",
+    "name": "isolate tests (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_skia\": \"[dummy hash for test_skia]\"@@@",
@@ -573,12 +674,13 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nfor h in sys.argv[2:]:\n  isolated['includes'].append(sys.argv[2])\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
+      "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
       "[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated",
+      "[dummy hash for isolate_recipes]",
       "abc123"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "add_isolated_input",
+    "name": "add_isolated_input (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import json@@@",
@@ -586,7 +688,7 @@
       "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1]) as f:@@@",
       "@@@STEP_LOG_LINE@python.inline@  isolated = json.load(f)@@@",
       "@@@STEP_LOG_LINE@python.inline@for h in sys.argv[2:]:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  isolated['includes'].append(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@  isolated['includes'].append(h)@@@",
       "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",
       "@@@STEP_LOG_LINE@python.inline@  json.dump(isolated, f, sort_keys=True)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
@@ -655,7 +757,13 @@
       "slavename:skiabot-linux-housekeeper-003",
       "--tag",
       "stepname:test_skia on Ubuntu",
-      "def456"
+      "def456",
+      "--",
+      "--properties",
+      "{\"buildername\": \"Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming\", \"mastername\": \"client.skia.fyi\", \"buildnumber\": 5, \"slavename\": \"skiabot-linux-housekeeper-003\", \"reason\": \"Triggered by Skia swarm_trigger Recipe\", \"swarm_out_dir\": \"${ISOLATED_OUTDIR}\", \"revision\": 164710}",
+      "--workdir",
+      "../../..",
+      "skia/swarm_test"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] test_skia on Ubuntu",
@@ -683,7 +791,7 @@
       "511"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "makedirs swarming tmp dir (3)",
+    "name": "makedirs swarming tmp dir (4)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
@@ -702,7 +810,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/perf_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-perf_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--blacklist\", \n        \".git\", \n        \"--extra-variable\", \n        \"BUILD_NUMBER\", \n        \"5\", \n        \"--extra-variable\", \n        \"MASTER_NAME\", \n        \"client.skia.fyi\", \n        \"--extra-variable\", \n        \"SLAVE_NAME\", \n        \"skiabot-linux-housekeeper-003\", \n        \"--extra-variable\", \n        \"BUILDER_NAME\", \n        \"Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming\", \n        \"--extra-variable\", \n        \"PATCHSET\", \n        \"\", \n        \"--extra-variable\", \n        \"ISSUE\", \n        \"\", \n        \"--extra-variable\", \n        \"REVISION\", \n        164710\n    ], \n    \"dir\": \"[SLAVE_BUILD]/skia/infra/bots\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/perf_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-perf_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[SLAVE_BUILD]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\", \n    \"version\": 1\n}",
       "[SLAVE_BUILD]/swarming_temp_dir/perf_skia.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -723,7 +831,7 @@
       "[SLAVE_BUILD]/swarming_temp_dir/perf_skia.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "isolate tests (3)",
+    "name": "isolate tests (4)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"perf_skia\": \"[dummy hash for perf_skia]\"@@@",
@@ -736,12 +844,13 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nfor h in sys.argv[2:]:\n  isolated['includes'].append(sys.argv[2])\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
+      "\nimport json\nimport sys\nwith open(sys.argv[1]) as f:\n  isolated = json.load(f)\nfor h in sys.argv[2:]:\n  isolated['includes'].append(h)\nwith open(sys.argv[1], 'w') as f:\n  json.dump(isolated, f, sort_keys=True)\n",
       "[SLAVE_BUILD]/swarming_temp_dir/skia-task-perf_skia.isolated",
+      "[dummy hash for isolate_recipes]",
       "abc123"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "add_isolated_input (2)",
+    "name": "add_isolated_input (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import json@@@",
@@ -749,7 +858,7 @@
       "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1]) as f:@@@",
       "@@@STEP_LOG_LINE@python.inline@  isolated = json.load(f)@@@",
       "@@@STEP_LOG_LINE@python.inline@for h in sys.argv[2:]:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  isolated['includes'].append(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@  isolated['includes'].append(h)@@@",
       "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[1], 'w') as f:@@@",
       "@@@STEP_LOG_LINE@python.inline@  json.dump(isolated, f, sort_keys=True)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
@@ -818,7 +927,13 @@
       "slavename:skiabot-linux-housekeeper-003",
       "--tag",
       "stepname:perf_skia on Ubuntu",
-      "def456"
+      "def456",
+      "--",
+      "--properties",
+      "{\"buildername\": \"Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming\", \"mastername\": \"client.skia.fyi\", \"buildnumber\": 5, \"slavename\": \"skiabot-linux-housekeeper-003\", \"reason\": \"Triggered by Skia swarm_trigger Recipe\", \"swarm_out_dir\": \"${ISOLATED_OUTDIR}\", \"revision\": 164710}",
+      "--workdir",
+      "../../..",
+      "skia/swarm_perf"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "[trigger] perf_skia on Ubuntu",

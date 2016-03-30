@@ -56,7 +56,7 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
                                isolate_vars, swarm_dimensions,
                                isolate_blacklist=None,
                                extra_isolate_hashes=None, idempotent=False,
-                               store_output=True):
+                               store_output=True, extra_args=None):
     """Isolate inputs and trigger the task to run."""
     isolated_hash = self.isolate_task(isolate_path, isolate_base_dir, task_name,
                                       isolate_vars, blacklist=isolate_blacklist,
@@ -64,7 +64,8 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
     tasks = self.trigger_swarming_tasks([(task_name, isolated_hash)],
                                         swarm_dimensions,
                                         idempotent=idempotent,
-                                        store_output=store_output)
+                                        store_output=store_output,
+                                        extra_args=extra_args)
     assert len(tasks) == 1
     return tasks[0]
 
@@ -152,7 +153,7 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
       with open(sys.argv[1]) as f:
         isolated = json.load(f)
       for h in sys.argv[2:]:
-        isolated['includes'].append(sys.argv[2])
+        isolated['includes'].append(h)
       with open(sys.argv[1], 'w') as f:
         json.dump(isolated, f, sort_keys=True)
     """, args=[isolated_file] + include_hashes)
@@ -165,7 +166,7 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
     return shlex.split(r.stdout)[0]
 
   def trigger_swarming_tasks(self, swarm_hashes, dimensions, idempotent=False,
-                             store_output=True):
+                             store_output=True, extra_args=None):
     """Triggers swarming tasks using swarm hashes.
 
     Args:
@@ -187,6 +188,8 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
       swarming_task.idempotent = idempotent
       swarming_task.priority = 90
       swarming_task.expiration = 4*60*60
+      if extra_args:
+        swarming_task.extra_args = extra_args
       swarming_tasks.append(swarming_task)
     self.m.swarming.trigger(swarming_tasks)
     return swarming_tasks

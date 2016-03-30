@@ -77,6 +77,68 @@ def swarm_dimensions(builder_cfg):
   return dimensions
 
 
+def isolate_recipes(api):
+  """Isolate the recipes."""
+  skia_recipes_dir = api.path['build'].join(
+      'scripts', 'slave', 'recipes', 'skia')
+  api.skia_swarming.create_isolated_gen_json(
+      skia_recipes_dir.join('recipes.isolate'),
+      skia_recipes_dir,
+      'linux',
+      'isolate_recipes',
+      {})
+  return api.skia_swarming.batcharchive(['isolate_recipes'])[0][1]
+
+
+def trigger_task(api, task_name, builder, builder_cfg, got_revision,
+                 infrabots_dir, idempotent=False, store_output=True,
+                 extra_isolate_hashes=None):
+  """Trigger the given bot to run as a Swarming task."""
+  # TODO(borenet): We're using Swarming directly to run the recipe through
+  # recipes.py. Once it's possible to track the state of a Buildbucket build,
+  # we should switch to use the trigger recipe module instead.
+
+  properties = {
+    'buildername': builder,
+    'mastername': api.properties['mastername'],
+    'buildnumber': api.properties['buildnumber'],
+    'reason': 'Triggered by Skia swarm_trigger Recipe',
+    'revision': got_revision,
+    'slavename': api.properties['slavename'],
+    'swarm_out_dir': '${ISOLATED_OUTDIR}',
+  }
+  if builder_cfg['is_trybot']:
+    properties['issue'] = str(api.properties['issue'])
+    properties['patchset'] = str(api.properties['patchset'])
+    properties['rietveld'] = api.properties['rietveld']
+
+  extra_args = [
+      '--properties', json.dumps(properties),
+      '--workdir', '../../..',
+      'skia/swarm_%s' % task_name,
+  ]
+
+  isolate_base_dir = api.path['slave_build']
+  dimensions = swarm_dimensions(builder_cfg)
+  isolate_blacklist = ['.git', 'out', '*.pyc']
+  isolate_vars = {
+    'BUILD': api.path['build'],
+    'WORKDIR': api.path['slave_build'],
+  }
+
+  return api.skia_swarming.isolate_and_trigger_task(
+      infrabots_dir.join('%s_skia.isolate' % task_name),
+      isolate_base_dir,
+      '%s_skia' % task_name,
+      isolate_vars,
+      dimensions,
+      isolate_blacklist=isolate_blacklist,
+      extra_isolate_hashes=extra_isolate_hashes,
+      idempotent=idempotent,
+      store_output=store_output,
+      extra_args=extra_args)
+
+
 def checkout_steps(api):
   """Run the steps to obtain a checkout of Skia."""
   gclient_cfg = api.gclient.make_config(CACHE_DIR=None)
@@ -97,11 +159,12 @@ def checkout_steps(api):
   return got_revision
 
 
-def compile_steps_swarm(api, infrabots_dir, builder_cfg):
+def compile_steps_swarm(api, builder_cfg, got_revision, infrabots_dir,
+                        extra_isolate_hashes):
   builder_name = derive_compile_bot_name(api.properties['buildername'],
                                          builder_cfg)
   # Windows bots require a toolchain.
-  extra_hashes = None
+  extra_hashes = extra_isolate_hashes[:]
   if 'Win' in builder_name:
     test_data = '''{
   "2013": "705384d88f80da637eb367e5acc6f315c0e1db2f",
@@ -112,16 +175,17 @@ def compile_steps_swarm(api, infrabots_dir, builder_cfg):
                            name='Read win_toolchain_hash.json',
                            test_data=test_data).rstrip()
     hashes = json.loads(j)
-    extra_hashes = [hashes['2013']]
+    extra_hashes.append(hashes['2013'])
 
-  # Isolate the inputs and trigger the task.
-  isolate_path = infrabots_dir.join('compile_skia.isolate')
-  isolate_vars = {'BUILDER_NAME': builder_name}
-  dimensions = swarm_dimensions(builder_cfg)
-  task = api.skia_swarming.isolate_and_trigger_task(
-      isolate_path, infrabots_dir, 'compile_skia', isolate_vars,
-      dimensions, idempotent=True, store_output=False,
-      isolate_blacklist=['.git', 'out', '*.pyc'],
+  task = trigger_task(
+      api,
+      'compile',
+      builder_name,
+      builder_cfg,
+      got_revision,
+      infrabots_dir,
+      idempotent=True,
+      store_output=False,
       extra_isolate_hashes=extra_hashes)
 
   # Wait for compile to finish, record the results hash.
@@ -140,26 +204,17 @@ def download_skps(api, infrabots_dir):
              env=api.skia.gsutil_env('chromium-skia-gm.boto'))
 
 
-def perf_steps_trigger(api, infrabots_dir, compile_hash, dimensions,
-                       got_revision, is_trybot):
+def perf_steps_trigger(api, builder_cfg, got_revision, infrabots_dir,
+                       extra_hashes):
   """Trigger perf tests via Swarming."""
-  # Swarm the tests.
-  task_name = 'perf_skia'
-  isolate_path = infrabots_dir.join('%s.isolate' % task_name)
-  issue = str(api.properties['issue']) if is_trybot else ''
-  patchset = str(api.properties['patchset']) if is_trybot else ''
-  isolate_vars = {
-      'MASTER_NAME': api.properties['mastername'],
-      'BUILDER_NAME': api.properties['buildername'],
-      'BUILD_NUMBER': str(api.properties['buildnumber']),
-      'SLAVE_NAME': api.properties['slavename'],
-      'REVISION': got_revision,
-      'ISSUE': issue,
-      'PATCHSET': patchset,
-  }
-  return api.skia_swarming.isolate_and_trigger_task(
-      isolate_path, infrabots_dir, task_name, isolate_vars, dimensions,
-      isolate_blacklist=['.git'], extra_isolate_hashes=[compile_hash])
+  return trigger_task(
+      api,
+      'perf',
+      api.properties['buildername'],
+      builder_cfg,
+      got_revision,
+      infrabots_dir,
+      extra_isolate_hashes=extra_hashes)
 
 
 def perf_steps_collect(api, task, upload_perf_results, got_revision,
@@ -200,27 +255,17 @@ def perf_steps_collect(api, task, upload_perf_results, got_revision,
              infra_step=True)
 
 
-def test_steps_trigger(api, infrabots_dir, compile_hash, dimensions,
-                       got_revision, is_trybot):
+def test_steps_trigger(api, builder_cfg, got_revision, infrabots_dir,
+                       extra_hashes):
   """Trigger DM via Swarming."""
-  # Swarm the tests.
-  task_name = 'test_skia'
-  isolate_path = infrabots_dir.join('%s.isolate' % task_name)
-  issue = str(api.properties['issue']) if is_trybot else ''
-  patchset = str(api.properties['patchset']) if is_trybot else ''
-  isolate_vars = {
-      'MASTER_NAME': api.properties['mastername'],
-      'BUILDER_NAME': api.properties['buildername'],
-      'BUILD_NUMBER': str(api.properties['buildnumber']),
-      'SLAVE_NAME': api.properties['slavename'],
-      'REVISION': got_revision,
-      'ISSUE': issue,
-      'PATCHSET': patchset,
-  }
-
-  return api.skia_swarming.isolate_and_trigger_task(
-      isolate_path, infrabots_dir, task_name, isolate_vars, dimensions,
-      isolate_blacklist=['.git'], extra_isolate_hashes=[compile_hash])
+  return trigger_task(
+      api,
+      'test',
+      api.properties['buildername'],
+      builder_cfg,
+      got_revision,
+      infrabots_dir,
+      extra_isolate_hashes=extra_hashes)
 
 
 def test_steps_collect(api, task, upload_dm_results, got_revision, is_trybot):
@@ -264,11 +309,14 @@ def RunSteps(api):
       api.path['checkout'].join('infra', 'bots', 'tools', 'luci-go'),
       swarming_rev='')
 
-  compile_hash = compile_steps_swarm(api, infrabots_dir, builder_cfg)
+  recipes_hash = isolate_recipes(api)
+
+  compile_hash = compile_steps_swarm(api, builder_cfg, got_revision,
+                                     infrabots_dir, [recipes_hash])
+  extra_hashes = [recipes_hash, compile_hash]
 
   do_test_steps = builder_spec['do_test_steps']
   do_perf_steps = builder_spec['do_perf_steps']
-  is_trybot = builder_cfg['is_trybot']
 
   if not (do_test_steps or do_perf_steps):
     return
@@ -276,16 +324,15 @@ def RunSteps(api):
   download_skps(api, infrabots_dir)
   download_images(api, infrabots_dir)
 
-  dimensions = swarm_dimensions(builder_cfg)
-
   test_task = None
   perf_task = None
   if do_test_steps:
-    test_task = test_steps_trigger(api, infrabots_dir, compile_hash, dimensions,
-                                   got_revision, is_trybot)
+    test_task = test_steps_trigger(api, builder_cfg, got_revision,
+                                   infrabots_dir, extra_hashes)
   if do_perf_steps:
-    perf_task = perf_steps_trigger(api, infrabots_dir, compile_hash, dimensions,
-                                   got_revision, is_trybot)
+    perf_task = perf_steps_trigger(api, builder_cfg, got_revision,
+                                   infrabots_dir, extra_hashes)
+  is_trybot = builder_cfg['is_trybot']
   if test_task:
     test_steps_collect(api, test_task, builder_spec['upload_dm_results'],
                        got_revision, is_trybot)
@@ -314,10 +361,9 @@ def GenTests(api):
           test += api.properties(issue=500,
                                  patchset=1,
                                  rietveld='https://codereview.chromium.org')
-        if 'Win' in builder:
-          test += api.step_data(
-              'upload new .isolated file for compile_skia',
-              stdout=api.raw_io.output('def456 XYZ.isolated'))
+        test += api.step_data(
+            'upload new .isolated file for compile_skia',
+            stdout=api.raw_io.output('def456 XYZ.isolated'))
         if 'Test' in builder:
           test += api.step_data(
               'upload new .isolated file for test_skia',

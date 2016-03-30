@@ -156,7 +156,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/skps/SKP_VERSION",
+      "[SLAVE_BUILD]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -169,7 +169,7 @@
       "noserial",
       "shell",
       "cat",
-      "/storage/emulated/legacy/skiabot/skia_skp/skps/SKP_VERSION"
+      "/storage/emulated/legacy/skiabot/skia_tmp_dir/SKP_VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -185,7 +185,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/images/SK_IMAGE_VERSION",
+      "[SLAVE_BUILD]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -198,7 +198,7 @@
       "noserial",
       "shell",
       "cat",
-      "/storage/emulated/legacy/skiabot/skia_images/SK_IMAGE_VERSION"
+      "/storage/emulated/legacy/skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -218,7 +218,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PYTHONPATH": "[SLAVE_BUILD]/skia/infra/bots/build/scripts"
+      "PYTHONPATH": "build/scripts"
     },
     "name": "rmtree dm",
     "~followup_annotations": [

@@ -1,0 +1,45 @@
+# Copyright 2016 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# TODO(borenet): The file list can probably be made smaller.
+{
+  'variables': {
+    'files': [
+      '../../../../../depot_tools/',
+      '../../../../site_config/',
+      '../../../../environment.cfg.py',
+      '../../../../infra/config/recipes.cfg',
+      '../../../../third_party/mock-1.0.1/',
+      '../../../../scripts/common/',
+      '../../../../scripts/tools/runit.py',
+      '../../../../scripts/slave/__init__.py',
+      '../../../../scripts/slave/annotation_utils.py',
+      '../../../../scripts/slave/annotated_run.py',
+      '../../../../scripts/slave/bootstrap.py',
+      '../../../../scripts/slave/bot_update.py',
+      '../../../../scripts/slave/build_directory.py',
+      '../../../../scripts/slave/cleanup_temp.py',
+      '../../../../scripts/slave/compile.py',
+      '../../../../scripts/slave/crash_utils.py',
+      '../../../../scripts/slave/gsutil',
+      '../../../../scripts/slave/gsutil.bat',
+      '../../../../scripts/slave/gtest/',
+      '../../../../scripts/slave/gtest_slave_utils.py',
+      '../../../../scripts/slave/performance_log_processor.py',
+      '../../../../scripts/slave/recipes.py',
+      '../../../../scripts/slave/recipes/',
+      '../../../../scripts/slave/recipe_modules/',
+      '../../../../scripts/slave/results_dashboard.py',
+      '../../../../scripts/slave/runtest.py',
+      '../../../../scripts/slave/runisolatedtest.py',
+      '../../../../scripts/slave/skia/',
+      '../../../../scripts/slave/slave_utils.py',
+      '../../../../scripts/slave/telemetry_utils.py',
+      '../../../../scripts/slave/xvfb.py',
+    ],
+    'command': [
+      'python', '../../../build/scripts/slave/recipes.py', 'run',
+    ],
+  },
+}
