@@ -154,10 +154,14 @@ class SkiaApi(recipe_api.RecipeApi):
     self.master_name = self.m.properties['mastername']
     self.slave_name = self.m.properties['slavename']
 
-    self.default_env = {}
     self.slave_dir = self.m.path['slave_build']
     self.skia_dir = self.slave_dir.join('skia')
     self.infrabots_dir = self.skia_dir.join('infra', 'bots')
+
+    self.default_env = {}
+    if running_in_swarming:
+      depot_tools = self.slave_dir.join('depot_tools')
+      self.default_env['PATH'] = '%s:%%(PATH)s' % depot_tools
 
     # We run through this recipe in one of two ways:
     # 1. Normal bot: run all of the steps.
