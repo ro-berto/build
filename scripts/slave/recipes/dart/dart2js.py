@@ -57,7 +57,7 @@ def RunSteps(api):
   assert len(builder_fragments) > 3
   assert builder_fragments[0] == 'dart2js'
   system = builder_fragments[1]
-  assert system in ['linux', 'mac10.8', 'mac10.9', 'win7', 'win8', 'win10']
+  assert system in ['linux', 'mac10.11', 'win7', 'win8', 'win10']
   runtime = builder_fragments[2]
   assert runtime in all_runtimes
   channel = builder_fragments[-1]
@@ -171,7 +171,7 @@ def RunSteps(api):
                cwd=api.path['checkout'])
     # TODO(whesse): Upload the logs to cloud storage, put a link to them
     # in the step presentation.
-    if system in ['linux', 'mac10.8', 'mac10.9']:
+    if system in ['linux', 'mac10.11']:
       api.step('debug log',
                ['cat', '.debug.log'],
                cwd=api.path['checkout'])
