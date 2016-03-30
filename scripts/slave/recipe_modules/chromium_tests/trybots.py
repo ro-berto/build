@@ -595,6 +595,10 @@ TRYBOTS = freeze({
         'buildername': 'Win SyzyAsan (rel)',
       }),
       # Experimental clang/win bots.
+      'win_clang': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'WinClang',
+      }),
       'win_clang_dbg': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'CrWinClang(dbg)',
