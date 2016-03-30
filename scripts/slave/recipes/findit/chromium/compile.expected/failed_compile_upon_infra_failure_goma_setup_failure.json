@@ -490,14 +490,13 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 408@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"compile_error\": \"COMPILER_PROXY_UNREACHABLE\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_EXCEPTION@@@"
+      "@@@STEP_EXCEPTION@@@",
+      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"GOMA_SETUP_FAILURE\"]@@@"
     ]
   },
   {

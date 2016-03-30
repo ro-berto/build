@@ -219,7 +219,27 @@ def GenTests(api):
   )
 
   yield (
-      api.test('failed_compile_upon_infra_failure') +
+      api.test('failed_compile_upon_infra_failure_goma_setup_failure') +
+      props(compile_targets=['target_name']) +
+      api.override_step_data('test r1.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             })) +
+      api.override_step_data(
+          'test r1.compile',
+          api.json.output({
+              'notice': [
+                  {
+                      "compile_error": "COMPILER_PROXY_UNREACHABLE",
+                  },
+              ],
+          }),
+          retcode=1)
+  )
+
+  yield (
+      api.test('failed_compile_upon_infra_failure_goma_ping_failure') +
       props(compile_targets=['target_name']) +
       api.override_step_data('test r1.check_targets',
                              api.json.output({
@@ -233,6 +253,29 @@ def GenTests(api):
                   {
                       'infra_status': {
                           'ping_status_code': 408,
+                      },
+                  },
+              ],
+          }),
+          retcode=1)
+  )
+
+  yield (
+      api.test('failed_compile_upon_infra_failure_goma_build_error') +
+      props(compile_targets=['target_name']) +
+      api.override_step_data('test r1.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             })) +
+      api.override_step_data(
+          'test r1.compile',
+          api.json.output({
+              'notice': [
+                  {
+                      'infra_status': {
+                          'ping_status_code': 200,
+                          'num_user_error': 1,
                       },
                   },
               ],
