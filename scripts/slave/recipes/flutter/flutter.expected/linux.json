@@ -155,10 +155,9 @@
   },
   {
     "cmd": [
-      "pub",
-      "run",
-      "test",
-      "-j1"
+      "dart",
+      "-c",
+      "test/all.dart"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/cassowary",
     "env": {
@@ -183,10 +182,9 @@
   },
   {
     "cmd": [
-      "pub",
-      "run",
-      "test",
-      "-j1"
+      "dart",
+      "-c",
+      "test/all.dart"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/flutter_tools",
     "env": {
@@ -198,10 +196,9 @@
   },
   {
     "cmd": [
-      "pub",
-      "run",
-      "test",
-      "-j1"
+      "dart",
+      "-c",
+      "test/all.dart"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/flx",
     "env": {
@@ -213,10 +210,9 @@
   },
   {
     "cmd": [
-      "pub",
-      "run",
-      "test",
-      "-j1"
+      "dart",
+      "-c",
+      "test/all.dart"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/newton",
     "env": {

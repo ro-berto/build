@@ -39,7 +39,7 @@ def TestFlutterPackagesAndExamples(api):
   checkout = api.path['checkout']
 
   def _pub_test(path):
-    api.step('test %s' % path, ['pub', 'run', 'test', '-j1'],
+    api.step('test %s' % path, ['dart', '-c', 'test/all.dart'],
       cwd=checkout.join(path))
 
   def _flutter_test(path):
