@@ -134,7 +134,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (with patch)"
@@ -148,7 +148,7 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Release",
+      "Release_x64",
       "--use-src-side-runtest-py",
       "--paths",
       "{\"checkout\": \"[SLAVE_BUILD]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
@@ -239,16 +239,13 @@
       "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromium_builder_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"crash_service\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromium_builder_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"crash_service\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromium_builder_tests\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"crash_service\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
@@ -285,7 +282,7 @@
       "--ninja-path",
       "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "--target",
-      "Release",
+      "Release_x64",
       "--src-dir",
       "[SLAVE_BUILD]\\src",
       "--goma-cache-dir",
@@ -302,7 +299,6 @@
       "--goma-disable-local-fallback",
       "--ninja-ensure-up-to-date",
       "--",
-      "chromium_builder_tests",
       "crash_service",
       "mini_installer"
     ],
@@ -328,7 +324,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\run_crash_handler.py",
       "--target",
-      "Release"
+      "Release_x64"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "start_crash_service"
@@ -341,7 +337,7 @@
       "--build-dir",
       "[SLAVE_BUILD]\\src\\out",
       "--target",
-      "Release",
+      "Release_x64",
       "--force-clean",
       "--config",
       "[SLAVE_BUILD]\\src\\chrome\\test\\mini_installer\\config\\config.config",
@@ -357,7 +353,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\process_dumps.py",
       "--target",
-      "Release"
+      "Release_x64"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "process_dumps"
