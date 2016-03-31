@@ -46,6 +46,7 @@ V8Testing = TestStepConfig('v8testing')
 V8Testing_2 = TestStepConfig('v8testing', shards=2)
 V8Testing_3 = TestStepConfig('v8testing', shards=3)
 V8Testing_4 = TestStepConfig('v8testing', shards=4)
+V8Testing_5 = TestStepConfig('v8testing', shards=5)
 Webkit = TestStepConfig('webkit')
 
 
@@ -237,7 +238,7 @@ BUILDERS = {
         'build_gs_archive': 'linux_nosnap_rel_archive',
         'enable_swarming': True,
         'tests': [
-          V8Testing,
+          V8Testing_2,
           SimdJs,
           Test262,
           Mozilla,
@@ -254,8 +255,11 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - nosnap debug builder',
         'build_gs_archive': 'linux_nosnap_dbg_archive',
         'enable_swarming': True,
-        'tests': [V8Testing_3, Mozilla, SimdJs],
+        'tests': [V8Testing_4, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
+        'swarming_properties': {
+          'default_hard_timeout': 60 * 60,
+        },
       },
       'V8 Linux - isolates': {
         'v8_apply_config': ['isolates'],
@@ -641,7 +645,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing, Ignition],
+        'tests': [V8Testing_2, Ignition],
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -1076,9 +1080,12 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'swarming_properties': {'default_priority': 35},
-        'tests': [V8Testing_4, Test262_2, Mozilla, SimdJs],
+        'tests': [V8Testing_5, Test262_2, Mozilla, SimdJs],
         'testing': {'platform': 'linux'},
+        'swarming_properties': {
+          'default_hard_timeout': 60 * 60,
+          'default_priority': 35,
+        },
       },
       'V8 Linux - arm64 - sim - gc stress': {
         'chromium_apply_config': [
@@ -1719,7 +1726,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_2],
+        'tests': [V8Testing_3],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_dbg': {
@@ -1730,8 +1737,11 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_3],
+        'tests': [V8Testing_4],
         'testing': {'platform': 'linux'},
+        'swarming_properties': {
+          'default_hard_timeout': 60 * 60,
+        },
       },
       'v8_linux_gcc_compile_rel': {
         'chromium_apply_config': ['no_dcheck', 'gcc'],
@@ -2075,7 +2085,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing, Ignition],
+        'tests': [V8Testing_2, Ignition],
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
