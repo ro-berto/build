@@ -30,8 +30,6 @@ class AutoBisectApi(recipe_api.RecipeApi):
   # Directory within the above bucket to store results.
   RESULTS_GS_DIR = 'bisect-results'
   GS_RESULTS_URL = 'gs://%s/%s/' % (BUCKET, RESULTS_GS_DIR)
-  # Repo for triggering build jobs.
-  SVN_REPO_URL = 'svn://svn.chromium.org/chrome-try/try-perf'
   # Email to send on try jobs (for build requests) since git try will not
   # necessarily rely on a local checkout for that information.
   BOT_EMAIL = 'chrome_bot@chromium.org'
@@ -40,6 +38,8 @@ class AutoBisectApi(recipe_api.RecipeApi):
     super(AutoBisectApi, self).__init__(*args, **kwargs)
     self.override_poll_interval = None
     self.bot_db = None
+    # Repo for triggering build jobs.
+    self.svn_repo_url = 'svn://svn.chromium.org/chrome-try/try-perf'    
     # The variable below are set and used for the internal bisects.
     self.buildurl_gs_prefix = None
     self.internal_bisect = False
@@ -88,6 +88,10 @@ class AutoBisectApi(recipe_api.RecipeApi):
   def set_deploy_script(self, path):  # pragma: no cover
     """Sets apk deployment script path for android-chrome."""
     self.full_deploy_script = path
+
+  def set_svn_repo(self, svn_repo_url):  # pragma: no cover
+    """Sets SVN repo url for triggering build jobs."""
+    self.svn_repo_url = svn_repo_url
 
   def gsutil_file_exists(self, path):
     """Returns True if a file exists at the given GS path."""

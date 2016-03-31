@@ -402,7 +402,7 @@ class RevisionState(object):
         '--revision', top_revision.commit_hash,
         '--name', self.job_name,
         '--clobber',
-        '--svn_repo', api.SVN_REPO_URL,
+        '--svn_repo', api.svn_repo_url,
         '--diff', self.patch_file,
     ]
     try:
