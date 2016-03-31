@@ -26,7 +26,10 @@ DEPS = [
 TEST_BUILDERS = {
   'client.skia.fyi': {
     'skiabot-linux-housekeeper-003': [
+      'Build-Mac-Clang-x86_64-Release-Swarming',
       'Build-Ubuntu-GCC-x86_64-Debug-Swarming',
+      'Build-Ubuntu-GCC-x86_64-Release-Swarming-Trybot',
+      'Build-Win8-MSVC-x86_64-Release-Swarming',
       'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release-Swarming',
       'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot',
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming',
@@ -54,6 +57,8 @@ def derive_compile_bot_name(builder_name, builder_cfg):
     )
     if extra_config:
       builder_name += '-%s' % extra_config
+    if builder_cfg['is_trybot']:
+      builder_name += '-Trybot'
   return builder_name
 
 
@@ -164,6 +169,10 @@ def compile_steps_swarm(api, builder_cfg, got_revision, infrabots_dir,
                         extra_isolate_hashes):
   builder_name = derive_compile_bot_name(api.properties['buildername'],
                                          builder_cfg)
+  compile_builder_cfg = builder_cfg
+  if builder_name != api.properties['buildername']:
+    compile_builder_cfg = api.skia.get_builder_spec(
+        api.path['slave_build'].join('skia'), builder_name)['builder_cfg']
   # Windows bots require a toolchain.
   extra_hashes = extra_isolate_hashes[:]
   if 'Win' in builder_name:
@@ -182,7 +191,7 @@ def compile_steps_swarm(api, builder_cfg, got_revision, infrabots_dir,
       api,
       'compile',
       builder_name,
-      builder_cfg,
+      compile_builder_cfg,
       got_revision,
       infrabots_dir,
       idempotent=True,
