@@ -70,7 +70,7 @@ SPEC = {
 
     'Linux ChromiumOS Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['chromeos', 'ninja_confirm_noop', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
