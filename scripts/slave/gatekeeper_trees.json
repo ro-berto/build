@@ -32,6 +32,11 @@
         "status-url": "https://chromium-status.appspot.com",
         "track-revisions": true
     },
+    "chromium_android": {
+        "masters": [
+            "https://build.chromium.org/p/chromium.android"
+        ]
+    },
     "infra": {
         "build-db": "infra_db.json",
         "masters": [

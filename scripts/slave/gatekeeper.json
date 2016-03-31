@@ -832,6 +832,9 @@
       "excluded_steps": [
         "slave_steps"
       ],
+      "forgiving_optional": [
+        "compile"
+      ],
       "sheriff_classes": ["sheriff_android"]
     },
     "infra_tree_closer": {
