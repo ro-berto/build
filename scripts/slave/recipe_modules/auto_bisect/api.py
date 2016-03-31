@@ -44,6 +44,7 @@ class AutoBisectApi(recipe_api.RecipeApi):
     self.buildurl_gs_prefix = None
     self.internal_bisect = False
     self.builder_bot = None
+    self.full_deploy_script = None
 
   def perform_bisect(self):
     return local_bisect.perform_bisect(self)
@@ -83,6 +84,10 @@ class AutoBisectApi(recipe_api.RecipeApi):
   def set_additional_depot_info(self, depot_info):
     """Adds additional depot info to the global depot variables."""
     depot_config.add_addition_depot_into(depot_info)  # pragma: no cover
+
+  def set_deploy_script(self, path):  # pragma: no cover
+    """Sets apk deployment script path for android-chrome."""
+    self.full_deploy_script = path
 
   def gsutil_file_exists(self, path):
     """Returns True if a file exists at the given GS path."""
@@ -246,13 +251,50 @@ class AutoBisectApi(recipe_api.RecipeApi):
         mastername, buildername)
     with self.m.chromium_tests.wrap_chromium_tests(bot_config_object, tests):
       if self.m.chromium.c.TARGET_PLATFORM == 'android' and not skip_download:
-        if bot_config.get('webview'):
-          self.m.chromium_android.adb_install_apk('SystemWebView.apk')
-          self.m.chromium_android.adb_install_apk('SystemWebViewShell.apk')
+        deploy_apks = []
+        deploy_args = []
+        if self.internal_bisect:  # pragma: no cover
+          deploy_args = list(bot_config['deploy_args'])
+          deploy_apks = bot_config.get('deploy_apks')
+          if deploy_apks:
+            deploy_args.extend([
+              '--apks',
+              ','.join(str(self.m.chromium_android.apk_path(apk))
+                       for apk in deploy_apks)])
         else:
-          self.m.chromium_android.adb_install_apk('ChromePublic.apk')
+          if bot_config.get('webview'):
+            deploy_apks = ['SystemWebView.apk', 'SystemWebViewShell.apk']
+          else:
+            deploy_apks = ['ChromePublic.apk']
+        self.deploy_apk_on_device(
+            self.full_deploy_script, deploy_apks, deploy_args)
       test_runner()
 
+  def deploy_apk_on_device(self, deploy_script, deploy_apks, deploy_args):
+    """Installs apk on the android device."""
+    if deploy_script:  # pragma: no cover
+      self.full_deploy_on_device(deploy_script, deploy_args)
+    else:
+      for apk in deploy_apks:
+        self.m.chromium_android.adb_install_apk(apk)
+
+  def full_deploy_on_device(self, deploy_script, args=None):  # pragma: no cover
+    """Install android-chrome apk on device."""
+    full_deploy_flags = [
+        '-v',
+        '--blacklist-file', self.m.chromium_android.blacklist_file,
+        '--perfbot',
+        '--release',        
+    ]
+    if args:
+      full_deploy_flags += args
+    self.m.python(
+        'Deploy on Device',
+        deploy_script,
+        full_deploy_flags,
+        infra_step=True,
+        env=self.m.chromium.get_env())
+  
   def start_try_job(self, api, update_step=None, bot_db=None, **kwargs):
     """Starts a recipe bisect job, perf test run, or legacy bisect run.
 
