@@ -351,6 +351,7 @@ def main_android(options, args):
   binaries = [
       'chrome_public_apk/libs/armeabi-v7a/libchrome_public.so',
       'lib/libchrome_public.so',
+      'libchromepublic.so',
   ]
 
   return check_android_binaries(binaries, target_dir, options)
@@ -365,7 +366,8 @@ def main_android_webview(options, args):
   target_dir = os.path.join(build_directory.GetBuildOutputDirectory(),
                             options.target)
 
-  binaries = ['lib/libwebviewchromium.so']
+  binaries = ['lib/libwebviewchromium.so',
+              'libwebviewchromium.so']
 
   return check_android_binaries(binaries, target_dir, options)
 
@@ -384,7 +386,8 @@ def main_android_cronet(options, args):
               'cronet_sample_apk/libs/armeabi/libcronet.so',
               'cronet_sample_apk/libs/mips/libcronet.so',
               'cronet_sample_apk/libs/x86_64/libcronet.so',
-              'cronet_sample_apk/libs/x86/libcronet.so']
+              'cronet_sample_apk/libs/x86/libcronet.so',
+              'libcronet.so']
 
   return check_android_binaries(binaries, target_dir, options)
 
