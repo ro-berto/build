@@ -212,7 +212,8 @@
       "cronet_package",
       "cronet_sample_test_apk",
       "cronet_test_instrumentation_apk",
-      "cronet_unittests_apk"
+      "cronet_unittests_apk",
+      "net_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
