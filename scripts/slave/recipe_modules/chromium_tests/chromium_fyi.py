@@ -1991,8 +1991,35 @@ SPEC = {
         'platform': 'linux',
       },
     },
-
-
+    'Android Asan Builder Tests (dbg)': {
+      'chromium_config': 'android',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'builder_tester',
+      'android_config': 'clang_tests',
+      'root_devices': True,
+      'tests': [
+        steps.AndroidInstrumentationTest('AndroidWebViewTest', tool='asan'),
+        steps.AndroidInstrumentationTest('ChromePublicTest', tool='asan'),
+        steps.AndroidInstrumentationTest('ContentShellTest', tool='asan'),
+        steps.AndroidInstrumentationTest('ChromeSyncShellTest', tool='asan'),
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_instrumentation_test,
+        steps.generate_isolated_script,
+        steps.generate_script,
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Chromium Win 10': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
