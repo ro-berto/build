@@ -273,10 +273,9 @@ class RevisionState(object):
   def _is_build_failed(self):
     api = self.bisector.api
     current_build = None
-    base_url = '%sjson/builders/%s'% (
-        # If this variable is not set assume local dev master.
-        os.environ.get('BUILDBOT_URL', 'http://localhost:8041/'),
-        self.bisector.get_builder_bot_for_this_platform())
+    path = 'json/builders/' + self.bisector.get_builder_bot_for_this_platform()
+    base_url = api.m.properties.get('buildbotURL', 'http://localhost:8041/')
+    base_url += path
     if self.build_number is None:
       try:
         # Get all the current builds.

@@ -367,6 +367,8 @@ def _make_test(api, test_data, test_name, platform='linux', extra_config=None):
         'recipe_tester_name': 'android-nexus7'}))
   else:
     basic_test += api.properties(bisect_config=_get_config(extra_config))
+  basic_test += api.properties(
+      buildbotURL= 'https://build.chromium.org/p/tryserver.chromium.perf')
   return basic_test
 
 

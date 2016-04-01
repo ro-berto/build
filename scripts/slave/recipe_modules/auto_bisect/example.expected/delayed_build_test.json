@@ -272,7 +272,7 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
-      "http://localhost:8041/json/builders/linux_perf_bisect_builder?as_text=1",
+      "https://build.chromium.org/p/tryserver.chromium.perfjson/builders/linux_perf_bisect_builder?as_text=1",
       "--outfile",
       "/path/to/tmp/"
     ],
@@ -325,7 +325,7 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
-      "http://localhost:8041/json/builders/linux_perf_bisect_builder?as_text=1",
+      "https://build.chromium.org/p/tryserver.chromium.perfjson/builders/linux_perf_bisect_builder?as_text=1",
       "--outfile",
       "/path/to/tmp/"
     ],
@@ -341,7 +341,7 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
-      "http://localhost:8041/json/builders/linux_perf_bisect_builder/builds/2106?as_text=1",
+      "https://build.chromium.org/p/tryserver.chromium.perfjson/builders/linux_perf_bisect_builder/builds/2106?as_text=1",
       "--outfile",
       "/path/to/tmp/"
     ],
@@ -394,7 +394,7 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
-      "http://localhost:8041/json/builders/linux_perf_bisect_builder/builds/2106?as_text=1",
+      "https://build.chromium.org/p/tryserver.chromium.perfjson/builders/linux_perf_bisect_builder/builds/2106?as_text=1",
       "--outfile",
       "/path/to/tmp/"
     ],
