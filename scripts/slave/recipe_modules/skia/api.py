@@ -201,7 +201,6 @@ class SkiaApi(recipe_api.RecipeApi):
     self.device_dirs = None
     self._ccache = None
     self._checked_for_ccache = False
-    self._already_ran = {}
     self.configuration = self.builder_spec['configuration']
     self.default_env.update({'SKIA_OUT': self.out_dir,
                              'BUILDTYPE': self.configuration})
@@ -242,6 +241,8 @@ class SkiaApi(recipe_api.RecipeApi):
                                     ', '.join([f.name for f in self.failed]))
 
   def _run_once(self, fn, *args, **kwargs):
+    if not hasattr(self, '_already_ran'):
+      self._already_ran = {}
     if not fn.__name__ in self._already_ran:
       self._already_ran[fn.__name__] = True
       fn(*args, **kwargs)
@@ -375,17 +376,21 @@ for pattern in build_products_whitelist:
         env=self.gsutil_env_skia_infra,
         abort_on_failure=False)
 
-  def _download_and_copy_dir(self, version_file, gs_path_tmpl, host_path,
-                             device_path, test_expected_version,
-                             test_actual_version):
-    actual_version_file = self.m.path.join(self.tmp_dir, version_file)
+  def download_dir(self, version_file, gs_path_tmpl, tmp_dir, host_path,
+                   test_expected_version, test_actual_version,
+                   running_in_swarming):
+    """Download the given directory from Google Storage if necessary.
+
+    Return the downloaded version.
+    """
+    actual_version_file = self.m.path.join(tmp_dir, version_file)
     # If we're running as a Swarming task, we should've received the test inputs
     # via the isolate server. Only download if we're not running in Swarming.
-    if not self.running_in_swarming:
+    if not running_in_swarming:
       # Ensure that the tmp_dir exists.
       self._run_once(self.m.file.makedirs,
                      'tmp_dir',
-                     self.tmp_dir,
+                     tmp_dir,
                      infra_step=True)
 
     # Find the actually-downloaded version.
@@ -394,11 +399,11 @@ for pattern in build_products_whitelist:
                                       name='Get downloaded %s' % version_file,
                                       test_data=test_actual_version).rstrip()
     except self.m.step.StepFailure:
-      if self.running_in_swarming:
+      if running_in_swarming:
         raise  # pragma: no cover
       actual_version = VERSION_NONE
 
-    if not self.running_in_swarming:
+    if not running_in_swarming:
       # Find the expected version and download if needed.
       expected_version_file = self.m.path['checkout'].join(version_file)
       expected_version = self._readfile(
@@ -423,7 +428,12 @@ for pattern in build_products_whitelist:
             env=self.gsutil_env_chromium_skia_gm)
         self._writefile(actual_version_file, expected_version)
         actual_version = expected_version
+    return actual_version
 
+  def copy_dir(self, host_version, version_file, tmp_dir,
+               host_path, device_path, test_expected_version,
+               test_actual_version):
+    actual_version_file = self.m.path.join(tmp_dir, version_file)
     # Copy to device.
     device_version_file = self.flavor.device_path_join(
         self.device_dirs.tmp_dir, version_file)
@@ -432,7 +442,7 @@ for pattern in build_products_whitelist:
         device_version = self.flavor.read_file_on_device(device_version_file)
       except self.m.step.StepFailure:
         device_version = VERSION_NONE
-      if device_version != actual_version:
+      if device_version != host_version:
         self.flavor.remove_file_on_device(device_version_file)
         self.flavor.create_clean_device_dir(device_path)
         self.flavor.copy_directory_contents_to_device(host_path, device_path)
@@ -441,11 +451,31 @@ for pattern in build_products_whitelist:
         self.flavor.copy_file_to_device(actual_version_file,
                                         device_version_file)
 
-  def download_and_copy_images(self):
+  def download_images(self, tmp_dir, local_images_dir, running_in_swarming):
     """Download test images if needed."""
-    self._download_and_copy_dir(
+    return self.download_dir(
         VERSION_FILE_SK_IMAGE,
         GS_SUBDIR_TMPL_SK_IMAGE,
+        tmp_dir,
+        local_images_dir,
+        test_expected_version=TEST_EXPECTED_SK_IMAGE_VERSION,
+        test_actual_version=self.m.properties.get(
+            'test_downloaded_sk_image_version',
+            TEST_EXPECTED_SK_IMAGE_VERSION),
+        running_in_swarming=running_in_swarming)
+
+  def _download_and_copy_images(self):
+    """Download and copy test images if needed."""
+    version = self.download_images(self.tmp_dir, self.images_dir, self.running_in_swarming)
+
+    """host_version, version_file, gs_path_tmpl, tmp_dir,
+               host_path, device_path, test_expected_version,
+               test_actual_version, running_in_swarming"""
+
+    self.copy_dir(
+        version,
+        VERSION_FILE_SK_IMAGE,
+        self.tmp_dir,
         self.images_dir,
         self.device_dirs.images_dir,
         test_expected_version=TEST_EXPECTED_SK_IMAGE_VERSION,
@@ -453,11 +483,25 @@ for pattern in build_products_whitelist:
             'test_downloaded_sk_image_version',
             TEST_EXPECTED_SK_IMAGE_VERSION))
 
-  def download_and_copy_skps(self):
-    """Download the SKPs if needed."""
-    self._download_and_copy_dir(
+  def download_skps(self, tmp_dir, local_skp_dir, running_in_swarming):
+    """Download SKPs if needed."""
+    return self.download_dir(
         VERSION_FILE_SKP,
         GS_SUBDIR_TMPL_SKP,
+        tmp_dir,
+        local_skp_dir,
+        test_expected_version=TEST_EXPECTED_SKP_VERSION,
+        test_actual_version=self.m.properties.get(
+            'test_downloaded_skp_version', TEST_EXPECTED_SKP_VERSION),
+        running_in_swarming=running_in_swarming)
+
+  def _download_and_copy_skps(self):
+    """Download and copy the SKPs if needed."""
+    version = self.download_skps(self.tmp_dir, self.local_skp_dir, self.running_in_swarming)
+    self.copy_dir(
+        version,
+        VERSION_FILE_SKP,
+        self.tmp_dir,
         self.local_skp_dir,
         self.device_dirs.skp_dir,
         test_expected_version=TEST_EXPECTED_SKP_VERSION,
@@ -516,8 +560,8 @@ print json.dumps({'ccache': ccache})
   def test_steps(self):
     """Run the DM test."""
     self._run_once(self.install)
-    self._run_once(self.download_and_copy_skps)
-    self._run_once(self.download_and_copy_images)
+    self._run_once(self._download_and_copy_skps)
+    self._run_once(self._download_and_copy_images)
 
     use_hash_file = False
     if self.upload_dm_results:
@@ -673,8 +717,8 @@ print json.dumps({'ccache': ccache})
       return
 
     self._run_once(self.install)
-    self._run_once(self.download_and_copy_skps)
-    self._run_once(self.download_and_copy_images)
+    self._run_once(self._download_and_copy_skps)
+    self._run_once(self._download_and_copy_images)
 
     if self.upload_perf_results:
       self.flavor.create_clean_device_dir(self.device_dirs.perf_data_dir)

@@ -202,18 +202,6 @@ def compile_steps_swarm(api, builder_cfg, got_revision, infrabots_dir,
   return api.skia_swarming.collect_swarming_task_isolate_hash(task)
 
 
-def download_images(api, infrabots_dir):
-  api.python('Download images',
-             script=infrabots_dir.join('download_images.py'),
-             env=api.skia.gsutil_env('chromium-skia-gm.boto'))
-
-
-def download_skps(api, infrabots_dir):
-  api.python('Download SKPs',
-             script=infrabots_dir.join('download_skps.py'),
-             env=api.skia.gsutil_env('chromium-skia-gm.boto'))
-
-
 def perf_steps_trigger(api, builder_cfg, got_revision, infrabots_dir,
                        extra_hashes):
   """Trigger perf tests via Swarming."""
@@ -323,7 +311,6 @@ def RunSteps(api):
 
   compile_hash = compile_steps_swarm(api, builder_cfg, got_revision,
                                      infrabots_dir, [recipes_hash])
-  extra_hashes = [recipes_hash, compile_hash]
 
   do_test_steps = builder_spec['do_test_steps']
   do_perf_steps = builder_spec['do_perf_steps']
@@ -331,8 +318,14 @@ def RunSteps(api):
   if not (do_test_steps or do_perf_steps):
     return
 
-  download_skps(api, infrabots_dir)
-  download_images(api, infrabots_dir)
+  extra_hashes = [recipes_hash, compile_hash]
+
+  api.skia.download_skps(api.path['slave_build'].join('tmp'),
+                         api.path['slave_build'].join('skps'),
+                         False)
+  api.skia.download_images(api.path['slave_build'].join('tmp'),
+                           api.path['slave_build'].join('images'),
+                           False)
 
   test_task = None
   perf_task = None
