@@ -84,15 +84,6 @@ def RunSteps(api):
       force=True, patch_root=bot_config.get('root_override'))
 
   api.chromium.runhooks()
-
-  # checkout llvm
-  api.step('checkout llvm',
-           [api.path.sep.join(['tools', 'clang', 'scripts', 'update.py']),
-            '--force-local-build',
-            '--without-android'],
-           cwd=api.path['checkout'],
-           env={'LLVM_FORCE_HEAD_REVISION': 'YES'})
-
   api.chromium.run_mb(mastername, buildername, use_goma=False)
 
   all_fuzzers = gn_refs(
