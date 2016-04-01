@@ -73,6 +73,15 @@
   },
   {
     "cmd": [
+      "tools/clang/scripts/update.py",
+      "--force-local-build",
+      "--without-android"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "checkout llvm"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[DEPOT_TOOLS]/gn.py",
