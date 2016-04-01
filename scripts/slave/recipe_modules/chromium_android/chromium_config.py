@@ -74,10 +74,14 @@ def cronet_builder(c):
   c.gyp_env.GYP_DEFINES['enable_bidirectional_stream'] = 1
   c.gyp_env.GYP_DEFINES['enable_websockets'] = 0
   c.compile_py.clobber = True
+  # TODO(jbudorick): Remove {cronet,net}_unittests_apk targets after
+  # gn switch is finished.
   c.compile_py.default_targets=['cronet_package',
                                 'cronet_sample_test_apk',
                                 'cronet_test_instrumentation_apk',
+                                'cronet_unittests',
                                 'cronet_unittests_apk',
+                                'net_unittests',
                                 'net_unittests_apk',]
 
 @CONFIG_CTX(includes=['main_builder'])
