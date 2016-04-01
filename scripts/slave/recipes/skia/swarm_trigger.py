@@ -87,7 +87,7 @@ def isolate_recipes(api):
   # This directory tends to be missing for some reason.
   api.file.makedirs(
       'third_party_infra',
-      api.path['build'].join('build', 'third_party', 'infra'),
+      api.path['build'].join('third_party', 'infra'),
       infra_step=True)
   skia_recipes_dir = api.path['build'].join(
       'scripts', 'slave', 'recipes', 'skia')
