@@ -200,9 +200,16 @@ class Master(object):
     from_address = 'buildbot@chromium.org'
 
   class Master3(Base):
-    """Client master."""
+    """Legacy client master."""
     master_host = 'master3.golo.chromium.org'
     master_port_base = 3
+    tree_closing_notification_recipients = []
+    from_address = 'buildbot@chromium.org'
+
+  class Master3a(Base):
+    """Client master."""
+    master_host = 'master3a.golo.chromium.org'
+    master_port_base = 13
     tree_closing_notification_recipients = []
     from_address = 'buildbot@chromium.org'
 
