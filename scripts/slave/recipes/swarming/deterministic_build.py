@@ -6,8 +6,6 @@
 
 Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 
-TODO(sebmarchand): This recipe has been moved to the recipe's root directory.
-Remove this copy once all the master have been updated.
 """
 
 from recipe_engine.recipe_api import Property
