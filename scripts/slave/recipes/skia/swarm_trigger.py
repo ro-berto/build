@@ -87,7 +87,7 @@ def isolate_recipes(api):
   skia_recipes_dir = api.path['build'].join(
       'scripts', 'slave', 'recipes', 'skia')
   api.skia_swarming.create_isolated_gen_json(
-      skia_recipes_dir.join('recipes.isolate'),
+      skia_recipes_dir.join('swarm_recipe.isolate'),
       skia_recipes_dir,
       'linux',
       'isolate_recipes',

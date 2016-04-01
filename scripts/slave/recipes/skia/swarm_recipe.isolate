@@ -1,0 +1,10 @@
+{
+  'includes': [
+    '../../../../../build/scripts/slave/isolation/recipes.isolate',
+  ],
+  'variables': {
+    'command': [
+      'python', '../../../build/scripts/slave/recipes.py', 'run',
+    ],
+  },
+}

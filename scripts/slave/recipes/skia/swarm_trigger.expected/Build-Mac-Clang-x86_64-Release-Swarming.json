@@ -323,7 +323,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[BUILD]/scripts/slave/recipes/skia/recipes.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-isolate_recipes.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\"\n    ], \n    \"dir\": \"[BUILD]/scripts/slave/recipes/skia\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[BUILD]/scripts/slave/recipes/skia/swarm_recipe.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-isolate_recipes.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\"\n    ], \n    \"dir\": \"[BUILD]/scripts/slave/recipes/skia\", \n    \"version\": 1\n}",
       "[SLAVE_BUILD]/swarming_temp_dir/isolate_recipes.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
