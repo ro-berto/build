@@ -214,7 +214,7 @@ class SkiaApi(recipe_api.RecipeApi):
     if self.running_in_swarming:
       self.dm_dir = self.m.path.join(
           self.swarming_out_dir, 'dm')
-      self.perf_data_dir = self.m.path.join(self.swarming_out_dir, 
+      self.perf_data_dir = self.m.path.join(self.swarming_out_dir,
           'perfdata', self.builder_name, 'data')
     else:
       self.dm_dir = self.slave_dir.join('dm')
