@@ -48,7 +48,7 @@ def derive_compile_bot_name(builder_name, builder_cfg):
       os = 'Ubuntu'
     elif os == 'iOS':  # pragma: nocover
       extra_config = os
-      os = 'OSX'
+      os = 'Mac'
     builder_name = 'Build-%s-%s-%s-%s' % (
       os,
       builder_cfg['compiler'],
