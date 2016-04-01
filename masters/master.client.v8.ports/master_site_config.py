@@ -6,7 +6,7 @@
 
 from config_bootstrap import Master
 
-class V8Ports(Master.Master3):
+class V8Ports(Master.Master3a):
   base_app_url = 'https://v8-status.appspot.com'
   tree_status_url = base_app_url + '/status'
   store_revisions_url = base_app_url + '/revisions'
