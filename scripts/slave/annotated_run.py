@@ -53,10 +53,10 @@ LOGDOG_WHITELIST_MASTER_BUILDERS = {
     'chromium.fyi': { WHITELIST_ALL, 'Android ChromeDriver Tests (dbg)' },
 
     # Chromium tryservers.
-    #'tryserver.chromium.android': { WHITELIST_ALL },
-    #'tryserver.chromium.mac': { WHITELIST_ALL },
-    #'tryserver.chromium.linux': { WHITELIST_ALL },
-    #'tryserver.chromium.windows': { WHITELIST_ALL },
+    'tryserver.chromium.android': { WHITELIST_ALL },
+    'tryserver.chromium.mac': { WHITELIST_ALL },
+    'tryserver.chromium.linux': { WHITELIST_ALL },
+    'tryserver.chromium.windows': { WHITELIST_ALL },
 }
 
 # LogDogPlatform is the set of platform-specific LogDog bootstrapping
