@@ -16,9 +16,10 @@ SPEC = {
     'Win Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'ninja_confirm_noop',
         'archive_gpu_tests',
-        'chrome_with_codecs'
+        'chrome_with_codecs',
+        'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -111,7 +112,7 @@ SPEC = {
     },
     'Win x64 Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -126,7 +127,7 @@ SPEC = {
     },
     'Win 7 Tests x64 (1)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -188,7 +189,7 @@ SPEC = {
 
     'Win x64 Builder (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -207,7 +208,7 @@ SPEC = {
 
     'Win Builder (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',

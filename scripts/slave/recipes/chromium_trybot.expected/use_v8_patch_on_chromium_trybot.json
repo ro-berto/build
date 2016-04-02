@@ -137,6 +137,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -250,15 +251,18 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\build\\gyp_chromium",
-      "--analyzer",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
+      "analyze",
+      "-m",
+      "tryserver.chromium.win",
+      "-b",
+      "win_chromium_rel_ng",
+      "-v",
+      "//out/Release",
       "{\"additional_compile_targets\": [\"chromium_builder_tests\", \"crash_service\"], \"files\": [\"v8/foo.cc\"], \"test_targets\": [\"blink_heap_unittests\", \"blink_platform_unittests\", \"mini_installer\", \"webkit_unit_tests\", \"wtf_unittests\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1"
-    },
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_TEXT@No compile necessary@@@",
@@ -298,6 +302,25 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
+      "gen",
+      "-m",
+      "tryserver.chromium.win",
+      "-b",
+      "win_chromium_rel_ng",
+      "--config-file",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
+      "--goma-dir",
+      "[BUILD]\\goma",
+      "//out/Release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files (with patch)"
   },
   {
     "cmd": [

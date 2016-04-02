@@ -15,10 +15,14 @@ SPEC = {
   'builders': {
     'GPU Win Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
-                                'chrome_with_codecs',
-                                'internal_gles2_conform_tests',
-                                'build_angle_deqp_tests'],
+      'chromium_apply_config': [
+        'archive_gpu_tests',
+        'build_angle_deqp_tests',
+        'chrome_with_codecs',
+        'internal_gles2_conform_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -36,9 +40,13 @@ SPEC = {
     },
     'GPU Win Builder (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
-                                'chrome_with_codecs',
-                                'internal_gles2_conform_tests'],
+      'chromium_apply_config': [
+        'archive_gpu_tests',
+        'chrome_with_codecs',
+        'internal_gles2_conform_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -266,10 +274,14 @@ SPEC = {
     },
     'GPU Win x64 Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
-                                'chrome_with_codecs',
-                                'internal_gles2_conform_tests',
-                                'build_angle_deqp_tests'],
+      'chromium_apply_config': [
+        'archive_gpu_tests',
+        'build_angle_deqp_tests',
+        'chrome_with_codecs',
+        'internal_gles2_conform_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -287,9 +299,13 @@ SPEC = {
     },
     'GPU Win x64 Builder (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop', 'archive_gpu_tests',
-                                'chrome_with_codecs',
-                                'internal_gles2_conform_tests'],
+      'chromium_apply_config': [
+        'archive_gpu_tests',
+        'chrome_with_codecs',
+        'internal_gles2_conform_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {

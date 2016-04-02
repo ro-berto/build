@@ -567,6 +567,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_official',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal'],
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -604,6 +605,7 @@ SPEC = {
     'CrWinClang(dbg)': {
       'chromium_config': 'chromium_win_clang',
       'gclient_config': 'chromium',
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -681,6 +683,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_official',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal'],
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

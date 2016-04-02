@@ -128,6 +128,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -318,6 +319,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -432,15 +434,18 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]\\src\\build\\gyp_chromium",
-      "--analyzer",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
+      "analyze",
+      "-m",
+      "chromium.win",
+      "-b",
+      "Win Builder",
+      "-v",
+      "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"unaffected_tests\", \"unaffected_tests_run\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_DEFINES": "archive_gpu_tests=1 chromium_win_pch=0 component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1"
-    },
     "name": "test r1.analyze",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
