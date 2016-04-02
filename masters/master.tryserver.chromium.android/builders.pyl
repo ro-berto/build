@@ -143,7 +143,35 @@
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "findit/chromium/compile",
       "scheduler": None,
-      "slavebuilddir": "android_chromium_variable",
+      "slavebuilddir": "android",
+      "slave_pools": ["ccompute_optional_bots"],
+    },
+    "android_chromium_variable_arm64": {
+      "builder_timeout_s": 6900,  # 60 * 115
+      "recipe": "findit/chromium/compile",
+      "scheduler": None,
+      "slavebuilddir": "android_arm64_dbg_recipe",
+      "slave_pools": ["ccompute_optional_bots"],
+    },
+    "android_chromium_variable_cast_shell": {
+      "builder_timeout_s": 6900,  # 60 * 115
+      "recipe": "findit/chromium/compile",
+      "scheduler": None,
+      "slavebuilddir": "cast_shell_android",
+      "slave_pools": ["ccompute_optional_bots"],
+    },
+    "android_chromium_variable_clang": {
+      "builder_timeout_s": 6900,  # 60 * 115
+      "recipe": "findit/chromium/compile",
+      "scheduler": None,
+      "slavebuilddir": "android_clang_dbg_recipe",
+      "slave_pools": ["ccompute_optional_bots"],
+    },
+    "android_chromium_variable_gn": {
+      "builder_timeout_s": 6900,  # 60 * 115
+      "recipe": "findit/chromium/compile",
+      "scheduler": None,
+      "slavebuilddir": "android_chromium_gn",
       "slave_pools": ["ccompute_optional_bots"],
     },
     "android_chromium_variable_nexus4": {
