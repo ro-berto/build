@@ -349,36 +349,53 @@ def RunSteps(api):
                        got_revision, is_trybot)
 
 
+def test_for_bot(api, builder, mastername, slavename, testname=None):
+  """Generate a test for the given bot."""
+  testname = testname or builder
+  test = (
+    api.test(testname) +
+    api.properties(buildername=builder,
+                   mastername=mastername,
+                   slavename=slavename,
+                   buildnumber=5,
+                   revision='abc123') +
+    api.path.exists(
+        api.path['slave_build'].join('skia'),
+        api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+    )
+  )
+  if 'Trybot' in builder:
+    test += api.properties(issue=500,
+                           patchset=1,
+                           rietveld='https://codereview.chromium.org')
+  test += api.step_data(
+      'upload new .isolated file for compile_skia',
+      stdout=api.raw_io.output('def456 XYZ.isolated'))
+  if 'Test' in builder:
+    test += api.step_data(
+        'upload new .isolated file for test_skia',
+        stdout=api.raw_io.output('def456 XYZ.isolated'))
+  if ('Test' in builder and 'Debug' in builder) or 'Perf' in builder:
+    test += api.step_data(
+        'upload new .isolated file for perf_skia',
+        stdout=api.raw_io.output('def456 XYZ.isolated'))
+
+  return test
+
+
 def GenTests(api):
   for mastername, slaves in TEST_BUILDERS.iteritems():
     for slavename, builders_by_slave in slaves.iteritems():
       for builder in builders_by_slave:
-        test = (
-          api.test(builder) +
-          api.properties(buildername=builder,
-                         mastername=mastername,
-                         slavename=slavename,
-                         buildnumber=5,
-                         revision='abc123') +
-          api.path.exists(
-              api.path['slave_build'].join('skia'),
-              api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
-          )
-        )
-        if 'Trybot' in builder:
-          test += api.properties(issue=500,
-                                 patchset=1,
-                                 rietveld='https://codereview.chromium.org')
-        test += api.step_data(
-            'upload new .isolated file for compile_skia',
-            stdout=api.raw_io.output('def456 XYZ.isolated'))
-        if 'Test' in builder:
-          test += api.step_data(
-              'upload new .isolated file for test_skia',
-              stdout=api.raw_io.output('def456 XYZ.isolated'))
-        if ('Test' in builder and 'Debug' in builder) or 'Perf' in builder:
-          test += api.step_data(
-              'upload new .isolated file for perf_skia',
-              stdout=api.raw_io.output('def456 XYZ.isolated'))
+        yield test_for_bot(api, builder, mastername, slavename)
 
-        yield test
+  builder = 'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming'
+  master = 'client.skia'
+  slave = 'skiabot-linux-test-000'
+  test = test_for_bot(api, builder, master, slave, 'No_downloaded_SKP_VERSION')
+  test += api.step_data('Get downloaded SKP_VERSION', retcode=1)
+  test += api.path.exists(
+      api.path['slave_build'].join('skia'),
+      api.path['slave_build'].join('tmp', 'uninteresting_hashes.txt')
+  )
+  yield test

@@ -341,10 +341,10 @@ for pattern in build_products_whitelist:
     return self.m.file.write('write %s' % self.m.path.basename(filename),
                              filename, contents, infra_step=True)
 
-  def rmtree(self, path):
+  def rmtree(self, path, running_in_swarming):
     """Wrapper around api.file.rmtree with environment fix."""
     env = {}
-    if self.running_in_swarming:
+    if running_in_swarming:
       env['PYTHONPATH'] = str(self.m.path.join('build', 'scripts'))
     self.m.file.rmtree(self.m.path.basename(path),
                        path,
@@ -418,14 +418,16 @@ for pattern in build_products_whitelist:
                              actual_version_file,
                              infra_step=True)
 
-        self.flavor.create_clean_host_dir(host_path)
+        self.rmtree(host_path, running_in_swarming)
+        self.m.file.makedirs(self.m.path.basename(host_path), host_path,
+                             infra_step=True)
         self.m.gsutil.download(
             global_constants.GS_GM_BUCKET,
             (gs_path_tmpl % expected_version) + '/*',
             host_path,
             name='download %s' % self.m.path.basename(host_path),
             args=['-R'],
-            env=self.gsutil_env_chromium_skia_gm)
+            env=self.gsutil_env(BOTO_CHROMIUM_SKIA_GM))
         self._writefile(actual_version_file, expected_version)
         actual_version = expected_version
     return actual_version
