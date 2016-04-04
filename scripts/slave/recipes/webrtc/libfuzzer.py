@@ -60,13 +60,6 @@ def RunSteps(api):
   api.webrtc.checkout()
   api.chromium.runhooks()
 
-  # checkout llvm
-  api.step('checkout llvm',
-           [api.path.sep.join(['tools', 'clang', 'scripts', 'update.py']),
-            '--force-local-build',
-            '--without-android'],
-           cwd=api.path['checkout'])
-
   api.chromium.run_gn(use_goma=False)
 
   step_result = api.python('calculate targets',
