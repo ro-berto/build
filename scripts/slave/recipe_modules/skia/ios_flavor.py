@@ -109,16 +109,17 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def cleanup_steps(self):
     """Run any device-specific cleanup steps."""
-    self._skia_api.run(
-        self._skia_api.m.step,
-        name='reboot',
-        cmd=[self.ios_bin.join('ios_restart')],
-        infra_step=True)
-    self._skia_api.run(
-        self._skia_api.m.step,
-        name='wait for reboot',
-        cmd=['sleep', '20'],
-        infra_step=True)
+    if self._skia_api.do_test_steps or self._skia_api.do_perf_steps:
+      self._skia_api.run(
+          self._skia_api.m.step,
+          name='reboot',
+          cmd=[self.ios_bin.join('ios_restart')],
+          infra_step=True)
+      self._skia_api.run(
+          self._skia_api.m.step,
+          name='wait for reboot',
+          cmd=['sleep', '20'],
+          infra_step=True)
 
   def read_file_on_device(self, path):
     """Read the given file."""

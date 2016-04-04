@@ -51,6 +51,7 @@ BUILD_PRODUCTS_ISOLATE_WHITELIST = [
   '*.dll',
   'skia_launcher',
   'lib/*.so',
+  'iOSShell.ipa',
 ]
 
 
