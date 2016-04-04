@@ -651,8 +651,8 @@
       "[DEPOT_TOOLS]/gsutil.py",
       "----",
       "cp",
-      "gs://chromium-cts/android-cts-5.1_r1-linux_x86-arm.zip",
-      "[TMP_BASE]/cts_tmp_1/android-cts-5.1_r1-linux_x86-arm.zip"
+      "gs://chromium-cts/android-cts-5.1_r5-linux_x86-arm.zip",
+      "[TMP_BASE]/cts_tmp_1/android-cts-5.1_r5-linux_x86-arm.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil Download CTS"
@@ -665,7 +665,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Extract CTS",
-    "stdin": "{\"output\": \"[TMP_BASE]/cts_tmp_1/cts-extracted\", \"zip_file\": \"[TMP_BASE]/cts_tmp_1/android-cts-5.1_r1-linux_x86-arm.zip\"}"
+    "stdin": "{\"output\": \"[TMP_BASE]/cts_tmp_1/cts-extracted\", \"zip_file\": \"[TMP_BASE]/cts_tmp_1/android-cts-5.1_r5-linux_x86-arm.zip\"}"
   },
   {
     "cmd": [
