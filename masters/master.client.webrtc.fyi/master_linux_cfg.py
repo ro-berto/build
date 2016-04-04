@@ -18,7 +18,6 @@ def Update(c):
                                 'Linux32 ARM',
                                 'Linux64 GCC',
                                 'Linux64 Release (swarming)',
-                                'Linux64 Release (Libfuzzer)',
       ]),
       # Run WebRTC DEPS roller at CET hours: 4am, 12pm and 8pm.
       Nightly(
@@ -41,11 +40,6 @@ def Update(c):
     {
       'name': 'Linux64 Release (swarming)',
       'slavebuilddir': 'linux_swarming',
-    },
-    {
-      'name': 'Linux64 Release (Libfuzzer)',
-      'recipe': 'webrtc/libfuzzer',
-      'slavebuilddir': 'linux64_libfuzzer',
     },
     {
       'name': 'Auto-roll - WebRTC DEPS',
