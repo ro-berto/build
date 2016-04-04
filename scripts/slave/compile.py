@@ -13,24 +13,16 @@
 
 import datetime
 import errno
-import getpass
-import glob
-import gzip
-import json
 import multiprocessing
 import optparse
 import os
 import re
 import shlex
-import shutil
-import socket
 import sys
-import tempfile
 import time
 
 from common import chromium_utils
 from slave import build_directory
-from slave import slave_utils
 from slave import goma_utils
 
 # Define a bunch of directory paths (same as bot_update.py)
