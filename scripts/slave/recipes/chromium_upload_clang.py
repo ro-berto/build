@@ -20,7 +20,7 @@ DEPS = [
 BUILDERS = freeze({
   'tryserver.chromium.linux': {
     'builders': {
-      'linux_chromium_clang_upload': {
+      'linux_upload_clang': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
@@ -36,7 +36,7 @@ BUILDERS = freeze({
   },
   'tryserver.chromium.mac': {
     'builders': {
-      'mac_chromium_clang_upload': {
+      'mac_upload_clang': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'mac',
@@ -47,7 +47,7 @@ BUILDERS = freeze({
   },
   'tryserver.chromium.win': {
     'builders': {
-      'win_chromium_clang_upload': {
+      'win_upload_clang': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'win',

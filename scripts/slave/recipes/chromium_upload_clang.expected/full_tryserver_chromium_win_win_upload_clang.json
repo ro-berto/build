@@ -3,11 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--master",
-      "tryserver.chromium.mac",
+      "tryserver.chromium.win",
       "--builder",
-      "mac_chromium_clang_upload",
+      "win_upload_clang",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -33,7 +33,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
     "~followup_annotations": [
@@ -107,7 +107,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/third_party/binutils/download.py"
+      "[SLAVE_BUILD]\\src\\third_party\\binutils\\download.py"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "download binutils"
@@ -116,7 +116,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/clang/scripts/package.py",
+      "[SLAVE_BUILD]\\src\\tools\\clang\\scripts\\package.py",
       "--upload"
     ],
     "cwd": "[SLAVE_BUILD]",
