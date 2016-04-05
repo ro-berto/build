@@ -19,6 +19,7 @@ TEST_BUILDERS = {
   'client.skia.compile': {
     'skiabot-linux-compile-000': [
       'Build-Ubuntu-GCC-Arm7-Debug-Android-Trybot',
+      'Build-Ubuntu-GCC-Arm7-Release-Android',
     ],
     'skiabot-win-compile-000': [
       'Build-Win-MSVC-x86-Debug-VS2015',

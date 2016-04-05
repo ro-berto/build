@@ -31,8 +31,9 @@ TEST_BUILDERS = {
       'Build-Ubuntu-GCC-x86_64-Release-Swarming-Trybot',
       'Build-Ubuntu-GCC-x86_64-Release-SwarmingValgrind',
       'Build-Win8-MSVC-x86_64-Release-Swarming',
-      'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release-Swarming',
       'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot',
+      'Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming',
+      'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release-Swarming',
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming',
       'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming',
       'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-SwarmingValgrind',
@@ -41,7 +42,8 @@ TEST_BUILDERS = {
 }
 
 
-def derive_compile_bot_name(builder_name, builder_cfg):
+def derive_compile_bot_name(builder_name, builder_spec):
+  builder_cfg = builder_spec['builder_cfg']
   if builder_cfg['role'] in ('Test', 'Perf'):
     os = builder_cfg['os']
     extra_config = builder_cfg.get('extra_config')
@@ -64,16 +66,20 @@ def derive_compile_bot_name(builder_name, builder_cfg):
   return builder_name
 
 
-def swarm_dimensions(builder_cfg):
+def swarm_dimensions(builder_spec):
   """Return a dict of keys and values to be used as Swarming bot dimensions."""
   dimensions = {
     'pool': 'Skia',
   }
+  builder_cfg = builder_spec['builder_cfg']
   dimensions['os'] = builder_cfg['os']
   if 'Win' in builder_cfg['os']:
     dimensions['os'] = 'Windows'  # pragma: no cover
   if builder_cfg['role'] in ('Test', 'Perf'):
-    if builder_cfg['cpu_or_gpu'] == 'CPU':
+    if 'Android' in builder_cfg['os']:
+      # For Android, the device type is a better dimension than CPU or GPU.
+      dimensions['product.board'] = builder_spec['product.board']
+    elif builder_cfg['cpu_or_gpu'] == 'CPU':
       dimensions['gpu'] = 'none'
       # TODO(borenet): Add appropriate CPU dimension(s).
       #dimensions['cpu'] = builder_cfg['cpu_or_gpu_value']
@@ -107,7 +113,7 @@ def isolate_recipes(api):
   return api.skia_swarming.batcharchive(['isolate_recipes'])[0][1]
 
 
-def trigger_task(api, task_name, builder, builder_cfg, got_revision,
+def trigger_task(api, task_name, builder, builder_spec, got_revision,
                  infrabots_dir, idempotent=False, store_output=True,
                  extra_isolate_hashes=None, expiration=None, hard_timeout=None):
   """Trigger the given bot to run as a Swarming task."""
@@ -124,6 +130,7 @@ def trigger_task(api, task_name, builder, builder_cfg, got_revision,
     'slavename': api.properties['slavename'],
     'swarm_out_dir': '${ISOLATED_OUTDIR}',
   }
+  builder_cfg = builder_spec['builder_cfg']
   if builder_cfg['is_trybot']:
     properties['issue'] = str(api.properties['issue'])
     properties['patchset'] = str(api.properties['patchset'])
@@ -137,7 +144,7 @@ def trigger_task(api, task_name, builder, builder_cfg, got_revision,
     extra_args.append('%s=%s' % (k, v))
 
   isolate_base_dir = api.path['slave_build']
-  dimensions = swarm_dimensions(builder_cfg)
+  dimensions = swarm_dimensions(builder_spec)
   isolate_blacklist = ['.git', 'out', '*.pyc']
   isolate_vars = {
     'BUILD': api.path['build'],
@@ -179,14 +186,14 @@ def checkout_steps(api):
   return got_revision
 
 
-def compile_steps_swarm(api, builder_cfg, got_revision, infrabots_dir,
+def compile_steps_swarm(api, builder_spec, got_revision, infrabots_dir,
                         extra_isolate_hashes):
   builder_name = derive_compile_bot_name(api.properties['buildername'],
-                                         builder_cfg)
-  compile_builder_cfg = builder_cfg
+                                         builder_spec)
+  compile_builder_spec = builder_spec
   if builder_name != api.properties['buildername']:
-    compile_builder_cfg = api.skia.get_builder_spec(
-        api.path['slave_build'].join('skia'), builder_name)['builder_cfg']
+    compile_builder_spec = api.skia.get_builder_spec(
+        api.path['slave_build'].join('skia'), builder_name)
   # Windows bots require a toolchain.
   extra_hashes = extra_isolate_hashes[:]
   if 'Win' in builder_name:
@@ -205,7 +212,7 @@ def compile_steps_swarm(api, builder_cfg, got_revision, infrabots_dir,
       api,
       'compile',
       builder_name,
-      compile_builder_cfg,
+      compile_builder_spec,
       got_revision,
       infrabots_dir,
       idempotent=True,
@@ -230,16 +237,16 @@ def get_timeouts(builder_cfg):
   return expiration, hard_timeout
 
 
-def perf_steps_trigger(api, builder_cfg, got_revision, infrabots_dir,
+def perf_steps_trigger(api, builder_spec, got_revision, infrabots_dir,
                        extra_hashes):
   """Trigger perf tests via Swarming."""
 
-  expiration, hard_timeout = get_timeouts(builder_cfg)
+  expiration, hard_timeout = get_timeouts(builder_spec['builder_cfg'])
   return trigger_task(
       api,
       'perf',
       api.properties['buildername'],
-      builder_cfg,
+      builder_spec,
       got_revision,
       infrabots_dir,
       extra_isolate_hashes=extra_hashes,
@@ -285,15 +292,15 @@ def perf_steps_collect(api, task, upload_perf_results, got_revision,
              infra_step=True)
 
 
-def test_steps_trigger(api, builder_cfg, got_revision, infrabots_dir,
+def test_steps_trigger(api, builder_spec, got_revision, infrabots_dir,
                        extra_hashes):
   """Trigger DM via Swarming."""
-  expiration, hard_timeout = get_timeouts(builder_cfg)
+  expiration, hard_timeout = get_timeouts(builder_spec['builder_cfg'])
   return trigger_task(
       api,
       'test',
       api.properties['buildername'],
-      builder_cfg,
+      builder_spec,
       got_revision,
       infrabots_dir,
       extra_isolate_hashes=extra_hashes,
@@ -344,7 +351,7 @@ def RunSteps(api):
 
   recipes_hash = isolate_recipes(api)
 
-  compile_hash = compile_steps_swarm(api, builder_cfg, got_revision,
+  compile_hash = compile_steps_swarm(api, builder_spec, got_revision,
                                      infrabots_dir, [recipes_hash])
 
   do_test_steps = builder_spec['do_test_steps']
@@ -365,10 +372,10 @@ def RunSteps(api):
   test_task = None
   perf_task = None
   if do_test_steps:
-    test_task = test_steps_trigger(api, builder_cfg, got_revision,
+    test_task = test_steps_trigger(api, builder_spec, got_revision,
                                    infrabots_dir, extra_hashes)
   if do_perf_steps:
-    perf_task = perf_steps_trigger(api, builder_cfg, got_revision,
+    perf_task = perf_steps_trigger(api, builder_spec, got_revision,
                                    infrabots_dir, extra_hashes)
   is_trybot = builder_cfg['is_trybot']
   if test_task:

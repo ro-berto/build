@@ -207,6 +207,9 @@ class SkiaApi(recipe_api.RecipeApi):
                              'BUILDTYPE': self.configuration})
     self.default_env.update(self.builder_spec['env'])
     self.build_targets = [str(t) for t in self.builder_spec['build_targets']]
+    if 'Android' in self.builder_name and self.running_in_swarming:
+      # TODO(borenet): Make the app build work on Swarming and remove this.
+      self.build_targets = ['dm', 'nanobench']
     self.do_test_steps = self.builder_spec['do_test_steps']
     self.do_perf_steps = self.builder_spec['do_perf_steps']
     self.is_trybot = self.builder_cfg['is_trybot']

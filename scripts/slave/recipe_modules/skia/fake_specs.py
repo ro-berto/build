@@ -154,6 +154,35 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
+  'Build-Ubuntu-GCC-Arm7-Release-Android': {
+    'build_targets': [
+      'most',
+    ],
+    'builder_cfg': {
+      'compiler': 'GCC',
+      'configuration': 'Release',
+      'extra_config': 'Android',
+      'is_trybot': False,
+      'os': 'Ubuntu',
+      'role': 'Build',
+      'target_arch': 'Arm7',
+    },
+    'configuration': 'Release',
+    'device_cfg': 'arm_v7_neon',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': False,
+    'do_test_steps': False,
+    'env': {
+      'GYP_DEFINES': 'skia_arch_type=arm skia_warnings_as_errors=1',
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': False,
+  },
   'Build-Ubuntu-GCC-x86_64-Debug-Swarming': {
     'build_targets': [
       'most',
@@ -637,6 +666,39 @@ FAKE_SPECS = {
       '--dummy-flags',
     ],
     'product.board': 'grouper',
+    'upload_dm_results': True,
+    'upload_perf_results': False,
+  },
+  'Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming': {
+    'build_targets': [
+      'dm',
+    ],
+    'builder_cfg': {
+      'arch': 'Arm7',
+      'compiler': 'GCC',
+      'configuration': 'Release',
+      'cpu_or_gpu': 'GPU',
+      'cpu_or_gpu_value': 'Tegra3',
+      'extra_config': 'Swarming',
+      'is_trybot': False,
+      'model': 'Nexus7v2',
+      'os': 'Android',
+      'role': 'Test',
+    },
+    'configuration': 'Release',
+    'device_cfg': 'arm_v7_neon',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': False,
+    'do_test_steps': True,
+    'env': {
+      'GYP_DEFINES': 'skia_arch_type=arm skia_warnings_as_errors=0',
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'product.board': 'flo',
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
