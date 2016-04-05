@@ -52,8 +52,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "ANDROID_HOME": "/b/android-sdk-linux",
+      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -71,8 +71,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "ANDROID_HOME": "/b/android-sdk-linux",
+      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -84,7 +84,7 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "/b/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",
@@ -104,7 +104,7 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "/b/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "root"
@@ -142,8 +142,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "ANDROID_HOME": "/b/android-sdk-linux",
+      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -161,8 +161,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "ANDROID_HOME": "/b/android-sdk-linux",
+      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -181,8 +181,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "ANDROID_HOME": "/b/android-sdk-linux",
+      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -194,7 +194,7 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "/b/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",
@@ -212,7 +212,7 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "/b/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",
@@ -240,8 +240,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "ANDROID_HOME": "/b/android-sdk-linux",
+      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -264,7 +264,7 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "/b/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",
@@ -295,7 +295,7 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "/b/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",
@@ -315,7 +315,7 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "/b/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",
@@ -335,7 +335,7 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "/b/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",
@@ -362,7 +362,7 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "/b/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",
@@ -424,8 +424,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "ANDROID_HOME": "/b/android-sdk-linux",
+      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -469,8 +469,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "ANDROID_HOME": "/b/android-sdk-linux",
+      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -482,7 +482,7 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "/b/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "shell",
@@ -501,7 +501,7 @@
   },
   {
     "cmd": [
-      "/home/chrome-bot/android-sdk-linux/platform-tools/adb",
+      "/b/android-sdk-linux/platform-tools/adb",
       "-s",
       "015d210a13480604",
       "reboot"
@@ -539,8 +539,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "ANDROID_HOME": "/b/android-sdk-linux",
+      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",
@@ -558,8 +558,8 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "ANDROID_HOME": "/b/android-sdk-linux",
+      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_dump_stats=1 skia_warnings_as_errors=0",

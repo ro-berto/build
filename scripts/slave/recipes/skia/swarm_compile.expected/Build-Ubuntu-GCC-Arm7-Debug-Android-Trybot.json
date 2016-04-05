@@ -85,8 +85,8 @@
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
-      "ANDROID_HOME": "/home/chrome-bot/android-sdk-linux",
-      "ANDROID_SDK_ROOT": "/home/chrome-bot/android-sdk-linux",
+      "ANDROID_HOME": "/b/android-sdk-linux",
+      "ANDROID_SDK_ROOT": "/b/android-sdk-linux",
       "BUILDTYPE": "Debug",
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "skia_arch_type=arm skia_warnings_as_errors=1",

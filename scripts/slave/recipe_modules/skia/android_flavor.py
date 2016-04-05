@@ -71,6 +71,8 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     self.android_bin = self._skia_api.m.path['slave_build'].join(
         'skia', 'platform_tools', 'android', 'bin')
     self._android_sdk_root = slave_info.android_sdk_root
+    if self._skia_api.running_in_swarming:
+      self._android_sdk_root = android_devices.SWARMING_SDK_ROOT
     self._adb = _ADBWrapper(
         self._skia_api.m.adb,
         self._skia_api.m.path.join(self._android_sdk_root,
