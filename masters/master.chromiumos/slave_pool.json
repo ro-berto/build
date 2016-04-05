@@ -20,7 +20,7 @@
         "build112-m2"
       ], 
       "daisy-full": [
-        "build91-m2"
+        "build326-m2"
       ], 
       "daisy-incremental": [
         "build87-m2"
@@ -57,7 +57,6 @@
     "build327-m2", 
     "build93-m2", 
     "cros199-c2", 
-    "build326-m2", 
     "build94-m2"
   ]
 }
