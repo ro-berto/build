@@ -271,6 +271,7 @@ ENABLED_MASTERS = [
     'client.v8',
     'client.v8.branches',
     'client.v8.fyi',
+    'client.v8.ports',
     'client.webrtc',
     'client.webrtc.fyi',
     'tryserver.blink',
@@ -318,6 +319,7 @@ DISABLED_SLAVES.update(internal_data.get('DISABLED_SLAVES', {}))
 GIT_MASTERS = [
     'client.v8',
     'client.v8.branches',
+    'client.v8.ports',
     'tryserver.v8',
 ]
 GIT_MASTERS += internal_data.get('GIT_MASTERS', [])

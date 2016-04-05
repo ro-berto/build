@@ -6,4 +6,17 @@ from master.v8.v8_notifier import V8Notifier
 
 
 def Update(config, active_master, c):
-  c['status'].extend([])
+  c['status'].extend([
+    V8Notifier(
+        config,
+        active_master,
+        categories_steps={
+          'x87': ['runhooks', 'compile', 'Check'],
+        },
+        extraRecipients=[
+          'weiliang.lin@intel.com',
+          'chunyang.dai@intel.com',
+          'zhengxing.li@intel.com',
+        ],
+    ),
+  ])

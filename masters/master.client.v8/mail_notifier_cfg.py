@@ -61,7 +61,6 @@ exclusions = {
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
                    'gclient_revert']
 
-x87_categories_steps = {'x87': ['runhooks', 'compile', 'Unittests', 'Check']}
 vtunejit_categories_steps = {'vtunejit': ['runhooks', 'compile']}
 mem_sheriff_categories_steps = {'mem_sheriff': v8_steps}
 predictable_categories_steps = {'predictable': v8_steps}
@@ -80,20 +79,6 @@ def Update(config, active_master, c):
       exclusions=exclusions,
       relayhost=config.Master.smtp,
       sendToInterestedUsers=True,
-      status_header='buildbot failure in %(project)s on %(builder)s, %(steps)s',
-      lookup=master_utils.FilterDomain(),
-      forgiving_steps=forgiving_steps))
-  c['status'].append(V8Notifier(
-      fromaddr=active_master.from_address,
-      categories_steps=x87_categories_steps,
-      exclusions={},
-      relayhost=config.Master.smtp,
-      sendToInterestedUsers=False,
-      extraRecipients=[
-        'weiliang.lin@intel.com',
-        'chunyang.dai@intel.com',
-        'zhengxing.li@intel.com',
-      ],
       status_header='buildbot failure in %(project)s on %(builder)s, %(steps)s',
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps))
