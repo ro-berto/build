@@ -5,6 +5,7 @@
 """Functions specific to handle goma related info.
 """
 
+import base64
 import datetime
 import getpass
 import glob
@@ -322,13 +323,18 @@ def SendGomaTsMon(json_file, exit_status):
     if not run_cmd:
       print 'Unknown os.name: %s' % os.name
       return
+
+    counter_json = json.dumps(counter)
+    # base64 encode on windows because it doesn't like json on the command-line.
+    if os.name == 'nt':
+      counter_json = base64.b64encode(counter_json)
     cmd = [sys.executable,
            run_cmd,
            'infra.tools.send_ts_mon_values', '--verbose',
            '--ts-mon-target-type', 'task',
            '--ts-mon-task-service-name', 'goma-client',
            '--ts-mon-task-job-name', 'default',
-           '--counter', json.dumps(counter)]
+           '--counter', counter_json]
     cmd_filter = chromium_utils.FilterCapture()
     retcode = chromium_utils.RunCommand(
       cmd, filter_obj=cmd_filter,
