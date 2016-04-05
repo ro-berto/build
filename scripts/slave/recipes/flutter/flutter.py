@@ -75,44 +75,16 @@ def MakeTempDir(api):
 
 
 def GenerateDocs(api, pub_cache):
-  activate_cmd = ['pub', 'global', 'activate', 'dartdoc', '0.9.1']
+  activate_cmd = ['pub', 'global', 'activate', 'dartdoc', '0.9.3+1']
   api.step('pub global activate dartdoc', activate_cmd)
-  dartdoc = pub_cache.join('bin', 'dartdoc')
 
   checkout = api.path['checkout']
-  flutter_styles = checkout.join('packages', 'flutter', 'doc', 'styles.html')
-  analytics = checkout.join('doc', '_analytics.html')
-  header_contents = '\n'.join([
-    api.file.read('Read styles.html', flutter_styles, test_data='styles'),
-    api.file.read('Read _analytics.html', analytics, test_data='analytics'),
-  ])
+  api.step('dartdoc packages', ['dart', 'dev/dartdoc.dart'], cwd=checkout)
 
-  with MakeTempDir(api) as temp_dir:
-    header = temp_dir.join('_header.html')
-    api.file.write('Write _header.html', header, header_contents)
-
-    # NOTE: If you add to this list, be sure to edit doc/index.html
-    DOCUMENTED_PACKAGES = [
-      'packages/flutter',
-      'packages/playfair',
-      'packages/cassowary',
-      'packages/flutter_test',
-      'packages/flutter_sprites',
-    ]
-    for package in DOCUMENTED_PACKAGES:
-        package_path = checkout.join(package)
-        package_name = api.path.basename(package)
-        api.step('dartdoc %s' % package_name, [dartdoc, '--header', header],
-            cwd=package_path)
-        api_path = package_path.join('doc', 'api')
-        remote_path = 'gs://docs.flutter.io/%s' % package_name
-        # Use rsync instead of copy to delete any obsolete docs.
-        api.gsutil(['-m', 'rsync', '-d', '-r', api_path, remote_path],
-            name='rsync %s/doc/api' % package_name)
-
-    index_path = checkout.join('doc', 'index.html')
-    api.gsutil.upload(index_path, 'docs.flutter.io', 'index.html',
-        name='upload doc/index.html')
+  docs_path = checkout.join('dev', 'docs', 'doc', 'api')
+  remote_path = 'gs://docs.flutter.io/'
+  api.gsutil(['-m', 'rsync', '-d', '-r', docs_path, remote_path],
+      name='rsync %s' % docs_path)
 
 
 def BuildExamples(api, git_hash):

@@ -315,7 +315,7 @@
       "global",
       "activate",
       "dartdoc",
-      "0.9.1"
+      "0.9.3+1"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -327,65 +327,16 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/flutter/packages/flutter/doc/styles.html",
-      "/path/to/tmp/"
+      "dart",
+      "dev/dartdoc.dart"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[SLAVE_BUILD]/flutter",
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "Read styles.html"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/flutter/doc/_analytics.html",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "Read _analytics.html"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "styles\nanalytics",
-      "[TMP_BASE]/tmp_tmp_1/_header.html"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "Write _header.html"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/.pub-cache/bin/dartdoc",
-      "--header",
-      "[TMP_BASE]/tmp_tmp_1/_header.html"
-    ],
-    "cwd": "[SLAVE_BUILD]/flutter/packages/flutter",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "dartdoc flutter"
+    "name": "dartdoc packages"
   },
   {
     "cmd": [
@@ -399,8 +350,8 @@
       "rsync",
       "-d",
       "-r",
-      "[SLAVE_BUILD]/flutter/packages/flutter/doc/api",
-      "gs://docs.flutter.io/flutter"
+      "[SLAVE_BUILD]/flutter/dev/docs/doc/api",
+      "gs://docs.flutter.io/"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -408,203 +359,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "gsutil rsync flutter/doc/api"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/.pub-cache/bin/dartdoc",
-      "--header",
-      "[TMP_BASE]/tmp_tmp_1/_header.html"
-    ],
-    "cwd": "[SLAVE_BUILD]/flutter/packages/playfair",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "dartdoc playfair"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "-m",
-      "rsync",
-      "-d",
-      "-r",
-      "[SLAVE_BUILD]/flutter/packages/playfair/doc/api",
-      "gs://docs.flutter.io/playfair"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "gsutil rsync playfair/doc/api"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/.pub-cache/bin/dartdoc",
-      "--header",
-      "[TMP_BASE]/tmp_tmp_1/_header.html"
-    ],
-    "cwd": "[SLAVE_BUILD]/flutter/packages/cassowary",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "dartdoc cassowary"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "-m",
-      "rsync",
-      "-d",
-      "-r",
-      "[SLAVE_BUILD]/flutter/packages/cassowary/doc/api",
-      "gs://docs.flutter.io/cassowary"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "gsutil rsync cassowary/doc/api"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/.pub-cache/bin/dartdoc",
-      "--header",
-      "[TMP_BASE]/tmp_tmp_1/_header.html"
-    ],
-    "cwd": "[SLAVE_BUILD]/flutter/packages/flutter_test",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "dartdoc flutter_test"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "-m",
-      "rsync",
-      "-d",
-      "-r",
-      "[SLAVE_BUILD]/flutter/packages/flutter_test/doc/api",
-      "gs://docs.flutter.io/flutter_test"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "gsutil rsync flutter_test/doc/api"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/.pub-cache/bin/dartdoc",
-      "--header",
-      "[TMP_BASE]/tmp_tmp_1/_header.html"
-    ],
-    "cwd": "[SLAVE_BUILD]/flutter/packages/flutter_sprites",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "dartdoc flutter_sprites"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "-m",
-      "rsync",
-      "-d",
-      "-r",
-      "[SLAVE_BUILD]/flutter/packages/flutter_sprites/doc/api",
-      "gs://docs.flutter.io/flutter_sprites"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "gsutil rsync flutter_sprites/doc/api"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "[DEPOT_TOOLS]/gsutil.py",
-      "----",
-      "cp",
-      "[SLAVE_BUILD]/flutter/doc/index.html",
-      "gs://docs.flutter.io/index.html"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "gsutil upload doc/index.html",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/docs.flutter.io/index.html@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[TMP_BASE]/tmp_tmp_1"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
-      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
-      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
-    },
-    "name": "rmtree temp dir",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "gsutil rsync [SLAVE_BUILD]/flutter/dev/docs/doc/api"
   },
   {
     "name": "$result",
