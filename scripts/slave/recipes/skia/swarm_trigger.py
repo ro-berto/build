@@ -29,11 +29,13 @@ TEST_BUILDERS = {
       'Build-Mac-Clang-x86_64-Release-Swarming',
       'Build-Ubuntu-GCC-x86_64-Debug-Swarming',
       'Build-Ubuntu-GCC-x86_64-Release-Swarming-Trybot',
+      'Build-Ubuntu-GCC-x86_64-Release-SwarmingValgrind',
       'Build-Win8-MSVC-x86_64-Release-Swarming',
       'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release-Swarming',
       'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot',
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming',
       'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming',
+      'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-SwarmingValgrind',
     ],
   },
 }
@@ -76,7 +78,12 @@ def swarm_dimensions(builder_cfg):
       # TODO(borenet): Add appropriate CPU dimension(s).
       #dimensions['cpu'] = builder_cfg['cpu_or_gpu_value']
     else:  # pragma: no cover
-      dimensions['gpu'] = builder_cfg['cpu_or_gpu_value']
+      # TODO: Create a dictionary of GPU name to device id when we have more
+      #       GPUs listed here.
+      if builder_cfg['cpu_or_gpu_value'] == 'GTX550Ti':
+        dimensions['gpu'] = '10de:1244'
+      else:
+        dimensions['gpu'] = builder_cfg['cpu_or_gpu_value']
   else:
     dimensions['gpu'] = 'none'
   return dimensions
@@ -102,7 +109,7 @@ def isolate_recipes(api):
 
 def trigger_task(api, task_name, builder, builder_cfg, got_revision,
                  infrabots_dir, idempotent=False, store_output=True,
-                 extra_isolate_hashes=None):
+                 extra_isolate_hashes=None, expiration=None, hard_timeout=None):
   """Trigger the given bot to run as a Swarming task."""
   # TODO(borenet): We're using Swarming directly to run the recipe through
   # recipes.py. Once it's possible to track the state of a Buildbucket build,
@@ -147,7 +154,9 @@ def trigger_task(api, task_name, builder, builder_cfg, got_revision,
       extra_isolate_hashes=extra_isolate_hashes,
       idempotent=idempotent,
       store_output=store_output,
-      extra_args=extra_args)
+      extra_args=extra_args,
+      expiration=expiration,
+      hard_timeout=hard_timeout)
 
 
 def checkout_steps(api):
@@ -207,9 +216,25 @@ def compile_steps_swarm(api, builder_cfg, got_revision, infrabots_dir,
   return api.skia_swarming.collect_swarming_task_isolate_hash(task)
 
 
+def get_timeouts(builder_cfg):
+  """Some builders require longer than the default timeouts.
+
+  Returns tuple of (expiration, hard_timeout). If those values are None then
+  default timeouts should be used.
+  """
+  expiration = None
+  hard_timeout = None
+  if 'Valgrind' in builder_cfg.get('extra_config', ''):
+    expiration = 24*60*60
+    hard_timeout = 7*60*60
+  return expiration, hard_timeout
+
+
 def perf_steps_trigger(api, builder_cfg, got_revision, infrabots_dir,
                        extra_hashes):
   """Trigger perf tests via Swarming."""
+
+  expiration, hard_timeout = get_timeouts(builder_cfg)
   return trigger_task(
       api,
       'perf',
@@ -217,7 +242,9 @@ def perf_steps_trigger(api, builder_cfg, got_revision, infrabots_dir,
       builder_cfg,
       got_revision,
       infrabots_dir,
-      extra_isolate_hashes=extra_hashes)
+      extra_isolate_hashes=extra_hashes,
+      expiration=expiration,
+      hard_timeout=hard_timeout)
 
 
 def perf_steps_collect(api, task, upload_perf_results, got_revision,
@@ -261,6 +288,7 @@ def perf_steps_collect(api, task, upload_perf_results, got_revision,
 def test_steps_trigger(api, builder_cfg, got_revision, infrabots_dir,
                        extra_hashes):
   """Trigger DM via Swarming."""
+  expiration, hard_timeout = get_timeouts(builder_cfg)
   return trigger_task(
       api,
       'test',
@@ -268,7 +296,9 @@ def test_steps_trigger(api, builder_cfg, got_revision, infrabots_dir,
       builder_cfg,
       got_revision,
       infrabots_dir,
-      extra_isolate_hashes=extra_hashes)
+      extra_isolate_hashes=extra_hashes,
+      expiration=expiration,
+      hard_timeout=hard_timeout)
 
 
 def test_steps_collect(api, task, upload_dm_results, got_revision, is_trybot):
@@ -375,7 +405,8 @@ def test_for_bot(api, builder, mastername, slavename, testname=None):
     test += api.step_data(
         'upload new .isolated file for test_skia',
         stdout=api.raw_io.output('def456 XYZ.isolated'))
-  if ('Test' in builder and 'Debug' in builder) or 'Perf' in builder:
+  if ('Test' in builder and 'Debug' in builder) or 'Perf' in builder or (
+      'SwarmingValgrind' in builder and 'Test' in builder):
     test += api.step_data(
         'upload new .isolated file for perf_skia',
         stdout=api.raw_io.output('def456 XYZ.isolated'))

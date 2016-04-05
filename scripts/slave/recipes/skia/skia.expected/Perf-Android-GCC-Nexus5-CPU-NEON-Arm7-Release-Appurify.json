@@ -125,6 +125,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"nanobench_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"product.board\": \"hammerhead\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"upload_dm_results\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"upload_perf_results\": true@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",

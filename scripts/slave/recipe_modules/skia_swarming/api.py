@@ -7,6 +7,10 @@ from recipe_engine import recipe_api
 import shlex
 
 
+DEFAULT_TASK_EXPIRATION = 4*60*60
+DEFAULT_TASK_TIMEOUT = 60*60
+
+
 class SkiaSwarmingApi(recipe_api.RecipeApi):
   """Provides steps to run Skia tasks on swarming bots."""
 
@@ -52,11 +56,11 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
                          source=luci_go_dir,
                          dest=dest)
 
-  def isolate_and_trigger_task(self, isolate_path, isolate_base_dir, task_name,
-                               isolate_vars, swarm_dimensions,
-                               isolate_blacklist=None,
-                               extra_isolate_hashes=None, idempotent=False,
-                               store_output=True, extra_args=None):
+  def isolate_and_trigger_task(
+      self, isolate_path, isolate_base_dir, task_name, isolate_vars,
+      swarm_dimensions, isolate_blacklist=None, extra_isolate_hashes=None,
+      idempotent=False, store_output=True, extra_args=None, expiration=None,
+      hard_timeout=None):
     """Isolate inputs and trigger the task to run."""
     isolated_hash = self.isolate_task(isolate_path, isolate_base_dir, task_name,
                                       isolate_vars, blacklist=isolate_blacklist,
@@ -65,7 +69,9 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
                                         swarm_dimensions,
                                         idempotent=idempotent,
                                         store_output=store_output,
-                                        extra_args=extra_args)
+                                        extra_args=extra_args,
+                                        expiration=expiration,
+                                        hard_timeout=hard_timeout)
     assert len(tasks) == 1
     return tasks[0]
 
@@ -165,15 +171,23 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
                       stdout=self.m.raw_io.output())
     return shlex.split(r.stdout)[0]
 
-  def trigger_swarming_tasks(self, swarm_hashes, dimensions, idempotent=False,
-                             store_output=True, extra_args=None):
+  def trigger_swarming_tasks(
+      self, swarm_hashes, dimensions, idempotent=False, store_output=True,
+      extra_args=None, expiration=None, hard_timeout=None):
     """Triggers swarming tasks using swarm hashes.
 
     Args:
       swarm_hashes: list of str. List of swarm hashes from the isolate server.
       dimensions: dict of str to str. The dimensions to run the task on.
                   Eg: {'os': 'Ubuntu', 'gpu': '10de', 'pool': 'Skia'}
-      idempotent: whether or not to de-duplicate tasks.
+      idempotent: bool. Whether or not to de-duplicate tasks.
+      store_output: bool. Whether task output should be stored.
+      extra_args: list of str. Extra arguments to pass to the task.
+      expiration: int. Task will expire if not picked up within this time.
+                  DEFAULT_TASK_EXPIRATION is used if this argument is None.
+      hard_timeout: int. Task will timeout if not completed within this time.
+                    DEFAULT_TASK_TIMEOUT is used if this argument is None.
+
     Returns:
       List of swarming.SwarmingTask instances.
     """
@@ -187,7 +201,10 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
       swarming_task.dimensions = dimensions
       swarming_task.idempotent = idempotent
       swarming_task.priority = 90
-      swarming_task.expiration = 4*60*60
+      swarming_task.expiration = (
+          expiration if expiration else DEFAULT_TASK_EXPIRATION)
+      swarming_task.hard_timeout = (
+          hard_timeout if hard_timeout else DEFAULT_TASK_TIMEOUT)
       if extra_args:
         swarming_task.extra_args = extra_args
       swarming_tasks.append(swarming_task)
