@@ -791,7 +791,7 @@ def update_scripts():
     rv, _ = _run_command(gclient_cmd, cwd=env.Build)
     if rv != 0:
       s.step_text('gclient sync failed!')
-      s.step_warnings()
+      s.step_exception()
     elif output_json:
       try:
         with open(output_json, 'r') as f:
@@ -810,7 +810,7 @@ def update_scripts():
                                json.dumps(build_checkout['revision']))
       except Exception as e:
         s.step_text('Unable to process gclient JSON %s' % repr(e))
-        s.step_warnings()
+        s.step_exception()
       finally:
         try:
           os.remove(output_json)
@@ -818,7 +818,7 @@ def update_scripts():
           LOGGER.warning("LEAKED: %s", output_json, exc_info=True)
     else:
       s.step_text('Unable to get SCM data')
-      s.step_warnings()
+      s.step_exception()
 
     os.environ['RUN_SLAVE_UPDATED_SCRIPTS'] = '1'
 
