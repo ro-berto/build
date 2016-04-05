@@ -351,7 +351,7 @@
       "-d",
       "-r",
       "[SLAVE_BUILD]/flutter/dev/docs/doc/api",
-      "gs://docs.flutter.io/"
+      "gs://docs.flutter.io/flutter"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {

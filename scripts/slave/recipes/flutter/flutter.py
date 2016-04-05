@@ -82,7 +82,7 @@ def GenerateDocs(api, pub_cache):
   api.step('dartdoc packages', ['dart', 'dev/dartdoc.dart'], cwd=checkout)
 
   docs_path = checkout.join('dev', 'docs', 'doc', 'api')
-  remote_path = 'gs://docs.flutter.io/'
+  remote_path = 'gs://docs.flutter.io/flutter'
   api.gsutil(['-m', 'rsync', '-d', '-r', docs_path, remote_path],
       name='rsync %s' % docs_path)
 
