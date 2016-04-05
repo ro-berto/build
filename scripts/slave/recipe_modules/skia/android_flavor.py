@@ -18,10 +18,10 @@ class _ADBWrapper(object):
   out on our bots. This wrapper ensures that we set a custom ADB path before
   attempting to use the module.
   """
-  def __init__(self, adb_api, path_to_adb, serial, android_flavor):
+  def __init__(self, adb_api, path_to_adb, serial_args, android_flavor):
     self._adb = adb_api
     self._adb.set_adb_path(path_to_adb)
-    self._serial = serial
+    self._serial_args = serial_args
     self._wait_count = 0
     self._android_flavor = android_flavor
 
@@ -29,9 +29,8 @@ class _ADBWrapper(object):
     """Run 'adb wait-for-device'."""
     self._wait_count += 1
     cmd = [
-        self._android_flavor.android_bin.join('adb_wait_for_device'),
-        '-s', self._serial,
-    ]
+        self._android_flavor.android_bin.join('adb_wait_for_device')
+    ] + self._serial_args
     self._android_flavor._skia_api.run(
         self._android_flavor._skia_api.m.step,
         name='wait for device (%d)' % self._wait_count,
@@ -41,8 +40,7 @@ class _ADBWrapper(object):
 
     cmd = [
         self._android_flavor.android_bin.join('adb_wait_for_charge'),
-        '-s', self._serial,
-    ]
+    ] + self._serial_args
     self._android_flavor._skia_api.run(
         self._android_flavor._skia_api.m.step,
         name='wait for charge (%d)' % self._wait_count,
@@ -67,17 +65,20 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     slave_info = android_devices.SLAVE_INFO.get(
         self._skia_api.slave_name,
         android_devices.SLAVE_INFO['default'])
-    self.serial = slave_info.serial
     self.android_bin = self._skia_api.m.path['slave_build'].join(
         'skia', 'platform_tools', 'android', 'bin')
     self._android_sdk_root = slave_info.android_sdk_root
+    self.serial = slave_info.serial
+    self.serial_args = ['-s', slave_info.serial]
     if self._skia_api.running_in_swarming:
       self._android_sdk_root = android_devices.SWARMING_SDK_ROOT
+      self.serial = None
+      self.serial_args = []
     self._adb = _ADBWrapper(
         self._skia_api.m.adb,
         self._skia_api.m.path.join(self._android_sdk_root,
                                    'platform-tools', 'adb'),
-        self.serial,
+        self.serial_args,
         self)
     self._has_root = slave_info.has_root
     self._default_env = {'ANDROID_SDK_ROOT': self._android_sdk_root,
@@ -86,12 +87,13 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
 
   def step(self, name, cmd, env=None, **kwargs):
     self._adb.maybe_wait_for_device()
-    args = [self.android_bin.join('android_run_skia'),
-            '--verbose',
-            '--logcat',
-            '-d', self.device,
-            '-s', self.serial,
-            '-t', self._skia_api.configuration,
+    args = [
+        self.android_bin.join('android_run_skia'),
+        '--verbose',
+        '--logcat',
+        '-d', self.device,
+    ] + self.serial_args + [
+        '-t', self._skia_api.configuration,
     ]
     env = dict(env or {})
     env.update(self._default_env)
@@ -150,8 +152,11 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     self._skia_api.run(
         self._skia_api.m.step,
         name='push %s' % self._skia_api.m.path.basename(host_dir),
-        cmd=[self.android_bin.join('adb_push_if_needed'), '--verbose',
-             '-s', self.serial, host_dir, device_dir],
+        cmd=[
+            self.android_bin.join('adb_push_if_needed'), '--verbose',
+        ] + self.serial_args + [
+            host_dir, device_dir,
+        ],
         env=self._default_env,
         infra_step=True)
 
@@ -160,8 +165,11 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     self._skia_api.run(
         self._skia_api.m.step,
         name='pull %s' % self._skia_api.m.path.basename(device_dir),
-        cmd=[self.android_bin.join('adb_pull_if_needed'), '--verbose',
-             '-s', self.serial, device_dir, host_dir],
+        cmd=[
+            self.android_bin.join('adb_pull_if_needed'), '--verbose',
+        ] + self.serial_args + [
+            device_dir, host_dir,
+        ],
         env=self._default_env,
         infra_step=True)
 
@@ -195,8 +203,10 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     # TODO(borenet): Set CPU scaling mode to 'performance'.
     self._skia_api.run(self._skia_api.m.step,
                        name='kill skia',
-                       cmd=[self.android_bin.join('android_kill_skia'),
-                            '--verbose', '-s', self.serial],
+                       cmd=[
+                           self.android_bin.join('android_kill_skia'),
+                           '--verbose',
+                       ] + self.serial_args,
                        env=self._default_env,
                        infra_step=True)
     if self._has_root:

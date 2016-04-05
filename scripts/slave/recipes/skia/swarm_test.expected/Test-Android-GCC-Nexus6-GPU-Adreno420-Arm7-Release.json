@@ -46,9 +46,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device",
-      "-s",
-      "noserial"
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -65,9 +63,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge",
-      "-s",
-      "noserial"
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -85,8 +81,6 @@
   {
     "cmd": [
       "/b/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "noserial",
       "shell",
       "echo",
       "$EXTERNAL_STORAGE"
@@ -105,9 +99,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_kill_skia",
-      "--verbose",
-      "-s",
-      "noserial"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -125,8 +117,6 @@
   {
     "cmd": [
       "/b/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "noserial",
       "shell",
       "dumpsys",
       "batteryproperties"
@@ -145,8 +135,6 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_push_if_needed",
       "--verbose",
-      "-s",
-      "noserial",
       "[SLAVE_BUILD]/skia/resources",
       "/storage/emulated/legacy/skiabot/skia_resources"
     ],
@@ -177,8 +165,6 @@
   {
     "cmd": [
       "/b/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "noserial",
       "shell",
       "cat",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/SKP_VERSION"
@@ -208,8 +194,6 @@
   {
     "cmd": [
       "/b/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "noserial",
       "shell",
       "cat",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
@@ -274,8 +258,6 @@
   {
     "cmd": [
       "/b/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "noserial",
       "shell",
       "rm",
       "-r",
@@ -294,8 +276,6 @@
   {
     "cmd": [
       "/b/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "noserial",
       "shell",
       "if",
       "[",
@@ -321,8 +301,6 @@
   {
     "cmd": [
       "/b/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "noserial",
       "shell",
       "mkdir",
       "-p",
@@ -414,8 +392,6 @@
   {
     "cmd": [
       "/b/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "noserial",
       "push",
       "[SLAVE_BUILD]/tmp/uninteresting_hashes.txt",
       "/storage/emulated/legacy/skiabot/skia_tmp_dir/uninteresting_hashes.txt"
@@ -437,8 +413,6 @@
       "--logcat",
       "-d",
       "arm_v7_neon",
-      "-s",
-      "noserial",
       "-t",
       "Release",
       "dm",
@@ -498,8 +472,6 @@
     "cmd": [
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_pull_if_needed",
       "--verbose",
-      "-s",
-      "noserial",
       "/storage/emulated/legacy/skiabot/skia_dm",
       "[SWARM_OUT_DIR]/dm"
     ],
@@ -519,8 +491,6 @@
   {
     "cmd": [
       "/b/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "noserial",
       "shell",
       "dumpsys",
       "batteryproperties"
@@ -538,8 +508,6 @@
   {
     "cmd": [
       "/b/android-sdk-linux/platform-tools/adb",
-      "-s",
-      "noserial",
       "reboot"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -569,9 +537,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device",
-      "-s",
-      "noserial"
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_device"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -588,9 +554,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge",
-      "-s",
-      "noserial"
+      "[SLAVE_BUILD]/skia/platform_tools/android/bin/adb_wait_for_charge"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
