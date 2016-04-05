@@ -18,6 +18,7 @@ DEPS = [
 TEST_BUILDERS = {
   'client.skia.compile': {
     'skiabot-linux-compile-000': [
+      'Build-Mac-Clang-Arm7-Release-iOS',
       'Build-Ubuntu-GCC-Arm7-Debug-Android-Trybot',
       'Build-Ubuntu-GCC-Arm7-Release-Android',
     ],

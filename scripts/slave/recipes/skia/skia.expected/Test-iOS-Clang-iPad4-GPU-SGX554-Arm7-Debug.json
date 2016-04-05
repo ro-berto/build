@@ -112,6 +112,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"role\": \"Test\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"device_cfg\": \"iPad4,1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"dm_flags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"--dummy-flags\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",

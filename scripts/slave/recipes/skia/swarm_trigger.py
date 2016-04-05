@@ -33,6 +33,7 @@ TEST_BUILDERS = {
       'Build-Win8-MSVC-x86_64-Release-Swarming',
       'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot',
       'Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming',
+      'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Release-Swarming',
       'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release-Swarming',
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming',
       'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming',
@@ -79,6 +80,11 @@ def swarm_dimensions(builder_spec):
     if 'Android' in builder_cfg['os']:
       # For Android, the device type is a better dimension than CPU or GPU.
       dimensions['product.board'] = builder_spec['product.board']
+    elif 'iOS' in builder_cfg['os']:
+      # For iOS, the device type is a better dimension than CPU or GPU.
+      dimensions['device'] = builder_spec['device_cfg']
+      # TODO(borenet): Replace this hack with something better.
+      dimensions['os'] = 'iOS-9.2'
     elif builder_cfg['cpu_or_gpu'] == 'CPU':
       dimensions['gpu'] = 'none'
       # TODO(borenet): Add appropriate CPU dimension(s).
