@@ -1522,49 +1522,8 @@ def _MainAndroid(options, args, extra_env):
   if options.run_python_script:
     return _MainLinux(options, args, extra_env)
 
-  if len(args) < 1:
-    raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
-
-  if _ListLogProcessors(options.annotate):
-    return 0
-  log_processor_class = _SelectLogProcessor(options, False)
-  log_processor = _CreateLogProcessor(log_processor_class, options, None)
-
-  if options.generate_json_file:
-    if os.path.exists(options.test_output_xml):
-      # remove the old XML output file.
-      os.remove(options.test_output_xml)
-
-  # Assume it's a gtest apk, so use the android harness.
-  test_suite = args[0]
-  run_test_target_option = '--release'
-  if options.target == 'Debug':
-    run_test_target_option = '--debug'
-  command = ['src/build/android/test_runner.py', 'gtest',
-             run_test_target_option, '-s', test_suite]
-
-  if options.flakiness_dashboard_server:
-    command += ['--flakiness-dashboard-server=%s' %
-        options.flakiness_dashboard_server]
-
-  result = _RunGTestCommand(
-      options, command, extra_env, log_processor=log_processor)
-
-  if options.generate_json_file:
-    if not _GenerateJSONForTestResults(options, log_processor):
-      return 1
-
-  if options.annotate:
-    annotation_utils.annotate(
-        options.test_type, result, log_processor,
-        perf_dashboard_id=options.perf_dashboard_id)
-
-  if options.results_url:
-    if not _SendResultsToDashboard(
-        log_processor, _ResultsDashboardDict(options)):
-      return 1
-
-  return result
+  raise Exception('runtest.py without --run-python-script not supported for '
+                  'Android')
 
 
 def _UpdateRunBenchmarkArgs(args, options):
