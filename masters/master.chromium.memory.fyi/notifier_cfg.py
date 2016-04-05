@@ -124,7 +124,6 @@ def Update(config, active_master, c):
           active_master.tree_closing_notification_recipients +
           # Also send e-mails to the Dr.Memory team.
           ['bruening+drmfailure@google.com',
-           'rnk+drmfailure@google.com',
            'zhaoqin+drmfailure@google.com',
           ]),
       lookup=master_utils.FilterDomain(),
