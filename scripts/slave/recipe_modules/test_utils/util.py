@@ -113,7 +113,7 @@ class GTestResults(object):
         # martiniss: this will go away once aggregate steps lands (I think)
         if last_result['status'] == 'SUCCESS':
           self.passes.add(test_fullname)
-        else:
+        elif last_result['status'] != 'SKIPPED':
           self.failures.add(test_fullname)
 
     # With multiple iterations a test could have passed in one but failed
