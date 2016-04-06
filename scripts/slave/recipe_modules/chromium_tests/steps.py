@@ -1590,7 +1590,7 @@ class AndroidInstrumentationTest(AndroidTest):
       ],
       # TODO(jbudorick): Remove this once it's handled by the generated script.
       'additional_apks': [
-        'apks/SystemWebView.apk',
+        'SystemWebView.apk',
       ],
     },
     'MojoTest': {

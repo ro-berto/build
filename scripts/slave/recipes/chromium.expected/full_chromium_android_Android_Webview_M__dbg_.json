@@ -459,7 +459,7 @@
       "--json-results-file",
       "/path/to/tmp/json",
       "--additional-apk",
-      "[SLAVE_BUILD]/src/out/Debug/apks/apks/SystemWebView.apk"
+      "[SLAVE_BUILD]/src/out/Debug/apks/SystemWebView.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test SystemWebViewShellLayoutTest",
