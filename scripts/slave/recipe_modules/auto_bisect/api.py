@@ -118,16 +118,8 @@ class AutoBisectApi(recipe_api.RecipeApi):
         stdout=self.m.json.output())
     return result.stdout
 
-  def run_bisect_script(self, extra_src='', path_to_config='', **kwargs):
-    """Executes src/tools/run-perf-bisect-regression.py to perform bisection.
-
-    Args:
-      extra_src (str): Path to extra source file. If this is supplied,
-        bisect script will use this to override default behavior.
-      path_to_config (str): Path to the config file to use. If this is supplied,
-        the bisect script will use this to override the default config file
-        path.
-    """
+  def run_bisect_script(self, **kwargs):
+    """Executes src/tools/run-perf-bisect-regression.py to perform bisection."""
     self.m.python(
         'Preparing for Bisection',
         script=self.m.path['checkout'].join(
@@ -137,11 +129,10 @@ class AutoBisectApi(recipe_api.RecipeApi):
 
     kwargs['allow_subannotations'] = True
 
-    if extra_src:
-      args = args + ['--extra_src', extra_src]
-    if path_to_config:
-      args = args + ['--path_to_config', path_to_config]
-
+    if kwargs.get('extra_src'):
+      args = args + ['--extra_src', kwargs.pop('extra_src')]
+    if kwargs.get('path_to_config'):
+      args = args + ['--path_to_config', kwargs.pop('path_to_config')]
     if self.m.chromium.c.TARGET_PLATFORM != 'android':
       # TODO(phajdan.jr): update for swarming, http://crbug.com/585401 .
       args += ['--path_to_goma', self.m.path['build'].join('goma')]
@@ -332,8 +323,6 @@ class AutoBisectApi(recipe_api.RecipeApi):
     try:
       # Run legacy bisect script if the patch contains bisect.cfg.
       if BISECT_CONFIG_FILE in affected_files:
-        kwargs['extra_src'] = ''
-        kwargs['path_to_config'] = ''
         self.run_bisect_script(**kwargs)
       elif api.properties.get('bisect_config'):
         # We can distinguish between a config for a full bisect vs a single

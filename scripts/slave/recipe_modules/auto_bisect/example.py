@@ -54,7 +54,8 @@ def RunSteps(api):
   #  Print results (may be done in a unit test)
 
   # Test runner for classic bisect script; calls bisect script in recipe
-  # wrapper with extra_src and path_to_config to override default behavior.
+  # wrapper with extra_src and path_to_config to override default behavior for
+  # android-chrome bisect jobs.
   if api.properties.get('mastername'):
     # TODO(akuegel): Load the config explicitly instead of relying on the
     # builders.py entries in chromium_tests.
@@ -64,7 +65,11 @@ def RunSteps(api):
         mastername, buildername)
     api.chromium_tests.configure_build(bot_config)
     api.chromium_tests.prepare_checkout(bot_config)
-    api.auto_bisect.run_bisect_script('dummy_extra_src', '/dummy/path/')
+    kwargs = {
+         'extra_src': 'dummy_extra_src',
+         'path_to_config': '/dummy/path/',
+    }    
+    api.auto_bisect.run_bisect_script(**kwargs)
 
 
 def GenTests(api):
