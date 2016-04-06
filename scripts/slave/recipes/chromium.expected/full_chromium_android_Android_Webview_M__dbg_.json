@@ -457,7 +457,9 @@
       "test-results.appspot.com",
       "--verbose",
       "--json-results-file",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--additional-apk",
+      "[SLAVE_BUILD]/src/out/Debug/apks/apks/SystemWebView.apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test SystemWebViewShellLayoutTest",

@@ -1588,6 +1588,10 @@ class AndroidInstrumentationTest(AndroidTest):
         'system_webview_shell_apk',
         'android_tools'
       ],
+      # TODO(jbudorick): Remove this once it's handled by the generated script.
+      'additional_apks': [
+        'apks/SystemWebView.apk',
+      ],
     },
     'MojoTest': {
       'compile_target': 'mojo_test_apk',

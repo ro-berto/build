@@ -713,11 +713,11 @@ class AndroidApi(recipe_api.RecipeApi):
       args.extend(['--test-apk', test_apk])
     if apk_under_test:
       args.extend(['--apk-under-test', apk_under_test])
+    for a in additional_apks or []:
+      args.extend(['--additional-apk', a])
 
     if not wrapper_script_suite_name:
       args.insert(0, 'instrumentation')
-      for a in additional_apks or []:
-        args.extend(['--additional-apk', a])
       if isolate_file_path:
         args.extend(['--isolate-file-path', isolate_file_path])
       if self.m.chromium.c.BUILD_CONFIG == 'Release':
