@@ -332,8 +332,6 @@ class FactoryCommands(object):
     self._extract_tool = self.PathJoin(self._script_dir, 'extract_build.py')
     self._cleanup_temp_tool = self.PathJoin(self._script_dir, 'cleanup_temp.py')
     self._bot_update_tool = self.PathJoin(self._script_dir, 'bot_update.py')
-    self._resource_sizes_tool = self.PathJoin(self._script_dir,
-                                              'resource_sizes.py')
     self._gclient_safe_revert_tool = self.PathJoin(self._script_dir,
                                                    'gclient_safe_revert.py')
     self._update_clang_py_tool = self.PathJoin(
