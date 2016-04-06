@@ -678,11 +678,6 @@ class AndroidApi(recipe_api.RecipeApi):
                                 device_flags=None,
                                 wrapper_script_suite_name=None,
                                 **kwargs):
-    if apk_under_test:
-      # TODO(jbudorick): Remove this once the test runner handles installation
-      # of the APK under test.
-      self.adb_install_apk(apk_under_test)
-
     logcat_output_file = self.m.raw_io.output()
     args = [
       '--blacklist-file', self.blacklist_file,

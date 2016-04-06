@@ -634,21 +634,6 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/AppRTCDemo.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install AppRTCDemo.apk"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
