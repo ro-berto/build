@@ -64,6 +64,21 @@ index b5d8dd0..257cc56 100644
 +foo
 """
 
+# This branched off commit 2 below and adds a new file. The diff considers
+# the new file as a copy of "test2".
+PATCH4 = """
+Index: baz
+new file mode 100644
+copy from test2
+copy to baz
+index b5d8dd0..7601807
+--- /dev/null
++++ b/baz
+@@ -0,0 +1 @@
++baz
+"""
+
+
 class PatchBaseTest(unittest.TestCase):
   @classmethod
   def git(cls, *args):
@@ -140,4 +155,8 @@ class PatchBaseTest(unittest.TestCase):
 
   def testFileAdded(self):
     commit_title = self.calculate_patch_base(PATCH3)
+    self.assertEquals('Commit2', commit_title)
+
+  def testFileCopied(self):
+    commit_title = self.calculate_patch_base(PATCH4)
     self.assertEquals('Commit2', commit_title)

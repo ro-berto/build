@@ -44,6 +44,12 @@ for line in patch.splitlines():
     # "Index" header looks like this:
     # Index: <file name>
     current_file = line.split('Index: ')[1]
+  elif line.startswith('copy from '):
+    # If diff considers a file to be a copy of an existing file, the base hash
+    # is from the existing file. In this case, the diff contains a line after
+    # "Index" and before "index" that looks like:
+    # copy from <old file name>
+    current_file = line.split('copy from ')[1]
   elif line.startswith('index '):
     # "index" header looks like this and comes a few lines after the one above:
     # index <base hash>..<hash after patch> <mode>
