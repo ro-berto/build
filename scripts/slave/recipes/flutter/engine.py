@@ -160,7 +160,7 @@ def TestObservatory(api):
 
 def BuildMac(api):
   RunGN(api, '--release')
-  Build(api, 'Release', 'sky_snapshot')
+  Build(api, 'Release')
   UploadArtifacts(api, 'darwin-x64', [
     'out/Release/sky_snapshot'
   ])
