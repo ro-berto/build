@@ -116,7 +116,7 @@ def GenTests(api):
   yield (
     api.v8.test(
         'tryserver.v8',
-        'v8_linux_rel',
+        'v8_linux_rel_ng_triggered',
         'triggered_by_cq',
         requester='commit-bot@chromium.org',
         patch_project='v8',
@@ -129,7 +129,7 @@ def GenTests(api):
   yield (
     api.v8.test(
         'tryserver.v8',
-        'v8_linux_rel',
+        'v8_linux_rel_ng_triggered',
         'triggered_by_ts',
         requester='dude@chromium.org',
         patch_project='v8',
@@ -143,7 +143,7 @@ def GenTests(api):
   yield (
     api.v8.test(
         'tryserver.v8',
-        'v8_linux_rel',
+        'v8_linux_rel_ng_triggered',
         'test_filter',
     ) +
     api.properties(

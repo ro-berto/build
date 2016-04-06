@@ -1562,27 +1562,6 @@ BUILDERS = {
 ####### Waterfall: tryserver.v8
   'tryserver.v8': {
     'builders': {
-      'v8_linux_rel': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [
-          V8Testing,
-          OptimizeForSize,
-          Test262Variants_2,
-          Mozilla,
-          Benchmarks,
-          SimdJs,
-          Ignition,
-          MjsunitSPFrameAccess,
-          Test262Ignition,
-        ],
-        'testing': {'platform': 'linux'},
-      },
       'v8_linux_rel_ng': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_config_kwargs': {
@@ -1653,26 +1632,6 @@ BUILDERS = {
           Mozilla,
           Benchmarks,
           SimdJs,
-        ],
-        'testing': {'platform': 'linux'},
-      },
-      'v8_linux_dbg': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [
-          V8Testing_2,
-          Test262,
-          Mozilla,
-          Benchmarks,
-          SimdJs,
-          Ignition,
-          MjsunitSPFrameAccess,
-          Test262Ignition,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1765,26 +1724,6 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [V8Testing],
-        'testing': {'platform': 'linux'},
-      },
-      'v8_linux64_rel': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [
-          V8Initializers,
-          V8Testing,
-          OptimizeForSize,
-          Test262Variants_2,
-          SimdJs,
-          Ignition,
-          MjsunitSPFrameAccess,
-          Test262Ignition,
-        ],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_rel_ng': {
@@ -1981,20 +1920,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
-      'v8_win_rel': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'v8_ninja',
-          'goma',
-        ],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'tests': [V8Testing, Ignition],
-        'testing': {'platform': 'win'},
-      },
       'v8_win_dbg': {
         'chromium_apply_config': [
           'default_compiler',
@@ -2112,24 +2037,6 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
         },
-        'testing': {'platform': 'win'},
-      },
-      'v8_win64_rel': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'v8_ninja',
-          'goma',
-        ],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-        },
-        'tests': [V8Testing, SimdJs, Ignition],
         'testing': {'platform': 'win'},
       },
       'v8_win64_rel_ng': {

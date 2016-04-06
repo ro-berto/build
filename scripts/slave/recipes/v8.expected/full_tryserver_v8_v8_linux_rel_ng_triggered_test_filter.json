@@ -3,79 +3,88 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
-      "--master",
-      "tryserver.v8",
-      "--builder",
-      "v8_linux_rel",
-      "--slave",
-      "TestSlavename",
-      "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
-      "--root",
-      "v8",
-      "--revision_mapping_file",
-      "{\"v8\": \"got_revision\", \"v8/tools/swarming_client\": \"got_swarming_client_revision\"}",
-      "--git-cache-dir",
-      "[GIT_CACHE]",
-      "--issue",
-      "12853011",
-      "--patchset",
-      "1",
-      "--rietveld_server",
-      "https://codereview.chromium.org",
-      "--output_json",
-      "/path/to/tmp/json",
-      "--revision",
-      "v8@12345",
-      "--no_shallow",
-      "--output_manifest"
+      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
+      "--path",
+      "[SLAVE_BUILD]/swarming.client",
+      "--url",
+      "https://chromium.googlesource.com/external/swarming.client.git"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
-    },
-    "name": "bot_update",
+    "name": "git setup (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "retry",
+      "fetch",
+      "origin",
+      "[dummy swarming client hash]"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "git fetch (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "FETCH_HEAD"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "git checkout (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "read revision",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Some step text@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"v8\": \"12345\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"v8\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"v8/tools/swarming_client\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8/tools/swarming_client.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"e4fee0b18f8163be6097c9c571640038896debc4\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"v8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#50110}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision\": \"e4fee0b18f8163be6097c9c571640038896debc4\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision_cp\": \"refs/heads/master@{#108913}\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"root\": \"v8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision@\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#50110}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_swarming_client_revision_cp@\"refs/heads/master@{#108913}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_swarming_client_revision@\"e4fee0b18f8163be6097c9c571640038896debc4\"@@@"
+      "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "git clean (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "sync"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "submodule sync (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "update",
+      "--init",
+      "--recursive"
+    ],
+    "cwd": "[SLAVE_BUILD]/swarming.client",
+    "name": "submodule update (swarming_client)",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@got_revision@\"12345\"@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
       "--version"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -83,125 +92,6 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@0.4.10@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
-      "runhooks"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "GYP_DEFINES": "clang=1 dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_target_arch=ia32",
-      "GYP_GENERATORS": "ninja",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
-    },
-    "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "cleanup_temp"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/v8",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
-      "--ninja-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/v8",
-      "--goma-cache-dir",
-      "[GOMA_CACHE]",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma-clang",
-      "--goma-jsonstatus",
-      "/path/to/tmp/json",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--goma-fail-fast",
-      "--goma-disable-local-fallback",
-      "--"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "compile",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--verbose",
-      "[SLAVE_BUILD]/v8/out/Release/benchmarks.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/ignition.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/mjsunit.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/mozilla.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/optimize_for_size.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/simdjs.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/test262.isolated.gen.json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "isolate tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"benchmarks\": \"[dummy hash for benchmarks]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"ignition\": \"[dummy hash for ignition]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"simdjs\": \"[dummy hash for simdjs]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -236,7 +126,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -247,7 +137,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Check/Ubuntu-12.04/[dummy has/v8_linux_rel/571",
+      "Check/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -269,7 +159,7 @@
       "pool",
       "Chrome",
       "--tag",
-      "buildername:v8_linux_rel",
+      "buildername:v8_linux_rel_ng_triggered",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -323,9 +213,9 @@
     "name": "[trigger] Check on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/v8_linux_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check/Ubuntu-12.04/[dummy has/v8_linux_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Check/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -340,7 +230,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -351,7 +241,7 @@
       "--shards",
       "1",
       "--task-name",
-      "OptimizeForSize/Ubuntu-12.04/[dummy has/v8_linux_rel/571",
+      "OptimizeForSize/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -373,7 +263,7 @@
       "pool",
       "Chrome",
       "--tag",
-      "buildername:v8_linux_rel",
+      "buildername:v8_linux_rel_ng_triggered",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -428,9 +318,9 @@
     "name": "[trigger] OptimizeForSize on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"OptimizeForSize/Ubuntu-12.04/[dummy has/v8_linux_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"OptimizeForSize/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"OptimizeForSize/Ubuntu-12.04/[dummy has/v8_linux_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"OptimizeForSize/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -445,7 +335,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -456,7 +346,7 @@
       "--shards",
       "2",
       "--task-name",
-      "Test262/Ubuntu-12.04/[dummy has/v8_linux_rel/571",
+      "Test262/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -478,7 +368,7 @@
       "pool",
       "Chrome",
       "--tag",
-      "buildername:v8_linux_rel",
+      "buildername:v8_linux_rel_ng_triggered",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -534,14 +424,14 @@
     "name": "[trigger] Test262 on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262/Ubuntu-12.04/[dummy has/v8_linux_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test262/Ubuntu-12.04/[dummy has/v8_linux_rel/571:2:0\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test262/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571:2:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test262/Ubuntu-12.04/[dummy has/v8_linux_rel/571:2:1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test262/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571:2:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
@@ -557,7 +447,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -568,7 +458,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/v8_linux_rel/571",
+      "Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -590,7 +480,7 @@
       "pool",
       "Chrome",
       "--tag",
-      "buildername:v8_linux_rel",
+      "buildername:v8_linux_rel_ng_triggered",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -645,9 +535,9 @@
     "name": "[trigger] Mjsunit - sp frame access on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/v8_linux_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/v8_linux_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -662,7 +552,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/v8/tools/swarming_client/swarming.py",
+      "[SLAVE_BUILD]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -673,7 +563,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test262 - ignition/Ubuntu-12.04/[dummy has/v8_linux_rel/571",
+      "Test262 - ignition/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -695,7 +585,7 @@
       "pool",
       "Chrome",
       "--tag",
-      "buildername:v8_linux_rel",
+      "buildername:v8_linux_rel_ng_triggered",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -753,9 +643,9 @@
     "name": "[trigger] Test262 - ignition on Ubuntu-12.04",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - ignition/Ubuntu-12.04/[dummy has/v8_linux_rel/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - ignition/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test262 - ignition/Ubuntu-12.04/[dummy has/v8_linux_rel/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test262 - ignition/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -773,7 +663,7 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -786,7 +676,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "Check/Ubuntu-12.04/[dummy has/v8_linux_rel/571"
+      "Check/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Check",
@@ -816,7 +706,7 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -829,7 +719,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "OptimizeForSize/Ubuntu-12.04/[dummy has/v8_linux_rel/571"
+      "OptimizeForSize/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "OptimizeForSize",
@@ -859,7 +749,7 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -872,7 +762,7 @@
       "--print-status-updates",
       "--shards",
       "2",
-      "Test262/Ubuntu-12.04/[dummy has/v8_linux_rel/571"
+      "Test262/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Test262",
@@ -903,7 +793,7 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -916,7 +806,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/v8_linux_rel/571"
+      "Mjsunit - sp frame access/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Mjsunit - sp frame access",
@@ -946,7 +836,7 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[SLAVE_BUILD]/v8/tools/swarming_client",
+      "[SLAVE_BUILD]/swarming.client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -959,7 +849,7 @@
       "--print-status-updates",
       "--shards",
       "1",
-      "Test262 - ignition/Ubuntu-12.04/[dummy has/v8_linux_rel/571"
+      "Test262 - ignition/Ubuntu-12.04/[dummy has/v8_linux_rel_ng_triggered/571"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Test262 - ignition",
