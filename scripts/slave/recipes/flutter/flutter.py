@@ -95,10 +95,9 @@ def BuildExamples(api, git_hash):
         ['flutter', 'build', 'apk'], cwd=app_path)
 
     if api.platform.is_mac:
-      # Can't build for iOS devices on the bots due to lack of codesigning.
-      # https://github.com/flutter/flutter/issues/3137
-      # api.step('flutter build ios %s' % app_dir, ['flutter', 'build', 'ios'],
-      #     cwd=app_path)
+      # Disable codesigning since this bot has no developer cert.
+      api.step('flutter build ios %s' % app_dir,
+        ['flutter', 'build', 'ios', '--no-codesign'], cwd=app_path)
       api.step('flutter build ios simulator %s' % app_dir,
         ['flutter', 'build', 'ios', '--simulator'], cwd=app_path)
 
