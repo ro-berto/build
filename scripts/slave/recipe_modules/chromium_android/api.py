@@ -661,18 +661,22 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def run_instrumentation_suite(self,
                                 name,
-                                test_apk,
+                                test_apk=None,
                                 apk_under_test=None,
                                 additional_apks=None,
                                 isolate_file_path=None,
                                 flakiness_dashboard=None,
                                 annotation=None, except_annotation=None,
                                 screenshot=False, verbose=False, tool=None,
-                                apk_package=None, host_driven_root=None,
-                                official_build=False, json_results_file=None,
+                                apk_package=None,
+                                host_driven_root=None,  # unused?
+                                official_build=False,
+                                json_results_file=None,
                                 timeout_scale=None, strict_mode=None,
                                 suffix=None, num_retries=None,
-                                device_flags=None, **kwargs):
+                                device_flags=None,
+                                wrapper_script_suite_name=None,
+                                **kwargs):
     if apk_under_test:
       # TODO(jbudorick): Remove this once the test runner handles installation
       # of the APK under test.
@@ -680,16 +684,9 @@ class AndroidApi(recipe_api.RecipeApi):
 
     logcat_output_file = self.m.raw_io.output()
     args = [
-      '--test-apk', test_apk,
       '--blacklist-file', self.blacklist_file,
       '--logcat-output-file', logcat_output_file,
     ]
-    if apk_under_test:
-      args.extend(['--apk-under-test', apk_under_test])
-    for a in additional_apks or []:
-      args.extend(['--additional-apk', a])
-    if isolate_file_path:
-      args.extend(['--isolate-file-path', isolate_file_path])
     if tool:
       args.append('--tool=%s' % tool)
     if flakiness_dashboard:
@@ -702,14 +699,10 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--screenshot')
     if verbose:
       args.append('--verbose')
-    if self.m.chromium.c.BUILD_CONFIG == 'Release':
-      args.append('--release')
     if self.c.coverage or self.c.incremental_coverage:
       args.extend(['--coverage-dir', self.coverage_dir])
     if host_driven_root:
       args.extend(['--host-driven-root', host_driven_root])
-    if official_build:
-      args.extend(['--official-build'])
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
     if timeout_scale:
@@ -721,10 +714,25 @@ class AndroidApi(recipe_api.RecipeApi):
     if device_flags:
       args.extend(['--device-flags', device_flags])
 
+    if not wrapper_script_suite_name:
+      args.insert(0, 'instrumentation')
+      args.extend(['--test-apk', test_apk])
+      if apk_under_test:
+        args.extend(['--apk-under-test', apk_under_test])
+      for a in additional_apks or []:
+        args.extend(['--additional-apk', a])
+      if isolate_file_path:
+        args.extend(['--isolate-file-path', isolate_file_path])
+      if self.m.chromium.c.BUILD_CONFIG == 'Release':
+        args.append('--release')
+      if official_build:
+        args.extend(['--official-build'])
+
     step_result = self.test_runner(
         'Instrumentation test %s%s' % (annotation or name,
                                        ' (%s)' % suffix if suffix else ''),
-        args=['instrumentation'] + args,
+        args=args,
+        wrapper_script_suite_name=wrapper_script_suite_name,
         **kwargs)
     if step_result.raw_io.output:
       step_result.presentation.logs['logcat'] = (
@@ -1245,7 +1253,7 @@ class AndroidApi(recipe_api.RecipeApi):
         f.result.presentation.status = self.m.step.FAILURE
       raise
 
-  def test_runner(self, step_name, args=None, **kwargs):
+  def test_runner(self, step_name, args=None, wrapper_script_suite_name=None, **kwargs):
     """Wrapper for the python testrunner script.
 
     Args:
@@ -1253,5 +1261,8 @@ class AndroidApi(recipe_api.RecipeApi):
       args: Testrunner arguments.
     """
     with self.handle_exit_codes():
-      return self.m.python(
-          step_name, self.c.test_runner, args, **kwargs)
+      script = self.c.test_runner
+      if wrapper_script_suite_name:
+        script = self.m.chromium.output_dir.join('bin', 'run_%s' %
+                                                 wrapper_script_suite_name)
+      return self.m.python(step_name, script, args, **kwargs)

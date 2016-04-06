@@ -189,6 +189,7 @@ def RunSteps(api, buildername):
       host_driven_root=api.path['checkout'].join('chrome', 'test'),
       timeout_scale=config.get('timeout_scale'),
       strict_mode=config.get('strict_mode'),
+      additional_apks=['Additional.apk'],
       step_test_data=lambda: api.raw_io.test_api.output(
           'logging...\nbeep\nboop\bbop'),
       device_flags=config.get('device_flags'))

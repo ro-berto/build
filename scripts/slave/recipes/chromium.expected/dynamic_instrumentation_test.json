@@ -516,43 +516,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/second_apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install second_apk"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/one_apk",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_chrome_public_test_apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--logcat-output-file",
       "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/second_apk",
-      "--additional-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/another_apk",
-      "--additional-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/omg_so_many_apks",
-      "--isolate-file-path",
-      "chrome/chrome_public_test_apk.isolate",
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",
-      "--release",
       "--json-results-file",
       "/path/to/tmp/json"
     ],

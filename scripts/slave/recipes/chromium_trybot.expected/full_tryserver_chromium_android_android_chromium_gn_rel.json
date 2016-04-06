@@ -618,39 +618,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebView.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install AndroidWebView.apk"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebViewTest.apk",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_android_webview_test_apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--logcat-output-file",
       "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebView.apk",
-      "--isolate-file-path",
-      "android_webview/android_webview_test_apk.isolate",
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",
-      "--release",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -662,43 +639,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ChromePublic.apk"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublicTest.apk",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_chrome_public_test_apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--logcat-output-file",
       "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk",
-      "--additional-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublicTestSupport.apk",
-      "--additional-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromiumNetTestSupport.apk",
-      "--isolate-file-path",
-      "chrome/chrome_public_test_apk.isolate",
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",
-      "--release",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -710,37 +660,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromeSyncShell.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ChromeSyncShell.apk"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromeSyncShellTest.apk",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_chrome_sync_shell_test_apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--logcat-output-file",
       "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromeSyncShell.apk",
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",
-      "--release",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -752,39 +681,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/ContentShell.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ContentShell.apk"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ContentShellTest.apk",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_content_shell_test_apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--logcat-output-file",
       "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/ContentShell.apk",
-      "--isolate-file-path",
-      "content/content_shell_test_apk.isolate",
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",
-      "--release",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -798,10 +704,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/MojoTest.apk",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_mojo_test_apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--logcat-output-file",
@@ -809,7 +712,6 @@
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",
-      "--release",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -1216,39 +1118,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebView.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install AndroidWebView.apk (2)"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebViewTest.apk",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_android_webview_test_apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--logcat-output-file",
       "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/AndroidWebView.apk",
-      "--isolate-file-path",
-      "android_webview/android_webview_test_apk.isolate",
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",
-      "--release",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -1260,43 +1139,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ChromePublic.apk (2)"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublicTest.apk",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_chrome_public_test_apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--logcat-output-file",
       "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublic.apk",
-      "--additional-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromePublicTestSupport.apk",
-      "--additional-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromiumNetTestSupport.apk",
-      "--isolate-file-path",
-      "chrome/chrome_public_test_apk.isolate",
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",
-      "--release",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -1308,37 +1160,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromeSyncShell.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ChromeSyncShell.apk (2)"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromeSyncShellTest.apk",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_chrome_sync_shell_test_apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--logcat-output-file",
       "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromeSyncShell.apk",
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",
-      "--release",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -1350,39 +1181,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/ContentShell.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install ContentShell.apk (2)"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ContentShellTest.apk",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_content_shell_test_apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--logcat-output-file",
       "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/ContentShell.apk",
-      "--isolate-file-path",
-      "content/content_shell_test_apk.isolate",
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",
-      "--release",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
@@ -1396,10 +1204,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/MojoTest.apk",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_mojo_test_apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--logcat-output-file",
@@ -1407,7 +1212,6 @@
       "--flakiness-dashboard-server",
       "test-results.appspot.com",
       "--verbose",
-      "--release",
       "--json-results-file",
       "/path/to/tmp/json"
     ],

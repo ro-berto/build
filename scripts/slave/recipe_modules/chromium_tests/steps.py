@@ -484,11 +484,7 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
     else:
       yield AndroidInstrumentationTest(
           test_name,
-          compile_targets=test.get('override_compile_targets', None),
-          isolate_file_path=test.get('isolate_file_path', None),
-          apk_under_test=test.get('apk_under_test', None),
-          test_apk=test.get('test_apk', None),
-          additional_apks=test.get('additional_apks', None))
+          compile_targets=test.get('override_compile_targets', None))
 
 
 def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
@@ -1073,10 +1069,7 @@ class AMPInstrumentationTest(AMPTest):
                          if self._android_isolate_path else None)
     return AndroidInstrumentationTest(
         name=self.name,
-        compile_targets=self._compile_target,
-        apk_under_test=self._apk_under_test,
-        test_apk=self.name,
-        isolate_file_path=isolate_file_path,
+        compile_targets=[self._compile_target],
         timeout_scale=self._test_timeout_scale).run(api, suffix)
 
 
@@ -1573,56 +1566,31 @@ class AndroidInstrumentationTest(AndroidTest):
   _DEFAULT_SUITES = {
     'AndroidWebViewTest': {
       'compile_target': 'android_webview_test_apk',
-      'isolate_file_path': 'android_webview/android_webview_test_apk.isolate',
-      'apk_under_test': 'AndroidWebView.apk',
-      'test_apk': 'AndroidWebViewTest.apk',
     },
     'ChromePublicTest': {
       'compile_target': 'chrome_public_test_apk',
-      'isolate_file_path': 'chrome/chrome_public_test_apk.isolate',
-      'apk_under_test': 'ChromePublic.apk',
-      'test_apk': 'ChromePublicTest.apk',
-      'additional_apks': [
-        'ChromePublicTestSupport.apk',
-        'ChromiumNetTestSupport.apk',
-      ],
     },
     'ChromeSyncShellTest': {
       'compile_target': 'chrome_sync_shell_test_apk',
-      'isolate_file_path': None,
-      'apk_under_test': 'ChromeSyncShell.apk',
-      'test_apk': 'ChromeSyncShellTest.apk',
     },
     'ChromotingTest': {
       'compile_target': 'remoting_test_apk',
-      'isolate_file_path': None,
-      'apk_under_test': 'Chromoting.apk',
-      'test_apk': 'ChromotingTest.apk',
     },
     'ContentShellTest': {
       'compile_target': 'content_shell_test_apk',
-      'isolate_file_path': 'content/content_shell_test_apk.isolate',
-      'apk_under_test': 'ContentShell.apk',
-      'test_apk': 'ContentShellTest.apk',
     },
     'SystemWebViewShellLayoutTest': {
       'compile_target': 'system_webview_shell_layout_test_apk',
+      # TODO(agrieve): These should be listed as deps for
+      #     system_webview_shell_layout_test_apk.
       'additional_compile_targets': [
         'system_webview_apk',
         'system_webview_shell_apk',
         'android_tools'
       ],
-      'isolate_file_path': ('android_webview/'
-                            'system_webview_shell_test_apk.isolate'),
-      'apk_under_test': 'SystemWebViewShell.apk',
-      'test_apk': 'SystemWebViewShellLayoutTest.apk',
-      'additional_apks': ['SystemWebView.apk'],
     },
     'MojoTest': {
       'compile_target': 'mojo_test_apk',
-      'isolate_file_path': None,
-      'apk_under_test': None,
-      'test_apk': 'MojoTest.apk',
     }
   }
 
@@ -1669,6 +1637,8 @@ class AndroidInstrumentationTest(AndroidTest):
     self._timeout_scale = timeout_scale
     self._tool = tool
     self._verbose = verbose
+    self._wrapper_script_suite_name = compile_targets[0]
+
 
   #override
   def run_tests(self, api, suffix, json_results_file):
@@ -1691,6 +1661,7 @@ class AndroidInstrumentationTest(AndroidTest):
         host_driven_root=self._host_driven_root,
         json_results_file=json_results_file,
         timeout_scale=self._timeout_scale,
+        wrapper_script_suite_name=self._wrapper_script_suite_name,
         step_test_data=lambda: api.json.test_api.output(mock_test_results))
 
 

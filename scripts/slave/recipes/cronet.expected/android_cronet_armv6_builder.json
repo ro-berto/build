@@ -492,83 +492,35 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/CronetSample.apk",
-      "-v",
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_cronet_sample_test_apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
+      "--logcat-output-file",
+      "/path/to/tmp/",
+      "--verbose",
+      "--num-retries",
+      "0"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install CronetSample.apk"
+    "name": "Instrumentation test cronet_sample_test_apk"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/CronetSampleTest.apk",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_cronet_test_instrumentation_apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--logcat-output-file",
       "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/CronetSample.apk",
-      "--additional-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromiumNetTestSupport.apk",
       "--verbose",
-      "--release",
       "--num-retries",
       "0"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test CronetSampleTest"
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
-      "[SLAVE_BUILD]/src/out/Release/apks/CronetTest.apk",
-      "-v",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
-    },
-    "name": "install CronetTest.apk"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/CronetTestInstrumentation.apk",
-      "--blacklist-file",
-      "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--logcat-output-file",
-      "/path/to/tmp/",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/CronetTest.apk",
-      "--additional-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/ChromiumNetTestSupport.apk",
-      "--isolate-file-path",
-      "components/cronet/android/cronet_test_instrumentation_apk.isolate",
-      "--verbose",
-      "--release",
-      "--num-retries",
-      "0"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test CronetTestInstrumentation"
+    "name": "Instrumentation test cronet_test_instrumentation_apk"
   },
   {
     "cmd": [

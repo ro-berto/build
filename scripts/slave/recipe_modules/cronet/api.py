@@ -14,24 +14,10 @@ class CronetApi(recipe_api.RecipeApi):
 
   INSTRUMENTATION_TESTS = freeze([
     {
-      'test': 'CronetSampleTest',
-      'gyp_target': 'cronet_sample_test_apk',
-      'apk_under_test': 'CronetSample.apk',
-      'test_apk': 'CronetSampleTest.apk',
-      'additional_apks': [
-        'ChromiumNetTestSupport.apk',
-      ],
+      'target': 'cronet_sample_test_apk',
     },
     {
-      'test': 'CronetTestInstrumentation',
-      'gyp_target': 'cronet_test_instrumentation_apk',
-      'apk_under_test': 'CronetTest.apk',
-      'test_apk': 'CronetTestInstrumentation.apk',
-      'additional_apks': [
-        'ChromiumNetTestSupport.apk',
-      ],
-      'isolate_file_path':
-        'components/cronet/android/cronet_test_instrumentation_apk.isolate',
+      'target': 'cronet_test_instrumentation_apk',
     },
   ])
 
@@ -111,13 +97,9 @@ class CronetApi(recipe_api.RecipeApi):
         droid.run_test_suite(suite, shard_timeout=180)
       for suite in instrumentation_tests:
         droid.run_instrumentation_suite(
-            name=suite['test'],
-            apk_under_test=droid.apk_path(suite.get('apk_under_test')),
-            test_apk=droid.apk_path(suite.get('test_apk')),
-            additional_apks=[
-                droid.apk_path(a) for a in suite.get('additional_apks') or ()],
-            isolate_file_path=suite.get('isolate_file_path'),
+            name=suite['target'],
             verbose=True,
+            wrapper_script_suite_name=suite['target'],
             num_retries=0,
             **suite.get('kwargs', {}))
       droid.common_tests_final_steps()
