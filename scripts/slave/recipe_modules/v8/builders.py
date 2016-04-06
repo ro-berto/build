@@ -2022,6 +2022,47 @@ BUILDERS = {
         },
         'testing': {'platform': 'win'},
       },
+      'v8_win_nosnap_shared_rel_ng': {
+        'v8_apply_config': ['no_snapshot'],
+        'chromium_apply_config': [
+          'default_compiler',
+          'v8_ninja',
+          'goma',
+          'no_dcheck',
+          'no_snapshot',
+          'shared_library',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'enable_swarming': True,
+        'slim_swarming_builder': True,
+        'triggers': [
+          'v8_win_nosnap_shared_rel_ng_triggered',
+        ],
+        'testing': {'platform': 'win'},
+      },
+      'v8_win_nosnap_shared_rel_ng_triggered': {
+        'v8_apply_config': ['no_snapshot'],
+        'chromium_apply_config': [
+          'use_windows_swarming_slaves',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'v8_win_nosnap_shared_rel_ng',
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86-64',
+        },
+        'tests': [V8Testing_2, Ignition],
+        'testing': {'platform': 'linux'},
+      },
       'v8_win64_compile_rel': {
         'chromium_apply_config': [
           'default_compiler',
