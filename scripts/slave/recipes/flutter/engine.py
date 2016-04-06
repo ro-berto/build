@@ -122,7 +122,7 @@ def BuildLinuxAndroidArm(api):
   def UploadService(name, out_dir):
     def Upload(from_path, to_path):
       api.gsutil.upload(from_path, BUCKET_NAME, GetCloudPath(api, to_path),
-          name='upload %s' % to_path)
+          name='upload %s' % api.path.basename(to_path))
 
     def ServicesOut(path):
       checkout = api.path['checkout']

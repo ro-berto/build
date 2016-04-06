@@ -39,14 +39,15 @@ def TestFlutterPackagesAndExamples(api):
   checkout = api.path['checkout']
 
   def _pub_test(path):
-    api.step('test %s' % path, ['dart', '-c', 'test/all.dart'],
-      cwd=checkout.join(path))
+    api.step('test %s' % api.path.basename(path),
+        ['dart', '-c', 'test/all.dart'], cwd=checkout.join(path))
 
   def _flutter_test(path):
     # TODO(eseidel): Sadly tests are linux-only for now. :(
     # https://github.com/flutter/flutter/issues/1707
     if api.platform.is_linux:
-      api.step('test %s' % path, ['flutter', 'test'], cwd=checkout.join(path))
+      api.step('test %s' % api.path.basename(path), ['flutter', 'test'],
+          cwd=checkout.join(path))
 
   _pub_test('packages/cassowary')
   _flutter_test('packages/flutter')
@@ -84,14 +85,14 @@ def GenerateDocs(api, pub_cache):
   docs_path = checkout.join('dev', 'docs', 'doc', 'api')
   remote_path = 'gs://docs.flutter.io/flutter'
   api.gsutil(['-m', 'rsync', '-d', '-r', docs_path, remote_path],
-      name='rsync %s' % docs_path)
+      name='rsync docs')
 
 
 def BuildExamples(api, git_hash):
   def BuildAndArchive(api, app_dir, apk_name):
     app_path = api.path['checkout'].join(app_dir)
-    api.step('flutter build apk %s' % app_dir, ['flutter', 'build', 'apk'],
-        cwd=app_path)
+    api.step('flutter build apk %s' % api.path.basename(app_dir),
+        ['flutter', 'build', 'apk'], cwd=app_path)
 
     if api.platform.is_mac:
       # Can't build for iOS devices on the bots due to lack of codesigning.

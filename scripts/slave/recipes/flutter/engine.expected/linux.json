@@ -448,7 +448,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gsutil upload firebase/firebase_lib.dex.jar",
+    "name": "gsutil upload firebase_lib.dex.jar",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/firebase/firebase_lib.dex.jar@@@"
     ]
@@ -469,7 +469,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gsutil upload firebase/interfaces_java.dex.jar",
+    "name": "gsutil upload interfaces_java.dex.jar",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/firebase/interfaces_java.dex.jar@@@"
     ]
@@ -490,7 +490,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gsutil upload gcm/gcm_lib.dex.jar",
+    "name": "gsutil upload gcm_lib.dex.jar",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/gcm/gcm_lib.dex.jar@@@"
     ]
@@ -511,7 +511,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gsutil upload gcm/interfaces_java.dex.jar",
+    "name": "gsutil upload interfaces_java.dex.jar (2)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/gcm/interfaces_java.dex.jar@@@"
     ]
