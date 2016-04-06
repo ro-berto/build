@@ -1528,6 +1528,28 @@ BUILDERS = {
 ####### Waterfall: client.v8.ports
   'client.v8.ports': {
     'builders': {
+      'V8 Linux - s390 - sim': {
+        'chromium_apply_config': [
+          'clang', 'v8_ninja', 'goma', 'simulate_s390'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [V8Testing],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - s390x - sim': {
+        'chromium_apply_config': [
+          'clang', 'v8_ninja', 'goma', 'simulate_s390'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [V8Testing],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux - x87 - nosnap - debug builder': {
         'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [

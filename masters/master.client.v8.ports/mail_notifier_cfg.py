@@ -11,6 +11,18 @@ def Update(config, active_master, c):
         config,
         active_master,
         categories_steps={
+          's390': ['runhooks', 'compile', 'Check'],
+        },
+        extraRecipients=[
+          'joransiu@ca.ibm.com',
+          'jyan@ca.ibm.com',
+          'michael_dawson@ca.ibm.com',
+        ],
+    ),
+    V8Notifier(
+        config,
+        active_master,
+        categories_steps={
           'x87': ['runhooks', 'compile', 'Check'],
         },
         extraRecipients=[

@@ -192,6 +192,14 @@ def simulate_ppc(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def simulate_s390(c):
+  if c.TARGET_BITS == 64:
+    c.gyp_env.GYP_DEFINES['v8_target_arch'] = 's390x'
+  else:
+    c.gyp_env.GYP_DEFINES['v8_target_arch'] = 's390'
+
+
+@CONFIG_CTX(includes=['v8'])
 def verify_heap(c):
   c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
 
