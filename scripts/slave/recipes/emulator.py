@@ -37,7 +37,7 @@ UNITTESTS = freeze([
 BUILDERS = freeze({
   'chromium.fyi':{
     'Android Tests (x86 emulator)': {
-      'config': 'x86_builder',
+      'config': 'x86_builder_mb',
       'target': 'Debug',
       'abi': 'x86',
       'api_level': 23,
@@ -70,6 +70,9 @@ def RunSteps(api, mastername, buildername):
   api.bot_update.ensure_checkout()
   api.chromium_android.clean_local_files()
   api.chromium.runhooks()
+
+  if api.chromium.c.project_generator.tool == 'mb':
+    api.chromium.run_mb(mastername, buildername, use_goma=True)
 
   targets = []
   for target, _ in builder.get('unittests', []):
