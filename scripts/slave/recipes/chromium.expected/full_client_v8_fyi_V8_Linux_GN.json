@@ -227,7 +227,9 @@
       "extensions_browsertests",
       "gin_unittests",
       "net_unittests",
-      "pdfium_test"
+      "pdfium_test",
+      "postmortem-metadata",
+      "unit_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile",

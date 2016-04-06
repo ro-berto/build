@@ -48,7 +48,9 @@ SPEC = {
         'extensions_browsertests',
         'gin_unittests',
         'pdfium_test',
+        'postmortem-metadata',
         'net_unittests',
+        'unit_tests',
       ],
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {
