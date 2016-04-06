@@ -323,7 +323,7 @@ def SpawnSubdirBuildbotsIfNeeded():
 
     # Allow failures, e.g. some hooks occasionally fail. Otherwise we
     # wouldn't copy the pw file and then never exercise this path again.
-    GClientCall(['sync'], fail_ok=True)
+    GClientCall(['sync', '--break_repo_locks'], fail_ok=True)
     shutil.copyfile(
         os.path.join(BUILD_DIR, 'site_config', '.bot_password'),
         os.path.join(botdir, 'build', 'site_config', '.bot_password'))
@@ -624,7 +624,7 @@ if '__main__' == __name__:
   if skip_sync_arg not in sys.argv:
     UseBotoPath()
     if subprocess.call(
-        [GetGClientPath(), 'sync', '--force'],
+        [GetGClientPath(), 'sync', '--force', '--break_repo_locks'],
         env=EnvWithDepotTools()) != 0:
       print >> sys.stderr, (
           '(%s) `gclient sync` failed; proceeding anyway...' % sys.argv[0])

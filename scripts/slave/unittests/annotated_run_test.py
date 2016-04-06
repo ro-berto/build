@@ -64,7 +64,8 @@ class AnnotatedRunTest(unittest.TestCase):
     gclient_path = os.path.join(env.Build, os.pardir, 'depot_tools',
                                 'gclient.bat')
     run_command.assert_has_calls([
-        mock.call([gclient_path, 'sync', '--force', '--verbose', '--jobs=2'],
+        mock.call([gclient_path, 'sync', '--force', '--verbose', '--jobs=2',
+                   '--break_repo_locks'],
                   cwd=env.Build),
         mock.call([sys.executable, 'annotated_run.py', 'foo']),
         ])

@@ -774,7 +774,8 @@ def update_scripts():
       gclient_name += '.bat'
     gclient_path = os.path.join(env.Build, os.pardir, 'depot_tools',
                                 gclient_name)
-    gclient_cmd = [gclient_path, 'sync', '--force', '--verbose', '--jobs=2']
+    gclient_cmd = [gclient_path, 'sync', '--force', '--verbose', '--jobs=2',
+                   '--break_repo_locks']
     try:
       fd, output_json = tempfile.mkstemp()
       os.close(fd)
