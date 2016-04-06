@@ -2047,6 +2047,7 @@ BUILDERS = {
       'v8_win_nosnap_shared_rel_ng_triggered': {
         'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [
+          'no_dcheck',
           'use_windows_swarming_slaves',
         ],
         'v8_config_kwargs': {
