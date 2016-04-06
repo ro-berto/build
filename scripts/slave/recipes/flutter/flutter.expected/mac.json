@@ -273,6 +273,35 @@
     "cmd": [
       "flutter",
       "build",
+      "ios"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/examples/stocks",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "flutter build ios examples/stocks"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "build",
+      "ios",
+      "--simulator"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/examples/stocks",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "flutter build ios simulator examples/stocks"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "build",
       "apk"
     ],
     "cwd": "[SLAVE_BUILD]/flutter/examples/material_gallery",
@@ -282,6 +311,35 @@
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "flutter build apk examples/material_gallery"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "build",
+      "ios"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/examples/material_gallery",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "flutter build ios examples/material_gallery"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "build",
+      "ios",
+      "--simulator"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/examples/material_gallery",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "flutter build ios simulator examples/material_gallery"
   },
   {
     "cmd": [

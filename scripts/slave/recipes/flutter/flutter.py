@@ -88,10 +88,17 @@ def GenerateDocs(api, pub_cache):
 
 
 def BuildExamples(api, git_hash):
-  def ArchiveAPK(api, app_dir, apk_name):
+  def BuildAndArchive(api, app_dir, apk_name):
     app_path = api.path['checkout'].join(app_dir)
     api.step('flutter build apk %s' % app_dir, ['flutter', 'build', 'apk'],
         cwd=app_path)
+
+    if api.platform.is_mac:
+      api.step('flutter build ios %s' % app_dir, ['flutter', 'build', 'ios'],
+          cwd=app_path)
+      api.step('flutter build ios simulator %s' % app_dir,
+        ['flutter', 'build', 'ios', '--simulator'], cwd=app_path)
+
     # This is linux just to have only one bot archive at once.
     if api.platform.is_linux:
       cloud_path = GetCloudPath(api, git_hash, 'examples/%s' % apk_name)
@@ -99,8 +106,8 @@ def BuildExamples(api, git_hash):
           link_name=apk_name, name='upload %s' % apk_name)
 
   # TODO(eseidel): We should not have to hard-code the desired apk name here.
-  ArchiveAPK(api, 'examples/stocks', 'Stocks.apk')
-  ArchiveAPK(api, 'examples/material_gallery', 'Gallery.apk')
+  BuildAndArchive(api, 'examples/stocks', 'Stocks.apk')
+  BuildAndArchive(api, 'examples/material_gallery', 'Gallery.apk')
 
 
 def RunFindXcode(api, step_name, target_version=None):
