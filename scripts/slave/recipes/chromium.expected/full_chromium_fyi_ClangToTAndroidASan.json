@@ -106,6 +106,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android asan=1 clang=1 clang_use_chrome_plugins=0 component=shared_library fastbuild=1 target_arch=arm",
       "LLVM_FORCE_HEAD_REVISION": "YES",
@@ -202,6 +203,38 @@
     "name": "tree truth steps"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::goma]/resources/ensure_goma.py",
+      "--target-dir",
+      "[SLAVE_BUILD]/src/build/goma/client",
+      "--download-from-google-storage-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ensure_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.fyi",
+      "-b",
+      "ClangToTAndroidASan",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[SLAVE_BUILD]/src/build/goma/client",
+      "//out/Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -245,6 +278,8 @@
       "ninja",
       "--compiler",
       "clang",
+      "--goma-dir",
+      "[SLAVE_BUILD]/src/build/goma/client",
       "--",
       "all"
     ],
