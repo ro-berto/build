@@ -204,7 +204,8 @@ class AndroidApi(recipe_api.RecipeApi):
         results_url='https://chromeperf.appspot.com',
         perf_id=self.m.properties['buildername'],
         perf_dashboard_id='resource_sizes',
-        test_type='resource_sizes')
+        test_type='resource_sizes',
+        env={'CHROMIUM_OUTPUT_DIR': self.m.chromium.output_dir})
 
   def check_webview_licenses(self, name='check licenses'):
     self.m.python(

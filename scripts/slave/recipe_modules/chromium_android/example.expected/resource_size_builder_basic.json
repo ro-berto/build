@@ -677,6 +677,9 @@
       "[SLAVE_BUILD]/src/out/Release/lib/libchrome.so"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
+    },
     "name": "resource_sizes"
   },
   {
