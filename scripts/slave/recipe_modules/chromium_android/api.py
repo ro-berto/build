@@ -709,12 +709,13 @@ class AndroidApi(recipe_api.RecipeApi):
       args.extend(['--num-retries', str(num_retries)])
     if device_flags:
       args.extend(['--device-flags', device_flags])
+    if test_apk:
+      args.extend(['--test-apk', test_apk])
+    if apk_under_test:
+      args.extend(['--apk-under-test', apk_under_test])
 
     if not wrapper_script_suite_name:
       args.insert(0, 'instrumentation')
-      args.extend(['--test-apk', test_apk])
-      if apk_under_test:
-        args.extend(['--apk-under-test', apk_under_test])
       for a in additional_apks or []:
         args.extend(['--additional-apk', a])
       if isolate_file_path:
