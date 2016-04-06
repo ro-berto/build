@@ -91,7 +91,7 @@ ifndef NO_REVISION_AUDIT
   ) 2>&1 | tee -a actions.log
 endif
 
-	$(SCRIPTS_DIR)/master/kill_pidfile.sh twistd.pid
+	if `test -f twistd.pid`; then kill -TERM -$$(ps h -o pgid= $$(cat twistd.pid) | awk '{print $$1}'); fi;
 
 kill: notify printstep
 	if `test -f twistd.pid`; then kill -KILL -$$(ps h -o pgid= $$(cat twistd.pid) | awk '{print $$1}'); fi;
