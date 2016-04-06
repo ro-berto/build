@@ -7,9 +7,11 @@
 """Tests that the tools/build annotated_run wrapper actually runs."""
 
 import collections
+import contextlib
 import json
 import logging
 import os
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -17,8 +19,10 @@ import unittest
 import test_env  # pylint: disable=W0403,W0611
 
 import mock
+from common import chromium_utils
 from common import env
 from slave import annotated_run
+from slave import gce
 from slave import infra_platform
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,34 +34,40 @@ MockOptions = collections.namedtuple('MockOptions',
      'logdog_host'))
 
 
-# Like mkstemp, but writes something in the file.
-orig_mkstemp = tempfile.mkstemp
-def mkstemp_json():
-  fd, output_json = orig_mkstemp()
-  os.write(fd, '{"solutions": {"build/": ""}}')
-  return fd, output_json
-
-
 class AnnotatedRunTest(unittest.TestCase):
+  def test_example(self):
+    build_properties = {
+      'recipe': 'annotated_run_test',
+      'true_prop': True,
+      'num_prop': 123,
+      'string_prop': '321',
+      'dict_prop': {'foo': 'bar'},
+    }
+
+    script_path = os.path.join(BASE_DIR, 'annotated_run.py')
+    exit_code = subprocess.call([
+        'python', script_path,
+        '--build-properties=%s' % json.dumps(build_properties)])
+    self.assertEqual(exit_code, 0)
 
   @mock.patch('slave.annotated_run._run_command')
   @mock.patch('slave.annotated_run.main')
   @mock.patch('sys.platform', return_value='win')
-  @mock.patch('tempfile.mkstemp', mkstemp_json)
+  @mock.patch('tempfile.mkstemp', side_effect=Exception('failure'))
   @mock.patch('os.environ', {})
-  def test_update_scripts_must_run(self, _sys_platform, main, run_command):
-    main.side_effect = Exception('Test error.')
-    run_command.return_value = (0, "")
+  def test_update_scripts_must_run(self, _tempfile_mkstemp, _sys_platform,
+                                   main, run_command):
+    annotated_run.main.side_effect = Exception('Test error!')
+    annotated_run._run_command.return_value = (0, "")
     annotated_run.shell_main(['annotated_run.py', 'foo'])
 
     gclient_path = os.path.join(env.Build, os.pardir, 'depot_tools',
                                 'gclient.bat')
     run_command.assert_has_calls([
-        mock.call([gclient_path, 'sync', '--force', '--verbose', '--jobs=2',
-                   '--output-json', mock.ANY],
+        mock.call([gclient_path, 'sync', '--force', '--verbose', '--jobs=2'],
                   cwd=env.Build),
         mock.call([sys.executable, 'annotated_run.py', 'foo']),
-      ])
+        ])
     main.assert_not_called()
 
 

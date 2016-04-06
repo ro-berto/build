@@ -5,9 +5,11 @@
 
 import argparse
 import collections
+import contextlib
 import json
 import logging
 import os
+import shutil
 import socket
 import subprocess
 import sys
@@ -321,6 +323,13 @@ class LogDogBootstrapError(Exception):
   pass
 
 
+def ensure_directory(*path):
+  path = os.path.join(*path)
+  if not os.path.isdir(path):
+    os.makedirs(path)
+  return path
+
+
 def _get_service_account_json(opts, credential_path):
   """Returns (str/None): If specified, the path to the service account JSON.
 
@@ -452,7 +461,7 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
   # LOGDOG_STREAM_PREFIX is set by the Butler when it bootstraps a process, so
   # it should be set for all child processes of the initial bootstrap.
   if os.environ.get('LOGDOG_STREAM_PREFIX', None) is not None:
-    raise LogDogNotBootstrapped(
+   raise LogDogNotBootstrapped(
        'LOGDOG_STREAM_PREFIX in enviornment, refusing to nest bootstraps.')
 
   plat = config.logdog_platform
@@ -752,10 +761,6 @@ def get_args(argv):
   return parser.parse_args(argv)
 
 
-class UpdateScriptFailure(Exception):
-  """Raised whenever update_script fails"""
-
-
 def update_scripts():
   if os.environ.get('RUN_SLAVE_UPDATED_SCRIPTS'):
     os.environ.pop('RUN_SLAVE_UPDATED_SCRIPTS')
@@ -787,7 +792,6 @@ def update_scripts():
     if rv != 0:
       s.step_text('gclient sync failed!')
       s.step_exception()
-      raise UpdateScriptFailure()
     elif output_json:
       try:
         with open(output_json, 'r') as f:
@@ -807,7 +811,6 @@ def update_scripts():
       except Exception as e:
         s.step_text('Unable to process gclient JSON %s' % repr(e))
         s.step_exception()
-        raise UpdateScriptFailure()
       finally:
         try:
           os.remove(output_json)
@@ -816,7 +819,6 @@ def update_scripts():
     else:
       s.step_text('Unable to get SCM data')
       s.step_exception()
-      raise UpdateScriptFailure()
 
     os.environ['RUN_SLAVE_UPDATED_SCRIPTS'] = '1'
 
@@ -970,18 +972,12 @@ def main(argv):
 
 
 def shell_main(argv):
-  try:
-    if update_scripts():
-      # Re-execute with the updated annotated_run.py.
-      rv, _ = _run_command([sys.executable] + argv)
-      return rv
-    else:
-      return main(argv[1:])
-  except UpdateScriptFailure:
-    return 2
-  except Exception:
-    print '@@@STEP_EXCEPTION@@@'
-    raise
+  if update_scripts():
+    # Re-execute with the updated annotated_run.py.
+    rv, _ = _run_command([sys.executable] + argv)
+    return rv
+  else:
+    return main(argv[1:])
 
 
 if __name__ == '__main__':
