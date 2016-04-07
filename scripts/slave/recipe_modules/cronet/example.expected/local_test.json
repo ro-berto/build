@@ -494,8 +494,6 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_cronet_sample_test_apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--logcat-output-file",
-      "/path/to/tmp/",
       "--verbose",
       "--num-retries",
       "0"
@@ -510,8 +508,6 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_cronet_test_instrumentation_apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--logcat-output-file",
-      "/path/to/tmp/",
       "--verbose",
       "--num-retries",
       "0"
