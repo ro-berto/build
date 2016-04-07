@@ -300,8 +300,10 @@ def SendGomaTsMon(json_file, exit_status):
         result = 'exception'
 
     num_failure = 0
+    ping_status_code = 0
     if infra_status:
       num_failure = infra_status['num_exec_compiler_proxy_failure']
+      ping_status_code = infra_status['ping_status_code']
 
     clobber = 0
     if os.environ.get('BUILDBOT_CLOBBER'):
@@ -315,6 +317,7 @@ def SendGomaTsMon(json_file, exit_status):
         'slave': os.environ.get('BUILDBOT_SLAVENAME', 'unknown'),
         'clobber': clobber,
         'os': chromium_utils.PlatformName(),
+        'ping_status_code': ping_status_code,
         'result': result}
     start_time = GetCompilerProxyStartTime()
     if start_time:
