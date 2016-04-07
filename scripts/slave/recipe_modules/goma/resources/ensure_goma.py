@@ -15,7 +15,7 @@ CONFIG = {
     'linux': {
         'repo': ('https://chrome-internal.googlesource.com/chrome/tools/'
                  'goma/linux.git'),
-        'revision': '7d65a74a8df225609e336b670118ae718483978f',
+        'revision': 'ae283a84eff40c572e5afa08130472714ac1748e',
     },
 }
 
