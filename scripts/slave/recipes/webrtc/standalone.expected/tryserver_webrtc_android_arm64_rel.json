@@ -359,6 +359,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "audio_decoder_unittests"
@@ -380,6 +381,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "common_audio_unittests"
@@ -401,6 +403,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "common_video_unittests"
@@ -422,6 +425,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "modules_tests"
@@ -443,6 +447,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "modules_unittests"
@@ -464,6 +469,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "peerconnection_unittests"
@@ -485,6 +491,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "system_wrappers_unittests"
@@ -506,6 +513,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "test_support_unittests"
@@ -527,6 +535,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "tools_unittests"
@@ -548,6 +557,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "video_engine_tests"
@@ -569,6 +579,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "voice_engine_unittests"
@@ -590,6 +601,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "webrtc_nonparallel_tests"
@@ -611,6 +623,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "webrtc_perf_tests"
@@ -633,6 +646,9 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
+    },
     "name": "Instrumentation test AppRTCDemoTest"
   },
   {
@@ -651,6 +667,9 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
+    },
     "name": "Instrumentation test libjingle_peerconnection_android_unittest"
   },
   {

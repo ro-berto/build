@@ -63,6 +63,9 @@
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
+    },
     "name": "[trigger] example_gtest_suite",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -136,6 +139,9 @@
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
+    },
     "name": "[trigger] example_instrumentation_suite",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -201,6 +207,9 @@
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
+    },
     "name": "[trigger] example_uirobot_suite",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -283,6 +292,9 @@
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
+    },
     "name": "[collect] example_gtest_suite",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -390,6 +402,9 @@
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
+    },
     "name": "[collect] example_instrumentation_suite",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"
@@ -495,6 +510,9 @@
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug"
+    },
     "name": "[collect] example_uirobot_suite",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"

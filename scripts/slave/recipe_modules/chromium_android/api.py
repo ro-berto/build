@@ -588,10 +588,9 @@ class AndroidApi(recipe_api.RecipeApi):
                             known_devices_file=known_devices_file, **kwargs)
 
     # now obtain the list of tests that were executed.
-    result = self.m.step(
+    result = self.test_runner(
         'get perf test list',
-        [self.c.test_runner,
-         'perf', '--steps', config, '--output-json-list', self.m.json.output(),
+        ['perf', '--steps', config, '--output-json-list', self.m.json.output(),
          '--blacklist-file', self.blacklist_file],
         step_test_data=lambda: self.m.json.test_api.output([
             {'test': 'perf_test.foo', 'device_affinity': 0,
@@ -624,6 +623,8 @@ class AndroidApi(recipe_api.RecipeApi):
 
       try:
         with self.handle_exit_codes():
+          env = self.m.chromium.get_env()
+          env['CHROMIUM_OUTPUT_DIR'] = self.m.chromium.output_dir
           self.m.chromium.runtest(
             self.c.test_runner,
             print_step_cmd,
@@ -633,7 +634,7 @@ class AndroidApi(recipe_api.RecipeApi):
             annotate=annotate,
             results_url='https://chromeperf.appspot.com',
             perf_id=perf_id,
-            env=self.m.chromium.get_env(),
+            env=env,
             chartjson_file=chartjson_file)
       except self.m.step.StepFailure as f:
         failures.append(f)
@@ -1262,4 +1263,9 @@ class AndroidApi(recipe_api.RecipeApi):
       if wrapper_script_suite_name:
         script = self.m.chromium.output_dir.join('bin', 'run_%s' %
                                                  wrapper_script_suite_name)
+      else:
+        env = kwargs.get('env', {})
+        env['CHROMIUM_OUTPUT_DIR'] = env.get('CHROMIUM_OUTPUT_DIR',
+                                             self.m.chromium.output_dir)
+        kwargs['env'] = env
       return self.m.python(step_name, script, args, **kwargs)

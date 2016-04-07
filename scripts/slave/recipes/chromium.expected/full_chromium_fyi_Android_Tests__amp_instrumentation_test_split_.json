@@ -549,6 +549,9 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
+    },
     "name": "[trigger] AndroidWebViewTest",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@",
@@ -642,6 +645,9 @@
       "--release"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
+    },
     "name": "[collect] AndroidWebViewTest",
     "~followup_annotations": [
       "@@@STEP_TEXT@on Foo Fone 1.2.3@@@"

@@ -182,5 +182,6 @@ class AndroidPerfTest(Test):
                    args=args,
                    revision=self._revision,
                    perf_test=True,
-                   perf_dashboard_id=self._name)
+                   perf_dashboard_id=self._name,
+                   env={'CHROMIUM_OUT_DIR': api.m.chromium.output_dir})
 
