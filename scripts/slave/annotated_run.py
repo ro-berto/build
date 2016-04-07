@@ -71,6 +71,10 @@ LogDogPlatform = collections.namedtuple('LogDogPlatform', (
 CipdBinary = collections.namedtuple('CipdBinary',
     ('package', 'version', 'relpath'))
 
+# CIPD tag for LogDog Butler/Annotee to use.
+LOGDOG_CIPD_CANARY = 'latest'
+LOGDOG_CIPD_VERSION = 'git_revision:36fbc27d6caa3951e74848cc7ce9f08f9ea6ad95'
+
 # RecipeRuntime will probe this for values.
 # - First, (),
 # - Then, (system,)
@@ -90,9 +94,9 @@ PLATFORM_CONFIG = {
   ('linux', 32): {
     'logdog_platform': LogDogPlatform(
         butler=CipdBinary('infra/tools/luci/logdog/butler/linux-386',
-                          'latest', 'logdog_butler'),
+                          LOGDOG_CIPD_VERSION, 'logdog_butler'),
         annotee=CipdBinary('infra/tools/luci/logdog/annotee/linux-386',
-                          'latest', 'logdog_annotee'),
+                          LOGDOG_CIPD_VERSION, 'logdog_annotee'),
         credential_path=('/creds/service_accounts/'
                          'service-account-luci-logdog-publisher.json'),
         streamserver='unix',
@@ -101,9 +105,9 @@ PLATFORM_CONFIG = {
   ('linux', 64): {
     'logdog_platform': LogDogPlatform(
         butler=CipdBinary('infra/tools/luci/logdog/butler/linux-amd64',
-                          'latest', 'logdog_butler'),
+                          LOGDOG_CIPD_VERSION, 'logdog_butler'),
         annotee=CipdBinary('infra/tools/luci/logdog/annotee/linux-amd64',
-                          'latest', 'logdog_annotee'),
+                          LOGDOG_CIPD_VERSION, 'logdog_annotee'),
         credential_path=('/creds/service_accounts/'
                          'service-account-luci-logdog-publisher.json'),
         streamserver='unix',
@@ -117,9 +121,9 @@ PLATFORM_CONFIG = {
   ('mac', 64): {
     'logdog_platform': LogDogPlatform(
         butler=CipdBinary('infra/tools/luci/logdog/butler/mac-amd64',
-                          'latest', 'logdog_butler'),
+                          LOGDOG_CIPD_VERSION, 'logdog_butler'),
         annotee=CipdBinary('infra/tools/luci/logdog/annotee/mac-amd64',
-                          'latest', 'logdog_annotee'),
+                          LOGDOG_CIPD_VERSION, 'logdog_annotee'),
         credential_path=('/creds/service_accounts/'
                          'service-account-luci-logdog-publisher.json'),
         streamserver='unix',
@@ -134,9 +138,9 @@ PLATFORM_CONFIG = {
   ('win', 32): {
     'logdog_platform': LogDogPlatform(
         butler=CipdBinary('infra/tools/luci/logdog/butler/windows-386',
-                          'latest', 'logdog_butler.exe'),
+                          LOGDOG_CIPD_VERSION, 'logdog_butler.exe'),
         annotee=CipdBinary('infra/tools/luci/logdog/annotee/windows-386',
-                          'latest', 'logdog_annotee.exe'),
+                          LOGDOG_CIPD_VERSION, 'logdog_annotee.exe'),
         credential_path=('c:\\creds\\service_accounts\\'
                          'service-account-luci-logdog-publisher.json'),
         streamserver='net.pipe',
@@ -145,9 +149,9 @@ PLATFORM_CONFIG = {
   ('win', 64): {
     'logdog_platform': LogDogPlatform(
         butler=CipdBinary('infra/tools/luci/logdog/butler/windows-amd64',
-                          'latest', 'logdog_butler.exe'),
+                          LOGDOG_CIPD_VERSION, 'logdog_butler.exe'),
         annotee=CipdBinary('infra/tools/luci/logdog/annotee/windows-amd64',
-                          'latest', 'logdog_annotee.exe'),
+                          LOGDOG_CIPD_VERSION, 'logdog_annotee.exe'),
         credential_path=('c:\\creds\\service_accounts\\'
                          'service-account-luci-logdog-publisher.json'),
         streamserver='net.pipe',
