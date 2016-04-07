@@ -58,7 +58,8 @@ def check_call(cmd, cwd=None, env=None):
 
 def check_output(cmd, cwd=None, env=None):
   log('Running %s%s' % (cmd, ' in %s' % cwd if cwd else ''))
-  return subprocess.check_output(cmd, cwd=cwd, shell=is_win, env=env)
+  return subprocess.check_output(cmd, cwd=cwd, shell=is_win, env=env,
+                                 stderr=subprocess.STDOUT)
 
 
 def report_checkout_state(b_dir, cur_host):
