@@ -16,6 +16,8 @@ def Update(c):
                             builderNames=[
           'Android Debug',
           'Android Release',
+          'Android Debug (GN)',
+          'Android Release (GN)',
           'Android Clang Debug',
           'Android ARM64 Debug',
       ]),
@@ -24,6 +26,8 @@ def Update(c):
   specs = [
     {'name': 'Android Debug'},
     {'name': 'Android Release'},
+    {'name': 'Android Debug (GN)', 'slavebuilddir': 'android_gn'},
+    {'name': 'Android Release (GN)', 'slavebuilddir': 'android_gn'},
     {'name': 'Android Clang Debug', 'slavebuilddir': 'android_clang'},
     {'name': 'Android ARM64 Debug', 'slavebuilddir': 'android_arm64'},
   ]

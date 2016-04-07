@@ -7,7 +7,7 @@
       "--master",
       "client.libyuv",
       "--builder",
-      "Android GN",
+      "Android Release (GN)",
       "--slave",
       "slavename",
       "--spec",

@@ -186,6 +186,24 @@ BUILDERS = freeze({
         },
         'testing': {'platform': 'win'},
       },
+      'Win64 Debug (GN)': {
+        'recipe_config': 'libyuv_clang',
+        'chromium_apply_config': ['gn'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'win'},
+      },
+      'Win64 Release (GN)': {
+        'recipe_config': 'libyuv_clang',
+        'chromium_apply_config': ['gn'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'win'},
+      },
       'Mac64 Debug': {
         'recipe_config': 'libyuv',
         'chromium_config_kwargs': {
@@ -196,6 +214,24 @@ BUILDERS = freeze({
       },
       'Mac64 Release': {
         'recipe_config': 'libyuv',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'Mac64 Debug (GN)': {
+        'recipe_config': 'libyuv',
+        'chromium_apply_config': ['gn'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'Mac64 Release (GN)': {
+        'recipe_config': 'libyuv',
+        'chromium_apply_config': ['gn'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -397,22 +433,22 @@ BUILDERS = freeze({
         },
         'testing': {'platform': 'linux'},
       },
-      'Android GN': {
+      'Android Debug (GN)': {
         'recipe_config': 'libyuv_android',
         'chromium_apply_config': ['gn'],
         'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
+          'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
         'testing': {'platform': 'linux'},
       },
-      'Android GN (dbg)': {
+      'Android Release (GN)': {
         'recipe_config': 'libyuv_android',
         'chromium_apply_config': ['gn'],
         'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
+          'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
@@ -471,6 +507,24 @@ BUILDERS = freeze({
         },
         'testing': {'platform': 'win'},
       },
+      'win_x64_gn': {
+        'recipe_config': 'libyuv_clang',
+        'chromium_apply_config': ['gn'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'win'},
+      },
+      'win_x64_gn_rel': {
+        'recipe_config': 'libyuv_clang',
+        'chromium_apply_config': ['gn'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'win'},
+      },
       'mac': {
         'recipe_config': 'libyuv',
         'chromium_config_kwargs': {
@@ -481,6 +535,24 @@ BUILDERS = freeze({
       },
       'mac_rel': {
         'recipe_config': 'libyuv',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'mac_gn': {
+        'recipe_config': 'libyuv',
+        'chromium_apply_config': ['gn'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'mac_gn_rel': {
+        'recipe_config': 'libyuv',
+        'chromium_apply_config': ['gn'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
