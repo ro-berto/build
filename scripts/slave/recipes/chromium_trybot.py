@@ -62,6 +62,14 @@ CHROMIUM_BLINK_TESTS_PATHS = freeze([
   'media',
   'third_party/WebKit',
   'third_party/harfbuzz-ng',
+  'third_party/iccjpeg',
+  'third_party/libjpeg',
+  'third_party/libjpeg_turbo',
+  'third_party/libpng',
+  'third_party/libwebp',
+  'third_party/qcms',
+  'third_party/yasm',
+  'third_party/zlib',
   'v8',
 ])
 
