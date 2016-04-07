@@ -62,9 +62,10 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
       idempotent=False, store_output=True, extra_args=None, expiration=None,
       hard_timeout=None):
     """Isolate inputs and trigger the task to run."""
-    isolated_hash = self.isolate_task(isolate_path, isolate_base_dir, task_name,
-                                      isolate_vars, blacklist=isolate_blacklist,
-                                      extra_hashes=extra_isolate_hashes)
+    os_type = swarm_dimensions.get('os', 'linux')
+    isolated_hash = self.isolate_task(
+        isolate_path, isolate_base_dir, os_type, task_name, isolate_vars,
+        blacklist=isolate_blacklist, extra_hashes=extra_isolate_hashes)
     tasks = self.trigger_swarming_tasks([(task_name, isolated_hash)],
                                         swarm_dimensions,
                                         idempotent=idempotent,
@@ -75,10 +76,10 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
     assert len(tasks) == 1
     return tasks[0]
 
-  def isolate_task(self, isolate_path, base_dir, task_name,
+  def isolate_task(self, isolate_path, base_dir, os_type, task_name,
                    isolate_vars, blacklist=None, extra_hashes=None):
     """Isolate inputs for the given task."""
-    self.create_isolated_gen_json(isolate_path, base_dir, 'linux',
+    self.create_isolated_gen_json(isolate_path, base_dir, os_type,
                                   task_name, isolate_vars,
                                   blacklist=blacklist)
     hashes = self.batcharchive([task_name])

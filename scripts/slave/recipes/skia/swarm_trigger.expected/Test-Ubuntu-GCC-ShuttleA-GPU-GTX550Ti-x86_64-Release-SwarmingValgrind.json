@@ -448,7 +448,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/compile_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[SLAVE_BUILD]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/compile_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-compile_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"Ubuntu\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[SLAVE_BUILD]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\", \n    \"version\": 1\n}",
       "[SLAVE_BUILD]/swarming_temp_dir/compile_skia.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -751,7 +751,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/test_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[SLAVE_BUILD]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/test_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-test_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"Ubuntu\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[SLAVE_BUILD]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\", \n    \"version\": 1\n}",
       "[SLAVE_BUILD]/swarming_temp_dir/test_skia.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -926,7 +926,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/perf_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-perf_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"linux\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[SLAVE_BUILD]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\", \n    \"version\": 1\n}",
+      "{\n    \"args\": [\n        \"--isolate\", \n        \"[SLAVE_BUILD]/skia/infra/bots/perf_skia.isolate\", \n        \"--isolated\", \n        \"[SLAVE_BUILD]/swarming_temp_dir/skia-task-perf_skia.isolated\", \n        \"--config-variable\", \n        \"OS\", \n        \"Ubuntu\", \n        \"--blacklist\", \n        \".git\", \n        \"--blacklist\", \n        \"out\", \n        \"--blacklist\", \n        \"*.pyc\", \n        \"--extra-variable\", \n        \"WORKDIR\", \n        \"[SLAVE_BUILD]\", \n        \"--extra-variable\", \n        \"BUILD\", \n        \"[BUILD]\"\n    ], \n    \"dir\": \"[SLAVE_BUILD]\", \n    \"version\": 1\n}",
       "[SLAVE_BUILD]/swarming_temp_dir/perf_skia.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",

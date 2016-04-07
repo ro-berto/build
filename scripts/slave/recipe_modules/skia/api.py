@@ -51,6 +51,7 @@ BUILD_PRODUCTS_ISOLATE_WHITELIST = [
   '*.dll',
   'skia_launcher',
   'lib/*.so',
+  'iOSShell.app',
   'iOSShell.ipa',
 ]
 
@@ -302,14 +303,11 @@ class SkiaApi(recipe_api.RecipeApi):
     self.got_revision = update_step.presentation.properties['got_revision']
     self.m.tryserver.maybe_apply_issue()
 
-  def compile_steps(self, clobber=False):
-    """Run the steps to build Skia."""
-    for target in self.build_targets:
-      self.flavor.compile(target)
-    if self.running_in_swarming:
-      self.m.python.inline(
-          name='copy build products',
-          program='''import errno
+  def copy_build_products(self, src, dst):
+    """Copy whitelisted build products from src to dst."""
+    self.m.python.inline(
+        name='copy build products',
+        program='''import errno
 import glob
 import os
 import shutil
@@ -328,12 +326,27 @@ except OSError as e:
 for pattern in build_products_whitelist:
   path = os.path.join(src, pattern)
   for f in glob.glob(path):
-    print 'Copying build product %%s' %% f
-    shutil.copy(f, dst)
+    print 'Copying build product %%s to %%s' %% (f, dst)
+    shutil.move(f, dst)
 ''' % str(BUILD_PRODUCTS_ISOLATE_WHITELIST),
-          args=[self.m.path.join(self.out_dir, self.configuration),
-                self.m.path.join(self.swarming_out_dir, 'out', self.configuration)],
-          infra_step=True)
+        args=[src, dst],
+        infra_step=True)
+
+  def compile_steps(self, clobber=False):
+    """Run the steps to build Skia."""
+    for target in self.build_targets:
+      self.flavor.compile(target)
+    if self.running_in_swarming:
+      self.copy_build_products(
+          self.m.path.join(self.out_dir, self.configuration),
+          self.m.path.join(self.swarming_out_dir, 'out', self.configuration))
+      if ('iOS' in self.builder_cfg.get('os', '') or
+          'iOS' in self.builder_cfg.get('extra_config', '')):
+        xcode_out = self.m.path.join(
+            'xcodebuild', '%s-iphoneos' % self.configuration)
+        self.copy_build_products(
+            self.m.path.join(self.skia_dir, xcode_out),
+            self.m.path.join(self.swarming_out_dir, xcode_out))
 
   def _readfile(self, filename, *args, **kwargs):
     """Convenience function for reading files."""
