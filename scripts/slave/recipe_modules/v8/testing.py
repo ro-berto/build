@@ -469,7 +469,10 @@ class V8SwarmingTest(V8Test):
       # swarming collect step like for local testing.
       result = self.api.swarming.collect_task(
         self.task,
-        step_test_data=lambda: self.v8.test_api.output_json(),
+        step_test_data=lambda: self.v8.test_api.output_json(
+            self.v8._test_data.get('test_failures', False),
+            self.v8._test_data.get('wrong_results', False),
+            self.v8._test_data.get('flakes', False)),
       )
     finally:
       # Note: Exceptions from post_run might hide a pending exception from the
@@ -683,6 +686,10 @@ class TestResults(object):
   @property
   def is_negative(self):
     return bool(self.failures or self.flakes or self.infra_failures)
+
+  @property
+  def has_failures(self):
+    return bool(self.failures or self.infra_failures)
 
   def __add__(self, other):
     return TestResults(

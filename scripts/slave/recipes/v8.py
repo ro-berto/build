@@ -87,9 +87,13 @@ def RunSteps(api):
     test_results = v8.runtests(tests)
     v8.maybe_bisect(test_results)
 
-    if test_results.is_negative:
+    if not api.tryserver.is_tryserver and test_results.is_negative:
       # Let the overall build fail for failures and flakes.
       raise api.step.StepFailure('Failures or flakes in build.')
+
+    if api.tryserver.is_tryserver and test_results.has_failures:
+      # Let tryjobs fail for failures only.
+      raise api.step.StepFailure('Failures in tryjob.')
 
   if v8.generate_gcov_coverage:
     v8.upload_gcov_coverage_report()
@@ -163,6 +167,24 @@ def GenTests(api):
     api.properties(
         extra_flags=['--trace_gc', '--turbo_stats'],
     )
+  )
+
+  yield (
+    api.v8.test(
+        'tryserver.v8',
+        'v8_linux_rel_ng_triggered',
+        'failures',
+    ) +
+    api.v8(test_failures=True, wrong_results=False, flakes=False)
+  )
+
+  yield (
+    api.v8.test(
+        'tryserver.v8',
+        'v8_linux_rel_ng_triggered',
+        'flakes',
+    ) +
+    api.v8(test_failures=True, wrong_results=False, flakes=True)
   )
 
   def TestFailures(wrong_results, flakes):
