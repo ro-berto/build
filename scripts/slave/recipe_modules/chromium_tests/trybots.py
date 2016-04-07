@@ -15,6 +15,11 @@ def simple_bot(bot_id, analyze_mode=None):
 TRYBOTS = freeze({
   'tryserver.blink': {
     'builders': {
+      # TODO(joelo): Remove this builder.
+      'linux_blink_rel_ng': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux',
+      }),
       'linux_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux (dbg)',
@@ -30,6 +35,18 @@ TRYBOTS = freeze({
       'linux_blink_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux',
+      }, analyze_mode='compile'),
+      'linux_blink_oilpan_dbg': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux non-Oilpan (dbg)',
+      }),
+      'linux_blink_oilpan_rel': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux non-Oilpan',
+      }),
+      'linux_blink_oilpan_compile_rel': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux non-Oilpan',
       }, analyze_mode='compile'),
       'mac_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
@@ -47,6 +64,18 @@ TRYBOTS = freeze({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.9',
       }, analyze_mode='compile'),
+      'mac_blink_oilpan_dbg': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Mac non-Oilpan (dbg)',
+      }),
+      'mac_blink_oilpan_rel': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Mac non-Oilpan',
+      }),
+      'mac_blink_oilpan_compile_rel': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Mac non-Oilpan',
+      }, analyze_mode='compile'),
       'win_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win7 (dbg)',
@@ -62,6 +91,18 @@ TRYBOTS = freeze({
       'win_blink_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win7',
+      }, analyze_mode='compile'),
+      'win_blink_oilpan_dbg': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Win non-Oilpan (dbg)',
+      }),
+      'win_blink_oilpan_rel': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Win non-Oilpan',
+      }),
+      'win_blink_oilpan_compile_rel': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Win non-Oilpan',
       }, analyze_mode='compile'),
     },
   },
@@ -233,6 +274,10 @@ TRYBOTS = freeze({
       'linux_arm': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Linux ARM',
+      }),
+      'linux_blink_oilpan_rel': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Linux non-Oilpan Builder',
       }),
       'linux_chromium_browser_side_navigation_rel': simple_bot({
         'mastername': 'chromium.fyi',
