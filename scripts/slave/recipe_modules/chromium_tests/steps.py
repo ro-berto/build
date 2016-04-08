@@ -883,12 +883,11 @@ class AMPTest(Test):
   AMP_INSTANCE_PROTOCOL = 'http'
   AMP_RESULTS_BUCKET = 'chrome-amp-results'
   def __init__(self, name, device_name=None, device_os=None, device_oem=None,
-               fallback_to_local=True, test_run_timeout=None):
+               test_run_timeout=None):
     self._name = name
     self._device_name = device_name
     self._device_os = device_os
     self._device_oem = device_oem
-    self._fallback_to_local = fallback_to_local
     self._test_run_id = None
     self._test_run_timeout = test_run_timeout
     self._trigger_successful = None
@@ -897,10 +896,6 @@ class AMPTest(Test):
   @property
   def name(self):
     return self._name
-
-  @property
-  def uses_local_devices(self):
-    return self._fallback_to_local
 
   def amp_arguments(self, api):
     return api.amp.amp_arguments(
@@ -937,20 +932,7 @@ class AMPTest(Test):
     raise NotImplementedError() # pragma: no cover
 
   def run(self, api, suffix, test_filter=None):
-    # If we were unable to successfully trigger the AMP job, run locally;
-    # otherwise return no results as results will be collected in post_run.
-    if not self._trigger_successful and self._fallback_to_local:
-      try:
-        self.run_test_locally(api, suffix)
-      finally:
-        step_result = api.step.active_result
-        valid, failures = self.validate_task_results(api, step_result)
-        self._step_results[suffix] = {'valid': valid, 'failures': failures}
-    else:
-      self._step_results[suffix] = {'valid': False, 'failures': []}
-
-  def run_test_locally(self, api):
-    raise NotImplementedError() # pragma: no cover
+    self._step_results[suffix] = {'valid': False, 'failures': []}
 
   def post_run(self, api, suffix, test_filter=None):
     if self._trigger_successful:
@@ -1001,12 +983,10 @@ class AMPTest(Test):
 class AMPGTestTest(AMPTest):
   def __init__(self, name, args=None, target_name=None, device_name=None,
                device_os=None, device_oem=None, android_isolate_path=None,
-               fallback_to_local=True, test_run_timeout=None,
-               **runtest_kwargs):
+               test_run_timeout=None, **runtest_kwargs):
     super(AMPGTestTest, self).__init__(
         name=name, device_name=device_name, device_os=device_os,
-        device_oem=device_oem, fallback_to_local=fallback_to_local,
-        test_run_timeout=test_run_timeout)
+        device_oem=device_oem, test_run_timeout=test_run_timeout)
     self._args = args
     self._target_name = target_name
     self._android_isolate_path = android_isolate_path
@@ -1027,20 +1007,15 @@ class AMPGTestTest(AMPTest):
     return api.amp.gtest_arguments(
         self.name, isolate_file_path=isolate_file_path)
 
-  #override
-  def run_test_locally(self, api, suffix):
-    return self._local_test.run(api, suffix)
-
 
 class AMPInstrumentationTest(AMPTest):
   def __init__(self, test_apk, apk_under_test, compile_target=None,
                device_name=None, device_os=None, device_oem=None,
-               android_isolate_path=None, fallback_to_local=True,
-               test_run_timeout=None, test_timeout_scale=None):
+               android_isolate_path=None, test_run_timeout=None,
+               test_timeout_scale=None):
     super(AMPInstrumentationTest, self).__init__(
         test_apk, device_name=device_name, device_os=device_os,
-        device_oem=device_oem, fallback_to_local=fallback_to_local,
-        test_run_timeout=test_run_timeout)
+        device_oem=device_oem, test_run_timeout=test_run_timeout)
     self._apk_under_test = apk_under_test
     self._compile_target = compile_target
     self._android_isolate_path = android_isolate_path
@@ -1062,15 +1037,6 @@ class AMPInstrumentationTest(AMPTest):
         test_apk=self.name,
         isolate_file_path=isolate_file_path,
         timeout_scale=self._test_timeout_scale)
-
-  #override
-  def run_test_locally(self, api, suffix):
-    isolate_file_path = (api.path['checkout'].join(self._android_isolate_path)
-                         if self._android_isolate_path else None)
-    return AndroidInstrumentationTest(
-        name=self.name,
-        compile_targets=[self._compile_target],
-        timeout_scale=self._test_timeout_scale).run(api, suffix)
 
 
 class LocalIsolatedScriptTest(Test):

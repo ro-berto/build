@@ -990,19 +990,6 @@ def GenTests(api):
   )
 
   yield (
-    api.test('amp_split_recipe_trigger_local_failure') +
-    api.properties(
-        mastername='chromium.fyi',
-        buildername='Android Tests (amp split)',
-        slavename='build1-a1',
-        buildnumber='77457',
-        parent_build_archive_url='gs://test-domain/test-archive.zip'
-    ) +
-    api.override_step_data('[trigger] base_unittests', retcode=1) +
-    api.override_step_data('base_unittests', retcode=1)
-  )
-
-  yield (
     api.test('amp_split_recipe_collect_failure') +
     api.properties(
         mastername='chromium.fyi',

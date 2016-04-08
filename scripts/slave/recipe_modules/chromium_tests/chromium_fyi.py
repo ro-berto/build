@@ -1975,8 +1975,7 @@ SPEC = {
             android_isolate_path=
                 'android_webview/android_webview_test_apk.isolate',
             compile_target='android_webview_test_apk',
-            device_name=['Nexus 5'], device_os=['4.4.2'],
-            fallback_to_local=True),
+            device_name=['Nexus 5'], device_os=['4.4.2']),
       ],
       'test_generators': [
         steps.generate_gtest,
