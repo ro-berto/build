@@ -72,12 +72,11 @@ def CommonChecks(input_api, output_api):
       'C0321',  # More than one statement on a single line
       'W0613',  # Unused argument
     ]
-    # Disabled Pylint because it hangs, see http://crbug.com/601782.
-    #tests.extend(input_api.canned_checks.GetPylint(
-    #    input_api,
-    #    output_api,
-    #    black_list=black_list,
-    #    disabled_warnings=disabled_warnings))
+    tests.extend(input_api.canned_checks.GetPylint(
+        input_api,
+        output_api,
+        black_list=black_list,
+        disabled_warnings=disabled_warnings))
 
   # Run our 'test_env.py' script to generate any required binaries before
   # executing the tests in parallel. Otherwise, individual tests may attempt to
