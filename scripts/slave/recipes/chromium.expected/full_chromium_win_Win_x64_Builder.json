@@ -272,6 +272,7 @@
       "--",
       "browser_tests",
       "browser_tests_run",
+      "crash_service",
       "mini_installer"
     ],
     "cwd": "[SLAVE_BUILD]",

@@ -220,7 +220,8 @@
       "--goma-dir",
       "[BUILD]\\goma",
       "--",
-      "chrome"
+      "chrome",
+      "crash_service"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile",

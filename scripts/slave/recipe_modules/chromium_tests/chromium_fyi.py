@@ -425,6 +425,7 @@ SPEC = {
       'compile_targets': [
         'content_unittests',
         'content_browsertests',
+        'crash_service',
       ],
       'test_generators': [
         steps.generate_gtest,

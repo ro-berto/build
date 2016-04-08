@@ -231,7 +231,8 @@
       "[BUILD]\\goma",
       "--ninja-ensure-up-to-date",
       "--",
-      "chromium_builder_tests"
+      "chromium_builder_tests",
+      "crash_service"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile",

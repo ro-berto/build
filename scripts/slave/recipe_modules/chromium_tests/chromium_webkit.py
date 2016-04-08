@@ -24,6 +24,11 @@ SPEC['builders'].update({
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 32,
     },
+    'compile_targets': [
+      # TODO(phajdan.jr): Find a way to automatically add crash_service
+      # to Windows builds (so that start_crash_service step works).
+      'crash_service',
+    ],
     'bot_type': 'builder',
     'testing': {
       'platform': 'win',
@@ -91,6 +96,10 @@ SPEC['builders'].update({
     'compile_targets': [
       # TODO(phajdan.jr): Shouldn't be needed once we have 64-bit testers.
       'blink_tests',
+
+      # TODO(phajdan.jr): Find a way to automatically add crash_service
+      # to Windows builds (so that start_crash_service step works).
+      'crash_service',
     ],
     'bot_type': 'builder_tester',
     'test_generators': [
@@ -112,6 +121,11 @@ SPEC['builders'].update({
       'BUILD_CONFIG': 'Debug',
       'TARGET_BITS': 32,
     },
+    'compile_targets': [
+      # TODO(phajdan.jr): Find a way to automatically add crash_service
+      # to Windows builds (so that start_crash_service step works).
+      'crash_service',
+    ],
     'bot_type': 'builder',
     'testing': {
       'platform': 'win',
@@ -155,6 +169,10 @@ SPEC['builders'].update({
     'compile_targets': [
       # TODO(phajdan.jr): Shouldn't be needed once we have 64-bit testers.
       'blink_tests',
+
+      # TODO(phajdan.jr): Find a way to automatically add crash_service
+      # to Windows builds (so that start_crash_service step works).
+      'crash_service',
     ],
     'bot_type': 'builder_tester',
     'test_generators': [

@@ -241,12 +241,16 @@
       "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
       "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"crash_service\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"blink_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"crash_service\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"blink_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"crash_service\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"blink_tests\"@@@",
@@ -316,7 +320,8 @@
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--",
-      "blink_tests"
+      "blink_tests",
+      "crash_service"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile (with patch)",
@@ -333,6 +338,17 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "mark: before_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\run_crash_handler.py",
+      "--target",
+      "Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "start_crash_service"
   },
   {
     "cmd": [
