@@ -34,7 +34,6 @@ def CommonChecks(input_api, output_api):
       r'.*scripts/tools/buildbot_tool_templates/.*',
       r'.*scripts/release/.*',
       r'.*scripts/slave/recipe_modules/.*',
-      r'.*scripts/slave/.recipe_deps/.*',
       r'.*scripts/gsd_generate_index/.*',
       r'.*masters/.*/templates/.*\.html$',
       r'.*masters/.*/templates/.*\.css$',
@@ -44,6 +43,13 @@ def CommonChecks(input_api, output_api):
       # master.client.drmemory and master.client.dynamorio and do not contain
       # checked-in code.
       r'.*masters/.*/gitpoller/.*',
+
+      # Exclude all "...recipe_deps" directories.
+      #
+      # These directories are created by tests in "tests/", and by recipe
+      # engine. Each is an independent recipe checkout. If Pylint is run on
+      # these, it will hang forever, so we must exclude them.
+      r'.*/\..*recipe_deps/.*',
   ]
   tests = []
 
