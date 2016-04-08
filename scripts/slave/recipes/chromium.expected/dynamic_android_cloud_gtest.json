@@ -304,7 +304,7 @@
       "6",
       "launch",
       "--snapshot",
-      "clean-20-l-phone-snapshot"
+      "clean-22-l-phone-snapshot"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "launch_instances"
