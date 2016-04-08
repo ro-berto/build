@@ -1438,10 +1438,6 @@ class AndroidTest(Test):
   def name(self):
     return self._name
 
-  @property
-  def uses_local_devices(self):
-    return True
-
   def _get_failing_tests(self, step_result):
     """Parses test results and returns a list of failed tests.
 
@@ -1511,6 +1507,10 @@ class AndroidJunitTest(AndroidTest):
   def __init__(self, name):
     super(AndroidJunitTest, self).__init__(name, compile_targets=[name],
         isolate_file_path=None)
+
+  @property
+  def uses_local_devices(self):
+    return False
 
   #override
   def run_tests(self, api, suffix, json_results_file):
@@ -1605,6 +1605,9 @@ class AndroidInstrumentationTest(AndroidTest):
     self._verbose = verbose
     self._wrapper_script_suite_name = compile_targets[0]
 
+  @property
+  def uses_local_devices(self):
+    return True
 
   #override
   def run_tests(self, api, suffix, json_results_file):

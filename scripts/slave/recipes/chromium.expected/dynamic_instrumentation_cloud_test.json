@@ -5,9 +5,9 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
-      "chromium.linux",
+      "chromium.fyi",
       "--builder",
-      "Android Tests",
+      "Android Cloud Tests",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -114,20 +114,6 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/swarming_client/swarming.py",
-      "--version"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
@@ -135,7 +121,7 @@
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[SLAVE_BUILD]/src/build/goma/client' target_arch=arm test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[SLAVE_BUILD]/src/build/goma/client' target_arch=ia32 use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -150,11 +136,10 @@
       "--",
       "--build-config-fs",
       "Release",
-      "--use-src-side-runtest-py",
       "--paths",
       "{\"checkout\": \"[SLAVE_BUILD]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Android Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Android Cloud Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -168,25 +153,24 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "read test spec",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json@@@",
+      "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Android Tests\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Android Cloud Tests\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"instrumentation_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"dimension_sets\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@            \"build.id\": \"KTU84P\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"product.board\": \"hammerhead\"@@@",
-      "@@@STEP_LOG_LINE@json.output@          }@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"ChromePublicTest\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"additional_apks\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"another_apk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"omg_so_many_apks\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        ], @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"apk_under_test\": \"second_apk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"ChromePublicTest\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test_apk\": \"one_apk\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -248,21 +232,20 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]/src/out/Release"
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.fyi",
+      "-b",
+      "Android Cloud Tests",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[SLAVE_BUILD]/src/build/goma/client",
+      "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree build directory",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "generate_build_files"
   },
   {
     "cmd": [
@@ -271,59 +254,119 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/extract_build.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/compile.py",
+      "--ninja-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "--target",
       "Release",
-      "--build-url",
-      "gs://chromium-linux-archive/chromium.linux/Android Builder/full-build-linux.zip",
-      "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--master-name",
-      "chromium.linux",
-      "--build-number",
-      "571"
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--goma-cache-dir",
+      "[GOMA_CACHE]",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--goma-jsonstatus",
+      "/path/to/tmp/json",
+      "--goma-dir",
+      "[SLAVE_BUILD]/src/build/goma/client",
+      "--",
+      "base_junit_tests",
+      "chrome_junit_tests",
+      "chrome_public_test_apk",
+      "components_junit_tests",
+      "content_junit_tests",
+      "junit_unit_tests",
+      "net_junit_tests"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "extract build"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::adb]/resources/list_devices.py",
-      "['[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "List adb devices",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "compile",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C009\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport subprocess\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  print 'Attempting to root device %s ...' % (device)\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n  print 'Finished rooting device %s' % (device)\n",
+      "[SLAVE_BUILD]/src/build/symlink.py",
+      "-f",
       "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
-      "014E1F310401C009"
+      "~/adb"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Root devices",
+    "name": "create adb symlink"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/gce_manager.py",
+      "TestSlavename",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "--n",
+      "6",
+      "launch",
+      "--snapshot",
+      "clean-20-l-phone-snapshot"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "launch_instances"
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[SLAVE_BUILD]/src/out/logcat"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "spawn_logcat_monitor"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/provision_devices.py",
+      "-t",
+      "Release",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--output-device-blacklist",
+      "/path/to/tmp/json",
+      "--emulators"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "provision_devices"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_chrome_public_test_apk",
+      "--blacklist-file",
+      "[SLAVE_BUILD]/src/out/bad_devices.json",
+      "--flakiness-dashboard-server",
+      "test-results.appspot.com",
+      "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Instrumentation test ChromePublicTest",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import subprocess@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@adb_path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@for device in sys.argv[2:]:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Attempting to root device %s ...' % (device)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  subprocess.check_call([adb_path, '-s', device, 'root'])@@@",
-      "@@@STEP_LOG_LINE@python.inline@  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Finished rooting device %s' % (device)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
   },
   {
@@ -468,24 +511,78 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "junit",
-      "-s",
-      "ui_junit_tests",
-      "--verbose",
-      "--release",
-      "--json-results-file",
-      "/path/to/tmp/json"
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "[SLAVE_BUILD]/src/out/Release/full_log",
+      "[SLAVE_BUILD]/src/out/logcat"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "logcat_dump"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "[SLAVE_BUILD]/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/Android Cloud Tests/571"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android Cloud Tests/571@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "x86",
+      "--more-info",
+      "[SLAVE_BUILD]/src/out/Release/full_log"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
-    "name": "ui_junit_tests",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
+    "name": "stack_tool_with_logcat_dump"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "stack_tool_for_tombstones"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/gce_manager.py",
+      "TestSlavename",
+      "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "--n",
+      "6",
+      "shutdown"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "shutdown_instances"
   },
   {
     "cmd": [

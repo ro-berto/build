@@ -673,6 +673,28 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_instrumentation_cloud_test') +
+    api.properties.generic(mastername='chromium.fyi',
+                           buildername='Android Cloud Tests',
+                           parent_buildername='Android Builder') +
+    api.override_step_data('read test spec', api.json.output({
+      'Android Cloud Tests': {
+        'instrumentation_tests': [
+          {
+            'test': 'ChromePublicTest',
+            'test_apk': 'one_apk',
+            'apk_under_test': 'second_apk',
+            'additional_apks': [
+              'another_apk',
+              'omg_so_many_apks',
+            ]
+          }
+        ],
+      },
+    }))
+  )
+
+  yield (
     api.test('goma_with_diagnose_goma_failure') +
     api.properties.generic(mastername='chromium.fyi',
                            buildername='CrWinGoma',
