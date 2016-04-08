@@ -260,6 +260,31 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/src/sky/tools/gn",
+      "--release",
+      "--ios",
+      "--ios-force-armv7"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "gn --release --ios --ios-force-armv7"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[SLAVE_BUILD]/src/out/ios_Release_armv7"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "build ios_Release_armv7"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",

@@ -176,6 +176,9 @@ def GenerateXcodeProject(api):
   RunGN(api, '--release', '--ios')
   Build(api, 'ios_Release')
 
+  RunGN(api, '--release', '--ios', '--ios-force-armv7')
+  Build(api, 'ios_Release_armv7')
+
   # Copy device 'Flutter' directory to a deploy dir:
   deploy_dir = out_dir.join('FlutterXcode')
   api.file.rmtree('deployment directory', deploy_dir)
