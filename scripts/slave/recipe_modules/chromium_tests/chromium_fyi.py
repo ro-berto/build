@@ -2100,14 +2100,7 @@ SPEC = {
       },
       'bot_type': 'builder_tester',
       'android_config': 'gce_builder',
-      'tests': [
-        steps.AndroidJunitTest('base_junit_tests'),
-        steps.AndroidJunitTest('chrome_junit_tests'),
-        steps.AndroidJunitTest('components_junit_tests'),
-        steps.AndroidJunitTest('content_junit_tests'),
-        steps.AndroidJunitTest('junit_unit_tests'),
-        steps.AndroidJunitTest('net_junit_tests'),
-      ],
+      'tests': [],
       'test_generators': [
         steps.generate_gtest,
         steps.generate_script,

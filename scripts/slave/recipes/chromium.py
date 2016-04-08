@@ -628,6 +628,23 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_android_cloud_gtest') +
+    api.properties.generic(mastername='chromium.fyi',
+                           buildername='Android Cloud Tests') +
+    api.override_step_data('read test spec', api.json.output({
+      'Android Cloud Tests': {
+        'gtest_tests': [
+          {
+            'args': [
+              '--isolate-file-path=src/base/base_unittests.isolate',
+            ],
+            'test': 'base_unittests',
+          },
+        ],
+      }
+    })))
+
+  yield (
     api.test('dynamic_instrumentation_test') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Android Tests',

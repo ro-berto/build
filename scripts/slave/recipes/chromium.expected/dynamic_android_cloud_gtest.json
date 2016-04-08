@@ -162,15 +162,12 @@
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Android Cloud Tests\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"instrumentation_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"additional_apks\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"another_apk\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"omg_so_many_apks\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"args\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"--isolate-file-path=src/base/base_unittests.isolate\"@@@",
       "@@@STEP_LOG_LINE@json.output@        ], @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"apk_under_test\": \"second_apk\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"ChromePublicTest\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test_apk\": \"one_apk\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -272,7 +269,7 @@
       "--goma-dir",
       "[SLAVE_BUILD]/src/build/goma/client",
       "--",
-      "chrome_public_test_apk"
+      "base_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -348,20 +345,25 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_chrome_public_test_apk",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "base_unittests",
+      "--isolate-file-path=src/base/base_unittests.isolate",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
       "--verbose",
+      "--release",
+      "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "Instrumentation test ChromePublicTest",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
-    ]
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
+    },
+    "name": "base_unittests"
   },
   {
     "cmd": [
