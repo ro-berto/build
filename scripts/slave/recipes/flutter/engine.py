@@ -109,6 +109,7 @@ def BuildLinuxAndroidArm(api):
   UploadArtifacts(api, 'android-arm', [
     'build/android/ant/chromium-debug.keystore',
     'out/android_Release/apks/SkyShell.apk',
+    'out/android_Release/flutter.jar',
     'out/android_Release/flutter.mojo',
     'out/android_Release/gen/sky/shell/shell/shell/libs/armeabi-v7a/' +
     'libsky_shell.so',
