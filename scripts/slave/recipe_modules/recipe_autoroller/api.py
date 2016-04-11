@@ -121,6 +121,9 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
       self.m.git.checkout(
           project_data['repo_url'], dir_path=workdir, submodules=False)
 
+      # git cl upload cannot work with detached HEAD, it requires a branch.
+      self.m.git('checkout', '-t', '-b', 'roll', 'origin/master', cwd=workdir)
+
       recipes_cfg_path = workdir.join('infra', 'config', 'recipes.cfg')
 
       roll_step = self.m.python('roll',
