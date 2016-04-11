@@ -25,6 +25,7 @@ def RunSteps(api):
   update_step = api.bot_update.ensure_checkout()
   revs = update_step.presentation.properties
   commit_pos = api.commit_position.parse_revision(revs['got_revision_cp'])
+  api.gclient.runhooks()
 
   # Clobber all out dirs to be sure to get a clean build.
   for out_dir in ["out_ios_arm",
