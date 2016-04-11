@@ -238,8 +238,8 @@ def get_timeouts(builder_cfg):
   expiration = None
   hard_timeout = None
   if 'Valgrind' in builder_cfg.get('extra_config', ''):
-    expiration = 24*60*60
-    hard_timeout = 7*60*60
+    expiration = 2*24*60*60
+    hard_timeout = 9*60*60
   return expiration, hard_timeout
 
 
