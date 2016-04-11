@@ -612,14 +612,11 @@
           "V8 Linux64 - debug - greedy allocator",
           "V8 Linux64 - cfi",
           "V8 Linux64 - gcov coverage",
-          "V8 Linux - mipsel - sim",
           "V8 Linux - full debug",
           "V8 Linux - interpreted regexp",
           "V8 Arm",
           "V8 Arm - debug",
           "V8 Arm GC Stress",
-          "V8 Mips - big endian - nosnap - 1",
-          "V8 Mips - big endian - nosnap - 2",
           "V8 Random Deopt Fuzzer - debug"
         ],
         "builders": {
@@ -632,6 +629,27 @@
               "Mozilla"
             ]
           },
+          "*": {}
+        }
+      }
+    ],
+    "https://build.chromium.org/p/client.v8.ports": [
+      {
+        "categories": [
+          "v8_all"
+        ],
+        "excluded_builders" : [
+          "V8 Linux - mipsel - sim",
+          "V8 Mips - big endian - nosnap - 1",
+          "V8 Mips - big endian - nosnap - 2",
+          "V8 Linux - ppc - sim",
+          "V8 Linux - ppc64 - sim",
+          "V8 Linux - s390 - sim",
+          "V8 Linux - s390x - sim",
+          "V8 Linux - x87 - nosnap - debug builder",
+          "V8 Linux - x87 - nosnap - debug"
+        ],
+        "builders": {
           "*": {}
         }
       }

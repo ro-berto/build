@@ -20,7 +20,9 @@ class V8Notifier(chromium_notifier.ChromiumNotifier):
                active_master,
                categories_steps,
                sendToInterestedUsers=False,
+               exclusions=None,
                extraRecipients=None):
+    exclusions = exclusions or {}
     extraRecipients = extraRecipients or []
     chromium_notifier.ChromiumNotifier.__init__(
         self,
@@ -28,6 +30,7 @@ class V8Notifier(chromium_notifier.ChromiumNotifier):
         categories_steps=categories_steps,
         relayhost=config.Master.smtp,
         sendToInterestedUsers=sendToInterestedUsers,
+        exclusions=exclusions,
         extraRecipients=extraRecipients,
         status_header=
             'buildbot failure in %(project)s on %(builder)s, %(steps)s',
@@ -38,4 +41,3 @@ class V8Notifier(chromium_notifier.ChromiumNotifier):
   def isInterestingStep(self, build_status, step_status, results):
     """Watch only failing steps."""
     return results[0] == FAILURE
-

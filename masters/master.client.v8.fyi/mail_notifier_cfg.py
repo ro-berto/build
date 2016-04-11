@@ -25,7 +25,7 @@ def Update(config, active_master, c):
         active_master,
         categories_steps={
           'clusterfuzz': [
-            'check clusterfuzz'
+            'check clusterfuzz',
             'runhooks',
             'gn',
             'compile',

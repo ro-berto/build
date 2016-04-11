@@ -892,53 +892,6 @@ BUILDERS = {
         },
         'testing': {'platform': 'linux'},
       },
-####### Category: MIPS
-      'V8 Mips - builder': {
-        'chromium_apply_config': ['no_snapshot', 'no_i18n'],
-        'v8_apply_config': ['mips_cross_compile', 'no_snapshot', 'no_i18n'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'mips',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'build_gs_archive': 'mips_rel_archive',
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Mips - big endian - nosnap - 1',
-          'V8 Mips - big endian - nosnap - 2',
-        ],
-      },
-      'V8 Mips - big endian - nosnap - 1': {
-        'v8_apply_config': ['no_snapshot', 'no_i18n'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'mips',
-          'TARGET_BITS': 32,
-          'SHARD_COUNT': 2,
-          'SHARD_RUN': 1,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Mips - builder',
-        'build_gs_archive': 'mips_rel_archive',
-        'tests': [V8Testing, SimdJs],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Mips - big endian - nosnap - 2': {
-        'v8_apply_config': ['no_snapshot', 'no_i18n'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'mips',
-          'TARGET_BITS': 32,
-          'SHARD_COUNT': 2,
-          'SHARD_RUN': 2,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Mips - builder',
-        'build_gs_archive': 'mips_rel_archive',
-        'tests': [V8Testing, SimdJs],
-        'testing': {'platform': 'linux'},
-      },
 ####### Category: Simulators
       'V8 Linux - arm - sim': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
@@ -1099,43 +1052,6 @@ BUILDERS = {
         'enable_swarming': True,
         'swarming_properties': {'default_priority': 35},
         'tests': [Mjsunit_3, Webkit],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux - mipsel - sim - builder': {
-        'chromium_apply_config': [
-          'clang', 'v8_ninja', 'goma', 'simulate_mipsel'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'build_gs_archive': 'mipsel_sim_rel_archive',
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Linux - mipsel - sim',
-        ],
-      },
-      'V8 Linux - mips64el - sim - builder': {
-        'chromium_apply_config': [
-          'clang', 'v8_ninja', 'goma', 'simulate_mipsel'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'build_gs_archive': 'mips64el_sim_rel_archive',
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux - mipsel - sim': {
-        'chromium_apply_config': ['simulate_mipsel'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux - mipsel - sim - builder',
-        'build_gs_archive': 'mipsel_sim_rel_archive',
-        'tests': [V8Testing, Test262, SimdJs],
         'testing': {'platform': 'linux'},
       },
 ####### Category: Misc
@@ -1508,6 +1424,91 @@ BUILDERS = {
 ####### Waterfall: client.v8.ports
   'client.v8.ports': {
     'builders': {
+####### Category: MIPS
+      'V8 Mips - builder': {
+        'chromium_apply_config': ['no_snapshot', 'no_i18n'],
+        'v8_apply_config': ['mips_cross_compile', 'no_snapshot', 'no_i18n'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'mips',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'mips_rel_archive',
+        'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 Mips - big endian - nosnap - 1',
+          'V8 Mips - big endian - nosnap - 2',
+        ],
+      },
+      'V8 Mips - big endian - nosnap - 1': {
+        'v8_apply_config': ['no_snapshot', 'no_i18n'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'mips',
+          'TARGET_BITS': 32,
+          'SHARD_COUNT': 2,
+          'SHARD_RUN': 1,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Mips - builder',
+        'build_gs_archive': 'mips_rel_archive',
+        'tests': [V8Testing, SimdJs],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Mips - big endian - nosnap - 2': {
+        'v8_apply_config': ['no_snapshot', 'no_i18n'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'mips',
+          'TARGET_BITS': 32,
+          'SHARD_COUNT': 2,
+          'SHARD_RUN': 2,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Mips - builder',
+        'build_gs_archive': 'mips_rel_archive',
+        'tests': [V8Testing, SimdJs],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - mipsel - sim - builder': {
+        'chromium_apply_config': [
+          'clang', 'v8_ninja', 'goma', 'simulate_mipsel'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'mipsel_sim_rel_archive',
+        'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 Linux - mipsel - sim',
+        ],
+      },
+      'V8 Linux - mips64el - sim - builder': {
+        'chromium_apply_config': [
+          'clang', 'v8_ninja', 'goma', 'simulate_mipsel'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'mips64el_sim_rel_archive',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - mipsel - sim': {
+        'chromium_apply_config': ['simulate_mipsel'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - mipsel - sim - builder',
+        'build_gs_archive': 'mipsel_sim_rel_archive',
+        'tests': [V8Testing, Test262, SimdJs],
+        'testing': {'platform': 'linux'},
+      },
+####### Category: PPC
       'V8 Linux - ppc - sim': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_ppc'],
         'v8_config_kwargs': {
@@ -1528,6 +1529,7 @@ BUILDERS = {
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
+####### Category: S390
       'V8 Linux - s390 - sim': {
         'chromium_apply_config': [
           'clang', 'v8_ninja', 'goma', 'simulate_s390'],
@@ -1550,6 +1552,7 @@ BUILDERS = {
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
+####### Category: X87
       'V8 Linux - x87 - nosnap - debug builder': {
         'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [

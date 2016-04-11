@@ -5,9 +5,9 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
-      "client.v8",
+      "client.v8.ports",
       "--builder",
-      "V8 Linux - mipsel - sim - builder",
+      "V8 Mips - builder",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -61,14 +61,43 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "[DEPOT_TOOLS]/gsutil.py",
+      "----",
+      "cp",
+      "gs://chromium-v8/mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2",
+      "[SLAVE_BUILD]"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "gsutil bootstrapping mips toolchain"
+  },
+  {
+    "cmd": [
+      "tar",
+      "xf",
+      "mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "unzipping"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=ia32 use_goma=1 v8_target_arch=mipsel",
-      "GYP_GENERATORS": "ninja",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "AR": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ar",
+      "CC": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-gcc",
+      "CXX": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
+      "LINK": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
+      "RANLIB": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
     },
     "name": "gclient runhooks"
   },
@@ -83,26 +112,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[SLAVE_BUILD]/v8",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [
@@ -121,21 +130,11 @@
       "--goma-cache-dir",
       "[GOMA_CACHE]",
       "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma-clang",
-      "--goma-jsonstatus",
-      "/path/to/tmp/json",
-      "--goma-dir",
-      "[BUILD]/goma",
+      "make",
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
+    "name": "compile"
   },
   {
     "allow_subannotations": true,
@@ -149,13 +148,13 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chromium-v8/v8-mipsel-sim-rel",
+      "gs://chromium-v8/v8-mips-rel",
       "--src-dir",
       "v8",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"V8 Linux - mipsel - sim - builder\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"V8 Mips - builder\", \"buildnumber\": 571, \"mastername\": \"client.v8.ports\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"V8 Linux - mipsel - sim - builder\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"V8 Mips - builder\", \"buildnumber\": 571, \"mastername\": \"client.v8.ports\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
@@ -166,7 +165,15 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "V8 Linux - mipsel - sim",
+        "builder_name": "V8 Mips - big endian - nosnap - 1",
+        "properties": {
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      },
+      {
+        "builder_name": "V8 Mips - big endian - nosnap - 2",
         "properties": {
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
@@ -175,7 +182,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@V8 Linux - mipsel - sim@@@"
+      "@@@STEP_TEXT@V8 Mips - big endian - nosnap - 1<br />V8 Mips - big endian - nosnap - 2@@@"
     ]
   },
   {
