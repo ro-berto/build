@@ -160,6 +160,34 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'WebKit Linux - TraceWrappables': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['blink_or_chromium'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [
+        'blink_tests',
+      ],
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+      ],
+      'tests': [
+        steps.BlinkTest(extra_args=[
+          '--additional-driver-flag',
+          '--enable-blink-features=TraceWrappables',
+        ]),
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': True,
+      'use_isolate': True,
+    },
     'MD Top Chrome ChromeOS non-material': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['chromeos'],
