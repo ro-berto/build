@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
+
 from recipe_engine import recipe_test_api
 
 
@@ -18,11 +20,16 @@ class RecipeAutorollerTestApi(recipe_test_api.RecipeTestApi):
         'recipe_engine': [
           {
             'author': 'foo@chromium.org',
-            'message': 'some commit message',
+            'message': '\n'.join([
+                'some commit message',
+                'R=bar@chromium.org,baz@chromium.org',
+                'BUG=123,456',
+            ]),
             'revision': '123abc',
           },
         ],
       },
+      'spec': 'api_version: 1\netc: "etc"\n',
     }
 
     roll_result = {
@@ -44,3 +51,23 @@ class RecipeAutorollerTestApi(recipe_test_api.RecipeTestApi):
 
     ret += self.step_data('%s.roll' % project, self.m.json.output(roll_result))
     return ret
+
+  def new_upload(self, project):
+    return self.step_data('%s.gsutil cat' % project,
+          self.m.raw_io.stream_output('', stream='stdout'),
+          self.m.raw_io.stream_output('Error: No URLs matched ...',
+                                   stream='stderr'),
+          retcode=1)
+
+  def previously_uploaded(self, project):
+    return self.step_data('%s.gsutil cat' % project,
+          self.m.raw_io.stream_output(json.dumps(
+              {
+                'issue': '123456789',
+                'issue_url': 'https://codereview.chromium.org/123456789',
+                # N.B. this is the actual md5 of the step test data specified
+                # for upstream-diff.
+                'diff_digest': 'd4fbd1f86c94d02a0e9f2a3d08aebc1c'
+              }),
+              stream='stdout'),
+          self.m.raw_io.stream_output('', stream='stderr'))
