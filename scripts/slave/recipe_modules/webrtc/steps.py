@@ -54,8 +54,8 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
       tests.append(AndroidTest(test))
     tests.append(AndroidPerfTest('webrtc_perf_tests', revision,
                                  perf_id=api.c.PERF_ID))
-    for test_name, test_config in api.ANDROID_INSTRUMENTATION_TESTS.iteritems():
-      tests.append(AndroidInstrumentationTest(test_name, test_config))
+    for test_name in api.ANDROID_INSTRUMENTATION_TESTS:
+      tests.append(AndroidInstrumentationTest(test_name))
 
   return tests
 
@@ -135,16 +135,11 @@ class AndroidTest(Test):
 
 class AndroidInstrumentationTest(Test):
   """Installs the APK on the device and runs the test."""
-  def __init__(self, name, test_config):
-    super(AndroidInstrumentationTest, self).__init__(name)
-    self._apk_under_test = test_config.get('apk_under_test')
-    self._test_apk = test_config.get('test_apk')
 
   def run(self, api, suffix):
     api.m.chromium_android.run_instrumentation_suite(
         name=self._name,
-        apk_under_test=api.m.chromium_android.apk_path(self._apk_under_test),
-        test_apk=api.m.chromium_android.apk_path(self._test_apk),
+        wrapper_script_suite_name=self._name,
         tool=get_android_tool(api),
         verbose=True)
 

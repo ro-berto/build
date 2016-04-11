@@ -651,40 +651,24 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "instrumentation",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_AppRTCDemoTest",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/AppRTCDemoTest.apk",
-      "--apk-under-test",
-      "[SLAVE_BUILD]/src/out/Release/apks/AppRTCDemo.apk",
-      "--release"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
-    },
     "name": "Instrumentation test AppRTCDemoTest"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "instrumentation",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_libjingle_peerconnection_android_unittest",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose",
-      "--test-apk",
-      "[SLAVE_BUILD]/src/out/Release/apks/libjingle_peerconnection_android_unittest.apk",
-      "--release"
+      "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
-    },
     "name": "Instrumentation test libjingle_peerconnection_android_unittest"
   },
   {

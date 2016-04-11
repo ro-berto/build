@@ -49,18 +49,10 @@ class WebRTCApi(recipe_api.RecipeApi):
     'webrtc_nonparallel_tests',
   )
 
-  # Instrumentation tests may target a separate APK to be tested. In that case,
-  # specify the APK name (without the .apk extension) as key in the dict below.
-  ANDROID_INSTRUMENTATION_TESTS = {
-    'AppRTCDemoTest': {
-      'apk_under_test': 'AppRTCDemo.apk',
-      'test_apk': 'AppRTCDemoTest.apk',
-    },
-    'libjingle_peerconnection_android_unittest': {
-      'apk_under_test': None,
-      'test_apk': 'libjingle_peerconnection_android_unittest.apk',
-    },
-  }
+  ANDROID_INSTRUMENTATION_TESTS = [
+    'AppRTCDemoTest',
+    'libjingle_peerconnection_android_unittest',
+  ]
 
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
