@@ -18,6 +18,9 @@ DEPS = [
 
 TEST_BUILDERS = {
   'client.skia': {
+    'build20-m3': [
+      'Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer',
+    ],
     'skiabot-ipad4-000': [
       'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug',
     ],

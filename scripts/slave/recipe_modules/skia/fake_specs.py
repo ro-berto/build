@@ -802,6 +802,42 @@ FAKE_SPECS = {
     'upload_dm_results': True,
     'upload_perf_results': False,
   },
+  'Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer': {
+    'build_targets': [
+      'dm',
+      'nanobench',
+    ],
+    'builder_cfg': {
+      'arch': 'x86_64',
+      'compiler': 'Clang',
+      'configuration': 'Debug',
+      'cpu_or_gpu': 'GPU',
+      'cpu_or_gpu_value': 'HD4000',
+      'extra_config': 'CommandBuffer',
+      'is_trybot': False,
+      'model': 'MacMini6.2',
+      'os': 'Mac',
+      'role': 'Test',
+    },
+    'configuration': 'Debug',
+    'dm_flags': [
+      '--dummy-flags',
+    ],
+    'do_perf_steps': True,
+    'do_test_steps': True,
+    'env': {
+      'CC': '/usr/bin/clang',
+      'CXX': '/usr/bin/clang++',
+      'GYP_DEFINES':
+          ('skia_arch_type=x86_64 skia_clang_build=1 skia_command_buffer=1 sk'
+           'ia_warnings_as_errors=0'),
+    },
+    'nanobench_flags': [
+      '--dummy-flags',
+    ],
+    'upload_dm_results': True,
+    'upload_perf_results': False,
+  },
   'Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot': {
     'build_targets': [
       'dm',

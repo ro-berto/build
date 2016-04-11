@@ -173,6 +173,9 @@ class SkiaApi(recipe_api.RecipeApi):
     #    into the correct output directory.
     self.running_in_swarming = running_in_swarming
 
+    # Some bots also require a checkout of chromium.
+    self._need_chromium_checkout = 'CommandBuffer' in self.builder_name
+
     # Check out the Skia code.
     self.checkout_steps()
 
@@ -295,6 +298,14 @@ class SkiaApi(recipe_api.RecipeApi):
     skia.revision = self.m.properties.get('revision') or 'origin/master'
     self.update_repo(skia)
 
+    if self._need_chromium_checkout:
+      chromium = gclient_cfg.solutions.add()
+      chromium.name = 'src'
+      chromium.managed = False
+      chromium.url = 'https://chromium.googlesource.com/chromium/src.git'
+      chromium.revision = 'origin/lkgr'
+      self.update_repo(chromium)
+
     # Run 'gclient sync'.
     gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
     gclient_cfg.target_os.add('llvm')
@@ -302,6 +313,9 @@ class SkiaApi(recipe_api.RecipeApi):
 
     self.got_revision = update_step.presentation.properties['got_revision']
     self.m.tryserver.maybe_apply_issue()
+
+    if self._need_chromium_checkout:
+      self.m.gclient.runhooks()
 
   def copy_build_products(self, src, dst):
     """Copy whitelisted build products from src to dst."""

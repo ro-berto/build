@@ -172,6 +172,17 @@ class DefaultFlavorUtils(object):
         args=['--win_toolchain_json', win_toolchain_json,
               '--depot_tools_parent_dir', self._skia_api.slave_dir])
 
+  def build_command_buffer(self):
+    """Build command_buffer."""
+    script = self._skia_api.skia_dir.join('tools', 'build_command_buffer.py')
+    self._skia_api.run(
+        self._skia_api.m.python, 'build command_buffer',
+        script=script,
+        args=['--chrome-dir', self._skia_api.slave_dir,
+              '--output-dir', self._skia_api.out_dir,
+              '--chrome-build-type', self._skia_api.configuration,
+              '--no-sync'])
+
   def compile(self, target):
     """Build the given target."""
     # The CHROME_PATH environment variable is needed for builders that use
@@ -192,6 +203,8 @@ class DefaultFlavorUtils(object):
     cmd = make_cmd + [target]
     self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
                        env=env, cwd=self._skia_api.m.path['checkout'])
+    if 'CommandBuffer' in self._skia_api.builder_name:
+      self._skia_api._run_once(self.build_command_buffer)
 
   def device_path_join(self, *args):
     """Like os.path.join(), but for paths on a connected device."""
