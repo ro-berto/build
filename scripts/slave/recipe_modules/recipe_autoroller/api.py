@@ -166,12 +166,13 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
     # TODO(phajdan.jr): verify that git-show order is stable and includes
     # all info we need to hash.
     diff_result = self.m.git(
-        'show', '--no-commit-id',
+        'show', '--format=%b',
         stdout=self.m.raw_io.output(),
         cwd=workdir,
         step_test_data=lambda: self.m.raw_io.test_api.stream_output(
             '-some line\n+some other line\n'))
     diff = diff_result.stdout
+    diff_result.presentation.logs['output'] = diff.splitlines()
     # TODO(phajdan.jr): remove prefix once new roller is no longer experimental.
     diff_digest = hashlib.md5('EXPERIMENTAL-' + diff).hexdigest()
 
