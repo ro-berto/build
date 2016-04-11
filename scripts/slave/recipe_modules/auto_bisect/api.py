@@ -129,6 +129,11 @@ class AutoBisectApi(recipe_api.RecipeApi):
 
     kwargs['allow_subannotations'] = True
 
+    # TODO(prasadv): Remove this once bisect runs are no longer running
+    # against revisions from February 2016 or earlier.
+    if self.internal_bisect:  # pragma: no cover
+      kwargs['env'] = {'CHROMIUM_OUTPUT_DIR': self.m.chromium.output_dir}
+
     if kwargs.get('extra_src'):
       args = args + ['--extra_src', kwargs.pop('extra_src')]
     if kwargs.get('path_to_config'):
