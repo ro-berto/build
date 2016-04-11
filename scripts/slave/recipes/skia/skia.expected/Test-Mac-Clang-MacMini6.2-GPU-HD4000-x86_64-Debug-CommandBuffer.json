@@ -175,7 +175,7 @@
       "--chrome-dir",
       "[SLAVE_BUILD]",
       "--output-dir",
-      "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer",
+      "[SLAVE_BUILD]/skia/out/Test-Mac-Clang-MacMini6.2-GPU-HD4000-x86_64-Debug-CommandBuffer/Debug",
       "--chrome-build-type",
       "Debug",
       "--no-sync"
