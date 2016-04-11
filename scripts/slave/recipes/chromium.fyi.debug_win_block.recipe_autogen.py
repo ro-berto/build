@@ -65,11 +65,6 @@ def Vista_Tests__dbg__1__steps(api):
             "parent_build_archive_url"], '--build-properties=%s' %
               api.json.dumps(build_properties,
                              separators=(',', ':'))])
-    # start crash handler step
-    api.python("start crash handler",
-               api.path["build"].join("scripts", "slave", "chromium",
-                                      "run_crash_handler.py"),
-               args=["--target", "Debug"])
     # runtest step
     api.python(
         "base_unittests",
@@ -82,8 +77,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'base_unittests',
          'base_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -98,8 +92,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'cacheinvalidation_unittests',
          'cacheinvalidation_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -114,8 +107,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'chrome_elf_unittests',
          'chrome_elf_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -130,8 +122,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'components_unittests',
          'components_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -146,8 +137,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'courgette_unittests',
          'courgette_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -162,8 +152,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'crypto_unittests',
          'crypto_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -178,8 +167,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'extensions_unittests',
          'extensions_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -194,8 +182,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'gcm_unit_tests',
          'gcm_unit_tests.exe', '--gtest_print_time'])
     # runtest step
@@ -210,8 +197,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'google_apis_unittests',
          'google_apis_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -226,8 +212,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'gpu_unittests',
          'gpu_unittests.exe', '--gmock_verbose=error', '--gtest_print_time'])
     # runtest step
@@ -242,8 +227,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'url_unittests',
          'url_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -258,8 +242,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'jingle_unittests',
          'jingle_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -274,8 +257,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'device_unittests',
          'device_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -290,8 +272,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'media_unittests',
          'media_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -306,8 +287,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'net_unittests',
          'net_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -322,8 +302,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'ppapi_unittests',
          'ppapi_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -338,8 +317,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'printing_unittests',
          'printing_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -354,8 +332,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'remoting_unittests',
          'remoting_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -370,8 +347,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'sbox_unittests',
          'sbox_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -386,8 +362,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'sbox_integration_tests',
          'sbox_integration_tests.exe', '--gtest_print_time'])
     # runtest step
@@ -402,8 +377,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'sbox_validation_tests',
          'sbox_validation_tests.exe', '--gtest_print_time'])
     # runtest step
@@ -418,8 +392,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'ipc_tests', 'ipc_tests.exe',
          '--gtest_print_time'])
     # runtest step
@@ -434,8 +407,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'sync_unit_tests',
          'sync_unit_tests.exe', '--gtest_print_time'])
     # runtest step
@@ -450,8 +422,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'unit_tests', 'unit_tests.exe',
          '--gtest_print_time'])
     # runtest step
@@ -466,8 +437,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'skia_unittests',
          'skia_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -482,8 +452,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'sql_unittests',
          'sql_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -498,8 +467,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'ui_base_unittests',
          'ui_base_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -514,8 +482,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'content_unittests',
          'content_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -530,8 +497,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'views_unittests',
          'views_unittests.exe', '--gtest_print_time'])
     # runtest step
@@ -546,8 +512,7 @@ def Vista_Tests__dbg__1__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":'+\
              '"1","GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'installer_util_unittests',
          'installer_util_unittests.exe', '--gtest_print_time'])
     # process dumps step
@@ -756,11 +721,6 @@ def Vista_Tests__dbg__2__steps(api):
             "parent_build_archive_url"], '--build-properties=%s' %
               api.json.dumps(build_properties,
                              separators=(',', ':'))])
-    # start crash handler step
-    api.python("start crash handler",
-               api.path["build"].join("scripts", "slave", "chromium",
-                                      "run_crash_handler.py"),
-               args=["--target", "Debug"])
     # runtest step
     api.python(
         "browser_tests",
@@ -773,8 +733,7 @@ def Vista_Tests__dbg__2__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":"1",'+\
              '"GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'browser_tests',
          'browser_tests.exe', '--lib=browser_tests', '--gtest_print_time'])
     # runtest step
@@ -789,8 +748,7 @@ def Vista_Tests__dbg__2__steps(api):
              '"gclient_env":{"CHROMIUM_GYP_SYNTAX_CHECK":"1",'+\
              '"DEPOT_TOOLS_UPDATE":"0","GYP_CHROMIUM_NO_ACTION":"1",'+\
              '"GYP_DEFINES":" component=shared_library",'+\
-             '"LANDMINES_VERBOSE":"1"},"process_dumps":true,'+\
-             '"start_crash_handler":true}',
+             '"LANDMINES_VERBOSE":"1"},"process_dumps":true}',
          '--annotate=gtest', '--test-type', 'content_browsertests',
          'content_browsertests.exe', '--gtest_print_time'])
     # process dumps step

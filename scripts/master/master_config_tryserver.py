@@ -130,7 +130,6 @@ def CreateBuilder(platform, builder_name, target,
   build_tool = []
   if platform in ('win32', 'win64'):
     factory_properties['process_dumps'] = True
-    factory_properties['start_crash_handler'] = True
 
     if ninja:
       factory = m_chromium_win_ninja

@@ -57,7 +57,6 @@ class ChromiumCommands(commands.FactoryCommands):
     # Scripts in the chromium scripts dir.
     self._process_coverage_tool = J(s_dir, 'process_coverage.py')
     self._layout_archive_tool = J(s_dir, 'archive_layout_test_results.py')
-    self._crash_handler_tool = J(s_dir, 'run_crash_handler.py')
     self._upload_parity_tool = J(s_dir, 'upload_parity_data.py')
     self._target_tests_tool = J(s_dir, 'target-tests.py')
     self._layout_test_tool = J(s_dir, 'layout_test_wrapper.py')
@@ -803,11 +802,6 @@ class ChromiumCommands(commands.FactoryCommands):
           index_suffix='layout-test-results/results.html',
           more_link_text='(zip)',
           more_link_url='layout-test-results.zip')
-
-  def AddRunCrashHandler(self, build_dir=None, target=None):
-    target = target or self._target
-    cmd = [self._python, self._crash_handler_tool, '--target', target]
-    self.AddTestStep(shell.ShellCommand, 'start_crash_handler', cmd)
 
   def AddProcessDumps(self):
     cmd = [self._python, self._process_dumps_tool,

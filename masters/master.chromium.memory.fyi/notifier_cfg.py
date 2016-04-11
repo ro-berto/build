@@ -13,7 +13,6 @@ from master import master_utils
 categories_steps = {
   '': ['update'],
   'memory_tester': [
-    'start_crash_handler',
     # Please keep the list below sorted.
     'memory test: app_list',
     'memory test: ash_unittests',
@@ -58,7 +57,7 @@ exclusions = {
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
-                   'archive_build', 'start_crash_handler']
+                   'archive_build']
 
 def Update(config, active_master, c):
   c['status'].append(failures_notifier.FailuresNotifier(

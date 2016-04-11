@@ -717,16 +717,6 @@ _step_signatures = {
         'name': 'upload latest build',
       }
     ),
-  'start_crash_handler': (buildbot.steps.shell.ShellCommand,
-      {
-        'command': ['python_slave',
-          '..\\..\\..\\scripts\\slave\\chromium\\run_crash_handler.py',
-          '--target'],
-        'description': 'running start_crash_handler',
-        'descriptionDone': 'start_crash_handler',
-        'name': 'start_crash_handler',
-      }
-    ),
   'process_dumps': (master.log_parser.retcode_command.ReturnCodeCommand,
       {
         'command': ['python_slave',
@@ -1006,18 +996,6 @@ def process_dumps_converter(step):
   rc.steps.append('# process dumps step')
   rc.steps.append('api.python("process dumps", '
       'api.path["build"].join("scripts", "slave", "process_dumps.py"), '
-      'args=["--target", "%s"])' % step[1]['command'][3])
-  return rc
-
-def start_crash_handler_converter(step):
-  rc = recipe_chunk()
-  rc.deps.add('recipe_engine/step')
-  rc.deps.add('recipe_engine/path')
-  rc.deps.add('recipe_engine/python')
-  rc.steps.append('# start crash handler step')
-  rc.steps.append('api.python("start crash handler", '
-      'api.path["build"].join("scripts", "slave", "chromium", '
-      '"run_crash_handler.py"), '
       'args=["--target", "%s"])' % step[1]['command'][3])
   return rc
 
@@ -1808,7 +1786,6 @@ _step_converters_map = {
     'delete_prior_sfx_archive': delete_prior_sfx_archive_converter,
     'drmemory_create_sfx_archive': drmemory_create_sfx_archive_converter,
     'upload_drmemory_latest': upload_drmemory_latest_converter,
-    'start_crash_handler': start_crash_handler_converter,
     'process_dumps': process_dumps_converter,
     'extract_build': extract_build_converter,
     'runbuild_win': runbuild_win_converter,

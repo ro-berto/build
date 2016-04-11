@@ -136,17 +136,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/chromium/run_crash_handler.py",
-      "--target",
-      "Release"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "start crash handler"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[BUILD]/scripts/slave/chromium/test_mini_installer_wrapper.py",
       "--target",
       "Release"

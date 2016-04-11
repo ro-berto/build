@@ -768,10 +768,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     self.TriggerFactory(factory, slave_type=slave_type,
                         factory_properties=factory_properties)
 
-    # Start the crash handler process.
-    if factory_properties.get('start_crash_handler'):
-      chromium_cmd_obj.AddRunCrashHandler()
-
     # Add all the tests.
     self._AddTests(chromium_cmd_obj, tests, mode, factory_properties)
 

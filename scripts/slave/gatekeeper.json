@@ -12,7 +12,6 @@
         "builders": {
           "Win": {
             "categories": [
-              "chromium_crash_handler",
               "chromium_windows"
             ]
           },
@@ -785,12 +784,6 @@
   },
 
   "categories": {
-    "chromium_crash_handler": {
-      "forgiving_optional": [
-        "start_crash_handler"
-      ]
-    },
-
     "chromium_memory_fyi": {
       "closing_optional": [
         "*"
