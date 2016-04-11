@@ -1477,26 +1477,6 @@ BUILDERS = {
         'tests': [Mjsunit, Webkit, Benchmarks, Mozilla],
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - ppc - sim': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_ppc'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'tests': [V8Testing],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux - ppc64 - sim': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_ppc'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'tests': [V8Testing],
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux - full debug': {
         'chromium_apply_config': [
           'clang', 'v8_ninja', 'goma', 'no_optimized_debug'],
@@ -1528,6 +1508,26 @@ BUILDERS = {
 ####### Waterfall: client.v8.ports
   'client.v8.ports': {
     'builders': {
+      'V8 Linux - ppc - sim': {
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_ppc'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [V8Testing],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - ppc64 - sim': {
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_ppc'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'tests': [V8Testing],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux - s390 - sim': {
         'chromium_apply_config': [
           'clang', 'v8_ninja', 'goma', 'simulate_s390'],

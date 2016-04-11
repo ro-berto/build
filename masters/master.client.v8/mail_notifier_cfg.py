@@ -48,13 +48,9 @@ exclusions = {
   'V8 Linux64 - debug - greedy allocator': [],
   'V8 Linux64 - cfi': [],
   'V8 Linux64 - gcov coverage': [],
-  'V8 Linux - ppc - sim': [],
-  'V8 Linux - ppc64 - sim': [],
   'V8 Linux - mipsel - sim': [],
   'V8 Mips - big endian - nosnap - 1': [],
   'V8 Mips - big endian - nosnap - 2': [],
-  'V8 Linux - x87 - nosnap - debug builder': [],
-  'V8 Linux - x87 - nosnap - debug': [],
   'V8 Linux - predictable': [],
 }
 
