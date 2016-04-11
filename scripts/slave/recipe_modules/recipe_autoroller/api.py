@@ -121,6 +121,10 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
       self.m.git.checkout(
           project_data['repo_url'], dir_path=workdir, submodules=False)
 
+      # Introduce ourselves to git - also needed for git cl upload to work.
+      self.m.git('config', 'user.email', 'recipe-roller@chromium.org')
+      self.m.git('config', 'user.name', 'recipe-roller')
+
       # git cl upload cannot work with detached HEAD, it requires a branch.
       self.m.git('checkout', '-t', '-b', 'roll', 'origin/master', cwd=workdir)
 
