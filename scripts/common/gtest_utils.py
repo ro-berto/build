@@ -631,7 +631,7 @@ class GTestJSONParser(object):
 
     for iteration_data in json_data['per_iteration_data']:
       for test_name, test_runs in iteration_data.iteritems():
-        if test_runs[-1]['status'] == 'SUCCESS':
+        if test_runs[-1]['status'] in ('SUCCESS', 'SKIPPED'):
           self.passed_tests.add(test_name)
         else:
           self.failed_tests.add(test_name)

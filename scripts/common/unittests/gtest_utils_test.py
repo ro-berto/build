@@ -690,15 +690,18 @@ class TestGTestJSONParserTests(auto_stub.TestCase):
         {
           'Test.One': [{'status': 'SUCCESS', 'output_snippet': ''}],
           'Test.Two': [{'status': 'SUCCESS', 'output_snippet': ''}],
+          'Test.Three': [{'status': 'SKIPPED', 'output_snippet': ''}],
         }
       ]
     })
-    self.assertEqual(['Test.One', 'Test.Two'], parser.PassedTests())
+    self.assertEqual(sorted(['Test.One', 'Test.Two', 'Test.Three']),
+                     parser.PassedTests())
     self.assertEqual([], parser.FailedTests())
     self.assertEqual(0, parser.FlakyTests())
     self.assertEqual(0, parser.DisabledTests())
     self.assertEqual(['SUCCESS'], parser.TriesForTest('Test.One'))
     self.assertEqual(['SUCCESS'], parser.TriesForTest('Test.Two'))
+    self.assertEqual(['SKIPPED'], parser.TriesForTest('Test.Three'))
 
   def testInvalidEscape(self):
     parser = gtest_utils.GTestJSONParser()
