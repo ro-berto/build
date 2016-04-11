@@ -166,7 +166,8 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
     # TODO(phajdan.jr): verify that git-show order is stable and includes
     # all info we need to hash.
     diff_result = self.m.git(
-        'show', stdout=self.m.raw_io.output(),
+        'show', '--no-commit-id',
+        stdout=self.m.raw_io.output(),
         cwd=workdir,
         step_test_data=lambda: self.m.raw_io.test_api.stream_output(
             '-some line\n+some other line\n'))
