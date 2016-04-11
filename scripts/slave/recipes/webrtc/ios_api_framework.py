@@ -33,11 +33,11 @@ def RunSteps(api):
                   "out_ios_ia32",
                   "out_ios_libs",
                   "out_ios_x86_64"]:
-    api.file.rmtree('clobber %s' % out_dir, api.path['checkout'].join(out_dir))
+    api.file.rmtree(out_dir, api.path['checkout'].join(out_dir))
 
   build_script = api.path['checkout'].join('webrtc', 'build', 'ios',
                                            'build_ios_framework.sh')
-  api.step('build', [build_script])
+  api.step('build', [build_script], cwd=api.path['checkout'])
 
   output_dir = api.path['checkout'].join('out_ios_framework')
   zip_out = api.path['slave_build'].join('webrtc_ios_api_framework.zip')

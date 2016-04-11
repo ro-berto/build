@@ -87,7 +87,7 @@
       "[SLAVE_BUILD]/src/out_ios_arm"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree clobber out_ios_arm",
+    "name": "rmtree out_ios_arm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -107,7 +107,7 @@
       "[SLAVE_BUILD]/src/out_ios_arm64"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree clobber out_ios_arm64",
+    "name": "rmtree out_ios_arm64",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -127,7 +127,7 @@
       "[SLAVE_BUILD]/src/out_ios_framework"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree clobber out_ios_framework",
+    "name": "rmtree out_ios_framework",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -147,7 +147,7 @@
       "[SLAVE_BUILD]/src/out_ios_ia32"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree clobber out_ios_ia32",
+    "name": "rmtree out_ios_ia32",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -167,7 +167,7 @@
       "[SLAVE_BUILD]/src/out_ios_libs"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree clobber out_ios_libs",
+    "name": "rmtree out_ios_libs",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -187,7 +187,7 @@
       "[SLAVE_BUILD]/src/out_ios_x86_64"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree clobber out_ios_x86_64",
+    "name": "rmtree out_ios_x86_64",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
@@ -203,7 +203,7 @@
     "cmd": [
       "[SLAVE_BUILD]/src/webrtc/build/ios/build_ios_framework.sh"
     ],
-    "cwd": "[SLAVE_BUILD]",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "build",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
