@@ -175,16 +175,32 @@ class RevisionState(object):
     }
     return deps_data
 
+  def _read_content(self, url, file_name, branch):   # pragma: no cover
+    """Uses gitiles recipe module to download and read file contents."""
+    try:
+      return self.bisector.api.m.gitiles.download_file(
+          repository_url=url, file_path=file_name, branch=branch)
+    except TypeError:
+      print 'Could not read content for %s/%s/%s' % (url, file_name, branch) 
+      return None
+
   def read_deps(self, recipe_tester_name):
     """Sets the dependencies for this revision from the contents of DEPS."""
     api = self.bisector.api
     if self.deps:
       return
     if self.bisector.internal_bisect:  # pragma: no cover
-      self.deps_file_contents = api.m.gitiles.download_file(
-          repository_url=depot_config.DEPOT_DEPS_NAME[self.depot_name]['url'],
-          file_path= depot_config.DEPOT_DEPS_NAME[self.depot_name]['deps_file'],
-          branch=self.commit_hash)
+      self.deps_file_contents = self._read_content(
+          depot_config.DEPOT_DEPS_NAME[self.depot_name]['url'],
+          depot_config.DEPOT_DEPS_NAME[self.depot_name]['deps_file'],
+          self.commit_hash)
+      # On April 5th, 2016 .DEPS.git was changed to DEPS on android-chrome repo,
+      # we are doing this in order to support both deps files.
+      if not self.deps_file_contents:
+        self.deps_file_contents = self._read_content(
+            depot_config.DEPOT_DEPS_NAME[self.depot_name]['url'],
+            depot_config.DEPS_FILENAME,
+            self.commit_hash)
     else:
       step_result = api.m.python(
           'fetch file %s:%s' % (self.commit_hash, depot_config.DEPS_FILENAME),
