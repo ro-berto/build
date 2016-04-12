@@ -22,11 +22,15 @@ class Builder(object):
 
 
 class Properties(object):
+  def __init__(self, properties=None):
+    # properties is a dict {property name: property value}
+    self.__properties = properties or {}
+
   def __contains__(self, _name):
     return True
 
-  def getProperty(self, _name):
-    return 'whatever'
+  def getProperty(self, name):
+    return self.__properties.get(name, 'whatever')
 
 
 class SourceStamp(object):
@@ -34,8 +38,9 @@ class SourceStamp(object):
 
 
 class Build(object):
-  def __init__(self, steps=None):
+  def __init__(self, steps=None, properties=None):
     self.__steps = steps or []
+    self.__properties = properties or {}
 
   def getNumber(self):
     return 5
@@ -50,7 +55,7 @@ class Build(object):
     return 1427929423.0
 
   def getProperties(self):
-    return Properties()
+    return Properties(self.__properties)
 
   def getSourceStamp(self):
     return SourceStamp()
@@ -207,6 +212,42 @@ class StatusLoggerTest(unittest.TestCase):
           "step_result": "success",
           "subproject_tag": "whatever",
           "project_id": "whatever",
+      }
+      with open(logger._ts_mon_logfile, 'r') as f:
+        line = f.read()
+        d = json.loads(line)
+        self.assertEqual(expected, d)
+
+  def testStepStepWithMissingProject(self):
+    config_dict = {
+        'file_logging': True,
+        'event_logging': True,
+    }
+    properties = {'patch_project': '',
+                  'subproject_tag': ''}
+    steps = [Step(step_number=1),
+             Step(step_number=2, result=1),
+             Step(step_number=3)]
+    with _make_logger(config_dict) as logger:
+      logger.stepFinished(Build(steps=steps, properties=properties),
+                          steps[-1],
+                          [0])
+      self.assertTrue(os.path.exists(logger.logfile))
+      self.assertTrue(os.path.isdir(logger._event_logging_dir))
+      self.assertTrue(os.path.exists(logger._event_logfile))
+
+      # Ensure we added valid json
+      with open(logger._event_logfile, 'r') as f:
+        content = f.read()
+        self.assertTrue(content)
+        json.loads(content)
+
+      # Ensure we wrote the correct json line.
+      expected = {
+          "slave": "cool-m1",
+          "builder": "coconuts",
+          "timestamp": 5500,
+          "step_result": "success",
       }
       with open(logger._ts_mon_logfile, 'r') as f:
         line = f.read()

@@ -209,7 +209,7 @@ class StatusEventLogger(StatusReceiverMultiService):
       d['pre_test_time_s'] = pre_test_time_s
     self.ts_mon_logger.info(json.dumps(d))
 
-  def send_step_results(
+  def send_step_result(
       self, timestamp, builder_name, bot_name,
       step_result, project_id, subproject_tag):
     """Log step results for ts_mon
@@ -231,9 +231,13 @@ class StatusEventLogger(StatusReceiverMultiService):
       'builder': builder_name,
       'step_result': step_result,
       'slave': bot_name,
-      'project_id': project_id,
-      'subproject_tag': subproject_tag,
     }
+
+    if project_id:
+      d['project_id'] = project_id
+    if subproject_tag:
+      d['subproject_tag'] = subproject_tag
+
     self.ts_mon_logger.info(json.dumps(d))
 
 
@@ -522,7 +526,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     project_id = properties.getProperty('patch_project')
     subproject_tag = properties.getProperty('subproject_tag')
 
-    self.send_step_results(
+    self.send_step_result(
       finished,
       builder_name,
       bot,
