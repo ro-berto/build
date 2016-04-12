@@ -76,7 +76,7 @@ def MakeTempDir(api):
 
 
 def GenerateDocs(api, pub_cache):
-  activate_cmd = ['pub', 'global', 'activate', 'dartdoc', '0.9.3+1']
+  activate_cmd = ['pub', 'global', 'activate', 'dartdoc', '0.9.4']
   api.step('pub global activate dartdoc', activate_cmd)
 
   checkout = api.path['checkout']
