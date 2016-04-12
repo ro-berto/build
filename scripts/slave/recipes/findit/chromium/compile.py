@@ -234,8 +234,12 @@ def RunSteps(api, target_mastername, target_buildername,
         found = True
   except api.step.InfraFailure:
     compile_results[revision_being_checked] = CompileResult.INFRA_FAILED
+    report['metadata']['infra_failure'] = True
     raise
   finally:
+    if found:
+      report['culprit'] = suspected_revision
+
     # Report the result.
     step_result = api.python.succeeding_step(
         'report', [json.dumps(report, indent=2)], as_log='report')
