@@ -1853,7 +1853,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_avx2_rel_ng_triggered': {
-        'chromium_apply_config': ['no_dcheck'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
