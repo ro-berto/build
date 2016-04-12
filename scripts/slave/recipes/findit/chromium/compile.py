@@ -19,6 +19,7 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
+    'recipe_engine/raw_io',
     'recipe_engine/step',
 ]
 
@@ -39,6 +40,9 @@ PROPERTIES = {
     'use_analyze': Property(
         kind=Single(bool, empty_val=False, required=False), default=True,
         help='Use analyze to filter out affected targets.'),
+    'suspected_revisions': Property(
+        kind=List(basestring), default=[],
+        help='A list of suspected revisions from heuristic analysis.'),
 }
 
 
@@ -46,6 +50,7 @@ class CompileResult(object):
   SKIPPED = 'skipped'  # No compile is needed.
   PASSED = 'passed'  # Compile passed.
   FAILED = 'failed'  # Compile failed.
+  INFRA_FAILED = 'infra_failed'  # Infra failed.
 
 
 def _run_compile_at_revision(api, target_mastername, target_buildername,
@@ -107,7 +112,7 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
 
 def RunSteps(api, target_mastername, target_buildername,
              good_revision, bad_revision,
-             compile_targets, use_analyze):
+             compile_targets, use_analyze, suspected_revisions):
   bot_config = api.chromium_tests.create_bot_config_object(
       target_mastername, target_buildername)
   api.chromium_tests.configure_build(
@@ -117,36 +122,128 @@ def RunSteps(api, target_mastername, target_buildername,
   api.chromium_tests.prepare_checkout(
       bot_config,
       root_solution_revision=bad_revision)
-  revisions_to_check = api.findit.revisions_between(good_revision, bad_revision)
+
+  # Retrieve revisions in the regression range. The returned revisions are in
+  # order from oldest to newest.
+  all_revisions = api.findit.revisions_between(good_revision, bad_revision)
+
+  # If suspected revisions are provided, divide the entire regression range into
+  # a list of smaller sub-ranges. Because only a failure immediately following a
+  # pass could identify the culprit, we rerun compile at the revision right
+  # before a suspected revision and then at the suspected revision itself. So a
+  # sub-range starts at the revision right before a suspected revision.
+  #
+  # Normally, heuristic analysis provides only 1 suspected revision and there
+  # will be 2 sub-ranges. Example (previous build cycle passed at r0):
+  #   Entire regression range: [r1, r2, r3, r4, ..., r10]
+  #   Suspected revisions: [r5]
+  # Then the sub-ranges are:
+  #   sub-range1: r4 and [r5, r6, ..., r10]
+  #   sub-range2: None and [r1, r2, r3]
+  # In this example, compile is run at r4 first, and there will be a few cases:
+  #   1) if r4 passes, the culprit is in [r5, r6, ..., r10]. Compile should be
+  #      rerun in order from r5 to r10.
+  #      1.1) if a failure occurs at rN (5<=N<=10), rN is the actual culprit
+  #           because it is the first failure after a series of pass.
+  #      1.2) if no failure occurs, the compile failure is a flaky one. This
+  #           sometimes happens and the compile log shows no error while the
+  #           step ran into an exception.
+  #   2) if r4 fails, the culprit is either r4 itself or one of [r1, r2, r3].
+  #      Compile should be rerun in order from r1 to r3. No compile is run at
+  #      r0, because it is the last known good revision.
+  #      2.1) if a failure occurs at rN (1<=N<=3), rN is the actual culprit.
+  #      2.2) if no failure occurs, r4 is the actual culprit instead.
+  #
+  # Occasionally, heuristic analysis provides 2+ suspected revisions (e.g. there
+  # are conflicting commits). In this case, there will be 3+ sub-ranges.
+  # For the above example, if the suspected revisions are [r5, r8], there will
+  # be three sub-ranges:
+  #   sub-range1: r7 and [r8, r9, r10]
+  #   sub-range2: r4 and [r5, r6]
+  #   sub-range3: None and [r1, r2, r3]
+  # Sub-ranges with newer revisions are tested first (sub-range1 -> sub-range2
+  # -> sub-range3), because it is more likely that a newer revision is the
+  # beginning of the compile breakage.
+  suspected_revision_index = [
+      all_revisions.index(r)
+          for r in set(suspected_revisions) if r in all_revisions]
+  if suspected_revision_index:
+    sub_ranges = []
+    remaining_revisions = all_revisions[:]
+    for index in sorted(suspected_revision_index, reverse=True):
+      if index > 0:
+        sub_ranges.append(remaining_revisions[index - 1:])
+        remaining_revisions = remaining_revisions[:index - 1]
+    # None is a placeholder for the last known good revision.
+    sub_ranges.append([None] + remaining_revisions)
+  else:
+    # Treat the entire regression range as a single sub-range.
+    sub_ranges = [[None] + all_revisions]
 
   compile_results = {}
   try_job_metadata = {
-      'regression_range_size': len(revisions_to_check)
+      'regression_range_size': len(all_revisions),
+      'sub_ranges': sub_ranges[:],
   }
   report = {
       'result': compile_results,
       'metadata': try_job_metadata,
   }
 
+  suspected_revision = None
+  revision_being_checked = None
+  found = False
   try:
-    for current_revision in revisions_to_check:
-      last_revision = None
-      compile_result = _run_compile_at_revision(
-          api, target_mastername, target_buildername,
-          current_revision, compile_targets, use_analyze)
+    while not found and sub_ranges:
+      # Sub-ranges with newer revisions are tested first.
+      first_revision = sub_ranges[0][0]
+      following_revisions = sub_ranges[0][1:]
+      sub_ranges.pop(0)
 
-      compile_results[current_revision] = compile_result
-      last_revision = current_revision
-      if compile_result == CompileResult.FAILED:
-        break  # Found the culprit, no need to check later revisions.
+      if first_revision is not None:  # No compile for last known good revision.
+        revision_being_checked = first_revision
+        compile_result = _run_compile_at_revision(
+            api, target_mastername, target_buildername,
+            first_revision, compile_targets, use_analyze)
+        compile_results[first_revision] = compile_result
+        if compile_result == CompileResult.FAILED:
+          # The first revision of this sub-range already failed, thus either it
+          # is the culprit or the culprit is in a sub-range with older
+          # revisions.
+          suspected_revision = first_revision
+          continue
+
+      # If the first revision passed, the culprit is either in the current range
+      # or is the first revision of previous range with newer revisions as
+      # identified above.
+      for revision in following_revisions:
+        revision_being_checked = revision
+        compile_result = _run_compile_at_revision(
+            api, target_mastername, target_buildername,
+            revision, compile_targets, use_analyze)
+        compile_results[revision] = compile_result
+        if compile_result == CompileResult.FAILED:
+          # First failure after a series of pass.
+          suspected_revision = revision
+          found = True
+          break
+
+      if not found and suspected_revision is not None:
+        # If all revisions in the current range passed, and the first revision
+        # of previous range failed, the culprit is found too.
+        found = True
+  except api.step.InfraFailure:
+    compile_results[revision_being_checked] = CompileResult.INFRA_FAILED
+    raise
   finally:
     # Report the result.
     step_result = api.python.succeeding_step(
         'report', [json.dumps(report, indent=2)], as_log='report')
 
-    if (last_revision and
-        compile_results.get(last_revision) == CompileResult.FAILED):
-      step_result.presentation.step_text = '<br/>Culprit: %s' % last_revision
+    if found:
+      step_result.presentation.step_text = (
+          '<br/>Culprit: <a href="https://crrev.com/%s">%s</a>' % (
+              suspected_revision, suspected_revision))
 
     # Set the report as a build property too, so that it will be reported back
     # to Buildbucket and Findit will pull from there instead of buildbot master.
@@ -156,7 +253,9 @@ def RunSteps(api, target_mastername, target_buildername,
 
 
 def GenTests(api):
-  def props(compile_targets=None, use_analyze=False):
+  def props(compile_targets=None, use_analyze=False,
+            good_revision=None, bad_revision=None,
+            suspected_revisions=None):
     properties = {
         'mastername': 'tryserver.chromium.linux',
         'buildername': 'linux_variable',
@@ -164,12 +263,14 @@ def GenTests(api):
         'buildnumber': '1',
         'target_mastername': 'chromium.linux',
         'target_buildername': 'Linux Builder',
-        'good_revision': 'r0',
-        'bad_revision': 'r1',
+        'good_revision': good_revision or 'r0',
+        'bad_revision': bad_revision or 'r1',
         'use_analyze': use_analyze,
     }
     if compile_targets:
       properties['compile_targets'] = compile_targets
+    if suspected_revisions:
+      properties['suspected_revisions'] = suspected_revisions
     return api.properties(**properties) + api.platform.name('linux')
 
   yield (
@@ -316,4 +417,119 @@ def GenTests(api):
               'test_targets': ['a', 'a_run'],
           })
       )
+  )
+
+  # Entire regression range: (r1, r6]
+  # Suspected_revisions: [r4]
+  # Expected smaller ranges: [r3, [r4, r5, r6]], [None, [r2]]
+  # Actual culprit: r4
+  # Should only run compile on r3, and then r4.
+  yield (
+      api.test('find_culprit_in_middle_of_a_sub_range') +
+      props(compile_targets=['target_name'],
+            good_revision='r1',
+            bad_revision='r6',
+            suspected_revisions=['r4']) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(2, 7))))) +
+      api.override_step_data('test r3.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             })) +
+      api.override_step_data('test r4.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             })) +
+      api.override_step_data('test r4.compile', retcode=1)
+  )
+
+  # Entire regression range: (r1, r6]
+  # Suspected_revisions: [r4]
+  # Expected smaller ranges: [r3, [r4, r5, r6]], [None, [r2]]
+  # Actual culprit: r3
+  # Should only run compile on r3, and then r2.
+  yield (
+      api.test('find_culprit_at_first_revision_of_a_sub_range') +
+      props(compile_targets=['target_name'],
+            good_revision='r1',
+            bad_revision='r6',
+            suspected_revisions=['r4']) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(2, 7))))) +
+      api.override_step_data('test r3.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             })) +
+      api.override_step_data('test r3.compile', retcode=1) +
+      api.override_step_data('test r2.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             }))
+  )
+
+  # Entire regression range: (r1, r10]
+  # Suspected_revisions: [r4, r8]
+  # Expected smaller ranges:
+  #     [r7, [r8, r9, r10]], [r3, [r4, r5, r6]], [None, [r2]]
+  # Actual culprit: r4
+  # Should only run compile on r7(failed), then r3(pass) and r4(failed).
+  yield (
+      api.test('find_culprit_in_second_sub_range') +
+      props(compile_targets=['target_name'],
+            good_revision='r1',
+            bad_revision='r6',
+            suspected_revisions=['r4', 'r8']) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(2, 11))))) +
+      api.override_step_data('test r7.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             })) +
+      api.override_step_data('test r7.compile', retcode=1) +
+      api.override_step_data('test r3.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             })) +
+      api.override_step_data('test r4.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             })) +
+      api.override_step_data('test r4.compile', retcode=1)
+  )
+
+  # Entire regression range: (r1, r5]
+  # Suspected_revisions: [r2]
+  # Expected smaller ranges:
+  #     [None, r2, r3, r4, r5]
+  # Actual culprit: r2
+  # Should only run compile on r2(failed).
+  yield (
+      api.test('find_culprit_as_first_revision_of_entire_range') +
+      props(compile_targets=['target_name'],
+            good_revision='r1',
+            bad_revision='r5',
+            suspected_revisions=['r2']) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(2, 6))))) +
+      api.override_step_data('test r2.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             })) +
+      api.override_step_data('test r2.compile', retcode=1)
   )

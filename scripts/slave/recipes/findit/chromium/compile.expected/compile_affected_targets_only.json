@@ -567,11 +567,17 @@
       "@@@STEP_LOG_LINE@report@    \"r1\": \"passed\"@@@",
       "@@@STEP_LOG_LINE@report@  }, @@@",
       "@@@STEP_LOG_LINE@report@  \"metadata\": {@@@",
-      "@@@STEP_LOG_LINE@report@    \"regression_range_size\": 1@@@",
+      "@@@STEP_LOG_LINE@report@    \"regression_range_size\": 1, @@@",
+      "@@@STEP_LOG_LINE@report@    \"sub_ranges\": [@@@",
+      "@@@STEP_LOG_LINE@report@      [@@@",
+      "@@@STEP_LOG_LINE@report@        null, @@@",
+      "@@@STEP_LOG_LINE@report@        \"r1\"@@@",
+      "@@@STEP_LOG_LINE@report@      ]@@@",
+      "@@@STEP_LOG_LINE@report@    ]@@@",
       "@@@STEP_LOG_LINE@report@  }@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
       "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {\"regression_range_size\": 1}, \"result\": {\"r1\": \"passed\"}}@@@"
+      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {\"regression_range_size\": 1, \"sub_ranges\": [[null, \"r1\"]]}, \"result\": {\"r1\": \"passed\"}}@@@"
     ]
   },
   {

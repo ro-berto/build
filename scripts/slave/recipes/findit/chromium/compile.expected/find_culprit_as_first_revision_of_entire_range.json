@@ -21,7 +21,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r1",
+      "src@r5",
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -34,7 +34,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"r1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"r5\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -182,20 +182,23 @@
       "git",
       "log",
       "--format=%H",
-      "r0..r1"
+      "r1..r5"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "git commits in range",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@revisions@r1@@@",
+      "@@@STEP_LOG_LINE@revisions@r2@@@",
+      "@@@STEP_LOG_LINE@revisions@r3@@@",
+      "@@@STEP_LOG_LINE@revisions@r4@@@",
+      "@@@STEP_LOG_LINE@revisions@r5@@@",
       "@@@STEP_LOG_END@revisions@@@"
     ]
   },
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "test r1"
+    "name": "test r2"
   },
   {
     "cmd": [
@@ -219,21 +222,21 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r1",
+      "src@r2",
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "test r1.bot_update",
+    "name": "test r2.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"r1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"r2\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -306,7 +309,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "test r1.ensure_goma",
+    "name": "test r2.ensure_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -324,7 +327,7 @@
       "GYP_DEFINES": "archive_gpu_tests=1 component=static_library ffmpeg_branding=Chrome gomadir='[SLAVE_BUILD]/src/build/goma/client' proprietary_codecs=1 target_arch=x64 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "test r1.gclient runhooks",
+    "name": "test r2.gclient runhooks",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -346,7 +349,7 @@
       "{\"buildername\": \"linux_variable\", \"buildnumber\": \"1\", \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"build1-a1\", \"target_platform\": \"linux\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "test r1.get compile targets for scripts",
+    "name": "test r2.get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -362,7 +365,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "test r1.read test spec",
+    "name": "test r2.read test spec",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@path: [SLAVE_BUILD]/src/testing/buildbot/chromium.linux.json@@@",
@@ -387,7 +390,7 @@
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "test r1.generate_build_files",
+    "name": "test r2.generate_build_files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -405,7 +408,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "test r1.check_targets",
+    "name": "test r2.check_targets",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -427,7 +430,7 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "test r1.cleanup_temp",
+    "name": "test r2.cleanup_temp",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -449,7 +452,7 @@
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "test r1.generate_build_files (2)",
+    "name": "test r2.generate_build_files (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -483,23 +486,15 @@
       "target_name"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "test r1.compile",
+    "name": "test r2.compile",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_EXCEPTION@@@",
-      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"GOMA_BUILD_ERROR\"]@@@"
+      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@exception@TypeError(\"'NoneType' object has no attribute '__getitem__'\",)@@@",
+      "@@@STEP_LOG_END@exception@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -511,27 +506,31 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "report",
     "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Culprit: <a href=\"https://crrev.com/r2\">r2</a>@@@",
       "@@@STEP_LOG_LINE@report@{@@@",
       "@@@STEP_LOG_LINE@report@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@report@    \"r1\": \"infra_failed\"@@@",
+      "@@@STEP_LOG_LINE@report@    \"r2\": \"failed\"@@@",
       "@@@STEP_LOG_LINE@report@  }, @@@",
       "@@@STEP_LOG_LINE@report@  \"metadata\": {@@@",
-      "@@@STEP_LOG_LINE@report@    \"regression_range_size\": 1, @@@",
+      "@@@STEP_LOG_LINE@report@    \"regression_range_size\": 4, @@@",
       "@@@STEP_LOG_LINE@report@    \"sub_ranges\": [@@@",
       "@@@STEP_LOG_LINE@report@      [@@@",
       "@@@STEP_LOG_LINE@report@        null, @@@",
-      "@@@STEP_LOG_LINE@report@        \"r1\"@@@",
+      "@@@STEP_LOG_LINE@report@        \"r2\", @@@",
+      "@@@STEP_LOG_LINE@report@        \"r3\", @@@",
+      "@@@STEP_LOG_LINE@report@        \"r4\", @@@",
+      "@@@STEP_LOG_LINE@report@        \"r5\"@@@",
       "@@@STEP_LOG_LINE@report@      ]@@@",
       "@@@STEP_LOG_LINE@report@    ]@@@",
       "@@@STEP_LOG_LINE@report@  }@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
       "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {\"regression_range_size\": 1, \"sub_ranges\": [[null, \"r1\"]]}, \"result\": {\"r1\": \"infra_failed\"}}@@@"
+      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {\"regression_range_size\": 4, \"sub_ranges\": [[null, \"r2\", \"r3\", \"r4\", \"r5\"]]}, \"result\": {\"r2\": \"failed\"}}@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "Infra compile failure: Step Failure in test r1.compile",
-    "status_code": 1
+    "recipe_result": null,
+    "status_code": 0
   }
 ]
