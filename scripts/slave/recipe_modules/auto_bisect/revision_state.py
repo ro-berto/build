@@ -154,10 +154,12 @@ class RevisionState(object):
     if self.needs_patch:  # pragma: no cover
       return False
     api = self.bisector.api
+    cwd = api.m.path['slave_build'].join(
+        depot_config.DEPOT_DEPS_NAME[self.depot_name]['src'])
     name = 'Checking DEPS for ' + self.commit_hash
     step_result = api.m.git(
         'show', '--name-only', '--pretty=format:',
-        self.commit_hash, stdout=api.m.raw_io.output(), name=name)
+        self.commit_hash, cwd=cwd, stdout=api.m.raw_io.output(), name=name)
     if self.bisector.dummy_builds and not self.commit_hash.startswith('dcdc'):
       return False
     if 'DEPS' in step_result.stdout.splitlines():  # pragma: no cover

@@ -650,7 +650,7 @@
       "--pretty=format:",
       "dcdcdc0ff1122212323134879ddceeb1240b0988"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "Checking DEPS for dcdcdc0ff1122212323134879ddceeb1240b0988",
     "stdout": "/path/to/tmp/"
   },
