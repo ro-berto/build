@@ -119,7 +119,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android chromecast=1 component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[SLAVE_BUILD]/src/build/goma/client' proprietary_codecs=1 target_arch=arm use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -214,25 +213,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "tree truth steps"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/tools/mb/mb.py",
-      "gen",
-      "-m",
-      "chromium.linux",
-      "-b",
-      "Cast Android (dbg)",
-      "--config-file",
-      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
-      "--goma-dir",
-      "[SLAVE_BUILD]/src/build/goma/client",
-      "//out/Debug"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "generate_build_files"
   },
   {
     "cmd": [
