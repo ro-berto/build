@@ -54,7 +54,12 @@ class AnnotatorFactory(object):
     factory.properties.update(self._factory_properties, 'AnnotatorFactory')
     cmd_obj = annotator_commands.AnnotatorCommands(
         factory, active_master=self.active_master)
-    cmd_obj.AddAnnotatedScript(timeout=timeout, max_time=max_time)
+
+    runner = cmd_obj.PathJoin(cmd_obj.script_dir, 'annotated_run.py')
+    cmd = [cmd_obj.python, '-u', runner, '--use-factory-properties-from-disk']
+    cmd = cmd_obj.AddB64GzBuildProperties(cmd)
+
+    cmd_obj.AddAnnotatedScript(cmd, timeout=timeout, max_time=max_time)
 
     for t in triggers or []:
       factory.addStep(commands.CreateTriggerStep(

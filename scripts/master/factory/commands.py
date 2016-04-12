@@ -349,6 +349,14 @@ class FactoryCommands(object):
     # scripts in scripts/slave
     self._runbuild = self.PathJoin(self._script_dir, 'runbuild.py')
 
+  @property
+  def python(self):
+    return self._python
+
+  @property
+  def script_dir(self):
+    return self._script_dir
+
   # Util methods.
   def GetExecutableName(self, executable):
     """The executable name must be executable plus '.exe' on Windows, or else
