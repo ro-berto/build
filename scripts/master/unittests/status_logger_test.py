@@ -34,6 +34,9 @@ class SourceStamp(object):
 
 
 class Build(object):
+  def __init__(self, steps=None):
+    self.__steps = steps or []
+
   def getNumber(self):
     return 5
 
@@ -53,19 +56,25 @@ class Build(object):
     return SourceStamp()
 
   def getSteps(self):
-    return []
+    return self.__steps
 
   def getTimes(self):
     return 5000, 6000
 
 
 class Step(object):
-  step_number = 8
+  def __init__(self, step_number=8, result=0):
+    self.step_number = step_number
+    self.__result = result
+
   def getName(self):
     return 'reticulating_splines'
 
   def getTimes(self):
     return 5100, 5500
+
+  def getResults(self):
+    return (self.__result, None)
 
 
 @contextlib.contextmanager
@@ -175,16 +184,34 @@ class StatusLoggerTest(unittest.TestCase):
         'file_logging': True,
         'event_logging': True,
     }
+    steps = [Step(step_number=1),
+             Step(step_number=2, result=1),
+             Step(step_number=3)]
     with _make_logger(config_dict) as logger:
-      logger.stepFinished(Build(), Step(), [0])
+      logger.stepFinished(Build(steps=steps), steps[-1], [0])
       self.assertTrue(os.path.exists(logger.logfile))
       self.assertTrue(os.path.isdir(logger._event_logging_dir))
       self.assertTrue(os.path.exists(logger._event_logfile))
+
       # Ensure we added valid json
       with open(logger._event_logfile, 'r') as f:
         content = f.read()
         self.assertTrue(content)
         json.loads(content)
+
+      # Ensure we wrote the correct json line.
+      expected = {
+          "slave": "cool-m1",
+          "builder": "coconuts",
+          "timestamp": 5500,
+          "step_result": "success",
+          "subproject_tag": "whatever",
+          "project_id": "whatever",
+      }
+      with open(logger._ts_mon_logfile, 'r') as f:
+        line = f.read()
+        d = json.loads(line)
+        self.assertEqual(expected, d)
 
 
 if __name__ == '__main__':

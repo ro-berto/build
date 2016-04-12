@@ -183,7 +183,6 @@ class StatusEventLogger(StatusReceiverMultiService):
       self._last_checked_active = now
     return self._active
 
-
   def send_build_result(
       self, scheduled, started, finished, builder_name, bot_name, result,
       project_id=None, subproject_tag=None, steps=None, pre_test_time_s=None):
@@ -209,6 +208,34 @@ class StatusEventLogger(StatusReceiverMultiService):
     if pre_test_time_s is not None:
       d['pre_test_time_s'] = pre_test_time_s
     self.ts_mon_logger.info(json.dumps(d))
+
+  def send_step_results(
+      self, timestamp, builder_name, bot_name,
+      step_result, project_id, subproject_tag):
+    """Log step results for ts_mon
+
+    Args:
+      timestamp(int): when the event was generated (end of a step). Seconds
+        since the Unix epoch.
+      builder_name(str): name of the builder the steps are part of.
+      bot_name(str): name of the machine running the build.
+      step_result (str): result for this step.
+      project_id(str): 'project' as shown on the codereview.
+      subproject_tag(str): a mention of a subproject. Mostly used to distinguish
+        between chromium and blink CLs in the chromium project.
+    """
+    # The presence of the field 'step_result' is how the collecting daemon
+    # tells the difference between this case and the one from send_build_result.
+    d = {
+      'timestamp': timestamp,
+      'builder': builder_name,
+      'step_result': step_result,
+      'slave': bot_name,
+      'project_id': project_id,
+      'subproject_tag': subproject_tag,
+    }
+    self.ts_mon_logger.info(json.dumps(d))
+
 
   def send_build_event(self, timestamp_kind, timestamp, build_event_type,
                        bot_name, builder_name, build_number, build_scheduled_ts,
@@ -489,6 +516,19 @@ class StatusEventLogger(StatusReceiverMultiService):
         step_name=step_name, step_number=step.step_number,
         result=buildbot.status.results.Results[results[0]],
         patch_url=self._get_patch_url(build.getProperties()))
+
+    # Send step result to ts-mon
+    properties = build.getProperties()
+    project_id = properties.getProperty('patch_project')
+    subproject_tag = properties.getProperty('subproject_tag')
+
+    self.send_step_results(
+      finished,
+      builder_name,
+      bot,
+      buildbot.status.results.Results[step.getResults()[0]],
+      project_id,
+      subproject_tag)
 
   def buildFinished(self, builderName, build, results):
     build_number = build.getNumber()
