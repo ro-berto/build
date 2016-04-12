@@ -33,8 +33,6 @@ TEST_BUILDERS = {
       'Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug',
     ],
     'skiabot-shuttle-ubuntu12-gtx550ti-001': [
-      'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
-      'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Debug-ZeroGPUCache',
       'Perf-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-VisualBench',
     ],
     'skiabot-shuttle-win8-i7-4790k-001': [

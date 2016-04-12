@@ -746,9 +746,6 @@ print json.dumps({'ccache': ccache})
 
   def perf_steps(self):
     """Run Skia benchmarks."""
-    if 'ZeroGPUCache' in self.builder_name:
-      return
-
     self._run_once(self.install)
     self._run_once(self._download_and_copy_skps)
     self._run_once(self._download_and_copy_images)

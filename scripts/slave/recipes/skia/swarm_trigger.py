@@ -24,12 +24,16 @@ DEPS = [
 
 
 TEST_BUILDERS = {
+  'client.skia': {
+    'skiabot-linux-swarm-012': [
+       'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
+    ],
+  },
   'client.skia.fyi': {
     'skiabot-linux-housekeeper-003': [
       'Build-Mac-Clang-x86_64-Release-Swarming',
       'Build-Ubuntu-GCC-x86_64-Debug-Swarming',
       'Build-Ubuntu-GCC-x86_64-Release-Swarming-Trybot',
-      'Build-Ubuntu-GCC-x86_64-Release-SwarmingValgrind',
       'Build-Win8-MSVC-x86_64-Release-Swarming',
       'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot',
       'Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming',
@@ -37,7 +41,6 @@ TEST_BUILDERS = {
       'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release-Swarming',
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming',
       'Test-Win8-MSVC-ShuttleB-CPU-AVX2-x86_64-Release-Swarming',
-      'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-SwarmingValgrind',
     ],
   },
 }
@@ -419,7 +422,7 @@ def test_for_bot(api, builder, mastername, slavename, testname=None):
         'upload new .isolated file for test_skia',
         stdout=api.raw_io.output('def456 XYZ.isolated'))
   if ('Test' in builder and 'Debug' in builder) or 'Perf' in builder or (
-      'SwarmingValgrind' in builder and 'Test' in builder):
+      'Valgrind' in builder and 'Test' in builder):
     test += api.step_data(
         'upload new .isolated file for perf_skia',
         stdout=api.raw_io.output('def456 XYZ.isolated'))
