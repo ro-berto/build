@@ -234,7 +234,7 @@ class V8Api(recipe_api.RecipeApi):
       if patch_project:
         self.m.swarming.add_default_tag('patch_project:%s' % patch_project)
     else:
-      if self.m.properties['mastername'] == 'client.v8':
+      if self.m.properties['mastername'] in ['client.v8', 'client.v8.ports']:
         self.m.swarming.default_priority = 25
       else:
         # This should be lower than the CQ.
