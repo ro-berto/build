@@ -24,6 +24,7 @@ from common import env
 from slave import annotated_run
 from slave import gce
 from slave import infra_platform
+from slave import update_scripts
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -50,24 +51,29 @@ class AnnotatedRunTest(unittest.TestCase):
         '--build-properties=%s' % json.dumps(build_properties)])
     self.assertEqual(exit_code, 0)
 
+  @mock.patch('slave.update_scripts._run_command')
   @mock.patch('slave.annotated_run._run_command')
   @mock.patch('slave.annotated_run.main')
   @mock.patch('sys.platform', return_value='win')
   @mock.patch('tempfile.mkstemp', side_effect=Exception('failure'))
   @mock.patch('os.environ', {})
   def test_update_scripts_must_run(self, _tempfile_mkstemp, _sys_platform,
-                                   main, run_command):
-    annotated_run.main.side_effect = Exception('Test error!')
+                                   main, annotated_run_command,
+                                   update_scripts_run_command):
+    update_scripts._run_command.return_value = (0, "")
     annotated_run._run_command.return_value = (0, "")
+    annotated_run.main.side_effect = Exception('Test error!')
     annotated_run.shell_main(['annotated_run.py', 'foo'])
 
     gclient_path = os.path.join(env.Build, os.pardir, 'depot_tools',
                                 'gclient.bat')
-    run_command.assert_has_calls([
+    annotated_run_command.assert_has_calls([
+        mock.call([sys.executable, 'annotated_run.py', 'foo']),
+        ])
+    update_scripts_run_command.assert_has_calls([
         mock.call([gclient_path, 'sync', '--force', '--verbose', '--jobs=2',
                    '--break_repo_locks'],
                   cwd=env.Build),
-        mock.call([sys.executable, 'annotated_run.py', 'foo']),
         ])
     main.assert_not_called()
 
