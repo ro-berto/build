@@ -37,6 +37,7 @@ TEST_BUILDERS = {
       'Build-Win8-MSVC-x86_64-Release-Swarming',
       'Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Swarming-Trybot',
       'Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming',
+      'Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug',
       'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Release-Swarming',
       'Test-Mac-Clang-MacMini6.2-CPU-AVX-x86_64-Release-Swarming',
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Swarming',
@@ -51,8 +52,11 @@ def derive_compile_bot_name(builder_name, builder_spec):
   if builder_cfg['role'] in ('Test', 'Perf'):
     os = builder_cfg['os']
     extra_config = builder_cfg.get('extra_config')
-    if os in ('Android', 'ChromeOS'):  # pragma:nocover
+    if os == 'Android':  # pragma:nocover
       extra_config = os
+      os = 'Ubuntu'
+    elif os == 'ChromeOS':
+      extra_config = 'CrOS_%s' % builder_cfg['model']
       os = 'Ubuntu'
     elif os == 'iOS':  # pragma: nocover
       extra_config = os
