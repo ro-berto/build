@@ -1588,7 +1588,7 @@ BUILDERS = {
   'tryserver.v8': {
     'builders': {
       'v8_linux_rel_ng': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'gcmole'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1619,6 +1619,7 @@ BUILDERS = {
           Ignition,
           MjsunitSPFrameAccess,
           Test262Ignition,
+          GCMole,
         ],
         'testing': {'platform': 'linux'},
       },
