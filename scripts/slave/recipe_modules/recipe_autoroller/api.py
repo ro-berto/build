@@ -78,6 +78,14 @@ More info is at https://goo.gl/zkKdpD. Use https://goo.gl/noib3a to file a bug
 """)
 
 
+# These are different results of a roll attempt:
+#   - success means we have a working non-empty roll
+#   - empty means the repo is using latest revision of its dependencies
+#   - failure means there are roll candidates but none of them are suitable
+#     for an automated roll
+ROLL_SUCCESS, ROLL_EMPTY, ROLL_FAILURE = range(3)
+
+
 def get_commit_message(roll_result):
   """Construct a roll commit message from 'recipes.py autoroll' result.
   """
@@ -111,10 +119,27 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
     projects are not affected.
     """
     project_data = self.m.luci_config.get_projects()
+    results = []
     with recipe_api.defer_results():
       for project in projects:
         with self.m.step.nest(str(project)):
-          self._roll_project(project_data[project])
+          results.append(self._roll_project(project_data[project]))
+
+    # We need to unwrap |DeferredResult|s.
+    results = [r.get_result() for r in results]
+
+    # Failures to roll are OK as long as at least one of the repos is moving
+    # forward. For example, with repos with following dependencies:
+    #
+    #   A    <- B
+    #   A, B <- C
+    #
+    # New commit in A repo will need to get rolled into B first. However,
+    # it'd also appear as a candidate for C roll, leading to a failure there.
+    if ROLL_FAILURE in results and ROLL_SUCCESS not in results:
+      self.m.python.failing_step(
+          'roll result',
+          'manual intervention needed: automated roll attempt failed')
 
   def _roll_project(self, project_data):
     with self.m.tempfile.temp_dir('roll_%s' % project_data['id']) as workdir:
@@ -139,12 +164,14 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
 
       if roll_result['success']:
         self._process_successful_roll(roll_step, roll_result, workdir)
+        return ROLL_SUCCESS
       else:
         if (not roll_result['roll_details'] and
             not roll_result['rejected_candidates_details']):
           roll_step.presentation.step_text += ' (already at latest revisions)'
+          return ROLL_EMPTY
         else:
-          roll_step.presentation.status = self.m.step.FAILURE
+          return ROLL_FAILURE
 
   def _process_successful_roll(self, roll_step, roll_result, workdir):
     roll_step.presentation.logs['blame'] = get_blame(
