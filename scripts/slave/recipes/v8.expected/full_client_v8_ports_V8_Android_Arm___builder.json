@@ -5,13 +5,13 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--master",
-      "client.v8",
+      "client.v8.ports",
       "--builder",
-      "V8 Arm - builder",
+      "V8 Android Arm - builder",
       "--slave",
       "TestSlavename",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'chromium_trunk': 'svn://svn-mirror.golo.chromium.org/chrome/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]\ntarget_os = ['android']",
       "--root",
       "v8",
       "--revision_mapping_file",
@@ -88,11 +88,9 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CXX": "/usr/bin/arm-linux-gnueabihf-g++",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "arm_float_abi=hard gomadir='[BUILD]/goma' target_arch=arm test_isolation_mode=prepare use_goma=1 v8_target_arch=arm",
+      "GYP_DEFINES": "OS=android gomadir='[BUILD]/goma' target_arch=arm test_isolation_mode=prepare use_goma=1 v8_target_arch=arm",
       "GYP_GENERATORS": "ninja",
-      "LINK": "/usr/bin/arm-linux-gnueabihf-g++",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -127,16 +125,12 @@
       "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
-      "--crosstool",
-      "/usr/bin/arm-linux-gnueabihf",
       "--compiler",
       "goma",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]/goma",
-      "--arch",
-      "arm",
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -158,25 +152,13 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[SLAVE_BUILD]/v8/out/Release/benchmarks.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/bot_default.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/ignition.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/optimize_for_size.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/perf.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/simdjs.isolated.gen.json",
-      "[SLAVE_BUILD]/v8/out/Release/test262.isolated.gen.json"
+      "[SLAVE_BUILD]/v8/out/Release/perf.isolated.gen.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"benchmarks\": \"[dummy hash for benchmarks]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"ignition\": \"[dummy hash for ignition]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"perf\": \"[dummy hash for perf]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"simdjs\": \"[dummy hash for simdjs]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"perf\": \"[dummy hash for perf]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -192,13 +174,13 @@
       "cp",
       "-a",
       "public-read",
-      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"ignition\": \"[dummy hash for ignition]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"perf\": \"[dummy hash for perf]\", \"simdjs\": \"[dummy hash for simdjs]\", \"test262\": \"[dummy hash for test262]\"}",
-      "gs://chromium-v8/v8-arm-rel/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
+      "{\"perf\": \"[dummy hash for perf]\"}",
+      "gs://chromium-v8/v8-android-arm-rel/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/v8-arm-rel/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/v8-android-arm-rel/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
     ]
   },
   {
@@ -213,13 +195,13 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chromium-v8/v8-arm-rel",
+      "gs://chromium-v8/v8-android-arm-rel",
       "--src-dir",
       "v8",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"V8 Arm - builder\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"V8 Android Arm - builder\", \"buildnumber\": 571, \"mastername\": \"client.v8.ports\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"V8 Arm - builder\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"buildername\": \"V8 Android Arm - builder\", \"buildnumber\": 571, \"mastername\": \"client.v8.ports\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "package build"
@@ -227,30 +209,7 @@
   {
     "cmd": [],
     "cwd": "[SLAVE_BUILD]",
-    "name": "trigger",
-    "trigger_specs": [
-      {
-        "builder_name": "V8 Arm",
-        "properties": {
-          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "parent_got_revision_cp": "refs/heads/master@{#50110}",
-          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "swarm_hashes": {
-            "benchmarks": "[dummy hash for benchmarks]",
-            "bot_default": "[dummy hash for bot_default]",
-            "ignition": "[dummy hash for ignition]",
-            "optimize_for_size": "[dummy hash for optimize_for_size]",
-            "perf": "[dummy hash for perf]",
-            "simdjs": "[dummy hash for simdjs]",
-            "test262": "[dummy hash for test262]"
-          }
-        }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@V8 Arm@@@"
-    ]
+    "name": "trigger"
   },
   {
     "cmd": [],
@@ -267,19 +226,13 @@
         ],
         "builder_name": "v8_trigger_proxy",
         "properties": {
-          "archive": "gs://chromium-v8/v8-arm-rel",
+          "archive": "gs://chromium-v8/v8-android-arm-rel",
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
-            "benchmarks": "[dummy hash for benchmarks]",
-            "bot_default": "[dummy hash for bot_default]",
-            "ignition": "[dummy hash for ignition]",
-            "optimize_for_size": "[dummy hash for optimize_for_size]",
-            "perf": "[dummy hash for perf]",
-            "simdjs": "[dummy hash for simdjs]",
-            "test262": "[dummy hash for test262]"
+            "perf": "[dummy hash for perf]"
           }
         }
       }
