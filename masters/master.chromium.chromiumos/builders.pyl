@@ -133,7 +133,7 @@
         "version": "precise",
         "bits": 64,
       },
-      "slaves": ["slave19-m1"],
+      "slaves": ["slave19-c1"],
     },
 
     "linux_ozone": {
