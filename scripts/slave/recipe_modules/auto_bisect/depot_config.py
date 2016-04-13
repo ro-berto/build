@@ -41,6 +41,13 @@ DEPOT_DEPS_NAME = {
         'from': ['chromium'],
         'url': 'https://chromium.googlesource.com/skia',
         'deps_var': 'skia_revision'
+    },
+    'catapult': {
+        'src': 'src/third_party/catapult',
+        'recurse': True,
+        'from': ['chromium'],
+        'url':'https://github.com/catapult-project/catapult.git',
+        'deps_var': 'catapult_revision'
     }
 }
 
