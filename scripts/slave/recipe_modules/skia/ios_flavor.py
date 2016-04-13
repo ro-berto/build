@@ -13,18 +13,25 @@ import default_flavor
 class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
   def __init__(self, skia_api):
     super(iOSFlavorUtils, self).__init__(skia_api)
+    self.default_env = {}
+    if self._skia_api.running_in_swarming:
+      self.default_env['XCODEBUILD'] = (
+          self._skia_api.slave_dir.join('xcodebuild'))
     self.ios_bin = self._skia_api.m.path['slave_build'].join(
         'skia', 'platform_tools', 'ios', 'bin')
 
   def step(self, name, cmd, **kwargs):
     args = [self.ios_bin.join('ios_run_skia')]
-
+    env = {}
+    env.update(kwargs.pop('env', {}))
+    env.update(self.default_env)
     # Convert 'dm' and 'nanobench' from positional arguments
     # to flags, which is what iOSShell expects to select which
     # one is being run.
     cmd = ["--" + c if c in ['dm', 'nanobench'] else c
           for c in cmd]
     return self._skia_api.run(self._skia_api.m.step, name=name, cmd=args + cmd,
+                              env=env,
                               **kwargs)
 
   def compile(self, target):
@@ -43,6 +50,7 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
         self._skia_api.m.step,
         'exists %s' % path,
         cmd=[self.ios_bin.join('ios_path_exists'), path],
+        env=self.default_env,
         infra_step=True,
     ) # pragma: no cover
 
@@ -52,6 +60,7 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
         self._skia_api.m.step,
         'rmdir %s' % path,
         cmd=[self.ios_bin.join('ios_rm'), path],
+        env=self.default_env,
         infra_step=True,
     )
 
@@ -61,6 +70,7 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
         self._skia_api.m.step,
         'mkdir %s' % path,
         cmd=[self.ios_bin.join('ios_mkdir'), path],
+        env=self.default_env,
         infra_step=True,
     )
 
@@ -72,6 +82,7 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
                                 self._skia_api.m.path.basename(device_dir)),
         cmd=[self.ios_bin.join('ios_push_if_needed'),
              host_dir, device_dir],
+        env=self.default_env,
         infra_step=True,
     )
 
@@ -82,6 +93,7 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
         name='pull %s' % self._skia_api.m.path.basename(device_dir),
         cmd=[self.ios_bin.join('ios_pull_if_needed'),
              device_dir, host_dir],
+        env=self.default_env,
         infra_step=True,
     )
 
@@ -91,6 +103,7 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
         self._skia_api.m.step,
         name='push %s' % host_path,
         cmd=[self.ios_bin.join('ios_push_file'), host_path, device_path],
+        env=self.default_env,
         infra_step=True,
     ) # pragma: no cover
 
@@ -105,6 +118,7 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
         self._skia_api.m.step,
         name='install iOSShell',
         cmd=[self.ios_bin.join('ios_install')],
+        env=self.default_env,
         infra_step=True)
 
   def cleanup_steps(self):
@@ -114,11 +128,13 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
           self._skia_api.m.step,
           name='reboot',
           cmd=[self.ios_bin.join('ios_restart')],
+          env=self.default_env,
           infra_step=True)
       self._skia_api.run(
           self._skia_api.m.step,
           name='wait for reboot',
           cmd=['sleep', '20'],
+          env=self.default_env,
           infra_step=True)
 
   def read_file_on_device(self, path):
@@ -127,6 +143,7 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
         self._skia_api.m.step,
         name='read %s' % self._skia_api.m.path.basename(path),
         cmd=[self.ios_bin.join('ios_cat_file'), path],
+        env=self.default_env,
         stdout=self._skia_api.m.raw_io.output(),
         infra_step=True)
     return ret.stdout.rstrip() if ret.stdout else ret.stdout
@@ -137,6 +154,7 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
         self._skia_api.m.step,
         'rm %s' % path,
         cmd=[self.ios_bin.join('ios_rm'), path],
+        env=self.default_env,
         infra_step=True,
     )
 
