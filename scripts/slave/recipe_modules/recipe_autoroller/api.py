@@ -78,6 +78,12 @@ More info is at https://goo.gl/zkKdpD. Use https://goo.gl/noib3a to file a bug
 """)
 
 
+TRIVIAL_ROLL_TBR_EMAILS = (
+    'martiniss@chromium.org',
+    'phajdan.jr@chromium.org',
+)
+
+
 # These are different results of a roll attempt:
 #   - success means we have a working non-empty roll
 #   - empty means the repo is using latest revision of its dependencies
@@ -234,9 +240,13 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
     if need_to_upload:
       commit_message = (
           'Rebase' if rebase else get_commit_message(roll_result))
-      # TODO(phajdan.jr): Send email for all CLs.
-      # TODO(phajdan.jr): TBR trivial rolls.
-      upload_args = ['--cq-dry-run']
+      if roll_result['trivial']:
+        # Land immediately.
+        upload_args = ['--use-commit-queue']
+        if not rebase:
+          commit_message += '\nTBR=%s\n' % ','.join(TRIVIAL_ROLL_TBR_EMAILS)
+      else:
+        upload_args = ['--send-mail', '--cq-dry-run']
       upload_args.extend(['--bypass-hooks', '-f', '-m', commit_message])
       upload_args.extend([
           '--auth-refresh-token-json=/creds/refresh_tokens/recipe-roller'])
