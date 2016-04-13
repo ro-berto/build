@@ -20,6 +20,8 @@ with 'test/' in order to not pollute the official coverage archives during
 testing.
 """
 
+from recipe_engine.types import freeze
+
 # Recipe module dependencies.
 DEPS = [
   'chromium',
@@ -30,6 +32,12 @@ DEPS = [
 ]
 
 
+# Valid continuous builders.
+BUILDERS = freeze({
+    'Syzygy Coverage': ('syzygy', {'BUILD_CONFIG': 'Coverage'}),
+    'win_cov_try': ('syzygy', {'BUILD_CONFIG': 'Coverage'}),
+})
+
 from recipe_engine.recipe_api import Property
 
 PROPERTIES = {
@@ -39,14 +47,13 @@ PROPERTIES = {
 
 def RunSteps(api, buildername):
   """Generates the sequence of steps that will be run on the coverage bot."""
-  assert buildername == 'Syzygy Coverage'
-
+  assert buildername in BUILDERS
   # Configure the build environment.
   s = api.syzygy
-  kwargs = {'BUILD_CONFIG': 'Coverage'}
-  s.set_config('syzygy', **kwargs)
-  api.chromium.set_config('syzygy', **kwargs)
-  api.gclient.set_config('syzygy', **kwargs)
+  config, kwargs = BUILDERS[buildername]
+  s.set_config(config, **kwargs)
+  api.chromium.set_config(config, **kwargs)
+  api.gclient.set_config(config, **kwargs)
 
   # Clean up any running processes on the slave.
   s.taskkill()
@@ -56,10 +63,12 @@ def RunSteps(api, buildername):
   s.runhooks()
   s.compile()
 
-  s.capture_unittest_coverage()
-  s.archive_coverage()
+  if not buildername.endswith('_try'):
+    s.capture_unittest_coverage()
+    s.archive_coverage()
 
 
 def GenTests(api):
   """Generates an end-to-end successful test for this builder."""
-  yield api.syzygy.generate_test(api, 'Syzygy Coverage')
+  for buildername in BUILDERS:
+    yield api.syzygy.generate_test(api, buildername)

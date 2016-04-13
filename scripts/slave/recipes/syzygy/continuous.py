@@ -36,8 +36,9 @@ BUILDERS = freeze({
   'Syzygy Official': ('syzygy_official', {}),
 
   # Trybots.
-  'win_rel_try': ('syzygy', {'BUILD_CONFIG': 'Release'}),
   'win_dbg_try': ('syzygy', {'BUILD_CONFIG': 'Debug'}),
+  'win_rel_try': ('syzygy', {'BUILD_CONFIG': 'Release'}),
+  'win_official_try': ('syzygy_official', {}),
   'win8_rel_try': ('syzygy', {'BUILD_CONFIG': 'Release'}),
 })
 
@@ -81,7 +82,7 @@ def RunSteps(api, buildername, blamelist, revision):
     s.randomly_reorder_chrome()
     s.benchmark_chrome()
 
-  if s.c.official_build:
+  if s.c.official_build and not buildername.endswith('_try'):
     assert build_config == 'Release'
     s.archive_binaries()
     s.upload_symbols()
