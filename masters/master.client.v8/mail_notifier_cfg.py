@@ -40,6 +40,9 @@ categories_steps = {
 }
 
 exclusions = {
+  'V8 Arm': [],
+  'V8 Arm - debug': [],
+  'V8 Arm GC Stress': [],
   'V8 Linux - swarming staging': [],
   'V8 Linux - debug - greedy allocator': [],
   'V8 Linux64 - debug - greedy allocator': [],

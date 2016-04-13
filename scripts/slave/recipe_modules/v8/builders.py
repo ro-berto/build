@@ -786,6 +786,217 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
       },
+####### Category: Arm
+      'V8 Arm - builder': {
+        'chromium_apply_config': [
+            'v8_ninja', 'default_compiler', 'goma', 'arm_hard_float'],
+        'v8_apply_config': ['arm_hard_float'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'arm_rel_archive',
+        'enable_swarming': True,
+        'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 Arm',
+        ],
+        'triggers_proxy': True,
+      },
+      'V8 Arm - debug builder': {
+        'chromium_apply_config': [
+            'v8_ninja', 'default_compiler', 'goma', 'arm_hard_float'],
+        'v8_apply_config': ['arm_hard_float'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'arm_dbg_archive',
+        'enable_swarming': True,
+        'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 Arm - debug',
+          'V8 Arm GC Stress',
+        ],
+      },
+      'V8 Android Arm - builder': {
+        'gclient_apply_config': ['android'],
+        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+          'TARGET_PLATFORM': 'android',
+        },
+        'bot_type': 'builder',
+        'build_gs_archive': 'android_arm_rel_archive',
+        'enable_swarming': True,
+        'testing': {'platform': 'linux'},
+        'triggers_proxy': True,
+      },
+      'V8 Arm': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Arm - builder',
+        'tests': [
+          V8Testing,
+          Benchmarks,
+          OptimizeForSize,
+          SimdJs,
+          Ignition,
+          Test262Ignition,
+        ],
+        'enable_swarming': True,
+        'swarming_properties': {
+          'default_hard_timeout': 60 * 60,
+          'default_expiration': 6 * 60 * 60,
+        },
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'cpu': 'armv7l',
+        },
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Arm - debug': {
+        'v8_apply_config': ['no_exhaustive_variants'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Arm - debug builder',
+        'tests': [
+          V8Testing_2,
+          OptimizeForSize,
+          SimdJs,
+        ],
+        'enable_swarming': True,
+        'swarming_properties': {
+          'default_hard_timeout': 60 * 60,
+          'default_expiration': 6 * 60 * 60,
+        },
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'cpu': 'armv7l',
+        },
+        'testing': {'platform': 'linux'},
+      },
+####### Category: Simulators
+      'V8 Linux - arm - sim': {
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'tests': [
+          V8Testing_2,
+          Test262,
+          Mozilla,
+          SimdJs,
+          Ignition,
+          MjsunitSPFrameAccess,
+          Test262Ignition,
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - arm - sim - debug': {
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'tests': [
+          V8Testing_2,
+          Test262,
+          Mozilla,
+          SimdJs,
+          Ignition,
+          MjsunitSPFrameAccess,
+          Test262Ignition,
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - arm - armv8-a - sim': {
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
+        'v8_apply_config': ['enable_armv8'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
+        'testing': {'platform': 'linux'},
+      },
+      # TODO(machenbach): Turn arm sim into builders/testers.
+      'V8 Linux - arm - armv8-a - sim - debug': {
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
+        'v8_apply_config': ['enable_armv8'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - arm - sim - novfp3': {
+        # TODO(machenbach): Can these configs be reduced to one?
+        'chromium_apply_config': [
+          'clang', 'v8_ninja', 'goma', 'simulate_arm', 'novfp3'],
+        'v8_apply_config': ['novfp3'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'swarming_properties': {'default_priority': 35},
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - arm - sim - debug - novfp3': {
+        'chromium_apply_config': [
+          'clang', 'v8_ninja', 'goma', 'simulate_arm', 'novfp3'],
+        'v8_apply_config': ['novfp3', 'no_exhaustive_variants'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'swarming_properties': {'default_priority': 35},
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - arm64 - sim - gc stress': {
+        'chromium_apply_config': [
+          'clang', 'v8_ninja', 'goma', 'simulate_arm'],
+        'v8_apply_config': ['gc_stress'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'swarming_properties': {'default_priority': 35},
+        'tests': [Mjsunit_3, Webkit],
+        'testing': {'platform': 'linux'},
+      },
 ####### Category: Misc
       'V8 Fuzzer': {
         'v8_config_kwargs': {
@@ -840,6 +1051,27 @@ BUILDERS = {
           'cpu': 'x86-64',
         },
         'testing': {'platform': 'mac'},
+      },
+      'V8 Arm GC Stress': {
+        'v8_apply_config': ['gc_stress', 'no_variants'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Arm - debug builder',
+        'tests': [Mjsunit_2, Webkit],
+        'enable_swarming': True,
+        'swarming_properties': {
+          'default_hard_timeout': 60 * 60,
+          'default_expiration': 6 * 60 * 60,
+        },
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'cpu': 'armv7l',
+        },
+        'testing': {'platform': 'linux'},
       },
       'V8 Linux64 GC Stress - custom snapshot': {
         'v8_apply_config': ['gc_stress', 'no_harness'],
@@ -1135,223 +1367,6 @@ BUILDERS = {
 ####### Waterfall: client.v8.ports
   'client.v8.ports': {
     'builders': {
-####### Category: Arm
-      'V8 Arm - builder': {
-        'chromium_apply_config': [
-            'v8_ninja', 'default_compiler', 'goma', 'arm_hard_float'],
-        'v8_apply_config': ['arm_hard_float'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'build_gs_archive': 'arm_rel_archive',
-        'enable_swarming': True,
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Arm',
-        ],
-        'triggers_proxy': True,
-      },
-      'V8 Arm - debug builder': {
-        'chromium_apply_config': [
-            'v8_ninja', 'default_compiler', 'goma', 'arm_hard_float'],
-        'v8_apply_config': ['arm_hard_float'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'build_gs_archive': 'arm_dbg_archive',
-        'enable_swarming': True,
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Arm - debug',
-          'V8 Arm GC Stress',
-        ],
-      },
-      'V8 Android Arm - builder': {
-        'gclient_apply_config': ['android'],
-        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-          'TARGET_PLATFORM': 'android',
-        },
-        'bot_type': 'builder',
-        'build_gs_archive': 'android_arm_rel_archive',
-        'enable_swarming': True,
-        'testing': {'platform': 'linux'},
-        'triggers_proxy': True,
-      },
-      'V8 Arm': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Arm - builder',
-        'tests': [
-          V8Testing,
-          Benchmarks,
-          OptimizeForSize,
-          SimdJs,
-          Ignition,
-          Test262Ignition,
-        ],
-        'enable_swarming': True,
-        'swarming_properties': {
-          'default_hard_timeout': 60 * 60,
-          'default_expiration': 6 * 60 * 60,
-        },
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-          'cpu': 'armv7l',
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Arm - debug': {
-        'v8_apply_config': ['no_exhaustive_variants'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Arm - debug builder',
-        'tests': [
-          V8Testing_2,
-          OptimizeForSize,
-          SimdJs,
-        ],
-        'enable_swarming': True,
-        'swarming_properties': {
-          'default_hard_timeout': 60 * 60,
-          'default_expiration': 6 * 60 * 60,
-        },
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-          'cpu': 'armv7l',
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Arm GC Stress': {
-        'v8_apply_config': ['gc_stress', 'no_variants'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Arm - debug builder',
-        'tests': [Mjsunit_2, Webkit],
-        'enable_swarming': True,
-        'swarming_properties': {
-          'default_hard_timeout': 60 * 60,
-          'default_expiration': 6 * 60 * 60,
-        },
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-          'cpu': 'armv7l',
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux - arm - sim': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [
-          V8Testing_2,
-          Test262,
-          Mozilla,
-          SimdJs,
-          Ignition,
-          MjsunitSPFrameAccess,
-          Test262Ignition,
-        ],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux - arm - sim - debug': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [
-          V8Testing_2,
-          Test262,
-          Mozilla,
-          SimdJs,
-          Ignition,
-          MjsunitSPFrameAccess,
-          Test262Ignition,
-        ],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux - arm - armv8-a - sim': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
-        'v8_apply_config': ['enable_armv8'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
-        'testing': {'platform': 'linux'},
-      },
-      # TODO(machenbach): Turn arm sim into builders/testers.
-      'V8 Linux - arm - armv8-a - sim - debug': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
-        'v8_apply_config': ['enable_armv8'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux - arm - sim - novfp3': {
-        # TODO(machenbach): Can these configs be reduced to one?
-        'chromium_apply_config': [
-          'clang', 'v8_ninja', 'goma', 'simulate_arm', 'novfp3'],
-        'v8_apply_config': ['novfp3'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'swarming_properties': {'default_priority': 35},
-        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux - arm - sim - debug - novfp3': {
-        'chromium_apply_config': [
-          'clang', 'v8_ninja', 'goma', 'simulate_arm', 'novfp3'],
-        'v8_apply_config': ['novfp3', 'no_exhaustive_variants'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'swarming_properties': {'default_priority': 35},
-        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
-        'testing': {'platform': 'linux'},
-      },
 ####### Category: ARM64
       'V8 Android Arm64 - builder': {
         'gclient_apply_config': ['android'],
@@ -1422,20 +1437,6 @@ BUILDERS = {
           'default_hard_timeout': 60 * 60,
           'default_priority': 35,
         },
-      },
-      'V8 Linux - arm64 - sim - gc stress': {
-        'chromium_apply_config': [
-          'clang', 'v8_ninja', 'goma', 'simulate_arm'],
-        'v8_apply_config': ['gc_stress'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'swarming_properties': {'default_priority': 35},
-        'tests': [Mjsunit_3, Webkit],
-        'testing': {'platform': 'linux'},
       },
 ####### Category: MIPS
       'V8 Mips - builder': {
