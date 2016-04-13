@@ -1656,25 +1656,6 @@ BUILDERS = {
           'gpu': '102b',
         },
       },
-      'v8_linux_nodcheck_rel': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'no_dcheck'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [
-          V8Testing,
-          Test262Variants_2,
-          Test262Ignition,
-          Ignition,
-          Mozilla,
-          Benchmarks,
-          SimdJs,
-        ],
-        'testing': {'platform': 'linux'},
-      },
       'v8_linux_nodcheck_rel_ng': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'no_dcheck'],
         'v8_config_kwargs': {
@@ -1834,25 +1815,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
-      'v8_linux64_avx2_rel': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [
-          V8Testing,
-          SimdJs,
-        ],
-        'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-          'pool': 'V8-AVX2',
-          'gpu': '102b',
-        },
-      },
       'v8_linux64_avx2_rel_ng': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
         'v8_config_kwargs': {
@@ -1927,29 +1889,6 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [Mjsunit_3, Webkit, MjsunitIgnition_2],
-        'testing': {'platform': 'linux'},
-      },
-      'v8_linux64_asan_rel': {
-        # TODO(machenbach): Run with exhaustive variants as soon as bot runs
-        # on swarming.
-        'v8_apply_config': ['no_exhaustive_variants'],
-        'chromium_apply_config': [
-          'v8_ninja',
-          'clang',
-          'asan',
-          'goma',
-          'no_dcheck',
-        ],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-        },
-        'tests': [V8Testing_2, Test262_2, Ignition],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_asan_rel_ng': {
@@ -2263,21 +2202,6 @@ BUILDERS = {
         'tests': [V8Testing_2, SimdJs, Ignition],
         'testing': {'platform': 'win'},
       },
-      'v8_mac_rel': {
-        'chromium_apply_config': ['v8_ninja', 'clang', 'goma'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [V8Testing, Test262, Mozilla, SimdJs, Ignition],
-        'swarming_dimensions': {
-          'os': 'Mac-10.9',
-          'cpu': 'x86-64',
-        },
-        'testing': {'platform': 'mac'},
-      },
       'v8_mac_rel_ng': {
         'chromium_apply_config': ['v8_ninja', 'clang', 'goma'],
         'v8_config_kwargs': {
@@ -2389,25 +2313,6 @@ BUILDERS = {
         },
         'testing': {'platform': 'mac'},
       },
-      'v8_linux_arm_rel': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [
-          V8Testing_3,
-          Test262,
-          Mozilla,
-          SimdJs,
-          Ignition,
-          MjsunitSPFrameAccess,
-          Test262Ignition_2,
-        ],
-        'testing': {'platform': 'linux'},
-      },
       'v8_linux_arm_rel_ng': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
         'v8_config_kwargs': {
@@ -2483,25 +2388,6 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [V8Testing_3, Test262, Mozilla, SimdJs],
-        'testing': {'platform': 'linux'},
-      },
-      'v8_linux_arm64_rel': {
-        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [
-          V8Testing_3,
-          Test262,
-          Mozilla,
-          SimdJs,
-          Ignition,
-          MjsunitSPFrameAccess,
-          Test262Ignition_2,
-        ],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_rel_ng': {
