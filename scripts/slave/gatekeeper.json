@@ -614,9 +614,6 @@
           "V8 Linux64 - gcov coverage",
           "V8 Linux - full debug",
           "V8 Linux - interpreted regexp",
-          "V8 Arm",
-          "V8 Arm - debug",
-          "V8 Arm GC Stress",
           "V8 Random Deopt Fuzzer - debug",
           "V8 Win64 - clang"
         ],
@@ -640,6 +637,9 @@
           "v8_all"
         ],
         "excluded_builders" : [
+          "V8 Arm",
+          "V8 Arm - debug",
+          "V8 Arm GC Stress",
           "V8 Linux - mipsel - sim",
           "V8 Mips - big endian - nosnap - 1",
           "V8 Mips - big endian - nosnap - 2",

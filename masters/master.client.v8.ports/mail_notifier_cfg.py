@@ -5,26 +5,31 @@
 from master.v8.v8_notifier import V8Notifier
 
 
+v8_steps = [
+  'runhooks',
+  'gn',
+  'compile',
+  'Check',
+  'OptimizeForSize',
+  'Mjsunit',
+  'Webkit',
+  'Benchmarks',
+  'Test262',
+  'Mozilla',
+]
+
 def Update(config, active_master, c):
   c['status'].extend([
     V8Notifier(
         config,
         active_master,
         categories_steps={
-          '': [
-            'runhooks',
-            'gn',
-            'compile',
-            'Check',
-            'OptimizeForSize',
-            'Mjsunit',
-            'Webkit',
-            'Benchmarks',
-            'Test262',
-            'Mozilla',
-          ],
+          '': v8_steps,
         },
         exclusions={
+          'V8 Arm': [],
+          'V8 Arm - debug': [],
+          'V8 Arm GC Stress': [],
           'V8 Linux - mipsel - sim': [],
           'V8 Mips - big endian - nosnap - 1': [],
           'V8 Mips - big endian - nosnap - 2': [],
@@ -36,6 +41,17 @@ def Update(config, active_master, c):
           'V8 Linux - x87 - nosnap - debug': [],
         },
         sendToInterestedUsers=True,
+    ),
+    V8Notifier(
+        config,
+        active_master,
+        categories_steps={
+          'mem_sheriff': v8_steps,
+        },
+        extraRecipients=[
+          'hpayer@chromium.org',
+          'ulan@chromium.org',
+        ],
     ),
     V8Notifier(
         config,
