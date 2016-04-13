@@ -406,7 +406,7 @@ class StatusPush(StatusReceiverMultiService):
 
     slaves = {slave_name: self._status.getSlave(slave_name).asDict()
               for slave_name in self._status.getSlaveNames()}
-    return {'builders': builder_infos, 'slaves': slaves}
+    return {'builders': builder_infos, 'slaves': slaves, 'name': self.name}
 
 
   def _recordBuild(self, build):
