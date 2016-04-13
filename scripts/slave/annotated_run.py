@@ -25,6 +25,7 @@ from common import annotator
 from common import chromium_utils
 from common import env
 from common import master_cfg_utils
+from slave import cipd
 from slave import gce
 from slave import infra_platform
 from slave import robust_tempdir
@@ -68,11 +69,6 @@ LOGDOG_WHITELIST_MASTER_BUILDERS = {
 LogDogPlatform = collections.namedtuple('LogDogPlatform', (
     'butler', 'annotee', 'credential_path', 'streamserver'))
 
-# A CIPD binary description, including the package name, version, and relative
-# path of the binary within the package.
-CipdBinary = collections.namedtuple('CipdBinary',
-    ('package', 'version', 'relpath'))
-
 # CIPD tag for LogDog Butler/Annotee to use.
 LOGDOG_CIPD_CANARY = 'latest'
 LOGDOG_CIPD_VERSION = 'git_revision:36fbc27d6caa3951e74848cc7ce9f08f9ea6ad95'
@@ -95,10 +91,16 @@ PLATFORM_CONFIG = {
   },
   ('linux', 32): {
     'logdog_platform': LogDogPlatform(
-        butler=CipdBinary('infra/tools/luci/logdog/butler/linux-386',
-                          LOGDOG_CIPD_VERSION, 'logdog_butler'),
-        annotee=CipdBinary('infra/tools/luci/logdog/annotee/linux-386',
-                          LOGDOG_CIPD_VERSION, 'logdog_annotee'),
+        butler=cipd.CipdBinary(
+            cipd.CipdPackage(
+                'infra/tools/luci/logdog/butler/linux-386',
+                LOGDOG_CIPD_VERSION),
+            'logdog_butler'),
+        annotee=cipd.CipdBinary(
+            cipd.CipdPackage(
+                'infra/tools/luci/logdog/annotee/linux-386',
+                LOGDOG_CIPD_VERSION),
+            'logdog_annotee'),
         credential_path=('/creds/service_accounts/'
                          'service-account-luci-logdog-publisher.json'),
         streamserver='unix',
@@ -106,10 +108,16 @@ PLATFORM_CONFIG = {
   },
   ('linux', 64): {
     'logdog_platform': LogDogPlatform(
-        butler=CipdBinary('infra/tools/luci/logdog/butler/linux-amd64',
-                          LOGDOG_CIPD_VERSION, 'logdog_butler'),
-        annotee=CipdBinary('infra/tools/luci/logdog/annotee/linux-amd64',
-                          LOGDOG_CIPD_VERSION, 'logdog_annotee'),
+        butler=cipd.CipdBinary(
+            cipd.CipdPackage(
+                'infra/tools/luci/logdog/butler/linux-amd64',
+                LOGDOG_CIPD_VERSION),
+            'logdog_butler'),
+        annotee=cipd.CipdBinary(
+            cipd.CipdPackage(
+                'infra/tools/luci/logdog/annotee/linux-amd64',
+                LOGDOG_CIPD_VERSION),
+            'logdog_annotee'),
         credential_path=('/creds/service_accounts/'
                          'service-account-luci-logdog-publisher.json'),
         streamserver='unix',
@@ -122,10 +130,16 @@ PLATFORM_CONFIG = {
   },
   ('mac', 64): {
     'logdog_platform': LogDogPlatform(
-        butler=CipdBinary('infra/tools/luci/logdog/butler/mac-amd64',
-                          LOGDOG_CIPD_VERSION, 'logdog_butler'),
-        annotee=CipdBinary('infra/tools/luci/logdog/annotee/mac-amd64',
-                          LOGDOG_CIPD_VERSION, 'logdog_annotee'),
+        butler=cipd.CipdBinary(
+            cipd.CipdPackage(
+                'infra/tools/luci/logdog/butler/mac-amd64',
+                LOGDOG_CIPD_VERSION),
+            'logdog_butler'),
+        annotee=cipd.CipdBinary(
+            cipd.CipdPackage(
+                'infra/tools/luci/logdog/annotee/mac-amd64',
+                LOGDOG_CIPD_VERSION),
+            'logdog_annotee'),
         credential_path=('/creds/service_accounts/'
                          'service-account-luci-logdog-publisher.json'),
         streamserver='unix',
@@ -139,10 +153,16 @@ PLATFORM_CONFIG = {
   },
   ('win', 32): {
     'logdog_platform': LogDogPlatform(
-        butler=CipdBinary('infra/tools/luci/logdog/butler/windows-386',
-                          LOGDOG_CIPD_VERSION, 'logdog_butler.exe'),
-        annotee=CipdBinary('infra/tools/luci/logdog/annotee/windows-386',
-                          LOGDOG_CIPD_VERSION, 'logdog_annotee.exe'),
+        butler=cipd.CipdBinary(
+            cipd.CipdPackage(
+                'infra/tools/luci/logdog/butler/windows-386',
+                LOGDOG_CIPD_VERSION),
+            'logdog_butler.exe'),
+        annotee=cipd.CipdBinary(
+            cipd.CipdPackage(
+                'infra/tools/luci/logdog/annotee/windows-386',
+                LOGDOG_CIPD_VERSION),
+            'logdog_annotee.exe'),
         credential_path=('c:\\creds\\service_accounts\\'
                          'service-account-luci-logdog-publisher.json'),
         streamserver='net.pipe',
@@ -150,10 +170,16 @@ PLATFORM_CONFIG = {
   },
   ('win', 64): {
     'logdog_platform': LogDogPlatform(
-        butler=CipdBinary('infra/tools/luci/logdog/butler/windows-amd64',
-                          LOGDOG_CIPD_VERSION, 'logdog_butler.exe'),
-        annotee=CipdBinary('infra/tools/luci/logdog/annotee/windows-amd64',
-                          LOGDOG_CIPD_VERSION, 'logdog_annotee.exe'),
+        butler=cipd.CipdBinary(
+            cipd.CipdPackage(
+                'infra/tools/luci/logdog/butler/windows-amd64',
+                LOGDOG_CIPD_VERSION),
+            'logdog_butler.exe'),
+        annotee=cipd.CipdBinary(
+            cipd.CipdPackage(
+                'infra/tools/luci/logdog/annotee/windows-amd64',
+                LOGDOG_CIPD_VERSION),
+            'logdog_annotee.exe'),
         credential_path=('c:\\creds\\service_accounts\\'
                          'service-account-luci-logdog-publisher.json'),
         streamserver='net.pipe',
@@ -304,15 +330,15 @@ def _get_service_account_json(opts, credential_path):
                              'Tried: %s' % (credential_path,))
 
 
-def _logdog_install_cipd(path, *packages):
-  """Returns (list): The paths to the binaries in each of the packages.
+def _logdog_install_cipd(path, *binaries):
+  """Returns (list): The paths to the binaries.
 
   This method bootstraps CIPD in "path", installing the packages specified
-  by "packages" and returning the paths to their binaries.
+  by "binaries".
 
   Args:
     path (str): The CIPD installation root.
-    packages (CipdBinary): The set of CIPD binary packages to install.
+    binaries (CipdBinary): The set of CIPD binaries to install.
   """
   verbosity = 0
   level = logging.getLogger().level
@@ -329,9 +355,9 @@ def _logdog_install_cipd(path, *packages):
       '--dest-directory', path,
       '--json-output', packages_path,
   ] + (['--verbose'] * verbosity)
-  for p in packages:
-    cmd += ['-P', '%s@%s' % (p.package, p.version)]
-    pmap[p.package] = os.path.join(path, p.relpath)
+  for b in binaries:
+    cmd += ['-P', '%s@%s' % (b.package.name, b.package.version)]
+    pmap[b.package.name] = os.path.join(path, b.relpath)
 
   try:
     _check_command(cmd)
@@ -339,8 +365,8 @@ def _logdog_install_cipd(path, *packages):
     LOGGER.exception('Failed to install LogDog CIPD packages.')
     raise LogDogBootstrapError()
 
-  # Resolve installed packages.
-  return tuple(pmap[p.package] for p in packages)
+  # Resolve installed binaries.
+  return tuple(pmap[b.package.name] for b in binaries)
 
 
 def _build_logdog_prefix(properties):

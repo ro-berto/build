@@ -30,6 +30,9 @@ LOGGER = logging.getLogger('cipd')
 # Used to contain a CIPD package specification.
 CipdPackage = collections.namedtuple('CipdPackage', ('name', 'version'))
 
+# A CIPD binary description - relative path of the binary within the package.
+CipdBinary = collections.namedtuple('CipdBinary', ('package', 'relpath'))
+
 
 def bootstrap(path):
   bootstrap_path = os.path.join(common.env.Build, 'scripts', 'slave',

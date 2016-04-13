@@ -22,6 +22,7 @@ import mock
 from common import chromium_utils
 from common import env
 from slave import annotated_run
+from slave import cipd
 from slave import gce
 from slave import infra_platform
 from slave import robust_tempdir
@@ -297,14 +298,15 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
   @mock.patch('os.path.isfile')
   @mock.patch('slave.annotated_run._logdog_install_cipd')
   @mock.patch('slave.annotated_run._get_service_account_json')
-  def test_runs_directly_if_logdog_error(self, service_account, cipd, isfile):
+  def test_runs_directly_if_logdog_error(
+      self, service_account, install_cipd, isfile):
     self.properties['buildername'] = 'yesbuilder'
 
     # Test Windows builder this time.
     infra_platform.get.return_value = ('win', 64)
 
     isfile.return_value = True
-    cipd.return_value = ('logdog_butler.exe', 'logdog_annotee.exe')
+    install_cipd.return_value = ('logdog_butler.exe', 'logdog_annotee.exe')
     service_account.return_value = 'creds.json'
     def error_for_logdog(args, **kw):
       if len(args) > 0 and args[0] == 'logdog_butler.exe':
@@ -366,8 +368,8 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
     annotated_run._run_command.return_value = (0, '')
 
     pkgs = annotated_run._logdog_install_cipd(self.basedir,
-        annotated_run.CipdBinary('infra/foo', 'v0', 'foo'),
-        annotated_run.CipdBinary('infra/bar', 'v1', 'baz'),
+        cipd.CipdBinary(cipd.CipdPackage('infra/foo', 'v0'), 'foo'),
+        cipd.CipdBinary(cipd.CipdPackage('infra/bar', 'v1'), 'baz'),
         )
     self.assertEqual(pkgs, (self._bp('foo'), self._bp('baz')))
 
@@ -386,8 +388,8 @@ class AnnotatedRunLogDogExecTest(_AnnotatedRunExecTestBase):
     self.assertRaises(annotated_run.LogDogBootstrapError,
         annotated_run._logdog_install_cipd,
         self.basedir,
-        annotated_run.CipdBinary('infra/foo', 'v0', 'foo'),
-        annotated_run.CipdBinary('infra/bar', 'v1', 'baz'),
+        cipd.CipdBinary(cipd.CipdPackage('infra/foo', 'v0'), 'foo'),
+        cipd.CipdBinary(cipd.CipdPackage('infra/bar', 'v1'), 'baz'),
     )
 
   def test_will_not_bootstrap_if_recursive(self):
