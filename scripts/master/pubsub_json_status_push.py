@@ -120,14 +120,12 @@ class PubSubClient(object):
     # TODO(hinoka): Sign messages so that they can be verified to originate
     # from buildbot.
     body = { 'messages': [{'data': base64.b64encode(data)}] }
-    log.msg('PubSub: Sending message to topic %s' % topic)
 
     @exponential_retry(retries=4, delay=1)
     def _run():
       client.projects().topics().publish(topic=topic, body=body).execute()
     _run()
 
-    log.msg('PubSub: Sending message to topic %s successful' % topic)
 
   def _runner(self):
     while True:
@@ -137,19 +135,17 @@ class PubSubClient(object):
           data = self.queue.get(True, 5)
         except Queue.Empty:
           if not parent_is_alive():
-            log.msg('PubSub: Parent has died, exiting.')
             self.queue.put(None)
           continue
 
         if data is None:
-          log.msg('PubSub: Received exit signal, quitting.')
           break
         try:
           self._send_data(self.client, self.topic_url, data)
-        except Exception as e:
-          log.err('PubSub: Encountered error while sending data: %s' % e)
-      except Exception as e:
-          log.err('PubSub: Encountered error: %s' % e)
+        except Exception:
+          pass
+      except Exception:
+        pass
 
 
   @staticmethod
