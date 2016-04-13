@@ -125,6 +125,7 @@ def _MojomFiles(build_dir, suffixes):
     'gen/content/test/data',
     'gen/device',
     'gen/mojo',
+    'gen/services',
   ]
   mojom_files = []
   for walk_dir in walk_dirs:
