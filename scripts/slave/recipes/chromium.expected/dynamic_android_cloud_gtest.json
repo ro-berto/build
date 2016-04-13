@@ -269,6 +269,7 @@
       "--goma-dir",
       "[SLAVE_BUILD]/src/build/goma/client",
       "--",
+      "base_unittests",
       "base_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -345,22 +346,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "base_unittests",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_base_unittests",
       "--isolate-file-path=src/base/base_unittests.isolate",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release",
       "--flakiness-dashboard-server=test-results.appspot.com",
       "--json-results-file",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "base_unittests"

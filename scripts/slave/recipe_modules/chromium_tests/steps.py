@@ -272,8 +272,9 @@ class LocalGTestTest(Test):
     if self._override_compile_targets:
       return self._override_compile_targets
 
+    # TODO(GYP) Remove special case once fully converted to GN.
     if api.chromium.c.TARGET_PLATFORM == 'android':
-      return [self.target_name + '_apk']
+      return [self.target_name, self.target_name + '_apk']
 
     return [self.target_name]
 
