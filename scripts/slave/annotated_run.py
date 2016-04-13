@@ -27,6 +27,7 @@ from common import env
 from common import master_cfg_utils
 from slave import gce
 from slave import infra_platform
+from slave import robust_tempdir
 from slave import update_scripts
 
 # Logging instance.
@@ -172,66 +173,6 @@ Config = collections.namedtuple('Config', (
 ))
 
 
-class Runtime(object):
-  """Runtime is the runtime context of the recipe execution.
-
-  It is a ContextManager that tracks generated files and cleans them up at
-  exit.
-  """
-
-  def __init__(self, leak=False):
-    self._tempdirs = []
-    self._leak = leak
-
-  def cleanup(self, path):
-    self._tempdirs.append(path)
-
-  def tempdir(self, base=None):
-    """Creates a temporary recipe-local working directory and yields it.
-
-    This creates a temporary directory for this annotation run. Directory
-    cleanup is appended to the supplied Runtime.
-
-    This creates two levels of directory:
-      <base>/.recipe_runtime
-      <base>/.recipe_runtime/tmpFOO
-
-    On termination, the entire "<base>/.recipe_runtime" directory is deleted,
-    removing the subdirectory created by this instance as well as cleaning up
-    any other temporary subdirectories leaked by previous executions.
-
-    Args:
-      rt (Runtime): Process-wide runtime.
-      base (str/None): The directory under which the tempdir should be created.
-          If None, the default temporary directory root will be used.
-    """
-    base = base or tempfile.gettempdir()
-    basedir = ensure_directory(base, '.recipe_runtime')
-    self.cleanup(basedir)
-    tdir = tempfile.mkdtemp(dir=basedir)
-    return tdir
-
-  def __enter__(self):
-    return self
-
-  def __exit__(self, _et, _ev, _tb):
-    self.close()
-
-  def close(self):
-    if self._leak:
-      LOGGER.warning('(--leak) Leaking temporary paths: %s', self._tempdirs)
-    else:
-      for path in reversed(self._tempdirs):
-        try:
-          if os.path.isdir(path):
-            LOGGER.debug('Cleaning up temporary directory [%s].', path)
-            chromium_utils.RemoveDirectory(path)
-        except BaseException:
-          LOGGER.exception('Failed to clean up temporary directory [%s].',
-                           path)
-    del(self._tempdirs[:])
-
-
 def get_config():
   """Returns (Config): The constructed Config object.
 
@@ -268,7 +209,7 @@ def _logdog_get_streamserver_uri(rt, typ):
   """Returns (str): The Butler StreamServer URI.
 
   Args:
-    rt (Runtime): Process-wide runtime.
+    rt (RobustTempdir): context for temporary directories.
     typ (str): The type of URI to generate. One of: ['unix'].
   Raises:
     LogDogBootstrapError: if |typ| is not a known type.
@@ -345,8 +286,6 @@ def _get_service_account_json(opts, credential_path):
   service account is implicitly authenticated. If we're running on Baremetal,
   a path to those credentials will be returned.
 
-  Args:
-    rt (RecipeRuntime): The runtime environment.
   Raises:
     |LogDogBootstrapError| if no credentials could be found.
   """
@@ -444,7 +383,7 @@ def _logdog_bootstrap(rt, opts, basedir, tempdir, config, properties, cmd):
   [annotated_run.py] => [logdog_butler] => [logdog_annotee] => [recipes.py]
 
   Args:
-    rt (Runtime): Process-wide runtime.
+    rt (RobustTempdir): context for temporary directories.
     opts (argparse.Namespace): Command-line options.
     basedir (str): The base (non-temporary) recipe directory.
     tempdir (str): The path to the session temporary directory.
@@ -882,7 +821,8 @@ def main(argv):
 
   # Enter our runtime environment.
   basedir = os.getcwd()
-  with Runtime(leak=opts.leak) as rt:
+  with robust_tempdir.RobustTempdir(
+      prefix='.recipe_runtime', leak=opts.leak) as rt:
     tdir = rt.tempdir(base=basedir)
     LOGGER.debug('Using temporary directory: [%s].', tdir)
 

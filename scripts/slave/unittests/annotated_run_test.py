@@ -24,6 +24,7 @@ from common import env
 from slave import annotated_run
 from slave import gce
 from slave import infra_platform
+from slave import robust_tempdir
 from slave import update_scripts
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -92,7 +93,7 @@ class _AnnotatedRunExecTestBase(unittest.TestCase):
         mock.patch('os.environ', {}),
         ))
 
-    self.rt = annotated_run.Runtime()
+    self.rt = robust_tempdir.RobustTempdir(prefix='annotated_run_test')
     self.basedir = self.rt.tempdir()
     self.tdir = self.rt.tempdir()
     self.opts = MockOptions(
