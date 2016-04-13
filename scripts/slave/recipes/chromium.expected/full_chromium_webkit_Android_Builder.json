@@ -261,10 +261,8 @@
       "--goma-dir",
       "[SLAVE_BUILD]/src/build/goma/client",
       "--",
-      "blink_heap_unittests",
       "blink_heap_unittests_apk",
       "blink_tests",
-      "webkit_unit_tests",
       "webkit_unit_tests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",

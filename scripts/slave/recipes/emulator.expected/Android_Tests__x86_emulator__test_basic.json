@@ -183,29 +183,17 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "android_webview_unittests",
       "android_webview_unittests_apk",
-      "base_unittests",
       "base_unittests_apk",
-      "cc_unittests",
       "cc_unittests_apk",
-      "components_unittests",
       "components_unittests_apk",
-      "events_unittests",
       "events_unittests_apk",
-      "gl_tests",
       "gl_tests_apk",
-      "ipc_tests",
       "ipc_tests_apk",
-      "skia_unittests",
       "skia_unittests_apk",
-      "sql_unittests",
       "sql_unittests_apk",
-      "sync_unit_tests",
       "sync_unit_tests_apk",
-      "ui_android_unittests",
       "ui_android_unittests_apk",
-      "ui_touch_selection_unittests",
       "ui_touch_selection_unittests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -297,13 +285,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_android_webview_unittests",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "android_webview_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "android_webview_unittests"
@@ -312,13 +304,18 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_base_unittests",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "base_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--isolate_file_path=[SLAVE_BUILD]/src/base/base_unittests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "base_unittests"
@@ -327,13 +324,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_cc_unittests",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "cc_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "cc_unittests"
@@ -342,13 +343,18 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_components_unittests",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "components_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--isolate_file_path=[SLAVE_BUILD]/src/components/components_unittests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "components_unittests"
@@ -357,13 +363,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_events_unittests",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "events_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "events_unittests"
@@ -372,13 +382,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_gl_tests",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "gl_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "gl_tests"
@@ -387,13 +401,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_ipc_tests",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "ipc_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "ipc_tests"
@@ -402,13 +420,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_skia_unittests",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "skia_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "skia_unittests"
@@ -417,13 +439,18 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_sql_unittests",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "sql_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--isolate_file_path=[SLAVE_BUILD]/src/sql/sql_unittests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "sql_unittests"
@@ -432,13 +459,18 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_sync_unit_tests",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "sync_unit_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "--isolate_file_path=[SLAVE_BUILD]/src/sync/sync_unit_tests.isolate"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "sync_unit_tests"
@@ -447,13 +479,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_ui_android_unittests",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "ui_android_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "ui_android_unittests"
@@ -462,13 +498,17 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_ui_touch_selection_unittests",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "ui_touch_selection_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "ui_touch_selection_unittests"
