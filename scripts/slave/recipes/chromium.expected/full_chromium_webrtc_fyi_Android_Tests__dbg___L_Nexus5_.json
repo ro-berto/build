@@ -508,7 +508,10 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_content_browsertests",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "content_browsertests",
       "--gtest_filter=WebRtc*",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
@@ -520,6 +523,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "content_browsertests"

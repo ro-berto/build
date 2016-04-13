@@ -913,8 +913,8 @@ class AndroidApi(recipe_api.RecipeApi):
     args.extend(['--blacklist-file', self.blacklist_file])
     if verbose:
       args.append('--verbose')
-    # TODO(agrieve): Remove once no more tests pass isolate_file_path (contained
-    #    in wrapper script).
+    if self.c.BUILD_CONFIG == 'Release':
+      args.append('--release')
     if isolate_file_path:
       args.append('--isolate_file_path=%s' % isolate_file_path)
     if gtest_filter:
@@ -926,14 +926,11 @@ class AndroidApi(recipe_api.RecipeApi):
           flakiness_dashboard)
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
-    # TODO(agrieve): Remove once no more tests pass shard_timeout (contained in
-    #    wrapper script).
     if shard_timeout:
       args.extend(['-t', str(shard_timeout)])
     self.test_runner(
         name or str(suite),
-        args=args,
-        wrapper_script_suite_name=suite,
+        ['gtest', '-s', suite] + args,
         env=self.m.chromium.get_env(),
         **kwargs)
 

@@ -516,7 +516,10 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_components_browsertests",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "components_browsertests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
@@ -528,6 +531,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
       "LLVM_FORCE_HEAD_REVISION": "YES",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
@@ -537,7 +541,10 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Debug/bin/run_gfx_unittests",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "gfx_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
@@ -548,6 +555,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Debug",
       "LLVM_FORCE_HEAD_REVISION": "YES",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
