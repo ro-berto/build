@@ -1,0 +1,35 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
+      "https://luci-config.appspot.com/_ah/api/config/v1/projects",
+      "--outfile",
+      "/path/to/tmp/",
+      "--headers-json",
+      "{\"Authorization\": \"Bearer ya2930948320948203480=\"}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Get luci-config projects"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
+      "https://luci-config.appspot.com//_ah/api/config/v1/config_sets/projects%2Fbuild%2Frefs%2Fheads%2Fmaster/config/recipes.cfg",
+      "--outfile",
+      "/path/to/tmp/",
+      "--headers-json",
+      "{\"Authorization\": \"Bearer ya2930948320948203480=\"}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Get project 'build' config 'recipes.cfg'"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

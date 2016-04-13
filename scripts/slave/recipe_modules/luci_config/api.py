@@ -4,7 +4,26 @@
 
 from recipe_engine import recipe_api
 
+import json
+
 class LuciConfigApi(recipe_api.RecipeApi):
+  def __init__(self, **kwargs):
+    super(LuciConfigApi, self).__init__(**kwargs)
+    self.set_config('basic')
+
+  def get_config_defaults(self):
+    return {
+      'BASE_URL': 'https://luci-config.appspot.com/',
+    }
+
+  def _get_headers(self):
+    if not self.c.auth_token:
+      return {}
+
+    return {
+      'Authorization': 'Bearer %s' % self.c.auth_token
+    }
+
   def get_projects(self):
     """Fetch the mapping of project id to url from luci-config.
 
@@ -12,28 +31,32 @@ class LuciConfigApi(recipe_api.RecipeApi):
       A dictionary mapping project id to its luci-config project spec (among
       which there is a repo_url key).
     """
-    # TODO(phajdan.jr): switch to fetch recipe module.
-    # When we start passing auth token e.g. for internal projects,
-    # it'd be better not to leak it, even on internal-only builders.
-    cmd = ['curl', 'https://luci-config.appspot.com/_ah/api/config/v1/projects']
-    fetch_result = self.m.step('Get project urls',
-        cmd,
-        stdout=self.m.json.output(),
-        step_test_data=lambda: self.m.json.test_api.output_stream({
-               'projects': [
-                   {
-                       'repo_type': 'GITILES',
-                       'id': 'recipe_engine',
-                       'repo_url': 'https://repo.repo/recipes-py',
-                   },
-                   {
-                       'repo_type': 'GITILES',
-                       'id': 'build',
-                       'repo_url': 'https://repo.repo/chromium/build',
-                   }
-               ],
-           }))
+    url = self.c.base_url + '_ah/api/config/v1/projects'
+    fetch_result = self.m.url.fetch(
+        url, step_name='Get luci-config projects',
+        headers=self._get_headers(),
+      )
+
     mapping = {}
-    for project in fetch_result.stdout['projects']:
+    for project in json.loads(fetch_result)['projects']:
       mapping[project['id']] = project
     return mapping
+
+  def get_project_config(self, project, config):
+    """Fetch the project config from luci-config.
+
+    Args:
+      project: The name of the project in luci-config.
+      config: The config to fetch from refs/heads/master of the project.
+
+    Returns:
+      The json returned from luci-config.
+    """
+    url = self.c.base_url + '/_ah/api/config/v1/config_sets/'
+    url += self.m.url.quote('projects/%s/refs/heads/master' % project, safe='')
+    url += '/config/%s' % config
+
+    fetch_result = self.m.url.fetch(
+        url, step_name='Get project %r config %r' % (project, config),
+        headers=self._get_headers())
+    return json.loads(fetch_result)
