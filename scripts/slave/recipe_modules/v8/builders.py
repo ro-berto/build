@@ -703,6 +703,19 @@ BUILDERS = {
         'tests': [V8Testing_2, SimdJs, Test262, Mozilla, Ignition],
         'testing': {'platform': 'win'},
       },
+      'V8 Win64 - clang': {
+        'chromium_apply_config': [
+          'clang',
+          'v8_ninja',
+          'goma',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
+      },
 ####### Category: Mac
       'V8 Mac': {
         'chromium_apply_config': ['v8_ninja', 'clang', 'goma'],
