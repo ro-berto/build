@@ -204,7 +204,7 @@ class StatusPush(StatusReceiverMultiService):
   DEFAULT_PUSH_INTERVAL_SEC = 30
 
   # Perform verbose logging.
-  verbose = False
+  verbose = True
 
   @classmethod
   def CreateStatusPush(cls, activeMaster, pushInterval=None):
@@ -296,10 +296,6 @@ class StatusPush(StatusReceiverMultiService):
     Args:
       updated_builds: (collection) A collection of _Build instances to push.
     """
-    # If there are no updated builds, we're done.
-    if not updated_builds:
-      return
-
     # Load all build information for builds that we're pushing.
     builds = sorted(updated_builds)
     if self.verbose:
@@ -319,12 +315,14 @@ class StatusPush(StatusReceiverMultiService):
       send_build['master'] = self.name
       send_builds.append(send_build)
 
-    # If there are no builds to send, do nothing.
-    if not send_builds:
-      return
+    # Add in master builder state into the message.
+    master_data = self._getMasterData()
 
     # Send off the builds.
-    self._client.send(json.dumps(send_builds))
+    self._client.send(json.dumps({
+        'builds': send_builds,
+        'master': master_data,
+    }))
 
   def _pushTimerExpired(self):
     """Callback invoked when the push timer has expired.
@@ -386,6 +384,31 @@ class StatusPush(StatusReceiverMultiService):
     build = builder.getBuild(b.build_number)
     return defer.succeed((b, build.asDict()))
 
+  def _getMasterData(self):
+    """Loads and returns a subset of the master data as a JSON.
+
+    This includes:
+    * builders: List of builders (builbot.status.builder.Builder).
+    * slaves: List of slaves (buildbot.status.slave).
+    """
+    builders = {builder_name: self._status.getBuilder(builder_name)
+                for builder_name in self._status.getBuilderNames()}
+    builder_infos = {}
+    for name, builder in builders.iteritems():
+      # Not included: basedir, category, cachedBuilds, state, pendingBuilds.
+      # cachedBuilds isn't useful and takes a ton of resources to compute.
+      # pendingBuilds requires a deferred call.
+      builder_info = {
+        'slaves': builder.slavenames,
+        'current_builds': sorted(b.getNumber() for b in builder.currentBuilds),
+      }
+      builder_infos[name] = builder_info
+
+    slaves = {slave_name: self._status.getSlave(slave_name).asDict()
+              for slave_name in self._status.getSlaveNames()}
+    return {'builders': builder_infos, 'slaves': slaves}
+
+
   def _recordBuild(self, build):
     """Records an update to a 'buildbot.status.build.Build' object.
 
@@ -406,12 +429,12 @@ class StatusPush(StatusReceiverMultiService):
 
   @event_handler
   def buildStarted(self, _builderName, build):
-    self._recordBuild(build)
+    # This info is included in the master json.
     return self
 
   @event_handler
   def stepStarted(self, build, _step):
-    self._recordBuild(build)
+    # This info is included in the master json.
     return self
 
   @event_handler
