@@ -49,12 +49,21 @@ def TestFlutterPackagesAndExamples(api):
       api.step('test %s' % api.path.basename(path), ['flutter', 'test'],
           cwd=checkout.join(path))
 
+  # keep the rest of this function in sync with
+  # https://github.com/flutter/flutter/blob/master/travis/test.sh
+
   _pub_test('packages/cassowary')
   _flutter_test('packages/flutter')
+  _pub_test('packages/flutter_driver')
+  _flutter_test('packages/flutter_sprites')
   _pub_test('packages/flutter_tools')
   _pub_test('packages/flx')
   _pub_test('packages/newton')
 
+  _flutter_test('dev/manual_tests')
+  _flutter_test('examples/hello_world')
+  _flutter_test('examples/layers')
+  _flutter_test('examples/material_gallery')
   _flutter_test('examples/stocks')
 
 def TestCreateAndLaunch(api):

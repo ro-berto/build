@@ -219,6 +219,20 @@
       "-c",
       "test/all.dart"
     ],
+    "cwd": "[SLAVE_BUILD]/flutter/packages/flutter_driver",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "test flutter_driver"
+  },
+  {
+    "cmd": [
+      "dart",
+      "-c",
+      "test/all.dart"
+    ],
     "cwd": "[SLAVE_BUILD]/flutter/packages/flutter_tools",
     "env": {
       "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
