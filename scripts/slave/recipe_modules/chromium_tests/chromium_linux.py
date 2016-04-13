@@ -372,7 +372,7 @@ SPEC = {
     },
     'Cast Android (dbg)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
+      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'compile_targets': [
