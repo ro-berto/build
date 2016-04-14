@@ -16,7 +16,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'bot_type': 'builder_tester',
+      'bot_type': 'builder',
       'disable_tests': True,
       'cf_archive_build': True,
       'cf_gs_bucket': 'chromium-browser-syzyasan',
@@ -28,21 +28,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'tests': [
-        steps.ScriptTest('Kasko integration test',
-                         'kasko_integration_tests.py',
-                         {
-                             'kasko_integration_tests.py': ['chrome',
-                                                            'chromedriver']
-                         }),
-        steps.ScriptTest('SyzyAsan integration test',
-                         'syzyasan_integration_tests.py',
-                         {
-                             'syzyasan_integration_tests.py': ['chrome',
-                                                               'chromedriver']
-                         }),
-
-      ],
     },
   },
 }
