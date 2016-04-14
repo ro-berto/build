@@ -12,7 +12,7 @@ import unittest
 import test_env  # pylint: disable=W0611,W0403
 
 from master.deferred_resource import DeferredResource
-from mock import Mock, call
+from mock import NonCallableMock, Mock, call
 from twisted.internet import reactor
 
 import apiclient
@@ -55,7 +55,7 @@ def run_deferred(deferred, timeout=1, print_traceback=True):
 
 
 def fake_resource():
-  resource = Mock()
+  resource = NonCallableMock()
   resource.greet.__name__ = 'greet'
   return resource
 

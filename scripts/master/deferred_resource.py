@@ -4,6 +4,7 @@
 
 """deferred_resource converts blocking apiclient resource to deferred."""
 
+import collections
 import datetime
 import functools
 import httplib
@@ -85,19 +86,31 @@ class DeferredResource(object):
   """
 
   class Api(object):
-    """Dynamically creates resource methods."""
-    def __init__(self, owner):
-      self._methods = {}
+    """Wraps an apiclient resource or method.
+
+    Can dynamically create Api objects for nested methods.
+    """
+    def __init__(self, owner, path=None):
+      self._cached_method = None
+      self._api_cache = {}
       self._owner = owner
+      self._path = tuple(path) if path else ()
+
+    def __call__(self, *args, **kwargs):
+      if not self._cached_method:
+        self._cached_method = self._owner._twistify(self._path)
+        if not self._cached_method:
+          raise AttributeError(
+              'Resource does not have method %s' % '.'.join(self.prefix))
+      return self._cached_method(*args, **kwargs)
 
     def __getattr__(self, name):
-      method = self._methods.get(name)
-      if method is None:
-        method = self._owner._twistify(name)
-        if method is None:
-          raise AttributeError('Resource does not have method %s' % name)
-        self._methods[name] = method
-      return method
+      new_prefix = self._path + (name,)
+      sub_api = self._api_cache.get(new_prefix)
+      if not sub_api:
+        sub_api = self._owner.Api(self._owner, path=self._path + (name,))
+        self._api_cache[new_prefix] = sub_api
+      return sub_api
 
   def __init__(
       self, resource, credentials=None, max_concurrent_requests=1,
@@ -291,11 +304,15 @@ class DeferredResource(object):
     arg_str_list += ['%s=%r' % (k, v) for k, v in kwargs.iteritems()]
     self.log('Request %s(%s)' % (method_name, ', '.join(arg_str_list)))
 
-  def _twistify(self, method_name):
+  def _twistify(self, path):
     """Wraps a resource method by name."""
-    method = getattr(self._resource, method_name, None)
-    if method is None:
-      return None
+    method = self._resource
+    for component in path:
+      if isinstance(method, collections.Callable):
+        method = method()
+      method = getattr(method, component, None)
+      if method is None:
+        return None
 
     @functools.wraps(method)
     def twistified(*args, **kwargs):
@@ -334,12 +351,12 @@ class DeferredResource(object):
             self._th_local.credentials.refresh(self._th_local.http)
 
         if self.verbose:
-          self._log_request(method_name, args, kwargs)
+          self._log_request(path, args, kwargs)
         response = method(*args, **kwargs).execute(http=self._th_local.http)
         if self.verbose:
           self.log('Reponse: %s' % response)
         return response
-      return self._retry(method_name, single_call)
+      return self._retry(path, single_call)
     return twistified
 
 

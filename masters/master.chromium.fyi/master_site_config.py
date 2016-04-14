@@ -14,5 +14,5 @@ class ChromiumFYI(Master.Master1):
   buildbot_url = 'http://build.chromium.org/p/chromium.fyi/'
   reboot_on_step_timeout = True
   pubsub_service_account_file = 'service-account-luci-milo.json'
-  pubsub_topic_url = 'projects/luci-milo/topics/public-buildbot'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
   name = 'chromium.fyi'

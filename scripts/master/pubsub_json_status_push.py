@@ -2,70 +2,21 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import ConfigParser
-import contextlib
-import Queue
 import base64
 import collections
 import datetime
 import functools
-import httplib2
 import json
-import multiprocessing
 import os
-import time
-import traceback
 
-from apiclient import discovery
 from buildbot.status.base import StatusReceiverMultiService
 from master import auth
 from master.deferred_resource import DeferredResource
-from oauth2client import client as oauth2client
 from twisted.internet import defer, reactor
 from twisted.python import log
 
 
 PUBSUB_SCOPES = ['https://www.googleapis.com/auth/pubsub']
-
-
-def parent_is_alive():
-  """Check For the existence of a unix pid.
-
-  Do a check if the parent process is still alive.  If not then
-  put a None in the queue ourself so that the process terminates
-  after processing the backlog. (Linux only).
-  """
-  if hasattr(os, 'getppid'):
-    try:
-      os.kill(os.getppid(), 0)
-    except OSError:
-      return False
-    else:
-      return True
-  # Default to saying the parent is alive, since we don't actually know.
-  return True
-
-
-class exponential_retry(object):
-  """Decorator which retries the function if an exception is encountered."""
-  def __init__(self, retries=None, delay=None):
-    self.retries = retries or 5
-    self.delay = delay or 1.0
-  def __call__(self, f):
-    @functools.wraps(f)
-    def wrapper(*args, **kwargs):
-      retry_delay = self.delay
-      for i in xrange(self.retries):
-        try:
-          return f(*args, **kwargs)
-        except Exception as e:
-          if (i+1) >= self.retries:
-            raise
-          log.err('Exception %s encountered, retrying in %d second(s)\n%s' %
-                            (e, retry_delay, traceback.format_exc()))
-          time.sleep(retry_delay)
-          retry_delay *= 2
-    return wrapper
 
 
 class PubSubClient(object):
@@ -75,12 +26,10 @@ class PubSubClient(object):
   main reactor from the increased load.
   """
 
-  def __init__(self, topic_url, service_account_file):
-    self.topic_url = topic_url
+  def __init__(self, topic, service_account_file):
+    self.topic = topic
     self.service_account_file = '/' + os.path.join(
         'creds', 'service_accounts', service_account_file)
-    self.queue = multiprocessing.Queue()
-    self.runner = multiprocessing.Process(target=self._runner)
     try:
       self.credentials = auth.create_service_account_credentials(
           self.service_account_file, scope=PUBSUB_SCOPES)
@@ -89,76 +38,38 @@ class PubSubClient(object):
           'PubSub: Could not load credentials %s: %s.' % (
               self.service_account_file, e))
       raise e
-    self.client = self._create_pubsub_client(credentials=self.credentials)
+    self.resource = None
+    log.msg('PubSub client for topic %s created' % self.topic)
 
+  @defer.inlineCallbacks
+  def start(self):
+    self.resource = yield DeferredResource.build(
+        'pubsub', 'v1', credentials=self.credentials)
+    self.resource.start()
     # Check to see if the topic exists.  Anything that's not a 200 means it
     # doesn't exist or is inaccessable.
-    @exponential_retry(retries=4, delay=1)
-    def _run():
-      # This blocks the twisted reactor but whatever, it's just the initial
-      # startup sequence.
-      self.client.projects().topics().get(topic=self.topic_url).execute()
-    _run()
-
-    log.msg('PubSub client for topic %s started' % self.topic_url)
-    self.runner.start()
-
-  def send(self, data):
-    self.queue.put(data)
+    res = yield self.resource.api.projects.topics.get(topic=self.topic)
+    log.msg('PubSub client for topic %s started: %s' % (self.topic, res))
 
   def close(self):
-    self.queue.put(None)
-    self.runner.join(10)
-    if self.runner.is_alive():
-      # Can't possibly take that long to drain outstanding messages,
-      # just kill it.
-      self.runner.terminate()
-      self.runner.join()
+    self.resource.stop()
 
-  @staticmethod
-  def _send_data(client, topic, data):
+  @defer.inlineCallbacks
+  def send(self, data):
     # TODO(hinoka): Sign messages so that they can be verified to originate
     # from buildbot.
-    body = { 'messages': [{'data': base64.b64encode(data)}] }
+    assert self.resource
 
-    @exponential_retry(retries=4, delay=1)
-    def _run():
-      client.projects().topics().publish(topic=topic, body=body).execute()
-    _run()
+    encoded_data = base64.b64encode(data)
+    body = { 'messages': [{'data': encoded_data}] }
 
-
-  def _runner(self):
-    while True:
-      try:
-        try:
-          # Block, and timeout if it's exceeded 5 seconds.
-          data = self.queue.get(True, 5)
-        except Queue.Empty:
-          if not parent_is_alive():
-            self.queue.put(None)
-          continue
-
-        if data is None:
-          break
-        try:
-          self._send_data(self.client, self.topic_url, data)
-        except Exception:
-          pass
-      except Exception:
-        pass
-
-
-  @staticmethod
-  def _create_pubsub_client(credentials=None, http=None):
-    """Create a new configured pubsub client.
-
-    Copied from https://cloud.google.com/pubsub/configure
-    """
-    http = httplib2.Http()
-    credentials.authorize(http)
-
-    return discovery.build('pubsub', 'v1', http=http)
-
+    log.msg('PubSub: Sending %d bytes' % len(encoded_data))
+    try:
+      res = yield self.resource.api.projects.topics.publish(
+          topic=self.topic, body=body)
+      log.msg('PubSub: Send successful %s' % res)
+    except Exception as e:
+      log.msg('PubSub: Send failed: %s' % e)
 
 # Annotation that wraps an event handler.
 def event_handler(func):
@@ -212,9 +123,9 @@ class StatusPush(StatusReceiverMultiService):
           'status listener.')
       return None
 
-    topic_url = getattr(activeMaster, 'pubsub_topic_url', None)
-    if not topic_url:
-      log.msg('PubSub: Missing pubsub_topic_url, not enabling.')
+    topic = getattr(activeMaster, 'pubsub_topic', None)
+    if not topic:
+      log.msg('PubSub: Missing pubsub_topic, not enabling.')
       return None
 
     # Set the master name, for indexing purposes.
@@ -228,14 +139,14 @@ class StatusPush(StatusReceiverMultiService):
     if not service_account_file:
       raise ConfigError('A service account file must be specified.')
 
-    return cls(topic_url, service_account_file, name, pushInterval)
+    return cls(topic, service_account_file, name, pushInterval)
 
 
-  def __init__(self, topic_url, service_account_file, name, pushInterval=None):
+  def __init__(self, topic, service_account_file, name, pushInterval=None):
     """Instantiates a new StatusPush service.
 
     Args:
-      topic_url: Pubsub URL to push updates to.
+      topic: Pubsub topic to push updates to.
       service_account_file: Credentials to use to push to pubsub.
       pushInterval: (number/timedelta) The data push interval. If a number is
           supplied, it is the number of seconds.
@@ -247,8 +158,8 @@ class StatusPush(StatusReceiverMultiService):
                                            self.DEFAULT_PUSH_INTERVAL_SEC)
 
     self.name = name  # Master name, since builds don't include this info.
-    self.topic_url = topic_url
-    self._client = PubSubClient(self.topic_url, service_account_file)
+    self.topic = topic
+    self._client = PubSubClient(self.topic, service_account_file)
     self._status = None
     self._res = None
     self._updated_builds = set()
@@ -263,6 +174,7 @@ class StatusPush(StatusReceiverMultiService):
       return datetime.timedelta(seconds=value)
     raise TypeError('Unknown time delta type; must be timedelta or number.')
 
+  @defer.inlineCallbacks
   def startService(self):
     """Twisted service is starting up."""
     StatusReceiverMultiService.startService(self)
@@ -270,6 +182,9 @@ class StatusPush(StatusReceiverMultiService):
     # Subscribe to get status updates.
     self._status = self.parent.getStatus()
     self._status.subscribe(self)
+
+    # Init the client.
+    yield self._client.start()
 
     # Schedule our first push.
     self._schedulePush()
