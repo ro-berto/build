@@ -54,8 +54,6 @@
     }
   }, 
   "unallocated": [
-    "build327-m2", 
-    "build93-m2", 
     "cros199-c2", 
     "build94-m2"
   ]
