@@ -280,7 +280,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for chromium@a6298e4afe.fetch builder state",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -333,7 +332,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for chromium@a6298e4afe.fetch builder state (2)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -349,7 +347,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for chromium@a6298e4afe.fetch build details",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -402,7 +399,6 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "Waiting for chromium@a6298e4afe.fetch build details (2)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

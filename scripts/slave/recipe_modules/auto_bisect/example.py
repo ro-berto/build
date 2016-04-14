@@ -68,7 +68,7 @@ def RunSteps(api):
     kwargs = {
          'extra_src': 'dummy_extra_src',
          'path_to_config': '/dummy/path/',
-    }    
+    }
     api.auto_bisect.run_bisect_script(**kwargs)
 
 
@@ -91,15 +91,15 @@ def GenTests(api):
       'Waiting for chromium@a6298e4afe.gsutil ls' , retcode=1)
   failed_build_test += api.step_data(
       'Waiting for chromium@a6298e4afe.fetch builder state',
-      stdout=api.raw_io.output('{"cachedBuilds": ["2106"]}'))
+      api.raw_io.output(json.dumps({'cachedBuilds': ['2106']})))
   failed_build_test += api.step_data(
       'Waiting for chromium@a6298e4afe.fetch build details',
-      stdout=api.raw_io.output(json.dumps({
+      api.raw_io.output(json.dumps({
           'results': 2,
           'properties': [('build_archive_url',
                           ('gs://chrome-perf/Linux Builder/full-build-linux_'
-                           'a6298e4afedbf2cd461755ea6f45b0ad64222222.zip'))],
-          })))
+                           'a6298e4afedbf2cd461755ea6f45b0ad64222222.zip'))]
+      })))
   yield failed_build_test
 
 
@@ -108,32 +108,32 @@ def GenTests(api):
       extra_config={'dummy_builds': None})
   delayed_build_test += api.step_data('gsutil ls', retcode=1)
   delayed_build_test += api.step_data(
-      'Waiting for chromium@a6298e4afe.gsutil ls' , retcode=1)
+      'Waiting for chromium@a6298e4afe.gsutil ls', retcode=1)
   delayed_build_test += api.step_data(
-      'Waiting for chromium@a6298e4afe.gsutil ls (2)' , retcode=1)
+      'Waiting for chromium@a6298e4afe.gsutil ls (2)', retcode=1)
   delayed_build_test += api.step_data(
-      'Waiting for chromium@a6298e4afe.gsutil ls (3)' , retcode=1)
+      'Waiting for chromium@a6298e4afe.gsutil ls (3)', retcode=1)
   delayed_build_test += api.step_data(
       'Waiting for chromium@a6298e4afe.fetch builder state',
-      stdout=api.raw_io.output('{"cachedBuilds": []}'))
+      api.raw_io.output(json.dumps({'cachedBuilds': []})))
   delayed_build_test += api.step_data(
       'Waiting for chromium@a6298e4afe.fetch builder state (2)',
-      stdout=api.raw_io.output('{"cachedBuilds": ["2106"]}'))
+      api.raw_io.output(json.dumps({'cachedBuilds': ['2106']})))
   delayed_build_test += api.step_data(
       'Waiting for chromium@a6298e4afe.fetch build details',
-      stdout=api.raw_io.output(json.dumps({
+      api.raw_io.output(json.dumps({
           'properties': [('build_archive_url',
                           ('gs://chrome-perf/Linux Builder/full-build-linux_'
-                           'a6298e4afedbf2cd461755ea6f45b0ad64222222.zip'))],
-          })))
+                           'a6298e4afedbf2cd461755ea6f45b0ad64222222.zip'))]
+      })))
   delayed_build_test += api.step_data(
       'Waiting for chromium@a6298e4afe.fetch build details (2)',
-      stdout=api.raw_io.output(json.dumps({
+      api.raw_io.output(json.dumps({
           'results': 2,
           'properties': [('build_archive_url',
                           ('gs://chrome-perf/Linux Builder/full-build-linux_'
-                           'a6298e4afedbf2cd461755ea6f45b0ad64222222.zip'))],
-          })))
+                           'a6298e4afedbf2cd461755ea6f45b0ad64222222.zip'))]
+      })))
   yield delayed_build_test
 
   missing_metric_test = _make_test(

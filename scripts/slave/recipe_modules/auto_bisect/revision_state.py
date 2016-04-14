@@ -283,10 +283,8 @@ class RevisionState(object):
   def _fetch_build_info(self, base_url, build_number):
     api = self.bisector.api
     build_url = '%s/builds/%s?as_text=1' % (base_url, build_number)
-    fetch_result = api.m.url.fetch_to_file(
-       build_url, None, step_name='fetch build details',
-       stdout=api.m.raw_io.output())
-    return json.loads(fetch_result.stdout or '{}')
+    fetch_result = api.m.url.fetch( build_url, step_name='fetch build details')
+    return json.loads(fetch_result or '{}')
 
   def _is_build_failed(self):
     api = self.bisector.api
@@ -298,11 +296,8 @@ class RevisionState(object):
       try:
         # Get all the current builds.
         builder_state_url = base_url + '?as_text=1'
-        fetch_step = api.m.url.fetch_to_file(
-            builder_state_url, None,
-            step_name='fetch builder state',
-            stdout=api.m.raw_io.output())
-        builder_state = fetch_step.stdout
+        builder_state = api.m.url.fetch(
+            builder_state_url, step_name='fetch builder state')
         builder_state = json.loads(builder_state or '{}')
         for build_number in builder_state.get('cachedBuilds', []):
           build = self._fetch_build_info(base_url, build_number)
