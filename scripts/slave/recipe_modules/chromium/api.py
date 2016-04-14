@@ -539,7 +539,8 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def run_mb(self, mastername, buildername, use_goma=True,
              mb_config_path=None, isolated_targets=None, name=None,
-             build_dir=None):
+             build_dir=None, android_version_code=None,
+             android_version_name=None):
     mb_config_path = (mb_config_path or
                       self.m.path['checkout'].join('tools', 'mb',
                                                    'mb_config.pyl'))
@@ -571,6 +572,11 @@ class ChromiumApi(recipe_api.RecipeApi):
       # TODO(dpranke): Change the MB flag to '--isolate-targets-file', maybe?
       data = '\n'.join(sorted_isolated_targets) + '\n'
       args += ['--swarming-targets-file', self.m.raw_io.input(data)]
+
+    if android_version_code:
+      args += ['--android-version-code=%s' % android_version_code]
+    if android_version_name:
+      args += ['--android-version-name=%s' % android_version_name]
 
     args += [build_dir]
 

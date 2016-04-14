@@ -182,6 +182,27 @@
     "cmd": [
       "python",
       "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.linux",
+      "-b",
+      "Android Builder (dbg)",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[SLAVE_BUILD]/src/build/goma/client",
+      "--android-version-code=3",
+      "--android-version-name=example",
+      "//out/Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",
