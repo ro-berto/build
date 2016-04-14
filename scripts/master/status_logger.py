@@ -243,8 +243,8 @@ class StatusEventLogger(StatusReceiverMultiService):
 
   def send_build_event(self, timestamp_kind, timestamp, build_event_type,
                        bot_name, builder_name, build_number, build_scheduled_ts,
-                       step_name=None, step_number=None, result=None,
-                       extra_result_code=None, patch_url=None):
+                       step_name=None, step_text=None, step_number=None,
+                       result=None, extra_result_code=None, patch_url=None):
     """Log a build/step event for event_mon."""
 
     if self.active and self._event_logging:
@@ -261,6 +261,7 @@ class StatusEventLogger(StatusReceiverMultiService):
          }
       if step_name:
         d['build-event-step-name'] = step_name
+        d['build-event-step-text'] = step_text
         d['build-event-step-number'] = step_number
       if result:
         d['build-event-result'] = result.upper()
@@ -447,12 +448,13 @@ class StatusEventLogger(StatusReceiverMultiService):
     builder_name = build.getBuilder().name
     build_number = build.getNumber()
     step_name = step.getName()
+    step_text = step.getText()
     self.log('stepStarted', '%s, %d, %s', builder_name, build_number, step_name)
     started, _ = step.getTimes()
     self.send_build_event(
         'BEGIN', started * 1000, 'STEP', bot, builder_name, build_number,
         self._get_requested_at_millis(build),
-        step_name=step_name, step_number=step.step_number,
+        step_name=step_name, step_text=step_text, step_number=step.step_number,
         patch_url=self._get_patch_url(build.getProperties()))
     # Must return self in order to subscribe to logStarted/Finished events.
     return self
@@ -511,13 +513,14 @@ class StatusEventLogger(StatusReceiverMultiService):
     build_number = build.getNumber()
     bot = build.getSlavename()
     step_name = step.getName()
+    step_text = step.getText()
     self.log('stepFinished', '%s, %d, %s, %r',
              builder_name, build_number, step_name, results)
     _, finished = step.getTimes()
     self.send_build_event(
         'END', finished * 1000, 'STEP', bot, builder_name, build_number,
         self._get_requested_at_millis(build),
-        step_name=step_name, step_number=step.step_number,
+        step_name=step_name, step_text=step_text, step_number=step.step_number,
         result=buildbot.status.results.Results[results[0]],
         patch_url=self._get_patch_url(build.getProperties()))
 

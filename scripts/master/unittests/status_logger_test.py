@@ -75,6 +75,9 @@ class Step(object):
   def getName(self):
     return 'reticulating_splines'
 
+  def getText(self):
+    return 'step text'
+
   def getTimes(self):
     return 5100, 5500
 
