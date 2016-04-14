@@ -192,10 +192,6 @@ def setup_target(api,
     if device == 'mips64_emulator':
       return
 
-    # Both our fugus are flaky, so disable running tests on them.
-    if device == 'fugu':
-      return
-
     api.step('setup device', [art_tools.join('setup-buildbot-device.sh')],
              env=env)
 
@@ -336,12 +332,12 @@ _CONFIG_MAP = {
         'debug': True,
       },
       'fugu-ndebug': {
-        'serial': '8C4CC68F',
+        'serial': '0BCDB85D',
         'device': 'fugu',
         'debug': False,
       },
       'fugu-debug': {
-        'serial': '0FF57BB6',
+        'serial': '1FF17015',
         'device': 'fugu',
         'debug': True,
       },
