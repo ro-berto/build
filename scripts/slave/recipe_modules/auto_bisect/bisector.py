@@ -345,13 +345,23 @@ class Bisector(object):
     patched_contents = re.sub(deps_item_regexp, new_commit_hash,
                               original_contents)
 
-    interned_deps_hash = self._git_intern_file(patched_contents,
-                                               self.api.m.path['checkout'],
-                                               new_commit_hash)
-    patch_text = self._gen_diff_patch(base_revision.commit_hash + ':DEPS',
-                                      interned_deps_hash, 'DEPS', 'DEPS',
-                                      cwd=self.api.m.path['checkout'],
-                                      deps_rev=new_commit_hash)
+    cwd = self.api.m.path['slave_build'].join(
+        depot_config.DEPOT_DEPS_NAME[base_revision.depot_name]['src'])
+    deps_file = 'DEPS'
+    # This is to support backward compatibility on android-chrome because
+    # .DEPS.git got migrated to DEPS on April 5, 2016
+    if (base_revision.depot_name == 'android-chrome' and
+        self.api.m.path.exists(self.api.path.join(cwd, '.DEPS.git'))):
+      deps_file = '.DEPS.git'  # pragma: no cover
+
+    interned_deps_hash = self._git_intern_file(
+        patched_contents, cwd, new_commit_hash)
+
+    patch_text = self._gen_diff_patch(
+        '%s:%s' % (base_revision.commit_hash, deps_file),
+        interned_deps_hash, deps_file, deps_file,
+        cwd=cwd,
+        deps_rev=new_commit_hash)
     return patch_text, patched_contents
 
   def _expand_initial_revision_range(self):

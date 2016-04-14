@@ -717,7 +717,7 @@
       "-w",
       "--stdin"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "Hashing modified DEPS file with revision 002",
     "stdin": "vars={'v8_revision': '002'};deps = {'src/v8': 'v8.git@' + Var('v8_revision'),'src/third_party/WebKit': 'webkit.git@010'}",
     "stdout": "/path/to/tmp/"
@@ -731,7 +731,7 @@
       "--src-prefix=IAMSRC:",
       "--dst-prefix=IAMDST:"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "Generating patch for a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS to 002",
     "stdout": "/path/to/tmp/"
   },
@@ -744,7 +744,7 @@
       "-w",
       "--stdin"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "Hashing modified DEPS file with revision 003",
     "stdin": "vars={'v8_revision': '003'};deps = {'src/v8': 'v8.git@' + Var('v8_revision'),'src/third_party/WebKit': 'webkit.git@010'}",
     "stdout": "/path/to/tmp/"
@@ -758,7 +758,7 @@
       "--src-prefix=IAMSRC:",
       "--dst-prefix=IAMDST:"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
+    "cwd": "[SLAVE_BUILD]/src",
     "name": "Generating patch for a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS to 003",
     "stdout": "/path/to/tmp/"
   },
