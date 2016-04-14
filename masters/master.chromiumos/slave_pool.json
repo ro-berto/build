@@ -25,9 +25,6 @@
       "daisy-incremental": [
         "build87-m2"
       ], 
-      "gizmo-paladin": [
-        "build118-m2"
-      ], 
       "oak-full": [
         "build323-m2"
       ], 
@@ -55,6 +52,7 @@
   }, 
   "unallocated": [
     "cros199-c2", 
+    "build118-m2", 
     "build94-m2"
   ]
 }
