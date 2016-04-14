@@ -1957,8 +1957,7 @@ SPEC = {
             android_isolate_path='base/base_unittests.isolate'),
         steps.GTestTest(
             'breakpad_unittests',
-            override_compile_targets=['breakpad_unittests_deps'],
-            android_isolate_path='breakpad/breakpad_unittests.isolate'),
+            override_compile_targets=['breakpad_unittests_deps']),
         steps.GTestTest('cc_unittests'),
         steps.AMPGTestTest('components_unittests',
             device_name=['Nexus 5'], device_os=['4.4.2'],

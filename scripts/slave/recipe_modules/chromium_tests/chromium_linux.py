@@ -160,8 +160,7 @@ SPEC = {
         steps.AndroidInstrumentationTest('MojoTest'),
         steps.GTestTest(
             'breakpad_unittests',
-            override_compile_targets=['breakpad_unittests_deps'],
-            android_isolate_path='breakpad/breakpad_unittests.isolate'),
+            override_compile_targets=['breakpad_unittests_deps']),
         steps.GTestTest(
             'sandbox_linux_unittests',
             override_compile_targets=['sandbox_linux_unittests_deps']),
