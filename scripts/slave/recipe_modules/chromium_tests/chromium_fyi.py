@@ -6,6 +6,31 @@ from . import steps
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
+
+KITCHEN_TEST_SPEC = {
+  'chromium_config': 'chromium',
+  'chromium_apply_config': [
+    'mb',
+    'ninja_confirm_noop',
+    'archive_gpu_tests',
+    'chrome_with_codecs'
+  ],
+  'gclient_config': 'chromium',
+  'chromium_config_kwargs': {
+    'BUILD_CONFIG': 'Release',
+    'TARGET_BITS': 64,
+  },
+  'compile_targets': [
+    'chromium_swarm_tests',
+  ],
+  'testing': {
+    'platform': 'linux',
+  },
+  'use_isolate': True,
+  'enable_swarming': True,
+}
+
+
 SPEC = {
   'settings': {
     'build_gs_bucket': 'chromium-fyi-archive',
@@ -2156,5 +2181,8 @@ SPEC = {
         'platform': 'win',
       },
     },
+
+    'Linux Kitchen (kitchen_run)': KITCHEN_TEST_SPEC,
+    'Linux Kitchen (annotated_run)': KITCHEN_TEST_SPEC,
   },
 }
