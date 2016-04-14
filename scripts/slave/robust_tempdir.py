@@ -43,8 +43,20 @@ class RobustTempdir(object):
     self._prefix = prefix
     self._leak = leak
 
-  def cleanup(self, path):
-    self._tempdirs.append(path)
+  def cleanup(self, base=None):
+    """Explicitly remove ALL temporary directories under "<base>/<prefix>".
+
+    This can be used e.g. to reduce chances of running out of disk space
+    when temporary directories are leaked.
+    """
+    base = base or tempfile.gettempdir()
+    path = os.path.join(base, self._prefix)
+    try:
+      if os.path.isdir(path):
+        LOGGER.info('Cleaning up temporary directory [%s].', path)
+        chromium_utils.RemoveDirectory(path)
+    except BaseException:
+      LOGGER.exception('Failed to clean up temporary directory [%s].', path)
 
   def tempdir(self, base=None):
     """Creates a temporary working directory and yields it.
@@ -62,10 +74,8 @@ class RobustTempdir(object):
           If None, the default temporary directory root will be used.
     """
     base = base or tempfile.gettempdir()
-    # TODO(phajdan.jr): Clean up leaked directories at the beginning.
-    # Doing so should automatically prevent more out-of-disk-space scenarios.
     basedir = _ensure_directory(base, self._prefix)
-    self.cleanup(basedir)
+    self._tempdirs.append(basedir)
     tdir = tempfile.mkdtemp(dir=basedir)
     return tdir
 
