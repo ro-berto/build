@@ -152,6 +152,8 @@
       "ninja",
       "--clobber",
       "--",
+      "chrome",
+      "chromedriver",
       "chromium_builder_asan"
     ],
     "cwd": "[SLAVE_BUILD]",

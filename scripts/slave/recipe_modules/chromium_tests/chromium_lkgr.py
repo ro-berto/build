@@ -30,9 +30,17 @@ SPEC = {
       },
       'tests': [
         steps.ScriptTest('Kasko integration test',
-                         'kasko_integration_tests.py', {}),
+                         'kasko_integration_tests.py',
+                         {
+                             'kasko_integration_tests.py': ['chrome',
+                                                            'chromedriver']
+                         }),
         steps.ScriptTest('SyzyAsan integration test',
-                         'syzyasan_integration_tests.py', {}),
+                         'syzyasan_integration_tests.py',
+                         {
+                             'syzyasan_integration_tests.py': ['chrome',
+                                                               'chromedriver']
+                         }),
 
       ],
     },
