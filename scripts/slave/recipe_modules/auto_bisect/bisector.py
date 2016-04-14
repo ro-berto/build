@@ -351,7 +351,7 @@ class Bisector(object):
     # This is to support backward compatibility on android-chrome because
     # .DEPS.git got migrated to DEPS on April 5, 2016
     if (base_revision.depot_name == 'android-chrome' and
-        self.api.m.path.exists(self.api.path.join(cwd, '.DEPS.git'))):
+        self.api.m.path.exists(self.api.m.path.join(cwd, '.DEPS.git'))):
       deps_file = '.DEPS.git'  # pragma: no cover
 
     interned_deps_hash = self._git_intern_file(
