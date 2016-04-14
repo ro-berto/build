@@ -8,8 +8,8 @@ from recipe_engine.config import Single
 
 def BaseConfig(BASE_URL, **kwargs):
   return ConfigGroup(
-    base_url = Single(str, empty_val=BASE_URL),
-    auth_token = Single(str),
+    base_url = Single(basestring, empty_val=BASE_URL),
+    auth_token = Single(basestring),
   )
 
 
