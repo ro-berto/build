@@ -22,6 +22,7 @@ def Update(config, active_master, c):
           'Win x64 GN',
           'Win x64 GN (dbg)',
           'Win8 GN (dbg)',
+          'WinClang64 (dbg)',
           'Win8 Aura',
       ]),
   ])
@@ -38,6 +39,7 @@ def Update(config, active_master, c):
     {'name': 'Win x64 GN', 'timeout': 3600},
     {'name': 'Win x64 GN (dbg)'},
     {'name': 'Win8 GN (dbg)'},
+    {'name': 'WinClang64 (dbg)'},
     {'name': 'Win10 Tests x64'},
   ]
 

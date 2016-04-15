@@ -14,9 +14,9 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--master",
-      "tryserver.chromium.win",
+      "chromium.win",
       "--builder",
-      "win_clang",
+      "WinClang64 (dbg)",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -27,16 +27,11 @@
       "{\"src\": \"got_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
       "[GIT_CACHE]",
-      "--issue",
-      "12853011",
-      "--patchset",
-      "1",
-      "--rietveld_server",
-      "https://codereview.chromium.org",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "src@HEAD",
+      "--force",
       "--output_manifest"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -135,10 +130,10 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "gclient runhooks (with patch)"
+    "name": "gclient runhooks"
   },
   {
     "cmd": [
@@ -154,7 +149,7 @@
       "--paths",
       "{\"checkout\": \"[SLAVE_BUILD]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"win_clang\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"buildername\": \"WinClang64 (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -177,81 +172,6 @@
       "@@@STEP_TEXT@path: [SLAVE_BUILD]\\src\\testing\\buildbot\\chromium.win.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\bootstrap\\win\\win_tools.bat"
-    ],
-    "cwd": "RECIPE_PACKAGE_REPO[depot_tools]",
-    "name": "ensure git tooling on windows"
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[SLAVE_BUILD]\\src",
-    "name": "git diff to analyze patch",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@",
-      "@@@SET_BUILD_PROPERTY@subproject_tag@\"chromium\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\src\\testing\\buildbot\\trybot_analyze_config.json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "read filter exclusion spec",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: 'testing\\\\buildbot\\\\trybot_analyze_config.json'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"f.*\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "analyze",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
-      "@@@STEP_LOG_END@excluded_files@@@",
-      "@@@STEP_LOG_LINE@analyze_details@{@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"all\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"all\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"all\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": []@@@",
-      "@@@STEP_LOG_LINE@analyze_details@}@@@",
-      "@@@STEP_LOG_END@analyze_details@@@"
     ]
   },
   {
@@ -282,9 +202,9 @@
       "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
-      "tryserver.chromium.win",
+      "chromium.win",
       "-b",
-      "win_clang",
+      "WinClang64 (dbg)",
       "--config-file",
       "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
@@ -292,7 +212,7 @@
       "//out/Debug_x64"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "generate_build_files (with patch)"
+    "name": "generate_build_files"
   },
   {
     "allow_subannotations": true,
@@ -338,26 +258,38 @@
       "/path/to/tmp/json",
       "--goma-dir",
       "[BUILD]\\goma",
-      "--goma-fail-fast",
-      "--goma-disable-local-fallback",
       "--",
       "all"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "compile (with patch)",
+    "name": "compile",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(0)"
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\zip_build.py",
+      "--target",
+      "Debug_x64",
+      "--build-url",
+      "gs://chromium-win-archive/chromium.win/WinClang64 (dbg)",
+      "--build_revision",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WinClang64 (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"WinClang64 (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "mark: before_tests"
+    "name": "package build"
   },
   {
     "name": "$result",

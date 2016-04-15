@@ -282,5 +282,28 @@ SPEC = {
         'platform': 'win',
       },
     },
+    'WinClang64 (dbg)': {
+      'chromium_config': 'chromium_win_clang',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_PLATFORM': 'win',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [
+        'all',
+      ],
+      # Recipes builds Debug builds with component=shared_library by default.
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'use_isolate': True,
+      'enable_swarming': True,
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
   },
 }
