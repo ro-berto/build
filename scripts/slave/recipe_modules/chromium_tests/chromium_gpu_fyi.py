@@ -955,5 +955,23 @@ SPEC = {
       },
       'enable_swarming': True,
     },
+    'Linux ChromiumOS Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['chromeos', 'ninja_confirm_noop', 'mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [
+        'aura_builder',
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': False,
+      'use_isolate': True,
+    },
   },
 }
