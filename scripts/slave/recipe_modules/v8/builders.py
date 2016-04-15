@@ -1645,7 +1645,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing,
+          V8Testing_2,
           SimdJs,
         ],
         'testing': {'platform': 'linux'},
@@ -1856,7 +1856,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing,
+          V8Testing_2,
           SimdJs,
         ],
         'testing': {'platform': 'linux'},
@@ -1875,7 +1875,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing, Benchmarks],
+        'tests': [V8Testing_2, Benchmarks],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_gc_stress_dbg': {
@@ -2025,7 +2025,7 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
         },
-        'tests': [V8Testing, Ignition, Mozilla],
+        'tests': [V8Testing_2, Ignition, Mozilla],
         'testing': {'platform': 'win'},
       },
       'v8_win_compile_dbg': {
@@ -2243,7 +2243,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing, Test262, Mozilla, SimdJs, Ignition],
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs, Ignition],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -2273,7 +2273,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing, Test262, Mozilla, SimdJs, Ignition],
+        'tests': [V8Testing_2, Test262, Mozilla, SimdJs, Ignition],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
