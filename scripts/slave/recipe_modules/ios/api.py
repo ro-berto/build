@@ -333,9 +333,15 @@ class iOSApi(recipe_api.RecipeApi):
     use_goma = (self.compiler == 'ninja' and
                 ('use_goma=1' in gyp_defines or 'use_goma=true' in gn_args))
     if use_goma:
-      self.m.chromium.apply_config('ninja')
-      self.m.chromium.apply_config('default_compiler')
-      self.m.chromium.apply_config('goma')
+      if 'without patch' not in suffix:
+        # TODO(crbug.com/603641):
+        # Configs aren't deapplied, so we only want to apply these
+        # configs once. Really, we should refactor this so that we're
+        # not applying configs at all in build(), but rather do it
+        # in an earlier step.
+        self.m.chromium.apply_config('ninja')
+        self.m.chromium.apply_config('default_compiler')
+        self.m.chromium.apply_config('goma')
       self.m.chromium.compile(targets=compile_targets,
                               target=build_sub_path,
                               cwd=cwd)
