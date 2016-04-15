@@ -421,6 +421,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
     swarming_dimension_sets = None
     swarming_priority = None
     swarming_expiration = None
+    swarming_hard_timeout = None
     if enable_swarming:
       swarming_spec = test.get('swarming', {})
       if swarming_spec.get('can_use_on_swarming_builders'):
@@ -429,6 +430,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
         swarming_dimension_sets = swarming_spec.get('dimension_sets')
         swarming_priority = swarming_spec.get('priority_adjustment')
         swarming_expiration = swarming_spec.get('expiration')
+        swarming_hard_timeout = swarming_spec.get('hard_timeout')
     override_compile_targets = test.get('override_compile_targets', None)
     target_name = str(test['test'])
     name = str(test.get('name', target_name))
@@ -447,6 +449,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                         swarming_dimensions=new_dimensions,
                         swarming_priority=swarming_priority,
                         swarming_expiration=swarming_expiration,
+                        swarming_hard_timeout=swarming_hard_timeout,
                         override_compile_targets=override_compile_targets,
                         use_xvfb=use_xvfb)
     else:
@@ -457,6 +460,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                       swarming_shards=swarming_shards,
                       swarming_priority=swarming_priority,
                       swarming_expiration=swarming_expiration,
+                      swarming_hard_timeout=swarming_hard_timeout,
                       override_compile_targets=override_compile_targets,
                       use_xvfb=use_xvfb)
 
@@ -606,7 +610,8 @@ class SwarmingTest(Test):
   }
 
   def __init__(self, name, dimensions=None, tags=None, target_name=None,
-               extra_suffix=None, priority=None, expiration=None):
+               extra_suffix=None, priority=None, expiration=None,
+               hard_timeout=None):
     self._name = name
     self._tasks = {}
     self._results = {}
@@ -616,6 +621,7 @@ class SwarmingTest(Test):
     self._extra_suffix = extra_suffix
     self._priority = priority
     self._expiration = expiration
+    self._hard_timeout = hard_timeout
     if dimensions and not extra_suffix:
       self._extra_suffix = self._get_gpu_suffix(dimensions)
 
@@ -698,6 +704,9 @@ class SwarmingTest(Test):
 
     if self._expiration:
       self._tasks[suffix].expiration = self._expiration
+
+    if self._hard_timeout:
+      self._tasks[suffix].hard_timeout = self._hard_timeout
 
     # Add custom dimensions.
     if self._dimensions:  # pragma: no cover
@@ -789,10 +798,11 @@ class SwarmingTest(Test):
 class SwarmingGTestTest(SwarmingTest):
   def __init__(self, name, args=None, target_name=None, shards=1,
                dimensions=None, tags=None, extra_suffix=None, priority=None,
-               expiration=None, upload_test_results=True,
+               expiration=None, hard_timeout=None, upload_test_results=True,
                override_compile_targets=None):
     super(SwarmingGTestTest, self).__init__(name, dimensions, tags, target_name,
-                                            extra_suffix, priority, expiration)
+                                            extra_suffix, priority, expiration,
+                                            hard_timeout)
     self._args = args or []
     self._shards = shards
     self._upload_test_results = upload_test_results
@@ -1146,10 +1156,10 @@ class LocalIsolatedScriptTest(Test):
 class SwarmingIsolatedScriptTest(SwarmingTest):
   def __init__(self, name, args=None, target_name=None, shards=1,
                dimensions=None, tags=None, extra_suffix=None, priority=None,
-               expiration=None, upload_test_results=True,
+               expiration=None, hard_timeout=None, upload_test_results=True,
                override_compile_targets=None):
     super(SwarmingIsolatedScriptTest, self).__init__(
-        name, dimensions, tags, target_name, extra_suffix, priority, expiration)
+        name, dimensions, tags, target_name, extra_suffix, priority, expiration, hard_timeout)
     self._args = args or []
     self._shards = shards
     self._upload_test_results = upload_test_results
@@ -1211,6 +1221,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
     swarming_dimension_sets = None
     swarming_priority = None
     swarming_expiration = None
+    swarming_hard_timeout = None
     if enable_swarming:
       swarming_spec = spec.get('swarming', {})
       if swarming_spec.get('can_use_on_swarming_builders', False):
@@ -1219,6 +1230,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
         swarming_dimension_sets = swarming_spec.get('dimension_sets')
         swarming_priority = swarming_spec.get('priority_adjustment')
         swarming_expiration = swarming_spec.get('expiration')
+        swarming_hard_timeout = swarming_spec.get('hard_timeout')
     name = str(spec['name'])
     # The variable substitution and precommit/non-precommit arguments
     # could be supported for the other test types too, but that wasn't
@@ -1242,13 +1254,15 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
               name=name, args=args, target_name=target_name,
               shards=swarming_shards, dimensions=new_dimensions,
               override_compile_targets=override_compile_targets,
-              priority=swarming_priority, expiration=swarming_expiration)
+              priority=swarming_priority, expiration=swarming_expiration,
+              hard_timeout=swarming_hard_timeout)
       else:
         yield SwarmingIsolatedScriptTest(
             name=name, args=args, target_name=target_name,
             shards=swarming_shards, dimensions=swarming_dimensions,
             override_compile_targets=override_compile_targets,
-            priority=swarming_priority, expiration=swarming_expiration)
+            priority=swarming_priority, expiration=swarming_expiration,
+            hard_timeout=swarming_hard_timeout)
     else:
       yield LocalIsolatedScriptTest(
           name=name, args=args, target_name=target_name,
@@ -1259,13 +1273,14 @@ class GTestTest(Test):
   def __init__(self, name, args=None, target_name=None, enable_swarming=False,
                swarming_shards=1, swarming_dimensions=None, swarming_tags=None,
                swarming_extra_suffix=None, swarming_priority=None,
-               swarming_expiration=None, **runtest_kwargs):
+               swarming_expiration=None, swarming_hard_timeout=None,
+               **runtest_kwargs):
     super(GTestTest, self).__init__()
     if enable_swarming:
       self._test = SwarmingGTestTest(
           name, args, target_name, swarming_shards, swarming_dimensions,
           swarming_tags, swarming_extra_suffix, swarming_priority,
-          swarming_expiration, override_compile_targets=runtest_kwargs.get(
+          swarming_expiration, swarming_hard_timeout, override_compile_targets=runtest_kwargs.get(
             'override_compile_targets'))
     else:
       self._test = LocalGTestTest(name, args, target_name, **runtest_kwargs)

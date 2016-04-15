@@ -412,7 +412,7 @@ def GenTests(api):
   )
 
   yield (
-    api.test('swarming_test_with_priority_and_expiration') +
+    api.test('swarming_test_with_priority_expiration_and_timeout') +
     props(extra_swarmed_tests=['gl_tests']) +
     api.platform.name('linux') +
     api.override_step_data('read test spec (2)', api.json.output({
@@ -424,6 +424,7 @@ def GenTests(api):
                     'can_use_on_swarming_builders': True,
                     'priority_adjustment': 'higher',
                     'expiration': 7200,
+                    'hard_timeout': 1800,
                   },
                 },
             ],
