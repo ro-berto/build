@@ -10,7 +10,7 @@ set -e
 
 if [ -f twistd.pid ]; then
   PID=`cat twistd.pid`
-  if [ -n $(ps -p$PID -o pid=) ]; then
+  if [ -n "$(ps -p$PID -o pid=)" ]; then
     echo "twistd.pid has pid $PID which is still alive. aborting."
     exit 2
   fi
