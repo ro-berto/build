@@ -2020,7 +2020,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, Ignition],
+        'tests': [V8Testing, Ignition, Mozilla],
         'testing': {'platform': 'win'},
       },
       'v8_win_compile_dbg': {
@@ -2198,7 +2198,7 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
         },
-        'tests': [V8Testing_2, SimdJs, Ignition],
+        'tests': [V8Testing_2, SimdJs, Ignition, Mozilla],
         'testing': {'platform': 'win'},
       },
       'v8_mac_rel_ng': {
