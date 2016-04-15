@@ -727,8 +727,13 @@ class V8Api(recipe_api.RecipeApi):
     # Slowest tests duration summary.
     lines = []
     for test in output['slowest_tests']:
+      suffix = ''
+      if test.get('marked_slow') is False:
+        suffix = ' *'
       lines.append(
-          '%s %s' %(V8Api.format_duration(test['duration']), test['name']))
+          '%s %s%s' % (V8Api.format_duration(test['duration']),
+                       test['name'], suffix))
+
     # Slowest tests duration details.
     lines.extend(['', 'Details:', ''])
     for test in output['slowest_tests']:

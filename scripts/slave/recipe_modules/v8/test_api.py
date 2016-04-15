@@ -40,26 +40,36 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
   def iter_builders(self):
     return builders.iter_builders()
 
-  def output_json(self, has_failures=False, wrong_results=False, flakes=False):
+  def output_json(self, has_failures=False, wrong_results=False, flakes=False,
+                  unmarked_slow_test=False):
+    slowest_tests = V8TestApi.SLOWEST_TESTS
+    if unmarked_slow_test:
+      slowest_tests += [{
+        'name': 'mjsunit/slow',
+        'flags': [],
+        'command': 'd8 -f mjsunit/slow',
+        'duration': 123.0,
+        'marked_slow': False,
+      }]
     if not has_failures:
       return self.m.json.output([{
         'arch': 'theArch',
         'mode': 'theMode',
         'results': [],
-        'slowest_tests': V8TestApi.SLOWEST_TESTS,
+        'slowest_tests': slowest_tests,
       }])
     if wrong_results:
       return self.m.json.output([{
         'arch': 'theArch1',
         'mode': 'theMode1',
         'results': [],
-        'slowest_tests': V8TestApi.SLOWEST_TESTS,
+        'slowest_tests': slowest_tests,
       },
       {
         'arch': 'theArch2',
         'mode': 'theMode2',
         'results': [],
-        'slowest_tests': V8TestApi.SLOWEST_TESTS,
+        'slowest_tests': slowest_tests,
       }])
     if flakes:
       return self.m.json.output([{
@@ -123,7 +133,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
             'exit_code': 1,
           },
         ],
-        'slowest_tests': V8TestApi.SLOWEST_TESTS,
+        'slowest_tests': slowest_tests,
       }])
 
 
@@ -177,7 +187,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'arch': 'theArch',
       'mode': 'theMode',
       'results': results,
-      'slowest_tests': V8TestApi.SLOWEST_TESTS,
+      'slowest_tests': slowest_tests,
     }])
 
   def one_failure(self):

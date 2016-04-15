@@ -369,3 +369,16 @@ def GenTests(api):
 
     api.time.step(120)
   )
+
+  # Explicitly highlight slow tests not marked as slow.
+  yield (
+    api.v8.test(
+        'tryserver.v8',
+        'v8_linux_rel_ng_triggered',
+        'slow_tests',
+        requester='commit-bot@chromium.org',
+        patch_project='v8',
+        blamelist=['dude@chromium.org'],
+    ) + api.override_step_data(
+        'Check', api.v8.output_json(unmarked_slow_test=True))
+  )
