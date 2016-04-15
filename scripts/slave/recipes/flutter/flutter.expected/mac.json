@@ -272,6 +272,54 @@
   {
     "cmd": [
       "flutter",
+      "drive",
+      "--verbose",
+      "--target",
+      "test_driver/scroll_perf.dart"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/dev/benchmarks/complex_layout",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "drive complex_layout"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "drive",
+      "--verbose",
+      "--target",
+      "test_driver/scroll_perf.dart"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/examples/material_gallery",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "drive material_gallery"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "drive",
+      "--verbose",
+      "--target",
+      "test_driver/scroll_perf.dart"
+    ],
+    "cwd": "[SLAVE_BUILD]/flutter/examples/stocks",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "drive stocks"
+  },
+  {
+    "cmd": [
+      "flutter",
       "build",
       "apk"
     ],

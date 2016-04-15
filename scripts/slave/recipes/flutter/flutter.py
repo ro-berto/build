@@ -49,6 +49,15 @@ def TestFlutterPackagesAndExamples(api):
       api.step('test %s' % api.path.basename(path), ['flutter', 'test'],
           cwd=checkout.join(path))
 
+  def _drive_test(path, test_name):
+    # We depend on the iOS simulator for now.
+    if not api.platform.is_mac:
+      return
+    api.step('drive %s' % api.path.basename(path),
+        ['flutter', 'drive', '--verbose', '--target',
+        'test_driver/%s.dart' % test_name],
+        cwd=checkout.join(path))
+
   # keep the rest of this function in sync with
   # https://github.com/flutter/flutter/blob/master/travis/test.sh
 
@@ -65,6 +74,12 @@ def TestFlutterPackagesAndExamples(api):
   _flutter_test('examples/layers')
   _flutter_test('examples/material_gallery')
   _flutter_test('examples/stocks')
+
+  # We're not getting perf numbers from these, just making sure they run.
+  _drive_test('dev/benchmarks/complex_layout', 'scroll_perf')
+  _drive_test('examples/material_gallery', 'scroll_perf')
+  _drive_test('examples/stocks', 'scroll_perf')
+
 
 def TestCreateAndLaunch(api):
   with MakeTempDir(api) as temp_dir:
