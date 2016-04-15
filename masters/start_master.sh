@@ -10,12 +10,11 @@ set -e
 
 if [ -f twistd.pid ]; then
   PID=`cat twistd.pid`
-  if [ -n $(ps -p$PID -o pid=) ]; then
+  if [ -n "$(ps -p$PID -o pid=)" ]; then
     echo "twistd.pid has pid $PID which is still alive. aborting."
     exit 2
   fi
 fi
-
 
 echo 'Now running Buildbot master.'
 python $SCRIPTS_DIR/common/twistd --no_save -y buildbot.tac
