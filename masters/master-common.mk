@@ -8,10 +8,10 @@
 #
 # For example: while we transition from buildbot 0.7.12 to buildbot 0.8.x ,
 # some masters will override BUILDBOT_PATH in their local Makefiles.
-TOPLEVEL_DIR ?= ../..
-SCRIPTS_DIR ?= $(TOPLEVEL_DIR)/scripts
+TOPLEVEL_DIR ?= ../../..
+SCRIPTS_DIR ?= $(TOPLEVEL_DIR)/build/scripts
 
-GCLIENT = $(shell which gclient || echo "$(TOPLEVEL_DIR)/../depot_tools/gclient")
+GCLIENT = $(shell which gclient || echo "$(TOPLEVEL_DIR)/depot_tools/gclient")
 
 BUILDBOT8_PATH = $(shell $(SCRIPTS_DIR)/common/env.py -M "$(PWD)" echo)
 BUILDBOT_PATH ?= $(BUILDBOT8_PATH)
@@ -19,4 +19,4 @@ BUILDBOT_PATH ?= $(BUILDBOT8_PATH)
 # Define PYTHONPATH.
 PYTHONPATH := $(BUILDBOT8_PATH)
 
-include $(TOPLEVEL_DIR)/masters/master-common-rules.mk
+include $(TOPLEVEL_DIR)/build/masters/master-common-rules.mk
