@@ -103,19 +103,30 @@ def BuildLinuxAndroidx64(api):
   ])
 
 
+def AddPathPrefix(api, prefix, paths):
+  return map(lambda path: api.path.join(prefix, path), paths)
+
+
 def BuildLinuxAndroidArm(api):
+  out_paths = [
+    'apks/SkyShell.apk',
+    'flutter.jar',
+    'flutter.mojo',
+    'gen/sky/shell/shell/shell/libs/armeabi-v7a/libsky_shell.so',
+    'icudtl.dat',
+    'gen/sky/shell/shell/classes.dex.jar',
+  ]
   RunGN(api, '--release', '--android', '--enable-gcm', '--enable-firebase')
   Build(api, 'android_Release', ':dist', 'gcm', 'sky/services/firebase')
   UploadArtifacts(api, 'android-arm', [
     'build/android/ant/chromium-debug.keystore',
-    'out/android_Release/apks/SkyShell.apk',
-    'out/android_Release/flutter.jar',
-    'out/android_Release/flutter.mojo',
-    'out/android_Release/gen/sky/shell/shell/shell/libs/armeabi-v7a/' +
-    'libsky_shell.so',
-    'out/android_Release/icudtl.dat',
-    'out/android_Release/gen/sky/shell/shell/classes.dex.jar',
-  ])
+  ] + AddPathPrefix(api, 'out/android_Release', out_paths))
+
+  RunGN(api, '--release', '--android', '--deploy')
+  Build(api, 'android_Release_Deploy', ':dist')
+  UploadArtifacts(api, 'android-arm-deploy', [
+    'build/android/ant/chromium-debug.keystore',
+  ] + AddPathPrefix(api, 'out/android_Release_Deploy', out_paths))
 
   UploadDartPackage(api, 'sky_engine')
   UploadDartPackage(api, 'sky_services')
