@@ -287,6 +287,19 @@
   },
   {
     "cmd": [
+      "killall",
+      "Simulator"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "kill simulator"
+  },
+  {
+    "cmd": [
       "flutter",
       "drive",
       "--verbose",
@@ -303,6 +316,19 @@
   },
   {
     "cmd": [
+      "killall",
+      "Simulator"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "kill simulator (2)"
+  },
+  {
+    "cmd": [
       "flutter",
       "drive",
       "--verbose",
@@ -316,6 +342,19 @@
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "drive stocks"
+  },
+  {
+    "cmd": [
+      "killall",
+      "Simulator"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "kill simulator (3)"
   },
   {
     "cmd": [
@@ -433,6 +472,19 @@
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
     "name": "drive sample_app"
+  },
+  {
+    "cmd": [
+      "killall",
+      "Simulator"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "ANDROID_HOME": "[SLAVE_BUILD]/flutter/infra/android_tools",
+      "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
+    },
+    "name": "kill simulator (4)"
   },
   {
     "cmd": [

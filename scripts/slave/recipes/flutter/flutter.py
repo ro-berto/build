@@ -57,6 +57,8 @@ def TestFlutterPackagesAndExamples(api):
         ['flutter', 'drive', '--verbose', '--target',
         'test_driver/%s.dart' % test_name],
         cwd=checkout.join(path))
+    # Attempted hack around: https://github.com/flutter/flutter/issues/3360
+    api.step('kill simulator', ['killall', 'Simulator'])
 
   # keep the rest of this function in sync with
   # https://github.com/flutter/flutter/blob/master/travis/test.sh
@@ -88,6 +90,8 @@ def TestCreateAndLaunch(api):
     app_path = temp_dir.join('sample_app')
     api.step('drive sample_app', ['flutter', 'drive', '--verbose'],
         cwd=app_path)
+    # Attempted hack around: https://github.com/flutter/flutter/issues/3360
+    api.step('kill simulator', ['killall', 'Simulator'])
 
 # TODO(eseidel): Would be nice to have this on api.path or api.file.
 @contextlib.contextmanager
