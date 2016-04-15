@@ -21,7 +21,7 @@ KITCHEN_TEST_SPEC = {
     'TARGET_BITS': 64,
   },
   'compile_targets': [
-    'chromium_swarm_tests',
+    'all',
   ],
   'testing': {
     'platform': 'linux',

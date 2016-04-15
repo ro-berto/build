@@ -245,7 +245,7 @@
       "[SLAVE_BUILD]/src/build/goma/client",
       "--ninja-ensure-up-to-date",
       "--",
-      "chromium_swarm_tests"
+      "all"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "compile",
