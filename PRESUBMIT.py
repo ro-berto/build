@@ -49,7 +49,7 @@ def CommonChecks(input_api, output_api):
       # These directories are created by tests in "tests/", and by recipe
       # engine. Each is an independent recipe checkout. If Pylint is run on
       # these, it will hang forever, so we must exclude them.
-      r'.*/\..*recipe_deps/.*',
+      r'^(.*/)?\..*recipe_deps/.*',
   ]
   tests = []
 
