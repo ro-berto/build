@@ -25,12 +25,6 @@ INFRA_RUNPY = /opt/infra-python/run.py
 SHORT_HOSTNAME := $(shell hostname -s)
 CURRENT_DIR = $(shell pwd)
 
-# Where we expect flock to live.
-FLOCK = /usr/bin/flock
-
-# Per-master lockfile.
-LOCKFILE = master_start.lock
-
 printstep:
 ifndef NO_REVISION_AUDIT
 	@echo "**  `python -c 'import datetime; print datetime.datetime.utcnow().isoformat() + "Z"'`	make $(MAKECMDGOALS)" >> actions.log
@@ -69,14 +63,15 @@ ifndef NO_REVISION_AUDIT
    || echo 'Running send_monitoring_event failed, skipping sending events.' \
   ) 2>&1 | tee -a actions.log
 endif
-ifneq ($(wildcard $(FLOCK)),)
-	PYTHONPATH=$(PYTHONPATH) SCRIPTS_DIR=$(SCRIPTS_DIR) $(FLOCK) -n $(LOCKFILE) $(TOPLEVEL_DIR)/build/masters/start_master.sh || ( \
-	echo "Failure to start master. Check to see if a master is running and" \
-	     "holding the lock on $(LOCKFILE)."; exit 1)
-else
-	PYTHONPATH=$(PYTHONPATH) SCRIPTS_DIR=$(SCRIPTS_DIR) $(TOPLEVEL_DIR)/build/masters/start_master.sh
-endif
-
+	# There is a race condition between startup and when twistd.pid is written.
+	# Anyone issuing a second `make start` before the twistd.pid is written will
+	# spawn two masters. This is hopefully unlikely, but a proper solution would
+	# be to use flock (not available on OSX). The critical section contains BOTH
+	# the twistd start and the wait for the twistd.pid.
+	@echo 'Now running Buildbot master.'
+	PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/common/twistd --no_save -y buildbot.tac
+	@echo 'Waiting for creation of twistd.pid...'
+	while `test ! -f twistd.pid`; do sleep 1; done;
 
 ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
 start-prof: bootstrap
