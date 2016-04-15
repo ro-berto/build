@@ -4,6 +4,7 @@
 
 from recipe_engine import recipe_api
 
+import base64
 import json
 
 class LuciConfigApi(recipe_api.RecipeApi):
@@ -39,7 +40,8 @@ class LuciConfigApi(recipe_api.RecipeApi):
 
     mapping = {}
     for project in json.loads(fetch_result)['projects']:
-      mapping[project['id']] = project
+      # Unicode and str-s don't mix well
+      mapping[str(project['id'])] = {str(k): str(v) for k, v in project.items()}
     return mapping
 
   def get_project_config(self, project, config):
@@ -59,4 +61,6 @@ class LuciConfigApi(recipe_api.RecipeApi):
     fetch_result = self.m.url.fetch(
         url, step_name='Get project %r config %r' % (project, config),
         headers=self._get_headers())
-    return json.loads(fetch_result)
+    result = json.loads(fetch_result)
+    result['content'] = base64.b64decode(result['content'])
+    return result
