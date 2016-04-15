@@ -2020,6 +2020,11 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86-64',
+        },
         'tests': [V8Testing, Ignition, Mozilla],
         'testing': {'platform': 'win'},
       },
