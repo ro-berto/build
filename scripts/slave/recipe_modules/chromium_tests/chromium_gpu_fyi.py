@@ -910,8 +910,15 @@ SPEC = {
     },
     'Linux ChromiumOS Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos', 'ninja_confirm_noop', 'mb'],
+      'chromium_apply_config': [
+        'archive_gpu_tests',
+        'chromeos',
+        'internal_gles2_conform_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
