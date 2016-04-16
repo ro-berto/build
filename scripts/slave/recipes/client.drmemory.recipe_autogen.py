@@ -1290,18 +1290,15 @@ def win_builder_steps(api):
              cwd=api.path["slave_build"])
     # Find package basename step
     step_result = api.step("Find package basename",
-                           ["dir", "/B",
+                           ["cmd.exe", "/C", "dir", "/B",
                             "DrMemory-Windows-*0x" + build_properties[
                                 "got_revision"][:7] + ".zip"],
                            stdout=api.raw_io.output(),
                            cwd=api.path["slave_build"])
     basename = step_result.stdout[:-4]
     # Delete prior sfx archive step
-    api.step("Delete prior sfx archive",
-             [
-                 "del", basename + "-sfx.exe"
-             ],
-             cwd=api.path["slave_build"])
+    api.file.remove("Delete prior sfx archive",
+        api.path["slave_build"].join(basename + "-sfx.exe"))
     # Create sfx archive step
     api.step("create sfx archive",
              [api.path["build"].join("scripts", "slave", "drmemory",
@@ -1313,10 +1310,9 @@ def win_builder_steps(api):
              env={"BOTTOOLS": api.path["slave_build"].join("tools", "buildbot",
                                                            "bot_tools")})
     # upload latest build step
-    api.step("copy locally",
-             ["copy", basename + "-sfx.exe",
-              "drmemory-windows-latest-sfx.exe"],
-             cwd=api.path["slave_build"])
+    api.file.copy("copy locally",
+        api.path["slave_build"].join(basename + "-sfx.exe"),
+        api.path["slave_build"].join("drmemory-windows-latest-sfx.exe"))
     api.gsutil.upload("drmemory-windows-latest-sfx.exe",
                       "chromium-drmemory-builds",
                       "",
