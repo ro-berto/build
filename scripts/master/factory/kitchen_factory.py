@@ -32,8 +32,10 @@ def KitchenFactory(active_master, repository, recipe,
   to run, regardless of output. After |max_time| seconds, the build is
   forcibly killed.
   """
+  factory_properties = factory_properties or {}
+
   factory = BuildFactory(build_inherit_factory_properties=False)
-  factory.properties.update(factory_properties or {}, 'KitchenFactory')
+  factory.properties.update(factory_properties, 'KitchenFactory')
   cmd_obj = annotator_commands.AnnotatorCommands(
       factory, active_master=active_master)
 
@@ -45,6 +47,7 @@ def KitchenFactory(active_master, repository, recipe,
       '--recipe', recipe,
   ]
   cmd = cmd_obj.AddB64GzBuildProperties(cmd)
+  cmd = cmd_obj.AddB64GzFactoryProperties(factory_properties, cmd)
 
   cmd_obj.AddAnnotatedScript(cmd, timeout=timeout, max_time=max_time)
 

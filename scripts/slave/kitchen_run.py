@@ -4,6 +4,7 @@
 # found in the LICENSE file.
 
 import argparse
+import copy
 import json
 import logging
 import os
@@ -101,9 +102,12 @@ def main(args):
     tempdir = rt.tempdir(basedir)
     LOGGER.info('Using temporary directory: [%s].', tempdir)
 
+    properties = copy.copy(args.factory_properties)
+    properties.update(args.build_properties)
+    LOGGER.info('Using properties: %r', properties)
     properties_file = os.path.join(tempdir, 'kitchen_properties.json')
     with open(properties_file, 'w') as f:
-      json.dump(args.build_properties, f)
+      json.dump(properties, f)
 
     return _call([
         kitchen, 'cook',
@@ -126,6 +130,9 @@ def shell_main(argv):
   parser.add_argument('--build-properties-gz', dest='build_properties',
       type=chromium_utils.convert_gz_json_type, default={},
       help='Build properties in b64 gz JSON format')
+  parser.add_argument('--factory-properties-gz', dest='factory_properties',
+      type=chromium_utils.convert_gz_json_type, default={},
+      help='factory properties in b64 gz JSON format')
   parser.add_argument('--leak', action='store_true',
       help='Refrain from cleaning up generated artifacts.')
   parser.add_argument('--verbose', action='store_true')
