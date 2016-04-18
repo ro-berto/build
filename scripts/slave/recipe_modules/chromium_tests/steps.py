@@ -887,6 +887,8 @@ class SwarmingGTestTest(SwarmingTest):
               test_results_server='test-results.appspot.com')
 
 
+# TODO(bpastene) Remove all AMP recipe code once all use of it has been
+# discontinued. crbug.com/603943
 class AMPTest(Test):
   AMP_INSTANCE_ADDRESS = '172.22.21.180'
   AMP_INSTANCE_PORT = '80'
@@ -982,10 +984,10 @@ class AMPTest(Test):
 
     return valid, failures
 
-  def has_valid_results(self, api, suffix):
+  def has_valid_results(self, api, suffix): # pragma: no cover
     return suffix in self._step_results and self._step_results[suffix]['valid']
 
-  def failures(self, api, suffix):
+  def failures(self, api, suffix): # pragma: no cover
     assert self.has_valid_results(api, suffix)
     return self._step_results[suffix]['failures']
 

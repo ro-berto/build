@@ -67,10 +67,6 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.android': {
     'builders': {
-      'android_amp': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'Android Tests (amp split)',
-      }),
       'android_archive_rel_ng': simple_bot({
         'mastername': 'chromium',
         'buildername': 'Android',

@@ -7,7 +7,6 @@ import collections
 from recipe_engine.types import freeze
 
 DEPS = [
-  'amp',
   'depot_tools/bot_update',
   'chromium',
   'chromium_android',
@@ -467,16 +466,6 @@ def GenTests(api):
     suppress_analyze() +
     api.override_step_data('gl_tests (with patch) on Ubuntu-12.04',
                            canned_test(passing=False))
-  )
-
-  yield (
-    api.test('amp_test_failure') +
-    props(buildername='android_amp',
-          mastername='tryserver.chromium.android') +
-    api.platform.name('linux') +
-    suppress_analyze() +
-    api.override_step_data('[collect] base_unittests (with patch)',
-                           canned_test(passing=False), retcode=1)
   )
 
   yield (
