@@ -16,9 +16,10 @@ SPEC = {
     'Mac Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'ninja_confirm_noop',
         'archive_gpu_tests',
-        'chrome_with_codecs'
+        'chrome_with_codecs',
+        'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -119,7 +120,7 @@ SPEC = {
     },
     'Mac Builder (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',

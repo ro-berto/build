@@ -204,9 +204,10 @@ SPEC = {
     'GPU Mac Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'ninja_confirm_noop',
         'archive_gpu_tests',
-        'chrome_with_codecs'
+        'chrome_with_codecs',
+        'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -225,9 +226,10 @@ SPEC = {
     'GPU Mac Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'ninja_confirm_noop',
         'archive_gpu_tests',
-        'chrome_with_codecs'
+        'chrome_with_codecs',
+        'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
