@@ -313,14 +313,13 @@ class AndroidApi(recipe_api.RecipeApi):
   def detect_and_setup_devices(self, restart_usb=False, skip_wipe=False,
                                disable_location=False, min_battery_level=None,
                                disable_network=False, disable_java_debug=False,
-                               reboot_timeout=None, max_battery_temp=None):
+                               max_battery_temp=None):
     self.authorize_adb_devices()
     self.device_status_check(restart_usb=restart_usb)
     self.provision_devices(
       skip_wipe=skip_wipe, disable_location=disable_location,
       min_battery_level=min_battery_level, disable_network=disable_network,
-      disable_java_debug=disable_java_debug, reboot_timeout=reboot_timeout,
-      max_battery_temp=max_battery_temp)
+      disable_java_debug=disable_java_debug, max_battery_temp=max_battery_temp)
 
   @property
   def blacklist_file(self):
@@ -427,8 +426,8 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def provision_devices(self, skip_wipe=False, disable_location=False,
                         min_battery_level=None, disable_network=False,
-                        disable_java_debug=False, reboot_timeout=None,
-                        max_battery_temp=None, disable_system_chrome=False,
+                        disable_java_debug=False, max_battery_temp=None,
+                        disable_system_chrome=False,
                         remove_system_webview=False, emulators=False,
                         **kwargs):
     args = [
@@ -440,10 +439,6 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--skip-wipe')
     if disable_location:
       args.append('--disable-location')
-    if reboot_timeout is not None:
-      assert isinstance(reboot_timeout, int)
-      assert reboot_timeout > 0
-      args.extend(['--reboot-timeout', reboot_timeout])
     if min_battery_level is not None:
       assert isinstance(min_battery_level, int)
       assert min_battery_level >= 0

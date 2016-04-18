@@ -240,6 +240,40 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "WebView Nexus5 Perf (1)",
+        "properties": {
+          "bucket": "master.chromium.perf.fyi",
+          "mastername": "master.chromium.perf.fyi",
+          "revision": "267739"
+        }
+      },
+      {
+        "builder_name": "WebView Nexus5X Perf (1)",
+        "properties": {
+          "bucket": "master.chromium.perf.fyi",
+          "mastername": "master.chromium.perf.fyi",
+          "revision": "267739"
+        }
+      },
+      {
+        "builder_name": "WebView Nexus5X Perf (2)",
+        "properties": {
+          "bucket": "master.chromium.perf.fyi",
+          "mastername": "master.chromium.perf.fyi",
+          "revision": "267739"
+        }
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@WebView Nexus5 Perf (1)<br />WebView Nexus5X Perf (1)<br />WebView Nexus5X Perf (2)@@@"
+    ]
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

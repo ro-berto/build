@@ -192,10 +192,6 @@ def perf(c):
   gyp_defs['buildtype'] = 'Official'
 
 @CONFIG_CTX(includes=['main_builder'])
-def webview_perf(c):
-  gyp_defs = c.gyp_env.GYP_DEFINES
-
-@CONFIG_CTX(includes=['main_builder'])
 def cast_builder(c):
   c.gyp_env.GYP_DEFINES['chromecast'] = 1
 

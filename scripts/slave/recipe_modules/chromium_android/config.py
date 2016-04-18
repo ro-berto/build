@@ -212,10 +212,6 @@ def perf(c):
   pass
 
 @config_ctx()
-def webview_perf(c):
-  pass
-
-@config_ctx()
 def cast_builder(c):
   pass
 

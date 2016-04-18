@@ -7,10 +7,10 @@ from recipe_engine.types import freeze
 
 DEPS = [
     'adb',
-    'depot_tools/bot_update',
     'chromium',
     'chromium_android',
     'chromium_tests',
+    'depot_tools/bot_update',
     'depot_tools/gclient',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -23,20 +23,14 @@ DEPS = [
 
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
-
-def _ChromiumPerfTesters():
-  def _AddTestSpec(name, perf_id, num_device_shards=1, num_host_shards=1,
-                   target_bits=64, known_devices_file='.known_devices'):
-    for shard_index in xrange(num_host_shards):
-      builder_name = '%s (%d)' % (name, shard_index + 1)
-      testers[builder_name] = _TestSpec(
-          name, perf_id, num_device_shards, num_host_shards, shard_index,
-          target_bits, known_devices_file)
-
-  def _TestSpec(name, perf_id, num_device_shards, num_host_shards, shard_index,
-                target_bits, known_devices_file):
+def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
+                   num_host_shards=1, target_bits=64,
+                   known_devices_file='.known_devices'):
+  def _CreateShardTestSpec(name, perf_id, required_apks, num_device_shards,
+                num_host_shards, shard_index, target_bits, known_devices_file):
     spec = {
       'perf_id': perf_id,
+      'required_apks': required_apks,
       'bucket': 'chrome-perf',
       'num_device_shards': num_device_shards,
       'num_host_shards': num_host_shards,
@@ -45,7 +39,6 @@ def _ChromiumPerfTesters():
       'max_battery_temp': 350,
       'known_devices_file': known_devices_file,
     }
-
     if target_bits == 32:
       builder_name = 'android_perf_rel'
     elif target_bits == 64:
@@ -53,31 +46,63 @@ def _ChromiumPerfTesters():
       spec['recipe_config'] = 'tests_arm64'
     spec['path'] = lambda api: '%s/full-build-linux_%s.zip' % (
         builder_name, api.properties['parent_revision'])
-
     return spec
 
-  testers = {}
+  tester_spec = {}
+  for shard_index in xrange(num_host_shards):
+    builder_name = '%s (%d)' % (name, shard_index + 1)
+    tester_spec[builder_name] = _CreateShardTestSpec(
+        name, perf_id, required_apks, num_device_shards, num_host_shards,
+        shard_index, target_bits, known_devices_file)
+  return tester_spec
 
-  _AddTestSpec('Android Galaxy S5 Perf', 'android-galaxy-s5',
-      num_device_shards=7, num_host_shards=3, target_bits=32)
-  _AddTestSpec('Android Nexus5 Perf', 'android-nexus5',
-      num_device_shards=7, num_host_shards=3, target_bits=32)
-  _AddTestSpec('Android Nexus5X Perf', 'android-nexus5X',
-      num_device_shards=7, num_host_shards=3)
-  _AddTestSpec('Android Nexus6 Perf', 'android-nexus6',
-      num_device_shards=7, num_host_shards=3, target_bits=32)
-  _AddTestSpec('Android Nexus7v2 Perf', 'android-nexus7v2',
-      num_device_shards=7, num_host_shards=3, target_bits=32)
-  _AddTestSpec('Android Nexus9 Perf', 'android-nexus9',
-      num_device_shards=7, num_host_shards=3)
-  _AddTestSpec('Android One Perf', 'android-one',
-      num_device_shards=7, num_host_shards=3, target_bits=32)
+def _ChromiumPerfTesters():
+  testers = [
+    _CreateTestSpec('Android Galaxy S5 Perf', 'android-galaxy-s5',
+        required_apks=['ChromePublic.apk'], num_device_shards=7,
+        num_host_shards=3, target_bits=32),
+    _CreateTestSpec('Android Nexus5 Perf', 'android-nexus5',
+        required_apks=['ChromePublic.apk'], num_device_shards=7,
+        num_host_shards=3, target_bits=32),
+    _CreateTestSpec('Android Nexus5X Perf', 'android-nexus5X',
+        required_apks=['ChromePublic.apk'], num_device_shards=7,
+        num_host_shards=3),
+    _CreateTestSpec('Android Nexus6 Perf', 'android-nexus6',
+        required_apks=['ChromePublic.apk'], num_device_shards=7,
+        num_host_shards=3, target_bits=32),
+    _CreateTestSpec('Android Nexus7v2 Perf', 'android-nexus7v2',
+        required_apks=['ChromePublic.apk'], num_device_shards=7,
+        num_host_shards=3, target_bits=32),
+    _CreateTestSpec('Android Nexus9 Perf', 'android-nexus9',
+        required_apks=['ChromePublic.apk'], num_device_shards=7,
+        num_host_shards=3),
+    _CreateTestSpec('Android One Perf', 'android-one',
+        required_apks=['ChromePublic.apk'], num_device_shards=7,
+        num_host_shards=3, target_bits=32),
+  ]
+  master_spec = {}
+  for spec in testers:
+    master_spec.update(spec)
+  return master_spec
 
-  return testers
+def _ChromiumPerfFYITesters():
+  testers = [
+    _CreateTestSpec('Android Nexus5 WebView Perf', 'android-webview',
+        required_apks=['SystemWebview.apk', 'SystemWebViewShell.apk'],
+        num_device_shards=5, num_host_shards=1, target_bits=32),
+    _CreateTestSpec('Android Nexus5x WebView Perf', 'android-webview-nexus5X',
+        required_apks=['SystemWebview.apk', 'SystemWebViewShell.apk'],
+        num_device_shards=7, num_host_shards=2, target_bits=32),
+  ]
+  master_spec = {}
+  for spec in testers:
+    master_spec.update(spec)
+  return master_spec
 
 
 BUILDERS = freeze({
   'chromium.perf': _ChromiumPerfTesters(),
+  'chromium.perf.fyi': _ChromiumPerfFYITesters(),
 })
 
 
@@ -124,7 +149,9 @@ def RunSteps(api):
 
   api.chromium_android.common_tests_setup_steps(perf_setup=True)
 
-  api.chromium_android.adb_install_apk('ChromePublic.apk')
+  required_apks = builder.get('required_apks', [])
+  for apk in required_apks:
+    api.chromium_android.adb_install_apk(apk)
 
   test_runner = api.chromium_tests.create_test_runner(
       api, builder.get('tests', []))
