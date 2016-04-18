@@ -27,7 +27,6 @@ TEST_BUILDERS = {
     'skiabot-linux-tester-000': [
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug',
       'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-TSAN',
-      'Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot',
     ],
     'skiabot-shuttle-ubuntu12-003': [
       'Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug',

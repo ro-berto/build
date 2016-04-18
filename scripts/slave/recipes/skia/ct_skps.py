@@ -179,8 +179,6 @@ def RunSteps(api):
         gs_dest_dir = 'ct/%s/%d/%02d/%02d/%02d/' % (
             ct_page_type, utc.year, utc.month, utc.day, utc.hour)
         for json_output in api.file.listdir('output dir', output_dir):
-          # TODO(rmistry): Use api.skia.gsutil_upload once the skia recipe
-          #                is usable without needing to call gen_steps first.
           api.gsutil.upload(
               name='upload json output',
               source=output_dir.join(json_output),

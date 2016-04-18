@@ -30,6 +30,9 @@ TEST_BUILDERS = {
     'skiabot-linux-swarm-012': [
       'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
     ],
+    'skiabot-linux-swarm-013': [
+      'Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot',
+    ],
   },
 }
 

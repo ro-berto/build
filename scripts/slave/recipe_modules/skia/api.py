@@ -199,9 +199,6 @@ class SkiaApi(recipe_api.RecipeApi):
     self.tmp_dir = self.m.path['slave_build'].join('tmp')
 
     self.gsutil_env_chromium_skia_gm = self.gsutil_env(BOTO_CHROMIUM_SKIA_GM)
-    # TODO(borenet): This works on GCE instance because we fall back on
-    # service account auth. What about our local bots?
-    self.gsutil_env_skia_infra = self.gsutil_env(None)
 
     self.device_dirs = None
     self._ccache = None
@@ -214,6 +211,7 @@ class SkiaApi(recipe_api.RecipeApi):
     if 'Android' in self.builder_name and self.running_in_swarming:
       # TODO(borenet): Make the app build work on Swarming and remove this.
       self.build_targets = ['dm', 'nanobench']
+    self.do_compile_steps = self.builder_spec.get('do_compile_steps', True)
     self.do_test_steps = self.builder_spec['do_test_steps']
     self.do_perf_steps = self.builder_spec['do_perf_steps']
     self.is_trybot = self.builder_cfg['is_trybot']
@@ -235,7 +233,8 @@ class SkiaApi(recipe_api.RecipeApi):
 
   def run_steps(self):
     """Compile, run tests, perf, etc."""
-    self.compile_steps()
+    if self.do_compile_steps:
+      self.compile_steps()
     if self.do_test_steps:
       self.test_steps()
     if self.do_perf_steps:
@@ -394,18 +393,6 @@ for pattern in build_products_whitelist:
         raise  # pragma: no cover
       if fail_build_on_failure:
         self.failed.append(e)
-
-  def gsutil_upload(self, name, source, bucket, dest):
-    """Upload to Google Storage without using a .boto file."""
-    self.run(
-        self.m.gsutil.upload,
-        name,
-        source=source,
-        bucket=bucket,
-        dest=dest,
-        args=['-R'],
-        env=self.gsutil_env_skia_infra,
-        abort_on_failure=False)
 
   def download_dir(self, version_file, gs_path_tmpl, tmp_dir, host_path,
                    test_expected_version, test_actual_version,

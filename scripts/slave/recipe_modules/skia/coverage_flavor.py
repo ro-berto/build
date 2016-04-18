@@ -13,16 +13,18 @@ import ssh_devices
 
 
 class CoverageFlavorUtils(default_flavor.DefaultFlavorUtils):
-  def compile(self, target):
-    """Build the given target."""
-    cmd = [self._skia_api.m.path['slave_build'].join('skia', 'tools',
-                                                     'llvm_coverage_build'),
-           target]
-    self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
-                       cwd=self._skia_api.m.path['checkout'])
 
   def step(self, name, cmd, **kwargs):
     """Run the given step through coverage."""
+    compile_target = 'dm'
+    build_cmd = [self._skia_api.m.path['slave_build'].join(
+                     'skia', 'tools', 'llvm_coverage_build'),
+                 compile_target]
+    self._skia_api.run(self._skia_api.m.step,
+                       'build %s' % compile_target,
+                       cmd=build_cmd,
+                       cwd=self._skia_api.m.path['checkout'])
+
     # Slice out the 'key' and 'properties' arguments to be reused.
     key = []
     properties = []
@@ -52,12 +54,10 @@ class CoverageFlavorUtils(default_flavor.DefaultFlavorUtils):
                        cwd=self._skia_api.m.path['checkout'], **kwargs)
 
     # Generate nanobench-style JSON output from the coverage report.
-    git_timestamp = self._skia_api.m.git.get_timestamp(test_data='1408633190',
-                                                       infra_step=True)
-    nanobench_json = results_dir.join('nanobench_%s_%s.json' % (
-        self._skia_api.got_revision, git_timestamp))
-    line_by_line_basename = ('coverage_by_line_%s_%s.json' % (
-        self._skia_api.got_revision, git_timestamp))
+    nanobench_json = results_dir.join('nanobench_%s.json' % (
+        self._skia_api.got_revision))
+    line_by_line_basename = ('coverage_by_line_%s.json' % (
+        self._skia_api.got_revision))
     line_by_line = results_dir.join(line_by_line_basename)
     args = [
         'python',
@@ -72,46 +72,8 @@ class CoverageFlavorUtils(default_flavor.DefaultFlavorUtils):
         'Generate Coverage Data',
         cmd=args, cwd=self._skia_api.m.path['checkout'])
 
-    # Upload raw coverage data.
-    now = self._skia_api.m.time.utcnow()
-    gs_json_path = '/'.join((
-        str(now.year).zfill(4), str(now.month).zfill(2),
-        str(now.day).zfill(2), str(now.hour).zfill(2),
-        self._skia_api.builder_name,
-        str(self._skia_api.m.properties['buildnumber'])))
-    if self._skia_api.is_trybot:
-      gs_json_path = '/'.join(('trybot', gs_json_path,
-                               str(self._skia_api.m.properties['issue'])))
-
-    self._skia_api.gsutil_upload(
-        'upload raw coverage data',
-        source=report_file,
-        bucket='skia-infra',
-        dest='/'.join(('coverage-raw-v1', gs_json_path, report_file_basename)))
-
-    # Upload nanobench JSON data.
-    gsutil_path = self._skia_api.m.path['depot_tools'].join(
-        'third_party', 'gsutil', 'gsutil')
-    upload_args = [self._skia_api.builder_name,
-                   self._skia_api.m.properties['buildnumber'],
-                   results_dir,
-                   self._skia_api.got_revision, gsutil_path]
-    if self._skia_api.is_trybot:
-      upload_args.append(self._skia_api.m.properties['issue'])
-    self._skia_api.run(
-        self._skia_api.m.python,
-        'upload nanobench coverage results',
-        script=self._skia_api.resource('upload_bench_results.py'),
-        args=upload_args,
-        cwd=self._skia_api.m.path['checkout'],
-        abort_on_failure=False,
-        infra_step=True)
-
-    # Upload line-by-line coverage data.
-    self._skia_api.gsutil_upload(
-        'upload line-by-line coverage data',
-        source=line_by_line,
-        bucket='skia-infra',
-        dest='/'.join(('coverage-json-v1', gs_json_path,
-                       line_by_line_basename)))
-
+    # Copy files from results_dir into swarming_out_dir.
+    for r in self._skia_api.m.file.listdir('results_dir', results_dir):
+      self._skia_api.m.file.copy(
+          'Copy to swarming out', results_dir.join(r),
+          self._skia_api.swarming_out_dir)

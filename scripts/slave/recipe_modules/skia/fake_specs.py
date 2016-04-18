@@ -886,6 +886,7 @@ FAKE_SPECS = {
     'dm_flags': [
       '--dummy-flags',
     ],
+    'do_compile_steps': False,
     'do_perf_steps': False,
     'do_test_steps': True,
     'env': {

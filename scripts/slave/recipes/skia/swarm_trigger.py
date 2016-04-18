@@ -14,10 +14,12 @@ DEPS = [
   'depot_tools/git',
   'depot_tools/tryserver',
   'file',
+  'gsutil',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
+  'recipe_engine/time',
   'skia',
   'skia_swarming',
 ]
@@ -27,6 +29,9 @@ TEST_BUILDERS = {
   'client.skia': {
     'skiabot-linux-swarm-012': [
        'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
+    ],
+    'skiabot-linux-swarm-013': [
+      'Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot',
     ],
   },
   'client.skia.fyi': {
@@ -164,8 +169,11 @@ def trigger_task(api, task_name, builder, builder_spec, got_revision,
     'WORKDIR': api.path['slave_build'],
   }
 
+  isolate_file = '%s_skia.isolate' % task_name
+  if 'Coverage' == builder_cfg['configuration']:
+    isolate_file = 'coverage_skia.isolate'
   return api.skia_swarming.isolate_and_trigger_task(
-      infrabots_dir.join('%s_skia.isolate' % task_name),
+      infrabots_dir.join(isolate_file),
       isolate_base_dir,
       '%s_skia' % task_name,
       isolate_vars,
@@ -247,6 +255,8 @@ def get_timeouts(builder_cfg):
   if 'Valgrind' in builder_cfg.get('extra_config', ''):
     expiration = 2*24*60*60
     hard_timeout = 9*60*60
+  elif 'Coverage' == builder_cfg['configuration']:
+    hard_timeout = 3*60*60
   return expiration, hard_timeout
 
 
@@ -321,8 +331,9 @@ def test_steps_trigger(api, builder_spec, got_revision, infrabots_dir,
       hard_timeout=hard_timeout)
 
 
-def test_steps_collect(api, task, upload_dm_results, got_revision, is_trybot):
-  """Collect the DM results from Swarming."""
+def test_steps_collect(api, task, upload_dm_results, got_revision, is_trybot,
+                       builder_cfg):
+  """Collect the test results from Swarming."""
   # Wait for tests to finish, download the results.
   api.file.rmtree('results_dir', task.task_output_dir, infra_step=True)
   api.skia_swarming.collect_swarming_task(task)
@@ -350,6 +361,81 @@ def test_steps_collect(api, task, upload_dm_results, got_revision, is_trybot):
         env=api.skia.gsutil_env('chromium-skia-gm.boto'),
         infra_step=True)
 
+  if builder_cfg['configuration']  == 'Coverage':
+    upload_coverage_results(api, task, got_revision, is_trybot)
+
+
+def upload_coverage_results(api, task, got_revision, is_trybot):
+  results_dir = task.task_output_dir.join('0')
+  git_timestamp = api.git.get_timestamp(test_data='1408633190',
+                                        infra_step=True)
+
+  # Upload raw coverage data.
+  cov_file_basename = '%s.cov' % got_revision
+  cov_file = results_dir.join(cov_file_basename)
+  now = api.time.utcnow()
+  gs_json_path = '/'.join((
+      str(now.year).zfill(4), str(now.month).zfill(2),
+      str(now.day).zfill(2), str(now.hour).zfill(2),
+      api.properties['buildername'],
+      str(api.properties['buildnumber'])))
+  if is_trybot:
+    gs_json_path = '/'.join(('trybot', gs_json_path,
+                             str(api.properties['issue'])))
+  api.gsutil.upload(
+      name='upload raw coverage data',
+      source=cov_file,
+      bucket='skia-infra',
+      dest='/'.join(('coverage-raw-v1', gs_json_path,
+                     cov_file_basename)),
+      env={'AWS_CREDENTIAL_FILE': None, 'BOTO_CONFIG': None},
+  )
+
+  # Transform the nanobench_${git_hash}.json file received from swarming bot
+  # into the nanobench_${git_hash}_${timestamp}.json file
+  # upload_bench_results.py expects.
+  src_nano_file = results_dir.join('nanobench_%s.json' % got_revision)
+  dst_nano_file = results_dir.join(
+      'nanobench_%s_%s.json' % (got_revision, git_timestamp))
+  api.file.copy('nanobench JSON', src_nano_file, dst_nano_file,
+                infra_step=True)
+  api.file.remove('old nanobench JSON', src_nano_file)
+
+  # Upload nanobench JSON data.
+  gsutil_path = api.path['depot_tools'].join(
+      'third_party', 'gsutil', 'gsutil')
+  upload_args = [api.properties['buildername'], api.properties['buildnumber'],
+                 results_dir, got_revision, gsutil_path]
+  if is_trybot:
+    upload_args.append(api.properties['issue'])
+  api.python(
+      'upload nanobench coverage results',
+      script=api.skia.resource('upload_bench_results.py'),
+      args=upload_args,
+      cwd=api.path['checkout'],
+      env=api.skia.gsutil_env('chromium-skia-gm.boto'),
+      infra_step=True)
+
+  # Transform the coverage_by_line_${git_hash}.json file received from
+  # swarming bot into a coverage_by_line_${git_hash}_${timestamp}.json file.
+  src_lbl_file = results_dir.join('coverage_by_line_%s.json' % got_revision)
+  dst_lbl_file_basename = 'coverage_by_line_%s_%s.json' % (
+      got_revision, git_timestamp)
+  dst_lbl_file = results_dir.join(dst_lbl_file_basename)
+  api.file.copy('Line-by-line coverage JSON', src_lbl_file, dst_lbl_file,
+                infra_step=True)
+  api.file.remove('old line-by-line coverage JSON', src_lbl_file)
+
+  # Upload line-by-line coverage data.
+  api.gsutil.upload(
+      name='upload line-by-line coverage data',
+      source=dst_lbl_file,
+      bucket='skia-infra',
+      dest='/'.join(('coverage-json-v1', gs_json_path,
+                     dst_lbl_file_basename)),
+      env={'AWS_CREDENTIAL_FILE': None, 'BOTO_CONFIG': None},
+  )
+
 
 def RunSteps(api):
   got_revision = checkout_steps(api)
@@ -364,8 +450,11 @@ def RunSteps(api):
 
   recipes_hash = isolate_recipes(api)
 
-  compile_hash = compile_steps_swarm(api, builder_spec, got_revision,
-                                     infrabots_dir, [recipes_hash])
+  do_compile_steps = builder_spec.get('do_compile_steps', True)
+  compile_hash = None
+  if do_compile_steps:
+    compile_hash = compile_steps_swarm(api, builder_spec, got_revision,
+                                       infrabots_dir, [recipes_hash])
 
   do_test_steps = builder_spec['do_test_steps']
   do_perf_steps = builder_spec['do_perf_steps']
@@ -373,7 +462,9 @@ def RunSteps(api):
   if not (do_test_steps or do_perf_steps):
     return
 
-  extra_hashes = [recipes_hash, compile_hash]
+  extra_hashes = [recipes_hash]
+  if compile_hash:
+    extra_hashes.append(compile_hash)
 
   api.skia.download_skps(api.path['slave_build'].join('tmp'),
                          api.path['slave_build'].join('skps'),
@@ -393,7 +484,7 @@ def RunSteps(api):
   is_trybot = builder_cfg['is_trybot']
   if test_task:
     test_steps_collect(api, test_task, builder_spec['upload_dm_results'],
-                       got_revision, is_trybot)
+                       got_revision, is_trybot, builder_cfg)
   if perf_task:
     perf_steps_collect(api, perf_task, builder_spec['upload_perf_results'],
                        got_revision, is_trybot)
@@ -418,9 +509,10 @@ def test_for_bot(api, builder, mastername, slavename, testname=None):
     test += api.properties(issue=500,
                            patchset=1,
                            rietveld='https://codereview.chromium.org')
-  test += api.step_data(
-      'upload new .isolated file for compile_skia',
-      stdout=api.raw_io.output('def456 XYZ.isolated'))
+  if 'Coverage' not in builder:
+    test += api.step_data(
+        'upload new .isolated file for compile_skia',
+        stdout=api.raw_io.output('def456 XYZ.isolated'))
   if 'Test' in builder:
     test += api.step_data(
         'upload new .isolated file for test_skia',
