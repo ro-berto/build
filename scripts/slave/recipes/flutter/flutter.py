@@ -49,16 +49,15 @@ def TestFlutterPackagesAndExamples(api):
       api.step('test %s' % api.path.basename(path), ['flutter', 'test'],
           cwd=checkout.join(path))
 
-  def _drive_test(path, test_name):
-    # We depend on the iOS simulator for now.
-    if not api.platform.is_mac:
-      return
-    api.step('drive %s' % api.path.basename(path),
-        ['flutter', 'drive', '--verbose', '--target',
-        'test_driver/%s.dart' % test_name],
-        cwd=checkout.join(path))
-    # Attempted hack around: https://github.com/flutter/flutter/issues/3360
-    api.step('kill simulator', ['killall', 'Simulator'])
+  # TODO(yjbanov): reenable when https://github.com/flutter/flutter/issues/3360 is fixed
+  # def _drive_test(path, test_name):
+  #   # We depend on the iOS simulator for now.
+  #   if not api.platform.is_mac:
+  #     return
+  #   api.step('drive %s' % api.path.basename(path),
+  #       ['flutter', 'drive', '--verbose', '--target',
+  #       'test_driver/%s.dart' % test_name],
+  #       cwd=checkout.join(path))
 
   # keep the rest of this function in sync with
   # https://github.com/flutter/flutter/blob/master/travis/test.sh
@@ -78,9 +77,10 @@ def TestFlutterPackagesAndExamples(api):
   _flutter_test('examples/stocks')
 
   # We're not getting perf numbers from these, just making sure they run.
-  _drive_test('dev/benchmarks/complex_layout', 'scroll_perf')
-  _drive_test('examples/material_gallery', 'scroll_perf')
-  _drive_test('examples/stocks', 'scroll_perf')
+  # TODO(yjbanov): reenable when https://github.com/flutter/flutter/issues/3360 is fixed
+  # _drive_test('dev/benchmarks/complex_layout', 'scroll_perf')
+  # _drive_test('examples/material_gallery', 'scroll_perf')
+  # _drive_test('examples/stocks', 'scroll_perf')
 
 
 def TestCreateAndLaunch(api):
@@ -90,8 +90,6 @@ def TestCreateAndLaunch(api):
     app_path = temp_dir.join('sample_app')
     api.step('drive sample_app', ['flutter', 'drive', '--verbose'],
         cwd=app_path)
-    # Attempted hack around: https://github.com/flutter/flutter/issues/3360
-    api.step('kill simulator', ['killall', 'Simulator'])
 
 # TODO(eseidel): Would be nice to have this on api.path or api.file.
 @contextlib.contextmanager
