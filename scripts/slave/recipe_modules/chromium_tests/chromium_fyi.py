@@ -673,6 +673,7 @@ SPEC = {
     },
     'CrWinClang(shared)': {
       'chromium_config': 'chromium_win_clang',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',

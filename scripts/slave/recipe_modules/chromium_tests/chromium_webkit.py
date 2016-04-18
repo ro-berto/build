@@ -2,19 +2,16 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import copy
-
-from . import chromium_chromiumos
 from . import steps
 
-SPEC = copy.deepcopy(chromium_chromiumos.SPEC)
-for b in SPEC['builders'].itervalues():
-    b['gclient_apply_config'] = ['blink']
+SPEC = {
+  'settings': {
+    'build_gs_bucket': 'chromium-webkit-archive',
+    'src_side_runtest_py': False,
+  },
+}
 
-SPEC['settings']['build_gs_bucket'] = 'chromium-webkit-archive'
-SPEC['settings']['src_side_runtest_py'] = False
-
-SPEC['builders'].update({
+SPEC['builders'] = {
   'WebKit Win Builder': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb'],
@@ -547,4 +544,4 @@ SPEC['builders'].update({
     'enable_swarming': True,
     'use_isolate': True,
   },
-})
+}

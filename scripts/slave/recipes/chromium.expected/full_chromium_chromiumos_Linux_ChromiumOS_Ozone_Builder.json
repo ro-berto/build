@@ -193,6 +193,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "chromeos=1 component=static_library ffmpeg_branding=ChromeOS gomadir='[SLAVE_BUILD]/src/build/goma/client' proprietary_codecs=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 use_ozone=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -271,6 +272,31 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "clean isolated files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.chromiumos",
+      "-b",
+      "Linux ChromiumOS Ozone Builder",
+      "--config-file",
+      "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[SLAVE_BUILD]/src/build/goma/client",
+      "--swarming-targets-file",
+      "browser_tests\n",
+      "//out/Release"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+    ]
   },
   {
     "cmd": [
