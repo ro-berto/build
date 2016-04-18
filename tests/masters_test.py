@@ -254,7 +254,6 @@ def main(argv):
       'master.client.fletch': 'Dartino',
       'master.client.flutter': 'ClientFlutter',
       'master.client.gyp': 'GYP',
-      'master.client.legion': 'ClientLegion',
       'master.client.libyuv': 'Libyuv',
       'master.client.libvpx': 'Libvpx',
       'master.client.mojo': 'Mojo',
