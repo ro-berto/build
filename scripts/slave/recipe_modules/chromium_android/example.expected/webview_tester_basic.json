@@ -521,6 +521,8 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json",
+      "--reboot-timeout",
+      "1800",
       "--disable-system-chrome",
       "--remove-system-webview"
     ],

@@ -155,6 +155,7 @@ def RunSteps(api, buildername):
         disable_location=config.get('disable_location', False),
         min_battery_level=config.get('min_battery_level'),
         max_battery_temp=config.get('max_battery_temp'),
+        reboot_timeout=1800,
         remove_system_webview=config.get('remove_system_webview', False),
         disable_system_chrome=config.get('disable_system_chrome', False))
 

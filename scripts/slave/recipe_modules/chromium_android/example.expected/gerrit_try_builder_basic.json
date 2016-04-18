@@ -538,7 +538,9 @@
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json",
-      "--skip-wipe"
+      "--skip-wipe",
+      "--reboot-timeout",
+      "1800"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
