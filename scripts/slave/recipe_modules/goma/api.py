@@ -21,6 +21,25 @@ class GomaApi(recipe_api.RecipeApi):
   def ensure_goma(self, goma_dir, canary=False):
     # TODO(iannucci): switch to CIPD (https://goto.google.com/toxxq).
     with self.m.step.nest('ensure_goma'):
+      try:
+        # TODO(phajdan.jr): remove "no cover" after enabling on Windows.
+        if self.m.platform.is_win:  # pragma: no cover
+          creds = ('C:\\creds\\service_accounts\\'
+                   'service-account-goma-client.json')
+        else:
+          creds = '/creds/service_accounts/service-account-goma-client.json'
+        self.m.cipd.set_service_account_credentials(creds)
+
+        self.m.cipd.install_client()
+        goma_package = ('infra_internal/goma/client/%s' %
+            self.m.cipd.platform_suffix())
+        self.m.cipd.ensure(
+            self.m.path['cache'].join('cipd', 'goma'),
+            {goma_package: 'latest'})
+      except self.m.step.StepFailure:  # pragma: no cover
+        # TODO(phajdan.jr): make failures fatal after experiment.
+        pass
+
       args=[
           '--target-dir', goma_dir,
           '--download-from-google-storage-path',
