@@ -162,9 +162,12 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
 
       recipes_cfg_path = workdir.join('infra', 'config', 'recipes.cfg')
 
-      roll_step = self.m.python('roll',
-          self.m.path['checkout'].join('recipes-py', 'recipes.py'),
-          ['--package', recipes_cfg_path, 'autoroll',
+      # It's important we use the infra checkout virtualenv, e.g. for coverage
+      # python module.
+      roll_step = self.m.step('roll',
+          [self.m.path['checkout'].join('ENV', 'bin', 'python'), '-u',
+           self.m.path['checkout'].join('recipes-py', 'recipes.py'),
+           '--package', recipes_cfg_path, 'autoroll',
            '--output-json', self.m.json.output()])
       roll_result = roll_step.json.output
 
