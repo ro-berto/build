@@ -46,7 +46,6 @@ exclusions = {
   'V8 Linux64 - cfi': [],
   'V8 Linux64 - gcov coverage': [],
   'V8 Linux - predictable': [],
-  'V8 Win64 - clang': [],
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
