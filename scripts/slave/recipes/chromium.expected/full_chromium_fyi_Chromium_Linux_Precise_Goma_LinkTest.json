@@ -115,6 +115,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ensure_goma"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -126,7 +131,10 @@
       "--canary"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "ensure_goma"
+    "name": "ensure_goma.ensure_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [

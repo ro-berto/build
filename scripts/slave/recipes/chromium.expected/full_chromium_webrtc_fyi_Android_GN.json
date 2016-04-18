@@ -120,6 +120,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "ensure_goma"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -130,7 +135,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py"
     ],
     "cwd": "[SLAVE_BUILD]",
-    "name": "ensure_goma"
+    "name": "ensure_goma.ensure_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
