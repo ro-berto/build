@@ -87,7 +87,25 @@ def _install_cipd_packages(path, *binaries):
   return [os.path.join(path, b.relpath) for b in binaries]
 
 
-def main(args):
+def main(argv):
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--repository', required=True,
+      help='URL of a git repository to fetch.')
+  parser.add_argument('--revision',
+      help='Git commit hash to check out.')
+  parser.add_argument('--recipe', required=True,
+      help='Name of the recipe to run')
+  parser.add_argument('--build-properties-gz', dest='build_properties',
+      type=chromium_utils.convert_gz_json_type, default={},
+      help='Build properties in b64 gz JSON format')
+  parser.add_argument('--factory-properties-gz', dest='factory_properties',
+      type=chromium_utils.convert_gz_json_type, default={},
+      help='factory properties in b64 gz JSON format')
+  parser.add_argument('--leak', action='store_true',
+      help='Refrain from cleaning up generated artifacts.')
+  parser.add_argument('--verbose', action='store_true')
+  args = parser.parse_args(argv[1:])
+
   basedir = os.getcwd()
   cipd_path = os.path.join(basedir, '.kitchen_cipd')
   (kitchen,) = _install_cipd_packages(
@@ -120,31 +138,14 @@ def main(args):
 
 
 def shell_main(argv):
-  parser = argparse.ArgumentParser()
-  parser.add_argument('--repository', required=True,
-      help='URL of a git repository to fetch.')
-  parser.add_argument('--revision',
-      help='Git commit hash to check out.')
-  parser.add_argument('--recipe', required=True,
-      help='Name of the recipe to run')
-  parser.add_argument('--build-properties-gz', dest='build_properties',
-      type=chromium_utils.convert_gz_json_type, default={},
-      help='Build properties in b64 gz JSON format')
-  parser.add_argument('--factory-properties-gz', dest='factory_properties',
-      type=chromium_utils.convert_gz_json_type, default={},
-      help='factory properties in b64 gz JSON format')
-  parser.add_argument('--leak', action='store_true',
-      help='Refrain from cleaning up generated artifacts.')
-  parser.add_argument('--verbose', action='store_true')
-  args = parser.parse_args(argv[1:])
-
-  logging.basicConfig(level=(logging.DEBUG if args.verbose else logging.INFO))
+  logging.basicConfig(
+      level=(logging.DEBUG if '--verbose' in argv else logging.INFO))
 
   if update_scripts.update_scripts():
     # Re-execute with the updated kitchen_run.py.
     return _call([sys.executable] + argv)
 
-  return main(args)
+  return main(argv)
 
 
 if __name__ == '__main__':
