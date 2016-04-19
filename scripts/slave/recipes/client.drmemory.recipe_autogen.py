@@ -1298,7 +1298,8 @@ def win_builder_steps(api):
     basename = step_result.stdout[:-4]
     # Delete prior sfx archive step
     api.file.remove("Delete prior sfx archive",
-        api.path["slave_build"].join(basename + "-sfx.exe"))
+        api.path["slave_build"].join(basename + "-sfx.exe"),
+        ok_ret=(0,1))
     # Create sfx archive step
     api.step("create sfx archive",
              [api.path["build"].join("scripts", "slave", "drmemory",
