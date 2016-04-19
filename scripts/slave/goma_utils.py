@@ -78,7 +78,8 @@ def GetLatestGomaCompilerProxySubprocInfo():
   return GetLatestGlogInfoFile('compiler_proxy-subproc')
 
 
-def UploadToGomaLogGS(file_path, gs_filename, text_to_append=None):
+def UploadToGomaLogGS(
+    file_path, gs_filename, text_to_append=None, override_gsutil=None):
   """Upload a file to Google Cloud Storage (gs://chrome-goma-log).
 
   Note that the uploaded file would automatically be gzip compressed.
@@ -104,14 +105,14 @@ def UploadToGomaLogGS(file_path, gs_filename, text_to_append=None):
           shutil.copyfileobj(f_in, gzipf_out)
         if text_to_append:
           gzipf_out.write(text_to_append)
-    slave_utils.GSUtilCopy(temp.name, gs_path)
+    slave_utils.GSUtilCopy(temp.name, gs_path, override_gsutil=override_gsutil)
     print "Copied log file to %s" % gs_path
   finally:
     os.remove(temp.name)
   return log_path
 
 
-def UploadGomaCompilerProxyInfo():
+def UploadGomaCompilerProxyInfo(override_gsutil=None):
   """Upload goma compiler_proxy.INFO to Google Storage."""
   latest_subproc_info = GetLatestGomaCompilerProxySubprocInfo()
   if latest_subproc_info:
@@ -125,13 +126,16 @@ def UploadGomaCompilerProxyInfo():
     return
   # Since a filename of compiler_proxy.INFO is fairly unique,
   # we might be able to upload it as-is.
-  log_path = UploadToGomaLogGS(latest_info, os.path.basename(latest_info))
+  log_path = UploadToGomaLogGS(
+      latest_info, os.path.basename(latest_info),
+      override_gsutil=override_gsutil)
   viewer_url = ('http://chromium-build-stats.appspot.com/compiler_proxy_log/'
                 + log_path)
   print 'Visualization at %s' % viewer_url
 
 
-def UploadNinjaLog(outdir, compiler, command, exit_status):
+def UploadNinjaLog(
+    outdir, compiler, command, exit_status, override_gsutil=None):
   """Upload .ninja_log to Google Cloud Storage (gs://chrome-goma-log),
   in the same folder with goma's compiler_proxy.INFO.
 
@@ -173,7 +177,8 @@ def UploadNinjaLog(outdir, compiler, command, exit_status):
       hostname, username, mtime.strftime('%Y%m%d-%H%M%S'), pid)
   additional_text = '# end of ninja log\n' + json.dumps(info)
   log_path = UploadToGomaLogGS(
-    ninja_log_path, ninja_log_filename, additional_text)
+      ninja_log_path, ninja_log_filename, additional_text,
+      override_gsutil=override_gsutil)
   viewer_url = 'http://chromium-build-stats.appspot.com/ninja_log/' + log_path
   print 'Visualization at %s' % viewer_url
 

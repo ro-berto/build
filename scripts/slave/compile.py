@@ -199,9 +199,13 @@ def goma_setup(options, env):
                                                        'crash_report_id_file')
   chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
 
+  override_gsutil = None
+  if options.gsutil_py_path:
+    override_gsutil = [sys.executable, options.gsutil_py_path]
+
   # Upload compiler_proxy.INFO to investigate the reason of compiler_proxy
   # start-up failure.
-  goma_utils.UploadGomaCompilerProxyInfo()
+  goma_utils.UploadGomaCompilerProxyInfo(override_gsutil=override_gsutil)
   # Upload GomaStats to make it monitored.
   if env.get('GOMA_DUMP_STATS_FILE'):
     goma_utils.SendGomaStats(env['GOMA_DUMP_STATS_FILE'],
@@ -227,6 +231,10 @@ def goma_teardown(options, env, exit_status):
   """Tears down goma if necessary. """
   if (options.compiler in ('goma', 'goma-clang') and
       options.goma_dir):
+    override_gsutil = None
+    if options.gsutil_py_path:
+      override_gsutil = [sys.executable, options.gsutil_py_path]
+
     # If goma compiler_proxy crashes during the build, there could be crash
     # dump.
     if options.build_data_dir:
@@ -240,7 +248,7 @@ def goma_teardown(options, env, exit_status):
       goma_utils.SendGomaTsMon(options.goma_jsonstatus, exit_status)
     # Always stop the proxy for now to allow in-place update.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
-    goma_utils.UploadGomaCompilerProxyInfo()
+    goma_utils.UploadGomaCompilerProxyInfo(override_gsutil=override_gsutil)
     if env.get('GOMA_DUMP_STATS_FILE'):
       goma_utils.SendGomaStats(env['GOMA_DUMP_STATS_FILE'],
                                env.get('GOMACTL_CRASH_REPORT_ID_FILE'),
@@ -959,8 +967,14 @@ def main_ninja(options, args):
     return exit_status
   finally:
     goma_teardown(options, env, exit_status)
+
+    override_gsutil = None
+    if options.gsutil_py_path:
+      override_gsutil = [sys.executable, options.gsutil_py_path]
+
     goma_utils.UploadNinjaLog(
-        options.target_output_dir, options.compiler, command, exit_status)
+        options.target_output_dir, options.compiler, command, exit_status,
+        override_gsutil=override_gsutil)
 
 
 def main_win(options, args):
@@ -1252,6 +1266,8 @@ def real_main():
   option_parser.add_option('--goma-jsonstatus',
                            help='Specify a file to dump goma_ctl jsonstatus.')
   option_parser.add_option('--verbose', action='store_true')
+  option_parser.add_option('--gsutil-py-path',
+                           help='Specify path to gsutil.py script.')
   option_parser.add_option('--ninja-path', default='ninja',
                            help='Specify path to the ninja tool.')
   option_parser.add_option('--ninja-ensure-up-to-date', action='store_true',

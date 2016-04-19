@@ -375,7 +375,7 @@ def GSUtilGetMetadataField(name, provider_prefix=None):
 
 
 def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None,
-               metadata=None):
+               metadata=None, override_gsutil=None):
   """Copy a file to Google Storage.
 
   Runs the following command:
@@ -391,6 +391,7 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None,
     cache_control: optional value to set Cache-Control header
     metadata: (dict) A dictionary of string key/value metadata entries to set
         (see `gsutil cp' '-h' option)
+    override_gsutil (list): optional argv to run gsutil
   Returns:
     The status code returned from running the generated gsutil command.
   """
@@ -399,10 +400,11 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None,
     source = 'file://' + source
   if not dest.startswith('gs://') and not dest.startswith('file://'):
     dest = 'file://' + dest
+  # The setup also sets up some env variables - for now always run that.
   gsutil = GSUtilSetup()
   # Run the gsutil command. gsutil internally calls command_wrapper, which
   # will try to run the command 10 times if it fails.
-  command = [gsutil]
+  command = override_gsutil or [gsutil]
 
   if not metadata:
     metadata = {}
