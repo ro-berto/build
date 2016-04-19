@@ -348,20 +348,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "audio_decoder_unittests",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_audio_decoder_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release",
       "-t",
       "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "audio_decoder_unittests"
@@ -370,20 +365,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "common_audio_unittests",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_common_audio_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release",
       "-t",
       "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "common_audio_unittests"
@@ -392,20 +382,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "common_video_unittests",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_common_video_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release",
       "-t",
       "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "common_video_unittests"
@@ -414,20 +399,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "modules_tests",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_modules_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release",
       "-t",
       "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "modules_tests"
@@ -436,20 +416,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "modules_unittests",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_modules_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release",
       "-t",
       "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "modules_unittests"
@@ -458,20 +433,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "peerconnection_unittests",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_peerconnection_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release",
       "-t",
       "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "peerconnection_unittests"
@@ -480,20 +450,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "system_wrappers_unittests",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_system_wrappers_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release",
       "-t",
       "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "system_wrappers_unittests"
@@ -502,20 +467,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "test_support_unittests",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_test_support_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release",
       "-t",
       "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "test_support_unittests"
@@ -524,20 +484,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "tools_unittests",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_tools_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release",
       "-t",
       "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "tools_unittests"
@@ -546,20 +501,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "video_engine_tests",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_video_engine_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release",
       "-t",
       "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "video_engine_tests"
@@ -568,20 +518,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "voice_engine_unittests",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_voice_engine_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release",
       "-t",
       "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "voice_engine_unittests"
@@ -590,20 +535,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "webrtc_nonparallel_tests",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_webrtc_nonparallel_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release",
       "-t",
       "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "webrtc_nonparallel_tests"
@@ -612,20 +552,15 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/webrtc/build/android/test_runner.py",
-      "gtest",
-      "-s",
-      "webrtc_perf_tests",
+      "[SLAVE_BUILD]/src/out/Release/bin/run_webrtc_perf_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
-      "--release",
       "-t",
       "2700"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "webrtc_perf_tests"
