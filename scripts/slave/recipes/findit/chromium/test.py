@@ -13,6 +13,7 @@ DEPS = [
     'adb',
     'depot_tools/bot_update',
     'chromium',
+    'chromium_android',
     'chromium_tests',
     'commit_position',
     'findit',
