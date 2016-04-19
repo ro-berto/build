@@ -630,6 +630,9 @@
       "--results-label=bad49c331def2a3bbf3ddd0096eb51551155"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
+    },
     "name": "Performance Test (bad49c331def2a3bbf3ddd0096eb51551155) 1 of 1",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
@@ -862,6 +865,9 @@
       "--results-label=d49c331def2a3bbf3ddd0096eb51551155"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
+    },
     "name": "Performance Test (d49c331def2a3bbf3ddd0096eb51551155) 1 of 1",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",

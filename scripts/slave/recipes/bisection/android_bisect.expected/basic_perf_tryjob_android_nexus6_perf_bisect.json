@@ -515,6 +515,9 @@
       "--results-label=Patch"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
+    },
     "name": "Performance Test (With Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
@@ -747,6 +750,9 @@
       "--results-label=TOT"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release"
+    },
     "name": "Performance Test (Without Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",

@@ -191,12 +191,20 @@ def _run_command(api, command, step_name):
   command_parts = command.split()
   stdout = api.m.raw_io.output()
   stderr = api.m.raw_io.output()
+
+  # TODO(prasadv): Remove this once bisect runs are no longer running
+  # against revisions from February 2016 or earlier.
+  kwargs = {}
+  if 'android-chrome' in command:  # pragma: no cover
+    kwargs['env'] = {'CHROMIUM_OUTPUT_DIR': api.m.chromium.output_dir}
+
   try:
     step_result = api.m.step(
         step_name,
         command_parts,
         stdout=stdout,
-        stderr=stderr)
+        stderr=stderr,
+        **kwargs)
     step_result.presentation.logs['Captured Output'] = (
         step_result.stdout or '').splitlines()
   except api.m.step.StepFailure as sf:
