@@ -20,10 +20,14 @@ def get_reviewers(commit_infos):
         for m in re.findall(
             '^%s=(.*)' % field, commit['message'], re.MULTILINE):
           for s in m.split(','):
-            if s:
-              # TODO(martiniss): infer domain for email address somehow?
-              if '@' in s:
-                reviewers.add(s.strip())
+            # TODO(martiniss): infer domain for email address somehow?
+            parts = s.split('@')
+            if len(parts) != 2:
+              continue
+            # This mirrors a check in depot_tools/third_party/upload.py .
+            if '.' not in parts[1]:
+              continue
+            reviewers.add(s.strip())
   return reviewers
 
 

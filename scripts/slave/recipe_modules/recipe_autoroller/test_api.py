@@ -21,9 +21,9 @@ class RecipeAutorollerTestApi(recipe_test_api.RecipeTestApi):
           {
             'author': 'foo@chromium.org',
             'message': '\n'.join([
-                'some commit message',
-                'R=bar@chromium.org,baz@chromium.org',
-                'BUG=123,456',
+              'some commit message',
+              'R=bar@chromium.org,baz@chromium.org,invalid1,invalid2@chromium',
+              'BUG=123,456',
             ]),
             'revision': '123abc',
           },
