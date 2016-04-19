@@ -618,12 +618,8 @@
         ],
         "builders": {
           "V8 Linux - predictable": {
-            "excluded_steps": [
-              "Mjsunit",
-              "Webkit",
-              "Benchmarks",
-              "Test262",
-              "Mozilla"
+            "categories": [
+              "v8_compile"
             ]
           },
           "*": {}
@@ -657,13 +653,10 @@
     "https://build.chromium.org/p/client.v8.fyi": [
       {
         "categories": [
-          "v8_all"
+          "v8_compile"
         ],
         "excluded_builders" : [
           "Linux Snapshot Builder",
-          "Chrome Win7 Perf",
-          "Chrome Mac10.9 Perf",
-          "Chrome Linux Perf",
           "Chromium Win SyzyASAN"
         ],
         "builders": {
@@ -920,28 +913,11 @@
     },
     "v8_all": {
       "closing_optional": [
-        "compile",
-        "gn",
-        "gclient runhooks",
-        "runhooks",
-        "Presubmit",
-        "Static-Initializers",
-        "Check",
-        "Unittests",
-        "OptimizeForSize",
-        "Mjsunit",
-        "Webkit",
-        "Benchmarks",
-        "SimdJs - all",
-        "SimdJs - small",
-        "Test262",
-        "Test262 - no variants",
-        "Mozilla",
-        "GCMole arm",
-        "GCMole arm64",
-        "GCMole ia32",
-        "GCMole x64",
-        "Simple Leak Check"
+        "*"
+      ],
+      "excluded_steps": [
+        "update_scripts",
+        "steps"
       ],
       "forgiving_optional": [
         "bot_update",
@@ -949,6 +925,24 @@
         "package build",
         "extract build",
         "cleanup_temp",
+        "gsutil upload",
+        "taskkill"
+      ],
+      "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)"
+    },
+    "v8_compile": {
+      "closing_optional": [
+        "compile",
+        "gn",
+        "gclient runhooks"
+      ],
+      "forgiving_optional": [
+        "bot_update",
+        "isolate tests",
+        "package build",
+        "extract build",
+        "cleanup_temp",
+        "gsutil upload",
         "taskkill"
       ],
       "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)"
