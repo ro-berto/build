@@ -354,7 +354,7 @@
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "Zip android-arm-deploy Artifacts",
+    "name": "Zip android-arm-release Artifacts",
     "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[SLAVE_BUILD]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"SkyShell.apk\", \"path\": \"[SLAVE_BUILD]/src/out/android_Release_Deploy/apks/SkyShell.apk\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_Release_Deploy/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"flutter.mojo\", \"path\": \"[SLAVE_BUILD]/src/out/android_Release_Deploy/flutter.mojo\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[SLAVE_BUILD]/src/out/android_Release_Deploy/gen/sky/shell/shell/shell/libs/armeabi-v7a/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[SLAVE_BUILD]/src/out/android_Release_Deploy/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[SLAVE_BUILD]/src/out/android_Release_Deploy/gen/sky/shell/shell/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_3/artifacts.zip\", \"root\": \"[SLAVE_BUILD]/src\"}"
   },
   {
@@ -367,15 +367,15 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_3/artifacts.zip",
-      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-deploy/artifacts.zip"
+      "gs://flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-release/artifacts.zip"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "PATH": "[SLAVE_BUILD]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
-    "name": "gsutil upload android-arm-deploy/artifacts.zip",
+    "name": "gsutil upload android-arm-release/artifacts.zip",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-deploy/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9/android-arm-release/artifacts.zip@@@"
     ]
   },
   {

@@ -124,7 +124,7 @@ def BuildLinuxAndroidArm(api):
 
   RunGN(api, '--release', '--android', '--deploy')
   Build(api, 'android_Release_Deploy', ':dist')
-  UploadArtifacts(api, 'android-arm-deploy', [
+  UploadArtifacts(api, 'android-arm-release', [
     'build/android/ant/chromium-debug.keystore',
   ] + AddPathPrefix(api, 'out/android_Release_Deploy', out_paths))
 

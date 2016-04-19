@@ -296,7 +296,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "flutter build ios examples/stocks"
+    "name": "flutter build ios stocks"
   },
   {
     "cmd": [
@@ -311,7 +311,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "flutter build ios simulator examples/stocks"
+    "name": "flutter build ios simulator stocks"
   },
   {
     "cmd": [
@@ -340,7 +340,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "flutter build ios examples/material_gallery"
+    "name": "flutter build ios material_gallery"
   },
   {
     "cmd": [
@@ -355,7 +355,7 @@
       "PATH": "[SLAVE_BUILD]/flutter/bin:[SLAVE_BUILD]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[SLAVE_BUILD]/.pub-cache"
     },
-    "name": "flutter build ios simulator examples/material_gallery"
+    "name": "flutter build ios simulator material_gallery"
   },
   {
     "cmd": [
