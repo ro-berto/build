@@ -6,7 +6,7 @@
 # from multiple recipes.
 
 from recipe_engine.types import freeze
-from testing import V8NoExhaustiveVariants, V8NoVariants, V8Variant
+from testing import V8NoExhaustiveVariants, V8Variant
 
 
 class TestStepConfig(object):
@@ -385,7 +385,7 @@ BUILDERS = {
         'build_gs_archive': 'linux_dbg_archive',
         'enable_swarming': True,
         'tests': [Mjsunit, Mozilla, Test262, Benchmarks, SimdJs],
-        'variants': V8NoVariants(),
+        'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - greedy allocator': {
@@ -1256,7 +1256,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Arm - debug builder',
         'tests': [Mjsunit_2, Webkit],
-        'variants': V8NoVariants(),
+        'variants': V8Variant('default'),
         'enable_swarming': True,
         'swarming_properties': {
           'default_hard_timeout': 60 * 60,

@@ -267,7 +267,7 @@
       "--random-seed=-973526194",
       "optimize_for_size",
       "--extra-flags=--optimize-for-size",
-      "--no-variants",
+      "--variants=default",
       "--rerun-failures-count=2",
       "--swarming",
       "--json-test-results",

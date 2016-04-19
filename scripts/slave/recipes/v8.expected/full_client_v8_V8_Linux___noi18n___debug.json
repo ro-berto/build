@@ -235,7 +235,7 @@
       "test262",
       "--download-data",
       "--noi18n",
-      "--no-variants",
+      "--variants=default",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"

@@ -182,7 +182,7 @@
       "--random-seed=-358114921",
       "test262",
       "--download-data",
-      "--no-variants",
+      "--variants=default",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"

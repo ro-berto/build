@@ -381,7 +381,7 @@
       "--random-seed=1950386076",
       "test262",
       "--download-data",
-      "--no-variants",
+      "--variants=default",
       "--tsan",
       "--rerun-failures-count=2",
       "--swarming",

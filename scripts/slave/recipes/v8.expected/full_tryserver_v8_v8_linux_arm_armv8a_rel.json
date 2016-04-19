@@ -393,7 +393,7 @@
       "--download-data",
       "--extra-flags",
       "--enable-armv8",
-      "--no-variants",
+      "--variants=default",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
       "--swarming",

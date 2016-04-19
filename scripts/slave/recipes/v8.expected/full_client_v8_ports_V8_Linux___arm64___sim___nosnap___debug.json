@@ -382,7 +382,7 @@
       "test262",
       "--download-data",
       "--no-snap",
-      "--no-variants",
+      "--variants=default",
       "--rerun-failures-count=2",
       "--swarming",
       "--json-test-results",

@@ -19,17 +19,13 @@ class V8TestingVariants(object):
 
   The variants have the following allowed transitions:
   exhaustive variants -> no exhaustive variants -> one specific variant
-
-  "no variants" is synonym to the specific variant called "default".
   """
   def __init__(self):
     self.test_args = []
 
   def __eq__(self, other):
     assert isinstance(other, V8TestingVariants)
-    synonyms = [['--variants=default'], ['--no-variants']]
-    return (self.test_args == other.test_args or
-            self.test_args in synonyms and other.test_args in synonyms)
+    return self.test_args == other.test_args
 
   def __add__(self, other):
     """Use + to specify variants with the more specific one on the right-hand
@@ -64,16 +60,10 @@ class V8Variant(V8TestingVariants):
 
   def _specify(self, other):
     # A specific variant cannot be replaced by a different one. E.g. if a
-    # builder is specified to run with "no variants" it can't have a test step
+    # builder is specified to run with the default it can't have a test step
     # that runs ignition only.
     assert self == other
     return other
-
-
-class V8NoVariants(V8Variant):
-  """Convenience class for the "no variants" == "default variant" synonym."""
-  def __init__(self):
-    self.test_args = ['--no-variants']
 
 
 TEST_CONFIGS = freeze({
@@ -125,7 +115,7 @@ TEST_CONFIGS = freeze({
     'tests': ['optimize_for_size'],
     'suite_mapping': ['mjsunit', 'cctest', 'webkit', 'intl'],
     'test_args': ['--extra-flags=--optimize-for-size'],
-    'variants': V8NoVariants(),
+    'variants': V8Variant('default'),
   },
   'simdjs': {
     'name': 'SimdJs - all',
@@ -140,7 +130,7 @@ TEST_CONFIGS = freeze({
     'name': 'Test262 - no variants',
     'tests': ['test262'],
     'test_args': ['--download-data'],
-    'variants': V8NoVariants(),
+    'variants': V8Variant('default'),
   },
   'test262_ignition': {
     'name': 'Test262 - ignition',

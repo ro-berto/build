@@ -451,7 +451,7 @@
       "--random-seed=1127209095",
       "test262",
       "--download-data",
-      "--no-variants",
+      "--variants=default",
       "--rerun-failures-count=2",
       "--swarming",
       "--json-test-results",

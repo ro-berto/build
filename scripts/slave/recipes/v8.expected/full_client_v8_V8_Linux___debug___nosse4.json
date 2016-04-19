@@ -266,7 +266,7 @@
       "--download-data",
       "--extra-flags",
       "--noenable-sse4-1 --noenable-avx",
-      "--no-variants",
+      "--variants=default",
       "--rerun-failures-count=2",
       "--swarming",
       "--json-test-results",

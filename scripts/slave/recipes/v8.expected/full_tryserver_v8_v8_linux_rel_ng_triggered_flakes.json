@@ -275,7 +275,7 @@
       "--random-seed=1300525911",
       "optimize_for_size",
       "--extra-flags=--optimize-for-size",
-      "--no-variants",
+      "--variants=default",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
       "--swarming",
