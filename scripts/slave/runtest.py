@@ -1368,7 +1368,8 @@ def _MainLinux(options, args, extra_env):
       pipes = [symbolize_command]
 
     # Temporary code to help track down crbug.com/522396
-    if 'win_chromium_rel_ng' in sys.argv and 'layout_test_wrapper' in sys.argv:
+    argv_str = str(sys.argv)
+    if 'win_chromium_rel_ng' in argv_str and 'layout_test_wrapper' in argv_str:
       print 'Not running layout tests through runisolatedtest.py'
     else:
       command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
