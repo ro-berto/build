@@ -63,6 +63,17 @@
   },
   {
     "cmd": [
+      "build/gyp_chromium"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "env": {
+      "CPPFLAGS": "-DSK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS=1",
+      "GYP_GENERATORS": "ninja"
+    },
+    "name": "gyp_chromium"
+  },
+  {
+    "cmd": [
       "ninja",
       "-C",
       "out/Release",

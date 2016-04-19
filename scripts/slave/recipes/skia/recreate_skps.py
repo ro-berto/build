@@ -40,6 +40,12 @@ def RunSteps(api, buildername):
   api.gclient.runhooks(
       env={'CPPFLAGS': '-DSK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS=1'})
 
+  # Call build/gyp_chromium
+  api.step('gyp_chromium',
+           ['build/gyp_chromium'],
+           env={'CPPFLAGS': '-DSK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS=1',
+                'GYP_GENERATORS': 'ninja'},
+           cwd=api.path['checkout'])
   # Build Chrome.
   api.step('Build Chrome',
            ['ninja', '-C', 'out/Release', 'chrome'],
