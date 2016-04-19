@@ -117,7 +117,8 @@ def UploadGomaCompilerProxyInfo(override_gsutil=None):
   latest_subproc_info = GetLatestGomaCompilerProxySubprocInfo()
   if latest_subproc_info:
     UploadToGomaLogGS(latest_subproc_info,
-                      os.path.basename(latest_subproc_info))
+                      os.path.basename(latest_subproc_info),
+                      override_gsutil=override_gsutil)
   else:
     print 'No compiler_proxy-subproc.INFO to upload'
   latest_info = GetLatestGomaCompilerProxyInfo()
