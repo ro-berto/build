@@ -582,7 +582,7 @@ class V8Api(recipe_api.RecipeApi):
   def maybe_bisect(self, test_results):
     """Build-local bisection for one failure."""
     # Don't activate for branch or fyi bots.
-    if self.m.properties['mastername'] != 'client.v8':
+    if self.m.properties['mastername'] not in ['client.v8', 'client.v8.ports']:
       return
 
     if self.bot_config.get('disable_auto_bisect'):  # pragma: no cover
