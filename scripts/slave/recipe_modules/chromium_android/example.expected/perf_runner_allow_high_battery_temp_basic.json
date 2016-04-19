@@ -746,16 +746,21 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/out/Release/bin/run_unittests",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "gtest",
+      "-s",
+      "unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
       "--verbose",
+      "--release",
       "--isolate_file_path=[SLAVE_BUILD]/src/some_file.isolate",
       "--gtest_filter=WebRtc*",
       "--tool=asan"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "unittests"

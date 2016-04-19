@@ -20,18 +20,18 @@ DEPS = [
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
 UNITTESTS = freeze([
-  'android_webview_unittests',
-  'base_unittests',
-  'cc_unittests',
-  'components_unittests',
-  'events_unittests',
-  'gl_tests',
-  'ipc_tests',
-  'skia_unittests',
-  'sql_unittests',
-  'sync_unit_tests',
-  'ui_android_unittests',
-  'ui_touch_selection_unittests',
+  ['android_webview_unittests', None],
+  ['base_unittests', ['base', 'base_unittests.isolate']],
+  ['cc_unittests', None],
+  ['components_unittests', ['components', 'components_unittests.isolate']],
+  ['events_unittests', None],
+  ['gl_tests', None],
+  ['ipc_tests', None],
+  ['skia_unittests', None],
+  ['sql_unittests', ['sql', 'sql_unittests.isolate']],
+  ['sync_unit_tests', ['sync', 'sync_unit_tests.isolate']],
+  ['ui_android_unittests', None],
+  ['ui_touch_selection_unittests', None],
 ])
 
 BUILDERS = freeze({
@@ -75,10 +75,8 @@ def RunSteps(api, mastername, buildername):
     api.chromium.run_mb(mastername, buildername, use_goma=True)
 
   targets = []
-  for target in builder.get('unittests', []):
-    # TODO(agrieve): Remove the _apk entry once GYP is gone.
+  for target, _ in builder.get('unittests', []):
     targets.append(target + '_apk')
-    targets.append('bin/run_%s' % target)
   api.chromium.compile(targets=targets)
 
   api.emulator.install_emulator_deps(api_level=builder.get('api_level'))
@@ -99,8 +97,12 @@ def RunSteps(api, mastername, buildername):
 
     try:
       with api.step.defer_results():
-        for suite in builder.get('unittests', []):
-          api.chromium_android.run_test_suite(suite)
+        for suite, isolate_file in builder.get('unittests', []):
+          isolate_file_path = (
+              api.path['checkout'].join(*isolate_file)
+              if isolate_file else None)
+          api.chromium_android.run_test_suite(
+              suite, isolate_file_path=isolate_file_path)
     finally:
       api.chromium_android.logcat_dump()
       api.chromium_android.stack_tool_steps()

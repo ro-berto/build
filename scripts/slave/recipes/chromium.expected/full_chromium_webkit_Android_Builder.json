@@ -321,8 +321,6 @@
       "--goma-dir",
       "[SLAVE_BUILD]/src/build/goma/client",
       "--",
-      "bin/run_blink_heap_unittests",
-      "bin/run_webkit_unit_tests",
       "blink_heap_unittests_apk",
       "blink_tests",
       "webkit_unit_tests_apk"
