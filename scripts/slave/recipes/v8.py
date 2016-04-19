@@ -305,7 +305,7 @@ def GenTests(api):
         'V8 Linux64 - debug - greedy allocator',
         'bisect_tester',
     ) +
-    api.v8.fail('Check') +
+    api.v8.fail('Check', variant='turbofan') +
     api.time.step(120)
   )
 

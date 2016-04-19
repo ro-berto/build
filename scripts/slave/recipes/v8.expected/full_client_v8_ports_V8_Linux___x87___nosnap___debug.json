@@ -142,8 +142,8 @@
       "--timeout=200",
       "--random-seed=-358114921",
       "bot_default",
-      "--exhaustive-variants",
       "--no-snap",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"

@@ -233,9 +233,9 @@
       "--timeout=200",
       "--random-seed=-358114921",
       "test262",
-      "--no-variants",
       "--download-data",
       "--noi18n",
+      "--no-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"

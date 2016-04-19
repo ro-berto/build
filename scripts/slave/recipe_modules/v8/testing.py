@@ -6,6 +6,76 @@ import re
 from recipe_engine.types import freeze
 
 
+class V8TestingVariants(object):
+  """Immutable class to manage the testing variant passed to v8.
+
+  There are several test-runner flags that determine the v8-side testing
+  variants to be used. This class manages passing those flags to the runner
+  and makes sure that only one such flag is passed.
+
+  Infra test configurations might specify the variants on different levels,
+  e.g. per test, per step or per builder. This class makes sure that a more
+  specific config can only choose more specific variants.
+
+  The variants have the following allowed transitions:
+  exhaustive variants -> no exhaustive variants -> one specific variant
+
+  "no variants" is synonym to the specific variant called "default".
+  """
+  def __init__(self):
+    self.test_args = []
+
+  def __eq__(self, other):
+    assert isinstance(other, V8TestingVariants)
+    synonyms = [['--variants=default'], ['--no-variants']]
+    return (self.test_args == other.test_args or
+            self.test_args in synonyms and other.test_args in synonyms)
+
+  def __add__(self, other):
+    """Use + to specify variants with the more specific one on the right-hand
+    side.
+    """
+    assert isinstance(other, V8TestingVariants)
+    return self._specify(other)
+
+  def _specify(other):  # pragma: no cover
+    raise NotImplementedError()
+
+
+class V8ExhaustiveVariants(V8TestingVariants):
+  def __init__(self):
+    self.test_args = ['--exhaustive-variants']
+
+  def _specify(self, other):
+    # Exhaustive variants can transition into any other variant config.
+    return other
+
+
+class V8NoExhaustiveVariants(V8TestingVariants):
+  def _specify(self, other):
+    assert not isinstance(other, V8ExhaustiveVariants)
+    # This is used to remove the default exhaustive variants on some bots.
+    return other
+
+
+class V8Variant(V8TestingVariants):
+  def __init__(self, name):
+    self.test_args = ['--variants=' + name]
+
+  def _specify(self, other):
+    # A specific variant cannot be replaced by a different one. E.g. if a
+    # builder is specified to run with "no variants" it can't have a test step
+    # that runs ignition only.
+    assert self == other
+    return other
+
+
+class V8NoVariants(V8Variant):
+  """Convenience class for the "no variants" == "default variant" synonym."""
+  def __init__(self):
+    self.test_args = ['--no-variants']
+
+
 TEST_CONFIGS = freeze({
   'benchmarks': {
     'name': 'Benchmarks',
@@ -27,7 +97,8 @@ TEST_CONFIGS = freeze({
   'ignition': {
     'name': 'Ignition',
     'tests': ['ignition'],
-    'test_args': ['--variants=ignition', '--ignition'],
+    'test_args': ['--ignition'],
+    'variants': V8Variant('ignition'),
   },
   'mjsunit': {
     'name': 'Mjsunit',
@@ -36,13 +107,14 @@ TEST_CONFIGS = freeze({
   'mjsunit_ignition': {
     'name': 'Mjsunit - ignition',
     'tests': ['mjsunit'],
-    'test_args': ['--variants=ignition', '--ignition'],
+    'test_args': ['--ignition'],
+    'variants': V8Variant('ignition'),
   },
   'mjsunit_sp_frame_access': {
     'name': 'Mjsunit - sp frame access',
     'tests': ['mjsunit'],
-    'test_args': [
-      '--variants=turbofan', '--extra-flags=--turbo_sp_frame_access'],
+    'test_args': ['--extra-flags=--turbo_sp_frame_access'],
+    'variants': V8Variant('turbofan'),
   },
   'mozilla': {
     'name': 'Mozilla',
@@ -52,7 +124,8 @@ TEST_CONFIGS = freeze({
     'name': 'OptimizeForSize',
     'tests': ['optimize_for_size'],
     'suite_mapping': ['mjsunit', 'cctest', 'webkit', 'intl'],
-    'test_args': ['--no-variants', '--extra-flags=--optimize-for-size'],
+    'test_args': ['--extra-flags=--optimize-for-size'],
+    'variants': V8NoVariants(),
   },
   'simdjs': {
     'name': 'SimdJs - all',
@@ -66,12 +139,14 @@ TEST_CONFIGS = freeze({
   'test262': {
     'name': 'Test262 - no variants',
     'tests': ['test262'],
-    'test_args': ['--no-variants', '--download-data'],
+    'test_args': ['--download-data'],
+    'variants': V8NoVariants(),
   },
   'test262_ignition': {
     'name': 'Test262 - ignition',
     'tests': ['test262'],
-    'test_args': ['--variants=ignition', '--ignition', '--download-data'],
+    'test_args': ['--ignition', '--download-data'],
+    'variants': V8Variant('ignition'),
   },
   'test262_variants': {
     'name': 'Test262',
@@ -362,13 +437,7 @@ class V8Test(BaseTest):
     isolated_target = orig_config.get(
         'isolated_target', orig_config['tests'][0])
 
-    # Filter variant manipulation from test arguments.
-    # We'll specify exactly the variant which failed.
-    orig_args = [x for x in orig_config.get('test_args', [])
-                 if x != '--no-variants']
-
-    new_args = [
-      '--variants', failure_dict['variant'],
+    test_args = orig_config.get('test_args', []) + [
       '--random-seed', failure_dict['random_seed'],
     ]
 
@@ -376,7 +445,8 @@ class V8Test(BaseTest):
       'name': 'Retry',
       'isolated_target': isolated_target,
       'tests': [failure_dict['name']],
-      'test_args' : orig_args + new_args,
+      'test_args': test_args,
+      'variants': V8Variant(failure_dict['variant'])
     }
 
     # Switch off test filters on rerun.

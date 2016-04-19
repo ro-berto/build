@@ -141,8 +141,8 @@
       "--timeout=200",
       "--random-seed=-358114921",
       "bot_default",
-      "--exhaustive-variants",
       "--isolates",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -836,12 +836,10 @@
       "--buildbot",
       "--timeout=200",
       "other-suite/dir/other-test-very-long-name0",
-      "--variants",
-      "default",
       "--random-seed",
       "123",
-      "--exhaustive-variants",
       "--isolates",
+      "--variants=default",
       "--rerun-failures-count=0",
       "--json-test-results",
       "/path/to/tmp/json"

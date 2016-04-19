@@ -873,6 +873,11 @@ class V8Api(recipe_api.RecipeApi):
     # Add builder-specific test arguments.
     full_args += self.c.testing.test_args
 
+    # Add builder- and test-specific variants.
+    variants = self.bot_config.get('variants', testing.V8ExhaustiveVariants())
+    variants += test.get('variants', variants)
+    full_args += variants.test_args
+
     full_args = self._with_extra_flags(full_args)
 
     if self.run_dynamorio:

@@ -40,9 +40,7 @@ config_ctx = config_item_context(BaseConfig)
 
 @config_ctx()
 def v8(c):
-  # Use the exhaustive set of testing variants by default. It's removed on bots
-  # that are too slow for it.
-  c.testing.test_args.append('--exhaustive-variants')
+  pass
 
 
 @config_ctx()
@@ -131,23 +129,6 @@ def nosse4(c):
 @config_ctx()
 def no_harness(c):
   c.testing.test_args.append('--no-harness')
-
-
-@config_ctx()
-def no_exhaustive_variants(c):
-  test_args = list(c.testing.test_args)
-  test_args.remove('--exhaustive-variants')
-  c.testing.test_args = test_args
-
-
-@config_ctx(includes=['no_exhaustive_variants'])
-def no_variants(c):
-  c.testing.test_args.append('--no-variants')
-
-
-@config_ctx(includes=['no_exhaustive_variants'])
-def turbo_variant(c):
-  c.testing.test_args.append('--variants=turbofan')
 
 
 @config_ctx()

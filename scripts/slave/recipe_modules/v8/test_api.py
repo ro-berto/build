@@ -214,7 +214,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'slowest_tests': V8TestApi.SLOWEST_TESTS,
     }])
 
-  def failures_example(self):
+  def failures_example(self, variant='default'):
     return self.m.json.output([{
       'arch': 'theArch',
       'mode': 'theMode',
@@ -224,7 +224,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           'result': 'FAIL',
           'expected': ['PASS', 'SLOW'],
           'duration': 3,
-          'variant': 'default',
+          'variant': variant,
           'random_seed': 123,
           'run': 1,
           'stdout': 'Some output.',
@@ -239,7 +239,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           'result': 'FAIL',
           'expected': ['PASS', 'SLOW'],
           'duration': 1.5,
-          'variant': 'default',
+          'variant': variant,
           'random_seed': 123,
           'run': 1,
           'stdout': 'Some output.',
@@ -390,9 +390,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
 
     return test
 
-  def fail(self, step_name):
+  def fail(self, step_name, variant='default'):
     return self.override_step_data(
-        step_name, self.failures_example())
+        step_name, self.failures_example(variant=variant))
 
   @recipe_test_api.mod_test_data
   @staticmethod

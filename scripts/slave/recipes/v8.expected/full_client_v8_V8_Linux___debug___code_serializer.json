@@ -360,7 +360,6 @@
       "--timeout=200",
       "--random-seed=1975875041",
       "test262",
-      "--no-variants",
       "--download-data",
       "--extra-flags",
       "--serialize-toplevel --cache=code",

@@ -6,6 +6,7 @@
 # from multiple recipes.
 
 from recipe_engine.types import freeze
+from testing import V8NoExhaustiveVariants, V8NoVariants, V8Variant
 
 
 class TestStepConfig(object):
@@ -362,7 +363,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - noi18n - debug': {
-        'v8_apply_config': ['no_i18n', 'no_exhaustive_variants'],
+        'v8_apply_config': ['no_i18n'],
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'no_i18n'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -370,10 +371,11 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [V8Testing, Mozilla, Test262, SimdJs],
+        'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - code serializer': {
-        'v8_apply_config': ['code_serializer', 'no_variants'],
+        'v8_apply_config': ['code_serializer'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -383,10 +385,11 @@ BUILDERS = {
         'build_gs_archive': 'linux_dbg_archive',
         'enable_swarming': True,
         'tests': [Mjsunit, Mozilla, Test262, Benchmarks, SimdJs],
+        'variants': V8NoVariants(),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - greedy allocator': {
-        'v8_apply_config': ['greedy_allocator', 'turbo_variant'],
+        'v8_apply_config': ['greedy_allocator'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -397,6 +400,7 @@ BUILDERS = {
         'enable_swarming': True,
         # TODO(machenbach): Add test262 and mozilla tests.
         'tests': [V8Testing, Benchmarks, SimdJs],
+        'variants': V8Variant('turbofan'),
         'testing': {'platform': 'linux'},
       },
 ####### Category: Linux64
@@ -564,7 +568,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - debug - greedy allocator': {
-        'v8_apply_config': ['greedy_allocator', 'turbo_variant'],
+        'v8_apply_config': ['greedy_allocator'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -576,6 +580,7 @@ BUILDERS = {
         'enable_swarming': True,
         # TODO(machenbach): Add test262 and mozilla tests.
         'tests': [V8Testing, Benchmarks, SimdJs],
+        'variants': V8Variant('turbofan'),
         'testing': {'platform': 'linux'},
       },
 ####### Category: Windows
@@ -800,7 +805,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Deopt Fuzzer': {
-        'v8_apply_config': ['deopt_fuzz_normal', 'no_exhaustive_variants'],
+        'v8_apply_config': ['deopt_fuzz_normal'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -810,6 +815,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'tests': [Deopt],
+        'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - gc stress': {
@@ -1117,7 +1123,7 @@ BUILDERS = {
       },
       'V8 Random Deopt Fuzzer - debug': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
-        'v8_apply_config': ['deopt_fuzz_random', 'no_exhaustive_variants'],
+        'v8_apply_config': ['deopt_fuzz_random'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1128,6 +1134,7 @@ BUILDERS = {
           'default_hard_timeout': 4 * 60 * 60,
         },
         'tests': [Deopt],
+        'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
     },
@@ -1215,7 +1222,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Arm - debug': {
-        'v8_apply_config': ['no_exhaustive_variants'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
@@ -1228,6 +1234,7 @@ BUILDERS = {
           OptimizeForSize,
           SimdJs,
         ],
+        'variants': V8NoExhaustiveVariants(),
         'enable_swarming': True,
         'swarming_properties': {
           'default_hard_timeout': 60 * 60,
@@ -1240,7 +1247,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Arm GC Stress': {
-        'v8_apply_config': ['gc_stress', 'no_variants'],
+        'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
@@ -1249,6 +1256,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Arm - debug builder',
         'tests': [Mjsunit_2, Webkit],
+        'variants': V8NoVariants(),
         'enable_swarming': True,
         'swarming_properties': {
           'default_hard_timeout': 60 * 60,
@@ -1341,7 +1349,7 @@ BUILDERS = {
       'V8 Linux - arm - sim - debug - novfp3': {
         'chromium_apply_config': [
           'clang', 'v8_ninja', 'goma', 'simulate_arm', 'novfp3'],
-        'v8_apply_config': ['novfp3', 'no_exhaustive_variants'],
+        'v8_apply_config': ['novfp3'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1350,6 +1358,7 @@ BUILDERS = {
         'enable_swarming': True,
         'swarming_properties': {'default_priority': 35},
         'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
+        'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
 ####### Category: ARM64
@@ -1725,7 +1734,7 @@ BUILDERS = {
       },
       'v8_linux_greedy_allocator_dbg': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
-        'v8_apply_config': ['greedy_allocator', 'turbo_variant'],
+        'v8_apply_config': ['greedy_allocator'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1734,6 +1743,7 @@ BUILDERS = {
         'enable_swarming': True,
         # TODO(machenbach): Add test262 and mozilla.
         'tests': [V8Testing_2, Benchmarks, SimdJs],
+        'variants': V8Variant('turbofan'),
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_rel': {
@@ -1868,7 +1878,7 @@ BUILDERS = {
       },
       'v8_linux64_greedy_allocator_dbg': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma'],
-        'v8_apply_config': ['greedy_allocator', 'turbo_variant'],
+        'v8_apply_config': ['greedy_allocator'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1876,6 +1886,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [V8Testing_2, Benchmarks],
+        'variants': V8Variant('turbofan'),
         'testing': {'platform': 'linux'},
       },
       'v8_linux_gc_stress_dbg': {
@@ -1911,9 +1922,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_asan_rel_ng_triggered': {
-        # TODO(machenbach): Run with exhaustive variants as soon as bot runs
-        # on swarming.
-        'v8_apply_config': ['no_exhaustive_variants'],
         'chromium_apply_config': [
           'v8_ninja',
           'clang',
@@ -1929,6 +1937,9 @@ BUILDERS = {
         'parent_buildername': 'v8_linux64_asan_rel_ng',
         'enable_swarming': True,
         'tests': [V8Testing_2, Test262_2, Ignition],
+        # TODO(machenbach): Run with exhaustive variants as soon as bot runs
+        # on swarming.
+        'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
