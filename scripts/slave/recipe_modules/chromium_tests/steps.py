@@ -273,7 +273,8 @@ class LocalGTestTest(Test):
       return self._override_compile_targets
 
     if api.chromium.c.TARGET_PLATFORM == 'android':
-      return [self.target_name + '_apk']
+      # TODO(agrieve): Remove the _apk entry once GYP is gone.
+      return [self.target_name + '_apk', 'bin/run_%s' % self.target_name]
 
     return [self.target_name]
 

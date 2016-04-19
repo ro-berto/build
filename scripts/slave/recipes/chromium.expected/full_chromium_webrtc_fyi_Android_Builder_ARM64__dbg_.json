@@ -321,6 +321,7 @@
       "[SLAVE_BUILD]/src/build/goma/client",
       "--",
       "android_builder_chromium_webrtc",
+      "bin/run_content_browsertests",
       "content_browsertests_apk"
     ],
     "cwd": "[SLAVE_BUILD]",
