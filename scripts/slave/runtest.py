@@ -1367,8 +1367,13 @@ def _MainLinux(options, args, extra_env):
           strip_path_prefix=options.strip_path_prefix)
       pipes = [symbolize_command]
 
-    command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
-                                          command)
+    # Temporary code to help track down crbug.com/522396
+    if 'win_chromium_rel_ng' in sys.argv and 'layout_test_wrapper' in sys.argv:
+      print 'Not running layout tests through runisolatedtest.py'
+    else:
+      command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
+                                            command)
+
     result = _RunGTestCommand(options, command, extra_env, pipes=pipes,
                               log_processor=log_processor)
   finally:
