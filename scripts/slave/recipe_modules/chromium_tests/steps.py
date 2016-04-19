@@ -273,8 +273,6 @@ class LocalGTestTest(Test):
       return self._override_compile_targets
 
     if api.chromium.c.TARGET_PLATFORM == 'android':
-      # TODO(agrieve): Remove _apk suffix in favour of bin/run_${target} once
-      #     GYP is gone. http://crbug.com/599919
       return [self.target_name + '_apk']
 
     return [self.target_name]
@@ -826,8 +824,6 @@ class SwarmingGTestTest(SwarmingTest):
     return [self.target_name, self.target_name + '_run']
 
   def isolate_target(self, api):
-    # TODO(agrieve): Remove _apk suffix in favour of bin/run_${target} once
-    #     GYP is gone. http://crbug.com/599919
     if api.chromium.c.TARGET_PLATFORM == 'android':
       return self.target_name + '_apk'
     return self.target_name
