@@ -24,17 +24,15 @@ class GomaApi(recipe_api.RecipeApi):
                     '--revision', 'build/goma@%s' % head],
                    cwd=self.m.path['build'])
 
-  def ensure_goma(self, chromeos=False):
+  def ensure_goma(self):
     with self.m.step.nest('ensure_goma'):
       try:
         self.m.cipd.set_service_account_credentials(
             self.service_account_json_path)
 
         self.m.cipd.install_client()
-        platform_suffix = self.m.cipd.platform_suffix()
-        if chromeos:
-          platform_suffix = platform_suffix.replace('linux', 'chromeos')
-        goma_package = ('infra_internal/goma/client/%s' % platform_suffix)
+        goma_package = ('infra_internal/goma/client/%s' %
+            self.m.cipd.platform_suffix())
         goma_dir = self.m.path['cache'].join('cipd', 'goma')
         self.m.cipd.ensure(goma_dir, {goma_package: 'release'})
         return goma_dir
