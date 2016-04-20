@@ -133,7 +133,7 @@
       "--root",
       "[CACHE]/cipd/goma",
       "--list",
-      "infra_internal/goma/client/mac-amd64 latest",
+      "infra_internal/goma/client/mac-amd64 release",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
@@ -146,7 +146,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/mac-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
@@ -164,7 +164,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library gomadir='[BUILD]/goma' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -194,7 +194,7 @@
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[CACHE]/cipd/goma",
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -249,7 +249,7 @@
       "--mode",
       "official",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[CACHE]/cipd/goma",
       "--goma-hermetic",
       "fallback",
       "--",

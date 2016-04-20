@@ -33,9 +33,9 @@ class GomaApi(recipe_api.RecipeApi):
         self.m.cipd.install_client()
         goma_package = ('infra_internal/goma/client/%s' %
             self.m.cipd.platform_suffix())
-        self.m.cipd.ensure(
-            self.m.path['cache'].join('cipd', 'goma'),
-            {goma_package: 'latest'})
+        goma_dir = self.m.path['cache'].join('cipd', 'goma')
+        self.m.cipd.ensure(goma_dir, {goma_package: 'release'})
+        return goma_dir
       except self.m.step.StepFailure:  # pragma: no cover
         # TODO(phajdan.jr): make failures fatal after experiment.
-        pass
+        return None

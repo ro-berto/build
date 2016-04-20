@@ -465,8 +465,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     return wrapper
 
   def ensure_goma(self):
-    # TODO(phajdan.jr): set GYP_DEFINES and compile_py.goma_dir .
-    self.m.goma.ensure_goma()
+    goma_dir = self.m.goma.ensure_goma()
+    if goma_dir:
+      # TODO(phajdan.jr): goma_dir should always be non-empty.
+      self.c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
+      self.c.compile_py.goma_dir = goma_dir
 
   def runhooks(self, **kwargs):
     """Run the build-configuration hooks for chromium."""
@@ -557,8 +560,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         # src-side, and so it might be actually using goma.
         self.ensure_goma()
         goma_dir = self.c.compile_py.goma_dir
-      if not goma_dir:
-        # TODO(phajdan.jr): update for swarming, http://crbug.com/585401 .
+      if not goma_dir:  # pragma: no cover
+        # TODO(phajdan.jr): remove fallback when we always use cipd for goma.
         goma_dir = self.m.path['build'].join('goma')
       args += ['--goma-dir', goma_dir]
 

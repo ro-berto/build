@@ -133,7 +133,7 @@
       "--root",
       "[CACHE]/cipd/goma",
       "--list",
-      "infra_internal/goma/client/linux-386 latest",
+      "infra_internal/goma/client/linux-386 release",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
@@ -146,7 +146,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-386\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
@@ -165,7 +165,7 @@
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[BUILD]/goma' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "OS=android branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -195,7 +195,7 @@
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[CACHE]/cipd/goma",
       "//out/Release"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -230,7 +230,7 @@
       "--mode",
       "official",
       "--goma-dir",
-      "[BUILD]/goma",
+      "[CACHE]/cipd/goma",
       "--goma-hermetic",
       "fallback",
       "--"

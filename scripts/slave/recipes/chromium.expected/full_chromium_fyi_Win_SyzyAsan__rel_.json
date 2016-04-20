@@ -142,7 +142,7 @@
       "--root",
       "[CACHE]\\cipd\\goma",
       "--list",
-      "infra_internal/goma/client/windows-386 latest",
+      "infra_internal/goma/client/windows-386 release",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
@@ -155,7 +155,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/windows-386\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
@@ -186,7 +186,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library fastbuild=1 gomadir='[BUILD]\\goma' syzyasan=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1 win_z7=0",
+      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library fastbuild=1 gomadir='[CACHE]\\cipd\\goma' syzyasan=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1 win_z7=0",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -279,7 +279,7 @@
       "--goma-service-account-json-file",
       "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "--goma-dir",
-      "[BUILD]\\goma",
+      "[CACHE]\\cipd\\goma",
       "--",
       "chrome"
     ],
