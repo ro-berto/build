@@ -603,9 +603,6 @@
     ],
     "https://build.chromium.org/p/client.v8": [
       {
-        "categories": [
-          "v8_all"
-        ],
         "excluded_builders" : [
           "V8 Linux - swarming staging",
           "V8 Linux - debug - greedy allocator",
@@ -622,7 +619,11 @@
               "v8_compile"
             ]
           },
-          "*": {}
+          "*": {
+            "categories": [
+              "v8_all"
+            ]
+          }
         }
       }
     ],
