@@ -18,7 +18,7 @@ class GomaApi(recipe_api.RecipeApi):
                     '--revision', 'build/goma@%s' % head],
                    cwd=self.m.path['build'])
 
-  def ensure_goma(self, goma_dir, canary=False):
+  def ensure_goma(self, goma_dir, canary=False, pure_cipd=False):
     # TODO(iannucci): switch to CIPD (https://goto.google.com/toxxq).
     with self.m.step.nest('ensure_goma'):
       try:
@@ -39,6 +39,9 @@ class GomaApi(recipe_api.RecipeApi):
       except self.m.step.StepFailure:  # pragma: no cover
         # TODO(phajdan.jr): make failures fatal after experiment.
         pass
+
+      if pure_cipd:
+        return
 
       args=[
           '--target-dir', goma_dir,

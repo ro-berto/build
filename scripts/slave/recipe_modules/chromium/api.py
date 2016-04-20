@@ -463,16 +463,23 @@ class ChromiumApi(recipe_api.RecipeApi):
   def ensure_goma(self):
     # New code is only enabled on whitelisted platforms for now.
     # Other platforms continue to use DEPS-ed goma.
-    if not self.m.platform.is_linux:
-      return
+    is_experiment = (not self.m.platform.is_linux)
+    pure_cipd = (not self.m.platform.is_linux)
 
     # TODO(phajdan.jr): Move goma out of src checkout.
     goma_dir = self.m.path['checkout'].join('build', 'goma', 'client')
 
-    self.c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
-    self.c.compile_py.goma_dir = goma_dir
+    if not is_experiment:
+      self.c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
+      self.c.compile_py.goma_dir = goma_dir
 
-    self.m.goma.ensure_goma(goma_dir, canary=self.c.compile_py.goma_canary)
+    try:
+      self.m.goma.ensure_goma(
+          goma_dir, canary=self.c.compile_py.goma_canary,
+          pure_cipd=pure_cipd)
+    except self.m.step.StepFailure:  # pragma: no cover
+      if not is_experiment:
+        raise
 
   def runhooks(self, **kwargs):
     """Run the build-configuration hooks for chromium."""
