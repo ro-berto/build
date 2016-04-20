@@ -50,17 +50,6 @@ def arm_hard_float(c):
 
 
 @config_ctx()
-def code_serializer(c):
-  c.testing.test_args.extend(
-      ['--extra-flags', '--serialize-toplevel --cache=code'])
-
-
-@config_ctx()
-def deadcode(c):
-  c.testing.test_args.append('--extra-flags=--dead-code-elimination')
-
-
-@config_ctx()
 def deopt_fuzz_normal(c):
   c.testing.test_args.append('--coverage=0.4')
   c.testing.test_args.append('--distribution-mode=smooth')
@@ -95,11 +84,6 @@ def greedy_allocator(c):
 
 
 @config_ctx()
-def isolates(c):
-  c.testing.test_args.append('--isolates')
-
-
-@config_ctx()
 def mips_cross_compile(c):
   c.mips_cross_compile = True
 
@@ -115,25 +99,8 @@ def no_snapshot(c):
 
 
 @config_ctx()
-def nosse3(c):
-  c.testing.test_args.extend(
-      ['--extra-flags', '--noenable-sse3 --noenable-avx'])
-
-
-@config_ctx()
-def nosse4(c):
-  c.testing.test_args.extend(
-      ['--extra-flags', '--noenable-sse4-1 --noenable-avx'])
-
-
-@config_ctx()
 def no_harness(c):
   c.testing.test_args.append('--no-harness')
-
-
-@config_ctx()
-def novfp3(c):
-  c.testing.test_args.append('--novfp3')
 
 
 @config_ctx()

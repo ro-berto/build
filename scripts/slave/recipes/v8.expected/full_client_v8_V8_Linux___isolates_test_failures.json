@@ -141,14 +141,14 @@
       "--timeout=200",
       "--random-seed=-358114921",
       "bot_default",
-      "--isolates",
       "--exhaustive-variants",
+      "--isolates",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Check",
+    "name": "Check - isolates",
     "~followup_annotations": [
       "@@@STEP_TEXT@failures: 19<br/>@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -838,14 +838,14 @@
       "other-suite/dir/other-test-very-long-name0",
       "--random-seed",
       "123",
-      "--isolates",
       "--variants=default",
+      "--isolates",
       "--rerun-failures-count=0",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]/v8",
-    "name": "Bisect a0.Retry",
+    "name": "Bisect a0.Retry - isolates",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@failures: 19<br/>@@@",

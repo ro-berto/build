@@ -845,7 +845,7 @@ class V8Api(recipe_api.RecipeApi):
               for t in test.get('suite_mapping', test['tests'])
               if f.startswith(t)]
 
-  def _setup_test_runner(self, test, applied_test_filter):
+  def _setup_test_runner(self, test, applied_test_filter, test_step_config):
     env = {}
     full_args = [
       '--progress=verbose',
@@ -873,10 +873,14 @@ class V8Api(recipe_api.RecipeApi):
     # Add builder-specific test arguments.
     full_args += self.c.testing.test_args
 
-    # Add builder- and test-specific variants.
+    # Add builder-, test- and step-specific variants.
     variants = self.bot_config.get('variants', testing.V8ExhaustiveVariants())
     variants += test.get('variants', variants)
+    variants += test_step_config.variants
     full_args += variants.test_args
+
+    # Add step-specific test arguments.
+    full_args += test_step_config.test_args
 
     full_args = self._with_extra_flags(full_args)
 

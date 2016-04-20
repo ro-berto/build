@@ -6,15 +6,19 @@
 # from multiple recipes.
 
 from recipe_engine.types import freeze
-from testing import V8NoExhaustiveVariants, V8Variant
+from testing import V8NoExhaustiveVariants, V8Variant, V8VariantNeutral
 
 
 class TestStepConfig(object):
   """Per-step test configuration."""
-  def __init__(self, name, shards=1, swarming=True):
+  def __init__(self, name, shards=1, swarming=True, suffix='', test_args=None,
+               variants=V8VariantNeutral):
     self.name = name
     self.shards = shards
     self.swarming = swarming
+    self.suffix = ' - ' + suffix if suffix else ''
+    self.test_args = test_args or []
+    self.variants = variants
 
 
 # Top-level test configs for convenience.
@@ -49,6 +53,14 @@ V8Testing_3 = TestStepConfig('v8testing', shards=3)
 V8Testing_4 = TestStepConfig('v8testing', shards=4)
 V8Testing_5 = TestStepConfig('v8testing', shards=5)
 Webkit = TestStepConfig('webkit')
+
+
+def with_test_args(suffix, test_args, tests, variants=V8VariantNeutral):
+  """Wrapper that runs a list of tests with additional arguments."""
+  return [
+    TestStepConfig(t.name, t.shards, t.swarming, suffix, test_args, variants)
+    for t in tests
+  ]
 
 
 BUILDERS = {
@@ -263,7 +275,6 @@ BUILDERS = {
         },
       },
       'V8 Linux - isolates': {
-        'v8_apply_config': ['isolates'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -271,11 +282,14 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
-        'tests': [V8Testing],
+        'tests': with_test_args(
+            'isolates',
+            ['--isolates'],
+            [V8Testing],
+        ),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosse3': {
-        'v8_apply_config': ['nosse3'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -284,11 +298,14 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'enable_swarming': True,
-        'tests': [V8Testing, Mozilla, SimdJs],
+        'tests': with_test_args(
+            'nosse3',
+            ['--extra-flags', '--noenable-sse3 --noenable-avx'],
+            [V8Testing, Mozilla, SimdJs],
+        ),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosse4': {
-        'v8_apply_config': ['nosse4'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -297,11 +314,14 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'enable_swarming': True,
-        'tests': [V8Testing, Mozilla, SimdJs],
+        'tests': with_test_args(
+            'nosse4',
+            ['--extra-flags', '--noenable-sse4-1 --noenable-avx'],
+            [V8Testing, Mozilla, SimdJs],
+        ),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - deadcode': {
-        'v8_apply_config': ['deadcode'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -310,11 +330,14 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'enable_swarming': True,
-        'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'tests': with_test_args(
+            'deadcode',
+            ['--extra-flags=--dead-code-elimination'],
+            [V8Testing, Test262, Mozilla, SimdJs],
+        ),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - isolates': {
-        'v8_apply_config': ['isolates'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -322,11 +345,14 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': [V8Testing],
+        'tests': with_test_args(
+            'isolates',
+            ['--isolates'],
+            [V8Testing],
+        ),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - nosse3': {
-        'v8_apply_config': ['nosse3'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -335,11 +361,14 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'enable_swarming': True,
-        'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'tests': with_test_args(
+            'nosse3',
+            ['--extra-flags', '--noenable-sse3 --noenable-avx'],
+            [V8Testing, Test262, Mozilla, SimdJs],
+        ),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - nosse4': {
-        'v8_apply_config': ['nosse4'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -348,7 +377,11 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'enable_swarming': True,
-        'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'tests': with_test_args(
+            'nosse4',
+            ['--extra-flags', '--noenable-sse4-1 --noenable-avx'],
+            [V8Testing, Test262, Mozilla, SimdJs],
+        ),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - interpreted regexp': {
@@ -375,7 +408,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - code serializer': {
-        'v8_apply_config': ['code_serializer'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -384,8 +416,12 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'enable_swarming': True,
-        'tests': [Mjsunit, Mozilla, Test262, Benchmarks, SimdJs],
-        'variants': V8Variant('default'),
+        'tests': with_test_args(
+            'code serializer',
+            ['--extra-flags', '--serialize-toplevel --cache=code'],
+            [Mjsunit, Mozilla, Test262, Benchmarks, SimdJs],
+            V8Variant('default'),
+        ),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - debug - greedy allocator': {
@@ -1308,57 +1344,67 @@ BUILDERS = {
       },
       'V8 Linux - arm - armv8-a - sim': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
-        'v8_apply_config': ['enable_armv8'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
+        'tests': with_test_args(
+            'armv8-a',
+            ['--extra-flags', '--enable-armv8'],
+            [V8Testing_2, Test262, Mozilla, SimdJs],
+        ),
         'testing': {'platform': 'linux'},
       },
       # TODO(machenbach): Turn arm sim into builders/testers.
       'V8 Linux - arm - armv8-a - sim - debug': {
         'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
-        'v8_apply_config': ['enable_armv8'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
+        'tests': with_test_args(
+            'armv8-a',
+            ['--extra-flags', '--enable-armv8'],
+            [V8Testing_2, Test262, Mozilla, SimdJs],
+        ),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - novfp3': {
         # TODO(machenbach): Can these configs be reduced to one?
         'chromium_apply_config': [
           'clang', 'v8_ninja', 'goma', 'simulate_arm', 'novfp3'],
-        'v8_apply_config': ['novfp3'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'swarming_properties': {'default_priority': 35},
-        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
+        'tests': with_test_args(
+            'novfp3',
+            ['--novfp3'],
+            [V8Testing_2, Test262, Mozilla, SimdJs],
+        ),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - debug - novfp3': {
         'chromium_apply_config': [
           'clang', 'v8_ninja', 'goma', 'simulate_arm', 'novfp3'],
-        'v8_apply_config': ['novfp3'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'swarming_properties': {'default_priority': 35},
-        'tests': [V8Testing_2, Test262, Mozilla, SimdJs],
-        'variants': V8NoExhaustiveVariants(),
+        'tests': with_test_args(
+            'novfp3',
+            ['--novfp3'],
+            [V8Testing_2, Test262, Mozilla, SimdJs],
+            V8NoExhaustiveVariants(),
+        ),
         'testing': {'platform': 'linux'},
       },
 ####### Category: ARM64

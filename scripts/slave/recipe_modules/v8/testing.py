@@ -14,8 +14,8 @@ class V8TestingVariants(object):
   and makes sure that only one such flag is passed.
 
   Infra test configurations might specify the variants on different levels,
-  e.g. per test, per step or per builder. This class makes sure that a more
-  specific config can only choose more specific variants.
+  e.g. per test, per step or per builder. This class makes sure that the
+  most specific variants are used.
 
   The variants have the following allowed transitions:
   exhaustive variants -> no exhaustive variants -> one specific variant
@@ -27,14 +27,14 @@ class V8TestingVariants(object):
     assert isinstance(other, V8TestingVariants)
     return self.test_args == other.test_args
 
-  def __add__(self, other):
+  def __add__(self, right):
     """Use + to specify variants with the more specific one on the right-hand
     side.
     """
-    assert isinstance(other, V8TestingVariants)
-    return self._specify(other)
+    assert isinstance(right, V8TestingVariants)
+    return right._specify(self)
 
-  def _specify(other):  # pragma: no cover
+  def _specify(self, previous):  # pragma: no cover
     raise NotImplementedError()
 
 
@@ -42,28 +42,38 @@ class V8ExhaustiveVariants(V8TestingVariants):
   def __init__(self):
     self.test_args = ['--exhaustive-variants']
 
-  def _specify(self, other):
-    # Exhaustive variants can transition into any other variant config.
-    return other
+  def _specify(self, previous):
+    # Keep the previous as it's either exhaustive already or more specific.
+    return previous
 
 
 class V8NoExhaustiveVariants(V8TestingVariants):
-  def _specify(self, other):
-    assert not isinstance(other, V8ExhaustiveVariants)
+  def _specify(self, previous):
     # This is used to remove the default exhaustive variants on some bots.
-    return other
+    if isinstance(previous, V8ExhaustiveVariants):
+      return self
+    else:
+      return previous
 
 
 class V8Variant(V8TestingVariants):
   def __init__(self, name):
     self.test_args = ['--variants=' + name]
 
-  def _specify(self, other):
+  def _specify(self, previous):
     # A specific variant cannot be replaced by a different one. E.g. if a
     # builder is specified to run with the default it can't have a test step
     # that runs ignition only.
-    assert self == other
-    return other
+    assert not isinstance(previous, V8Variant) or self == previous
+    return self
+
+
+class _V8VariantNeutral(V8TestingVariants):
+  """Convenience null object to specify effectless default values."""
+  def _specify(self, previous):
+    return previous
+
+V8VariantNeutral = _V8VariantNeutral()
 
 
 TEST_CONFIGS = freeze({
@@ -354,7 +364,8 @@ class V8Test(BaseTest):
           self.v8._test_data.get('wrong_results', False),
           self.v8._test_data.get('flakes', False))
 
-    full_args, env = self.v8._setup_test_runner(test, self.applied_test_filter)
+    full_args, env = self.v8._setup_test_runner(
+        test, self.applied_test_filter, self.test_step_config)
     if self.v8.c.testing.may_shard and self.v8.c.testing.SHARD_COUNT > 1:
       full_args += [
         '--shard-count=%d' % self.v8.c.testing.SHARD_COUNT,
@@ -365,7 +376,7 @@ class V8Test(BaseTest):
       self.api.json.output(add_json_log=False),
     ]
     self.api.python(
-      test['name'],
+      test['name'] + self.test_step_config.suffix,
       self.api.path['checkout'].join('tools', 'run-tests.py'),
       full_args,
       cwd=self.api.path['checkout'],
@@ -403,7 +414,8 @@ class V8Test(BaseTest):
     if flake_log and flakes:
       # Emit a separate step to show flakes from the previous step
       # to not close the tree.
-      step_result = self.api.step(test['name'] + ' (flakes)', cmd=None)
+      step_result = self.api.step(
+          test['name'] + self.test_step_config.suffix + ' (flakes)', cmd=None)
       step_result.presentation.status = self.api.step.WARNING
       self.v8._update_failure_presentation(
             flake_log, flakes, step_result.presentation)
@@ -470,7 +482,7 @@ class V8SwarmingTest(V8Test):
     args.extend(self.api.swarming.get_collect_cmd_args(task))
 
     return self.api.python(
-        name=self.test['name'],
+        name=self.test['name'] + self.test_step_config.suffix,
         script=self.v8.resource('collect_v8_task.py'),
         args=args,
         allow_subannotations=True,
@@ -481,7 +493,7 @@ class V8SwarmingTest(V8Test):
     # Set up arguments for test runner.
     self.test = test or TEST_CONFIGS[self.name]
     extra_args, _ = self.v8._setup_test_runner(
-        self.test, self.applied_test_filter)
+        self.test, self.applied_test_filter, self.test_step_config)
 
     # Let json results be stored in swarming's output folder. The collect
     # step will copy the folder's contents back to the client.
@@ -501,7 +513,7 @@ class V8SwarmingTest(V8Test):
     # Initialize swarming task with custom data-collection step for v8
     # test-runner output.
     self.task = self.api.swarming.task(
-        title=self.test['name'],
+        title=self.test['name'] + self.test_step_config.suffix,
         isolated_hash=self._get_isolated_hash(self.test),
         shards=shards,
         extra_args=extra_args,

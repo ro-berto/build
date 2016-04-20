@@ -212,7 +212,7 @@ def GenTests(api):
         'V8 Linux - isolates',
         'empty_json',
     ) +
-    api.override_step_data('Check', api.json.output([])) +
+    api.override_step_data('Check - isolates', api.json.output([])) +
     api.expect_exception('AssertionError')
   )
 
@@ -222,7 +222,7 @@ def GenTests(api):
         'V8 Linux - isolates',
         'one_failure',
     ) +
-    api.override_step_data('Check', api.v8.one_failure())
+    api.override_step_data('Check - isolates', api.v8.one_failure())
   )
 
   yield (
