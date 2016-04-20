@@ -173,7 +173,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.compile_py.compiler:
       args += ['--compiler', self.c.compile_py.compiler]
       if 'goma' in self.c.compile_py.compiler:
-        args += ['--goma-jsonstatus', self.m.json.output()]
+        args += [
+            '--goma-jsonstatus', self.m.json.output(),
+            '--goma-service-account-json-file',
+            self.m.goma.service_account_json_path,
+        ]
     if out_dir:
       args += ['--out-dir', out_dir]
     if self.c.compile_py.mode:
