@@ -91,7 +91,7 @@ def swarm_dimensions(builder_spec):
   if builder_cfg['role'] in ('Test', 'Perf'):
     if 'Android' in builder_cfg['os']:
       # For Android, the device type is a better dimension than CPU or GPU.
-      dimensions['product.board'] = builder_spec['product.board']
+      dimensions['product_board'] = builder_spec['product.board']
     elif 'iOS' in builder_cfg['os']:
       # For iOS, the device type is a better dimension than CPU or GPU.
       dimensions['device'] = builder_spec['device_cfg']

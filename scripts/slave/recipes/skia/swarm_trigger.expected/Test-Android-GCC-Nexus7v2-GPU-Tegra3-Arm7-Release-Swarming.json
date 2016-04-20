@@ -852,7 +852,7 @@
       "pool",
       "Skia",
       "--dimension",
-      "product.board",
+      "product_board",
       "flo",
       "--tag",
       "buildername:Test-Android-GCC-Nexus7v2-GPU-Tegra3-Arm7-Release-Swarming",
