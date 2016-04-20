@@ -989,8 +989,14 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
 
   pipes = pipes or []
 
+  command_str = ' '.join(command)
+  debug = ('win_chromium_rel_ng' in command_str and
+           'layout_test_wrapper' in command_str)
+  if debug:
+    print 'Logging extra information to debug layout test hang.'
+
   # Print the given command (which should be a list of one or more strings).
-  if print_cmd:
+  if print_cmd or debug:
     print '\n' + subprocess.list2cmdline(command) + '\n',
     for pipe in pipes:
       print '     | ' + subprocess.list2cmdline(pipe) + '\n',
@@ -1002,6 +1008,8 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
     # Run the command.  The stdout and stderr file handles are passed to the
     # subprocess directly for writing.  No processing happens on the output of
     # the subprocess.
+    if debug:
+      print 'Calling subprocess.Popen directly'
     proc = subprocess.Popen(command, stdout=sys.stdout, stderr=sys.stderr,
                             bufsize=0, **kwargs)
 
@@ -1121,17 +1129,27 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
     finished_event.set()
     log_event.set()
 
+    if debug:
+      print 'before thread.join()'
+
     # Wait for the reader thread to complete (implies EOF reached on stdout/
     # stderr pipes).
     thread.join()
+
+    if debug:
+      print 'after thread.join()'
 
     # Check whether any of the sub commands has failed.
     for handle in proc_handles:
       if handle.returncode:
         return handle.returncode
 
+  if debug:
+    print 'before proc.wait()'
   # Wait for the command to terminate.
   proc.wait()
+  if debug:
+    print 'after proc.wait()'
   return proc.returncode
 
 
