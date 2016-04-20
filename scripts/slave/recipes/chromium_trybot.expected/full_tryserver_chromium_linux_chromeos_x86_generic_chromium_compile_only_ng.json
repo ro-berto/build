@@ -161,22 +161,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::goma]/resources/ensure_goma.py",
-      "--target-dir",
-      "[SLAVE_BUILD]/src/build/goma/client",
-      "--download-from-google-storage-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "ensure_goma.ensure_goma",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
       "cros",
       "chrome-sdk",
       "--board=x86-generic",
@@ -184,7 +168,7 @@
       "--use-external-config",
       "--clear-sdk-cache",
       "--gomadir",
-      "[SLAVE_BUILD]/src/build/goma/client",
+      "[BUILD]/goma",
       "--fastbuild",
       "--",
       "python",
@@ -325,7 +309,7 @@
       "--nocolor",
       "--use-external-config",
       "--gomadir",
-      "[SLAVE_BUILD]/src/build/goma/client",
+      "[BUILD]/goma",
       "--fastbuild",
       "--",
       "python",
@@ -351,7 +335,7 @@
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-dir",
-      "[SLAVE_BUILD]/src/build/goma/client",
+      "[BUILD]/goma",
       "--goma-fail-fast",
       "--goma-disable-local-fallback",
       "--ninja-ensure-up-to-date",

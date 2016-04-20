@@ -262,22 +262,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::goma]/resources/ensure_goma.py",
-      "--target-dir",
-      "[SLAVE_BUILD]/src/build/goma/client",
-      "--download-from-google-storage-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "ensure_goma.ensure_goma",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[SLAVE_BUILD]/src/tools/mb/mb.py",
       "gen",
       "-m",
@@ -287,7 +271,7 @@
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[SLAVE_BUILD]/src/build/goma/client",
+      "[BUILD]/goma",
       "//out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -313,8 +297,6 @@
       "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
-      "--goma-dir",
-      "[SLAVE_BUILD]/src/build/goma/client",
       "--",
       "android_webview_test_apk",
       "chrome_public_test_apk",

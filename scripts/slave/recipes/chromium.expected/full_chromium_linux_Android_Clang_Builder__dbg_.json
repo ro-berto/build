@@ -158,22 +158,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::goma]/resources/ensure_goma.py",
-      "--target-dir",
-      "[SLAVE_BUILD]/src/build/goma/client",
-      "--download-from-google-storage-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "ensure_goma.ensure_goma",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
@@ -181,7 +165,7 @@
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android asan=1 clang=1 component=shared_library enable_errorprone=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[SLAVE_BUILD]/src/build/goma/client' proprietary_codecs=1 run_findbugs=1 target_arch=arm use_allocator=none use_goma=1",
+      "GYP_DEFINES": "OS=android asan=1 clang=1 component=shared_library enable_errorprone=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]/goma' proprietary_codecs=1 run_findbugs=1 target_arch=arm use_allocator=none use_goma=1",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -288,7 +272,7 @@
       "--config-file",
       "[SLAVE_BUILD]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[SLAVE_BUILD]/src/build/goma/client",
+      "[BUILD]/goma",
       "//out/Debug"
     ],
     "cwd": "[SLAVE_BUILD]",
@@ -342,7 +326,7 @@
       "--goma-jsonstatus",
       "/path/to/tmp/json",
       "--goma-dir",
-      "[SLAVE_BUILD]/src/build/goma/client",
+      "[BUILD]/goma",
       "--",
       "android_builder_tests",
       "system_webview_apk"
