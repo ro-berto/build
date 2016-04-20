@@ -2092,6 +2092,7 @@ SPEC = {
     },
     'Android Coverage (dbg)': {
       'chromium_config': 'android',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
