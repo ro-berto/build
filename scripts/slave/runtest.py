@@ -1367,11 +1367,6 @@ def _MainLinux(options, args, extra_env):
           strip_path_prefix=options.strip_path_prefix)
       pipes = [symbolize_command]
 
-    # Temporary code to help track down crbug.com/522396
-    argv_str = str(sys.argv)
-    if 'win_chromium_rel_ng' in argv_str and 'layout_test_wrapper' in argv_str:
-      print 'Not running layout tests through runisolatedtest.py'
-    else:
       command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
                                             command)
 
@@ -1474,8 +1469,13 @@ def _MainWin(options, args, extra_env):
           options.test_launcher_summary_output)
       command.append('--test-launcher-summary-output=%s' % json_file_name)
 
-    command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
-                                          command)
+    command_str = ' '.join(command)
+    if ('win_chromium_rel_ng' in command_str and
+        'layout_test_wrapper' in command_str):
+      print 'Not running layout tests through runisolatedtest.py'
+    else:
+      command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
+                                            command)
     result = _RunGTestCommand(options, command, extra_env, log_processor)
   finally:
     if _UsingGtestJson(options):
