@@ -540,27 +540,29 @@ class RevisionState(object):
       False if they are instead significantly different form those of testing
       the latest knwon good revision.
     """
+    lkgr = self.bisector.lkgr
+    fkbr = self.bisector.fkbr
 
     if self.bisector.is_return_code_mode():
-      return self.overall_return_code == self.bisector.lkgr.overall_return_code
+      return self.overall_return_code == lkgr.overall_return_code
 
     while True:
       diff_from_good = self.bisector.significantly_different(
-          self.bisector.lkgr.values, self.values)
+          lkgr.values[:len(fkbr.values)], self.values)
       diff_from_bad = self.bisector.significantly_different(
-          self.bisector.fkbr.values, self.values)
+          fkbr.values[:len(lkgr.values)], self.values)
 
       if diff_from_good and diff_from_bad:
         # Multiple regressions.
         # For now, proceed bisecting the biggest difference of the means.
-        dist_from_good = abs(self.mean_value - self.bisector.lkgr.mean_value)
-        dist_from_bad = abs(self.mean_value - self.bisector.fkbr.mean_value)
+        dist_from_good = abs(self.mean_value - lkgr.mean_value)
+        dist_from_bad = abs(self.mean_value - fkbr.mean_value)
         if dist_from_good > dist_from_bad:
           # TODO(robertocn): Add way to handle the secondary regression
-          #self.bisector.handle_secondary_regression(self, self.bisector.fkbr)
+          #self.bisector.handle_secondary_regression(self, fkbr)
           return False
         else:
-          #self.bisector.handle_secondary_regression(self.bisector.lkgr, self)
+          #self.bisector.handle_secondary_regression(lkgr, self)
           return True
 
       if diff_from_good or diff_from_bad:  # pragma: no cover
