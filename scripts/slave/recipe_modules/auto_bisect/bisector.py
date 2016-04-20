@@ -912,6 +912,9 @@ class Bisector(object):
       return None
     culprit_info = api.query_revision_info(self.culprit)
 
+    if not culprit_info:  # pragma: no cover
+      return None
+
     return {
         'subject': culprit_info['subject'],
         'author': culprit_info['author'],
