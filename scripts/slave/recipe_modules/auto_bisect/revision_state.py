@@ -301,7 +301,8 @@ class RevisionState(object):
         builder_state = json.loads(builder_state or '{}')
         for build_number in builder_state.get('cachedBuilds', []):
           build = self._fetch_build_info(base_url, build_number)
-          build_properties = dict(build.get('properties', []))
+          # Properties is a list of triples (key, value, source)
+          build_properties = dict([t[:2] for t in build.get('properties', [])])
           if build_properties.get('build_archive_url') == self.build_url:
             self.build_number = build_number
             current_build = build
