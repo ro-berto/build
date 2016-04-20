@@ -84,6 +84,11 @@ class BuilderConfig(object):
     return self.config.get('buildslave_type', self._GetLegacySlaveType())
 
   @property
+  def auto_reboot(self):
+    """Returns (bool): True if this slave should auto-reboot."""
+    return self.config.get('auto_reboot', True)
+
+  @property
   def cbb_variant(self):
     """Returns (str): Cbuildbot recipe variant for this builder type, or None.
     """
