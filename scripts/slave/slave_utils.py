@@ -404,7 +404,7 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None,
   gsutil = GSUtilSetup()
   # Run the gsutil command. gsutil internally calls command_wrapper, which
   # will try to run the command 10 times if it fails.
-  command = override_gsutil or [gsutil]
+  command = list(override_gsutil or [gsutil])
 
   if not metadata:
     metadata = {}
