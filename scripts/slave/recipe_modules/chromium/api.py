@@ -465,7 +465,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     return wrapper
 
   def ensure_goma(self):
-    goma_dir = self.m.goma.ensure_goma()
+    goma_dir = self.m.goma.ensure_goma(chromeos=(
+        self.c.gyp_env.GYP_DEFINES.get('chromeos') == 1))
     if goma_dir:
       # TODO(phajdan.jr): goma_dir should always be non-empty.
       self.c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
