@@ -249,26 +249,23 @@
     "name": "trigger",
     "trigger_specs": [
       {
+        "bucket": "master.chromium.perf.fyi",
         "builder_name": "WebView Nexus5 Perf (1)",
         "properties": {
-          "bucket": "master.chromium.perf.fyi",
-          "mastername": "master.chromium.perf.fyi",
           "revision": "267739"
         }
       },
       {
+        "bucket": "master.chromium.perf.fyi",
         "builder_name": "WebView Nexus5X Perf (1)",
         "properties": {
-          "bucket": "master.chromium.perf.fyi",
-          "mastername": "master.chromium.perf.fyi",
           "revision": "267739"
         }
       },
       {
+        "bucket": "master.chromium.perf.fyi",
         "builder_name": "WebView Nexus5X Perf (2)",
         "properties": {
-          "bucket": "master.chromium.perf.fyi",
-          "mastername": "master.chromium.perf.fyi",
           "revision": "267739"
         }
       }

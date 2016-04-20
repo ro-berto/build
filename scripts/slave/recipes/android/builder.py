@@ -217,10 +217,9 @@ def _RunStepsInternal(api, mastername, buildername, revision):
   # TODO(mikecase): Remove this logic once WebView bots are on chromium.perf
   if bot_config.get('triggers'):
     api.trigger(*[{'bucket': b['mastername'],
-                   'buildername': b['buildername'],
-                   'mastername': b['mastername'],
-                   'revision': api.properties['revision']}
-                  for b in bot_config['triggers']])
+                   'builder_name': b['buildername'],
+                   'properties': {'revision': api.properties['revision']}
+                   } for b in bot_config['triggers']])
 
 def RunSteps(api, mastername, buildername, revision):
   with api.tryserver.set_failure_hash():
