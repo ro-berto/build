@@ -111,49 +111,12 @@ class AutoBisectApi(recipe_api.RecipeApi):
       A dict with the keys "author", "email", "date", "subject" and "body",
       as output by fetch_revision_info.py.
     """
-    step_name = 'Reading culprit cl information.'
-    # Use gitiles to get commit information.
-    if revision.depot_name == 'android-chrome':  # pragma: no cover
-      commit_url = depot_config.DEPOT_DEPS_NAME[revision.depot_name]['url']
-      return self._commit_info(revision.commit_hash, commit_url, step_name)
     result = self.m.python(
-        step_name,
+        'Reading culprit cl information.',
         self.resource('fetch_revision_info.py'),
         [revision.commit_hash, revision.depot_name],
         stdout=self.m.json.output())
     return result.stdout
-
-  def _commit_info(self, commit_hash, url, step_name=None):  # pragma: no cover
-    """Fetches information about a given commit.
-
-    Args:
-      commit_hash (str): A git commit hash.
-      url (str): The URL of a repository, e.g.
-    "https://chromium.googlesource.com/chromium/src".
-      step_name (str): Optional step name.
-
-    Returns:
-     A dict with commit information.
-    """
-    try:
-     step_name = step_name or 'gitiles commit info: %s' % commit_hash
-     commit_info = self.m.gitiles.commit_log(
-         url, commit_hash, step_name=step_name)
-
-     message = commit_info['message'].splitlines()
-     subject = message[0]
-     body = '\n'.join(message[1:])
-     return {
-          'author': commit_info['author']['name'],
-          'email': commit_info['author']['email'],
-          'subject': subject,
-          'body': body,
-          'date': commit_info['committer']['time'],
-     }
-    except self.m.step.StepFailure:  # pragma: no cover
-     self.surface_result('BAD_REV')
-     raise
-     
 
   def run_bisect_script(self, **kwargs):
     """Executes src/tools/run-perf-bisect-regression.py to perform bisection."""
