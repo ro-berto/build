@@ -129,7 +129,7 @@ def RunSteps(api):
 
 def GenTests(api):
   yield (api.test('Android_Debug__Nexus_9_') +
-    api.properties(mastername='chromium.gpu') +
+    api.properties(mastername='chromium.gpu.fyi') +
     api.properties(buildername='Android Debug (Nexus 9)') +
     api.properties(slavename='TestSlave')
         )
