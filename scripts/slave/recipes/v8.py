@@ -195,11 +195,11 @@ def GenTests(api):
     return (
       api.v8.test(
           'client.v8',
-          'V8 Linux - isolates',
+          'V8 Linux64 - internal snapshot',
           'test_failures%s%s' % (results_suffix, flakes_suffix),
       ) +
       api.override_step_data(
-          'Check - isolates', api.v8.output_json(
+          'Check', api.v8.output_json(
               has_failures=True, wrong_results=wrong_results, flakes=flakes))
     )
 
@@ -213,20 +213,20 @@ def GenTests(api):
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux - isolates',
+        'V8 Linux64 - internal snapshot',
         'empty_json',
     ) +
-    api.override_step_data('Check - isolates', api.json.output([])) +
+    api.override_step_data('Check', api.json.output([])) +
     api.expect_exception('AssertionError')
   )
 
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux - isolates',
+        'V8 Linux64 - internal snapshot',
         'one_failure',
     ) +
-    api.override_step_data('Check - isolates', api.v8.one_failure())
+    api.override_step_data('Check', api.v8.one_failure())
   )
 
   yield (
@@ -313,11 +313,13 @@ def GenTests(api):
     api.time.step(120)
   )
 
+  # TODO(machenbach): Remove some tests. Now all testers are slim swarming
+  # testers.
   # Same as above with a swarming tester.
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux',
+        'V8 Linux64',
         'bisect_tester_swarming',
     ) +
     api.v8.fail('Check') +

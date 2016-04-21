@@ -628,8 +628,8 @@ class V8Api(recipe_api.RecipeApi):
         elif self.bot_type == 'tester':
           if test.uses_swarming:
             self.download_isolated_json(revision)
-          else:
-            self.download_build()
+          else:  # pragma: no cover
+            raise self.m.step.InfraFailure('Swarming required for bisect.')
         else:  # pragma: no cover
           raise self.m.step.InfraFailure(
               'Bot type %s not supported.' % self.bot_type)
