@@ -114,6 +114,14 @@ class SizesStep(Test):
   def name(self):
     return 'sizes'  # pragma: no cover
 
+  def has_valid_results(self, api, suffix):
+    # TODO(sebmarchand): implement this function as well as the
+    # |failures| one.
+    return True
+
+  def failures(self, api, suffix):
+    return []
+
 
 class ScriptTest(Test):  # pylint: disable=W0232
   """

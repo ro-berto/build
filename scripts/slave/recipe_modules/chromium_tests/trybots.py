@@ -591,6 +591,11 @@ TRYBOTS = freeze({
           },
         ],
       },
+      # Optional Official trybot.
+      'win_chrome_official': simple_bot({
+        'mastername': 'chromium.chrome',
+        'buildername': 'Google Chrome Win',
+      }),
     },
   },
   'tryserver.v8': {
