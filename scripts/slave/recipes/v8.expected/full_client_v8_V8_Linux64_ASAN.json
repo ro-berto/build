@@ -617,6 +617,10 @@
       {
         "builder_name": "V8 Linux64 ASAN no inline - release builder",
         "properties": {
+          "build_environment": {
+            "GYP_DEFINES": "asan=1 clang=1 lsan=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64",
+            "GYP_GENERATORS": "ninja"
+          },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
@@ -631,6 +635,10 @@
       {
         "builder_name": "V8 Linux64 ASAN - debug builder",
         "properties": {
+          "build_environment": {
+            "GYP_DEFINES": "asan=1 clang=1 lsan=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64",
+            "GYP_GENERATORS": "ninja"
+          },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
@@ -645,6 +653,10 @@
       {
         "builder_name": "V8 Linux64 ASAN arm64 - debug builder",
         "properties": {
+          "build_environment": {
+            "GYP_DEFINES": "asan=1 clang=1 lsan=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64",
+            "GYP_GENERATORS": "ninja"
+          },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
@@ -659,6 +671,10 @@
       {
         "builder_name": "V8 Linux ASAN arm - debug builder",
         "properties": {
+          "build_environment": {
+            "GYP_DEFINES": "asan=1 clang=1 lsan=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64",
+            "GYP_GENERATORS": "ninja"
+          },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
@@ -673,6 +689,10 @@
       {
         "builder_name": "V8 Linux ASAN mipsel - debug builder",
         "properties": {
+          "build_environment": {
+            "GYP_DEFINES": "asan=1 clang=1 lsan=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64",
+            "GYP_GENERATORS": "ninja"
+          },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",

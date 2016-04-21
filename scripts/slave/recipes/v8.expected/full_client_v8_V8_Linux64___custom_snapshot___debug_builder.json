@@ -237,6 +237,10 @@
       {
         "builder_name": "V8 Linux64 - custom snapshot - debug",
         "properties": {
+          "build_environment": {
+            "GYP_DEFINES": "clang=1 embed_script='[SLAVE_BUILD]/v8/test/mjsunit/mjsunit.js' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=x64",
+            "GYP_GENERATORS": "ninja"
+          },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
@@ -249,6 +253,10 @@
       {
         "builder_name": "V8 Linux64 GC Stress - custom snapshot",
         "properties": {
+          "build_environment": {
+            "GYP_DEFINES": "clang=1 embed_script='[SLAVE_BUILD]/v8/test/mjsunit/mjsunit.js' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=x64",
+            "GYP_GENERATORS": "ninja"
+          },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",

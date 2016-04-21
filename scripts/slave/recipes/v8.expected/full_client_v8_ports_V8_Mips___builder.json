@@ -169,6 +169,15 @@
       {
         "builder_name": "V8 Mips - big endian - nosnap - 1",
         "properties": {
+          "build_environment": {
+            "AR": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ar",
+            "CC": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-gcc",
+            "CXX": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
+            "GYP_CROSSCOMPILE": "1",
+            "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
+            "LINK": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
+            "RANLIB": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
+          },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
@@ -177,6 +186,15 @@
       {
         "builder_name": "V8 Mips - big endian - nosnap - 2",
         "properties": {
+          "build_environment": {
+            "AR": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ar",
+            "CC": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-gcc",
+            "CXX": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
+            "GYP_CROSSCOMPILE": "1",
+            "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
+            "LINK": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-g++",
+            "RANLIB": "[SLAVE_BUILD]/mips-2013.11/bin/mips-linux-gnu-ranlib"
+          },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
