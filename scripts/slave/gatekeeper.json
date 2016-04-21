@@ -395,13 +395,7 @@
           "Chromium Linux MSan Builder": {},
           "Linux MSan Tests": {},
           "Chromium Linux ChromeOS MSan Builder": {},
-          "Linux ChromeOS MSan Tests": {},
-          "Chromium Linux Builder (valgrind)": {},
-          "Linux Tests (valgrind)(1)": {},
-          "Linux Tests (valgrind)(2)": {},
-          "Linux Tests (valgrind)(3)": {},
-          "Linux Tests (valgrind)(4)": {},
-          "Linux Tests (valgrind)(5)": {}
+          "Linux ChromeOS MSan Tests": {}
         }
       }
     ],

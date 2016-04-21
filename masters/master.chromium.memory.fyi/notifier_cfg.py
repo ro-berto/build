@@ -79,7 +79,6 @@ def Update(config, active_master, c):
           'sheriff, etc.).\n\n'
           'For more info on the memory waterfall please see these links:\n'
           'http://dev.chromium.org/developers/tree-sheriffs/sheriff-details-chromium/memory-sheriff\n'
-          'http://dev.chromium.org/developers/how-tos/using-valgrind\n'
           'http://dev.chromium.org/developers/how-tos/using-valgrind/threadsanitizer\n'
           '\nBy the way, the current memory sheriff is on the CC list.'
       ))
