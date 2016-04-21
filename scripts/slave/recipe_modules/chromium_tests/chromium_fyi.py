@@ -36,24 +36,6 @@ SPEC = {
     'build_gs_bucket': 'chromium-fyi-archive',
   },
   'builders': {
-    'Win Builder': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'builder',
-      'compile_targets': [
-        'chromium_builder_tests',
-      ],
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
-      'use_isolate': True,
-    },
     'Chromium Mac 10.10 MacViews': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
