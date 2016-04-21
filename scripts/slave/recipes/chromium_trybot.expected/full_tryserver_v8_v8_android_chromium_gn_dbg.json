@@ -383,6 +383,8 @@
       "goma",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
+      "--goma-service-account-json-file",
+      "/creds/service_accounts/service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "--goma-fail-fast",
