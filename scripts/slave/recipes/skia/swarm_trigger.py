@@ -133,7 +133,8 @@ def isolate_recipes(api):
 
 def trigger_task(api, task_name, builder, builder_spec, got_revision,
                  infrabots_dir, idempotent=False, store_output=True,
-                 extra_isolate_hashes=None, expiration=None, hard_timeout=None):
+                 extra_isolate_hashes=None, expiration=None, hard_timeout=None,
+                 io_timeout=None):
   """Trigger the given bot to run as a Swarming task."""
   # TODO(borenet): We're using Swarming directly to run the recipe through
   # recipes.py. Once it's possible to track the state of a Buildbucket build,
@@ -184,7 +185,8 @@ def trigger_task(api, task_name, builder, builder_spec, got_revision,
       store_output=store_output,
       extra_args=extra_args,
       expiration=expiration,
-      hard_timeout=hard_timeout)
+      hard_timeout=hard_timeout,
+      io_timeout=io_timeout)
 
 
 def checkout_steps(api):
@@ -247,24 +249,27 @@ def compile_steps_swarm(api, builder_spec, got_revision, infrabots_dir,
 def get_timeouts(builder_cfg):
   """Some builders require longer than the default timeouts.
 
-  Returns tuple of (expiration, hard_timeout). If those values are None then
-  default timeouts should be used.
+  Returns tuple of (expiration, hard_timeout, io_timeout). If those values are
+  none then default timeouts should be used.
   """
   expiration = None
   hard_timeout = None
+  io_timeout = None
   if 'Valgrind' in builder_cfg.get('extra_config', ''):
     expiration = 2*24*60*60
     hard_timeout = 9*60*60
+    io_timeout = 60*60
   elif 'Coverage' == builder_cfg['configuration']:
     hard_timeout = 3*60*60
-  return expiration, hard_timeout
+  return expiration, hard_timeout, io_timeout
 
 
 def perf_steps_trigger(api, builder_spec, got_revision, infrabots_dir,
                        extra_hashes):
   """Trigger perf tests via Swarming."""
 
-  expiration, hard_timeout = get_timeouts(builder_spec['builder_cfg'])
+  expiration, hard_timeout, io_timeout = get_timeouts(
+      builder_spec['builder_cfg'])
   return trigger_task(
       api,
       'perf',
@@ -274,7 +279,8 @@ def perf_steps_trigger(api, builder_spec, got_revision, infrabots_dir,
       infrabots_dir,
       extra_isolate_hashes=extra_hashes,
       expiration=expiration,
-      hard_timeout=hard_timeout)
+      hard_timeout=hard_timeout,
+      io_timeout=io_timeout)
 
 
 def perf_steps_collect(api, task, upload_perf_results, got_revision,
@@ -318,7 +324,8 @@ def perf_steps_collect(api, task, upload_perf_results, got_revision,
 def test_steps_trigger(api, builder_spec, got_revision, infrabots_dir,
                        extra_hashes):
   """Trigger DM via Swarming."""
-  expiration, hard_timeout = get_timeouts(builder_spec['builder_cfg'])
+  expiration, hard_timeout, io_timeout = get_timeouts(
+      builder_spec['builder_cfg'])
   return trigger_task(
       api,
       'test',
@@ -328,7 +335,8 @@ def test_steps_trigger(api, builder_spec, got_revision, infrabots_dir,
       infrabots_dir,
       extra_isolate_hashes=extra_hashes,
       expiration=expiration,
-      hard_timeout=hard_timeout)
+      hard_timeout=hard_timeout,
+      io_timeout=io_timeout)
 
 
 def test_steps_collect(api, task, upload_dm_results, got_revision, is_trybot,

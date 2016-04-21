@@ -9,6 +9,7 @@ import shlex
 
 DEFAULT_TASK_EXPIRATION = 4*60*60
 DEFAULT_TASK_TIMEOUT = 60*60
+DEFAULT_IO_TIMEOUT = 20*60
 
 
 class SkiaSwarmingApi(recipe_api.RecipeApi):
@@ -60,7 +61,7 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
       self, isolate_path, isolate_base_dir, task_name, isolate_vars,
       swarm_dimensions, isolate_blacklist=None, extra_isolate_hashes=None,
       idempotent=False, store_output=True, extra_args=None, expiration=None,
-      hard_timeout=None):
+      hard_timeout=None, io_timeout=None):
     """Isolate inputs and trigger the task to run."""
     os_type = swarm_dimensions.get('os', 'linux')
     isolated_hash = self.isolate_task(
@@ -72,7 +73,8 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
                                         store_output=store_output,
                                         extra_args=extra_args,
                                         expiration=expiration,
-                                        hard_timeout=hard_timeout)
+                                        hard_timeout=hard_timeout,
+                                        io_timeout=io_timeout)
     assert len(tasks) == 1
     return tasks[0]
 
@@ -174,7 +176,7 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
 
   def trigger_swarming_tasks(
       self, swarm_hashes, dimensions, idempotent=False, store_output=True,
-      extra_args=None, expiration=None, hard_timeout=None):
+      extra_args=None, expiration=None, hard_timeout=None, io_timeout=None):
     """Triggers swarming tasks using swarm hashes.
 
     Args:
@@ -188,6 +190,8 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
                   DEFAULT_TASK_EXPIRATION is used if this argument is None.
       hard_timeout: int. Task will timeout if not completed within this time.
                     DEFAULT_TASK_TIMEOUT is used if this argument is None.
+      io_timeout: int. Task will timeout if there is no output within this time.
+                  DEFAULT_IO_TIMEOUT is used if this argument is None.
 
     Returns:
       List of swarming.SwarmingTask instances.
@@ -206,6 +210,8 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
           expiration if expiration else DEFAULT_TASK_EXPIRATION)
       swarming_task.hard_timeout = (
           hard_timeout if hard_timeout else DEFAULT_TASK_TIMEOUT)
+      swarming_task.io_timeout = (
+          io_timeout if io_timeout else DEFAULT_IO_TIMEOUT)
       if extra_args:
         swarming_task.extra_args = extra_args
       swarming_tasks.append(swarming_task)
