@@ -1819,23 +1819,6 @@ class WebViewCTSTest(Test):
     api.chromium_android.run_webview_cts()
 
 
-class DiagnoseGomaTest(Test):
-  name = 'diagnose_goma'
-
-  @property
-  def name(self):
-    return 'diagnose_goma'
-
-  @staticmethod
-  def compile_targets(_):
-    return []
-
-  def run(self, api, suffix, test_filter=None):
-    diagnose_goma_log_py = api.path['build'].join('goma',
-                                                  'diagnose_goma_log.py')
-    api.python('diagnose_goma', diagnose_goma_log_py, [])
-
-
 class IncrementalCoverageTest(Test):
   name = 'incremental_coverage'
 

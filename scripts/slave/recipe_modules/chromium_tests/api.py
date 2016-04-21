@@ -309,13 +309,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
         "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
 
-    tests, tests_including_triggered = bot_config.get_tests(bot_db)
-
-    if bot_config.get('goma_canary') or bot_config.get('goma_staging'):
-      tests.insert(0, steps.DiagnoseGomaTest())
-      tests_including_triggered.insert(0, steps.DiagnoseGomaTest())
-
-    return tests, tests_including_triggered
+    return bot_config.get_tests(bot_db)
 
   def get_compile_targets(self, bot_config, bot_db, tests):
     assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
