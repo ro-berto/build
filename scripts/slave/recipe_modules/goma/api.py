@@ -33,6 +33,9 @@ class GomaApi(recipe_api.RecipeApi):
         self.m.cipd.install_client()
         goma_package = ('infra_internal/goma/client/%s' %
             self.m.cipd.platform_suffix())
+        # For Windows there's only 64-bit goma client.
+        if self.m.platform.is_win:
+          goma_package = goma_package.replace('386', 'amd64')
         goma_dir = self.m.path['cache'].join('cipd', 'goma')
         self.m.cipd.ensure(goma_dir, {goma_package: 'release'})
         return goma_dir
