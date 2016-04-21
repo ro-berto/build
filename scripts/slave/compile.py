@@ -177,9 +177,6 @@ def goma_setup(options, env):
   goma_key = os.path.join(options.goma_dir, 'goma.key')
   if os.path.exists(goma_key):
     env['GOMA_API_KEY_FILE'] = goma_key
-  if options.goma_service_account_json_file:
-    env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = \
-        options.goma_service_account_json_file
   if chromium_utils.IsWindows():
     env['GOMA_RPC_EXTRA_PARAMS'] = '?win'
   goma_start_command = ['restart'] if options.clobber else ['ensure_start']
@@ -1268,9 +1265,6 @@ def real_main():
   option_parser.add_option('--goma-disable-local-fallback', action='store_true')
   option_parser.add_option('--goma-jsonstatus',
                            help='Specify a file to dump goma_ctl jsonstatus.')
-  option_parser.add_option('--goma-service-account-json-file',
-                           help='Specify a file containing goma service account'
-                                ' credentials')
   option_parser.add_option('--verbose', action='store_true')
   option_parser.add_option('--gsutil-py-path',
                            help='Specify path to gsutil.py script.')

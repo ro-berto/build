@@ -7,12 +7,6 @@ from recipe_engine import recipe_api
 class GomaApi(recipe_api.RecipeApi):
   """GomaApi contains helper functions for using goma."""
 
-  @property
-  def service_account_json_path(self):
-    if self.m.platform.is_win:
-      return 'C:\\creds\\service_accounts\\service-account-goma-client.json'
-    return '/creds/service_accounts/service-account-goma-client.json'
-
   def update_goma_canary(self):
     """Returns a step for updating goma canary."""
     # deprecated? switch to use ensure_goma with canary=True.
@@ -27,8 +21,12 @@ class GomaApi(recipe_api.RecipeApi):
   def ensure_goma(self):
     with self.m.step.nest('ensure_goma'):
       try:
-        self.m.cipd.set_service_account_credentials(
-            self.service_account_json_path)
+        if self.m.platform.is_win:
+          creds = ('C:\\creds\\service_accounts\\'
+                   'service-account-goma-client.json')
+        else:
+          creds = '/creds/service_accounts/service-account-goma-client.json'
+        self.m.cipd.set_service_account_credentials(creds)
 
         self.m.cipd.install_client()
         goma_package = ('infra_internal/goma/client/%s' %

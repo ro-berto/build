@@ -308,8 +308,6 @@
       "goma-clang",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
-      "--goma-service-account-json-file",
-      "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
       "--",
