@@ -219,7 +219,7 @@ BUILDERS = {
         ] + with_test_args(
             'isolates',
             ['--isolates'],
-            [V8Testing],
+            [V8Testing_2],
         ) + with_test_args(
             'nosse3',
             ['--extra-flags', '--noenable-sse3 --noenable-avx'],
