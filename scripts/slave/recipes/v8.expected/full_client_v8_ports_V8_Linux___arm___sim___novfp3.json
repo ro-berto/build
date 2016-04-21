@@ -88,7 +88,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
-      "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_can_use_vfp3_instructions=false v8_target_arch=arm",
+      "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },

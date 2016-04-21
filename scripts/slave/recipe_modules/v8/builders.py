@@ -1375,8 +1375,7 @@ BUILDERS = {
       },
       'V8 Linux - arm - sim - novfp3': {
         # TODO(machenbach): Can these configs be reduced to one?
-        'chromium_apply_config': [
-          'clang', 'v8_ninja', 'goma', 'simulate_arm', 'novfp3'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1391,8 +1390,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - debug - novfp3': {
-        'chromium_apply_config': [
-          'clang', 'v8_ninja', 'goma', 'simulate_arm', 'novfp3'],
+        'chromium_apply_config': ['clang', 'v8_ninja', 'goma', 'simulate_arm'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
