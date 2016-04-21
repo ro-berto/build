@@ -358,12 +358,6 @@ class V8Test(BaseTest):
   def run(self, test=None, coverage_context=NULL_COVERAGE, **kwargs):
     test = test or TEST_CONFIGS[self.name]
 
-    def step_test_data():
-      return self.v8.test_api.output_json(
-          self.v8._test_data.get('test_failures', False),
-          self.v8._test_data.get('wrong_results', False),
-          self.v8._test_data.get('flakes', False))
-
     full_args, env = self.v8._setup_test_runner(
         test, self.applied_test_filter, self.test_step_config)
     if self.v8.c.testing.may_shard and self.v8.c.testing.SHARD_COUNT > 1:
@@ -381,7 +375,7 @@ class V8Test(BaseTest):
       full_args,
       cwd=self.api.path['checkout'],
       env=env,
-      step_test_data=step_test_data,
+      step_test_data=lambda: self.v8.test_api.output_json(),
       **kwargs
     )
     return self.post_run(test)
@@ -541,10 +535,7 @@ class V8SwarmingTest(V8Test):
       # swarming collect step like for local testing.
       result = self.api.swarming.collect_task(
         self.task,
-        step_test_data=lambda: self.v8.test_api.output_json(
-            self.v8._test_data.get('test_failures', False),
-            self.v8._test_data.get('wrong_results', False),
-            self.v8._test_data.get('flakes', False)),
+        step_test_data=lambda: self.v8.test_api.output_json(),
       )
     finally:
       # Note: Exceptions from post_run might hide a pending exception from the

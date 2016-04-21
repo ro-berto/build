@@ -175,7 +175,8 @@ def GenTests(api):
         'v8_linux_rel_ng_triggered',
         'failures',
     ) +
-    api.v8(test_failures=True, wrong_results=False, flakes=False)
+    api.override_step_data(
+        'Check', api.v8.output_json(has_failures=True))
   )
 
   yield (
@@ -184,7 +185,8 @@ def GenTests(api):
         'v8_linux_rel_ng_triggered',
         'flakes',
     ) +
-    api.v8(test_failures=True, wrong_results=False, flakes=True)
+    api.override_step_data(
+        'Check', api.v8.output_json(has_failures=True, flakes=True))
   )
 
   def TestFailures(wrong_results, flakes):
@@ -196,7 +198,9 @@ def GenTests(api):
           'V8 Linux - isolates',
           'test_failures%s%s' % (results_suffix, flakes_suffix),
       ) +
-      api.v8(test_failures=True, wrong_results=wrong_results, flakes=flakes)
+      api.override_step_data(
+          'Check - isolates', api.v8.output_json(
+              has_failures=True, wrong_results=wrong_results, flakes=flakes))
     )
 
   yield TestFailures(wrong_results=False, flakes=False)

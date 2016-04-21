@@ -393,23 +393,3 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
   def fail(self, step_name, variant='default'):
     return self.override_step_data(
         step_name, self.failures_example(variant=variant))
-
-  @recipe_test_api.mod_test_data
-  @staticmethod
-  def test_failures(has_failures):
-    return has_failures
-
-  @recipe_test_api.mod_test_data
-  @staticmethod
-  def flakes(flakes):
-    return flakes
-
-  @recipe_test_api.mod_test_data
-  @staticmethod
-  def wrong_results(wrong_results):
-    return wrong_results
-
-  def __call__(self, test_failures=False, wrong_results=False, flakes=False):
-    return (self.test_failures(test_failures) +
-            self.wrong_results(wrong_results) +
-            self.flakes(flakes))
