@@ -52,8 +52,6 @@ SUPPRESSIONS = {
         'GPU Win Builder (dbg)',
         'Linux Debug (NVIDIA)',
         'Mac 10.10 Debug (Intel)',
-        'Mac Retina Release',
-        'Mac Retina Debug',
         'Mac 10.10 Retina Debug (AMD)',
         'Win7 Debug (NVIDIA)',
     ],

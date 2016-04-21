@@ -164,6 +164,11 @@ TRYBOTS = freeze({
             'buildername': 'GPU Mac Builder',
             'tester': 'Mac Retina Release',
           },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Mac Builder',
+            'tester': 'Mac 10.10 Retina Release (AMD)',
+          },
         ],
       },
       'mac_angle_dbg_ng': {
@@ -177,6 +182,11 @@ TRYBOTS = freeze({
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU Mac Builder (dbg)',
             'tester': 'Mac Retina Debug',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Mac Builder (dbg)',
+            'tester': 'Mac 10.10 Retina Debug (AMD)',
           },
         ],
       },
