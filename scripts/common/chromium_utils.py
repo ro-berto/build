@@ -926,6 +926,7 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
       # Wait for kill signal or timeout.
       if kill_event.wait(timeout):
         break
+    print threading.currentThread(), 'TimedFlush: Finished'
 
   # TODO(all): nsylvain's CommandRunner in buildbot_slave is based on this
   # method.  Update it when changes are introduced here.
@@ -967,6 +968,8 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
           in_line = cStringIO.StringIO()
         in_byte = readfh.read(1)
 
+      print threading.currentThread(), 'ProcessRead: readfh finished.'
+
       if log_event and in_line.getvalue():
         log_event.set()
 
@@ -983,9 +986,11 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
         if in_line.getvalue():
           writefh.write(in_line.getvalue())
     finally:
+      print threading.currentThread(), 'ProcessRead: cleaning up.'
       kill_event.set()
       flush_thread.join()
       writefh.flush()
+      print  threading.currentThread(), 'ProcessRead: finished.'
 
   pipes = pipes or []
 
