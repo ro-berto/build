@@ -408,6 +408,24 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'UBSanVptr Linux': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'test_generators': [
+        steps.generate_gtest,
+        steps.generate_script,
+        steps.generate_isolated_script,
+      ],
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Mac OpenSSL': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
