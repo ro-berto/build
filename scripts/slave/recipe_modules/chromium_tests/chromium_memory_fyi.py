@@ -12,7 +12,7 @@ SPEC = {
     'Chromium Linux MSan Builder': {
       'chromium_config': 'chromium_msan',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['prebuilt_instrumented_libraries'],
+      'chromium_apply_config': ['mb', 'prebuilt_instrumented_libraries'],
       'GYP_DEFINES': {
         'msan_track_origins': 2,
       },
@@ -45,7 +45,7 @@ SPEC = {
     'Chromium Linux ChromeOS MSan Builder': {
       'chromium_config': 'chromium_msan',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['prebuilt_instrumented_libraries'],
+      'chromium_apply_config': ['mb', 'prebuilt_instrumented_libraries'],
       'GYP_DEFINES': {
         'msan_track_origins': 2,
         'chromeos': 1
@@ -79,6 +79,7 @@ SPEC = {
     'Chromium Linux TSan Builder': {
       'chromium_config': 'chromium_tsan2',
       'gclient_config': 'chromium',
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
