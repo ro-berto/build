@@ -182,12 +182,13 @@ def find_values(results, metric):  # pragma: no cover
       results, metric.as_pair())
   return has_valid_value, value
 
+def _rebase_path(file_path):
+  """Attempts to make a path relative src/out/Release"""
+  if file_path.startswith('src/tools') or file_path.startswith(r'src\tools'):
+    return os.path.join(os.pardir, os.pardir, os.pardir, file_path)
+  return file_path
 
 def _run_command(api, command, step_name):
-  # TODO(robertocn): Reevaluate this approach when adding support for non-perf
-  # tests and non-linux platforms.
-  if api.m.platform.is_linux and 'xvfb' not in command:
-    command = 'xvfb-run -a ' + command
   command_parts = command.split()
   stdout = api.m.raw_io.output()
   stderr = api.m.raw_io.output()
@@ -199,9 +200,11 @@ def _run_command(api, command, step_name):
     kwargs['env'] = {'CHROMIUM_OUTPUT_DIR': api.m.chromium.output_dir}
 
   try:
-    step_result = api.m.step(
-        step_name,
-        command_parts,
+    step_result = api.m.chromium.runtest(
+        test=_rebase_path(command_parts[0]),
+        args=command_parts[1:],
+        xvfb=True,
+        name=step_name,
         stdout=stdout,
         stderr=stderr,
         **kwargs)
