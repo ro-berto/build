@@ -48,7 +48,9 @@ F('win_asan_rel', win_out().ChromiumASANFactory(
        'cf_archive_name': 'asan',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': asan_win_gyp}}))
+       'gclient_env': {'GYP_DEFINES': asan_win_gyp},
+       'use_mb': True,
+    }))
 
 # ASan/Win coverage bot.
 B('Win ASan Release Coverage', 'win_asan_rel_cov', scheduler='chromium_lkgr')
@@ -62,7 +64,10 @@ F('win_asan_rel_cov', win_out().ChromiumASANFactory(
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {
-           'GYP_DEFINES': asan_win_gyp + ' sanitizer_coverage=edge'}}))
+           'GYP_DEFINES': asan_win_gyp + ' sanitizer_coverage=edge',
+       },
+       'use_mb': True,
+    }))
 
 
 # ASan/Win supports neither the component build nor NaCL at the moment.
@@ -80,7 +85,9 @@ F('win_asan_rel_media', win_out().ChromiumASANFactory(
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan',
        'gs_bucket': 'gs://chrome-test-builds/media',
-       'gclient_env': {'GYP_DEFINES': asan_win_media_gyp}}))
+       'gclient_env': {'GYP_DEFINES': asan_win_media_gyp},
+       'use_mb': True,
+    }))
 
 # Win SyzyASan bot.
 B('Win SyzyASAN LKGR', 'win_syzyasan_lkgr', 'compile', 'chromium_lkgr')
@@ -101,7 +108,9 @@ F('mac_asan_rel', linux().ChromiumASANFactory(
        'cf_archive_name': 'asan',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': asan_mac_gyp}}))
+       'gclient_env': {'GYP_DEFINES': asan_mac_gyp},
+       'use_mb': True,
+    }))
 
 B('Mac ASAN Release Media', 'mac_asan_rel_media', 'compile', 'chromium_lkgr')
 F('mac_asan_rel_media', linux().ChromiumASANFactory(
@@ -111,7 +120,9 @@ F('mac_asan_rel_media', linux().ChromiumASANFactory(
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan',
        'gs_bucket': 'gs://chrome-test-builds/media',
-       'gclient_env': {'GYP_DEFINES': asan_mac_gyp + media_gyp}}))
+       'gclient_env': {'GYP_DEFINES': asan_mac_gyp + media_gyp},
+       'use_mb': True,
+    }))
 
 B('Mac ASAN Debug', 'mac_asan_dbg', 'compile', 'chromium_lkgr')
 F('mac_asan_dbg', linux().ChromiumASANFactory(
@@ -124,7 +135,9 @@ F('mac_asan_dbg', linux().ChromiumASANFactory(
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_mac_gyp +
-                                      ' component=static_library '}}))
+                                      ' component=static_library '},
+       'use_mb': True,
+    }))
 
 ################################################################################
 ## Linux
@@ -143,7 +156,9 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
        'cf_archive_name': 'asan',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': asan_rel_gyp}}))
+       'gclient_env': {'GYP_DEFINES': asan_rel_gyp},
+       'use_mb': True,
+    }))
 
 linux_media_gyp = (' proprietary_codecs=1 ffmpeg_branding=ChromeOS')
 B('ASAN Release Media', 'linux_asan_rel_media',
@@ -157,7 +172,9 @@ F('linux_asan_rel_media', linux().ChromiumASANFactory(
        'cf_archive_name': 'asan',
        'gs_bucket': 'gs://chrome-test-builds/media',
        'gclient_env': {'GYP_DEFINES': asan_rel_gyp +
-                       linux_media_gyp}}))
+                       linux_media_gyp},
+       'use_mb': True,
+    }))
 
 asan_rel_sym_gyp = ('asan=1 lsan=1 sanitizer_coverage=edge '
                     'v8_enable_verify_heap=1 enable_ipc_fuzzer=1 '
@@ -173,7 +190,9 @@ F('linux_asan_rel_sym', linux().ChromiumASANFactory(
        'cf_archive_name': 'asan-symbolized',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': asan_rel_sym_gyp}}))
+       'gclient_env': {'GYP_DEFINES': asan_rel_sym_gyp},
+       'use_mb': True,
+    }))
 
 asan_debug_gyp = ('asan=1 lsan=1 sanitizer_coverage=edge enable_ipc_fuzzer=1 ')
 
@@ -187,7 +206,9 @@ F('linux_asan_dbg', linux().ChromiumASANFactory(
        'cf_archive_name': 'asan',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': asan_debug_gyp}}))
+       'gclient_env': {'GYP_DEFINES': asan_debug_gyp},
+       'use_mb': True,
+    }))
 
 asan_chromiumos_rel_gyp = ('%s chromeos=1' % asan_rel_gyp)
 
@@ -203,7 +224,9 @@ F('linux_chromiumos_asan_rel', linux().ChromiumASANFactory(
        'cf_archive_subdir_suffix': 'chromeos',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': asan_chromiumos_rel_gyp}}))
+       'gclient_env': {'GYP_DEFINES': asan_chromiumos_rel_gyp},
+       'use_mb': True,
+    }))
 
 asan_ia32_v8_arm = ('asan=1 sanitizer_coverage=edge disable_nacl=1 '
                     'v8_target_arch=arm host_arch=x86_64 target_arch=ia32 '
@@ -229,7 +252,9 @@ F('linux_asan_dbg_ia32_v8_arm', linux().ChromiumASANFactory(
        'cf_archive_name': 'asan-v8-arm',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm}}))
+       'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm},
+       'use_mb': True,
+    }))
 
 B('ASan Release (32-bit x86 with V8-ARM)',
   'linux_asan_rel_ia32_v8_arm',
@@ -243,7 +268,9 @@ F('linux_asan_rel_ia32_v8_arm', linux().ChromiumASANFactory(
        'cf_archive_name': 'asan-v8-arm',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm_rel}}))
+       'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm_rel},
+       'use_mb': True,
+    }))
 
 B('ASan Release Media (32-bit x86 with V8-ARM)',
   'linux_asan_rel_media_ia32_v8_arm',
@@ -256,7 +283,9 @@ F('linux_asan_rel_media_ia32_v8_arm', linux().ChromiumASANFactory(
        'cf_archive_subdir_suffix': 'v8-arm',
        'cf_archive_name': 'asan-v8-arm',
        'gs_bucket': 'gs://chrome-test-builds/media',
-       'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm_rel + linux_media_gyp}}))
+       'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm_rel + linux_media_gyp},
+       'use_mb': True,
+    }))
 
 B('ASan Release (32-bit x86 with V8-ARM, symbolized)',
   'linux_asan_rel_sym_ia32_v8_arm',
@@ -270,7 +299,9 @@ F('linux_asan_rel_sym_ia32_v8_arm', linux().ChromiumASANFactory(
        'cf_archive_name': 'asan-symbolized-v8-arm',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm_rel_sym}}))
+       'gclient_env': {'GYP_DEFINES': asan_ia32_v8_arm_rel_sym},
+       'use_mb': True,
+    }))
 
 # The build process for TSan is described at
 # http://dev.chromium.org/developers/testing/threadsanitizer-tsan-v2
@@ -300,7 +331,9 @@ F('linux_tsan_dbg', linux().ChromiumFactory(
        'gs_bucket': 'gs://chromium-browser-tsan',
        'gs_acl': 'public-read',
        'tsan': True,
-       'gclient_env': {'GYP_DEFINES': tsan_gyp}}))
+       'gclient_env': {'GYP_DEFINES': tsan_gyp},
+       'use_mb': True,
+    }))
 
 # The build process for MSan is described at
 # http://dev.chromium.org/developers/testing/memorysanitizer
@@ -318,7 +351,9 @@ F('linux_msan_rel_no_origins', linux().ChromiumFactory(
        'cf_archive_name': 'msan-no-origins',
        'gs_bucket': 'gs://chromium-browser-msan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': msan_gyp + 'msan_track_origins=0 '}}))
+       'gclient_env': {'GYP_DEFINES': msan_gyp + 'msan_track_origins=0 '},
+       'use_mb': True,
+    }))
 
 B('MSAN Release (chained origins)', 'linux_msan_rel_chained_origins', 'compile',
   'chromium_lkgr')
@@ -331,7 +366,9 @@ F('linux_msan_rel_chained_origins', linux().ChromiumFactory(
        'cf_archive_name': 'msan-chained-origins',
        'gs_bucket': 'gs://chromium-browser-msan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': msan_gyp + 'msan_track_origins=2 '}}))
+       'gclient_env': {'GYP_DEFINES': msan_gyp + 'msan_track_origins=2 '},
+       'use_mb': True,
+    }))
 
 # This is a bot that uploads LKGR telemetry harnesses to Google Storage.
 B('Telemetry Harness Upload', 'telemetry_harness_upload', None, 'chromium_lkgr')
@@ -353,7 +390,9 @@ F('linux_ubsan_rel', linux().ChromiumFactory(
        'cf_archive_name': 'ubsan',
        'gs_bucket': 'gs://chromium-browser-ubsan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': ubsan_gyp}}))
+       'gclient_env': {'GYP_DEFINES': ubsan_gyp},
+       'use_mb': True,
+    }))
 
 ubsan_vptr_gyp = ('ubsan_vptr=1 sanitizer_coverage=edge ')
 
@@ -368,7 +407,9 @@ F('linux_ubsan_vptr_rel', linux().ChromiumFactory(
        'cf_archive_name': 'ubsan-vptr',
        'gs_bucket': 'gs://chromium-browser-ubsan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': ubsan_vptr_gyp}}))
+       'gclient_env': {'GYP_DEFINES': ubsan_vptr_gyp},
+       'use_mb': True,
+    }))
 
 def Update(_config, active_master, c):
   lkgr_poller = gitiles_poller.GitilesPoller(
