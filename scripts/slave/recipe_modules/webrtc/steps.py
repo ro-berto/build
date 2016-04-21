@@ -120,17 +120,9 @@ def get_android_tool(api):
 
 
 class AndroidTest(Test):
-  # WebRTC tests need a longer timeout to avoid getting killed by the Chromium
-  # Android test framework.
-  _SHARD_TIMEOUT = 15 * 60
-
-  def __init__(self, name):
-    super(AndroidTest, self).__init__(name)
-
   def run(self, api, suffix):
     api.m.chromium_android.run_test_suite(self._name,
-                                          tool=get_android_tool(api),
-                                          shard_timeout=self._SHARD_TIMEOUT)
+                                          tool=get_android_tool(api))
 
 
 class AndroidInstrumentationTest(Test):
@@ -152,9 +144,6 @@ class AndroidPerfTest(Test):
     from the gtest binaries since the way of running perf tests with telemetry
     is entirely different.
   """
-  # WebRTC tests need a longer timeout to avoid getting killed by the Chromium
-  # Android test framework.
-  _SHARD_TIMEOUT = 45 * 60
 
   def __init__(self, name, revision, perf_id=None):
     super(AndroidPerfTest, self).__init__(name)
@@ -166,17 +155,15 @@ class AndroidPerfTest(Test):
       # Run as a normal test for trybots and Debug, without perf data scraping.
       api.m.chromium_android.run_test_suite(
           self._name,
-          tool=get_android_tool(api),
-          shard_timeout=self._SHARD_TIMEOUT)
+          tool=get_android_tool(api))
     else:
-      args = ['gtest', '-s', self._name, '--verbose', '--release',
-              '-t', str(self._SHARD_TIMEOUT)]
-      tool = get_android_tool(api)
+      wrapper_script = api.m.chromium.output_dir.join('bin',
+                                                      'run_%s' % self._name)
+      args = ['--verbose']
       api.add_test(name=self._name,
-                   test=api.m.chromium_android.c.test_runner,
+                   test=wrapper_script,
                    args=args,
                    revision=self._revision,
                    perf_test=True,
-                   perf_dashboard_id=self._name,
-                   env={'CHROMIUM_OUT_DIR': api.m.chromium.output_dir})
+                   perf_dashboard_id=self._name)
 
