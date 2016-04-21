@@ -193,7 +193,7 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
     if roll_result['trivial']:
       roll_step.presentation.step_text += ' (trivial)'
     else:
-      roll_step.presentation.status = self.m.step.WARNING
+      roll_step.presentation.status = self.m.step.FAILURE
 
     # We use recipes.cfg hashes to uniquely identify changes (which might be
     # rebased).
