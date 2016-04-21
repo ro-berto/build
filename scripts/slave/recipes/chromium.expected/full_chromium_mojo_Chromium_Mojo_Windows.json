@@ -267,6 +267,8 @@
       "[GOMA_CACHE]",
       "--build-tool",
       "ninja",
+      "--build-data-dir",
+      "[ROOT]\\build_data_dir",
       "--compiler",
       "goma",
       "--goma-jsonstatus",

@@ -103,6 +103,7 @@ def GenTests(api):
         'mastername': mastername,
         'buildername': buildername,
         'parent_buildername': bot_config.get('parent_buildername'),
+        'build_data_dir': api.path['root'].join('build_data_dir'),
       }
       if mastername == 'chromium.webkit':
         properties['gs_acl'] = 'public-read'
