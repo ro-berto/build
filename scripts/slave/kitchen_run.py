@@ -120,8 +120,12 @@ def main(argv):
     tempdir = rt.tempdir(basedir)
     LOGGER.info('Using temporary directory: [%s].', tempdir)
 
+    build_data_dir = rt.tempdir(basedir)
+    LOGGER.info('Using build data directory: [%s].', build_data_dir)
+
     properties = copy.copy(args.factory_properties)
     properties.update(args.build_properties)
+    properties['build_data_dir'] = build_data_dir
     LOGGER.info('Using properties: %r', properties)
     properties_file = os.path.join(tempdir, 'kitchen_properties.json')
     with open(properties_file, 'w') as f:
