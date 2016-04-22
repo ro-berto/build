@@ -175,8 +175,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       if 'goma' in self.c.compile_py.compiler:
         args += [
             '--goma-jsonstatus', self.m.json.output(),
-            '--goma-service-account-json-file',
-            self.m.goma.service_account_json_path,
         ]
     if out_dir:
       args += ['--out-dir', out_dir]
@@ -466,7 +464,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def ensure_goma(self):
     # TODO(phajdan.jr): make cipd-fetched goma work on chromeos.
-    if self.c.gyp_env.GYP_DEFINES.get('chromeos') == 1:
+    if self.c.gyp_env.GYP_DEFINES.get('chromeos') == 1:  # pragma: no cover
       return
 
     goma_dir = self.m.goma.ensure_goma()

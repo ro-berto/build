@@ -110,63 +110,6 @@
     ]
   },
   {
-    "cmd": [],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "ensure_goma"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::cipd]\\resources\\bootstrap.py",
-      "--platform",
-      "windows-386",
-      "--dest-directory",
-      "[SLAVE_BUILD]\\cipd",
-      "--json-output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "ensure_goma.install cipd",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[SLAVE_BUILD]\\\\cipd\\\\cipd\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[SLAVE_BUILD]\\cipd\\cipd",
-      "ensure",
-      "--root",
-      "[CACHE]\\cipd\\goma",
-      "--list",
-      "infra_internal/goma/client/windows-amd64 release",
-      "--json-output",
-      "/path/to/tmp/json",
-      "--service-account-json",
-      "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "ensure_goma.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/windows-amd64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -190,7 +133,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "archive_gpu_tests=1 build_angle_deqp_tests=1 chromium_win_pch=0 component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\cipd\\goma' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "archive_gpu_tests=1 build_angle_deqp_tests=1 chromium_win_pch=0 component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[BUILD]\\goma' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -342,7 +285,7 @@
       "--config-file",
       "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[CACHE]\\cipd\\goma",
+      "[BUILD]\\goma",
       "--swarming-targets-file",
       "browser_tests\n",
       "//out/Release"
@@ -380,10 +323,8 @@
       "goma",
       "--goma-jsonstatus",
       "/path/to/tmp/json",
-      "--goma-service-account-json-file",
-      "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "--goma-dir",
-      "[CACHE]\\cipd\\goma",
+      "[BUILD]\\goma",
       "--ninja-ensure-up-to-date",
       "--",
       "browser_tests",
