@@ -326,7 +326,9 @@
     },
     "name": "base_junit_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -372,7 +374,9 @@
     },
     "name": "base_junit_tests (2)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -418,7 +422,9 @@
     },
     "name": "chrome_junit_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -464,7 +470,9 @@
     },
     "name": "components_junit_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -510,7 +518,9 @@
     },
     "name": "content_junit_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -556,7 +566,9 @@
     },
     "name": "junit_unit_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -602,7 +614,9 @@
     },
     "name": "net_junit_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -648,7 +662,9 @@
     },
     "name": "ui_junit_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -696,7 +712,7 @@
   },
   {
     "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "reason": "8 tests failed: ['base_junit_tests', 'base_junit_tests', 'chrome_junit_tests', 'components_junit_tests', 'content_junit_tests', 'junit_unit_tests', 'net_junit_tests', 'ui_junit_tests']",
+    "status_code": 1
   }
 ]

@@ -605,7 +605,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test AndroidWebViewTest (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -647,7 +649,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromePublicTest (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -689,7 +693,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ContentShellTest (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -731,7 +737,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromeSyncShellTest (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1113,7 +1121,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test AndroidWebViewTest (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1155,7 +1165,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromePublicTest (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1197,7 +1209,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ContentShellTest (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1239,7 +1253,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromeSyncShellTest (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1274,7 +1290,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "AndroidWebViewTest (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -1287,7 +1303,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "ChromePublicTest (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -1300,7 +1316,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "ContentShellTest (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -1313,7 +1329,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "ChromeSyncShellTest (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },

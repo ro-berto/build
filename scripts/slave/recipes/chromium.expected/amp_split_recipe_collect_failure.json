@@ -1171,7 +1171,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test AndroidWebViewTest",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1211,7 +1213,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ContentShellTest",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1251,7 +1255,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromePublicTest",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1291,7 +1297,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromeSyncShellTest",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1520,7 +1528,9 @@
     },
     "name": "junit_unit_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1566,7 +1576,9 @@
     },
     "name": "chrome_junit_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1612,7 +1624,9 @@
     },
     "name": "content_junit_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -2426,7 +2440,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 tests failed: ['base_unittests']",
+    "reason": "8 tests failed: ['AndroidWebViewTest', 'ContentShellTest', 'ChromePublicTest', 'ChromeSyncShellTest', 'junit_unit_tests', 'chrome_junit_tests', 'content_junit_tests', 'base_unittests']",
     "status_code": 1
   }
 ]

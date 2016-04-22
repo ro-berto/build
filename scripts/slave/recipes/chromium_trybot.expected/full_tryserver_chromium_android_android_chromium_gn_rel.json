@@ -619,7 +619,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test AndroidWebViewTest (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -659,7 +661,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromePublicTest (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -699,7 +703,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromeSyncShellTest (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -739,7 +745,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ContentShellTest (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -779,7 +787,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test MojoTest (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -861,7 +871,9 @@
     },
     "name": "base_junit_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -907,7 +919,9 @@
     },
     "name": "chrome_junit_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -953,7 +967,9 @@
     },
     "name": "components_invalidation_impl_junit_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -999,7 +1015,9 @@
     },
     "name": "components_policy_junit_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1045,7 +1063,9 @@
     },
     "name": "content_junit_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1091,7 +1111,9 @@
     },
     "name": "junit_unit_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1137,7 +1159,9 @@
     },
     "name": "net_junit_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1183,7 +1207,9 @@
     },
     "name": "ui_junit_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1399,7 +1425,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test AndroidWebViewTest (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1439,7 +1467,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromePublicTest (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1479,7 +1509,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromeSyncShellTest (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1519,7 +1551,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ContentShellTest (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1559,7 +1593,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test MojoTest (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1605,7 +1641,9 @@
     },
     "name": "base_junit_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1651,7 +1689,9 @@
     },
     "name": "chrome_junit_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1697,7 +1737,9 @@
     },
     "name": "components_invalidation_impl_junit_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1743,7 +1785,9 @@
     },
     "name": "components_policy_junit_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1789,7 +1833,9 @@
     },
     "name": "content_junit_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1835,7 +1881,9 @@
     },
     "name": "junit_unit_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1881,7 +1929,9 @@
     },
     "name": "net_junit_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1927,7 +1977,9 @@
     },
     "name": "ui_junit_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1962,7 +2014,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "AndroidWebViewTest (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -1975,7 +2027,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "ChromePublicTest (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -1988,7 +2040,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "ChromeSyncShellTest (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2001,7 +2053,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "ContentShellTest (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2014,7 +2066,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "MojoTest (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2027,7 +2079,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "base_junit_tests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2040,7 +2092,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "chrome_junit_tests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2053,7 +2105,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "components_invalidation_impl_junit_tests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2066,7 +2118,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "components_policy_junit_tests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2079,7 +2131,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "content_junit_tests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2092,7 +2144,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "junit_unit_tests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2105,7 +2157,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "net_junit_tests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -2118,7 +2170,7 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "ui_junit_tests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>TestB<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },

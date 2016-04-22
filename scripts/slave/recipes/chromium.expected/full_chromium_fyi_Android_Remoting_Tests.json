@@ -501,7 +501,9 @@
     "cwd": "[SLAVE_BUILD]",
     "name": "Instrumentation test ChromotingTest",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -625,7 +627,7 @@
   },
   {
     "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "reason": "1 tests failed: ['ChromotingTest']",
+    "status_code": 1
   }
 ]

@@ -1485,18 +1485,11 @@ class AndroidTest(Test):
       None if results are invalid, a list of failures otherwise (may be empty).
     """
     try:
-      # Extract test results.
-      json_results = step_result.json.output
-      test_results = {test_name: test_data[0]['status']
-                      for result_dict in json_results['per_iteration_data']
-                      for test_name, test_data in result_dict.iteritems()}
-
-      # TODO(sergiyb): Figure out how to handle status UNKNOWN.
-      return sorted(
-          [test_name for test_name, test_status in test_results.iteritems()
-           if test_status not in ['SUCCESS', 'SKIPPED']])
-    except (KeyError, IndexError, TypeError,
-            AttributeError):  # pragma: no cover
+      gtest_results = step_result.test_utils.gtest_results
+      if 'UNRELIABLE_RESULTS' in gtest_results.raw.get('global_tags', []):
+        return None  # pragma: no cover
+      return gtest_results.failures
+    except AttributeError:  # pragma: no cover
       return None
 
   def run_tests(self, api, suffix, json_results_file):
@@ -1512,7 +1505,7 @@ class AndroidTest(Test):
   def run(self, api, suffix, test_filter=None):
     assert api.chromium.c.TARGET_PLATFORM == 'android'
     try:
-      json_results_file = api.json.output(add_json_log=False)
+      json_results_file = api.test_utils.gtest_results(add_json_log=False)
       self.run_tests(api, suffix, json_results_file)
     finally:
       step_result = api.step.active_result
@@ -1558,14 +1551,10 @@ class AndroidJunitTest(AndroidTest):
 
   #override
   def run_tests(self, api, suffix, json_results_file):
-    mock_test_results = {
-      'per_iteration_data': [{'TestA': [{'status': 'SUCCESS'}]},
-                             {'TestB': [{'status': 'FAILURE'}]}]
-    }
     api.chromium_android.run_java_unit_test_suite(
         self.name, verbose=True, suffix=suffix,
         json_results_file=json_results_file,
-        step_test_data=lambda: api.json.test_api.output(mock_test_results))
+        step_test_data=lambda: api.test_utils.test_api.canned_gtest_output(False))
 
 
 class AndroidInstrumentationTest(AndroidTest):
@@ -1653,10 +1642,6 @@ class AndroidInstrumentationTest(AndroidTest):
 
   #override
   def run_tests(self, api, suffix, json_results_file):
-    mock_test_results = {
-      'per_iteration_data': [{'TestA': [{'status': 'SUCCESS'}]},
-                             {'TestB': [{'status': 'FAILURE'}]}]
-    }
     api.chromium_android.run_instrumentation_suite(
         self.name,
         test_apk=api.chromium_android.apk_path(self._test_apk),
@@ -1672,7 +1657,7 @@ class AndroidInstrumentationTest(AndroidTest):
         json_results_file=json_results_file,
         timeout_scale=self._timeout_scale,
         wrapper_script_suite_name=self._wrapper_script_suite_name,
-        step_test_data=lambda: api.json.test_api.output(mock_test_results))
+        step_test_data=lambda: api.test_utils.test_api.canned_gtest_output(False))
 
 
 class BlinkTest(Test):
