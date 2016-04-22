@@ -1459,7 +1459,6 @@ SPEC = {
     },
     'ClangToTAndroidASan': {
       'chromium_config': 'clang_tot_android_asan',
-      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
