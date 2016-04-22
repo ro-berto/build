@@ -433,7 +433,7 @@ class V8Test(BaseTest):
     isolated_target = orig_config.get(
         'isolated_target', orig_config['tests'][0])
 
-    test_args = orig_config.get('test_args', []) + [
+    test_args = list(orig_config.get('test_args', [])) + [
       '--random-seed', failure_dict['random_seed'],
     ]
 
