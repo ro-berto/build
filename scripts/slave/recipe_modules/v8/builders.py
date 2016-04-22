@@ -1984,22 +1984,6 @@ BUILDERS = {
         'tests': [V8Testing, Ignition],
         'testing': {'platform': 'linux'},
       },
-      'v8_win_nosnap_shared_compile_rel': {
-        'v8_apply_config': ['no_snapshot'],
-        'chromium_apply_config': [
-          'default_compiler',
-          'v8_ninja',
-          'goma',
-          'shared_library',
-          'no_snapshot',
-        ],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
       'v8_win_nosnap_shared_rel_ng': {
         'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [
@@ -2041,23 +2025,6 @@ BUILDERS = {
         },
         'tests': [V8Testing_2, Ignition],
         'testing': {'platform': 'linux'},
-      },
-      'v8_win64_compile_rel': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'v8_ninja',
-          'goma',
-        ],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-        },
-        'testing': {'platform': 'win'},
       },
       'v8_win64_rel_ng': {
         'chromium_apply_config': [
@@ -2402,21 +2369,6 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-      },
-      'v8_swarming_staging': {
-        'chromium_apply_config': ['v8_ninja', 'clang', 'asan', 'goma'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [V8Testing_2],
-        'swarming_dimensions': {
-          'os': 'Mac-10.9',
-          'cpu': 'x86-64',
-        },
-        'testing': {'platform': 'mac'},
       },
     },
   },
