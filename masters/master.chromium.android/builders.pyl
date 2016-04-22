@@ -205,7 +205,7 @@
     "builders": {
       "slave_data": {
         "os": "linux",
-        "version": "precise",
+        "version": "trusty",
         "bits": 64,
       },
       "slaves": [
@@ -213,6 +213,7 @@
           "slave37-c1",
           "slave38-c1",
           "slave39-c1",
+          "slave75-c1",
         ],
     },
     "cronet_arm64": {
