@@ -216,7 +216,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\archive_build.py",
       "--target",
-      "Release",
+      "Release_x64",
       "--factory-properties",
       "{\"gclient_env\": {\"GYP_DEFINES\": \"chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\\\goma' linux_dump_symbols=0 target_arch=x64 test_isolation_mode=noop use_goma=1\"}, \"gs_acl\": \"public-read\", \"gs_bucket\": \"gs://chromium-browser-snapshots\"}",
       "--build-properties",
