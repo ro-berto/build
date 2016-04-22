@@ -551,8 +551,6 @@
       "[SLAVE_BUILD]/src/out/Release/bin/run_remoting_test_apk",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
       "--verbose",
       "--json-results-file",
       "/path/to/tmp/json"
@@ -562,6 +560,29 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "/path/to/tmp/json",
+      "--master-name",
+      "chromium.fyi",
+      "--builder-name",
+      "Android Remoting Tests",
+      "--build-number",
+      "571",
+      "--test-type",
+      "ChromotingTest",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [ChromotingTest]"
   },
   {
     "cmd": [

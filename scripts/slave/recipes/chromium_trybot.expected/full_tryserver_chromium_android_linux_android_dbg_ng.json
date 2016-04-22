@@ -484,6 +484,29 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "/path/to/tmp/json",
+      "--master-name",
+      "tryserver.chromium.android",
+      "--builder-name",
+      "linux_android_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "base_junit_tests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [base_junit_tests]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "junit",
       "-s",
@@ -501,6 +524,29 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "/path/to/tmp/json",
+      "--master-name",
+      "tryserver.chromium.android",
+      "--builder-name",
+      "linux_android_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "chrome_junit_tests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [chrome_junit_tests]"
   },
   {
     "cmd": [
@@ -528,6 +574,29 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "/path/to/tmp/json",
+      "--master-name",
+      "tryserver.chromium.android",
+      "--builder-name",
+      "linux_android_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "components_junit_tests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [components_junit_tests]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "junit",
       "-s",
@@ -545,6 +614,29 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "/path/to/tmp/json",
+      "--master-name",
+      "tryserver.chromium.android",
+      "--builder-name",
+      "linux_android_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "content_junit_tests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [content_junit_tests]"
   },
   {
     "cmd": [
@@ -572,6 +664,29 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "/path/to/tmp/json",
+      "--master-name",
+      "tryserver.chromium.android",
+      "--builder-name",
+      "linux_android_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "junit_unit_tests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [junit_unit_tests]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "junit",
       "-s",
@@ -594,6 +709,29 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "/path/to/tmp/json",
+      "--master-name",
+      "tryserver.chromium.android",
+      "--builder-name",
+      "linux_android_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "net_junit_tests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [net_junit_tests]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "junit",
       "-s",
@@ -611,6 +749,29 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "/path/to/tmp/json",
+      "--master-name",
+      "tryserver.chromium.android",
+      "--builder-name",
+      "linux_android_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "ui_junit_tests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [ui_junit_tests]"
   },
   {
     "cmd": [
@@ -810,6 +971,29 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "/path/to/tmp/json",
+      "--master-name",
+      "tryserver.chromium.android",
+      "--builder-name",
+      "linux_android_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "base_junit_tests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [base_junit_tests] (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "junit",
       "-s",
@@ -827,6 +1011,29 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "/path/to/tmp/json",
+      "--master-name",
+      "tryserver.chromium.android",
+      "--builder-name",
+      "linux_android_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "chrome_junit_tests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [chrome_junit_tests] (2)"
   },
   {
     "cmd": [
@@ -854,6 +1061,29 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "/path/to/tmp/json",
+      "--master-name",
+      "tryserver.chromium.android",
+      "--builder-name",
+      "linux_android_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "components_junit_tests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [components_junit_tests] (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "junit",
       "-s",
@@ -871,6 +1101,29 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "/path/to/tmp/json",
+      "--master-name",
+      "tryserver.chromium.android",
+      "--builder-name",
+      "linux_android_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "content_junit_tests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [content_junit_tests] (2)"
   },
   {
     "cmd": [
@@ -898,6 +1151,29 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "/path/to/tmp/json",
+      "--master-name",
+      "tryserver.chromium.android",
+      "--builder-name",
+      "linux_android_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "junit_unit_tests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [junit_unit_tests] (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "junit",
       "-s",
@@ -920,6 +1196,29 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "/path/to/tmp/json",
+      "--master-name",
+      "tryserver.chromium.android",
+      "--builder-name",
+      "linux_android_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "net_junit_tests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [net_junit_tests] (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]/src/build/android/test_runner.py",
       "junit",
       "-s",
@@ -937,6 +1236,29 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>TestB<br/>@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_gtest_test_results.py",
+      "--input-gtest-json",
+      "/path/to/tmp/json",
+      "--master-name",
+      "tryserver.chromium.android",
+      "--builder-name",
+      "linux_android_dbg_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "ui_junit_tests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "Upload to test-results [ui_junit_tests] (2)"
   },
   {
     "cmd": [

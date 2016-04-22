@@ -1519,6 +1519,13 @@ class AndroidTest(Test):
           ['failures:', failures]
         ])
 
+      api.test_results.upload(
+          json_results_file,
+          test_type=self.name,
+          chrome_revision=api.bot_update.last_returned_properties.get(
+              'got_revision_cp', 'x@{#0}'),
+          test_results_server='test-results.appspot.com')
+
   def compile_targets(self, _):
     return self._compile_targets
 
@@ -1602,7 +1609,6 @@ class AndroidInstrumentationTest(AndroidTest):
 
   def __init__(self, name, compile_targets=None, apk_under_test=None,
                test_apk=None, isolate_file_path=None, timeout_scale=None,
-               flakiness_dashboard='test-results.appspot.com',
                annotation=None, except_annotation=None, screenshot=False,
                verbose=True, tool=None, host_driven_root=None,
                additional_apks=None):
@@ -1625,7 +1631,6 @@ class AndroidInstrumentationTest(AndroidTest):
     self._apk_under_test = (
         apk_under_test or suite_defaults.get('apk_under_test'))
     self._except_annotation = except_annotation
-    self._flakiness_dashboard = flakiness_dashboard
     self._host_driven_root = host_driven_root
     self._screenshot = screenshot
     self._test_apk = test_apk or suite_defaults.get('test_apk')
@@ -1653,7 +1658,6 @@ class AndroidInstrumentationTest(AndroidTest):
             for a in self._additional_apks or []],
         suffix=suffix,
         isolate_file_path=self.isolate_file_path,
-        flakiness_dashboard=self._flakiness_dashboard,
         annotation=self._annotation, except_annotation=self._except_annotation,
         screenshot=self._screenshot, verbose=self._verbose, tool=self._tool,
         host_driven_root=self._host_driven_root,
