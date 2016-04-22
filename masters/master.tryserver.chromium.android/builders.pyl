@@ -116,7 +116,6 @@
       "slavebuilddir": "android",
       "slave_pools": ["slaves_with_devices"],
     },
-
     "linux_android_rel_ng": {
       "builder_timeout_s": 6900,  # 60 * 115
       "recipe": "chromium_trybot",
@@ -171,7 +170,7 @@
       "recipe": "findit/chromium/compile",
       "scheduler": None,
       "slavebuilddir": "android_chromium_variable_nexus4",
-      "slave_pools": ["ccompute_optional_bots"],
+      "slave_pools": ["slaves_with_nexus4_devices"],
     },
     "android_chromium_variable_archive": {
       "builder_timeout_s": 6900,  # 60 * 115
@@ -397,5 +396,15 @@
         "build97-b4",
       ],
     },
+    "slaves_with_nexus4_devices": {
+      "slave_data": {
+        "os": "linux",
+        "version": "precise",
+        "bits": 64,
+      },
+      "slaves": [
+        "build35-b4",
+      ],
+    }
   }
 }
