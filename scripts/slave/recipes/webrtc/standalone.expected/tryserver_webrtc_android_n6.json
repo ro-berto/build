@@ -353,7 +353,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_audio_decoder_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -368,7 +370,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_common_audio_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -383,7 +387,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_common_video_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -398,7 +404,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_modules_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -413,7 +421,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_modules_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -428,7 +438,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_peerconnection_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -443,7 +455,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_system_wrappers_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -458,7 +472,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_test_support_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -473,7 +489,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_tools_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -488,7 +506,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_video_engine_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -503,7 +523,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_voice_engine_unittests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -518,7 +540,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_webrtc_nonparallel_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "-t",
+      "900"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
@@ -533,7 +557,9 @@
       "[SLAVE_BUILD]/src/out/Debug/bin/run_webrtc_perf_tests",
       "--blacklist-file",
       "[SLAVE_BUILD]/src/out/bad_devices.json",
-      "--verbose"
+      "--verbose",
+      "-t",
+      "2700"
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
