@@ -110,6 +110,19 @@
     "name": "compile"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\syzygy\\build\\generate_coverage.py",
+      "--verbose",
+      "--syzygy",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out\\Coverage"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "capture_unittest_coverage"
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

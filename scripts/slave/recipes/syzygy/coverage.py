@@ -63,8 +63,9 @@ def RunSteps(api, buildername):
   s.runhooks()
   s.compile()
 
+  s.capture_unittest_coverage()
+
   if not buildername.endswith('_try'):
-    s.capture_unittest_coverage()
     s.archive_coverage()
 
 
