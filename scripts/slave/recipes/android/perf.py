@@ -24,10 +24,9 @@ DEPS = [
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 
 def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
-                   num_host_shards=1, target_bits=64,
-                   known_devices_file='.known_devices'):
+                    num_host_shards=1, target_bits=64):
   def _CreateShardTestSpec(name, perf_id, required_apks, num_device_shards,
-                num_host_shards, shard_index, target_bits, known_devices_file):
+                           num_host_shards, shard_index, target_bits):
     spec = {
       'perf_id': perf_id,
       'required_apks': required_apks,
@@ -37,7 +36,7 @@ def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
       'shard_index': shard_index,
       'test_spec_file': 'chromium.perf.json',
       'max_battery_temp': 350,
-      'known_devices_file': known_devices_file,
+      'known_devices_file': '.known_devices',
     }
     if target_bits == 32:
       builder_name = 'android_perf_rel'
@@ -53,7 +52,7 @@ def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
     builder_name = '%s (%d)' % (name, shard_index + 1)
     tester_spec[builder_name] = _CreateShardTestSpec(
         name, perf_id, required_apks, num_device_shards, num_host_shards,
-        shard_index, target_bits, known_devices_file)
+        shard_index, target_bits)
   return tester_spec
 
 def _ChromiumPerfTesters():
