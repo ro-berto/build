@@ -2071,8 +2071,9 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Chromium Win 10': {
+    'Win 10 Fast Ring': {
       'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'GYP_DEFINES': {
         'dcheck_always_on': '1',

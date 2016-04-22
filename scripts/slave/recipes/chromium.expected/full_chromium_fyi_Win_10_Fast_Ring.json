@@ -16,7 +16,7 @@
       "--master",
       "chromium.fyi",
       "--builder",
-      "Chromium Win 10",
+      "Win 10 Fast Ring",
       "--slave",
       "TestSlavename",
       "--spec",
@@ -172,6 +172,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -190,7 +191,7 @@
       "--paths",
       "{\"checkout\": \"[SLAVE_BUILD]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Chromium Win 10\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"buildername\": \"Win 10 Fast Ring\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "get compile targets for scripts",
@@ -226,6 +227,25 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb.py",
+      "gen",
+      "-m",
+      "chromium.fyi",
+      "-b",
+      "Win 10 Fast Ring",
+      "--config-file",
+      "[SLAVE_BUILD]\\src\\tools\\mb\\mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]\\cipd\\goma",
+      "//out/Release_x64"
+    ],
+    "cwd": "[SLAVE_BUILD]",
+    "name": "generate_build_files"
   },
   {
     "cmd": [
