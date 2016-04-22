@@ -151,6 +151,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_script,
         steps.generate_isolated_script,
+        steps.generate_junit_test,
       ],
       'tests': [
         steps.AndroidInstrumentationTest('AndroidWebViewTest'),
@@ -264,6 +265,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_junit_test,
         steps.generate_script,
       ],
       'testing': {
@@ -320,6 +322,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_junit_test,
         steps.generate_script,
       ],
       'testing': {

@@ -713,6 +713,22 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_junit_test') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Android Tests',
+                           parent_buildername='Android Builder') +
+    api.override_step_data('read test spec', api.json.output({
+      'Android Tests': {
+        'junit_tests': [
+          {
+            'test': 'base_junit_tests',
+          },
+        ],
+      },
+    }))
+  )
+
+  yield (
     api.test('dynamic_gtest_on_builder') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Builder') +

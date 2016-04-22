@@ -501,6 +501,14 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
           compile_targets=test.get('override_compile_targets', None))
 
 
+def generate_junit_test(api, chromium_tests_api, mastername, buildername,
+                        test_spec, bot_update_step, enable_swarming=False,
+                        swarming_dimensions=None,
+                        scripts_compile_targets=None):
+  for test in test_spec.get(buildername, {}).get('junit_tests', []):
+    yield AndroidJunitTest(str(test['test']))
+
+
 def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
                     bot_update_step, enable_swarming=False,
                     swarming_dimensions=None, scripts_compile_targets=None):

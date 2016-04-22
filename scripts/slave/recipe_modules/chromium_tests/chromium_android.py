@@ -110,6 +110,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_junit_test,
         steps.generate_script,
       ],
       'bot_type': 'builder',
@@ -133,6 +134,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_junit_test,
         steps.generate_script,
       ],
       'testing': {
@@ -155,6 +157,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_junit_test,
         steps.generate_script,
       ],
       'testing': {
@@ -177,6 +180,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_junit_test,
         steps.generate_script,
       ],
       'testing': {
@@ -199,6 +203,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_junit_test,
         steps.generate_script,
       ],
       'testing': {
@@ -221,6 +226,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_junit_test,
         steps.generate_script,
       ],
       'testing': {
@@ -243,6 +249,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_junit_test,
         steps.generate_script,
       ],
       'testing': {
@@ -265,6 +272,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_junit_test,
         steps.generate_script,
       ],
       'testing': {
@@ -287,6 +295,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_junit_test,
         steps.generate_script,
       ],
       'testing': {
@@ -317,6 +326,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_instrumentation_test,
         steps.generate_isolated_script,
+        steps.generate_junit_test,
         steps.generate_script,
       ],
     },
@@ -340,6 +350,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_script,
         steps.generate_isolated_script,
+        steps.generate_junit_test,
       ],
       'testing': {
         'platform': 'linux',
@@ -365,6 +376,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_script,
         steps.generate_isolated_script,
+        steps.generate_junit_test,
       ],
       'testing': {
         'platform': 'linux',
@@ -390,6 +402,7 @@ SPEC = {
         steps.generate_gtest,
         steps.generate_script,
         steps.generate_isolated_script,
+        steps.generate_junit_test,
       ],
       'testing': {
         'platform': 'linux',
