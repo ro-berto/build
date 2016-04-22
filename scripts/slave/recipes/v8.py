@@ -232,16 +232,6 @@ def GenTests(api):
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux64',
-        'one_failure_build_env_not_supported',
-    ) +
-    api.override_step_data('Check', api.v8.one_failure()) +
-    api.properties(build_environment=None)
-  )
-
-  yield (
-    api.v8.test(
-        'client.v8',
         'V8 Fuzzer',
         'fuzz_archive',
     ) +

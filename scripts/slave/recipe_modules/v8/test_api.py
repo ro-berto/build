@@ -368,11 +368,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         )
     )
     if parent_buildername:
-      test += self.m.properties(
-          parent_got_revision='54321',
-          build_environment={
-            'useful': 'envvars', 'from': 'the', 'parent': 'bot'},
-      )
+      test += self.m.properties(parent_got_revision='54321')
       if bot_config.get('enable_swarming'):
         # Assume each tester is triggered with the required hashes for all
         # tests.
