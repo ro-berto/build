@@ -264,6 +264,25 @@ class V8Api(recipe_api.RecipeApi):
       env['GYP_MSVS_VERSION'] = self.m.chromium.c.gyp_env.GYP_MSVS_VERSION
     self.m.chromium.runhooks(env=env, **kwargs)
 
+  @property
+  def build_environment(self):
+    if self.m.properties.get('parent_build_environment'):
+      return self.m.properties['parent_build_environment']
+    if self.bot_type == 'tester':
+      return None
+    build_environment = dict(
+        (k, v) for (k, v) in self.m.chromium.c.gyp_env.as_jsonish().iteritems()
+               if k.startswith('GYP') and v is not None
+    )
+    build_environment.update(self.c.gyp_env.as_jsonish())
+    if 'GYP_DEFINES' in build_environment:
+      # Filter out gomadir.
+      build_environment['GYP_DEFINES'] = ' '.join(
+          d for d in build_environment['GYP_DEFINES'].split()
+            if not d.startswith('gomadir')
+      )
+    return build_environment
+
   def setup_mips_toolchain(self):
     mips_dir = self.m.path['slave_build'].join(MIPS_DIR, 'bin')
     if not self.m.path.exists(mips_dir):
@@ -695,6 +714,15 @@ class V8Api(recipe_api.RecipeApi):
     lines.append('Flags: %s' % ' '.join(results[0]['flags']))
     lines.append('Command: %s' % results[0]['command'])
     lines.append('')
+    lines.append('Build environment:')
+    build_environment = self.build_environment
+    if build_environment is None:
+      lines.append(
+          'Not available. Please look up the builder\'s configuration.')
+    else:
+      for key in sorted(build_environment):
+        lines.append(' %s: %s' % (key, build_environment[key]))
+    lines.append('')
 
     # Add results for each run of a command.
     for result in sorted(results, key=lambda r: int(r['run'])):
@@ -918,6 +946,9 @@ class V8Api(recipe_api.RecipeApi):
     triggers = self.bot_config.get('triggers', [])
     triggers_proxy = self.bot_config.get('triggers_proxy', False)
     if triggers or triggers_proxy:
+      # Careful! Before adding new properties, note the following:
+      # Triggered bots on CQ will either need new properties to be explicitly
+      # whitelisted or their name should be prefixed with 'parent_'.
       properties = {
         'parent_got_revision': self.revision,
         'parent_got_revision_cp': self.revision_cp,
@@ -944,6 +975,12 @@ class V8Api(recipe_api.RecipeApi):
 
       # TODO(machenbach): Also set meaningful buildbucket tags of triggering
       # parent.
+
+      # Pass build environment to testers if it doesn't exceed buildbot's
+      # limits.
+      # TODO(machenbach): Remove the check in the after-buildbot age.
+      if len(self.m.json.dumps(self.build_environment)) < 1024:
+        properties['parent_build_environment'] = self.build_environment
 
       swarm_hashes = self.m.isolate.isolated_tests
       if swarm_hashes:

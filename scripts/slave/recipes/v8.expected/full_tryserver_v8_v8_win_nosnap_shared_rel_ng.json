@@ -196,6 +196,10 @@
           "category": "cq",
           "issue": 12853011,
           "master": "tryserver.v8",
+          "parent_build_environment": {
+            "GYP_DEFINES": "chromium_win_pch=0 component=shared_library dcheck_always_on=0 fastbuild=1 target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_target_arch=ia32 v8_use_snapshot=false",
+            "GYP_GENERATORS": "ninja"
+          },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",

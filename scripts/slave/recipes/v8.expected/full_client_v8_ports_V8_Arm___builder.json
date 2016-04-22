@@ -236,6 +236,13 @@
       {
         "builder_name": "V8 Arm",
         "properties": {
+          "parent_build_environment": {
+            "CXX": "/usr/bin/arm-linux-gnueabihf-g++",
+            "GYP_CROSSCOMPILE": "1",
+            "GYP_DEFINES": "arm_float_abi=hard target_arch=arm test_isolation_mode=prepare use_goma=1 v8_target_arch=arm",
+            "GYP_GENERATORS": "ninja",
+            "LINK": "/usr/bin/arm-linux-gnueabihf-g++"
+          },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
@@ -272,6 +279,13 @@
         "builder_name": "v8_trigger_proxy",
         "properties": {
           "archive": "gs://chromium-v8/v8-arm-rel",
+          "parent_build_environment": {
+            "CXX": "/usr/bin/arm-linux-gnueabihf-g++",
+            "GYP_CROSSCOMPILE": "1",
+            "GYP_DEFINES": "arm_float_abi=hard target_arch=arm test_isolation_mode=prepare use_goma=1 v8_target_arch=arm",
+            "GYP_GENERATORS": "ninja",
+            "LINK": "/usr/bin/arm-linux-gnueabihf-g++"
+          },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
