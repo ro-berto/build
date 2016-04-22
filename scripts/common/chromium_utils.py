@@ -930,8 +930,8 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
 
   # TODO(all): nsylvain's CommandRunner in buildbot_slave is based on this
   # method.  Update it when changes are introduced here.
-  def ProcessRead(readfh, writefh, parser_func=None, filter_obj=None,
-                  log_event=None):
+  def ProcessRead(proc, writefh, parser_func=None, filter_obj=None,
+                  log_event=None, debug=False):
     writefh.flush()
 
     # Python on Windows writes the buffer only when it reaches 4k.  Ideally
@@ -945,7 +945,7 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
     flush_thread.start()
 
     try:
-      in_byte = readfh.read(1)
+      in_byte = proc.stdout.read(1)
       in_line = cStringIO.StringIO()
       while in_byte:
         # Capture all characters except \r.
@@ -966,9 +966,11 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
           else:
             writefh.write(in_line.getvalue())
           in_line = cStringIO.StringIO()
-        in_byte = readfh.read(1)
+        if debug and proc.poll() is not None:
+          print 'Child process has terminated'
+        in_byte = proc.stdout.read(1)
 
-      print threading.currentThread(), 'ProcessRead: readfh finished.'
+      print threading.currentThread(), 'ProcessRead: proc.stdout finished.'
 
       if log_event and in_line.getvalue():
         log_event.set()
@@ -1049,10 +1051,11 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
 
     # Launch and start the reader thread.
     thread = threading.Thread(target=ProcessRead,
-                              args=(proc_handles[0].stdout, sys.stdout),
+                              args=(proc_handles[0], sys.stdout),
                               kwargs={'parser_func': parser_func,
                                       'filter_obj': filter_obj,
-                                      'log_event': log_event})
+                                      'log_event': log_event,
+                                      'debug': debug})
 
     kill_lock = threading.Lock()
 
