@@ -33,6 +33,10 @@ B('Win', 'win_clobber', 'compile|windows', 'chromium',
   notify_on_missing=True)
 F('win_clobber', m_annotator.BaseFactory('chromium'))
 
+B('Win x64', 'win_x64_clobber', 'compile|windows', 'chromium',
+  notify_on_missing=True)
+F('win_x64_clobber', m_annotator.BaseFactory('chromium'))
+
 ################################################################################
 ## Mac
 ################################################################################

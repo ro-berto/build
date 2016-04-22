@@ -464,18 +464,14 @@ TRYBOTS = freeze({
         'mastername': 'chromium',
         'buildername': 'Win',
       }),
+      'win_x64_archive': simple_bot({
+        'mastername': 'chromium',
+        'buildername': 'Win x64',
+      }),
       'win_chromium_dbg_ng': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win Builder (dbg)',
         'tester': 'Win7 Tests (dbg)(1)',
-      }),
-      'win_chromium_gn_x64_dbg': simple_bot({
-        'mastername': 'chromium.win',
-        'buildername': 'Win x64 GN (dbg)',
-      }),
-      'win_chromium_gn_x64_rel': simple_bot({
-        'mastername': 'chromium.win',
-        'buildername': 'Win x64 GN',
       }),
       'win_chromium_rel_ng': {
         'bot_ids': [

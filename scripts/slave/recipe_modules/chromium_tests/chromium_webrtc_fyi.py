@@ -21,16 +21,16 @@ SPEC = {
 }
 
 
-def AddGNBuilder(spec, name):
-  SPEC['builders'][name] = copy.deepcopy(spec['builders'][name])
+def AddGNBuilder(spec, name, dest_name=None):
+  SPEC['builders'][dest_name or name] = copy.deepcopy(spec['builders'][name])
 
 
 AddGNBuilder(chromium_linux.SPEC, 'Android GN')
 AddGNBuilder(chromium_linux.SPEC, 'Android GN (dbg)')
 AddGNBuilder(chromium_mac.SPEC, 'Mac GN')
 AddGNBuilder(chromium_mac.SPEC, 'Mac GN (dbg)')
-AddGNBuilder(chromium_win.SPEC, 'Win x64 GN')
-AddGNBuilder(chromium_win.SPEC, 'Win x64 GN (dbg)')
+AddGNBuilder(chromium_win.SPEC, 'Win x64 Builder', 'Win x64 GN')
+AddGNBuilder(chromium_win.SPEC, 'Win x64 Builder (dbg)', 'Win x64 GN (dbg)')
 
 
 for b in SPEC['builders'].itervalues():

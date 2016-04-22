@@ -148,25 +148,6 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'Win x64 GN': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'win',
-        'TARGET_BITS': 64,
-      },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
-      'enable_swarming': True,
-      'testing': {
-        'platform': 'win',
-      },
-    },
     'Win8 Aura': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
@@ -243,25 +224,6 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
-    },
-    'Win x64 GN (dbg)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_PLATFORM': 'win',
-        'TARGET_BITS': 64,
-      },
-      'test_generators': [
-        steps.generate_gtest,
-        steps.generate_script,
-        steps.generate_isolated_script,
-      ],
-      'enable_swarming': True,
-      'testing': {
-        'platform': 'win',
-      },
     },
     'Win8 GN (dbg)': {
       'chromium_config': 'chromium',
