@@ -755,7 +755,7 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'main_builder',
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'compile_targets': [
       ],
       'testing': {
