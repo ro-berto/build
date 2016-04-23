@@ -65,9 +65,9 @@
       "slave_data": {
         "bits": 64,
         "os": "win",
-        "version": "win7",
+        "version": "win10",
       },
-      "slaves": ["vm711-m4"],
+      "slaves": ["build78-b1", "build79-b1"],
     },
   },
 }
