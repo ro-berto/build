@@ -1048,9 +1048,6 @@ class FactoryCommands(object):
     cmd = [self._python, self._runhooks_tool]
 
     options = options or {}
-    if '--compiler=goma' in options or '--compiler=goma-clang' in options:
-      cmd.append('--use-goma')
-
     self._factory.addStep(
         shell.ShellCommand,
         haltOnFailure=True,
@@ -1063,14 +1060,20 @@ class FactoryCommands(object):
 
   def AddGenerateBuildFilesStep(self, env=None, timeout=None, options=None,
                                 config_file_path=None, target=None):
+    options = options or []
     if not config_file_path:
       config_file_path = self.PathJoin(self._repository_root,
                                        'tools', 'mb', 'mb_config.pyl')
+
     cmd = [self._python, self._mb_tool, 'gen',
            '-m', WithProperties('%(mastername)s'),
            '-b', WithProperties('%(buildername)s'),
-           '--config-file', config_file_path,
-           '//out/%s' % target]
+           '--config-file', config_file_path]
+
+    if '--compiler=goma' in options or '--compiler=goma-clang' in options:
+      cmd += ['--goma-dir', self.PathJoin('..', '..', '..', '..', 'goma')]
+
+    cmd += ['//out/%s' % target]
 
     self._factory.addStep(
         shell.ShellCommand,
