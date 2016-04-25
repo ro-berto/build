@@ -22,6 +22,7 @@ from common import chromium_utils
 from common import env
 from slave import cipd
 from slave import infra_platform
+from slave import monitoring_utils
 from slave import robust_tempdir
 from slave import update_scripts
 
@@ -130,6 +131,8 @@ def main(argv):
     properties_file = os.path.join(tempdir, 'kitchen_properties.json')
     with open(properties_file, 'w') as f:
       json.dump(properties, f)
+
+    monitoring_utils.write_build_monitoring_event(build_data_dir, properties)
 
     return _call([
         kitchen, 'cook',

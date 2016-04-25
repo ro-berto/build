@@ -28,6 +28,7 @@ from common import master_cfg_utils
 from slave import cipd
 from slave import gce
 from slave import infra_platform
+from slave import monitoring_utils
 from slave import robust_tempdir
 from slave import update_scripts
 
@@ -93,7 +94,6 @@ PLATFORM_CONFIG = {
 
   # Linux
   ('linux',): {
-    'run_cmd': ['/opt/infra-python/run.py'],
   },
   ('linux', 32): {
     'logdog_platform': LogDogPlatform(
@@ -132,7 +132,6 @@ PLATFORM_CONFIG = {
 
   # Mac
   ('mac',): {
-    'run_cmd': ['/opt/infra-python/run.py'],
   },
   ('mac', 64): {
     'logdog_platform': LogDogPlatform(
@@ -154,8 +153,6 @@ PLATFORM_CONFIG = {
 
   # Windows
   ('win',): {
-    'run_cmd': ['C:\\infra-python\\ENV\\Scripts\\python.exe',
-                'C:\\infra-python\\run.py'],
   },
   ('win', 32): {
     'logdog_platform': LogDogPlatform(
@@ -197,7 +194,6 @@ PLATFORM_CONFIG = {
 # Config is the runtime configuration used by `annotated_run.py` to bootstrap
 # the recipe engine.
 Config = collections.namedtuple('Config', (
-    'run_cmd',
     'logdog_host',
     'logdog_pubsub_topic',
     'logdog_max_buffer_age',
@@ -222,7 +218,6 @@ def get_config():
 
   # Construct runtime configuration.
   return Config(
-      run_cmd=platform_config.get('run_cmd'),
       logdog_host=platform_config.get('logdog_host'),
       logdog_pubsub_topic=platform_config.get('logdog_pubsub_topic'),
       logdog_max_buffer_age=platform_config.get('logdog_max_buffer_age'),
@@ -750,49 +745,6 @@ def clean_old_recipe_engine():
         os.remove(os.path.join(dirpath, filename))
 
 
-def write_monitoring_event(config, datadir, build_properties):
-  # Ensure that all command components of "run_cmd" are available.
-  if not config.run_cmd:
-    LOGGER.warning('No run.py is defined for this platform.')
-    return
-  run_cmd_missing = [p for p in config.run_cmd if not os.path.exists(p)]
-  if run_cmd_missing:
-    LOGGER.warning('Unable to find run.py. Some components are missing: %s',
-                   run_cmd_missing)
-    return
-
-  hostname = socket.getfqdn()
-  if hostname:  # just in case getfqdn() returns None.
-    hostname = hostname.split('.')[0]
-  else:
-    hostname = None
-
-  try:
-    cmd = config.run_cmd + ['infra.tools.send_monitoring_event',
-       '--event-mon-output-file', os.path.join(datadir, 'log_request_proto'),
-       '--event-mon-run-type', 'file',
-       '--event-mon-service-name',
-           'buildbot/master/master.%s'
-           % build_properties.get('mastername', 'UNKNOWN'),
-       '--build-event-build-name',
-           build_properties.get('buildername', 'UNKNOWN'),
-       '--build-event-build-number',
-           str(build_properties.get('buildnumber', 0)),
-       '--build-event-build-scheduling-time',
-           str(1000*int(build_properties.get('requestedAt', 0))),
-       '--build-event-type', 'BUILD',
-       '--event-mon-timestamp-kind', 'POINT',
-       # And use only defaults for credentials.
-     ]
-    # Add this conditionally so that we get an error in
-    # send_monitoring_event log files in case it isn't present.
-    if hostname:
-      cmd += ['--build-event-hostname', hostname]
-    _check_command(cmd)
-  except Exception:
-    LOGGER.warning("Failed to send monitoring event.", exc_info=True)
-
-
 def _exec_recipe(rt, opts, basedir, tdir, config, properties):
   # Find out if the recipe we intend to run is in build_internal's recipes. If
   # so, use recipes.py from there, otherwise use the one from build.
@@ -874,7 +826,7 @@ def main(argv):
     properties['build_data_dir'] = build_data_dir
 
     # Write our annotated_run.py monitoring event.
-    write_monitoring_event(config, build_data_dir, properties)
+    monitoring_utils.write_build_monitoring_event(build_data_dir, properties)
 
     # Execute our recipe.
     return _exec_recipe(rt, opts, basedir, tdir, config, properties)
