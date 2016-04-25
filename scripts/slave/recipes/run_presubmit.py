@@ -27,9 +27,7 @@ def _RunStepsInternal(api):
 
   bot_update_step = api.bot_update.ensure_checkout(
       force=force_checkout,
-      patch_oauth2=codereview_auth,
-      # TODO(tandrii): remove this to fix http://crbug.com/605541.
-      patch_root='TODO(TANDRII): REMOVE THIS TRANSITION TO patch_projects')
+      patch_oauth2=codereview_auth)
   relative_root = api.gclient.calculate_patch_root(
       api.properties['patch_project']).rstrip('/')
   got_revision_property = api.gclient.c.got_revision_mapping[relative_root]
