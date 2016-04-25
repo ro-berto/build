@@ -164,13 +164,17 @@
   {
     "cmd": [
       "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\skia\\infra\\bots\\win_toolchain_hash.json",
-      "/path/to/tmp/"
+      "make.py",
+      "nanobench"
     ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Read win_toolchain_hash.json"
+    "cwd": "[SLAVE_BUILD]\\skia",
+    "env": {
+      "BUILDTYPE": "Release_x64",
+      "CHROME_PATH": "[HOME]\\src",
+      "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_dump_stats=1 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
+      "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot"
+    },
+    "name": "build nanobench"
   },
   {
     "cmd": [
@@ -194,201 +198,6 @@
       "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[SLAVE_BUILD]\\tmp\\WIN_TOOLCHAIN_HASH",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Get downloaded WIN_TOOLCHAIN_HASH",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_EXCEPTION@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[SLAVE_BUILD]\\win"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "rmtree win",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\bootstrap\\win\\win_tools.bat"
-    ],
-    "cwd": "RECIPE_PACKAGE_REPO[depot_tools]",
-    "name": "ensure git tooling on windows"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::git]\\resources\\git_setup.py",
-      "--path",
-      "[SLAVE_BUILD]\\swarming.client",
-      "--url",
-      "https://chromium.googlesource.com/external/swarming.client.git",
-      "--git_cmd_path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "git setup (swarming_client)"
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
-      "retry",
-      "fetch",
-      "origin",
-      "master"
-    ],
-    "cwd": "[SLAVE_BUILD]\\swarming.client",
-    "name": "git fetch (swarming_client)"
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
-      "checkout",
-      "-f",
-      "FETCH_HEAD"
-    ],
-    "cwd": "[SLAVE_BUILD]\\swarming.client",
-    "name": "git checkout (swarming_client)"
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
-      "rev-parse",
-      "HEAD"
-    ],
-    "cwd": "[SLAVE_BUILD]\\swarming.client",
-    "name": "read revision",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
-      "clean",
-      "-f",
-      "-d",
-      "-x"
-    ],
-    "cwd": "[SLAVE_BUILD]\\swarming.client",
-    "name": "git clean (swarming_client)"
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
-      "submodule",
-      "sync"
-    ],
-    "cwd": "[SLAVE_BUILD]\\swarming.client",
-    "name": "submodule sync (swarming_client)"
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
-      "submodule",
-      "update",
-      "--init",
-      "--recursive"
-    ],
-    "cwd": "[SLAVE_BUILD]\\swarming.client",
-    "name": "submodule update (swarming_client)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\swarming.client\\swarming.py",
-      "--version"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.10@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\swarming.client\\isolateserver.py",
-      "download",
-      "-I",
-      "https://isolateserver.appspot.com",
-      "-s",
-      "38380d77eec9164e5818ae45e2915a6f22d60e85",
-      "-t",
-      "[SLAVE_BUILD]\\win",
-      "--cache",
-      "[HOME]\\.isolate_cache"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Download Win Toolchain"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]\\skia\\infra\\bots\\bootstrap_win_toolchain_json.py",
-      "--win_toolchain_json",
-      "[SLAVE_BUILD]\\win\\src\\build\\win_toolchain.json",
-      "--depot_tools_parent_dir",
-      "[SLAVE_BUILD]\\win"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "Bootstrap Win Toolchain"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "38380d77eec9164e5818ae45e2915a6f22d60e85",
-      "[SLAVE_BUILD]\\tmp\\WIN_TOOLCHAIN_HASH"
-    ],
-    "cwd": "[SLAVE_BUILD]",
-    "name": "write WIN_TOOLCHAIN_HASH"
-  },
-  {
-    "cmd": [
-      "python",
-      "make.py",
-      "nanobench"
-    ],
-    "cwd": "[SLAVE_BUILD]\\skia",
-    "env": {
-      "BUILDTYPE": "Release_x64",
-      "CHROME_PATH": "[SLAVE_BUILD]\\win\\src",
-      "GYP_DEFINES": "qt_sdk=C:/Qt/Qt5.1.0/5.1.0/msvc2012_64/ skia_arch_type=x86_64 skia_dump_stats=1 skia_warnings_as_errors=0 skia_win_debuggers_path=c:/DbgHelp",
-      "GYP_MSVS_VERSION": "2015",
-      "PATH": "[SLAVE_BUILD]\\win\\depot_tools;%(PATH)s",
-      "SKIA_OUT": "[SLAVE_BUILD]\\skia\\out\\Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot"
-    },
-    "name": "build nanobench"
   },
   {
     "cmd": [
@@ -476,6 +285,13 @@
       "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]\\bootstrap\\win\\win_tools.bat"
+    ],
+    "cwd": "RECIPE_PACKAGE_REPO[depot_tools]",
+    "name": "ensure git tooling on windows"
   },
   {
     "cmd": [

@@ -91,16 +91,20 @@ class DefaultFlavorUtils(object):
 
       toolchain_hash_file = self._skia_api.skia_dir.join(
           'infra', 'bots', 'win_toolchain_hash.json')
-      if self._skia_api.m.path.exists(toolchain_hash_file):
+      if (self._skia_api.m.path.exists(toolchain_hash_file) and
+          self._skia_api.builder_cfg.get('extra_config') == 'VS2015'):
         # Find the desired toolchain version.
         test_data = '''{
+    "2013": "705384d88f80da637eb367e5acc6f315c0e1db2f",
     "2015": "38380d77eec9164e5818ae45e2915a6f22d60e85"
 }'''
         j = self._skia_api._readfile(toolchain_hash_file,
                                      name='Read win_toolchain_hash.json',
                                      test_data=test_data).rstrip()
         hashes = json.loads(j)
-        desired_vs_version = '2015'
+        desired_vs_version = '2013'
+        if 'VS2015' in self._skia_api.builder_cfg.get('extra_config', ''):
+          desired_vs_version = '2015'
         desired_hash = hashes[desired_vs_version]
 
         # Find the actually-downloaded toolchain version.
@@ -190,10 +194,11 @@ class DefaultFlavorUtils(object):
       if self._skia_api.running_in_swarming:
         self._skia_api._run_once(self.bootstrap_win_toolchain)
       else:
-        env['PATH'] = self._skia_api.m.path.pathsep.join([
-            str(self._skia_api.slave_dir.join('win', 'depot_tools')),
-            '%(PATH)s'])
-        env['GYP_MSVS_VERSION'] = '2015'
+        if 'VS2015' in self._skia_api.builder_cfg.get('extra_config', ''):
+          env['PATH'] = self._skia_api.m.path.pathsep.join([
+              str(self._skia_api.slave_dir.join('win', 'depot_tools')),
+              '%(PATH)s'])
+          env['GYP_MSVS_VERSION'] = '2015'
     else:
       make_cmd = ['make']
     cmd = make_cmd + [target]
