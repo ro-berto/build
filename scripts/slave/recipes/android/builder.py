@@ -67,17 +67,9 @@ BUILDERS = freeze({
       ],
       'triggers': [
         {
-          'buildername': 'WebView Nexus5 Perf (1)',
+          'buildername': 'Android Nexus5 WebView Perf (1)',
           'mastername': 'master.chromium.perf.fyi',
         },
-        {
-          'buildername': 'WebView Nexus5X Perf (1)',
-          'mastername': 'master.chromium.perf.fyi',
-        },
-        {
-          'buildername': 'WebView Nexus5X Perf (2)',
-          'mastername': 'master.chromium.perf.fyi',
-        }
       ]
     },
     'Android arm64 Builder': {
@@ -102,6 +94,16 @@ BUILDERS = freeze({
         'system_webview_apk',
         'system_webview_shell_apk',
       ],
+      'triggers': [
+        {
+          'buildername': 'Android Nexus5X WebView Perf (1)',
+          'mastername': 'master.chromium.perf.fyi',
+        },
+        {
+          'buildername': 'Android Nexus5X WebView Perf (2)',
+          'mastername': 'master.chromium.perf.fyi',
+        }
+      ]
     }
   },
   'tryserver.chromium.perf': {

@@ -252,28 +252,14 @@
     "trigger_specs": [
       {
         "bucket": "master.chromium.perf.fyi",
-        "builder_name": "WebView Nexus5 Perf (1)",
-        "properties": {
-          "revision": "267739"
-        }
-      },
-      {
-        "bucket": "master.chromium.perf.fyi",
-        "builder_name": "WebView Nexus5X Perf (1)",
-        "properties": {
-          "revision": "267739"
-        }
-      },
-      {
-        "bucket": "master.chromium.perf.fyi",
-        "builder_name": "WebView Nexus5X Perf (2)",
+        "builder_name": "Android Nexus5 WebView Perf (1)",
         "properties": {
           "revision": "267739"
         }
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@WebView Nexus5 Perf (1)<br />WebView Nexus5X Perf (1)<br />WebView Nexus5X Perf (2)@@@"
+      "@@@STEP_TEXT@Android Nexus5 WebView Perf (1)@@@"
     ]
   },
   {
