@@ -166,6 +166,8 @@ class FilterApi(recipe_api.RecipeApi):
       kwargs['wrapper'] = self.m.chromium.get_cros_chrome_sdk_wrapper()
     else:
       kwargs['env'].update(self.m.chromium.c.gyp_env.as_jsonish())
+    kwargs['env']['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = \
+        self.m.goma.service_account_json_path
 
     if use_mb:
       if 'env' in kwargs:
