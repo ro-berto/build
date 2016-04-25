@@ -111,6 +111,8 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     cmd = [self.android_bin.join('android_ninja'), target, '-d', self.device]
     if 'Clang' in self._skia_api.builder_name:
       cmd.append('--clang')
+    if 'GCC' in self._skia_api.builder_name:
+      cmd.append('--gcc')
     self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
                        env=env, cwd=self._skia_api.m.path['checkout'])
 

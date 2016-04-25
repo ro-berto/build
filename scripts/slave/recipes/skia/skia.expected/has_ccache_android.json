@@ -126,7 +126,8 @@
       "[SLAVE_BUILD]/skia/platform_tools/android/bin/android_ninja",
       "most",
       "-d",
-      "arm_v7_neon"
+      "arm_v7_neon",
+      "--gcc"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
     "env": {
