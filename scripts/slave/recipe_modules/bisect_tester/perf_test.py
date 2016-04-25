@@ -182,10 +182,15 @@ def find_values(results, metric):  # pragma: no cover
       results, metric.as_pair())
   return has_valid_value, value
 
-def _rebase_path(file_path):
-  """Attempts to make a path relative src/out/Release"""
-  if file_path.startswith('src/tools') or file_path.startswith(r'src\tools'):
-    return os.path.join(os.pardir, os.pardir, os.pardir, file_path)
+def _rebase_path(api, file_path):
+  """Attempts to make an absolute path for the command.
+
+  We want to pass to runtest.py an absolute path if possible.
+  """
+  if file_path.startswith('src/'):
+    return api.m.path['checkout'].join(*file_path.split('/')[1:])
+  elif file_path.startswith('src\\'):  # pragma: no cover
+    return api.m.path['checkout'].join(*file_path.split('\\')[1:])
   return file_path
 
 def _run_command(api, command, step_name):
@@ -216,7 +221,7 @@ def _run_command(api, command, step_name):
     python_mode = True
   try:
     step_result = api.m.chromium.runtest(
-        test=_rebase_path(command_parts[0]),
+        test=_rebase_path(api, command_parts[0]),
         args=command_parts[1:],
         xvfb=True,
         name=step_name,
