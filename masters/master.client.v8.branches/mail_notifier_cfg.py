@@ -56,5 +56,15 @@ def Update(config, active_master, c):
           'michael_dawson@ca.ibm.com',
         ],
     ),
+    V8Notifier(
+        config,
+        active_master,
+        categories_steps={'s390': V8_STEPS},
+        extraRecipients=[
+          'joransiu@ca.ibm.com',
+          'jyan@ca.ibm.com',
+          'michael_dawson@ca.ibm.com',
+        ],
+    ),
   ])
 

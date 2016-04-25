@@ -2448,6 +2448,16 @@ for branch_name in ('stable branch', 'beta branch'):
       'Release', 'intel', 64, unittests_only=True)
   BRANCH_BUILDERS[name]['chromium_apply_config'].append('simulate_ppc')
 
+  name = 'V8 s390 - sim - %s' % branch_name
+  BRANCH_BUILDERS[name] = AddBranchBuilder(
+      'Release', 'intel', 32, unittests_only=True)
+  BRANCH_BUILDERS[name]['chromium_apply_config'].append('simulate_s390')
+
+  name = 'V8 s390x - sim - %s' % branch_name
+  BRANCH_BUILDERS[name] = AddBranchBuilder(
+      'Release', 'intel', 64, unittests_only=True)
+  BRANCH_BUILDERS[name]['chromium_apply_config'].append('simulate_s390')
+
 BUILDERS['client.v8.branches'] = {'builders': BRANCH_BUILDERS}
 
 BUILDERS['client.dart.fyi'] = {'builders': {
