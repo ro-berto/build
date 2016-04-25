@@ -56,7 +56,7 @@ TEST_BUILDERS = {
       'Build-Ubuntu-GCC-x86_64-Release-CMake',
     ],
     'skiabot-win-compile-000': [
-      'Build-Win-MSVC-x86-Debug-VS2015',
+      'Build-Win-MSVC-x86-Debug',
     ],
   },
   'client.skia.fyi': {
@@ -134,12 +134,11 @@ def GenTests(api):
                                  rietveld='https://codereview.chromium.org')
         if 'Win' in builder and 'Swarming' not in builder:
           test += api.platform('win', 64)
-          if builder == 'Build-Win-MSVC-x86-Debug-VS2015':
-            test += api.path.exists(
-                api.path['slave_build'].join('skia', 'infra', 'bots',
-                                             'win_toolchain_hash.json'))
-            test += api.step_data('Get downloaded WIN_TOOLCHAIN_HASH',
-                                  retcode=1)
+          test += api.path.exists(
+              api.path['slave_build'].join('skia', 'infra', 'bots',
+                                           'win_toolchain_hash.json'))
+          test += api.step_data('Get downloaded WIN_TOOLCHAIN_HASH',
+                                retcode=1)
 
         yield test
 
