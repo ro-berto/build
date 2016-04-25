@@ -20,6 +20,7 @@ PROPERTIES = {
   'v8': Property(default=True, kind=bool),
   "win64": Property(default=False, kind=bool),
   "clang": Property(default=False, kind=bool),
+  "rel": Property(default=False, kind=bool),
 }
 
 
@@ -126,13 +127,12 @@ def _RunTests(api, memory_tool, v8, out_dir):
              cwd=api.path['checkout'], env=env)
 
 
-def RunSteps(api, memory_tool, xfa, v8, win64, clang):
+def RunSteps(api, memory_tool, xfa, v8, win64, clang, rel):
   _CheckoutSteps(api, memory_tool, xfa, v8, win64, clang)
 
+  out_dir = 'Release' if rel else 'Debug'
   if win64:
-    out_dir = 'Debug_x64'
-  else:
-    out_dir = 'Debug'
+    out_dir += '_x64'
 
   _BuildSteps(api, out_dir)
   with api.step.defer_results():
@@ -207,6 +207,17 @@ def GenTests(api):
   )
 
   yield (
+      api.test('win_xfa_64_rel') +
+      api.platform('win', 64) +
+      api.properties(xfa=True,
+                     win64=True,
+                     rel=True,
+                     mastername="client.pdfium",
+                     buildername='windows_xfa_64_rel',
+                     slavename="test_slave")
+  )
+
+  yield (
       api.test('win_xfa_clang') +
       api.platform('win', 64) +
       api.properties(xfa=True,
@@ -233,6 +244,16 @@ def GenTests(api):
       api.properties(xfa=True,
                      mastername="client.pdfium",
                      buildername='linux_xfa',
+                     slavename="test_slave")
+  )
+
+  yield (
+      api.test('linux_xfa_rel') +
+      api.platform('linux', 64) +
+      api.properties(xfa=True,
+                     rel=True,
+                     mastername="client.pdfium",
+                     buildername='linux_xfa_rel',
                      slavename="test_slave")
   )
 
