@@ -358,14 +358,13 @@ FAKE_SPECS = {
     'upload_dm_results': False,
     'upload_perf_results': False,
   },
-  'Build-Win-MSVC-x86-Debug-VS2015': {
+  'Build-Win-MSVC-x86-Debug': {
     'build_targets': [
       'most',
     ],
     'builder_cfg': {
       'compiler': 'MSVC',
       'configuration': 'Debug',
-      'extra_config': 'VS2015',
       'is_trybot': False,
       'os': 'Win',
       'role': 'Build',
