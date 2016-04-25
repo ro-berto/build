@@ -312,7 +312,8 @@
       "--builder-name=win64_nv_tester",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "tools/perf/run_benchmark.exe",
+      "--run-python-script",
+      "tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "page_cycler.intl_ar_fa_he"
@@ -340,7 +341,8 @@
       "--builder-name=win64_nv_tester",
       "--slave-name=TestSlavename",
       "--build-number=571",
-      "tools/perf/run_benchmark.exe",
+      "--run-python-script",
+      "tools/perf/run_benchmark",
       "-v",
       "--browser=release",
       "page_cycler.intl_ar_fa_he"

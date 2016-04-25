@@ -199,12 +199,28 @@ def _run_command(api, command, step_name):
   if 'android-chrome' in command:  # pragma: no cover
     kwargs['env'] = {'CHROMIUM_OUTPUT_DIR': api.m.chromium.output_dir}
 
+  # By default, we assume that the test to run is an executable binary. In the
+  # case of python scripts, runtest.py will guess based on the extension.
+  python_mode = False
+  if command_parts[0] == 'python':  # pragma: no cover
+    # Dashboard prepends the command with 'python' when on windows, however, it
+    # is not necessary to pass this along to the runtest.py invocation.
+    # TODO(robertocn): Remove this clause when dashboard stops sending python as
+    # part of the command.
+    # https://github.com/catapult-project/catapult/issues/2283
+    command_parts = command_parts[1:]
+    python_mode = True
+  elif _is_telemetry_command(command):
+    # run_benchmark is a python script without an extension, hence we force
+    # python mode.
+    python_mode = True
   try:
     step_result = api.m.chromium.runtest(
         test=_rebase_path(command_parts[0]),
         args=command_parts[1:],
         xvfb=True,
         name=step_name,
+        python_mode=python_mode,
         stdout=stdout,
         stderr=stderr,
         **kwargs)
