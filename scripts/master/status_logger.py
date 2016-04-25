@@ -380,7 +380,7 @@ class StatusEventLogger(StatusReceiverMultiService):
     patch_url = None
     if ('issue' in build_properties and 'patchset' in build_properties and
         'rietveld' in build_properties):
-      patch_url = '%s/%s#%s' % (
+      patch_url = '%s/%s#ps%s' % (
           build_properties.getProperty('rietveld'),
           build_properties.getProperty('issue'),
           build_properties.getProperty('patchset'))
