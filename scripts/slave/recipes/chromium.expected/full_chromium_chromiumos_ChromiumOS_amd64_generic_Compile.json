@@ -99,7 +99,7 @@
   },
   {
     "cmd": [
-      "cros",
+      "RECIPE_PACKAGE_REPO[depot_tools]/cros",
       "chrome-sdk",
       "--board=amd64-generic",
       "--nocolor",
@@ -172,7 +172,7 @@
   },
   {
     "cmd": [
-      "cros",
+      "RECIPE_PACKAGE_REPO[depot_tools]/cros",
       "chrome-sdk",
       "--board=amd64-generic",
       "--nocolor",

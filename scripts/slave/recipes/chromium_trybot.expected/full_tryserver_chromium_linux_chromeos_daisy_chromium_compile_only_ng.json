@@ -104,7 +104,7 @@
   },
   {
     "cmd": [
-      "cros",
+      "RECIPE_PACKAGE_REPO[depot_tools]/cros",
       "chrome-sdk",
       "--board=daisy",
       "--nocolor",
@@ -246,7 +246,7 @@
   },
   {
     "cmd": [
-      "cros",
+      "RECIPE_PACKAGE_REPO[depot_tools]/cros",
       "chrome-sdk",
       "--board=daisy",
       "--nocolor",

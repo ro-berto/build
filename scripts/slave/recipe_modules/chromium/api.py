@@ -449,7 +449,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     """
     assert self.c.TARGET_CROS_BOARD
     wrapper = [
-        'cros', 'chrome-sdk',
+        self.m.depot_tools.cros_path, 'chrome-sdk',
         '--board=%s' % (self.c.TARGET_CROS_BOARD,),
         '--nocolor',]
     wrapper += self.c.cros_sdk.args
