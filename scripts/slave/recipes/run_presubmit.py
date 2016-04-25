@@ -19,8 +19,6 @@ DEPS = [
 
 
 def _RunStepsInternal(api):
-  root = api.rietveld.calculate_issue_root(extra_patch_project_roots={'v8': []})
-
   repo_name = api.properties['repo_name']
   codereview_auth = api.properties.get('codereview_auth', False)
   force_checkout = api.properties.get('force_checkout', False)
@@ -28,10 +26,12 @@ def _RunStepsInternal(api):
   api.gclient.set_config(repo_name)
 
   bot_update_step = api.bot_update.ensure_checkout(
-      force=force_checkout, patch_project_roots={'v8': []},
-      patch_oauth2=codereview_auth)
-  relative_root = '%s/%s' % (api.gclient.c.solutions[0].name, root)
-  relative_root = relative_root.strip('/')
+      force=force_checkout,
+      patch_oauth2=codereview_auth,
+      # TODO(tandrii): remove this to fix http://crbug.com/605541.
+      patch_root='TODO(TANDRII): REMOVE THIS TRANSITION TO patch_projects')
+  relative_root = api.gclient.calculate_patch_root(
+      api.properties['patch_project']).rstrip('/')
   got_revision_property = api.gclient.c.got_revision_mapping[relative_root]
   upstream = bot_update_step.json.output['properties'].get(
       got_revision_property)
@@ -42,17 +42,18 @@ def _RunStepsInternal(api):
     upstream = bot_update_step.json.output['properties'].get(
         '%s_git' % got_revision_property) or ''
 
+  abs_root = api.path['slave_build'].join(relative_root)
   # TODO(hinoka): Extract email/name from issue?
   api.git('-c', 'user.email=commit-bot@chromium.org',
           '-c', 'user.name=The Commit Bot',
           'commit', '-a', '-m', 'Committed patch',
-          name='commit git patch', cwd=api.path['checkout'].join(root))
+          name='commit git patch', cwd=abs_root)
 
   if api.properties.get('runhooks'):
     api.gclient.runhooks()
 
   presubmit_args = [
-    '--root', api.path['checkout'].join(root),
+    '--root', abs_root,
     '--commit',
     '--verbose', '--verbose',
     '--issue', api.properties['issue'],
