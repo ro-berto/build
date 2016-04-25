@@ -1311,6 +1311,7 @@ SPEC = {
     },
     'ClangToTLinux': {
       'chromium_config': 'clang_tot_linux',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1360,6 +1361,7 @@ SPEC = {
     },
     'ClangToTLinux (dbg)': {
       'chromium_config': 'clang_tot_linux',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -1381,12 +1383,12 @@ SPEC = {
     },
     'ClangToTLinuxASan': {
       'chromium_config': 'clang_tot_linux_asan',
+      'chromium_apply_config': ['mb', 'lsan'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'chromium_apply_config': ['lsan'],
       'compile_targets': [
         'all',
       ],
@@ -1421,6 +1423,7 @@ SPEC = {
     },
     'ClangToTLinuxUBSanVptr': {
       'chromium_config': 'clang_tot_linux_ubsan_vptr',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
