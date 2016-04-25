@@ -368,6 +368,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "clang_revision",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -411,6 +414,9 @@
       "fake tests"
     ],
     "cwd": "[SLAVE_BUILD]/src/out/Debug-iphonesimulator",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "compile",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",

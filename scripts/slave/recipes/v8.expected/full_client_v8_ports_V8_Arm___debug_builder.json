@@ -89,6 +89,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CXX": "/usr/bin/arm-linux-gnueabihf-g++",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "arm_float_abi=hard gomadir='[BUILD]/goma' target_arch=arm test_isolation_mode=prepare use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=arm",
       "GYP_GENERATORS": "ninja",
@@ -144,6 +145,9 @@
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "compile",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",

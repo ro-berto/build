@@ -88,6 +88,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -118,6 +119,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "clang_revision",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -157,6 +161,9 @@
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "compile",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
@@ -986,6 +993,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -1007,6 +1015,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "Bisect a0.clang_revision",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1048,6 +1059,9 @@
       "All"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "Bisect a0.compile",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1305,6 +1319,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "clang=1 gomadir='[BUILD]/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64 v8_use_external_startup_data=0",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -1326,6 +1341,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "Bisect a2.clang_revision",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1367,6 +1385,9 @@
       "All"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "Bisect a2.compile",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

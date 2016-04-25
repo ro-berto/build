@@ -168,6 +168,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -340,6 +341,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -415,6 +417,9 @@
       "chromium_builder_perf"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "compile bad49c331def2a3bbf3ddd0096eb51551155",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
@@ -557,6 +562,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -632,6 +638,9 @@
       "chromium_builder_perf"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "compile d49c331def2a3bbf3ddd0096eb51551155",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",

@@ -115,6 +115,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=0",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -144,6 +145,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "clang_revision",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -181,6 +185,9 @@
       "chromium_builder_perf"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "compile"
   },
   {

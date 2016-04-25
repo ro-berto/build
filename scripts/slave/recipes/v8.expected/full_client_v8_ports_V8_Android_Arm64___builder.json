@@ -88,6 +88,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android gomadir='[BUILD]/goma' target_arch=arm64 test_isolation_mode=prepare use_goma=1 v8_target_arch=arm64",
       "GYP_GENERATORS": "ninja",
@@ -138,6 +139,9 @@
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "compile",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",

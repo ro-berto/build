@@ -177,6 +177,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' proprietary_codecs=1 target_arch=arm test_isolation_mode=prepare use_goma=1",
@@ -355,6 +356,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "compile",

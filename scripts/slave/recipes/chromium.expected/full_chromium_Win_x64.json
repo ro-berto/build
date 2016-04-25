@@ -172,6 +172,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[CACHE]\\cipd\\goma' linux_dump_symbols=0 target_arch=x64 test_isolation_mode=noop use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -263,6 +264,9 @@
       "all"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "compile",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",

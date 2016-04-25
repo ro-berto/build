@@ -76,6 +76,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "official_build=1 target_arch=ia32",
       "GYP_GENERATORS": "msvs-ninja,ninja",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -108,6 +109,9 @@
       "official_build"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "compile"
   },
   {

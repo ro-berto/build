@@ -76,6 +76,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "target_arch=ia32 v8_enable_disassembler=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "GYP_MSVS_VERSION": "2013",
@@ -118,6 +119,9 @@
       "--"
     ],
     "cwd": "[SLAVE_BUILD]",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
     "name": "compile"
   },
   {

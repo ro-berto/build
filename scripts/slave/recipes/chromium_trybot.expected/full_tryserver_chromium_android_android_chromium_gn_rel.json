@@ -168,6 +168,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
@@ -458,6 +459,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "compile (with patch)",
@@ -496,6 +498,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "spawn_logcat_monitor"
@@ -511,6 +514,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "authorize_adb_devices"
@@ -527,6 +531,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "device_status_check",
@@ -639,6 +644,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "provision_devices"
@@ -888,6 +894,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "breakpad_unittests (with patch)"
@@ -906,6 +913,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "sandbox_linux_unittests (with patch)"
@@ -926,6 +934,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "base_junit_tests (with patch)",
@@ -974,6 +983,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "chrome_junit_tests (with patch)",
@@ -1022,6 +1032,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "components_invalidation_impl_junit_tests (with patch)",
@@ -1070,6 +1081,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "components_policy_junit_tests (with patch)",
@@ -1118,6 +1130,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "content_junit_tests (with patch)",
@@ -1166,6 +1179,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "junit_unit_tests (with patch)",
@@ -1214,6 +1228,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "net_junit_tests (with patch)",
@@ -1262,6 +1277,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "ui_junit_tests (with patch)",
@@ -1391,6 +1407,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
@@ -1464,6 +1481,7 @@
     ],
     "cwd": "[SLAVE_BUILD]",
     "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "compile (without patch)",
@@ -1698,6 +1716,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "base_junit_tests (without patch)",
@@ -1746,6 +1765,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "chrome_junit_tests (without patch)",
@@ -1794,6 +1814,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "components_invalidation_impl_junit_tests (without patch)",
@@ -1842,6 +1863,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "components_policy_junit_tests (without patch)",
@@ -1890,6 +1912,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "content_junit_tests (without patch)",
@@ -1938,6 +1961,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "junit_unit_tests (without patch)",
@@ -1986,6 +2010,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "net_junit_tests (without patch)",
@@ -2034,6 +2059,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "ui_junit_tests (without patch)",
@@ -2295,6 +2321,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_with_logcat_dump"
@@ -2309,6 +2336,7 @@
     "cwd": "[SLAVE_BUILD]",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[SLAVE_BUILD]/src/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[SLAVE_BUILD]/src/third_party/android_tools/sdk/platform-tools:[SLAVE_BUILD]/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_for_tombstones"

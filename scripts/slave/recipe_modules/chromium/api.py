@@ -64,6 +64,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.env.GOMA_STUBBY_PROXY_IP_ADDRESS:
       ret['GOMA_STUBBY_PROXY_IP_ADDRESS'] = \
         self.c.env.GOMA_STUBBY_PROXY_IP_ADDRESS
+    ret['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = \
+        self.m.goma.service_account_json_path
     if self.c.env.FORCE_MAC_TOOLCHAIN:
       ret['FORCE_MAC_TOOLCHAIN'] = self.c.env.FORCE_MAC_TOOLCHAIN
     return ret
@@ -465,10 +467,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     return wrapper
 
   def ensure_goma(self):
-    # TODO(phajdan.jr): make cipd-fetched goma work on chromeos.
-    if self.c.gyp_env.GYP_DEFINES.get('chromeos') == 1:
-      return
-
     goma_dir = self.m.goma.ensure_goma()
     if goma_dir:
       # TODO(phajdan.jr): goma_dir should always be non-empty.
