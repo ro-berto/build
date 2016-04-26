@@ -50,29 +50,45 @@ def _RunStepsInternal(api):
   if api.properties.get('runhooks'):
     api.gclient.runhooks()
 
-  presubmit_args = [
+  patch_storage = api.properties.get('patch_storage', 'rietveld')
+  if patch_storage == 'rietveld':
+    presubmit_args = [
+      '--issue', api.properties['issue'],
+      '--patchset', api.properties['patchset'],
+      '--rietveld_url', api.properties['rietveld'],
+      '--rietveld_fetch',
+    ]
+    if codereview_auth:
+      presubmit_args.extend([
+          '--rietveld_email_file',
+          api.path['build'].join('site_config', '.rietveld_client_email')])
+      presubmit_args.extend([
+          '--rietveld_private_key_file',
+          api.path['build'].join('site_config', '.rietveld_secret_key')])
+    else:
+      presubmit_args.extend(['--rietveld_email', ''])  # activate anonymous mode
+  elif patch_storage == 'gerrit':
+    # Field event.patchSet.ref looks like 'refs/changes/11/338811/4'
+    issue, patchset = api.properties['event.patchSet.ref'].split('/')[-2:]
+    presubmit_args = [
+      '--issue', issue,
+      '--patchset', patchset,
+      '--gerrit_url', api.properties['gerrit'],
+      '--gerrit_fetch',
+    ]
+  else:  # pragma: no cover
+    assert False, 'patch_storage %s is not supported' % patch_storage
+
+  presubmit_args.extend([
     '--root', abs_root,
     '--commit',
     '--verbose', '--verbose',
-    '--issue', api.properties['issue'],
-    '--patchset', api.properties['patchset'],
     '--skip_canned', 'CheckRietveldTryJobExecution',
     '--skip_canned', 'CheckTreeIsOpen',
     '--skip_canned', 'CheckBuildbotPendingBuilds',
-    '--rietveld_url', api.properties['rietveld'],
-    '--rietveld_fetch',
     '--upstream', upstream,  # '' if not in bot_update mode.
-  ]
+  ])
 
-  if codereview_auth:
-    presubmit_args.extend([
-        '--rietveld_email_file',
-        api.path['build'].join('site_config', '.rietveld_client_email')])
-    presubmit_args.extend([
-        '--rietveld_private_key_file',
-        api.path['build'].join('site_config', '.rietveld_secret_key')])
-  else:
-    presubmit_args.extend(['--rietveld_email', ''])  # activate anonymous mode
 
   env = {}
   if repo_name in ['build', 'build_internal', 'build_internal_scripts_slave']:
@@ -137,6 +153,18 @@ def GenTests(api):
         buildername='infra_presubmit',
         repo_name='infra',
         patch_project='infra',
+        runhooks=True) +
+    api.step_data('presubmit', api.json.output([['infra_presubmit',
+                                                 ['compile']]]))
+  )
+
+  yield (
+    api.test('infra_with_runhooks_and_gerrit') +
+    api.properties.tryserver_gerrit(
+        full_project_name='infra/infra',
+        repo_name='infra',
+        mastername='tryserver.infra',
+        buildername='infra_presubmit',
         runhooks=True) +
     api.step_data('presubmit', api.json.output([['infra_presubmit',
                                                  ['compile']]]))
