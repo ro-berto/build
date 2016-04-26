@@ -150,13 +150,6 @@ def layout_test(options, args):
     return slave_utils.RunPythonCommandInBuildDir(build_dir, options.target,
                                                   command)
   finally:
-    if 'win_chromium_rel_ng' in sys.argv:
-      print 'layout_test_wrapper calling stdout.flush()'
-      try:
-        sys.stdout.flush()
-      finally:
-        print 'layout_test_wrapper calling stdout.close()'
-        sys.stdout.close()
     if options.enable_pageheap:
       slave_utils.SetPageHeap(build_dir, dumprendertree_exe, False)
 
